@@ -48,7 +48,7 @@ profile_plot.SoilProfileList(d, color = "soil_color", width = 0.25, cex.names = 
 \code{\link{initProfileList}}
 }
 \examples{
-library(soil)
+library(aqp)
 data(sp1)
 
 # add color vector
