@@ -65,7 +65,45 @@ library(aqp)
 data(sp1)
 
 #
-# 1. try slotting categorical variables
+# 1 standard usage, and plotting example
+#
+
+# slot at two different segment sizes
+a <- soil.slot(sp1)
+b <- soil.slot(sp1, seg_size=5)
+
+# stack into long format
+ab <- make.groups(a, b)
+ab$which <- factor(ab$which, levels=c('a','b'), labels=c('1-cm Interval', '5-cm Interval'))
+
+# manually add mean +/- SD
+ab$upper <- with(ab, p.mean+p.sd)
+ab$lower <- with(ab, p.mean-p.sd)
+
+# use mean +/- 1 SD
+# custom plotting function for uncertainty viz.
+xyplot(top ~ p.mean | which, data=ab, ylab='Depth',
+xlab='mean bounded by +/- 1 SD',
+lower=ab$lower, upper=ab$upper, ylim=c(250,-5), alpha=0.5, 
+panel=panel.depth_function, 
+prepanel=prepanel.depth_function,
+layout=c(2,1), scales=list(x=list(alternating=1))
+)
+
+# use median and IQR
+# custom plotting function for uncertainty viz.
+xyplot(top ~ p.median | which, data=ab, ylab='Depth',
+xlab='median bounded by 25th and 75th percentiles',
+lower=ab$p.q25, upper=ab$p.q75, ylim=c(250,-5), alpha=0.5, 
+panel=panel.depth_function, 
+prepanel=prepanel.depth_function,
+layout=c(2,1), scales=list(x=list(alternating=1))
+)
+
+
+
+#
+# 1.1 try slotting categorical variables
 #
 
 # normalize horizon names:
