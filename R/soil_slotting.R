@@ -173,8 +173,6 @@ soil.slot.vec <- function(i, ...)
 #
 # TODO: check depth probability calculations
 # 
-# TODO: when we don't care about weights, add median +/- 1.58 * IQR/sqrt(n)   for more robust summary
-# 
 # TODO: warnings generated in some cases... could it be when there is a single soil / group?
 # 
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE)
@@ -339,8 +337,14 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	# compute row-wise summary statistics
 	if(prop.class %in% c('numeric','integer'))
 		{
+		# standard summary statistics
 		p.mean <- apply(x.recon, 1, mean, na.rm=TRUE)
 		p.sd <- apply(x.recon, 1, conditional.sd)
+		
+		# slightly more robust statistics
+		p.median <- apply(x.recon, 1, median, na.rm=TRUE)
+		p.q25 <- apply(x.recon, 1, quantile, probs=0.25, na.rm=TRUE)
+		p.q75 <- apply(x.recon, 1, quantile, probs=0.75, na.rm=TRUE)
 		}
 	
 	# todo: update this to use a different column
@@ -423,7 +427,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		{
 		if(prop.class %in% c('numeric','integer'))
 			{
-			df.stats <- data.frame(p.mean, p.sd)
+			df.stats <- data.frame(p.mean, p.sd, p.median, p.q25, p.q75)
 			}
 		if(prop.class == 'character')
 			{
