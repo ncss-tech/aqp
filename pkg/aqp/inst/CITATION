@@ -1,0 +1,16 @@
+p1 <- person('D.E.', 'Beaudette', 'dylan.beaudette@gmail.com')
+p2 <- person('A.T.', "O'Geen")
+
+citHeader("To cite the soil package in publications use:")
+
+citEntry(entry="Article",
+         title = "A Toolkit for Soil Scientists: The soil Package",
+         author = personList(p1,p2),
+         journal = "Journal of Statistical Software",
+         year         = 20010,
+         volume       = 'xxx',
+         pages        = 'xxx-xxx', 
+         url          = "http://r-forge.r-project.org/projects/aqp/",
+
+	textVersion = "Beaudette, D.E. and A.T. O'Geen. A Toolkit for Soil Scientists: The soil Package. Journal of Statistical Software, 2010, xxx:xxx-xxx" )
+
