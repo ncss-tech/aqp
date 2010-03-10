@@ -58,7 +58,7 @@ Dylan E. Beaudette
 \code{\link{subplot}}
 }
 \examples{
-library(soil)
+library(aqp)
 
 #
 # 1. single profile

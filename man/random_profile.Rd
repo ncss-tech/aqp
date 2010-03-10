@@ -28,7 +28,7 @@ A dataframe with the simulated profile.
 \seealso{\code{\link{profile_plot}}}
 \examples{
 # need this
-library(soil)
+library(aqp)
 
 # generate 10 random profiles with default settings:
 d.list <- lapply(1:10, function(i) random_profile(i))

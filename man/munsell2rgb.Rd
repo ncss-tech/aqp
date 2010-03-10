@@ -40,7 +40,7 @@ Dylan E. Beaudette
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-library(soil)
+library(aqp)
 data(sp1)
 
 # convert colors

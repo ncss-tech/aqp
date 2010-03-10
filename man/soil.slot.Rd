@@ -59,7 +59,7 @@ A dataframe with slice-wise aggregation, weighted aggregation, class probabiliti
 # setup environment
 library(reshape)
 library(lattice)
-library(soil)
+library(aqp)
 
 # load example data
 data(sp1)
