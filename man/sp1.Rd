@@ -77,12 +77,13 @@ function(i) with(i, sum((bottom - top) * p.mean) / sum(bottom - top))
 # combined viz
 g2 <- make.groups(s1, s5, s10, s20)
 
-xyplot(cbind(top,bottom) ~ p.mean | which, groups=which, data=g2, 
-ylim=c(120,-5), as.table=TRUE, 
-panel=panel.soil_profile, scales=list(y=list(tick.number=10)),
-cols=c(1,1,1,1), layout=c(4,1), 
-xlab='Property', ylab='Depth (cm)', 
-main='Soil Profile Averaging by Slotting')
+xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, 
+panel=panel.depth_function, ylim=c(250,-10), 
+scales=list(y=list(tick.number=10)), xlab='Property', 
+ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
+auto.key=list(columns=2, points=FALSE, lines=TRUE)
+)
+
 
 }
 \keyword{datasets}

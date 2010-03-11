@@ -155,51 +155,6 @@ depth_function_plot <- function(b, v, df=2, ...)
 	}
 
 
-# 
-# this panel function is a little funky see usage notes:
-# 
-# x: the soil property vector
-# y: a vector of depths, repeated twice to include top and bottom
-# groups: grouping facor
-# cols: a vector of colors, as long as the number of panels
-# 
-panel.soil_profile <- function(x, y, groups, subscripts, cols, ...)
-	{
-	
-	make.segments <- function(df, lcol, ...)
-		{
-		
-		n_hz <- length(df$prop) / 2
-		
-		# need at least 2 horizons
-		if(n_hz > 1)
-			{
-			df.new <- data.frame(top=df$bnd[1:n_hz], bottom=df$bnd[(n_hz+1):length(df$prop)], prop=df$prop[1:n_hz])
-			
-			# print(df.new)
-			
-			# vertical segments
-			panel.segments(df.new$prop, df.new$top, df.new$prop, df.new$bottom, col=lcol)  
-			# horizontal segments
-			panel.segments(df.new$prop[-n_hz], df.new$bottom[-n_hz], df.new$prop[-1], df.new$top[-1], col=lcol)
-			}
-			
-		else
-			{
-			print(paste('only 1 horizon, skipping!', df$groups[1]))
-			}
-		
-		}
-	
-	panel_color <- cols[panel.number()]
-	
-	# re-make a nice dataframe
-	d <- data.frame(prop=x, bnd=y, groups=groups[subscripts])
-	
-	by(d, d$groups, make.segments, lcol=panel_color, ...)
-	
-	}
-
 
 
 
