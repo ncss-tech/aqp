@@ -31,6 +31,7 @@ else
 			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
 			# levels in the groups, for color matching
 			ll <- levels(d$groups)
+			n_groups = length(ll)
 			}
 		
 		# no grouping, add a fake group for compatiblity
@@ -39,6 +40,7 @@ else
 			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
 			# levels in the groups, for color matching
 			ll <- levels(d$groups)
+			n_groups = length(ll)
 			}
 		
 		
@@ -58,8 +60,17 @@ else
 		d <- data.frame(yhat=x, top=y, groups=groups[subscripts])
 		# levels in the groups, for color matching
 		ll <- levels(d$groups)	
+		n_groups = length(ll)
 		}
 	
+	
+	# load current line style
+    superpose.line <- trellis.par.get("superpose.line")
+    
+    # repeat enough times for the current number of groups
+    line.col <- rep(superpose.line$col, length.out=n_groups)
+	line.lty <- rep(superpose.line$lty, length.out=n_groups)
+	line.lwd <- rep(superpose.line$lwd, length.out=n_groups)
 	
 	# add main lines
 	by(d, d$groups, function(d_i) 
@@ -67,7 +78,7 @@ else
 		# lookup color
 		m <- match(unique(d_i$group), ll)
 		# add line
-		panel.lines(d_i$yhat, d_i$top, lwd=trellis.par.get('superpose.line')$lwd, col=trellis.par.get('superpose.line')$col[m], lty=trellis.par.get('superpose.line')$lty[m])
+		panel.lines(d_i$yhat, d_i$top, lwd=line.lwd[m], col=line.col[m], lty=line.lty[m])
 		})
 	
 	}

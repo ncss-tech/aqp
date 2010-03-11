@@ -92,7 +92,7 @@ layout=c(2,1), scales=list(x=list(alternating=1))
 
 # use median and IQR
 # custom plotting function for uncertainty viz.
-xyplot(top ~ p.median | which, data=ab, ylab='Depth',
+xyplot(top ~ p.q50 | which, data=ab, ylab='Depth',
 xlab='median bounded by 25th and 75th percentiles',
 lower=ab$p.q25, upper=ab$p.q75, ylim=c(250,-5), alpha=0.5, 
 panel=panel.depth_function, 
@@ -114,6 +114,7 @@ sp1$name[grep('BA', sp1$name)] <- 'B'
 sp1$name[grep('Bt', sp1$name)] <- 'B'
 sp1$name[grep('Bw', sp1$name)] <- 'B'
 sp1$name[grep('C', sp1$name)] <- 'C'
+sp1$name[grep('R', sp1$name)] <- 'R'
 
 # generate new data for testing soil.slot()
 y <- with(sp1, data.frame(id=id, top=top, bottom=bottom, prop=name))
@@ -128,9 +129,11 @@ a <- soil.slot(y)
 # reshape into long format for plotting
 a.long <- melt(a, id.var=c('top','bottom'))
 
+a.long$variable <- factor(a.long$variable, levels=c('O','A','B','C','R'))
+
 # plot horizon type proportions
 xyplot(top ~ value | variable, data=a.long, subset=value > 0,
-ylim=c(150, -5), type='S', horizontal=TRUE, layout=c(4,1), col=1 )
+ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
 
 
 #
