@@ -3,11 +3,24 @@
 make.segments <- function(df)
 	{
 	
+	# group data
+	ll <- levels(df$groups)	
+	n_groups = length(ll)
+	
+	# get the current group index
+	m <- match(unique(df$group), ll)
+	
+	# get the number of depth slices
 	n_hz <- length(df$prop) / 2
 	
-	# lookup color
-	ll <- levels(df$groups)	
-	m <- match(unique(df$group), ll)
+	# load current line style
+    superpose.line <- trellis.par.get("superpose.line")
+    
+    # repeat enough times for the current number of groups
+    line.col <- rep(superpose.line$col, length.out=n_groups)
+	line.lty <- rep(superpose.line$lty, length.out=n_groups)
+	line.lwd <- rep(superpose.line$lwd, length.out=n_groups)
+	
 	
 	# need at least 2 horizons
 	if(n_hz > 1)
@@ -17,13 +30,11 @@ make.segments <- function(df)
 		
 		# vertical segments
 		panel.segments(df.new$prop, df.new$top, df.new$prop, df.new$bottom, 
-		lwd=trellis.par.get('superpose.line')$lwd, col=trellis.par.get('superpose.line')$col[m], 
-		lty=trellis.par.get('superpose.line')$lty[m]) 
+		lwd=line.lwd[m], col=line.col[m], lty=line.lty[m]) 
 		 
 		# horizontal segments
 		panel.segments(df.new$prop[-n_hz], df.new$bottom[-n_hz], df.new$prop[-1], df.new$top[-1], 
-		lwd=trellis.par.get('superpose.line')$lwd, col=trellis.par.get('superpose.line')$col[m], 
-		lty=trellis.par.get('superpose.line')$lty[m])
+		lwd=line.lwd[m], col=line.col[m], lty=line.lty[m])
 		}
 		
 	else

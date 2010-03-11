@@ -47,14 +47,19 @@ Soil profile data from Pinnacles National Monument, CA.
 \examples{
 # prep environment
 require(lattice)
-require(soil)
+require(aqp)
 data(sp1)
 
 # slot all profiles into 1cm depth slices
 s1 <- soil.slot(data=sp1)
 
-# check
+# check mean +/- 1SD
 xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
+data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
+panel=panel.superpose, ylim=c(110,-5))
+
+# check median & IQR
+xyplot(top ~ p.q50 + p.q25 + p.q75, 
 data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
 panel=panel.superpose, ylim=c(110,-5))
 
@@ -71,12 +76,15 @@ s20 <- soil.slot(data=sp1, seg_size=20)
 # variation in segment-weighted mean property: very little
 sapply(
 list(s1,s5,s10,s20), 
-function(i) with(i, sum((bottom - top) * p.mean) / sum(bottom - top)) 
+function(i) {
+	with(i, sum((bottom - top) * p.mean) / sum(bottom - top)) 
+	}
 )
 
 # combined viz
 g2 <- make.groups(s1, s5, s10, s20)
 
+# note special syntax for plotting step function
 xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, 
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
