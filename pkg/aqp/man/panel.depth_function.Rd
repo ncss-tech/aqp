@@ -3,10 +3,10 @@
 \alias{panel.depth_function}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Lattice Panel Function for Soil Profiles
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Panel function for plotting grouped soil property data, along with upper and lower estimates of uncertainty.
 }
 \usage{
 panel.depth_function(x, y, upper = NA, lower = NA, subscripts = NULL, groups = NULL, ...)

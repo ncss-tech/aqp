@@ -3,10 +3,10 @@
 \alias{make.segments}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Low-Level Lattice Plotting of Line Segments
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function is used by \code{\link{panel.depth_function}} to plot segmented step-functions.
 }
 \usage{
 make.segments(df)
@@ -40,46 +40,10 @@ make.segments(df)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+%% ~~objects to See Also as \code{\link{panel.depth_function}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(df)
-	{
-	
-	n_hz <- length(df$prop) / 2
-	
-	# lookup color
-	ll <- levels(df$groups)	
-	m <- match(unique(df$group), ll)
-	
-	# need at least 2 horizons
-	if(n_hz > 1)
-		{
-		# re-make dataframe for plotting segments
-		df.new <- data.frame(top=df$bnd[1:n_hz], bottom=df$bnd[(n_hz+1):length(df$prop)], prop=df$prop[1:n_hz])
-		
-		# vertical segments
-		panel.segments(df.new$prop, df.new$top, df.new$prop, df.new$bottom, 
-		lwd=trellis.par.get('superpose.line')$lwd, col=trellis.par.get('superpose.line')$col[m], 
-		lty=trellis.par.get('superpose.line')$lty[m]) 
-		 
-		# horizontal segments
-		panel.segments(df.new$prop[-n_hz], df.new$bottom[-n_hz], df.new$prop[-1], df.new$top[-1], 
-		lwd=trellis.par.get('superpose.line')$lwd, col=trellis.par.get('superpose.line')$col[m], 
-		lty=trellis.par.get('superpose.line')$lty[m])
-		}
-		
-	else
-		{
-		print(paste('only 1 horizon, skipping!', df$groups[1]))
-		}
-	
-	}
+# see panel.depth_function()
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
