@@ -2,8 +2,7 @@
 \Rdversion{1.1}
 \alias{plot_slices}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Map Depth Slices
-}
+\title{Map Depth Slices}
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
