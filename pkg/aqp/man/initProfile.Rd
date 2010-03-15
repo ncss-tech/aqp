@@ -4,7 +4,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Initialise a SoilProfile Object}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Initialize a SoilProfile class object from a dataframe.
 }
 \usage{
 initProfile(d, depth_units = "cm", idcol = "id")
@@ -75,5 +75,4 @@ function(d, depth_units='cm', idcol="id")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{manip}

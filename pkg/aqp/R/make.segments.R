@@ -2,6 +2,7 @@
 # TODO: document this
 make.segments <- function(df)
 	{
+	require(lattice)
 	
 	# group data
 	ll <- levels(df$groups)	

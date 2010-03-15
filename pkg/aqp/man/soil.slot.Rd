@@ -9,7 +9,7 @@ Soil Profile Slotting
 Align soil properties to a user-defined basis.
 }
 \usage{
-soil.slot(data, seg_size = NA, seg_vect = NA, return_raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE)
+soil.slot(data, seg_size = NA, seg_vect = NA, return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,7 +28,7 @@ User-degined segment size, default is 1.
   \item{seg_vect}{
 User-degined segment structure (needs work)
 }
-  \item{return_raw}{
+  \item{return.raw}{
 If TRUE, un-aggregated data will be returned by depth-slice. Useful for debugging, or for the generation of box and whisker plots.
 }
   \item{use.wts}{
@@ -189,5 +189,4 @@ prepanel=prepanel.depth_function
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{manip}

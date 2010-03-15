@@ -8,6 +8,7 @@
   A data frame with 154 observations on the following 21 variables.
   \describe{
     \item{\code{id}}{profile id}
+    \item{\code{surface}}{dated surface}
     \item{\code{top}}{horizon top in cm}
     \item{\code{bottom}}{horizon bottom in cm}
     \item{\code{bound_distinct}}{horizon lower boundary distinctness class}

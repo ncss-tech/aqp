@@ -27,6 +27,8 @@ Soil samples from 10 soil profiles, taken from the Sierra Foothill Region of Cal
     \item{\code{L}}{color: l-coordinate, CIE-LAB colorspace (dry)}
     \item{\code{A}}{color: a-coordinate, CIE-LAB colorspace (dry)}
     \item{\code{B}}{color: b-coordinate, CIE-LAB colorspace (dry)}
+    \item{name}{horizon name}
+    \item{soil_color}{horizon color}
   }
 }
 \details{

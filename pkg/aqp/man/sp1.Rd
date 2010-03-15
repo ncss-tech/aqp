@@ -30,9 +30,6 @@ Soil profile data from Pinnacles National Monument, CA.
     \item{\code{hue}}{a character vector}
     \item{\code{value}}{a numeric vector}
     \item{\code{chroma}}{a numeric vector}
-    \item{\code{r}}{a numeric vector}
-    \item{\code{g}}{a numeric vector}
-    \item{\code{b}}{a numeric vector}
   }
 }
 \details{

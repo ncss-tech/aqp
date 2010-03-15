@@ -1,20 +1,24 @@
-\name{make.segments}
+\name{print.SoilProfile}
 \Rdversion{1.1}
-\alias{make.segments}
+\alias{print.SoilProfile}
+\alias{print.SoilProfileList}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Low-Level Lattice Plotting of Line Segments
+Print Method for SoilProfile and SoilProfileList Class Objects
 }
 \description{
-This function is used by \code{\link{panel.depth_function}} to plot segmented step-functions.
+Standard Print Method for SoilProfile SoilProfileList Class Objects
 }
 \usage{
-make.segments(df)
+\method{print}{SoilProfile}(x, \dots)
+\method{print}{SoilProfileList}(x, \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{df}{
-%%     ~~Describe \code{df} here~~
+  \item{x}{a SoilProfile or SoilProfileList class object}
+  \item{\dots}{
+other arguments
 }
 }
 \details{
@@ -31,7 +35,7 @@ make.segments(df)
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+D.E. Beaudette
 }
 \note{
 %%  ~~further notes~~
@@ -40,11 +44,10 @@ make.segments(df)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{panel.depth_function}}, ~~~
+\code{\link{initProfileList}}, \code{\link{initProfile}}
 }
 \examples{
-# see panel.depth_function()
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{hplot}
+\keyword{manip}

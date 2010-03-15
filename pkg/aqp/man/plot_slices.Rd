@@ -4,7 +4,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Map Depth Slices}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Generate maps of given properties, for each specified depth slice.
 }
 \usage{
 plot_slices(slices, region_outline, contours = NA, depths, variable, probs, legend.cex = 1, symbol.cex = 1.5)
@@ -117,5 +117,4 @@ function(slices, region_outline, contours=NA, depths, variable, probs, legend.ce
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{hplot}
