@@ -92,11 +92,7 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.25, cex.
 	depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
 	depth_axis_labels <- paste(depth_axis_intervals, d$depth_units)
 	axis(side=4, line=-2.5, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.names)
-		
- 	# debugging:
- 	# abline(v=1:d$num_profiles, lty=2)
 	}
 	
-# profile_plot(sp1.list, color='soil_color')	
 	
 	
