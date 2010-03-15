@@ -119,5 +119,4 @@ arrows(sp.10[,1], sp.10[,2], sp.20[,1], sp.20[,2], len=0.08, col='grey')
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{manip}

@@ -25,8 +25,6 @@ initProfile <- function(d, depth_units='cm', idcol="id")
 	return(d.temp)
 	}
 
-# try it out
-# sp1.1 <- initProfile(sp1[1:6, ])
 
 
 # constructor for lists of soil profiles
@@ -56,8 +54,6 @@ initProfileList <- function(d, depth_units='cm', idcol="id")
 	return(d.list)
 	}
 
-# try it out:
-# sp1.list <- initProfileList(sp1)
 
 
 # default max() operator on SoilProfile class
@@ -98,10 +94,3 @@ print.SoilProfileList <- function(x, ...)
 	cat("\nList of ", x$num_profiles , " SoilProfile objects, maximum depth ", x$max_depth, " (", x$depth_units, ")\n\n", sep='')
 	}
 
-# default plot method, could use some work...
-plot.SoilProfile <- function(x, form, ...)
-	{
-	
-	# consider using lattice graphics
-	plot(as.formula(form), data=x$data, ylim=c(x$max_depth, 0), ...)
-	}
