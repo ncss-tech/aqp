@@ -113,46 +113,6 @@ plot_slices <- function(slices, region_outline, contours=NA, depths, variable, p
 # x.new <- do.call('rbind', x.re.formatted)
 
 
-##############################################################
-## plotting functions ##
-##############################################################
-
-
-
-
-# 
-# needs to be cleaned up
-# 
-depth_function_plot <- function(b, v, df=2, ...)
-	{
-	require(splines)
-	# require(quantreg)
-	
-	# mid points
-	d <- diff(b)/2 + b[-length(b)]
-	
-	
-	# quantile regression
-	# lm.sp <- rq(v ~ ns(d,df))
-	
-	# regular lm
-	lm.sp <- lm(v ~ ns(d,df))
-	
-	new_depths <- seq(min(b), max(b))
-	lm.sp.pred <- predict(lm.sp, data.frame(d=new_depths))
-	
-	plot(lm.sp.pred, new_depths, type='l', col='blue', xlim=c(0,max(v)+1), ylim=c(max(b)+1,0), ...)
-	
-	
-	# plot the midpoints
-	points(d ~ v)
-	
-	lines(approx(v,d), lty=2, col='red')
-	
-	# make the step function:
-	segments(v, b[-length(b)], v, b[-1])
-	segments(v[-length(v)], b[-c(1,length(b))], v[-1], b[-c(1,length(b))])
-	}
 
 
 
