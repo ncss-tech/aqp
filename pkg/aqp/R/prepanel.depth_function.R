@@ -21,6 +21,6 @@ if(missing(groups))
 	}
 
 # compute better xlim based on range of confidence band 
-the_range <- c(min(d$lower, na.rm=TRUE), max(d$upper, na.rm=TRUE))
+the_range <- c(min(c(d$lower,d$yhat), na.rm=TRUE), max(c(d$upper, d$yhat), na.rm=TRUE))
 return(list(xlim=the_range))
 }
