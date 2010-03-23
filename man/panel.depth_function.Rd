@@ -61,6 +61,7 @@ panel.depth_function(x, y, upper = NA, lower = NA, subscripts = NULL, groups = N
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+library(lattice)
 data(sp1)
 
 xyplot(cbind(top,bottom) ~ prop, groups=id, data=sp1, 
