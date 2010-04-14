@@ -1,11 +1,11 @@
 Package: aqp
-Version: 0.75
-Date: 2010-03-14
+Version: 0.76
+Date: 2010-04-14
 Title: Algorithms for Quantitative Pedology
 Author: Dylan Beaudette <debeaudette@ucdavis.edu>
 Maintainer: Dylan Beaudette <debeaudette@ucdavis.edu>
-Depends: R (>= 2.8.0), lattice, cluster, sp, maptools
-Suggests: RColorBrewer, plyr
+Depends: R (>= 2.8.0), lattice, cluster, sp
+Suggests: RColorBrewer, plyr, maptools, foreign
 Description: R package for working with and plotting soil profile data.
 License: GPL (>= 2)
-Packaged: 2010-03-14 11:00:00 UTC; dylan
+Packaged: 2010-04-14 11:00:00 UTC; dylan
