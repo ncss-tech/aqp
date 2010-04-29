@@ -1,3 +1,5 @@
+## check this function... 
+
 # TODO : this function doesn't help when the upper/lower CI limits aren't defined
 # revert to standard pre-panel function in that case
 # used to pre-compute wider xlim range based on upper/lower values
