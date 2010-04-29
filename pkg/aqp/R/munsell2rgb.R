@@ -14,7 +14,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 	if(length(unique( c(length(the_hue),length(the_value),length(the_chroma)))) != 1)
 		stop('All inputs must be vectors of equal length.')
 	
-	# load lookup table
+	# load lookup table from our package
 	data(munsell)
 	
 	# perform subset
@@ -23,6 +23,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 		{
 		s.i <- subset(munsell, 
 		select=c('r','g','b'), 
+		# hue, value, and chroma are columns in munsell dataframe
 		subset=hue == the_hue[i] & value == the_value[i] & chroma == the_chroma[i])
 		
 		# check for searches returning no matches

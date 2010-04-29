@@ -8,17 +8,7 @@ Algorithms for Quantitative Pedology
 \description{
 R package for working with and plotting soil profile data.
 }
-\details{
-\tabular{ll}{
-Package: \tab aqp\cr
-Version: \tab 0.75\cr
-Date: \tab 2010-03-14\cr
-Depends: \tab R (>= 2.8.0), lattice, cluster, sp, maptools\cr
-Suggests: \tab RColorBrewer, plyr\cr
-License: \tab GPL (>= 2)\cr
-Packaged: \tab 2010-03-14 11:00:00 UTC; dylan\cr
-Built: \tab R 2.10.1; ; 2010-03-23 18:40:20 UTC; unix\cr
-}
+
 
 Index:
 \preformatted{
@@ -48,18 +38,12 @@ unroll                  Unroll Genetic Horizons
 }
 \author{
 Dylan Beaudette <debeaudette@ucdavis.edu>
-
-Maintainer: Dylan Beaudette <debeaudette@ucdavis.edu>
-~~ The author and/or maintainer of the package ~~
 }
 \references{
-~~ Literature or other references for background information ~~
+http://casoilresource.lawr.ucdavis.edu/
 }
 \keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
+\seealso{}
 \examples{
 # TODO 
 }
