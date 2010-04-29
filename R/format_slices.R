@@ -12,6 +12,7 @@ format_slices <- function(data, crs=NULL, depths, variable=NULL)
 	for(i in depths)
 	{
 		# get this depth slice
+		# 'top' must be a numeric column in the source dataframe
 		d.sub <- subset(data, subset=top==i)
 		
 		# convert to SPDF: 'x' and 'y' columns must be present
