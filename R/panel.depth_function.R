@@ -1,6 +1,4 @@
 
-
-# add a manual page for this
 # note: confidence bands not defined when NA is present
 panel.depth_function <- function(x, y, upper=NA, lower=NA, subscripts=NULL, groups=NULL, ...) {
 
@@ -12,6 +10,8 @@ panel.grid(h=-1, v=-1, lty=3, col=1)
 # when the length of 'y' is > 'x', we are plotting a step function
 if(length(y) > length(x))
 	{
+	print('plotting segments...')
+	
 	# re-make a nice dataframe
 	d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
 	
@@ -22,7 +22,9 @@ if(length(y) > length(x))
 # normal plot -- not a step function
 else
 	{
-		# if we have an upper and lower bound defined, plot them
+	print('plotting lines...')
+	
+	# if we have an upper and lower bound defined, plot them
 	if(!missing(upper) & !missing(lower))
 		{
 		# working with grouped data and paneled data
@@ -77,6 +79,7 @@ else
 		{
 		# lookup color
 		m <- match(unique(d_i$group), ll)
+		
 		# add line
 		panel.lines(d_i$yhat, d_i$top, lwd=line.lwd[m], col=line.col[m], lty=line.lty[m])
 		})
