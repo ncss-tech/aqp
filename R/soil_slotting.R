@@ -28,36 +28,55 @@ conditional.sd <- function(x)
 
 
 
-# TODO: update this to generalize over several grouping variables
-# function used to slot soils one 'group' at a time 
-soil.slot.vec <- function(i, ...)
+# input dataframe must have an id column identifing each profile
+# note: this only works with numeric variables
+soil.slot.multiple <- function(data, g, vars, ...)
 	{
-	# when there is only a single soil being slotted, 
-	# we need to fix the levels of the 'id' factor:
-	i$id <- factor(i$id)
+	# absolutely need these
+	require(plyr)
+	require(reshape)
 	
-	# slot this data set with associated parameters
-	s <- soil.slot(data=i, ...)
+	# convert into long forma
+	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
-	return(s)
-	}
+	# apply slotting group-wise and return in long format
+	# note that we are passing in additional arguments to soil.slot 
+	# from the calling function
+	d.slotted <- ddply(d.long, .(variable), .fun=function(i, groups=g, ...) {
+		
+		# subset just the relevant columns
+		i.sub <- data.frame(
+			id=i$id, 
+			top=i$top, 
+			bottom=i$bottom, 
+			prop=i$value,
+			groups=i[, groups]
+			)
+			
+		# apply slotting according to grouping factor
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, ...)
+		return(i.slotted)
+		})
+		
+	# done
+	return(d.slotted)
+	}	
 
 
 
-## this function will cause errors when the levels of an id (factor) do not match those levels that actually have data!!
-## 
+
+
+
 ## this function will also break when horizon boundaries do not make sense
 ## 
 # means and confidence intervals should be calculated by population defined by seg_size and n pedons
-# note that this requires a wt column now
-# 
-#
-# TODO: check depth probability calculations
-# 
-# TODO: warnings generated in some cases... could it be when there is a single soil / group?
 # 
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE)
 	{
+	
+	# re-level id factor according to account for subsets
+	data$id <- factor(data$id)
+	
 	# what is the datatype of 'prop'
 	prop.class <- class(data$prop)
 	

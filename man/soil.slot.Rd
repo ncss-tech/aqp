@@ -6,7 +6,7 @@
 Soil Profile Slotting
 }
 \description{
-Align soil properties to a user-defined basis.
+Align a single soil property to a user-defined basis.
 }
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE)
@@ -53,13 +53,12 @@ A dataframe with slice-wise aggregation, weighted aggregation, class probabiliti
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{sp1}, \link{unroll}}
+\code{\link{sp1}, \link{unroll}}, \code{\link{soil.slot.multiple}}
 }
 \examples{
 # setup environment
 library(reshape)
 library(lattice)
-library(aqp)
 
 # load example data
 data(sp1)
@@ -165,9 +164,10 @@ prepanel=prepanel.depth_function
 # 3.2 standard aggregation, by grouping variable
 #
 require(plyr)
+
 # try str(sp1) for hints
 sp1$group <- with(sp1, factor(group))
-a <- ddply(sp1, .(group), .fun=soil.slot.vec)
+a <- ddply(sp1, .(group), .fun=soil.slot)
 
 # manually add mean +/- SD
 a$upper <- with(a, p.mean+p.sd)
