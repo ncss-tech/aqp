@@ -9,7 +9,8 @@ Convert Munsell Notation to RGB
 Color conversion based on a look-up table of common soil colors.
 }
 \usage{
-munsell2rgb(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE)
+munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
+maxColorValue=1, return_triplets=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

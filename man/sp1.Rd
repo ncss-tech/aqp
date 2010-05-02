@@ -38,9 +38,9 @@ Soil profile data from Pinnacles National Monument, CA.
 \source{
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+
 \examples{
 # prep environment
 require(lattice)
@@ -79,7 +79,8 @@ function(i) {
 )
 
 # combined viz
-g2 <- make.groups(s1, s5, s10, s20)
+g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5, 
+"10cm interval"=s10, "20cm interval"=s20)
 
 # note special syntax for plotting step function
 xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, 

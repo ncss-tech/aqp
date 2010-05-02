@@ -32,9 +32,10 @@ conditional.sd <- function(x)
 # note: this only works with numeric variables
 soil.slot.multiple <- function(data, g, vars, ...)
 	{
-	# absolutely need these
-	require(plyr)
-	require(reshape)
+	# check for dependencies
+	if(!require(plyr) | !require(reshape))
+		stop('Please install the "plyr" and "reshape" packages.')
+
 	
 	# convert into long forma
 	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)

@@ -40,8 +40,12 @@ k <- rep(c(0,0.1,0.05,0.01), each=100)
 w <- 100*exp(-k*z)
 
 xyplot(z ~ w, groups=k, ylim=c(105,-5), xlim=c(-5,105), type='l', 
-ylab='Depth', xlab='Weighting Factor', panel=function(...) {panel.grid(h=-1,v=-1) ; panel.superpose(...)},
-auto.key=list(columns=4, lines=TRUE, points=FALSE, title="k", cex=0.8, size=3)
+ylab='Depth', xlab='Weighting Factor', 
+auto.key=list(columns=4, lines=TRUE, points=FALSE, title="k", cex=0.8, size=3),
+panel=function(...) {
+	panel.grid(h=-1,v=-1) 
+	panel.superpose(...)
+	}
 )
 
 ## 2. basic implementation, requires at least two properties
@@ -62,6 +66,7 @@ require(MASS)
 d.sam <- sammon(d)
 
 # simple plot
+dev.off() ; dev.new()
 plot(d.sam$points, type = "n", xlim=range(d.sam$points[,1] * 1.5))
 text(d.sam$points, labels=row.names(d.sam$points), cex=0.5, col=cutree(h, 3))
 
@@ -69,10 +74,14 @@ text(d.sam$points, labels=row.names(d.sam$points), cex=0.5, col=cutree(h, 3))
 ## 4. try out the 'sample_interval' argument
 # compute using sucessively larger sampling intervals
 data(sp3)
-d <- profile_compare(sp3, vars=c('clay','cec','ph'), max_d=100, k=0.01)
-d.2 <- profile_compare(sp3, vars=c('clay','cec','ph'), max_d=100, k=0.01, sample_interval=2)
-d.10 <- profile_compare(sp3, vars=c('clay','cec','ph'), max_d=100, k=0.01, sample_interval=10)
-d.20 <- profile_compare(sp3, vars=c('clay','cec','ph'), max_d=100, k=0.01, sample_interval=20)
+d <- profile_compare(sp3, vars=c('clay','cec','ph'), 
+max_d=100, k=0.01)
+d.2 <- profile_compare(sp3, vars=c('clay','cec','ph'), 
+max_d=100, k=0.01, sample_interval=2)
+d.10 <- profile_compare(sp3, vars=c('clay','cec','ph'), 
+max_d=100, k=0.01, sample_interval=10)
+d.20 <- profile_compare(sp3, vars=c('clay','cec','ph'), 
+max_d=100, k=0.01, sample_interval=20)
 
 # check the results via hclust / dendrograms
 oldpar <- par(mfcol=c(1,4), mar=c(2,1,2,2))

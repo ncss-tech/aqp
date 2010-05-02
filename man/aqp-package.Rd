@@ -28,14 +28,13 @@ profile_compare         Numerical Soil Profile Comparison
 profile_plot.default    Profile Plot
 random_profile          Random Profile
 soil.slot               Soil Profile Slotting
+soil.slot.multiple      Multivariate Soil Profile Slotting
 sp1                     Soil Profile Data Example 1
 sp2                     Honcut Creek Soil Profile Data
 sp3                     Soil Profile Data Example 3
 unroll                  Unroll Genetic Horizons
 }
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
-}
+
 \author{
 Dylan Beaudette <debeaudette@ucdavis.edu>
 }
@@ -43,7 +42,7 @@ Dylan Beaudette <debeaudette@ucdavis.edu>
 http://casoilresource.lawr.ucdavis.edu/
 }
 \keyword{ package }
-\seealso{}
+\seealso{\code{\link{sp1}, \link{sp2}, \link{sp3}}}
 \examples{
 # TODO 
 }

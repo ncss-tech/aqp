@@ -9,7 +9,7 @@ profile_plot <- function(...) UseMethod("profile_plot")
 	
 	
 # method for SoilProfileList class
-profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.25, cex.names=0.5, plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, max.depth=d$max_depth, ...)
+profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, cex.names=0.5, plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, max.depth=d$max_depth, ...)
 	{	
 		
 	# check for missing / bad soil color column
@@ -31,7 +31,7 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.25, cex.
 	
 	# init plotting region, unless we are appending to an existing plot
 	if(!add)
-		plot(0, 0, type='n', xlim=c(1, d$num_profiles+extra_x_space), ylim=c(max(depth_axis_intervals), -2), axes=FALSE)
+		plot(0, 0, type='n', xlim=c(1, d$num_profiles+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE)
 	
 	# add horizons in specified order	
 	for(i in 1:d$num_profiles)
@@ -51,7 +51,7 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.25, cex.
 		text(i + width, mid, d$data[[profile_i]][,'name'], pos=4, offset=0.1, cex=cex.names)
 		
 		# ID
-		text(i, y.offset-1, d$data[[profile_i]]$id, pos=3, font=2, cex=cex.names+(0.2*cex.names))
+		text(i, y.offset, d$data[[profile_i]]$id, pos=3, font=2, cex=cex.names+(0.2*cex.names))
 		}
 	
 	# axis:

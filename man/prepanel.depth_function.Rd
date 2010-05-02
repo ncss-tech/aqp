@@ -9,7 +9,8 @@ Pre-Panel Function for panel.depth_function
 Compute reasonable xlim values based on upper/lower confidence limits of depth function.
 }
 \usage{
-prepanel.depth_function(x, y, upper, lower, subscripts, groups = NULL, ...)
+prepanel.depth_function(x, y, upper, lower, subscripts, 
+groups = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -45,17 +46,9 @@ other arguments
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-D.E. Beaudette
-}
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E Beaudette}
 
 \seealso{
 \code{\link{panel.depth_function}}

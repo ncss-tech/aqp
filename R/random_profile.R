@@ -37,7 +37,7 @@ for(i in 1:n_prop)
 	p <- numeric(n_hz)
 	p[1] <- rnorm(1)
 	for(j in 2:n_hz)
-		p[j] <- p[j-1] + rnorm(1, mean=runif(n=1, min=1, max=100), sd=runif(n=1, min=1, max=100))
+		p[j] <- p[j-1] + rnorm(1, mean=runif(n=1, min=-10, max=10), sd=runif(n=1, min=1, max=10))
 
 	# add properties
 	new_col <- paste('p',i, sep='')
@@ -47,3 +47,4 @@ for(i in 1:n_prop)
 # all done
 return(d)
 }
+
