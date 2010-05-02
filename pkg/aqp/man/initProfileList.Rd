@@ -1,7 +1,8 @@
 \name{initProfileList}
 \Rdversion{1.1}
 \alias{initProfileList}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\alias{[.SoilProfileList}
+
 \title{Intitalize a SoilProfileList Object}
 \description{
 Initialize a SoilProfileList class object from a dataframe.
@@ -11,71 +12,36 @@ initProfileList(d, depth_units = "cm", idcol = "id")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{d}{
-%%     ~~Describe \code{d} here~~
+  \item{d}{an input dataframe representing a single soil profile}
+  \item{depth_units}{unit of measure for depth values}
+  \item{idcol}{a column used to uniquely define this profile from others}
 }
-  \item{depth_units}{
-%%     ~~Describe \code{depth_units} here~~
-}
-  \item{idcol}{
-%%     ~~Describe \code{idcol} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+\details{This function will generate a SoilProfileList object by passing each soil profile in the input dataframe to \code{link{initProfile}}.}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\value{An object of class 'SoilProfileList'.}
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E Beaudette}
+
+\seealso{\code{\link{initProfile}}}
+
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+data(sp1)
 
-## The function is currently defined as
-function(d, depth_units='cm', idcol="id")
-	{
-	# need to 
-	if(!require(plyr))
-		stop('Please install the "plyr" package.')
-	
-	# init list of SoilProfile
-	d.list <- list()
-	d.list$data <- dlply(.data=d, .variables=idcol, .fun=initProfile, depth_units=depth_units, idcol=idcol)
-	
-	# add the max depth for the entire list
-	d.list$max_depth <- max(sapply(d.list$data, max), na.rm=TRUE)
-	
-	# add the depth units for the entire list
-	d.list$depth_units <- depth_units
-	
-	# keep count of number of profiles for later
-	d.list$num_profiles <- length(d.list$data)
-	
-	# set class membership
-	class(d.list) <- c('SoilProfileList','list')
-	
-	return(d.list)
-	}
+# convert into SoilProfileList object
+sp1.splist <- initProfileList(sp1)
+
+# basic accessor functions (still in development)
+
+# 1. get the first horizon from each soil profile 
+sp1.splist[1,]
+
+# 2 get the first profile as a SoilProfile object
+sp1.splist[, 1]
+
+# 3. get a named column from the second profile
+sp1.splist[, 2][, 'name']
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -19,7 +19,7 @@ soil.slot.multiple(data, g, vars, ...)
   \item{\dots}{further arguments to \code{\link{soil.slot}}}
 }
 \details{
-This function is a wrapper to \code{\link{soil.slotl}}, that makes it simpler to "slice" several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
+This function is a wrapper to \code{\link{soil.slot}}, that makes it simpler to "slice" several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
 }
 \value{
 A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-slice information repeated for each requested input variable.
@@ -40,7 +40,7 @@ data(sp3)
 
 # add new grouping factor
 sp3$group <- 1
-sp3$group[sp3$id > 5] <- 2
+sp3$group[as.numeric(sp3$id) > 5] <- 2
 sp3$group <- factor(sp3$group)
 
 # slot several variables at once
@@ -62,10 +62,9 @@ prepanel=prepanel.depth_function
 )
 
 # convert mean value for each variable into long format
-cast(a, groups + top + bottom ~ variable, value=c('p.mean'))
+a.wide <- cast(a, groups + top + bottom ~ variable, value=c('p.mean'))
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{manip}

@@ -1,6 +1,7 @@
 \name{soil.slot}
 \Rdversion{1.1}
 \alias{soil.slot}
+\alias{conditional.sd}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Soil Profile Slotting
@@ -9,7 +10,8 @@ Soil Profile Slotting
 Align a single soil property to a user-defined basis.
 }
 \usage{
-soil.slot(data, seg_size = NA, seg_vect = NA, return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE)
+soil.slot(data, seg_size = NA, seg_vect = NA, 
+return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -39,7 +41,7 @@ If TRUE, depth probability is computed and returned. Setting a dummy 'prop' colu
 }
 }
 \details{
-See the documentation for the sample dataset 'sp1' for further examples.
+The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}.
 }
 \value{
 A dataframe with slice-wise aggregation, weighted aggregation, class probabilities, or depth probabilities.
@@ -63,6 +65,16 @@ library(lattice)
 # load example data
 data(sp1)
 
+
+# test that mean of 1cm slotted property is equal to the 
+# hz-thickness weighted mean value of that property
+sp1.sub <- subset(sp1, sub=id == 'P009')
+hz.wt.mean <- with(sp1.sub, 
+sum((bottom - top) * prop) / sum(bottom - top) 
+)
+a <- soil.slot(sp1.sub)
+all.equal(mean(a$p.mean), hz.wt.mean)
+
 #
 # 1 standard usage, and plotting example
 #
@@ -73,7 +85,8 @@ b <- soil.slot(sp1, seg_size=5)
 
 # stack into long format
 ab <- make.groups(a, b)
-ab$which <- factor(ab$which, levels=c('a','b'), labels=c('1-cm Interval', '5-cm Interval'))
+ab$which <- factor(ab$which, levels=c('a','b'), 
+labels=c('1-cm Interval', '5-cm Interval'))
 
 # manually add mean +/- SD
 ab$upper <- with(ab, p.mean+p.sd)

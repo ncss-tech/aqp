@@ -6,7 +6,8 @@
 Generate a random soil profile according to set criteria, with correlated depth trends.
 }
 \usage{
-random_profile(id, n = c(3, 4, 5, 6), min_thick = 5, max_thick = 30, n_prop = 5)
+random_profile(id, n = c(3, 4, 5, 6), min_thick = 5,
+ max_thick = 30, n_prop = 5)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,9 +17,7 @@ random_profile(id, n = c(3, 4, 5, 6), min_thick = 5, max_thick = 30, n_prop = 5)
   \item{max_thick}{maximum thickness criteria for a simulated horizon}
   \item{n_prop}{number of simulated soil properties (columns in the returned dataframe)}
 }
-\details{
-  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
 A dataframe with the simulated profile.
 }
@@ -37,9 +36,15 @@ d <- do.call('rbind', d.list)
 # convert to SoilProfileList and plot
 # add a fake color
 d$soil_color <- 'white'
+
+# if the plotrix package is installed, 
+# make a more interesting color based on the first property
+if(require(plotrix))
+	d$soil_color <- color.scale(d$p1, c(0,1,1),c(1,1,0),0)
+
+# convert to SoilProfileList object		
 d <- initProfileList(d)
 profile_plot(d)
-
 
 
 # simple cluster analysis:
@@ -56,7 +61,8 @@ plot(hclust(p))
 
 # 67 seconds on 1.3 Ghz Intel Mac Mini -- D matrix = 192.3 Mb
 # more efficient computation, at the expense of precision, with 
-# p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'), max_d=50, k=0, sample_interval=10)
+# p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'),
+# max_d=50, k=0, sample_interval=10)
 
 # compare with
 # p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'), max_d=50, k=0)

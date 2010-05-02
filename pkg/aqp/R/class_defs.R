@@ -31,7 +31,7 @@ initProfile <- function(d, depth_units='cm', idcol="id")
 # could use some work...
 initProfileList <- function(d, depth_units='cm', idcol="id")
 	{
-	# need to 
+	# check for dependencies
 	if(!require(plyr))
 		stop('Please install the "plyr" package.')
 	
@@ -72,12 +72,37 @@ max.SoilProfile <- function(x, ...)
 	"[.data.frame"(x$data, ...)
 	}
 
-# interesting effect:
-# sp.list[1,] --> returns the first horizon from all objects
-# sp.list[,1] --> returns all horizons from the first object
-"[.SoilProfileList" <- function(x, ...)
+
+# note: when asking for horizon 'n' from all profiles, NA is returned when there is no horizon 'n' in that profile.
+"[.SoilProfileList" <- function(x, i, j)
 	{
-	"[.data.frame"(x$data, ...)
+	# no indices
+	if(missing(i) & missing(j))
+		{ 
+    	return(x)
+    	}
+    
+    # just a row-like index
+    if(missing(j))
+		{
+		tmp <- lapply(x$data, function(z) z[i, ])
+		
+		# check for dependencies
+		if(!require(plyr))
+			stop('Please install the "plyr" package.')
+		
+		# convert into a dataframe with profile ids
+		return( ldply(tmp) )	
+		}
+	
+	# just a column-like index
+    if(missing(i))
+    	{
+    	tmp <- "[.data.frame"(x$data, i, j)	
+    	
+    	return(tmp)
+    	}
+    
 	}
 
 

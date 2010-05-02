@@ -32,14 +32,12 @@ Soil samples from 10 soil profiles, taken from the Sierra Foothill Region of Cal
   }
 }
 \details{
-%%  ~~ If necessary, more details than the __description__ above ~~
+These data were collected to support research funded by the Kearney Foundation of Soil Science.
 }
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+
+
 \examples{
 data(sp3)
 ## maybe str(sp3) ; plot(sp3) ...

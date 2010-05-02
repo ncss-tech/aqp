@@ -12,7 +12,9 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }
 \usage{
 
-\method{profile_plot}{SoilProfileList}(d, color = "soil_color", width = 0.25, cex.names = 0.5, plot.order = 1:d$num_profiles, add = FALSE, scaling.factor = 1, y.offset = 0, max.depth = d$max_depth, \dots)
+\method{profile_plot}{SoilProfileList}(d, color = "soil_color", width = 0.2, 
+cex.names = 0.5, plot.order = 1:d$num_profiles, add = FALSE,
+scaling.factor = 1, y.offset = 0, max.depth = d$max_depth, \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -29,20 +31,14 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+This function sets the margins before plotting, so previous calls to \code{par(mar=...)} will be overridden.
 }
 \value{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
 }
-\references{
-http://casoilresource.lawr.ucdavis.edu/
-}
-\author{
-Dylan E. Beaudette
-}
-\note{
-%%  ~~further notes~~
-}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
 
 \seealso{
 \code{\link{initProfileList}}

@@ -6,31 +6,37 @@
 Generate a descretized vector of genetic horizons along a user-defined pattern.
 }
 \usage{
-unroll(top, bottom, prop, max_depth, segment_size = NA, bottom_padding_value = NA)
+unroll(top, bottom, prop, max_depth, bottom_padding_value = NA)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{top}{ ~~Describe \code{top} here~~ }
-  \item{bottom}{ ~~Describe \code{bottom} here~~ }
-  \item{prop}{ ~~Describe \code{prop} here~~ }
-  \item{max_depth}{ ~~Describe \code{max_depth} here~~ }
-  \item{segment_size}{ ~~Describe \code{segment_size} here~~ }
-  \item{bottom_padding_value}{ ~~Describe \code{bottom_padding_value} here~~ }
+  \item{top}{vector of upper horizon boundaries}
+  \item{bottom}{vector of lower horizon boundaries}
+  \item{prop}{vector of some property to be "unrolled" over a regular sequence}
+  \item{max_depth}{maximum depth to consider}
+  \item{bottom_padding_value}{value to use when padding missing data}
 }
 \details{
 This function is used internally by several higher-level components of the soil package.
 }
-\value{
-  ~Describe the value returned
-  If it is a LIST, use
-  \item{comp1 }{Description of 'comp1'}
-  \item{comp2 }{Description of 'comp2'}
-  ...
-}
+
+\value{a vector of "unrolled" property values}
+
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
 
 \seealso{\code{\link{soil.slot}}}
+
+\examples{
+data(sp1)
+
+# subset a single soil profile:
+sp1.1 <- subset(sp1, subset=id == 'P001')
+
+# demonstrate how this function works
+x <- with(sp1.1, unroll(top, bottom, prop, max_depth=50))
+plot(x, 1:length(x), ylim=c(55,0), type='b', cex=0.5)	
+}
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
