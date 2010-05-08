@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Format Depth Slices of a Soil Profile}
 \description{
-This function constructions a spatial data frame from soil profile data that has
+This function constructions a list of spatial data frames from soil profile data that has
 already been 'sliced' into regular depth intervals.
 }
 \usage{
@@ -21,13 +21,13 @@ format_slices(data, crs, depths, variable = NULL)
 If the resulting SPDF are to be used for geostatistical interpolation or simulation, it is necessary to supply an argument for 'variable', such that points in space where that variable is NA will be removed.
 }
 \value{
-  A list of SPDF slices are returned, element in the list for each reqested slice in 'depths'.}
+  A list of SPDF slices are returned, with elements representing each reqested slice in 'depths'.}
   
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
-\note{ ~~further notes~~ 
 
-}
+\note{}
+
 \seealso{\code{\link{plot_slices}}}
 \examples{
 
