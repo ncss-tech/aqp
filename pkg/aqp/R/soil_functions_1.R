@@ -14,6 +14,7 @@ plot_slices <- function(slices, region_outline, contours=NA, depths, variable, p
 	
 	global_quantiles.names <- levels(cut(probs, breaks=probs))
 	
+	## todo: automate legend placement
 	# setup plot regions: hard-coded for 3x2 layout
 	m <- matrix(c(1,1,1,2,3,4,5,6,7,8,8,8), ncol=3, byrow=TRUE)
 	layout(m, heights=c(0.1,1,1,0.2))
