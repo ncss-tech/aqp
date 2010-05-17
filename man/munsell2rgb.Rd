@@ -42,6 +42,16 @@ Dylan E. Beaudette
 }
 \examples{
 library(aqp)
+
+# basic example:
+d <- expand.grid(hue='10YR', value=2:8, chroma=1:8)
+d$color <- with(d, munsell2rgb(hue, value, chroma))
+
+# similar to the 10YR color book page
+plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
+
+
+# soils example
 data(sp1)
 
 # convert colors
