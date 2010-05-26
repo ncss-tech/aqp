@@ -43,7 +43,7 @@ soil.slot.multiple <- function(data, g, vars, ...)
 	# apply slotting group-wise and return in long format
 	# note that we are passing in additional arguments to soil.slot 
 	# from the calling function
-	d.slotted <- ddply(d.long, .(variable), .fun=function(i, groups=g, ...) {
+	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, ...) {
 		
 		# subset just the relevant columns
 		i.sub <- data.frame(
@@ -68,12 +68,39 @@ soil.slot.multiple <- function(data, g, vars, ...)
 
 
 
-## this function will also break when horizon boundaries do not make sense
+## this function will break when horizon boundaries do not make sense
 ## 
 # means and confidence intervals should be calculated by population defined by seg_size and n pedons
 # 
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE)
 	{
+	
+# 	## this isn't usually a problem
+# 	# test for horizon boundaries that are equal... common to Cr and R horizons
+# 	hz.test <- data$top == data$bottom
+# 	if(length(which(hz.test)) > 0)
+# 		{
+# 		print(data[which(hz.test), ])
+# 		stop('Error: top and bottom horizon boundaries are equal. Cr or R horizon?')
+# 		}
+	
+	# no NA allowed in top or bottom
+	hz.test.top <- is.na(data$top)
+	hz.test.bottom <- is.na(data$bottom)
+	
+	if(length(which(hz.test.bottom)) > 0)
+		{
+		print(data[which(hz.test.top), ])
+		stop('Error: NA in horizon top boundary')
+		}
+		
+	if(length(which(hz.test.top)) > 0)
+		{
+		print(data[which(hz.test.bottom), ])
+		stop('Error: NA in horizon top boundary')
+		}
+	
+	
 	
 	# re-level id factor according to account for subsets
 	data$id <- factor(data$id)
@@ -81,13 +108,30 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	# what is the datatype of 'prop'
 	prop.class <- class(data$prop)
 	
-	# print(paste('property is:', prop.class))
-	
 	# get the max depth for the entire dataset
 	max_d <- max(data$bottom)
 	
 	# unroll the dataset, a pedon at a time
-	x.unrolled <- by(data, data$id, function(i, m=max_d) unroll(top=i$top, bottom=i$bottom, prop=i$prop, max_depth=m))
+	x.unrolled <- by(data, data$id, function(i, m=max_d) 
+		{
+		
+		u <- try(unroll(top=i$top, bottom=i$bottom, prop=i$prop, max_depth=m))
+		
+		## TODO: could be better
+		# check for a non-NULL attribute of 'class'
+		# this will only happen when there was an error
+		if( !is.null(attr(u, 'class')))
+			{
+			if(attr(u, 'class') == 'try-error')
+				{
+				print(i)
+				stop('Error: bad horizon structure')
+				}
+			}
+		else
+			return(u)
+		} )
+	
 	
 	# note that these will be used later on, based on segmenting approach
 	# reconstitute into a matrix with 1:n-depth interval rows, and n_pedons columns
