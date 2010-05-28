@@ -88,13 +88,13 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	hz.test.top <- is.na(data$top)
 	hz.test.bottom <- is.na(data$bottom)
 	
-	if(length(which(hz.test.bottom)) > 0)
+	if(any(hz.test.top))
 		{
 		print(data[which(hz.test.top), ])
 		stop('Error: NA in horizon top boundary')
 		}
 		
-	if(length(which(hz.test.top)) > 0)
+	if(any(hz.test.bottom))
 		{
 		print(data[which(hz.test.bottom), ])
 		stop('Error: NA in horizon top boundary')
