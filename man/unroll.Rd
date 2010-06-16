@@ -17,7 +17,7 @@ unroll(top, bottom, prop, max_depth, bottom_padding_value = NA)
   \item{bottom_padding_value}{value to use when padding missing data}
 }
 \details{
-This function is used internally by several higher-level components of the soil package.
+This function is used internally by several higher-level components of the soil package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
 }
 
 \value{a vector of "unrolled" property values}

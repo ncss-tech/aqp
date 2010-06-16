@@ -41,7 +41,7 @@ If TRUE, depth probability is computed and returned. Setting a dummy 'prop' colu
 }
 }
 \details{
-The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}.
+The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
 }
 \value{
 A dataframe with slice-wise aggregation, weighted aggregation, class probabilities, or depth probabilities.
