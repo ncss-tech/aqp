@@ -11,7 +11,7 @@ Align a single soil property to a user-defined basis.
 }
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, 
-return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE)
+return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE, strict=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
