@@ -6,7 +6,7 @@
 Generate a descretized vector of genetic horizons along a user-defined pattern.
 }
 \usage{
-unroll(top, bottom, prop, max_depth, bottom_padding_value = NA)
+unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,7 +36,7 @@ sp1.1 <- subset(sp1, subset=id == 'P001')
 
 # demonstrate how this function works
 x <- with(sp1.1, unroll(top, bottom, prop, max_depth=50))
-plot(x, 1:length(x), ylim=c(55,0), type='b', cex=0.5)	
+plot(x, 1:length(x), ylim=c(90,0), type='b', cex=0.5)	
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

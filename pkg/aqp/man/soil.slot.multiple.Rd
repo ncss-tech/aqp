@@ -9,7 +9,7 @@ Multivariate Soil Profile Slotting
 Align several soil properties to a user-defined basis, with data returned in long format.
 }
 \usage{
-soil.slot.multiple(data, g, vars, ...)
+soil.slot.multiple(data, g, vars, strict=FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

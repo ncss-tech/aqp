@@ -6,18 +6,23 @@ unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict
 	{
 	# are horizons in the correct order?
 	if(! all.equal(top,sort(top)))
-		stop('Error: horizons are not sorted by depth.')
+		stop('Error: horizons are not sorted by depth')
 	
 	# number of horizons
 	n.horizons <- length(top)
 	
 	# all bottom values above the last horizon should be in the SET of top values below the first horizon
-	if(strict)
+	hz.test.bottom_hz_in_top <- bottom[-n.horizons] %in% top[-1]
+	if(length(which(hz.test.bottom_hz_in_top)) != (n.horizons - 1))
 		{
-		hz.test.bottom_hz_in_top <- bottom[-n.horizons] %in% top[-1]
-		if(length(which(hz.test.bottom_hz_in_top)) != (n.horizons - 1))
+		
+		if(strict)
 			{
-			stop('Error: bad horizon structure')
+			stop('error: bad horizon structure')
+			}
+		else
+			{
+			warning('bad horizon structure, check with strict=TRUE');
 			}
 		}
 		
