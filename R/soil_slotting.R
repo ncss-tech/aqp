@@ -30,7 +30,7 @@ conditional.sd <- function(x)
 
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
-soil.slot.multiple <- function(data, g, vars, ...)
+soil.slot.multiple <- function(data, g, vars, strict=FALSE, ...)
 	{
 	# check for dependencies
 	if(!require(plyr) | !require(reshape))
@@ -55,7 +55,7 @@ soil.slot.multiple <- function(data, g, vars, ...)
 			)
 			
 		# apply slotting according to grouping factor
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, ...)
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, strict=strict, ...)
 		return(i.slotted)
 		})
 		
@@ -72,7 +72,7 @@ soil.slot.multiple <- function(data, g, vars, ...)
 ## 
 # means and confidence intervals should be calculated by population defined by seg_size and n pedons
 # 
-soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE)
+soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE, strict=FALSE)
 	{
 	
 # 	## this isn't usually a problem
@@ -83,6 +83,8 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 # 		print(data[which(hz.test), ])
 # 		stop('Error: top and bottom horizon boundaries are equal. Cr or R horizon?')
 # 		}
+	
+	## check for fatal errors
 	
 	# no NA allowed in top or bottom
 	hz.test.top <- is.na(data$top)
@@ -100,8 +102,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		stop('Error: NA in horizon top boundary')
 		}
 	
-	
-	
+
 	# re-level id factor according to account for subsets
 	data$id <- factor(data$id)
 	
@@ -115,7 +116,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	x.unrolled <- by(data, data$id, function(i, m=max_d) 
 		{
 		
-		u <- try(unroll(top=i$top, bottom=i$bottom, prop=i$prop, max_depth=m))
+		u <- try(unroll(top=i$top, bottom=i$bottom, prop=i$prop, max_depth=m, strict=strict))
 		
 		## TODO: could be better
 		# check for a non-NULL attribute of 'class'
