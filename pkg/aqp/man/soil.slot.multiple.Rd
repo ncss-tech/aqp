@@ -16,6 +16,7 @@ soil.slot.multiple(data, g, vars, ...)
   \item{data}{an input dataframe with 'id' column defining soil profiles}
   \item{g}{a character string or vector of length = 1, naming the column in the input dataframe to use as the grouping variable}
   \item{vars}{a character vector with names of columns in the input dataframe that will be aggregated}
+  \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
   \item{\dots}{further arguments to \code{\link{soil.slot}}}
 }
 \details{
