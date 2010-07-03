@@ -11,7 +11,8 @@ Align a single soil property to a user-defined basis.
 }
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, 
-return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE, strict=FALSE)
+return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE, 
+strict=FALSE, user.fun=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,6 +41,7 @@ If TRUE, then a column called 'wt' should be present in the source dataframe, an
 If TRUE, depth probability is computed and returned. Setting a dummy 'prop' column to 1 in the source dataframe is suggested. See examples below.
 }
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
+\item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
 }
 \details{
 The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
