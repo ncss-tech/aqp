@@ -30,7 +30,7 @@ conditional.sd <- function(x)
 
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
-soil.slot.multiple <- function(data, g, vars, strict=FALSE, ...)
+soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 	{
 	# check for dependencies
 	if(!require(plyr) | !require(reshape))
@@ -55,7 +55,7 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, ...)
 			)
 			
 		# apply slotting according to grouping factor
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, strict=strict, ...)
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, strict=strict, user.fun=user.fun, ...)
 		return(i.slotted)
 		})
 		
@@ -72,7 +72,7 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, ...)
 ## 
 # means and confidence intervals should be calculated by population defined by seg_size and n pedons
 # 
-soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE, strict=FALSE)
+soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE, strict=FALSE, user.fun=NULL)
 	{
 	
 # 	## this isn't usually a problem
@@ -102,7 +102,11 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		stop('Error: NA in horizon top boundary')
 		}
 	
-
+	# can't pass in a bogus aggregate function
+	if(!is.null(user.fun) & !is.function(user.fun)) 
+		stop('Error: user.fun is not a function')
+		
+	
 	# re-level id factor according to account for subsets
 	data$id <- factor(data$id)
 	
@@ -291,6 +295,12 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 		p.quantiles <- data.frame(t(apply(x.recon, 1, quantile, probs=q.probs, na.rm=TRUE)))
 		names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
+		
+		# user function
+		if(!is.null(user.fun))
+			{
+			p.user <- try( apply(x.recon, 1, user.fun) )
+			}
 		}
 	
 	# todo: update this to use a different column
@@ -299,7 +309,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		# the results of this operation are a list,
 		# one element for each depth segment
 		
-		# get a vector of all possible categories		
+		# get a vector of all possible categories
 		p.unique.classes <- as.vector(na.omit(unique(as.vector(x.recon))))
 		
 		# tabular frequences for complete set of possible categories
@@ -373,7 +383,13 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		{
 		if(prop.class %in% c('numeric','integer'))
 			{
-			df.stats <- data.frame(p.mean, p.sd, p.quantiles)
+			if(!is.null(user.fun))
+				{
+				# TODO: might be good to check for a try-error
+				df.stats <- data.frame(p.mean, p.sd, p.quantiles, p.user)
+				}
+			else
+				df.stats <- data.frame(p.mean, p.sd, p.quantiles)
 			}
 		if(prop.class == 'character')
 			{
