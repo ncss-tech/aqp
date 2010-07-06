@@ -57,15 +57,17 @@ plot(hclust(p))
 # stress-test profile comparison functions (not run)
 # d.list <- lapply(1:1000, function(i) random_profile(i))
 # d <- do.call('rbind', d.list)
-# rm(d.list)
+# rm(d.list) ; gc()
+# 
+# 100 profiles, 4 varibales:
+# 67 seconds on 1.3 Ghz Intel Mac Mini 
+# D matrix = 192.3 Mb
+# p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'), max_d=50, k=0)
 
-# 67 seconds on 1.3 Ghz Intel Mac Mini -- D matrix = 192.3 Mb
 # more efficient computation, at the expense of precision, with 
 # p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'),
 # max_d=50, k=0, sample_interval=10)
 
-# compare with
-# p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'), max_d=50, k=0)
 
 
 }

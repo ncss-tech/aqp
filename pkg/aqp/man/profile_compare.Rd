@@ -68,7 +68,8 @@ d.sam <- sammon(d)
 # simple plot
 dev.off() ; dev.new()
 plot(d.sam$points, type = "n", xlim=range(d.sam$points[,1] * 1.5))
-text(d.sam$points, labels=row.names(d.sam$points), cex=0.5, col=cutree(h, 3))
+text(d.sam$points, labels=row.names(as.data.frame(d.sam$points)), 
+cex=0.75, col=cutree(h, 3))
 
 
 ## 4. try out the 'sample_interval' argument
