@@ -1,0 +1,5 @@
+-------------------------- aqp 0.88 (2010-07-06) --------------------------
+* new version of plyr (1.0) should speed up most functions in aqp pacakge 
+* added support for user-defined functions in soil.slot and soil.slot.multiple
+* planning addition of PCA by depth slice
+* planning addition of equal-area spline fitting

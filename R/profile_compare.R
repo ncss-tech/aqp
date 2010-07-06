@@ -46,7 +46,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
-	s.unrolled <- by(s, s$id, function(di, p=vars, d=max_d) 
+	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d) 
 		{
 		# init a temp list
 		l <- list()
@@ -79,7 +79,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		}
 	)
 	
-	
+		
 	# init a list to store distance matrices, one for each depth interval
 	d <- vector('list', max(seq_along(depth_slice_seq)))
 	
