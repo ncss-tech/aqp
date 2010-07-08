@@ -136,7 +136,6 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	setTxtProgressBar(pb, i)
 	
 	
-	
 	# debugging information on memory consumption
 	cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
 	
