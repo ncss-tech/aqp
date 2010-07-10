@@ -11,10 +11,8 @@
 
 
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
-# TODO: convert soil_flag into a factor
 # function requires at least two attributes
-# hard coded reference to id
-# seems to work with different total depths... need to check
+# hard coded reference to s$id
 # set k to 0 for no depth weighting 
 profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FALSE, add_soil_flag=FALSE, return_depth_distances=FALSE)
 	{
@@ -89,7 +87,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		
 	
 	
-	
+	## NOTE: careful iterating over lists with a for() loop, and when there may be a NULL lurking
 	# init a list to store distance matrices, one for each depth interval
 	d <- vector('list', max(seq_along(depth_slice_seq)))
 	
