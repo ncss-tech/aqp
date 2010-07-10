@@ -193,7 +193,8 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 				d[[i]] <- d_i
 				}
 			
-			
+			# remove the soil.matrix object to save some space
+			rm(soil.matrix) ; gc()
 			}
 		# use a less expensive approach, where all NA are replaced by the max distance
 		else
