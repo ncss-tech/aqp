@@ -7,6 +7,8 @@
 
 ## soil.slot() would be a better approach than using every nth depth slice
 
+## careful -- we are getting the labels for the final dissimilarity matrix from the levels of the profile ID
+
 
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
 # TODO: convert soil_flag into a factor
@@ -43,7 +45,8 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	# compute a weighting vector based on k	
 	w <- 1 * exp(-k * depth_slice_seq)
 	
-	
+	## unroll each named soil property, for each soil profile
+	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
 	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d) 
@@ -58,28 +61,41 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 			l[[p_i]] <- unroll(di$top, di$bottom, prop=di[,p_i], max_depth=d)
 			}
 			
-		
-		
-		# add a soil flag as one of the attributes 
-		# doesn't seem to help-- resulting groupings do not make sense
-		if(add_soil_flag)
-			{
-			# generate a soil flag: 1=soil, 0=not soil
-			max_soil_depth <- max(di$bottom)
-			if(max_soil_depth >= d)
-				remaining_non_soil <- 0
-			else
-				remaining_non_soil <- d - max_soil_depth
-				
-			l$soil_flag <- factor(c(rep(1, times=max_soil_depth), rep(0, times=remaining_non_soil )))
-			}
-			
 		# convert list into z by p matrix
 		m <- sapply(l, '[')
 		}
 	)
 	
+	
+	## NOTE: this will not work when a user-defined interval is used for slicing!!
+	## 
+	## generate a matrix storing a flag describing soil vs. non-soil at each slice
+	## note that this does not take into account missing horizon data within the profile
+	if(add_soil_flag)
+		{
+		# get the depth of each profile
+		s.slices_of_soil <- tapply(s$bottom, s$id, function(i) max(i, na.rm=TRUE) )
 		
+		# truncate to the max requested depth
+		s.slices_of_soil <- ifelse(s.slices_of_soil <= max_d, s.slices_of_soil, max_d)
+		s.slices_of_non_soil <- max_d - s.slices_of_soil
+		
+		# init a matrix with dimensions: depth slices, number of profiles
+		soil.matrix <- matrix(ncol=length(s.slices_of_soil), nrow=max_d)
+		
+		# will with TRUE for 'soil' or FALSE for 'non-soil'
+		for(s.i in 1:length(s.slices_of_soil))
+			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
+		
+		
+		# debugging: plot a diagnostic image
+		image(1:n.profiles, 1:max_d, t(soil.matrix), col=c('white','grey'), ylim=c(max_d, 1), xlab='ID', ylab='Depth', main='Soil/Non-Soil Matrix')
+		abline(v=1:max_d + 0.5)
+		}
+		
+	
+	
+	
 	# init a list to store distance matrices, one for each depth interval
 	d <- vector('list', max(seq_along(depth_slice_seq)))
 	
@@ -143,13 +159,56 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	# finish progress bar	
 	close(pb)
 	
+	
+	# should NA in the dissimilarity matrix be replaced with max(D) ?
 	if(replace_na)
 		{
 		# replace all NA with the MAX distance between any observations
 		max.distance <- max(sapply(d, max, na.rm=TRUE))
-		d <- lapply(d, function(d_i) {d_i[which(is.na(d_i))] <- max.distance ; return(d_i)} )
-		}
 		
+		## note: this will not work with sample_interval set
+		# should we use a more expensive approach, that uses the soil/non_soil flag?
+		if(add_soil_flag)
+			{
+			# kind of messy: re-using an object like this
+			for(i in 1:length(d))
+				{
+				d_i <- as.matrix(d[[i]])
+
+				# set all pairs that are made between deep vs. shallow soil
+				# to the maximum distance- by row and column
+				cells.with.na.rows <- which(is.na(d_i[, which(soil.matrix[i, ])]))
+				cells.with.na.cols <- which(is.na(d_i[which(soil.matrix[i, ]), ]))
+				
+				d_i[, which(soil.matrix[i, ])][cells.with.na.rows] <- max.distance
+				d_i[which(soil.matrix[i, ]), ][cells.with.na.cols] <- max.distance
+				
+				# convert back to dist object
+				d_i <- as.dist(d_i)
+				
+				# copy original attributes
+				attributes(d_i) <- attributes(d[[i]])
+				
+				# save back to original position in list
+				d[[i]] <- d_i
+				}
+			
+			
+			}
+		# use a less expensive approach, where all NA are replaced by the max distance
+		else
+			{
+			d <- lapply(d, function(d_i) 
+				{
+				cells.with.na <- which(is.na(d_i))
+				d_i[cells.with.na] <- max.distance
+				return(d_i)
+				} )
+			}
+		}
+	
+	
+	
 	# perform depth-weighting 	
 	for(i in seq_along(depth_slice_seq))
 		d[[i]] <- d[[i]] * w[i]
@@ -175,7 +234,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	D <- as.dist(m.ref)
 	
 	# update labels from our list of hz-dissimilarities
-	attr(D, 'Labels') <- attr(d[[1]], 'Labels')
+	attr(D, 'Labels') <- levels(s$id)
 	
 	# add distance metric
 	attr(D, 'Distance Metric') <- 'Gower'
