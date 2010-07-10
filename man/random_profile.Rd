@@ -60,8 +60,9 @@ plot(hclust(p))
 # rm(d.list) ; gc()
 # 
 # 100 profiles, 4 varibales:
-# 67 seconds on 1.3 Ghz Intel Mac Mini 
+# 66 seconds on 1.3 Ghz Intel Mac Mini 
 # D matrix = 192.3 Mb
+# 768 Mb required
 # p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'), max_d=50, k=0)
 
 # more efficient computation, at the expense of precision, with 

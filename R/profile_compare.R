@@ -45,27 +45,22 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	# compute a weighting vector based on k	
 	w <- 1 * exp(-k * depth_slice_seq)
 	
+	# TODO: if max_d < profile depth, s.unrolled is not truncated to max_d
 	## unroll each named soil property, for each soil profile
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
 	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d) 
 		{
-		# init a temp list
-		l <- list()
-		# iterate over named properties:
-		for(p_i in p)
-			{
-			# unroll each named property to matching component of our list
-			# if the profiles are shallower than max_depth, padd with NA
-			l[[p_i]] <- unroll(di$top, di$bottom, prop=di[,p_i], max_depth=d)
-			}
-			
-		# convert list into z by p matrix
-		m <- sapply(l, '[')
+		
+		# iterate over the set of properties, unrolling as we go
+		# the result is a [z by p] matrix unrolled to max_d
+		m <- sapply(p, function(p_i) unroll(di$top, di$bottom, prop=di[,p_i], max_depth=d) )
+		
+		return(m)
 		}
 	)
-	
+
 	
 	## NOTE: this will not work when a user-defined interval is used for slicing!!
 	## 
@@ -90,7 +85,6 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		
 		# debugging: plot a diagnostic image
 		image(1:n.profiles, 1:max_d, t(soil.matrix), col=c('white','grey'), ylim=c(max_d, 1), xlab='ID', ylab='Depth', main='Soil/Non-Soil Matrix')
-		abline(v=1:max_d + 0.5)
 		}
 		
 	
@@ -156,8 +150,12 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
 	
 	}
+	# done creating list of slice-wise dissimilarties
 	# finish progress bar	
 	close(pb)
+	
+	# clean-up
+	rm(s.unrolled) ; gc()
 	
 	
 	# should NA in the dissimilarity matrix be replaced with max(D) ?
@@ -224,12 +222,18 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	# by pedon:
 	# consider using mean diss, or something different that total
 	cat("Computing Profile Total Dissimilarities\n")
-	d.vect <- apply(t(sapply(d, '[')), 2, sum, na.rm=TRUE)
+	d.vect <- colSums(t(sapply(d, '[')), na.rm=TRUE)
+	
+	# remove list of dissimilarities to save RAM
+	rm(d) ; gc()
 	
 	# now make into a combined distance matrix
 	m.ref <- lower.tri(matrix(ncol=n.profiles, nrow=n.profiles), diag=FALSE)
 	m.ref[which(m.ref == FALSE)] <- NA
 	m.ref[which(m.ref)] <- d.vect
+	
+	# remove unformatted disimilarities
+	rm(d.vect) ; gc()
 	
 	# coerce to 'dist' class
 	D <- as.dist(m.ref)
