@@ -3,5 +3,5 @@
 3. objective selection of k
 4. sensitivity analysis on profile_compare()
 5. equal-area splines
-6. consider re-scaling D, returned from profile_compare
-7. document plot_distance_graph
+
+
