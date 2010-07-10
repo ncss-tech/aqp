@@ -61,7 +61,7 @@ require(ape)
 require(cluster)
 h <- diana(d)
 p <- as.phylo(as.hclust(h))
-plot(ladderize(p), cex=0.75, label.offset=1, no.margin=TRUE)
+plot(ladderize(p), cex=0.75, label.offset=0.5, no.margin=TRUE)
 
 # add in the dated surface type via color
 tiplabels(col=p.surface, pch=15)
