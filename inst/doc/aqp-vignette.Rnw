@@ -1,0 +1,10 @@
+\documentclass{article}
+
+% just a container for now
+% will eventially make this into a real Sweav-able document
+
+% metadata for R CMD build system
+% \VignetteIndexEntry{AQP Extended Manual}
+
+\begin{document}
+\end{document}

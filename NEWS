@@ -1,6 +1,6 @@
 -------------------------- aqp 0.89 (2010-07-10) --------------------------
 * added plot_distance_graph() function for visualizing between-profile dissimilarity
-* updated documentation
+* updated documentation: extended manual is now accessible as a vignette
 * major improvements in profile_compare() when add_soil_flag=TRUE and replace_na=TRUE
 | appears to create much more realistic groupings when there are both shallow and
 | deep soils in the collection
