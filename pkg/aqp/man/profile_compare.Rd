@@ -18,10 +18,14 @@ return_depth_distances = FALSE)
   \item{k}{a depth-weighting coeficient, use '0' for no depth-weighting (see examples below)}
   \item{sample_interval}{use every n-th depth slice instead of every depth slice, useful for working with > 1000 profiles at a time}
   \item{replace_na}{if TRUE, missing data are replaced by maximum dissimilarity (FALSE)}
-  \item{add_soil_flag}{(experimental) addition of 'soil'/'non-soil' flag for use when comparing soil profiles with large differences in depth (FALSE)}
+  \item{add_soil_flag}{(experimental) algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (FALSE)}
   \item{return_depth_distances}{return intermediate, depth-wise dissimilarity results (FALSE)}
 }
-\details{}
+\details{
+	Variability in soil depth can interfere significantly with the calculation of between-profile dissimilarity-- what is the numerical ``distance'' (or dissimilarity) between a slice of soil from profile A and the corresponding, but missing, slice from a shallower profile B? Gower's distance metric would yield a NULL distance, despite the fact that intuition suggests otherwise: shallower soils should be more dissimilar from deeper soils. For example, when a 25 cm deep profile is compared with a 50 cm deep profile, numerical distances are only accumulated for the first 25 cm of soil (distances from 26 - 50 cm are NULL). When summed, the total distance between these profiles will generally be less than the distance between two profiles of equal depth. Our algorithm has an option (setting replace_na=TRUE) to replace NULL distances with the maximum distance between any pair of profiles for the current depth slice. In this way, the numerical distance between a slice of soil and a corresponding slice of non-soil reflects the fact that these two materials should be treated very differently (i.e. maximum dissimilarity). 
+
+This alternative calculation of dissimilarities between soil and non-soil slices solves the problem of comparing shallow profiles with deeper profiles. However, it can result in a new problem: distances calculated between two shallow profiles will be erroneously inflated beyond the extent of either profile's depth. Our algorithm has an additional option (setting add_soil_flag=TRUE) that will preserve NULL distances between slices when both slices represent non-soil material. With this option enabled, shallow profiles will only accumulate mutual dissimilarity to the depth of the deeper profile.
+	}
 \value{
 a dissimilarity matrix object of class 'dist'
 }
