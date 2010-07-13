@@ -17,7 +17,7 @@ f.noise(inits, pure.patterns, sample.pattern, eps.total = 0.05)
   \item{eps.total}{precision of comparisons; currently not used}
 }
 \details{
-This is similar to the work of Chipera and Bish (2002), using the methods described in (Bish, 1994).
+This is similar to the work of Chipera and Bish (2002), using the methods described in (Bish, 1994). If the flexibility of a custom objective function is not required, the linear model framework should be sufficient for pattern fitting. GLS should be used if realistic standard errors are needed.
 }
 
 \value{the sum of absolute differences between the unkown pattern and combination of pure patterns for the current set of mixture proportions}
@@ -65,6 +65,15 @@ for(i in 2:7)
 	plot(1:n, rruff.sample[, i], type='l', axes=FALSE)
 	legend('topright', bty='n', legend=paste(names(rruff.sample)[i], ' (', w[i-1], ')', sep=''), cex=2)
 	}
+
+# fitting with lm, with lots of added noise
+rruff.sample$synthetic_pat <- apply(sweep(rruff.sample[,2:7], 2, w, '*'), 1, sum) + runif(n, min=0, max=100)
+
+l <- lm(synthetic_pat ~ nontronite + montmorillonite + clinochlore + antigorite + chamosite + hematite, data=rruff.sample)
+
+summary(l)
+
+## fitting by minimizing an objective function (not run)
 
 # SANN is a slower algorithm, sometimes gives strange results
 # default Nelder-Mead is most robust
