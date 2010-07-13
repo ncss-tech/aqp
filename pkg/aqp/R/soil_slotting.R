@@ -36,6 +36,9 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 	if(!require(plyr) | !require(reshape))
 		stop('Please install the "plyr" and "reshape" packages.')
 
+	# currently this will only work with integer depths
+	if(!is.integer(na.omit(data$top)) | !is.integer(na.omit(data$bottom)))
+		stop('this function can only accept integer horizon depths')
 	
 	# convert into long forma
 	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
@@ -85,6 +88,10 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 # 		}
 	
 	## check for fatal errors
+	
+	# currently this will only work with integer depths
+	if(!is.integer(na.omit(data$top)) | !is.integer(na.omit(data$bottom)))
+		stop('this function can only accept integer horizon depths')
 	
 	# no NA allowed in top or bottom
 	hz.test.top <- is.na(data$top)

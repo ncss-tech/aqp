@@ -20,8 +20,8 @@ strict=FALSE, user.fun=NULL)
 A dataframe representing a 'stack' of soil profiles and having the following format:
 	\describe{
 		\item{id}{An id that is unique across soil profiles within the dataframe.}
-		\item{top}{The horizon top boundary.}
-		\item{bottom}{The horizon bottom boundary.}
+		\item{top}{The horizon top boundary, must be an integer.}
+		\item{bottom}{The horizon bottom boundary, must be an integer.}
 		\item{prop}{A property to be aggregated. If numeric mean and standard deviation are returned, if character class-wise probabilities are returned.}		
 	}
 }

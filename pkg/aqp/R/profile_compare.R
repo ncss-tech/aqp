@@ -14,8 +14,12 @@
 # function requires at least two attributes
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
-profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FALSE, add_soil_flag=FALSE, return_depth_distances=FALSE)
+profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FALSE, add_soil_flag=FALSE, return_depth_distances=FALSE, strict_hz_eval=FALSE)
 	{
+	
+	# currently this will only work with integer depths
+	if(!is.integer(na.omit(s$top)) | !is.integer(na.omit(s$bottom)))
+		stop('this function can only accept integer horizon depths')
 	
 	# check to make sure that there is an 'id' column
 	if(is.null(s$id))
@@ -48,14 +52,25 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d) 
+	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go
 		# the result is a [z by p] matrix unrolled to max_d
-		m <- sapply(p, function(p_i) unroll(di$top, di$bottom, prop=di[,p_i], max_depth=d) )
+		m <- try(sapply(p, function(p_i) unroll(di$top, di$bottom, prop=di[,p_i], max_depth=d, strict=strict) ))
 		
-		return(m)
+		## TODO: could be better
+		# check for a non-NULL attribute of 'class'
+		# this will only happen when there was an error
+		if( !is.null(attr(m, 'class')))
+			{
+			if(attr(m, 'class') == 'try-error')
+				{
+				stop(paste('Error: bad horizon structure in soil id', as.character(unique(di$id))))
+				}
+			}
+		else
+			return(m)
 		}
 	)
 
@@ -73,11 +88,13 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		s.slices_of_soil <- ifelse(s.slices_of_soil <= max_d, s.slices_of_soil, max_d)
 		s.slices_of_non_soil <- max_d - s.slices_of_soil
 		
+		s.slices_of_soil.length <- length(s.slices_of_soil)
+		
 		# init a matrix with dimensions: depth slices, number of profiles
-		soil.matrix <- matrix(ncol=length(s.slices_of_soil), nrow=max_d)
+		soil.matrix <- matrix(ncol=s.slices_of_soil.length, nrow=max_d)
 		
 		# will with TRUE for 'soil' or FALSE for 'non-soil'
-		for(s.i in 1:length(s.slices_of_soil))
+		for(s.i in 1:s.slices_of_soil.length)
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
 		
 		

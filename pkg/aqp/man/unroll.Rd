@@ -10,8 +10,8 @@ unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{top}{vector of upper horizon boundaries}
-  \item{bottom}{vector of lower horizon boundaries}
+  \item{top}{vector of upper horizon boundaries, must be an integer}
+  \item{bottom}{vector of lower horizon boundaries, must be an integer}
   \item{prop}{vector of some property to be "unrolled" over a regular sequence}
   \item{max_depth}{maximum depth to consider}
   \item{bottom_padding_value}{value to use when padding missing data}
