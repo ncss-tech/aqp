@@ -13,7 +13,7 @@ soil.slot.multiple(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{data}{an input dataframe with 'id' column defining soil profiles}
+  \item{data}{an input dataframe with 'id' column defining soil profiles, horizon depths must be integers}
   \item{g}{a character string or vector of length = 1, naming the column in the input dataframe to use as the grouping variable}
   \item{vars}{a character vector with names of columns in the input dataframe that will be aggregated}
   \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}

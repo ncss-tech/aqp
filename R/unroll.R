@@ -4,6 +4,11 @@
 # horizons must be in order by depth!
 unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict=FALSE)
 	{
+	
+	# currently this will only work with integer depths
+	if(!is.integer(na.omit(top)) | !is.integer(na.omit(bottom)))
+		stop('this function can only accept integer horizon depths')
+	
 	# are horizons in the correct order?
 	if(! all.equal(top,sort(top)))
 		stop('Error: horizons are not sorted by depth')
@@ -18,11 +23,11 @@ unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict
 		
 		if(strict)
 			{
-			stop('error: bad horizon structure')
+			stop('error unrolling profile')
 			}
 		else
 			{
-			warning('bad horizon structure, check with strict=TRUE');
+			warning('error unrolling profile, stop execution with strict=TRUE');
 			}
 		}
 		

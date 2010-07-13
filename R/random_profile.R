@@ -19,13 +19,13 @@ if(max_thick < min_thick)
 n_hz <- sample(n, 1)
 
 # generate hz top bnd
-tops <- numeric(n_hz-1)
+tops <- integer(n_hz-1)
 for(i in 1:(n_hz-1))
 	tops[i] <- sample(min_thick:max_thick, 1)
 
 # add 0, then generate bottom bnd
-tops <- c(0, tops)
-bottoms <- c(tops[-1], sample(min_thick:max_thick, 1))
+tops <- as.integer(c(0, tops))
+bottoms <- as.integer(c(tops[-1], sample(min_thick:max_thick, 1)))
 
 # combine into a df
 d <- data.frame(id=id, top=cumsum(tops), bottom=cumsum(bottoms), name=paste('H',1:n_hz,sep=''))
