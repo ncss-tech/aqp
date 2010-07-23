@@ -23,6 +23,7 @@ scaling.factor = 1, y.offset = 0, max.depth = d$max_depth, \dots)
   \item{color}{the name of the column containing R-compatible color descriptions}
   \item{width}{scaling of profile widths}
   \item{cex.names}{character scaling applied to horizon names}
+  \item{cex.depth.axis}{character scaling applied to depth scale}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 

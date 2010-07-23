@@ -2,7 +2,6 @@
 # convert munsell Hue, Value, Chroma into RGB
 # user can adjust how rgb() function will return and R-friendly color
 # TODO if alpha is greater than maxColorValue, there will be an error
-# looks like our database is missing colors with value|chroma of 1
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE)
 	{
 	# check for missing data
@@ -17,6 +16,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 	# load lookup table from our package
 	data(munsell)
 	
+	## TODO: this is kind of slow
 	# perform subset
 	s <- list()
 	for(i in 1:length(the_hue))

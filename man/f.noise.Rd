@@ -47,14 +47,19 @@ n <- nrow(rruff.sample)
 n.components <- 6
 
 # mineral fractions, normally we don't know these
-w <- c(0.387, 0.232, 0.153, 0.096, 0.049, 0.065)
-
+w <- c(0.346, 0.232, 0.153, 0.096, 0.049, 0.065)
 
 
 # make synthetic combined pattern
 # scale the pure substances by the known proportions
-# and add some noise:  + runif(n, min=0, max=1)
 rruff.sample$synthetic_pat <- apply(sweep(rruff.sample[,2:7], 2, w, '*'), 1, sum)
+
+# add 1 more substance that will be unknown to the fitting process
+rruff.sample$synthetic_pat <- rruff.sample$synthetic_pat + (1 - sum(w)) * rruff.sample[,8]
+
+# try adding some nasty noise
+# rruff.sample$synthetic_pat <- apply(sweep(rruff.sample[,2:7], 2, w, '*'), 1, sum) + runif(n, min=0, max=100)
+
 
 # look at components and combined pattern
 par(mfcol=c(7,1), mar=c(0,0,0,0))
@@ -66,12 +71,35 @@ for(i in 2:7)
 	legend('topright', bty='n', legend=paste(names(rruff.sample)[i], ' (', w[i-1], ')', sep=''), cex=2)
 	}
 
-# fitting with lm, with lots of added noise
-rruff.sample$synthetic_pat <- apply(sweep(rruff.sample[,2:7], 2, w, '*'), 1, sum) + runif(n, min=0, max=100)
 
-l <- lm(synthetic_pat ~ nontronite + montmorillonite + clinochlore + antigorite + chamosite + hematite, data=rruff.sample)
+
+## fit pattern mixtures with a linear model
+l <- lm(synthetic_pat ~ nontronite + montmorillonite + clinochlore 
++ antigorite + chamosite + hematite, data=rruff.sample)
 
 summary(l)
+
+par(mfcol=c(2,1), mar=c(0,3,0,0))
+plot(1:n, rruff.sample$synthetic_pat, type='l', lwd=2, lty=2, axes=FALSE, xlab='', ylab='')
+lines(1:n, predict(l), col=2)
+axis(2, cex.axis=0.75, las=2)
+legend('topright', legend=c('original','fitted'), col=c(1,2), lty=c(2,1), lwd=c(2,1), bty='n', cex=1.25)
+
+plot(1:n, resid(l), type='l', axes=FALSE, xlab='', ylab='', col='blue')
+abline(h=0, col=grey(0.5), lty=2)
+axis(2, cex.axis=0.75, las=2)
+legend('topright', legend=c('residuals'), bty='n', cex=1.25)
+
+
+## more realistic standard errors from GLS
+# # not run
+# library(nlme)
+# l.gls <- gls(synthetic_pat ~ nontronite + montmorillonite + clinochlore + antigorite + chamosite + hematite, data=rruff.sample, correlation=corCAR1())
+# 
+# summary(l.gls)
+# 
+
+
 
 ## fitting by minimizing an objective function (not run)
 
@@ -120,7 +148,7 @@ summary(l)
 # abline(h=0, col=grey(0.5), lty=2)
 # axis(2, cex.axis=0.75, las=2)
 # legend('topright', legend=c('difference'), bty='n', cex=1.25)
-
+# 
 
 }
 
