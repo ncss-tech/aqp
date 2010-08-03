@@ -1,10 +1,3 @@
-##############################################################
-## spatial slicing functions ##
-##############################################################
-
-
-
-
 # plot named slices of a given variable, cut into specified quantiles
 plot_slices <- function(slices, region_outline, contours=NA, depths, variable, probs, legend.cex=1, symbol.cex=1.5)
 	{
@@ -54,28 +47,3 @@ plot_slices <- function(slices, region_outline, contours=NA, depths, variable, p
 	legend(1, 1, legend=ltext, col=1, pt.cex=2, pt.bg=cols, pch=21, horiz=TRUE, yjust=0.5, xjust=0.5, cex=legend.cex, bty='n')
 	
 	}
-
-
-
-##############################################################
-## data formatting functions ##
-##############################################################
-
-# 
-# x.re.formatted <- by(x, x$pedon_id, function(d.sub) 
-# {
-# num_hz <- nrow(d.sub)
-# last_hz <- d.sub[num_hz, ]
-# last_hz$top <- last_hz$bottom 
-# rbind(d.sub, last_hz)
-# } 
-# )
-# 
-# x.new <- do.call('rbind', x.re.formatted)
-
-
-
-
-
-
-

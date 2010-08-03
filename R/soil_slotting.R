@@ -73,9 +73,10 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 
 ## this function will break when horizon boundaries do not make sense
 ## 
-# means and confidence intervals should be calculated by population defined by seg_size and n pedons
-# 
-soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, compute.depth.prob=FALSE, strict=FALSE, user.fun=NULL)
+# TODO: sd should be calculated by population defined by seg_size and n pedons
+# TODO: re-factor how profile weights are used, consider using rq()
+# TODO: retuan the number of profiles + number of unique horizons when using custom segmenting interval
+soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, strict=FALSE, user.fun=NULL)
 	{
 	
 # 	## this isn't usually a problem
@@ -291,14 +292,24 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		}
 
 	
-	# compute row-wise summary statistics
+	## compute row-wise summary statistics
+	
+	# always compute a contributing fraction
+	# this is the number of profile contributing the the slice-wise aggregate
+	contributing_fraction <- apply(x.recon, 1, function(i) length(na.omit(i)) / length(i))
+	
+	
+	# the following are computed according to user-defined parameters
 	if(prop.class %in% c('numeric','integer'))
 		{
 		# standard summary statistics
+		## this mean is the horizon-thickness weighted mean across all profiles
 		p.mean <- apply(x.recon, 1, mean, na.rm=TRUE)
+		
+		## this estimate of SD is too low when using a segment size > 1 cm
 		p.sd <- apply(x.recon, 1, conditional.sd)
 		
-		# quantiles
+		## these are the horizon-thickness weighted quantiles
 		q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 		p.quantiles <- data.frame(t(apply(x.recon, 1, quantile, probs=q.probs, na.rm=TRUE)))
 		names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
@@ -335,12 +346,8 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 # 		p.prop[which(p.prop <= 0.000001), ] <- NA
 		
 		}
-		
-	if(compute.depth.prob == TRUE)
-		{
-		p.prop <- apply(x.recon, 1, function(i) sum(i, na.rm=TRUE) / length(i))
-		}
-		
+	
+	## NOTE: the calculation of the weighted SD is not quite right when using segments larger than 1 cm
 	# no way to use weights with character vectors yet...
 	if(use.wts == TRUE)
 		{
@@ -385,7 +392,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		# re-make final dataframe, note that df.top_bottom is made based on segmenting/non-segmenting
 		df.stats <- data.frame(p.mean, p.wtmean, p.sd, p.wtsd)
 		}
-	# no weithed stats needed
+	# no weighted stats needed
 	else
 		{
 		if(prop.class %in% c('numeric','integer'))
@@ -402,10 +409,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			{
 			df.stats <- data.frame(p.prop)
 			}
-		if(compute.depth.prob == TRUE)
-			{
-			df.stats <- data.frame(p.prop)
-			}
 		}
 	
 	
@@ -413,7 +416,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	# this is usually where we have problems, caused by bad horizon boundaries
 	if(nrow(df.top_bottom) == nrow(df.stats))
 		{
-		x.slotted <- data.frame(df.top_bottom, df.stats)
+		x.slotted <- data.frame(df.top_bottom, contributing_fraction, df.stats)
 		}
 	# something is wrong
 	else

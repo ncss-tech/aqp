@@ -1,3 +1,8 @@
+-------------------------- aqp 0.92 (2010-08-03) --------------------------
+* including a new column in the results from soil.slot(), 
+  denoting number of profiles used in slice-wise aggregation
+* added note to soil.slot() manual page highlighting possible problems with SD calculation
+
 -------------------------- aqp 0.90 (2010-07-13) --------------------------
 * better error checking on profile aggregation and classification functions
 * most functions now require that horizon depths are integers

@@ -13,7 +13,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 \usage{
 
 \method{profile_plot}{SoilProfileList}(d, color = "soil_color", width = 0.2, 
-cex.names = 0.5, plot.order = 1:d$num_profiles, add = FALSE,
+cex.names = 0.5, cex.depth.axis=cex.names, plot.order = 1:d$num_profiles, add = FALSE,
 scaling.factor = 1, y.offset = 0, max.depth = d$max_depth, \dots)
 
 }

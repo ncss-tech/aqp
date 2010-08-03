@@ -7,12 +7,12 @@
 Soil Profile Slotting
 }
 \description{
-Align a single soil property to a user-defined basis.
+Align a single soil property to a user-defined basis, and perform slice-wise aggregation.
 }
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, 
-return.raw = FALSE, use.wts = FALSE, compute.depth.prob = FALSE, 
-strict=FALSE, user.fun=NULL)
+return.raw = FALSE, use.wts = FALSE,
+strict = FALSE, user.fun = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,23 +22,20 @@ A dataframe representing a 'stack' of soil profiles and having the following for
 		\item{id}{An id that is unique across soil profiles within the dataframe.}
 		\item{top}{The horizon top boundary, must be an integer.}
 		\item{bottom}{The horizon bottom boundary, must be an integer.}
-		\item{prop}{A property to be aggregated. If numeric mean and standard deviation are returned, if character class-wise probabilities are returned.}		
+		\item{prop}{A property to be aggregated. can be numeric or a factor.}		
 	}
 }
   \item{seg_size}{
 User-degined segment size, default is 1.
 }
   \item{seg_vect}{
-User-degined segment structure (needs work)
+User-degined segment structure
 }
   \item{return.raw}{
 If TRUE, un-aggregated data will be returned by depth-slice. Useful for debugging, or for the generation of box and whisker plots.
 }
   \item{use.wts}{
-If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data. Weighted means and standard deviations will be returned by depth-slice.
-}
-  \item{compute.depth.prob}{
-If TRUE, depth probability is computed and returned. Setting a dummy 'prop' column to 1 in the source dataframe is suggested. See examples below.
+If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data. Weighted means and standard deviations will be returned by depth-slice. Use with caution.
 }
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
@@ -46,8 +43,34 @@ If TRUE, depth probability is computed and returned. Setting a dummy 'prop' colu
 \details{
 The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
 }
+
+\note{The calculation of standard deviation is correct when computing along 1 unit slices. When a user-defined segmenting vector is supplied, the resulting standard deviation is lower than it should be because we are inflating our sample size. When in doubt, use quantiles instead as these are properly weighted by horizon thickness.}
+
 \value{
-A dataframe with slice-wise aggregation, weighted aggregation, class probabilities, or depth probabilities.
+A dataframe with slice-wise aggregation. When \code{prop} is numeric a dataframe is returned in the following format:
+	\describe{
+		\item{top}{The slice top boundary.}
+		\item{bottom}{The slice bottom boundary.}
+		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
+		\item{p.mean}{The horizon-thickness weighted mean.}
+		\item{p.sd}{An approximation of the horizon-thickness weighted mean: use with caution, may be too low.}
+		\item{p.q5}{The horizon-thickness weighted 5th percentile.}
+		\item{p.q25}{The horizon-thickness weighted 25th percentile}
+		\item{p.q50}{The horizon-thickness weighted 50th percentile (median)}
+		\item{p.q75}{The horizon-thickness weighted 75th percentile}
+		\item{p.q95}{The horizon-thickness weighted 95th percentile}
+	}
+
+When \code{prop} is a factor variable, slice-wise probabilities for each level of \code{prop}:
+	\describe{
+		\item{top}{The slice top boundary.}
+		\item{bottom}{The slice bottom boundary.}
+		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
+		\item{A}{The slice-wise probability of level A}
+		\item{B}{The slice-wise probability of level B}
+		\item{\dots}{}
+		\item{n}{The slice-wise probability of level n}
+	}
 }
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
@@ -152,11 +175,14 @@ ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
 
 
 #
-# 2. depth probability
+# 2. depth probability via contributing fraction
+# note that this assumes that we are not missing data in 'prop'
+# get around NA by making makeing a fake column filled with 1
+# like this:
+# sp1$prop <- 1
 #
-y <- with(sp1, data.frame(id=id, top=top, bottom=bottom, prop=1))
-a <- soil.slot(y, compute.depth.prob=TRUE)
-xyplot(top ~ p.prop, data=a, ylim=c(250, -5), type='S', horizontal=TRUE, asp=4)
+a <- soil.slot(sp1)
+xyplot(top ~ contributing_fraction, data=a, ylim=c(250, -5), type='S', horizontal=TRUE, asp=4)
 
 
 #
@@ -198,7 +224,6 @@ lower=a$lower, upper=a$upper, ylim=c(250,-5), alpha=0.5,
 panel=panel.depth_function, 
 prepanel=prepanel.depth_function
 )
-
 
 
 
