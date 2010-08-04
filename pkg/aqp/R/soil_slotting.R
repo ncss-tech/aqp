@@ -37,7 +37,7 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 		stop('Please install the "plyr" and "reshape" packages.')
 
 	# currently this will only work with integer depths
-	if(!is.integer(na.omit(data$top)) | !is.integer(na.omit(data$bottom)))
+	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('this function can only accept integer horizon depths')
 	
 	# convert into long forma
@@ -91,7 +91,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	## check for fatal errors
 	
 	# currently this will only work with integer depths
-	if(!is.integer(na.omit(data$top)) | !is.integer(na.omit(data$bottom)))
+	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('this function can only accept integer horizon depths')
 	
 	# no NA allowed in top or bottom
