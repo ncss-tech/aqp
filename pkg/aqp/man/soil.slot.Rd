@@ -42,11 +42,8 @@ If TRUE, then a column called 'wt' should be present in the source dataframe, an
 }
 \details{
 The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
-}
 
-\note{The calculation of standard deviation is correct when computing along 1 unit slices. When a user-defined segmenting vector is supplied, the resulting standard deviation is lower than it should be because we are inflating our sample size. When in doubt, use quantiles instead as these are properly weighted by horizon thickness.}
-
-\value{
+Data are returned according to the following:
 A dataframe with slice-wise aggregation. When \code{prop} is numeric a dataframe is returned in the following format:
 	\describe{
 		\item{top}{The slice top boundary.}
@@ -71,7 +68,13 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 		\item{\dots}{}
 		\item{n}{The slice-wise probability of level n}
 	}
+
 }
+
+\note{The calculation of standard deviation is correct when computing along 1 unit slices. When a user-defined segmenting vector is supplied, the resulting standard deviation is lower than it should be because we are inflating our sample size. When in doubt, use quantiles instead as these are properly weighted by horizon thickness.}
+
+\value{See Details section above.}
+
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
 \note{
