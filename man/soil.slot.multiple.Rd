@@ -9,20 +9,21 @@ Multivariate Soil Profile Slotting
 Align several soil properties to a user-defined basis, with data returned in long format.
 }
 \usage{
-soil.slot.multiple(data, g, vars, strict=FALSE, user.fun=NULL, ...)
+soil.slot.multiple(data, g, vars, seg_size=NA, strict=FALSE, user.fun=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data}{an input dataframe with 'id' column defining soil profiles, horizon depths must be integers}
   \item{g}{a character string or vector of length = 1, naming the column in the input dataframe to use as the grouping variable}
   \item{vars}{a character vector with names of columns in the input dataframe that will be aggregated}
+  \item{seg_size}{User-degined segment size, default is 1}
   \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
   \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
-  \item{\dots}{further arguments to \code{\link{soil.slot}}}
 }
 \details{
 This function is a wrapper to \code{\link{soil.slot}}, that makes it simpler to "slice" several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
 }
+\note{\code{soil.slot.multiple} does not currently support a user-defined slotting vector}
 \value{
 A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-slice information repeated for each requested input variable.
 }
