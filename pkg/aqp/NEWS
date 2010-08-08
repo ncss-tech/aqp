@@ -1,3 +1,7 @@
+-------------------------- aqp 0.93 (2010-08-07) --------------------------
+* bug fixes, new documentation + examples
+* AQP now requires R >= 2.9.0
+
 -------------------------- aqp 0.92 (2010-08-03) --------------------------
 * including a new column in the results from soil.slot(), 
   denoting number of profiles used in slice-wise aggregation

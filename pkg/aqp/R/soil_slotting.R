@@ -30,7 +30,7 @@ conditional.sd <- function(x)
 
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
-soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
+soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fun=NULL)
 	{
 	# check for dependencies
 	if(!require(plyr) | !require(reshape))
@@ -40,13 +40,19 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('this function can only accept integer horizon depths')
 	
+	## TODO: is there a better way to do this?
+	# capture arguments
+	ss <- seg_size
+	s <- strict
+	uf <- user.fun
+	
 	# convert into long forma
 	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
 	# apply slotting group-wise and return in long format
 	# note that we are passing in additional arguments to soil.slot 
 	# from the calling function
-	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, ...) {
+	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf) {
 		
 		# subset just the relevant columns
 		i.sub <- data.frame(
@@ -56,9 +62,12 @@ soil.slot.multiple <- function(data, g, vars, strict=FALSE, user.fun=NULL, ...)
 			prop=i$value,
 			groups=i[, groups]
 			)
-			
+		
+		## TODO: allow for seg_vect or seg_size	
+		## currently only one or the other is supported
 		# apply slotting according to grouping factor
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, strict=strict, user.fun=user.fun, ...)
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf)
+		
 		return(i.slotted)
 		})
 		
@@ -163,11 +172,12 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	if(!missing(seg_size) | !missing(seg_vect))
 		{
 		
-		# use a user-defined segmenting vector, starting from 0		
+		# use a user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
 			{
 			wind.idx <- rep(seg_vect[-1], diff(seg_vect))[1:max_d]
 			}
+			
 		# using a fixed-interval segmenting vector
 		else
 			{
