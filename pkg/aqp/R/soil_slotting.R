@@ -27,7 +27,7 @@ conditional.sd <- function(x)
 	}
 
 
-
+## TODO: seg_vect does not work
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
 soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fun=NULL)
