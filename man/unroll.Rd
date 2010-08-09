@@ -18,7 +18,7 @@ unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)
   \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 }
 \details{
-This function is used internally by several higher-level components of the soil package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
+This function is used internally by several higher-level components of the \code{aqp} package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
 }
 
 \value{a vector of "unrolled" property values}
