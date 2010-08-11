@@ -71,6 +71,10 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 		return(i.slotted)
 		})
 		
+	# convert tops and bottoms to integers
+	d.slotted$top <- as.integer(d.slotted$top)
+	d.slotted$bottom <- as.integer(d.slotted$bottom)
+	
 	# done
 	return(d.slotted)
 	}	
@@ -434,7 +438,10 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		print("ERROR!")
 		print(data)
 		}
-		
+	
+	# covert tops / bottoms to integers
+	x.slotted$top <- as.integer(x.slotted$top)
+	x.slotted$bottom <- as.integer(x.slotted$bottom)
 	# done
 	return(x.slotted)
 	}
