@@ -173,7 +173,9 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		}
 	
 	# if we have a regular-interval segment size, re-group the data following the segmenting id
-	if(!missing(seg_size) | !missing(seg_vect))
+	# note that we are testing for the default value of seg_size and seg_vect
+	# must be a better way to do this..
+	if(!is.na(seg_size) | !is.na(seg_vect))
 		{
 		
 		# use a user-defined segmenting vector, starting from 0
@@ -197,7 +199,11 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		
 		
 		## warnings are being generated here
-		## it looks like values are being recycled, possibly the weights
+		## it looks like values are being recycled
+		## Warning message:
+		##   In rbind(`1` = c(13L, 13L, 7L, 7L, 7L, 7L, 7L, 7L, 7L, 7L, 1L, 1L,  :
+		##   number of columns of result is not a multiple of vector length (arg 9)
+		##   ???
 		# subset values and weights by id
 		# note that we are lumping the subset values by id into a single row of a matrix
 		x.recon <- try(do.call('rbind', by(x.recon_original, wind.idx, unlist) ))
@@ -306,6 +312,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		}
 
 	
+	
 	## compute row-wise summary statistics
 	
 	# always compute a contributing fraction
@@ -336,17 +343,21 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		}
 	
 	# todo: update this to use a different column
-	if(prop.class == 'character')
+	if(prop.class == 'factor')
 		{
 		# the results of this operation are a list,
 		# one element for each depth segment
 		
 		# get a vector of all possible categories
+		# these are the factor codes...
 		p.unique.classes <- as.vector(na.omit(unique(as.vector(x.recon))))
 		
 		# tabular frequences for complete set of possible categories
-		p.table <- apply(x.recon, 1, function(i) { table(factor(i, levels=p.unique.classes), useNA='no')  } )
-		
+		# should generalize to user-defined segmenting vectors
+		p.table <- apply(x.recon, 1, function(i) { 
+			table(factor(i, levels=p.unique.classes, labels=levels(data$prop)[p.unique.classes]), useNA='no')  
+			} 
+			)
 		
 		# convert into a dataframe
 		p.freq <- as.data.frame(t(p.table))
@@ -361,8 +372,13 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		
 		}
 	
+# 	## slice-wise probability does not work with categorical vectors, when slice size > 1
+# 	return(p.freq)
+# 	stop()
+# 	
+	
 	## NOTE: the calculation of the weighted SD is not quite right when using segments larger than 1 cm
-	# no way to use weights with character vectors yet...
+	# no way to use weights with factor vectors yet...
 	if(use.wts == TRUE)
 		{
 		## weighted mean calculation
@@ -419,7 +435,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			else
 				df.stats <- data.frame(p.mean, p.sd, p.quantiles)
 			}
-		if(prop.class == 'character')
+		if(prop.class == 'factor')
 			{
 			df.stats <- data.frame(p.prop)
 			}

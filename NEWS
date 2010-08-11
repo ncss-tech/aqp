@@ -1,3 +1,8 @@
+-------------------------- aqp 0.94 (2010-08-11) --------------------------
+* fixed bug in soil.slot() when aggregating a categorical variable,
+  with a user-supplied segmenting vector
+* soil.slot() now requires that categorical variables be encoded as factors
+
 -------------------------- aqp 0.93 (2010-08-07) --------------------------
 * bug fixes, new documentation + examples
 * AQP now requires R >= 2.9.0
