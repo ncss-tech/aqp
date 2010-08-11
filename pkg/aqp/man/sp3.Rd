@@ -45,23 +45,45 @@ These data were collected to support research funded by the Kearney Foundation o
 library(ape)
 data(sp3)
 
-# make a fake grouping variables
+# generate a RGB version of soil colors
+# and convert to HSV for aggregation
+sp3$h <- NA ; sp3$s <- NA ; sp3$v <- NA
+sp3.rgb <- with(sp3, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
+sp3[, c('h','s','v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue=1)))
+
+# make a fake grouping variable, and aggregate all profiles
 sp3$group <- factor('A')
-a <- soil.slot.multiple(sp3, g='group', vars=c('clay','cec','ph'), seg_size=10)
+a <- soil.slot.multiple(sp3, g='group', vars=c('clay','cec','ph','h','s','v'), seg_size=10)
 
-# aggregation metric affects the result
-a.wide <- cast(a, top + bottom ~ variable, value=c('p.mean'))
+# convert back to wide format, note that aggregation metric affects the result
+a.wide.q25 <- cast(a, top + bottom ~ variable, value=c('p.q25'))
+a.wide.q50 <- cast(a, top + bottom ~ variable, value=c('p.q50'))
+a.wide.q75 <- cast(a, top + bottom ~ variable, value=c('p.q75'))
 
-# add a new id for the "mean profile"
+# add a new id for the 25th, 50th, and 75th percentile pedons
 # and convert top/bottoms to integers
-a.wide$id <- 'mp'
-a.wide$top <- as.integer(a.wide$top)
-a.wide$bottom <- as.integer(a.wide$bottom)
+a.wide.q25$id <- 'Q25'
+a.wide.q50$id <- 'Q50'
+a.wide.q75$id <- 'Q75'
 
 # combine original data with "mean profile"
-sp3.grouped <- rbind(sp3[, c('top','bottom','id','clay','cec','ph')], a.wide[, c('top','bottom','id','clay','cec','ph')])
+vars <- c('top','bottom','id','clay','cec','ph','h','s','v')
+sp3.grouped <- rbind(
+sp3[, vars], a.wide.q25[, vars], a.wide.q50[, vars], a.wide.q75[, vars]
+)
 
-# perform comparison, and convert to phylo class object
+# re-constitute the soil color from HSV triplets
+# convert HSV back to standard R colors
+sp3.grouped$soil_color <- with(sp3.grouped, hsv(h, s, v))
+
+# give each horizon a name
+sp3.grouped$name <- paste(round(sp3.grouped$clay), '/' , round(sp3.grouped$cec), '/', round(sp3.grouped$ph,1))
+
+# make SoilProfileList object for plotting
+sp3.list <- initProfileList(sp3.grouped)
+
+
+## perform comparison, and convert to phylo class object
 d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, k=0.01)
 h <- agnes(d, method='ward')
 p <- ladderize(as.phylo(as.hclust(h)))
@@ -71,17 +93,11 @@ p <- ladderize(as.phylo(as.hclust(h)))
 plot_distance_graph(d, 11)
 
 # similarity relative to mean profile
-round(1 - (as.matrix(d)[11, ] / 23.69539), 2)
+round(1 - (as.matrix(d)[11, ] / max(as.matrix(d)[11, ])), 2)
 
-
-# convert soil data into ProfileList object for plotting
-sp3.grouped$soil_color <- 'white'
-sp3.grouped$name <- paste(round(sp3.grouped$clay), '/' , round(sp3.grouped$cec), '/', round(sp3.grouped$ph,1))
-sp3.list <- initProfileList(sp3.grouped)
-
-
+## make dendrogram + soil profiles
 par(mar=c(1,1,1,1))
-p.plot <- plot(p, cex=0.8, label.offset=3, direction='up', y.lim=c(100,-2), x.lim=c(1,sp3.list$num_profiles+1))
+p.plot <- plot(p, cex=0.8, label.offset=3, direction='up', y.lim=c(80,-2), x.lim=c(1.25,sp3.list$num_profiles+1), show.tip.label=FALSE)
 
 # get the last plot geometry
 lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
@@ -95,8 +111,8 @@ function(i) which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
 # plot the profiles, in the ordering defined by the dendrogram
 # with a couple fudge factors to make them fit
 profile_plot(sp3.list, color="soil_color", plot.order=new_order,
-scaling.factor=0.3, width=0.1, cex.names=0.65,
-y.offset=max(lastPP$yy)+8, add=TRUE)
+scaling.factor=0.35, width=0.1, cex.names=0.5,
+y.offset=max(lastPP$yy)+5, add=TRUE)
 }
 
 \keyword{datasets}

@@ -18,10 +18,11 @@ maxColorValue=1, return_triplets=FALSE)
   \item{the_value}{a vector of one or more values}
   \item{the_chroma}{a vector of one or more chromas}
   \item{alpha}{alpha channel value (for transparency effects)}
-  \item{maxColorValue}{maximum RGB color value (see\code{\link{rgb})}}
-  	\item{return_triplets}{should the function return raw RGB triplets instead of an R color}
+  \item{maxColorValue}{maximum RGB color value (see \code{\link{rgb})}}
+  \item{return_triplets}{should the function return raw RGB triplets instead of an R color}
 }
-\details{This function generalizes to vectorized usage, as long as the lenght of each argument is the same.}
+\details{This function generalizes to vectorized usage, as long as the length of each argument is the same.}
+\note{Care should be taken when using the resulting RGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.}
 \value{
 A vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
 }
