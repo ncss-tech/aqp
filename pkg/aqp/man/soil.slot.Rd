@@ -159,8 +159,8 @@ sp1$name[grep('R', sp1$name)] <- 'R'
 
 # generate new data for testing soil.slot()
 y <- with(sp1, data.frame(id=id, top=top, bottom=bottom, prop=name))
-# convert name back to a character
-y$prop <- as.character(y$prop)
+# convert name to a factor
+y$prop <- factor(y$prop)
 # fix factor levels
 y$id <- factor(y$id)
 
