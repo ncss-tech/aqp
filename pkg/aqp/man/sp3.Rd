@@ -89,11 +89,11 @@ h <- agnes(d, method='ward')
 p <- ladderize(as.phylo(as.hclust(h)))
 
 
-# look at distance plot
-plot_distance_graph(d, 11)
+# look at distance plot-- just the median profile
+plot_distance_graph(d, 12)
 
-# similarity relative to mean profile
-round(1 - (as.matrix(d)[11, ] / max(as.matrix(d)[11, ])), 2)
+# similarity relative to median profile
+round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
 
 ## make dendrogram + soil profiles
 par(mar=c(1,1,1,1))
