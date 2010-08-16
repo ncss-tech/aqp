@@ -62,14 +62,17 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 image(matrix(1:nrow(sp1)), axes=FALSE, col=sp1$soil_color, main='Soil Colors')
 
 # convert into a more useful color space
-require(colorspace)
-
+# you will need the colorspace package for this to work
+if(require(colorspace))
+{
 # keep RGB triplets from conversion
 sp1.rgb <- with(sp1, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
 
 # convert into LAB color space
 sp1.lab <- as(with(sp1.rgb, RGB(r,g,b)), 'LAB')
 plot(sp1.lab)
+}
+
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
