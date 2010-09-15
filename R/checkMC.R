@@ -9,11 +9,15 @@ checkMC <- function(n=2)
 	require(doMC)
 	)
 		{
-		# setup the parallel environment
-		registerDoMC(cores=n)
-	
-		# if everything worked, then use it!
-		cat(paste('using parallel computation [', n, ' cores]\n', sep=''))
+		# setup the parallel environment if it hasn't been already
+		if(is.null(getDoParName()))
+			{
+			registerDoMC(cores=n)
+		
+			# if everything worked, then use it!
+			cat(paste('using parallel computation [', n, ' cores]\n', sep=''))
+			}
+		
 		parallel <- TRUE
 		}
 	# otherwise don't
