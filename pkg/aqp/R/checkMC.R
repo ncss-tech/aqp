@@ -3,7 +3,7 @@
 checkMC <- function(n=2)
 	{
 	if(
-	getOption('AQP_parallel') & 
+	getOption('AQP_parallel', default=FALSE) & 
 	as.numeric(packageDescription('plyr')$Version) >= 1.2 & 
 	require(foreach) & 
 	require(doMC)
