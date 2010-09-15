@@ -29,6 +29,13 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	if(class(s$id) != 'factor')
 		s$id <- factor(s$id)
 	
+	## this is still experimental
+	# check for ability to use parallel computations:
+	parallel <- checkMC()
+		
+	
+	
+	
 	# identify the number of profiles
 	n.profiles <- length(levels(s$id))
 	
@@ -52,7 +59,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
+	s.unrolled <- dlply(s, .(id), .progress='text', .parallel=parallel, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go
@@ -82,6 +89,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	if(add_soil_flag)
 		{
 		# get the depth of each profile
+		## could be converted to 'vaggregate' in latest version of plyr
 		s.slices_of_soil <- tapply(s$bottom, s$id, function(i) max(i, na.rm=TRUE) )
 		
 		# truncate to the max requested depth

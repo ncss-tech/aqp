@@ -48,16 +48,13 @@ profile_plot(d)
 
 
 # simple cluster analysis:
-d.list <- lapply(1:10, function(i) random_profile(i))
-d <- do.call('rbind', d.list)
+d <- ldply(1:10, function(i) random_profile(i))
 p <- profile_compare(d, vars=c('p1','p2','p3'), max_d=50, k=0)
 plot(hclust(p))
 
 
 # stress-test profile comparison functions (not run)
-# d.list <- lapply(1:1000, function(i) random_profile(i))
-# d <- do.call('rbind', d.list)
-# rm(d.list) ; gc()
+# d <- ldply(1:1000, function(i) random_profile(i))
 # 
 # 100 profiles, 4 varibales:
 # 66 seconds on 1.3 Ghz Intel Mac Mini 
