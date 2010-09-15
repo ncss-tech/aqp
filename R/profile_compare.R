@@ -93,7 +93,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		# init a matrix with dimensions: depth slices, number of profiles
 		soil.matrix <- matrix(ncol=s.slices_of_soil.length, nrow=max_d)
 		
-		# will with TRUE for 'soil' or FALSE for 'non-soil'
+		# fille with TRUE for 'soil' or FALSE for 'non-soil'
 		for(s.i in 1:s.slices_of_soil.length)
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
 		
@@ -114,7 +114,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	
 	# 'i' is not the depth slice, rather, the index
 	for(i in seq_along(depth_slice_seq))
-	{
+		{
 		# for each z, generate distance matrix
 		# note that we have to pass in variable 'i', as this is the 
 		# current depth segment
@@ -154,17 +154,17 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 			rm(m.ref)
 			}
 			
-	# cleanup: not sure if this helps... seems to
-	gc()
+		# cleanup: not sure if this helps... seems to
+		gc()
+			
+		# update progress bar
+		setTxtProgressBar(pb, i)
 		
-	# update progress bar
-	setTxtProgressBar(pb, i)
-	
-	
-	# debugging information on memory consumption
-	cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
-	
-	}
+		
+		# debugging information on memory consumption
+		cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
+		
+		}
 	# done creating list of slice-wise dissimilarties
 	# finish progress bar	
 	close(pb)
