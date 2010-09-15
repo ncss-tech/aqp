@@ -35,7 +35,12 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 	# check for dependencies
 	if(!require(plyr) | !require(reshape))
 		stop('Please install the "plyr" and "reshape" packages.')
-
+		
+	## this is still experimental
+	# check for ability to use parallel computations:
+	parallel <- checkMC()
+		
+		
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('this function can only accept integer horizon depths')
@@ -52,7 +57,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 	# apply slotting group-wise and return in long format
 	# note that we are passing in additional arguments to soil.slot 
 	# from the calling function
-	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf) {
+	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf, .parallel=parallel) {
 		
 		# subset just the relevant columns
 		i.sub <- data.frame(
@@ -66,7 +71,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 		## TODO: allow for seg_vect or seg_size	
 		## currently only one or the other is supported
 		# apply slotting according to grouping factor
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf)
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf, .parallel=parallel)
 		
 		return(i.slotted)
 		})
@@ -88,7 +93,8 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 ## 
 # TODO: sd should be calculated by population defined by seg_size and n pedons
 # TODO: re-factor how profile weights are used, consider using rq()
-# TODO: retuan the number of profiles + number of unique horizons when using custom segmenting interval
+# TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
+# TODO: replace by() with equivilant plyr functions
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, strict=FALSE, user.fun=NULL)
 	{
 	
@@ -138,7 +144,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	max_d <- max(data$bottom)
 	
 	# unroll the dataset, a pedon at a time
-	x.unrolled <- by(data, data$id, function(i, m=max_d) 
+	x.unrolled <- dlply(data, .(id), .fun=function(i, m=max_d) 
 		{
 		
 		u <- try(unroll(top=i$top, bottom=i$bottom, prop=i$prop, max_depth=m, strict=strict))
