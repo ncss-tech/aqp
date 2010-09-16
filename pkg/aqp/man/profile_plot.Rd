@@ -12,9 +12,10 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }
 \usage{
 
-\method{profile_plot}{SoilProfileList}(d, color = "soil_color", width = 0.2, 
-cex.names = 0.5, cex.depth.axis=cex.names, plot.order = 1:d$num_profiles, add = FALSE,
-scaling.factor = 1, y.offset = 0, max.depth = d$max_depth, \dots)
+\method{profile_plot}{SoilProfileList}(d, color='soil_color', width=0.2, name='name', 
+cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
+plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, 
+max.depth=d$max_depth, shrink=FALSE, shrink.cutoff=3,  \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,13 +23,17 @@ scaling.factor = 1, y.offset = 0, max.depth = d$max_depth, \dots)
   \item{d}{a SoilProfileList object}
   \item{color}{the name of the column containing R-compatible color descriptions}
   \item{width}{scaling of profile widths}
+  \item{name}{the name of the column containing the horizon designation}
   \item{cex.names}{character scaling applied to horizon names}
   \item{cex.depth.axis}{character scaling applied to depth scale}
+  \item{cex.id}{character scaling applied to profile id}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 
   \item{y.offset}{vertical offset for top of profiles} 
   \item{max.depth}{lower depth boundary of plot}
+  \item{shrink}{should long horizon names be shrunk by 80\% ?}
+  \item{shrink.cutoff}{character length defining long horizon names}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{

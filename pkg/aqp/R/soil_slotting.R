@@ -57,7 +57,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 	# apply slotting group-wise and return in long format
 	# note that we are passing in additional arguments to soil.slot 
 	# from the calling function
-	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf, .parallel=parallel) {
+	d.slotted <- ddply(d.long, .(variable), .parallel=parallel, .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf) {
 		
 		# subset just the relevant columns
 		i.sub <- data.frame(
