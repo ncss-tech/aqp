@@ -79,7 +79,7 @@ max.SoilProfile <- function(x, ...)
 	# no indices
 	if(missing(i) & missing(j))
 		{ 
-    	return(x)
+    	print('no yet implemented')
     	}
     
     # just a row-like index

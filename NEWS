@@ -2,6 +2,7 @@
 * added VERY experimental support for parallel processing based on the latest versions
   of plyr, doMC, and foreach packages
 * updated vignette with technical details on aggregation and dissimilarity computation
+* new options to profile_plot()
 
 
 -------------------------- aqp 0.94 (2010-08-11) --------------------------

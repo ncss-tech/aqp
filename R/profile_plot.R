@@ -9,7 +9,7 @@ profile_plot <- function(...) UseMethod("profile_plot")
 	
 	
 # method for SoilProfileList class
-profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, cex.names=0.5, cex.depth.axis=cex.names, plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, max.depth=d$max_depth, ...)
+profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, max.depth=d$max_depth, shrink=FALSE, shrink.cutoff=3, ...)
 	{	
 		
 	# check for missing / bad soil color column
@@ -17,6 +17,11 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, cex.n
 	if(! color %in% names(d$data[[1]]$data))
 		{
 		stop(paste('Invalid soil color column:', color))
+		}
+	
+	if(! name %in% names(d$data[[1]]$data))
+		{
+		stop(paste('Invalid horizon name column:', name))
 		}
 		
 	# fudge factors
@@ -47,11 +52,22 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, cex.n
 		rect(i-width, y0, i + width, y1, col=d$data[[profile_i]][, color])
 	
 		# annotate with names
+		# first get the horizon mid-point
 		mid <- ( y1 + y0 )/2
-		text(i + width, mid, d$data[[profile_i]][,'name'], pos=4, offset=0.1, cex=cex.names)
 		
-		# ID
-		text(i, y.offset, d$data[[profile_i]]$id, pos=3, font=2, cex=cex.names+(0.2*cex.names))
+		# optionally shrink the size of names if they are longer than a given thresh
+		if(shrink) {
+			names.to.shrink <- which(nchar(d$data[[profile_i]][, name]) > shrink.cutoff)
+			cex.names.shrunk <- rep(cex.names, length(d$data[[profile_i]][, 'top']))
+			cex.names.shrunk[names.to.shrink] <- cex.names.shrunk[names.to.shrink] * 0.8
+			text(i + width, mid, d$data[[profile_i]][, name], pos=4, offset=0.1, cex=cex.names.shrunk)
+			}
+		# standard printing of names, all at the same size
+		else
+			text(i + width, mid, d$data[[profile_i]][, name], pos=4, offset=0.1, cex=cex.names)		
+		
+		# add the profile ID
+		text(i, y.offset, d$data[[profile_i]]$id, pos=3, font=2, cex=cex.id)
 		}
 	
 	# axis:
