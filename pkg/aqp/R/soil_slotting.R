@@ -140,6 +140,13 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	# what is the datatype of 'prop'
 	prop.class <- class(data$prop)
 	
+	# if we have a character, then convert to factor
+	if(prop.class == 'character')
+		{
+		cat('converting to categorical variable to factor \n')
+		data$prop <- factor(data$prop)
+		}
+	
 	# get the max depth for the entire dataset
 	max_d <- max(data$bottom)
 	
@@ -349,7 +356,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		}
 	
 	# todo: update this to use a different column
-	if(prop.class == 'factor')
+	if(prop.class == 'factor' | prop.class == 'character')
 		{
 		# the results of this operation are a list,
 		# one element for each depth segment
