@@ -91,6 +91,8 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 
 ## this function will break when horizon boundaries do not make sense
 ## 
+# TODO: optionally compute probability by dividing by number of profiles, not just profiles eith data to a given depth
+# TODO: slice-wise probability does not work with categorical vectors, when slice size > 1
 # TODO: sd should be calculated by population defined by seg_size and n pedons
 # TODO: re-factor how profile weights are used, consider using rq()
 # TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
@@ -98,17 +100,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, strict=FALSE, user.fun=NULL)
 	{
 	
-# 	## this isn't usually a problem
-# 	# test for horizon boundaries that are equal... common to Cr and R horizons
-# 	hz.test <- data$top == data$bottom
-# 	if(length(which(hz.test)) > 0)
-# 		{
-# 		print(data[which(hz.test), ])
-# 		stop('Error: top and bottom horizon boundaries are equal. Cr or R horizon?')
-# 		}
-	
-	## check for fatal errors
-	
+	## check for fatal errors	
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('this function can only accept integer horizon depths')
@@ -146,6 +138,10 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		cat('converting to categorical variable to factor \n')
 		data$prop <- factor(data$prop)
 		}
+	
+	# test for use of categorical variable and >1 seg vect
+	if(prop.class == 'factor' & (!is.na(seg_size) | !is.na(seg_vect)))
+		stop('sorry, aggregation of categorical variables by segments sizes >1 is not yet supported')
 	
 	# get the max depth for the entire dataset
 	max_d <- max(data$bottom)
@@ -210,7 +206,9 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			}
 		
 		
-		
+		##
+		## TODO: with some segment sizes, the last element of wind.idx is not the correct length 
+		##
 		## warnings are being generated here
 		## it looks like values are being recycled
 		## Warning message:
@@ -220,6 +218,9 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		# subset values and weights by id
 		# note that we are lumping the subset values by id into a single row of a matrix
 		x.recon <- try(do.call('rbind', by(x.recon_original, wind.idx, unlist) ))
+		
+		# debugging
+		# return(list(x.recon_original, wind.idx))
 		
 		if(use.wts == TRUE)
 			{
@@ -275,7 +276,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			
 			# return a dataframe with all values, indexed by segment
 			# useful for looking at the distribution of properties by segment
-			# bwplot(factor(seg_interval) ~ p, data=s)
 			if(return.raw == TRUE)
 					{
 					# generate the index as an ordered factor, with labels in the depth order
@@ -286,7 +286,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			
 			}
 			
-		# using a fixed-interval segmenting vector	
+		# using a fixed-interval segmenting vector
 		else
 			{
 			# get the length of our segmented data set
@@ -366,7 +366,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		p.unique.classes <- as.vector(na.omit(unique(as.vector(x.recon))))
 		
 		# tabular frequences for complete set of possible categories
-		# should generalize to user-defined segmenting vectors
+		# TODO: generalize to user-defined segmenting vectors
 		p.table <- apply(x.recon, 1, function(i) { 
 			table(factor(i, levels=p.unique.classes, labels=levels(data$prop)[p.unique.classes]), useNA='no')  
 			} 
@@ -376,20 +376,11 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		p.freq <- as.data.frame(t(p.table))
 		
 		# convert into proportions
+		# TODO: optionally divide by total number of profiles
 		p.row.counts <- apply(p.freq, 1, sum)
 		p.prop <- sweep(p.freq, 1, STATS=p.row.counts, FUN='/')
-		
-		## TODO: finish this
-		# remove proportions of 0
-# 		p.prop[which(p.prop <= 0.000001), ] <- NA
-		
 		}
-	
-# 	## slice-wise probability does not work with categorical vectors, when slice size > 1
-# 	return(p.freq)
-# 	stop()
-# 	
-	
+		
 	## NOTE: the calculation of the weighted SD is not quite right when using segments larger than 1 cm
 	# no way to use weights with factor vectors yet...
 	if(use.wts == TRUE)
