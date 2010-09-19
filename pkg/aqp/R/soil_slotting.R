@@ -38,7 +38,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 		
 	## this is still experimental
 	# check for ability to use parallel computations:
-	parallel <- checkMC()
+	# parallel <- checkMC()
 		
 		
 	# currently this will only work with integer depths
@@ -57,7 +57,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 	# apply slotting group-wise and return in long format
 	# note that we are passing in additional arguments to soil.slot 
 	# from the calling function
-	d.slotted <- ddply(d.long, .(variable), .parallel=parallel, .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf) {
+	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf) {
 		
 		# subset just the relevant columns
 		i.sub <- data.frame(
@@ -91,9 +91,9 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 
 ## this function will break when horizon boundaries do not make sense
 ## 
+# TODO: check weighted computations.... probably not quite correct
 # TODO: optionally compute probability by dividing by number of profiles, not just profiles eith data to a given depth
 # TODO: slice-wise probability does not work with categorical vectors, when slice size > 1
-# TODO: sd should be calculated by population defined by seg_size and n pedons
 # TODO: re-factor how profile weights are used, consider using rq()
 # TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
 # TODO: replace by() with equivilant plyr functions
@@ -197,7 +197,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		else
 			{
 			# generate a vector of unique segment ids
-			# adding one extra can sometimes cause warnings... not sure if it matters
 			segment_label <- 1:((max_d/seg_size)+1)
 			
 			# generate combined segment id vector
@@ -206,21 +205,21 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			}
 		
 		
-		##
-		## TODO: with some segment sizes, the last element of wind.idx is not the correct length 
-		##
-		## warnings are being generated here
-		## it looks like values are being recycled
-		## Warning message:
-		##   In rbind(`1` = c(13L, 13L, 7L, 7L, 7L, 7L, 7L, 7L, 7L, 7L, 1L, 1L,  :
-		##   number of columns of result is not a multiple of vector length (arg 9)
-		##   ???
+		## this was the old method, resulting in deflated SD, due to artificial inflation of 'n'
 		# subset values and weights by id
 		# note that we are lumping the subset values by id into a single row of a matrix
-		x.recon <- try(do.call('rbind', by(x.recon_original, wind.idx, unlist) ))
+		# x.recon <- try(do.call('rbind', by(x.recon_original, wind.idx, unlist) ))
 		
-		# debugging
-		# return(list(x.recon_original, wind.idx))
+		
+		# compute hz-thickness wt-mean value within each user-defined slice
+		# this will increase SD by not artifically inflating 'n'
+		x.recon <- apply(x.recon_original, 2, function(i, idx=wind.idx) tapply(i, idx, mean, na.rm=TRUE))
+		
+		# NaN can result from missing data, convert them into NA for simplicity sake
+		x.recon[is.nan(x.recon)] <- NA
+		
+		# debugging:
+		# return(list(x.recon_original, x.recon, wind.idx))
 		
 		if(use.wts == TRUE)
 			{
@@ -228,7 +227,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			x.recon.wts <- try(do.call('rbind', by(x.recon.wts_original, wind.idx, unlist) ))
 			}
 			
-		# use a user-defined segmenting vector, starting from 0		
+		# use a user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
 			{
 			
@@ -327,7 +326,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	
 	
 	## compute row-wise summary statistics
-	
 	# always compute a contributing fraction
 	# this is the number of profile contributing the the slice-wise aggregate
 	contributing_fraction <- apply(x.recon, 1, function(i) length(na.omit(i)) / length(i))

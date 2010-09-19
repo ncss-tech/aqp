@@ -31,7 +31,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	
 	## this is still experimental
 	# check for ability to use parallel computations:
-	parallel <- checkMC()
+	# parallel <- checkMC()
 		
 	
 	
@@ -59,7 +59,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress='text', .parallel=parallel, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
+	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go

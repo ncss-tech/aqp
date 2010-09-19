@@ -2,12 +2,8 @@
 ## once this is better tested, put the number of cores into an options() var
 checkMC <- function(n=2)
 	{
-	if(
-	getOption('AQP_parallel', default=FALSE) & 
-	as.numeric(packageDescription('plyr')$Version) >= 1.2 & 
-	require(foreach) & 
-	require(doMC)
-	)
+	plyr.ver <- as.numeric(paste(package_version(packageDescription("plyr")$Version)[[1,1]], package_version(packageDescription("plyr")$Version)[[1,2]], sep='.'))
+	if( getOption('AQP_parallel', default=FALSE) & plyr.ver >= 1.2 & require(foreach) & require(doMC) )
 		{
 		# setup the parallel environment if it hasn't been already
 		if(is.null(getDoParName()))
