@@ -12,8 +12,13 @@ if(length(y) > length(x))
 	{
 	print('plotting segments...')
 	
-	# re-make a nice dataframe
-	d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
+	# re-make a nice dataframe, assuming that we have 'groups' defined
+	if(!missing(groups))
+		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
+	
+	# if 'groups' is missing, add a fake 'groups' column
+	else
+		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
 	
 	# add line segments that form step-function
 	by(d, d$groups, make.segments, ...)	

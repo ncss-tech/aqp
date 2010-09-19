@@ -1,9 +1,15 @@
+-------------------------- aqp 0.96 (2010-09-19) --------------------------
+* temporarily disabled parallel computation, will be re-added in next release
+* bug fixes in panel.depth_function where 'groups' was not defined
+* major changes to soil.slot() when called with user-defined segment size, or segmenting vector
+  - SD values were previously too low due to an inflated 'n' in the calculation
+  - calculation of weighted mean and sd should be used with caution
+
 -------------------------- aqp 0.95 (2010-09-15) --------------------------
 * added VERY experimental support for parallel processing based on the latest versions
   of plyr, doMC, and foreach packages
 * updated vignette with technical details on aggregation and dissimilarity computation
 * new options to profile_plot()
-
 
 -------------------------- aqp 0.94 (2010-08-11) --------------------------
 * fixed bug in soil.slot() when aggregating a categorical variable,
