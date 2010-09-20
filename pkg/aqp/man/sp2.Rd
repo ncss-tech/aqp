@@ -61,13 +61,13 @@ require(ape)
 require(cluster)
 h <- diana(d)
 p <- as.phylo(as.hclust(h))
-plot(ladderize(p), cex=0.75, label.offset=0.5, no.margin=TRUE)
+plot(ladderize(p), cex=0.75, label.offset=0.25)
 
 # add in the dated surface type via color
 tiplabels(col=p.surface, pch=15)
 
 # based on distance matrix values, YMMV
-legend(x=-0.36, y=6.1, legend=levels(sp2$surface), col=1:6, pch=15, bty='n', bg='white')
+legend(x=0, y=6.1, legend=levels(sp2$surface), col=1:6, pch=15, bty='n', bg='white')
 
 
 }
