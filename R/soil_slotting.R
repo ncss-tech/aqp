@@ -43,7 +43,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 		
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
-		stop('this function can only accept integer horizon depths')
+		stop('This function can only accept integer horizon depths')
 	
 	## TODO: is there a better way to do this?
 	# capture arguments
@@ -98,13 +98,21 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 # TODO: re-factor how profile weights are used, consider using rq()
 # TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
 # TODO: replace by() with equivilant plyr functions
-soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=FALSE, strict=FALSE, user.fun=NULL)
+soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALSE, user.fun=NULL)
 	{
 	
-	## check for fatal errors	
+	#################################################################################
+	##### Initialization: check for fatal errors, and do some clean-up
+	#################################################################################
+	
+	# temporarily disable wt. calculations
+	if(use.wts)
+		stop('Weighted mean and SD are currently disabled. Please wait for the next release.')
+	
+	
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
-		stop('this function can only accept integer horizon depths')
+		stop('This function can only accept integer horizon depths')
 	
 	# no NA allowed in top or bottom
 	hz.test.top <- is.na(data$top)
@@ -113,18 +121,18 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	if(any(hz.test.top))
 		{
 		print(data[which(hz.test.top), ])
-		stop('Error: NA in horizon top boundary')
+		stop('NA in horizon top boundary')
 		}
 		
 	if(any(hz.test.bottom))
 		{
 		print(data[which(hz.test.bottom), ])
-		stop('Error: NA in horizon top boundary')
+		stop('NA in horizon bottom boundary')
 		}
 	
 	# can't pass in a bogus aggregate function
 	if(!is.null(user.fun) & !is.function(user.fun)) 
-		stop('Error: user.fun is not a function')
+		stop(paste('`', user.fun, '` is not a function', sep=''))
 		
 	
 	# re-level id factor according to account for subsets
@@ -136,18 +144,21 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	# if we have a character, then convert to factor
 	if(prop.class == 'character')
 		{
-		cat('converting to categorical variable to factor \n')
+		cat('notice: converting to categorical variable to factor \n')
 		data$prop <- factor(data$prop)
 		}
 	
 	# test for use of categorical variable and >1 seg vect
 	if(prop.class == 'factor' & (!missing(seg_size) | !missing(seg_vect)))
-		stop('sorry, aggregation of categorical variables by segments sizes >1 is not yet supported')
+		stop('Sorry, aggregation of categorical variables by segments sizes >1 is not yet supported')
 	
 	# get the max depth for the entire dataset
 	max_d <- max(data$bottom)
 	
-	# unroll the dataset, a pedon at a time
+
+	#################################################################################
+	##### Step 1: unroll profiles in the collection
+	#################################################################################
 	x.unrolled <- dlply(data, .(id), .fun=function(i, m=max_d) 
 		{
 		
@@ -169,10 +180,13 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		} )
 	
 	
-	# note that these will be used later on, based on segmenting approach
-	# reconstitute into a matrix with 1:n-depth interval rows, and n_pedons columns
-	x.recon_original <- sapply(x.unrolled, '[')
+	#######################################################################################
+	##### Step 2: reconstitute into a matrix with 1:n-segment rows, and n_pedons columns ##
+	#######################################################################################
+	x.recon <- sapply(x.unrolled, '[')
 	
+	
+	## TODO: fix this
 	if(use.wts == TRUE)
 		{
 		# unroll a weight vector for each pedon
@@ -182,6 +196,12 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		x.recon.wts_original <- sapply(x.unrolled.wts, '[')
 		}
 	
+	
+	
+	############################################################################################
+	##### Step 3a: generate a segmenting index and compute stats along user-defined segments  ##
+	############################################################################################
+	
 	# if we have a regular-interval segment size, re-group the data following the segmenting id
 	# note that we are testing for the default value of seg_size and seg_vect
 	# must be a better way to do this..
@@ -189,7 +209,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 		{
 		
 		# give a warning about weights and SD
-		cat('calculation of SD with a user-defined segment size is unrealiable\n')
+		cat('notice: calculation of SD with a user-defined segment size is unrealiable\n')
 		
 		# use a user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
@@ -209,55 +229,19 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			}
 		
 		
-		## this was the old method, resulting in deflated SD, due to artificial inflation of 'n'
-		# subset values and weights by id
-		# note that we are lumping the subset values by id into a single row of a matrix
+	
 		
-		
-		###############################################################
-		#### first idea: results inflated 'n' for SD calculation       ##
-		###############################################################
+		##############################################################################
+		#### segment sizes > 1 will result in inflated 'n' for SD calculation       ##
+		##############################################################################
 		
 		# generate a list, where each entry is a vector corresponding to the collection of 
 		# values from all profiles, for those depths defined by each slice
 		# we can't directly rbind this list together into a DF, because there are cases where the last
 		# entry has a shorter length than all of the other entries
 		# this is caused by a seg_size that does not divide evenly into our max depth (max_d)
-		l.recon <- by(x.recon_original, wind.idx, unlist)
+		l.recon <- by(x.recon, wind.idx, unlist)
 
-#		if(!missing(seg_size))
-#			{
-#			# figure out the proper number of elements that _should_ be in each entry
-#			n.recon.items.per.row <- ncol(x.recon_original) * seg_size
-#		
-#			# get an index to the last entry in the list, as this one is likely to be shorter than the rest
-#			l.last.idx <- length(l.recon)
-#		
-#			# figure out how much NA padding need, and then append it to the last entry
-#			n.NA.padding <- n.recon.items.per.row-length(l.recon[[l.last.idx]])
-#			l.recon[[l.last.idx]] <- c(l.recon[[l.last.idx]], rep(NA, times=n.NA.padding))
-#		
-#			# some user-feedback
-#			if(n.NA.padding > 0)
-#				cat(paste('requested segment interval (', seg_size, ') does not divide evenly into max depth (', max_d, ') ... padding with NA\n', sep=''))
-#			}
-#		
-#		# convert list into dataframe, for row-wise calculation of summary stats
-#		# this should not error when max_d is not evenly divisible by seg_size 
-#		# x.recon <- do.call('rbind', l.recon)
-
-		
-		###############################################################
-		#### second idea: results in equal-weighting between profiles ##
-		###############################################################
-		
-		# compute hz-thickness wt-mean value within each user-defined slice
-		# this will increase SD by not artifically inflating 'n'
-		# x.recon <- apply(x.recon_original, 2, function(i, idx=wind.idx) tapply(i, idx, mean, na.rm=TRUE))
-		
-		# NaN can result from missing data, convert them into NA for simplicity sake
-		# x.recon[is.nan(x.recon)] <- NA
-		
 		
 		## TODO: fix this!
 		## weighted calculations are broken!
@@ -267,41 +251,40 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			x.recon.wts <- try(do.call('rbind', by(x.recon.wts_original, wind.idx, unlist) ))
 			}
 			
-		# use a user-defined segmenting vector, starting from 0
+		# user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
 			{
 			
-			# get actual length of segmented data
-			# note that this might be less than the maximum depth suggested by the segmenting vector
-			len <- length(l.recon)
+			# if the user requests multiple slices that are beyond the length of the deepest profile
+			# throw an error
+			if(length(which(seg_vect > max_d)) > 1)
+				stop(paste('multiple requested segments extend beyond the maximum soil depth within the profile collection: ', paste(seg_vect[which(seg_vect > max_d)], collapse=','), sep=''))
+				
+			# get length and lower boundary of the requested segments
 			len.seg_vect <- length(seg_vect)
+			max.seg_vect <- max(seg_vect)
 			
-			# the actual max_depth may be less than the requested segments
-			# in that case we will need to truncate the horizon label vector
-			if(len < len.seg_vect)
+			# the actual max depth may be less than the requested segments
+			# in that case we will need to truncate the horizon label vector to max_d
+			if(max_d < max.seg_vect)
 				{
 				seg_vect_legal_idx <- which( (seg_vect - max_d) <= 0)
-				sv_clean <- seg_vect[c(1,seg_vect_legal_idx+1)]
+				sv_clean <- c(seg_vect[seg_vect_legal_idx], max_d)
+				cat(paste('notice: truncating requested lower segment (', max.seg_vect, ') to max profile depth (', max_d, ')\n', sep=''))
 				}
 				
-			# the actual depth may be more than the max depth requested in the seg_vect
-			else if(len > len.seg_vect)
-				{
-				sv_clean <- c(seg_vect[-len.seg_vect], max_d)
-				}
-			
-			# normal circumstances
-			# ??? what are they?
+			# the actual depth may be more than, or equal to, the deepest requested segment
+			# in that case we are truncating aggregation to the deepest requested lower boundary
 			else
 				{
 				sv_clean <- seg_vect
 				}
-			
-			len.clean <- length(sv_clean)
+		
 			
 			# generate segment tops and bottoms
 			# this generates an extra row sometimes, check for it below
-			df.top_bottom <- data.frame(top=c(0,sv_clean[-c(1, len.clean)]), bottom=c(sv_clean[-c(1, len.clean)], max_d))
+			df.top_bottom <- data.frame(top=sv_clean[-len.seg_vect], bottom=sv_clean[-1])
+			
 			
 			# check for lower horizon where top == bottom, and remove it
 			bad_hz_list_TF <- with(df.top_bottom, top == bottom)
@@ -309,12 +292,11 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			if(TRUE %in% bad_hz_list_TF)
 				{
 				bad_hz_list_idx <- which(bad_hz_list_TF)
-				print(paste('Removing horizon with 0 thickness (', bad_hz_list_idx, ')', sep='' ))
+				cat(paste('notice: removing horizon with 0 thickness (hz ', bad_hz_list_idx, ')\n', sep=''))
 				df.top_bottom <- df.top_bottom[-bad_hz_list_idx, ]
 				}
 						
-			# done with user-defined segment vector
-			}
+			} # done with user-defined segment vector
 			
 		# using a fixed-interval segmenting vector
 		else
@@ -331,13 +313,12 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			# done with fixed-interval segmenting vector
 			}
 		
-		## compute row-wise summary statistics
+		## compute segment-wise summary statistics
 		# always compute a contributing fraction
 		# this is the number of profile contributing the the slice-wise aggregate
 		contributing_fraction <- sapply(l.recon, function(i) length(na.omit(i)) / length(i))
 		
-		## compute summary stats by segment
-		# standard summary statistics
+		
 		## this mean is the horizon-thickness weighted mean across all profiles
 		p.mean <- sapply(l.recon, mean, na.rm=TRUE)
 		
@@ -354,20 +335,23 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			{
 			p.user <- try( sapply(l.recon, user.fun) )
 			}
-		
-		
+			
 		} # done with segmenting
 	
-	# no segmenting
+	
+	###############################################################
+	##### Step 3b: compute stats along single-interval segments  ##
+	###############################################################
 	else
 		{
-		x.recon <- x.recon_original
 		
+		## TODO: currently broken
+		## work on weights
 		if(use.wts == TRUE)
 			x.recon.wts <- x.recon.wts_original
 		
+		# make the top and bottom hz labels
 		df.top_bottom <- data.frame(top=0:(max_d-1), bottom=1:max_d)
-		
 		
 		
 		## compute row-wise summary statistics
@@ -424,13 +408,15 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 			p.prop <- sweep(p.freq, 1, STATS=p.row.counts, FUN='/')
 			}
 			
-		} # done with 1cm interval
+		} # done with 1cm interval aggregation
 
 	
 	
 	
 	
-	
+	######################################################################
+	##### Step 4: combine stats with segment labels and return to user  ##
+	######################################################################
 		
 	## NOTE: the calculation of the weighted SD is not quite right when using segments larger than 1 cm
 	# no way to use weights with factor vectors yet...
@@ -507,8 +493,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, return.raw=FALSE, use.wts=
 	# something is wrong
 	else
 		{
-		print("ERROR!")
-		print(data)
+		stop('The number of rows in aggregate data do not match number of segments. This was probably caused by incorrect horizon boundaries.')
 		}
 	
 	# covert tops / bottoms to integers

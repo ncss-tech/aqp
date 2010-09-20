@@ -101,7 +101,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		# init a matrix with dimensions: depth slices, number of profiles
 		soil.matrix <- matrix(ncol=s.slices_of_soil.length, nrow=max_d)
 		
-		# fille with TRUE for 'soil' or FALSE for 'non-soil'
+		# file with TRUE for 'soil' or FALSE for 'non-soil'
 		for(s.i in 1:s.slices_of_soil.length)
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
 		

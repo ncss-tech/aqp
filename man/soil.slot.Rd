@@ -11,8 +11,7 @@ Align a single soil property to a user-defined basis, and perform slice-wise agg
 }
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, 
-return.raw = FALSE, use.wts = FALSE,
-strict = FALSE, user.fun = NULL)
+use.wts = FALSE, strict = FALSE, user.fun = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,13 +28,10 @@ A dataframe representing a 'stack' of soil profiles and having the following for
 User-degined segment size, default is 1.
 }
   \item{seg_vect}{
-User-degined segment structure
-}
-  \item{return.raw}{
-If TRUE, un-aggregated data will be returned by depth-slice. Useful for debugging, or for the generation of box and whisker plots.
+User-degined segment structure: should start from 0, and deepest boundary should be deeper than the deepest soil profile in the collection. For example, if the deepest profile in the collection is 200 cm, then the following segmenting vector would be reasonable: \code{c(0,10,20,30,60,100,150,210)}. The resulting aggregation will automatically be truncated at 200 cm. The user is responsible for supplying sensible values.
 }
   \item{use.wts}{
-If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data. Weighted means and standard deviations will be returned by depth-slice. Use with caution.
+If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data. Weighted means and standard deviations will be returned by depth-slice. Use with caution, this feature is still experimental and likely not quite correct.
 }
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}

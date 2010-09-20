@@ -39,7 +39,7 @@ These data were collected to support research funded by the Kearney Foundation o
 
 
 \examples{
-## this example investigates the concept of a "mean profile"
+## this example investigates the concept of a "median profile"
 
 # required packages
 library(ape)
@@ -85,7 +85,7 @@ sp3.list <- initProfileList(sp3.grouped)
 
 
 ## perform comparison, and convert to phylo class object
-d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, k=0.01)
+d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, k=0.01, replace_na=TRUE, add_soil_flag=TRUE)
 h <- agnes(d, method='ward')
 p <- ladderize(as.phylo(as.hclust(h)))
 
