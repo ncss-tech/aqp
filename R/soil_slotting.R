@@ -105,11 +105,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	##### Initialization: check for fatal errors, and do some clean-up
 	#################################################################################
 	
-	# temporarily disable wt. calculations
-	if(use.wts)
-		stop('Weighted mean and SD are currently disabled. Please wait for the next release.')
-	
-	
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('This function can only accept integer horizon depths')
@@ -182,21 +177,26 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	
 	#######################################################################################
 	##### Step 2: reconstitute into a matrix with 1:n-segment rows, and n_pedons columns ##
+	##### TODO: use lists for everything, so that segment size does not affect agg. calcs #
 	#######################################################################################
+	# values
 	x.recon <- sapply(x.unrolled, '[')
 	
-	
-	## TODO: fix this
+	# weights
 	if(use.wts == TRUE)
 		{
+		cat('notice: profile weights are still experimental, use with caution!\n')
+		
 		# unroll a weight vector for each pedon
 		x.unrolled.wts <- by(data, data$id, function(i, m=max_d) unroll(top=i$top, bottom=i$bottom, prop=i$wt, max_depth=m))
 		
 		# reconstitute weights:
-		x.recon.wts_original <- sapply(x.unrolled.wts, '[')
+		x.recon.wts <- sapply(x.unrolled.wts, '[')
+		x.recon.wts <- x.recon.wts / max(x.recon.wts, na.rm=TRUE)
+		
+		rm(x.unrolled.wts); gc()
 		}
-	
-	
+
 	
 	############################################################################################
 	##### Step 3a: generate a segmenting index and compute stats along user-defined segments  ##
@@ -207,6 +207,10 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# must be a better way to do this..
 	if(!missing(seg_size) | !missing(seg_vect))
 		{
+		
+		# weighted calculation with profile weights is not supported
+		if(use.wts)
+			stop('Profile weights are not supported with user-defined segment size')
 		
 		# give a warning about weights and SD
 		cat('notice: calculation of SD with a user-defined segment size is unrealiable\n')
@@ -242,14 +246,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		# this is caused by a seg_size that does not divide evenly into our max depth (max_d)
 		l.recon <- by(x.recon, wind.idx, unlist)
 
-		
-		## TODO: fix this!
-		## weighted calculations are broken!
-		if(use.wts == TRUE)
-			{
-			# subset values by  id
-			x.recon.wts <- try(do.call('rbind', by(x.recon.wts_original, wind.idx, unlist) ))
-			}
 			
 		# user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
@@ -344,12 +340,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	###############################################################
 	else
 		{
-		
-		## TODO: currently broken
-		## work on weights
-		if(use.wts == TRUE)
-			x.recon.wts <- x.recon.wts_original
-		
+	
 		# make the top and bottom hz labels
 		df.top_bottom <- data.frame(top=0:(max_d-1), bottom=1:max_d)
 		
@@ -419,41 +410,39 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	######################################################################
 		
 	## NOTE: the calculation of the weighted SD is not quite right when using segments larger than 1 cm
-	# no way to use weights with factor vectors yet...
+	## also: no way to use weights with factor vectors yet...
 	if(use.wts == TRUE)
 		{
-		## weighted mean calculation
-		## reduces to standard mean, when weights are equal
-		# compute the row-wise sum of weights vector
-		wts_seg_sums <- apply(x.recon.wts, 1, sum, na.rm=TRUE) 
+		## weighted mean calculation: reduces to standard mean, when weights are equal
+		# compute sum of (wt * x) by row
+		sum_wx <- apply(x.recon.wts * x.recon, 1, sum, na.rm=TRUE)
+		# compute sum of wt by row
+		sum_w <- apply(x.recon.wts, 1, sum, na.rm=TRUE)
 		
-		# generate a row-wise fractional weight matrix,
-		# same dimensions as reconstituted property matrix
-		wt_matrix <- sweep(x.recon.wts, 1, STATS=wts_seg_sums, FUN='/')
+		# compute wt. mean = sum (wt * x) / sum (wt)
+		p.wtmean <- sum_wx / sum_w	
 		
-		# scale each property by its associated weight
-		x.recon.wted <- x.recon * wt_matrix
 		
-		# compute the mean by row, weights sum to 1, so there is no division step
-		p.wtmean <- apply(x.recon.wted, 1, sum, na.rm=TRUE)
-	
-	
 		## row-wise weighted sd calculations: only if there are 3 or more obs
-		if(ncol(x.recon.wted) >= 3)
+		if(ncol(x.recon) >= 3)
 			{
-			d1 <- apply(wt_matrix * x.recon^2, 1, sum, na.rm=TRUE)
-			d2 <- apply(wt_matrix, 1, sum, na.rm=TRUE)
-			d3 <- apply(x.recon * wt_matrix, 1, sum, na.rm=TRUE)^2
+			d1 <- apply(x.recon.wts * x.recon^2, 1, sum, na.rm=TRUE)
+			d2 <- apply(x.recon.wts, 1, sum, na.rm=TRUE)
+			d3 <- apply(x.recon * x.recon.wts, 1, sum, na.rm=TRUE)^2
 			
-			n1 <- apply(wt_matrix, 1, sum, na.rm=TRUE)^2
-			n2 <- apply(wt_matrix^2, 1, sum, na.rm=TRUE)
+			n1 <- apply(x.recon.wts, 1, sum, na.rm=TRUE)^2
+			n2 <- apply(x.recon.wts^2, 1, sum, na.rm=TRUE)
 		
 			# weighted variance
 			var.wt <- (d1 * d2 - d3) / (n1 - n2)
 			
 			# weighted sd: id wt. variances less than 0 -- these were probably computed by too few observations
-			var.wt[which(var.wt < 0)] <- NA
+			var.wt[var.wt < 0] <- NA
 			p.wtsd <- sqrt(var.wt)
+			
+			# if any SD values are NA, the wt. SD should also be NA
+			p.wtsd[is.na(p.sd)] <- NA
+			
 			}
 		else # not enough obs to compute SD
 			{

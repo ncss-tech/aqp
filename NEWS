@@ -1,3 +1,7 @@
+-------------------------- aqp 0.96-1 (2010-09-21) --------------------------
+* fixed weighted mean / SD calculation when using 1 unit segments in soil.slot()
+  - wt. mean / SD still disabled for user-defined segment sizes
+
 -------------------------- aqp 0.96 (2010-09-20) --------------------------
 * temporarily disabled parallel computation, will be re-added in next release
 * bug fixes in panel.depth_function where 'groups' was not defined
