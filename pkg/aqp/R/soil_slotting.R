@@ -87,6 +87,123 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 
 
 
+## 
+## calculation of segment-wise summary statistics
+## 
+seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, prop.levels=NA)
+	{
+	
+	# this is the number of slices contributing the the slice-wise aggregate
+	contributing_fraction <- sapply(l.recon, function(i) length(na.omit(i)) / length(i))
+	
+	# sequence for iterating over lists
+	l.seq <-1:length(l.recon)
+	
+	# numeric variables
+	if(prop.class %in% c('numeric','integer'))
+		{
+				
+		# this mean is the horizon-thickness weighted mean across all profiles
+		p.mean <- sapply(l.recon, mean, na.rm=TRUE)
+		
+		# this estimate of SD is too low when using a segment size > 1 cm
+		p.sd <- sapply(l.recon, conditional.sd)
+		
+		# these are the horizon-thickness weighted quantiles
+		q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+		p.quantiles <- data.frame(t(sapply(l.recon, quantile, probs=q.probs, na.rm=TRUE)))
+		names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
+		
+		
+		# weighted mean and SD
+		# need to adapt this for lists
+		if(use.wts == TRUE)
+			{
+						
+			## weighted mean calculation: reduces to standard mean, when weights are equal
+			# compute sum of (wt * x) by row
+			sum_wx <- sapply(l.seq, function(i) sum(l.recon.wts[[i]] * l.recon[[i]], na.rm=TRUE))
+			# compute sum of wt by row
+			sum_w <- sapply(l.seq, function(i) sum(l.recon.wts[[i]], na.rm=TRUE))
+			
+			# compute wt. mean = sum (wt * x) / sum (wt)
+			p.wtmean <- sum_wx / sum_w	
+			
+			
+			## row-wise weighted sd calculations: only if there are 3 or more obs
+			if(length(l.recon) >= 3)
+				{
+				d1 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]] * l.recon[[i]]^2, na.rm=TRUE))
+				d2 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]], na.rm=TRUE))
+				d3 <- sapply(l.seq, function(i) sum(l.recon[[i]] * l.recon.wts[[i]], na.rm=TRUE)^2)
+				
+				n1 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]], na.rm=TRUE)^2)
+				n2 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]]^2, na.rm=TRUE))
+			
+				# weighted variance
+				var.wt <- (d1 * d2 - d3) / (n1 - n2)
+				
+				# weighted sd: id wt. variances less than 0 -- these were probably computed by too few observations
+				var.wt[var.wt < 0] <- NA
+				p.wtsd <- sqrt(var.wt)
+				
+				# if any SD values are NA, the wt. SD should also be NA
+				p.wtsd[is.na(p.sd)] <- NA
+				
+				}
+			else # not enough obs to compute SD
+				{
+				p.wtsd <- NA
+				}
+				
+			} # end processing weighted mean and SD
+		
+		
+		# try user defined function
+		# TODO: catch errors
+		if(!is.null(user.fun))
+			{
+			p.user <- try( sapply(l.recon, user.fun) )
+			df.stats <- data.frame(contributing_fraction, p.mean, p.sd, p.quantiles, p.user)
+			}
+		# no user function	
+		else
+			{
+			if(use.wts)
+				df.stats <- data.frame(contributing_fraction, p.mean, p.wtmean, p.sd, p.wtsd, p.quantiles)
+			else
+				df.stats <- data.frame(contributing_fraction, p.mean, p.sd, p.quantiles)
+			}
+		
+		} # end processing numeric variables
+	
+	
+	## TODO: figure out how to apply this to segments > 1 unit
+	# categorical variables
+	if(prop.class == 'factor')
+		{
+		# get a vector of all possible categories
+		# these are the factor codes...
+		p.unique.classes <- as.vector(na.omit(unique(unlist(l.recon))))
+		
+		# tabular frequences for complete set of possible categories
+		# TODO: generalize to user-defined segmenting vectors
+		p.table <- sapply(l.seq, function(i) { 
+			prop.table(table(factor(l.recon[[i]], levels=p.unique.classes, labels=prop.levels[p.unique.classes]), useNA='no'))  
+			} 
+			)
+		
+		# convert into a dataframe, and combine with contr. fract.
+		p.prop <- as.data.frame(t(p.table))
+		df.stats <- data.frame(contributing_fraction, p.prop)
+		}
+	
+	# done
+	return(df.stats)
+	}
+
+
+
 
 
 ## this function will break when horizon boundaries do not make sense
@@ -143,10 +260,19 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		data$prop <- factor(data$prop)
 		}
 	
-	# test for use of categorical variable and >1 seg vect
-	if(prop.class == 'factor' & (!missing(seg_size) | !missing(seg_vect)))
-		stop('Sorry, aggregation of categorical variables by segments sizes >1 is not yet supported')
-	
+	if(prop.class == 'factor')
+		{
+		# save the levels of our categorical variable
+		prop.levels <- levels(data$prop) 
+		 
+		 # test for use of categorical variable and >1 seg vect
+		 if( !missing(seg_size) | !missing(seg_vect) )
+			stop('Sorry, aggregation of categorical variables by segments sizes >1 is not yet supported')
+		}
+	# for numerical variables, set this to NA
+	else
+		prop.levels <- NA
+		
 	# get the max depth for the entire dataset
 	max_d <- max(data$bottom)
 	
@@ -194,9 +320,20 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		x.recon.wts <- sapply(x.unrolled.wts, '[')
 		x.recon.wts <- x.recon.wts / max(x.recon.wts, na.rm=TRUE)
 		
+		# clean-up
 		rm(x.unrolled.wts); gc()
 		}
 
+
+	## TODO: this is a little wasteful, as we can work with the x.unrolled instead
+	# convert to lists
+	l.recon <- by(x.recon, 1:max_d, unlist)
+		
+	# optionally setup weight list
+	if(use.wts == TRUE)
+		l.recon.wts <- by(x.recon.wts, 1:max_d, unlist)
+	
+	
 	
 	############################################################################################
 	##### Step 3a: generate a segmenting index and compute stats along user-defined segments  ##
@@ -208,12 +345,8 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	if(!missing(seg_size) | !missing(seg_vect))
 		{
 		
-		# weighted calculation with profile weights is not supported
-		if(use.wts)
-			stop('Profile weights are not supported with user-defined segment size')
-		
 		# give a warning about weights and SD
-		cat('notice: calculation of SD with a user-defined segment size is unrealiable\n')
+		cat('notice: calculation of SD with a user-defined segment size may be unrealiable\n')
 		
 		# use a user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
@@ -245,8 +378,12 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		# entry has a shorter length than all of the other entries
 		# this is caused by a seg_size that does not divide evenly into our max depth (max_d)
 		l.recon <- by(x.recon, wind.idx, unlist)
-
-			
+		
+		# optionally setup weight list
+		if(use.wts == TRUE)
+			l.recon.wts <- by(x.recon.wts, wind.idx, unlist)
+		
+		
 		# user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
 			{
@@ -309,29 +446,9 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			# done with fixed-interval segmenting vector
 			}
 		
-		## compute segment-wise summary statistics
-		# always compute a contributing fraction
-		# this is the number of profile contributing the the slice-wise aggregate
-		contributing_fraction <- sapply(l.recon, function(i) length(na.omit(i)) / length(i))
+		# compute segment-wise summary statistics
+		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts)
 		
-		
-		## this mean is the horizon-thickness weighted mean across all profiles
-		p.mean <- sapply(l.recon, mean, na.rm=TRUE)
-		
-		## this estimate of SD is too low when using a segment size > 1 cm
-		p.sd <- sapply(l.recon, conditional.sd)
-		
-		## these are the horizon-thickness weighted quantiles
-		q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-		p.quantiles <- data.frame(t(sapply(l.recon, quantile, probs=q.probs, na.rm=TRUE)))
-		names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
-		
-		# user function
-		if(!is.null(user.fun))
-			{
-			p.user <- try( sapply(l.recon, user.fun) )
-			}
-			
 		} # done with segmenting
 	
 	
@@ -344,140 +461,19 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		# make the top and bottom hz labels
 		df.top_bottom <- data.frame(top=0:(max_d-1), bottom=1:max_d)
 		
+		# compute row-wise summary statistics
+		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts, prop.levels)
 		
-		## compute row-wise summary statistics
-		# always compute a contributing fraction
-		# this is the number of profile contributing the the slice-wise aggregate
-		contributing_fraction <- apply(x.recon, 1, function(i) length(na.omit(i)) / length(i))
-	
-	
-		# the following are computed according to user-defined parameters
-		if(prop.class %in% c('numeric','integer'))
-			{
-			# standard summary statistics
-			## this mean is the horizon-thickness weighted mean across all profiles
-			p.mean <- apply(x.recon, 1, mean, na.rm=TRUE)
-		
-			## this estimate of SD is too low when using a segment size > 1 cm
-			p.sd <- apply(x.recon, 1, conditional.sd)
-		
-			## these are the horizon-thickness weighted quantiles
-			q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-			p.quantiles <- data.frame(t(apply(x.recon, 1, quantile, probs=q.probs, na.rm=TRUE)))
-			names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
-		
-			# user function
-			if(!is.null(user.fun))
-				{
-				p.user <- try( apply(x.recon, 1, user.fun) )
-				}
-			}
-		
-		# todo: update this to use a different column
-		if(prop.class == 'factor' | prop.class == 'character')
-			{
-			# the results of this operation are a list,
-			# one element for each depth segment
-		
-			# get a vector of all possible categories
-			# these are the factor codes...
-			p.unique.classes <- as.vector(na.omit(unique(as.vector(x.recon))))
-		
-			# tabular frequences for complete set of possible categories
-			# TODO: generalize to user-defined segmenting vectors
-			p.table <- apply(x.recon, 1, function(i) { 
-				table(factor(i, levels=p.unique.classes, labels=levels(data$prop)[p.unique.classes]), useNA='no')  
-				} 
-				)
-		
-			# convert into a dataframe
-			p.freq <- as.data.frame(t(p.table))
-		
-			# convert into proportions
-			# TODO: optionally divide by total number of profiles
-			p.row.counts <- apply(p.freq, 1, sum)
-			p.prop <- sweep(p.freq, 1, STATS=p.row.counts, FUN='/')
-			}
-			
-		} # done with 1cm interval aggregation
+		} # done with 1-unit interval aggregation
 
 	
-	
-	
-	
-	######################################################################
-	##### Step 4: combine stats with segment labels and return to user  ##
-	######################################################################
-		
-	## NOTE: the calculation of the weighted SD is not quite right when using segments larger than 1 cm
-	## also: no way to use weights with factor vectors yet...
-	if(use.wts == TRUE)
-		{
-		## weighted mean calculation: reduces to standard mean, when weights are equal
-		# compute sum of (wt * x) by row
-		sum_wx <- apply(x.recon.wts * x.recon, 1, sum, na.rm=TRUE)
-		# compute sum of wt by row
-		sum_w <- apply(x.recon.wts, 1, sum, na.rm=TRUE)
-		
-		# compute wt. mean = sum (wt * x) / sum (wt)
-		p.wtmean <- sum_wx / sum_w	
-		
-		
-		## row-wise weighted sd calculations: only if there are 3 or more obs
-		if(ncol(x.recon) >= 3)
-			{
-			d1 <- apply(x.recon.wts * x.recon^2, 1, sum, na.rm=TRUE)
-			d2 <- apply(x.recon.wts, 1, sum, na.rm=TRUE)
-			d3 <- apply(x.recon * x.recon.wts, 1, sum, na.rm=TRUE)^2
-			
-			n1 <- apply(x.recon.wts, 1, sum, na.rm=TRUE)^2
-			n2 <- apply(x.recon.wts^2, 1, sum, na.rm=TRUE)
-		
-			# weighted variance
-			var.wt <- (d1 * d2 - d3) / (n1 - n2)
-			
-			# weighted sd: id wt. variances less than 0 -- these were probably computed by too few observations
-			var.wt[var.wt < 0] <- NA
-			p.wtsd <- sqrt(var.wt)
-			
-			# if any SD values are NA, the wt. SD should also be NA
-			p.wtsd[is.na(p.sd)] <- NA
-			
-			}
-		else # not enough obs to compute SD
-			{
-			p.wtsd <- NA
-			}
-			
-		# re-make final dataframe, note that df.top_bottom is made based on segmenting/non-segmenting
-		df.stats <- data.frame(p.mean, p.wtmean, p.sd, p.wtsd)
-		}
-		
-	# no weighted stats needed
-	else
-		{
-		if(prop.class %in% c('numeric','integer'))
-			{
-			if(!is.null(user.fun))
-				{
-				# TODO: might be good to check for a try-error
-				df.stats <- data.frame(p.mean, p.sd, p.quantiles, p.user)
-				}
-			else
-				df.stats <- data.frame(p.mean, p.sd, p.quantiles)
-			}
-		if(prop.class == 'factor')
-			{
-			df.stats <- data.frame(p.prop)
-			}
-		}
 	
 	
 	## form into dataframe for returning to the user 
 	# this is usually where we have problems, caused by bad horizon boundaries
 	if(nrow(df.top_bottom) == nrow(df.stats))
 		{
-		x.slotted <- data.frame(df.top_bottom, contributing_fraction, df.stats)
+		x.slotted <- data.frame(df.top_bottom, df.stats)
 		}
 	# something is wrong
 	else
