@@ -7,7 +7,8 @@ Resample an XRD Pattern
 Resample an XRD pattern along a user-defined twotheta resolution via local spline interpolation.
 }
 \usage{
-resample.twotheta(twotheta, x, tt.min = min(twotheta), tt.max = max(twotheta), new.res = 0.02)
+resample.twotheta(twotheta, x, tt.min = min(twotheta), 
+tt.max = max(twotheta), new.res = 0.02)
 }
 \arguments{
   \item{twotheta}{a vector of twotheta value}
@@ -36,7 +37,8 @@ A dataframe with the following columns
 data(rruff.sample)
 
 # resample single pattern
-nontronite.resamp <- with(rruff.sample, resample.twotheta(twotheta, nontronite, new.res=0.02) )
+nontronite.resamp <- with(rruff.sample, 
+resample.twotheta(twotheta, nontronite, new.res=0.02) )
 
 # plot original vs. resampled pattern
 plot(nontronite ~ twotheta, data=rruff.sample, type='l', col='grey')

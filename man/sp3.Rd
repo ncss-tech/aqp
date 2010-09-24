@@ -85,7 +85,8 @@ sp3.list <- initProfileList(sp3.grouped)
 
 
 ## perform comparison, and convert to phylo class object
-d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, k=0.01, replace_na=TRUE, add_soil_flag=TRUE)
+d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, 
+k=0.01, replace_na=TRUE, add_soil_flag=TRUE)
 h <- agnes(d, method='ward')
 p <- ladderize(as.phylo(as.hclust(h)))
 
