@@ -182,7 +182,8 @@ ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
 # sp1$prop <- 1
 #
 a <- soil.slot(sp1)
-xyplot(top ~ contributing_fraction, data=a, ylim=c(250, -5), type='S', horizontal=TRUE, asp=4)
+xyplot(top ~ contributing_fraction, data=a, 
+ylim=c(250, -5), type='S', horizontal=TRUE, asp=4)
 
 
 #
@@ -279,7 +280,8 @@ a$wt.lower <- with(a, p.wtmean - p.wtsd)
 
 # convert to long format
 library(reshape)
-a.long <- melt(a, id.var=c('top','bottom'), measure.var=c('p.mean','p.wtmean','upper','lower','wt.upper','wt.lower'))
+a.long <- melt(a, id.var=c('top','bottom'), 
+measure.var=c('p.mean','p.wtmean','upper','lower','wt.upper','wt.lower'))
 
 # red lines are weighted
 # point symbols are sized proportional to their weights
