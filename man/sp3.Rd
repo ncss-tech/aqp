@@ -98,7 +98,7 @@ round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
 
 ## make dendrogram + soil profiles
 par(mar=c(1,1,1,1))
-p.plot <- plot(p, cex=0.8, label.offset=3, direction='up', y.lim=c(80,-2), 
+p.plot <- plot(p, cex=0.8, label.offset=3, direction='up', y.lim=c(120,-2), 
 x.lim=c(1.25,sp3.list$num_profiles+1), show.tip.label=FALSE)
 
 # get the last plot geometry
