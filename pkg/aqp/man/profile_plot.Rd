@@ -15,7 +15,8 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 \method{profile_plot}{SoilProfileList}(d, color='soil_color', width=0.2, name='name', 
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
 plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, 
-max.depth=d$max_depth, shrink=FALSE, shrink.cutoff=3,  \dots)
+max.depth=d$max_depth, shrink=FALSE, shrink.cutoff=3,
+abbr=FALSE, abbr.cutoff=5, \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -34,6 +35,8 @@ max.depth=d$max_depth, shrink=FALSE, shrink.cutoff=3,  \dots)
   \item{max.depth}{lower depth boundary of plot}
   \item{shrink}{should long horizon names be shrunk by 80\% ?}
   \item{shrink.cutoff}{character length defining long horizon names}
+  \item{abbr}{should the profile ID be abbreviated?}
+  \item{abbr.cutoff}{suggested minimum length for abbreviated IDs}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
