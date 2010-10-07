@@ -209,10 +209,8 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 ## this function will break when horizon boundaries do not make sense
 ## 
 # TODO: we only need x.recon for 1cm aggregation, otherwise l.recon is used
-# TODO: check weighted computations.... probably not quite correct
-# TODO: optionally compute probability by dividing by number of profiles, not just profiles eith data to a given depth
+# TODO: optionally compute probability by dividing by number of profiles, not just profiles with data to a given depth
 # TODO: slice-wise probability does not work with categorical vectors, when slice size > 1
-# TODO: re-factor how profile weights are used, consider using rq()
 # TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
 # TODO: replace by() with equivilant plyr functions
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALSE, user.fun=NULL)
@@ -344,10 +342,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# must be a better way to do this..
 	if(!missing(seg_size) | !missing(seg_vect))
 		{
-		
-		# give a warning about weights and SD
-		cat('notice: calculation of SD with a user-defined segment size may be unrealiable\n')
-		
+				
 		# use a user-defined segmenting vector, starting from 0
 		if(!missing(seg_vect))
 			{
@@ -365,12 +360,6 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			wind.idx <- rep(segment_label, each=seg_size)[1:max_d]
 			}
 		
-		
-	
-		
-		##############################################################################
-		#### segment sizes > 1 will result in inflated 'n' for SD calculation       ##
-		##############################################################################
 		
 		# generate a list, where each entry is a vector corresponding to the collection of 
 		# values from all profiles, for those depths defined by each slice

@@ -1,3 +1,7 @@
+-------------------------- aqp 0.97-1 (2010-10-06) --------------------------
+* verified that weighted standard deviations are correct when seg_size > 1
+* removed notices about possible problems with sd calculations
+
 -------------------------- aqp 0.97 (2010-09-22) --------------------------
 * soil.slot() streamlined and functionality restored to pre-0.95 condition
 

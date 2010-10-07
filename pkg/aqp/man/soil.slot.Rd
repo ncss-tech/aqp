@@ -46,13 +46,13 @@ A dataframe with slice-wise aggregation. When \code{prop} is numeric a dataframe
 		\item{top}{The slice top boundary.}
 		\item{bottom}{The slice bottom boundary.}
 		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
-		\item{p.mean}{The horizon-thickness weighted mean.}
-		\item{p.sd}{An approximation of the horizon-thickness weighted mean: use with caution, may be too low.}
-		\item{p.q5}{The horizon-thickness weighted 5th percentile.}
-		\item{p.q25}{The horizon-thickness weighted 25th percentile}
-		\item{p.q50}{The horizon-thickness weighted 50th percentile (median)}
-		\item{p.q75}{The horizon-thickness weighted 75th percentile}
-		\item{p.q95}{The horizon-thickness weighted 95th percentile}
+		\item{p.mean}{The slice-wise (optionally weighted) mean.}
+		\item{p.sd}{An slice-wise (optionally weighted) standard deviation.}
+		\item{p.q5}{The slice-wise 5th percentile.}
+		\item{p.q25}{The slice-wise 25th percentile}
+		\item{p.q50}{The slice-wise 50th percentile (median)}
+		\item{p.q75}{The slice-wise 75th percentile}
+		\item{p.q95}{The slice-wise 95th percentile}
 	}
 
 When \code{prop} is a factor variable, slice-wise probabilities for each level of \code{prop}:
@@ -68,7 +68,7 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 
 }
 
-\note{The calculation of standard deviation is correct when computing along 1 unit slices. When a user-defined segmenting vector is supplied, the resulting standard deviation is lower than it should be because we are inflating our sample size. When in doubt, use quantiles instead as these are properly weighted by horizon thickness.}
+\note{If a user-defined function (\code{user.fun}) is specified, care must be taken if sample size is used within the calculation _and_ slice sizes are > 1 depth unit.}
 
 \value{See Details section above.}
 
