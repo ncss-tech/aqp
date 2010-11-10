@@ -28,7 +28,11 @@ validity=function(object)
 # initializer function for SoilProfile class
 setMethod(f='initialize', signature='SoilProfile', 
 definition=function(.Object, data, metadata, idcol, depth_units) 
-	{	
+	{
+		
+	# temporary reminder
+	print('this is new stuff, use with caution.')	
+		
 	# assign data slot
 	.Object@data <- data
 	
