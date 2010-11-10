@@ -7,13 +7,13 @@ setClass('SoilProfile',
 representation(
 depths='matrix',
 horizon_data='data.frame',
-site_data='list',
+site_data='data.frame',
 user_id='character',
 depth_units='character',
 metadata='list'
 ), 
 prototype=prototype(
-site_data=list(),
+site_data=data.frame(),
 depth_units='cm'
 ),
 validity=function(object)
@@ -77,7 +77,8 @@ definition=function(object)
 
 
 # S3 function for the user, just a wrapper
-SoilProfile <- function(depths, horizon_data, site_data=list(), user_id, depth_units='cm')
+# TODO: how can we leave out the non-required arguments?
+SoilProfile <- function(depths, horizon_data, site_data=data.frame(), user_id, depth_units='cm')
 	{
 	# not much to it
 	return(new(Class='SoilProfile', depths=depths, horizon_data=horizon_data, site_data=site_data, user_id=user_id, depth_units=depth_units))
@@ -119,34 +120,54 @@ definition=function(object, value)
 	stop('invalid initialization for SoilProfile object')
   
   # assemble object
-  SoilProfile(depths=depths, horizon_data=horizon_data, user_id=user_id)
+  return(SoilProfile(depths=depths, horizon_data=horizon_data, user_id=user_id))
   }
 )
 
-# # test: works OK
-# sp1.1 <- sp1[sp1$id == 'P001', ]
-# depths(sp1.1) <- id ~ top + bottom
-
-
-
-
+# experimental assignment of site data
 setMethod(f='site_data<-', signature='SoilProfile',
 definition=function(object, value)
   {
   depth.names <- NULL
   if (inherits(value, "formula")) 
 	{
-	mf <- model.frame(value, object)
-	print(cc)
-# 	nm <- as.character(as.list(value)[[2]])[2:3]
-# 	depth.names <- match(nm, names(object))
+	mf <- model.frame(value, object@horizon_data)
+	
+	# assemble site_data, this is a 1-row data.frame
+	# since these data are repeated for each horizon, just keep the first
+	
+	# when there is only one attribute for site data we need to use a different approach
+	if(ncol(mf) < 2)
+	  {
+	  site_data <- data.frame(X1=mf[1,])
+	  names(site_data) <- names(mf)
+	  }
+	  
+	# otherwise we just take the first row
+	else
+	  site_data <- mf[1, ]
+	  
+	# assign
+	object@site_data <- site_data
 	}
+	
+  # in this case the user is supplying a 1-row dataframe with information
+  else if(inherits(value, 'data.frame'))
+	{
+	object@site_data <- value
+	}
+  else
+	stop('invalid initialization for SoilProfile object')
    
-   SoilProfile(data=object, idcol='id', depth_units='cm')
+   return(object)
   }
 )
 
-
+# # test: works OK
+# data(sp1)
+# sp1.1 <- sp1[sp1$id == 'P001', ]
+# depths(sp1.1) <- id ~ top + bottom
+# site_data(sp1.1) <- ~ group
 
 
 #    
