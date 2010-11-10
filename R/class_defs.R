@@ -1,5 +1,5 @@
 ##
-## defines basic soil object and methods
+## old stuff: defines basic soil object and methods
 ##
 
 
@@ -79,7 +79,7 @@ max.SoilProfile <- function(x, ...)
 	# no indices
 	if(missing(i) & missing(j))
 		{ 
-    	print('no yet implemented')
+    	print('not yet implemented')
     	}
     
     # just a row-like index
