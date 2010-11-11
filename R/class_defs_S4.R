@@ -1,3 +1,13 @@
+##
+## TODO:
+##
+## 1. figure out how to deal with: user ids (labels) vs. internal ids
+## 2. site_data functions for SoilProfileCollection objects
+##
+##
+##
+
+
 ## 
 ## S4 class defs-- initial steps
 ##
@@ -9,8 +19,7 @@ depths='matrix',
 horizon_data='data.frame',
 site_data='data.frame',
 user_id='character',
-depth_units='character',
-metadata='list'
+depth_units='character'
 ), 
 prototype=prototype(
 site_data=data.frame(),
@@ -27,14 +36,35 @@ validity=function(object)
 	}
 )
 
+
+# class prototype for a single soil profile
+setClass('SoilProfileCollection', 
+representation(
+collection='list',
+depth_units='character'
+),
+prototype=prototype(
+depth_units='cm'
+),
+validity=function(object)
+	{
+	# check for consistent depth units
+	du <- sapply(object@collection, function(i) i@depth_units)
+	if(length(unique(du)) > 1)
+	  warning('inconsisten depth units provided')
+	}
+)
+
+
+
+##
+## class initializer functions
+##
+
 # initializer function for SoilProfile class
 setMethod(f='initialize', signature='SoilProfile', 
 definition=function(.Object, depths, horizon_data, site_data, user_id, depth_units) 
 	{
-		
-	# temporary reminder
-	print('this is new stuff, use with caution.')	
-	
 	# assign depths slot
 	.Object@depths <- depths
 	
@@ -47,14 +77,6 @@ definition=function(.Object, depths, horizon_data, site_data, user_id, depth_uni
 	# call inspector to check for horizon level errors
 	validObject(.Object)
 	
-	# build metadata
-	md <- list()
-	md$nhz <- nrow(horizon_data)
-	md$max_depth <- max(depths, na.rm=TRUE)
-	
-	# assign metadata
-	.Object@metadata <- md
-	
 	# assign user_id
 	.Object@user_id <- user_id
 	
@@ -66,14 +88,88 @@ definition=function(.Object, depths, horizon_data, site_data, user_id, depth_uni
 	}
 )
 
+
+
+# this needs more work
+# initializer function for SoilProfile class
+setMethod(f='initialize', signature='SoilProfileCollection', 
+definition=function(.Object, collection) 
+	{
+	# assign slots
+	.Object@collection <- collection
+		
+	# call inspector to check for horizon level errors
+	validObject(.Object)
+	
+	# assign depth_units
+	.Object@depth_units <- unique(sapply(.Object@collection, function(i) i@depth_units))
+		
+	# done
+	return(.Object)
+	}
+)
+
+
+
+
+
+
+##
+## not yet sure if this is a good idea to overload basic functions
+##
+
+# overload length() to give us the number of horizons
+setMethod(f='length', signature='SoilProfile',
+definition=function(x)
+	{
+	return(nrow(x@horizon_data))
+	}
+)
+
+# overload length() to give us the number of profiles
+setMethod(f='length', signature='SoilProfileCollection',
+definition=function(x)
+	{
+	return(length(x@collection))
+	}
+)
+
+# overload max() to give us the profile depth
+setMethod(f='max', signature='SoilProfile',
+definition=function(x)
+	{
+	return(max(x@depths, na.rm=TRUE))
+	}
+)
+
+# overload max() to give us the max depth within a collection
+setMethod(f='max', signature='SoilProfileCollection',
+definition=function(x)
+	{
+	return(max(sapply(x@collection, max)))
+	}
+)
+
 # basic printing method for SoilProfile class
 setMethod(f='show', signature='SoilProfile',
 definition=function(object)
 	{
-		cat("\nSoilProfile object ID:`", object@user_id, "` with ", object@metadata$nhz, " horizons, ", object@metadata$max_depth, " (", object@depth_units, ") deep\n\n", sep='')
-	print(object@horizon_data)
+	cat("SoilProfile object ID:`", object@user_id, "` with ", length(object), " horizons, ", max(object), " (", object@depth_units, ") deep\n", sep='')
 	}
 )	
+
+setMethod(f='show', signature='SoilProfileCollection',
+definition=function(object)
+	{
+	cat("Collection of ", length(object) , " SoilProfile objects, maximum depth ", max(object), " (", object@depth_units, ")\n", sep='')
+	}
+)	
+
+
+
+##
+## S3 helper functions
+##
 
 
 # S3 function for the user, just a wrapper
@@ -84,17 +180,23 @@ SoilProfile <- function(depths, horizon_data, site_data=data.frame(), user_id, d
 	return(new(Class='SoilProfile', depths=depths, horizon_data=horizon_data, site_data=site_data, user_id=user_id, depth_units=depth_units))
 	}
 
+# S4 function for the user, just a wrapper
+# TODO: how can we leave out the non-required arguments?
+SoilProfileCollection <- function(collection)
+	{
+	# not much to it
+	return(new(Class='SoilProfileCollection', collection=collection))
+	}
 
+
+
+##
+## depths()<- setter
+##
 # setup the depths() generic function
 setGeneric('depths<-',package='aqp', def=function(object, value) 
   {
   standardGeneric('depths<-')
-  }
-)
-
-setGeneric('site_data<-',package='aqp', def=function(object, value) 
-  {
-  standardGeneric('site_data<-')
   }
 )
 
@@ -103,24 +205,110 @@ setGeneric('site_data<-',package='aqp', def=function(object, value)
 setMethod(f='depths<-', signature='data.frame',
 definition=function(object, value)
   {
-  depth.names <- NULL
+  # make sure inputs are valid
   if (inherits(value, "formula")) 
 	{
 	# extract components of formula
+	# 1. user id
+	# 2. top
+	# 3. bottom
 	mf <- model.frame(value, object)
 	
-	# generate user ID and depths
-	user_id <- unique(as.character(mf[,1]))
-	depths <- as.matrix(mf[, 2:3])
+	# get the names and column indices of the id, top, bottom
+	# so that we can remove them latter
+	nm <- names(mf)
+	idx <- match(nm, names(object))
 	
-	# optionally remove id, top, and bottom from the horizon data?
-	horizon_data <- object
+	# generate user ID and depths
+	user_id <- unique(as.character(mf[, 1]))
+	
+	# if there is only 1 ID we are generating a SoilProfile objects
+	if(length(user_id) == 1)
+	  {
+	  # extract depths
+	  depths <- as.matrix(object[, idx[2:3]])
+	
+	  # make a copy of the horizon data, with id, top, and bottom removed
+	  horizon_data <- object[, -idx]
+	  
+	  # assemble object and return
+	  return(SoilProfile(depths=depths, horizon_data=horizon_data, user_id=user_id))
+	  }
+	
+	# otherwise, we have a collection--> SoilProfileCollection
+	else
+	  {
+	  # check for dependencies
+	  if(!require(plyr))
+		  stop('Please install the "plyr" package.')
+	  
+	  # nm contains names for user_id, top, bottom
+	  SPC <- dlply(.data=object, .variables=nm[1], .progress='text', .fun=function(profile_i)
+		{
+		# get current user_id
+		user_id_i <- unique(as.character(profile_i[, idx[1]]))
+		
+		# extract depths
+		depths <- as.matrix(profile_i[, idx[2:3]])
+	  
+		# make a copy of the horizon data, with id, top, and bottom removed
+		horizon_data <- profile_i[, -idx]
+		
+		# assemble object and return
+		return(SoilProfile(depths=depths, horizon_data=horizon_data, user_id=user_id_i))
+		}
+	  )
+	  
+	  
+	  # assemble and return the SoilProfileCollection object
+	  return(SoilProfileCollection(collection=SPC))
+	  }
+	
+	
+	
+	
 	}
   else
 	stop('invalid initialization for SoilProfile object')
   
-  # assemble object
-  return(SoilProfile(depths=depths, horizon_data=horizon_data, user_id=user_id))
+  # done
+  }
+)
+
+
+
+##
+## site_data() accessor
+##
+setGeneric('site_data', package='aqp', def=function(object, value) 
+  {
+  standardGeneric('site_data')
+  }
+)
+
+# simple case, just a single SoilProfile
+setMethod(f='site_data', signature='SoilProfile',
+definition=function(object)
+  {
+  return(object@site_data)
+  }
+)
+
+# more complex case, collection of SoilProfile objects
+setMethod(f='site_data', signature='SoilProfileCollection',
+definition=function(object)
+  {
+  return(object@site_data)
+  }
+)
+
+
+##
+## site_data()<- setter
+##
+setGeneric('site_data<-', package='aqp', def=function(object, value) 
+  {
+  standardGeneric('site_data<-')
   }
 )
 
@@ -133,6 +321,10 @@ definition=function(object, value)
 	{
 	mf <- model.frame(value, object@horizon_data)
 	
+	# get the names and column indices of the site data, 
+	# so that we can remove them from horizon_data
+	idx <- match(names(mf), names(object@horizon_data))
+	
 	# assemble site_data, this is a 1-row data.frame
 	# since these data are repeated for each horizon, just keep the first
 	
@@ -144,10 +336,14 @@ definition=function(object, value)
 	  }
 	  
 	# otherwise we just take the first row
+	# TODO: check for uniqueness
 	else
 	  site_data <- mf[1, ]
-	  
-	# assign
+	
+	# remove the named site data from horizon_data
+	object@horizon_data <- object@horizon_data[, -idx]
+	
+	# assign to object's slot
 	object@site_data <- site_data
 	}
 	
@@ -159,40 +355,8 @@ definition=function(object, value)
   else
 	stop('invalid initialization for SoilProfile object')
    
-   return(object)
+  # done
+  return(object)
   }
 )
 
-# # test: works OK
-# data(sp1)
-# sp1.1 <- sp1[sp1$id == 'P001', ]
-# depths(sp1.1) <- id ~ top + bottom
-# site_data(sp1.1) <- ~ group
-
-
-#    
-#    return(s)
-      
-#     else if (is.character(value)) {
-#         cc = object[, value]
-#         coord.numbers = match(value, names(object))
-#     }
-#     else if (is.null(dim(value)) && length(value) > 1) {
-#         if (any(value != as.integer(value) || any(value < 1))) 
-#             stop("coordinate columns should be positive integers")
-#         cc = object[, value]
-#         coord.numbers = value
-#     }
-#     else cc = coordinates(value)
-#     if (any(is.na(cc))) 
-#         stop("coordinates are not allowed to contain missing values")
-#     if (!is.null(coord.numbers)) {
-#         object = object[, -coord.numbers, drop = FALSE]
-#         stripped = coord.numbers
-#         if (ncol(object) == 0) 
-#             return(SpatialPoints(cc))
-#     }
-#     else stripped = numeric(0)
-#     SpatialPointsDataFrame(coords = cc, data = object, coords.nrs = stripped, 
-#         match.ID = FALSE)
-  
