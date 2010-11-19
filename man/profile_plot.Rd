@@ -15,7 +15,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 \method{profile_plot}{SoilProfileList}(d, color='soil_color', width=0.2, name='name', 
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
 plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, 
-max.depth=d$max_depth, shrink=FALSE, shrink.cutoff=3,
+max.depth=d$max_depth, n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3,
 abbr=FALSE, abbr.cutoff=5, \dots)
 
 }
@@ -32,7 +32,8 @@ abbr=FALSE, abbr.cutoff=5, \dots)
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 
   \item{y.offset}{vertical offset for top of profiles} 
-  \item{max.depth}{lower depth boundary of plot}
+  \item{max.depth}{suggested lower depth boundary of plot}
+  \item{n.depth.ticks}{suggested number of ticks in depth scale}
   \item{shrink}{should long horizon names be shrunk by 80\% ?}
   \item{shrink.cutoff}{character length defining long horizon names}
   \item{abbr}{should the profile ID be abbreviated?}
@@ -40,7 +41,7 @@ abbr=FALSE, abbr.cutoff=5, \dots)
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
-This function sets the margins before plotting, so previous calls to \code{par(mar=...)} will be overridden.
+This function sets the margins before plotting, so previous calls to \code{par(mar=...)} will be overridden. Depth limits (max.depth) and number of depth ticks (n.depth.ticks) are *suggestions* to the \code{pretty()} function. You may have to tinker with both parameters to get what you want.
 }
 \value{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
@@ -50,7 +51,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{initProfileList}}
+\code{\link{initProfileList}, \link{pretty}}
 }
 \examples{
 library(aqp)
