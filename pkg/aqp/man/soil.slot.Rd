@@ -36,7 +36,7 @@ If TRUE, then a column called 'wt' should be present in the source dataframe, an
 }
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
-\item{class_prob_mode}{strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (class_prob_mode=1), or to the number of profiles in the collection (class_prob_mode=2).}
+\item{class_prob_mode}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (class_prob_mode=1), or by the number of profiles in the collection (class_prob_mode=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1. Mode 2 is likely the best way to communicate horizon probability near the lower range in soil depth within a collection of soil profiles.}
 }
 \details{
 The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
