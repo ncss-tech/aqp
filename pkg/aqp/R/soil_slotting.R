@@ -90,7 +90,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 ## 
 ## calculation of segment-wise summary statistics
 ## 
-seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, prop.levels=NA)
+seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, prop.levels=NA, class_prob_mode=1)
 	{
 	
 	# this is the number of slices contributing the the slice-wise aggregate
@@ -188,8 +188,15 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		
 		# tabular frequences for complete set of possible categories
 		# TODO: generalize to user-defined segmenting vectors
-		p.table <- sapply(l.seq, function(i) { 
-			prop.table(table(factor(l.recon[[i]], levels=p.unique.classes, labels=prop.levels[p.unique.classes]), useNA='no'))  
+		p.table <- sapply(l.seq, function(i, cpm=class_prob_mode) {
+			tf <- factor(l.recon[[i]], levels=p.unique.classes, labels=prop.levels[p.unique.classes])
+			if(cpm == 1)
+				tb <- table(tf, useNA='no')
+			else if(cpm == 2)
+				tb <- table(tf, useNA='always')
+				
+			pt <- prop.table(tb)  
+			return(pt)
 			} 
 			)
 		
@@ -213,7 +220,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 # TODO: slice-wise probability does not work with categorical vectors, when slice size > 1
 # TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
 # TODO: replace by() with equivilant plyr functions
-soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALSE, user.fun=NULL)
+soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALSE, user.fun=NULL, class_prob_mode=1)
 	{
 	
 	#################################################################################
@@ -451,7 +458,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		df.top_bottom <- data.frame(top=0:(max_d-1), bottom=1:max_d)
 		
 		# compute row-wise summary statistics
-		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts, prop.levels)
+		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts, prop.levels, class_prob_mode)
 		
 		} # done with 1-unit interval aggregation
 

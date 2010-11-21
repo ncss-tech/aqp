@@ -12,7 +12,7 @@ Align a single soil property to a user-defined basis, and perform slice-wise agg
 }
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, 
-use.wts = FALSE, strict = FALSE, user.fun = NULL)
+use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,6 +36,7 @@ If TRUE, then a column called 'wt' should be present in the source dataframe, an
 }
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
+\item{class_prob_mode}{strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (class_prob_mode=1), or to the number of profiles in the collection (class_prob_mode=2).}
 }
 \details{
 The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
@@ -161,8 +162,9 @@ y$prop <- factor(y$prop)
 # fix factor levels
 y$id <- factor(y$id)
 
-# default slotting-- 1cm intervals
-a <- soil.slot(y)
+# default slotting-- 1cm intervals, 
+# adjusting slice-wise probability with contributing fraction
+a <- soil.slot(y, class_prob_mode=1)
 
 # reshape into long format for plotting
 a.long <- melt(a, id.var=c('top','bottom'))
@@ -172,6 +174,26 @@ a.long$variable <- factor(a.long$variable, levels=c('O','A','B','C','R'))
 # plot horizon type proportions
 xyplot(top ~ value | variable, data=a.long, subset=value > 0,
 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
+
+
+## ajust probability to size of collection
+a.1 <- soil.slot(y, class_prob_mode=2)
+
+# reshape into long format for plotting
+a.1.long <- melt(a.1, id.var=c('top','bottom'))
+
+# group mode 1 and mode 2 data
+g <- make.groups(mode_1=a.long, mode_2=a.1.long)
+g$variable <- factor(g$variable, levels=c('O','A','B','C','R'))
+
+# plot horizon type proportions
+xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
+ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
+auto.key=list(lines=TRUE, points=FALSE, columns=2),
+par.settings=list(superpose.line=list(col=c(1,2))))
+
+
+
 
 
 #
