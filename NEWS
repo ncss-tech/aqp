@@ -1,5 +1,6 @@
 -------------------------- aqp 0.98 (2010-11-22) --------------------------
 * experimental addition of new S4 classes and methods... not ready for production use
+  - these are now in the aqp_S4 branch
 * added n.depth.ticks option to profile_plot()
 * removed code in profile_compare() that is now obsolete
   - note that this will cause changes to numerical classification of soil profiles
