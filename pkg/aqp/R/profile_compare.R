@@ -14,7 +14,7 @@
 # function requires at least two attributes
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
-profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FALSE, add_soil_flag=FALSE, return_depth_distances=FALSE, strict_hz_eval=FALSE)
+profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE)
 	{
 	
 	# currently this will only work with integer depths
