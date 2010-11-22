@@ -1,7 +1,6 @@
 Urgent:
 -------
-1. fix SD calculation in soil.slot() when using user-defined segment size
-2. fix wt. mean and SD calculations in soil.slot()
+1. convert to Hmisc weighted SD, quantile, table, etc. functions
 
 Interesting:
 ------------
