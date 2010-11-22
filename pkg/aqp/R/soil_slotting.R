@@ -90,6 +90,8 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 ## 
 ## calculation of segment-wise summary statistics
 ## 
+##TODO: use wtd.mean, wtd.var, wtd.quantile, wtd.table from Hmisc to provided
+## weighted versions of all summary stats.
 seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, prop.levels=NA, class_prob_mode=1)
 	{
 	

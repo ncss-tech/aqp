@@ -133,34 +133,10 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		# distance metric has large effect on results
 		# Gower's distance gives the best looking results, and automatically standardizes variables
 		
-		# compute the proportion of cases where NA occurs
-		proportion_non_NA <- 1 - (length(which(is.na(sp))) / (n.profiles * n.vars))
-		
-		# use some criteria for deciding when to keep the dissimilarities for this slice
-		if(proportion_non_NA >= 0.5)
-			{
-			## this is where we run into memory-size limitations
-			## an ff object would help here... however it can not preserve all of the information 
-			## that a list can... we would need to store these data as raw matrices
-			d[[i]] <- daisy(sp, metric='gower')
-			}
-		
-		# otherwise contribute no dissimilarity to the total
-		else
-			{
-			print(paste(round(proportion_non_NA, 2), 'non-missing in slice', depth_slice_seq[i]))
-			
-			# generate an appropriately formatted dissimilarity matrix, full of NA
-			m.ref <- lower.tri(matrix(ncol=n.profiles,nrow=n.profiles), diag=FALSE)
-			m.ref[which(m.ref == FALSE)] <- NA
-			
-			## this is where we run into memory-size limitations
-			# assign to this slice
-			d[[i]] <- as.dist(m.ref)
-			
-			# clean-up
-			rm(m.ref)
-			}
+		## this is where we run into memory-size limitations
+		## an ff object would help here... however it can not preserve all of the information 
+		## that a list can... we would need to store these data as raw matrices
+		d[[i]] <- daisy(sp, metric='gower')
 			
 		# cleanup: not sure if this helps... seems to
 		gc()
@@ -170,7 +146,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=FA
 		
 		
 		# debugging information on memory consumption
-		cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
+		# cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
 		
 		}
 	# done creating list of slice-wise dissimilarties
