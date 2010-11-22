@@ -7,7 +7,7 @@ Performs a numerical comparison of soil profiles using named properties, based o
 }
 \usage{
 profile_compare(s, vars, max_d, k, sample_interval = NA, 
-replace_na = FALSE, add_soil_flag = FALSE, 
+replace_na = TRUE, add_soil_flag = TRUE, 
 return_depth_distances = FALSE, strict_hz_eval = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,8 +17,8 @@ return_depth_distances = FALSE, strict_hz_eval = FALSE)
   \item{max_d}{depth-slices up to this depth are considered in the comparison}
   \item{k}{a depth-weighting coeficient, use '0' for no depth-weighting (see examples below)}
   \item{sample_interval}{use every n-th depth slice instead of every depth slice, useful for working with > 1000 profiles at a time}
-  \item{replace_na}{if TRUE, missing data are replaced by maximum dissimilarity (FALSE)}
-  \item{add_soil_flag}{(experimental) algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (FALSE)}
+  \item{replace_na}{if TRUE, missing data are replaced by maximum dissimilarity (TRUE)}
+  \item{add_soil_flag}{algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE)}
   \item{return_depth_distances}{return intermediate, depth-wise dissimilarity results (FALSE)}
   \item{strict_hz_eval}{should horizons be strictly checked for internal self-consistency? (FALSE)}
 }
