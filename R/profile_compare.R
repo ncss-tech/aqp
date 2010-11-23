@@ -58,7 +58,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	## unroll each named soil property, for each soil profile
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
-	cat(paste("Unrolling ", length(levels(s$id)), " Profiles\n", sep=""))
+	cat(paste("Unrolling ", n.profiles, " Profiles\n", sep=""))
 	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
 		{
 		
@@ -107,7 +107,11 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 		
 		
 		# debugging: plot a diagnostic image
-		image(1:n.profiles, 1:max_d, t(soil.matrix), col=c('white','grey'), ylim=c(max_d, 1), xlab='ID', ylab='Depth', main='Soil/Non-Soil Matrix')
+		labs <- levels(s$id)
+		image(1:n.profiles, 1:max_d, t(soil.matrix), col=c(NA,'grey'), ylim=c(max_d, 1), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
+		abline(v=seq(1, n.profiles)+0.5, lty=2)
+		axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
+		axis(side=1, at=1:n.profiles, labels=labs, las=2)
 		}
 		
 	
