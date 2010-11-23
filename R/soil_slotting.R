@@ -98,7 +98,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 	# this is the number of slices contributing the the slice-wise aggregate
 	contributing_fraction <- sapply(l.recon, function(i) length(na.omit(i)) / length(i))
 	
-	# sequence for iterating over lists
+	# sequence for iterating over multiple lists
 	l.seq <-1:length(l.recon)
 	
 	# numeric variables
@@ -109,56 +109,27 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		p.mean <- sapply(l.recon, mean, na.rm=TRUE)
 		
 		# this estimate of SD is too low when using a segment size > 1 cm
-		p.sd <- sapply(l.recon, conditional.sd)
+		p.sd <- sqrt(sapply(l.recon, wtd.var, na.rm=TRUE))
 		
 		# these are the horizon-thickness weighted quantiles
 		q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-		p.quantiles <- data.frame(t(sapply(l.recon, quantile, probs=q.probs, na.rm=TRUE)))
+		p.quantiles <- data.frame(t(sapply(l.recon, wtd.quantile, probs=q.probs, na.rm=TRUE)))
 		names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
 		
 		
-		# weighted mean and SD
-		# need to adapt this for lists
+		# profile-weighted statistics
 		if(use.wts == TRUE)
-			{
-						
-			## weighted mean calculation: reduces to standard mean, when weights are equal
-			# compute sum of (wt * x) by row
-			sum_wx <- sapply(l.seq, function(i) sum(l.recon.wts[[i]] * l.recon[[i]], na.rm=TRUE))
-			# compute sum of wt by row
-			sum_w <- sapply(l.seq, function(i) sum(l.recon.wts[[i]], na.rm=TRUE))
+			{			
+			# weighted mean calculation: reduces to standard mean, when weights are equal
+			p.wtmean <- sapply(l.seq, function(i) wtd.mean(l.recon[[i]], weights=l.recon.wts[[i]], na.rm=TRUE)) 
 			
-			# compute wt. mean = sum (wt * x) / sum (wt)
-			p.wtmean <- sum_wx / sum_w	
+			# weighted standard deviation: reduces to regular SD when weights are equal
+			p.wtsd <- sqrt(sapply(l.seq, function(i) wtd.var(l.recon[[i]], weights=l.recon.wts[[i]], normwt=TRUE, na.rm=TRUE)))
 			
-			
-			## row-wise weighted sd calculations: only if there are 3 or more obs
-			if(length(l.recon) >= 3)
-				{
-				d1 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]] * l.recon[[i]]^2, na.rm=TRUE))
-				d2 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]], na.rm=TRUE))
-				d3 <- sapply(l.seq, function(i) sum(l.recon[[i]] * l.recon.wts[[i]], na.rm=TRUE)^2)
-				
-				n1 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]], na.rm=TRUE)^2)
-				n2 <- sapply(l.seq, function(i) sum(l.recon.wts[[i]]^2, na.rm=TRUE))
-			
-				# weighted variance
-				var.wt <- (d1 * d2 - d3) / (n1 - n2)
-				
-				# weighted sd: id wt. variances less than 0 -- these were probably computed by too few observations
-				var.wt[var.wt < 0] <- NA
-				p.wtsd <- sqrt(var.wt)
-				
-				# if any SD values are NA, the wt. SD should also be NA
-				p.wtsd[is.na(p.sd)] <- NA
-				
-				}
-			else # not enough obs to compute SD
-				{
-				p.wtsd <- NA
-				}
-				
-			} # end processing weighted mean and SD
+			# weighted quantiles: reduces to standard quantiles when weights are equal
+			p.wtquantiles <- data.frame(t(sapply(l.seq, function(i) wtd.quantile(l.recon[[i]], weights=l.recon.wts[[i]], probs=q.probs, normwt=TRUE, na.rm=TRUE))))
+			names(p.wtquantiles) <- paste('p.wtq', round(q.probs * 100), sep='')
+			} # end processing weighted mean, SD, quantiles
 		
 		
 		# try user defined function
@@ -166,13 +137,17 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		if(!is.null(user.fun))
 			{
 			p.user <- try( sapply(l.recon, user.fun) )
-			df.stats <- data.frame(contributing_fraction, p.mean, p.sd, p.quantiles, p.user)
+			
+			if(use.wts)
+				df.stats <- data.frame(contributing_fraction, p.mean, p.wtmean, p.sd, p.wtsd, p.quantiles, p.wtquantiles, p.user)
+			else
+				df.stats <- data.frame(contributing_fraction, p.mean, p.sd, p.quantiles, p.user)
 			}
 		# no user function	
 		else
 			{
 			if(use.wts)
-				df.stats <- data.frame(contributing_fraction, p.mean, p.wtmean, p.sd, p.wtsd, p.quantiles)
+				df.stats <- data.frame(contributing_fraction, p.mean, p.wtmean, p.sd, p.wtsd, p.quantiles, p.wtquantiles)
 			else
 				df.stats <- data.frame(contributing_fraction, p.mean, p.sd, p.quantiles)
 			}
@@ -180,6 +155,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		} # end processing numeric variables
 	
 	
+	## TODO: implement weighted prop. tables with wtd.table
 	## TODO: figure out how to apply this to segments > 1 unit
 	# categorical variables
 	if(prop.class == 'factor')
@@ -192,8 +168,12 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		# TODO: generalize to user-defined segmenting vectors
 		p.table <- sapply(l.seq, function(i, cpm=class_prob_mode) {
 			tf <- factor(l.recon[[i]], levels=p.unique.classes, labels=prop.levels[p.unique.classes])
+			
+			# probabilities are relative to number of contributing profiles
 			if(cpm == 1)
 				tb <- table(tf, useNA='no')
+			
+			# probabilities are relative to total number of profiles
 			else if(cpm == 2)
 				tb <- table(tf, useNA='always')
 				

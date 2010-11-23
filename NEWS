@@ -1,4 +1,9 @@
 -------------------------- aqp 0.98 (2010-11-22) --------------------------
+* re-write of weighted profile aggregation
+  - aqp package now requires Hmisc package
+  - using Hmisc::wtd.{mean,var,quantile} to compute values
+  - better adjustment of weights when computing weighted SD
+  - weighted quantiles now computed
 * experimental addition of new S4 classes and methods... not ready for production use
   - these are now in the aqp_S4 branch
 * added n.depth.ticks option to profile_plot()
