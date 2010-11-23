@@ -1,4 +1,5 @@
 
+## TODO: iterate over profile IDs instead of groups
 # TODO: document this
 make.segments <- function(df)
 	{

@@ -1,4 +1,5 @@
 
+## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
 panel.depth_function <- function(x, y, upper=NA, lower=NA, subscripts=NULL, groups=NULL, ...) {
 
@@ -21,6 +22,7 @@ if(length(y) > length(x))
 		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
 	
 	# add line segments that form step-function
+	## TODO: iterate over profile IDs instead of groups
 	by(d, d$groups, make.segments, ...)	
 	}
 
