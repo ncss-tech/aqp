@@ -1,7 +1,6 @@
 \name{soil.slot}
 \Rdversion{1.1}
 \alias{soil.slot}
-\alias{conditional.sd}
 \alias{seg.summary}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
@@ -32,14 +31,14 @@ User-degined segment size, default is 1.
 User-degined segment structure: should start from 0, and deepest boundary should be deeper than the deepest soil profile in the collection. For example, if the deepest profile in the collection is 200 cm, then the following segmenting vector would be reasonable: \code{c(0,10,20,30,60,100,150,210)}. The resulting aggregation will automatically be truncated at 200 cm. The user is responsible for supplying sensible values.
 }
   \item{use.wts}{
-If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data (i.e. area weights, etc.). Weighted means and standard deviations will be returned by depth-slice. Use with caution, this feature is still experimental. See examples below.
+If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data (i.e. area weights, etc.). Weighted means, standard deviations, quantiles, and optionally proportions will be returned by depth-slice. See detailes and examples below.
 }
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
 \item{class_prob_mode}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (class_prob_mode=1), or by the number of profiles in the collection (class_prob_mode=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1. Mode 2 is likely the best way to communicate horizon probability near the lower range in soil depth within a collection of soil profiles.}
 }
 \details{
-The \code{conditional.sd} function is a wrapper to \code{sd}, that replicates the pre-R 2.8 behavior of \code{sd}. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
+Unweighted and weighted summary stats are computed with the Hmisc functions \code{wtd.mean}, \code{wtd.var}, and \code{wtd.quantile}. Weighted probabilities (proportions) will be implemented in a future release. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
 
 Data are returned according to the following:
 A dataframe with slice-wise aggregation. When \code{prop} is numeric a dataframe is returned in the following format:
@@ -193,6 +192,20 @@ auto.key=list(lines=TRUE, points=FALSE, columns=2),
 par.settings=list(superpose.line=list(col=c(1,2))))
 
 
+## compare class probability values when changing segment size
+a.5 <- soil.slot(y, class_prob_mode=2, seg_size=5)
+
+# reshape into long format for plotting
+a.5.long <- melt(a.5, id.var=c('top','bottom'))
+
+# group 1cm and 5cm slices
+g <- make.groups(s1cm=a.1.long, s5cm=a.5.long)
+g$variable <- factor(g$variable, levels=c('O','A','B','C','R'))
+
+xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
+ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
+auto.key=list(lines=TRUE, points=FALSE, columns=2),
+par.settings=list(superpose.line=list(col=c(1,2))))
 
 
 
