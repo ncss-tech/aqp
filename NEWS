@@ -1,10 +1,12 @@
--------------------------- aqp 0.98 (2010-11-22) --------------------------
-* re-write of weighted profile aggregation
+-------------------------- aqp 0.98-1 (2010-11-23) --------------------------
+* soil.slot() now computes aggregate probabilities over user-defined segments
+* re-write of weighted profile aggregation functions
   - aqp package now requires Hmisc package
   - using Hmisc::wtd.{mean,var,quantile} to compute values
-  - better adjustment of weights when computing weighted SD
-  - weighted quantiles now computed
-* experimental addition of new S4 classes and methods... not ready for production use
+	+ better adjustment of weights when computing weighted SD
+	+ fixes long-standing bugs with wt. mean/SD when NA present in x_i and not in wt_i
+	+ weighted quantiles now computed
+* addition of new (experimental) S4 classes and methods
   - these are now in the aqp_S4 branch
 * added n.depth.ticks option to profile_plot()
 * profile_compare() algorithm stabilized, new default settings

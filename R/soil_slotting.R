@@ -3,30 +3,6 @@
 ##############################################################
 
 
-
-
-#
-# as of R 2.7 calling var() or anything that calls var()
-# results in an error when there are not enough values
-# previously NA was returned
-#
-conditional.sd <- function(x)
-	{
-	
-	l <- length(na.omit(x))
-	if(l >= 3)
-		{
-		x.sd <- sd(x, na.rm=TRUE)
-		}
-	else
-		{
-		x.sd <- NA	
-		}
-	
-	return(x.sd)
-	}
-
-
 ## TODO: seg_vect does not work
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
@@ -90,8 +66,7 @@ soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fu
 ## 
 ## calculation of segment-wise summary statistics
 ## 
-##TODO: use wtd.mean, wtd.var, wtd.quantile, wtd.table from Hmisc to provided
-## weighted versions of all summary stats.
+##TODO: figure out how to do weighted tables
 seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, prop.levels=NA, class_prob_mode=1)
 	{
 	
@@ -155,32 +130,42 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		} # end processing numeric variables
 	
 	
-	## TODO: implement weighted prop. tables with wtd.table
-	## TODO: figure out how to apply this to segments > 1 unit
+	## TODO: wtd.table() does not return objects similar to table()... can't use it right now
+	## xtabs() is another approach, but it drops the count of NA
+	## xtabs(wts ~ obs, data=data.frame(wts=wts, obs=tf))
 	# categorical variables
 	if(prop.class == 'factor')
 		{
 		# get a vector of all possible categories
-		# these are the factor codes...
+		# note that l.recon contains factor codes
 		p.unique.classes <- as.vector(na.omit(unique(unlist(l.recon))))
 		
 		# tabular frequences for complete set of possible categories
-		# TODO: generalize to user-defined segmenting vectors
-		p.table <- sapply(l.seq, function(i, cpm=class_prob_mode) {
+		p.table <- sapply(l.seq, function(i, cpm=class_prob_mode, wts=l.recon.wts) 
+			{
 			tf <- factor(l.recon[[i]], levels=p.unique.classes, labels=prop.levels[p.unique.classes])
 			
 			# probabilities are relative to number of contributing profiles
 			if(cpm == 1)
-				tb <- table(tf, useNA='no')
+			  {
+			  tb <- table(tf, useNA='no')
+			  # convert to proportions
+			  pt <- prop.table(tb)
+			  }
 			
 			# probabilities are relative to total number of profiles
 			else if(cpm == 2)
-				tb <- table(tf, useNA='always')
-				
-			pt <- prop.table(tb)  
+			  {
+			  tb <- table(tf, useNA='always')
+			  # convert to proportions, 
+			  # the last column will be named 'NA', and contains the tally of NAs --> remove it
+			  pt <- prop.table(tb)
+			  pt <- pt[-length(pt)]
+			  }
+			  
 			return(pt)
 			} 
-			)
+		)
 		
 		# convert into a dataframe, and combine with contr. fract.
 		p.prop <- as.data.frame(t(p.table))
@@ -198,8 +183,6 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 ## this function will break when horizon boundaries do not make sense
 ## 
 # TODO: we only need x.recon for 1cm aggregation, otherwise l.recon is used
-# TODO: optionally compute probability by dividing by number of profiles, not just profiles with data to a given depth
-# TODO: slice-wise probability does not work with categorical vectors, when slice size > 1
 # TODO: return the number of profiles + number of unique horizons when using custom segmenting interval
 # TODO: replace by() with equivilant plyr functions
 soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALSE, user.fun=NULL, class_prob_mode=1)
@@ -251,11 +234,8 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		{
 		# save the levels of our categorical variable
 		prop.levels <- levels(data$prop) 
-		 
-		 # test for use of categorical variable and >1 seg vect
-		 if( !missing(seg_size) | !missing(seg_vect) )
-			stop('Sorry, aggregation of categorical variables by segments sizes >1 is not yet supported')
 		}
+	
 	# for numerical variables, set this to NA
 	else
 		prop.levels <- NA
@@ -425,7 +405,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			}
 		
 		# compute segment-wise summary statistics
-		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts)
+		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts, prop.levels, class_prob_mode)
 		
 		} # done with segmenting
 	
