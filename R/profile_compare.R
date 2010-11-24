@@ -106,12 +106,15 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
 		
 		
-		# debugging: plot a diagnostic image
-		labs <- levels(s$id)
-		image(1:n.profiles, 1:max_d, t(soil.matrix), col=c(NA,'grey'), ylim=c(max_d, 1), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
-		abline(v=seq(1, n.profiles)+0.5, lty=2)
-		axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
-		axis(side=1, at=1:n.profiles, labels=labs, las=2)
+		# debugging: plot a diagnostic image, but only when reasonable to do so (< 100 profiles)
+		if(n.profiles <= 100)
+		  {
+		  labs <- levels(s$id)
+		  image(1:n.profiles, 1:max_d, t(soil.matrix), col=c(NA,'grey'), ylim=c(max_d, 1), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
+		  abline(v=seq(1, n.profiles)+0.5, lty=2)
+		  axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
+		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex=0.5)
+		  }
 		}
 		
 	
