@@ -6,7 +6,7 @@
 ## TODO: seg_vect does not work
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
-soil.slot.multiple <- function(data, g, vars, seg_size=NA, strict=FALSE, user.fun=NULL)
+soil.slot.multiple <- function(data, g, vars, seg_size=1, strict=FALSE, user.fun=NULL)
 	{
 	# check for dependencies
 	if(!require(plyr) | !require(reshape))

@@ -18,7 +18,7 @@ return_depth_distances = FALSE, strict_hz_eval = FALSE)
   \item{k}{a depth-weighting coeficient, use '0' for no depth-weighting (see examples below)}
   \item{sample_interval}{use every n-th depth slice instead of every depth slice, useful for working with > 1000 profiles at a time}
   \item{replace_na}{if TRUE, missing data are replaced by maximum dissimilarity (TRUE)}
-  \item{add_soil_flag}{The algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE). This has the side-effect of producing a diagnostic plot illustrating the contents of the soil/non-soil matrix.}
+  \item{add_soil_flag}{The algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE). This has the side-effect of producing a diagnostic plot illustrating the contents of the soil/non-soil matrix (when there are 100 or fewer profiles in the collection).}
   \item{return_depth_distances}{return intermediate, depth-wise dissimilarity results (FALSE)}
   \item{strict_hz_eval}{should horizons be strictly checked for internal self-consistency? (FALSE)}
 }
