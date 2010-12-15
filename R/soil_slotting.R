@@ -167,8 +167,21 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 			} 
 		)
 		
-		# convert into a dataframe, and combine with contr. fract.
-		p.prop <- as.data.frame(t(p.table))
+		# convert into a dataframe: if there are > 1 classes, 
+		# then we must transpose p.table when converting to a data.frame
+		if(length(p.unique.classes) > 1)
+			p.prop <- data.frame(t(p.table))
+			
+		# when there is only 1 class, things are more complicated:
+		# 1. no need to transpose p.table
+		# 2. need to manually add the class name
+		else
+			{
+			p.prop <- data.frame(p.table)
+			names(p.prop) <- prop.levels[p.unique.classes]
+			}
+		
+		# combine with contributing fraction
 		df.stats <- data.frame(contributing_fraction, p.prop)
 		}
 	

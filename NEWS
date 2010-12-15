@@ -1,3 +1,7 @@
+-------------------------- aqp 0.98-4 (2010-12-15) --------------------------
+* fixed minor bug in soil.slot() when computing probabilities from profiles that had
+  missing horizons and that had only a single class within the variable to be aggregated
+
 -------------------------- aqp 0.98-1 (2010-11-23) --------------------------
 * added basic demo: demo(aqp)
 * soil.slot() now computes aggregate probabilities over user-defined segments
