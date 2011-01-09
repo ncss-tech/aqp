@@ -13,12 +13,12 @@ unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)
   \item{top}{vector of upper horizon boundaries, must be an integer}
   \item{bottom}{vector of lower horizon boundaries, must be an integer}
   \item{prop}{vector of some property to be "unrolled" over a regular sequence}
-  \item{max_depth}{maximum depth to consider}
+  \item{max_depth}{maximum depth to which missing data is padded with NA}
   \item{bottom_padding_value}{value to use when padding missing data}
   \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 }
 \details{
-This function is used internally by several higher-level components of the \code{aqp} package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
+This function is used internally by several higher-level components of the \code{aqp} package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function. The \code{max_depth} argument is used to specifiy the maximum depth of profiles within a collection, so that data from any profile shallower than this depth is padded with NA.
 }
 
 \value{a vector of "unrolled" property values}
