@@ -150,12 +150,8 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 			
 		# update progress bar
 		setTxtProgressBar(pb, i)
-		
-		
-		# debugging information on memory consumption
-		# cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
-		
 		}
+		
 	# done creating list of slice-wise dissimilarties
 	# finish progress bar	
 	close(pb)
@@ -163,6 +159,8 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	# clean-up
 	rm(s.unrolled) ; gc()
 	
+	# debugging information on memory consumption
+	cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
 	
 	# should NA in the dissimilarity matrix be replaced with max(D) ?
 	if(replace_na)
