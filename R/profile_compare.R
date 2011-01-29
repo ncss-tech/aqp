@@ -29,12 +29,8 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	if(class(s$id) != 'factor')
 		s$id <- factor(s$id)
 	
-	## this is still experimental
-	# check for ability to use parallel computations:
-	# parallel <- checkMC()
-		
-	
-	
+	## this is still experimental: check for ability to use parallel computations:
+	parallel_flag <- checkMC()
 	
 	# identify the number of profiles
 	n.profiles <- length(levels(s$id))
@@ -59,7 +55,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", n.profiles, " Profiles\n", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval) 
+	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=parallel_flag) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go
@@ -111,30 +107,23 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 		  {
 		  labs <- levels(s$id)
 		  image(1:n.profiles, 1:max_d, t(soil.matrix), col=c(NA,'grey'), ylim=c(max_d, 1), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
+		  box()
 		  abline(v=seq(1, n.profiles)+0.5, lty=2)
 		  axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
-		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex=0.5)
+		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex.axis=0.5)
 		  }
 		}
 		
 	
-	
-	## NOTE: careful iterating over lists with a for() loop, and when there may be a NULL lurking
-	# init a list to store distance matrices, one for each depth interval
-	d <- vector('list', max(seq_along(depth_slice_seq)))
-	
-	# init a progress bar
-	pb <- txtProgressBar(min=1, max=max(seq_along(depth_slice_seq)), style=3, width=40)
+	##
+	## new version for computing slice-wise dissimilarities... fast! 
+	## 
 	cat("Computing Dissimilarity Matrices\n")
-	
-	# 'i' is not the depth slice, rather, the index
-	for(i in seq_along(depth_slice_seq))
-		{
-		# for each z, generate distance matrix
-		# note that we have to pass in variable 'i', as this is the 
-		# current depth segment
-		ps <- sapply(s.unrolled, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
-		sp <- t(ps)
+	d <- llply(depth_slice_seq, .parallel=parallel_flag, .progress='text', .fun=function(i, su=s.unrolled) 
+	  {
+	  
+	  ps <- sapply(su, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
+	  sp <- t(ps)
 		
 		# compute distance metric for this depth
 		# distance metric has large effect on results
@@ -143,24 +132,63 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 		## this is where we run into memory-size limitations
 		## an ff object would help here... however it can not preserve all of the information 
 		## that a list can... we would need to store these data as raw matrices
-		d[[i]] <- daisy(sp, metric='gower')
-			
-		# cleanup: not sure if this helps... seems to
-		gc()
-			
-		# update progress bar
-		setTxtProgressBar(pb, i)
-		}
-		
-	# done creating list of slice-wise dissimilarties
-	# finish progress bar	
-	close(pb)
-	
+		d.i <- daisy(sp, metric='gower')
+		return(d.i)
+	  }
+	)
+
 	# clean-up
 	rm(s.unrolled) ; gc()
 	
+	
+## 
+## this is the old version for computing slice-wise dissimilarities... slow
+## 	
+# 	## NOTE: careful iterating over lists with a for() loop, and when there may be a NULL lurking
+# 	# init a list to store distance matrices, one for each depth interval
+# 	d <- vector('list', max(seq_along(depth_slice_seq)))
+# 	
+# 	# init a progress bar
+# 	pb <- txtProgressBar(min=1, max=max(seq_along(depth_slice_seq)), style=3, width=40)
+# 	cat("Computing Dissimilarity Matrices\n")
+# 	
+# 	# 'i' is not the depth slice, rather, the index
+# 	for(i in seq_along(depth_slice_seq))
+# 		{
+# 		# for each z, generate distance matrix
+# 		# note that we have to pass in variable 'i', as this is the 
+# 		# current depth segment
+# 		ps <- sapply(s.unrolled, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
+# 		sp <- t(ps)
+# 		
+# 		# compute distance metric for this depth
+# 		# distance metric has large effect on results
+# 		# Gower's distance gives the best looking results, and automatically standardizes variables
+# 		
+# 		## this is where we run into memory-size limitations
+# 		## an ff object would help here... however it can not preserve all of the information 
+# 		## that a list can... we would need to store these data as raw matrices
+# 		d[[i]] <- daisy(sp, metric='gower')
+# 			
+# 		# cleanup: not sure if this helps... seems to
+# 		gc()
+# 			
+# 		# update progress bar
+# 		setTxtProgressBar(pb, i)
+# 		}
+# 		
+# 	# done creating list of slice-wise dissimilarties
+# 	# finish progress bar	
+# 	close(pb)
+# 	
+# 	# clean-up
+# 	rm(s.unrolled) ; gc()
+# 	
+# 	
+	
+	
 	# debugging information on memory consumption
-	cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
+	# cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
 	
 	# should NA in the dissimilarity matrix be replaced with max(D) ?
 	if(replace_na)

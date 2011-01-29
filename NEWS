@@ -1,3 +1,10 @@
+-------------------------- aqp 0.99-1 (2011-01-26) --------------------------
+* soil.slot() and profile_compare() now have support for parallel computation thanks to bug-fixes in plyr 1.4
+  - plyr >= 1.4, foreach, and doMC packages are required
+  - specific examples are not yet documented, but should be soon
+  - this feature is still experimental! testing is advised
+* profile_compare() now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)
+
 -------------------------- aqp 0.98-4 (2010-12-15) --------------------------
 * fixed minor bug in soil.slot() when computing probabilities from profiles that had
   missing horizons and that had only a single class within the variable to be aggregated

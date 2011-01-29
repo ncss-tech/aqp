@@ -3,7 +3,7 @@
 checkMC <- function(n=2)
 	{
 	plyr.ver <- as.numeric(paste(package_version(packageDescription("plyr")$Version)[[1,1]], package_version(packageDescription("plyr")$Version)[[1,2]], sep='.'))
-	if( getOption('AQP_parallel', default=FALSE) & plyr.ver >= 1.2 & require(foreach) & require(doMC) )
+	if( getOption('AQP_parallel', default=FALSE) & plyr.ver >= 1.4 & require(foreach) & require(doMC) )
 		{
 		# setup the parallel environment if it hasn't been already
 		if(is.null(getDoParName()))
@@ -14,11 +14,14 @@ checkMC <- function(n=2)
 			cat(paste('using parallel computation [', n, ' cores]\n', sep=''))
 			}
 		
-		parallel <- TRUE
+		parallel_flag <- TRUE
 		}
 	# otherwise don't
 	else
-		parallel <- FALSE
+	  {
+# 	  cat('something is wrong, not using parallel computation')
+	  parallel_flag <- FALSE
+	  }
 		
-	return(parallel)
+	return(parallel_flag)
 	}
