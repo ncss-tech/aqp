@@ -12,11 +12,6 @@ soil.slot.multiple <- function(data, g, vars, seg_size=1, strict=FALSE, user.fun
 	if(!require(plyr) | !require(reshape))
 		stop('Please install the "plyr" and "reshape" packages.')
 		
-	## this is still experimental
-	# check for ability to use parallel computations:
-	# parallel <- checkMC()
-		
-		
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('This function can only accept integer horizon depths')
@@ -44,10 +39,14 @@ soil.slot.multiple <- function(data, g, vars, seg_size=1, strict=FALSE, user.fun
 			groups=i[, groups]
 			)
 		
+		## this is still experimental -- check for ability to use parallel computations:
+		parallel_flag <- checkMC()
+			
+		
 		## TODO: allow for seg_vect or seg_size	
 		## currently only one or the other is supported
 		# apply slotting according to grouping factor
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf)
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf, .parallel=parallel_flag)
 		
 		return(i.slotted)
 		})
