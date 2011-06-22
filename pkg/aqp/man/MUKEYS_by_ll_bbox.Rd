@@ -13,8 +13,6 @@ MUKEYS_by_ll_bbox(bbox)
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
 \note{}
-
-
 \seealso{}
 \examples{
 # fetch map unit keys from the bounding-box:
