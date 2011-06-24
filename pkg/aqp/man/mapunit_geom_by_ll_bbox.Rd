@@ -12,17 +12,21 @@ mapunit_geom_by_ll_bbox(bbox)
 \value{A SpatialPolygonsDataFrame of map unit polygons, in WGS84 (long,lat) coordinates.}
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
-\note{It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box.}
+\note{It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox.}
 \seealso{}
 \examples{
 # fetch map unit geometry from a bounding-box:
 # 
-#         +------------- (-120.8, 37.8)
+#         +------------- (-120.41, 38.70)
 #         |                     |
 #         |                     |
-# (-120.95, 37.7) --------------+
+# (-120.54, 38.61) --------------+
 
-b <- c(-120.9,37.7,-120.8,37.8)
-\dontrun{mapunit_geom_by_ll_bbox(b)}
+b <- c(-120.54,38.61,-120.41,38.70)
+\dontrun{x <- mapunit_geom_by_ll_bbox(b)}
 }
 \keyword{manip}
+
+
+
+
