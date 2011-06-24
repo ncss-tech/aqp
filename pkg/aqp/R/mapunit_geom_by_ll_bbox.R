@@ -1,6 +1,6 @@
 
 # 2011-06-22
-# It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box.
+# It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
 mapunit_geom_by_ll_bbox <- function(bbox)
   {
   # temp fix until the new version of RGDAL is on CRAN
