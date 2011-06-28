@@ -1,7 +1,8 @@
 
 # convert munsell Hue, Value, Chroma into RGB
-# user can adjust how rgb() function will return and R-friendly color
+# user can adjust how rgb() function will return an R-friendly color
 # TODO if alpha is greater than maxColorValue, there will be an error
+# TODO: use join() from plyr package for faster look-up
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE)
 	{
 	# check for missing data
@@ -18,8 +19,9 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 	
 	## TODO: this is kind of slow
 	# perform subset
-	s <- list()
-	for(i in 1:length(the_hue))
+	n.cols <- length(the_hue)
+	s <- vector(mode='list', length=n.cols)
+	for(i in 1:n.cols)
 		{
 		s.i <- subset(munsell, 
 		select=c('r','g','b'), 
@@ -34,7 +36,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 		}
 	
 	# convert to DF
-	s.df <- do.call('rbind', s)
+	s.df <- ldply(s)
 	
 	# if the user wants the raw RGB triplets, give those back
 	if(return_triplets)

@@ -51,6 +51,20 @@ d$color <- with(d, munsell2rgb(hue, value, chroma))
 # similar to the 10YR color book page
 plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
 
+# multiple pages of hue:
+d <- expand.grid(hue=c('5YR','7.5YR','10YR'), value=2:8, chroma=1:8)
+d$hue <- factor(d$hue, levels=c('5YR','7.5YR','10YR'))
+d$color <- with(d, munsell2rgb(hue, value, chroma))
+
+xyplot(value ~ chroma | hue,
+main="Common Soil Colors", layout=c(3,1), scales=list(alternating=1),
+strip=strip.custom(bg=grey(0.85)),
+data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
+panel=function(x, y, subscripts, ...)
+{
+panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
+}
+)
 
 # soils example
 data(sp1)
