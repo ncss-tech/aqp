@@ -1,7 +1,7 @@
 
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
-panel.depth_function <- function(x, y, upper=NA, lower=NA, subscripts=NULL, groups=NULL, ...) {
+panel.depth_function <- function(x, y, upper=NA, lower=NA, subscripts=NULL, groups=NULL, id=NA, ...) {
 
 # add grid
 panel.grid(h=-1, v=-1, lty=3, col=1)
@@ -11,19 +11,22 @@ panel.grid(h=-1, v=-1, lty=3, col=1)
 # when the length of 'y' is > 'x', we are plotting a step function
 if(length(y) > length(x))
 	{
+	if(missing(id))
+		stop('must provide a profile id')
+		
 	print('plotting segments...')
 	
 	# re-make a nice dataframe, assuming that we have 'groups' defined
 	if(!missing(groups))
-		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
+		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts], id=id[subscripts])
 	
 	# if 'groups' is missing, add a fake 'groups' column
 	else
-		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
+		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1), id=id[subscripts])
 	
 	# add line segments that form step-function
 	## TODO: iterate over profile IDs instead of groups
-	by(d, d$groups, make.segments, ...)	
+	by(d, d$id, make.segments, ...)	
 	}
 
 # normal plot -- not a step function
