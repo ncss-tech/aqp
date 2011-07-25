@@ -3,10 +3,11 @@
 \title{Fetch Map Unit Geometry from SDA}
 \description{Fetch map unit geometry from the SDA website by WGS84 bounding box.}
 \usage{
-mapunit_geom_by_ll_bbox(bbox)
+mapunit_geom_by_ll_bbox(bbox, source = 'sda')
 }
 \arguments{
   \item{bbox}{a bounding box in WGS coordinates}
+  \item{source}{the source database, currently limited to soil data access (SDA)}
 }
 \details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}. See examples for bounding box formatting.}
 \value{A SpatialPolygonsDataFrame of map unit polygons, in WGS84 (long,lat) coordinates.}

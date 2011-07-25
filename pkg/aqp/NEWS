@@ -1,3 +1,9 @@
+-------------------------- aqp 0.99-4 (2011-08-01) --------------------------
+* code and documentation clean-up
+* experimental soil data access (SDA) query functions have been added
+* additional customizations added to profile_plot
+* two new sample data sets + examples
+
 -------------------------- aqp 0.99-1 (2011-01-26) --------------------------
 * soil.slot() and profile_compare() now have support for parallel computation thanks to bug-fixes in plyr 1.4
   - plyr >= 1.4, foreach, and doMC packages are required
