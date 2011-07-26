@@ -122,6 +122,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	d <- llply(depth_slice_seq, .parallel=parallel_flag, .progress='text', .fun=function(i, su=s.unrolled) 
 	  {
 	  
+	  ## this could be a source of slowness, esp. the t()
 	  ps <- sapply(su, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
 	  sp <- t(ps)
 		
@@ -138,54 +139,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	)
 
 	# clean-up
-	rm(s.unrolled) ; gc()
-	
-	
-## 
-## this is the old version for computing slice-wise dissimilarities... slow
-## 	
-# 	## NOTE: careful iterating over lists with a for() loop, and when there may be a NULL lurking
-# 	# init a list to store distance matrices, one for each depth interval
-# 	d <- vector('list', max(seq_along(depth_slice_seq)))
-# 	
-# 	# init a progress bar
-# 	pb <- txtProgressBar(min=1, max=max(seq_along(depth_slice_seq)), style=3, width=40)
-# 	cat("Computing Dissimilarity Matrices\n")
-# 	
-# 	# 'i' is not the depth slice, rather, the index
-# 	for(i in seq_along(depth_slice_seq))
-# 		{
-# 		# for each z, generate distance matrix
-# 		# note that we have to pass in variable 'i', as this is the 
-# 		# current depth segment
-# 		ps <- sapply(s.unrolled, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
-# 		sp <- t(ps)
-# 		
-# 		# compute distance metric for this depth
-# 		# distance metric has large effect on results
-# 		# Gower's distance gives the best looking results, and automatically standardizes variables
-# 		
-# 		## this is where we run into memory-size limitations
-# 		## an ff object would help here... however it can not preserve all of the information 
-# 		## that a list can... we would need to store these data as raw matrices
-# 		d[[i]] <- daisy(sp, metric='gower')
-# 			
-# 		# cleanup: not sure if this helps... seems to
-# 		gc()
-# 			
-# 		# update progress bar
-# 		setTxtProgressBar(pb, i)
-# 		}
-# 		
-# 	# done creating list of slice-wise dissimilarties
-# 	# finish progress bar	
-# 	close(pb)
-# 	
-# 	# clean-up
-# 	rm(s.unrolled) ; gc()
-# 	
-# 	
-	
+	rm(s.unrolled) ; gc()	
 	
 	# debugging information on memory consumption
 	# cat(paste(" [size of D:", round(object.size(d) / 1024^2, 1), "Mb] "))
@@ -250,6 +204,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 		return(d)
 	
 	
+	## this could be a source of slow-ness: t()
 	# compute the total distance, for all dept intervals,
 	# by pedon:
 	# consider using mean diss, or something different that total
