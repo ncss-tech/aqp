@@ -6,10 +6,6 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda')
   # need rgdal
   if(!require(rgdal))
   	stop('This function requires the `rgdal` package.')
-  	
-  # temp fix until the new version of RGDAL is on CRAN
-  warning('sourcing SVN version of rgdal::readOGR()')
-  source('https://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg/R/ogr_sp.R?root=rgdal')
   
   # parse bbox
   bbox.text <- paste(bbox, collapse=',')
@@ -64,13 +60,7 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda')
   
   # read in via OGR, into a SPolyDF. 
   # note hard-coded layer name from within the GML source
-  ## this does not work, because of possibly bad GML!
-  ## 
-  ## Error in data.frame(dlist, row.names = fids, stringsAsFactors = stringsAsFactors) : 
-  ## duplicate row.names: 464331, 464429, 464445, [...]
-  ## 
-  ## submitted a patch to Roger, fix is in SVN
-  ## until then we need to source the current version of readOGR()
+  # disambiguateFIDs=TRUE is required due to sloppy GML from SDA
   d <- readOGR(dsn=tf.full, layer=file.layer, disambiguateFIDs=TRUE, stringsAsFactors=FALSE)
   
   
