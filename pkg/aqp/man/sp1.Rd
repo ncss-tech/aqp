@@ -83,7 +83,7 @@ g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5,
 "10cm interval"=s10, "20cm interval"=s20)
 
 # note special syntax for plotting step function
-xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, 
+xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, id=g2$which,
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
 ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
