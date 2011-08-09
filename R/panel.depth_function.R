@@ -1,7 +1,7 @@
 
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
-panel.depth_function <- function(x, y, upper=NA, lower=NA, subscripts=NULL, groups=NULL, id=NA, ...) {
+panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, ...) {
 
 # add grid
 panel.grid(h=-1, v=-1, lty=3, col=1)
