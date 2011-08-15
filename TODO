@@ -1,15 +1,13 @@
 Urgent:
 -------
-1. convert to Hmisc weighted SD, quantile, table, etc. functions
+1. finish new S4 classes/methods
 
 Interesting:
 ------------
 1. PCA by depth slice
 2. user-defined slices for profile_compare()
-3. objective selection of k
-4. sensitivity analysis on profile_compare()
-5. equal-area splines
-6. check profile-level weighting scheme
+3. sensitivity analysis on profile_compare()
+4. equal-area splines
 
 Website:
 --------
