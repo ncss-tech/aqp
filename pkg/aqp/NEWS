@@ -1,6 +1,9 @@
--------------------------- aqp 0.99-4 (2011-08-01) --------------------------
+-------------------------- aqp 0.99-4 (2011-08-15) --------------------------
 * code and documentation clean-up
-* experimental soil data access (SDA) query functions have been added
+* Soil Sata Access (SDA) query functions have been added
+  - mapunit_geom_by_ll_bbox() : get map unit geometry by bounding box
+  - MUKEYS_by_ll_bbox() : get map unit keys by bounding box
+  - SDA_query() : retrieve soil tabular data via query written in SQL
 * additional customizations added to profile_plot
 * two new sample data sets + examples
 
