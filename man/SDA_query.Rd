@@ -1,54 +1,28 @@
 \name{SDA_query}
 \alias{SDA_query}
+\alias{cleanSDA}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
-\usage{
-SDA_query(q)
-}
+\title{Soil Data Access Query}
+\description{Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe.}
+\usage{SDA_query(q)}
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{q}{
-%%     ~~Describe \code{q} here~~
+  \item{q}{a text string containing valid SQL}
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+\details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}.}
+\value{A dataframe containing the results.}
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
+\note{This function requires the `SSOAP` package.}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\seealso{\code{\link{MUKEYS_by_ll_bbox}}, \code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{
 # NASIS export metadata:
-# res <- SDA_query('select areasymbol, exportcertdate from distlegendmd order by areasymbol')
+\dontrun{res <- SDA_query('select areasymbol, exportcertdate from distlegendmd order by areasymbol')}
 
 # basic query:
-# res <- SDA_query("select cokey, compname, comppct_r from component where compname like 'yolo%' and majcompflag = 'Yes' ")
+\dontrun{res <- SDA_query("select cokey, compname, comppct_r from component where compname = 'yolo' and majcompflag = 'Yes' ")}
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{manip}
+

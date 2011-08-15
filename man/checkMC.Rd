@@ -22,6 +22,6 @@ Dylan Beaudette
 options(AQP_parallel=TRUE)
 
 # result will depend on the above option and your specific system configuration
-checkMC(n=2)
+\dontrun{checkMC(n=2)}
 }
 \keyword{manip}
