@@ -23,6 +23,6 @@ MUKEYS_by_ll_bbox(bbox)
 # (-120.95, 37.7) --------------+
 
 b <- c(-120.9,37.7,-120.8,37.8)
-\dontrun{MUKEYS_by_ll_bbox(b)}
+\dontrun{m <- MUKEYS_by_ll_bbox(b)}
 }
 \keyword{manip}

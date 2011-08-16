@@ -22,6 +22,22 @@
 
 # basic query:
 \dontrun{res <- SDA_query("select cokey, compname, comppct_r from component where compname = 'yolo' and majcompflag = 'Yes' ")}
+
+# get tabular data based on result from spatial query:
+\dontrun{
+# bbox
+b <- c(-120.9,37.7,-120.8,37.8)
+# get map unit keys for this bbox
+m <- MUKEYS_by_ll_bbox(b)
+# make an SQL-compliant "in" statment
+in.statment <- paste(m, collapse="','")
+in.statment <- paste("('", in.statment, "')", sep='')
+# format query:
+q <- paste("SELECT cokey, compname, comppct_r FROM component WHERE majcompflag = 'Yes' AND mukey IN ", in.statment, "ORDER BY mukey, comppct_r DESC", sep="")
+# now get component data for these map unit keys
+res <- SDA_query(q)
+}
+
 }
 
 \keyword{manip}
