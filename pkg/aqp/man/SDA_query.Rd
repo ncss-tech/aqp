@@ -1,6 +1,7 @@
 \name{SDA_query}
 \alias{SDA_query}
 \alias{cleanSDA}
+\alias{format_SQL_in_statement}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Soil Data Access Query}
 \description{Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe.}
@@ -30,11 +31,12 @@ b <- c(-120.9,37.7,-120.8,37.8)
 # get map unit keys for this bbox
 m <- MUKEYS_by_ll_bbox(b)
 # make an SQL-compliant "in" statment
-in.statment <- paste(m, collapse="','")
-in.statment <- paste("('", in.statment, "')", sep='')
+in.statement <- format_SQL_in_statement(m)
 # format query:
-q <- paste("SELECT cokey, compname, comppct_r FROM component WHERE majcompflag = 'Yes' AND mukey IN ", in.statment, "ORDER BY mukey, comppct_r DESC", sep="")
-# now get component data for these map unit keys
+q <- paste("SELECT component.cokey, compname, comppct_r, hzdept_r, hzdepb_r, hzname, sandtotal_r, silttotal_r, claytotal_r
+FROM component JOIN chorizon ON component.cokey = chorizon.cokey
+WHERE majcompflag = 'Yes' AND mukey IN ", in.statment, "ORDER BY cokey, comppct_r DESC, hzdept_r ASC", sep="")
+# now get component and horizon-level data for these map unit keys
 res <- SDA_query(q)
 }
 

@@ -23,8 +23,17 @@ mapunit_geom_by_ll_bbox(bbox, source = 'sda')
 #         |                     |
 # (-120.54, 38.61) --------------+
 
+\dontrun{
+# basic usage
 b <- c(-120.54,38.61,-120.41,38.70)
-\dontrun{x <- mapunit_geom_by_ll_bbox(b)}
+x <- mapunit_geom_by_ll_bbox(b) # about 20 seconds
+plot(x)
+
+# get map unit data for matching map unit keys
+in.statement <- format_SQL_in_statement(unique(x$MUKEY))
+q <- paste("SELECT mukey, muname FROM mapunit WHERE mukey IN ", in.statment, sep="")
+res <- SDA_query(q)
+}
 }
 \keyword{manip}
 

@@ -63,6 +63,11 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda')
   # disambiguateFIDs=TRUE is required due to sloppy GML from SDA
   d <- readOGR(dsn=tf.full, layer=file.layer, disambiguateFIDs=TRUE, stringsAsFactors=FALSE)
   
+  # throw-out some garbage columns
+  d$SPATIALVERSION <- NULL
+  d$SHAPE <- NULL
+  d$OBJECTID <- NULL
+  gc()
   
   # done, clean-up
   # leaves the .gfs file hanging around
