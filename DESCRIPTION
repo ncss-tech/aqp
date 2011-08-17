@@ -1,11 +1,11 @@
 Package: aqp
-Version: 0.99-4
-Date: 2011-08-16
+Version: 0.99-5
+Date: 2011-08-17
 Title: Algorithms for Quantitative Pedology
 Author: Dylan Beaudette <debeaudette@ucdavis.edu>, Pierre Roudier <roudierp@landcareresearch.co.nz>
 Maintainer: Dylan Beaudette <debeaudette@ucdavis.edu>, Pierre Roudier <roudierp@landcareresearch.co.nz>
-Depends: R (>= 2.9.0), plyr, reshape, lattice, cluster, sp, Hmisc, XML, RCurl
-Suggests: RColorBrewer, colorspace, maptools, rgdal, foreign, SSOAP
+Depends: R (>= 2.9.0), plyr, reshape, lattice, cluster, sp, Hmisc
+Suggests: RColorBrewer, colorspace, maptools, rgdal, foreign, MASS, ape, plotrix, foreach, doMC, SSOAP, XML, RCurl
 Description: A collection of algorithms related to modeling of soil resources, soil classification, soil profile aggregation, and visualization. 
 License: GPL (>= 2)
-Packaged: 2011-08-16 00:00:00 UTC; dylan
+Packaged: 2011-08-17 00:00:00 UTC; dylan
