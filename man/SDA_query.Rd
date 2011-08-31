@@ -19,7 +19,11 @@
 \seealso{\code{\link{MUKEYS_by_ll_bbox}}, \code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{
 # NASIS export metadata:
-\dontrun{res <- SDA_query('select areasymbol, exportcertdate from distlegendmd order by areasymbol')}
+\dontrun{
+res <- SDA_query('select areasymbol, exportcertdate from distlegendmd order by areasymbol')
+res$exportcertdate <- as.Date(as.POSIXct(res$exportcertdate, format='%m/%d/%Y %H:%M:%S'))
+recently_updated <- res$areasymbol[res$exportcertdate > as.Date('2011-01-01')]
+}
 
 # basic query:
 \dontrun{res <- SDA_query("select cokey, compname, comppct_r from component where compname = 'yolo' and majcompflag = 'Yes' ")}
