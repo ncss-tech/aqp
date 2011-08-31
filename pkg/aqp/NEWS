@@ -6,6 +6,7 @@
   + implemented in mix_and_clean_colors()
 
 * test_hz_logic() : basic function for testing horizon logic, returns TRUE/FALSE by ID
+* parallel operations now NON-functional, while we wait for plyr to support doSMP...
 -------------------------- aqp 0.99-4 (2011-08-15) --------------------------
 * code and documentation clean-up
 * Soil Sata Access (SDA) query functions have been added

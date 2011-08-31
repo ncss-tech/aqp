@@ -67,6 +67,23 @@ prepanel=prepanel.depth_function
 # convert mean value for each variable into long format
 a.wide <- cast(a, groups + top + bottom ~ variable, value=c('p.mean'))
 
+
+## this will work in the next version of plyr
+\dontrun{library(doSMP)
+
+# setup global option
+options('AQP_parallel'=TRUE)
+
+# register workers (2 cores)
+w <- startWorkers(workerCount=2, FORCE=TRUE)
+registerDoSMP(w)
+
+# run in parallel
+a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'), seg_size=5)
+
+# stop workers (critical!)
+stopWorkers(w)
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
