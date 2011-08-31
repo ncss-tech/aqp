@@ -29,9 +29,6 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	if(class(s$id) != 'factor')
 		s$id <- factor(s$id)
 	
-	## this is still experimental: check for ability to use parallel computations:
-	parallel_flag <- checkMC()
-	
 	# identify the number of profiles
 	n.profiles <- length(levels(s$id))
 	
@@ -55,7 +52,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", n.profiles, " Profiles\n", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=parallel_flag) 
+	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go
@@ -119,7 +116,7 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	## new version for computing slice-wise dissimilarities... fast! 
 	## 
 	cat("Computing Dissimilarity Matrices\n")
-	d <- llply(depth_slice_seq, .parallel=parallel_flag, .progress='text', .fun=function(i, su=s.unrolled) 
+	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress='text', .fun=function(i, su=s.unrolled) 
 	  {
 	  
 	  ## this could be a source of slowness, esp. the t()

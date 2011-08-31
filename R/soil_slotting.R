@@ -39,14 +39,11 @@ soil.slot.multiple <- function(data, g, vars, seg_size=1, strict=FALSE, user.fun
 			groups=i[, groups]
 			)
 		
-		## this is still experimental -- check for ability to use parallel computations:
-		parallel_flag <- checkMC()
-			
-		
 		## TODO: allow for seg_vect or seg_size	
 		## currently only one or the other is supported
 		# apply slotting according to grouping factor
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf, .parallel=parallel_flag)
+    ## TODO: does this function find the forwach backend?
+		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf, .parallel=getOption('AQP_parallel', default=FALSE))
 		
 		return(i.slotted)
 		})
