@@ -40,7 +40,7 @@ get_site_data_from_pedon_db <- function(dsn)
   elev, slope, aspect, plantassocnm,
   bedrckdepth, br.choice_label as bedrock_kind,
   hs.choice AS hillslope_pos,
-  descname as describer, soinmascorr as correlated_as, psctopdepth, pscbotdepth
+  descname as describer, soinmassamp as sampled_as, soinmascorr as correlated_as, psctopdepth, pscbotdepth
   FROM (
   (
   (
