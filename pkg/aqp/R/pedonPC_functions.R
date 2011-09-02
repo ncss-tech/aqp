@@ -91,7 +91,7 @@ get_hz_data_from_pedon_db <- function(dsn)
   phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, phfield,
   Sum(phfrags.fragvol)  AS total_frags_pct
-FROM (pedon INNER JOIN phorizon ON (pedon.pedbsidref = phorizon.pedbsidref) AND (pedon.peiid = phorizon.peiidref)) INNER JOIN phfrags ON (phorizon.pedbsidref = phfrags.pedbsidref) AND (phorizon.phiid = phfrags.phiidref)
+FROM (pedon INNER JOIN phorizon ON (pedon.pedbsidref = phorizon.pedbsidref) AND (pedon.peiid = phorizon.peiidref)) LEFT OUTER JOIN phfrags ON (phorizon.pedbsidref = phfrags.pedbsidref) AND (phorizon.phiid = phfrags.phiidref)
 GROUP BY pedon.upedonid, phorizon.phiid, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb, phorizon.claytotest, phorizon.silttotest, phorizon.sandtotest, phfield
 ORDER BY pedon.upedonid, phorizon.hzdept ASC ;"
   
