@@ -40,16 +40,20 @@ get_site_data_from_pedon_db <- function(dsn)
   elev, slope, aspect, plantassocnm,
   bedrckdepth, br.choice_label as bedrock_kind,
   hs.choice AS hillslope_pos,
-  descname as describer, soinmassamp as sampled_as, soinmascorr as correlated_as, psctopdepth, pscbotdepth
+  descname as describer, soinmassamp as sampled_as, soinmascorr as correlated_as, psctopdepth, pscbotdepth,
+  ps.choice_label as part_size_class
   FROM (
   (
   (
+  (
   site INNER JOIN pedon ON site.siteiid = pedon.siteiidref)
-  INNER JOIN metadata_domain_detail as dm ON site.horizdatnm = dm.choice_id) 
-  INNER JOIN metadata_domain_detail br ON site.bedrckkind = br.choice_id)
-  INNER JOIN metadata_domain_detail hs ON site.hillslopeprof = hs.choice_id
+  INNER JOIN metadata_domain_detail AS dm ON site.horizdatnm = dm.choice_id) 
+  INNER JOIN metadata_domain_detail AS br ON site.bedrckkind = br.choice_id)
+  INNER JOIN metadata_domain_detail AS ps ON pedon.taxpartsize = ps.choice_id)
+  INNER JOIN metadata_domain_detail AS hs ON site.hillslopeprof = hs.choice_id
   WHERE dm.domain_id = 1261
   AND br.domain_id = 517
+  AND ps.domain_id = 127
   AND hs.domain_id = 971
   ORDER BY site.usiteid ;"
   
@@ -82,12 +86,13 @@ get_hz_data_from_pedon_db <- function(dsn)
   require(RODBC)
   
   # this can be optimized
+  # RF calculation should be done in  a sub-query
   q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id,
   phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
-  phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, 
+  phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, phfield,
   Sum(phfrags.fragvol)  AS total_frags_pct
 FROM (pedon INNER JOIN phorizon ON (pedon.pedbsidref = phorizon.pedbsidref) AND (pedon.peiid = phorizon.peiidref)) INNER JOIN phfrags ON (phorizon.pedbsidref = phfrags.pedbsidref) AND (phorizon.phiid = phfrags.phiidref)
-GROUP BY pedon.upedonid, phorizon.phiid, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb, phorizon.claytotest, phorizon.silttotest, phorizon.sandtotest
+GROUP BY pedon.upedonid, phorizon.phiid, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb, phorizon.claytotest, phorizon.silttotest, phorizon.sandtotest, phfield
 ORDER BY pedon.upedonid, phorizon.hzdept ASC ;"
   
   # setup connection to our pedon database
