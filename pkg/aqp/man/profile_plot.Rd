@@ -14,7 +14,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 
 \method{profile_plot}{SoilProfileList}(d, color='soil_color', width=0.2, name='name', 
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
-print.id=TRUE, plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, 
+print.id=TRUE, id.style='top', plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, 
 max.depth=d$max_depth, n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3,
 abbr=FALSE, abbr.cutoff=5, \dots)
 
@@ -29,6 +29,7 @@ abbr=FALSE, abbr.cutoff=5, \dots)
   \item{cex.depth.axis}{character scaling applied to depth scale}
   \item{cex.id}{character scaling applied to profile id}
   \item{print.id}{should the profile id be printed above each profile? (TRUE)}
+  \item{id.style}{profile ID printing style: 'top' = centered above each profile (default), 'side' = 'along the top-left edge of profiles'}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 
@@ -42,7 +43,7 @@ abbr=FALSE, abbr.cutoff=5, \dots)
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
-This function sets the margins before plotting, so previous calls to \code{par(mar=...)} will be overridden. Depth limits (max.depth) and number of depth ticks (n.depth.ticks) are *suggestions* to the \code{pretty()} function. You may have to tinker with both parameters to get what you want.
+This function sets the margins before plotting, so previous calls to \code{par(mar=...)} will be overridden. Depth limits (max.depth) and number of depth ticks (n.depth.ticks) are *suggestions* to the \code{pretty()} function. You may have to tinker with both parameters to get what you want. The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
 }
 \value{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
@@ -66,6 +67,9 @@ sp1.list <- initProfileList(sp1)
 
 # plot profiles
 profile_plot(sp1.list)
+
+# plot profiles, using alternate profile ID label style
+profile_plot(sp1.list, id.style='side')
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

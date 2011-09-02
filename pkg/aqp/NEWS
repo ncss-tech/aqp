@@ -1,4 +1,4 @@
--------------------------- aqp 0.99-6 (2011-08-31) --------------------------
+-------------------------- aqp 0.99-7 (2011-09-01) --------------------------
 * new functions for getting data out of PedonPC (MS Access) databases [windows only for now]
   - get_site_data_from_pedon_db() : site and pedon aggregate data
   - get_hz_data_from_pedon_db() : horizon level data
@@ -7,6 +7,7 @@
 
 * test_hz_logic() : basic function for testing horizon logic, returns TRUE/FALSE by ID
 * parallel operations now NON-functional, while we wait for plyr to support doSMP...
+* new ID plotting style for profile_plot() : handy when plotting large collections and/or long IDs
 -------------------------- aqp 0.99-4 (2011-08-15) --------------------------
 * code and documentation clean-up
 * Soil Sata Access (SDA) query functions have been added
