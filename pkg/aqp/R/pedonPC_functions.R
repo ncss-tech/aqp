@@ -31,6 +31,7 @@ mix_and_clean_colors <- function(x)
 
 
 # get site/pedon aggregate data
+# note that we use LEFT joins with the metadata table, in case those fields are NULL
 get_site_data_from_pedon_db <- function(dsn)
   {
   q <- "SELECT site.usiteid as site_id, pedon.upedonid as pedon_id, 
@@ -47,14 +48,10 @@ get_site_data_from_pedon_db <- function(dsn)
   (
   (
   site INNER JOIN pedon ON site.siteiid = pedon.siteiidref)
-  INNER JOIN metadata_domain_detail AS dm ON site.horizdatnm = dm.choice_id) 
-  INNER JOIN metadata_domain_detail AS br ON site.bedrckkind = br.choice_id)
-  INNER JOIN metadata_domain_detail AS ps ON pedon.taxpartsize = ps.choice_id)
-  INNER JOIN metadata_domain_detail AS hs ON site.hillslopeprof = hs.choice_id
-  WHERE dm.domain_id = 1261
-  AND br.domain_id = 517
-  AND ps.domain_id = 127
-  AND hs.domain_id = 971
+  LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1261) AS dm ON site.horizdatnm = dm.choice_id) 
+  LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 517) AS br ON site.bedrckkind = br.choice_id)
+  LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 127) AS ps ON pedon.taxpartsize = ps.choice_id)
+  LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 971) AS hs ON site.hillslopeprof = hs.choice_id
   ORDER BY site.usiteid ;"
   
   # setup connection to our pedon database
@@ -73,7 +70,7 @@ get_site_data_from_pedon_db <- function(dsn)
   d$datum <- as.character(d$datum)
   
   # warn if mixed datums
-  if(length(unique(d$datum)) > 1)
+  if(length(unique(na.omit(d$datum))) > 1)
     warning('multiple datums present')
   
   # done
