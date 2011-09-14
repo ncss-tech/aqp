@@ -32,7 +32,7 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, name=
 	depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
 	
 	# set margins... consider moving outside of function
-	par(mar=c(0.5,0,0,1))
+	par(mar=c(0.5,1,0,1))
 	
 	# init plotting region, unless we are appending to an existing plot
 	if(!add)
