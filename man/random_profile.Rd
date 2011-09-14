@@ -30,8 +30,11 @@ A dataframe with the simulated profile.
 library(aqp)
 
 # generate 10 random profiles with default settings:
-d.list <- lapply(1:10, function(i) random_profile(i))
-d <- do.call('rbind', d.list)
+d <- ldply(1:10, random_profile)
+
+# convert to SoilProfileList object and plot
+d <- initProfileList(d)
+profile_plot(d)
 
 # convert to SoilProfileList and plot
 # add a fake color
@@ -48,13 +51,13 @@ profile_plot(d)
 
 
 # simple cluster analysis:
-d <- ldply(1:10, function(i) random_profile(i))
+d <- ldply(1:10, random_profile)
 p <- profile_compare(d, vars=c('p1','p2','p3'), max_d=50, k=0)
 plot(hclust(p))
 
 
 # stress-test profile comparison functions (not run)
-# d <- ldply(1:1000, function(i) random_profile(i))
+# d <- ldply(1:1000, random_profile)
 # 
 # 100 profiles, 4 varibales:
 # 66 seconds on 1.3 Ghz Intel Mac Mini 
