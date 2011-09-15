@@ -53,7 +53,8 @@ sp3[, c('h','s','v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue=1)))
 
 # make a fake grouping variable, and aggregate all profiles
 sp3$group <- factor('A')
-a <- soil.slot.multiple(sp3, g='group', vars=c('clay','cec','ph','h','s','v'), seg_size=10)
+a <- soil.slot.multiple(sp3, fm=group ~ clay + cec + ph + h + s + v, seg_size=10)
+
 
 # convert back to wide format, note that aggregation metric affects the result
 a.wide.q25 <- cast(a, top + bottom ~ variable, value=c('p.q25'))
