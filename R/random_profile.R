@@ -4,7 +4,8 @@ id,
 n=c(3,4,5,6), 
 min_thick=5, 
 max_thick=30, 
-n_prop=5
+n_prop=5,
+exact=FALSE
 )
 {
 
@@ -15,8 +16,13 @@ if(missing(id))
 if(max_thick < min_thick)
 	stop('illogical horizon thickness constraints')
 
-# choose a number of horizons
-n_hz <- sample(n, 1)
+# if requested, give back the exact number of horizons
+if(length(n) == 1 & exact)
+	n_hz <- n
+
+# otherwise randomly choose from suggestions
+else
+	n_hz <- sample(n, 1)
 
 # generate hz top bnd
 tops <- integer(n_hz-1)
