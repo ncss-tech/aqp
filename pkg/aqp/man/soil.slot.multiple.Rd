@@ -1,7 +1,6 @@
 \name{soil.slot.multiple}
 \Rdversion{1.1}
 \alias{soil.slot.multiple}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Multivariate Soil Profile Slotting
 }
@@ -9,23 +8,19 @@ Multivariate Soil Profile Slotting
 Align several soil properties to a user-defined basis, with data returned in long format.
 }
 \usage{
-soil.slot.multiple(data, g, vars, seg_size=1, strict=FALSE, user.fun=NULL)
+soil.slot.multiple(data, g, vars, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data}{an input dataframe with 'id' column defining soil profiles, horizon depths must be integers}
-  \item{g}{a character string or vector of length = 1, naming the column in the input dataframe to use as the grouping variable}
-  \item{vars}{a character vector with names of columns in the input dataframe that will be aggregated}
-  \item{seg_size}{User-degined segment size, default is 1}
-  \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
-  \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
+  \item{g}{a character vector of length=1 naming the column from the input dataframe that contains group labels}
+  \item{vars}{a character vector with names of columns from the input dataframe that will be aggregated}
+  \item{...}{further arguments passed onto \code{\link{soil.slot}}}
 }
 \details{
 This function is a wrapper to \code{\link{soil.slot}}, that makes it simpler to "slice" several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
 }
-\note{\code{soil.slot.multiple} does not currently support a user-defined slotting vector}
 \value{
-A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-slice information repeated for each requested input variable.
+A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-slice information repeated for each requested input variable and group.
 }
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
@@ -48,16 +43,17 @@ sp3$group <- factor(sp3$group)
 
 # slot several variables at once
 # within each level of 'group'
-# according to 5 cm vertcal increments
-a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'), seg_size=5)
+# using default parameters to soil.slot()
+a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'))
 
 # pre-compute intervals
 a$upper <- with(a, p.mean + p.sd)
 a$lower <- with(a, p.mean - p.sd)
 
-# check the results
+# check the results:
+# note that 'group' is the column containing group labels
 xyplot(
-top ~ p.mean | variable, data=a, groups=groups, subscripts=TRUE, 
+top ~ p.mean | variable, data=a, groups=group, subscripts=TRUE, 
 lower=a$lower, upper=a$upper, ylim=c(125,-5), alpha=0.5,
 layout=c(3,1), scales=list(x=list(relation='free')),
 panel=panel.depth_function, 
@@ -65,7 +61,18 @@ prepanel=prepanel.depth_function
 )
 
 # convert mean value for each variable into long format
-a.wide <- cast(a, groups + top + bottom ~ variable, value=c('p.mean'))
+a.wide <- cast(a, group + top + bottom ~ variable, value=c('p.mean'))
+
+
+## again, this time for a user-defined slab from 40-60 cm
+a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'), seg_vect=c(40,60))
+
+# now we have weighted average properties (within the defined slab) for each variable, and each group
+(a.wide <- cast(a, group + top + bottom ~ variable, value=c('p.mean')))
+
+## this time, compute the weighted mean of selected properties, by profile ID
+a <- soil.slot.multiple(sp3, g='id', vars=c('L','A', 'B'), seg_vect=c(40,60))
+(a.wide <- cast(a, id + top + bottom ~ variable, value=c('p.mean')))
 
 
 ## this will work in the next version of plyr

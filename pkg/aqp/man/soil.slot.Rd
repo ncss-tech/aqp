@@ -98,8 +98,18 @@ sp1.sub <- subset(sp1, sub=id == 'P009')
 hz.wt.mean <- with(sp1.sub, 
 sum((bottom - top) * prop) / sum(bottom - top) 
 )
+# hopefully the same value, calculated with soil.slot()
 a <- soil.slot(sp1.sub)
-all.equal(mean(a$p.mean), hz.wt.mean)
+# same?
+if(!all.equal(mean(a$p.mean), hz.wt.mean))
+	stop('there is a bug in soil.slot() !!!')
+
+
+# calculate a weighted average of some propery over a slab of soil
+slab <- c(100,150)
+soil.slot(sp1.sub, seg_vect=slab)$p.mean
+
+
 
 #
 # 1 standard usage, and plotting example

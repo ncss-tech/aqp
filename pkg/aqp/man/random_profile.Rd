@@ -7,15 +7,16 @@ Generate a random soil profile according to set criteria, with correlated depth 
 }
 \usage{
 random_profile(id, n = c(3, 4, 5, 6), min_thick = 5,
- max_thick = 30, n_prop = 5)
+ max_thick = 30, n_prop = 5, exact = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{id}{a character or numeric id used for this profile}
-  \item{n}{vector of possible number of horizons}
+  \item{n}{vector of possible number of horizons, or the exact number of horizons (see below)}
   \item{min_thick}{minimum thickness criteria for a simulated horizon}
   \item{max_thick}{maximum thickness criteria for a simulated horizon}
   \item{n_prop}{number of simulated soil properties (columns in the returned dataframe)}
+  \item{exact}{should the exact number of requested horizons be generated? (defaults to FALSE)}
 }
 
 \value{
@@ -32,24 +33,25 @@ library(aqp)
 # generate 10 random profiles with default settings:
 d <- ldply(1:10, random_profile)
 
+# add a fake color
+d$soil_color <- 'white'
+
 # convert to SoilProfileList object and plot
 d <- initProfileList(d)
 profile_plot(d)
 
-# convert to SoilProfileList and plot
-# add a fake color
-d$soil_color <- 'white'
-
 # if the plotrix package is installed, 
 # make a more interesting color based on the first property
 if(require(plotrix))
+	{
+	d <- ldply(1:10, random_profile)
 	d$soil_color <- color.scale(d$p1, c(0,1,1),c(1,1,0),0)
+	d <- initProfileList(d)
+	profile_plot(d)
+	}
 
-# convert to SoilProfileList object		
-d <- initProfileList(d)
-profile_plot(d)
 
-
+#
 # simple cluster analysis:
 d <- ldply(1:10, random_profile)
 p <- profile_compare(d, vars=c('p1','p2','p3'), max_d=50, k=0)

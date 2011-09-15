@@ -2,51 +2,24 @@
 ## slotting functions ##
 ##############################################################
 
-
-## TODO: seg_vect does not work
 # input dataframe must have an id column identifing each profile
 # note: this only works with numeric variables
-soil.slot.multiple <- function(data, g, vars, seg_size=1, strict=FALSE, user.fun=NULL)
+soil.slot.multiple <- function(data, g, vars, ...)
 	{
-	# check for dependencies
-	if(!require(plyr) | !require(reshape))
-		stop('Please install the "plyr" and "reshape" packages.')
 		
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('This function can only accept integer horizon depths')
 	
-	## TODO: is there a better way to do this?
-	# capture arguments
-	ss <- seg_size
-	s <- strict
-	uf <- user.fun
-	
-	# convert into long forma
+	# convert into long format
 	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
+	# temp hack: make a column called 'prop' ... as soil.slot is expecting this!
+	d.long$prop <- d.long$value
+	
 	# apply slotting group-wise and return in long format
-	# note that we are passing in additional arguments to soil.slot 
-	# from the calling function
-	d.slotted <- ddply(d.long, .(variable), .progress='text', .fun=function(i, groups=g, seg_size=ss, strict=s, user.fun=uf) {
-		
-		# subset just the relevant columns
-		i.sub <- data.frame(
-			id=i$id, 
-			top=i$top, 
-			bottom=i$bottom, 
-			prop=i$value,
-			groups=i[, groups]
-			)
-		
-		## TODO: allow for seg_vect or seg_size	
-		## currently only one or the other is supported
-		# apply slotting according to grouping factor
-    ## TODO: does this function find the forwach backend?
-		i.slotted <- ddply(i.sub, .(groups), .fun=soil.slot, seg_size=seg_size, strict=strict, user.fun=uf, .parallel=getOption('AQP_parallel', default=FALSE))
-		
-		return(i.slotted)
-		})
+	# note '...' is gobbled by soil.slot()
+	d.slotted <- ddply(d.long, .variables=c('variable', g), .progress='text', .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
 		
 	# convert tops and bottoms to integers
 	d.slotted$top <- as.integer(d.slotted$top)
@@ -254,7 +227,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	
 
 	#################################################################################
-	##### Step 1: unroll profiles in the collection
+	##### Step 1: unroll profiles in the collection: result is a list
 	#################################################################################
 	x.unrolled <- dlply(data, .(id), .fun=function(i, m=max_d) 
 		{
@@ -321,10 +294,33 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	if(!missing(seg_size) | !missing(seg_vect))
 		{
 				
-		# use a user-defined segmenting vector, starting from 0
+		# use a user-defined segmenting vector
 		if(!missing(seg_vect))
 			{
-			wind.idx <- rep(seg_vect[-1], diff(seg_vect))[1:max_d]
+			# if seg_vect starts with 0: simple case
+			if(seg_vect[1] == 0)
+				wind.idx <- rep(seg_vect[-1], times=diff(seg_vect))[1:max_d]
+			
+			# user only cares about some slab of soil  > 0 and < max_depth
+			# should only be a seg_vect of length 2
+			else
+				{
+				if(length(seg_vect) != 2)
+					stop('seg_vect must either start from 0, or contain two values between 0 and the soil depth')
+				
+				# obvious
+				slab.thickness <- diff(seg_vect)
+				# how many slices of NA before the slab?
+				padding.before <- rep(NA, times=seg_vect[1])
+				# how many slices of NA afer the slab
+				padding.after <- rep(NA, times=max_d - seg_vect[2])
+				# make a new label for the slab
+				new.label <- paste(seg_vect, collapse='-')
+				# generate and index for the slab
+				slab.idx <- rep(new.label, times=slab.thickness)
+				# generate the entire index: padding+slab+padding = total number of slices (max_d)
+				wind.idx <- c(padding.before, slab.idx, padding.after)
+				}
 			}
 			
 		# using a fixed-interval segmenting vector
