@@ -3,10 +3,23 @@
 ##############################################################
 
 # input dataframe must have an id column identifing each profile
-# note: this only works with numeric variables
-soil.slot.multiple <- function(data, g, vars, ...)
+soil.slot.multiple <- function(data, fm, ...)
 	{
-		
+	# sanity check:
+	if(! inherits(fm, "formula"))
+		stop('must provide a valid formula: groups ~ var1 + var2 + ...')
+	  
+	# extract components of the formula:
+	g <- all.vars(update(fm, .~0)) # left-hand side
+	vars <- all.vars(update(fm, 0~.)) # right-hand side
+	
+	# check for bogus left/right side problems with the formula
+	if(g == '.' | any(g %in% names(sp3)) == FALSE) # missing group on left-hand side
+		stop('group name either missing from formula, or does match any columns in dataframe')
+	
+	if(any(vars %in% names(sp3)) == FALSE) # bogus column names in right-hand side
+		stop('column names in formula do not match column names in dataframe')
+	
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('This function can only accept integer horizon depths')
@@ -14,6 +27,7 @@ soil.slot.multiple <- function(data, g, vars, ...)
 	# convert into long format
 	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
+	## TODO work on fixing this
 	# temp hack: make a column called 'prop' ... as soil.slot is expecting this!
 	d.long$prop <- d.long$value
 	

@@ -8,12 +8,11 @@ Multivariate Soil Profile Slotting
 Align several soil properties to a user-defined basis, with data returned in long format.
 }
 \usage{
-soil.slot.multiple(data, g, vars, ...)
+soil.slot.multiple(data, fm, ...)
 }
 \arguments{
   \item{data}{an input dataframe with 'id' column defining soil profiles, horizon depths must be integers}
-  \item{g}{a character vector of length=1 naming the column from the input dataframe that contains group labels}
-  \item{vars}{a character vector with names of columns from the input dataframe that will be aggregated}
+  \item{fm}{a formula in the form: groups ~ var1 + var2 + var3 + ...}
   \item{...}{further arguments passed onto \code{\link{soil.slot}}}
 }
 \details{
@@ -44,7 +43,7 @@ sp3$group <- factor(sp3$group)
 # slot several variables at once
 # within each level of 'group'
 # using default parameters to soil.slot()
-a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'))
+a <- soil.slot.multiple(sp3, fm=group ~ L + A + B)
 
 # pre-compute intervals
 a$upper <- with(a, p.mean + p.sd)
@@ -65,13 +64,13 @@ a.wide <- cast(a, group + top + bottom ~ variable, value=c('p.mean'))
 
 
 ## again, this time for a user-defined slab from 40-60 cm
-a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'), seg_vect=c(40,60))
+a <- soil.slot.multiple(sp3, fm=group ~ L + A + B, seg_vect=c(40,60))
 
 # now we have weighted average properties (within the defined slab) for each variable, and each group
 (a.wide <- cast(a, group + top + bottom ~ variable, value=c('p.mean')))
 
 ## this time, compute the weighted mean of selected properties, by profile ID
-a <- soil.slot.multiple(sp3, g='id', vars=c('L','A', 'B'), seg_vect=c(40,60))
+a <- soil.slot.multiple(sp3, fm=id ~ L + A + B, seg_vect=c(40,60))
 (a.wide <- cast(a, id + top + bottom ~ variable, value=c('p.mean')))
 
 
@@ -86,7 +85,7 @@ w <- startWorkers(workerCount=2, FORCE=TRUE)
 registerDoSMP(w)
 
 # run in parallel
-a <- soil.slot.multiple(sp3, g='group', vars=c('L','A', 'B'), seg_size=5)
+a <- soil.slot.multiple(sp3, fm=group ~ L + A + B, seg_size=5)
 
 # stop workers (critical!)
 stopWorkers(w)
