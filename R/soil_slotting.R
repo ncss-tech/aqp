@@ -14,10 +14,10 @@ soil.slot.multiple <- function(data, fm, ...)
 	vars <- all.vars(update(fm, 0~.)) # right-hand side
 	
 	# check for bogus left/right side problems with the formula
-	if(g == '.' | any(g %in% names(sp3)) == FALSE) # missing group on left-hand side
+	if(g == '.' | any(g %in% names(data)) == FALSE) # missing group on left-hand side
 		stop('group name either missing from formula, or does match any columns in dataframe')
 	
-	if(any(vars %in% names(sp3)) == FALSE) # bogus column names in right-hand side
+	if(any(vars %in% names(data)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match column names in dataframe')
 	
 	# currently this will only work with integer depths
