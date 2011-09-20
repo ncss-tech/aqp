@@ -1,3 +1,4 @@
+## TODO: convert this to S4 SoilProfileCollection
 # generate a soil profile figure, from a generic dataframe
 # using top and bottom boundaries, annotating with name
 # optionally color with vector that is the same length as number of horizons
