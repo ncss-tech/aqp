@@ -127,16 +127,15 @@ setReplaceMethod("site", "SoilProfileCollection",
 
 
 
-
-##
-## initialize spatial data
-##
-
-
-
 ##
 ## horizon data replacement
 ##
+## horizons<- setter method
+##
+if (!isGeneric('horizons<-'))
+  setGeneric('horizons<-', function(object, value) 
+    standardGeneric('horizons<-'))
+
 setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
   # testing the class of the horizon data to add to the object
@@ -161,4 +160,9 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   return(object)
   }
 )
+
+
+##
+## initialize spatial data
+##
 
