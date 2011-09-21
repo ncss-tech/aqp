@@ -112,7 +112,7 @@ setMethod("profile_plot", "SoilProfileCollection",
 	
 	# axis:
 	depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
-	depth_axis_labels <- paste(depth_axis_intervals, units(sp1))
+	depth_axis_labels <- paste(depth_axis_intervals, units(object))
 	axis(side=4, line=-2.5, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
 	
 	}

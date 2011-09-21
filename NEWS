@@ -1,3 +1,10 @@
+-------------------------- aqp 0.99-8.2 (2011-09-21) --------------------------
+* added S4 class/methods for `SoilProfileCollection`
+  - this supercedes the (now removed) S3 `SoilProfileList` classes
+  - basic accessors/settors are in place, subject to change
+* profile_plot() now uses the `SoilProfileCollection` class
+! expect some tumultous times ahead in the API... should be ironed out by 1.0 release
+
 -------------------------- aqp 0.99-8 (2011-09-14) --------------------------
 * soil.slot() will now accept boundaries defining a 'slab' over which aggregates are computed
 * soil.slot.multiple() now cleanly wraps soil.slot(), accepting all arguments

@@ -1,6 +1,7 @@
 \name{profile_plot.default}
 \Rdversion{1.1}
 \alias{profile_plot}
+\alias{profile_plot.default}
 \alias{profile_plot.SoilProfileCollection}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
