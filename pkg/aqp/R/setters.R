@@ -158,7 +158,7 @@ setReplaceMethod("site", "SoilProfileCollection",
   idx <- match(names_attr, names(horizons(object)))
   # remove the index to the ID columnm, as we do not want to remove this from
   # the horizon data !
-  idx <- idx[-match(idname(sp1), names_attr)]
+  idx <- idx[-match(idname(object), names_attr)]
   
   # this seems to work fine in all cases, as we keep the ID column
   site_data <- ddply(mf, idname(object), 

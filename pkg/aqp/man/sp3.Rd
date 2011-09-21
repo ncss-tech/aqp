@@ -81,8 +81,6 @@ sp3.grouped$soil_color <- with(sp3.grouped, hsv(h, s, v))
 sp3.grouped$name <- paste(round(sp3.grouped$clay), '/' , 
 round(sp3.grouped$cec), '/', round(sp3.grouped$ph,1))
 
-# make SoilProfileList object for plotting
-sp3.list <- initProfileList(sp3.grouped)
 
 
 ## perform comparison, and convert to phylo class object
@@ -99,9 +97,13 @@ plot_distance_graph(d, 12)
 round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
 
 ## make dendrogram + soil profiles
+# first promote to SoilProfileCollection
+depths(sp3.grouped) <- id ~ top + bottom
+
+# setup plot
 par(mar=c(1,1,1,1))
 p.plot <- plot(p, cex=0.8, label.offset=3, direction='up', y.lim=c(120,-2), 
-x.lim=c(1.25,sp3.list$num_profiles+1), show.tip.label=FALSE)
+x.lim=c(1.25,length(sp3.grouped)+1), show.tip.label=FALSE)
 
 # get the last plot geometry
 lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
@@ -114,9 +116,9 @@ function(i) which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
 
 # plot the profiles, in the ordering defined by the dendrogram
 # with a couple fudge factors to make them fit
-profile_plot(sp3.list, color="soil_color", plot.order=new_order,
+profile_plot(sp3.grouped, color="soil_color", plot.order=new_order,
 scaling.factor=0.35, width=0.1, cex.names=0.5,
-y.offset=max(lastPP$yy)+5, add=TRUE)
+y.offset=max(lastPP$yy)+6, add=TRUE)
 }
 
 \keyword{datasets}

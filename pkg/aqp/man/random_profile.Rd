@@ -36,8 +36,8 @@ d <- ldply(1:10, random_profile)
 # add a fake color
 d$soil_color <- 'white'
 
-# convert to SoilProfileList object and plot
-d <- initProfileList(d)
+# promote to SoilProfileCollection and plot
+depths(d) <- id ~ top + bottom
 profile_plot(d)
 
 # if the plotrix package is installed, 
@@ -46,7 +46,7 @@ if(require(plotrix))
 	{
 	d <- ldply(1:10, random_profile)
 	d$soil_color <- color.scale(d$p1, c(0,1,1),c(1,1,0),0)
-	d <- initProfileList(d)
+	depths(d) <- id ~ top + bottom
 	profile_plot(d)
 	}
 

@@ -39,20 +39,21 @@ Busacca, Alan J.; Singer, Michael J.; Verosub, Kenneth L. 1989. Late Cenozoic st
 \examples{
 data(sp2)
 
-# convert into SoilProfileList and plot
+# convert into SoilProfileCollection and plot
 # plotting order, based on the dated surface each soil was described on
 p.surface <- as.numeric(aggregate(sp2$surface, by=list(sp2$id), unique)$x)
 p.order <- order(p.surface)
 
-sp2.list <- initProfileList(sp2)
-profile_plot(sp2.list, plot.order=p.order)
+depths(sp2) <- id ~ top + bottom
+units(sp2) <- 'cm'
+profile_plot(sp2, plot.order=p.order)
 
-# truncate plot to 200 cm depth
-profile_plot(sp2.list, plot.order=p.order, max.depth=200)
+# truncate plot to 200 cm depth, that looks better
+profile_plot(sp2, plot.order=p.order, max.depth=200)
 
 
 # look at numerical distances between profiles
-# warning messages are harmless
+data(sp2)
 d <- profile_compare(sp2, vars=c('prop','field_ph','hue','value'), 
 max_d=100, k=0.01, sample_interval=5)
 
