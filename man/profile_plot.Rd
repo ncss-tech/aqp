@@ -1,8 +1,7 @@
 \name{profile_plot.default}
 \Rdversion{1.1}
 \alias{profile_plot}
-\alias{profile_plot.default}
-\alias{profile_plot.SoilProfileList}
+\alias{profile_plot.SoilProfileCollection}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Profile Plot
@@ -12,16 +11,17 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }
 \usage{
 
-\method{profile_plot}{SoilProfileList}(d, color='soil_color', width=0.2, name='name', 
-cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
-print.id=TRUE, id.style='top', plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, 
-max.depth=d$max_depth, n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3,
+\method{profile_plot}{SoilProfileCollection}(object, color='soil_color', 
+width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, 
+cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', 
+plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, 
+max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, 
 abbr=FALSE, abbr.cutoff=5, \dots)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{d}{a SoilProfileList object}
+  \item{object}{a SoilProfileCollection object}
   \item{color}{the name of the column containing R-compatible color descriptions}
   \item{width}{scaling of profile widths}
   \item{name}{the name of the column containing the horizon designation}
@@ -53,7 +53,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{initProfileList}, \link{pretty}}
+\code{\link{depths}, \link{pretty}}
 }
 \examples{
 library(aqp)
@@ -62,14 +62,15 @@ data(sp1)
 # add color vector
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
-# convert to SoilPofileList class object
-sp1.list <- initProfileList(sp1)
+# promote to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+units(sp1) <- 'cm'
 
 # plot profiles
-profile_plot(sp1.list)
+profile_plot(sp1)
 
 # plot profiles, using alternate profile ID label style
-profile_plot(sp1.list, id.style='side')
+profile_plot(sp1, id.style='side')
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
