@@ -113,7 +113,7 @@ setMethod(f='units', signature='SoilProfileCollection',
 	u <- as.character(metadata(object)[['units']])
 	  # give a warning if not defined
 	if(u == '')
-	  warning('depth units have not yet been defined', call.=FALSE)
+	  message('Note: depth units have not yet been defined.')
 	
 	return(u)
   }

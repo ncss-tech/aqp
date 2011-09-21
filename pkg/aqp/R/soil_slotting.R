@@ -222,7 +222,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# if we have a character, then convert to factor
 	if(prop.class == 'character')
 		{
-		cat('notice: converting to categorical variable to factor \n')
+		message('Note: converting to categorical variable to factor.')
 		data$prop <- factor(data$prop)
 		}
 	
@@ -274,7 +274,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# weights
 	if(use.wts == TRUE)
 		{
-		cat('notice: profile weights are still experimental, use with caution!\n')
+		message('Note: profile weights are still experimental, use with caution!')
 		
 		# unroll a weight vector for each pedon
 		x.unrolled.wts <- by(data, data$id, function(i, m=max_d) unroll(top=i$top, bottom=i$bottom, prop=i$wt, max_depth=m))
@@ -380,7 +380,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 				{
 				seg_vect_legal_idx <- which( (seg_vect - max_d) <= 0)
 				sv_clean <- c(seg_vect[seg_vect_legal_idx], max_d)
-				cat(paste('notice: truncating requested lower segment (', max.seg_vect, ') to max profile depth (', max_d, ')\n', sep=''))
+				cat(paste('Note: truncating requested lower segment (', max.seg_vect, ') to max profile depth (', max_d, '). \n', sep=''))
 				}
 				
 			# the actual depth may be more than, or equal to, the deepest requested segment
