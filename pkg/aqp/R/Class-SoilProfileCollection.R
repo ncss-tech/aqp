@@ -13,7 +13,7 @@ setClass(
     idcol='id',
     idcol='top',
     idcol='bottom',
-    metadata=data.frame(),
+    metadata=data.frame(stringsAsFactors=FALSE), # default units are unkown
     horizons=data.frame(),
     site=data.frame(),
     sp=SpatialPoints(matrix(c(1,1), nrow=1))
