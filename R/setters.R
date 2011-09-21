@@ -1,4 +1,54 @@
 ##
+## initialize metadata: object modification in-place
+##
+if (!isGeneric('metadata<-'))
+  setGeneric('metadata<-', function(object, value) 
+    standardGeneric('metadata<-'))
+    
+setReplaceMethod("metadata", "SoilProfileCollection",
+  function(object, value) {
+	
+	# quick sanity check
+	if(nrow(value) > 1 | nrow(value) < 1)
+	  stop("metadata should be a 1-row data frame")
+	
+	# otherwise assign
+	object@metadata <- value
+	
+	# done
+	return(object)
+	}   
+)
+
+##
+## initialize units: object modification in-place, units stored in @metadata
+##
+if (!isGeneric('units<-'))
+  setGeneric('units<-', function(object, value) 
+    standardGeneric('units<-'))
+    
+setReplaceMethod("units", "SoilProfileCollection",
+  function(object, value) {
+	
+	# quick sanity check: character, length 1
+	
+	# keep existing metadata
+	md <- metadata(object)
+	
+	# default units are always in metadata
+	# replace what ever is there
+	md[['units']] <- value
+	
+	# replace metadata
+	metadata(object) <- md
+	
+	# done
+	return(object)
+	}   
+)
+
+
+##
 ## depths<- setter method - to create AQP objects
 ##
 if (!isGeneric('depths<-'))
@@ -20,9 +70,15 @@ setReplaceMethod("depths", "data.frame",
       else
 	stop('invalid initialization for SoilProfile object')
     }
+    
+    # add default metadata
+    metadata(res) <- data.frame(units='', stringsAsFactors=FALSE)
+    
+    # done 
     return(res)
   }
 )
+
 
 ##
 ## initialize SP/SPC objects from a model.frame
@@ -126,7 +182,6 @@ setReplaceMethod("site", "SoilProfileCollection",
 }
 
 
-
 ##
 ## horizon data replacement
 ##
@@ -160,6 +215,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   return(object)
   }
 )
+
 
 
 ##

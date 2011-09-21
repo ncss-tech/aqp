@@ -6,21 +6,38 @@
 
 
 # generic function prototype
-profile_plot <- function(...) UseMethod("profile_plot")
+if (!isGeneric("profile_plot"))
+    setGeneric("profile_plot", function(object, ...)
+      standardGeneric("profile_plot"))
+
+# function definition
+setMethod("profile_plot", "SoilProfileCollection",
+  function(object, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, ...) {
 	
+	# get horizons
+	h <- horizons(object)
 	
-# method for SoilProfileList class
-profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:d$num_profiles, add=FALSE, scaling.factor=1, y.offset=0, max.depth=d$max_depth, n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, ...)
-	{	
-		
-	# check for missing / bad soil color column
-	# hack: just check the first object in the list
-	if(! color %in% names(d$data[[1]]$data))
+	# get column names from horizon dataframe
+	nm <- names(h)
+	
+	# get number of profiles
+	n <- length(object)
+	
+	# get top/bottom column names
+	IDcol <- idname(object)
+	tcol <- object@topcol
+	bcol <- object@bottomcol
+	
+	# get profile IDs
+	pIDs <- profile_id(object)
+	
+	# check soil color column name
+	if(! color %in% nm)
 		{
 		stop(paste('Invalid soil color column:', color))
 		}
-	
-	if(! name %in% names(d$data[[1]]$data))
+	# check horizon name column
+	if(! name %in% nm)
 		{
 		stop(paste('Invalid horizon name column:', name))
 		}
@@ -37,20 +54,26 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, name=
 	
 	# init plotting region, unless we are appending to an existing plot
 	if(!add)
-		plot(0, 0, type='n', xlim=c(1, d$num_profiles+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE)
+		plot(0, 0, type='n', xlim=c(1, n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE)
+	
 	
 	# add horizons in specified order	
-	for(i in 1:d$num_profiles)
+	for(i in 1:n)
 		{
 		# convert linear sequence into plotting order
 		profile_i <- plot.order[i]
 		
+		# extract the current profile's horizon data
+		this_profile_id <- pIDs[profile_i]
+		this_profile_data <- h[h[IDcol] == this_profile_id, ]
+		
 		# generate rectangle geometry
-		y0 <- (d$data[[profile_i]][,'bottom'] * scaling.factor) + y.offset
-		y1 <- (d$data[[profile_i]][,'top'] * scaling.factor) + y.offset
+		# get vectors of horizon boundaries, and scale
+		y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
+		y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
 		
 		# make rectangles (horizons)
-		rect(i-width, y0, i + width, y1, col=d$data[[profile_i]][, color])
+		rect(i-width, y0, i + width, y1, col=this_profile_data[, color])
 	
 		# annotate with names
 		# first get the horizon mid-point
@@ -58,25 +81,25 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, name=
 		
 		# optionally shrink the size of names if they are longer than a given thresh
 		if(shrink) {
-			names.to.shrink <- which(nchar(d$data[[profile_i]][, name]) > shrink.cutoff)
-			cex.names.shrunk <- rep(cex.names, length(d$data[[profile_i]][, 'top']))
+			names.to.shrink <- which(nchar(this_profile_data[, name]) > shrink.cutoff)
+			cex.names.shrunk <- rep(cex.names, length(this_profile_data[, tcol]))
 			cex.names.shrunk[names.to.shrink] <- cex.names.shrunk[names.to.shrink] * 0.8
-			text(i + width, mid, d$data[[profile_i]][, name], pos=4, offset=0.1, cex=cex.names.shrunk)
+			text(i + width, mid, this_profile_data[, name], pos=4, offset=0.1, cex=cex.names.shrunk)
 			}
 		# standard printing of names, all at the same size
 		else
-			text(i + width, mid, d$data[[profile_i]][, name], pos=4, offset=0.1, cex=cex.names)		
+			text(i + width, mid, this_profile_data[, name], pos=4, offset=0.1, cex=cex.names)		
 		
 		# add the profile ID
 		if(print.id)
 		  {
-      # optionally abbreviate
+		  # optionally abbreviate
 		  if(abbr)
-        id.text <- abbreviate(as.character(d$data[[profile_i]]$id), abbr.cutoff)
+			id.text <- abbreviate(as.character(this_profile_id), abbr.cutoff)
       
       # no abbreviations of th ID
       else
-        id.text <- as.character(d$data[[profile_i]]$id)
+        id.text <- as.character(this_profile_id)
 		  
 		  # add the text: according to style
       if(id.style == 'top')
@@ -89,9 +112,10 @@ profile_plot.SoilProfileList <- function(d, color='soil_color', width=0.2, name=
 	
 	# axis:
 	depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
-	depth_axis_labels <- paste(depth_axis_intervals, d$depth_units)
+	depth_axis_labels <- paste(depth_axis_intervals, units(sp1))
 	axis(side=4, line=-2.5, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
-	}
 	
+	}
+  )
 	
 	

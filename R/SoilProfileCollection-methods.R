@@ -55,6 +55,7 @@ setMethod("idname", "SoilProfileCollection",
     return(object@idcol)
 )
 
+
 ## distinct profile IDs
 if (!isGeneric("profile_id"))
   setGeneric("profile_id", function(object, ...)
@@ -77,7 +78,6 @@ setMethod("site", "SoilProfileCollection",
   }
 )
 
-
 ## horizon data
 # returns a data.frame aggregating horizons data
 if (!isGeneric("horizons"))
@@ -87,6 +87,35 @@ if (!isGeneric("horizons"))
 setMethod(f='horizons', signature='SoilProfileCollection',
   function(object){
   return(object@horizons)
+  }
+)
+
+## metadata
+# returns a data.frame
+if (!isGeneric("metadata"))
+  setGeneric("metadata", function(object, ...)
+    standardGeneric("metadata"))
+
+setMethod(f='metadata', signature='SoilProfileCollection',
+  function(object){
+  return(object@metadata)
+  }
+)
+
+## units
+# returns a data.frame
+if (!isGeneric("units"))
+  setGeneric("units", function(object, ...)
+    standardGeneric("units"))
+
+setMethod(f='units', signature='SoilProfileCollection',
+  function(object){
+	u <- as.character(metadata(object)[['units']])
+	  # give a warning if not defined
+	if(u == '')
+	  warning('depth units have not yet been defined', call.=FALSE)
+	
+	return(u)
   }
 )
 
@@ -100,7 +129,7 @@ setMethod(f='horizons', signature='SoilProfileCollection',
 setMethod(f='min', signature='SoilProfileCollection',
 definition=function(x) {
   # compute depths by ID
-  d <- tapply(unlist(x@horizons[x@bottomcol]), unlist(x@horizons[[idname(x)]]), max, na.rm=TRUE)
+  d <- tapply(unlist(horizons(x)[x@bottomcol]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
   # return the shallowest depth
   return(min(d))
   }
@@ -110,7 +139,7 @@ definition=function(x) {
 setMethod(f='max', signature='SoilProfileCollection',
 definition=function(x){
   # compute depths by ID
-  d <- tapply(unlist(x@horizons[x@bottomcol]), unlist(x@horizons[[idname(x)]]), max, na.rm=TRUE)
+  d <- tapply(unlist(horizons(x)[x@bottomcol]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
   # return the deepest depth
   return(max(d))
   }
@@ -119,7 +148,7 @@ definition=function(x){
 # overload length() to give us the number of profiles in the collection
 setMethod(f='length', signature='SoilProfileCollection',
   definition=function(x){
-  l <- nrow(unique(x@horizons[[idname(x)]]))
+  l <- length(profile_id(x))
   return(l)
   }
 )
