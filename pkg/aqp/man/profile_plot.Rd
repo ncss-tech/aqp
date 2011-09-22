@@ -54,7 +54,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{depths}, \link{pretty}}
+\code{\link{SoilProfileCollection}, \link{depths<-}, \link{pretty}}
 }
 \examples{
 library(aqp)
