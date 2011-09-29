@@ -65,6 +65,21 @@ panel=panel.superpose, ylim=c(150,-5))
 lab.agg.cec_7 <- ddply(lab, .(pedon_id), 
 .fun=summarise, CEC_7=wtd.mean(CEC_7, weights=bottom-top))
 
-# do something with the aggregated data now...
+# 6. SoilProfileCollection Demo
+data(ca630)
+
+# combine site+horizon data into single DF
+ca <- join(ca630$lab, ca630$site)
+
+# promote to SoilProfileCollection
+depths(ca) <- pedon_id ~ top + bottom
+
+# extract site data
+site(ca) <- ~ mlra + ssa + lon + lat + user_pedon_id + control_sec_top + control_sec_bottom + series + soiltax
+
+# extract spatial data as SpatialPoints
+coordinates(ca) <- ~ lon + lat
+
+
 }
 \keyword{datasets}
