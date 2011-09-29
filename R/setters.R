@@ -222,3 +222,8 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 ## initialize spatial data
 ##
 
+# coordinates.SPC
+# proj4string.SPC
+# ... other SP-related overloads
+
+
