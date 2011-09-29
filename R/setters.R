@@ -86,8 +86,13 @@ setReplaceMethod("depths", "data.frame",
 .initSPCfromMF <- function(data, mf){
   # get column names containing id, top, bottom
   nm <- names(mf)
+  
+  # re-order data: IDs, top hz depths
+  new.order <- order(data[[nm[1]]], data[[nm[2]]])
+  
   # create object
-  res <- SoilProfileCollection(idcol=nm[1], topcol=nm[2], bottomcol=nm[3], horizons=data)
+  res <- SoilProfileCollection(idcol=nm[1], topcol=nm[2], bottomcol=nm[3], horizons=data[new.order, ])
+  
   # done
   return(res)
 }
@@ -104,9 +109,10 @@ setReplaceMethod("site", "SoilProfileCollection",
   function(object, value) {
 	# get the corresponding vector of IDs, will be used to compute distinct site attributes
     ids <- as.character(horizons(object)[[idname(object)]])
-  # creation of site data from horizon data
+	
+	# creation of site data from horizon data
     if (inherits(value, "formula")) {
-      mf <- model.frame(value, horizons(object))
+      mf <- model.frame(value, horizons(object), na.action=na.pass)
       nm <- names(mf)
       mf <- data.frame(ids, mf)
       names(mf) <- c(idname(object), nm)
@@ -161,6 +167,7 @@ setReplaceMethod("site", "SoilProfileCollection",
   idx <- idx[-match(idname(object), names_attr)]
   
   # this seems to work fine in all cases, as we keep the ID column
+  # and it ensures that the result is in the same order as the IDs
   site_data <- ddply(mf, idname(object), 
       .fun=function(x) {
 	df <- subset(x, select=names_attr)
@@ -208,8 +215,8 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
   	stop("there are IDs in the replacement that do not exist in the original data")
   
-  # replacement
-  object@horizons <- value
+  # replacement: order by IDs, then top horizon boundary
+  object@horizons <- value[order(value[[idname(object)]], value[[object@topcol]]), ]
   
   # done
   return(object)
@@ -221,9 +228,35 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 ##
 ## initialize spatial data
 ##
+setReplaceMethod("coordinates", "SoilProfileCollection",
+  function(object, value) {
+  
+  # basic sanity check... needs work
+  if(! inherits(value, "formula"))
+  	stop('invalid formula')
+  
+  # extract coordinates as matrix
+  mf <- data.matrix(model.frame(value, site(object), na.action=na.pass))
+  
+  # test for missing coordinates
+  mf.missing <- apply(mf, 2, is.na)
+  
+  if(any(mf.missing))
+	stop('cannot initialize a SpatialPoints object with missing coordinates')
+  
+  # assign to sp slot
+  # note that this will clobber any existing spatial data
+  object@sp <- SpatialPoints(coords=mf)
 
-# coordinates.SPC
+  # done
+  return(object)
+  }
+)
+
+
 # proj4string.SPC
+# spplot.SPC
+# 
 # ... other SP-related overloads
 
 

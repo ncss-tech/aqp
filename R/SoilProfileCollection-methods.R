@@ -66,6 +66,14 @@ setMethod("profile_id", "SoilProfileCollection",
     unique(as.character(horizons(object)[[idname(object)]]))
 )
 
+## for some reason this doesn't work... ?
+# ## spatial data: coordinates
+# setMethod("coordinates", "SoilProfileCollection",
+#   function(object) {
+#   return(sp::coordinates(object@sp))
+#   }
+# )
+
 ## site data
 if (!isGeneric("site"))
   setGeneric("site", function(object, ...)
@@ -182,6 +190,9 @@ setReplaceMethod("$", "SoilProfileCollection",
   }
 )
 
+##
+## TODO: this should return a SPDF when @sp is filled with real data
+##
 ## list/array style access
 setMethod("[[", c("SoilProfileCollection", "ANY", "missing"),
   function(x, i, j, ...) {
