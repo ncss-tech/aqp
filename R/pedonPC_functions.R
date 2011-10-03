@@ -75,6 +75,7 @@ get_site_data_from_pedon_db <- function(dsn)
   }
 
 
+# note that missing rock fragment data are converted to 0%
 get_hz_data_from_pedon_db <- function(dsn)
   {
   require(RODBC)
@@ -83,7 +84,8 @@ get_hz_data_from_pedon_db <- function(dsn)
   # RF calculation should be done in  a sub-query
   q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id,
   phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
-  phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, phfield, f.total_frags_pct
+  phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, phfield, 
+  IIF(IsNULL(f.total_frags_pct), 0, f.total_frags_pct) AS total_frags_pct
   FROM (
   (pedon INNER JOIN phorizon ON pedon.peiid = phorizon.peiidref) 
   LEFT OUTER JOIN (
@@ -93,11 +95,6 @@ get_hz_data_from_pedon_db <- function(dsn)
     ) as f on phorizon.phiid = f.phiidref
   )
   ORDER BY pedon.upedonid, phorizon.hzdept ASC ;"
-  
-  # Sum(phfrags.fragvol)  AS 
-# FROM (pedon INNER JOIN phorizon ON (pedon.pedbsidref = phorizon.pedbsidref) AND (pedon.peiid = phorizon.peiidref)) LEFT OUTER JOIN phfrags ON (phorizon.pedbsidref = phfrags.pedbsidref) AND (phorizon.phiid = phfrags.phiidref)
-# GROUP BY pedon.upedonid, phorizon.phiid, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb, phorizon.claytotest, phorizon.silttotest, phorizon.sandtotest, phfield
-
   
   # setup connection to our pedon database
   channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
