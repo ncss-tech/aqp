@@ -14,7 +14,7 @@ get_hz_data_from_pedon_db(dsn)
 \value{A dataframe.}
 \references{}
 \author{Dylan E. Beaudette and Jay Skovlin}
-\note{}
+\note{NULL total rock fragment values are assumed to represent an _absense_ of rock fragments, and set to 0.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
