@@ -1,11 +1,13 @@
 
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
-panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, ...) {
+panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, ...) {
 
 # add grid
 panel.grid(h=-1, v=-1, lty=3, col=1)
 
+# load current line style
+superpose.line <- trellis.par.get("superpose.line")
 
 # TODO: add uncertainty viz.
 # when the length of 'y' is > 'x', we are plotting a step function
@@ -43,7 +45,7 @@ else
 			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
 			# levels in the groups, for color matching
 			ll <- levels(d$groups)
-			n_groups = length(ll)
+			n_groups <- length(ll)
 			}
 		
 		# no grouping, add a fake group for compatiblity
@@ -52,18 +54,26 @@ else
 			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
 			# levels in the groups, for color matching
 			ll <- levels(d$groups)
-			n_groups = length(ll)
+			n_groups <- length(ll)
 			}
 		
-		
+    # optionally sync region + main line colors
+    if(sync.colors)
+      region.col <- rep(superpose.line$col, length.out=n_groups)
+    else
+      region.col <- rep(grey(0.7), length.out=n_groups)
+      
 		# add conf. intervals / aggregation uncertainty
 		by(d, d$groups, function(d_i) 
 			{
+      # lookup color
+  	  m <- match(unique(d_i$group), ll)
+      
 			# cannot have NA in values that define polygon boundaries
 			d_i <- subset(d_i, subset=is.na(d_i$upper) == FALSE & is.na(d_i$lower) == FALSE)
 			
 			# make conf.int polygon
-			panel.polygon(x=c(d_i$lower, rev(d_i$upper)), y=c(d_i$top, rev(d_i$top)), col=grey(0.7), border=NA, ...)
+			panel.polygon(x=c(d_i$lower, rev(d_i$upper)), y=c(d_i$top, rev(d_i$top)), col=region.col[m], border=NA, ...)
 			})
 		}
 	# no upper, lower bounds
@@ -72,15 +82,14 @@ else
 		d <- data.frame(yhat=x, top=y, groups=groups[subscripts])
 		# levels in the groups, for color matching
 		ll <- levels(d$groups)	
-		n_groups = length(ll)
+		n_groups <- length(ll)
 		}
 	
 	
-	# load current line style
-    superpose.line <- trellis.par.get("superpose.line")
-    
-    # repeat enough times for the current number of groups
-    line.col <- rep(superpose.line$col, length.out=n_groups)
+	
+  # setup style parameters for main lines 
+  # repeat enough times for the current number of groups
+  line.col <- rep(superpose.line$col, length.out=n_groups)
 	line.lty <- rep(superpose.line$lty, length.out=n_groups)
 	line.lwd <- rep(superpose.line$lwd, length.out=n_groups)
 	
