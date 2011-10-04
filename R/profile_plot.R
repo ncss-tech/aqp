@@ -49,12 +49,12 @@ setMethod("profile_plot", "SoilProfileCollection",
 	# pre-compute nice range for depth axis, also used for plot init
 	depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
 	
-	# set margins... consider moving outside of function
-	par(mar=c(0.5,1,0,1))
-	
 	# init plotting region, unless we are appending to an existing plot
 	if(!add)
+	  {
+    par(mar=c(0.5,1,0,1))
 		plot(0, 0, type='n', xlim=c(1, n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE)
+	  }
 	
 	
 	# add horizons in specified order	
