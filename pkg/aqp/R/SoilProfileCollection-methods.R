@@ -27,8 +27,8 @@ setMethod(
 
 	# in the presence of site data
     if (nrow(site(object)) > 0) {
-      cat("\nSampling sites attributes:\n")
-      print(site(object))
+      cat("\nSampling site attributes:\n")
+      print(head(site(object)))
     }
   }
 )

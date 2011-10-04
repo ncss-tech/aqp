@@ -2,9 +2,35 @@
 ## slotting functions ##
 ##############################################################
 
-# input dataframe must have an id column identifing each profile
-soil.slot.multiple <- function(data, fm, ...)
-	{
+# setup generic function
+if (!isGeneric("soil.slot.multiple"))
+  setGeneric("soil.slot.multiple", function(data, fm, ...)
+    standardGeneric("soil.slot.multiple"))
+
+# temp interface to SPC class objects
+setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
+  function(data, fm, ...){
+  
+  # extract horizons and site, then join together
+  h <- horizons(data)
+  s <- site(data)
+  h <- join(h, s)
+          
+  # add old-style, hard-coded {id, top, bottom} column names        
+  h$id <- h[[idname(data)]]
+  h$top <- h[[data@topcol]]
+  h$bottom <- h[[data@bottomcol]]
+  
+  res <- soil.slot.multiple(h, fm, ...)
+  return(res)
+  }
+)
+
+
+# current interface to data.frame objects
+setMethod(f='soil.slot.multiple', signature='data.frame',
+definition=function(data, fm, ...) {
+  
 	# sanity check:
 	if(! inherits(fm, "formula"))
 		stop('must provide a valid formula: groups ~ var1 + var2 + ...')
@@ -42,9 +68,7 @@ soil.slot.multiple <- function(data, fm, ...)
 	# done
 	return(d.slotted)
 	}	
-
-
-
+)
 
 ## 
 ## calculation of segment-wise summary statistics
