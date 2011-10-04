@@ -71,8 +71,8 @@ setReplaceMethod("depths", "data.frame",
 	stop('invalid initialization for SoilProfile object')
     }
     
-    # add default metadata
-    metadata(res) <- data.frame(units='', stringsAsFactors=FALSE)
+    # add default metadata: depths are cm
+    metadata(res) <- data.frame(units='cm', stringsAsFactors=FALSE)
     
     # done 
     return(res)
@@ -170,9 +170,9 @@ setReplaceMethod("site", "SoilProfileCollection",
   # and it ensures that the result is in the same order as the IDs
   site_data <- ddply(mf, idname(object), 
       .fun=function(x) {
-	df <- subset(x, select=names_attr)
-	colwise(unique)(df)
-      })
+	      unique(x[, names_attr])
+      }
+  )
 
   # if site data is already present in the object, we don't want to erase it
   if (length(site(object)) > 0)
@@ -254,9 +254,10 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 )
 
 
-# proj4string.SPC
-# spplot.SPC
-# 
-# ... other SP-related overloads
-
-
+# # proj4string
+# setReplaceMethod("proj4string", "SoilProfileCollection",
+#   function(object, value) {
+#   proj4string(object@sp) <- value
+#     
+#   }
+# )
