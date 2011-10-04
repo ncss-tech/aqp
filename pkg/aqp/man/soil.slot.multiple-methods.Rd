@@ -1,17 +1,29 @@
-\name{soil.slot.multiple}
-\Rdversion{1.1}
-\alias{soil.slot.multiple}
+\name{soil.slot.multiple-methods}
+\docType{methods}
+\alias{soil.slot.multiple-methods}
+\alias{soil.slot.multiple,data.frame-method}
+\alias{soil.slot.multiple,SoilProfileCollection-method}
+
 \title{
 Multivariate Soil Profile Slotting
 }
 \description{
 Align several soil properties to a user-defined basis, with data returned in long format.
 }
-\usage{
-soil.slot.multiple(data, fm, ...)
+
+\section{Methods}{
+\describe{
+
+\item{\code{signature(data = "data.frame")}}{
 }
+
+\item{\code{signature(data = "SoilProfileCollection")}}{
+}
+
+}}
+
 \arguments{
-  \item{data}{a dataframe with columns ('id', 'top', 'bottom'), or a SoilProfilecollection class object}
+  \item{data}{a dataframe with columns ('id', 'top', 'bottom')}
   \item{fm}{a formula in the form: groups ~ var1 + var2 + var3 + ...}
   \item{...}{further arguments passed onto \code{\link{soil.slot}}}
 }
@@ -21,6 +33,7 @@ This function is a wrapper to \code{\link{soil.slot}}, that makes it simpler to 
 \value{
 A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-slice information repeated for each requested input variable and group.
 }
+
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
 \note{
@@ -91,6 +104,6 @@ a <- soil.slot.multiple(sp3, fm=group ~ L + A + B, seg_size=5)
 stopWorkers(w)
 }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+
+\keyword{methods}
 \keyword{manip}

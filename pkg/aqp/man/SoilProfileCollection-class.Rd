@@ -1,0 +1,84 @@
+\name{SoilProfileCollection-class}
+\Rdversion{1.1}
+\docType{class}
+\alias{SoilProfileCollection-class}
+\alias{$,SoilProfileCollection-method}
+\alias{$<-,SoilProfileCollection-method}
+\alias{[[,SoilProfileCollection,ANY,missing-method}
+\alias{[[<-,SoilProfileCollection,ANY,missing-method}
+\alias{coordinates<-,SoilProfileCollection-method}
+\alias{horizons,SoilProfileCollection-method}
+\alias{horizons<-,SoilProfileCollection-method}
+\alias{idname,SoilProfileCollection-method}
+\alias{length,SoilProfileCollection-method}
+\alias{max,SoilProfileCollection-method}
+\alias{metadata,SoilProfileCollection-method}
+\alias{metadata<-,SoilProfileCollection-method}
+\alias{min,SoilProfileCollection-method}
+\alias{profile_id,SoilProfileCollection-method}
+\alias{profile_plot,SoilProfileCollection-method}
+\alias{show,SoilProfileCollection-method}
+\alias{site,SoilProfileCollection-method}
+\alias{site<-,SoilProfileCollection-method}
+\alias{soil.slot.multiple,SoilProfileCollection-method}
+\alias{units,SoilProfileCollection-method}
+\alias{units<-,SoilProfileCollection-method}
+
+\title{SoilProfileCollection Class}
+\description{Basic class for storing soil profile collections, associated site data, and metadata.}
+
+\section{Objects from the Class}{
+Objects can be created by calls of the form \code{new("SoilProfileCollection", ...)}.
+}
+\section{Slots}{
+  \describe{
+    \item{\code{idcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify profiles }
+    \item{\code{topcol}:}{Object of class \code{"character"} the name of the column with horizon top boundaries }
+    \item{\code{bottomcol}:}{Object of class \code{"character"} the name of the column with horizon bottom boundaries }
+    \item{\code{metadata}:}{Object of class \code{"data.frame"} a dataframe with horizon data, 1 or more rows per profile }
+    \item{\code{horizons}:}{Object of class \code{"data.frame"} a data frame with site data, 1 row per profile }
+    \item{\code{site}:}{Object of class \code{"data.frame"} a SpatialPoints class object, 1 row per profile }
+    \item{\code{sp}:}{Object of class \code{"SpatialPoints"} a 1-row dataframe with metadata such as depth units }
+  }
+}
+\section{Methods}{
+  \describe{
+    \item{$}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{$<-}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{[[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
+    \item{[[<-}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
+    \item{coordinates<-}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{horizons}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{horizons<-}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{idname}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{length}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{max}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{metadata}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{metadata<-}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{min}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{profile_id}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{profile_plot}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{show}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{site}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{site<-}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{soil.slot.multiple}{\code{signature(data = "SoilProfileCollection")}: ... }
+    \item{units}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{units<-}{\code{signature(object = "SoilProfileCollection")}: ... }
+	 }
+}
+\references{
+%%  ~~put references to the literature/web site here~~
+}
+\author{Pierre Roudier and Dylan E. Beaudette}
+\note{
+%%  ~~further notes~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{\link{profile_plot-methods}}
+\examples{
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+}
+\keyword{classes}
