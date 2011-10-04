@@ -1,25 +1,33 @@
-\name{profile_plot.default}
-\Rdversion{1.1}
-\alias{profile_plot}
-\alias{profile_plot.default}
-\alias{profile_plot.SoilProfileCollection}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\name{profile_plot-methods}
+\docType{methods}
+\alias{profile_plot-methods}
+\alias{profile_plot,SoilProfileCollection-method}
+
 \title{
 Profile Plot
 }
 \description{
 Generate a simple diagram of a soil profile, with annotated horizon names.
 }
-\usage{
 
-\method{profile_plot}{SoilProfileCollection}(object, color='soil_color', 
+\section{Methods}{
+\describe{
+
+\item{\code{signature(object = "SoilProfileCollection")}}{
+
+}
+}}
+
+\usage{
+profile_plot(object, color='soil_color', 
 width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, 
 cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', 
 plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, 
 max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, 
 abbr=FALSE, abbr.cutoff=5, \dots)
-
 }
+
+
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{a SoilProfileCollection object}
@@ -50,11 +58,12 @@ This function sets the margins before plotting, so previous calls to \code{par(m
 A new plot of soil profiles is generated, or optionally added to an existing plot.
 }
 
+
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{SoilProfileCollection}, \link{depths<-}, \link{pretty}}
+\code{\link{SoilProfileCollection-class}, \link{pretty}}
 }
 \examples{
 library(aqp)
@@ -74,7 +83,4 @@ profile_plot(sp1)
 profile_plot(sp1, id.style='side')
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{hplot}
 

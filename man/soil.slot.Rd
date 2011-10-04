@@ -81,7 +81,7 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{sp1}, \link{unroll}}, \code{\link{soil.slot.multiple}}
+\code{\link{sp1}, \link{unroll}}, \code{\link{soil.slot.multiple-methods}}
 }
 \examples{
 # setup environment
