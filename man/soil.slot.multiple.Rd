@@ -11,7 +11,7 @@ Align several soil properties to a user-defined basis, with data returned in lon
 soil.slot.multiple(data, fm, ...)
 }
 \arguments{
-  \item{data}{an input dataframe with 'id' column defining soil profiles, horizon depths must be integers}
+  \item{data}{a dataframe with columns ('id', 'top', 'bottom'), or a SoilProfilecollection class object}
   \item{fm}{a formula in the form: groups ~ var1 + var2 + var3 + ...}
   \item{...}{further arguments passed onto \code{\link{soil.slot}}}
 }
