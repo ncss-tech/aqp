@@ -114,7 +114,7 @@ setReplaceMethod("site", "SoilProfileCollection",
     if (inherits(value, "formula")) {
       mf <- model.frame(value, horizons(object), na.action=na.pass)
       nm <- names(mf)
-      mf <- data.frame(ids, mf)
+      mf <- data.frame(ids, mf, stringsAsFactors=FALSE) # don't automatically make strings into factors
       names(mf) <- c(idname(object), nm)
       res <- .createSiteFromHorizon(object, mf)
       # is this the best approach?
@@ -176,7 +176,7 @@ setReplaceMethod("site", "SoilProfileCollection",
 
   # if site data is already present in the object, we don't want to erase it
   if (length(site(object)) > 0)
-    site_data <- data.frame(site(object), site_data)
+    site_data <- data.frame(site(object), site_data, stringsAsFactors=FALSE)
 
   # remove the named site data from horizon_data
   horizons(object) <- horizons(object)[, -idx]
