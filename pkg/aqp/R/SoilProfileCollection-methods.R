@@ -1,4 +1,4 @@
-## init
+q## init
 "SoilProfileCollection" <- function(
 idcol='id',
 topcol='top',
@@ -166,27 +166,50 @@ setMethod(f='length', signature='SoilProfileCollection',
 # standard column access: search horizons, then site
 setMethod("$", "SoilProfileCollection",
   function(x, name) {
-    if (name %in% names(horizons(x)))
+	
+	# get names from site and hz data
+	s.names <- names(site(x))
+	h.names <- names(horizons(x))
+	
+	# when site data are initialized from an external DF, it is possible that
+	# there will be duplicate column names
+	if(name %in% h.names & name %in% s.names)
+		warning('column name is present in horizon and site data, extracting from horizon data only')
+	
+	# get column from horizon data
+    if (name %in% h.names)
       res <- horizons(x)[[name]]
+    
+    # otherwise check site data
     else
-      if (name %in% names(site(x)))
-	res <- site(x)[[name]]
-      else
-	res <- NULL
-    res
+      if (name %in% s.names)
+		res <- site(x)[[name]]
+	  
+	  # if still missing return NULL 
+	  else
+		res <- NULL
+	
+	return(res)
   }
 )
 
-## TODO: not sure about this
+
 ## TODO: this should check lengths 
 ## also: how can we create new columns ?
 setReplaceMethod("$", "SoilProfileCollection",
   function(x, name, value) {
-    if (name %in% names(horizons(x)))
-      horizons(x)[[name]] <- value
-    else
-      site(x)[[name]] <- value
-    x
+    if (name %in% names(horizons(x))) {
+      h <- horizons(x)
+      h[[name]] <- value
+      horizons(x) <- h
+      }
+    else {
+	  s <- site(x)
+      s[[name]] <- value
+      # TODO: site(x) <- should work, and does not
+      x@site <- s
+      }
+    return(x)
   }
 )
 
