@@ -16,7 +16,6 @@
 \alias{metadata<-,SoilProfileCollection-method}
 \alias{min,SoilProfileCollection-method}
 \alias{profile_id,SoilProfileCollection-method}
-\alias{profile_plot,SoilProfileCollection-method}
 \alias{show,SoilProfileCollection-method}
 \alias{site,SoilProfileCollection-method}
 \alias{site<-,SoilProfileCollection-method}
@@ -76,7 +75,6 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\link{profile_plot-methods}}
 \examples{
 data(sp1)
 depths(sp1) <- id ~ top + bottom
