@@ -1,7 +1,8 @@
 \name{profile_plot-methods}
 \docType{methods}
-\alias{profile_plot-methods}
-\alias{profile_plot,SoilProfileCollection-method}
+\alias{profile_plot}
+\alias{profile_plot.SoilProfileCollection}
+
 
 \title{
 Profile Plot
@@ -19,12 +20,11 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }}
 
 \usage{
-profile_plot(object, color='soil_color', 
-width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, 
-cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', 
-plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, 
-max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, 
-abbr=FALSE, abbr.cutoff=5, \dots)
+profile_plot.SoilProfileCollection(object, color='soil_color', width=0.2, name='name', 
+cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
+id.style='top', plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, 
+max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
+abbr.cutoff=5, \dots)
 }
 
 
@@ -74,7 +74,6 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
 # promote to SoilProfileCollection
 depths(sp1) <- id ~ top + bottom
-units(sp1) <- 'cm'
 
 # plot profiles
 profile_plot(sp1)
