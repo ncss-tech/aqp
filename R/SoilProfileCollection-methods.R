@@ -213,10 +213,53 @@ setReplaceMethod("$", "SoilProfileCollection",
   }
 )
 
+
+##
+## currently returns horizons indexed numerically... not that useful unless re-sampled
+##
+## matrix / DF style access: only to horizon data
+setMethod("[", "SoilProfileCollection",
+  function(x, i, j , ...) {
+    
+    # convert to integer
+    i <- as.integer(i)
+    
+    # sanity check
+    if(!missing(j))
+      warning('j index ignored for now')
+    
+    if(any(is.na(i)))
+      stop('NA not permitted in horizon index')
+    
+    # extract horizons
+    h <- horizons(x)
+    
+    # subset data based on i
+    h.sub <- ddply(h, idname(x), .fun=function(y) y[i, ])
+    
+    # if there is REAL data in @sp, return a SPDF
+    # for now test for our custom dummy SP obj: number of coordinates == number of profiles
+    if(nrow(coordinates(x@sp)) == length(x)) {
+      # combine with coordinates
+      res <- SpatialPointsDataFrame(x@sp, data=h.sub)
+    }
+    
+    # no coordinates, return a DF
+    else {
+      # format result
+      res <- h.sub
+    }
+    
+  # done  
+  return(res)
+  }
+)
+
+
 ##
 ## TODO: this should return a SPDF when @sp is filled with real data
 ##
-## list/array style access
+## list / array style access
 setMethod("[[", c("SoilProfileCollection", "ANY", "missing"),
   function(x, i, j, ...) {
     if (i %in% names(horizons(x)))
