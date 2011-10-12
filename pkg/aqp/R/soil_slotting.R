@@ -14,7 +14,7 @@ setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
   # extract horizons and site, then join together
   h <- horizons(data)
   s <- site(data)
-  h <- join(h, s)
+  h <- join(h, s, type='left')
           
   # add old-style, hard-coded {id, top, bottom} column names        
   h$id <- h[[idname(data)]]
@@ -22,6 +22,9 @@ setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
   h$bottom <- h[[data@bottomcol]]
   
   res <- soil.slot.multiple(h, fm, ...)
+  
+  # currently sends back a DF,
+  # we should send back an SPC object with original format...
   return(res)
   }
 )
