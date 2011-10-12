@@ -221,12 +221,14 @@ setMethod("[[", c("SoilProfileCollection", "ANY", "missing"),
   function(x, i, j, ...) {
     if (i %in% names(horizons(x)))
       res <- horizons(x)[[i]]
-    else
+    else {
       if (i %in% names(site(x)))
-	res <- site(x)[[i]]
+	      res <- site(x)[[i]]
       else
-	res <- NULL
-    res
+	      res <- NULL
+    }
+    
+  return(res)
   }
 )
 
@@ -237,13 +239,18 @@ setReplaceMethod("[[", c("SoilProfileCollection", "ANY", "missing", "ANY"),
       horizons(x)[[i]] <- value
     else
       site(x)[[i]] <- value
-    x
+    
+    return(x)
   }
 )
 
+
+## column names
 ## TODO: should this return a named list?
-# getting names
-names.SoilProfileCollection <- function(x) c(names(horizons(x)), names(site(x)))
+setMethod("names", "SoilProfileCollection",
+  function(x) {
+  res <- c(names(horizons(x)), names(site(x)))
+  return(res)
+  }
 
-
-
+)

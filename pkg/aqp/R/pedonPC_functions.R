@@ -158,8 +158,8 @@ ORDER BY pedon.upedonid, phiidref, colormoistst;"
   
   # mix and clean colors
   cat('mixing and cleaning colors ...\n')
-  dry.colors.final <- ddply(dry.colors, .(pedon_id, hz_id), mix_and_clean_colors, .progress='text')
-  moist.colors.final <- ddply(moist.colors, .(pedon_id, hz_id), mix_and_clean_colors, .progress='text')
+  dry.colors.final <- ddply(dry.colors, c('pedon_id', 'hz_id'), mix_and_clean_colors, .progress='text')
+  moist.colors.final <- ddply(moist.colors, c('pedon_id', 'hz_id'), mix_and_clean_colors, .progress='text')
 
   # rename columns
   names(dry.colors.final) <- c('pedon_id','hz_id','d_r','d_g','d_b')

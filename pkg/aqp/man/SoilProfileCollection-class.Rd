@@ -2,26 +2,29 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SoilProfileCollection-class}
+\alias{SoilProfileCollection}
+\alias{depths<-}
 \alias{$,SoilProfileCollection-method}
 \alias{$<-,SoilProfileCollection-method}
 \alias{[[,SoilProfileCollection,ANY,missing-method}
 \alias{[[<-,SoilProfileCollection,ANY,missing-method}
 \alias{coordinates<-,SoilProfileCollection-method}
-\alias{horizons,SoilProfileCollection-method}
-\alias{horizons<-,SoilProfileCollection-method}
-\alias{idname,SoilProfileCollection-method}
+\alias{horizons}
+\alias{horizons<-}
+\alias{idname}
+\alias{names,SoilProfileCollection-method}
 \alias{length,SoilProfileCollection-method}
 \alias{max,SoilProfileCollection-method}
-\alias{metadata,SoilProfileCollection-method}
-\alias{metadata<-,SoilProfileCollection-method}
+\alias{metadata}
+\alias{metadata<-}
 \alias{min,SoilProfileCollection-method}
-\alias{profile_id,SoilProfileCollection-method}
+\alias{profile_id}
 \alias{show,SoilProfileCollection-method}
-\alias{site,SoilProfileCollection-method}
-\alias{site<-,SoilProfileCollection-method}
+\alias{site}
+\alias{site<-}
 \alias{soil.slot.multiple,SoilProfileCollection-method}
-\alias{units,SoilProfileCollection-method}
-\alias{units<-,SoilProfileCollection-method}
+\alias{units}
+\alias{units<-}
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}
@@ -50,6 +53,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{horizons}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{horizons<-}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{idname}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{names}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{length}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{max}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{metadata}{\code{signature(object = "SoilProfileCollection")}: ... }
