@@ -10,20 +10,18 @@ get_site_data_from_pedon_db(dsn)
 \arguments{
   \item{dsn}{The path to a 'pedon.mdb' database.}
 }
-\details{This function currently works only on Windows.}
+\details{}
 \value{A dataframe.}
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{Dylan E. Beaudette and Jay Skovlin}
-\note{
-%%  ~~further notes~~
-}
+\note{This function currently works only on Windows.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{get_hz_data_from_pedon_db}}, \code{\link{get_site_data_from_pedon_db}}
+\code{\link{get_hz_data_from_pedon_db}}, \code{\link{get_veg_from_AK_Site}}, 
 }
 \examples{
 }

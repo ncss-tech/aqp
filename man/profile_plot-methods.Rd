@@ -52,7 +52,7 @@ abbr.cutoff=5, \dots)
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
-This function sets the margins before plotting, so previous calls to \code{par(mar=...)} will be overridden. Depth limits (max.depth) and number of depth ticks (n.depth.ticks) are *suggestions* to the \code{pretty()} function. You may have to tinker with both parameters to get what you want. The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
+Depth limits (max.depth) and number of depth ticks (n.depth.ticks) are *suggestions* to the \code{pretty()} function. You may have to tinker with both parameters to get what you want. The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
 }
 \value{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
