@@ -18,8 +18,9 @@ setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
           
   # add old-style, hard-coded {id, top, bottom} column names        
   h$id <- h[[idname(data)]]
-  h$top <- h[[data@topcol]]
-  h$bottom <- h[[data@bottomcol]]
+  hzDepthCols <- horizonDepths(data)
+  h$top <- h[[hzDepthCols[1]]]
+  h$bottom <- h[[hzDepthCols[2]]]
   
   res <- soil.slot.multiple(h, fm, ...)
   

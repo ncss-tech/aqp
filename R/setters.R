@@ -91,7 +91,8 @@ setReplaceMethod("depths", "data.frame",
   new.order <- order(data[[nm[1]]], data[[nm[2]]])
   
   # create object
-  res <- SoilProfileCollection(idcol=nm[1], topcol=nm[2], bottomcol=nm[3], horizons=data[new.order, ])
+  depthcols <- c(nm[2], nm[3])
+  res <- SoilProfileCollection(idcol=nm[1], depthcols=depthcols, horizons=data[new.order, ])
   
   # done
   return(res)
@@ -216,7 +217,8 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   	stop("there are IDs in the replacement that do not exist in the original data")
   
   # replacement: order by IDs, then top horizon boundary
-  object@horizons <- value[order(value[[idname(object)]], value[[object@topcol]]), ]
+  hz_top_depths <- horizonDepths(object)[1]
+  object@horizons <- value[order(value[[idname(object)]], value[[hz_top_depths]]), ]
   
   # done
   return(object)

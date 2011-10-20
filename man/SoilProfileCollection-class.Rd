@@ -9,6 +9,7 @@
 \alias{[[,SoilProfileCollection,ANY,missing-method}
 \alias{[[<-,SoilProfileCollection,ANY,missing-method}
 \alias{coordinates<-,SoilProfileCollection-method}
+\alias{horizonDepths}
 \alias{horizons}
 \alias{horizons<-}
 \alias{idname}
@@ -35,8 +36,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
 \section{Slots}{
   \describe{
     \item{\code{idcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify profiles }
-    \item{\code{topcol}:}{Object of class \code{"character"} the name of the column with horizon top boundaries }
-    \item{\code{bottomcol}:}{Object of class \code{"character"} the name of the column with horizon bottom boundaries }
+    \item{\code{depthcols}:}{Object of class \code{"character"} with the names of columns containing the horizon top and bottom boundaries}
     \item{\code{metadata}:}{Object of class \code{"data.frame"} a dataframe with horizon data, 1 or more rows per profile }
     \item{\code{horizons}:}{Object of class \code{"data.frame"} a data frame with site data, 1 row per profile }
     \item{\code{site}:}{Object of class \code{"data.frame"} a SpatialPoints class object, 1 row per profile }
@@ -50,6 +50,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{[[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
     \item{[[<-}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
     \item{coordinates<-}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{horizonDepths}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{horizons}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{horizons<-}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{idname}{\code{signature(object = "SoilProfileCollection")}: ... }

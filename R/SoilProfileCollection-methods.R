@@ -1,15 +1,14 @@
-q## init
+## init
 "SoilProfileCollection" <- function(
 idcol='id',
-topcol='top',
-bottomcol='bottom',
+depthcols=c('top','bottom'),
+metadata=data.frame(),
 horizons,
 site=data.frame(),
-sp=SpatialPoints(matrix(c(1,1), nrow=1)), # this is a bogus place-holder
-metadata=data.frame()
+sp=new('SpatialPoints') # this is a bogus place-holder
 ){
   # creation of the object (includes a validity check)
-  new("SoilProfileCollection", idcol=idcol, topcol=topcol, bottomcol=bottomcol, horizons=horizons, site=site, sp=sp, metadata=metadata)
+  new("SoilProfileCollection", idcol=idcol, depthcols=depthcols, metadata=metadata, horizons=horizons, site=site, sp=sp)
 }
 
 
@@ -65,6 +64,18 @@ setMethod("profile_id", "SoilProfileCollection",
   function(object) 
     unique(as.character(horizons(object)[[idname(object)]]))
 )
+
+
+## horizon depth column names
+if (!isGeneric("horizonDepths"))
+    setGeneric("horizonDepths", function(object, ...)
+      standardGeneric("horizonDepths"))
+
+setMethod("horizonDepths", "SoilProfileCollection",
+  function(object) 
+    return(object@depthcols)
+)
+
 
 ## for some reason this doesn't work... ?
 # ## spatial data: coordinates
@@ -137,7 +148,8 @@ setMethod(f='units', signature='SoilProfileCollection',
 setMethod(f='min', signature='SoilProfileCollection',
 definition=function(x) {
   # compute depths by ID
-  d <- tapply(unlist(horizons(x)[x@bottomcol]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
+  hz_bottom_depths <- horizonDepths(x)[2]
+  d <- tapply(unlist(horizons(x)[[hz_bottom_depths]]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
   # return the shallowest depth
   return(min(d))
   }
@@ -147,7 +159,8 @@ definition=function(x) {
 setMethod(f='max', signature='SoilProfileCollection',
 definition=function(x){
   # compute depths by ID
-  d <- tapply(unlist(horizons(x)[x@bottomcol]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
+  hz_bottom_depths <- horizonDepths(x)[2]
+  d <- tapply(unlist(horizons(x)[[hz_bottom_depths]]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
   # return the deepest depth
   return(max(d))
   }

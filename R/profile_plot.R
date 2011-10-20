@@ -18,8 +18,9 @@ profile_plot.SoilProfileCollection <- function(object, color='soil_color', width
   
   # get top/bottom column names
   IDcol <- idname(object)
-  tcol <- object@topcol
-  bcol <- object@bottomcol
+  hzDepthCols <- horizonDepths(object)
+  tcol <- hzDepthCols[1]
+  bcol <- hzDepthCols[2]
   
   # get profile IDs
   pIDs <- profile_id(object)
