@@ -25,7 +25,7 @@ random_profile(id, n = c(3, 4, 5, 6), min_thick = 5,
 \value{
 A dataframe with the simulated profile.
 }
-\details{The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Further description of the method is outlined in (Brenton et al, 2011).
+\details{The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Amplitude of the peak is controlled by ("lpp.a + "lpp.b"), depth of the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further description of the method is outlined in (Brenton et al, 2011).
 }
 \references{
 D. Brenton Myers, Newell R. Kitchen, Kenneth A. Sudduth, Randall J. Miles, E. John Sadler, Sabine Grunwald, Peak functions for modeling high resolution soil profile data, Geoderma, Volume 166, Issue 1, 30 October 2011, Pages 74-83, ISSN 0016-7061, 10.1016/j.geoderma.2011.07.014.

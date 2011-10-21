@@ -11,10 +11,13 @@ if (!isGeneric("soil.slot.multiple"))
 setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
   function(data, fm, ...){
   
-  # extract horizons and site, then join together
+  # extract horizons and site 
   h <- horizons(data)
   s <- site(data)
-  h <- join(h, s, type='left')
+  
+  # if there is site data, join together
+  if(nrow(s) > 0)
+    h <- join(h, s, type='left')
           
   # add old-style, hard-coded {id, top, bottom} column names        
   h$id <- h[[idname(data)]]
@@ -44,7 +47,7 @@ definition=function(data, fm, ...) {
 	vars <- all.vars(update(fm, 0~.)) # right-hand side
 	
 	# check for bogus left/right side problems with the formula
-	if(g == '.' | any(g %in% names(data)) == FALSE) # missing group on left-hand side
+	if(any(g %in% names(data)) == FALSE & g != '.') # bogus grouping column
 		stop('group name either missing from formula, or does match any columns in dataframe')
 	
 	if(any(vars %in% names(data)) == FALSE) # bogus column names in right-hand side
@@ -54,6 +57,12 @@ definition=function(data, fm, ...) {
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('This function can only accept integer horizon depths')
 	
+  # if there is no left-hand component in the formula, we are aggregating all data in the collection
+  if(g == '.') { 
+    g <- 'all.profiles' # add new grouping variable to horizons
+    data[, g] <- 1
+  }
+  
 	# convert into long format
 	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
