@@ -207,8 +207,7 @@ setMethod("$", "SoilProfileCollection",
 )
 
 
-## TODO: this should check lengths 
-## also: how can we create new columns ?
+## problem: when making new columns how  can the function determine where to insert the replacement>?
 setReplaceMethod("$", "SoilProfileCollection",
   function(x, name, value) {
     if (name %in% names(horizons(x))) {

@@ -1,7 +1,8 @@
--------------------------- aqp 0.99-8.42 (2011-10-20) --------------------------
+-------------------------- aqp 0.99-8.43 (2011-11-03) --------------------------
 * stabilized S4 class, working on S4-izing all related functions
 * preliminary documentation on the new S4 classes/methods
 * logistic power peak (LPP) can now be used to generate synthetic depth functions
+* added contributing fraction annotation in panel.depth_function()
 
 -------------------------- aqp 0.99-8.4 (2011-10-04) --------------------------
 * minor bug fixes and enhancements in PedonPC function
