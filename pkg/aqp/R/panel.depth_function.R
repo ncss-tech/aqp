@@ -1,8 +1,7 @@
-
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
-panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, ...) {
-
+panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NULL, ...) {
+  
 # add grid
 panel.grid(h=-1, v=-1, lty=3, col=1)
 
@@ -16,7 +15,7 @@ if(length(y) > length(x))
 	if(missing(id))
 		stop('must provide a profile id')
 		
-	print('plotting segments...')
+	cat('plotting segments...\n')
 	
 	# re-make a nice dataframe, assuming that we have 'groups' defined
 	if(!missing(groups))
@@ -34,7 +33,7 @@ if(length(y) > length(x))
 # normal plot -- not a step function
 else
 	{
-	print('plotting lines...')
+	cat('plotting lines...\n')
 	
 	# if we have an upper and lower bound defined, plot them
 	if(!missing(upper) & !missing(lower))
@@ -104,6 +103,29 @@ else
 		})
 	
 	}
+
+  # annotate with contributing fraction
+  if(! is.null(cf)) {
+    # test for groups: CF labeling with grouped data isn't yet defined
+    if(!missing(groups))
+      cat('notice: contributing fraction annotation with grouped data is not yet supported\n')
+    else {
+      # get relevant contributing fraction values
+      cf.i <- cf[subscripts]
+      
+      ## TODO: smarter positioning would help
+      # generate annotated depths
+      y.q <- quantile(y, probs=c(0.95), na.rm=TRUE)
+      a.seq <- seq(from=5, to=y.q, by=20)
+      
+      # extract CF at annotated depths
+      a.text <- paste(round(cf.i[a.seq] * 100), '%')
+      # add to right-hand side of the panel
+      grid.text(a.text, x=unit(1, 'npc'), y=unit(a.seq, 'native'), just='right', gp=gpar(font=3, cex=0.8))  
+      }
+    
+    
+    }
 
 
 }
