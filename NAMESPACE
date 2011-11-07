@@ -1,0 +1,13 @@
+import(plyr)
+import(reshape)
+import(lattice)
+import(cluster)
+import(sp)
+import(Hmisc)
+
+exportClasses(SoilProfileCollection)
+
+
+exportMethods("depths<-")
+
+exportPattern("^[^\\.]")
