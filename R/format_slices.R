@@ -39,3 +39,4 @@ format_slices <- function(data, crs=NULL, depths, variable=NULL)
 	}
 	return(slices)
 }
+

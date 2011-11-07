@@ -21,14 +21,18 @@ setMethod(
     cat("Object of class ", class(object), "\n", sep = "")
     cat("Number of profiles: ", length(object), "\n", sep="")
 	cat("Depth range: ", min(object), "-", max(object), " ", units(object), "\n", sep="")
-#       cat("\nAvailable profiles:\n")
-#       print(.getProfilesAsList(object))
+	cat("\nHorizon attributes:\n")
+	print(head(horizons(object)))
 
 	# in the presence of site data
     if (nrow(site(object)) > 0) {
       cat("\nSampling site attributes:\n")
       print(head(site(object)))
     }
+    
+    # presence of spatial data
+    if(nrow(coordinates(x@sp)) == length(x))
+	  cat("\nSpatial data present\n")
   }
 )
 
@@ -46,8 +50,7 @@ setMethod(
 
 ## ID column name
 if (!isGeneric("idname"))
-    setGeneric("idname", function(object, ...)
-      standardGeneric("idname"))
+    setGeneric("idname", function(object, ...) standardGeneric("idname"))
 
 setMethod("idname", "SoilProfileCollection",
   function(object) 
@@ -57,8 +60,7 @@ setMethod("idname", "SoilProfileCollection",
 
 ## distinct profile IDs
 if (!isGeneric("profile_id"))
-  setGeneric("profile_id", function(object, ...)
-    standardGeneric("profile_id"))
+  setGeneric("profile_id", function(object, ...) standardGeneric("profile_id"))
 
 setMethod("profile_id", "SoilProfileCollection",
   function(object) 
@@ -68,8 +70,7 @@ setMethod("profile_id", "SoilProfileCollection",
 
 ## horizon depth column names
 if (!isGeneric("horizonDepths"))
-    setGeneric("horizonDepths", function(object, ...)
-      standardGeneric("horizonDepths"))
+    setGeneric("horizonDepths", function(object, ...) standardGeneric("horizonDepths"))
 
 setMethod("horizonDepths", "SoilProfileCollection",
   function(object) 
@@ -87,8 +88,7 @@ setMethod("horizonDepths", "SoilProfileCollection",
 
 ## site data
 if (!isGeneric("site"))
-  setGeneric("site", function(object, ...)
-    standardGeneric("site"))
+  setGeneric("site", function(object, ...) standardGeneric("site"))
 
 # retrieves the site data frame
 setMethod("site", "SoilProfileCollection",
@@ -100,8 +100,7 @@ setMethod("site", "SoilProfileCollection",
 ## horizon data
 # returns a data.frame aggregating horizons data
 if (!isGeneric("horizons"))
-  setGeneric("horizons", function(object, ...)
-    standardGeneric("horizons"))
+  setGeneric("horizons", function(object, ...) standardGeneric("horizons"))
 
 setMethod(f='horizons', signature='SoilProfileCollection',
   function(object){
@@ -112,8 +111,7 @@ setMethod(f='horizons', signature='SoilProfileCollection',
 ## metadata
 # returns a data.frame
 if (!isGeneric("metadata"))
-  setGeneric("metadata", function(object, ...)
-    standardGeneric("metadata"))
+  setGeneric("metadata", function(object, ...) standardGeneric("metadata"))
 
 setMethod(f='metadata', signature='SoilProfileCollection',
   function(object){
@@ -124,8 +122,7 @@ setMethod(f='metadata', signature='SoilProfileCollection',
 ## units
 # returns a data.frame
 if (!isGeneric("units"))
-  setGeneric("units", function(object, ...)
-    standardGeneric("units"))
+  setGeneric("units", function(object, ...) standardGeneric("units"))
 
 setMethod(f='units', signature='SoilProfileCollection',
   function(object){
@@ -309,3 +306,4 @@ setMethod("names", "SoilProfileCollection",
   }
 
 )
+

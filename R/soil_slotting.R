@@ -502,3 +502,4 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# done
 	return(x.slotted)
 	}
+

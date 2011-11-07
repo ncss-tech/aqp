@@ -26,3 +26,4 @@ if(missing(groups))
 the_range <- c(min(c(d$lower,d$yhat), na.rm=TRUE), max(c(d$upper, d$yhat), na.rm=TRUE))
 return(list(xlim=the_range))
 }
+

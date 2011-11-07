@@ -59,6 +59,3 @@ SDA_query <- function(q)
   }
 
 
-
-
-

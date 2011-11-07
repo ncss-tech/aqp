@@ -16,3 +16,4 @@ resample.twotheta <- function(twotheta, x, tt.min=min(twotheta), tt.max=max(twot
 	return(x.new)
 	}
 	
+

@@ -232,4 +232,4 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	return(D)	
 	}
 	
-	
+

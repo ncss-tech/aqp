@@ -47,3 +47,4 @@ plot_slices <- function(slices, region_outline, contours=NA, depths, variable, p
 	legend(1, 1, legend=ltext, col=1, pt.cex=2, pt.bg=cols, pch=21, horiz=TRUE, yjust=0.5, xjust=0.5, cex=legend.cex, bty='n')
 	
 	}
+
