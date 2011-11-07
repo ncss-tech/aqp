@@ -43,3 +43,4 @@ f.noise <- function(inits, pure.patterns, sample.pattern, eps.total=0.05)
 	return(d)
 	}
 	
+

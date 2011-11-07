@@ -2,8 +2,7 @@
 ## initialize metadata: object modification in-place
 ##
 if (!isGeneric('metadata<-'))
-  setGeneric('metadata<-', function(object, value) 
-    standardGeneric('metadata<-'))
+  setGeneric('metadata<-', function(object, value) standardGeneric('metadata<-'))
     
 setReplaceMethod("metadata", "SoilProfileCollection",
   function(object, value) {
@@ -24,8 +23,7 @@ setReplaceMethod("metadata", "SoilProfileCollection",
 ## initialize units: object modification in-place, units stored in @metadata
 ##
 if (!isGeneric('units<-'))
-  setGeneric('units<-', function(object, value) 
-    standardGeneric('units<-'))
+  setGeneric('units<-', function(object, value) standardGeneric('units<-'))
     
 setReplaceMethod("units", "SoilProfileCollection",
   function(object, value) {
@@ -52,8 +50,7 @@ setReplaceMethod("units", "SoilProfileCollection",
 ## depths<- setter method - to create AQP objects
 ##
 if (!isGeneric('depths<-'))
-  setGeneric('depths<-', function(object, value) 
-    standardGeneric('depths<-'))
+  setGeneric('depths<-', function(object, value) standardGeneric('depths<-'))
 
 setReplaceMethod("depths", "data.frame",
   function(object, value) {
@@ -103,8 +100,7 @@ setReplaceMethod("depths", "data.frame",
 ## initialize site data
 ##
 if (!isGeneric('site<-'))
-  setGeneric('site<-', function(object, value) 
-    standardGeneric('site<-'))
+  setGeneric('site<-', function(object, value) standardGeneric('site<-'))
 
 setReplaceMethod("site", "SoilProfileCollection",
   function(object, value) {
@@ -196,8 +192,7 @@ setReplaceMethod("site", "SoilProfileCollection",
 ## horizons<- setter method
 ##
 if (!isGeneric('horizons<-'))
-  setGeneric('horizons<-', function(object, value) 
-    standardGeneric('horizons<-'))
+  setGeneric('horizons<-', function(object, value) standardGeneric('horizons<-'))
 
 setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
@@ -265,3 +260,4 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 #   object
 #   }
 # )
+

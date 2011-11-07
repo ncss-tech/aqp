@@ -210,5 +210,3 @@ get_veg_from_AK_Site <- function(dsn)
   }
 
 
-
-

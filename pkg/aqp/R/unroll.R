@@ -56,4 +56,4 @@ unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict
 	# return vector, padded to max_depth
 	return(as.vector(p.pad))
 	}
-	
+
