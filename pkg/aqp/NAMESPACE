@@ -1,13 +1,12 @@
-import(plyr)
-import(reshape)
 import(lattice)
 import(cluster)
-import(sp)
-import(Hmisc)
+importFrom('plyr', ddply, llply, ldply, dlply)
+importFrom('reshape', melt, cast)
+importFrom('sp', coordinates, proj4string)
+importFrom('Hmisc', wtd.mean, wtd.var, wtd.quantile, wtd.rank, wtd.table)
 
 exportClasses(SoilProfileCollection)
 
-
-exportMethods("depths<-")
+exportMethods('depths<-', 'units<-', 'metadata<-', 'site<-')
 
 exportPattern("^[^\\.]")

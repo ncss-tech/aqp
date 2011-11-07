@@ -31,7 +31,7 @@ setMethod(
     }
     
     # presence of spatial data
-    if(nrow(coordinates(x@sp)) == length(x))
+    if(nrow(coordinates(object@sp)) == length(object))
 	  cat("\nSpatial data present\n")
   }
 )
