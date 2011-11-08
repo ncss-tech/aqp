@@ -14,7 +14,7 @@
 # function requires at least two attributes
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
-profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE)
+pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE)
 	{
 	
 	# currently this will only work with integer depths
@@ -233,3 +233,29 @@ profile_compare <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TR
 	}
 	
 
+# setup generic function
+if (!isGeneric("profile_compare"))
+  setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
+
+# temp interface to SPC class objects
+setMethod(f='profile_compare', signature='SoilProfileCollection',
+  function(s, ...){
+  
+  # extract horizons and site 
+  h <- horizons(s)
+          
+  # add old-style, hard-coded {id, top, bottom} column names        
+  h$id <- h[[idname(s)]]
+  hzDepthCols <- horizonDepths(s)
+  h$top <- h[[hzDepthCols[1]]]
+  h$bottom <- h[[hzDepthCols[2]]]
+  
+  res <- profile_compare(h, ...)
+  
+  # result is a distance matrix
+  return(res)
+  }
+)
+
+# temp interface for dataframes
+setMethod(f='profile_compare', signature='data.frame', definition=pc)
