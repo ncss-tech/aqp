@@ -4,8 +4,7 @@
 
 # setup generic function
 if (!isGeneric("soil.slot.multiple"))
-  setGeneric("soil.slot.multiple", function(data, fm, ...)
-    standardGeneric("soil.slot.multiple"))
+  setGeneric("soil.slot.multiple", function(data, fm, ...) standardGeneric("soil.slot.multiple"))
 
 # temp interface to SPC class objects
 setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
