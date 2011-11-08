@@ -172,14 +172,16 @@ ORDER BY pedon.upedonid, phiidref, colormoistst;"
   rm(d, d.rgb, dry.colors, moist.colors, dry.colors.final, moist.colors.final)
   gc()
   
-  # fill missing color with white
-  d.final$d_r[is.na(d.final$d_r)] <- 1
-  d.final$d_g[is.na(d.final$d_g)] <- 1
-  d.final$d_b[is.na(d.final$d_b)] <- 1
   
-  d.final$m_r[is.na(d.final$m_r)] <- 1
-  d.final$m_g[is.na(d.final$m_g)] <- 1
-  d.final$m_b[is.na(d.final$m_b)] <- 1
+  ## probably not a good idea
+  # fill missing color with white
+#   d.final$d_r[is.na(d.final$d_r)] <- NA
+#   d.final$d_g[is.na(d.final$d_g)] <- NA
+#   d.final$d_b[is.na(d.final$d_b)] <- NA
+#   
+#   d.final$m_r[is.na(d.final$m_r)] <- NA
+#   d.final$m_g[is.na(d.final$m_g)] <- NA
+#   d.final$m_b[is.na(d.final$m_b)] <- NA
   
   # done
   return(d.final)
