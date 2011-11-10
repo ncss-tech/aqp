@@ -1,4 +1,4 @@
--------------------------- aqp 0.99-8.44 (2011-11-03) --------------------------
+-------------------------- aqp 0.99-8.45 (2011-11-10) --------------------------
 * added NAMESPACE file for R >= 2.14 compatibility
 * stabilized S4 class, working on S4-izing all related functions
 * preliminary documentation on the new S4 classes/methods

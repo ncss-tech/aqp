@@ -66,7 +66,7 @@ panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
 }
 )
 
-# try again, this time annotate with LAB A-coordinate:
+# try again, this time annotate with LAB coordinates:
 if(require(colorspace))
   {
   d.rgb <- with(d, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
@@ -74,12 +74,13 @@ if(require(colorspace))
   d <- data.frame(d, d.lab@coords)
   
   xyplot(value ~ chroma | hue,
-  main="Common Soil Colors - Annotated with LAB A-coordinate", layout=c(3,1), scales=list(alternating=1),
+  main="Common Soil Colors - Annotated with LAB Coordinates", layout=c(3,1), scales=list(alternating=1),
   strip=strip.custom(bg=grey(0.85)),
   data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
   panel=function(x, y, subscripts, ...) {
-    panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
-    panel.text(x, y, labels=round(d$A[subscripts]), cex=0.75, col='white', font=2)
+    panel.xyplot(x, y, pch=15, cex=7, col=d$color[subscripts])
+    lab.text <- with(d[subscripts, ], paste(round(L), round(A), round(B), sep='\n'))
+    panel.text(x, y, labels=lab.text, cex=0.75, col='white', font=2)
     }
   )
   
