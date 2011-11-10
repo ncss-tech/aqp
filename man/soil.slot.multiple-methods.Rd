@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{soil.slot.multiple-methods}
 \alias{soil.slot.multiple}
+\alias{soil.slot.multiple}
 
 \title{
 Multivariate Soil Profile Slotting
@@ -10,15 +11,15 @@ Multivariate Soil Profile Slotting
 Align several soil properties to a user-defined basis, with data returned in long format.
 }
 
+\usage{
+soil.slot.multiple(data, fm, ...)
+}
+
+
 \section{Methods}{
 \describe{
-
-\item{\code{signature(data = "data.frame")}}{
-}
-
-\item{\code{signature(data = "SoilProfileCollection")}}{
-}
-
+\item{data = "SoilProfileCollection"}{ see \link{SoilProfileCollection} }
+\item{data = "data.frame"}{ see \link{soil.slot} }
 }}
 
 \arguments{

@@ -231,7 +231,11 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	# return the distance matrix, class = 'dist'
 	return(D)	
 	}
-	
+
+
+##############
+## S4 stuff ##
+##############
 
 # setup generic function
 if (!isGeneric("profile_compare"))
@@ -250,6 +254,7 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   h$top <- h[[hzDepthCols[1]]]
   h$bottom <- h[[hzDepthCols[2]]]
   
+  # invoke data.frame method
   res <- profile_compare(h, ...)
   
   # result is a distance matrix

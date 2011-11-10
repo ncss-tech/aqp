@@ -1,3 +1,5 @@
+## see the convertColor() function from grDevices
+
 
 # convert munsell Hue, Value, Chroma into RGB
 # user can adjust how rgb() function will return an R-friendly color
