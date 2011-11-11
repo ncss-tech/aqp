@@ -415,3 +415,41 @@ setMethod(f='slice', signature='SoilProfileCollection',
   }
 )
 
+## Coercition methods and sp utilities
+setAs("SoilProfileCollection", "SpatialPoints", function(from) {
+    from@sp
+  }
+)
+
+setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
+    SpatialPointsDataFrame(from@sp, data = from@site)
+  }
+)
+
+setMethod(f='proj4string', signature='SoilProfileCollection',
+  function(obj){
+    proj4string(obj@sp)
+  }
+)
+
+## clip: spatial clipping of a SPC (requires GEOS)
+if (!isGeneric("clip"))
+  setGeneric("clip", function(object, ...) standardGeneric("clip"))
+
+setMethod(f='clip', signature='SoilProfileCollection',
+  function(object, geom){
+
+    # This functionality require the GEOS bindings
+    # provided by rgeos
+    require(rgeos)
+    spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
+    ids <- which(spc_intersection)
+
+    valid_ids <- site(object)[ids, object@idcol]
+
+    valid_horizons <- which(horizons(object)[, object@idcol] == valid_ids)
+    valid_sites <- which(site(object)[, object@idcol] == valid_ids)
+
+    SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
+  }
+)
