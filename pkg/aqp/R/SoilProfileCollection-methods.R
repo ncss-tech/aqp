@@ -360,9 +360,6 @@ setMethod(f='slice', signature='SoilProfileCollection',
   	stop('must provide a valid formula: ~ var1 + var2 + ...')
 
   # extract components of the formula:
-#   vars <- all.vars(update(fm, 0~.)) # right-hand side
-
-  require(stringr)
   formula <- str_c(deparse(fm, 500), collapse="")
   elements <- str_split(formula, fixed("~"))[[1]]
   formula <- lapply(str_split(elements, "[+*]"), str_trim)
