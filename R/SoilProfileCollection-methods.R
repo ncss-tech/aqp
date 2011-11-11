@@ -307,3 +307,103 @@ setMethod("names", "SoilProfileCollection",
 
 )
 
+
+##
+## neat-stuff
+##
+
+# works on a single set of depths + property at a time
+# include: 
+# 'bottom' - bottom boundary is included in the z-slice test
+# 'top' - top boundary is included in the z-slice test
+get.single.slice <- function(d, top, bottom, z, include='top') {
+  # extract pieces
+  d.top <- d[[top]]
+  d.bottom <- d[[bottom]]
+  d.v <- d[['value']]
+  d.var.name <- unique(d[['variable']]) # this is repeated for each horizon
+    
+  # determine the property at z-slice, based on boundary rule
+  if(include == 'bottom')
+    res <- d.v[which(z > d.top & z <= d.bottom)]
+  if(include == 'top')
+    res <- d.v[which(z >= d.top & z < d.bottom)]
+  else
+    stop('invalid horizon boundary rule')
+  
+  # account for no data
+  if(length(res) == 0)
+    res <- NA
+  
+  # name the variable, for nicer column names output from ddply()
+  names(res) <- 'slice'
+  return(res)
+  }
+
+## slice: returns a DF if no @sp, SPDF otherwise
+if (!isGeneric("slice"))
+  setGeneric("slice", function(object, ...) standardGeneric("slice"))
+
+
+## TODO: this should use a formula interface something like:
+# z-sclice ~ var1 + var2 + var3 ...
+# this doesn't work with the standard formula parsing functions
+
+## TODO: allow for multiple slices... what would be returned ? a new SPC?
+
+## TODO: allow the use of site data (PSC etc.) to determine the z-slice
+setMethod(f='slice', signature='SoilProfileCollection',
+  function(object, fm, z, just.the.data=FALSE){
+  
+  # test for logical input
+  if(! inherits(fm, "formula"))
+  	stop('must provide a valid formula: ~ var1 + var2 + ...')
+    
+  # extract components of the formula:
+	vars <- all.vars(update(fm, 0~.)) # right-hand side
+	
+  # get horizons + depth column names + ID column name
+  h <- horizons(object)
+  hd <- horizonDepths(object)
+  id <- idname(object)
+  
+	# check for bogus left/right side problems with the formula
+  if(any(z < 1) | any(is.na(z)))
+    stop('z-slice must be >= 1')
+  
+  ## this will have to be updated for z-slices defined by data in @site
+	if(! class(z) %in% c('numeric','integer')) # bogus z-slice
+		stop('z-slice must be either numeric or integer')
+	
+	if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
+		stop('column names in formula do not match any horizon data')
+  
+  # melt into long format
+  m <- melt(h, measure.vars=vars, id.vars=c(id, hd[1], hd[2]))
+  
+  # extract single slice by id/variable
+  hd.slice <- ddply(m, c(id, 'variable'), .fun=get.single.slice, top=hd[1], bottom=hd[2], z=z)
+  
+  # convert back into wide format
+  fm.to.wide <- as.formula(paste(id, 'variable', sep=' ~ '))
+  hd.slice <- cast(hd.slice, formula=fm.to.wide, value='slice')
+  
+  # if we just want the data:
+  if(just.the.data)
+    return(hd.slice)
+  
+  # if site data: join
+  if(nrow(site(object)) > 0 )
+    res <- join(hd.slice, site(object))
+  else
+    res <- hd.slice
+  
+  # if spatial data: SPDF
+  if(nrow(coordinates(object@sp)) == length(object)) {
+    res <- SpatialPointsDataFrame(object@sp, data=res)
+    }
+  
+  return(res)
+  }
+)
+
