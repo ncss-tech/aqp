@@ -345,9 +345,6 @@ if (!isGeneric("slice"))
   setGeneric("slice", function(object, ...) standardGeneric("slice"))
 
 
-## TODO: this should use a formula interface something like:
-# z-sclice ~ var1 + var2 + var3 ...
-# this doesn't work with the standard formula parsing functions
 
 ## TODO: allow for multiple slices... what would be returned ? a new SPC?
 
