@@ -29,7 +29,7 @@ setMethod(
       cat("\nSampling site attributes:\n")
       print(head(site(object)))
     }
-    
+
     # presence of spatial data
     if(nrow(coordinates(object@sp)) == length(object))
 	  cat("\nSpatial data present\n")
@@ -53,7 +53,7 @@ if (!isGeneric("idname"))
     setGeneric("idname", function(object, ...) standardGeneric("idname"))
 
 setMethod("idname", "SoilProfileCollection",
-  function(object) 
+  function(object)
     return(object@idcol)
 )
 
@@ -63,7 +63,7 @@ if (!isGeneric("profile_id"))
   setGeneric("profile_id", function(object, ...) standardGeneric("profile_id"))
 
 setMethod("profile_id", "SoilProfileCollection",
-  function(object) 
+  function(object)
     unique(as.character(horizons(object)[[idname(object)]]))
 )
 
@@ -73,7 +73,7 @@ if (!isGeneric("horizonDepths"))
     setGeneric("horizonDepths", function(object, ...) standardGeneric("horizonDepths"))
 
 setMethod("horizonDepths", "SoilProfileCollection",
-  function(object) 
+  function(object)
     return(object@depthcols)
 )
 
@@ -130,7 +130,7 @@ setMethod(f='units', signature='SoilProfileCollection',
 	  # give a warning if not defined
 	if(u == '')
 	  message('Note: depth units have not yet been defined.')
-	
+
 	return(u)
   }
 )
@@ -176,29 +176,29 @@ setMethod(f='length', signature='SoilProfileCollection',
 # standard column access: search horizons, then site
 setMethod("$", "SoilProfileCollection",
   function(x, name) {
-	
+
 	# get names from site and hz data
 	s.names <- names(site(x))
 	h.names <- names(horizons(x))
-	
+
 	# when site data are initialized from an external DF, it is possible that
 	# there will be duplicate column names
 	if(name %in% h.names & name %in% s.names)
 		warning('column name is present in horizon and site data, extracting from horizon data only')
-	
+
 	# get column from horizon data
     if (name %in% h.names)
       res <- horizons(x)[[name]]
-    
+
     # otherwise check site data
     else
       if (name %in% s.names)
 		res <- site(x)[[name]]
-	  
-	  # if still missing return NULL 
+
+	  # if still missing return NULL
 	  else
 		res <- NULL
-	
+
 	return(res)
   }
 )
@@ -229,37 +229,37 @@ setReplaceMethod("$", "SoilProfileCollection",
 ## matrix / DF style access: only to horizon data
 setMethod("[", "SoilProfileCollection",
   function(x, i, j , ...) {
-    
+
     # convert to integer
     i <- as.integer(i)
-    
+
     # sanity check
     if(!missing(j))
       warning('j index ignored for now')
-    
+
     if(any(is.na(i)))
       stop('NA not permitted in horizon index')
-    
+
     # extract horizons
     h <- horizons(x)
-    
+
     # subset data based on i
     h.sub <- ddply(h, idname(x), .fun=function(y) y[i, ])
-    
+
     # if there is REAL data in @sp, return a SPDF
     # for now test for our custom dummy SP obj: number of coordinates == number of profiles
     if(nrow(coordinates(x@sp)) == length(x)) {
       # combine with coordinates
       res <- SpatialPointsDataFrame(x@sp, data=h.sub)
     }
-    
+
     # no coordinates, return a DF
     else {
       # format result
       res <- h.sub
     }
-    
-  # done  
+
+  # done
   return(res)
   }
 )
@@ -279,7 +279,7 @@ setMethod("[[", c("SoilProfileCollection", "ANY", "missing"),
       else
 	      res <- NULL
     }
-    
+
   return(res)
   }
 )
@@ -291,7 +291,7 @@ setReplaceMethod("[[", c("SoilProfileCollection", "ANY", "missing", "ANY"),
       horizons(x)[[i]] <- value
     else
       site(x)[[i]] <- value
-    
+
     return(x)
   }
 )
@@ -313,7 +313,7 @@ setMethod("names", "SoilProfileCollection",
 ##
 
 # works on a single set of depths + property at a time
-# include: 
+# include:
 # 'bottom' - bottom boundary is included in the z-slice test
 # 'top' - top boundary is included in the z-slice test
 get.single.slice <- function(d, top, bottom, z, include='top') {
@@ -322,7 +322,7 @@ get.single.slice <- function(d, top, bottom, z, include='top') {
   d.bottom <- d[[bottom]]
   d.v <- d[['value']]
   d.var.name <- unique(d[['variable']]) # this is repeated for each horizon
-    
+
   # determine the property at z-slice, based on boundary rule
   if(include == 'bottom')
     res <- d.v[which(z > d.top & z <= d.bottom)]
@@ -330,11 +330,11 @@ get.single.slice <- function(d, top, bottom, z, include='top') {
     res <- d.v[which(z >= d.top & z < d.bottom)]
   else
     stop('invalid horizon boundary rule')
-  
+
   # account for no data
   if(length(res) == 0)
     res <- NA
-  
+
   # name the variable, for nicer column names output from ddply()
   names(res) <- 'slice'
   return(res)
@@ -353,56 +353,67 @@ if (!isGeneric("slice"))
 
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
-  function(object, fm, z, just.the.data=FALSE){
-  
+  function(object, fm, just.the.data=FALSE){
+
   # test for logical input
   if(! inherits(fm, "formula"))
   	stop('must provide a valid formula: ~ var1 + var2 + ...')
-    
+
   # extract components of the formula:
-	vars <- all.vars(update(fm, 0~.)) # right-hand side
-	
+#   vars <- all.vars(update(fm, 0~.)) # right-hand side
+
+  require(stringr)
+  formula <- str_c(deparse(fm, 500), collapse="")
+  elements <- str_split(formula, fixed("~"))[[1]]
+  formula <- lapply(str_split(elements, "[+*]"), str_trim)
+
+  if (length(formula) > 2)
+    stop("please provide a valid formula")
+
+  z <- as.numeric(formula[[1]])
+  vars <- formula[[2]]
+
   # get horizons + depth column names + ID column name
   h <- horizons(object)
   hd <- horizonDepths(object)
   id <- idname(object)
-  
+
 	# check for bogus left/right side problems with the formula
   if(any(z < 1) | any(is.na(z)))
     stop('z-slice must be >= 1')
-  
+
   ## this will have to be updated for z-slices defined by data in @site
 	if(! class(z) %in% c('numeric','integer')) # bogus z-slice
 		stop('z-slice must be either numeric or integer')
-	
+
 	if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match any horizon data')
-  
+
   # melt into long format
   m <- melt(h, measure.vars=vars, id.vars=c(id, hd[1], hd[2]))
-  
+
   # extract single slice by id/variable
   hd.slice <- ddply(m, c(id, 'variable'), .fun=get.single.slice, top=hd[1], bottom=hd[2], z=z)
-  
+
   # convert back into wide format
   fm.to.wide <- as.formula(paste(id, 'variable', sep=' ~ '))
   hd.slice <- cast(hd.slice, formula=fm.to.wide, value='slice')
-  
+
   # if we just want the data:
   if(just.the.data)
     return(hd.slice)
-  
+
   # if site data: join
   if(nrow(site(object)) > 0 )
     res <- join(hd.slice, site(object))
   else
     res <- hd.slice
-  
+
   # if spatial data: SPDF
   if(nrow(coordinates(object@sp)) == length(object)) {
     res <- SpatialPointsDataFrame(object@sp, data=res)
     }
-  
+
   return(res)
   }
 )
