@@ -77,7 +77,7 @@ lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key),
 .fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top))
 
 # 6. extract a SPDF with horizon data along a slice at 25 cm
-s.25 <- slice(ca, ~ bs_7 + CEC7 + ex_acid, z=55)
+s.25 <- slice(ca, fm=55 ~ bs_7 + CEC7 + ex_acid)
 spplot(s.25, zcol=c('bs_7','CEC7','ex_acid'))
 }
 \keyword{datasets}
