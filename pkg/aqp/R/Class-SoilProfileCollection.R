@@ -17,17 +17,17 @@ setClass(
     sp=new('SpatialPoints')
   ),
   validity=function(object) {
-    
+
 #     # number of ids and number of profiles must match
 #     if (length(which(!is.na(object@ids))) != length(object@profiles))
 #       stop('number of ids and number of profiles must match')
 #     # if there is some site data
 #     if (length(object@site) > 0) {
-#       # number of ids and number of sites must match  
+#       # number of ids and number of sites must match
 #       if (length(which(!is.na(object@ids))) != nrow(object@site))
 # 		 stop('number of ids and number of sites must match')
 # 	}
-#     
+#
     return(TRUE)
   }
 )
