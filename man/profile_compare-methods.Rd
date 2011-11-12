@@ -10,7 +10,8 @@ Performs a numerical comparison of soil profiles using named properties, based o
 }
 
 \usage{
-profile_compare(s, vars, max_d, k, sample_interval=NA, 
+profile_compare(s, ...)
+pc(s, vars, max_d, k, sample_interval=NA, 
 replace_na=TRUE, add_soil_flag=TRUE, 
 return_depth_distances=FALSE, strict_hz_eval=FALSE)
 }

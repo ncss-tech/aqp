@@ -10,6 +10,7 @@
 ## careful -- we are getting the labels for the final dissimilarity matrix from the levels of the profile ID
 
 
+## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
 # function requires at least two attributes
 # hard coded reference to s$id
