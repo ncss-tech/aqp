@@ -81,5 +81,23 @@ profile_plot(sp1)
 # plot profiles, using alternate profile ID label style
 profile_plot(sp1, id.style='side')
 
+
+# plot horizon color according to some property
+# RColorBrewer helps with nice colors
+if(require(RColorBrewer)) {
+  data(sp3)
+  
+  # setup colors
+  cols <- rev(brewer.pal(8, 'Spectral'))
+  cr <- colorRamp(cols)
+  
+  # assign color based on clay content, rescaled to {0,1}
+  sp3$soil_color <- rgb(cr(rescaler(sp3$clay, type='range')), max=255)
+  depths(sp3) <- id ~ top + bottom
+  profile_plot(sp3)
+}
+
+
+
 }
 

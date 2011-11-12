@@ -28,7 +28,7 @@ A dataframe with the simulated profile.
 \details{The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Amplitude of the peak is controlled by ("lpp.a + "lpp.b"), depth of the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further description of the method is outlined in (Brenton et al, 2011).
 }
 \references{
-D. Brenton Myers, Newell R. Kitchen, Kenneth A. Sudduth, Randall J. Miles, E. John Sadler, Sabine Grunwald, Peak functions for modeling high resolution soil profile data, Geoderma, Volume 166, Issue 1, 30 October 2011, Pages 74-83, ISSN 0016-7061, 10.1016/j.geoderma.2011.07.014.
+Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.; Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution soil profile data Geoderma, 2011, 166, 74-83.
 }
 \author{Dylan E. Beaudette}
 \note{See examples for ideas on simulating several profiles at once.}
@@ -46,26 +46,51 @@ d$soil_color <- 'white'
 depths(d) <- id ~ top + bottom
 profile_plot(d)
 
-# if the plotrix package is installed, 
+
 # make a more interesting color based on the first property
 # depth functions are generated using the LPP function
-if(require(plotrix))
-	{
-	d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
-	d$soil_color <- color.scale(d$p1, c(0,1,1),c(1,1,0),0)
-	depths(d) <- id ~ top + bottom
-	profile_plot(d)
-	}
-
-# do this again, this time set all of the LPP parameters
-if(require(plotrix))
-  {
-  d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
-  lpp.a=5, lpp.b=5, lpp.d=5, lpp.e=5, lpp.u=25)
-  d$soil_color <- color.scale(d$p1, c(0,1,1),c(1,1,0),0)
+if(require(RColorBrewer)) {
+  cols <- rev(brewer.pal(8, 'Spectral'))
+  cr <- colorRamp(cols)
+  
+  d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
+  d$soil_color <- rgb(cr(rescaler(d$p1, type='range')), max=255)
   depths(d) <- id ~ top + bottom
-	profile_plot(d)
+  profile_plot(d)
+  
+
+  # do this again, this time set all of the LPP parameters
+  d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
+  lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
+  d$soil_color <- rgb(cr(rescaler(d$p1, type='range')), max=255)
+  depths(d) <- id ~ top + bottom
+  profile_plot(d)
   }
+
+
+# try plotting the LPP-derived simulated data
+# aggregated over all profiles
+a <- soil.slot.multiple(d, fm= ~ p1)
+a$mid <- with(a, (top + bottom) / 2)
+
+(p1 <- xyplot(mid ~ p.q50, data=a,
+lower=a$p.q25, upper=a$p.q75, ylim=c(150,-5), alpha=0.5,
+panel=panel.depth_function, prepanel=prepanel.depth_function,
+cf=a$contributing_fraction, xlab='Simulated Data', ylab='Depth',
+main='LPP(a=5, b=10, d=5, e=5, u=25)',
+par.settings=list(superpose.line=list(col='black', lwd=2))
+))
+
+# optionally add original data as step-functions
+if(require(latticeExtra)) {
+  h <- horizons(d)
+  h$mid <- with(h, (top + bottom) / 2)
+  p1 + as.layer(xyplot(top ~ p1, groups=id, data=h,
+  horizontal=TRUE, type='S',
+  par.settings=list(superpose.line=list(col='blue', lwd=1, lty=2))))
+  }
+
+
 
 #
 # simple cluster analysis:
