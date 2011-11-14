@@ -1,0 +1,340 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+\documentclass[a4paper]{article}
+
+\author{D.E. Beaudette\\USDA-NRCS}
+\title{Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists}
+
+\SweaveOpts{echo=FALSE}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{subfigure}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{color}
+
+% reset some float-controlling parameters
+\renewcommand{\floatpagefraction}{0.8}  % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+
+
+\begin{document}
+
+\maketitle
+
+%% an abstract and keywords
+\begin{abstract}
+ Soils are routinely sampled and characterized according to genetic horizons (layers), resulting in data that are associated with principal dimensions: location ($x$,$y$), depth ($z$), and property space ($\mathbf{p}$). The high dimensionality and grouped nature of this type of data can complicate standard analysis, summarization, and visualization. The \textbf{aqp} package was developed to address some of these issues, as well as provide a useful framework for the advancement of quantitative studies in soil genesis, geography, and classification.
+\end{abstract}
+
+
+\section[Background]{Background}
+
+The soils of the world support a wide range of natural ecosystems, agricultural production, industrial processes, and the largest surficial carbon pool \citep{Schlesinger1997}. The rise and fall of past civilizations can be directly linked to the use and misuse of the soil resource \citep{Hillel1998}. A staggering quantity of soils information has been collected over the last 100 years, yet these data are often underutilized due to the sheer volume and complex structure. We have developed an \textbf{R} package that supports the interpretation of massive soils databases through numerical extensions to traditional methods of visualizing, aggregating, and classifying soils information. Further development of these numerical analogues will provide a new set of \textit{quantitative} tools that soil scientists and surveyors can use in conjunction with well-established, \textit{qualitative} methods.
+
+Soil science is an integrative approach to understanding surficial processes that includes concepts from several disciplines \citep{Buol2003Soil-Genes}. Pedology, one of several branches of soil science, is the study of the genesis, morphology, classification, and geography of soils. Soil profiles are usually described, sampled, and characterized by genetic horizons (``layers'' defined by morphology and usually associated with an inferred process), extending from the surface to a lower boundary determined by bedrock contact or to a depth of 150-200 cm \citep{SoilSurveyDivisionStaff1993}. The stratigraphy and morphology of soil horizons are usually the first data that the soil scientist uses to qualitatively classify a soil: i.e. degree of alteration relative to the parent material (Figure~\ref{fig:photos:sfrec}), expression of oxidized or reduced forms of iron (Figure~\ref{fig:photos:owens}), accumulation of organic matter, or evidence of cyclical deposition of new material (Figure~\ref{fig:photos:pinn}). 
+
+\begin{figure}[ht]
+
+\centering
+\subfigure[] % caption for subfigure a
+{
+    \label{fig:photos:sfrec}
+    \includegraphics[width=4cm]{sfrec_profile.jpg}
+}
+\hspace{0.1cm}
+\subfigure[] % caption for subfigure b
+{
+    \label{fig:photos:owens}
+    \includegraphics[width=4cm]{owens_lake_profile.jpg}
+}
+\hspace{0.1cm}
+\subfigure[] % caption for subfigure b
+{
+    \label{fig:photos:pinn}
+    \includegraphics[width=4cm]{pinn_profile.jpg}
+}
+\caption{Examples of soil profiles illustrating how horizons change with depth. Color, texture, structure and root abundance are common visual indicators of near surface processes in soil.}
+\label{fig:photos} % caption for the whole figure
+\end{figure}
+
+
+Hans Jenny was one of the first researchers to advocate a semi-quantitative theory of soil genesis; in which he described the ``factors of soil formation'' concept \citep{Jenny1941Factors}. This novel approach is based on the expression:
+
+\begin{equation}
+\label{jenny_clorpt}
+S = f(cl, o, r, p, t)
+\end{equation} 
+
+\noindent
+where $S$ represents a branch within a soil classification system, a collection of soil properties associated with a soil profile or a single layer (horizon). The parameters within the ``clorpt'' framework are: $cl$ representing a climate factor, $o$ representing an organic factor, $r$ representing a relief factor, $p$ representing a parent material factor, and $t$ representing time. The $S$ term in equation \ref{jenny_clorpt} can be modeled as matrix of soil properties (columns) associated with either genetic horizons or regular depth-slices (rows), occurring at some location in space. While the ``clorpt'' model is a useful construct for understanding how soil genesis might proceed, quantitative evaluation is usually not possible because of complex interaction and possible feedback mechanisms between terms on the right-hand side of the expression \citep{Huggett1975}. The left-hand side of the expression, $S$, is especially difficult to quantitatively define when it describes a collection of soil horizons and properties. The magnitude of measured properties, correlation between properties, and trends with depth are all critical elements of how a soil profile is interpreted as a whole \citep{Arkley1976}
+
+Several mature systems exist for the classification of soil profiles; Soil Taxonomy, World Reference Base, Australian Soil Classification, etc. \citep{Buol2003Soil-Genes}. Each system is based on current knowledge of soil genesis, manifestation of specific processes in the form of field or lab measured properties, and region-specific land use limitations. Most soil classification systems seek to accommodate the (potential) global variability of soils (including Soil Taxonomy and World Reference Base), while others are tailored to region-specific soil variability. Soil Taxonomy \citep{SoilSurveyStaff1999} provides a rich vocabulary for grouping soils into several levels of a hierarchy based on established land-use limitations and our current knowledge of soil genesis. However, Soil Taxonomy does not currently define an approach for \textit{numerically} describing the difference between soils. There has been limited work on purely numerical systems of soil classification \citep{Rayner1966,Moore1967,Moore1972,Little1985,Dale1989}, and several authors have suggested the potential merit to such an approach \citep{Webster1968,Arkley1976,Minasny2007,Carre2009}. In particular, \citet{Young2000} suggested that fine-scale soil variability is more adequately captured by numerical classification as opposed to Soil Taxonomy. To date, most numerical soil classification methods are rarely employed outside of case studies presented within scientific journals. A numerical classification system could potentially be used to bridge national taxonomic systems (i.e. Soil Taxonomy and the Australian Soil Classification system) based solely on soil physical and chemical processes. Alternative classification schemes could be generated from the same underlying data, but directed towards specific goals, by selecting which variables and dissimilarity metric are used. For example, soil texture, organic matter content, and aggregate stability information (weighted such that near-surface horizons contribute more to the final classification) could be used to generate a classification scheme supporting erosion prevention.
+
+
+\section[The aqp Package]{The \textbf{aqp} Package}
+The \textbf{aqp} (Algorithms for Quantitative Pedology) package for \textbf{R} \citep{R2006} was developed to address some of the difficulties associated with processing soils information, specifically related to visualization, aggregation, and classification of soil profile data. This package is based on S3-style functions and classes. Most functions use basic dataframes (rectangular data tables) as input, where rows represent soil horizons and columns define properties of those horizons. Rows associated with each profile are ``stacked'' (i.e. long format), with collections of rows corresponding a single soil profile identified by an appropriate ID. Functions within the AQP package assume that horizon boundaries are defined as depth from the soil surface, and that the lower boundary of the deepest horizon represents a logical ``end'' to the soil profile-- either contact with a root restricting layer or to a conventionally used lower boundary (e.g. 150 cm). The \textbf{aqp} package defines a new S4 class, `SoilProfileCollection', for storage of collections of one or more soil profiles, associated site data, metadata, and more.
+
+
+\subsection{Visualizing Soil Profile Data}
+Visualization of key soil morphologic properties (i.e. color) is the first step in the interpretation of soil profile information. Therefore, a simple diagram (Figure~\ref{fig:profile_plot}) illustrating horizon depths, colors, and names (for a collection of soil profiles) represents an ideal starting point for presenting the soils within an area of interest. The \texttt{profile\_plot()} function provides an approach for rendering soil profiles, based on basic stratigraphic parameters: horizon top boundary, bottom boundary, horizon name, and optionally horizon color (specified in a format that \textbf{R} understands). Combined with the base graphics plotting and layout capabilities, the \texttt{profile\_plot()} function can be used to quickly organize and depict soils information.
+
+
+
+
+The \textbf{aqp} package has several other functions for visualizing soils information: 1) \texttt{plot\_slices()} for generating maps of soil properties by depth slice, 2) \texttt{panel.soil\_profile()} for plotting grouped soil properties vs. depth as step functions, and 3) \texttt{panel.depth\_function()} for plotting grouped depth functions, accompanied by upper and lower confidence limits, vs. depth. In addition, there are several examples within the manual pages that describe how to integrate these functions into calls to base and lattice graphics commands for the production of complex diagrams (See \S \ref{case_study_1}).
+
+
+\subsubsection{Color Conversion}
+Since soil colors are measured in Munsell notation (hue, value, chroma), conversion to the RGB colorspace is required for digital reproduction. The \texttt{munsell2rgb()} function uses a look-up table of common soil colors, and can directly convert (hue, value, chroma) coordinates into (R, G, B) triplets or hexadecimal-encoded colors. The \texttt{munsell} look-up table was generated from the MCSL spectral database of Munsell chips \citep{MCSL2010} and color conversion equations \citep{Lindbloom2010}. The Munsell Color Science Laboratory (MCSL) spectral database contains xyY colorspace coordinates for a range of commonly used Munsell colors, defined at even-numbered chroma values. Colors at odd-numbered chroma values were derived by estimating xyY colorspace coordinates along the entire range of chroma defined for each Munsell hue and value, via spline interpolation (Figure \ref{fig:color_chip_interpolation}).
+
+The conversion from xyY coordinates to RGB coordinates was performed with the following 4 steps: conversion from $xyY$ to $XYZ$ coordinates (Equation \ref{xyY_to_XYZ}), chromatic adaption transformation from the C to D65\footnote{Most \textbf{R} plotting functions, and computer monitors in general, use the sRGB color profile which assumes a D65 illuminant.} illuminant (Equation \ref{chromatic_adaption}), conversion from $XYZ$ (D65 illuminant) to $rgb$ (Equation \ref{XYZ_to_RGB_step_1}), scaling of $rgb$ values to conform to a specific gamma value (Equation \ref{XYZ_to_RGB_step_2}).
+
+
+
+
+
+\subsection{Re-Alignment of Soil Horizons into Depth Slices}
+\subsubsection{Aggregation by Depth Slice}
+
+Standard aggregation or summarization of soils information usually involves properties summed across all horizons (carbon quantity), mean values that are weighted by profile thickness (clay content), or depth to a diagnostic feature (bedrock contact). These approaches generalize well to tasks that require either: single estimates of a given soil property at sampling locations in space, or, group-wise estimates of a given soil property. These approaches do not generalize well to cases in which vertical variation in a given soil property is of interest, and needs to be summarized for a group of soil profiles. For example, the change in clay content with depth is used as a diagnostic element in US Soil Taxonomy, and is an important criterion for several land use interpretations. A collection of soils within a given region is likely to include a wide range in horizon designation (A, B, C, etc.), depth, thickness, and horizon sequences. Therefore, summarization by major horizon type is confounded by variable thickness of major horizon types (A, B, C, etc.), and potential absence of major horizon types at some locations. We present an alternative approach, where soil properties are summarized along a set of depth slices, despite being collected by genetic horizon (Figure~\ref{fig:profile_aggregation}). 
+
+
+
+
+The algorithm (implemented in the \texttt{soil.slot()} function) is based on the assumption that a \textit{representative depth function} for some soil property (i.e. clay content) can be generated from a collection of soil profiles by summarizing this property along depth slices. Depth slices are defined by a segmenting vector: either regularly spaced (1 cm) intervals, or a user-defined vector of segment boundaries (e.g. 0-10, 10-25, 25-50, 50-150). Each profile in the collection is first segmented according to the specified segmenting vector. Then, summary statistics are computed along slices within the collection of profiles. If the segments ($s$) associated with some property are represented as a matrix, rows would represent a slice of values across the collection of profiles ($\mathbf{s}_{i}$) at depth interval $i$, and columns would represent the sequence of values ($\mathbf{s}_{j}$) associated with profile $j$. Therefore, the computation of the aggregate value by slice ($\bar{s}_{i}$) can be symbolized as:
+
+\begin{equation}
+\label{eqn:aqp:slotting}
+\begin{vmatrix} 
+s_{1,1}   &  s_{1,2}   &  s_{1,3}   &  s_{1,4}   &   \dots   &   s_{1,j}   \\
+s_{2,1}   &  s_{2,2}   &  s_{2,3}   &  s_{2,4}   &   \dots   &   s_{2,j}   \\
+\vdots   &  \vdots   &   \vdots   &  \vdots   & \ddots   &  \vdots   \\
+s_{i,1}   &  s_{i,2}   &  s_{i,3}   &  s_{i,4}   &   \dots   &   s_{i,j}   \\
+\end{vmatrix}
+% 
+\xrightarrow{  \displaystyle \bar{s}_{i} = f( \mathbf{s}_{i} )     }
+% 
+\begin{vmatrix} 
+\bar{s}_{1}   \\
+\bar{s}_{2}   \\
+\vdots    \\
+\bar{s}_{i}   \\
+\end{vmatrix}
+\end{equation}
+
+
+\noindent
+where $f( \; )$ is a scalar-returning function applied row-wise, resulting in a new column vector. The algorithm currently supports calculation of mean, standard deviation, quantiles, or a user-defined function. The resulting estimate of central tendency and spread around that tendency for each depth slice are reconstituted into a single \textit{representative depth function} (Figure~\ref{fig:profile_aggregation}). When available, weights (i.e. area fractions) can be supplied for each profile, resulting in weighted versions of most summary statistics. Representative depth functions can be computed for continuous variables (i.e. clay content), categorical variables, and soil depth probability (i.e. probability that the soil profile ends at a given depth). Probabilities for each level $k$ of a categorical variable are computed by slice:
+
+\begin{equation}
+\label{eqn:aqp:slotting}
+\hat{s}_{k.i} = freq( \mathbf{s}_{k.i} ) / j
+\end{equation}
+
+\noindent
+where $freq(\mathbf{s}_{k.i})$ is the frequency of level $k$ along slice $i$, and $j$ is the number of profiles in the collection. Depth-slice probabilities generated from major horizon types can reveal site-wide patterns in soil morphology, such as A horizon thickness, presence or absense of transitional horizons (i.e. AB or BA horizons), and depth to paralithic or bedrock contact. In addition, a collection of horizon types can be combined into a new, synthetic soil profile from depth-slice probabilities; representative of the collection of soils used within the aggregation.
+
+
+% 
+% TODO: finish this section
+% 
+% % describe this here
+\textbf{place-holder text}
+Slice-wise aggregation of physical properties along with soil colors and hoizon designation can be used to generate a visualization of a ``median soil profile'' (Figure \ref{fig:aggregate_profiles}). Typically the mean, or median (50th percentile) is used to generate a new aggregate profile, that is representative of the original collection. Extending this idea, I thought that it would be interesting to generate aggregate profiles that are representative of the 25th and 75th percentiles as well. Using the soil profiles P001 - P005 (Figure \ref{fig:aggregate_profiles}), aggregate profiles Q25, Q50, and Q75 (Figure \ref{fig:aggregate_profiles}) were generated. Soil colors were based on field-described, dry colors. The colors and clay contents of Q25 represent those values in the 25th percentile of the original collection: i.e. darker colors and lower clay contents. The horizon names assigned to Q25, Q50, and Q75 are based on the horizon name that was most common, within each depth slice. A blue line separates those slices within the aggregated profiles which were derived from at least 50\% of the original collection. Slices below 70cm are excluded as they were only derived from P001. In most cases the median (Q50) aggregate profile would be the most useful description of the "central tendency" for a collection of soil profiles. Who knows, maybe it could be used in place of an official series description to describe a map unit. Or, it could be used within the context of a general soils map-- instead of listing all of the series within an aggregate map unit.
+ 
+ 
+
+
+
+% may need more material
+\subsubsection{Investigation of Spatial Patterns by Depth Slice}
+
+Representation of spatial patterns in soil properties, either at points or interpolated along a regular grid, is confounded by irregular horizon depths, variation in naming conventions used by different workers, and the absence of certain horizon types at certain locations. The depth slice  aggregation methods presented in the previous section can be extended to re-align soils data (collected by genetic horizon) onto a common depth-basis. The \texttt{format\_slices()} function is provided to re-format the resulting ``sliced'' data into a list of \texttt{sp} class elements, suitable for mapping or modeling tasks.
+
+
+\subsubsection{Limitations of the Algorithm}
+
+Care should be taken when applying this algorithm in two major cases, where either 1) several heterogeneous groups of soil profiles are aggregated together, and, or 2) soil depth varies greatly within a collection of soil profiles. In the first case, aggregation will result in depth functions that are \textit{numerically} correct, but in no way representative of any of the original soils in the original collection. In the second case, aggregation will result in depth functions that are reasonable near the surface, but quite unreasonable beyond the average depth of the shallowest profiles within the collection. An important diagnostic that is returned by this algorithm (the ``contributing fraction'') describes what fraction of the original profile collection was used to compute an aggregate value at each depth slice. Inspection of this value, along with an evaluation of spread relative to central tendency (i.e. coefficient of variation) can help determine when aggregate depth functions may not be sufficiently representative.
+
+
+
+\subsection{Numerical Classification of Soil Profiles}
+
+\subsubsection{Pair-Wise Comparison by Depth Slice}
+
+One approach to a purely numerical extension to soil classification requires the calculation of pair-wise dissimilarity between soil profiles. Since soil profiles are defined by an ordered (in depth) set of horizons, a numerical comparison must account for variation in horizon thickness and associated properties between profiles \citep{Webster1990}. Our approach builds on work of \citeauthor{Moore1972} \citeyearpar{Moore1972} and the previously mentioned depth-slicing algorithm. Between-profile dissimilarity is evaluated along regular depth slices: every slice, every other slice, or every \textit{nth} slice (Figure~\ref{fig:dissimilarity:profile_dissimilarity}). The final between-profile dissimilarity is computed by summing the collection of slice-wise dissimilarity matrices. Internally, this is accomplished by forming a series of soil property matrices $\mathbf{P}_{j}$ representing ``sliced'' soil properties from profile $j$, where a single cell in this matrix $x_{i,p}$ represents a soil property $p$ from depth slice $i$. The vector of properties defined by a single slice $\mathbf{x}_{ij}$ from the collection of property matrices are accumulated, row-wise, forming a new matrix $\mathbf{X}_{i}$. In this matrix, rows represent profiles and columns represent properties. Pair-wise dissimilarity $\mathbf{D}$ between profiles is computed as the sum of slice-wise dissimilarity:
+
+\begin{equation}
+\label{eqn:aqp:dissimilarity_calc_total}
+\mathbf{D} = \sum^{n}_{i=1} w_{i} G(\mathbf{X}_{i} )
+\end{equation}
+
+\noindent
+where $n$ is the number of slices, $w_{i}$ is an optional weighting coefficient, and $G(\;)$ is Gower's generalized dissimilarity metric \citep{Gower1971}. 
+
+
+
+
+The algorithm (implemented in the \texttt{profile\_compare()} function) represents a compromise between the way soils are commonly described and sampled (by genetic horizon type) and a normalized basis for the comparison of measured properties (depth slice). Gower's generalized dissimilarity metric is available via the \texttt{daisy()} function (from the \textbf{cluster} package). This metric can be evaluated from binary, categorical, and continuous variables; and can accommodate limited occurrences of missing observations \citep{Kaufman2005}. Between-profile dissimilarities are computed to a user-specified maximum depth.
+
+\subsubsection{Tuning Parameters}
+
+
+Before summation of dissimilarities across depth slices, the matrix of between-profile dissimilarities can be weighted according to the depth of a given slice ($d$) via an exponential decay function: $w = e^{-k \times d}$, where $k$ and $d$ are $>$ 0. The decay rate parameter ($k$) determines how rapidly a slice's dissimilarity value is down-weighed with depth: a value of 0.1 would effectively remove any influence of dissimilarities computed below about 30 cm, and a value of 1 would weight all slices equally (Figure~\ref{fig:dissimilarity:wt-functions}). The actual value for $k$ should be determined as objectively as possible; i.e with a combination of knowledge about expected vertical anisotropy and a metric such as the cophenetic correlation coefficient \citep{Sneath1973}. Within the sample dataset \texttt{sp3}, incrementing $k$ from 0 to 0.1, with respect to resulting agglomerative (``average'' method) clustering is demonstrated in Figure~\ref{fig:k_param_comparison}. For this dataset, lower levels of $k$ result in better agreement (larger cophenetic correlation coefficients) between the dissimilarity matrix and grouping defined by agglomerative clustering. The highest cophenetic correlation coefficient is encountered when $k$ = 0.01, close to the depth weighting values suggested by \citet{Russell1968}.
+
+
+% how we deal with profiles of different depths
+Variable soil depth can interfere significantly with the calculation of between-profile dissimilarity. For example, how should the dissimilarity between two profiles at a given depth, when one of the profiles is shallower than that depth? When soil depths are not well defined (e.g. alluvial soils excavated with different tools) a lower-limit to the depth-wise dissimilarity calculation should be sufficient. When the soils in question have been described down to a natural lower boundary (e.g. bedrock, root-restricting layer, etc.) the dissimilarity between soil and non-soil material should be incorporated into the final dissimilarity between profiles. As currently implemented in the function \texttt{daisy()} \citep{Kaufman2005}, Gower's dissimilarity metric is undefined when one of the two inputs is missing. Therefore, when a 25 cm deep profile is compared with a 50 cm deep profile, pair-wise dissimilarities are only accumulated for the first 25 cm of soil (dissimilarities from 26 - 50 cm are NULL). When summed, the total dissimilarity between these profiles will generally be much lower than if the profiles had been of equal depth. 
+
+Our algorithm has an option (setting \texttt{replace\_na=TRUE}) to replace NULL dissimilarity with the maximum dissimilarity between any pair of profiles for the current depth slice (Figure \ref{fig:soil_flag_option}). In this way, the dissimilarity between a slice of soil and a corresponding slice of non-soil reflects the fact that these two materials should be treated very differently (i.e. maximum dissimilarity). This alternative calculation of dissimilarity between soil and non-soil slices solves the problem of comparing shallow profiles with deeper profiles. However, it can result in a new problem: dissimilarity calculated between two shallow profiles will be erroneously inflated beyond the extent of either profile's depth when deeper profiles exist in the collection. Our algorithm has an additional option (setting \texttt{add\_soil\_flag=TRUE}) that will preserve NULL distances between slices when both slices represent non-soil material (Figure \ref{fig:soil_flag_option}). With this option enabled, shallow profiles will only accumulate mutual dissimilarity to the depth of the deeper profile.
+
+For massive collections of soil profiles the \texttt{sample\_interval} argument to \texttt{profile\_compare()} can be used to reduce memory consumption by computing pair-wise dissimilarities every $n$ slices. For example, the comparison of 1,000 soil profiles, each with 5 variables, to a maximum depth of 50 cm requires 192.3 Mb of RAM for the storage of the entire dissimilarity matrix (all depth slices) and takes about 70 seconds to perform (1.3 Ghz Intel CPU). Computing dissimilarity values every 5 slices reduces memory consumption to 1 fifth the original size (38.5 Mb) and processing time by a factor of about 3 (22 seconds). Within the sample dataset \texttt{sp3}, larger \texttt{sample\_interval} values result in lower total dissimilarity values, minor differences in grouping structure, and minor reduction in cophenetic correlation coefficients; up to a sampling interval of every 10th slice (Figure~\ref{fig:sample_interval_param_comparison}). However, the specific threshold defining a reasonable trade-off between computational efficiency and preservation of detail will depend on the input dataset, available computing resources, and the purpose of the analysis. An optimized version of \texttt{profile\_compare()} that uses file-based storage for the collection of dissimilarity matrices is currently in development.
+
+Selection of variables included in the dissimilarity calculation, dissimilarity metric, depth-weighting coefficient, replacement of NULL distances, and grouping criteria all affect the output of this algorithm-- and require further evaluation. Ideally, variables should be selected to accomodate the type of grouping that is most appropriate for the task at hand. For example, a classification reflecting basic parameters of soil development could be built from physical and chemical properties (particle size, pH, CEC, \%BS, soil color, etc.) whereas a classification geared towards soil management decisions could be built from other properties (horizon morphology, bulk density, soil depth, etc.).
+
+
+% this isn't going into the dissertation chapter / paper
+\section{XRD Full-Pattern Matching}
+\label{xrd_pattern_matching}
+X-Ray diffraction (XRD) has contributed more to the current understanding of phyllosilicate minerals in soil systems than any other single method of analysis \citep{Whittig1986X-RAY-Diff}. Crystal structure and composition for common species of clay minerals have largely been derived from extrapolated XRD studies, as clay minerals are usually too small for single-crystal methods \citep{Hughes1994}. The platy structure and common stacking along with c-dimension make it possible to identify clay minerals via changes in measured (00l) diffraction peaks according to a battery of treatments that affect interlayer spacing \citep{Hughes1994}. Peak position, intensity and width are generally modified by a combination of sequential ion-exchange reactions, possibly followed with heat treatments. For example, it is possible to differentiate between clay minerals at the subgroup level (i.e. smectites from serpentines from kaolins) through changes in interlayer spacing associated with 1) solvation with Mg, 2) solvation with Mg and glycerol, 3) solvation with K, and 5) solvation with K followed by heating to 550 degrees C for 2 hours \citep{Whittig1986X-RAY-Diff}. Differentiation between dioctahedral vs. trioctahedral species is generally much more difficult, and requires alternative solvation/heat treatments such as Green-Kelly test \citep{Greene-Kelly1953}, interpretation of (060) diffraction peaks, or full-pattern quantitative XRD (QXRD) methods.
+
+There are several methods that have been used for quantitative interpretation of X-ray diffraction patterns, and can be split into two major categories: 1) peak-matching, and 2) full pattern matching \citep{Bish1994}. The reference intensity ratio (RIR) method is based on normalization of one or more peaks of a mineral phase with respect to the intensity (or integrated intensity) of an internal standard. A known quantity of corundum is typically added to the sample, in a 1:1 ratio, and used as the internal standard. Replicated analysis and the use of several peaks can increase the accuracy of the RIR method \citep{Bish1994}. Full pattern matching methods have become more common with the advent of digital X-ray diffractometers and high-speed computers, and can overcome many of the problems associated with peak-based identification \citep{Hughes1994}. Of these methods, Rietveld refinement and Observed Patterns are two of the most widely used. Rietveld refinement is based on fundamental physical laws that describe the interaction of radiation with crystal structures, and relies on a detailed crystallographic data on all phases present in a sample. Therefore application of this method is much more difficult when working with substances containing large quantities of amorphous, poorly crystalline, or micro-crystalline (i.e. clay mineral) phases \citep{Bish1994}. 
+
+The Observed Patterns method is based on empirical mixture modeling, rather than fundamental principals, and thus requires less detailed characterization of the sample \citep{Bish1994}. A simulated pattern is fit to the unknown pattern (all previously normalized to an internal standard) based on iteratively estimating the fractions of phases that are present within the unknown sample. Proportions are estimated by minimizing the sum of absolute differences between the unknown pattern and the composite pattern at each $2\theta$ value:
+
+\begin{equation}
+\label{eq:ful_pattern_matching_obj_fn}
+D(2\theta) = \sum \; \lvert  I_u(2\theta) - W_p * I_p(2\theta)  \rvert 
+\end{equation}
+
+\noindent
+where $I_{u}(2\theta)$ is the intensity of the unknown sample at each $2\theta$ value, $W_{p}$ is the proportion of phase $p$, and $I_{p}(2\theta)$ is the intensity of phase $p$ at each $2\theta$ value. This approach requires knowledge of the main mineral phases within the unknown, pure standards of those phases, and that all analysis be conducted under the same operating conditions. If pure standards cannot be obtained, it is possible to simulate patterns for those phases from the Powder Diffraction File. The accuracy of this method can be greatly improved when pure standards are available that closely match the crystal size and composition of the phases present in the unknown sample.
+
+
+\section{Example Usage of the aqp Package}
+
+\subsection{Profile Visualization, Classification, and Aggregation}
+\label{case_study_1}
+The \textbf{aqp} package ships with several example soil profile datasets, collected from the Sierra Foothill and Sacramento Valley regions. The \texttt{sp3} dataset is based on a collection of 10 soil profiles from 3 major geologic groups (metavolcanic rocks, metasedimentary rocks, and granodiorite), representative of the Sierra Foothill Region. These data contain field-measured color values (Munsell notation) along with lab-measured clay content, cation exchange capacity (CEC), pH, total carbon, and analytically-measured color values \citep{soil-methods-manual}. The variability of soil properties in this region is largely controlled by the type of underlying bedrock. Finer-textured, redder soils are usually found on metavolcanic rocks, whereas coarser-textured, yellow to gray colored soils are found on granitic rocks. Soils formed on metasedimentary rocks generally resemble soils formed on metavolcanic rocks, but variability in the type of rock and degree of metamorphism can result in drastically different soil properties. The following case study demonstrates how functions from the \textbf{aqp} package can be used to \textit{numerically} describe: 1) differences between soil profiles, 2) dissimilarity-based group membership, and 3) aggregated soil property information defined by these groups.
+
+Surrogate horizon names based on the clay content, cation exchange capacity (CEC), and pH of each horizon, are generated to facilitate interpretation of profile classification. Next field-measured colors are converted to RGB triplets for visualization with the \texttt{munsell2rgb()} function. Missing values, illogical combinations, or Munsell values not matched by rows in the look-up table result in no data (NA). 
+
+
+
+
+Between-profile dissimilarity is computed with the \texttt{profile\_compare()} function using clay content, cation exchange capacity (CEC), and pH values, to a maximum depth of 100 cm, and using a depth-weighting coefficient of 0.01. Divisive hierarchical clustering (\texttt{diana()} function from the \textbf{cluster} package) is used to group soil profiles into a dendrogram for visualization \citep{Kaufman2005,Maechler2005}. The output from \texttt{diana()} is converted into an \textbf{ape} class object, and ladderized \citep{Paradis2004}. Divisive clustering was used as it most closely resembles the top-down approach that a soil scientist would (usually) take when sorting soils: i.e. splitting an initial collection of individuals into subsequently smaller and smaller groups. Finally, the \texttt{sp3} dataframe is converted into a \texttt{SoilProfileCollection} class object.
+
+
+
+\noindent
+A new plot of the dendrogram is generated with the standard plot method for \textbf{ape} class objects; adjustments are made in order to accommodate sketches of the soil profiles below (Figure~\ref{fig:case_study_dend}). Information on the ordering of soil profiles is extracted from the special \texttt{last\_plot.phylo} object, and used to position profile sketches below corresponding terminal nodes of the dendrogram. Finally, soil profile sketches are generated by the \texttt{profile\_plot()} function, applied to a \texttt{SoilProfileCollection} class object (Figure~\ref{fig:case_study_dend}). If so desired, alternative depth-function plots could be inserted below their corresponding ``leaves'' of the dendrogram; i.e. particle size information, principal component scores, etc.
+
+
+The results of this numerical classification (Figure~\ref{fig:case_study_dend}) match field observation of soil properties, and expected differences between major lithologic types. Profiles 1-4 were collected from soils formed on metavolcanic rocks of varying iron content; with higher clay and pH values found on rocks with the highest iron content (profiles 2-4). Profile 5 was collected from a soil formed on metasedimentary rock, with high clay content and much lower pH values. Profiles 6-10 were collected from soils with low clay content and slightly higher pH values formed on granodiorite. Slightly higher clay contents and an increasing pH depth-function differentiate profiles 7-9 (swale position) from profiles 6 \& 10 (backslope position). General patterns in soil color mirror the 3 groups identified within the clustering: deep red colors found in group 1 (high-iron soils from metavolcanic rocks) and group 2 (metasedimentary rocks), gray to brown colors found in the swale position of group 3, and the lighter, more yellow colors found on the backslope position (Figure~\ref{fig:case_study_dend}). 
+
+According to branching within the dendrogram (Figure~\ref{fig:case_study_dend}), the metasedimentary-soil appears to be most similar to the metavolcanic-soil group. Inspection of the dissimilarity matrix reveals that this soil is approximately 31\% similar to the soils of the metavolcanic group and only 9\% similar to the soils of the granodiorite group.
+
+
+
+
+
+Next, depth-slice aggregation of cec and clay values is performed by calling the \texttt{soil.slot()} function for each of the three major groups identified via cluster analysis. Depth-slice aggregation of pH values is applied to groups defined by cutting the dendrogram at a lower level, such that the granodiorite group is split according to hillslope position (Figure~\ref{fig:case_study_dend}). The \texttt{ddply()} function (\textbf{plyr} package) is simplest to use, however the \texttt{by()} and \texttt{do.call()} functions could have been used as well. Visualization of the depth-wise trends and uncertainty (+/- 1 standard deviation) is performed with the custom lattice panel function \texttt{panel.depth\_function()} (Figure~\ref{fig:depth_aggregation}).
+
+
+
+
+Aggregation of soil profile information gives an indication of group-wise central tendency and an empirical estimate of variability (Figure~\ref{fig:depth_aggregation}). Clay content (Figures~\ref{fig:depth_aggregation:clay}) and CEC values (Figures~\ref{fig:depth_aggregation:cec}) are highest within the metavolcanic-soils, with a marked but highly variable increase at 60-80 cm in depth. CEC values are lowest in the granitic-soils and show very low variability with depth. The metasedimentary-soil group lies closer to the metavolcanic-soils, and additional observations (required to compute depth-wise variability) would assist with further, interpretation.  Visualization of aggregate soils information can also aid interpretation of the results from the previous classification. Of the three characteristics supplied to the \texttt{profile\_compare()} function (clay content, CEC, and pH), the distribution of cec values and clay content with depth appears to be the most important factor contributing to differences between groups (Figures~\ref{fig:depth_aggregation:clay} and \ref{fig:depth_aggregation:cec}). Diverging pH depth trends (Figure~\ref{fig:depth_aggregation:ph}) differentiate the two sub-groups identified within the granitic-soils (backslope vs. swale hillslope position).
+
+
+
+% TODO: finish this!
+\subsection{Estimation of Proportions in a Composite XRD Pattern}
+\label{case_study_2}
+pending
+
+
+
+
+\section{Concluding Remarks}
+
+The examples presented in the previous sections represent only a handful of the functions within the \textbf{aqp} package. Several additional functions are included that can be used to format and display depth slices of soils information according to spatial coordinates. A \texttt{random\_profile()} function is included to simulate soil profile data, for the development and testing of aggregation and classification algorithms. The bundled documentation includes extensive, annotated examples based on three sample soils datasets. Examples presented in this chapter were based on a small number of soil profiles for clarity. However, functions in the \textbf{aqp} package have been successfully applied to studies involving several thousand soil profiles. Stable versions of the \textbf{aqp} are hosted on CRAN\footnote{http://cran.r-project.org/web/packages/aqp/}, and the active development version of the \textbf{aqp} package will continue to be hosted on R-Forge\footnote{http://aqp.r-forge.r-project.org/}.
+
+
+\section{Acknowledgments}
+Several portions of this research was funded by the Kearney Foundation of Soil Science. I would like to thank Dr. Brent Myers for providing thoughtful commentary on several of the ideas presented in this paper.
+
+
+
+% \bibliographystyle{sssaj.bst}
+% \bibliography{/home/dylan/latex/soil_papers}
+
+
+A simple example that will run in any S engine: The integers from 1 to
+10 are
+<<print=TRUE>>=
+1:10
+<<results=hide>>=
+print(1:20)
+@ % the above is just to ensure that 2 code chunks can follow each other
+
+We can also emulate a simple calculator:
+<<echo=TRUE,print=TRUE>>=
+1 + 1
+1 + pi
+sin(pi/2)
+@
+
+Now we look at Gaussian data:
+
+<<>>=
+library(stats)
+x <- rnorm(20)
+print(x)
+print(t1 <- t.test(x))
+@
+Note that we can easily integrate some numbers into standard text: The
+third element of vector \texttt{x} is \Sexpr{x[3]}, the
+$p$-value of the test is \Sexpr{format.pval(t1$p.value)}. % $
+
+Now we look at a summary of the famous iris data set, and we want to
+see the commands in the code chunks:
+
+\SweaveOpts{echo=true}
+
+% the following code is R-specific, as data(iris) will not run in Splus. 
+% Hence, we mark it as R code. 
+<<engine=R>>=
+data(iris)
+summary(iris)
+@ %def
+
+
+\begin{figure}[htbp]
+  \begin{center}
+<<fig=TRUE>>=
+library(graphics)
+pairs(iris)
+@
+    \caption{Pairs plot of the iris data.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+<<fig=true>>=
+boxplot(Sepal.Length~Species, data=iris)
+@
+    \caption{Boxplot of sepal length grouped by species.}
+  \end{center}
+\end{figure}
+
+
+
+
+\end{document}
+
+
