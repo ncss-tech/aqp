@@ -1,4 +1,6 @@
 -------------------------- aqp 0.99-8.45 (2011-11-10) --------------------------
+* matrix-style subsetting almost works:
+  - s[i, j] ---> i is the profile index, and j is the horizon/slice index
 * added a 'slice' method for SoilProfileCollection objects
   - returns selected variables along a depth slice (i.e. no aggregation)
 * added NAMESPACE file for R >= 2.14 compatibility
