@@ -79,5 +79,12 @@ lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key),
 # 6. extract a SPDF with horizon data along a slice at 25 cm
 s.25 <- slice(ca, fm=55 ~ bs_7 + CEC7 + ex_acid)
 spplot(s.25, zcol=c('bs_7','CEC7','ex_acid'))
+
+# 7. Extract the 2nd horizon from all profiles as SPDF
+ca.2 <- ca[, 2]
+
+# 8. Extract the all horizons from profiles 1:10 as data.frame
+ca.1.to.10 <- ca[1:10, ]
+
 }
 \keyword{datasets}

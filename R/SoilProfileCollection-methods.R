@@ -223,40 +223,62 @@ setReplaceMethod("$", "SoilProfileCollection",
 )
 
 
+
 ##
-## currently returns horizons indexed numerically... not that useful unless re-sampled
+## TODO: site + sp data are not returned, should be
+## TODO: should return SPC objects not data.frames
 ##
 ## matrix / DF style access: only to horizon data
+##
+## i = profile index
+## j = horizon / slice index
 setMethod("[", "SoilProfileCollection",
-  function(x, i, j , ...) {
+  function(x, i, j, ...) {
 
     # convert to integer
-    i <- as.integer(i)
+    if(!missing(i)) {
+      i <- as.integer(i)
+      if(any(is.na(i)))
+        stop('NA not permitted in profile index')
+    }
+    else # if no index is provided, the user wants all profiles
+      i <- 1:length(x)
 
     # sanity check
-    if(!missing(j))
-      warning('j index ignored for now')
+    if(!missing(j)) {
+      j <- as.integer(j)
+      if(any(is.na(j)))
+      stop('NA not permitted in horizon/slice index')
+    }
 
-    if(any(is.na(i)))
-      stop('NA not permitted in horizon index')
-
-    # extract horizons
+    # extract requested profile IDs
+    p.ids <- profile_id(x)[i]
+    
+    # extract all horizons
     h <- horizons(x)
-
-    # subset data based on i
-    h.sub <- ddply(h, idname(x), .fun=function(y) y[i, ])
+    
+    # keep only the requested horizons (filtered by pedon ID)
+    h <- h[h[[idname(x)]] %in% p.ids, ]
+    
+    # subset horizons/slices based on j --> only when j is given
+    if(!missing(j))
+      h <- ddply(h, idname(x), .fun=function(y) y[j, ])
 
     # if there is REAL data in @sp, return a SPDF
     # for now test for our custom dummy SP obj: number of coordinates == number of profiles
-    if(nrow(coordinates(x@sp)) == length(x)) {
+    # also need to test that there is only 1 horizon/slice per location
+    if(nrow(coordinates(x@sp)) == length(x) & length(p.ids) == nrow(h)) {
       # combine with coordinates
-      res <- SpatialPointsDataFrame(x@sp, data=h.sub)
+      cat('result is a SpatialPointsDataFrame object\n')
+      # note that we are filtering based on 'i' - an index of selected profiles
+      res <- SpatialPointsDataFrame(x@sp[i, ], data=h)
     }
 
-    # no coordinates, return a DF
+    # no coordinates, return a data.frame for now
+    # TODO: return as a SPC + site + sp data
     else {
-      # format result
-      res <- h.sub
+      cat('result is a data.frame object\n')
+      res <- h
     }
 
   # done
@@ -405,8 +427,11 @@ setMethod(f='slice', signature='SoilProfileCollection',
 
   # if spatial data: SPDF
   if(nrow(coordinates(object@sp)) == length(object)) {
+    cat('result is a SpatialPointsDataFrame object\n')
     res <- SpatialPointsDataFrame(object@sp, data=res)
     }
+  else
+    cat('result is a data.frame object\n')
 
   return(res)
   }
