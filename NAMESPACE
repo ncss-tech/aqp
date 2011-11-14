@@ -4,6 +4,7 @@ importFrom('plyr', ddply, llply, ldply, dlply)
 importFrom('reshape', melt, cast)
 importFrom('stringr', str_c, str_split, str_trim)
 importFrom('sp', coordinates, proj4string)
+importFrom("sp", "coordinates<-")
 importFrom('Hmisc', wtd.mean, wtd.var, wtd.quantile, wtd.rank, wtd.table)
 
 exportClasses(SoilProfileCollection)

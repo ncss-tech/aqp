@@ -31,8 +31,12 @@ setMethod(
     }
 
     # presence of spatial data
-    if(nrow(coordinates(object@sp)) == length(object))
-	  cat("\nSpatial data present\n")
+    if(nrow(coordinates(object@sp)) == length(object)) {
+    cat('\nSpatial Data:\n')
+    show(object@sp@bbox)
+    show(object@sp@proj4string)
+    }
+	  
   }
 )
 

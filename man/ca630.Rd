@@ -57,7 +57,11 @@ site(ca) <- ~ mlra + ssa + lon + lat + cntrl_depth_to_top + cntrl_depth_to_bot +
 
 # extract spatial data as SpatialPoints
 coordinates(ca) <- ~ lon + lat
+# temp hack to add the CRS data ... 
+proj4string(ca@sp) <- '+proj=latlong +datum=NAD83'
 
+# check the result
+ca
 
 # 3. aggregate CEC 7 for all profiles into 1 cm slices
 # add new fake grouping column
@@ -73,8 +77,8 @@ ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.l
 )
 
 # 5. safely compute hz-thickness weighted mean CEC (pH 7)
-lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
-.fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top))
+head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
+.fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
 
 # 6. extract a SPDF with horizon data along a slice at 25 cm
 s.25 <- slice(ca, fm=55 ~ bs_7 + CEC7 + ex_acid)

@@ -6,6 +6,7 @@
 \alias{depths<-}
 \alias{$,SoilProfileCollection-method}
 \alias{$<-,SoilProfileCollection-method}
+\alias{[,SoilProfileCollection,ANY,missing-method}
 \alias{[[,SoilProfileCollection,ANY,missing-method}
 \alias{[[<-,SoilProfileCollection,ANY,missing-method}
 \alias{coordinates<-,SoilProfileCollection-method}
@@ -47,6 +48,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
   \describe{
     \item{$}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{$<-}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
     \item{[[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
     \item{[[<-}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
     \item{coordinates<-}{\code{signature(object = "SoilProfileCollection")}: ... }
