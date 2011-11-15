@@ -5,25 +5,25 @@
 # behavior not defined for horizons with an indefinate lower boundary
 
 ## basic function
-profile_plot.SoilProfileCollection <- function(object, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, ...) {
+plot.SoilProfileCollection <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, ...) {
   
   # get horizons
-  h <- horizons(object)
+  h <- horizons(x)
   
   # get column names from horizon dataframe
   nm <- names(h)
   
   # get number of profiles
-  n <- length(object)
+  n <- length(x)
   
   # get top/bottom column names
-  IDcol <- idname(object)
-  hzDepthCols <- horizonDepths(object)
+  IDcol <- idname(x)
+  hzDepthCols <- horizonDepths(x)
   tcol <- hzDepthCols[1]
   bcol <- hzDepthCols[2]
   
   # get profile IDs
-  pIDs <- profile_id(object)
+  pIDs <- profile_id(x)
   
   # check soil color column name
   if(! color %in% nm)
@@ -106,18 +106,14 @@ profile_plot.SoilProfileCollection <- function(object, color='soil_color', width
   
   # axis:
   depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
-  depth_axis_labels <- paste(depth_axis_intervals, units(object))
+  depth_axis_labels <- paste(depth_axis_intervals, units(x))
   axis(side=4, line=-2.5, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
   
   }
 
 
-# generic function prototype
-if (!isGeneric("profile_plot"))
-    setGeneric("profile_plot", function(object, ...)
-      standardGeneric("profile_plot"))
 
 # method dispatch
-setMethod("profile_plot", signature("SoilProfileCollection"), profile_plot.SoilProfileCollection)
+setMethod("plot", signature("SoilProfileCollection"), definition=plot.SoilProfileCollection)
 
 

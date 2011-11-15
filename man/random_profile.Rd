@@ -44,7 +44,7 @@ d$soil_color <- 'white'
 
 # promote to SoilProfileCollection and plot
 depths(d) <- id ~ top + bottom
-profile_plot(d)
+plot(d)
 
 
 # make a more interesting color based on the first property
@@ -56,7 +56,7 @@ if(require(RColorBrewer)) {
   d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
   d$soil_color <- rgb(cr(rescaler(d$p1, type='range')), max=255)
   depths(d) <- id ~ top + bottom
-  profile_plot(d)
+  plot(d)
   
 
   # do this again, this time set all of the LPP parameters
@@ -64,7 +64,7 @@ if(require(RColorBrewer)) {
   lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
   d$soil_color <- rgb(cr(rescaler(d$p1, type='range')), max=255)
   depths(d) <- id ~ top + bottom
-  profile_plot(d)
+  plot(d)
   }
 
 
