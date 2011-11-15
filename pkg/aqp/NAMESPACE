@@ -1,5 +1,6 @@
 import(lattice)
 import(cluster)
+importFrom("graphics", "plot")
 importFrom('plyr', ddply, llply, ldply, dlply)
 importFrom('reshape', melt, cast)
 importFrom('stringr', str_c, str_split, str_trim)

@@ -46,10 +46,10 @@ p.order <- order(p.surface)
 
 depths(sp2) <- id ~ top + bottom
 units(sp2) <- 'cm'
-profile_plot(sp2, plot.order=p.order)
+plot(sp2, plot.order=p.order)
 
 # truncate plot to 200 cm depth, that looks better
-profile_plot(sp2, plot.order=p.order, max.depth=200)
+plot(sp2, plot.order=p.order, max.depth=200)
 
 
 # look at numerical distances between profiles

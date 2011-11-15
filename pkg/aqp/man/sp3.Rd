@@ -116,7 +116,7 @@ function(i) which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
 
 # plot the profiles, in the ordering defined by the dendrogram
 # with a couple fudge factors to make them fit
-profile_plot(sp3.grouped, color="soil_color", plot.order=new_order,
+plot(sp3.grouped, color="soil_color", plot.order=new_order,
 scaling.factor=0.35, width=0.1, cex.names=0.5,
 y.offset=max(lastPP$yy)+6, add=TRUE)
 }

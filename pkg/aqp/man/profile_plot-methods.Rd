@@ -1,7 +1,7 @@
 \name{profile_plot-methods}
 \docType{methods}
-\alias{profile_plot}
 \alias{profile_plot.SoilProfileCollection}
+\alias{plot.SoilProfileCollection}
 
 
 \title{
@@ -76,10 +76,10 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 depths(sp1) <- id ~ top + bottom
 
 # plot profiles
-profile_plot(sp1)
+plot(sp1)
 
 # plot profiles, using alternate profile ID label style
-profile_plot(sp1, id.style='side')
+plot(sp1, id.style='side')
 
 
 # plot horizon color according to some property
@@ -94,7 +94,7 @@ if(require(RColorBrewer)) {
   # assign color based on clay content, rescaled to {0,1}
   sp3$soil_color <- rgb(cr(rescaler(sp3$clay, type='range')), max=255)
   depths(sp3) <- id ~ top + bottom
-  profile_plot(sp3)
+  plot(sp3)
 }
 
 

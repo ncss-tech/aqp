@@ -41,7 +41,7 @@ if(require(RColorBrewer)) {
 depths(sp4) <- id ~ top + bottom
 
 # plot
-profile_plot(sp4)
+plot(sp4)
 
 }
 \keyword{datasets}
