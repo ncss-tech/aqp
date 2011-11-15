@@ -371,8 +371,8 @@ if (!isGeneric("slice"))
 
 
 
-
-## TODO: this si slower than soil.slot ... why?
+## TODO: currently does not correctly "slice" categorical values
+## TODO: this is slower than soil.slot ... why?
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
   function(object, fm, just.the.data=FALSE){
@@ -411,7 +411,11 @@ setMethod(f='slice', signature='SoilProfileCollection',
 
 	if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match any horizon data')
-
+  
+  # notify user that categorical vars are not supported
+  if(any(sapply(vars, function(i) class(h[[i]])) %in% c('character', 'factor')))
+    stop('categorical variables are not currently supported')
+  
   # melt into long format
   m <- melt(h, measure.vars=vars, id.vars=c(id, hd[1], hd[2]))
 
