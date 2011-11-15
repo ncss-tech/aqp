@@ -30,6 +30,9 @@
 \alias{soil.slot.multiple,SoilProfileCollection-method}
 \alias{depth_units}
 \alias{depth_units<-}
+\alias{slice}
+\alias{get.slice}
+\alias{clip}
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}
