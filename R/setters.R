@@ -20,12 +20,12 @@ setReplaceMethod("metadata", "SoilProfileCollection",
 )
 
 ##
-## initialize units: object modification in-place, units stored in @metadata
+## initialize depth_units: object modification in-place, depth_units stored in @metadata
 ##
-if (!isGeneric('units<-'))
-  setGeneric('units<-', function(object, value) standardGeneric('units<-'))
+if (!isGeneric('depth_units<-'))
+  setGeneric('depth_units<-', function(object, value) standardGeneric('depth_units<-'))
 
-setReplaceMethod("units", "SoilProfileCollection",
+setReplaceMethod("depth_units", "SoilProfileCollection",
   function(object, value) {
 
 	# quick sanity check: character, length 1
@@ -33,9 +33,9 @@ setReplaceMethod("units", "SoilProfileCollection",
 	# keep existing metadata
 	md <- metadata(object)
 
-	# default units are always in metadata
+	# default depth_units are always in metadata
 	# replace what ever is there
-	md[['units']] <- value
+	md[['depth_units']] <- value
 
 	# replace metadata
 	metadata(object) <- md
@@ -69,7 +69,7 @@ setReplaceMethod("depths", "data.frame",
     }
 
     # add default metadata: depths are cm
-    metadata(res) <- data.frame(units='cm', stringsAsFactors=FALSE)
+    metadata(res) <- data.frame(depth_units='cm', stringsAsFactors=FALSE)
 
     # done
     return(res)

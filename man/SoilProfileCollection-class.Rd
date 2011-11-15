@@ -25,8 +25,8 @@
 \alias{site}
 \alias{site<-}
 \alias{soil.slot.multiple,SoilProfileCollection-method}
-\alias{units}
-\alias{units<-}
+\alias{depth_units}
+\alias{depth_units<-}
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}
