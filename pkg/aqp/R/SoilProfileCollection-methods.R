@@ -20,7 +20,7 @@ setMethod(
   definition=function(object){
     cat("Object of class ", class(object), "\n", sep = "")
     cat("Number of profiles: ", length(object), "\n", sep="")
-	cat("Depth range: ", min(object), "-", max(object), " ", units(object), "\n", sep="")
+	cat("Depth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
 	cat("\nHorizon attributes:\n")
 	print(head(horizons(object)))
 
@@ -123,17 +123,17 @@ setMethod(f='metadata', signature='SoilProfileCollection',
   }
 )
 
-## units
+## depth_units
 # returns a data.frame
-if (!isGeneric("units"))
-  setGeneric("units", function(object, ...) standardGeneric("units"))
+if (!isGeneric("depth_units"))
+  setGeneric("depth_units", function(object, ...) standardGeneric("depth_units"))
 
-setMethod(f='units', signature='SoilProfileCollection',
+setMethod(f='depth_units', signature='SoilProfileCollection',
   function(object){
-	u <- as.character(metadata(object)[['units']])
+	u <- as.character(metadata(object)[['depth_units']])
 	  # give a warning if not defined
 	if(u == '')
-	  message('Note: depth units have not yet been defined.')
+	  message('Note: depth depth_units have not yet been defined.')
 
 	return(u)
   }
