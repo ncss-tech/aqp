@@ -341,7 +341,7 @@ setMethod("names", "SoilProfileCollection",
 # include:
 # 'bottom' - bottom boundary is included in the z-slice test
 # 'top' - top boundary is included in the z-slice test
-get.single.slice <- function(d, top, bottom, z, include='top') {
+get.slice <- function(d, top, bottom, z, include='top') {
   # extract pieces
   d.top <- d[[top]]
   d.bottom <- d[[bottom]]
@@ -371,8 +371,8 @@ if (!isGeneric("slice"))
 
 
 
-## TODO: allow for multiple slices... what would be returned ? a new SPC?
 
+## TODO: this si slower than soil.slot ... why?
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
   function(object, fm, just.the.data=FALSE){
@@ -385,12 +385,16 @@ setMethod(f='slice', signature='SoilProfileCollection',
   formula <- str_c(deparse(fm, 500), collapse="")
   elements <- str_split(formula, fixed("~"))[[1]]
   formula <- lapply(str_split(elements, "[+*]"), str_trim)
-
+  
+  # TODO: this will have to be changed when we implement no LHS = all slices
   if (length(formula) > 2)
     stop("please provide a valid formula")
-
-  z <- as.numeric(formula[[1]])
-  vars <- formula[[2]]
+  
+  # extract parsed formula components
+  vars <- formula[[2]] # RHS, simple enough
+  # LHS: could be either single integer or vector of slices
+  z <- as.numeric(eval(parse(text=formula[[1]])))
+  
 
   # get horizons + depth column names + ID column name
   h <- horizons(object)
@@ -398,10 +402,10 @@ setMethod(f='slice', signature='SoilProfileCollection',
   id <- idname(object)
 
 	# check for bogus left/right side problems with the formula
-  if(any(z < 1) | any(is.na(z)))
+  if(any(z < 0) | any(is.na(z)))
     stop('z-slice must be >= 1')
 
-  ## this will have to be updated for z-slices defined by data in @site
+  ## TODO: this will have to be updated for z-slices defined by data in @site
 	if(! class(z) %in% c('numeric','integer')) # bogus z-slice
 		stop('z-slice must be either numeric or integer')
 
@@ -411,25 +415,42 @@ setMethod(f='slice', signature='SoilProfileCollection',
   # melt into long format
   m <- melt(h, measure.vars=vars, id.vars=c(id, hd[1], hd[2]))
 
-  # extract single slice by id/variable
-  hd.slice <- ddply(m, c(id, 'variable'), .fun=get.single.slice, top=hd[1], bottom=hd[2], z=z)
+  # extract slice by id/variable, for each requested depth
+  # pre-allocate storage as list
+  hd.slices <- vector(mode='list', length=length(z))
+  # prepare an index for the list
+  slice.idx <- seq_along(z)
+  
+  # iterate over this index
+  for(slice.i in slice.idx) {
+    m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, top=hd[1], bottom=hd[2], z=z[slice.i])
+    # add the slice value 
+    m.i$depth <- z[slice.i]
+    # save to the list
+    hd.slices[[slice.i]] <- m.i
+    }
+  
+  # convert list into DF and order by id, depth
+  hd.slices <- ldply(hd.slices)
+  ## TODO: make sure sorting is correct!
+  hd.slices <- hd.slices[order(hd.slices[[id]], hd.slices[['depth']]), ]
 
   # convert back into wide format
-  fm.to.wide <- as.formula(paste(id, 'variable', sep=' ~ '))
-  hd.slice <- cast(hd.slice, formula=fm.to.wide, value='slice')
+  fm.to.wide <- as.formula(paste(id, '+', 'depth', '~', 'variable', sep=' '))
+  hd.slices <- cast(hd.slices, formula=fm.to.wide, value='slice')
 
   # if we just want the data:
   if(just.the.data)
-    return(hd.slice)
+    return(hd.slices)
 
   # if site data: join
   if(nrow(site(object)) > 0 )
-    res <- join(hd.slice, site(object))
+    res <- join(hd.slices, site(object))
   else
-    res <- hd.slice
+    res <- hd.slices
 
-  # if spatial data: SPDF
-  if(nrow(coordinates(object@sp)) == length(object)) {
+  # if spatial data and only a single slice: SPDF
+  if(nrow(coordinates(object@sp)) == length(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
     res <- SpatialPointsDataFrame(object@sp, data=res)
     }
@@ -440,6 +461,7 @@ setMethod(f='slice', signature='SoilProfileCollection',
   }
 )
 
+
 ## Coercition methods and sp utilities
 setAs("SoilProfileCollection", "SpatialPoints", function(from) {
     from@sp
@@ -447,6 +469,7 @@ setAs("SoilProfileCollection", "SpatialPoints", function(from) {
 )
 
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
+    cat('ony site data are extracted\n')
     SpatialPointsDataFrame(from@sp, data = from@site)
   }
 )
