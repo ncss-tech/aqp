@@ -2,17 +2,12 @@
 \docType{methods}
 \alias{soil.slot.multiple-methods}
 \alias{soil.slot.multiple}
-\alias{soil.slot.multiple}
 
 \title{
 Multivariate Soil Profile Slotting
 }
 \description{
 Align several soil properties to a user-defined basis, with data returned in long format.
-}
-
-\usage{
-soil.slot.multiple(data, fm, ...)
 }
 
 

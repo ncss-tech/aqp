@@ -493,15 +493,20 @@ setMethod(f='clip', signature='SoilProfileCollection',
 
     # This functionality require the GEOS bindings
     # provided by rgeos
-    require(rgeos)
-    spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
-    ids <- which(spc_intersection)
+    if(require(rgeos)) {
+      spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
+      ids <- which(spc_intersection)
 
-    valid_ids <- site(object)[ids, object@idcol]
+      valid_ids <- site(object)[ids, object@idcol]
 
-    valid_horizons <- which(horizons(object)[, object@idcol] == valid_ids)
-    valid_sites <- which(site(object)[, object@idcol] == valid_ids)
+      valid_horizons <- which(horizons(object)[, object@idcol] == valid_ids)
+      valid_sites <- which(site(object)[, object@idcol] == valid_ids)
 
-    SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
+      SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
+    }
+    else { # no rgeos, return original
+      cat('clipping not performed, please install `rgeos`')
+      object
+    }
   }
 )
