@@ -82,13 +82,12 @@ setMethod("horizonDepths", "SoilProfileCollection",
 )
 
 
-## for some reason this doesn't work... ?
-# ## spatial data: coordinates
-# setMethod("coordinates", "SoilProfileCollection",
-#   function(object) {
-#   return(sp::coordinates(object@sp))
-#   }
-# )
+## spatial data: coordinates
+setMethod("coordinates", "SoilProfileCollection",
+  function(obj) {
+  return(coordinates(obj@sp))
+  }
+)
 
 ## site data
 if (!isGeneric("site"))

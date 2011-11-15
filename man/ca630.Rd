@@ -57,8 +57,8 @@ site(ca) <- ~ mlra + ssa + lon + lat + cntrl_depth_to_top + cntrl_depth_to_bot +
 
 # extract spatial data as SpatialPoints
 coordinates(ca) <- ~ lon + lat
-# temp hack to add the CRS data ... 
-proj4string(ca@sp) <- '+proj=latlong +datum=NAD83'
+# assign CRS data
+proj4string(ca) <- '+proj=latlong +datum=NAD83'
 
 # check the result
 ca

@@ -251,13 +251,13 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 )
 
 
-# ##
-# ## proj4string: broken
-# ##
-# setReplaceMethod("proj4string", "SoilProfileCollection",
-#   function(object, value) {
-#   proj4string(object@sp) <- value
-#   object
-#   }
-# )
+##
+## proj4string setting
+##
+setReplaceMethod("proj4string", "SoilProfileCollection",
+  function(obj, value) {
+  proj4string(obj@sp) <- value
+  obj
+  }
+)
 

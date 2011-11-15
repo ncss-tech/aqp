@@ -1,6 +1,6 @@
-\name{profile_plot-methods}
+\name{SoilProfileCollection-plotting-methods}
 \docType{methods}
-\alias{profile_plot.SoilProfileCollection}
+\alias{profile_plot}
 \alias{plot.SoilProfileCollection}
 
 
@@ -14,23 +14,23 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 \section{Methods}{
 \describe{
 
-\item{\code{signature(object = "SoilProfileCollection")}}{
+\item{\code{signature(x = "SoilProfileCollection")}}{
 
 }
 }}
 
 \usage{
-profile_plot.SoilProfileCollection(object, color='soil_color', width=0.2, name='name', 
+plot.SoilProfileCollection(x, color='soil_color', width=0.2, name='name', 
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
-id.style='top', plot.order=1:length(object), add=FALSE, scaling.factor=1, y.offset=0, 
-max.depth=max(object), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
+id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, 
+max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
 abbr.cutoff=5, \dots)
 }
 
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{a SoilProfileCollection object}
+  \item{x}{a SoilProfileCollection object}
   \item{color}{the name of the column containing R-compatible color descriptions}
   \item{width}{scaling of profile widths}
   \item{name}{the name of the column containing the horizon designation}

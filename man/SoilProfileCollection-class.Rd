@@ -9,6 +9,9 @@
 \alias{[,SoilProfileCollection,ANY,missing-method}
 \alias{[[,SoilProfileCollection,ANY,missing-method}
 \alias{[[<-,SoilProfileCollection,ANY,missing-method}
+\alias{proj4string,SoilProfileCollection-method}
+\alias{proj4string<-,SoilProfileCollection-method}
+\alias{coordinates,SoilProfileCollection-method}
 \alias{coordinates<-,SoilProfileCollection-method}
 \alias{horizonDepths}
 \alias{horizons}
