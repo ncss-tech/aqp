@@ -52,12 +52,13 @@ d$color <- with(d, munsell2rgb(hue, value, chroma))
 plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
 
 # multiple pages of hue:
-d <- expand.grid(hue=c('5YR','7.5YR','10YR'), value=2:8, chroma=1:8)
-d$hue <- factor(d$hue, levels=c('5YR','7.5YR','10YR'))
+hues <- c('2.5YR','5YR','7.5YR','10YR')
+d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2))
+d$hue <- factor(d$hue, levels=hues)
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
-xyplot(value ~ chroma | hue,
-main="Common Soil Colors", layout=c(3,1), scales=list(alternating=1),
+xyplot(value ~ factor(chroma) | hue,
+main="Common Soil Colors", layout=c(4,1), scales=list(alternating=1),
 strip=strip.custom(bg=grey(0.85)),
 data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
 panel=function(x, y, subscripts, ...)
@@ -73,9 +74,9 @@ if(require(colorspace))
   d.lab <- as(with(d.rgb, RGB(r,g,b)), 'LAB')
   d <- data.frame(d, d.lab@coords)
   
-  xyplot(value ~ chroma | hue,
-  main="Common Soil Colors - Annotated with LAB Coordinates", layout=c(3,1), scales=list(alternating=1),
-  strip=strip.custom(bg=grey(0.85)),
+  xyplot(value ~ factor(chroma) | hue,
+  main="Common Soil Colors - Annotated with LAB Coordinates", layout=c(4,1), 
+  scales=list(alternating=1), strip=strip.custom(bg=grey(0.85)),
   data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
   panel=function(x, y, subscripts, ...) {
     panel.xyplot(x, y, pch=15, cex=7, col=d$color[subscripts])
@@ -83,6 +84,13 @@ if(require(colorspace))
     panel.text(x, y, labels=lab.text, cex=0.75, col='white', font=2)
     }
   )
+  
+  # also demonstrate A ~ hue for each slice of chroma
+  xyplot(A ~ hue | factor(value), groups=chroma, data=d,
+  scales=list(alternating=1), strip=strip.custom(bg=grey(0.85)),
+  main="A-coordinate vs. Munsell Hue", sub='panels are Munsell value, colors are Munsell chroma',
+  xlab='Munsell Hue', ylab='A-coordinate', pch=16,
+  type='b', as.table=TRUE, auto.key=list(lines=TRUE, points=FALSE, columns=4))
   
   }
 
