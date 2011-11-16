@@ -36,7 +36,7 @@ setMethod(
     show(object@sp@bbox)
     show(object@sp@proj4string)
     }
-	  
+
   }
 )
 
@@ -256,13 +256,13 @@ setMethod("[", "SoilProfileCollection",
 
     # extract requested profile IDs
     p.ids <- profile_id(x)[i]
-    
+
     # extract all horizons
     h <- horizons(x)
-    
+
     # keep only the requested horizons (filtered by pedon ID)
     h <- h[h[[idname(x)]] %in% p.ids, ]
-    
+
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j))
       h <- ddply(h, idname(x), .fun=function(y) y[j, ])
@@ -385,16 +385,16 @@ setMethod(f='slice', signature='SoilProfileCollection',
   formula <- str_c(deparse(fm, 500), collapse="")
   elements <- str_split(formula, fixed("~"))[[1]]
   formula <- lapply(str_split(elements, "[+*]"), str_trim)
-  
+
   # TODO: this will have to be changed when we implement no LHS = all slices
   if (length(formula) > 2)
     stop("please provide a valid formula")
-  
+
   # extract parsed formula components
   vars <- formula[[2]] # RHS, simple enough
   # LHS: could be either single integer or vector of slices
   z <- as.numeric(eval(parse(text=formula[[1]])))
-  
+
 
   # get horizons + depth column names + ID column name
   h <- horizons(object)
@@ -411,11 +411,11 @@ setMethod(f='slice', signature='SoilProfileCollection',
 
 	if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match any horizon data')
-  
+
   # notify user that categorical vars are not supported
   if(any(sapply(vars, function(i) class(h[[i]])) %in% c('character', 'factor')))
     stop('categorical variables are not currently supported')
-  
+
   # melt into long format
   m <- melt(h, measure.vars=vars, id.vars=c(id, hd[1], hd[2]))
 
@@ -424,16 +424,16 @@ setMethod(f='slice', signature='SoilProfileCollection',
   hd.slices <- vector(mode='list', length=length(z))
   # prepare an index for the list
   slice.idx <- seq_along(z)
-  
+
   # iterate over this index
   for(slice.i in slice.idx) {
     m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, top=hd[1], bottom=hd[2], z=z[slice.i])
-    # add the slice value 
+    # add the slice value
     m.i$depth <- z[slice.i]
     # save to the list
     hd.slices[[slice.i]] <- m.i
     }
-  
+
   # convert list into DF and order by id, depth
   hd.slices <- ldply(hd.slices)
   ## TODO: make sure sorting is correct!
@@ -484,11 +484,11 @@ setMethod(f='proj4string', signature='SoilProfileCollection',
   }
 )
 
-## clip: spatial clipping of a SPC (requires GEOS)
-if (!isGeneric("clip"))
-  setGeneric("clip", function(object, ...) standardGeneric("clip"))
+## spatial_subset: spatial clipping of a SPC (requires GEOS)
+if (!isGeneric("spatial_subset"))
+  setGeneric("spatial_subset", function(object, ...) standardGeneric("spatial_subset"))
 
-setMethod(f='clip', signature='SoilProfileCollection',
+setMethod(f='spatial_subset', signature='SoilProfileCollection',
   function(object, geom){
 
     # This functionality require the GEOS bindings
@@ -505,8 +505,7 @@ setMethod(f='clip', signature='SoilProfileCollection',
       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
     }
     else { # no rgeos, return original
-      cat('clipping not performed, please install `rgeos`')
-      object
+      stop('Spatial subsetting not performed, please install the `rgeos` package.')
     }
   }
 )
