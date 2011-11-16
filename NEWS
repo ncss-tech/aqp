@@ -1,8 +1,9 @@
--------------------------- aqp 0.99-8.45 (2011-11-10) --------------------------
+-------------------------- aqp 0.99-8.46 (2011-11-16) --------------------------
+* adding coercion methods for common objects and sp-class objects
 * matrix-style subsetting almost works:
   - s[i, j] ---> i is the profile index, and j is the horizon/slice index
 * added a 'slice' method for SoilProfileCollection objects
-  - returns selected variables along a depth slice (i.e. no aggregation)
+  - returns selected variables along depth slice(s) (i.e. no aggregation)
 * added NAMESPACE file for R >= 2.14 compatibility
 * stabilized S4 class, working on S4-izing all related functions
 * preliminary documentation on the new S4 classes/methods

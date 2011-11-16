@@ -31,7 +31,7 @@ setMethod(
     }
 
     # presence of spatial data
-    if(nrow(coordinates(object@sp)) == length(object)) {
+    if(nrow(coordinates(object)) == length(object)) {
     cat('\nSpatial Data:\n')
     show(object@sp@bbox)
     show(object@sp@proj4string)
@@ -270,11 +270,11 @@ setMethod("[", "SoilProfileCollection",
     # if there is REAL data in @sp, return a SPDF
     # for now test for our custom dummy SP obj: number of coordinates == number of profiles
     # also need to test that there is only 1 horizon/slice per location
-    if(nrow(coordinates(x@sp)) == length(x) & length(p.ids) == nrow(h)) {
+    if(nrow(coordinates(x)) == length(x) & length(p.ids) == nrow(h)) {
       # combine with coordinates
       cat('result is a SpatialPointsDataFrame object\n')
       # note that we are filtering based on 'i' - an index of selected profiles
-      res <- SpatialPointsDataFrame(x@sp[i, ], data=h)
+      res <- SpatialPointsDataFrame(coordinates(x)[i, ], data=h)
     }
 
     # no coordinates, return a data.frame for now
@@ -337,6 +337,8 @@ setMethod("names", "SoilProfileCollection",
 ## neat-stuff
 ##
 
+## slice(SPC, ...)
+
 # works on a single set of depths + property at a time
 # include:
 # 'bottom' - bottom boundary is included in the z-slice test
@@ -375,7 +377,7 @@ if (!isGeneric("slice"))
 ## TODO: this is slower than soil.slot ... why?
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
-  function(object, fm, just.the.data=FALSE){
+  function(object, fm, top.down=TRUE, just.the.data=FALSE){
 
   # test for logical input
   if(! inherits(fm, "formula"))
@@ -399,6 +401,7 @@ setMethod(f='slice', signature='SoilProfileCollection',
   # get horizons + depth column names + ID column name
   h <- horizons(object)
   hd <- horizonDepths(object)
+  top <- hd[1] ; bottom <- hd[2] # convenience vars
   id <- idname(object)
 
 	# check for bogus left/right side problems with the formula
@@ -417,7 +420,7 @@ setMethod(f='slice', signature='SoilProfileCollection',
     stop('categorical variables are not currently supported')
 
   # melt into long format
-  m <- melt(h, measure.vars=vars, id.vars=c(id, hd[1], hd[2]))
+  m <- melt(h, measure.vars=vars, id.vars=c(id, top, bottom))
 
   # extract slice by id/variable, for each requested depth
   # pre-allocate storage as list
@@ -427,54 +430,95 @@ setMethod(f='slice', signature='SoilProfileCollection',
 
   # iterate over this index
   for(slice.i in slice.idx) {
-    m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, top=hd[1], bottom=hd[2], z=z[slice.i])
-    # add the slice value
-    m.i$depth <- z[slice.i]
+    m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, top=top, bottom=bottom, z=z[slice.i])
+    
+    # add depth range:
+    # top-down, means that the slice starts from the user-defined depths (default)
+    if(top.down) {
+      m.i[[top]] <- z[slice.i]      # "top"
+      m.i[[bottom]] <- z[slice.i] + 1  # "bottom"
+    }
+    # otherwise, the slice starts at the bottom (why would someone do this?)
+    else {
+      m.i[[top]] <- z[slice.i] - 1 # "top"
+      m.i[[bottom]] <- z[slice.i]     # "bottom"
+    }
     # save to the list
     hd.slices[[slice.i]] <- m.i
     }
 
-  # convert list into DF and order by id, depth
+  # convert list into DF and order by id, top = hd[1]
   hd.slices <- ldply(hd.slices)
-  ## TODO: make sure sorting is correct!
-  hd.slices <- hd.slices[order(hd.slices[[id]], hd.slices[['depth']]), ]
+  ## TODO: make sure sorting is correct!  
+  hd.slices <- hd.slices[order(hd.slices[[id]], hd.slices[[top]]), ]
 
   # convert back into wide format
-  fm.to.wide <- as.formula(paste(id, '+', 'depth', '~', 'variable', sep=' '))
-  hd.slices <- cast(hd.slices, formula=fm.to.wide, value='slice')
+  # and remove reshape-related attributes
+  fm.to.wide <- as.formula(paste(id, '+', top, '+', bottom, '~', 'variable', sep=' '))
+  hd.slices <- data.frame(cast(hd.slices, formula=fm.to.wide, value='slice'))
 
   # if we just want the data:
   if(just.the.data)
     return(hd.slices)
 
-  # if site data: join
-  if(nrow(site(object)) > 0 )
-    res <- join(hd.slices, site(object))
-  else
-    res <- hd.slices
-
   # if spatial data and only a single slice: SPDF
-  if(nrow(coordinates(object@sp)) == length(object) & length(z) == 1) {
+  # TODO: include site data as well
+  if(nrow(coordinates(object)) == length(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
-    res <- SpatialPointsDataFrame(object@sp, data=res)
+    # check for site data, if present - join to our sliced data
+    if(nrow(site(object)) > 0 )
+      hd.slices <- join(hd.slices, site(object))
+    
+    return(SpatialPointsDataFrame(coordinates(object), data=hd.slices))
     }
   else
-    cat('result is a data.frame object\n')
-
-  return(res)
+    cat('result is a SoilProfileCollection object\n')
+  
+  # otherwise return an SPC, be sure to copy over the spatial data
+  depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom))
+  hd.slices@sp <- object@sp
+  
+  # if site data: return an SPC + @site
+  # note that we should have a proper setter for this
+  if(nrow(site(object)) > 0 )
+    hd.slices@site <- site(object)
+  
+  return(hd.slices)
   }
 )
 
 
-## Coercition methods and sp utilities
-setAs("SoilProfileCollection", "SpatialPoints", function(from) {
-    from@sp
+## Coercition methods: general
+setAs("SoilProfileCollection", "data.frame", function(from) {
+  
+  # horizons + site + coordinates
+  if(nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
+    site.coords <- data.frame(site(from), coordinates(from))
+    return(join(horizons(from), site.coords))
   }
+  
+  # horizons + site
+  if(nrow(site(from)) > 0 & ! nrow(coordinates(from)) == length(from))
+    return(join(horizons(from), site(from)))
+    
+  # horizons + coordinates
+  if(! nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
+    ids.coords <- data.frame(profile_id(from), coordinates(from))
+    return(data.frame(horizons(from), ids.coords))
+  }
+  
+  # just horizons
+  else {
+    return(horizons(from))
+  }
+  
+}
 )
 
+## Coercition methods: and sp utilities
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
     cat('ony site data are extracted\n')
-    SpatialPointsDataFrame(from@sp, data = from@site)
+    SpatialPointsDataFrame(coordinates(from), data = from@site)
   }
 )
 
