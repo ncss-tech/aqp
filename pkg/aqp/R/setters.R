@@ -239,12 +239,21 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   mf.missing <- apply(mf, 2, is.na)
 
   if(any(mf.missing))
-	stop('cannot initialize a SpatialPoints object with missing coordinates')
+	  stop('cannot initialize a SpatialPoints object with missing coordinates')
 
   # assign to sp slot
   # note that this will clobber any existing spatial data
   object@sp <- SpatialPoints(coords=mf)
-
+  
+  # remove coordinates from source data
+  # note that mf is a matrix, so we need to access the colnames differently
+  coord_names <- dimnames(mf)[[2]]
+  idx <- match(coord_names, names(site(object)))
+  
+  # remove the named site data from site_data
+  # TODO we should use a proper setter!
+  object@site <- site(object)[, -idx]
+  
   # done
   return(object)
   }

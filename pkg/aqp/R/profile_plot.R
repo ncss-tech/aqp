@@ -24,17 +24,6 @@ plot.SoilProfileCollection <- function(x, color='soil_color', width=0.2, name='n
   
   # get profile IDs
   pIDs <- profile_id(x)
-  
-  # check soil color column name
-  if(! color %in% nm)
-	  {
-	  stop(paste('Invalid soil color column:', color))
-	  }
-  # check horizon name column
-  if(! name %in% nm)
-	  {
-	  stop(paste('Invalid horizon name column:', name))
-	  }
 	  
   # fudge factors
   extra_x_space <- 1
@@ -61,13 +50,28 @@ plot.SoilProfileCollection <- function(x, color='soil_color', width=0.2, name='n
 	  this_profile_id <- pIDs[profile_i]
 	  this_profile_data <- h[h[IDcol] == this_profile_id, ]
 	  
+    ## TODO: allow color to be set via formula interface
+    # extract / generate horizon color
+    m <- match(color, names(this_profile_data))
+    if(! is.na(m))
+      this_profile_colors <- this_profile_data[[m]]
+    else # no user-defined color column, or it is missing
+      this_profile_colors <- 'white'
+    
+    # extract / generate horizon name
+    m <- match(name, names(this_profile_data))
+    if(! is.na(m))
+      this_profile_names <- this_profile_data[[m]]
+    else # no user-defined color column, or it is missing
+      this_profile_names <- ''
+    
 	  # generate rectangle geometry
 	  # get vectors of horizon boundaries, and scale
 	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
 	  y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
 	  
 	  # make rectangles (horizons)
-	  rect(i-width, y0, i + width, y1, col=this_profile_data[, color])
+	  rect(i-width, y0, i + width, y1, col=this_profile_colors)
   
 	  # annotate with names
 	  # first get the horizon mid-point
@@ -75,14 +79,14 @@ plot.SoilProfileCollection <- function(x, color='soil_color', width=0.2, name='n
 	  
 	  # optionally shrink the size of names if they are longer than a given thresh
 	  if(shrink) {
-		  names.to.shrink <- which(nchar(this_profile_data[, name]) > shrink.cutoff)
+		  names.to.shrink <- which(nchar(this_profile_names) > shrink.cutoff)
 		  cex.names.shrunk <- rep(cex.names, length(this_profile_data[, tcol]))
 		  cex.names.shrunk[names.to.shrink] <- cex.names.shrunk[names.to.shrink] * 0.8
-		  text(i + width, mid, this_profile_data[, name], pos=4, offset=0.1, cex=cex.names.shrunk)
+		  text(i + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names.shrunk)
 		  }
 	  # standard printing of names, all at the same size
 	  else
-		  text(i + width, mid, this_profile_data[, name], pos=4, offset=0.1, cex=cex.names)		
+		  text(i + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names)		
 	  
 	  # add the profile ID
 	  if(print.id)

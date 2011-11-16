@@ -42,13 +42,19 @@ Soil profile data from Pinnacles National Monument, CA.
 \references{http://casoilresource.lawr.ucdavis.edu/}
 
 \examples{
-# prep environment
-require(lattice)
-require(aqp)
 data(sp1)
 
-# slot all profiles into 1cm depth slices
-s1 <- soil.slot(data=sp1)
+## promote to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
+
+## extract 1-unit thick slices of 'prop' at defined depths
+s <- slice(sp1, 0:25 ~ prop)
+plot(s, name='prop')
+
+# aggregate all profiles into 1cm depth slices, 
+# using data from column 'prop'
+s1 <- soil.slot.multiple(sp1, fm= ~ prop)
 
 # check mean +/- 1SD
 xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
@@ -62,13 +68,13 @@ panel=panel.superpose, ylim=c(110,-5))
 
 # other segment sizes
 # 5cm
-s5 <- soil.slot(data=sp1, seg_size=5)
+s5 <- soil.slot.multiple(sp1, fm= ~ prop, seg_size=5)
 
 # 10cm segments:
-s10 <- soil.slot(data=sp1, seg_size=10)
+s10 <- soil.slot.multiple(sp1, fm= ~ prop, seg_size=10)
 
 # 20cm
-s20 <- soil.slot(data=sp1, seg_size=20)
+s20 <- soil.slot.multiple(sp1, fm= ~ prop, seg_size=20)
 
 # variation in segment-weighted mean property: very little
 sapply(
@@ -87,7 +93,7 @@ xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, id=g2$which,
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
 ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
-auto.key=list(columns=2, points=FALSE, lines=TRUE)
+auto.key=list(columns=4, points=FALSE, lines=TRUE)
 )
 
 
