@@ -32,7 +32,7 @@
 \alias{depth_units<-}
 \alias{slice}
 \alias{get.slice}
-\alias{clip}
+\alias{spatial_subset}
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}
