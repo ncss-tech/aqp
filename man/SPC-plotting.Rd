@@ -1,7 +1,7 @@
 \name{SoilProfileCollection-plotting-methods}
 \docType{methods}
-\alias{profile_plot}
-\alias{plot.SoilProfileCollection}
+\alias{plotSPC}
+\alias{plot,SoilProfileCollection-method}
 
 
 \title{
@@ -20,7 +20,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }}
 
 \usage{
-plot.SoilProfileCollection(x, color='soil_color', width=0.2, name='name', 
+plotSPC(x, color='soil_color', width=0.2, name='name', 
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
 id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, 
 max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 

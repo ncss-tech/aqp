@@ -3,36 +3,19 @@
 \docType{class}
 \alias{SoilProfileCollection-class}
 \alias{SoilProfileCollection}
-\alias{depths<-}
 \alias{$,SoilProfileCollection-method}
 \alias{$<-,SoilProfileCollection-method}
-\alias{[,SoilProfileCollection,ANY,missing-method}
-\alias{[[,SoilProfileCollection,ANY,missing-method}
-\alias{[[<-,SoilProfileCollection,ANY,missing-method}
+\alias{[,SoilProfileCollection-method}
 \alias{proj4string,SoilProfileCollection-method}
 \alias{proj4string<-,SoilProfileCollection-method}
 \alias{coordinates,SoilProfileCollection-method}
 \alias{coordinates<-,SoilProfileCollection-method}
-\alias{horizonDepths}
-\alias{horizons}
-\alias{horizons<-}
-\alias{idname}
 \alias{names,SoilProfileCollection-method}
 \alias{length,SoilProfileCollection-method}
 \alias{max,SoilProfileCollection-method}
-\alias{metadata}
-\alias{metadata<-}
 \alias{min,SoilProfileCollection-method}
-\alias{profile_id}
 \alias{show,SoilProfileCollection-method}
-\alias{site}
-\alias{site<-}
-\alias{soil.slot.multiple,SoilProfileCollection-method}
-\alias{depth_units}
-\alias{depth_units<-}
-\alias{slice}
-\alias{get.slice}
-\alias{spatial_subset}
+
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}

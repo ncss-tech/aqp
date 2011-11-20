@@ -1,8 +1,10 @@
 \name{profile_compare-methods}
 \docType{methods}
-\alias{profile_compare-methods}
-\alias{profile_compare}
 \alias{pc}
+\alias{profile_compare}
+\alias{profile_compare,SoilProfileCollection-method}
+\alias{profile_compare,data.frame-method}
+
 
 \title{Numerical Soil Profile Comparison}
 \description{
