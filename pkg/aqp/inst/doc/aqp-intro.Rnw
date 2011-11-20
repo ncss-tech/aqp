@@ -1,0 +1,141 @@
+%\VignetteIndexEntry{AQP Introduction}
+\documentclass[letterpaper,10pt]{article}
+
+\title{AQP Introduction}
+\author{D.E. Beaudette and P. Roudier}
+
+\usepackage{amsmath}
+\usepackage{subfigure}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+% hack to get fuller pages
+\usepackage[letterpaper,left=0.75in,right=0.75in,top=1in,bottom=1in]{geometry}
+
+% reset some float-controlling parameters
+\renewcommand{\floatpagefraction}{0.8}	% require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+
+
+
+\begin{document}
+
+\maketitle
+
+%% an abstract and keywords
+\begin{abstract}
+Soils are routinely sampled and characterized according to genetic horizons, resulting in data that are associated with principle dimensions: location ($x$, $y$), depth ($z$), and property space ($\mathbf{p}$). The high dimensionality and grouped nature of this type of data can complicate standard analysis, summarization, and visualization. The ``aqp'' (algorithms for quantitative pedology) package was designed to support data-driven approaches to common soils-related tasks such as visualization, aggregation, and classiffication of soil profile collections. In addition, we sought to advance the study of numerical soil classification by building on previously published methods within an extensible and open source framework. Functions in the \texttt{aqp} package have been successfully applied to studies involving several thousand soil profiles. The stable version of the \texttt{aqp} package is hosted by CRAN (http://cran.r-project.org/web/packages/aqp), and the development version is hosted by R-Forge (http://aqp.r-forge.r-project.org).
+\end{abstract}
+
+\section{Introduction}
+\label{introduction}
+
+% soil viz intro
+Soil profiles are usually described, sampled, and characterized by genetic horizons (defined by morphology and usually associated with an inferred process), extending from the surface to a lower boundary determined by bedrock contact or to a depth of 150-200 cm \citep{SoilSurveyDivisionStaff1993}. Stratigraphy and morphology of horizons are usually the first data used to infer dominant pedogenic processes within the profile: i.e. degree of alteration relative to the parent material, expression of oxidized or reduced forms of iron, accumulation of organic matter, or evidence of cyclical deposition of new material. While the investigation of soil profile characteristics and horizon-level morphology are strongly based on visual and tactile cues, communication of these data is typically delivered via written narrative or tabular form-- complicating integration or further meta-analysis. Soil profile sketches aligned with landscape, parent material, or vegetation gradients are commonly used as the foundation for the development of soil-landscape models, and ultimately take the form of block diagrams in soil survey documents (Figure~\ref{fig:manual_profile_sketches}). Despite artistic merits, the reliance on hand-drawn soil profile sketches highlights a missing component in the soil scientist's digital toolkit. An automated approach to the creation, alignment (e.g. along environmental gradients), and styling of soil profile sketches from digital databases could contribute towards more powerful, data-driven exploration of soil-landscape relationships.
+
+
+\begin{figure}[ht]
+
+\centering
+\subfigure[] % caption for subfigure a
+{
+    \label{fig:photos:sfrec}
+    \includegraphics[width=4cm]{sfrec_profile.jpg}
+}
+\hspace{0.1cm}
+\subfigure[] % caption for subfigure b
+{
+    \label{fig:photos:owens}
+    \includegraphics[width=4cm]{owens_lake_profile.jpg}
+}
+\hspace{0.1cm}
+\subfigure[] % caption for subfigure b
+{
+    \label{fig:photos:pinn}
+    \includegraphics[width=4cm]{pinn_profile.jpg}
+}
+\caption{Examples of soil profiles illustrating how horizons change with depth. Color, texture, structure and root abundance are common visual indicators of near surface processes in soil.}
+\label{fig:photos} % caption for the whole figure
+\end{figure}
+
+
+% 
+% extra viz material
+% 
+Depiction of basic soil morphology (e.g. horizonation and soil color) is commonly the first step towards understanding patterns in a collection of soil profiles. A simple diagram showing horizon depths, colors, and designations represents an ideal starting point for arranging soils along environmental gradients or for communicating soil variability to non-specialists. 
+
+
+
+\begin{figure}[tb]
+\includegraphics[width=\textwidth]{profile_sketch.png}
+\centering %center the image
+\caption{An example of profile sketches manually created from soil profile observations collected as part of the Pinnacles National Monument soil survey. Horizon designations, sequences, boundaries, and soil texture classes are usually sufficient for describing complex soil-landscape relationships.}
+\label{fig:manual_profile_sketches}
+\end{figure} 
+
+
+
+
+<<>>=
+library("aqp")
+data(ca630)
+str(ca630)
+
+# combine site+horizon data into single DF
+ca <- join(ca630$lab, ca630$site, type='inner')
+
+# promote to SoilProfileCollection
+depths(ca) <- pedon_key ~ hzn_top + hzn_bot
+
+# extract site data
+site(ca) <- ~ mlra + ssa + lon + lat + cntrl_depth_to_top + cntrl_depth_to_bot + sampled_taxon_name
+
+# extract spatial data as SpatialPoints
+coordinates(ca) <- ~ lon + lat
+# assign CRS data
+proj4string(ca) <- '+proj=latlong +datum=NAD83'
+
+# add new fake grouping column
+ca@site$group <- 1 # messy syntax ... will be fixed in AQP 1.0
+
+# aggregate CEC 7 for all profiles into 1 cm slices
+a <- soil.slot.multiple(ca, fm=group ~ bs_7)
+
+# 4. plot median & IQR by 1 cm slice
+p1 <- xyplot(
+top ~ p.q50, data=a, lower=a$p.q25, upper=a$p.q75, 
+ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
+panel=panel.depth_function, prepanel=prepanel.depth_function,
+ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.line=list(col='black'))
+)
+
+# 5. safely compute hz-thickness weighted mean CEC (pH 7)
+head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
+.fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
+
+# 6. extract a SPDF with horizon data along a slice at 25 cm
+s.25 <- slice(ca, fm=55 ~ bs_7 + CEC7 + ex_acid)
+
+# 6.1 extract a data.frame with horizon data along a slices c(10,20,50)
+s.multiple <- slice(ca, fm=c(10,20,50) ~ bs_7 + CEC7 + ex_acid)
+
+# 7. Extract the 2nd horizon from all profiles as SPDF
+ca.2 <- ca[, 2]
+
+# 8. Extract the all horizons from profiles 1:10 as data.frame
+ca.1.to.10 <- ca[1:10, ]
+@
+
+...
+
+\begin{center}
+<<fig=TRUE,echo=FALSE>>=
+print(p1)
+@
+\end{center}
+
+\end{document}
