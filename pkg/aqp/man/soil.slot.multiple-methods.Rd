@@ -1,7 +1,8 @@
 \name{soil.slot.multiple-methods}
 \docType{methods}
-\alias{soil.slot.multiple-methods}
 \alias{soil.slot.multiple}
+\alias{soil.slot.multiple,data.frame-method}
+\alias{soil.slot.multiple,SoilProfileCollection-method}
 
 \title{
 Multivariate Soil Profile Slotting

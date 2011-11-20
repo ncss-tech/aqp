@@ -5,7 +5,7 @@
 # behavior not defined for horizons with an indefinate lower boundary
 
 ## basic function
-plot.SoilProfileCollection <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, ...) {
   
   # get horizons
   h <- horizons(x)
@@ -118,6 +118,6 @@ plot.SoilProfileCollection <- function(x, color='soil_color', width=0.2, name='n
 
 
 # method dispatch
-setMethod("plot", signature("SoilProfileCollection"), definition=plot.SoilProfileCollection)
+setMethod("plot", signature("SoilProfileCollection"), definition=plotSPC)
 
 
