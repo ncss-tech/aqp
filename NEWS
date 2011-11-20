@@ -1,4 +1,5 @@
--------------------------- aqp 0.99-8.46 (2011-11-16) --------------------------
+-------------------------- aqp 0.99-8.47 (2011-11-20) --------------------------
+* started VERY basic AQP Introduction vignette... still experimental
 * adding coercion methods for common objects and sp-class objects
 * matrix-style subsetting almost works:
   - s[i, j] ---> i is the profile index, and j is the horizon/slice index

@@ -23,6 +23,7 @@ Align several soil properties to a user-defined basis, with data returned in lon
   \item{fm}{a formula in the form: groups ~ var1 + var2 + var3 + ... OR ~ var1 + var2 + var3 + ...}
   \item{...}{further arguments passed onto \code{\link{soil.slot}}}
 }
+
 \details{
 This function is a wrapper to \code{\link{soil.slot}}, that makes it simpler to "slice" several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
 }
