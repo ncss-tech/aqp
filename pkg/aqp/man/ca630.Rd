@@ -64,7 +64,7 @@ proj4string(ca) <- '+proj=latlong +datum=NAD83'
 ca
 
 # 3. aggregate CEC 7 for all profiles into 1 cm slices
-# add new fake grouping column
+# add new fake grouping column (temp hack... don't use @site for serious work!)
 ca@site$group <- 1 # messy syntax ... will be fixed in AQP 1.0
 a <- soil.slot.multiple(ca, fm=group ~ bs_7)
 
