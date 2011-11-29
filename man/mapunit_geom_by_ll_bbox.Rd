@@ -31,7 +31,7 @@ plot(x)
 
 # get map unit data for matching map unit keys
 in.statement <- format_SQL_in_statement(unique(x$MUKEY))
-q <- paste("SELECT mukey, muname FROM mapunit WHERE mukey IN ", in.statment, sep="")
+q <- paste("SELECT mukey, muname FROM mapunit WHERE mukey IN ", in.statement, sep="")
 res <- SDA_query(q)
 }
 }
