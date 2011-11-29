@@ -34,8 +34,6 @@ Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.; Sadler, E. J. & Grun
 \note{See examples for ideas on simulating several profiles at once.}
 \seealso{\code{\link{profile_compare}}}
 \examples{
-library(lattice)
-
 # generate 10 random profiles with default settings:
 d <- ldply(1:10, random_profile)
 
@@ -49,22 +47,34 @@ plot(d)
 
 # make a more interesting color based on the first property
 # depth functions are generated using the LPP function
-if(require(RColorBrewer)) {
-  cols <- rev(brewer.pal(8, 'Spectral'))
-  cr <- colorRamp(cols)
+if(require(scales)) {
+  opar <- par(mfrow=c(2,1))
   
+  # setup color palette and mapping function
+  cols <- rev(brewer_pal(pal='Spectral')(8))
+  grad <- gradient_n_pal(cols)
+  
+  # generate data and color scales
   d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
-  d$soil_color <- rgb(cr(rescaler(d$p1, type='range')), max=255)
+  d$soil_color <- cscale(d$p1, grad)
+  
+  # promote to SPC and plot
   depths(d) <- id ~ top + bottom
   plot(d)
+  legend('bottom', legend=pretty(d$p1), pt.bg=cscale(pretty(d$p1), grad),
+  pch=22, pt.cex=2.5, bty='n', horiz=TRUE)
   
-
+  
   # do this again, this time set all of the LPP parameters
   d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
   lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
-  d$soil_color <- rgb(cr(rescaler(d$p1, type='range')), max=255)
+  d$soil_color <- cscale(d$p1, grad)
   depths(d) <- id ~ top + bottom
   plot(d)
+  legend('bottom', legend=pretty(d$p1), pt.bg=cscale(pretty(d$p1), grad),
+  pch=22, pt.cex=2.5, bty='n', horiz=TRUE)
+  
+  par(opar)
   }
 
 
@@ -91,14 +101,6 @@ if(require(latticeExtra)) {
   }
 
 
-
-#
-# simple cluster analysis:
-d <- ldply(1:10, random_profile)
-p <- profile_compare(d, vars=c('p1','p2','p3'), max_d=50, k=0)
-plot(hclust(p))
-
-
 # stress-test profile comparison functions (not run)
 # d <- ldply(1:1000, random_profile)
 # 
@@ -111,8 +113,6 @@ plot(hclust(p))
 # more efficient computation, at the expense of precision, with 
 # p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'),
 # max_d=50, k=0, sample_interval=10)
-
-
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

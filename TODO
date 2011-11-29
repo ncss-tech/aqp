@@ -4,6 +4,7 @@ Urgent:
 2. update all documentation with new classes/methods
 3. fix all related examples
 4. update vignette
+5. integrate color styling with 'scales' package in plot.SoilProfileCollection
 
 Interesting:
 ------------
