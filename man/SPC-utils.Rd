@@ -43,5 +43,22 @@
 %%  ~~describe this method here~~
 }
 }}
+
+
+\examples{
+## setting site-level data
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+# site-level data from horizon-level data
+site(sp1) <- ~ group
+
+# make some fake site data, and append from data.frame
+# ordering must match order of profile IDs !!
+site(sp1) <- data.frame(p=runif(n=length(sp1)))
+# this won't clobber existing data
+site(sp1) <- data.frame(p2=runif(n=length(sp1)), p3=runif(n=length(sp1)))
+
+## getting site-level data
+site(sp1)
+}
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

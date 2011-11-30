@@ -1,4 +1,5 @@
--------------------------- aqp 0.99-8.47 (2011-11-20) --------------------------
+-------------------------- aqp 0.99-8.50 (2011-11-29) --------------------------
+* added "site(SoilProfileCollection) <-" method for data.frame
 * started VERY basic AQP Introduction vignette... still experimental
 * adding coercion methods for common objects and sp-class objects
 * matrix-style subsetting almost works:
