@@ -28,6 +28,12 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
 ## Coercition methods: and sp utilities
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
     cat('ony site data are extracted\n')
-    SpatialPointsDataFrame(coordinates(from), data = from@site)
+    SpatialPointsDataFrame(coordinates(from), data = from@site, proj4string=CRS(proj4string(from)))
+  }
+)
+
+## Coercition methods: and sp utilities
+setAs("SoilProfileCollection", "SpatialPoints", function(from) {
+    SpatialPoints(coordinates(from), proj4string=CRS(proj4string(from)))
   }
 )
