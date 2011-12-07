@@ -53,6 +53,8 @@ setReplaceMethod("proj4string", "SoilProfileCollection",
 )
 
 
+## doesn't quite work
+
 ## spatial_subset: spatial clipping of a SPC (requires GEOS)
 if (!isGeneric("spatial_subset"))
   setGeneric("spatial_subset", function(object, ...) standardGeneric("spatial_subset"))
@@ -68,10 +70,10 @@ setMethod(f='spatial_subset', signature='SoilProfileCollection',
 
       valid_ids <- site(object)[ids, object@idcol]
 
-      valid_horizons <- which(horizons(object)[, object@idcol] == valid_ids)
-      valid_sites <- which(site(object)[, object@idcol] == valid_ids)
+      valid_horizons <- which(horizons(object)[, object@idcol] %in% valid_ids)
+      valid_sites <- which(site(object)[, object@idcol] %in% valid_ids)
 
-      SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
+      SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = object@metadata, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
     }
     else { # no rgeos, return original
       stop('Spatial subsetting not performed, please install the `rgeos` package.')
