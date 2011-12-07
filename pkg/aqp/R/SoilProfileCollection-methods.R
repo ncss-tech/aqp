@@ -219,18 +219,49 @@ setMethod("$", "SoilProfileCollection",
 ## problem: when making new columns how  can the function determine where to insert the replacement>?
 setReplaceMethod("$", "SoilProfileCollection",
   function(x, name, value) {
-    if (name %in% names(horizons(x))) {
-      h <- horizons(x)
+  	# extract hz and site data
+  	h <- horizons(x)
+	s <- site(x)
+
+    # working with horizon data
+    if (name %in% names(h)) {
       h[[name]] <- value
       horizons(x) <- h
+      return(x)
       }
-    else {
-	  s <- site(x)
-      s[[name]] <- value
-      # TODO: site(x) <- should work, and does not
+      
+    # working with site data  
+    if(name %in% names(s)) {
+	  s[[name]] <- value
+      # TODO: use site(x) <- s
       x@site <- s
+      return(x)
       }
-    return(x)
+    
+    # ambiguous: use length of replacement to determing: horizon / site   
+    else {
+      n.site <- nrow(s)
+      n.hz <- nrow(h)
+      l <- length(value)
+
+      if(l == n.hz) {
+      	h[[name]] <- value
+	    horizons(x) <- h
+	    return(x)
+      	}
+      
+      if(l == n.site) {
+      	s[[name]] <- value
+      	# TODO: use site(x) <- s
+      	x@site <- s
+      	return(x)
+      	}
+	
+	  else
+	  	stop('length of replacement must equal number of sites or number of horizons')
+    		
+    }
+  # done  
   }
 )
 
