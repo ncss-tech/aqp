@@ -1,3 +1,11 @@
+-------------------------- aqp 0.99-8.51 (2011-12-08) --------------------------
+* matrix-style subsetting functional:
+  - s[i, j] ---> i is the profile index, and j is the horizon/slice index
+  - s[i, ] returns a SoilProfileCollection
+  - s[, j] returns a SpatialPointsDataFrame when a single slice is used
+* spatial_subset() can be used to extract members of a SoilProfileCollection with a geometry (uses rgeos)
+* smarter $<- methods so that site/horizon data slots are auto-selected
+
 -------------------------- aqp 0.99-8.50 (2011-11-29) --------------------------
 * added "site(SoilProfileCollection) <-" method for data.frame
 * started VERY basic AQP Introduction vignette... still experimental
