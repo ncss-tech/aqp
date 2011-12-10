@@ -1,6 +1,17 @@
+##
+## proj4string setting
+##
+
 setMethod(f='proj4string', signature='SoilProfileCollection',
   function(obj){
     proj4string(obj@sp)
+  }
+)
+
+setReplaceMethod("proj4string", "SoilProfileCollection",
+  function(obj, value) {
+  proj4string(obj@sp) <- value
+  obj
   }
 )
 
@@ -42,20 +53,14 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 )
 
 
+
+
+
+
 ##
-## proj4string setting
-##
-setReplaceMethod("proj4string", "SoilProfileCollection",
-  function(obj, value) {
-  proj4string(obj@sp) <- value
-  obj
-  }
-)
-
-
-## doesn't quite work
-
 ## spatial_subset: spatial clipping of a SPC (requires GEOS)
+##
+
 if (!isGeneric("spatial_subset"))
   setGeneric("spatial_subset", function(object, ...) standardGeneric("spatial_subset"))
 
@@ -67,12 +72,19 @@ setMethod(f='spatial_subset', signature='SoilProfileCollection',
     if(require(rgeos)) {
       spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
       ids <- which(spc_intersection)
-
-      valid_ids <- site(object)[ids, object@idcol]
-
-      valid_horizons <- which(horizons(object)[, object@idcol] %in% valid_ids)
-      valid_sites <- which(site(object)[, object@idcol] %in% valid_ids)
-
+	
+	# extract relevant info
+	s <- site(object)
+	h <- horizons(object)
+	
+	# get indexes to valid site, hz data
+      valid_ids <- s[ids, object@idcol]
+      valid_horizons <- which(h[, object@idcol] %in% valid_ids)
+      valid_sites <- which(s[, object@idcol] %in% valid_ids)
+	
+	# create a new SPC with subset data
+	## TODO: use integer profile index to simplify this process
+	## TODO: @sp bbox may need to be re-computed
       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = object@metadata, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])
     }
     else { # no rgeos, return original

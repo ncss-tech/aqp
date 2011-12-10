@@ -297,35 +297,40 @@ setMethod("[", "SoilProfileCollection",
     # extract requested profile IDs
     p.ids <- profile_id(x)[i]
 
-    # extract all horizons
+    # extract all horizon data
     h <- horizons(x)
-
-    # keep only the requested horizons (filtered by pedon ID)
+	
+    # keep only the requested horizon data (filtered by pedon ID)
     h <- h[h[[idname(x)]] %in% p.ids, ]
-
+    # keep only requested site and spatial data by index i
+    s <- site(x)[i, ]
+	sp <- x@sp[i]
+	
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j))
       h <- ddply(h, idname(x), .fun=function(y) y[j, ])
 
-    # if there is REAL data in @sp, return a SPDF
+    # if there is REAL data in @sp, and we only have 1 row of hz per coordinate- return SPDF
     # for now test for our custom dummy SP obj: number of coordinates == number of profiles
     # also need to test that there is only 1 horizon/slice per location
     if(nrow(coordinates(x)) == length(x) & length(p.ids) == nrow(h)) {
       # combine with coordinates
       cat('result is a SpatialPointsDataFrame object\n')
       # note that we are filtering based on 'i' - an index of selected profiles
-      res <- SpatialPointsDataFrame(coordinates(x)[i, ], data=h)
+
+      # if site data, join hz+site
+      if(nrow(s) > 0)
+      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=join(h, s)))
+      else # no site data
+      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=h))	
     }
 
-    # no coordinates, return a data.frame for now
-    # TODO: return as a SPC + site + sp data
+    # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     else {
-      cat('result is a data.frame object\n')
-      res <- h
+      SoilProfileCollection(idcol=x@idcol, depthcols=x@depthcols, metadata=x@metadata, horizons=h, site=s, sp=sp)
     }
-
+    
   # done
-  return(res)
   }
 )
 
