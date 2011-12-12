@@ -1,5 +1,9 @@
 Urgent:
 -------
+** ADD to all modules using data.frame, melt, ... ?
+  ## important: change the default behavior of data.frame and melt
+  opt.original <- options(stringsAsFactors = FALSE)
+  
 1. finish new S4 classes/methods
 2. update all documentation with new classes/methods
 3. fix all related examples

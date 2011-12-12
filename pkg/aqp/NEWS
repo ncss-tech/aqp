@@ -1,4 +1,5 @@
 -------------------------- aqp 0.99-8.51 (2011-12-08) --------------------------
+* bug fix in slice(), now works with numeric OR categorical vars, but NOT both...
 * matrix-style subsetting functional:
   - s[i, j] ---> i is the profile index, and j is the horizon/slice index
   - s[i, ] returns a SoilProfileCollection

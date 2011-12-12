@@ -28,7 +28,8 @@ get.slice <- function(d, top, bottom, z, include='top') {
   return(res)
   }
 
-## slice: returns a DF if no @sp, SPDF otherwise
+
+## slice:
 if (!isGeneric("slice"))
   setGeneric("slice", function(object, ...) standardGeneric("slice"))
 
@@ -37,7 +38,11 @@ if (!isGeneric("slice"))
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
   function(object, fm, top.down=TRUE, just.the.data=FALSE){
-
+  
+  ## important: change the default behavior of data.frame and melt
+  opt.original <- options(stringsAsFactors = FALSE)
+  
+  
   # test for logical input
   if(! inherits(fm, "formula"))
     stop('must provide a valid formula: ~ var1 + var2 + ...')
@@ -56,13 +61,15 @@ setMethod(f='slice', signature='SoilProfileCollection',
   # LHS: could be either single integer or vector of slices
   z <- as.numeric(eval(parse(text=formula[[1]])))
 
-
   # get horizons + depth column names + ID column name
   h <- horizons(object)
   hd <- horizonDepths(object)
   top <- hd[1] ; bottom <- hd[2] # convenience vars
   id <- idname(object)
-
+  
+  # get variable classes
+  vars.class <- sapply(vars, function(i) class(h[[i]]))
+  
 	# check for bogus left/right side problems with the formula
   if(any(z < 0) | any(is.na(z)))
     stop('z-slice must be >= 1')
@@ -74,10 +81,13 @@ setMethod(f='slice', signature='SoilProfileCollection',
 	if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match any horizon data')
 
-  # notify user that categorical vars are not supported
-  if(any(sapply(vars, function(i) class(h[[i]])) %in% c('character', 'factor')))
-    stop('categorical variables are not currently supported')
-
+  # notify user that a mixture of numeric / categorical vars is not supported
+  # if(any(vars.class %in% c('character', 'factor')))
+  if(length(unique(vars.class)) > 1)
+     stop('a mixture of numeric/categoric variables is not currently supported')
+  
+  ## TODO this approach won't work with mixed (numeric / char / factor variables)
+  # numeric / categorical vars must be done in different passes
   # melt into long format
   m <- melt(h, measure.vars=vars, id.vars=c(id, top, bottom))
 
@@ -114,7 +124,7 @@ setMethod(f='slice', signature='SoilProfileCollection',
   # convert back into wide format
   # and remove reshape-related attributes
   fm.to.wide <- as.formula(paste(id, '+', top, '+', bottom, '~', 'variable', sep=' '))
-  hd.slices <- data.frame(cast(hd.slices, formula=fm.to.wide, value='slice'))
+  hd.slices <- data.frame(cast(hd.slices, formula=fm.to.wide, value='slice'), stringsAsFactors=FALSE)
 
   # if we just want the data:
   if(just.the.data)
@@ -142,6 +152,10 @@ setMethod(f='slice', signature='SoilProfileCollection',
   if(nrow(site(object)) > 0 )
     hd.slices@site <- site(object)
   
+  # reset options:
+  options(opt.original)
+  
+  # done
   return(hd.slices)
   }
 )
