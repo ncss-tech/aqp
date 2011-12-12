@@ -42,7 +42,6 @@ setMethod(f='slice', signature='SoilProfileCollection',
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
   
-  
   # test for logical input
   if(! inherits(fm, "formula"))
     stop('must provide a valid formula: ~ var1 + var2 + ...')
@@ -90,7 +89,10 @@ setMethod(f='slice', signature='SoilProfileCollection',
   # numeric / categorical vars must be done in different passes
   # melt into long format
   m <- melt(h, measure.vars=vars, id.vars=c(id, top, bottom))
-
+  
+  ## melt.data.frame will convert id column into a factor... undo that behavior!
+  m[[id]] <- as.character(m[[id]])
+  
   # extract slice by id/variable, for each requested depth
   # pre-allocate storage as list
   hd.slices <- vector(mode='list', length=length(z))

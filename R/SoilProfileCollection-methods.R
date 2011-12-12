@@ -2,9 +2,9 @@
 "SoilProfileCollection" <- function(
 idcol='id',
 depthcols=c('top','bottom'),
-metadata=data.frame(),
+metadata=data.frame(stringsAsFactors=FALSE),
 horizons,
-site=data.frame(),
+site=data.frame(stringsAsFactors=FALSE),
 sp=new('SpatialPoints') # this is a bogus place-holder
 ){
   # creation of the object (includes a validity check)
