@@ -22,9 +22,6 @@ test_hz_logic <- function(i, topcol, bottomcol)
 
 
 .SoilProfileCollectionValidity <- function(object) {
-    
-  
-  return(TRUE)
   
     # 1. test for bad horizon logic
     id <- idname(object)
@@ -61,28 +58,12 @@ setClass(
     idcol='id',
     depthcols=c('top','bottom'),
     metadata=data.frame(stringsAsFactors=FALSE), # default units are unkown
-    horizons=data.frame(),
-    site=data.frame(),
+    horizons=data.frame(stringsAsFactors=FALSE),
+    site=data.frame(stringsAsFactors=FALSE),
     sp=new('SpatialPoints')
   ),
   validity=.SoilProfileCollectionValidity
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

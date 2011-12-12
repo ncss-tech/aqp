@@ -28,7 +28,7 @@ make.segments <- function(df)
 	if(n_hz > 1)
 		{
 		# re-make dataframe for plotting segments
-		df.new <- data.frame(top=df$bnd[1:n_hz], bottom=df$bnd[(n_hz+1):length(df$prop)], prop=df$prop[1:n_hz])
+		df.new <- data.frame(top=df$bnd[1:n_hz], bottom=df$bnd[(n_hz+1):length(df$prop)], prop=df$prop[1:n_hz], stringsAsFactors=FALSE)
 		
 		# vertical segments
 		panel.segments(df.new$prop, df.new$top, df.new$prop, df.new$bottom, 

@@ -13,12 +13,20 @@ format_SQL_in_statement <- function(x)
 # clean-up results from SDA SOAP query, and return as DF
 cleanSDA <- function(i) 
   {
+  # important: change the default behavior of data.frame and melt
+  opt.original <- options(stringsAsFactors = FALSE)
+  
   # remove left-overs from SOAP result
   i$.attrs <- NULL
+  
   # convert NULL in NA
   i[which(sapply(i, is.null))] <- NA
+  
+  # reset options:
+  options(opt.original)
+  
   # convert list to DF
-  as.data.frame(i)
+  return(as.data.frame(i))
   }
 
 # TODO: figure out how to inspect the results and set column classes
@@ -39,8 +47,7 @@ SDA_query <- function(q)
   # submit and process the query
   res <- .SOAP(s, "RunQuery", Query=q, action=a, xmlns=x)
   
-  # results are stored in:
-  # res$diffgram$NewDataSet
+  # results are stored in: res$diffgram$NewDataSet
   
   # clean the results, convert to DF
   cat('processing results...\n')
