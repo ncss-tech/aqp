@@ -7,6 +7,14 @@ test_hz_logic <- function(i, topcol, bottomcol)
     return(res)
   }
   
+  # PASSES for now
+  else {
+    res <- TRUE
+    names(res) <- 'hz_logic_pass'
+    return(res)
+  }
+    
+  
   ## this will not work when an SPC of discreet slices is generated!
   ## todo: break out into smaller simpler functions, and use only when needed
 #   # test hz logic
@@ -17,7 +25,7 @@ test_hz_logic <- function(i, topcol, bottomcol)
 #     names(res) <- 'hz_logic_pass'
 #   }
   
-  return(res)
+  # return(res)
   }
 
 
