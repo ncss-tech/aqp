@@ -43,14 +43,21 @@ Soil profile data from Pinnacles National Monument, CA.
 
 \examples{
 data(sp1)
+# convert colors
+sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
 ## promote to SoilProfileCollection
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-## extract 1-unit thick slices of 'prop' at defined depths
+# extract 1-unit thick slices of 'prop' at defined depths
 s <- slice(sp1, 0:25 ~ prop)
 plot(s, name='prop')
+
+# try again, this time with the horizon name and color
+s <- slice(sp1, 0:25 ~ name + soil_color)
+plot(s)
+
 
 # aggregate all profiles into 1cm depth slices, 
 # using data from column 'prop'

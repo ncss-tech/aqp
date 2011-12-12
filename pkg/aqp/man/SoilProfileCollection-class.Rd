@@ -86,6 +86,7 @@ sp1$top[1] <- NA
 depths(sp1) <- id ~ top + bottom
 
 # insert a bogus horizon boundary
+## NOTE: this is currently valid, as this check breaks slice(SPC, ...)
 data(sp1)
 sp1$top[2] <- 30
 depths(sp1) <- id ~ top + bottom
