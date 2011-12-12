@@ -302,10 +302,18 @@ setMethod("[", "SoilProfileCollection",
 	
     # keep only the requested horizon data (filtered by pedon ID)
     h <- h[h[[idname(x)]] %in% p.ids, ]
-    # keep only requested site and spatial data by index i
-    s <- site(x)[i, ]
-	sp <- x@sp[i]
-	
+    
+    # site data, with conditional subsetting
+    s <- site(x)
+    if(nrow(s) > 0)
+      s <- s[i, ]   # this will return i-rows of bogus data
+	  
+    # subset spatial data if exists
+    if(nrow(coordinates(x)) == length(x))
+      sp <- x@sp[i]
+    else
+      sp <- x@sp
+    
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j))
       h <- ddply(h, idname(x), .fun=function(y) y[j, ])
