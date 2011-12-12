@@ -64,7 +64,7 @@ proj4string(ca) <- '+proj=latlong +datum=NAD83'
 ca
 
 # 3. aggregate CEC 7 for all profiles into 1 cm slices
-ca$group <- rep(1, times=nrow(site(ca)))
+ca$group <- rep(1, times=length(ca))
 a <- soil.slot.multiple(ca, fm=group ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
@@ -80,7 +80,7 @@ head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key),
 .fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
 
 # 6. extract a SPDF with horizon data along a slice at 25 cm
-s.25 <- slice(ca, fm=55 ~ bs_7 + CEC7 + ex_acid)
+s.25 <- slice(ca, fm=25 ~ bs_7 + CEC7 + ex_acid)
 spplot(s.25, zcol=c('bs_7','CEC7','ex_acid'))
 
 # 6.1 extract a data.frame with horizon data along a slices c(10,20,50)
