@@ -67,7 +67,7 @@ setMethod(f='slice', signature='SoilProfileCollection',
   id <- idname(object)
   
   # get variable classes
-  vars.class <- sapply(vars, function(i) class(h[[i]]))
+  vars.is.numeric.test <- sapply(vars, function(i) is.numeric(h[[i]]))  
   
 	# check for bogus left/right side problems with the formula
   if(any(z < 0) | any(is.na(z)))
@@ -81,9 +81,10 @@ setMethod(f='slice', signature='SoilProfileCollection',
 		stop('column names in formula do not match any horizon data')
 
   # notify user that a mixture of numeric / categorical vars is not supported
-  # if(any(vars.class %in% c('character', 'factor')))
-  if(length(unique(vars.class)) > 1)
+  if(any(! vars.is.numeric.test)) {
+     print(!vars.is.numeric.test)
      stop('a mixture of numeric/categoric variables is not currently supported')
+  }
   
   ## TODO this approach won't work with mixed (numeric / char / factor variables)
   # numeric / categorical vars must be done in different passes
