@@ -66,7 +66,6 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \code{\link{SoilProfileCollection-class}, \link{pretty}}
 }
 \examples{
-library(aqp)
 data(sp1)
 
 # add color vector
@@ -80,7 +79,6 @@ plot(sp1)
 
 # plot profiles, using alternate profile ID label style
 plot(sp1, id.style='side')
-
 
 # plot horizon color according to some property
 # RColorBrewer helps with nice colors

@@ -2,16 +2,13 @@
 \docType{methods}
 \alias{spatial_subset}
 \alias{spatial_subset,SoilProfileCollection-method}
-\title{ ~~ Methods for Function \code{spatial_subset} in Package \pkg{aqp} ~~}
-\description{
- ~~ Methods for function \code{spatial_subset} in package \pkg{aqp} ~~
-}
+\title{Spatial Subsetting of SoilProfileCollection Objects}
+\description{Spatial Subsetting of SoilProfileCollection Objects}
 \section{Methods}{
 \describe{
 
-\item{\code{signature(object = "SoilProfileCollection")}}{
-%%  ~~describe this method here~~
-}
+\item{\code{signature(object = "SoilProfileCollection")}}{}
 }}
+\note{This functionality requires the `rgeos` package.}
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }
+\keyword{manip}
