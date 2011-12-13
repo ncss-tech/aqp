@@ -10,7 +10,7 @@ require(aqp) ; require(ape) ; require(lattice)
 # 1. basic profile aggregation and plotting
 # 
 data(sp1)
-# slot all profiles into 1,5,10,20 cm depth slices
+# aggregate all profiles into 1,5,10,20 cm depth slabs
 s1 <- soil.slot(data=sp1)
 # 5cm
 s5 <- soil.slot(data=sp1, seg_size=5)
@@ -20,19 +20,19 @@ s10 <- soil.slot(data=sp1, seg_size=10)
 s20 <- soil.slot(data=sp1, seg_size=20)
 
 # variation in segment-weighted mean property: very little
-sapply(
+round(sapply(
 list(s1,s5,s10,s20), 
 function(i) {
 	with(i, sum((bottom - top) * p.mean) / sum(bottom - top)) 
 	}
-)
+), 2)
 
 # combined viz
 g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5, 
 "10cm interval"=s10, "20cm interval"=s20)
 
 # note special syntax for plotting step function
-xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, 
+xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, id=g2$which,
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
 ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
@@ -52,9 +52,8 @@ sp3$h <- NA ; sp3$s <- NA ; sp3$v <- NA
 sp3.rgb <- with(sp3, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
 sp3[, c('h','s','v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue=1)))
 
-# make a fake grouping variable, and aggregate all profiles
-sp3$group <- factor('A')
-a <- soil.slot.multiple(sp3, g='group', vars=c('clay','cec','ph','h','s','v'), seg_size=10)
+# aggregate all profiles along 10-cm slabs
+a <- soil.slot.multiple(sp3, fm= ~ clay + cec + ph + h + s + v, seg_size=10)
 
 # convert back to wide format, note that aggregation metric affects the result
 a.wide.q25 <- cast(a, top + bottom ~ variable, value=c('p.q25'))
@@ -62,7 +61,6 @@ a.wide.q50 <- cast(a, top + bottom ~ variable, value=c('p.q50'))
 a.wide.q75 <- cast(a, top + bottom ~ variable, value=c('p.q75'))
 
 # add a new id for the 25th, 50th, and 75th percentile pedons
-# and convert top/bottoms to integers
 a.wide.q25$id <- 'Q25'
 a.wide.q50$id <- 'Q50'
 a.wide.q75$id <- 'Q75'
@@ -81,14 +79,16 @@ sp3.grouped$soil_color <- with(sp3.grouped, hsv(h, s, v))
 sp3.grouped$name <- paste(round(sp3.grouped$clay), '/' , 
 round(sp3.grouped$cec), '/', round(sp3.grouped$ph,1))
 
-# make SoilProfileList object for plotting
-sp3.list <- initProfileList(sp3.grouped)
+# upgrade to SoilProfileCollection
+depths(sp3.grouped) <- id ~ top + bottom
 
+# check:
+plot(sp3.grouped)
 
 ## perform comparison, and convert to phylo class object
 d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, 
 k=0.01, replace_na=TRUE, add_soil_flag=TRUE)
-h <- agnes(d, method='ward')
+h <- diana(d)
 p <- ladderize(as.phylo(as.hclust(h)))
 
 
@@ -101,7 +101,7 @@ round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
 ## make dendrogram + soil profiles
 par(mar=c(1,1,1,1))
 p.plot <- plot(p, cex=0.8, label.offset=3, direction='up', y.lim=c(120,-2), 
-x.lim=c(1.25,sp3.list$num_profiles+1), show.tip.label=FALSE)
+x.lim=c(1.25,length(sp3.grouped)+1), show.tip.label=FALSE)
 
 # get the last plot geometry
 lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
@@ -114,7 +114,7 @@ function(i) which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
 
 # plot the profiles, in the ordering defined by the dendrogram
 # with a couple fudge factors to make them fit
-profile_plot(sp3.list, color="soil_color", plot.order=new_order,
+plot(sp3.grouped, plot.order=new_order,
 scaling.factor=0.35, width=0.1, cex.names=0.5,
 y.offset=max(lastPP$yy)+5, add=TRUE)
 
