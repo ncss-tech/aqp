@@ -1,15 +1,19 @@
-test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE)
+# this should be further documented
+test_hz_logic <- function(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE)
   {
+  
   # test for na
-  if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
-    res <- FALSE
-    names(res) <- 'hz_logic_pass'
-    return(res)
+  if(test.NA) { 
+    if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
+      res <- FALSE
+      names(res) <- 'hz_logic_pass'
+      return(res)
+    }
   }
   
   # test for illogical horizon boundaries
   # note that this will fail with non-contiguous slices!
-  if(strict == TRUE) {
+  if(strict) {
     n <- nrow(i)
     res <- all.equal(i[[topcol]][-1], i[[bottomcol]][-n])
     if(res != TRUE)
@@ -24,20 +28,7 @@ test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE)
     names(res) <- 'hz_logic_pass'
     return(res)
   }
-    
-  
-  ## this will not work when an SPC of discreet slices is generated!
-  ## todo: break out into smaller simpler functions, and use only when needed
-#   # test hz logic
-#   n <- nrow(i)
-#   res <- all.equal(i[[topcol]][-1], i[[bottomcol]][-n])
-#   if(res != TRUE) {
-#     res <- FALSE
-#     names(res) <- 'hz_logic_pass'
-#   }
-  
-  # return(res)
-  }
+}
 
 
 .SoilProfileCollectionValidity <- function(object) {

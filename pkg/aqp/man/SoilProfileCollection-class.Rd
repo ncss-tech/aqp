@@ -69,14 +69,15 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
 %%  ~~further notes~~
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \examples{
 ## 1. test validity methods
 
 # this should work fine
 data(sp1)
 depths(sp1) <- id ~ top + bottom
+
+# horizon logic can be tested via data.frame and 
+# test_hz_logic(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE)
 
 \dontrun{
 # these next examples should throw an error
