@@ -110,7 +110,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   
   # axis:
   depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
-  depth_axis_labels <- paste(depth_axis_intervals, units(x))
+  depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
   axis(side=4, line=-2.5, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
   
   }
