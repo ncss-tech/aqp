@@ -160,7 +160,7 @@ definition=function(x) {
   hz_bottom_depths <- horizonDepths(x)[2]
   d <- tapply(unlist(horizons(x)[[hz_bottom_depths]]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
   # return the shallowest depth
-  return(min(d))
+  return(min(d, na.rm=TRUE))
   }
 )
 
@@ -171,7 +171,7 @@ definition=function(x){
   hz_bottom_depths <- horizonDepths(x)[2]
   d <- tapply(unlist(horizons(x)[[hz_bottom_depths]]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
   # return the deepest depth
-  return(max(d))
+  return(max(d, na.rm=TRUE))
   }
 )
 
