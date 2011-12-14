@@ -14,7 +14,7 @@
 \value{A dataframe containing the results.}
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
-\note{This function requires the `SSOAP` package (\url{http://www.omegahat.org/SSOAP/}).}
+\note{This function requires the `SSOAP` (\url{http://www.omegahat.org/SSOAP/}), `RCurl` (\url{http://www.omegahat.org/RCurl/}) and `XML` (\url{http://www.omegahat.org/RSXML/}) packages.}
 
 \seealso{\code{\link{MUKEYS_by_ll_bbox}}, \code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{
