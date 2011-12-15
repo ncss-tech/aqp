@@ -56,19 +56,18 @@ get_site_data_from_pedon_db <- function(dsn)
 
   # exec query
   cat(paste('fetching from', dsn, '...\n'))
-  d <- sqlQuery(channel, q)
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)
   
-  # fix column types
-  d$site_id <- as.character(d$site_id)
-  d$pedon_id <- as.character(d$pedon_id)
-  d$datum <- as.character(d$datum)
-  
   # warn if mixed datums
   if(length(unique(na.omit(d$datum))) > 1)
     warning('multiple datums present')
+  
+  # are there any dupes?
+  if(any(table(d$pedon_id) > 1))
+    warning('duplicate site/pedon information in results')
   
   # done
   return(d)
@@ -101,15 +100,10 @@ get_hz_data_from_pedon_db <- function(dsn)
 
   # exec query
   cat(paste('fetching from', dsn, '...\n'))
-  d <- sqlQuery(channel, q)
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)
-  
-  # fix column types
-  d$pedon_id <- as.character(d$pedon_id)
-  d$hz_id <- as.character(d$hz_id)
-  d$hzname <- as.character(d$hzname)
   
   # done
   return(d)
@@ -136,15 +130,11 @@ ORDER BY pedon.upedonid, phiidref, colormoistst;"
 
   # exec query
   cat(paste('fetching from', dsn, '...\n'))
-  d <- sqlQuery(channel, q)
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)
   
-  # convert factor to character
-  d$pedon_id <- as.character(d$pedon_id)  
-  d$colorhue <- as.character(d$colorhue)
-
   # convert Munsell to RGB---> note: this is slow
   cat('converting Munsell to RGB ...\n')
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
@@ -172,17 +162,6 @@ ORDER BY pedon.upedonid, phiidref, colormoistst;"
   rm(d, d.rgb, dry.colors, moist.colors, dry.colors.final, moist.colors.final)
   gc()
   
-  
-  ## probably not a good idea
-  # fill missing color with white
-#   d.final$d_r[is.na(d.final$d_r)] <- NA
-#   d.final$d_g[is.na(d.final$d_g)] <- NA
-#   d.final$d_b[is.na(d.final$d_b)] <- NA
-#   
-#   d.final$m_r[is.na(d.final$m_r)] <- NA
-#   d.final$m_g[is.na(d.final$m_g)] <- NA
-#   d.final$m_b[is.na(d.final$m_b)] <- NA
-  
   # done
   return(d.final)
   }
@@ -202,7 +181,7 @@ get_veg_from_AK_Site <- function(dsn)
 
   # exec query
   cat(paste('fetching from', dsn, '...\n'))
-  d <- sqlQuery(channel, q)
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)

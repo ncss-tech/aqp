@@ -32,20 +32,14 @@ http://casoilresource.lawr.ucdavis.edu/drupal/node/201
 \author{
 Dylan E. Beaudette
 }
-\note{
-%%  ~~further notes~~
-}
+\note{As of \code{plyr} 1.6 (CRAN), there are cases when this function will fail (\url{https://github.com/hadley/plyr/issues/43}). The next version of \code{plyr} should address this problem. Until then, be sure not to pass in a Munsell (hue, value, chroma) as factors.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\seealso{}
 \examples{
-library(aqp)
-
-# basic example:
-d <- expand.grid(hue='10YR', value=2:8, chroma=1:8)
+# basic example: no factors!
+d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
 # similar to the 10YR color book page
@@ -53,11 +47,12 @@ plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
 
 # multiple pages of hue:
 hues <- c('2.5YR','5YR','7.5YR','10YR')
-d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2))
-d$hue <- factor(d$hue, levels=hues)
+d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
-xyplot(value ~ factor(chroma) | hue,
+
+# plot: note that we are setting panel order from red-->yellow
+xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
 main="Common Soil Colors", layout=c(4,1), scales=list(alternating=1),
 strip=strip.custom(bg=grey(0.85)),
 data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
@@ -74,7 +69,7 @@ if(require(colorspace))
   d.lab <- as(with(d.rgb, RGB(r,g,b)), 'LAB')
   d <- data.frame(d, d.lab@coords)
   
-  xyplot(value ~ factor(chroma) | hue,
+  xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
   main="Common Soil Colors - Annotated with LAB Coordinates", layout=c(4,1), 
   scales=list(alternating=1), strip=strip.custom(bg=grey(0.85)),
   data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
@@ -86,7 +81,7 @@ if(require(colorspace))
   )
   
   # also demonstrate A ~ hue for each slice of chroma
-  xyplot(A ~ hue | factor(value), groups=chroma, data=d,
+  xyplot(A ~ factor(hue, levels=hues) | factor(value), groups=chroma, data=d,
   scales=list(alternating=1), strip=strip.custom(bg=grey(0.85)),
   main="A-coordinate vs. Munsell Hue", sub='panels are Munsell value, colors are Munsell chroma',
   xlab='Munsell Hue', ylab='A-coordinate', pch=16,
