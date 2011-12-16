@@ -1,4 +1,6 @@
--------------------------- aqp 0.99-8.55 (2011-12-14) --------------------------
+-------------------------- aqp 0.99-8.56 (2011-12-16) --------------------------
+* added `strict` argument to many functions, to gracefully account for bad horizon data
+  - enforce quality control with strict=TRUE
 * munsell2rgb() is now 100x faster thanks to plyr::join()
   - note that factors cannot be used in the conversion, see: https://github.com/hadley/plyr/issues/43
     + there is a check and conversion within the function that should prevent segfaults
