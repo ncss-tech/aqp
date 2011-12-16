@@ -4,7 +4,7 @@
 # include:
 # 'bottom' - bottom boundary is included in the z-slice test
 # 'top' - top boundary is included in the z-slice test
-get.slice <- function(d, top, bottom, z, include='top') {
+get.slice <- function(d, top, bottom, z, include='top', strict=TRUE) {
   # extract pieces
   d.top <- d[[top]]
   d.bottom <- d[[bottom]]
@@ -18,11 +18,31 @@ get.slice <- function(d, top, bottom, z, include='top') {
     res <- d.v[which(z >= d.top & z < d.bottom)]
   else
     stop('invalid horizon boundary rule')
-
+  
+  # used for QA/QC
+  l.res <- length(res)
+  
   # account for no data
-  if(length(res) == 0)
+  if(l.res == 0)
     res <- NA
-
+  
+  # if there were multiple matches (i.e. bad horizonation)
+  if(l.res > 1 ) {
+    
+    # strict usage of the data... erors stop execution
+    if(strict == TRUE) {
+      print(d)
+      stop('bad horizonation')  
+    }
+    
+    # looser interp of the data... issue warning and pic the first
+    else {
+     warning('Bad horizonation detected, using the mean of all matching results. Use strict=TRUE to enforce QA/QC.')
+     res <- mean(res, na.rm=TRUE)
+    }
+    
+  }
+  
   # name the variable, for nicer column names output from ddply()
   names(res) <- 'slice'
   return(res)
@@ -37,7 +57,7 @@ if (!isGeneric("slice"))
 ## TODO: this is slower than soil.slot ... why?
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
-  function(object, fm, top.down=TRUE, just.the.data=FALSE){
+  function(object, fm, top.down=TRUE, just.the.data=FALSE, progress='none', strict=TRUE){
   
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
@@ -102,7 +122,9 @@ setMethod(f='slice', signature='SoilProfileCollection',
 
   # iterate over this index
   for(slice.i in slice.idx) {
-    m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, top=top, bottom=bottom, z=z[slice.i])
+    
+    # errors from get.slice() can be avoided loosening constraints with strict=FALSE
+    m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, .progress=progress, top=top, bottom=bottom, z=z[slice.i], strict=strict)
     
     # add depth range:
     # top-down, means that the slice starts from the user-defined depths (default)
@@ -118,9 +140,10 @@ setMethod(f='slice', signature='SoilProfileCollection',
     # save to the list
     hd.slices[[slice.i]] <- m.i
     }
-
+  
   # convert list into DF and order by id, top = hd[1]
   hd.slices <- ldply(hd.slices)
+  
   ## TODO: make sure sorting is correct!  
   hd.slices <- hd.slices[order(hd.slices[[id]], hd.slices[[top]]), ]
 
