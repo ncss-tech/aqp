@@ -33,7 +33,7 @@ get.slice <- function(d, top, bottom, z, include='top') {
 if (!isGeneric("slice"))
   setGeneric("slice", function(object, ...) standardGeneric("slice"))
 
-## TODO: currently does not correctly "slice" categorical values
+
 ## TODO: this is slower than soil.slot ... why?
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection',
