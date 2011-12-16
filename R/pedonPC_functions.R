@@ -11,8 +11,7 @@ mix_and_clean_colors <- function(x)
   
   # skip horizons with a single color
   tab <- table(x$hz_id)
-  if(tab > 1)
-    {
+  if(tab > 1) {
     r <- with(x, wtd.mean(r, weights=pct))
     g <- with(x, wtd.mean(g, weights=pct))
     b <- with(x, wtd.mean(b, weights=pct))
@@ -135,7 +134,7 @@ ORDER BY pedon.upedonid, phiidref, colormoistst;"
   # close connection
   odbcClose(channel)
   
-  # convert Munsell to RGB---> note: this is slow
+  # convert Munsell to RGB
   cat('converting Munsell to RGB ...\n')
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
 
