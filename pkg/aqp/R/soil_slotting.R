@@ -264,7 +264,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# if we have a character, then convert to factor
 	if(prop.class == 'character')
 		{
-		message('Note: converting to categorical variable to factor.')
+		message('Note: converting categorical variable to factor.')
 		data$prop <- factor(data$prop)
 		}
 	
