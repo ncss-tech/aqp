@@ -64,8 +64,7 @@ proj4string(ca) <- '+proj=latlong +datum=NAD83'
 ca
 
 # 3. aggregate CEC 7 for all profiles into 1 cm slices
-ca$group <- rep(1, times=length(ca))
-a <- soil.slot.multiple(ca, fm=group ~ bs_7)
+a <- soil.slot.multiple(ca, fm= ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
 xyplot(
@@ -75,6 +74,18 @@ panel=panel.depth_function, prepanel=prepanel.depth_function,
 ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.line=list(col='black'))
 )
 
+# 4. aggregate CEC 7 into 1 cm slices, by MLRA (stored in @site)
+a <- soil.slot.multiple(ca, fm= mlra ~ bs_7)
+
+# 4. plot median & IQR by 1 cm slice, by selected MLRA
+xyplot(
+top ~ p.q50 | factor(mlra, levels=c('18','22','22A')) , data=a, lower=a$p.q25, upper=a$p.q75, 
+ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
+panel=panel.depth_function, prepanel=prepanel.depth_function,
+ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.line=list(col='black'))
+)
+
+
 # 5. safely compute hz-thickness weighted mean CEC (pH 7)
 head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
 .fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
@@ -82,6 +93,9 @@ head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key),
 # 6. extract a SPDF with horizon data along a slice at 25 cm
 s.25 <- slice(ca, fm=25 ~ bs_7 + CEC7 + ex_acid)
 spplot(s.25, zcol=c('bs_7','CEC7','ex_acid'))
+
+# note that the ordering is preserved:
+all.equal(s.25$pedon_key, profile_id(ca))
 
 # 6.1 extract a data.frame with horizon data along a slices c(10,20,50)
 s.multiple <- slice(ca, fm=c(10,20,50) ~ bs_7 + CEC7 + ex_acid)
@@ -92,5 +106,7 @@ ca.2 <- ca[, 2]
 # 8. Extract the all horizons from profiles 1:10 as data.frame
 ca.1.to.10 <- ca[1:10, ]
 
+# basic plot method: profile plot
+plot(ca.1.to.10)
 }
 \keyword{datasets}
