@@ -5,10 +5,8 @@ Urgent:
   opt.original <- options(stringsAsFactors = FALSE)
   
 1. finish new S4 classes/methods
-2. update all documentation with new classes/methods
-3. fix all related examples
-4. update vignette
-5. integrate color styling with 'scales' package in plot.SoilProfileCollection
+2. integrate color styling with 'scales' package in plot.SoilProfileCollection
+3. more aggressive checking of ordering / IDs
 
 Interesting:
 ------------

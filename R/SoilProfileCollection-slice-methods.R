@@ -85,6 +85,7 @@ setMethod(f='slice', signature='SoilProfileCollection',
   hd <- horizonDepths(object)
   top <- hd[1] ; bottom <- hd[2] # convenience vars
   id <- idname(object)
+  id.order <- profile_id(object) # this is the original ordering of profiles
   
   # get variable classes
   vars.is.numeric.test <- sapply(vars, function(i) is.numeric(h[[i]]))  
@@ -119,11 +120,14 @@ setMethod(f='slice', signature='SoilProfileCollection',
   hd.slices <- vector(mode='list', length=length(z))
   # prepare an index for the list
   slice.idx <- seq_along(z)
-
+  
   # iterate over this index
   for(slice.i in slice.idx) {
     
-    # errors from get.slice() can be avoided loosening constraints with strict=FALSE
+    ## wow this is stupid... ddply() is re-ordering the data
+    ## this is the most time consuming chunk of code
+    ## a vectorized version of get.slice would help
+    # errors from get.slice() can be avoided by loosening constraints with strict=FALSE
     m.i <- ddply(m, c(id, 'variable'), .fun=get.slice, .progress=progress, top=top, bottom=bottom, z=z[slice.i], strict=strict)
     
     # add depth range:
@@ -141,17 +145,20 @@ setMethod(f='slice', signature='SoilProfileCollection',
     hd.slices[[slice.i]] <- m.i
     }
   
+  
+  ## TODO: this is wasteful
   # convert list into DF and order by id, top = hd[1]
   hd.slices <- ldply(hd.slices)
   
-  ## TODO: make sure sorting is correct!  
-  hd.slices <- hd.slices[order(hd.slices[[id]], hd.slices[[top]]), ]
-
+  ## stupid: this is re-ordering my data as well
   # convert back into wide format
   # and remove reshape-related attributes
   fm.to.wide <- as.formula(paste(id, '+', top, '+', bottom, '~', 'variable', sep=' '))
   hd.slices <- data.frame(cast(hd.slices, formula=fm.to.wide, value='slice'), stringsAsFactors=FALSE)
-
+  
+  ## fix the broken ordering from ddply(), and cast()  
+  hd.slices <- hd.slices[order(match(hd.slices[[id]], id.order), hd.slices[[top]]), ]
+  
   # if we just want the data:
   if(just.the.data)
     return(hd.slices)
