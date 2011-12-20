@@ -2,12 +2,8 @@
 \Rdversion{1.1}
 \alias{munsell}
 \docType{data}
-\title{
-Munsell-RGB Lookup Table for Common Soil Colors
-}
-\description{
-A lookup table of interpolated Munsell color chips for common soil colors.
-}
+\title{Munsell-RGB Lookup Table for Common Soil Colors}
+\description{A lookup table of interpolated Munsell color chips for common soil colors.}
 \usage{data(munsell)}
 \format{
   A data frame with 8825 observations on the following 6 variables.
