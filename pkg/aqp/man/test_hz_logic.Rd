@@ -19,11 +19,28 @@ test_hz_logic(i, topcol, bottomcol, test.NA = TRUE, strict = FALSE)
 \author{D.E. Beaudette}
 \note{}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{\link{depths<-}}
 \examples{
+# simple example: just one profile
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+s <- horizons(sp1[1, ])
 
+# apply tests
+# passes:
+test_hz_logic(s, 'top', 'bottom', test.NA=TRUE, strict=FALSE)
+# passes:
+test_hz_logic(s, 'top', 'bottom', test.NA=TRUE, strict=TRUE)
+
+# add-in some bad data
+s$bottom[6] <- NA # missing horizon boundary, common on bottom-most hz
+s$bottom[3] <- 30 # inconsistent hz boundary
+
+# apply tests
+# fails due to missing hz boundary
+test_hz_logic(s, 'top', 'bottom', test.NA=TRUE, strict=FALSE)
+# fails due to inconsistent hz boundary
+test_hz_logic(s, 'top', 'bottom', test.NA=FALSE, strict=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

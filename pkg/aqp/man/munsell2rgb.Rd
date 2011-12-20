@@ -1,7 +1,6 @@
 \name{munsell2rgb}
 \Rdversion{1.1}
 \alias{munsell2rgb}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Convert Munsell Notation to RGB
 }
@@ -12,7 +11,6 @@ Color conversion based on a look-up table of common soil colors.
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{the_hue}{a vector of one or more more hues, upper-case}
   \item{the_value}{a vector of one or more values}
@@ -27,14 +25,16 @@ maxColorValue=1, return_triplets=FALSE)
 A vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
 }
 \references{
-http://casoilresource.lawr.ucdavis.edu/drupal/node/201
+\url{http://casoilresource.lawr.ucdavis.edu/drupal/node/201}
+\url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
+\url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 }
 \author{
 Dylan E. Beaudette
 }
-\note{As of \code{plyr} 1.6 (CRAN), there are cases when this function will fail (\url{https://github.com/hadley/plyr/issues/43}). The next version of \code{plyr} should address this problem. Until then, be sure not to pass in a Munsell (hue, value, chroma) as factors.}
+\note{}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\section{Warning}{As of \code{plyr} 1.6 (CRAN), there are cases when this function will fail (\url{https://github.com/hadley/plyr/issues/43}). The next version of \code{plyr} should address this problem. Until then, be sure not to pass in Munsell (hue, value, chroma) as factors.}
 
 \seealso{}
 \examples{
