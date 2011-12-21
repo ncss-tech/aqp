@@ -24,15 +24,21 @@ setMethod(f='slab', signature='SoilProfileCollection',
   h$top <- h[[hzDepthCols[1]]]
   h$bottom <- h[[hzDepthCols[2]]]
   
+  # perform aggregation, using data.frame method
   res <- slab(h, fm, ...)
   
-  # currently sends back a DF,
-  # we should send back an SPC object with original format...
+  ## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
+  
+  # result is a data.frame
+  cat("notice: result is a data.frame\n")
   return(res)
   }
 )
 
 
+##
+## TODO: update to current standards, see slice()
+##
 # current interface to data.frame objects
 setMethod(f='slab', signature='data.frame',
 definition=function(data, fm, ...) {
