@@ -4,12 +4,9 @@
 \alias{slab,data.frame-method}
 \alias{slab,SoilProfileCollection-method}
 
-\title{
-Multivariate Soil Profile Slotting
-}
-\description{
-Align several soil properties to a user-defined basis, with data returned in long format.
-}
+\title{Slab-Wise Aggregation of SoilProfileCollection Objects}
+
+\description{Aggregate soil properties along user-defined `slabs`, and optionally within groups.}
 
 
 \section{Methods}{
@@ -25,7 +22,7 @@ Align several soil properties to a user-defined basis, with data returned in lon
 }
 
 \details{
-This function is a wrapper to \code{\link{soil.slot}}, that makes it simpler to "slice" several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
+This function is a wrapper to \code{\link{soil.slot}}, and allows for slab-wise aggregation of several soil properties at once. The results are in long format; see examples for further processing steps that may be required.
 }
 \value{
 A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-slice information repeated for each requested input variable and group. If a grouping variable is not given, then all of the profiles in the collection are aggregated into a single representative profile.
@@ -33,9 +30,7 @@ A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-s
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
-\note{
-%%  ~~further notes~~
-}
+\note{This function has replaced the previously defined `soil.slot.multiple' function as of aqp 0.98-8.58.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -72,7 +67,6 @@ prepanel=prepanel.depth_function
 
 # convert mean value for each variable into long format
 a.wide <- cast(a, group + top + bottom ~ variable, value=c('p.mean'))
-
 
 ## again, this time for a user-defined slab from 40-60 cm
 a <- slab(sp3, fm=group ~ L + A + B, seg_vect=c(40,60))
