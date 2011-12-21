@@ -3,11 +3,11 @@
 ##############################################################
 
 # setup generic function
-if (!isGeneric("soil.slot.multiple"))
-  setGeneric("soil.slot.multiple", function(data, fm, ...) standardGeneric("soil.slot.multiple"))
+if (!isGeneric("slab"))
+  setGeneric("slab", function(data, fm, ...) standardGeneric("slab"))
 
 # temp interface to SPC class objects
-setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
+setMethod(f='slab', signature='SoilProfileCollection',
   function(data, fm, ...){
   
   # extract horizons and site 
@@ -24,7 +24,7 @@ setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
   h$top <- h[[hzDepthCols[1]]]
   h$bottom <- h[[hzDepthCols[2]]]
   
-  res <- soil.slot.multiple(h, fm, ...)
+  res <- slab(h, fm, ...)
   
   # currently sends back a DF,
   # we should send back an SPC object with original format...
@@ -34,7 +34,7 @@ setMethod(f='soil.slot.multiple', signature='SoilProfileCollection',
 
 
 # current interface to data.frame objects
-setMethod(f='soil.slot.multiple', signature='data.frame',
+setMethod(f='slab', signature='data.frame',
 definition=function(data, fm, ...) {
     
     ## important: change the default behavior of data.frame and melt
