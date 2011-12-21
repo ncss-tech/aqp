@@ -61,7 +61,7 @@ plot(s)
 
 # aggregate all profiles into 1cm depth slices, 
 # using data from column 'prop'
-s1 <- soil.slot.multiple(sp1, fm= ~ prop)
+s1 <- slab(sp1, fm= ~ prop)
 
 # check mean +/- 1SD
 xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
@@ -75,13 +75,13 @@ panel=panel.superpose, ylim=c(110,-5))
 
 # other segment sizes
 # 5cm
-s5 <- soil.slot.multiple(sp1, fm= ~ prop, seg_size=5)
+s5 <- slab(sp1, fm= ~ prop, seg_size=5)
 
 # 10cm segments:
-s10 <- soil.slot.multiple(sp1, fm= ~ prop, seg_size=10)
+s10 <- slab(sp1, fm= ~ prop, seg_size=10)
 
 # 20cm
-s20 <- soil.slot.multiple(sp1, fm= ~ prop, seg_size=20)
+s20 <- slab(sp1, fm= ~ prop, seg_size=20)
 
 # variation in segment-weighted mean property: very little
 sapply(

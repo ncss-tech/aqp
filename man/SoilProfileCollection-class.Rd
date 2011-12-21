@@ -56,7 +56,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{show}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{site}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{site<-}{\code{signature(object = "SoilProfileCollection")}: ... }
-    \item{soil.slot.multiple}{\code{signature(data = "SoilProfileCollection")}: ... }
+    \item{slab}{\code{signature(data = "SoilProfileCollection")}: ... }
     \item{units}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{units<-}{\code{signature(object = "SoilProfileCollection")}: ... }
 	 }

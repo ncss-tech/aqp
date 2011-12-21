@@ -53,7 +53,7 @@ sp3.rgb <- with(sp3, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
 sp3[, c('h','s','v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue=1)))
 
 # aggregate all profiles along 10-cm slabs
-a <- soil.slot.multiple(sp3, fm= ~ clay + cec + ph + h + s + v, seg_size=10)
+a <- slab(sp3, fm= ~ clay + cec + ph + h + s + v, seg_size=10)
 
 # convert back to wide format, note that aggregation metric affects the result
 a.wide.q25 <- cast(a, top + bottom ~ variable, value=c('p.q25'))

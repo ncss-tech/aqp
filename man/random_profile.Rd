@@ -80,7 +80,7 @@ if(require(scales)) {
 
 # try plotting the LPP-derived simulated data
 # aggregated over all profiles
-a <- soil.slot.multiple(d, fm= ~ p1)
+a <- slab(d, fm= ~ p1)
 a$mid <- with(a, (top + bottom) / 2)
 
 (p1 <- xyplot(mid ~ p.q50, data=a,

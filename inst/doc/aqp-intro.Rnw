@@ -100,7 +100,7 @@ coordinates(ca) <- ~ lon + lat
 proj4string(ca) <- '+proj=latlong +datum=NAD83'
 
 # aggregate CEC 7 by MLRa
-a <- soil.slot.multiple(ca, fm=mlra ~ bs_7)
+a <- slab(ca, fm=mlra ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
 p1 <- xyplot(

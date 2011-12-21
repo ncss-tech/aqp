@@ -64,7 +64,7 @@ proj4string(ca) <- '+proj=latlong +datum=NAD83'
 ca
 
 # 3. aggregate CEC 7 for all profiles into 1 cm slices
-a <- soil.slot.multiple(ca, fm= ~ bs_7)
+a <- slab(ca, fm= ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
 xyplot(
@@ -75,7 +75,7 @@ ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.l
 )
 
 # 4. aggregate CEC 7 into 1 cm slices, by MLRA (stored in @site)
-a <- soil.slot.multiple(ca, fm= mlra ~ bs_7)
+a <- slab(ca, fm= mlra ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice, by selected MLRA
 xyplot(
