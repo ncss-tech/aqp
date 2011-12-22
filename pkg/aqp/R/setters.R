@@ -86,7 +86,14 @@ setReplaceMethod("depths", "data.frame",
 
   # re-order data: IDs, top hz depths
   new.order <- order(data[[nm[1]]], data[[nm[2]]])
-
+  
+  # check for factor-class ID
+  if(class(data[[nm[1]]]) == 'factor') {
+    warning('converting IDs from factor to character')
+    data[[nm[1]]] <- as.character(data[[nm[1]]])
+  }
+    
+  
   # create object
   depthcols <- c(nm[2], nm[3])
   res <- SoilProfileCollection(idcol=nm[1], depthcols=depthcols, horizons=data[new.order, ])

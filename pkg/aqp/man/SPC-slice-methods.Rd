@@ -1,6 +1,7 @@
 \name{slice-methods}
 \docType{methods}
 \alias{get.slice}
+\alias{slice.fast}
 \alias{slice}
 \alias{slice,SoilProfileCollection-method}
 \title{ ~~ Methods for Function \code{slice} in Package \pkg{aqp} ~~}
@@ -31,11 +32,11 @@ profile_id(d)
 
 # slice-up at 10 cm: these IDs match the output from profile_id()
 # output a data.frame instead of a SoilProfilecollection
-s <- slice(d, 10 ~ p1 + p2 + p3, just.the.data=TRUE)
+s <- slice(d, 10 ~ name + p1 + p2 + p3, just.the.data=TRUE)
 
 # are the results in the same order as our original IDs?
 if( ! all.equal(s$id, profile_id(d)))
   stop('IDs do not match')
 }
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }
+\keyword{manip}

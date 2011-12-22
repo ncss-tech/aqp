@@ -1,3 +1,12 @@
+-------------------------- aqp 0.99-9 (2011-12-22) --------------------------
+* almost ready for AQP 1.0, vignettes are the last missing piece :)
+* slice(SPC, ...) is now 10-100x faster, scales linearly
+* slice(SPC, ...) can simultaniously slice categorical and continuous variables
+* converted ID column in sample data to character class
+* fixed a bug in slice() where NA would be returned when IDs were factors
+* added test to depths()<- such that factor IDs are converted into character IDs and a warning is issued
+* added join conditions for most functions using plyr::join(), resulting in less chatter on the console 
+
 -------------------------- aqp 0.99-8.58 (2011-12-21) --------------------------
 * WARNING: soil.slot.multiple() renamed to slab()
 * fixed minor bug in slice(), when numerical IDs are used: ddply() and cast() implicitly re-order data...
