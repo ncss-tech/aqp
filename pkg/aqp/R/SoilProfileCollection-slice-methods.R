@@ -23,10 +23,9 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   # more rows than IDs --> bad horizonation
   if(l.ids != n.res) {
   	if(strict == TRUE) {
-  	  # get offending ID
+  	  # get offending IDs
   	  id.tab <- table(h[[id]])
-  	  print(id.tab)
-  	  bad.ids <- paste(names(id.tab)[which(id.tab > 1)], collapse=',')
+  	  bad.ids <- paste(names(id.tab)[which(id.tab > 1)], collapse=', ')
   	  stop(paste('bad horizonation in IDs:', bad.ids))
   	  }
   	
@@ -43,7 +42,7 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
 
 ## this is a much more robust + fast version of slice.slow
 ## needs a little more testing, and then will be ready
-slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, progress='none', strict=TRUE){
+slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE){
   
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
