@@ -16,7 +16,7 @@ setMethod(f='slab', signature='SoilProfileCollection',
   
   # if there is site data, join together
   if(nrow(s) > 0)
-    h <- join(h, s, type='left')
+    h <- join(h, s, type='left', by=idname(data))
           
   # add old-style, hard-coded {id, top, bottom} column names        
   h$id <- h[[idname(data)]]
@@ -30,7 +30,7 @@ setMethod(f='slab', signature='SoilProfileCollection',
   ## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
   
   # result is a data.frame
-  cat("notice: result is a data.frame\n")
+  cat("result is a data.frame\n")
   return(res)
   }
 )
@@ -450,7 +450,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			if(TRUE %in% bad_hz_list_TF)
 				{
 				bad_hz_list_idx <- which(bad_hz_list_TF)
-				cat(paste('notice: removing horizon with 0 thickness (hz ', bad_hz_list_idx, ')\n', sep=''))
+				cat(paste('removing horizon with 0 thickness (hz ', bad_hz_list_idx, ')\n', sep=''))
 				df.top_bottom <- df.top_bottom[-bad_hz_list_idx, ]
 				}
 						

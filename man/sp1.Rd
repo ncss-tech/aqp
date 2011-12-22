@@ -50,12 +50,8 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-# extract 1-unit thick slices of 'prop' at defined depths
-s <- slice(sp1, 0:25 ~ prop)
-plot(s, name='prop')
-
-# try again, this time with the horizon name and color
-s <- slice(sp1, 0:25 ~ name + soil_color)
+# extract 1-unit thick slices at defined depths
+s <- slice(sp1, 0:25 ~ prop + name + soil_color)
 plot(s)
 
 

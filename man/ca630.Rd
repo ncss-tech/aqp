@@ -107,6 +107,6 @@ ca.2 <- ca[, 2]
 ca.1.to.10 <- ca[1:10, ]
 
 # basic plot method: profile plot
-plot(ca.1.to.10)
+plot(ca.1.to.10, name='hzn_desgn')
 }
 \keyword{datasets}

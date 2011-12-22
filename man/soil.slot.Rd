@@ -3,17 +3,13 @@
 \alias{soil.slot}
 \alias{seg.summary}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-Soil Profile Slotting
-}
-\description{
-Align a single soil property to a user-defined basis, and perform slice-wise aggregation.
-}
+\title{Slice-Wise Aggregation of Soil Properties}
+\description{Align a single soil property to a user-defined basis, and perform slice-wise aggregation.}
 \usage{
 soil.slot(data, seg_size = NA, seg_vect = NA, 
 use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{data}{
 A dataframe representing a 'stack' of soil profiles and having the following format:
@@ -74,23 +70,16 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
-\note{
-%%  ~~further notes~~
-}
+\note{This function is used internally by other functions. Examples below should be used with caution, as they will be migrated into higher-level documentation soon.}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\section{Warning}{These examples are now obsolete, use with cation.}
 
 \seealso{
 \code{\link{sp1}, \link{unroll}}, \code{\link{slab}}
 }
 \examples{
-# setup environment
-library(reshape)
-library(lattice)
-
 # load example data
 data(sp1)
-
 
 # test that mean of 1cm slotted property is equal to the 
 # hz-thickness weighted mean value of that property
@@ -106,8 +95,8 @@ if(!all.equal(mean(a$p.mean), hz.wt.mean))
 
 
 # calculate a weighted average of some propery over a slab of soil
-slab <- c(100,150)
-soil.slot(sp1.sub, seg_vect=slab)$p.mean
+s <- c(100,150)
+soil.slot(sp1.sub, seg_vect=s)$p.mean
 
 
 
@@ -248,27 +237,6 @@ prepanel=prepanel.depth_function
 )
 
 
-#
-# 3.2 standard aggregation, by grouping variable
-#
-require(plyr)
-
-# try str(sp1) for hints
-sp1$group <- with(sp1, factor(group))
-a <- ddply(sp1, .(group), .fun=soil.slot)
-
-# manually add mean +/- SD
-a$upper <- with(a, p.mean+p.sd)
-a$lower <- with(a, p.mean-p.sd)
-
-# use custom plotting function for uncertainty viz.
-xyplot(
-top ~ p.mean, data=a, groups=group, subscripts=TRUE, 
-lower=a$lower, upper=a$upper, ylim=c(250,-5), alpha=0.5,
-panel=panel.depth_function, 
-prepanel=prepanel.depth_function
-)
-
 
 # 
 # 3.3 use of weights
@@ -276,7 +244,7 @@ prepanel=prepanel.depth_function
 data(sp1)
 
 # some fake weights
-wts <- data.frame(id=levels(sp1$id), wt=c(3,1,2,1,2,1,4,1,2))
+wts <- data.frame(id=unique(sp1$id), wt=c(3,1,2,1,2,1,4,1,2))
 
 # merge wtih original data
 g <- merge(sp1, wts, by='id')
@@ -330,7 +298,7 @@ measure.var=c('p.mean','p.wtmean','upper','lower','wt.upper','wt.lower'))
 
 # red lines are weighted
 # point symbols are sized proportional to their weights
-xyplot(cbind(top, bottom) ~ value, groups=variable, data=a.long, 
+xyplot(cbind(top, bottom) ~ value, groups=variable, data=a.long, id=g$id,
 ylim=c(260,-10), ylab='Depth', xlab='Property',
 par.settings=list(superpose.line=list(
 col=c('black','red','black','black','red','red'), 
