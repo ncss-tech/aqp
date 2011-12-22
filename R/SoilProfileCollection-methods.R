@@ -328,7 +328,7 @@ setMethod("[", "SoilProfileCollection",
 
       # if site data, join hz+site
       if(nrow(s) > 0)
-      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=join(h, s)))
+      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=join(h, s, by=idname(x))))
       else # no site data
       	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=h))	
     }
