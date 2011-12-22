@@ -100,7 +100,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, progress=
     # join with original IDs in order to account for NA, or bad horizonation
     d <- data.frame(temp_id=id.order)
     names(d) <- id
-    m.i <- join(d, m.i.sub, type='left', match='first')
+    m.i <- join(d, m.i.sub, by=id, type='left', match='first')
     
     # add depth range:
     # top-down, means that the slice starts from the user-defined depths (default)
@@ -134,7 +134,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, progress=
     cat('result is a SpatialPointsDataFrame object\n')
     # check for site data, if present - join to our sliced data
     if(nrow(site(object)) > 0 )
-      hd.slices <- join(hd.slices, site(object))
+      hd.slices <- join(hd.slices, site(object), by=id)
     
     return(SpatialPointsDataFrame(coordinates(object), data=hd.slices))
     }
@@ -322,7 +322,7 @@ slice.slow <- function(object, fm, top.down=TRUE, just.the.data=FALSE, progress=
     cat('result is a SpatialPointsDataFrame object\n')
     # check for site data, if present - join to our sliced data
     if(nrow(site(object)) > 0 )
-      hd.slices <- join(hd.slices, site(object))
+      hd.slices <- join(hd.slices, site(object), by=id)
     
     return(SpatialPointsDataFrame(coordinates(object), data=hd.slices))
     }

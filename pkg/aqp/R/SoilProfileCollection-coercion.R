@@ -4,12 +4,12 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
   # horizons + site + coordinates
   if(nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
     site.coords <- data.frame(site(from), coordinates(from), stringsAsFactors=FALSE)
-    return(join(horizons(from), site.coords))
+    return(join(horizons(from), site.coords, by=idname(from)))
   }
   
   # horizons + site
   if(nrow(site(from)) > 0 & ! nrow(coordinates(from)) == length(from))
-    return(join(horizons(from), site(from)))
+    return(join(horizons(from), site(from), by=idname(from)))
     
   # horizons + coordinates
   if(! nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
