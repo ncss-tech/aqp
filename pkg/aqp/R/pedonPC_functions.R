@@ -1,5 +1,4 @@
-# TODO: allow user to specify set of IDs for subsetting
-
+## consider moving into a new package: NRCS
 
 # mixes colors whene there are multiple values per / horizon
 # TODO: this is only used by pedonPC functions, and could be generalized
