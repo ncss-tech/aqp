@@ -1,3 +1,7 @@
+-------------------------- aqp 0.99-9.1 (2011-12-27) --------------------------
+* pedonPC, NASIS, and SDA functions moved *out* of aqp, and *into* new package: soilDB
+  - removed assocated, suggested packages from aqp
+
 -------------------------- aqp 0.99-9 (2011-12-22) --------------------------
 * almost ready for AQP 1.0, vignettes are the last missing piece :)
 * slice(SPC, ...) is now 10-100x faster, scales linearly
