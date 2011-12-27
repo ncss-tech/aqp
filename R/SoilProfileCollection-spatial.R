@@ -83,6 +83,7 @@ setMethod(f='spatial_subset', signature='SoilProfileCollection',
       valid_sites <- which(s[, object@idcol] %in% valid_ids)
 	
 	# create a new SPC with subset data
+  ## TODO: copy over diagnostic horizon data
 	## TODO: use integer profile index to simplify this process
 	## TODO: @sp bbox may need to be re-computed
       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = object@metadata, horizons = horizons(object)[valid_horizons, ], site = site(object)[valid_sites, ], sp = object@sp[ids,])

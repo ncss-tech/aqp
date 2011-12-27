@@ -1,36 +1,4 @@
-# this should be further documented
-test_hz_logic <- function(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE)
-  {
-  
-  # test for na
-  if(test.NA) { 
-    if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
-      res <- FALSE
-      names(res) <- 'hz_logic_pass'
-      return(res)
-    }
-  }
-  
-  # test for illogical horizon boundaries
-  # note that this will fail with non-contiguous slices!
-  if(strict) {
-    n <- nrow(i)
-    res <- all.equal(i[[topcol]][-1], i[[bottomcol]][-n])
-    if(res != TRUE)
-      res <- FALSE
-    names(res) <- 'hz_logic_pass'
-    return(res)
-  }
-  
-  # PASSES for now
-  else {
-    res <- TRUE
-    names(res) <- 'hz_logic_pass'
-    return(res)
-  }
-}
-
-
+# class def for main class within aqp
 .SoilProfileCollectionValidity <- function(object) {
   
     # 1. test for bad horizon logic
@@ -62,7 +30,8 @@ setClass(
     metadata='data.frame', # single-row dataframe with key-value mapping
     horizons='data.frame', # all horizons sorted by ID, top
     site='data.frame', # data about the sampling sites
-    sp='SpatialPoints' # (optional) spatial data stored here
+    sp='SpatialPoints', # (optional) spatial data stored here
+    diagnostic='data.frame' # (optional) diagnostic horizons are stored here
   ),
   prototype=prototype(
     idcol='id',
@@ -70,7 +39,8 @@ setClass(
     metadata=data.frame(stringsAsFactors=FALSE), # default units are unkown
     horizons=data.frame(stringsAsFactors=FALSE),
     site=data.frame(stringsAsFactors=FALSE),
-    sp=new('SpatialPoints')
+    sp=new('SpatialPoints'),
+    diagnostic=data.frame(stringsAsFactors=FALSE)
   ),
   validity=.SoilProfileCollectionValidity
 )

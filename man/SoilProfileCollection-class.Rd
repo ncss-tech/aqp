@@ -27,10 +27,11 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
   \describe{
     \item{\code{idcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify profiles }
     \item{\code{depthcols}:}{Object of class \code{"character"} with the names of columns containing the horizon top and bottom boundaries}
-    \item{\code{metadata}:}{Object of class \code{"data.frame"} a dataframe with horizon data, 1 or more rows per profile }
-    \item{\code{horizons}:}{Object of class \code{"data.frame"} a data frame with site data, 1 row per profile }
-    \item{\code{site}:}{Object of class \code{"data.frame"} a SpatialPoints class object, 1 row per profile }
-    \item{\code{sp}:}{Object of class \code{"SpatialPoints"} a 1-row dataframe with metadata such as depth units }
+    \item{\code{metadata}:}{Object of class \code{"data.frame"} with collection-level metadata, having a single row, and user-defined columns}
+    \item{\code{horizons}:}{Object of class \code{"data.frame"} with 1 or more rows per profile}
+    \item{\code{site}:}{Object of class \code{"data.frame"} with 1 row per profile }
+    \item{\code{sp}:}{Object of class \code{"SpatialPoints"} with 1 row per profile }
+    \item{\code{diagnostic}:}{Object of class \code{"data.frame"} with 0 or more rows per profile}
   }
 }
 \section{Methods}{
