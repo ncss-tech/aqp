@@ -5,10 +5,11 @@ depthcols=c('top','bottom'),
 metadata=data.frame(stringsAsFactors=FALSE),
 horizons,
 site=data.frame(stringsAsFactors=FALSE),
-sp=new('SpatialPoints') # this is a bogus place-holder
+sp=new('SpatialPoints'), # this is a bogus place-holder
+diagnostic=data.frame(stringsAsFactors=FALSE)
 ){
   # creation of the object (includes a validity check)
-  new("SoilProfileCollection", idcol=idcol, depthcols=depthcols, metadata=metadata, horizons=horizons, site=site, sp=sp)
+  new("SoilProfileCollection", idcol=idcol, depthcols=depthcols, metadata=metadata, horizons=horizons, site=site, sp=sp, diagnostic=diagnostic)
 }
 
 
@@ -100,8 +101,20 @@ setMethod("site", "SoilProfileCollection",
   }
 )
 
+## diagnostic horizons
+# returns a data.frame diagnostic horizon data
+# if (!isGeneric("diagnostic_hz"))
+#   setGeneric("diagnostic_hz", function(object, ...) standardGeneric("diagnostic_hz"))
+# 
+# setMethod(f='diagnostic_hz', signature='SoilProfileCollection',
+#   function(object){
+#   return(object@diagnostic)
+#   }
+# )
+
+
 ## horizon data
-# returns a data.frame aggregating horizons data
+# returns a data.frame with horizons data
 if (!isGeneric("horizons"))
   setGeneric("horizons", function(object, ...) standardGeneric("horizons"))
 

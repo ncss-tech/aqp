@@ -142,6 +142,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   else
     cat('result is a SoilProfileCollection object\n')
   
+  
   # otherwise return an SPC, be sure to copy over the spatial data
   depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom))
   hd.slices@sp <- object@sp
@@ -150,6 +151,12 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # note that we should have a proper setter for this
   if(nrow(site(object)) > 0 )
     hd.slices@site <- site(object)
+  
+  # copy over any diagnostic features
+#   diagnostic_hz(hd.slices) <- diagnostic_hz(object)
+  
+  # copy over metadata
+  metadata(hd.slices) <- metadata(object)
   
   # reset options:
   options(opt.original)
