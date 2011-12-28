@@ -24,7 +24,7 @@ plotSPC(x, color='soil_color', width=0.2, name='name',
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
 id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, 
 max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
-abbr.cutoff=5, \dots)
+abbr.cutoff=5, divide.hz=TRUE, \dots)
 }
 
 
@@ -49,6 +49,7 @@ abbr.cutoff=5, \dots)
   \item{shrink.cutoff}{character length defining long horizon names}
   \item{abbr}{should the profile ID be abbreviated?}
   \item{abbr.cutoff}{suggested minimum length for abbreviated IDs}
+  \item{divide.hz}{should horizons be divided with a thin black line? (default is TRUE)}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
@@ -76,6 +77,9 @@ depths(sp1) <- id ~ top + bottom
 
 # plot profiles
 plot(sp1)
+
+# plot profiles without horizon-line divisions
+plot(sp1, divide.hz=FALSE)
 
 # plot profiles, using alternate profile ID label style
 plot(sp1, id.style='side')
