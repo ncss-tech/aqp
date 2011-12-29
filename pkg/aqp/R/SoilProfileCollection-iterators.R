@@ -22,13 +22,5 @@ setMethod(f='profileApply', signature='SoilProfileCollection',
 
 
 
-## example
-#
 
-## f will call elements from within @horizons
-## f should return the same number of records as horizons in profile i
-
-# depths(sp1) <- id ~ top + bottom
-# f <- function(x) { c(x$prop[1], diff(x$prop)) }
-# profileApply(sp1, FUN=f)
 
