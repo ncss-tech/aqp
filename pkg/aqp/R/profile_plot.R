@@ -5,7 +5,7 @@
 # behavior not defined for horizons with an indefinate lower boundary
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='side', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
   
   # get horizons
   h <- horizons(x)
@@ -36,7 +36,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     par(mar=c(0.5,1,0,1))
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/20), n+extra_x_space), ylim=c(max(depth_axis_intervals), -3), axes=FALSE)
+	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/20), n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE)
 	}
   
   

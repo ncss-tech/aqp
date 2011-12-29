@@ -22,7 +22,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 \usage{
 plotSPC(x, color='soil_color', width=0.2, name='name', 
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
-id.style='top', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, 
+id.style='side', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, 
 max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
 abbr.cutoff=5, divide.hz=TRUE, \dots)
 }
@@ -38,7 +38,7 @@ abbr.cutoff=5, divide.hz=TRUE, \dots)
   \item{cex.depth.axis}{character scaling applied to depth scale}
   \item{cex.id}{character scaling applied to profile id}
   \item{print.id}{should the profile id be printed above each profile? (TRUE)}
-  \item{id.style}{profile ID printing style: 'top' = centered above each profile (default), 'side' = 'along the top-left edge of profiles'}
+  \item{id.style}{profile ID printing style: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles' (default)}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 
@@ -76,7 +76,10 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 depths(sp1) <- id ~ top + bottom
 
 # plot profiles
-plot(sp1)
+plot(sp1, id.style='side')
+
+# title, note line argument:
+title('Sample Data 1', line=-1, cex.main=0.75)
 
 # plot profiles without horizon-line divisions
 plot(sp1, divide.hz=FALSE)
