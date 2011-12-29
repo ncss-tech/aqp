@@ -3,6 +3,7 @@
   - removed assocated, suggested packages from aqp
 * new argument to plot(SoilProfileCollection, ..., divide.hz=TRUE|FALSE) tha can optionally suppress 
   plotting of dividing lines between horizons (suggested by Ludwig Hilger)
+* new function profileApply() for applying functions by profile
 
 -------------------------- aqp 0.99-9 (2011-12-22) --------------------------
 * almost ready for AQP 1.0, vignettes are the last missing piece :)
