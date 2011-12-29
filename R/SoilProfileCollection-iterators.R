@@ -13,7 +13,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection',
   function(object, FUN, ...){
 	
 	h <- horizons(object)
-	l <- dlply(h, idname(object), .fun=FUN)
+	l <- dlply(h, idname(object), .fun=FUN, ...)
 	res <- unlist(l)
 	
 	return(res)
