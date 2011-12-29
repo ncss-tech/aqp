@@ -1,6 +1,7 @@
 -------------------------- aqp 0.99-9.1 (2011-12-27) --------------------------
 * pedonPC, NASIS, and SDA functions moved *out* of aqp, and *into* new package: soilDB
   - removed assocated, suggested packages from aqp
+  - soilDB will be on CRAN shortly
 * new argument to plot(SoilProfileCollection, ..., divide.hz=TRUE|FALSE) tha can optionally suppress 
   plotting of dividing lines between horizons (suggested by Ludwig Hilger)
 * new function profileApply() for applying functions by profile
