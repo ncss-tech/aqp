@@ -33,10 +33,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
   
   # init plotting region, unless we are appending to an existing plot
-  if(!add)
-	{
-  par(mar=c(0.5,1,0,1))
-	  plot(0, 0, type='n', xlim=c(1, n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE)
+  # note that we are using some fudge-factors to get the plotting region just right
+  if(!add) {
+    par(mar=c(0.5,1,0,1))
+	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/20), n+extra_x_space), ylim=c(max(depth_axis_intervals), -3), axes=FALSE)
 	}
   
   
