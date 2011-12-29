@@ -209,11 +209,14 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
-	stop("value must be a data.frame")
-
+	  stop("value must be a data.frame")
+  
+  ## 
+  ## not sure if this test is important... as sometimes we want to delete horizons
+  ##
   # testing the number of rows of the horizon data
-  if (nrow(value) != nrow(horizons(object)))
-	stop("inconsistent number of rows")
+  # if (nrow(value) != nrow(horizons(object)))
+	  # stop("inconsistent number of rows")
 
   # basic test of ids:
   if(!idname(object) %in% names(value)) # is there a matching ID column in the replacement?
