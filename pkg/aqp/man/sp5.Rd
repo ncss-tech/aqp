@@ -46,5 +46,11 @@ data(sp5)
 # plot a random sampling of profiles
 plot(sp5[sample(1:length(sp5), 25), ], divide.hz=FALSE)
 
+# plot the first 100 profiles, as 4 rows of 25- hard-coding the max depth
+layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
+plot(sp5[1:25, ], max.depth=300)
+plot(sp5[26:50, ], max.depth=300)
+plot(sp5[51:75, ], max.depth=300)
+plot(sp5[76:100, ], max.depth=300)
 }
 \keyword{datasets}
