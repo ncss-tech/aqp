@@ -1,8 +1,9 @@
-## experimental!!
 
 # analog to apply():
 # operates along horizons, by profile
 # returning n = nrow(horizons(obj))
+
+## TODO: how can we get access the to the site data for profile_i ?
 
 # returns a data.frame
 if (!isGeneric("profileApply"))
