@@ -5,16 +5,13 @@
 # behavior not defined for horizons with an indefinate lower boundary
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='side', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='side', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
   
   # get horizons
   h <- horizons(x)
   
   # get column names from horizon dataframe
   nm <- names(h)
-  
-  # get number of profiles
-  n <- length(x)
   
   # get top/bottom column names
   IDcol <- idname(x)
