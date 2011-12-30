@@ -72,8 +72,11 @@ horizons(sp1) <- h
 site(sp1)
 
 ## setting site-level data
-# site-level data from horizon-level data
+# site-level data from horizon-level data (stored in @horizons)
 site(sp1) <- ~ group
+
+## note that you cannot assign site data via obj$ <- 
+## until you have setup the @site slot with a call to site(obj) <- 
 
 # make some fake site data, and append from data.frame
 # ordering must match order of profile IDs !!
