@@ -215,7 +215,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   ## not sure if this test is important... as sometimes we want to delete horizons
   ##
   # testing the number of rows of the horizon data
-  # if (nrow(value) != nrow(horizons(object)))
+  # if (nrow(value) != nrow(object))
 	  # stop("inconsistent number of rows")
 
   # basic test of ids:

@@ -1,7 +1,7 @@
 
 # analog to apply():
 # operates along horizons, by profile
-# returning n = nrow(horizons(obj))
+# returning n = nrow(obj)
 
 ## TODO: how can we get access the to the site data for profile_i ?
 
