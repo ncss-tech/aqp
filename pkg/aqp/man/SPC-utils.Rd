@@ -67,6 +67,9 @@ h <- horizons(sp1)
 # original order and length must be preserved!
 horizons(sp1) <- h
 
+# get number of horizons
+nrow(sp1)
+
 	
 ## getting site-level data
 site(sp1)

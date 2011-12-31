@@ -10,7 +10,7 @@
 \item{\code{signature(object = "SoilProfileCollection")}}{}
 }}
 
-\value{A vector of length \code{nrow(horizons(object))} (horizon data) or of length \code{length(object)} (site data).}
+\value{A vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data).}
 
 \examples{
 data(sp1)
@@ -57,19 +57,19 @@ site(s) <- ~ group
 
 # eval dupes with digest, save md5 hash into @site
 if(require(digest)) {
-s$md5 <- profileApply(s, function(x) digest(unlist(x[, -1])))
+	s$md5 <- profileApply(s, function(x) digest(unlist(x[, -1])))
 
-# get unique hashes
-u.md5 <- unique(s$md5)
+	# get unique hashes
+	u.md5 <- unique(s$md5)
 
-# list profile idx by hash:
-profiles.by.hash <- sapply(u.md5, function(i) which(s$md5 == i), simplify=FALSE)
+	# list profile idx by hash:
+	profiles.by.hash <- sapply(u.md5, function(i) which(s$md5 == i), simplify=FALSE)
 
-# get an index of the first copy of each profile
-u.profiles <- sapply(profiles.by.hash, function(x) x[1])
+	# get an index of the first copy of each profile
+	u.profiles <- sapply(profiles.by.hash, function(x) x[1])
 
-# check: OK
-plot(s[u.profiles, ])
+	# check: OK
+	plot(s[u.profiles, ])
 }
 
 
