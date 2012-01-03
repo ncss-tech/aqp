@@ -197,9 +197,6 @@ setMethod(f='length', signature='SoilProfileCollection',
 )
 
 # overload nrow() to give us the number of horizons in the collection
-if (!isGeneric("nrow"))
-  setGeneric("nrow", function(object, ...) standardGeneric("nrow"))
-  
 setMethod(f='nrow', signature='SoilProfileCollection',
   definition=function(x){
   nrow(x@horizons)
