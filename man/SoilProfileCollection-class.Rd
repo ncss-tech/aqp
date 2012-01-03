@@ -15,6 +15,7 @@
 \alias{max,SoilProfileCollection-method}
 \alias{min,SoilProfileCollection-method}
 \alias{show,SoilProfileCollection-method}
+\alias{nrow,SoilProfileCollection-method}
 
 
 \title{SoilProfileCollection Class}
