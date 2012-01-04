@@ -44,9 +44,10 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 6 slots
 data(sp5)
 
 # plot a random sampling of profiles
-plot(sp5[sample(1:length(sp5), 25), ], divide.hz=FALSE)
+s <- sample(1:length(sp5), size=25)
+plot(sp5[s, ], divide.hz=FALSE)
 
-# plot the first 100 profiles, as 4 rows of 25- hard-coding the max depth
+# plot the first 100 profiles, as 4 rows of 25, hard-coding the max depth
 layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
 plot(sp5[1:25, ], max.depth=300)
 plot(sp5[26:50, ], max.depth=300)
@@ -54,27 +55,37 @@ plot(sp5[51:75, ], max.depth=300)
 plot(sp5[76:100, ], max.depth=300)
 
 
-# more fun demos
+# more fun demos, these require the 'scales' package
 if(require(scales)) {
+
+# 4x1 matrix of plotting areas
 layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
 
-plot(sp5[1:25, ], max.depth=300) ; mtext('Set 1', 2, line=-0.5, font=2)
-y.p <- profileApply(sp5[1:25, ], function(x) {s <- sample(1:nrow(x), 1) ; with(x[s,], (top+bottom)/2)})
+# plot profiles, with points added to the mid-points of randomly selected horizons
+sub <- sp5[1:25, ]
+plot(sub, max.depth=300) ; mtext('Set 1', 2, line=-0.5, font=2)
+y.p <- profileApply(sub, function(x) {s <- sample(1:nrow(x), 1) ; with(x[s,], (top+bottom)/2)})
 points(1:25, y.p, bg='white', pch=21)
 
-plot(sp5[26:50, ], max.depth=300); mtext('Set 2', 2, line=-0.5, font=2)
-y.a <- profileApply(sp5[26:50], function(x) max(x$bottom))
+# plot profiles, with arrows pointing to profile bottoms
+sub <- sp5[26:50, ]
+plot(sub, max.depth=300); mtext('Set 2', 2, line=-0.5, font=2)
+y.a <- profileApply(sub, function(x) max(x$bottom))
 arrows(1:25, y.a-50, 1:25, y.a, len=0.1, col='white')
 
-plot(sp5[51:75, ], max.depth=300); mtext('Set 3', 2, line=-0.5, font=2)
+# plot profiles, with points connected by lines: ideally reflecting some kind of measured data
+sub <- sp5[51:75, ]
+plot(sub, max.depth=300); mtext('Set 3', 2, line=-0.5, font=2)
 y.p <- 20*(sin(1:25) + 2*cos(1:25) + 5)
 points(1:25, y.p, bg='white', pch=21)
 lines(1:25, y.p, lty=2)
 
-plot(sp5[76:100, ], max.depth=300); mtext('Set 4', 2, line=-0.5, font=2)
-y.Ca.min <- profileApply(sp5[76:100], function(x) x$top[which.max(x$clay)])
-y.Ca.max <- profileApply(sp5[76:100], function(x) x$bottom[which.max(x$clay)])
-polygon(c(1:25, 25:1), c(y.Ca.min, y.Ca.max), border='black', col=rgb(0,0,0.8, alpha=0.25))
+# plot profiles, with polygons connecting horizons with max clay content (+/-) 10 cm
+sub <- sp5[76:100, ]
+y.clay.max <- profileApply(sub, function(x) {i <- which.max(x$clay) ; with(x[i, ], (top+bottom)/2)} )
+plot(sub, max.depth=300); mtext('Set 4', 2, line=-0.5, font=2)
+polygon(c(1:25, 25:1), c(y.clay.max-10, rev(y.clay.max+10)), border='black', col=rgb(0,0,0.8, alpha=0.25))
+points(1:25, y.clay.max, pch=21, bg='white')
 
 
 
