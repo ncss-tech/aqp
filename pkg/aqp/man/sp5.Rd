@@ -37,7 +37,7 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 6 slots
 }
 }
 \details{These data are c/o F. Carre (Florence.CARRE@ineris.fr).}
-\source{296 Soil Profiles from the La Rochelle region of France (F. Carre and Girard, 2002).}
+\source{296 Soil Profiles from the La Rochelle region of France (F. Carre and Girard, 2002). These data can be found on the OSACA project page (\url{http://eusoils.jrc.ec.europa.eu/projects/OSACA/}).}
 \references{F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distances with landform and land cover attributes. Geoderma. 110: 241--263.}
 
 \examples{
@@ -89,33 +89,50 @@ points(1:25, y.clay.max, pch=21, bg='white')
 
 
 
-
-yo <- 100
-sf <- 0.65
+# plotting parameters
+yo <- 100 # y-offset
+sf <- 0.65 # scaling factor
+# plot profile sketches
 plot(sp5[1:25, ], max.depth=300, y.offset=yo, scaling.factor=sf)
+# optionally add describe plotting area above profiles with lines
 # abline(h=c(0,90,100, (300*sf)+yo), lty=2)
+# simulate an environmental variable associated with profiles (elevation, etc.)
 r <- vector(mode='numeric', length=25)
 r[1] <- -50 ; for(i in 2:25) {r[i] <- r[i-1] + rnorm(mean=-1, sd=25, n=1)}
+# rescale
 r <- rescale(r, to=c(80, 0))
+# illustrate gradient with points/lines/arrows
 lines(1:25, r)
 points(1:25, r, pch=16)
 arrows(1:25, r, 1:25, 95, len=0.1)
+# add scale for simulated gradient
 axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
+# depict a secondary environmental gradient with polygons (water table depth, etc.)
 polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)), border='black', col=rgb(0,0,0.8, alpha=0.25))
 
 
-
+##
+# sample 25 profiles from the collection
 s <- sp5[sample(1:length(sp5), size=25), ]
-d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0, max_d=300)
+# compute pair-wise dissimilarity
+d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0, replace_na=TRUE, add_soil_flag=TRUE, max_d=300)
+# keep only the dissimilarity between profile 1 and all others
 d.1 <- as.matrix(d)[1, ]
+# rescale dissimilarities
 d.1 <- rescale(d.1, to=c(80, 0))
+# sort in ascending order
 d.1.order <- rev(order(d.1))
-yo <- 100
-sf <- 0.65
+# plotting parameters
+yo <- 100 # y-offset
+sf <- 0.65 # scaling factor
+# plot sketches
 plot(s, max.depth=300, y.offset=yo, scaling.factor=sf, plot.order=d.1.order)
+# add dissimilarity values with lines/points
 lines(1:25, d.1[d.1.order])
 points(1:25, d.1[d.1.order], pch=16)
+# link dissimilarity values with profile sketches via arrows
 arrows(1:25, d.1[d.1.order], 1:25, 95, len=0.1)
+# add an axis for the dissimilarity scale
 axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
 }
 
