@@ -52,5 +52,61 @@ plot(sp5[1:25, ], max.depth=300)
 plot(sp5[26:50, ], max.depth=300)
 plot(sp5[51:75, ], max.depth=300)
 plot(sp5[76:100, ], max.depth=300)
+
+
+# more fun demos
+if(require(scales)) {
+layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
+
+plot(sp5[1:25, ], max.depth=300) ; mtext('Set 1', 2, line=-0.5, font=2)
+y.p <- profileApply(sp5[1:25, ], function(x) {s <- sample(1:nrow(x), 1) ; with(x[s,], (top+bottom)/2)})
+points(1:25, y.p, bg='white', pch=21)
+
+plot(sp5[26:50, ], max.depth=300); mtext('Set 2', 2, line=-0.5, font=2)
+y.a <- profileApply(sp5[26:50], function(x) max(x$bottom))
+arrows(1:25, y.a-50, 1:25, y.a, len=0.1, col='white')
+
+plot(sp5[51:75, ], max.depth=300); mtext('Set 3', 2, line=-0.5, font=2)
+y.p <- 20*(sin(1:25) + 2*cos(1:25) + 5)
+points(1:25, y.p, bg='white', pch=21)
+lines(1:25, y.p, lty=2)
+
+plot(sp5[76:100, ], max.depth=300); mtext('Set 4', 2, line=-0.5, font=2)
+y.Ca.min <- profileApply(sp5[76:100], function(x) x$top[which.max(x$clay)])
+y.Ca.max <- profileApply(sp5[76:100], function(x) x$bottom[which.max(x$clay)])
+polygon(c(1:25, 25:1), c(y.Ca.min, y.Ca.max), border='black', col=rgb(0,0,0.8, alpha=0.25))
+
+
+
+
+yo <- 100
+sf <- 0.65
+plot(sp5[1:25, ], max.depth=300, y.offset=yo, scaling.factor=sf)
+# abline(h=c(0,90,100, (300*sf)+yo), lty=2)
+r <- vector(mode='numeric', length=25)
+r[1] <- -50 ; for(i in 2:25) {r[i] <- r[i-1] + rnorm(mean=-1, sd=25, n=1)}
+r <- rescale(r, to=c(80, 0))
+lines(1:25, r)
+points(1:25, r, pch=16)
+arrows(1:25, r, 1:25, 95, len=0.1)
+axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
+polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)), border='black', col=rgb(0,0,0.8, alpha=0.25))
+
+
+
+s <- sp5[sample(1:length(sp5), size=25), ]
+d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0, max_d=300)
+d.1 <- as.matrix(d)[1, ]
+d.1 <- rescale(d.1, to=c(80, 0))
+d.1.order <- rev(order(d.1))
+yo <- 100
+sf <- 0.65
+plot(s, max.depth=300, y.offset=yo, scaling.factor=sf, plot.order=d.1.order)
+lines(1:25, d.1[d.1.order])
+points(1:25, d.1[d.1.order], pch=16)
+arrows(1:25, d.1[d.1.order], 1:25, 95, len=0.1)
+axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
+}
+
 }
 \keyword{datasets}
