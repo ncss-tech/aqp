@@ -63,7 +63,7 @@ proj4string(ca) <- '+proj=latlong +datum=NAD83'
 # check the result
 ca
 
-# 3. aggregate CEC 7 for all profiles into 1 cm slices
+# 3. aggregate \%BS 7 for all profiles into 1 cm slices
 a <- slab(ca, fm= ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
@@ -71,18 +71,21 @@ xyplot(
 top ~ p.q50, data=a, lower=a$p.q25, upper=a$p.q75, 
 ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
 panel=panel.depth_function, prepanel=prepanel.depth_function,
-ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.line=list(col='black'))
+ylab='Depth (cm)', xlab='Base Saturation at pH 7', 
+par.settings=list(superpose.line=list(col='black', lwd=2))
 )
 
-# 4. aggregate CEC 7 into 1 cm slices, by MLRA (stored in @site)
-a <- slab(ca, fm= mlra ~ bs_7)
+# 4. aggregate \%BS at pH 8.2 for all profiles by MLRA, along 1 cm slices
+# note that mlra is stored in @site
+a <- slab(ca, mlra ~ bs_8.2)
 
-# 4. plot median & IQR by 1 cm slice, by selected MLRA
 xyplot(
-top ~ p.q50 | factor(mlra, levels=c('18','22','22A')) , data=a, lower=a$p.q25, upper=a$p.q75, 
-ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
+top ~ p.q50, groups=factor(mlra, levels=c('18','22')) , data=a, lower=a$p.q25, upper=a$p.q75, 
+ylim=c(160,-5), alpha=0.5, scales=list(y=list(tick.num=7, alternating=3), x=list(alternating=1)),
 panel=panel.depth_function, prepanel=prepanel.depth_function,
-ylab='Depth (cm)', xlab='Base Saturation at pH 7', par.settings=list(superpose.line=list(col='black'))
+ylab='Depth (cm)', xlab='Base Saturation at pH 8.2', 
+par.settings=list(superpose.line=list(col=c('black','blue'), lty=c(1,2), lwd=2)),
+auto.key=list(columns=2, title='MLRA', points=FALSE, lines=TRUE)
 )
 
 
