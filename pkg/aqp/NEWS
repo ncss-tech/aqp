@@ -1,3 +1,7 @@
+-------------------------- aqp 0.99-9.3 (2012-01-09) --------------------------
+* 'site(SCP) <- d' now tries to merge data from SPC@site with 'd' via left join
+  - this means that all new SPC objects will have a single column of @site data, containin profile IDs
+
 -------------------------- aqp 0.99-9.1 (2011-12-27) --------------------------
 * pedonPC, NASIS, and SDA functions moved *out* of aqp, and *into* new package: soilDB
   - removed assocated, suggested packages from aqp

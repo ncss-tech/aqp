@@ -288,9 +288,7 @@ setReplaceMethod("$", "SoilProfileCollection",
 
 
 
-##
-## TODO: site + sp data are not returned, should be
-## TODO: should return SPC objects not data.frames
+### NOTE: this DOES NOT re-order data, only subsets!
 ##
 ## matrix / DF style access: only to horizon data
 ##
@@ -325,9 +323,20 @@ setMethod("[", "SoilProfileCollection",
     h <- h[h[[idname(x)]] %in% p.ids, ]
     
     # site data, with conditional subsetting
-    s <- site(x)
-    if(nrow(s) > 0)
-      s <- s[i, ]   # this will return i-rows of bogus data
+    s.all <- site(x)
+    s.i <- s.all[[idname(x)]] %in% p.ids
+    
+    ## this assumes that ordering is correct
+    ## NOTE:  s[i, ] with a 1-column DF results in a vector
+    if(ncol(s.all) < 2) {
+      s <- data.frame(s.all[s.i, ], stringsAsFactors=FALSE)
+      names(s) <- names(s.all)
+    }
+    # @site has more than 1 column, normal subsetting will work 
+    else {
+      s <- s.all[s.i, ]
+    }
+    
 	  
     # subset spatial data if exists
     if(nrow(coordinates(x)) == length(x))

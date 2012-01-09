@@ -78,14 +78,12 @@ site(sp1)
 # site-level data from horizon-level data (stored in @horizons)
 site(sp1) <- ~ group
 
-## note that you cannot assign site data via obj$ <- 
-## until you have setup the @site slot with a call to site(obj) <- 
 
 # make some fake site data, and append from data.frame
-# ordering must match order of profile IDs !!
-site(sp1) <- data.frame(p=runif(n=length(sp1)))
+# a matching ID column must be present in both @site and new data
+# note that IDs should all be character class
+d <- data.frame(id=profile_id(sp1), p=runif(n=length(sp1)), stringsAsFactors=FALSE)
+site(sp1) <- d
 
-# this won't clobber existing data
-site(sp1) <- data.frame(p2=runif(n=length(sp1)), p3=runif(n=length(sp1)))
 }
 \keyword{methods}
