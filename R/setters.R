@@ -61,16 +61,21 @@ setReplaceMethod("depths", "data.frame",
     }
     else {
       if (inherits(value, "character")) { # initialization by colnames
-	mf <- object[,value]
-	res <- .initSPCfromMF(data=object, mf=mf)
+	      mf <- object[,value]
+	      res <- .initSPCfromMF(data=object, mf=mf)
       }
       else
-	stop('invalid initialization for SoilProfile object')
+	      stop('invalid initialization for SoilProfile object')
     }
 
     # add default metadata: depths are cm
     metadata(res) <- data.frame(depth_units='cm', stringsAsFactors=FALSE)
-
+    
+    # add default site data: profile IDs in same order as hz
+    site.temp <- data.frame(xxx=profile_id(res), stringsAsFactors=FALSE)
+    names(site.temp) <- idname(res)
+    res@site <- site.temp
+    
     # done
     return(res)
   }
@@ -123,37 +128,34 @@ setReplaceMethod("site", "SoilProfileCollection",
       object <- .createSiteFromHorizon(object, mf)
     }
     
-    # creation of site data from an external data.frame (nrow = num. profiles)
+    # creation of site data from an external data.frame via join(..., type='left')
     if (inherits(value, "data.frame")) {
-      # check to make sure there is no overlap in site + hz variable names
+      # get column names from proposed site, and existing horizons
       ns <- names(value)
-      nh <- names(object)
+      nh <- names(object@horizons)
+      
+      ## remove ID column from names(horizons)
+      ID.idx <- match(idname(object), nh)
+      
+      # check to make sure there is no overlap in proposed site + hz variable names
+      if(any(ns %in% nh[-ID.idx]))
+        stop('duplicate names in new site / existing horizon data not allowed')
       
       # existing site data (may be absent == 0-row data.frame)
       s <- site(object)
       
-      if(any(ns %in% nh))
-        stop('duplicate names in site/horizon data not allowed')
+      # join to existing data: by default it will only be idname(object)
       
-      # check (nrow = num. profiles)
-      if(nrow(value) != length(object))
-        stop('number of rows in candidate site data != number of profiles')
+      ## an appropriate ID must exist in 'value' AND @site for this to work
+      # LEFT-join in - assumes that appropriate IDs exist in both @site and 'value'
+      site.new <- join(s, value, type='left')
       
-      # passed checks, should be fine, assuming ordering matches ordering of profile IDs !!!
-      # if there is no site data, then assign what we have
-      if(nrow(s) == 0)
-        object@site <- value
+      # sanity check: site + new data should have same number of rows as original
+      if(nrow(s) != nrow(site.new))
+        stop('invalid join condition, site data not changed')
       
-      # otherwise we have existing data
-      else {
-        # check for variable name conflicts
-        if(any(ns %in% names(s)))
-          stop('duplicate names in candidate site and existing site data')
-        
-        # merge-in assuming correct ordering !
-        s <- cbind(s, value)
-        object@site <- s
-      }
+      # look good, proceed
+      object@site <- site.new
 	  }
   
     # done
@@ -176,7 +178,7 @@ setReplaceMethod("site", "SoilProfileCollection",
 
   # this seems to work fine in all cases, as we keep the ID column
   # and it ensures that the result is in the same order as the IDs
-  site_data <- ddply(mf, idname(object),
+  new_site_data <- ddply(mf, idname(object),
       .fun=function(x) {
 	      unique(x[, names_attr])
       }
@@ -184,7 +186,7 @@ setReplaceMethod("site", "SoilProfileCollection",
 
   # if site data is already present in the object, we don't want to erase it
   if (length(site(object)) > 0)
-    site_data <- data.frame(site(object), site_data, stringsAsFactors=FALSE)
+    site_data <- join(site(object), new_site_data, by=idname(object))
 
   # remove the named site data from horizon_data
   horizons(object) <- horizons(object)[, -idx]

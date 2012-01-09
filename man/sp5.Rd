@@ -28,7 +28,8 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 6 slots
   .. ..$ top       : horizon top boundary (cm)
   .. ..$ bottom    : horizon bottom boundary (cm)
   .. ..$ soil_color: soil color in r-friendly format
-  ..@ site     :'data.frame':	0 obs. of  0 variables
+  ..@ site      :'data.frame':  296 obs. of  1 variable:
+  .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...
   ..@ sp       :Formal class 'SpatialPoints' [package "sp"] with 3 slots
   .. .. ..@ coords     : num [1, 1] 0
   .. .. ..@ bbox       : logi [1, 1] NA
