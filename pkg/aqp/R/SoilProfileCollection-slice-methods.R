@@ -80,9 +80,20 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   if(! class(z) %in% c('numeric','integer')) # bogus z-slice
 		stop('z-slice must be either numeric or integer')
 
+  # check for '.' --> all variables, minus ID/depths
+  if(vars == '.') {
+  	nh <- names(h)
+  	cols.to.remove.idx <- match(c(id, top, bottom), nh)
+  	vars <- nh[-cols.to.remove.idx]
+  }
+  	
+  
+  # check for column names that don't exist
   if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match any horizon data')
 
+
+  
   
   ## extract all vars by slice_i
   # pre-allocate storage as list

@@ -1,6 +1,10 @@
 -------------------------- aqp 0.99-9.3 (2012-01-09) --------------------------
 * 'site(SCP) <- d' now tries to merge data from SPC@site with 'd' via left join
   - this means that all new SPC objects will have a single column of @site data, containin profile IDs
+* plot-SoilProfileCollection now tries to guess the best orientation of IDs
+  - override with id.style='top' or id.style='side'
+* slice-SoilProfileCollection now accepts '.' to define all columns should be returned at requested slices
+  - slice(SPC, 1:50 ~ . )   # this means all vars. ID, top, bottom are automatically removed
 
 -------------------------- aqp 0.99-9.1 (2011-12-27) --------------------------
 * pedonPC, NASIS, and SDA functions moved *out* of aqp, and *into* new package: soilDB
