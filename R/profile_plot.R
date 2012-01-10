@@ -5,7 +5,7 @@
 # behavior not defined for horizons with an indefinate lower boundary
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='side', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
   
   # get horizons
   h <- horizons(x)
@@ -21,7 +21,21 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   
   # get profile IDs
   pIDs <- profile_id(x)
-	  
+  
+  # if profile style is auto, determin style from simple rule
+  # median.chars * n.profiles / plot.width > 12
+  if(id.style == 'auto') {
+  	med.ID.char <- median(sapply(pIDs, nchar))
+  	plot.width <- par('pin')[1]
+  	too.full <- (med.ID.char * length(pIDs)) / plot.width
+  	
+  	if(too.full > 12)
+  		id.style <- 'side'
+  	else
+  		id.style <- 'top'
+  	}
+  
+  
   # fudge factors
   extra_x_space <- 1
   extra_y_space <- 2
