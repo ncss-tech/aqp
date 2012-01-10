@@ -30,10 +30,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 	
   # join new data with look-up table
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
-  
-  ## ! this causes memory corrpution errors when hue is a factor column
-  ## https://github.com/hadley/plyr/issues/43 [closed ?]
-  res <- join(d, munsell) # result has original munsell + r,g,b
+  res <- join(d, munsell, type='left', by=c('hue','value','chroma')) # result has original munsell + r,g,b
 	
   # reset options:
   options(opt.original)
