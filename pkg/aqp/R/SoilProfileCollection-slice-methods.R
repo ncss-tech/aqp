@@ -150,8 +150,6 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     
     return(SpatialPointsDataFrame(coordinates(object), data=hd.slices))
     }
-  else
-    cat('result is a SoilProfileCollection object\n')
   
   
   # otherwise return an SPC, be sure to copy over the spatial data

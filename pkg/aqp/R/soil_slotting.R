@@ -30,7 +30,6 @@ setMethod(f='slab', signature='SoilProfileCollection',
   ## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
   
   # result is a data.frame
-  cat("result is a data.frame\n")
   return(res)
   }
 )
