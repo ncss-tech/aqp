@@ -9,6 +9,8 @@
 
 ## careful -- we are getting the labels for the final dissimilarity matrix from the levels of the profile ID
 
+## TODO: site/hz properties combined:
+## D = (D_hz/max(D_hz) * w_hz) + (D_site/max(D_site) * w_site) / (w_hz + w_site)
 
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
