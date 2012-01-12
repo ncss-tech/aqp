@@ -2,8 +2,10 @@
 \docType{methods}
 \alias{profileApply}
 \alias{profileApply,SoilProfileCollection-method}
+\alias{split,SoilProfileCollection-method}
+
 \title{Apply a function to soil profiles within a SoilProfileCollection object.}
-\description{Apply a function to soil profiles within a SoilProfileCollection object.}
+\description{Apply a function to soil profiles within a SoilProfileCollection object. Note that each iteration has access to a SoilProfileCollection object.}
 \section{Methods}{
 \describe{
 
@@ -20,6 +22,10 @@ depths(sp1) <- id ~ top + bottom
 # scaled = (x - mean(x)) / sd(x)
 sp1$d <- profileApply(sp1, FUN=function(x) round(scale(x$prop), 2))
 plot(sp1, name='d')
+
+# split a SPC into a list of single-profile SPC objects
+str(split(sp1), 1)
+
 
 # compute depth-wise differencing by profile
 # note that our function expects that the column 'prop' exists
