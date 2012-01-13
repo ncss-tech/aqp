@@ -1,9 +1,11 @@
--------------------------- aqp 0.99-9.3 (2012-01-12) --------------------------
+-------------------------- aqp 0.99-9.4 (2012-01-12) --------------------------
 * profileApply() now provides access to all aspects of the SoilProfileCollection object
   - that means that:
     profileApply(SPC, function(x) ... ) 
     operates on x, which is a soilProfileCollection containing only profile_i
-    
+  !!! note that this may break functionality based on aqp 0.99-9.3
+
+-------------------------- aqp 0.99-9.4 (2012-01-09) --------------------------
 * 'site(SCP) <- d' now tries to merge data from SPC@site with 'd' via left join
   - this means that all new SPC objects will have a single column of @site data, containin profile IDs
 * plot-SoilProfileCollection now tries to guess the best orientation of IDs
