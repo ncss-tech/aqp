@@ -8,7 +8,6 @@ importFrom('sp', 'coordinates', 'coordinates<-', 'proj4string', 'proj4string<-')
 importFrom('Hmisc', wtd.mean, wtd.var, wtd.quantile, wtd.rank, wtd.table)
 
 exportClasses(SoilProfileCollection)
-
 exportMethods('depths<-', 'depth_units<-', 'metadata<-', 'site<-')
 
 exportPattern("^[^\\.]")
