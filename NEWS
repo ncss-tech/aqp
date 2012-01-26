@@ -1,4 +1,5 @@
 -------------------------- aqp 0.99-9.4 (2012-01-12) --------------------------
+* profile_compare() and slab() now default to _no_ progress bars, see 'progress' argument to adjust
 * profileApply() now provides access to all aspects of the SoilProfileCollection object
   - that means that:
     profileApply(SPC, function(x) ... ) 
