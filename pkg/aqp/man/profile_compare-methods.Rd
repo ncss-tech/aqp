@@ -12,10 +12,9 @@ Performs a numerical comparison of soil profiles using named properties, based o
 }
 
 \usage{
-
 pc(s, vars, max_d, k, sample_interval=NA, 
 replace_na=TRUE, add_soil_flag=TRUE, 
-return_depth_distances=FALSE, strict_hz_eval=FALSE)
+return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none')
 }
 
 
@@ -36,6 +35,7 @@ return_depth_distances=FALSE, strict_hz_eval=FALSE)
   \item{add_soil_flag}{The algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE). This has the side-effect of producing a diagnostic plot illustrating the contents of the soil/non-soil matrix (when there are 100 or fewer profiles in the collection).}
   \item{return_depth_distances}{return intermediate, depth-wise dissimilarity results (FALSE)}
   \item{strict_hz_eval}{should horizons be strictly checked for internal self-consistency? (FALSE)}
+  \item{progress}{'none' (default): argument passed to \code{ddply} and related functions, see \code{\link{create_progress_bar}} for all possible options; 'text' is usually fine.}
 }
 
 \details{

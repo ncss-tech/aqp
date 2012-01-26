@@ -17,7 +17,7 @@
 # function requires at least two attributes
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
-pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE)
+pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none')
 	{
 	
 	# currently this will only work with integer depths
@@ -55,7 +55,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	cat(paste("Unrolling ", n.profiles, " Profiles\n", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress='text', .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
+	s.unrolled <- dlply(s, .(id), .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go
@@ -119,7 +119,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	## new version for computing slice-wise dissimilarities... fast! 
 	## 
 	cat("Computing Dissimilarity Matrices\n")
-	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress='text', .fun=function(i, su=s.unrolled) 
+	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) 
 	  {
 	  
 	  ## this could be a source of slowness, esp. the t()

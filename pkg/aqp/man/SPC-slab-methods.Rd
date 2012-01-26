@@ -18,6 +18,7 @@
 \arguments{
   \item{data}{a dataframe with columns ('id', 'top', 'bottom')}
   \item{fm}{a formula in the form: groups ~ var1 + var2 + var3 + ... OR ~ var1 + var2 + var3 + ...}
+  \item{progress}{'none' (default): argument passed to \code{ddply} and related functions, see \code{\link{create_progress_bar}} for all possible options; 'text' is usually fine.}
   \item{...}{further arguments passed onto \code{\link{soil.slot}}}
 }
 

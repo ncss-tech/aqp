@@ -40,7 +40,7 @@ setMethod(f='slab', signature='SoilProfileCollection',
 ##
 # current interface to data.frame objects
 setMethod(f='slab', signature='data.frame',
-definition=function(data, fm, ...) {
+definition=function(data, fm, progress='none', ...) {
     
     ## important: change the default behavior of data.frame and melt
     opt.original <- options(stringsAsFactors = FALSE)
@@ -79,7 +79,7 @@ definition=function(data, fm, ...) {
 	
 	# apply slotting group-wise and return in long format
 	# note '...' is gobbled by soil.slot()
-	d.slotted <- ddply(d.long, .variables=c('variable', g), .progress='text', .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
+	d.slotted <- ddply(d.long, .variables=c('variable', g), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
 		
 	# convert tops and bottoms to integers
 	d.slotted$top <- as.integer(d.slotted$top)
