@@ -17,7 +17,7 @@
 # function requires at least two attributes
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
-pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none')
+pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none', plot.depth.matrix=FALSE)
 	{
 	
 	# currently this will only work with integer depths
@@ -103,7 +103,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 		
 		
 		# debugging: plot a diagnostic image, but only when reasonable to do so (< 100 profiles)
-		if(n.profiles <= 100)
+		if(n.profiles <= 100 & plot.depth.matrix)
 		  {
 		  labs <- levels(s$id)
 		  image(1:n.profiles, 1:max_d, t(soil.matrix), col=c(NA,'grey'), ylim=c(max_d, 1), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
