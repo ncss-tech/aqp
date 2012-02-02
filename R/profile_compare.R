@@ -54,7 +54,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	## unroll each named soil property, for each soil profile
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
-	cat(paste("Unrolling ", n.profiles, " Profiles\n", sep=""))
+	message(paste("Unrolling ", n.profiles, " Profiles", sep=""))
 	s.unrolled <- dlply(s, .(id), .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
 		{
 		
@@ -118,7 +118,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	##
 	## new version for computing slice-wise dissimilarities... fast! 
 	## 
-	cat("Computing Dissimilarity Matrices\n")
+	message("Computing Dissimilarity Matrices")
 	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) 
 	  {
 	  
@@ -208,7 +208,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	# compute the total distance, for all dept intervals,
 	# by pedon:
 	# consider using mean diss, or something different that total
-	cat("Computing Profile Total Dissimilarities\n")
+	message("Computing Profile Total Dissimilarities")
 	d.vect <- colSums(t(sapply(d, '[')), na.rm=TRUE)
 	
 	# remove list of dissimilarities to save RAM
