@@ -41,7 +41,7 @@ make.segments <- function(df)
 		
 	else
 		{
-		print(paste('only 1 horizon, skipping!', df$groups[1]))
+		message(paste('only 1 horizon, skipping!', df$groups[1]))
 		}
 	
 	}

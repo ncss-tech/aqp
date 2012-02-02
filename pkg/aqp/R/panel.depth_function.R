@@ -15,7 +15,7 @@ if(length(y) > length(x))
 	if(missing(id))
 		stop('must provide a profile id')
 		
-	cat('plotting segments...\n')
+	message('plotting segments...')
 	
 	# re-make a nice dataframe, assuming that we have 'groups' defined
 	if(!missing(groups))
@@ -33,7 +33,7 @@ if(length(y) > length(x))
 # normal plot -- not a step function
 else
 	{
-	cat('plotting lines...\n')
+	message('plotting lines...')
 	
 	# if we have an upper and lower bound defined, plot them
 	if(!missing(upper) & !missing(lower))
@@ -108,7 +108,7 @@ else
   if(! is.null(cf)) {
     # test for groups: CF labeling with grouped data isn't yet defined
     if(!missing(groups))
-      cat('notice: contributing fraction annotation with grouped data is not yet supported\n')
+      warning('contributing fraction annotation with grouped data is not yet supported')
     else {
       # get relevant contributing fraction values
       cf.i <- cf[subscripts]
