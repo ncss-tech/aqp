@@ -239,28 +239,23 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 ##
 ## intit diagnotic horizon data
 ##
-# if (!isGeneric('diagnostic_hz<-'))
-#   setGeneric('diagnostic_hz<-', function(object, value) standardGeneric('diagnostic_hz<-'))
-# 
-# setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
-#   function(object, value) {
-#   
-#   # testing the class of the new data
-#   if (!inherits(value, "data.frame"))
-#     stop("diagnostic horizon data must be a data.frame")
-# 
-#   # testing the structure of the data
-#   if (ncol(value) != 3)
-# 	  stop("diagnostic horizon data should have 3 columns: top, bottom, type")
-#   
-#   # structure is fixed
-#   if(any(! n %in% c('top','botom','type')))
-#     stop('diagnostic horizon data should have 3 columns: top, bottom, type')
-#   
-#   # re-order by depth
-#   object@diagnostic <- value[order(value$top), ]
-# 
-#   # done
-#   return(object)
-#   }
-# )
+## NOTE: these data are likely to be free-form, may not exist for every profile, and are usually 1:many
+##
+if (!isGeneric('diagnostic_hz<-'))
+  setGeneric('diagnostic_hz<-', function(object, value) standardGeneric('diagnostic_hz<-'))
+
+setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
+  function(object, value) {
+  
+  # testing the class of the new data
+  if (!inherits(value, "data.frame"))
+    stop("diagnostic horizon data must be a list")
+	
+  ## NOTE: no checks!!
+  # copy data over
+  object@diagnostic <- value
+  
+  # done
+  return(object)
+  }
+)

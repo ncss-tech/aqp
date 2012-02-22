@@ -101,16 +101,15 @@ setMethod("site", "SoilProfileCollection",
   }
 )
 
-## diagnostic horizons
-# returns a data.frame diagnostic horizon data
-# if (!isGeneric("diagnostic_hz"))
-#   setGeneric("diagnostic_hz", function(object, ...) standardGeneric("diagnostic_hz"))
-# 
-# setMethod(f='diagnostic_hz', signature='SoilProfileCollection',
-#   function(object){
-#   return(object@diagnostic)
-#   }
-# )
+## diagnostic horizons: stored as a DF, same order as profile_ids, however, some IDs may be missing
+if (!isGeneric("diagnostic_hz"))
+  setGeneric("diagnostic_hz", function(object, ...) standardGeneric("diagnostic_hz"))
+
+setMethod(f='diagnostic_hz', signature='SoilProfileCollection',
+  function(object){
+  return(object@diagnostic)
+  }
+)
 
 
 ## horizon data
@@ -324,8 +323,8 @@ setMethod("[", "SoilProfileCollection",
     
     # site data, with conditional subsetting
     s.all <- site(x)
-    s.i <- s.all[[idname(x)]] %in% p.ids
-    
+    s.i <- which(s.all[[idname(x)]] %in% p.ids)
+  	  
     ## this assumes that ordering is correct
     ## NOTE:  s[i, ] with a 1-column DF results in a vector
     if(ncol(s.all) < 2) {
@@ -337,12 +336,18 @@ setMethod("[", "SoilProfileCollection",
       s <- s.all[s.i, ]
     }
     
-	  
     # subset spatial data if exists
     if(nrow(coordinates(x)) == length(x))
       sp <- x@sp[i]
     else
       sp <- x@sp
+    
+    # subset diagnostic data, but only if it exists
+    # note that not all profiles have diagnostic hz data
+    d <- diagnostic_hz(x)
+    if(length(d) > 0) # some data
+    	d <- d[which(d[[idname(x)]] %in% p.ids), ]
+    
     
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j))
@@ -365,7 +370,7 @@ setMethod("[", "SoilProfileCollection",
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     else {
-      SoilProfileCollection(idcol=x@idcol, depthcols=x@depthcols, metadata=x@metadata, horizons=h, site=s, sp=sp)
+      SoilProfileCollection(idcol=x@idcol, depthcols=x@depthcols, metadata=x@metadata, horizons=h, site=s, sp=sp, diagnostic=d)
     }
     
   # done
