@@ -47,7 +47,7 @@ definition=function(data, fm, progress='none', ...) {
     
 	# sanity check:
 	if(! inherits(fm, "formula"))
-		stop('must provide a valid formula: groups ~ var1 + var2 + ...')
+		stop('must provide a valid formula: groups ~ var1 + var2 + ...', call.=FALSE)
 	  
 	# extract components of the formula:
 	g <- all.vars(update(fm, .~0)) # left-hand side
@@ -55,14 +55,14 @@ definition=function(data, fm, progress='none', ...) {
 	
 	# check for bogus left/right side problems with the formula
 	if(any(g %in% names(data)) == FALSE & g != '.') # bogus grouping column
-		stop('group name either missing from formula, or does match any columns in dataframe')
+		stop('group name either missing from formula, or does match any columns in dataframe', call.=FALSE)
 	
 	if(any(vars %in% names(data)) == FALSE) # bogus column names in right-hand side
-		stop('column names in formula do not match column names in dataframe')
+		stop('column names in formula do not match column names in dataframe', call.=FALSE)
 	
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
-		stop('This function can only accept integer horizon depths')
+		stop('This function can only accept integer horizon depths', call.=FALSE)
 	
   # if there is no left-hand component in the formula, we are aggregating all data in the collection
   if(g == '.') { 
@@ -237,7 +237,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	
 	# currently this will only work with integer depths
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
-		stop('This function can only accept integer horizon depths')
+		stop('This function can only accept integer horizon depths', call.=FALSE)
 	
 	# no NA allowed in top or bottom
 	hz.test.top <- is.na(data$top)
@@ -246,18 +246,18 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	if(any(hz.test.top))
 		{
 		print(data[which(hz.test.top), ])
-		stop('NA in horizon top boundary')
+		stop('NA in horizon top boundary', call.=FALSE)
 		}
 		
 	if(any(hz.test.bottom))
 		{
 		print(data[which(hz.test.bottom), ])
-		stop('NA in horizon bottom boundary')
+		stop('NA in horizon bottom boundary', call.=FALSE)
 		}
 	
 	# can't pass in a bogus aggregate function
 	if(!is.null(user.fun) & !is.function(user.fun)) 
-		stop(paste('`', user.fun, '` is not a function', sep=''))
+		stop(paste('`', user.fun, '` is not a function', sep=''), call.=FALSE)
 		
 	
 	# re-level id factor according to account for subsets
@@ -415,7 +415,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			# if the user requests multiple slices that are beyond the length of the deepest profile
 			# throw an error
 			if(length(which(seg_vect > max_d)) > 1)
-				stop(paste('multiple requested segments extend beyond the maximum soil depth within the profile collection: ', paste(seg_vect[which(seg_vect > max_d)], collapse=','), sep=''))
+				stop(paste('multiple requested segments extend beyond the maximum soil depth within the profile collection: ', paste(seg_vect[which(seg_vect > max_d)], collapse=','), sep=''), call.=FALSE)
 				
 			# get length and lower boundary of the requested segments
 			len.seg_vect <- length(seg_vect)
@@ -427,7 +427,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 				{
 				seg_vect_legal_idx <- which( (seg_vect - max_d) <= 0)
 				sv_clean <- c(seg_vect[seg_vect_legal_idx], max_d)
-				cat(paste('Note: truncating requested lower segment (', max.seg_vect, ') to max profile depth (', max_d, '). \n', sep=''))
+				warning(paste('Note: truncating requested lower segment (', max.seg_vect, ') to max profile depth (', max_d, ').', sep=''), call.=FALSE)
 				}
 				
 			# the actual depth may be more than, or equal to, the deepest requested segment
@@ -449,7 +449,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			if(TRUE %in% bad_hz_list_TF)
 				{
 				bad_hz_list_idx <- which(bad_hz_list_TF)
-				cat(paste('removing horizon with 0 thickness (hz ', bad_hz_list_idx, ')\n', sep=''))
+				warning(paste('removing horizon with 0 thickness (hz ', bad_hz_list_idx, ')', sep=''), call.=FALSE)
 				df.top_bottom <- df.top_bottom[-bad_hz_list_idx, ]
 				}
 						

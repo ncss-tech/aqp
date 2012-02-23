@@ -216,7 +216,7 @@ setMethod("$", "SoilProfileCollection",
 	# when site data are initialized from an external DF, it is possible that
 	# there will be duplicate column names
 	if(name %in% h.names & name %in% s.names)
-		warning('column name is present in horizon and site data, extracting from horizon data only')
+		warning('column name is present in horizon and site data, extracting from horizon data only', call.=FALSE)
 
 	# get column from horizon data
     if (name %in% h.names)
@@ -300,7 +300,7 @@ setMethod("[", "SoilProfileCollection",
     if(!missing(i)) {
       i <- as.integer(i)
       if(any(is.na(i)))
-        stop('NA not permitted in profile index')
+        stop('NA not permitted in profile index', call.=FALSE)
     }
     else # if no index is provided, the user wants all profiles
       i <- 1:length(x)
@@ -309,7 +309,7 @@ setMethod("[", "SoilProfileCollection",
     if(!missing(j)) {
       j <- as.integer(j)
       if(any(is.na(j)))
-      stop('NA not permitted in horizon/slice index')
+      stop('NA not permitted in horizon/slice index', call.=FALSE)
     }
 
     # extract requested profile IDs

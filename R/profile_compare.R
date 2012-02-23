@@ -22,11 +22,11 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 	
 	# currently this will only work with integer depths
 	if(!is.integer(na.omit(s$top)) | !is.integer(na.omit(s$bottom)))
-		stop('this function can only accept integer horizon depths')
+		stop('this function can only accept integer horizon depths', call.=FALSE)
 	
 	# check to make sure that there is an 'id' column
 	if(is.null(s$id))
-		stop("'s' must contain a column named 'id' ")
+		stop("'s' must contain a column named 'id' ", call.=FALSE)
 	
 	# if the id column is not a factor, convert it to one:
 	if(class(s$id) != 'factor')
@@ -69,7 +69,7 @@ pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_
 			{
 			if(attr(m, 'class') == 'try-error')
 				{
-				stop(paste('Error: bad horizon structure in soil id', as.character(unique(di$id))))
+				stop(paste('Error: bad horizon structure in soil id', as.character(unique(di$id))), call.=FALSE)
 				}
 			}
 		else

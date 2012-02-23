@@ -26,7 +26,7 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   	  # get offending IDs
   	  id.tab <- table(h[[id]])
   	  bad.ids <- paste(names(id.tab)[which(id.tab > 1)], collapse=', ')
-  	  stop(paste('bad horizonation in IDs:', bad.ids))
+  	  stop(paste('bad horizonation in IDs:', bad.ids), call.=FALSE)
   	  }
   	
   	# looser interp of the data... issue warning and return multuple rows/ID
@@ -49,7 +49,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   
   # test for logical input
   if(! inherits(fm, "formula"))
-    stop('must provide a valid formula: ~ var1 + var2 + ...')
+    stop('must provide a valid formula: ~ var1 + var2 + ...', call.=FALSE)
 
   # extract components of the formula:
   formula <- str_c(deparse(fm, 500), collapse="")
@@ -58,7 +58,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
   # TODO: this will have to be changed when we implement no LHS = all slices
   if (length(formula) > 2)
-    stop("please provide a valid formula")
+    stop("please provide a valid formula", call.=FALSE)
 
   # extract parsed formula components
   vars <- formula[[2]] # RHS, simple enough
@@ -74,11 +74,11 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     
   # check for bogus left/right side problems with the formula
   if(any(z < 0) | any(is.na(z)))
-    stop('z-slice must be >= 1')
+    stop('z-slice must be >= 1', call.=FALSE)
 
   ## TODO: this will have to be updated for z-slices defined by data in @site
   if(! class(z) %in% c('numeric','integer')) # bogus z-slice
-		stop('z-slice must be either numeric or integer')
+		stop('z-slice must be either numeric or integer', call.=FALSE)
 
   # check for '.' --> all variables, minus ID/depths
   if(vars == '.') {
@@ -90,7 +90,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   
   # check for column names that don't exist
   if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
-		stop('column names in formula do not match any horizon data')
+		stop('column names in formula do not match any horizon data', call.=FALSE)
 
 
   
