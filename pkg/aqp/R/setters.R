@@ -9,7 +9,7 @@ setReplaceMethod("metadata", "SoilProfileCollection",
 
 	# quick sanity check
 	if(nrow(value) > 1 | nrow(value) < 1)
-	  stop("metadata should be a 1-row data frame")
+	  stop("metadata should be a 1-row data frame", call.=FALSE)
 
 	# otherwise assign
 	object@metadata <- value
@@ -65,7 +65,7 @@ setReplaceMethod("depths", "data.frame",
 	      res <- .initSPCfromMF(data=object, mf=mf)
       }
       else
-	      stop('invalid initialization for SoilProfile object')
+	      stop('invalid initialization for SoilProfile object', call.=FALSE)
     }
 
     # add default metadata: depths are cm
@@ -94,7 +94,7 @@ setReplaceMethod("depths", "data.frame",
   
   # check for factor-class ID
   if(class(data[[nm[1]]]) == 'factor') {
-    warning('converting IDs from factor to character')
+    warning('converting IDs from factor to character', call.=FALSE)
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
     
@@ -139,7 +139,7 @@ setReplaceMethod("site", "SoilProfileCollection",
       
       # check to make sure there is no overlap in proposed site + hz variable names
       if(any(ns %in% nh[-ID.idx]))
-        stop('duplicate names in new site / existing horizon data not allowed')
+        stop('duplicate names in new site / existing horizon data not allowed', call.=FALSE)
       
       # existing site data (may be absent == 0-row data.frame)
       s <- site(object)
@@ -152,7 +152,7 @@ setReplaceMethod("site", "SoilProfileCollection",
       
       # sanity check: site + new data should have same number of rows as original
       if(nrow(s) != nrow(site.new))
-        stop('invalid join condition, site data not changed')
+        stop('invalid join condition, site data not changed', call.=FALSE)
       
       # look good, proceed
       object@site <- site.new
@@ -211,7 +211,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
-	  stop("value must be a data.frame")
+	  stop("value must be a data.frame", call.=FALSE)
   
   ## 
   ## not sure if this test is important... as sometimes we want to delete horizons
@@ -222,10 +222,10 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 
   # basic test of ids:
   if(!idname(object) %in% names(value)) # is there a matching ID column in the replacement?
-  	stop("there is no matching ID column in replacement")
+  	stop("there is no matching ID column in replacement", call.=FALSE)
 
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
-  	stop("there are IDs in the replacement that do not exist in the original data")
+  	stop("there are IDs in the replacement that do not exist in the original data", call.=FALSE)
 
   # replacement: order by IDs, then top horizon boundary
   hz_top_depths <- horizonDepths(object)[1]
@@ -247,11 +247,40 @@ if (!isGeneric('diagnostic_hz<-'))
 setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
   function(object, value) {
   
+  # get the initial data
+  d <- diagnostic_hz(object)
+  
+  # get column and ID names
+  nm <- names(value)
+  idn <- idname(object)
+  pIDs <- profile_id(object)
+  
   # testing the class of the new data
   if (!inherits(value, "data.frame"))
-    stop("diagnostic horizon data must be a list")
+    stop("diagnostic horizon data must be a data.frame", call.=FALSE)
 	
-  ## NOTE: no checks!!
+  # test for the special case where internally-used functions 
+  # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
+  # short-circut, and return original object
+  if(nrow(d) == 0 & nrow(value) == 0)
+  	return(object)
+  
+  # test to make sure that our common ID is present in the new data
+  if(! idn %in% nm)
+  	stop(paste("diagnostic horizon data are missing a common ID:", idn), call.=FALSE)
+  
+  # test to make sure that at least one of the IDS in candidate data are present within SPC
+  if(all( ! unique(value[[idn]]) %in% pIDs) )
+  	stop('candidate data have no matching IDs in target object!', call.=FALSE)
+  
+  # warn user if some of the IDs in the candidate data are missing
+  if(any( ! unique(value[[idn]]) %in% pIDs) )
+  	warning('some records in candidate data have no matching IDs in target object', call.=FALSE)
+  
+  # if data are already present, warn the user
+  if(nrow(d) > 0)
+  	warning('overwriting existing diagnostic horizon data!', call.=FALSE)
+  
   # copy data over
   object@diagnostic <- value
   

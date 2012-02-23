@@ -7,11 +7,11 @@ unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict
 	
 	# currently this will only work with integer depths
 	if(any( !as.integer(top[top != 0]) == top[top != 0] ) | any( !as.integer(bottom) == bottom))
-		stop('this function can only accept integer horizon depths')
+		stop('this function can only accept integer horizon depths', call.=FALSE)
 	
 	# are horizons in the correct order?
 	if(! all.equal(top,sort(top)))
-		stop('Error: horizons are not sorted by depth')
+		stop('Error: horizons are not sorted by depth', call.=FALSE)
 	
 	# number of horizons
 	n.horizons <- length(top)

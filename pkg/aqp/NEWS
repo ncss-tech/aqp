@@ -1,6 +1,7 @@
 -------------------------- aqp 0.99-9.6 (2012-02-21) --------------------------
 * preliminary support for diagnostic horizons via diagnostic_hz()
 * new examples
+* error and warnings messages cleaned-up
 
 -------------------------- aqp 0.99-9.52 (2012-01-31) --------------------------
 * converting all messages passed to the user from cat() to message() and warning()

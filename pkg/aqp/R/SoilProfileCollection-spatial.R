@@ -23,7 +23,7 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 
   # basic sanity check... needs work
   if(! inherits(value, "formula"))
-    stop('invalid formula')
+    stop('invalid formula', call.=FALSE)
 
   # extract coordinates as matrix
   mf <- data.matrix(model.frame(value, site(object), na.action=na.pass))
@@ -32,7 +32,7 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   mf.missing <- apply(mf, 2, is.na)
 
   if(any(mf.missing))
-	  stop('cannot initialize a SpatialPoints object with missing coordinates')
+	  stop('cannot initialize a SpatialPoints object with missing coordinates', call.=FALSE)
 
   # assign to sp slot
   # note that this will clobber any existing spatial data
@@ -92,7 +92,7 @@ setMethod(f='spatial_subset', signature='SoilProfileCollection',
       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = metadata(object), horizons = h[valid_horizons, ], site = s[valid_sites, ], sp = object@sp[ids,], diagnostic = d[valid_diagnostic, ])
     }
     else { # no rgeos, return original
-      stop('Spatial subsetting not performed, please install the `rgeos` package.')
+      stop('Spatial subsetting not performed, please install the `rgeos` package.', call.=FALSE)
     }
   }
 )
