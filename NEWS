@@ -1,4 +1,7 @@
 -------------------------- aqp 0.99-9.6 (2012-02-21) --------------------------
+* spurious warnings from profile_compare() caused by daisy() now suppressed
+  - warnings were generated when calling daisy() on a matrix of all NA
+    which typically occured when using too-large a lower depth for evaluation of D
 * preliminary support for diagnostic horizons via diagnostic_hz()
 * new examples
 * error and warnings messages cleaned-up
