@@ -265,8 +265,10 @@ if (!isGeneric("profile_compare"))
 setMethod(f='profile_compare', signature='SoilProfileCollection',
   function(s, ...){
   
-  # extract horizons and site 
+  # extract horizons
   h <- horizons(s)
+  
+  ## TODO check for variables from site, and use them
           
   # add old-style, hard-coded {id, top, bottom} column names        
   h$id <- h[[idname(s)]]
