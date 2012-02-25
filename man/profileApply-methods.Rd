@@ -6,7 +6,7 @@
 \alias{splitProfiles,SoilProfileCollection-method}
 
 \title{Apply a function to soil profiles within a SoilProfileCollection object.}
-\description{Apply a function to soil profiles within a SoilProfileCollection object. Note that each iteration has access to a SoilProfileCollection object.}
+\description{Apply a function to soil profiles within a SoilProfileCollection object, each iteration has access to a SoilProfileCollection object.}
 \section{Methods}{
 \describe{
 
@@ -36,7 +36,7 @@ sp1$d <- profileApply(sp1, FUN=f)
 plot(sp1, name='d')
 
 # compute depth-wise cumulative sum by profile
-# note the use of an anonymous function function
+# note the use of an anonymous function
 sp1$d <- profileApply(sp1, FUN=function(x) cumsum(x$prop))
 plot(sp1, name='d')
 
