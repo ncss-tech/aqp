@@ -1,6 +1,7 @@
 -------------------------- aqp 0.99-9.7 (2012-02-28) --------------------------
 * profile_compare() will now use site-level attributes if input is a SoilProfileCollection
   - horizon / site level data currently weighted equally
+  - NOTE: this feature is new, test-first!
 * minor bug fixes in profile_compare() to remove spurious warnings
 * better error check in slice()
 

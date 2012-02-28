@@ -74,8 +74,9 @@ panel=function(...) {
 )
 
 ## 2. basic implementation, requires at least two properties
+# implementation for a data.frame class object
 data(sp1)
-d <- profile_compare(sp1, vars=c('prop','value'), max_d=100, k=0.01)
+d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01)
 
 # better plotting with ape package:
 require(ape)
