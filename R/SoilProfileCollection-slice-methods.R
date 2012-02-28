@@ -81,7 +81,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 		stop('z-slice must be either numeric or integer', call.=FALSE)
 
   # check for '.' --> all variables, minus ID/depths
-  if(vars == '.') {
+  if(any(vars == '.')) {
   	nh <- names(h)
   	cols.to.remove.idx <- match(c(id, top, bottom), nh)
   	vars <- nh[-cols.to.remove.idx]
