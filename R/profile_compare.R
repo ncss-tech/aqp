@@ -299,19 +299,27 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   	# remove from hz-level vars
   	vars <- vars[-matching.idx]
   	
+  	
+  	## TODO: allow user to pass-in variable type information
   	# compute dissimilarty on site-level data: only works with 2 or more variables
   	# rescale to [0,1]
   	if(length(site.vars) >= 2) {
-  		message(paste('site-level variables included:', paste(site.vars, collapse=',')))
-  		d.site <- daisy(s.site[, site.vars], metric='gower', stand=TRUE)
+  		message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
+  		d.site <- daisy(s.site[, site.vars], metric='gower')
   		d.site <- rescaler(d.site, type='range')
   		
   		# reset default behavior of hz-level D
   		rescale.result=TRUE
+  		
+  		## TODO: there might be cases where we get an NA in d.site
+  		if(any(is.na(d.site)))
+  			warning('NA in site-level dissimilarity matrix', call.=FALSE)
+  			
+  		## TODO: ordering of D_hz vs D_site ... assumptions safe?
   	}
   	
   	else
-  		warning("cannot compute site-level dissimilarity with fewer than 2 variables", .call=FALSE)	
+  		warning("cannot compute site-level dissimilarity with fewer than 2 variables", call.=FALSE)	
   }
   
   # setup a dummy D_site
@@ -332,8 +340,8 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   
   # if we have site-level data and a valid D_site
   # combine via weighted average: using weights of 1 for now
-  if(class(d.site) == 'dist') {
-  	res <- 	(d.hz + d.site) / 2
+  if(inherits(d.site, 'dist')) {
+  	res <- 	(res + d.site) / 2
   }
   
   # result is a distance matrix
