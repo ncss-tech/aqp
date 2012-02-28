@@ -311,9 +311,13 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   		# reset default behavior of hz-level D
   		rescale.result=TRUE
   		
-  		## TODO: there might be cases where we get an NA in d.site
-  		if(any(is.na(d.site)))
-  			warning('NA in site-level dissimilarity matrix', call.=FALSE)
+  		## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
+  		## ... but why ? read-up on daisy
+  		if(any(is.na(d.site))) {
+  			warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
+  			# we have re-scaled to [0,1] so D_min is 0
+  			d.site[which(is.na(d.site))] <- 0
+  		}
   			
   		## TODO: ordering of D_hz vs D_site ... assumptions safe?
   	}
