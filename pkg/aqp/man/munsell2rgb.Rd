@@ -29,14 +29,11 @@ A vector of R colors is returned that is the same length as the input data. If \
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
 \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 }
-\author{
-Dylan E. Beaudette
-}
-\note{}
+\author{Dylan E. Beaudette}
 
 \section{Warning}{As of \code{plyr} 1.6 (CRAN), there are cases when this function will fail (\url{https://github.com/hadley/plyr/issues/43}). The next version of \code{plyr} should address this problem. Until then, be sure not to pass in Munsell (hue, value, chroma) as factors.}
 
-\seealso{}
+
 \examples{
 # basic example: no factors!
 d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)

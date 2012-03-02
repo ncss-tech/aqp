@@ -15,9 +15,9 @@ test_hz_logic(i, topcol, bottomcol, test.NA = TRUE, strict = FALSE)
 }
 \details{This function is used as part of the validity-methods for SoilProfileCollection objects.}
 \value{logical: TRUE --> pass, FALSE --> fail}
-\references{}
-\author{D.E. Beaudette}
-\note{}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
 
 \seealso{\link{depths<-}}
 \examples{

@@ -17,7 +17,7 @@ plot_distance_graph(D, idx = 1:dim(as.matrix((D)))[1])
 \value{No value is returned.}
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
-\note{}
+
 
 \seealso{\code{\link{sp2}}, \code{\link{profile_compare}}}
 

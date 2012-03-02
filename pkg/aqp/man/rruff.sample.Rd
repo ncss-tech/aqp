@@ -21,9 +21,7 @@ Several sample XRD patterns from the RRUFF project site.
 \item{\code{goethite}}{XRD pattern for goethite}
   }
 }
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
+
 \source{
 http://rruff.info/
 }

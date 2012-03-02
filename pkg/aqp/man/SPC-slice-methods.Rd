@@ -15,6 +15,10 @@
 %%  ~~describe this method here~~
 }
 }}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
+
 \examples{
 # simulate some data, IDs are 1:20
 d <- ldply(1:20, random_profile)

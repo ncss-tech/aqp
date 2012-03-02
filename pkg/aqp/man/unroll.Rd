@@ -5,10 +5,8 @@
 \description{
 Generate a descretized vector of genetic horizons along a user-defined pattern.
 }
-\usage{
-unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)
-}
-%- maybe also 'usage' for other objects documented here.
+\usage{unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)}
+
 \arguments{
   \item{top}{vector of upper horizon boundaries, must be an integer}
   \item{bottom}{vector of lower horizon boundaries, must be an integer}

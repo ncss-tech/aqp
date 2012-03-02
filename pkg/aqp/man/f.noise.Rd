@@ -30,9 +30,7 @@ patterns.  J. Applied Crystallography, 35, 744-749.
 Bish, D. 1994. Quantitative Methods in Soil Mineralogy, in Quantitative X-Ray Diffraction Analysis of Soil. Amonette, J. & Zelazny, L. (ed.) Soil Science Society of America, pp 267-295.
 }
 \author{Dylan E. Beaudette}
-\note{
-%%  ~~further notes~~
-}
+
 
 \seealso{\code{\link{resample.twotheta}}}
 \examples{

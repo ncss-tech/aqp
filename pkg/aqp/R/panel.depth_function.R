@@ -27,7 +27,7 @@ if(length(y) > length(x))
 	
 	# add line segments that form step-function
 	## TODO: iterate over profile IDs instead of groups
-	by(d, d$id, make.segments, ...)	
+	by(d, d$id, .make.segments, ...)	
 	}
 
 # normal plot -- not a step function

@@ -83,6 +83,54 @@ if(require(digest)) {
 }
 
 
+##
+## helper functions: these must be modified to suit your own data
+##
+
+# compute the weighted-mean of some property within a given diagnostic horizon
+# note that this requires conditional eval of data that may contain NA
+# see ?slab and ?soil.slot for details on the syntax
+# note that function expects certain columns within 'x'
+f.diag.wt.prop <- function(x, d.hz, prop) {
+	# extract diagnostic horizon data
+	d <- diagnostic_hz(x)
+	# subset to the requested diagnostic hz
+	d <- d[d$diag_kind == d.hz, ]
+	# if missing return NA
+	if(nrow(d) == 0)
+		return(NA)
+	
+	# extract depths and check for missing
+	sv <- c(d$featdept, d$featdepb)
+	if(any(is.na(sv)))
+		return(NA)
+	
+	# create formula from named property
+	fm <- as.formula(paste('~', prop))
+	# return just the (weighted) mean, accessed from @horizons
+	s <- slab(x, fm, seg_vect=sv)$p.mean
+	return(s)
+}
+
+
+# conditional eval of thickness of some diagnostic feature or horizon
+# will return a vector of length(x), you can save to @site
+f.diag.thickness <- function(x, d.hz) {
+	# extract diagnostic horizon data
+	d <- diagnostic_hz(x)
+	# subset to the requested diagnostic hz
+	d <- d[d$diag_kind == d.hz, ]
+	# if missing return NA
+	if(nrow(d) == 0)
+		return(NA)
+	
+	# compute thickness
+	thick <- d$featdepb - d$featdept
+	return(thick)
+}
+
+
+
 }
 \keyword{methods}
 \keyword{manip}

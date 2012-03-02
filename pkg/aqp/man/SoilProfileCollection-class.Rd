@@ -63,13 +63,8 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{units<-}{\code{signature(object = "SoilProfileCollection")}: ... }
 	 }
 }
-\references{
-%%  ~~put references to the literature/web site here~~
-}
+
 \author{Pierre Roudier and Dylan E. Beaudette}
-\note{
-%%  ~~further notes~~
-}
 
 \examples{
 ## 1. test validity methods

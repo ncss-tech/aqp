@@ -2,7 +2,7 @@
 \Rdversion{1.1}
 \alias{soil.slot}
 \alias{seg.summary}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{Slice-Wise Aggregation of Soil Properties}
 \description{Align a single soil property to a user-defined basis, and perform slice-wise aggregation.}
 \usage{
