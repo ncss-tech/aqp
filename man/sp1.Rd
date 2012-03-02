@@ -32,12 +32,6 @@ Soil profile data from Pinnacles National Monument, CA.
     \item{\code{chroma}}{a numeric vector}
   }
 }
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
 

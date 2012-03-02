@@ -31,11 +31,14 @@
     \item{\code{soil_color}}{R-friendly encoding of soil color}
   }
 }
-\details{}
+
 \source{
 Busacca, Alan J.; Singer, Michael J.; Verosub, Kenneth L. 1989. Late Cenozoic stratigraphy of the Feather and Yuba rivers area, California, with a section on soil development in mixed alluvium at Honcut Creek. USGS Bulletin 1590-G.
 }
-\references{}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
+
 \examples{
 data(sp2)
 

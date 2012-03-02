@@ -6,9 +6,12 @@
 \description{Spatial Subsetting of SoilProfileCollection Objects}
 \section{Methods}{
 \describe{
-
 \item{\code{signature(object = "SoilProfileCollection")}}{}
 }}
+
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
+
 \note{This functionality requires the `rgeos` package.}
 \keyword{methods}
 \keyword{manip}

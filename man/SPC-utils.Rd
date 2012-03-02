@@ -47,6 +47,9 @@
 }
 }}
 
+\references{http://casoilresource.lawr.ucdavis.edu/}
+\author{Dylan E. Beaudette}
+
 
 \examples{
 data(sp1)
