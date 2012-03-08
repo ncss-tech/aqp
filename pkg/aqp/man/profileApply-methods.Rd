@@ -130,6 +130,26 @@ f.diag.thickness <- function(x, d.hz) {
 }
 
 
+# conditional eval of property within particle size control section
+# makes assumptions about the SPC that is passed-in
+f.psc.prop <- function(x, prop) {
+  # these are accessed from @site
+  sv <- c(x$psctopdepth, x$pscbotdepth)
+  # test for missing PCS data
+  if(any(is.na(sv)))
+    return(NA) 
+	
+	# this should never happen... unless someone made a mistake
+	# check to make sure that the lower PSC boundary is shallower than the depth
+	if(sv[2] > max(x))
+		return(NA)
+	
+  # create formula from named property
+  fm <- as.formula(paste('~', prop))
+  # return just the (weighted) mean, accessed from @horizons
+  s <- slab(x, fm, seg_vect=sv)$p.mean
+  return(s)
+}
 
 }
 \keyword{methods}
