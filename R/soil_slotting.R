@@ -2,6 +2,7 @@
 ## slotting functions ##
 ##############################################################
 
+
 # setup generic function
 if (!isGeneric("slab"))
   setGeneric("slab", function(data, fm, ...) standardGeneric("slab"))

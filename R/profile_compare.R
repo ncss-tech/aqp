@@ -323,7 +323,7 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   	}
   	
   	else
-  		warning("cannot compute site-level dissimilarity with fewer than 2 variables", call.=FALSE)	
+  		stop("cannot compute site-level dissimilarity with fewer than 2 variables", call.=FALSE)	
   }
   
   # setup a dummy D_site
