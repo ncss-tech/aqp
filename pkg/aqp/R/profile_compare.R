@@ -346,6 +346,8 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   # combine via weighted average: using weights of 1 for now
   if(inherits(d.site, 'dist')) {
   	res <- 	(res + d.site) / 2
+  	# re-scale to [0,1]
+  	res <- rescaler(res, type='range')
   }
   
   # result is a distance matrix
