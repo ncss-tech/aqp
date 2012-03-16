@@ -25,10 +25,12 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
 }
 )
 
+## TODO: why does the proj4string get mangled in the conversion?
 ## Coercition methods: and sp utilities
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
     cat('ony site data are extracted\n')
-    SpatialPointsDataFrame(coordinates(from), data = from@site, proj4string=CRS(proj4string(from)))
+    s <- SpatialPointsDataFrame(coordinates(from), data = from@site, proj4string=CRS(proj4string(from)))
+    return(s)
   }
 )
 
