@@ -58,7 +58,7 @@ rruff.sample$synthetic_pat <- rruff.sample$synthetic_pat +
 
 # try adding some nasty noise
 # rruff.sample$synthetic_pat <- apply(sweep(rruff.sample[,2:7], 2, w, '*'), 1, sum) + 
-runif(n, min=0, max=100)
+# runif(n, min=0, max=100)
 
 
 # look at components and combined pattern
