@@ -16,6 +16,7 @@
 ## TODO: we are suppressing warnings from daisy() when input is all NA
 ##       this is fine for now, but we should figure out a better way
 
+## TODO: decide: rescaling D --  D / max_d ? or [0,1]
 
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
@@ -27,7 +28,11 @@ rescale.result=FALSE)
 	{
 	
 	# currently this will only work with integer depths
-	if(!is.integer(na.omit(s$top)) | !is.integer(na.omit(s$bottom)))
+	# test by attempting to cast to integers
+	# if there is no difference, then we are fine
+	top.test <- any( ! as.integer(na.omit(s$top)) == na.omit(s$top))
+	bottom.test <- any( ! as.integer(na.omit(s$bottom)) == na.omit(s$bottom))
+	if(top.test | bottom.test)
 		stop('this function can only accept integer horizon depths', call.=FALSE)
 	
 	# check to make sure that there is an 'id' column
