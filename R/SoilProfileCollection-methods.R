@@ -18,24 +18,29 @@ diagnostic=data.frame(stringsAsFactors=FALSE)
 setMethod(
   f='show',
   signature='SoilProfileCollection',
-  definition=function(object){
+  definition=function(object) {
+  	n.profiles <- length(object)
+  	
     cat("Object of class ", class(object), "\n", sep = "")
-    cat("Number of profiles: ", length(object), "\n", sep="")
-	cat("Depth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
-	cat("\nHorizon attributes:\n")
-	print(head(horizons(object)))
+    cat("Number of profiles: ", n.profiles, "\n", sep="")
+  	
+  	if(n.profiles > 1)
+			cat("Depth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
+		
+  	cat("\nHorizon attributes:\n")
+  	print(head(horizons(object)))
 
-	# in the presence of site data
+		# in the presence of site data
     if (nrow(site(object)) > 0) {
       cat("\nSampling site attributes:\n")
       print(head(site(object)))
     }
 
     # presence of spatial data
-    if(nrow(coordinates(object)) == length(object)) {
-    cat('\nSpatial Data:\n')
-    show(object@sp@bbox)
-    show(object@sp@proj4string)
+    if(nrow(coordinates(object)) == n.profiles) {
+    	cat('\nSpatial Data:\n')
+    	show(object@sp@bbox)
+    	show(object@sp@proj4string)
     }
 
   }
@@ -287,12 +292,17 @@ setReplaceMethod("$", "SoilProfileCollection",
 
 
 
+
+
 ### NOTE: this DOES NOT re-order data, only subsets!
 ##
 ## matrix / DF style access: only to horizon data
 ##
 ## i = profile index
 ## j = horizon / slice index
+##
+## TODO: check for SPC[i] .... this is an error
+##
 setMethod("[", "SoilProfileCollection",
   function(x, i, j, ...) {
 
