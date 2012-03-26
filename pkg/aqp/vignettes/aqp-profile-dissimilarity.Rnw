@@ -34,7 +34,7 @@
 
 % setup R session
 <<setup, echo=FALSE, results='hide'>>=
-options(replace.assign=TRUE, width=140)
+	options(replace.assign=TRUE, width=140)
 @
 
 
@@ -45,7 +45,7 @@ options(replace.assign=TRUE, width=140)
 
 
 <<demo-1>>=
-library(aqp)
+	library(aqp)
 library(ape)
 library(RColorBrewer)
 library(latticeExtra)
@@ -56,7 +56,7 @@ cols <- brewer.pal(3, 'Set1')
 
 # setup horizon-level data: data are from lab sampled pedons
 d <- read.csv(
-textConnection("
+	textConnection("
 
 series,top,bottom,clay,frags,ph
 auburn,0,3,21,6,5.6
@@ -76,10 +76,10 @@ sobrante,51,74,20,12,6.2
 
 # establish site-level data
 s <- data.frame(
-series=c('auburn', 'dunstone', 'sobrante'), 
-precip=c(24, 30, 32),
-stringsAsFactors=FALSE
-)
+	series=c('auburn', 'dunstone', 'sobrante'), 
+	precip=c(24, 30, 32),
+	stringsAsFactors=FALSE
+	)
 
 
 # generate fake horizon names with clay / frags / ph
@@ -121,10 +121,10 @@ plot(d.phylo, direction='down', srt=0, font=1, label.offset=1)
 
 \clearpage
 <<demo-2>>=
-# continuing from example above...
-
-# return dissimilarity matrices at each depth slice
-d.dis.all <- profile_compare(d, vars=c('clay', 'ph', 'frags'), k=0, max_d=61, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=TRUE)
+	# continuing from example above...
+	
+	# return dissimilarity matrices at each depth slice
+	d.dis.all <- profile_compare(d, vars=c('clay', 'ph', 'frags'), k=0, max_d=61, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=TRUE)
 
 # check between-profile dissimilarity, at slice 1
 print(as.matrix(d.dis.all[[1]]))
@@ -141,10 +141,10 @@ d.23 <- sapply(d.dis.all, f.23)
 
 # combine into single data.frame
 d.all <- make.groups(
-        auburn.dunstone=data.frame(slice=1:61, d=d.12, d.sum=cumsum(d.12)),
-        auburn.sobrante=data.frame(slice=1:61, d=d.13, d.sum=cumsum(d.13)),
-        dunstone.sobrante=data.frame(slice=1:61, d=d.23, d.sum=cumsum(d.23))
-        )
+auburn.dunstone=data.frame(slice=1:61, d=d.12, d.sum=cumsum(d.12)),
+auburn.sobrante=data.frame(slice=1:61, d=d.13, d.sum=cumsum(d.13)),
+dunstone.sobrante=data.frame(slice=1:61, d=d.23, d.sum=cumsum(d.23))
+)
 
 # plot slice-wise dissimilarity between all three soils
 p.1 <- xyplot(slice ~ d, groups=which, data=d.all, ylim=c(62,0), type=c('l','g'), xlim=c(0.2,1.2), ylab='Depth (cm)', xlab='', horizontal=TRUE, auto.key=list(columns=3, lines=TRUE, points=FALSE), asp=1)
