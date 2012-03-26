@@ -1,10 +1,10 @@
 ## see the convertColor() function from grDevices
+## ... out function gives "better" looking colors
 
 
 # convert munsell Hue, Value, Chroma into RGB
 # user can adjust how rgb() function will return an R-friendly color
 # TODO if alpha is greater than maxColorValue, there will be an error
-# TODO: remove warnings at plyr > 1.6
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE)
 	{
 	## important: change the default behavior of data.frame and melt
