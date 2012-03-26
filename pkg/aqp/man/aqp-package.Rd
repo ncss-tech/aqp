@@ -19,5 +19,5 @@ Extended Examples:
 \author{Dylan E. Beaudette <debeaudette@ucdavis.edu>}
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \keyword{ package }
-\seealso{\link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}}, \link{sp5}}}
+\seealso{\link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}, \link{sp5}}}
 
