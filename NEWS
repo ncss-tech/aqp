@@ -1,3 +1,7 @@
+-------------------------- aqp 1.0 (2012-03-26) --------------------------
+* 1.0 release, still missing condensed vignettes- should be ready soon
+* see http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56 for samples
+
 -------------------------- aqp 0.99-9.8 (2012-03-02) --------------------------
 * profile_compare() will now use site-level attributes if input is a SoilProfileCollection
   - horizon / site level data currently weighted equally
@@ -24,7 +28,7 @@
   !!! note that this may break functionality based on aqp 0.99-9.3
 
 -------------------------- aqp 0.99-9.4 (2012-01-09) --------------------------
-* 'site(SCP) <- d' now tries to merge data from SPC@site with 'd' via left join
+* `site(SCP) <- d` now tries to merge data from SPC@site with 'd' via left join
   - this means that all new SPC objects will have a single column of @site data, containin profile IDs
 * plot-SoilProfileCollection now tries to guess the best orientation of IDs
   - override with id.style='top' or id.style='side'
