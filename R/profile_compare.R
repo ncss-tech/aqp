@@ -18,6 +18,8 @@
 
 ## TODO: decide: rescaling D --  D / max_d ? or [0,1]
 
+## TODO:  'vaggregate' is faster, but does not operate exactly as tapply
+
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
 # function requires at least two attributes
@@ -97,11 +99,12 @@ rescale.result=FALSE)
 		
 		# keep temp subset of the data so that soil/non-soil matrix is 
 		# evaluated based on presence of real data in at least 1 variable
-		s.sub <- na.omit(s[, c('id', 'top', 'bottom', vars)])
+		## Note that this only works if 'id' is a factor
+		s.sub <- na.omit(s[, c('id', 'bottom', vars)])
 		
 		# get the depth of each profile
-		## could be converted to 'vaggregate' in latest version of plyr
-		s.slices_of_soil <- tapply(s.sub$bottom, s.sub$id, function(i) max(i, na.rm=TRUE) )
+		# tapply() returns NA if any level of 'id' is missing data
+		s.slices_of_soil <- tapply(s.sub$bottom, s.sub$id, max, na.rm=TRUE)
 		
 		# if there is NA in the above vector, then it is because one or more profiles 
 		# didn't have any data within the depth range defined by max_d
@@ -144,7 +147,6 @@ rescale.result=FALSE)
 		  }
 		# cleanup
 		rm(s.sub)
-		
 		}
 		
 	
