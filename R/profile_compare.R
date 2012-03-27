@@ -91,12 +91,26 @@ rescale.result=FALSE)
 	## NOTE: this will not work when a user-defined interval is used for slicing!!
 	## 
 	## generate a matrix storing a flag describing soil vs. non-soil at each slice
-	## note that this does not take into account missing horizon data within the profile
+	## note that this will truncate a profile to the max depth of actual data
 	if(add_soil_flag)
 		{
+		
+		# keep temp subset of the data so that soil/non-soil matrix is 
+		# evaluated based on presence of real data in at least 1 variable
+		s.sub <- na.omit(s[, c('id', 'top', 'bottom', vars)])
+		
 		# get the depth of each profile
 		## could be converted to 'vaggregate' in latest version of plyr
-		s.slices_of_soil <- tapply(s$bottom, s$id, function(i) max(i, na.rm=TRUE) )
+		s.slices_of_soil <- tapply(s.sub$bottom, s.sub$id, function(i) max(i, na.rm=TRUE) )
+		
+		# if there is NA in the above vector, then it is because one or more profiles 
+		# didn't have any data within the depth range defined by max_d
+		bad.profiles.idx <- which(is.na(s.slices_of_soil))
+		if(length(bad.profiles.idx) > 0) {
+			# stop stop and let the user know
+			bad.profiles <- names(s.slices_of_soil)[bad.profiles.idx]
+			stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', ')), call.=FALSE)
+		}
 		
 		# truncate to the max requested depth
 		s.slices_of_soil <- ifelse(s.slices_of_soil <= max_d, s.slices_of_soil, max_d)
@@ -108,9 +122,9 @@ rescale.result=FALSE)
 		soil.matrix <- matrix(ncol=s.slices_of_soil.length, nrow=max_d)
 		
 		# file with TRUE for 'soil' or FALSE for 'non-soil'
-		for(s.i in 1:s.slices_of_soil.length)
+		for(s.i in 1:s.slices_of_soil.length) {
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
-		
+		}
 		
 		# plot a diagnostic image, but only when reasonable to do so (< 100 profiles)
 		if(n.profiles <= 100 & plot.depth.matrix)
@@ -121,13 +135,16 @@ rescale.result=FALSE)
 			else
 				image.cols <- c('grey')
 			
-		  labs <- levels(s$id)
-		  image(x=1:n.profiles, y=1:max_d, z=t(soil.matrix), col=image.cols, ylim=c(max_d, 1), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
+		  labs <- levels(s.sub$id)
+		  image(x=1:n.profiles, y=1:max_d, z=t(soil.matrix), col=image.cols, ylim=c(max_d, 0), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
 		  box()
 		  abline(v=seq(1, n.profiles)+0.5, lty=2)
 		  axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
 		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex.axis=0.5)
 		  }
+		# cleanup
+		rm(s.sub)
+		
 		}
 		
 	

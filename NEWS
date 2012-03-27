@@ -1,6 +1,7 @@
 -------------------------- aqp 1.0 (2012-03-26) --------------------------
 * 1.0 release, still missing condensed vignettes- should be ready soon
 * see http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56 for samples
+* A small bug in profile_compare() was fixed, where slices were evaluated as 'soil' based on the bottom depth of the profile, and NOT on the presence of actual data. See ?profile_compare for details. This change will have a minor affect on profile comparisons in cases where Cr or R horizons (usually missing most characterization data) have been extended down to some arbitrary depth (usually 150 or 200 cm) AND a maximum depth of evaluation (max_d) was set beyond the actual depth of most profiles in the collection.
 
 -------------------------- aqp 0.99-9.8 (2012-03-02) --------------------------
 * profile_compare() will now use site-level attributes if input is a SoilProfileCollection
