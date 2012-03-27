@@ -33,7 +33,7 @@ progress='none', plot.depth.matrix=FALSE, rescale.result=FALSE)
   \item{k}{a depth-weighting coeficient, use '0' for no depth-weighting (see examples below)}
   \item{sample_interval}{use every n-th depth slice instead of every depth slice, useful for working with > 1000 profiles at a time}
   \item{replace_na}{if TRUE, missing data are replaced by maximum dissimilarity (TRUE)}
-  \item{add_soil_flag}{The algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE). This has the side-effect of producing a diagnostic plot illustrating the contents of the soil/non-soil matrix (when there are 100 or fewer profiles in the collection).}
+  \item{add_soil_flag}{The algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE). See details section below.}
   \item{return_depth_distances}{return intermediate, depth-wise dissimilarity results (FALSE)}
   \item{strict_hz_eval}{should horizons be strictly checked for internal self-consistency? (FALSE)}
   \item{progress}{'none' (default): argument passed to \code{ddply} and related functions, see \code{\link{create_progress_bar}} for all possible options; 'text' is usually fine.}
@@ -45,6 +45,8 @@ progress='none', plot.depth.matrix=FALSE, rescale.result=FALSE)
 Variability in soil depth can interfere significantly with the calculation of between-profile dissimilarity-- what is the numerical ``distance'' (or dissimilarity) between a slice of soil from profile A and the corresponding, but missing, slice from a shallower profile B? Gower's distance metric would yield a NULL distance, despite the fact that intuition suggests otherwise: shallower soils should be more dissimilar from deeper soils. For example, when a 25 cm deep profile is compared with a 50 cm deep profile, numerical distances are only accumulated for the first 25 cm of soil (distances from 26 - 50 cm are NULL). When summed, the total distance between these profiles will generally be less than the distance between two profiles of equal depth. Our algorithm has an option (setting replace_na=TRUE) to replace NULL distances with the maximum distance between any pair of profiles for the current depth slice. In this way, the numerical distance between a slice of soil and a corresponding slice of non-soil reflects the fact that these two materials should be treated very differently (i.e. maximum dissimilarity). 
 
 This alternative calculation of dissimilarities between soil and non-soil slices solves the problem of comparing shallow profiles with deeper profiles. However, it can result in a new problem: distances calculated between two shallow profiles will be erroneously inflated beyond the extent of either profile's depth. Our algorithm has an additional option (setting add_soil_flag=TRUE) that will preserve NULL distances between slices when both slices represent non-soil material. With this option enabled, shallow profiles will only accumulate mutual dissimilarity to the depth of the deeper profile.
+
+Note that when the \code{add_soil_flag} option is enabled (default), slices are classified as 'soil' down to the maximum depth to which at least one of variables used in the dissimilarity calculation is not NA. This will cause problems when profiles within a collection contain all NAs within the columns used to determine dissimilarity. An approach for identifying and removing these kind of profiles is presented in the examples section below.
 }
 
 \value{
@@ -117,6 +119,23 @@ plot(as.dendrogram(hclust(d.10)), horiz=TRUE, main='Every 10th Depth Slice')
 plot(as.dendrogram(hclust(d.20)), horiz=TRUE, main='Every 20th Depth Slice')
 par(oldpar)
 
+## 5. identify profiles within a collection that contain all NAs
+d <- ldply(1:10, random_profile)
+depths(d) <- id ~ top + bottom
+
+# replace first profile's data with NA
+na.required <- nrow(d[1, ])
+d$p1[1:na.required] <- NA
+d$p2[1:na.required] <- NA
+
+# attempt profile comparison: this won't work, throws an error
+# dd <- profile_compare(d, vars=c('p1','p2'), max_d=100, k=0)
+
+# check for soils that are missing all clay / total RF data
+missing.too.much.data.idx <- which(profileApply(d, function(i) length(which(is.na(i$p1) | is.na(i$p2))) / nrow(i)) == 1)
+
+# remove bad profiles and try again: works
+dd <- profile_compare(d[-missing.too.much.data.idx, ], vars=c('p1','p2'), max_d=100, k=0)
 }
 
 
