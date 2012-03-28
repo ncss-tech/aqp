@@ -72,7 +72,7 @@ definition=function(data, fm, progress='none', ...) {
   }
   
 	# convert into long format
-	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
+    d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
 	## TODO work on fixing this
 	# temp hack: make a column called 'prop' ... as soil.slot is expecting this!
@@ -80,7 +80,7 @@ definition=function(data, fm, progress='none', ...) {
 	
 	# apply slotting group-wise and return in long format
 	# note '...' is gobbled by soil.slot()
-	d.slotted <- ddply(d.long, .variables=c('variable', g), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
+    d.slotted <- ddply(d.long, .variables=c('variable', g), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
 		
 	# convert tops and bottoms to integers
 	d.slotted$top <- as.integer(d.slotted$top)
@@ -291,7 +291,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	#################################################################################
 	##### Step 1: unroll profiles in the collection: result is a list
 	#################################################################################
-	x.unrolled <- dlply(data, .(id), .fun=function(i, m=max_d) 
+	x.unrolled <- dlply(data, "id", .fun=function(i, m=max_d) 
 		{
 		
 		u <- try(unroll(top=i$top, bottom=i$bottom, prop=i$prop, max_depth=m, strict=strict))

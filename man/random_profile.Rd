@@ -35,6 +35,7 @@ Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.; Sadler, E. J. & Grun
 \seealso{\code{\link{profile_compare}}}
 \examples{
 # generate 10 random profiles with default settings:
+require(plyr)
 d <- ldply(1:10, random_profile)
 
 # add a fake color
@@ -83,6 +84,7 @@ if(require(scales)) {
 a <- slab(d, fm= ~ p1)
 a$mid <- with(a, (top + bottom) / 2)
 
+library(lattice)
 (p1 <- xyplot(mid ~ p.q50, data=a,
 lower=a$p.q25, upper=a$p.q75, ylim=c(150,-5), alpha=0.5,
 panel=panel.depth_function, prepanel=prepanel.depth_function,

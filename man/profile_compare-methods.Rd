@@ -82,6 +82,7 @@ d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01)
 
 # better plotting with ape package:
 require(ape)
+require(cluster)
 h <- diana(d)
 p <- as.phylo(as.hclust(h))
 plot(ladderize(p), cex=0.75, label.offset=1, no.margin=TRUE)
@@ -120,6 +121,7 @@ plot(as.dendrogram(hclust(d.20)), horiz=TRUE, main='Every 20th Depth Slice')
 par(oldpar)
 
 ## 5. identify profiles within a collection that contain all NAs
+require(plyr)
 d <- ldply(1:10, random_profile)
 depths(d) <- id ~ top + bottom
 

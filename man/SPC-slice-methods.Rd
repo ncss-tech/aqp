@@ -21,6 +21,7 @@
 
 \examples{
 # simulate some data, IDs are 1:20
+library(plyr)
 d <- ldply(1:20, random_profile)
 
 # re-order IDs

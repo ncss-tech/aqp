@@ -23,11 +23,16 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
     cat('Notice: converting hue to character\n')
     the_hue <- as.character(the_hue)
   }
-    
   
-	# load look-up table from our package
-	data(munsell)
-	
+
+  # load look-up table from our package
+  
+  # This is a hack to avoid munsell2rgb: "no visible 
+  # binding for global variable ‘munsell’" at package R CMD check
+  munsell <- NULL
+  # This should be moreover more foolproof than data(munsell)
+  load(system.file("data/munsell.rda", package="aqp")[1]) 
+  
   # join new data with look-up table
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
   res <- join(d, munsell, type='left', by=c('hue','value','chroma')) # result has original munsell + r,g,b

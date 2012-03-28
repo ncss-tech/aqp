@@ -67,7 +67,7 @@ rescale.result=FALSE)
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	message(paste("Unrolling ", n.profiles, " Profiles", sep=""))
-	s.unrolled <- dlply(s, .(id), .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
+	s.unrolled <- dlply(s, "id", .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
 		{
 		
 		# iterate over the set of properties, unrolling as we go
@@ -284,7 +284,7 @@ rescale.result=FALSE)
 	# this is important when incorporating site data
 	# causes problems for some functions like sammon
 	if(rescale.result)
-		D <- rescaler(D, type='range')
+		D <- rescale(D)
 	
 	# return the distance matrix, class = 'dist'
 	return(D)	
@@ -330,7 +330,7 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   	if(length(site.vars) >= 2) {
   		message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
   		d.site <- daisy(s.site[, site.vars], metric='gower')
-  		d.site <- rescaler(d.site, type='range')
+  		d.site <- rescale(d.site)
   		
   		# reset default behavior of hz-level D
   		rescale.result=TRUE
@@ -371,7 +371,7 @@ setMethod(f='profile_compare', signature='SoilProfileCollection',
   if(inherits(d.site, 'dist')) {
   	res <- 	(res + d.site) / 2
   	# re-scale to [0,1]
-  	res <- rescaler(res, type='range')
+  	res <- rescale(res)
   }
   
   # result is a distance matrix

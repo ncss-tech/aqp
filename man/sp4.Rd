@@ -31,11 +31,12 @@ data(sp4)
 sp4$soil_color <- 'white'
 
 # optionally color horizons with 'ex_Ca_to_Mg'
-if(require(RColorBrewer)) {
-  cols <- rev(brewer.pal(8, 'Spectral'))
-  cr <- colorRamp(cols)
-  sp4$soil_color <- rgb(cr(rescaler(sp4$ex_Ca_to_Mg, type='range')), max=255)
-}
+require(RColorBrewer)
+require(scales)
+cols <- rev(brewer.pal(8, 'Spectral'))
+cr <- colorRamp(cols)
+sp4$soil_color <- rgb(cr(rescale(sp4$ex_Ca_to_Mg)), max=255)
+
 
 # init SPC object
 depths(sp4) <- id ~ top + bottom

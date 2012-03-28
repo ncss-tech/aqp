@@ -6,6 +6,7 @@ Urgent:
   
 2. integrate color styling with 'scales' package in plot.SoilProfileCollection
 3. more aggressive checking of ordering / IDs
+4. Should we move to reshape2? It is faster. (PR)
 
 Interesting:
 ------------

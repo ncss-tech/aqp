@@ -47,6 +47,8 @@ str(ca630)
 
 # 2. promote to SoilProfileCollection
 # combine site+horizon data into single DF
+
+library(plyr)
 ca <- join(ca630$lab, ca630$site, type='inner')
 
 # promote to SoilProfileCollection
@@ -56,6 +58,7 @@ depths(ca) <- pedon_key ~ hzn_top + hzn_bot
 site(ca) <- ~ mlra + ssa + lon + lat + cntrl_depth_to_top + cntrl_depth_to_bot + sampled_taxon_name
 
 # extract spatial data as SpatialPoints
+library(sp)
 coordinates(ca) <- ~ lon + lat
 # assign CRS data
 proj4string(ca) <- '+proj=latlong +datum=NAD83'
@@ -67,6 +70,7 @@ ca
 a <- slab(ca, fm= ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
+library(lattice)
 xyplot(
 top ~ p.q50, data=a, lower=a$p.q25, upper=a$p.q75, 
 ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
@@ -90,6 +94,7 @@ auto.key=list(columns=2, title='MLRA', points=FALSE, lines=TRUE)
 
 
 # 5. safely compute hz-thickness weighted mean CEC (pH 7)
+library(Hmisc)
 head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
 .fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
 

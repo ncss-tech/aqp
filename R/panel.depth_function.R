@@ -121,6 +121,7 @@ else
       # extract CF at annotated depths
       a.text <- paste(round(cf.i[a.seq] * 100), '%')
       # add to right-hand side of the panel
+      unit <- gpar <- NULL
       grid.text(a.text, x=unit(0.99, 'npc'), y=unit(a.seq, 'native'), just='right', gp=gpar(font=3, cex=0.8))  
       }
     

@@ -57,6 +57,7 @@ a$lower <- with(a, p.mean - p.sd)
 
 # check the results:
 # note that 'group' is the column containing group labels
+library(lattice)
 xyplot(
 top ~ p.mean | variable, data=a, groups=group, subscripts=TRUE, 
 lower=a$lower, upper=a$upper, ylim=c(125,-5), alpha=0.5,
@@ -67,6 +68,7 @@ prepanel=prepanel.depth_function
 
 
 # convert mean value for each variable into long format
+library(reshape)
 a.wide <- cast(a, group + top + bottom ~ variable, value=c('p.mean'))
 
 ## again, this time for a user-defined slab from 40-60 cm

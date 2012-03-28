@@ -49,6 +49,7 @@ d$color <- with(d, munsell2rgb(hue, value, chroma))
 
 
 # plot: note that we are setting panel order from red-->yellow
+library(lattice)
 xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
 main="Common Soil Colors", layout=c(4,1), scales=list(alternating=1),
 strip=strip.custom(bg=grey(0.85)),
