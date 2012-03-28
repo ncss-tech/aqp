@@ -109,6 +109,7 @@ a <- soil.slot(sp1)
 b <- soil.slot(sp1, seg_size=5)
 
 # stack into long format
+library(lattice)
 ab <- make.groups(a, b)
 ab$which <- factor(ab$which, levels=c('a','b'), 
 labels=c('1-cm Interval', '5-cm Interval'))
@@ -160,6 +161,7 @@ y$id <- factor(y$id)
 a <- soil.slot(y, class_prob_mode=1)
 
 # reshape into long format for plotting
+require(reshape)
 a.long <- melt(a, id.var=c('top','bottom'))
 
 a.long$variable <- factor(a.long$variable, levels=c('O','A','B','C','R'))

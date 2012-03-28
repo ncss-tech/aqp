@@ -1,3 +1,12 @@
+-------------------------- aqp 1.0-1 (2012-03-28) --------------------------
+* Cleaned NAMESPACE and DESCRIPTION
+* removed un-necessary dependencies
+* join added to the plyr imports
+* added scales to the Imports as well, and removed rescaler() in the code, repaced by scales::rescale
+* hack in munsell2rgb to avoid the 'no visible binding for global variable ‘munsell’' at package R CMD check and make the whole thing more robust (using load and system.file rather than data(...)
+* Dylan is now the only maintainer, as per Uwe request
+* when using plyr **ply function, switched from using the .(foo) interface to "foo" - seems more foolproof
+
 -------------------------- aqp 1.0 (2012-03-26) --------------------------
 * 1.0 release, still missing condensed vignettes- should be ready soon
 * see http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56 for samples

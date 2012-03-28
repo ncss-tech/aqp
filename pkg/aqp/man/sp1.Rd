@@ -54,6 +54,7 @@ plot(s)
 s1 <- slab(sp1, fm= ~ prop)
 
 # check mean +/- 1SD
+library(lattice)
 xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
 data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
 panel=panel.superpose, ylim=c(110,-5))

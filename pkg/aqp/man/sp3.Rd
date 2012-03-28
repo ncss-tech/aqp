@@ -57,6 +57,7 @@ a <- slab(sp3, fm=group ~ clay + cec + ph + h + s + v, seg_size=10)
 
 
 # convert back to wide format, note that aggregation metric affects the result
+require(reshape)
 a.wide.q25 <- cast(a, top + bottom ~ variable, value=c('p.q25'))
 a.wide.q50 <- cast(a, top + bottom ~ variable, value=c('p.q50'))
 a.wide.q75 <- cast(a, top + bottom ~ variable, value=c('p.q75'))
@@ -87,6 +88,8 @@ round(sp3.grouped$cec), '/', round(sp3.grouped$ph,1))
 ## D is rescaled to [0,]
 d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, 
 k=0.01, replace_na=TRUE, add_soil_flag=TRUE, rescale.result=TRUE)
+
+require(cluster)
 h <- agnes(d, method='ward')
 p <- ladderize(as.phylo(as.hclust(h)))
 

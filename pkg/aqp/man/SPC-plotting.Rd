@@ -2,7 +2,7 @@
 \docType{methods}
 \alias{plotSPC}
 \alias{plot,SoilProfileCollection-method}
-
+\alias{plot,SoilProfileCollection,ANY-method}
 
 \title{
 Profile Plot
@@ -97,8 +97,9 @@ if(require(RColorBrewer)) {
   cols <- rev(brewer.pal(8, 'Spectral'))
   cr <- colorRamp(cols)
   
+  library(scales)
   # assign color based on clay content, rescaled to {0,1}
-  sp3$soil_color <- rgb(cr(rescaler(sp3$clay, type='range')), max=255)
+  sp3$soil_color <- rgb(cr(rescale(sp3$clay)), max=255)
   depths(sp3) <- id ~ top + bottom
   plot(sp3)
 }
