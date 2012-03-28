@@ -1,3 +1,6 @@
+-------------------------- aqp 1.0-2 (2012-03-29) --------------------------
+* More NAMESPACE cleaning
+
 -------------------------- aqp 1.0-1 (2012-03-28) --------------------------
 * Cleaned NAMESPACE and DESCRIPTION
 * removed un-necessary dependencies

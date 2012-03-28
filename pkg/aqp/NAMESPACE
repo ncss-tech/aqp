@@ -1,3 +1,7 @@
+importClassesFrom("sp",
+  "SpatialPoints"
+)
+
 importFrom(grid,
   grid.text
 )
@@ -39,6 +43,8 @@ importFrom(stringr,
 )
 
 importFrom(sp,
+  SpatialPoints,
+  SpatialPointsDataFrame,
   coordinates, 
   "coordinates<-", 
   proj4string, 
