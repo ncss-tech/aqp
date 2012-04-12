@@ -80,8 +80,14 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
 	  # get vectors of horizon boundaries, and scale
 	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
 	  y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
+	
+	
+	##
+	## TODO: use horizon boundary type and topography to modify figures
+	##
+	## i.e. clear-wavy = dashed lines at an angle, based on red book
 	  
-	  # create horizons + colors
+	# create horizons + colors
     # default are filled rectangles
     if(divide.hz)
 	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL)
