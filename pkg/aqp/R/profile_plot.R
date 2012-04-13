@@ -1,6 +1,6 @@
 
 # simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
-hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G'), offset=c(0.5, 1.5, 5)) {	
+hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
 	x <- as.character(x)
 	x.code <- match(x, codes)
 	x.offset <- offset[x.code]

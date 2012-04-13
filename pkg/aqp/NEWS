@@ -1,3 +1,7 @@
+-------------------------- aqp 1.0-3 (2012-03-29) --------------------------
+* added horizon boundary distinctness code conversions and plotting functionality
+  - see ?sp1 and ?random_profile for new examples
+
 -------------------------- aqp 1.0-2 (2012-03-29) --------------------------
 * More NAMESPACE cleaning
 

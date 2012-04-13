@@ -11,7 +11,7 @@
   }
 
 
-random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5, exact=FALSE, method='random_walk', ...) {
+random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5, exact=FALSE, method='random_walk', HzDistinctSim=FALSE, ...) {
 
   # sanity check
   if(missing(id))
@@ -97,7 +97,30 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
 	  new_col <- paste('p',i, sep='')
 	  d[,new_col] <- p
 	  }
-
+	
+  # optionally add horizon distinctness codes:
+  # these are based on USDA-NCSS codes and approximate vertical offsets
+	# codes are constrained to the thickness of the horizon
+  if(HzDistinctSim) {
+  	# standard codes and offsets
+  	codes <- c('A','C','G','D')
+  	offsets <- hzDistinctnessCodeToOffset(codes)
+  	# compute horizon thickness vector
+  	thick <- with(d, bottom-top)
+  	
+  	# create matrix of distinctness codes based on (1/3) horizon thickness
+  	# 1 when possible, 0 when impossible
+  	prob.matrix <- t(sapply(thick, function(i) (i/3) >= offsets))
+  	prob.matrix[which(prob.matrix)] <- 1
+		
+  	d.codes <- vector(mode='character', length=n_hz)
+  	for(i in 1:n_hz) {
+  		d.codes[i] <- sample(codes, size=1, prob=prob.matrix[i, ])
+  	}
+  	
+  	d$HzDistinctCode <- d.codes
+  }
+  
   # all done
   return(d)
 }
