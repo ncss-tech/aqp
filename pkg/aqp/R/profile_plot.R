@@ -1,3 +1,14 @@
+
+# simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
+hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G'), offset=c(0.5, 1.5, 5)) {	
+	x <- as.character(x)
+	x.code <- match(x, codes)
+	x.offset <- offset[x.code]
+	x.offset <- ifelse(is.na(x.offset), 0, x.offset)
+	return(x.offset)
+}
+
+
 # generate a soil profile figure, from a generic dataframe
 # using top and bottom boundaries, annotating with name
 # optionally color with vector that is the same length as number of horizons
@@ -5,7 +16,7 @@
 # behavior not defined for horizons with an indefinate lower boundary
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, ...) {
   
   # get horizons
   h <- horizons(x)
@@ -89,8 +100,17 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
 	  
 	# create horizons + colors
     # default are filled rectangles
-    if(divide.hz)
+    if(divide.hz) {
 	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL)
+	 
+	 # optionally add horizon boundary distinctiveness
+	 if(! is.null(hz.distinctness.offset)) {
+	 	hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
+	 	segments(i-width, y0 - hz.dist.offset, i+width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty)
+		segments(i-width, y0 + hz.dist.offset, i+width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty)	
+     }
+	    
+	 }
     
     # otherwise, we only draw the left, top, right borders, and then fill
     else {
