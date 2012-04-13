@@ -24,7 +24,7 @@ plotSPC(x, color='soil_color', width=0.2, name='name',
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
 id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x),
 max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
-abbr.cutoff=5, divide.hz=TRUE, \dots)
+abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, \dots)
 }
 
 
@@ -51,6 +51,9 @@ abbr.cutoff=5, divide.hz=TRUE, \dots)
   \item{abbr}{should the profile ID be abbreviated?}
   \item{abbr.cutoff}{suggested minimum length for abbreviated IDs}
   \item{divide.hz}{should horizons be divided with a thin black line? (default is TRUE)}
+  \item{hz.distinctness.offset}{column name containing vertical offsets used to depict horizon boundary distinctness (same units as profiles)}
+  \item{hz.distinctness.offset.col}{color used to encode horizon distinctness (default is 'black')}
+  \item{hz.distinctness.offset.lty}{line style used to encode horizon distinctness (default is 2)}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
@@ -65,7 +68,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{SoilProfileCollection-class}, \link{pretty}}
+\code{\link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}}
 }
 \examples{
 data(sp1)
@@ -87,6 +90,10 @@ plot(sp1, divide.hz=FALSE)
 
 # plot profiles, using alternate profile ID label style
 plot(sp1, id.style='side')
+
+# add dashed lines illustrating horizon boundary distinctness
+sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
+plot(sp1, hz.distinctness.offset='hzD')
 
 # plot horizon color according to some property
 # RColorBrewer helps with nice colors

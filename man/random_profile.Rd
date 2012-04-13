@@ -8,7 +8,8 @@ Generate a random soil profile according to set criteria, with correlated depth 
 }
 \usage{
 random_profile(id, n = c(3, 4, 5, 6), min_thick = 5,
- max_thick = 30, n_prop = 5, exact = FALSE, method = 'random_walk', ...)
+ max_thick = 30, n_prop = 5, exact = FALSE, method = 'random_walk', 
+ HzDistinctSim=FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,20 +20,21 @@ random_profile(id, n = c(3, 4, 5, 6), min_thick = 5,
   \item{n_prop}{number of simulated soil properties (columns in the returned dataframe)}
   \item{exact}{should the exact number of requested horizons be generated? (defaults to FALSE)}
   \item{method}{named method used to synthesize depth function ('random_walk' or 'LPP'), see details}
+  \item{HzDistinctSim}{optionally simulate horizon boundary distinctness codes}
   \item{\dots}{additional parameters passed-in to the LPP (\code{.lpp}) function}
 }
 
 \value{
 A dataframe with the simulated profile.
 }
-\details{The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Amplitude of the peak is controlled by ("lpp.a + "lpp.b"), depth of the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further description of the method is outlined in (Brenton et al, 2011).
+\details{The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Amplitude of the peak is controlled by ("lpp.a + "lpp.b"), depth of the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further description of the method is outlined in (Brenton et al, 2011). Simulated horizon distinctness codes are based on the USDA-NCSS field description methods (\url{http://soils.usda.gov/technical/fieldbook/}). Simulated distinctness codes are constrained according to horizon thickness, i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that are thinner than 3x this vertical distance
 }
 \references{
 Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.; Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution soil profile data Geoderma, 2011, 166, 74-83.
 }
 \author{Dylan E. Beaudette}
 \note{See examples for ideas on simulating several profiles at once.}
-\seealso{\code{\link{profile_compare}}}
+\seealso{\code{\link{profile_compare}, \link{hzDistinctnessCodeToOffset}}}
 \examples{
 # generate 10 random profiles with default settings:
 require(plyr)
@@ -44,6 +46,15 @@ d$soil_color <- 'white'
 # promote to SoilProfileCollection and plot
 depths(d) <- id ~ top + bottom
 plot(d)
+
+
+# simulate horizon boundary distinctness codes:
+d <- ldply(1:10, random_profile, HzDistinctSim=TRUE)
+d$soil_color <- grey(0.85)
+depths(d) <- id ~ top + bottom
+d$HzD <- hzDistinctnessCodeToOffset(d$HzDistinctCode)
+plot(d, hz.distinctness.offset='HzD')
+
 
 
 # make a more interesting color based on the first property
