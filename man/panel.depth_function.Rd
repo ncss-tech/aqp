@@ -2,7 +2,7 @@
 \Rdversion{1.1}
 \alias{panel.depth_function}
 \alias{prepanel.depth_function}
-\alias{.make.segments}
+\alias{make.segments}
 
 \title{Lattice Panel Function for Soil Profiles}
 

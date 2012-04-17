@@ -37,23 +37,27 @@ Soil profile data from Pinnacles National Monument, CA.
 
 \examples{
 data(sp1)
-# convert colors
+# convert colors from Munsell to hex-encoded RGB
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
-## promote to SoilProfileCollection
+# promote to SoilProfileCollection
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-# extract 1-unit thick slices at defined depths
+# re-sample each profile into 1 cm (thick) depth slices
+# for the variables 'prop', 'name', 'soil_color'
+# result is a SoilProfileCollection object
 s <- slice(sp1, 0:25 ~ prop + name + soil_color)
+
+# plot, note slices
 plot(s)
 
 
-# aggregate all profiles into 1cm depth slices, 
+# aggregate all profiles along 1 cm depth slices, 
 # using data from column 'prop'
 s1 <- slab(sp1, fm= ~ prop)
 
-# check mean +/- 1SD
+# plot mean +/- 1SD
 library(lattice)
 xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
 data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
