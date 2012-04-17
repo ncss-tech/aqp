@@ -4,10 +4,8 @@
 \alias{slice.fast}
 \alias{slice}
 \alias{slice,SoilProfileCollection-method}
-\title{ ~~ Methods for Function \code{slice} in Package \pkg{aqp} ~~}
-\description{
- ~~ Methods for function \code{slice} in package \pkg{aqp} ~~
-}
+\title{Slicing of SoilProfilecollection Objects}
+\description{Slicing of SoilProfilecollection Objects}
 \section{Methods}{
 \describe{
 
@@ -19,29 +17,32 @@
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
 
+\seealso{\code{\link{slab}}}
+
 \examples{
 # simulate some data, IDs are 1:20
 library(plyr)
 d <- ldply(1:20, random_profile)
 
-# re-order IDs
-new.order <- sample(1:20)
-head(d <- d[order(match(d$id, new.order), d$top), ])
-
-# init SoilProfilecollection object: IDs are reset according to natural order of ID labels
+# init SoilProfilecollection object
 depths(d) <- id ~ top + bottom
 head(horizons(d))
 
-# check order of IDs: these match the re-ordered horizon data
-profile_id(d)
+# generate single slice at 10 cm
+# output is a SoilProfilecollection object
+s <- slice(d, 10 ~ name + p1 + p2 + p3)
 
-# slice-up at 10 cm: these IDs match the output from profile_id()
-# output a data.frame instead of a SoilProfilecollection
+# generate single slice at 10 cm, output data.frame
 s <- slice(d, 10 ~ name + p1 + p2 + p3, just.the.data=TRUE)
 
-# are the results in the same order as our original IDs?
-if( ! all.equal(s$id, profile_id(d)))
-  stop('IDs do not match')
+# generate integer slices from 0 - 25 cm
+s <- slice(d, 0:25 ~ name + p1 + p2 + p3)
+plot(s)
+
+# generate slices from 0 - 10 cm, for all variables
+s <- slice(d, 0:10 ~ .)
+print(s)
+
 }
 \keyword{methods}
 \keyword{manip}

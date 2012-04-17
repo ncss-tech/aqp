@@ -27,7 +27,7 @@ if(length(y) > length(x))
 	
 	# add line segments that form step-function
 	## TODO: iterate over profile IDs instead of groups
-	by(d, d$id, .make.segments, ...)	
+	by(d, d$id, make.segments, ...)	
 	}
 
 # normal plot -- not a step function
@@ -108,26 +108,27 @@ else
   if(! is.null(cf)) {
     # test for groups: CF labeling with grouped data isn't yet defined
     if(!missing(groups))
-      warning('contributing fraction annotation with grouped data is not yet supported')
+      warning('contributing fraction annotation with grouped data is not yet supported', call.=FALSE)
     else {
-      # get relevant contributing fraction values
+      # get contributing fraction values for this panel
       cf.i <- cf[subscripts]
       
-      ## TODO: smarter positioning would help
-      # generate annotated depths
-      y.q <- quantile(y, probs=c(0.95), na.rm=TRUE)
-      a.seq <- seq(from=5, to=y.q, by=20)
+      # make a function for linear interpolation of CF values based on depth
+      cf.approx.fun <- approxfun(y, cf.i, method='linear')
       
-      # extract CF at annotated depths
-      a.text <- paste(round(cf.i[a.seq] * 100), '%')
+      # generate annotated depths: 5 cm to 95th percentile of max depth
+      y.q95 <- quantile(y, probs=c(0.95), na.rm=TRUE)
+      a.seq <- seq(from=5, to=y.q95, by=20)
+      
+      # interpolate CF at annotated depths
+      a.CF <- cf.approx.fun(a.seq)
+      a.text <- paste(round(a.CF * 100), '%')
+      
       # add to right-hand side of the panel
       unit <- gpar <- NULL
       grid.text(a.text, x=unit(0.99, 'npc'), y=unit(a.seq, 'native'), just='right', gp=gpar(font=3, cex=0.8))  
       }
-    
-    
     }
-
 
 }
 

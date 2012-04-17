@@ -36,7 +36,7 @@ A dataframe similar to the output from \code{\link{soil.slot}}, but with depth-s
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{soil.slot}}, \code{\link{unroll}}
+\code{\link{slice}}
 }
 \examples{
 data(sp3)

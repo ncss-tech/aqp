@@ -1,4 +1,6 @@
--------------------------- aqp 1.0-3 (2012-03-29) --------------------------
+-------------------------- aqp 1.0-4 (2012-04-17) --------------------------
+* minor bug fix in panel.depth_function()
+* cleanup of documentation and examples
 * added horizon boundary distinctness code conversions and plotting functionality
   - see ?sp1 and ?random_profile for new examples
 

@@ -69,7 +69,7 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 \value{See Details section above.}
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
-\author{Dylan E Beaudette}
+\author{D.E. Beaudette}
 \note{This function is used internally by other functions. Examples below should be used with caution, as they will be migrated into higher-level documentation soon.}
 
 \section{Warning}{These examples are now obsolete, use with cation.}
@@ -78,6 +78,9 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 \code{\link{sp1}, \link{unroll}}, \code{\link{slab}}
 }
 \examples{
+library(lattice)
+library(grid)
+
 # load example data
 data(sp1)
 
@@ -109,7 +112,6 @@ a <- soil.slot(sp1)
 b <- soil.slot(sp1, seg_size=5)
 
 # stack into long format
-library(lattice)
 ab <- make.groups(a, b)
 ab$which <- factor(ab$which, levels=c('a','b'), 
 labels=c('1-cm Interval', '5-cm Interval'))
@@ -125,6 +127,7 @@ xlab='mean bounded by +/- 1 SD',
 lower=ab$lower, upper=ab$upper, ylim=c(250,-5), alpha=0.5, 
 panel=panel.depth_function, 
 prepanel=prepanel.depth_function,
+cf=ab$contributing_fraction,
 layout=c(2,1), scales=list(x=list(alternating=1))
 )
 
@@ -135,6 +138,7 @@ xlab='median bounded by 25th and 75th percentiles',
 lower=ab$p.q25, upper=ab$p.q75, ylim=c(250,-5), alpha=0.5, 
 panel=panel.depth_function, 
 prepanel=prepanel.depth_function,
+cf=ab$contributing_fraction,
 layout=c(2,1), scales=list(x=list(alternating=1))
 )
 
@@ -272,44 +276,6 @@ legend('bottomright',
 legend=c('wt = 1','wt = 2','wt = 3','wt = 4','un-weighted','weighted'), 
 pch=c(1,1,1,1,NA,NA), lwd=c(1,1,1,1,2,2), lty=c(NA,NA,NA,NA,1,1), 
 pt.cex=sqrt(c(1,2,3,4,1,1)), col=c(1,1,1,1,1,2), bty='n')
-
-
-
-
-# 
-# try again with larger segment sizes 
-# 
-
-# aggregate and add upper/lower intervals via SD
-a <- soil.slot(g, use.wts=TRUE, seg_size=10)
-
-a$upper <- with(a, p.mean + p.sd)
-a$lower <- with(a, p.mean - p.sd)
-a$wt.upper <- with(a, p.wtmean + p.wtsd)
-a$wt.lower <- with(a, p.wtmean - p.wtsd)
-
-# convert to long format
-library(reshape)
-a.long <- melt(a, id.var=c('top','bottom'), 
-measure.var=c('p.mean','p.wtmean','upper','lower','wt.upper','wt.lower'))
-
-# red lines are weighted
-# point symbols are sized proportional to their weights
-xyplot(cbind(top, bottom) ~ value, groups=variable, data=a.long, id=g$id,
-ylim=c(260,-10), ylab='Depth', xlab='Property',
-par.settings=list(superpose.line=list(
-col=c('black','red','black','black','red','red'), 
-lwd=c(2,2,1,1,1,1), 
-lty=c(1,1,2,2,2,2))), 
-panel=function(...) {
-panel.points(g$prop, g$mid, cex=sqrt(g$wt), col=1)
-panel.depth_function(...)
-}
-)
-
-
-
-
 
 
 }
