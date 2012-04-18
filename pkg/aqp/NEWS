@@ -1,4 +1,7 @@
--------------------------- aqp 1.0-4 (2012-04-17) --------------------------
+-------------------------- aqp 1.1 (2012-04-18) --------------------------
+* merged documentation for soil.slot() and slab()
+  - slab() should be used in all places where soil.slot() was used
+  - soil.slot() will dissapear from the package NAMESPACE eventually, so don't use it directly!
 * minor bug fix in panel.depth_function()
 * cleanup of documentation and examples
 * added horizon boundary distinctness code conversions and plotting functionality
