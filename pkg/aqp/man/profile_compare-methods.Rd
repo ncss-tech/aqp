@@ -57,7 +57,7 @@ A dissimilarity matrix object of class 'dist', optionally scaled to [0, 1].
 \note{
 ... based on the work of .... 
 }
-\seealso{\code{\link{unroll}}, \code{\link{soil.slot}}}
+\seealso{\code{\link{slice}}}
 \examples{
 
 ## 1. check out the influence depth-weight coef:

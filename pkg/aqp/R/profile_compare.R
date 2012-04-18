@@ -5,7 +5,7 @@
 
 ## consider using 'ff' package for file-based storage of VERY large objects. Probably just the dissimilarity matrix
 
-## soil.slot() would be a better approach than using every nth depth slice
+## slice() would be a better approach than using every nth depth slice
 
 ## careful -- we are getting the labels for the final dissimilarity matrix from the levels of the profile ID
 

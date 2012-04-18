@@ -20,19 +20,19 @@ A dataframe representing a 'stack' of soil profiles and having the following for
 		\item{prop}{A property to be aggregated. can be numeric or a factor.}		
 	}
 }
-  \item{seg_size}{
-User-degined segment size, default is 1.
-}
-  \item{seg_vect}{
-User-degined segment structure: should start from 0, and deepest boundary should be deeper than the deepest soil profile in the collection. For example, if the deepest profile in the collection is 200 cm, then the following segmenting vector would be reasonable: \code{c(0,10,20,30,60,100,150,210)}. The resulting aggregation will automatically be truncated at 200 cm. The user is responsible for supplying sensible values.
-}
-  \item{use.wts}{
-If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data (i.e. area weights, etc.). Weighted means, standard deviations, quantiles, and optionally proportions will be returned by depth-slice. See detailes and examples below.
-}
+  \item{seg_size}{User-degined segment size, default is 1.}
+  
+  \item{seg_vect}{User-degined segment structure: should start from 0, and deepest boundary should be deeper than the deepest soil profile in the collection. For example, if the deepest profile in the collection is 200 cm, then the following segmenting vector would be reasonable: \code{c(0,10,20,30,60,100,150,210)}. The resulting aggregation will automatically be truncated at 200 cm. The user is responsible for supplying sensible values.}
+  
+  \item{use.wts}{If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data (i.e. area weights, etc.). Weighted means, standard deviations, quantiles, and optionally proportions will be returned by depth-slice. See detailes and examples below.}
+  
 \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
+
 \item{user.fun}{User-defined function that should accept a vector and return a scalar. This function should know how to properly deal with unexpected, NA, NULL, or Inf values and trap them accordingly.}
+
 \item{class_prob_mode}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (class_prob_mode=1), or by the number of profiles in the collection (class_prob_mode=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1. Mode 2 is likely the best way to communicate horizon probability near the lower range in soil depth within a collection of soil profiles.}
 }
+
 \details{
 Unweighted and weighted summary stats are computed with the Hmisc functions \code{wtd.mean}, \code{wtd.var}, and \code{wtd.quantile}. Weighted probabilities (proportions) will be implemented in a future release. See the sample dataset 'sp1' documentation for further examples on how to used \code{soil.slot}. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function.
 
@@ -66,7 +66,7 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 
 \note{If a user-defined function (\code{user.fun}) is specified, care must be taken if sample size is used within the calculation _and_ slice sizes are > 1 depth unit.}
 
-\value{See Details section above.}
+
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{D.E. Beaudette}
@@ -74,9 +74,8 @@ When \code{prop} is a factor variable, slice-wise probabilities for each level o
 
 \section{Warning}{These examples are now obsolete, use with cation.}
 
-\seealso{
-\code{\link{sp1}, \link{unroll}}, \code{\link{slab}}
-}
+\seealso{ \code{\link{sp1}}, \code{\link{unroll}}, \code{\link{slab}} }
+
 \examples{
 library(lattice)
 library(grid)
