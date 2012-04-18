@@ -3,7 +3,11 @@
 ##
 
 # required packages
-require(aqp) ; require(ape) ; require(lattice)
+require(aqp)
+require(ape)
+require(cluster)
+require(lattice)
+require(reshape)
 
 
 # 
@@ -11,21 +15,21 @@ require(aqp) ; require(ape) ; require(lattice)
 # 
 data(sp1)
 # aggregate all profiles into 1,5,10,20 cm depth slabs
-s1 <- soil.slot(data=sp1)
+s1 <- slab(sp1, ~ prop)
 # 5cm
-s5 <- soil.slot(data=sp1, seg_size=5)
+s5 <- slab(sp1, ~ prop, seg_size=5)
 # 10cm segments:
-s10 <- soil.slot(data=sp1, seg_size=10)
+s10 <- slab(sp1, ~ prop, seg_size=10)
 # 20cm
-s20 <- soil.slot(data=sp1, seg_size=20)
+s20 <- slab(sp1, ~ prop, seg_size=20)
 
 # variation in segment-weighted mean property: very little
 round(sapply(
-list(s1,s5,s10,s20), 
+list(s1, s5, s10, s20), 
 function(i) {
 	with(i, sum((bottom - top) * p.mean) / sum(bottom - top)) 
 	}
-), 2)
+), 1)
 
 # combined viz
 g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5, 
@@ -35,7 +39,7 @@ g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5,
 xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, id=g2$which,
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
-ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
+ylab='Depth (cm)', main='Soil Profile Aggregation by Regular Depth-slice',
 auto.key=list(columns=2, points=FALSE, lines=TRUE)
 )
 
@@ -84,6 +88,7 @@ depths(sp3.grouped) <- id ~ top + bottom
 
 # check:
 plot(sp3.grouped)
+
 
 ## perform comparison, and convert to phylo class object
 d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, 
