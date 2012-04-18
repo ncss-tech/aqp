@@ -6,12 +6,12 @@
 # setup generic function
 if (!isGeneric("slab"))
   setGeneric("slab", 
-		function(data, fm, progress='none', seg_size = NA, seg_vect = NA, use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1) 
+		function(data, fm, ...) 
 	standardGeneric("slab"))
 
 # temp interface to SPC class objects
 setMethod(f='slab', signature='SoilProfileCollection',
-  function(data, fm, progress='none', seg_size = NA, seg_vect = NA, use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1){
+  function(data, fm, ...){
   
   # extract horizons and site 
   h <- horizons(data)
@@ -43,7 +43,7 @@ setMethod(f='slab', signature='SoilProfileCollection',
 ##
 # current interface to data.frame objects
 setMethod(f='slab', signature='data.frame',
-definition=function(data, fm, progress='none', seg_size = NA, seg_vect = NA, use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1) {
+definition=function(data, fm, progress='none', ...) {
     
     ## important: change the default behavior of data.frame and melt
     opt.original <- options(stringsAsFactors = FALSE)

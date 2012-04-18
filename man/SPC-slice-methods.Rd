@@ -43,6 +43,33 @@ plot(s)
 s <- slice(d, 0:10 ~ .)
 print(s)
 
+
+## 
+## check sliced data
+##
+
+# test that mean of 1 cm slices property is equal to the 
+# hz-thickness weighted mean value of that property
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+
+# get the first profile
+sp1.sub <- sp1[which(profile_id(sp1) == 'P009'), ]
+
+# compute hz-thickness wt. mean
+hz.wt.mean <- with(horizons(sp1.sub), 
+sum((bottom - top) * prop) / sum(bottom - top) 
+)
+
+# hopefully the same value, calculated via slice()
+s <- slice(sp1.sub, 0:max(sp1.sub) ~ prop)
+hz.slice.mean <- mean(s$prop, na.rm=TRUE)
+
+# same?
+if(!all.equal(hz.slice.mean, hz.wt.mean))
+	stop('there is a bug in slice() !!!')
+
+
 }
 \keyword{methods}
 \keyword{manip}

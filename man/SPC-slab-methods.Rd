@@ -46,6 +46,8 @@ use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1)
 
 
 \details{
+\code{soil.slot} is used internally by the various \code{slab} methods, and should be be directly invoked by the user.
+
 Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}.
 
 Unweighted and weighted summary stats are computed with the Hmisc functions \code{wtd.mean}, \code{wtd.var}, and \code{wtd.quantile}. Weighted probabilities (proportions) will be implemented in a future release. See the sample dataset \code{\link{sp1}} documentation for further examples. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. If a user-defined function (\code{user.fun}) is specified, care must be taken if sample size is used within the calculation _and_ slice sizes are > 1 depth unit.
@@ -90,6 +92,101 @@ When a single factor variable is used, slice-wise probabilities for each level o
 \code{\link{slice}}
 }
 \examples{
+##
+## basic examples
+##
+library(lattice)
+library(grid)
+
+# load sample data, sp1 is a data.frame
+data(sp1)
+
+# using data.frame method of slab()
+# aggregate entire collection with two different segment sizes
+a <- slab(sp1, fm = ~ prop)
+b <- slab(sp1, fm = ~ prop, seg_size=5)
+
+# check output
+str(a)
+
+# stack into long format
+ab <- make.groups(a, b)
+ab$which <- factor(ab$which, levels=c('a','b'), 
+labels=c('1-cm Interval', '5-cm Interval'))
+
+# manually copmute mean +/- 1 SD
+ab$upper <- with(ab, p.mean + p.sd)
+ab$lower <- with(ab, p.mean - p.sd)
+
+# use mean +/- 1 SD
+# custom plotting function for uncertainty viz.
+xyplot(top ~ p.mean | which, data=ab, ylab='Depth',
+			 xlab='mean bounded by +/- 1 SD',
+			 lower=ab$lower, upper=ab$upper, ylim=c(250,-5), alpha=0.5, 
+			 panel=panel.depth_function, 
+			 prepanel=prepanel.depth_function,
+			 cf=ab$contributing_fraction,
+			 layout=c(2,1), scales=list(x=list(alternating=1))
+			 )
+
+# use median and IQR
+# custom plotting function for uncertainty viz.
+xyplot(top ~ p.q50 | which, data=ab, ylab='Depth',
+			 xlab='median bounded by 25th and 75th percentiles',
+			 lower=ab$p.q25, upper=ab$p.q75, ylim=c(250,-5), alpha=0.5, 
+			 panel=panel.depth_function, 
+			 prepanel=prepanel.depth_function,
+			 cf=ab$contributing_fraction,
+			 layout=c(2,1), scales=list(x=list(alternating=1))
+			 )
+
+
+##
+## categorical variable example
+##
+library(reshape)
+data(sp1)
+
+# normalize horizon names: result is a factor
+sp1$name <- generalize.hz(sp1$name, 
+new=c('O','A','B','C'), 
+pat=c('O', '^A','^B','C'))
+
+# compute slice-wise probability so that it sums to contributin fraction
+a <- slab(sp1, fm= ~ name, class_prob_mode=1)
+
+# reshape into long format for plotting
+a.long <- melt(a, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
+
+# plot horizon type proportions
+xyplot(top ~ value | variable, data=a.long, subset=value > 0,
+ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
+
+xyplot(top ~ value, data=a.long, groups=variable, subset=value > 0,
+ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, asp=2)
+
+
+# adjust probability to size of collection
+a.1 <- slab(sp1, fm= ~ name, class_prob_mode=2)
+
+# reshape into long format for plotting
+a.1.long <- melt(a.1, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
+
+# group mode 1 and mode 2 data
+g <- make.groups(mode_1=a.long, mode_2=a.1.long)
+
+# plot horizon type proportions
+xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
+			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
+			 auto.key=list(lines=TRUE, points=FALSE, columns=2),
+			 par.settings=list(superpose.line=list(col=c(1,2))))
+
+
+
+
+##
+## multivariate examples
+##
 data(sp3)
 
 # add new grouping factor
@@ -99,7 +196,6 @@ sp3$group <- factor(sp3$group)
 
 # slot several variables at once
 # within each level of 'group'
-# using default parameters to soil.slot()
 a <- slab(sp3, fm=group ~ L + A + B)
 
 # pre-compute intervals
