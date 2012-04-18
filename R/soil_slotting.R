@@ -5,11 +5,13 @@
 
 # setup generic function
 if (!isGeneric("slab"))
-  setGeneric("slab", function(data, fm, ...) standardGeneric("slab"))
+  setGeneric("slab", 
+		function(data, fm, progress='none', seg_size = NA, seg_vect = NA, use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1) 
+	standardGeneric("slab"))
 
 # temp interface to SPC class objects
 setMethod(f='slab', signature='SoilProfileCollection',
-  function(data, fm, ...){
+  function(data, fm, progress='none', seg_size = NA, seg_vect = NA, use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1){
   
   # extract horizons and site 
   h <- horizons(data)
@@ -41,7 +43,7 @@ setMethod(f='slab', signature='SoilProfileCollection',
 ##
 # current interface to data.frame objects
 setMethod(f='slab', signature='data.frame',
-definition=function(data, fm, progress='none', ...) {
+definition=function(data, fm, progress='none', seg_size = NA, seg_vect = NA, use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1) {
     
     ## important: change the default behavior of data.frame and melt
     opt.original <- options(stringsAsFactors = FALSE)
@@ -72,7 +74,7 @@ definition=function(data, fm, progress='none', ...) {
   }
   
 	# convert into long format
-    d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
+  d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
 	## TODO work on fixing this
 	# temp hack: make a column called 'prop' ... as soil.slot is expecting this!
@@ -87,7 +89,7 @@ definition=function(data, fm, progress='none', ...) {
 	d.slotted$bottom <- as.integer(d.slotted$bottom)
 	
 	# reset options:
-    options(opt.original)
+  options(opt.original)
 	
 	# done
 	return(d.slotted)

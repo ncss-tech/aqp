@@ -32,9 +32,7 @@ This function can be used to replace \code{panel.superpose} when plotting depth 
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
 
-\seealso{
-\code{\link{sp1}}
-}
+\seealso{ \code{\link{sp1}}, \code{\link{slice}}, \code{\link{slab}}}
 \examples{
 library(lattice)
 data(sp1)
@@ -57,21 +55,6 @@ auto.key=list(columns=2, points=FALSE, lines=TRUE),
 par.settings=list(superpose.line=list(col=c('Orange','RoyalBlue')))
 )
 
-
-# 2. plotting upper/lower envelope around some value, by depth:
-# profile data are aggregated ("slotted") by 1cm depth slices
-a <- soil.slot(sp1)
-
-# manually add mean +/- SD
-a$upper <- with(a, p.mean+p.sd)
-a$lower <- with(a, p.mean-p.sd)
-
-# use custom plotting function for uncertainty viz.
-xyplot(top ~ p.mean, data=a, 
-lower=a$lower, upper=a$upper, ylim=c(250,-5), alpha=0.5, 
-panel=panel.depth_function, 
-prepanel=prepanel.depth_function
-)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

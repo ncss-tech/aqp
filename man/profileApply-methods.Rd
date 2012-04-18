@@ -15,6 +15,8 @@
 
 \value{A vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data).}
 
+\seealso{ \code{\link{slab}} }
+
 \examples{
 data(sp1)
 depths(sp1) <- id ~ top + bottom
@@ -89,7 +91,7 @@ if(require(digest)) {
 
 # compute the weighted-mean of some property within a given diagnostic horizon
 # note that this requires conditional eval of data that may contain NA
-# see ?slab and ?soil.slot for details on the syntax
+# see ?slab for details on the syntax
 # note that function expects certain columns within 'x'
 f.diag.wt.prop <- function(x, d.hz, prop) {
 	# extract diagnostic horizon data

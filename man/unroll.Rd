@@ -24,8 +24,6 @@ This function is used internally by several higher-level components of the \code
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
 
-\seealso{\code{\link{soil.slot}}}
-
 \examples{
 data(sp1)
 
