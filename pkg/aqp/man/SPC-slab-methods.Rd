@@ -3,14 +3,16 @@
 \alias{slab}
 \alias{slab,data.frame-method}
 \alias{slab,SoilProfileCollection-method}
+\alias{soil.slot}
+\alias{seg.summary}
 
 \title{Slab-Wise Aggregation of SoilProfileCollection Objects}
 \description{Aggregate soil properties along user-defined `slabs`, and optionally within groups.}
 
 \usage{
-slab(data, fm, progress = 'none', seg_size = NA, seg_vect = NA, 
-use.wts = FALSE, strict = FALSE, user.fun = NULL, 
-class_prob_mode=1)
+slab(data, fm, progress = 'none', ...)
+soil.slot(data, seg_size = NA, seg_vect = NA, 
+use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1)
 }
 
 \arguments{
@@ -19,6 +21,8 @@ class_prob_mode=1)
   \item{fm}{a formula: either `groups ~ var1 + var2 + var3' where named variables are aggregated within `groups' OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3'}
   
   \item{progress}{'none' (default): argument passed to \code{ddply} and related functions, see \code{\link{create_progress_bar}} for all possible options; 'text' is usually fine.}
+  
+  \item{\dots}{further arguments passsed to \code{soil.slot}}
   
   \item{seg_size}{user-defined segment size, default is 1}
   
