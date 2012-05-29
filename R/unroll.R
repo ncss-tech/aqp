@@ -2,8 +2,7 @@
 # returning a vector of standardized length
 # suitable for slotting
 # horizons must be in order by depth!
-unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict=FALSE)
-	{
+unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict=FALSE) {
 	
 	# currently this will only work with integer depths
 	if(any( !as.integer(top[top != 0]) == top[top != 0] ) | any( !as.integer(bottom) == bottom))
@@ -18,15 +17,12 @@ unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict
 	
 	# all bottom values above the last horizon should be in the SET of top values below the first horizon
 	hz.test.bottom_hz_in_top <- bottom[-n.horizons] %in% top[-1]
-	if(length(which(hz.test.bottom_hz_in_top)) != (n.horizons - 1))
-		{
+	if(length(which(hz.test.bottom_hz_in_top)) != (n.horizons - 1)) {
 		
-		if(strict)
-			{
+		if(strict) {
 			stop('error unrolling profile')
 			}
-		else
-			{
+		else {
 			warning('error unrolling profile, stop execution with strict=TRUE');
 			}
 		}
@@ -53,7 +49,7 @@ unroll <- function(top, bottom, prop, max_depth, bottom_padding_value=NA, strict
 	if(sign(num.NA.append) == 1)
 		p.pad <- c(p.pad, rep(bottom_padding_value, times=num.NA.append))
 	
-	# return vector, padded to max_depth
-	return(as.vector(p.pad))
+	# return vector, padded and truncated to max_depth
+	return(as.vector(p.pad)[1:max_depth])
 	}
 

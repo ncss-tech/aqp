@@ -3,22 +3,23 @@
 ## profile classification functions ##
 ##############################################################
 
+# define function for summing a list of dissimilarity matrices
+# that have had NA replaced with 0
+.SumDistanceList <- function(x) Reduce("+", x)
+
+
 ## consider using 'ff' package for file-based storage of VERY large objects. Probably just the dissimilarity matrix
 
 ## slice() would be a better approach than using every nth depth slice
 
-## careful -- we are getting the labels for the final dissimilarity matrix from the levels of the profile ID
-
 ## TODO: site/hz properties combined:
-## 2012-02-28: partiall implemented, but no way to control weighting
+## 2012-02-28: partially implemented, but no way to control weighting
 ## D = (D_hz/max(D_hz) * w_hz) + (D_site/max(D_site) * w_site) / (w_hz + w_site)
 
 ## TODO: we are suppressing warnings from daisy() when input is all NA
 ##       this is fine for now, but we should figure out a better way
 
-## TODO: decide: rescaling D --  D / max_d ? or [0,1]
-
-## TODO:  'vaggregate' is faster, but does not operate exactly as tapply
+## TODO: decide: rescaling D --  D / max(D) ? or [0,1]
 
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
@@ -26,8 +27,7 @@
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
 pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none', plot.depth.matrix=FALSE, 
-rescale.result=FALSE)
-	{
+rescale.result=FALSE, verbose=FALSE) {
 	
 	# currently this will only work with integer depths
 	# test by attempting to cast to integers
@@ -41,6 +41,7 @@ rescale.result=FALSE)
 	if(is.null(s$id))
 		stop("'s' must contain a column named 'id' ", call.=FALSE)
 	
+	## TODO: this is adding considerable time at n.profiles > 500
 	# if the id column is not a factor, convert it to one:
 	if(class(s$id) != 'factor')
 		s$id <- factor(s$id)
@@ -62,25 +63,31 @@ rescale.result=FALSE)
 	# compute a weighting vector based on k	
 	w <- 1 * exp(-k * depth_slice_seq)
 	
-	# TODO: if max_d < profile depth, s.unrolled is not truncated to max_d
+	## DEBUG
+	if(verbose) {
+		cat('depth-slice seq:\n')
+		print(depth_slice_seq)
+		
+		cat('weight vector:\n')
+		print(w)
+	}
+	
+	## TODO: convert to slice()
 	## unroll each named soil property, for each soil profile
 	## the result is a list matricies with dimensions: depth, num_properties 
 	# this approach requires a named list of soil properties
 	message(paste("Unrolling ", n.profiles, " Profiles", sep=""))
-	s.unrolled <- dlply(s, "id", .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) 
-		{
+	s.unrolled <- dlply(s, "id", .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) {
 		
 		# iterate over the set of properties, unrolling as we go
 		# the result is a [z by p] matrix unrolled to max_d
-		m <- try(sapply(p, function(p_i) unroll(di$top, di$bottom, prop=di[,p_i], max_depth=d, strict=strict) ))
+		m <- try(sapply(p, function(p_i) unroll(di$top, di$bottom, prop=di[, p_i], max_depth=d, strict=strict) ))
 		
 		## TODO: could be better
 		# check for a non-NULL attribute of 'class'
 		# this will only happen when there was an error
-		if( !is.null(attr(m, 'class')))
-			{
-			if(attr(m, 'class') == 'try-error')
-				{
+		if( !is.null(attr(m, 'class'))) {
+			if(attr(m, 'class') == 'try-error') {
 				stop(paste('Error: bad horizon structure in soil id', as.character(unique(di$id))), call.=FALSE)
 				}
 			}
@@ -88,14 +95,13 @@ rescale.result=FALSE)
 			return(m)
 		}
 	)
-
+	
 	
 	## NOTE: this will not work when a user-defined interval is used for slicing!!
 	## 
 	## generate a matrix storing a flag describing soil vs. non-soil at each slice
 	## note that this will truncate a profile to the max depth of actual data
-	if(add_soil_flag)
-		{
+	if(add_soil_flag){
 		
 		# keep temp subset of the data so that soil/non-soil matrix is 
 		# evaluated based on presence of real data in at least 1 variable
@@ -130,8 +136,7 @@ rescale.result=FALSE)
 		}
 		
 		# plot a diagnostic image, but only when reasonable to do so (< 100 profiles)
-		if(n.profiles <= 100 & plot.depth.matrix)
-		  {
+		if(n.profiles <= 100 & plot.depth.matrix) {
 			# define color scheme: if all TRUE, then we only need 1 color
 			if(length(table(soil.matrix)) > 1)
 				image.cols <- c(NA, 'grey')
@@ -148,7 +153,7 @@ rescale.result=FALSE)
 		# cleanup
 		rm(s.sub)
 		}
-		
+
 	
 	##
 	## new version for computing slice-wise dissimilarities... fast! 
@@ -159,8 +164,7 @@ rescale.result=FALSE)
 	ow <- options('warn')
 	options(warn=-1)
 	
-	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) 
-	  {
+	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) {
 	  
 	  ## this could be a source of slowness, esp. the t()
 	  ps <- sapply(su, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
@@ -191,8 +195,7 @@ rescale.result=FALSE)
 	message(paste(" [", round(object.size(d) / 1024^2, 2), " Mb]", sep=''))
 	
 	# should NA in the dissimilarity matrix be replaced with max(D) ?
-	if(replace_na)
-		{
+	if(replace_na) {
 		# replace all NA with the MAX distance between any observations
 		# note that down deep, there may not be enough data for any pair-wise comparisons
 		# therefore, we should not attempt to calculate max() on a matrix of all NA
@@ -201,11 +204,9 @@ rescale.result=FALSE)
 		
 		## note: this will not work with sample_interval set
 		# should we use a more expensive approach, that uses the soil/non_soil flag?
-		if(add_soil_flag)
-			{
+		if(add_soil_flag) {
 			# kind of messy: re-using an object like this
-			for(i in 1:length(d))
-				{
+			for(i in 1:length(d)) {
 				d_i <- as.matrix(d[[i]])
 
 				# set all pairs that are made between deep vs. shallow soil
@@ -230,8 +231,7 @@ rescale.result=FALSE)
 			rm(soil.matrix) ; gc()
 			}
 		# use a less expensive approach, where all NA are replaced by the max distance
-		else
-			{
+		else {
 			d <- lapply(d, function(d_i) 
 				{
 				cells.with.na <- which(is.na(d_i))
@@ -243,42 +243,33 @@ rescale.result=FALSE)
 	
 	
 	
-	# perform depth-weighting 	
-	for(i in seq_along(depth_slice_seq))
+	# final tidy-ing of the list of dissimilarity matrices
+	for(i in seq_along(depth_slice_seq)) {
+		# convert NA -> 0
+		na.idx <- which(is.na(d[[i]]))
+		if(length(na.idx) > 0)
+			d[[i]][na.idx] <- 0
+		
+		# depth-weighting
 		d[[i]] <- d[[i]] * w[i]
+		}
 	
-	
+		
 	# optionally return the distances for each depth, after weighting
 	if(return_depth_distances)
 		return(d)
 	
-	
-	## this could be a source of slow-ness: t()
-	# compute the total distance, for all dept intervals,
-	# by pedon:
-	# consider using mean diss, or something different that total
+	# otherwise, continue
 	message("Computing Profile Total Dissimilarities")
-	d.vect <- colSums(t(sapply(d, '[')), na.rm=TRUE)
 	
-	# remove list of dissimilarities to save RAM
-	rm(d) ; gc()
-	
-	# now make into a combined distance matrix
-	m.ref <- lower.tri(matrix(ncol=n.profiles, nrow=n.profiles), diag=FALSE)
-	m.ref[which(m.ref == FALSE)] <- NA
-	m.ref[which(m.ref)] <- d.vect
-	
-	# remove unformatted disimilarities
-	rm(d.vect) ; gc()
-	
-	# coerce to 'dist' class
-	D <- as.dist(m.ref)
-	
-	# update labels from our list of hz-dissimilarities
-	attr(D, 'Labels') <- levels(s$id)
+	# reduce list of dissimilarity matrices by summation
+	D <- .SumDistanceList(d)
 	
 	# add distance metric
 	attr(D, 'Distance Metric') <- 'Gower'
+	
+	# remove previous warnings about NA
+	attr(D, 'NA.message') <- NULL
 	
 	# optionally rescale to 0-1
 	# this is important when incorporating site data
@@ -286,10 +277,86 @@ rescale.result=FALSE)
 	if(rescale.result)
 		D <- rescale(D)
 	
-	# return the distance matrix, class = 'dist'
+	# return the distance matrix, class = 'dissimilarity, dist'
 	return(D)	
 	}
 
+
+pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
+	
+	# default behavior: do not normalize D
+	
+	# extract horizons
+	s.hz <- horizons(s)
+	
+	# extract site
+	s.site <- site(s)
+	sn <- names(s.site)
+	
+	# check for any site data, remove and a save for later
+	if(any(vars %in% sn)) {
+		
+		# extract site-level vars
+		matching.idx <- na.omit(match(sn, vars))
+		site.vars <- vars[matching.idx]
+		
+		# remove from hz-level vars
+		vars <- vars[-matching.idx]
+		
+		
+		## TODO: allow user to pass-in variable type information
+		# compute dissimilarty on site-level data: only works with 2 or more variables
+		# rescale to [0,1]
+		if(length(site.vars) >= 2) {
+			message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
+			d.site <- daisy(s.site[, site.vars], metric='gower')
+			d.site <- rescale(d.site)
+			
+			# reset default behavior of hz-level D
+			rescale.result=TRUE
+			
+			## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
+			## ... but why ? read-up on daisy
+			if(any(is.na(d.site))) {
+				warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
+				# we have re-scaled to [0,1] so D_min is 0
+				d.site[which(is.na(d.site))] <- 0
+			}
+			
+			## TODO: ordering of D_hz vs D_site ... assumptions safe?
+		}
+		
+		else
+			stop("cannot compute site-level dissimilarity with fewer than 2 variables", call.=FALSE)	
+	}
+	
+	# setup a dummy D_site
+	else
+		d.site <- NULL
+	
+	## 
+	## TODO: update this next part
+	##
+	# add old-style, hard-coded {id, top, bottom} column names        
+	s.hz$id <- s.hz[[idname(s)]]
+	hzDepthCols <- horizonDepths(s)
+	s.hz$top <- s.hz[[hzDepthCols[1]]]
+	s.hz$bottom <- s.hz[[hzDepthCols[2]]]
+	
+	# invoke data.frame method
+	res <- profile_compare(s.hz, vars=vars, rescale.result=rescale.result, ...)
+	
+	# if we have site-level data and a valid D_site
+	# combine via weighted average: using weights of 1 for now
+	if(inherits(d.site, 'dist')) {
+		res <- 	(res + d.site) / 2
+		# re-scale to [0,1]
+		res <- rescale(res)
+	}
+	
+	# result is a distance matrix
+	return(res)
+}
 
 ##############
 ## S4 stuff ##
@@ -301,83 +368,7 @@ if (!isGeneric("profile_compare"))
   setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
 
 # temp interface to SPC class objects
-setMethod(f='profile_compare', signature='SoilProfileCollection',
-  function(s, vars, rescale.result=FALSE, ...){
-  
-  # default behavior: do not normalize D
-  	
-  # extract horizons
-  s.hz <- horizons(s)
-  
-  # extract site
-  s.site <- site(s)
-  sn <- names(s.site)
-  
-  # check for any site data, remove and a save for later
-  if(any(vars %in% sn)) {
-  	
-  	# extract site-level vars
-  	matching.idx <- na.omit(match(sn, vars))
-  	site.vars <- vars[matching.idx]
-  	
-  	# remove from hz-level vars
-  	vars <- vars[-matching.idx]
-  	
-  	
-  	## TODO: allow user to pass-in variable type information
-  	# compute dissimilarty on site-level data: only works with 2 or more variables
-  	# rescale to [0,1]
-  	if(length(site.vars) >= 2) {
-  		message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
-  		d.site <- daisy(s.site[, site.vars], metric='gower')
-  		d.site <- rescale(d.site)
-  		
-  		# reset default behavior of hz-level D
-  		rescale.result=TRUE
-  		
-  		## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
-  		## ... but why ? read-up on daisy
-  		if(any(is.na(d.site))) {
-  			warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
-  			# we have re-scaled to [0,1] so D_min is 0
-  			d.site[which(is.na(d.site))] <- 0
-  		}
-  			
-  		## TODO: ordering of D_hz vs D_site ... assumptions safe?
-  	}
-  	
-  	else
-  		stop("cannot compute site-level dissimilarity with fewer than 2 variables", call.=FALSE)	
-  }
-  
-  # setup a dummy D_site
-  else
-  	d.site <- NULL
-  
-  ## 
-  ## TODO: update this next part
-  ##
-  # add old-style, hard-coded {id, top, bottom} column names        
-  s.hz$id <- s.hz[[idname(s)]]
-  hzDepthCols <- horizonDepths(s)
-  s.hz$top <- s.hz[[hzDepthCols[1]]]
-  s.hz$bottom <- s.hz[[hzDepthCols[2]]]
-  
-  # invoke data.frame method
-  res <- profile_compare(s.hz, vars=vars, rescale.result=rescale.result, ...)
-  
-  # if we have site-level data and a valid D_site
-  # combine via weighted average: using weights of 1 for now
-  if(inherits(d.site, 'dist')) {
-  	res <- 	(res + d.site) / 2
-  	# re-scale to [0,1]
-  	res <- rescale(res)
-  }
-  
-  # result is a distance matrix
-  return(res)
-  }
-)
+setMethod(f='profile_compare', signature='SoilProfileCollection', definition=pc.SPC)
 
 # temp interface for dataframes
 setMethod(f='profile_compare', signature='data.frame', definition=pc)

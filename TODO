@@ -7,6 +7,8 @@ Urgent:
 2. integrate color styling with 'scales' package in plot.SoilProfileCollection
 3. more aggressive checking of ordering / IDs
 4. Should we move to reshape2? It is faster. (PR)
+5. S4-cleanup of slice / slab / profile_compare
+6. concat methods for SPC objects
 
 Interesting:
 ------------
