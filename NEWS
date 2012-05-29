@@ -2,6 +2,7 @@
 * minor bug fix in unroll(), was not previously respecting the max depth argument
 * minor speed-bump and simplification of profile_compare()
 * documentation updates
+* added helper message related to profile_compare() stopping when any profile contains insufficient data
 
 -------------------------- aqp 1.1 (2012-04-18) --------------------------
 * merged documentation for soil.slot() and slab()

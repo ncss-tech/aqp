@@ -97,10 +97,10 @@ rescale.result=FALSE, verbose=FALSE) {
 	)
 	
 	
-	## NOTE: this will not work when a user-defined interval is used for slicing!!
-	## 
+	##
 	## generate a matrix storing a flag describing soil vs. non-soil at each slice
 	## note that this will truncate a profile to the max depth of actual data
+	## profiles missing any data will cause function to stop here
 	if(add_soil_flag){
 		
 		# keep temp subset of the data so that soil/non-soil matrix is 
@@ -118,7 +118,10 @@ rescale.result=FALSE, verbose=FALSE) {
 		if(length(bad.profiles.idx) > 0) {
 			# stop stop and let the user know
 			bad.profiles <- names(s.slices_of_soil)[bad.profiles.idx]
-			stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', ')), call.=FALSE)
+			stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', '), '\nConsider removing these profiles and re-running.'), call.=FALSE)
+			
+			## consider issuing a warning instead, and filling the missing data... this will require some thought
+			# s.slices_of_soil[bad.profiles.idx] <- max_d
 		}
 		
 		# truncate to the max requested depth
