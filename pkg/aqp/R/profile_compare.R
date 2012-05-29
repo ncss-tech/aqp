@@ -243,6 +243,16 @@ rescale.result=FALSE, verbose=FALSE) {
 	
 	
 	
+	# optionally return the distances for each depth
+	# depth-weighting is performed, but NA is not converted to 0
+	if(return_depth_distances) {
+		# depth-weighting
+		for(i in seq_along(depth_slice_seq))
+			d[[i]] <- d[[i]] * w[i]
+		return(d)
+		}
+		
+	
 	# final tidy-ing of the list of dissimilarity matrices
 	for(i in seq_along(depth_slice_seq)) {
 		# convert NA -> 0
@@ -254,12 +264,8 @@ rescale.result=FALSE, verbose=FALSE) {
 		d[[i]] <- d[[i]] * w[i]
 		}
 	
-		
-	# optionally return the distances for each depth, after weighting
-	if(return_depth_distances)
-		return(d)
 	
-	# otherwise, continue
+	##
 	message("Computing Profile Total Dissimilarities")
 	
 	# reduce list of dissimilarity matrices by summation
