@@ -9,6 +9,7 @@ if (!isGeneric("slab"))
 		function(data, fm, ...) 
 	standardGeneric("slab"))
 
+## TODO: integrate methods for SPC / data.frame
 # temp interface to SPC class objects
 setMethod(f='slab', signature='SoilProfileCollection',
   function(data, fm, ...){
