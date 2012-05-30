@@ -14,6 +14,10 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   # 2. extract data.frame along slice, and named vars + id
   h <- h[idx, c(id, vars)]
   
+  # 2.5 compute fraction missing
+  # note: if no variable has data then NA is returned
+  h$pct_not_NA <- apply(h[, vars], 1, function(i, n=length(vars)) 1 - (length(na.omit(i)) / n))
+  
   # 3. QA/QC
   # how many unique IDs?
   l.ids <- length(unique(h[[id]]))   
@@ -35,7 +39,7 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
       warning('Bad horizonation detected, first matching horizon selected. Use strict=TRUE to enforce QA/QC.')
   	}
   
-  # done: return subset of original data
+  # done: return subset of original data + pct not NA
   return(h)
   }
 
@@ -134,7 +138,8 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   
   # re-order by id, then top
   # keep only data we care about
-  hd.slices <- hd.slices[order(match(hd.slices[[id]], id.order), hd.slices[[top]]), c(id, top, bottom, vars)]
+  # note that we have a new column in there used to store pct not NA
+  hd.slices <- hd.slices[order(match(hd.slices[[id]], id.order), hd.slices[[top]]), c(id, top, bottom, vars, 'pct_not_NA')]
   
   # if we just want the data:
   if(just.the.data)
@@ -180,6 +185,5 @@ if (!isGeneric("slice"))
   setGeneric("slice", function(object, ...) standardGeneric("slice"))
 
 
-## TODO: this is slower than soil.slot ... why?
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
 setMethod(f='slice', signature='SoilProfileCollection', slice.fast)

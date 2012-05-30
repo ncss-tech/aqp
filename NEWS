@@ -3,6 +3,7 @@
 * minor speed-bump and simplification of profile_compare()
 * documentation updates
 * added helper message related to profile_compare() stopping when any profile contains insufficient data
+* slice() now computes the fraction of variables within a slice that are missing data
 
 -------------------------- aqp 1.1 (2012-04-18) --------------------------
 * merged documentation for soil.slot() and slab()
@@ -21,7 +22,7 @@
 * removed un-necessary dependencies
 * join added to the plyr imports
 * added scales to the Imports as well, and removed rescaler() in the code, repaced by scales::rescale
-* hack in munsell2rgb to avoid the 'no visible binding for global variable ‘munsell’' at package R CMD check and make the whole thing more robust (using load and system.file rather than data(...)
+* hack in munsell2rgb to avoid the 'no visible binding for global variable 'munsell' at package R CMD check and make the whole thing more robust (using load and system.file rather than data(...)
 * Dylan is now the only maintainer, as per Uwe request
 * when using plyr **ply function, switched from using the .(foo) interface to "foo" - seems more foolproof
 
