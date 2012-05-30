@@ -81,17 +81,106 @@ panel=function(...) {
 ## 2. basic implementation, requires at least two properties
 # implementation for a data.frame class object
 data(sp1)
-d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01)
+d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01, 
+plot.depth.matrix=TRUE)
 
-# better plotting with ape package:
+# upgrade to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+op <- par(mfrow=c(1,2))
+# plot profile collection
+plot(sp1)
+# annotate max depth of profile comparison
+abline(h=100, col='red', lty=2)
+# perform comparison on SoilProfileCollection object
+# compare soil/non-soil matrix plot
+d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01, 
+plot.depth.matrix=TRUE)
+par(op)
+
+
+# more soil properties
+data(sp2)
+d.1 <- profile_compare(sp2, vars=c('prop','field_ph','hue','value'), 
+max_d=100, k=0.01, plot.depth.matrix=TRUE)
+
+# add some missing data: 
+sp2$prop[1:2] <- NA
+d.2 <- profile_compare(sp2, vars=c('prop','field_ph','hue','value'), 
+max_d=100, k=0.01, plot.depth.matrix=TRUE)
+
+# note small changes in D:
+cor(d.1, d.2)
+
+## 3. identify profiles within a collection that contain all NAs
+require(plyr)
+s <- ldply(1:10, random_profile)
+depths(s) <- id ~ top + bottom
+
+# replace first profile's data with NA
+na.required <- nrow(s[1, ])
+s$p1[1:na.required] <- NA
+s$p2[1:na.required] <- NA
+
+# attempt profile comparison: this won't work, throws an error
+# d <- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)
+
+# check for soils that are missing all clay / total RF data
+f.check.NA <- function(i) length(which(is.na(i$p1) | is.na(i$p2))) / nrow(i) == 1
+missing.too.much.data.idx <- which(profileApply(s, f.check.NA))
+
+# remove bad profiles and try again: works
+s.no.na <- profile_compare(s[-missing.too.much.data.idx, ], vars=c('p1','p2'), 
+max_d=100, k=0, plot.depth.matrix=TRUE)
+
+
+## alternate approach for visualizing missing data
+# 10 random profiles
+s <- ldply(paste('soil', 1:10), random_profile)
+
+# randomly sprinkle some missing data
+s[sample(nrow(s), 5), 'p1'] <- NA
+s[sample(nrow(s), 5), 'p2'] <- NA
+s[sample(nrow(s), 5), 'p3'] <- NA
+
+# set all p4 and p5 attributes of `soil 1' to NA
+s[which(s$id == 'soil 1'), 'p5'] <- NA
+s[which(s$id == 'soil 1'), 'p4'] <- NA
+
+# upgrade to SPC
+depths(s) <- id ~ top + bottom
+
+# slice into regular segments
+# note: this will compute slice-wise missing data
+s.sliced <- slice(s, 0:100 ~ .)
+
+# however, when all data are missing, then NA is retured
+# convert these into 1
+s.sliced$pct_not_NA[is.na(s.sliced$pct_not_NA)] <- 1
+
+
+# symbolize missing data fraction
+if(require(RColorBrewer)) {
+  cols <- rev(brewer.pal(8, 'Spectral'))
+  cr <- colorRamp(cols)
+  # assign color based on fraction of data NOT missing
+  s.sliced$soil_color <- rgb(cr(s.sliced$pct_not_NA), max=255)
+  # leave out horizon (slice boundaries)
+  plot(s.sliced, divide.hz=FALSE)
+  # legend
+  legend.divs <- c(0, .25, .50, .75, 1)
+  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), horiz=TRUE, pt.cex=2, pch=22, inset=0.2)
+}
+
+
+## 4. better plotting of dendrograms with ape package:
 require(ape)
 require(cluster)
 h <- diana(d)
 p <- as.phylo(as.hclust(h))
-plot(ladderize(p), cex=0.75, label.offset=1, no.margin=TRUE)
+plot(ladderize(p), cex=0.75, label.offset=1)
 tiplabels(col=cutree(h, 3), pch=15)
 
-## 3. other uses of the dissimilarity matrix
+## 5. other uses of the dissimilarity matrix
 require(MASS)
 # Sammon Mapping: doesn't like '0' values in dissimilarity matrix
 d.sam <- sammon(d)
@@ -103,7 +192,7 @@ text(d.sam$points, labels=row.names(as.data.frame(d.sam$points)),
 cex=0.75, col=cutree(h, 3))
 
 
-## 4. try out the 'sample_interval' argument
+## 6. try out the 'sample_interval' argument
 # compute using sucessively larger sampling intervals
 data(sp3)
 d <- profile_compare(sp3, vars=c('clay','cec','ph'), 
@@ -122,25 +211,6 @@ plot(as.dendrogram(hclust(d.2)), horiz=TRUE, main='Every 2nd Depth Slice')
 plot(as.dendrogram(hclust(d.10)), horiz=TRUE, main='Every 10th Depth Slice')
 plot(as.dendrogram(hclust(d.20)), horiz=TRUE, main='Every 20th Depth Slice')
 par(oldpar)
-
-## 5. identify profiles within a collection that contain all NAs
-require(plyr)
-d <- ldply(1:10, random_profile)
-depths(d) <- id ~ top + bottom
-
-# replace first profile's data with NA
-na.required <- nrow(d[1, ])
-d$p1[1:na.required] <- NA
-d$p2[1:na.required] <- NA
-
-# attempt profile comparison: this won't work, throws an error
-# dd <- profile_compare(d, vars=c('p1','p2'), max_d=100, k=0)
-
-# check for soils that are missing all clay / total RF data
-missing.too.much.data.idx <- which(profileApply(d, function(i) length(which(is.na(i$p1) | is.na(i$p2))) / nrow(i)) == 1)
-
-# remove bad profiles and try again: works
-dd <- profile_compare(d[-missing.too.much.data.idx, ], vars=c('p1','p2'), max_d=100, k=0)
 }
 
 

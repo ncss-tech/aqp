@@ -138,8 +138,8 @@ rescale.result=FALSE, verbose=FALSE) {
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
 		}
 		
-		# plot a diagnostic image, but only when reasonable to do so (< 100 profiles)
-		if(n.profiles <= 100 & plot.depth.matrix) {
+		# plot a diagnostic image, may not be useful for n > 100 profiles
+		if(plot.depth.matrix) {
 			# define color scheme: if all TRUE, then we only need 1 color
 			if(length(table(soil.matrix)) > 1)
 				image.cols <- c(NA, 'grey')
@@ -151,7 +151,7 @@ rescale.result=FALSE, verbose=FALSE) {
 		  box()
 		  abline(v=seq(1, n.profiles)+0.5, lty=2)
 		  axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
-		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex.axis=0.5)
+		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex.axis=0.75)
 		  }
 		# cleanup
 		rm(s.sub)
