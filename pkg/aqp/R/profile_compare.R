@@ -21,6 +21,9 @@
 
 ## TODO: decide: rescaling D --  D / max(D) ? or [0,1]
 
+## TODO: allow for other distance-computing functions
+## TODO: allow for 'weights' argument (when metric = 'Gower') to daisy()
+
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
 # function requires at least two attributes
@@ -41,13 +44,33 @@ rescale.result=FALSE, verbose=FALSE) {
 	if(is.null(s$id))
 		stop("'s' must contain a column named 'id' ", call.=FALSE)
 	
-	## TODO: this is adding considerable time at n.profiles > 500
-	# if the id column is not a factor, convert it to one:
-	if(class(s$id) != 'factor')
-		s$id <- factor(s$id)
+	
+	# iterate over profiles and copmute percent missing data
+	pct_missing <- ddply(s, 'id', .fun=function(i, v=vars) {
+	  # iterater over requested variables
+	  # compute percent missing by profile
+	  p <- round(sapply(i[, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
+	})
+  
+	# keep track of profiles missing any or all of their data
+	problem.profiles.idx <- which(apply(pct_missing[, vars], 1, function(i) any(i > 0)) )
+	bad.profiles.idx <- which(apply(pct_missing[, vars], 1, function(i) all(i == 100)) )
+  
+	if(length(problem.profiles.idx) > 0) {
+		message('Missing data will bias results, check inputs.\nPercent missing:')
+		print(pct_missing[problem.profiles.idx, ])
+	}
+  
+	if(length(bad.profiles.idx) > 0) {
+	  # stop stop and let the user know
+	  bad.profiles <- unique(s$id)[bad.profiles.idx]
+	  stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', '), '\nConsider removing these profiles and re-running.'), call.=FALSE)
+	}
+	
 	
 	# identify the number of profiles
-	n.profiles <- length(levels(s$id))
+  # n.profiles <- length(s)
+	n.profiles <- length(unique(s$id))
 	
 	# number of variables
 	n.vars <- length(vars)
@@ -62,16 +85,7 @@ rescale.result=FALSE, verbose=FALSE) {
 	
 	# compute a weighting vector based on k	
 	w <- 1 * exp(-k * depth_slice_seq)
-	
-	## DEBUG
-	if(verbose) {
-		cat('depth-slice seq:\n')
-		print(depth_slice_seq)
 		
-		cat('weight vector:\n')
-		print(w)
-	}
-	
 	## TODO: convert to slice()
 	## unroll each named soil property, for each soil profile
 	## the result is a list matricies with dimensions: depth, num_properties 
@@ -97,32 +111,17 @@ rescale.result=FALSE, verbose=FALSE) {
 	)
 	
 	
-	##
 	## generate a matrix storing a flag describing soil vs. non-soil at each slice
 	## note that this will truncate a profile to the max depth of actual data
-	## profiles missing any data will cause function to stop here
+	## profiles missing data in all variables will cause function to stop here
 	if(add_soil_flag){
-		
+    
 		# keep temp subset of the data so that soil/non-soil matrix is 
 		# evaluated based on presence of real data in at least 1 variable
-		## Note that this only works if 'id' is a factor
-		s.sub <- na.omit(s[, c('id', 'bottom', vars)])
-		
+		s.sub <- na.omit(s[, c('id', 'top', 'bottom', vars)])
+    
 		# get the depth of each profile
-		# tapply() returns NA if any level of 'id' is missing data
 		s.slices_of_soil <- tapply(s.sub$bottom, s.sub$id, max, na.rm=TRUE)
-		
-		# if there is NA in the above vector, then it is because one or more profiles 
-		# didn't have any data within the depth range defined by max_d
-		bad.profiles.idx <- which(is.na(s.slices_of_soil))
-		if(length(bad.profiles.idx) > 0) {
-			# stop stop and let the user know
-			bad.profiles <- names(s.slices_of_soil)[bad.profiles.idx]
-			stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', '), '\nConsider removing these profiles and re-running.'), call.=FALSE)
-			
-			## consider issuing a warning instead, and filling the missing data... this will require some thought
-			# s.slices_of_soil[bad.profiles.idx] <- max_d
-		}
 		
 		# truncate to the max requested depth
 		s.slices_of_soil <- ifelse(s.slices_of_soil <= max_d, s.slices_of_soil, max_d)
@@ -146,7 +145,8 @@ rescale.result=FALSE, verbose=FALSE) {
 			else
 				image.cols <- c('grey')
 			
-		  labs <- levels(s.sub$id)
+      # labs <- profile_id(s)
+		  labs <- unique(s.sub$id)
 		  image(x=1:n.profiles, y=1:max_d, z=t(soil.matrix), col=image.cols, ylim=c(max_d, 0), xlab='ID', ylab='Slice Number (usually eq. to depth)', main='Soil / Non-Soil Matrix', axes=FALSE)
 		  box()
 		  abline(v=seq(1, n.profiles)+0.5, lty=2)
@@ -188,6 +188,7 @@ rescale.result=FALSE, verbose=FALSE) {
 		return(d.i)
 	  }
 	)
+  # reset warning options
 	options(ow)
 	
 	## TODO: does this actually do anything?
@@ -204,7 +205,7 @@ rescale.result=FALSE, verbose=FALSE) {
 		# therefore, we should not attempt to calculate max() on a matrix of all NA
 		max.distance.vect <- sapply(d, function(i) if(all(is.na(i))) NA else max(i, na.rm=TRUE))
 		max.distance <- max(max.distance.vect, na.rm=TRUE)
-		
+    
 		## note: this will not work with sample_interval set
 		# should we use a more expensive approach, that uses the soil/non_soil flag?
 		if(add_soil_flag) {
@@ -286,13 +287,24 @@ rescale.result=FALSE, verbose=FALSE) {
 	if(rescale.result)
 		D <- rescale(D)
 	
+	## DEBUG
+	if(verbose) {
+	  cat('depth-slice seq:\n')
+	  print(depth_slice_seq)
+	  
+	  cat('depth-weighting vector:\n')
+	  print(round(w, 2))
+    
+	  cat(paste('max dissimilarity:', max.distance, '\n'))
+	}
+  
+  
 	# return the distance matrix, class = 'dissimilarity, dist'
 	return(D)	
 	}
 
 
 pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
-	
 	# default behavior: do not normalize D
 	
 	# extract horizons
