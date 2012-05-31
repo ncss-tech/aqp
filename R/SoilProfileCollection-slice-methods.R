@@ -16,7 +16,8 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   
   # 2.5 compute fraction missing
   # note: if no variable has data then NA is returned
-  h$pct_not_NA <- apply(h[, vars], 1, function(i, n=length(vars)) 1 - (length(na.omit(i)) / n))
+  # if there is only 1 variable, don't try to compute this value
+  h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
   
   # 3. QA/QC
   # how many unique IDs?
@@ -139,7 +140,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # re-order by id, then top
   # keep only data we care about
   # note that we have a new column in there used to store pct not NA
-  hd.slices <- hd.slices[order(match(hd.slices[[id]], id.order), hd.slices[[top]]), c(id, top, bottom, vars, 'pct_not_NA')]
+  hd.slices <- hd.slices[order(match(hd.slices[[id]], id.order), hd.slices[[top]]), c(id, top, bottom, vars, '.pctMissing')]
   
   # if we just want the data:
   if(just.the.data)

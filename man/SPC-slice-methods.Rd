@@ -43,7 +43,8 @@ plot(s)
 s <- slice(d, 0:10 ~ .)
 print(s)
 
-# note that pct NOT NA is computed for each slice:
+# note that pct missing is computed for each slice,
+# if all vars are missing, then NA is returned
 d$p1[1:10] <- NA
 s <- slice(d, 10 ~ ., just.the.data=TRUE)
 print(s)
