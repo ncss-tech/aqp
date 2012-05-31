@@ -155,7 +155,7 @@ s.sliced <- slice(s, 0:100 ~ .)
 
 # however, when all data are missing, then NA is retured
 # convert these into 1
-s.sliced$pct_not_NA[is.na(s.sliced$pct_not_NA)] <- 1
+s.sliced$.pctMissing[is.na(s.sliced$.pctMissing)] <- 1
 
 
 # symbolize missing data fraction
@@ -163,12 +163,12 @@ if(require(RColorBrewer)) {
   cols <- rev(brewer.pal(8, 'Spectral'))
   cr <- colorRamp(cols)
   # assign color based on fraction of data NOT missing
-  s.sliced$soil_color <- rgb(cr(s.sliced$pct_not_NA), max=255)
+  s.sliced$soil_color <- rgb(cr(s.sliced$.pctMissing), max=255)
   # leave out horizon (slice boundaries)
   plot(s.sliced, divide.hz=FALSE)
   # legend
   legend.divs <- c(0, .25, .50, .75, 1)
-  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), horiz=TRUE, pt.cex=2, pch=22, inset=0.2)
+  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), horiz=TRUE, pt.cex=2, pch=22, inset=0.2, bg='white')
 }
 
 

@@ -10,6 +10,8 @@ if (!isGeneric("slab"))
 	standardGeneric("slab"))
 
 ## TODO: integrate methods for SPC / data.frame
+## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
+## TODO: use.wts doesn't work with SPC objects
 # temp interface to SPC class objects
 setMethod(f='slab', signature='SoilProfileCollection',
   function(data, fm, ...){
@@ -30,8 +32,6 @@ setMethod(f='slab', signature='SoilProfileCollection',
   
   # perform aggregation, using data.frame method
   res <- slab(h, fm, ...)
-  
-  ## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
   
   # result is a data.frame
   return(res)
@@ -127,8 +127,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		
 		
 		# profile-weighted statistics
-		if(use.wts == TRUE)
-			{			
+		if(use.wts == TRUE) {
 			# weighted mean calculation: reduces to standard mean, when weights are equal
 			p.wtmean <- sapply(l.seq, function(i) wtd.mean(l.recon[[i]], weights=l.recon.wts[[i]], na.rm=TRUE)) 
 			
@@ -143,8 +142,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 		
 		# try user defined function
 		# TODO: catch errors
-		if(!is.null(user.fun))
-			{
+		if(!is.null(user.fun)) {
 			p.user <- try( sapply(l.recon, user.fun) )
 			
 			if(use.wts)
@@ -153,8 +151,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 				df.stats <- data.frame(contributing_fraction, p.mean, p.sd, p.quantiles, p.user)
 			}
 		# no user function	
-		else
-			{
+		else {
 			if(use.wts)
 				df.stats <- data.frame(contributing_fraction, p.mean, p.wtmean, p.sd, p.wtsd, p.quantiles, p.wtquantiles)
 			else
@@ -318,6 +315,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	#######################################################################################
 	##### Step 2: reconstitute into a matrix with 1:n-segment rows, and n_pedons columns ##
 	##### TODO: use lists for everything, so that segment size does not affect agg. calcs #
+	##### TODO: don't use hard-coded weight column
 	#######################################################################################
 	# values
 	x.recon <- sapply(x.unrolled, '[')

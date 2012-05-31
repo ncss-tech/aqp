@@ -28,7 +28,7 @@ use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1)
   
   \item{seg_vect}{User-defined segment structure: should start from 0, and deepest boundary should be deeper than the deepest soil profile in the collection. For example, if the deepest profile in the collection is 200 cm, then the following segmenting vector would be reasonable: \code{c(0,10,20,30,60,100,150,210)}. The resulting aggregation will automatically be truncated at 200 cm. The user is responsible for supplying sensible values.}
   
-  \item{use.wts}{If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data (i.e. area weights, etc.). Weighted means, standard deviations, quantiles, and optionally proportions will be returned by depth-slice. See details and examples below.}
+  \item{use.wts}{If TRUE, then a column called 'wt' should be present in the source dataframe, and must make sense within the context of the data (i.e. area weights, etc.). Weighted means, standard deviations, quantiles, and optionally proportions will be returned by depth-slice. See details and examples below. This option doesn't currently work with SoilProfileCollection objects.}
   
 \item{strict}{Should horizons be strictly checked for self-consistency? defaults to FALSE}
 
