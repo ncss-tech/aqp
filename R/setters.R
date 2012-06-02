@@ -52,6 +52,13 @@ setReplaceMethod("depth_units", "SoilProfileCollection",
 if (!isGeneric('depths<-'))
   setGeneric('depths<-', function(object, value) standardGeneric('depths<-'))
 
+setReplaceMethod("depths", "SoilProfileCollection",
+	function(object, value) {
+		message('This is already a SoilProfilecollection-class object, doing nothing.')
+		object
+	})
+
+
 setReplaceMethod("depths", "data.frame",
   function(object, value) {
     if (inherits(value, "formula")) {
