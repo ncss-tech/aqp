@@ -22,7 +22,7 @@ verbose=FALSE)
 
 
 \section{Methods}{
-\describe{
+\itemize{
 \item{data = "SoilProfileCollection"}{ see \code{\link{SoilProfileCollection}} }
 \item{data = "data.frame"}{ see \link{profile_compare} }
 }}
@@ -50,19 +50,24 @@ Variability in soil depth can interfere significantly with the calculation of be
 This alternative calculation of dissimilarities between soil and non-soil slices solves the problem of comparing shallow profiles with deeper profiles. However, it can result in a new problem: distances calculated between two shallow profiles will be erroneously inflated beyond the extent of either profile's depth. Our algorithm has an additional option (setting add_soil_flag=TRUE) that will preserve NULL distances between slices when both slices represent non-soil material. With this option enabled, shallow profiles will only accumulate mutual dissimilarity to the depth of the deeper profile.
 
 Note that when the \code{add_soil_flag} option is enabled (default), slices are classified as 'soil' down to the maximum depth to which at least one of variables used in the dissimilarity calculation is not NA. This will cause problems when profiles within a collection contain all NAs within the columns used to determine dissimilarity. An approach for identifying and removing these kind of profiles is presented in the examples section below.
+
+A notice is issued if there are any NA values within the matrix used for distance calculations, as thes values are optionally replaced by the max dissimilarity.
+
+Our approach builds on the work of (Moore, 1972) and the previously mentioned depth-slicing algorithm.
 }
 
-\value{
-A dissimilarity matrix object of class 'dist', optionally scaled to [0, 1].
+\value{A dissimilarity matrix object of class 'dissimilarity, dist', optionally scaled to [0, 1].}
+
+\references{
+\describe{
+\item{1.}{http://casoilresource.lawr.ucdavis.edu/}
+\item{2.}{Moore, A.; Russell, J. & Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.}
 }
-\references{http://casoilresource.lawr.ucdavis.edu/}
+}
 \author{Dylan E. Beaudette}
-\note{
-... based on the work of .... 
-}
-\seealso{\code{\link{slice}}}
+\note{}
+\seealso{\code{\link{slice}}, \code{\link{daisy}}}
 \examples{
-
 ## 1. check out the influence depth-weight coef:
 require(lattice)
 z <- rep(1:100,4)
@@ -87,14 +92,14 @@ plot.depth.matrix=TRUE)
 # upgrade to SoilProfileCollection
 depths(sp1) <- id ~ top + bottom
 op <- par(mfrow=c(1,2))
-# plot profile collection
-plot(sp1)
-# annotate max depth of profile comparison
-abline(h=100, col='red', lty=2)
 # perform comparison on SoilProfileCollection object
 # compare soil/non-soil matrix plot
 d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01, 
 plot.depth.matrix=TRUE)
+# plot profile collection
+plot(sp1)
+# annotate max depth of profile comparison
+abline(h=100, col='red', lty=2)
 par(op)
 
 
@@ -168,7 +173,7 @@ if(require(RColorBrewer)) {
   plot(s.sliced, divide.hz=FALSE)
   # legend
   legend.divs <- c(0, .25, .50, .75, 1)
-  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), horiz=TRUE, pt.cex=2, pch=22, inset=0.2, bg='white')
+  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), horiz=TRUE, pt.cex=2, pch=22, bg='white', title='Percent Missing')
 }
 
 
