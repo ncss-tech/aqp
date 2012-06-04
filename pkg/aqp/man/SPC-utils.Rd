@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{depths<-}
 \alias{depths<-,data.frame-method}
+\alias{depths<-,SoilProfileCollection-method}
 
 \alias{horizons}
 \alias{horizons<-}

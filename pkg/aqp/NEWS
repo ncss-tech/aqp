@@ -1,8 +1,9 @@
--------------------------- aqp 1.2 (2012-05-29) --------------------------
+-------------------------- aqp 1.2-2 (2012-05-31) --------------------------
 * minor bug fix in unroll(), was not previously respecting the max depth argument
 * minor speed-bump and simplification of profile_compare()
 * documentation updates
 * added helper message related to profile_compare() stopping when any profile contains insufficient data
+* profile_compare() now issues a notice when _some_ data are missing, leading to biased results
 * slice() now computes the fraction of variables within a slice that are missing data
 * bug introduced into slab() when use.wts=TRUE [should have a fix soon]
 

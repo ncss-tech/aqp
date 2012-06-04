@@ -46,7 +46,8 @@ auto.key=list(columns=2, points=FALSE, lines=TRUE)
 
 
 # 
-# 2. investigate the concept of a median 
+# 2. investigate the concept of a 'median profile'
+# note that this involves aggregation between two dissimilar groups of soils
 # 
 data(sp3)
 
@@ -92,7 +93,7 @@ plot(sp3.grouped)
 
 ## perform comparison, and convert to phylo class object
 d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, 
-k=0.01, replace_na=TRUE, add_soil_flag=TRUE)
+k=0.01, replace_na=TRUE, add_soil_flag=TRUE, plot.depth.matrix=TRUE)
 h <- diana(d)
 p <- ladderize(as.phylo(as.hclust(h)))
 
@@ -100,7 +101,7 @@ p <- ladderize(as.phylo(as.hclust(h)))
 # look at distance plot-- just the median profile
 plot_distance_graph(d, 12)
 
-# similarity relative to median profile
+# similarity relative to median profile (profile #12)
 round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
 
 ## make dendrogram + soil profiles
