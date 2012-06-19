@@ -1,4 +1,5 @@
--------------------------- aqp 1.2-2 (2012-05-31) --------------------------
+-------------------------- aqp 1.2-3 (2012-06-19) --------------------------
+* fixed minor bug in NAMESPACE
 * minor bug fix in unroll(), was not previously respecting the max depth argument
 * minor speed-bump and simplification of profile_compare()
 * documentation updates
