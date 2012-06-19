@@ -65,7 +65,7 @@ Our approach builds on the work of (Moore, 1972) and the previously mentioned de
 }
 }
 \author{Dylan E. Beaudette}
-\note{}
+
 \seealso{\code{\link{slice}}, \code{\link{daisy}}}
 \examples{
 ## 1. check out the influence depth-weight coef:

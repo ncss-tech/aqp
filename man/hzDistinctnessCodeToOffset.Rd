@@ -17,8 +17,6 @@ hzDistinctnessCodeToOffset(x, codes = c("A", "C", "G", "D"), offset = c(0.5, 1.5
 \value{a vector of vertical offsets, with the same length as the number of distinctness codes passed to the function}
 \references{\url{http://soils.usda.gov/technical/fieldbook/}}
 \author{D.E. Beaudette}
-\note{}
-
 
 \seealso{\code{\link{plotSPC}}}
 \examples{

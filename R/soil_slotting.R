@@ -3,56 +3,39 @@
 ##############################################################
 
 
-# setup generic function
-if (!isGeneric("slab"))
-  setGeneric("slab", 
-		function(data, fm, ...) 
-	standardGeneric("slab"))
+# SoilProfileCollection method
+slab.SPC <- function(data, fm, ...){
+	
+	# extract horizons and site 
+	h <- horizons(data)
+	s <- site(data)
+	
+	# if there is site data, join together
+	if(nrow(s) > 0)
+		h <- join(h, s, type='left', by=idname(data))
+	
+	# add old-style, hard-coded {id, top, bottom} column names        
+	h$id <- h[[idname(data)]]
+	hzDepthCols <- horizonDepths(data)
+	h$top <- h[[hzDepthCols[1]]]
+	h$bottom <- h[[hzDepthCols[2]]]
+	
+	# perform aggregation, using data.frame method
+	res <- slab(h, fm, ...)
+	
+	# result is a data.frame
+	return(res)
+}
 
-## TODO: integrate methods for SPC / data.frame
-## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
-## TODO: use.wts doesn't work with SPC objects
-# temp interface to SPC class objects
-setMethod(f='slab', signature='SoilProfileCollection',
-  function(data, fm, ...){
-  
-  # extract horizons and site 
-  h <- horizons(data)
-  s <- site(data)
-  
-  # if there is site data, join together
-  if(nrow(s) > 0)
-    h <- join(h, s, type='left', by=idname(data))
-          
-  # add old-style, hard-coded {id, top, bottom} column names        
-  h$id <- h[[idname(data)]]
-  hzDepthCols <- horizonDepths(data)
-  h$top <- h[[hzDepthCols[1]]]
-  h$bottom <- h[[hzDepthCols[2]]]
-  
-  # perform aggregation, using data.frame method
-  res <- slab(h, fm, ...)
-  
-  # result is a data.frame
-  return(res)
-  }
-)
-
-
-##
-## TODO: update to current standards, see slice()
-##
-# current interface to data.frame objects
-setMethod(f='slab', signature='data.frame',
-definition=function(data, fm, progress='none', ...) {
-    
-    ## important: change the default behavior of data.frame and melt
-    opt.original <- options(stringsAsFactors = FALSE)
-    
+# data.frame method
+slab.DF <- function(data, fm, progress='none', ...) {
+	## important: change the default behavior of data.frame and melt
+	opt.original <- options(stringsAsFactors = FALSE)
+	
 	# sanity check:
 	if(! inherits(fm, "formula"))
 		stop('must provide a valid formula: groups ~ var1 + var2 + ...', call.=FALSE)
-	  
+	
 	# extract components of the formula:
 	g <- all.vars(update(fm, .~0)) # left-hand side
 	vars <- all.vars(update(fm, 0~.)) # right-hand side
@@ -68,14 +51,14 @@ definition=function(data, fm, progress='none', ...) {
 	if(any( !as.integer(data$top[data$top != 0]) == data$top[data$top != 0] ) | any( !as.integer(data$bottom) == data$bottom))
 		stop('This function can only accept integer horizon depths', call.=FALSE)
 	
-  # if there is no left-hand component in the formula, we are aggregating all data in the collection
-  if(g == '.') { 
-    g <- 'all.profiles' # add new grouping variable to horizons
-    data[, g] <- 1
-  }
-  
+	# if there is no left-hand component in the formula, we are aggregating all data in the collection
+	if(g == '.') { 
+		g <- 'all.profiles' # add new grouping variable to horizons
+		data[, g] <- 1
+	}
+	
 	# convert into long format
-  d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
+	d.long <- melt(data, id.vars=c('id','top','bottom', g), measure.vars=vars)
 	
 	## TODO work on fixing this
 	# temp hack: make a column called 'prop' ... as soil.slot is expecting this!
@@ -83,19 +66,37 @@ definition=function(data, fm, progress='none', ...) {
 	
 	# apply slotting group-wise and return in long format
 	# note '...' is gobbled by soil.slot()
-  d.slotted <- ddply(d.long, .variables=c('variable', g), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
-		
+	d.slotted <- ddply(d.long, .variables=c('variable', g), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
+	
 	# convert tops and bottoms to integers
 	d.slotted$top <- as.integer(d.slotted$top)
 	d.slotted$bottom <- as.integer(d.slotted$bottom)
 	
 	# reset options:
-  options(opt.original)
+	options(opt.original)
 	
 	# done
 	return(d.slotted)
-	}	
-)
+}
+
+
+# setup generic function
+if (!isGeneric("slab"))
+	setGeneric("slab", function(data, fm, ...) standardGeneric("slab"))
+
+
+##
+## TODO: update to current standards, see slice()
+##
+# current interface to data.frame objects
+setMethod(f='slab', signature='data.frame', definition=slab.DF)
+
+## TODO: integrate methods for SPC / data.frame
+## TODO: there is no simple way to get back an SPC object, as there are several vars / slab returned
+## TODO: use.wts doesn't work with SPC objects
+# temp interface to SPC class objects
+setMethod(f='slab', signature='SoilProfileCollection', definition=slab.SPC)
+
 
 ## 
 ## calculation of segment-wise summary statistics

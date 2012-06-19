@@ -2,7 +2,9 @@
 \docType{methods}
 \alias{slab}
 \alias{slab,data.frame-method}
+\alias{slab.DF}
 \alias{slab,SoilProfileCollection-method}
+\alias{slab.SPC}
 \alias{soil.slot}
 \alias{seg.summary}
 
@@ -10,7 +12,13 @@
 \description{Aggregate soil properties along user-defined `slabs`, and optionally within groups.}
 
 \usage{
-slab(data, fm, progress = 'none', ...)
+# standard usage, for SoilProfileCollection class objects
+slab.SPC(data, fm, ...)
+
+# legacy method for data.frames
+slab.DF(data, fm, progress = 'none', ...)
+
+# low-level calculations done here
 soil.slot(data, seg_size = NA, seg_vect = NA, 
 use.wts = FALSE, strict = FALSE, user.fun = NULL, class_prob_mode=1)
 }
