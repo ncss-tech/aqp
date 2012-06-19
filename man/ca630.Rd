@@ -82,9 +82,11 @@ par.settings=list(superpose.line=list(col='black', lwd=2))
 # 4. aggregate \%BS at pH 8.2 for all profiles by MLRA, along 1 cm slices
 # note that mlra is stored in @site
 a <- slab(ca, mlra ~ bs_8.2)
+# keep only MLRA 18 and 22
+a <- subset(a, subset=mlra %in% c('18', '22'))
 
 xyplot(
-top ~ p.q50, groups=factor(mlra, levels=c('18','22')) , data=a, lower=a$p.q25, upper=a$p.q75, 
+top ~ p.q50, groups=mlra , data=a, lower=a$p.q25, upper=a$p.q75, 
 ylim=c(160,-5), alpha=0.5, scales=list(y=list(tick.num=7, alternating=3), x=list(alternating=1)),
 panel=panel.depth_function, prepanel=prepanel.depth_function,
 ylab='Depth (cm)', xlab='Base Saturation at pH 8.2', 
