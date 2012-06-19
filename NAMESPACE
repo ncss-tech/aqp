@@ -3,7 +3,8 @@ importClassesFrom("sp",
 )
 
 importFrom(grid,
-  grid.text,
+  gpar,
+	grid.text,
   unit
 )
 
