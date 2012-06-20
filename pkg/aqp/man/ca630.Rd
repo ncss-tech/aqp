@@ -42,13 +42,17 @@ $lab : A data frame containing horizon information.
 \details{These data were extracted from the NSSL database. `ca630` is a list composed of site and lab data, each stored as dataframes. These data are modeled by a 1:many (site:lab) relation, with the `pedon_id` acting as the primary key in the `site` table and as the foreign key in the `lab` table.}
 \source{\url{http://ssldata.nrcs.usda.gov/}}
 \examples{
+library(plyr)
+library(lattice)
+library(Hmisc)
+library(sp)
+
 data(ca630)
 str(ca630)
 
 # 2. promote to SoilProfileCollection
 # combine site+horizon data into single DF
 
-library(plyr)
 ca <- join(ca630$lab, ca630$site, type='inner')
 
 # promote to SoilProfileCollection
@@ -58,7 +62,6 @@ depths(ca) <- pedon_key ~ hzn_top + hzn_bot
 site(ca) <- ~ mlra + ssa + lon + lat + cntrl_depth_to_top + cntrl_depth_to_bot + sampled_taxon_name
 
 # extract spatial data as SpatialPoints
-library(sp)
 coordinates(ca) <- ~ lon + lat
 # assign CRS data
 proj4string(ca) <- '+proj=latlong +datum=NAD83'
@@ -70,7 +73,6 @@ ca
 a <- slab(ca, fm= ~ bs_7)
 
 # 4. plot median & IQR by 1 cm slice
-library(lattice)
 xyplot(
 top ~ p.q50, data=a, lower=a$p.q25, upper=a$p.q75, 
 ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
@@ -83,7 +85,7 @@ par.settings=list(superpose.line=list(col='black', lwd=2))
 # note that mlra is stored in @site
 a <- slab(ca, mlra ~ bs_8.2)
 # keep only MLRA 18 and 22
-a <- subset(a, subset=mlra %in% c('18', '22'))
+a <- subset(a, subset=mlra \%in\% c('18', '22'))
 
 xyplot(
 top ~ p.q50, groups=mlra , data=a, lower=a$p.q25, upper=a$p.q75, 
@@ -96,7 +98,6 @@ auto.key=list(columns=2, title='MLRA', points=FALSE, lines=TRUE)
 
 
 # 5. safely compute hz-thickness weighted mean CEC (pH 7)
-library(Hmisc)
 head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
 .fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
 
