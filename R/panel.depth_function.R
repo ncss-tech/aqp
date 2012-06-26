@@ -39,7 +39,7 @@ else {
 		if(!missing(groups) & !missing(subscripts)) {
 			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
 			# levels in the groups, for color matching
-			ll <- unique(d$groups)
+			ll <- levels(d$groups)
 			n_groups <- length(ll)
 			}
 		
@@ -47,7 +47,7 @@ else {
 		if(missing(groups)) {
 			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
 			# levels in the groups, for color matching
-			ll <- unique(d$groups)
+			ll <- levels(d$groups)
 			n_groups <- length(ll)
 			}
 		
@@ -89,6 +89,7 @@ else {
 	by(d, d$groups, function(d_i){
 		# lookup color
 		m <- match(unique(d_i$group), ll)
+		
 		
 		# add line
 		panel.lines(d_i$yhat, d_i$top, lwd=line.lwd[m], col=line.col[m], lty=line.lty[m])
