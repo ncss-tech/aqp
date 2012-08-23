@@ -1,3 +1,7 @@
+-------------------------- aqp 1.2-7 (2012-08-23) --------------------------
+* plot() method for SoilProfileCollection object no longer sets page margins, this will cause some figures to change
+* added demo 'slope_effect_hz_thickness'
+
 -------------------------- aqp 1.2-6 (2012-06-26) --------------------------
 * fixed minor bug in panel.depth_function(): grouping + paneling ignored full suite of colors
 * fixed minor bug in NAMESPACE
