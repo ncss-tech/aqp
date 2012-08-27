@@ -61,12 +61,12 @@ s1 <- slab(sp1, fm= ~ prop)
 library(lattice)
 xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
 data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
-panel=panel.superpose, ylim=c(110,-5))
+panel=panel.superpose, ylim=c(110,-5), asp=2)
 
 # check median & IQR
 xyplot(top ~ p.q50 + p.q25 + p.q75, 
 data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
-panel=panel.superpose, ylim=c(110,-5))
+panel=panel.superpose, ylim=c(110,-5), asp=2)
 
 # other segment sizes
 # 5cm
@@ -95,7 +95,7 @@ xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, id=g2$which,
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
 ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
-auto.key=list(columns=4, points=FALSE, lines=TRUE)
+auto.key=list(columns=2, points=FALSE, lines=TRUE), asp=2
 )
 
 
