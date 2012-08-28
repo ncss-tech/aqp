@@ -1,3 +1,8 @@
+-------------------------- aqp 1.2-8 (2012-08-28) --------------------------
+* the names() method for SoilProfileCollection objects now returns a named list of horizon and site column names
+* improved examples: see ?sp4 and ?ca630
+* fixed minor bug related to subsetting a SoilProfileCollection object, followed by coercion to SpatialPointsDataFrame
+
 -------------------------- aqp 1.2-7 (2012-08-23) --------------------------
 * plot() method for SoilProfileCollection object no longer sets page margins, this will cause some figures to change
 * added demo 'slope_effect_hz_thickness'
