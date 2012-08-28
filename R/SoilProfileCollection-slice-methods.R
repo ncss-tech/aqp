@@ -147,14 +147,17 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     return(hd.slices)
 
   # if spatial data and only a single slice: SPDF
-  # TODO: include site data as well
   if(nrow(coordinates(object)) == length(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
     # check for site data, if present - join to our sliced data
     if(nrow(site(object)) > 0 )
       hd.slices <- join(hd.slices, site(object), by=id)
     
-    return(SpatialPointsDataFrame(coordinates(object), data=hd.slices))
+    # since the order of our slices and coordinates are the same
+    # it is safe to use 'match.ID=FALSE'
+    # this gets around a potential problem when dimnames(object)[[1]] aren't consecutive 
+    # values-- often the case when subsetting has been performed
+    return(SpatialPointsDataFrame(coordinates(object), data=hd.slices, match.ID=FALSE))
     }
   
   

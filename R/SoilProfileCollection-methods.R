@@ -162,10 +162,9 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 ##
 
 ## column names
-## TODO: should this return a named list?
 setMethod("names", "SoilProfileCollection",
   function(x) {
-  res <- c(names(horizons(x)), names(site(x)))
+  res <- list(horizons=names(horizons(x)), site=names(site(x)))
   return(res)
   }
 )
@@ -246,7 +245,7 @@ setReplaceMethod("$", "SoilProfileCollection",
   function(x, name, value) {
   	# extract hz and site data
   	h <- horizons(x)
-	s <- site(x)
+		s <- site(x)
 
     # working with horizon data
     if (name %in% names(h)) {
@@ -370,12 +369,17 @@ setMethod("[", "SoilProfileCollection",
       # combine with coordinates
       cat('result is a SpatialPointsDataFrame object\n')
       # note that we are filtering based on 'i' - an index of selected profiles
-
+			
+      # since the order of our slices and coordinates are the same
+      # it is safe to use 'match.ID=FALSE'
+      # this gets around a potential problem when dimnames(x)[[1]] aren't consecutive 
+      # values-- often the case when subsetting has been performed
+      
       # if site data, join hz+site
       if(nrow(s) > 0)
-      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=join(h, s, by=idname(x))))
+      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=join(h, s, by=idname(x)), match.ID=FALSE))
       else # no site data
-      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=h))	
+      	return(SpatialPointsDataFrame(coordinates(x)[i, ], data=h, match.ID=FALSE))	
     }
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data

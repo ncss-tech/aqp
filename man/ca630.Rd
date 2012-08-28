@@ -45,34 +45,48 @@ $lab : A data frame containing horizon information.
 library(plyr)
 library(lattice)
 library(Hmisc)
+library(maps)
 library(sp)
 
+# check the data out:
 data(ca630)
 str(ca630)
 
-# 2. promote to SoilProfileCollection
-# combine site+horizon data into single DF
+# note that pedon_key is the link between the two tables
 
-ca <- join(ca630$lab, ca630$site, type='inner')
+# make a copy of the horizon data
+ca <- ca630$lab
 
-# promote to SoilProfileCollection
+# promote to a SoilProfileCollection class object
 depths(ca) <- pedon_key ~ hzn_top + hzn_bot
 
-# extract site data
-site(ca) <- ~ mlra + ssa + lon + lat + cntrl_depth_to_top + cntrl_depth_to_bot + sampled_taxon_name
+# add site data, based on pedon_key
+site(ca) <- ca630$site
 
-# extract spatial data as SpatialPoints
+# ID data missing coordinates: '|' is a logical OR
+(missing.coords.idx <- which(is.na(ca$lat) | is.na(ca$lon)))
+
+# remove missing coordinates by safely subsetting
+if(length(missing.coords.idx) > 0)
+	ca <- ca[-missing.coords.idx, ]
+
+# register spatial data
 coordinates(ca) <- ~ lon + lat
-# assign CRS data
+
+# assign a coordinate reference system
 proj4string(ca) <- '+proj=latlong +datum=NAD83'
 
 # check the result
-ca
+print(ca)
 
-# 3. aggregate \%BS 7 for all profiles into 1 cm slices
+# map the data (several ways to do this, here is a simple way)
+map(database='county', region='california')
+points(coordinates(ca), col='red', cex=0.5)
+
+# aggregate \%BS 7 for all profiles into 1 cm slices
 a <- slab(ca, fm= ~ bs_7)
 
-# 4. plot median & IQR by 1 cm slice
+# plot median & IQR by 1 cm slice
 xyplot(
 top ~ p.q50, data=a, lower=a$p.q25, upper=a$p.q75, 
 ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
@@ -81,12 +95,14 @@ ylab='Depth (cm)', xlab='Base Saturation at pH 7',
 par.settings=list(superpose.line=list(col='black', lwd=2))
 )
 
-# 4. aggregate \%BS at pH 8.2 for all profiles by MLRA, along 1 cm slices
+# aggregate \%BS at pH 8.2 for all profiles by MLRA, along 1 cm slices
 # note that mlra is stored in @site
 a <- slab(ca, mlra ~ bs_8.2)
+
 # keep only MLRA 18 and 22
 a <- subset(a, subset=mlra \%in\% c('18', '22'))
 
+# plot median & IQR by 1 cm slice, using different colors for each MLRA
 xyplot(
 top ~ p.q50, groups=mlra , data=a, lower=a$p.q25, upper=a$p.q75, 
 ylim=c(160,-5), alpha=0.5, scales=list(y=list(tick.num=7, alternating=3), x=list(alternating=1)),
@@ -97,24 +113,25 @@ auto.key=list(columns=2, title='MLRA', points=FALSE, lines=TRUE)
 )
 
 
-# 5. safely compute hz-thickness weighted mean CEC (pH 7)
+# safely compute hz-thickness weighted mean CEC (pH 7)
+# using data.frame objects
 head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key), 
 .fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
 
-# 6. extract a SPDF with horizon data along a slice at 25 cm
+# extract a SPDF with horizon data along a slice at 25 cm
 s.25 <- slice(ca, fm=25 ~ bs_7 + CEC7 + ex_acid)
 spplot(s.25, zcol=c('bs_7','CEC7','ex_acid'))
 
 # note that the ordering is preserved:
 all.equal(s.25$pedon_key, profile_id(ca))
 
-# 6.1 extract a data.frame with horizon data along a slices c(10,20,50)
+# extract a data.frame with horizon data at 10, 20, and 50 cm
 s.multiple <- slice(ca, fm=c(10,20,50) ~ bs_7 + CEC7 + ex_acid)
 
-# 7. Extract the 2nd horizon from all profiles as SPDF
+# Extract the 2nd horizon from all profiles as SPDF
 ca.2 <- ca[, 2]
 
-# 8. Extract the all horizons from profiles 1:10 as data.frame
+# subset profiles 1 through 10
 ca.1.to.10 <- ca[1:10, ]
 
 # basic plot method: profile plot
