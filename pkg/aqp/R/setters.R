@@ -167,7 +167,7 @@ setReplaceMethod("site", "SoilProfileCollection",
   
     # check to make sure the the number of rows in @site is the same as length(object)
     if(length(object) != nrow(site(object)))
-    	stop('invalid site data, duplicates present in source data?', call.=FALSE)
+    	stop('invalid site data, non-unique values present in horizon data?', call.=FALSE)
     
     # done
     return(object)
@@ -186,7 +186,8 @@ setReplaceMethod("site", "SoilProfileCollection",
   # remove the index to the ID columnm, as we do not want to remove this from
   # the horizon data !
   idx <- idx[-match(idname(object), names_attr)]
-
+	
+  # this will break when multiple horizons in the same pedon have different site data!
   # this seems to work fine in all cases, as we keep the ID column
   # and it ensures that the result is in the same order as the IDs
   new_site_data <- ddply(mf, idname(object),
@@ -201,7 +202,7 @@ setReplaceMethod("site", "SoilProfileCollection",
 
   # remove the named site data from horizon_data
   horizons(object) <- horizons(object)[, -idx]
-
+	
   # replace existing site data
   object@site <- site_data
 
