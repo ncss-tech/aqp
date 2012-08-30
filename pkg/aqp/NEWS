@@ -1,3 +1,8 @@
+-------------------------- aqp 1.2-9 (2012-08-30) --------------------------
+* fixed bug in NAMESPACE that caused an error when 'sp' library wasn't loaded
+* added another sanity check to 'site<-' for cases where duplicates occur in the source data set
+* added some new documentation to package help page see 'help(aqp)' for details
+
 -------------------------- aqp 1.2-8 (2012-08-28) --------------------------
 * the names() method for SoilProfileCollection objects now returns a named list of horizon and site column names
 * improved examples: see ?sp4 and ?ca630

@@ -1,6 +1,3 @@
-importClassesFrom("sp",
-  "SpatialPoints"
-)
 
 importFrom(grid,
   gpar,
@@ -48,6 +45,7 @@ importFrom(stringr,
 )
 
 importFrom(sp,
+	CRS,
   SpatialPoints,
   SpatialPointsDataFrame,
   coordinates, 
