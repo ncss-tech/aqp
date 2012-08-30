@@ -160,11 +160,15 @@ setReplaceMethod("site", "SoilProfileCollection",
       # sanity check: site + new data should have same number of rows as original
       if(nrow(s) != nrow(site.new))
         stop('invalid join condition, site data not changed', call.=FALSE)
-      
+            
       # look good, proceed
       object@site <- site.new
 	  }
   
+    # check to make sure the the number of rows in @site is the same as length(object)
+    if(length(object) != nrow(site(object)))
+    	stop('invalid site data, duplicates present in source data?', call.=FALSE)
+    
     # done
     return(object)
   }

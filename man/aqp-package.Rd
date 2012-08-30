@@ -15,6 +15,10 @@ Demos:
 
 Extended Examples:
 \url{http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56}
+
+\url{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-profile-dissimilarity.html?root=aqp}
+
+\url{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/vertical_vs_perpendicular.html?root=aqp}
 }
 
 

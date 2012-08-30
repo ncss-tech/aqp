@@ -1,6 +1,5 @@
 # example objective function for full pattern matching
-f.noise <- function(inits, pure.patterns, sample.pattern, eps.total=0.05)
-	{
+f.noise <- function(inits, pure.patterns, sample.pattern, eps.total=0.05) {
 	
 	# how many components in the mixture?
 	# the last element is the noise component
