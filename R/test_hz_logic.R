@@ -1,6 +1,8 @@
+## TODO: this checking assumes that the data are sorted!
+## TODO: `strict` checking may be too strict!
+
 # this should be further documented
-test_hz_logic <- function(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE)
-  {
+test_hz_logic <- function(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE) {
   
   # test for na
   if(test.NA) { 
