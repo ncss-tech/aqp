@@ -45,7 +45,7 @@ importFrom(stringr,
 )
 
 importFrom(sp,
-	CRS,
+  CRS,
   SpatialPoints,
   SpatialPointsDataFrame,
   coordinates, 
