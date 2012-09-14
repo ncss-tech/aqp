@@ -14,16 +14,16 @@ Demos:
 \code{demo(slope_effect_hz_thickness)}
 
 Extended Examples:
-\url{http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56}
+\href{http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56}{AQP-related blog posts}
 
-\url{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-profile-dissimilarity.html?root=aqp}
+\href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-profile-dissimilarity.html?root=aqp}{Soil profile dissimilarity demo}
 
-\url{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/vertical_vs_perpendicular.html?root=aqp}
+\href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/vertical_vs_perpendicular.html?root=aqp}{Vertical vs. perpendicular horizon depth measurement demo}
 }
 
 
 \author{Dylan E. Beaudette <debeaudette@ucdavis.edu>}
-\references{http://casoilresource.lawr.ucdavis.edu/}
+\references{\href{http://casoilresource.lawr.ucdavis.edu/}{http://casoilresource.lawr.ucdavis.edu/}}
 \keyword{ package }
 \seealso{\link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}, \link{sp5}}}
 
