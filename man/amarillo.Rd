@@ -140,9 +140,7 @@ List of 2
 }
 \details{}
 \source{USDA-NRCSS SSURGO database, and the KSSL database; c/o Skye Wills.}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
+
 \examples{
 data(amarillo)
 ## maybe str(amarillo) ; plot(amarillo) ...
