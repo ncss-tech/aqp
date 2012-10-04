@@ -62,7 +62,7 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 ##
 
 if (!isGeneric("spatial_subset"))
-  setGeneric("spatial_subset", function(object, ...) standardGeneric("spatial_subset"))
+  setGeneric("spatial_subset", function(object, geom) standardGeneric("spatial_subset"))
 
 setMethod(f='spatial_subset', signature='SoilProfileCollection',
   function(object, geom){
