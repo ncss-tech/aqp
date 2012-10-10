@@ -161,6 +161,73 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 ## overloads
 ##
 
+
+## concatentation
+## TODO: check for duplicates, consider using digest
+rbind.SoilProfileCollection <- function(...) {
+	# setup some defaults
+	options(stringsAsFactors=FALSE)
+	
+	# parse dots
+	objects <- list(...)
+	names(objects) <- NULL
+	
+	# short-circuits
+	if(length(objects) == 0)
+		return(NULL)
+	if(length(objects) == 1)
+		return(objects[1])
+	
+	# combine pieces
+	# should have length of 1
+	o.idname <- unique(lapply(objects, idname))
+	o.depth.units <- unique(lapply(objects, depth_units))
+	o.hz.depths <- unique(lapply(objects, horizonDepths))
+	o.m <- unique(lapply(objects, metadata))
+	o.coords <- unique(lapply(objects, function(i) ncol(coordinates(i))))
+	o.p4s <- unique(lapply(objects, proj4string))
+	
+	# should have length > 1
+	o.h <- lapply(objects, horizons)
+	o.s <- lapply(objects, site)
+	o.d <- lapply(objects, diagnostic_hz)
+	o.sp <- lapply(objects, function(i) i@sp)
+	
+	# sanity checks:
+	if(length(o.idname) > 1)
+		stop('inconsistent ID names', call.=FALSE)
+	if(length(o.depth.units) > 1)
+		stop('inconsistent depth units', call.=FALSE)
+	if(length(o.hz.depths) > 1)
+		stop('inconsistent depth columns', call.=FALSE)
+	if(length(o.m) > 1)
+		stop('inconsistent metadata', call.=FALSE)
+	
+	# spatial data may be missing...
+	if(length(o.coords) > 1)
+		stop('inconsistent spatial data', call.=FALSE)
+	if(length(o.p4s) > 1)
+		stop('inconsistent CRS', call.=FALSE)
+	
+	# generate new SPC components
+	o.h <- do.call('rbind', o.h)
+	o.s <- do.call('rbind', o.s)
+	o.d <- do.call('rbind', o.d)
+	
+	# spatial points require some more effort when spatial data are missing
+	o.1.sp <- objects[[1]]@sp
+	if(ncol(coordinates(o.1.sp)) == 1) # missing spatial data
+		o.sp <- o.1.sp # copy the first filler
+	else # not missing spatial data
+		o.sp <- do.call('rbind', o.sp) # rbind properly
+	
+	# make SPC and return
+	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
+	
+	return(res)
+	}
+
+
 ## column names
 setMethod("names", "SoilProfileCollection",
   function(x) {
@@ -227,9 +294,9 @@ definition=function(x, vars){
 	# down-grade to un-named vector of indices
 	return(as.vector(u.profiles))
 	}
-  else {
-	stop('This function requres the `digest` package.', call.=FALSE)
-	}
+  else
+		stop('This function requres the `digest` package.', call.=FALSE)
+	
   }
 )
 

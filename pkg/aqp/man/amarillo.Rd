@@ -138,7 +138,7 @@ List of 2
   ..$ S4             : int [1:383] NA NA NA NA NA NA NA NA NA NA ...
   ..$ model_desg     : chr [1:383] "" "" "" "" ...
 }
-\details{}
+
 \source{USDA-NRCSS SSURGO database, and the KSSL database; c/o Skye Wills.}
 
 \examples{

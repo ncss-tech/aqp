@@ -17,6 +17,8 @@
 \alias{show,SoilProfileCollection-method}
 \alias{nrow,SoilProfileCollection-method}
 \alias{unique,SoilProfileCollection-method}
+\alias{unique,SoilProfileCollection-method}
+\alias{rbind.SoilProfileCollection}
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}
@@ -97,6 +99,23 @@ if(require(digest)) {
 # compare with and without dupes:
 # note subsetting of SoilProfileCollection
 cbind(dupes=length(s), no.dupes=length(s[u, ]))
+
+## 3. concatonate SoilProfileCollection objects
+require(plyr)
+d <- ldply(1:10, random_profile)
+
+# promote to SoilProfileCollection and plot
+depths(d) <- id ~ top + bottom
+plot(d)
+
+# split into new SoilProfileCollection objects by index
+d.1 <- d[1, ]
+d.2 <- d[2, ]
+d.345 <- d[3:5, ]
+
+# recombine
+d.new <- rbind(d.345, d.1, d.2)
+plot(d.new)
 
 
 \dontrun{
