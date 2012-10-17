@@ -97,8 +97,7 @@ exportMethods(
   "site<-",
   slab,
   slice,
-  spatial_subset,
-  splitProfiles
+  spatial_subset
 )
 
 exportPattern("^[^\\.]")
