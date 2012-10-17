@@ -2,8 +2,6 @@
 \docType{methods}
 \alias{profileApply}
 \alias{profileApply,SoilProfileCollection-method}
-\alias{splitProfiles}
-\alias{splitProfiles,SoilProfileCollection-method}
 
 \title{Apply a function to soil profiles within a SoilProfileCollection object.}
 \description{Apply a function to soil profiles within a SoilProfileCollection object, each iteration has access to a SoilProfileCollection object.}
@@ -20,10 +18,6 @@
 \examples{
 data(sp1)
 depths(sp1) <- id ~ top + bottom
-
-# split a SPC into a list of single-profile SPC objects
-# used internally by profileApply()
-str(splitProfiles(sp1), 1)
 
 # scale properties within each profile
 # scaled = (x - mean(x)) / sd(x)

@@ -1,3 +1,9 @@
+-------------------------- aqp 1.3-1 (2012-10-17) --------------------------
+* speed-bump in profileApply()
+  - splitProfiles() function is no longer defined/used/needed
+* bug fix in SoilProfileCollection subsetting via []
+  - SoilProfiles with a single horizon confused subsetting in the presence of spatial data
+
 -------------------------- aqp 1.3 (2012-10-07) --------------------------
 * added rbind.SoilProfileCollection() for concatenating SPC objects
   - this function performs basic sanity checks, but cannot combine unlike objects
