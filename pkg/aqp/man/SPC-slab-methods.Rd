@@ -157,25 +157,26 @@ data(sp1)
 
 # normalize horizon names: result is a factor
 sp1$name <- generalize.hz(sp1$name, 
-new=c('O','A','B','C'), 
-pat=c('O', '^A','^B','C'))
+													new=c('O','A','B','C'), 
+													pat=c('O', '^A','^B','C'))
 
-# compute slice-wise probability so that it sums to contributin fraction
-a <- slab(sp1, fm= ~ name, class_prob_mode=1)
+# compute slice-wise probability so that it sums to contributing fraction, from 0-150
+a <- slab(sp1, fm= ~ name, class_prob_mode=1, seg_vect=0:150)
 
 # reshape into long format for plotting
 a.long <- melt(a, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
 
-# plot horizon type proportions
+# plot horizon type proportions using panels
 xyplot(top ~ value | variable, data=a.long, subset=value > 0,
-ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
+			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
 
+# again, this time using groups
 xyplot(top ~ value, data=a.long, groups=variable, subset=value > 0,
-ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, asp=2)
+			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, asp=2)
 
 
-# adjust probability to size of collection
-a.1 <- slab(sp1, fm= ~ name, class_prob_mode=2)
+# adjust probability to size of collection, from 0-150
+a.1 <- slab(sp1, fm= ~ name, class_prob_mode=2, seg_vect=0:150)
 
 # reshape into long format for plotting
 a.1.long <- melt(a.1, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
@@ -185,11 +186,27 @@ g <- make.groups(mode_1=a.long, mode_2=a.1.long)
 
 # plot horizon type proportions
 xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
-			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
+			 ylim=c(240, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
 			 auto.key=list(lines=TRUE, points=FALSE, columns=2),
 			 par.settings=list(superpose.line=list(col=c(1,2))))
 
 
+# apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
+f.ML.hz <- function(i) {
+	if(any(i > 0))
+		which.max(i)
+	else
+		NA
+}
+a$name <- c('O','A','B','C')[apply(a[, c('O','A','B','C')], 1, f.ML.hz)]
+
+# extract ML-horizon boundaries using RLE
+# note that this will overestimate each change in ML-horizon by 1 depth slice
+ml.rle <- rle(as.vector(na.omit(a$name)))
+ml.hz.bounds <- cumsum(ml.rle$lengths) - 1
+
+# composite into a data.frame for use later
+(gen.hz.ml <- data.frame(hz=ml.rle$value, top=c(0, ml.hz.bounds[-length(ml.hz.bounds)]), bottom=ml.hz.bounds, stringsAsFactors=FALSE))
 
 
 ##
@@ -241,24 +258,6 @@ a <- slab(sp3, fm=id ~ L + A + B, seg_vect=c(40,60))
 ## note the missing left-hand side of the formula
 a <- slab(sp3, fm= ~ L + A + B)
 
-
-
-## this will work in the next version of plyr
-\dontrun{library(doSMP)
-
-# setup global option
-options('AQP_parallel'=TRUE)
-
-# register workers (2 cores)
-w <- startWorkers(workerCount=2, FORCE=TRUE)
-registerDoSMP(w)
-
-# run in parallel
-a <- slab(sp3, fm=group ~ L + A + B, seg_size=5)
-
-# stop workers (critical!)
-stopWorkers(w)
-}
 }
 
 \keyword{methods}
