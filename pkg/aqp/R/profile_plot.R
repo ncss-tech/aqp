@@ -50,7 +50,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   
   
   # fudge factors
-  extra_x_space <- 1
+  extra_x_space <- 2
   extra_y_space <- 2
   
   # pre-compute nice range for depth axis, also used for plot init
@@ -60,13 +60,12 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # par(mar=c(0.5,1,0,1)) # is it wise to adjust the plotting area?
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/20), n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE, xlab='', ylab='')
+	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE, xlab='', ylab='')
 	}
   
   
   # add horizons in specified order	
-  for(i in 1:n)
-	  {
+  for(i in 1:n) {
 	  # convert linear sequence into plotting order
 	  profile_i <- plot.order[i]
 	  
