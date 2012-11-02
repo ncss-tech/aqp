@@ -15,7 +15,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection',
 		# iterate over SPC, spliting into a list of SPC_i ... SPC_n
 		for(i in seq_along(pIDs)) {
 			pID <- pIDs[i]
-			l[[pID]] <- do.call(FUN, list(object[i, ]))
+			l[[pID]] <- do.call(FUN, list(object[i, ], ...))
 		}
 		
 		# convert list into a vector

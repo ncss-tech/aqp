@@ -25,7 +25,8 @@ importFrom(plyr,
   llply,
   ldply,
   dlply,
-  join
+  join,
+	summarise
 )
 
 importFrom(reshape, 
