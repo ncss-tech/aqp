@@ -6,11 +6,11 @@
 get.ml.hz(x, hz.names)
 }
 \arguments{
-  \item{x}{output from \code{\link{help}}}
+  \item{x}{output from \code{\link{slab.SPC}}}
   \item{hz.names}{vector of horizon names}
 }
 
-\details{This function is expecting that \code{x] is a data.frame containing columns identified in \code{nz.names}.}
+\details{This function is expecting that \code{x} is a data.frame containing columns identified in \code{nz.names}.}
 
 \value{
 A dataframe with the following columns:
@@ -22,7 +22,7 @@ A dataframe with the following columns:
 \author{D.E. Beaudette}
 % \note{}
 
-\seealso{\code{\link{slab}}}
+\seealso{\code{\link{slab.SPC}}}
 \examples{
 data(sp1)
 

@@ -1,8 +1,6 @@
 # generate a data.frame of ML horizonation
 # using the output from slab() and a vector of horizon names
 get.ml.hz <- function(x, hz.names) {
-	require(plyr)
-	
 	# get index to max probability, 
 	# but only when there is at least one value > 0
 	f.ML.hz <- function(i) {
