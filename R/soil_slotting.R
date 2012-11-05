@@ -64,6 +64,7 @@ slab.DF <- function(data, fm, progress='none', ...) {
 	# temp hack: make a column called 'prop' ... as soil.slot is expecting this!
 	d.long$prop <- d.long$value
 	
+	# TODO: plyr 1.8 now supports parallel computation with ddply() research and implement
 	# apply slotting group-wise and return in long format
 	# note '...' is gobbled by soil.slot()
 	d.slotted <- ddply(d.long, .variables=c('variable', g), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=soil.slot, ...) 
@@ -111,8 +112,7 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 	l.seq <-1:length(l.recon)
 	
 	# numeric variables
-	if(prop.class %in% c('numeric','integer'))
-		{
+	if(prop.class %in% c('numeric','integer')) {
 				
 		# this mean is the horizon-thickness weighted mean across all profiles
 		p.mean <- sapply(l.recon, mean, na.rm=TRUE)
