@@ -18,7 +18,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: return geometry from last plot
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, ...) {
   
   # get horizons
   h <- horizons(x)
@@ -60,7 +60,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # par(mar=c(0.5,1,0,1)) # is it wise to adjust the plotting area?
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+extra_x_space), ylim=c(max(depth_axis_intervals), -4), axes=FALSE, xlab='', ylab='')
+	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), ylim=c(max(depth_axis_intervals), -4), axes=FALSE, xlab='', ylab='')
 	}
   
   
@@ -161,7 +161,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   # axis:
   depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
   depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
-  axis(side=4, line=-2.5, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
+  axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
   
   }
 
