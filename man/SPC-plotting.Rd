@@ -25,7 +25,8 @@ plotSPC(x, color='soil_color', width=0.2, name='name',
 cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
 id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x),
 max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
-abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, \dots)
+abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
+hz.distinctness.offset.lty=2, axis.line.offset=-2.5, \dots)
 }
 
 
@@ -55,6 +56,7 @@ abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offs
   \item{hz.distinctness.offset}{column name containing vertical offsets used to depict horizon boundary distinctness (same units as profiles)}
   \item{hz.distinctness.offset.col}{color used to encode horizon distinctness (default is 'black')}
   \item{hz.distinctness.offset.lty}{line style used to encode horizon distinctness (default is 2)}
+  \item{axis.line.offset}{horizonatal offset applied to depth axis (default is -2.5)}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
