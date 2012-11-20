@@ -2,6 +2,7 @@
 * minor tweaks to plot.SoilProfileCollection() for improved output with small/large size collections
 * new function get.ml.hz() attempts to determine the most likely horizonation after slabbing
 * fixed bug in profileApply() where further arguments to FUN weren't passed on to FUN
+* missing data report from profile_compare() now only includes horizons with some data (e.g. Cr and R horizons are skipped)
 
 -------------------------- aqp 1.3-1 (2012-10-17) --------------------------
 * speed-bump in profileApply()
