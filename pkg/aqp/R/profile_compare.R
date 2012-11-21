@@ -45,13 +45,14 @@ rescale.result=FALSE, verbose=FALSE) {
 		stop("'s' must contain a column named 'id' ", call.=FALSE)
 	
 	
+	## TODO: reverted use of 'cc' horizon index
 	## TODO: put this into its own function
 	## TODO: weight result using horizon thickness
 	# iterate over profiles and compute percent missing data by variable
 	pct_missing <- ddply(s, 'id', .fun=function(i, v=vars) {
 		# only evaluate missing data within horizons that aren't completly NA (Oi, Cr, R horizons)
-		cc <- which( ! apply(sapply(i[, v], is.na), 1, all))
-		round(sapply(i[cc, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
+		# cc <- which( ! apply(sapply(i[, v], is.na), 1, all))
+		round(sapply(i[, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
 	})
   
 	# keep track of profiles missing any or all of their data
