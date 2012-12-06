@@ -45,6 +45,3 @@ setClass(
   validity=.SoilProfileCollectionValidity
 )
 
-
-
-

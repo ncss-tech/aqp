@@ -386,6 +386,56 @@ setReplaceMethod("$", "SoilProfileCollection",
 
 
 
+## subset method for SoilProfileCollection objects
+## s: site-level subsetting criteria (properly quoted)
+## h: horizon-level subsetting criteria (properly quoted)
+## result: SoilProfileCollection with all profiles that match _either_ criteria- i.e. greedy matching
+if (!isGeneric("subsetProfiles"))
+  setGeneric("subsetProfiles", function(object, s, h, ...) standardGeneric("subsetProfiles"))
+  
+setMethod("subsetProfiles", "SoilProfileCollection",
+  function(object, s, h, ...) {
+  	
+  	# sanity checks
+  	if(missing(s) & missing(h))
+  		stop('must provide either, site or horizon level subsetting criteria', call.=FALSE)
+  	
+  	# extract parts
+  	s.d <- site(object)
+  	h.d <- horizons(object)
+  	id.col <- idname(object)
+  	object.ids <- profile_id(object)
+  	
+  	# subset using conventional data.frame methods
+  	if(!missing(s))
+  		s.d.sub.IDs <- subset(s.d, select=id.col, subset=eval(parse(text=s)))[, 1] # convert to vector
+  	else
+  		s.d.sub.IDs <- NA
+  	
+  	if(!missing(h))
+  		h.d.sub.IDs <- subset(h.d, select=id.col, subset=eval(parse(text=h)))[, 1] # convert to vector
+  	else
+  		h.d.sub.IDs <- NA
+  	
+    # intersect IDs if s and h were used
+    if(!missing(h) & !missing(s))
+      matching.IDs <- intersect(s.d.sub.IDs, h.d.sub.IDs)
+    
+  	# if only h, or only s were used, then 
+    else
+  	  matching.IDs <- unique(na.omit(c(s.d.sub.IDs, h.d.sub.IDs)))
+  	
+  	# convert IDs into a numerical profile index
+  	# note: no matches results in idx == 0
+  	idx <- match(matching.IDs, object.ids)
+  	
+  	# subset SoilProfileCollection
+  	return(object[idx, ])
+  	}
+)
+
+
+
 
 ### NOTE: this DOES NOT re-order data, only subsets!
 ##
