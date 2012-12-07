@@ -10,6 +10,10 @@ get.ml.hz <- function(x, hz.names) {
 			NA
 	}
 	
+	# strange boot-strapping experiment, may not be useful
+# 	x.boot <- t(sapply(1:nrow(x), function(i) sample(hz.names, size=1000, replace=TRUE, prob=x[i, hz.names])))
+# 	x.boot.prob <- data.frame(t(sapply(1:nrow(x), function(i) table(factor(x.boot[i, ], levels=hz.names)) / 1000)))
+	
 	# get most probable horizon, by slice
 	x$name <- hz.names[apply(x[, hz.names], 1, f.ML.hz)]
 	
@@ -25,8 +29,8 @@ get.ml.hz <- function(x, hz.names) {
 	# it is necessary to account for overlaps
 	x.ml <- ddply(x.ml, 'hz', summarise, top=min(top), bottom=max(bottom))
 	
-	# re-order just in case
-	x.ml <- x.ml[order(x.ml$top), ]
+	# re-order using vector of horizon names
+	x.ml <- x.ml[match(hz.names, x.ml$hz), ]
 	
 	# integrate probability density function over ML bounds
 	x.ml$confidence <- NA
