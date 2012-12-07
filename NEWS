@@ -1,6 +1,7 @@
 -------------------------- aqp 1.3-3 (2012-12-06) --------------------------
 * new function subsetProfiles() for simpler subsetting of SoilProfileCollection objects via site or horizon-level attributes
 * get.ml.hz() now returns a 'confidence' for each horizon (as a percent)
+* added experimental 'filter' argument to profile_compare()-- see manual page for usage
 
 
 -------------------------- aqp 1.3-2 (2012-11-01) --------------------------

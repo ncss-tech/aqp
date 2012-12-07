@@ -13,7 +13,7 @@ Performs a numerical comparison of soil profiles using named properties, based o
 }
 
 \usage{
-pc(s, vars, max_d, k, sample_interval=NA, 
+pc(s, vars, max_d, k, filter=NULL, sample_interval=NA, 
 replace_na=TRUE, add_soil_flag=TRUE, 
 return_depth_distances=FALSE, strict_hz_eval=FALSE,
 progress='none', plot.depth.matrix=FALSE, rescale.result=FALSE,
@@ -33,6 +33,7 @@ verbose=FALSE)
   \item{vars}{A vector with named properties that will be used in the comparison. These are typically column names describing horizon-level attributes (2 or more), but can also contain site-level attributes (2 or more) if \code{s} is a \code{\link{SoilProfileCollection}}.}
   \item{max_d}{depth-slices up to this depth are considered in the comparison}
   \item{k}{a depth-weighting coeficient, use '0' for no depth-weighting (see examples below)}
+  \item{filter}{an index used to determine which horizons (rows) are included in the analysis}
   \item{sample_interval}{use every n-th depth slice instead of every depth slice, useful for working with > 1000 profiles at a time}
   \item{replace_na}{if TRUE, missing data are replaced by maximum dissimilarity (TRUE)}
   \item{add_soil_flag}{The algorithm will generate a 'soil'/'non-soil' matrix for use when comparing soil profiles with large differences in depth (TRUE). See details section below.}
