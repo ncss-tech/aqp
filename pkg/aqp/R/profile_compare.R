@@ -24,12 +24,14 @@
 ## TODO: allow for other distance-computing functions
 ## TODO: allow for 'weights' argument (when metric = 'Gower') to daisy()
 
+## TODO: determine practical significance of 'filter' argument
+
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
 # function requires at least two attributes
 # hard coded reference to s$id
 # set k to 0 for no depth weighting 
-pc <- function(s, vars, max_d, k, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none', plot.depth.matrix=FALSE, 
+pc <- function(s, vars, max_d, k, filter=NULL, sample_interval=NA, replace_na=TRUE, add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none', plot.depth.matrix=FALSE, 
 rescale.result=FALSE, verbose=FALSE) {
 	
 	# currently this will only work with integer depths
@@ -40,18 +42,25 @@ rescale.result=FALSE, verbose=FALSE) {
 	if(top.test | bottom.test)
 		stop('this function can only accept integer horizon depths', call.=FALSE)
 	
+	## TODO: this should be updated
 	# check to make sure that there is an 'id' column
 	if(is.null(s$id))
 		stop("'s' must contain a column named 'id' ", call.=FALSE)
 	
+	## TODO: evaluate the practical implications of this
+	# optionally filter the data
+	if(!missing(filter)) {
+		s <- s[filter, ]
+	}
 	
-	## TODO: reverted use of 'cc' horizon index
 	## TODO: put this into its own function
 	## TODO: weight result using horizon thickness
 	# iterate over profiles and compute percent missing data by variable
 	pct_missing <- ddply(s, 'id', .fun=function(i, v=vars) {
+		## TODO: rows.to.review may not be needed
 		# only evaluate missing data within horizons that aren't completly NA (Oi, Cr, R horizons)
-		# cc <- which( ! apply(sapply(i[, v], is.na), 1, all))
+		# all.missing.test <- apply(sapply(i[, v], is.na), 1, all)
+		# rows.to.review <- which( ! all.missing.test )
 		round(sapply(i[, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
 	})
   
@@ -69,7 +78,6 @@ rescale.result=FALSE, verbose=FALSE) {
 	  bad.profiles <- unique(s$id)[bad.profiles.idx]
 	  stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', '), '\nConsider removing these profiles and re-running.'), call.=FALSE)
 	}
-	
 	
 	# identify the number of profiles
   # n.profiles <- length(s)
