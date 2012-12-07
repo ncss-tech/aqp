@@ -28,5 +28,14 @@ get.ml.hz <- function(x, hz.names) {
 	# re-order just in case
 	x.ml <- x.ml[order(x.ml$top), ]
 	
+	# integrate probability density function over ML bounds
+	x.ml$confidence <- NA
+	for(i in seq_along(x.ml$hz)) {
+		slice.seq <- seq(from=x.ml$top[i], to=x.ml$bottom[i])
+		x.i <- x[slice.seq, x.ml$hz[i]]
+		hz.int.prob.pct <- round( (sum(x.i) / length(slice.seq)) * 100)
+		x.ml$confidence[i] <- hz.int.prob.pct
+	}
+	
 	return(x.ml)
 }

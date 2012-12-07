@@ -10,17 +10,17 @@ get.ml.hz(x, hz.names)
   \item{hz.names}{vector of horizon names}
 }
 
-\details{This function is expecting that \code{x} is a data.frame containing columns identified in \code{nz.names}.}
+\details{This function is expecting that \code{x} is a data.frame containing columns identified in \code{hz.names}.}
 
 \value{
 A dataframe with the following columns:
 	\item{hz}{horizon names}
 	\item{top}{top boundary}
 	\item{bottom}{bottom boundary}
+	\item{confidence}{integrated probability / ML horizon thickness, rounded to the nearest integer}
 	}
 
 \author{D.E. Beaudette}
-% \note{}
 
 \seealso{\code{\link{slab.SPC}}}
 \examples{
