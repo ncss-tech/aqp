@@ -2,7 +2,8 @@
 * new function subsetProfiles() for simpler subsetting of SoilProfileCollection objects via site or horizon-level attributes
 * get.ml.hz() now returns a 'confidence' for each horizon (as a percent)
 * added experimental 'filter' argument to profile_compare()-- see manual page for usage
-
+* added new argument to plot.SoilProfileCollection()-- alt.label: used to add secondary labeling via data in @site
+* plot.SoilProfileCollection() will now do a better job of selecting the location for profile IDs based on label length, font size, and figure size
 
 -------------------------- aqp 1.3-2 (2012-11-01) --------------------------
 * minor tweaks to plot.SoilProfileCollection() for improved output with small/large size collections
