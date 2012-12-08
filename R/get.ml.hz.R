@@ -29,8 +29,9 @@ get.ml.hz <- function(x, hz.names) {
 	# it is necessary to account for overlaps
 	x.ml <- ddply(x.ml, 'hz', summarise, top=min(top), bottom=max(bottom))
 	
-	# re-order using vector of horizon names
+	# re-order using vector of horizon names-- this will result in NAs if a named horizon was not the most likely
 	x.ml <- x.ml[match(hz.names, x.ml$hz), ]
+	x.ml <- na.omit(x.ml)
 	
 	# integrate probability density function over ML bounds
 	x.ml$confidence <- NA
