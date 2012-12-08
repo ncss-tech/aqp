@@ -18,8 +18,8 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: return geometry from last plot
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, ...) {
-  
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, ...) {
+	
   # get horizons
   h <- horizons(x)
   
@@ -35,14 +35,14 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
   # get profile IDs
   pIDs <- profile_id(x)
   
-  # if profile style is auto, determin style from simple rule
-  # median.chars * n.profiles / plot.width > 12
+  # if profile style is auto, determin style based on font metrics
   if(id.style == 'auto') {
-  	med.ID.char <- median(sapply(pIDs, nchar))
+  	sum.ID.str.width <- sum(sapply(pIDs, strwidth, units='user', cex=cex.id, font=2))
   	plot.width <- par('pin')[1]
-  	too.full <- (med.ID.char * length(pIDs)) / plot.width
+  	ID.width.ratio <- sum.ID.str.width  / plot.width
+#   	print(ID.width.ratio)
   	
-  	if(too.full > 12)
+  	if(ID.width.ratio > 0.7)
   		id.style <- 'side'
   	else
   		id.style <- 'top'
@@ -85,9 +85,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
     m <- match(name, names(this_profile_data))
     if(! is.na(m))
       this_profile_names <- this_profile_data[[m]]
-    else # no user-defined color column, or it is missing
+    else # no user-defined horizon name column, or it is missing
       this_profile_names <- ''
-    
+	  
 	  # generate rectangle geometry
 	  # get vectors of horizon boundaries, and scale
 	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
@@ -139,29 +139,35 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', cex.names=0.5
 		  text(i + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names)		
 	  
 	  # add the profile ID
-	  if(print.id)
-		{
-		# optionally abbreviate
-		if(abbr)
-		  id.text <- abbreviate(as.character(this_profile_id), abbr.cutoff)
+	  if(print.id) {
+			# optionally abbreviate
+			if(abbr)
+		  	id.text <- abbreviate(as.character(this_profile_id), abbr.cutoff)
 	
-	# no abbreviations of th ID
-	else
-	  id.text <- as.character(this_profile_id)
+			# no abbreviations of th ID
+			else
+	  		id.text <- as.character(this_profile_id)
 		
-		# add the text: according to style
-	if(id.style == 'top')
-			text(i, y.offset, id.text, pos=3, font=2, cex=cex.id)
+			# add the text: according to style
+			if(id.style == 'top')
+				text(i, y.offset, id.text, pos=3, font=2, cex=cex.id)
 	
-	if(id.style == 'side')
-		text(i-(width+0.025), y.offset, id.text, adj=c(1, -width), font=2, cex=cex.id, srt=90)
-		}
+			if(id.style == 'side')
+				text(i-(width+0.025), y.offset, id.text, adj=c(1, -width), font=2, cex=cex.id, srt=90)
+			}
 	  }
   
   # axis:
   depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
   depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
   axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
+  
+  # plot alternate labels
+  if(!missing(alt.label)) {
+  	al <- site(x)[[alt.label]]
+  	al <- al[plot.order]
+  	text(1:length(x), y.offset+3, al, srt=90, adj=c(1, 0.5), font=2, cex=cex.id * 1.5)
+  }
   
   }
 
