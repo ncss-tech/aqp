@@ -37,7 +37,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
   
   # if profile style is auto, determin style based on font metrics
   if(id.style == 'auto') {
-  	sum.ID.str.width <- sum(sapply(pIDs, strwidth, units='user', cex=cex.id, font=2))
+  	sum.ID.str.width <- sum(sapply(pIDs, strwidth, units='inches', cex=cex.id, font=2))
   	plot.width <- par('pin')[1]
   	ID.width.ratio <- sum.ID.str.width  / plot.width
 #   	print(ID.width.ratio)
