@@ -1,3 +1,58 @@
+
+# function is more useful when supplied with a meaningful sd for each horizon
+simulate.SoilProfileCollection <- function(x, n=1, iterations=25, hz.sd=5, min.thick=2) {	
+	h.data <- horizons(x)[, -c(1:3)]
+	h.depths <- horizons(x)[, horizonDepths(x)]
+	thick <- h.depths[, 2] - h.depths[, 1]
+	
+	# sanity checks
+	if(length(x) > 1)
+		stop('this function can only simulate data from a SoilProfileCollection containing a single profile')
+	
+	if(length(thick) %% length(hz.sd) != 0)
+		stop('the length of hz.sd must divide evenly into the number of horizons', call.=FALSE)
+	
+	# define function to wrap rnorm for use with outer
+	rnorm.vect <- function(mean, sd, n) {
+		rnorm(n=n, mean=mean, sd=sd)
+	}
+	rnorm.vect <- Vectorize(rnorm.vect)
+	
+	# allocate storage for simulated horizon depths
+	l <- list()
+	
+	# generate n-simulated horizon depths
+	for(i in 1:n) {
+		# simulate
+		sim <- mapply(rnorm.vect, thick, hz.sd, n=iterations)
+		
+		# compute the mean of simulated values and round to integers
+		sim <- round(sapply(sim, mean))
+		
+		# convert thickness values that are below min.thick -> min.thick
+		sim <- pmax(sim, min.thick)
+		
+		# convert thickness -> depths
+		sim <- cumsum(sim)
+		d <- data.frame(id=i, top=c(0, sim[-length(sim)]), bottom=sim)
+			
+		# combine with original horizon data, and save to list element
+		l[[i]] <- cbind(d, h.data)
+	}
+	
+	# convert list -> data.frame
+	x.sim <- do.call(rbind, l)
+	
+	# upgrade to SoilProfileCollection
+	depths(x.sim) <- id ~ top + bottom
+	
+	## TODO: combine all of the original data back into the result
+	
+	# done
+	return(x.sim)
+}
+
+
 .lpp <- function(x, a, b, u, d, e) {
   # the exponential term
   f.exp <- exp((x + d * log(e) - u) / d)
@@ -48,8 +103,7 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
 
   # generate several properties
   # with different means / sd
-  for(i in 1:n_prop)
-	  {
+  for(i in 1:n_prop) {
 	# init storage
 	  p <- numeric(n_hz)
 	
