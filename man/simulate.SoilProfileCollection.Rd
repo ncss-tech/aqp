@@ -6,7 +6,7 @@
 	Simulate a collection of soil profiles based on the horizonation of a single soil profile.
 }
 \usage{
-	simulate.SoilProfileCollection(x, n=1, iterations=25, hz.sd=5, min.thick=2)
+	simulate.SoilProfileCollection(x, n=1, iterations=25, hz.sd=2, min.thick=2)
 }
 
 \arguments{
