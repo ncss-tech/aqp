@@ -21,7 +21,7 @@
 	A SoilProfileCollection object with \code{n} simulated profiles, each containing the same number of horizons and same data as \code{x}.
 }
 \details{
-This function attempts to generate a collection of simulated soil profiles based on the horizon thickness data associated with a single "template" profile. Simulation is based on sampling from the gaussian distribution where each simulated horizon has a mean thickness defined by the template and a user-supplied standard deviation.
+This function generates a collection of simulated soil profiles based on the horizon thickness data associated with a single "template" profile. Simulation is based on sampling from a family of gaussian distribution with means defined by the "template" profile and standard deviation defined by the user.
 }
 
 \author{D. E. Beaudette}
@@ -41,14 +41,14 @@ s$name <- paste('H', seq_along(s$name), sep='')
 sim.1 <- simulate(s, n=25)
 
 # simulate 25 new profiles using 's' and variable SD for each horizon
-sim.2 <- simulate(s, n=25, hz.sd=c(5, 10, 15, 15, 15, 30, 10))
+sim.2 <- simulate(s, n=25, hz.sd=c(1, 2, 5, 5, 5, 10, 2))
 
 # plot
 par(mfrow=c(2,1), mar=c(0, 0, 0, 0))
 plot(sim.1)
-mtext('SD = 5', side=2, line=-1.5, font=2, cex=0.75)
+mtext('SD = 2', side=2, line=-1.5, font=2, cex=0.75)
 plot(sim.2)
-mtext('SD = c(5, 10, 15, 15, 15, 30, 10)', side=2, line=-1.5, font=2, cex=0.75)
+mtext('SD = c(1, 2, 5, 5, 5, 10, 2)', side=2, line=-1.5, font=2, cex=0.75)
 
 # aggregate horizonation of simulated data
 # note: set class_prob_mode=2 as profiles were not defined to a constant depth

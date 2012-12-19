@@ -1,9 +1,9 @@
 
 # function is more useful when supplied with a meaningful sd for each horizon
-simulate.SoilProfileCollection <- function(x, n=1, iterations=25, hz.sd=5, min.thick=2) {	
-	h.data <- horizons(x)[, -c(1:3)]
-	h.depths <- horizons(x)[, horizonDepths(x)]
-	thick <- h.depths[, 2] - h.depths[, 1]
+simulate.SoilProfileCollection <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {	
+	hd <- horizonDepths(x)
+	h <- horizons(x)
+	thick <- h[[hd[2]]] - h[[hd[1]]]
 	
 	# sanity checks
 	if(length(x) > 1)
@@ -16,7 +16,7 @@ simulate.SoilProfileCollection <- function(x, n=1, iterations=25, hz.sd=5, min.t
 	rnorm.vect <- function(mean, sd, n) {
 		rnorm(n=n, mean=mean, sd=sd)
 	}
-	rnorm.vect <- Vectorize(rnorm.vect)
+	rnorm.vect <- Vectorize(rnorm.vect, vectorize.args=c('mean', 'sd'))
 	
 	# allocate storage for simulated horizon depths
 	l <- list()
@@ -26,8 +26,8 @@ simulate.SoilProfileCollection <- function(x, n=1, iterations=25, hz.sd=5, min.t
 		# simulate
 		sim <- mapply(rnorm.vect, thick, hz.sd, n=iterations)
 		
-		# compute the mean of simulated values and round to integers
-		sim <- round(sapply(sim, mean))
+		# sample a single value per horizon, and use as the representative value
+		sim <- round(apply(sim, 2, sample, size=1))
 		
 		# convert thickness values that are below min.thick -> min.thick
 		sim <- pmax(sim, min.thick)
@@ -35,9 +35,9 @@ simulate.SoilProfileCollection <- function(x, n=1, iterations=25, hz.sd=5, min.t
 		# convert thickness -> depths
 		sim <- cumsum(sim)
 		d <- data.frame(id=i, top=c(0, sim[-length(sim)]), bottom=sim)
-			
+		
 		# combine with original horizon data, and save to list element
-		l[[i]] <- cbind(d, h.data)
+		l[[i]] <- cbind(d, h)
 	}
 	
 	# convert list -> data.frame
