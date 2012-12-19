@@ -1,12 +1,12 @@
-\name{simulate.SoilProfileCollection}
-\alias{simulate.SoilProfileCollection}
+\name{sim}
+\alias{sim}
 
 \title{Simulate Soil Profiles}
 \description{
 	Simulate a collection of soil profiles based on the horizonation of a single soil profile.
 }
 \usage{
-	simulate.SoilProfileCollection(x, n=1, iterations=25, hz.sd=2, min.thick=2)
+	sim(x, n=1, iterations=25, hz.sd=2, min.thick=2)
 }
 
 \arguments{
@@ -38,10 +38,10 @@ s <- sp3[3, ]
 s$name <- paste('H', seq_along(s$name), sep='')
 
 # simulate 25 new profiles, using 's' and function defaults
-sim.1 <- simulate(s, n=25)
+sim.1 <- sim(s, n=25)
 
 # simulate 25 new profiles using 's' and variable SD for each horizon
-sim.2 <- simulate(s, n=25, hz.sd=c(1, 2, 5, 5, 5, 10, 2))
+sim.2 <- sim(s, n=25, hz.sd=c(1, 2, 5, 5, 5, 10, 2))
 
 # plot
 par(mfrow=c(2,1), mar=c(0, 0, 0, 0))
