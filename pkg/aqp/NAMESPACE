@@ -56,7 +56,8 @@ importFrom(sp,
 )
 
 importFrom(Hmisc, 
-  wtd.mean, 
+  hdquantile,
+	wtd.mean, 
   wtd.var, 
   wtd.quantile, 
   wtd.rank, 
