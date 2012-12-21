@@ -114,30 +114,30 @@ seg.summary <- function(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, 
 	# numeric variables
 	if(prop.class %in% c('numeric','integer')) {
 				
-		# this mean is the horizon-thickness weighted mean across all profiles
+		# mean
 		p.mean <- sapply(l.recon, mean, na.rm=TRUE)
 		
-		# this estimate of SD is too low when using a segment size > 1 cm
+		# SD: this estimate may be too low when using a segment size > 1 cm
 		p.sd <- sqrt(sapply(l.recon, wtd.var, na.rm=TRUE))
 		
-		# these are the horizon-thickness weighted quantiles
+		# Harrell-Davis quantile estimator: better for small-med. size samples
 		q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-		p.quantiles <- data.frame(t(sapply(l.recon, wtd.quantile, probs=q.probs, na.rm=TRUE)))
+		p.quantiles <- data.frame(t(sapply(l.recon, hdquantile, probs=q.probs, na.rm=TRUE)))
 		names(p.quantiles) <- paste('p.q', round(q.probs * 100), sep='')
 		
 		
-		# profile-weighted statistics
-		if(use.wts == TRUE) {
-			# weighted mean calculation: reduces to standard mean, when weights are equal
-			p.wtmean <- sapply(l.seq, function(i) wtd.mean(l.recon[[i]], weights=l.recon.wts[[i]], na.rm=TRUE)) 
-			
-			# weighted standard deviation: reduces to regular SD when weights are equal
-			p.wtsd <- sqrt(sapply(l.seq, function(i) wtd.var(l.recon[[i]], weights=l.recon.wts[[i]], normwt=TRUE, na.rm=TRUE)))
-			
-			# weighted quantiles: reduces to standard quantiles when weights are equal
-			p.wtquantiles <- data.frame(t(sapply(l.seq, function(i) wtd.quantile(l.recon[[i]], weights=l.recon.wts[[i]], probs=q.probs, normwt=TRUE, na.rm=TRUE))))
-			names(p.wtquantiles) <- paste('p.wtq', round(q.probs * 100), sep='')
-			} # end processing weighted mean, SD, quantiles
+# 		# profile-weighted statistics
+# 		if(use.wts == TRUE) {
+# 			# weighted mean calculation: reduces to standard mean, when weights are equal
+# 			p.wtmean <- sapply(l.seq, function(i) wtd.mean(l.recon[[i]], weights=l.recon.wts[[i]], na.rm=TRUE)) 
+# 			
+# 			# weighted standard deviation: reduces to regular SD when weights are equal
+# 			p.wtsd <- sqrt(sapply(l.seq, function(i) wtd.var(l.recon[[i]], weights=l.recon.wts[[i]], normwt=TRUE, na.rm=TRUE)))
+# 			
+# 			# weighted quantiles: reduces to standard quantiles when weights are equal
+# 			p.wtquantiles <- data.frame(t(sapply(l.seq, function(i) wtd.quantile(l.recon[[i]], weights=l.recon.wts[[i]], probs=q.probs, normwt=TRUE, na.rm=TRUE))))
+# 			names(p.wtquantiles) <- paste('p.wtq', round(q.probs * 100), sep='')
+# 			} # end processing weighted mean, SD, quantiles
 		
 		
 		# try user defined function
