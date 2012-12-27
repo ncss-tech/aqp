@@ -308,30 +308,30 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	# values
 	x.recon <- sapply(x.unrolled, '[')
 	
-  ## TODO: weights should be stored as a 'site' atttribute in an SPC object
-	# weights
-	if(use.wts == TRUE) {
-		message('Note: profile weights are still experimental, use with caution!')
+  # ## TODO: weights should be stored as a 'site' atttribute in an SPC object
+	# # weights
+	# if(use.wts == TRUE) {
+		# message('Note: profile weights are still experimental, use with caution!')
 		
-		# unroll a weight vector for each pedon
-		x.unrolled.wts <- by(data, data$id, function(i, m=max_d) unroll(top=i$top, bottom=i$bottom, prop=i$wt, max_depth=m))
+		# # unroll a weight vector for each pedon
+		# x.unrolled.wts <- by(data, data$id, function(i, m=max_d) unroll(top=i$top, bottom=i$bottom, prop=i$wt, max_depth=m))
 		
-		# reconstitute weights:
-		x.recon.wts <- sapply(x.unrolled.wts, '[')
-		x.recon.wts <- x.recon.wts / max(x.recon.wts, na.rm=TRUE)
+		# # reconstitute weights:
+		# x.recon.wts <- sapply(x.unrolled.wts, '[')
+		# x.recon.wts <- x.recon.wts / max(x.recon.wts, na.rm=TRUE)
 		
-		# clean-up
-		rm(x.unrolled.wts); gc()
-		}
+		# # clean-up
+		# rm(x.unrolled.wts); gc()
+		# }
 
 
 	## TODO: this is wasteful, as we can work with the x.unrolled instead
 	# convert to lists
 	l.recon <- by(x.recon, 1:max_d, unlist)
 		
-	# optionally setup weight list
-	if(use.wts == TRUE)
-		l.recon.wts <- by(x.recon.wts, 1:max_d, unlist)
+	# # optionally setup weight list
+	# if(use.wts == TRUE)
+		# l.recon.wts <- by(x.recon.wts, 1:max_d, unlist)
 	
 	
 	
@@ -345,16 +345,14 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 	if(!missing(seg_size) | !missing(seg_vect)) {
 				
 		# use a user-defined segmenting vector
-		if(!missing(seg_vect))
-			{
+		if(!missing(seg_vect)) {
 			# if seg_vect starts with 0: simple case
 			if(seg_vect[1] == 0)
 				wind.idx <- rep(seg_vect[-1], times=diff(seg_vect))[1:max_d]
 			
 			# user only cares about some slab of soil  > 0 and < max_depth
 			# should only be a seg_vect of length 2
-			else
-				{
+			else {
 				if(length(seg_vect) != 2)
 					stop('seg_vect must either start from 0, or contain two values between 0 and the soil depth')
 				
@@ -366,7 +364,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 				padding.after <- rep(NA, times=max_d - seg_vect[2])
 				# make a new label for the slab
 				new.label <- paste(seg_vect, collapse='-')
-				# generate and index for the slab
+				# generate an index for the slab
 				slab.idx <- rep(new.label, times=slab.thickness)
 				# generate the entire index: padding+slab+padding = total number of slices (max_d)
 				wind.idx <- c(padding.before, slab.idx, padding.after)
@@ -391,9 +389,9 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 		# this is caused by a seg_size that does not divide evenly into our max depth (max_d)
 		l.recon <- by(x.recon, wind.idx, unlist)
 		
-		# optionally setup weight list
-		if(use.wts == TRUE)
-			l.recon.wts <- by(x.recon.wts, wind.idx, unlist)
+		# # optionally setup weight list
+		# if(use.wts == TRUE)
+			# l.recon.wts <- by(x.recon.wts, wind.idx, unlist)
 		
 		
 		# user-defined segmenting vector, starting from 0
@@ -454,7 +452,7 @@ soil.slot <- function(data, seg_size=NA, seg_vect=NA, use.wts=FALSE, strict=FALS
 			}
 		
 		# compute segment-wise summary statistics
-		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts, prop.levels, class_prob_mode)
+		df.stats <- seg.summary(l.recon, prop.class, use.wts, user.fun, l.recon.wts=NA, prop.levels, class_prob_mode)
 		} # done with segmenting
 	
 	
