@@ -3,10 +3,10 @@
 ##############################################################
 
 # default slab function for categorical variables
-slab.fun.factor.default <- function(values, prop.levels) {
+slab.fun.factor.default <- function(values, prop.levels, class_prob_mode) {
 	# get a vector of all possible categories
-	# note that l.recon contains factor codes
-	p.unique.classes <- as.vector(na.omit(unique(values)))
+	p.unique.classes <- levels(values)
+	tf <- factor(values, levels=p.unique.classes, labels=prop.levels[p.unique.classes])
 		
 	# tabular frequences for complete set of possible categories
 	p.table <- sapply(values, function(i, cpm=class_prob_mode, wts=l.recon.wts) {
@@ -76,8 +76,11 @@ slab.fun.numeric.default <- function(values) {
 # slab.fun: aggregate function applied to data chunks
 # ... : extra arguments passed on to slab.fun
 
-# custom segmentation 
-slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fun=slab.fun.numeric.default, ...){
+# this is about 40% slower than the old method
+slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fun=slab.fun.numeric.default, class_prob_mode=1, ...){
+	if(! (require(reshape) & require(Hmisc) & require(plyr)) )
+		stop("please install the 'reshape' and 'Hmisc' packages", call.=FALSE)
+	
 	## important: change the default behavior of data.frame and melt
 	opt.original <- options(stringsAsFactors = FALSE)
 	
@@ -86,6 +89,9 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 	
 	# get number of profiles
 	n.profiles <- length(object)
+	
+	# max depth
+	max.d <- max(object)
 	
 	# extract components of the formula:
 	g <- all.vars(update(fm, .~0)) # left-hand side
@@ -112,13 +118,13 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 		fm.slice <- formula(paste(seg.size[1], ':', seg.size[2]-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
 	
 	# slice into 1cm increments, result is a SPC
-	data <- slice(object, fm.slice, strict=strict)
+	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
 	
-	# max depth
-	max.d <- max(data)
+	# merge site data back into the result
+	data <- join(data, site(object), by=idname(object))
 	
 	# convert sliced SPC into a data.frame, merging-in site-level data
-	data <- as(data, 'data.frame')
+	# data <- as(data, 'data.frame')
 	
 	# check variable classes
 	## TODO: there must be a cleaner way to check on this
@@ -143,6 +149,7 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 		}
 		
 		# re-set default function, currently no user-supply-able option
+		# TODO: figure out how to add the extra arguments
 		slab.fun <- slab.fun.factor.default	
 		stop('TODO: finish implementation and testing')	
 		}
