@@ -57,47 +57,11 @@ plot(s)
 # using data from column 'prop'
 s1 <- slab(sp1, fm= ~ prop)
 
-# plot mean +/- 1SD
-library(lattice)
-xyplot(top ~ p.mean + I(p.mean + p.sd) + I(p.mean - p.sd), 
-data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
-panel=panel.superpose, ylim=c(110,-5), asp=2)
-
 # check median & IQR
+library(lattice)
 xyplot(top ~ p.q50 + p.q25 + p.q75, 
 data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2), 
 panel=panel.superpose, ylim=c(110,-5), asp=2)
-
-# other segment sizes
-# 5cm
-s5 <- slab(sp1, fm= ~ prop, seg_size=5)
-
-# 10cm segments:
-s10 <- slab(sp1, fm= ~ prop, seg_size=10)
-
-# 20cm
-s20 <- slab(sp1, fm= ~ prop, seg_size=20)
-
-# variation in segment-weighted mean property: very little
-sapply(
-list(s1,s5,s10,s20), 
-function(i) {
-	with(i, sum((bottom - top) * p.mean) / sum(bottom - top)) 
-	}
-)
-
-# combined viz
-g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5, 
-"10cm interval"=s10, "20cm interval"=s20)
-
-# note special syntax for plotting step function
-xyplot(cbind(top,bottom) ~ p.mean, groups=which, data=g2, id=g2$which,
-panel=panel.depth_function, ylim=c(250,-10), 
-scales=list(y=list(tick.number=10)), xlab='Property', 
-ylab='Depth (cm)', main='Soil Profile Averaging by Slotting',
-auto.key=list(columns=2, points=FALSE, lines=TRUE), asp=2
-)
-
 
 }
 \keyword{datasets}
