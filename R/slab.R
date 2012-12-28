@@ -1,6 +1,15 @@
+## updated to use aggregate(), now >10x faster than ddply() version
+## keep checking on other options:
+## http://stackoverflow.com/questions/11533438/why-is-plyr-so-slow
+
+
+## TODO: contributing fraction calculation doesn't work when slabbing categorical variables
+## TODO: cpm argument doesn't seem to affect the results
+## TODO: fix all examples and demos
 
 # default slab function for categorical variables
-# returns data.frame with a single row
+# returns a named vector of results
+# this type of function is compatible with aggregate()
 .slab.fun.factor.default <- function(values, cpm) {
 	
 	# probabilities are relative to number of contributing profiles
@@ -19,33 +28,20 @@
 		pt <- pt[-length(pt)]
 	}
 	
-	# convert table into a data.frame
-	p.prop <- data.frame(matrix(pt, nrow=1))
-	# assign safe names to the resulting columns: each column is a level of values
-	names(p.prop) <- make.names(levels(values))
+	# assign safe names to the vector of probabilities
+	names(pt) <- make.names(levels(values))
 	
-	return(p.prop)
+	return(pt)
 	}
+
 
 # default slab function for continuous variables
-# returns data.frame with a single row
+# returns a named vector of results
+# this type of function is compatible with aggregate()
 .slab.fun.numeric.default <- function(values) {
 	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-	q.df <- data.frame(t(hdquantile(values, probs=q.probs, na.rm=TRUE)))
-	names(q.df) <- paste('p.q', round(q.probs * 100), sep='')
-	return(q.df)
-	}
-
-# this function is internally used to process chunks
-.process.slab.chunk <- function(chunk, slab.fun, ...) {
-	# process summary
-	chunk.summary <- slab.fun(chunk$value, ...)
-	# parse chunk label and re-create depths
-	chunk.depths <- strsplit(as.character(chunk$seg.label[1]), '-')[[1]]
-	# estimate contributing fraction
-	cf <- length(na.omit(chunk$value)) / length(chunk$value)
-	# compose result
-	res <- data.frame(top=chunk.depths[1], bottom=chunk.depths[2], contributing_fraction=cf, chunk.summary)
+	res <- hdquantile(values, probs=q.probs, na.rm=TRUE)
+	names(res) <- paste('p.q', round(q.probs * 100), sep='')
 	return(res)
 	}
 
@@ -60,7 +56,7 @@
 # ... : extra arguments passed on to slab.fun
 
 # this is about 40% slower than the old method
-.slab <- function(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...){
+.slab <- function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...){
 	# get extra arguments: length of 0 if no extra arguments
 	extra.args <- list(...)
 	
@@ -105,14 +101,13 @@
 	
 	# merge site data back into the result
 	data <- join(data, site(object), by=idname(object))
-	
-	# convert sliced SPC into a data.frame, merging-in site-level data
-	# data <- as(data, 'data.frame')
-	
+		
 	# check variable classes
-	## TODO: there must be a cleaner way to check on this
-	vars.numeric.test <- sapply(data.frame(data[, vars]), function(i) inherits(i, 'numeric') | inherits(i, 'integer'))
-	
+	if(length(vars) > 1)
+		vars.numeric.test <- sapply(data[, vars], is.numeric)
+	else
+		vars.numeric.test <- is.numeric(data[[vars]])
+		
 	# sanity check: all numeric, or single character/factor
 	if(any(! vars.numeric.test) & length(vars) > 1)
 		stop('mixed variable types and multiple categorical variables are not currently supported in the same call to slab', call.=FALSE)
@@ -125,12 +120,7 @@
 			message('Note: converting categorical variable to factor.')
 			data[[vars]] <- factor(data[[vars]])
 		}
-	
-		if(class(data[[vars]]) ==  'factor') {
-			# save the levels of our categorical variable
-			prop.levels <- levels(data[[vars]]) 
-		}
-		
+			
 		# re-set default function, currently no user-supply-able option
 		slab.fun <- .slab.fun.factor.default
 		
@@ -194,21 +184,40 @@
 	seg.label.is.not.NA <- which(!is.na(data$seg.label))
 	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(idname(object), 'seg.label', g), measure.vars=vars)
 	
-	# process chunks according to group -> variable -> segment
-	# optionally account for extra arguments
-	if(length(extra.args) == 0)
-		d.slabbed <- ddply(d.long, .variables=c(g, 'variable', 'seg.label'), .progress=progress, .fun=.process.slab.chunk, slab.fun=slab.fun) 
+	# make a formula for aggregate()
+	aggregate.fm <- as.formula(paste('value ~ ', g, ' + variable + seg.label', sep=''))
 	
-	else
-		d.slabbed <- do.call(what='ddply', args=c(list(d.long, .variables=c(g, 'variable', 'seg.label'), .progress=progress,  .fun=.process.slab.chunk, slab.fun=slab.fun), extra.args))
+	# process chunks according to group -> variable -> segment
+	# NA values are not explicitly dropped
+	if(length(extra.args) == 0)
+		d.slabbed <- aggregate(aggregate.fm, data=d.long, na.action=na.include, FUN=slab.fun)
+	
+	# optionally account for extra arguments
+	else {
+		the.args <- c(list(formula=aggregate.fm, data=d.long, na.action=na.include, FUN=slab.fun), extra.args)
+		d.slabbed <- do.call(what='aggregate', args=the.args)
+	}
+	
+		
+	# if slab.fun returns a vector of length > 1 we must:
+	# convert the complex data.frame returned by aggregate into a regular data.frame
+	# the column 'value' is a matrix with the results of slab.fun
+	if(class(d.slabbed$value) == 'matrix')
+		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
+	
+	# convert the slab.label column into top/bottom as integers
+	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
+	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
+	d.slabbed$bottom <- as.integer(lapply(slab.depths, function(i) i[2]))
+	
+	## TODO: this doesn't work with categorical variables
+	# estimate contributing fraction
+	d.slabbed$contributing_fraction <- aggregate(aggregate.fm, data=d.long, na.action=na.include, FUN=function(i) {length(na.omit(i)) / length(i)})$value
+
 	
 	# remove seg.label from result
 	d.slabbed$seg.label <- NULL
-	
-	# convert depths back into integers
-	d.slabbed$top <- as.integer(d.slabbed$top)
-	d.slabbed$bottom <- as.integer(d.slabbed$bottom)
-	
+		
 	# reset options:
 	options(opt.original)
 	
