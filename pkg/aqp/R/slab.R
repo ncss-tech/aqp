@@ -1,60 +1,42 @@
-##############################################################
-## slotting functions ##
-##############################################################
 
 # default slab function for categorical variables
-slab.fun.factor.default <- function(values, prop.levels, class_prob_mode) {
-	# get a vector of all possible categories
-	p.unique.classes <- levels(values)
-	tf <- factor(values, levels=p.unique.classes, labels=prop.levels[p.unique.classes])
-		
-	# tabular frequences for complete set of possible categories
-	p.table <- sapply(values, function(i, cpm=class_prob_mode, wts=l.recon.wts) {
-			tf <- factor(l.recon[[i]], levels=p.unique.classes, labels=prop.levels[p.unique.classes])
-			
-			# probabilities are relative to number of contributing profiles
-			if(cpm == 1) {
-			  tb <- table(tf, useNA='no')
-			  # convert to proportions
-			  pt <- prop.table(tb)
-			  }
-			
-			# probabilities are relative to total number of profiles
-			else if(cpm == 2) {
-			  tb <- table(tf, useNA='always')
-			  # convert to proportions, 
-			  # the last column will be named 'NA', and contains the tally of NAs --> remove it
-			  pt <- prop.table(tb)
-			  pt <- pt[-length(pt)]
-			  }
-			  
-			return(pt)
-			} 
-		)
-		
-		# convert into a dataframe: if there are > 1 classes, 
-		# then we must transpose p.table when converting to a data.frame
-		if(length(p.unique.classes) > 1)
-			p.prop <- data.frame(t(p.table))
-			
-		# when there is only 1 class, things are more complicated:
-		# 1. no need to transpose p.table
-		# 2. need to manually add the class name
-		else {
-			p.prop <- data.frame(p.table)
-			names(p.prop) <- prop.levels[p.unique.classes]
-			}
+# returns data.frame with a single row
+.slab.fun.factor.default <- function(values, cpm) {
+	
+	# probabilities are relative to number of contributing profiles
+	if(cpm == 1) {
+		tb <- table(values, useNA='no')
+		# convert to proportions
+		pt <- prop.table(tb)
+	}
+	
+	# probabilities are relative to total number of profiles
+	else if(cpm == 2) {
+		tb <- table(values, useNA='always')
+		# convert to proportions, 
+		# the last column will be named 'NA', and contains the tally of NAs --> remove it
+		pt <- prop.table(tb)
+		pt <- pt[-length(pt)]
+	}
+	
+	# convert table into a data.frame
+	p.prop <- data.frame(matrix(pt, nrow=1))
+	# assign safe names to the resulting columns: each column is a level of values
+	names(p.prop) <- make.names(levels(values))
+	
+	return(p.prop)
 	}
 
 # default slab function for continuous variables
-slab.fun.numeric.default <- function(values) {
+# returns data.frame with a single row
+.slab.fun.numeric.default <- function(values) {
 	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 	q.df <- data.frame(t(hdquantile(values, probs=q.probs, na.rm=TRUE)))
 	names(q.df) <- paste('p.q', round(q.probs * 100), sep='')
 	return(q.df)
 	}
 
-# this function is internally used
+# this function is internally used to process chunks
 .process.slab.chunk <- function(chunk, slab.fun, ...) {
 	# process summary
 	chunk.summary <- slab.fun(chunk$value, ...)
@@ -71,15 +53,16 @@ slab.fun.numeric.default <- function(values) {
 # SoilProfileCollection method
 # object: SoilProfileCollection 
 # fm: formula defining aggregation
-# seg.size: either regular segment interval, or user-defined segment boundaries {starting from 0, or length of 2}
+# slab.structure: either regular segment interval, or user-defined segment boundaries {starting from 0, or length of 2}
 # progress: plyr-progress display
-# slab.fun: aggregate function applied to data chunks
+# slab.fun: aggregate function applied to data chunks (must return a single row / chunk)
+# cpm: class probability normalization mode
 # ... : extra arguments passed on to slab.fun
 
 # this is about 40% slower than the old method
-slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fun=slab.fun.numeric.default, class_prob_mode=1, ...){
-	if(! (require(reshape) & require(Hmisc) & require(plyr)) )
-		stop("please install the 'reshape' and 'Hmisc' packages", call.=FALSE)
+.slab <- function(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...){
+	# get extra arguments: length of 0 if no extra arguments
+	extra.args <- list(...)
 	
 	## important: change the default behavior of data.frame and melt
 	opt.original <- options(stringsAsFactors = FALSE)
@@ -114,8 +97,8 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 	
 	# short-cut for user-defined slab
 	## TODO: slice() returns an extra row, so only request slices to max-1
-	if(length(seg.size) == 2 )
-		fm.slice <- formula(paste(seg.size[1], ':', seg.size[2]-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
+	if(length(slab.structure) == 2 )
+		fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2]-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
 	
 	# slice into 1cm increments, result is a SPC
 	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
@@ -149,41 +132,41 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 		}
 		
 		# re-set default function, currently no user-supply-able option
-		# TODO: figure out how to add the extra arguments
-		slab.fun <- slab.fun.factor.default	
-		stop('TODO: finish implementation and testing')	
+		slab.fun <- .slab.fun.factor.default
+		
+		# add extra arguments required by this function
+		# note that we cannot accept additional arguments when processing categorical values
+		extra.args <- list(cpm=cpm)
 		}
 		
-	
-	
 	# generate labels for slabs
 	# fixed-size slabs
-	if(length(seg.size) == 1) {
+	if(length(slab.structure) == 1) {
 		# generate sequence of segment labels
-		seg.label <- rep(1:ceiling(max.d / seg.size), each=seg.size, length=max.d)
+		seg.label <- rep(1:ceiling(max.d / slab.structure), each=slab.structure, length=max.d)
 		# general segment labels
 		seg.label.levels <- tapply(1:max.d, seg.label, function(i) {r <- range(i); paste(c(r[1]-1, r[2]), collapse='-') } )
 	}
 	
 	# user-defined slabs
-	if(length(seg.size) > 1) {
+	if(length(slab.structure) > 1) {
 		# trival case where segments start from 0
-		if(seg.size[1] == 0 & length(seg.size) > 2)
-			seg.label <- rep(seg.size[-1], times=diff(seg.size))[1:max.d]
+		if(slab.structure[1] == 0 & length(slab.structure) > 2)
+			seg.label <- rep(slab.structure[-1], times=diff(slab.structure))[1:max.d]
 		
 		# other case: user defines an arbitrary lower and upper limit
 		else {
-			if(length(seg.size) != 2)
+			if(length(slab.structure) != 2)
 				stop('user-defined slab boundaries must either start from 0, or contain two values between 0 and the max soil depth')
 			
 			# proceed
-			slab.thickness <- diff(seg.size)
+			slab.thickness <- diff(slab.structure)
 			# how many slices of NA before the slab?
-			padding.before <- rep(NA, times=seg.size[1])
+			padding.before <- rep(NA, times=slab.structure[1])
 			# how many slices of NA afer the slab
-			padding.after <- rep(NA, times=max.d - seg.size[2])
+			padding.after <- rep(NA, times=max.d - slab.structure[2])
 			# make a new label for the slab
-			new.label <- paste(seg.size, collapse='-')
+			new.label <- paste(slab.structure, collapse='-')
 			# generate an index for the slab
 			slab.idx <- rep(new.label, times=slab.thickness)
 			# generate the entire index: padding+slab+padding = total number of slices (max_d)
@@ -192,7 +175,7 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 			}
 		
 		# generate segment labels	
-		seg.label.levels <- sapply(1:(length(seg.size)-1), function(i) paste(c(seg.size[i], seg.size[i+1]), collapse='-'))
+		seg.label.levels <- sapply(1:(length(slab.structure)-1), function(i) paste(c(slab.structure[i], slab.structure[i+1]), collapse='-'))
 	}
 	
 	
@@ -209,13 +192,22 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 	# convert into long format
 	# throwing out those rows with an NA segment label
 	seg.label.is.not.NA <- which(!is.na(data$seg.label))
-	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c('id', 'seg.label', g), measure.vars=vars)
+	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(idname(object), 'seg.label', g), measure.vars=vars)
 	
 	# process chunks according to group -> variable -> segment
-	d.slabbed <- ddply(d.long, .variables=c(g, 'variable', 'seg.label'), .progress=progress, .parallel=getOption('AQP_parallel', default=FALSE), .fun=.process.slab.chunk, slab.fun=slab.fun, ...) 
+	# optionally account for extra arguments
+	if(length(extra.args) == 0)
+		d.slabbed <- ddply(d.long, .variables=c(g, 'variable', 'seg.label'), .progress=progress, .fun=.process.slab.chunk, slab.fun=slab.fun) 
+	
+	else
+		d.slabbed <- do.call(what='ddply', args=c(list(d.long, .variables=c(g, 'variable', 'seg.label'), .progress=progress,  .fun=.process.slab.chunk, slab.fun=slab.fun), extra.args))
 	
 	# remove seg.label from result
 	d.slabbed$seg.label <- NULL
+	
+	# convert depths back into integers
+	d.slabbed$top <- as.integer(d.slabbed$top)
+	d.slabbed$bottom <- as.integer(d.slabbed$bottom)
 	
 	# reset options:
 	options(opt.original)
@@ -224,3 +216,9 @@ slab2 <- function(object, fm, seg.size=1, progress='none', strict=FALSE, slab.fu
 	return(d.slabbed)
 }
 
+# setup generic function
+if (!isGeneric("slab"))
+	setGeneric("slab", function(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...) standardGeneric("slab"))
+
+# method dispatch
+setMethod(f='slab', signature='SoilProfileCollection', definition=.slab)

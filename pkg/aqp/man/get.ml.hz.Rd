@@ -6,7 +6,7 @@
 get.ml.hz(x, hz.names)
 }
 \arguments{
-  \item{x}{output from \code{\link{slab.SPC}}}
+  \item{x}{output from \code{\link{slab}}}
   \item{hz.names}{vector of horizon names}
 }
 
@@ -22,9 +22,10 @@ A dataframe with the following columns:
 
 \author{D.E. Beaudette}
 
-\seealso{\code{\link{slab.SPC}}}
+\seealso{\code{\link{slab}}}
 \examples{
 data(sp1)
+depths(sp1) <- id ~ top + bottom
 
 # normalize horizon names: result is a factor
 sp1$name <- generalize.hz(sp1$name, 
@@ -32,7 +33,7 @@ sp1$name <- generalize.hz(sp1$name,
   pat=c('O', '^A','^B','C'))
 
 # compute slice-wise probability so that it sums to contributing fraction, from 0-150
-a <- slab(sp1, fm= ~ name, class_prob_mode=1, seg_vect=0:150)
+a <- slab(sp1, fm= ~ name, cpm=1, slab.structure=0:150)
 
 # generate table of ML horizonation
 get.ml.hz(a, c('O','A','B','C'))

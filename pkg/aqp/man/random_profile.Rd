@@ -60,7 +60,7 @@ plot(d, hz.distinctness.offset='HzD')
 # make a more interesting color based on the first property
 # depth functions are generated using the LPP function
 if(require(scales)) {
-  opar <- par(mfrow=c(2,1))
+  opar <- par(mar=c(0,0,0,0), mfrow=c(2,1))
   
   # setup color palette and mapping function
   cols <- rev(brewer_pal(pal='Spectral')(8))
@@ -107,25 +107,11 @@ par.settings=list(superpose.line=list(col='black', lwd=2))
 # optionally add original data as step-functions
 if(require(latticeExtra)) {
   h <- horizons(d)
-  h$mid <- with(h, (top + bottom) / 2)
   p1 + as.layer(xyplot(top ~ p1, groups=id, data=h,
   horizontal=TRUE, type='S',
   par.settings=list(superpose.line=list(col='blue', lwd=1, lty=2))))
   }
 
-
-# stress-test profile comparison functions (not run)
-# d <- ldply(1:1000, random_profile)
-# 
-# 100 profiles, 4 varibales:
-# 66 seconds on 1.3 Ghz Intel Mac Mini 
-# D matrix = 192.3 Mb
-# 768 Mb required
-# p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'), max_d=50, k=0)
-
-# more efficient computation, at the expense of precision, with 
-# p <- profile_compare(d, vars=c('p1','p2','p3','p4','p5'),
-# max_d=50, k=0, sample_interval=10)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
