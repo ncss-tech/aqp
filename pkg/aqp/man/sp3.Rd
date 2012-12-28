@@ -51,27 +51,32 @@ sp3$h <- NA ; sp3$s <- NA ; sp3$v <- NA
 sp3.rgb <- with(sp3, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
 sp3[, c('h','s','v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue=1)))
 
-# make a fake grouping variable, and aggregate all profiles
-sp3$group <- factor('A')
-a <- slab(sp3, fm=group ~ clay + cec + ph + h + s + v, seg_size=10)
+# promote to SoilProfileCollection
+depths(sp3) <- id ~ top + bottom
 
+# aggregate across entire collection
+a <- slab(sp3, fm= ~ clay + cec + ph + h + s + v, slab.structure=10)
 
-# convert back to wide format, note that aggregation metric affects the result
-require(reshape)
+# check
+str(a)
+
+# convert back to wide format
+library(reshape)
 a.wide.q25 <- cast(a, top + bottom ~ variable, value=c('p.q25'))
 a.wide.q50 <- cast(a, top + bottom ~ variable, value=c('p.q50'))
 a.wide.q75 <- cast(a, top + bottom ~ variable, value=c('p.q75'))
 
 # add a new id for the 25th, 50th, and 75th percentile pedons
-# and convert top/bottoms to integers
 a.wide.q25$id <- 'Q25'
 a.wide.q50$id <- 'Q50'
 a.wide.q75$id <- 'Q75'
 
 # combine original data with "mean profile"
 vars <- c('top','bottom','id','clay','cec','ph','h','s','v')
+# make data.frame version of sp3
+sp3.df <- as(sp3, 'data.frame')
 sp3.grouped <- rbind(
-sp3[, vars], a.wide.q25[, vars], a.wide.q50[, vars], a.wide.q75[, vars]
+sp3.df[, vars], a.wide.q25[, vars], a.wide.q50[, vars], a.wide.q75[, vars]
 )
 
 # re-constitute the soil color from HSV triplets
