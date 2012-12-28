@@ -45,6 +45,7 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   }
 
 
+## TODO: further optimization should be possible.
 ## this is a much more robust + fast version of slice.slow
 ## needs a little more testing, and then will be ready
 slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE){
@@ -97,8 +98,6 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   if(any(vars %in% names(h)) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match any horizon data', call.=FALSE)
 
-
-  
   
   ## extract all vars by slice_i
   # pre-allocate storage as list
@@ -106,10 +105,14 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # prepare an index for the list
   slice.idx <- seq_along(z)
   
+  # convert h into an imutable data.frame for speed
+  # h <- idata.frame(h)
+  
   # iterate over this index
   for(slice.i in slice.idx) {
     
     # extract all vars for current slice
+    # TODO: this is wasteful as the entire pile of horizons is passed to get.slice in each iteration of the loop
     m.i.sub <- get.slice(h, id=id, top=top, bottom=bottom, vars=vars, z=z[slice.i], strict=strict)
     
     # join with original IDs in order to account for NA, or bad horizonation

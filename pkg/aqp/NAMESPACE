@@ -21,12 +21,13 @@ importFrom(graphics,
 )
 
 importFrom(plyr, 
+  idata.frame,
   ddply,
   llply,
   ldply,
   dlply,
   join,
-	summarise
+  summarise
 )
 
 importFrom(reshape, 
