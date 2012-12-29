@@ -54,6 +54,9 @@
 
 # this is about 40% slower than the old method
 .slab <- function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...){
+	# issue a message for now that things have changed
+	message('usage of slab() has changed considerably, please see the manual page for details')
+	
 	# get extra arguments: length of 0 if no extra arguments
 	extra.args <- list(...)
 	
@@ -223,7 +226,7 @@
 
 # setup generic function
 if (!isGeneric("slab"))
-	setGeneric("slab", function(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...) standardGeneric("slab"))
+	setGeneric("slab", function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...) standardGeneric("slab"))
 
 # method dispatch
 setMethod(f='slab', signature='SoilProfileCollection', definition=.slab)
