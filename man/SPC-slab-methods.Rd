@@ -25,7 +25,7 @@ slab(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab
   
   \item{slab.fun}{Function used to process each 'slab' of data, returning a \code{data.frame} with a single row. See details.}
   
-  \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 1 values will always sum to the contributing fraction, while mode 2 values will always sum to 1.}
+  \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1.}
 
 	\item{\dots}{further arguments passsed to \code{slab.fun}}
 
@@ -129,8 +129,8 @@ library(reshape)
 
 # normalize horizon names: result is a factor
 sp1$name <- generalize.hz(sp1$name, 
-													new=c('O','A','B','C'), 
-													pat=c('O', '^A','^B','C'))
+new=c('O','A','B','C'), 
+pat=c('O', '^A','^B','C'))
 
 # compute slice-wise probability so that it sums to contributing fraction, from 0-150
 a <- slab(sp1, fm= ~ name, cpm=1, slab.structure=0:150)
@@ -145,7 +145,6 @@ xyplot(top ~ value | variable, data=a.long, subset=value > 0,
 # again, this time using groups
 xyplot(top ~ value, data=a.long, groups=variable, subset=value > 0,
 			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, asp=2)
-
 
 # adjust probability to size of collection, from 0-150
 a.1 <- slab(sp1, fm= ~ name, cpm=2, slab.structure=0:150)
@@ -190,7 +189,7 @@ mean.and.sd <- function(values) {
 	s <- sd(values, na.rm=TRUE)
 	upper <- m + s
 	lower <- m - s
-	res <- data.frame(mean=m, lower=lower, upper=upper)
+	res <- c(mean=m, lower=lower, upper=upper)
 	return(res)
 	}
 

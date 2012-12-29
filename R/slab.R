@@ -1,11 +1,8 @@
 ## updated to use aggregate(), now >10x faster than ddply() version
+## scales linearly with an increas in num. profiles
+## scales exponentially (faster) with an increase in num. profiles / group
 ## keep checking on other options:
 ## http://stackoverflow.com/questions/11533438/why-is-plyr-so-slow
-
-
-## TODO: contributing fraction calculation doesn't work when slabbing categorical variables
-## TODO: cpm argument doesn't seem to affect the results
-## TODO: fix all examples and demos
 
 # default slab function for categorical variables
 # returns a named vector of results
@@ -185,16 +182,16 @@
 	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(idname(object), 'seg.label', g), measure.vars=vars)
 	
 	# make a formula for aggregate()
-	aggregate.fm <- as.formula(paste('value ~ ', g, ' + variable + seg.label', sep=''))
+	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep=''))
 	
 	# process chunks according to group -> variable -> segment
 	# NA values are not explicitly dropped
 	if(length(extra.args) == 0)
-		d.slabbed <- aggregate(aggregate.fm, data=d.long, na.action=na.include, FUN=slab.fun)
+		d.slabbed <- aggregate(aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun)
 	
 	# optionally account for extra arguments
 	else {
-		the.args <- c(list(formula=aggregate.fm, data=d.long, na.action=na.include, FUN=slab.fun), extra.args)
+		the.args <- c(list(formula=aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun), extra.args)
 		d.slabbed <- do.call(what='aggregate', args=the.args)
 	}
 	
@@ -210,9 +207,8 @@
 	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
 	d.slabbed$bottom <- as.integer(lapply(slab.depths, function(i) i[2]))
 	
-	## TODO: this doesn't work with categorical variables
 	# estimate contributing fraction
-	d.slabbed$contributing_fraction <- aggregate(aggregate.fm, data=d.long, na.action=na.include, FUN=function(i) {length(na.omit(i)) / length(i)})$value
+	d.slabbed$contributing_fraction <- aggregate(aggregate.fm, data=d.long, na.action=na.pass, FUN=function(i) {length(na.omit(i)) / length(i)})$value
 
 	
 	# remove seg.label from result

@@ -32,7 +32,7 @@ head(s1)
 round(sapply(
 list(s1, s5, s10, s20), 
 function(i) {
-	with(i, sum((bottom - top) * chunk.summary) / sum(bottom - top)) 
+	with(i, sum((bottom - top) * value) / sum(bottom - top)) 
 	}
 ), 1)
 
@@ -41,7 +41,7 @@ g2 <- make.groups("1cm interval"=s1, "5cm interval"=s5,
 "10cm interval"=s10, "20cm interval"=s20)
 
 # note special syntax for plotting step function
-xyplot(cbind(top,bottom) ~ chunk.summary, groups=which, data=g2, id=g2$which,
+xyplot(cbind(top,bottom) ~ value, groups=which, data=g2, id=g2$which,
 panel=panel.depth_function, ylim=c(250,-10), 
 scales=list(y=list(tick.number=10)), xlab='Property', 
 ylab='Depth (cm)', main='Soil Profile Aggregation by Regular Depth-slice',
