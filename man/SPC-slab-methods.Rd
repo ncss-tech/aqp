@@ -9,7 +9,7 @@
 
 \usage{
 # method for SoilProfileCollection objects
-slab(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...)
+slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...)
 }
 
 \arguments{
@@ -18,8 +18,6 @@ slab(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab
   \item{fm}{A formula: either `groups ~ var1 + var2 + var3' where named variables are aggregated within `groups' OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3'}
   
   \item{slab.structure}{A user-defined slab thickness (defined by an integer), or user-defined structure (numeric vector). See details below.}
-  
-  \item{progress}{'none' (default): argument passed to \code{ddply} and related functions, see \code{\link{create_progress_bar}} for all possible options; 'text' is usually fine.}
   
   \item{strict}{logical: should horizons be strictly checked for self-consistency?}
   
@@ -31,58 +29,64 @@ slab(object, fm, slab.structure=1, progress='none', strict=FALSE, slab.fun=.slab
 
 }
 
-  
-  
-  
+
 \section{Methods}{
 \describe{
 \item{data = "SoilProfileCollection"}{Typical usage, where input is a \code{\link{SoilProfileCollection}}.}
 }
 }
 
-
 \details{
-\code{soil.slot} is used internally by the various \code{slab} methods, and should be be directly invoked by the user.
+Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased.
 
-Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}.
+There are several possible ways to define slabs, using \code{slab.structure}:
 
-Unweighted and weighted summary stats are computed with the Hmisc functions \code{wtd.mean}, \code{wtd.var}, and \code{wtd.quantile}. Weighted probabilities (proportions) will be implemented in a future release. See the sample dataset \code{\link{sp1}} documentation for further examples. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. If a user-defined function (\code{user.fun}) is specified, care must be taken if sample size is used within the calculation _and_ slice sizes are > 1 depth unit.
+\describe{
+	\item{a single integer}{e.g. 10: data are aggregated over a regular sequence of 10-unit thickness slabs}
+	\item{a vector of 2 integers}{e.g. c(50, 60): data are aggregated over depths spanning 50--60 units}
+	\item{a vector of 3 or more integers}{e.g. c(0, 5, 10, 50, 100): data are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
+	} 
 }
 
 \value{
-Output is returned in long format, such that slice-wise aggregates are returned once for each combination of grouping variable (optional) and variable described in the \code{fm} argument.
+Output is returned in long format, such that slice-wise aggregates are returned once for each combination of grouping level (optional), variable described in the \code{fm} argument, and depth-wise 'slab'.
 
-When a single numeric variable is used:
+Aggregation of numeric variables, using the default slab function:
 	\describe{
-		\item{top}{The slice top boundary.}
-		\item{bottom}{The slice bottom boundary.}
-		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
-		\item{p.mean}{The slice-wise (optionally weighted) mean.}
-		\item{p.sd}{An slice-wise (optionally weighted) standard deviation.}
+		\item{variable}{The names of variables included in the call to \code{slab}.}
+		\item{groupname}{The name of the grouping variable when provided, otherwise a fake grouping variable named 'all.profiles'.}
 		\item{p.q5}{The slice-wise 5th percentile.}
 		\item{p.q25}{The slice-wise 25th percentile}
 		\item{p.q50}{The slice-wise 50th percentile (median)}
 		\item{p.q75}{The slice-wise 75th percentile}
 		\item{p.q95}{The slice-wise 95th percentile}
-	}
+		\item{top}{The slab top boundary.}
+		\item{bottom}{The slab bottom boundary.}
+		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
+		}
 
 When a single factor variable is used, slice-wise probabilities for each level of that factor are returned as:
 	\describe{
-		\item{top}{The slice top boundary.}
-		\item{bottom}{The slice bottom boundary.}
-		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
+		\item{variable}{The names of variables included in the call to \code{slab}.}
+		\item{groupname}{The name of the grouping variable when provided, otherwise a fake grouping variable named 'all.profiles'.}
 		\item{A}{The slice-wise probability of level A}
 		\item{B}{The slice-wise probability of level B}
 		\item{\dots}{}
 		\item{n}{The slice-wise probability of level n}
+		\item{top}{The slab top boundary.}
+		\item{bottom}{The slab bottom boundary.}
+		\item{contributing_fraction}{The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1.}
+
 	}
 }
 
-\references{http://casoilresource.lawr.ucdavis.edu/}
+\references{
+D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, March 2013, Pages 258-268, 10.1016/j.cageo.2012.10.020.
+}
 \author{Dylan E Beaudette}
-\note{This function has replaced the previously defined `soil.slot.multiple' function as of aqp 0.98-8.58}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\note{Arguments to \code{slab} have changed with \code{aqp} 1.5 (2012-12-29) as part of a code clean-up and optimization. Calculation of weighted-summaries was broken in \code{aqp} 1.2-6 (2012-06-26), and removed as of \code{aqp} 1.5 (2012-12-29).  \code{slab} replaced the previously defined \code{soil.slot.multiple} function as of \code{aqp} 0.98-8.58 (2011-12-21).}
+
 
 \seealso{
 \code{\link{slice}}
@@ -180,10 +184,8 @@ sp3$group <- factor(sp3$group)
 depths(sp3) <- id ~ top + bottom
 site(sp3) <- ~ group
 
-# aggregate several variables at once, using a custom aggregate function
-# within each level of 'group'
 
-# this function returns the mean +/- 1SD
+# custom 'slab' function, returning mean +/- 1SD
 mean.and.sd <- function(values) {
 	m <- mean(values, na.rm=TRUE)
 	s <- sd(values, na.rm=TRUE)
@@ -193,6 +195,7 @@ mean.and.sd <- function(values) {
 	return(res)
 	}
 
+# aggregate several variables at once, within 'group'
 a <- slab(sp3, fm=group ~ L + A + B, slab.fun=mean.and.sd)
 
 # check the results:

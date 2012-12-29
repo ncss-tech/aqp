@@ -1,3 +1,11 @@
+-------------------------- aqp 1.4-5 (2012-12-29) --------------------------
+* slab() re-written from scratch, resulting in reduced memory footprint and quicker running time
+  ! older code based on slab() is likely to now broken- sorry, it won't happen again
+  - the new code is much slimmer and based on aggregate() rather than ddply
+  - function arguments have changed so be sure to check the manual page
+  - user-supplied functions are now much simpler to write and rely on vectors rather than data.frames (= faster)
+  - the next major release will contain additional examples of how to use the new features
+
 -------------------------- aqp 1.4 (2012-12-18) --------------------------
 * new function simulate.SoilProfileCollection() for simulation based on a template soil profile, proper documentation pending...
 
