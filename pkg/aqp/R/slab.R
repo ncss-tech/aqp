@@ -1,4 +1,5 @@
 ## updated to use aggregate(), now >10x faster than ddply() version
+## slice() can be further optimized, possibly through the use of idata.frame() or data.table()
 ## scales linearly with an increas in num. profiles
 ## scales exponentially (faster) with an increase in num. profiles / group
 ## keep checking on other options:
@@ -55,7 +56,7 @@
 # this is about 40% slower than the old method
 .slab <- function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...){
 	# issue a message for now that things have changed
-	message('usage of slab() has changed considerably, please see the manual page for details')
+# 	message('usage of slab() has changed considerably, please see the manual page for details')
 	
 	# get extra arguments: length of 0 if no extra arguments
 	extra.args <- list(...)
@@ -71,6 +72,10 @@
 	
 	# max depth
 	max.d <- max(object)
+	
+	# get name of ID column in original object for later
+	object.ID <- idname(object)
+	
 	
 	# extract components of the formula:
 	g <- all.vars(update(fm, .~0)) # left-hand side
@@ -100,8 +105,12 @@
 	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
 	
 	# merge site data back into the result
-	data <- join(data, site(object), by=idname(object))
-		
+	data <- join(data, site(object), by=object.ID)
+	
+	# clean-up
+	rm(object)
+	gc()
+	
 	# check variable classes
 	if(length(vars) > 1)
 		vars.numeric.test <- sapply(data[, vars], is.numeric)
@@ -179,14 +188,28 @@
 		data[, g] <- 1
 	}
 	
+# 	# determine number of profiles / group
+# 	profiles.per.group <- tapply(data[, object.ID], data[, g], function(i) length(unique(i)))
+# 	
+# 	# deliver some feedback:
+# 	message(paste('number of profiles:', n.profiles))
+# 	message(paste('profiles / group [', g, ']:', sep=''), appendLF=TRUE)
+# 	print(profiles.per.group)
+	
 	# convert into long format
 	# throwing out those rows with an NA segment label
 	seg.label.is.not.NA <- which(!is.na(data$seg.label))
-	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(idname(object), 'seg.label', g), measure.vars=vars)
+	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(object.ID, 'seg.label', g), measure.vars=vars)
 	
 	# make a formula for aggregate()
 	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep=''))
 	
+	##
+	## TODO: this might be the place to implement parallel code: 
+	##       1. split into a list based on g (only when g > 1 and profiles/group > threshold)
+	##       2. aggregate using seg.label + variable in parallel
+	##       3. combine results (a list of data.frames)
+	##
 	# process chunks according to group -> variable -> segment
 	# NA values are not explicitly dropped
 	if(length(extra.args) == 0)
