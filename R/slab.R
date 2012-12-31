@@ -178,8 +178,11 @@
 	}
 	
 	
+	## TODO: make sure that nrow(data) == length(factor(rep(seg.label, times=n.profiles), labels=seg.label.levels))
+	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
+	##         seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
+	##         l <- split(data, seg.label, drop=FALSE)
 	# add segmenting label to data
-	## TODO: check to make sure sorting assumptions are correct
 	data$seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
 	
 	# if there is no left-hand component in the formula, we are aggregating all data in the collection
@@ -206,7 +209,7 @@
 	
 	##
 	## TODO: this might be the place to implement parallel code: 
-	##       1. split into a list based on g (only when g > 1 and profiles/group > threshold)
+	##       1. split into a list based on number of cores/cpus available
 	##       2. aggregate using seg.label + variable in parallel
 	##       3. combine results (a list of data.frames)
 	##
