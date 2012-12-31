@@ -1,3 +1,6 @@
+## this scales fairly well:
+## n = (100, 1000, 10000) --> (0.53, 4.21, 38) seconds
+
 ## slice(SPC, ...)
 
 # this function is run on the horizon data, once for each depth slice
