@@ -1,3 +1,8 @@
+-------------------------- aqp 1.4-6 (2013-01-03) --------------------------
+* updated documentation and SoilProfileCollection tutorial here:
+  - https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp
+* plans laid for parallel processing in slab() and profileApply() via 'parallel' package
+
 -------------------------- aqp 1.4-5 (2012-12-29) --------------------------
 * slab() re-written from scratch, resulting in reduced memory footprint and quicker running time
   ! older code based on slab() is likely to now broken- sorry, it won't happen again
@@ -7,7 +12,7 @@
   - the next major release will contain additional examples of how to use the new features
 
 -------------------------- aqp 1.4 (2012-12-18) --------------------------
-* new function simulate.SoilProfileCollection() for simulation based on a template soil profile, proper documentation pending...
+* new function sim() for simulation based on a template soil profile, proper documentation pending...
 
 -------------------------- aqp 1.3-3 (2012-12-06) --------------------------
 * new function subsetProfiles() for simpler subsetting of SoilProfileCollection objects via site or horizon-level attributes

@@ -118,7 +118,7 @@ labels=c('1-cm Interval', '5-cm Interval'))
 # custom plotting function for uncertainty viz.
 xyplot(top ~ p.q50 | which, data=ab, ylab='Depth',
 			 xlab='median bounded by 25th and 75th percentiles',
-			 lower=ab$p.q25, upper=ab$p.q75, ylim=c(250,-5), alpha=0.5, 
+			 lower=ab$p.q25, upper=ab$p.q75, ylim=c(250,-5),
 			 panel=panel.depth_function, 
 			 prepanel=prepanel.depth_function,
 			 cf=ab$contributing_fraction,
@@ -176,14 +176,13 @@ xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
 data(sp3)
 
 # add new grouping factor
-sp3$group <- 1
-sp3$group[as.numeric(sp3$id) > 5] <- 2
+sp3$group <- 'group 1'
+sp3$group[as.numeric(sp3$id) > 5] <- 'group 2'
 sp3$group <- factor(sp3$group)
 
 # upgrade to SPC
 depths(sp3) <- id ~ top + bottom
 site(sp3) <- ~ group
-
 
 # custom 'slab' function, returning mean +/- 1SD
 mean.and.sd <- function(values) {
@@ -203,14 +202,38 @@ a <- slab(sp3, fm=group ~ L + A + B, slab.fun=mean.and.sd)
 library(lattice)
 xyplot(
 top ~ mean | variable, data=a, groups=group, subscripts=TRUE, 
-lower=a$lower, upper=a$upper, ylim=c(125,-5), alpha=0.5,
+lower=a$lower, upper=a$upper, ylim=c(125,-5),
 layout=c(3,1), scales=list(x=list(relation='free')),
 panel=panel.depth_function, 
-prepanel=prepanel.depth_function
+prepanel=prepanel.depth_function,
+auto.key=list(columns=2, lines=TRUE, points=FALSE)
 )
 
 
-# convert mean value for each variable into long format
+# compare a single profile to the group-level aggregate values
+a.1 <- slab(sp3[1, ], fm=group ~ L + A + B, slab.fun=mean.and.sd)
+
+# manually update the group column
+a.1$group <- 'profile 1'
+
+# combine into a single data.frame:
+g <- rbind(a, a.1)
+
+# plot with customized line styles
+xyplot(
+	top ~ mean | variable, data=g, groups=group, subscripts=TRUE, 
+	lower=a$lower, upper=a$upper, ylim=c(125,-5),
+	layout=c(3,1), scales=list(x=list(relation='free')),
+	panel=panel.depth_function, 
+	prepanel=prepanel.depth_function,
+	sync.colors=TRUE, alpha=0.25,
+	par.settings=list(superpose.line=list(col=c('orange', 'royalblue', 'black'), lwd=2, lty=c(1,1,2))),
+	auto.key=list(columns=3, lines=TRUE, points=FALSE)
+)
+
+
+
+## convert mean value for each variable into long format
 library(reshape)
 
 # note that depths are no longer in order 
