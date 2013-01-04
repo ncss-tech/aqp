@@ -21,7 +21,7 @@ slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.defa
   
   \item{strict}{logical: should horizons be strictly checked for self-consistency?}
   
-  \item{slab.fun}{Function used to process each 'slab' of data, returning a \code{data.frame} with a single row. See details.}
+  \item{slab.fun}{Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around \code{hdquantile}. See details.}
   
   \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1.}
 
@@ -37,7 +37,9 @@ slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.defa
 }
 
 \details{
-Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased.
+Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps \code{\link{hdquantile}} from the Hmisc package.
+
+Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased.
 
 There are several possible ways to define slabs, using \code{slab.structure}:
 
@@ -82,6 +84,8 @@ When a single factor variable is used, slice-wise probabilities for each level o
 
 \references{
 D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, March 2013, Pages 258-268, 10.1016/j.cageo.2012.10.020.
+
+Harrell FE, Davis CE (1982): A new distribution-free quantile estimator. Biometrika 69:635-640.
 }
 \author{Dylan E Beaudette}
 
@@ -89,7 +93,7 @@ D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A
 
 
 \seealso{
-\code{\link{slice}}
+\code{\link{slice}, \link{hdquantile}}
 }
 \examples{
 ##
