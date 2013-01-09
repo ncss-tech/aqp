@@ -2,6 +2,7 @@
 * updated documentation and SoilProfileCollection tutorial here:
   - https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp
 * plans laid for parallel processing in slab() and profileApply() via 'parallel' package
+* plotSPC() gets a 'density' argument for shaded coloring of horizons
 
 -------------------------- aqp 1.4-5 (2012-12-29) --------------------------
 * slab() re-written from scratch, resulting in reduced memory footprint and quicker running time
