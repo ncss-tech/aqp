@@ -155,7 +155,8 @@ setReplaceMethod("site", "SoilProfileCollection",
       
       ## an appropriate ID must exist in 'value' AND @site for this to work
       # LEFT-join in - assumes that appropriate IDs exist in both @site and 'value'
-      site.new <- join(s, value, type='left')
+      # we are suppressing the 'Joining by:' output from join()
+      suppressMessages(site.new <- join(s, value, type='left'))
       
       # sanity check: site + new data should have same number of rows as original
       if(nrow(s) != nrow(site.new))
