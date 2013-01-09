@@ -18,7 +18,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: return geometry from last plot
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, ...) {
 	
   # get horizons
   h <- horizons(x)
@@ -81,6 +81,23 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
     else # no user-defined color column, or it is missing
       this_profile_colors <- 'white'
     
+	  # extract / generate horizon fill density
+	  if(! missing(density)) {
+	  	# if a single number was given, then recylce it over all horizons
+	  	if(is.numeric(density))
+	  		this_profile_density <- density
+	  	# otherwise we have a column name
+	  	else {
+	  		m <- match(density, names(this_profile_data))
+	  		if(! is.na(m))
+		  		this_profile_density <- this_profile_data[[m]]
+		  	else # user-defined column is missing
+			  	this_profile_density <- NULL
+	  	}
+	  }
+	  else # no user-defined color column
+	  	this_profile_density <- NULL
+	  
     # extract / generate horizon name
     m <- match(name, names(this_profile_data))
     if(! is.na(m))
@@ -102,7 +119,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
 	# create horizons + colors
     # default are filled rectangles
     if(divide.hz) {
-	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL)
+	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density)
 	 
 	 # optionally add horizon boundary distinctiveness
 	 if(! is.null(hz.distinctness.offset)) {
@@ -115,7 +132,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
     
     # otherwise, we only draw the left, top, right borders, and then fill
     else {
-      rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NA)
+      rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NA, density=this_profile_density)
       segments(i-width, y0, i-width, y1) # left-hand side
       segments(i+width, y0, i+width, y1) # right-rand side
       segments(i-width, min(y1), i+width, min(y1)) # profile top
