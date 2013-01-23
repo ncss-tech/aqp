@@ -1,3 +1,27 @@
+
+##
+## wrappers to spatial operations via sp, rgdal, raster
+##
+
+## Note: this should probably be done with proper S4 methods
+
+# spTransform.SoilProfileCollection <- function(spc, ...) {
+# 	spc@sp <- spTransform(spc@sp, ...)
+# 	return(x)
+# }
+# 
+# over.SoilProfileCollection <- function(spc, ...) {
+# 	res <- over(spc@sp, ...)
+# 	return(res)
+# }
+# 
+# extract.SoilProfileCollection <- function(spc, x, ...) {
+# 	res <- extract(spc@sp, ...)
+# 	return(res)
+# }
+
+
+
 ##
 ## proj4string setting
 ##
