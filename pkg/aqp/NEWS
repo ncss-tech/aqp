@@ -1,3 +1,7 @@
+-------------------------- aqp 1.4-7 (2013-01-24) --------------------------
+* HTML version of all documentation (including images) auto-generated via knitr and available on the r-forge website
+* new function: texture.triangle.low.rv.high() plots texture data with low-high range defined by quantiles
+
 -------------------------- aqp 1.4-6 (2013-01-03) --------------------------
 * updated documentation and SoilProfileCollection tutorial here:
   - https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp
