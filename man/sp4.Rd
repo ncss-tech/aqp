@@ -107,6 +107,7 @@ cr <- colorRamp(cols)
 sp4$soil_color <- rgb(cr(rescale(sp4$ex_Ca_to_Mg)), max=255)
 
 # plot again, this time using new colors
+par(mar=c(0,0,0,0))
 plot(sp4) # how does it know about horizon names / colors? see the manual page.
 
 # apply a function to each profile, returning a single value per profile,
@@ -128,6 +129,7 @@ sp4$depth # specific columns as a vector
 
 # use site-level data to alter plotting order
 new.order <- order(sp4$depth) # the result is an index of rank
+par(mar=c(0,0,0,0))
 plot(sp4, plot.order=new.order)
 
 # deconstruct SoilProfileCollection into a data.frame, with horizon+site data

@@ -94,6 +94,7 @@ points(1:25, y.clay.max, pch=21, bg='white')
 yo <- 100 # y-offset
 sf <- 0.65 # scaling factor
 # plot profile sketches
+par(mar=c(0,0,0,0))
 plot(sp5[1:25, ], max.depth=300, y.offset=yo, scaling.factor=sf)
 # optionally add describe plotting area above profiles with lines
 # abline(h=c(0,90,100, (300*sf)+yo), lty=2)
@@ -127,6 +128,7 @@ d.1.order <- rev(order(d.1))
 yo <- 100 # y-offset
 sf <- 0.65 # scaling factor
 # plot sketches
+par(mar=c(0,0,0,0))
 plot(s, max.depth=300, y.offset=yo, scaling.factor=sf, plot.order=d.1.order)
 # add dissimilarity values with lines/points
 lines(1:25, d.1[d.1.order])

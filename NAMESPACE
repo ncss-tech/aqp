@@ -65,6 +65,10 @@ importFrom(Hmisc,
   wtd.table
 )
 
+importFrom(plotrix, 
+  soil.texture,
+	triax.points
+)
 
 exportClasses(SoilProfileCollection)
 
