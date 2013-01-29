@@ -1,4 +1,8 @@
 -------------------------- aqp 1.4-7 (2013-01-24) --------------------------
+* profileApply() can now return arbitrary objects = new subsetting/transformation possibilities
+  - see ?profileApply for examples
+
+-------------------------- aqp 1.4-7 (2013-01-24) --------------------------
 * HTML version of all documentation (including images) auto-generated via knitr and available on the r-forge website
 * new function: texture.triangle.low.rv.high() plots texture data with low-high range defined by quantiles
 

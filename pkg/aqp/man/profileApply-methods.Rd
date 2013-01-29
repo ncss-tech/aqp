@@ -5,13 +5,25 @@
 
 \title{Apply a function to soil profiles within a SoilProfileCollection object.}
 \description{Apply a function to soil profiles within a SoilProfileCollection object, each iteration has access to a SoilProfileCollection object.}
+
+\usage{
+# method for SoilProfileCollection objects
+profileApply(object, FUN, simplify=TRUE, ...)
+}
+
+\arguments{
+  \item{object}{a SoilProfileCollection}
+  \item{FUN}{a function to be applied to each profile within the collection}
+  \item{simplify}{logical, should the result be simplified to a vector? see details}
+	\item{\dots}{further arguments passsed to FUN}
+}
+
 \section{Methods}{
 \describe{
-
 \item{\code{signature(object = "SoilProfileCollection")}}{}
 }}
 
-\value{A vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data).}
+\value{When simplify is TRUE, a vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data). When simplify is FALSE, a list is returned.}
 
 \seealso{ \code{\link{slab}} }
 
@@ -44,6 +56,45 @@ sp1$mean_prop <- profileApply(sp1, FUN=function(x) mean(x$prop, na.rm=TRUE))
 
 # re-plot using ranks defined by computed summaries (in @site)
 plot(sp1, plot.order=rank(sp1$mean_prop))
+
+
+## iterate over profiles, subsetting horizon data
+
+# example data
+data(sp1)
+
+# promote to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
+
+# make some fake site data related to a depth of some importance
+sp1$dep <- profileApply(sp1, function(i) {round(rnorm(n=1, mean=mean(i$top)))})
+
+# custom function for subsetting horizon data, by profile
+# keep horizons with lower boundary < site-level attribute 'dep'
+fun <- function(i) {
+	# extract horizons
+	h <- horizons(i)
+	# make an expression to subset horizons
+	exp <- paste('bottom < ', i$dep, sep='')
+	# subset horizons, and write-back into current SPC
+	horizons(i) <- subset(h, subset=eval(parse(text=exp)))
+	# return modified SPC
+	return(i)
+}
+
+# list of modified SoilProfileCollection objects
+l <- profileApply(sp1, fun, simplify=FALSE)
+
+# re-combine list of SoilProfileCollection objects into a single SoilProfileCollection
+sp1.sub <- do.call(rbind, l)
+
+# graphically check
+par(mfrow=c(2,1), mar=c(0,0,1,0))
+plot(sp1)
+points(1:length(sp1), sp1$dep, col='red', pch=7)
+plot(sp1.sub)
+
 
 
 

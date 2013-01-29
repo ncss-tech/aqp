@@ -1,10 +1,10 @@
 # analog to apply():
 # operates by profile, returns vector of length(object) or nrow(object)
 if (!isGeneric("profileApply"))
- 	setGeneric("profileApply", function(object, FUN, ...) standardGeneric("profileApply"))
+ 	setGeneric("profileApply", function(object, FUN, simplify=TRUE, ...) standardGeneric("profileApply"))
 
 setMethod(f='profileApply', signature='SoilProfileCollection',
-	function(object, FUN, ...) {
+	function(object, FUN, simplify=TRUE, ...) {
 						
 		# get profile IDs
 		pIDs <- profile_id(object)
@@ -18,8 +18,13 @@ setMethod(f='profileApply', signature='SoilProfileCollection',
 			l[[pID]] <- do.call(FUN, list(object[i, ], ...))
 		}
 		
-		# convert list into a vector
-		return(unlist(l))
+		# optionally simplify
+		if(simplify) {
+			res <- unlist(l)
+			return(res)
+		}
+		else
+			return(l)
 	}
 )
 
