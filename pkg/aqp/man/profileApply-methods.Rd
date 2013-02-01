@@ -14,7 +14,7 @@ profileApply(object, FUN, simplify=TRUE, ...)
 \arguments{
   \item{object}{a SoilProfileCollection}
   \item{FUN}{a function to be applied to each profile within the collection}
-  \item{simplify}{logical, should the result be simplified to a vector? see details}
+  \item{simplify}{logical, should the result be simplified to a vector? see examples}
 	\item{\dots}{further arguments passsed to FUN}
 }
 
