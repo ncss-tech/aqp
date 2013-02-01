@@ -16,6 +16,8 @@ Demos:
 Extended Examples:
 \href{http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56}{AQP-related blog posts}
 
+\href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp}{Introduction to SoilProfileCollection objects}
+
 \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-profile-dissimilarity.html?root=aqp}{Soil profile dissimilarity demo}
 
 \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/vertical_vs_perpendicular.html?root=aqp}{Vertical vs. perpendicular horizon depth measurement demo}
