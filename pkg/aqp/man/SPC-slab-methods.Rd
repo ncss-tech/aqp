@@ -9,7 +9,7 @@
 
 \usage{
 # method for SoilProfileCollection objects
-slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...)
+slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
 }
 
 \arguments{
@@ -24,6 +24,8 @@ slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.defa
   \item{slab.fun}{Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around \code{hdquantile}. See details.}
   
   \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1.}
+  
+  \item{weights}{Column name containing weights. NOT YET IMPLEMENTED}
 
 	\item{\dots}{further arguments passsed to \code{slab.fun}}
 
@@ -257,6 +259,16 @@ a <- slab(sp3, fm= id ~ L + A + B, slab.structure=c(40,60), slab.fun=mean.and.sd
 ## aggregate the entire collection, using default slab function (hdquantile)
 ## note the missing left-hand side of the formula
 a <- slab(sp3, fm= ~ L + A + B)
+
+
+## weighted-aggregation -- NOT YET IMPLEMENTED --
+# load sample data, upgrade to SoilProfileCollection
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+
+# generate pretend weights as site-level attribute
+set.seed(10101)
+sp1$site.wts <- runif(n=length(sp1), min=20, max=100)
 
 }
 
