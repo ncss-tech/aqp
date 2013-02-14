@@ -5,6 +5,11 @@
 ## keep checking on other options:
 ## http://stackoverflow.com/questions/11533438/why-is-plyr-so-slow
 
+## weighted aggregation:
+## 1. not currently possible with aggregate() as it can only operate on vectors
+## 2. possible with other functions: https://stat.ethz.ch/pipermail/r-help/2003-June/035321.html
+## 3. switching to data.table may be required
+
 # default slab function for categorical variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
@@ -44,6 +49,19 @@
 	}
 
 
+## TODO: not yet implemented
+# default slab function for weighted, continuous variables
+# returns a named vector of results
+# this type of function is compatible with aggregate()
+# NOTE: nw (normalize-weights) argument will affect the results!
+.slab.fun.wtd.numeric.default <- function(values, w, nw=TRUE) {
+	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+	res <- wtd.quantile(values, weights=w, probs=q.probs, na.rm=TRUE, normwt=nw)
+	names(res) <- paste('p.q', round(q.probs * 100), sep='')
+	return(res)
+}
+
+
 # SoilProfileCollection method
 # object: SoilProfileCollection 
 # fm: formula defining aggregation
@@ -51,12 +69,13 @@
 # progress: plyr-progress display
 # slab.fun: aggregate function applied to data chunks (must return a single row / chunk)
 # cpm: class probability normalization mode
+# weights: character vector naming column containing weights
 # ... : extra arguments passed on to slab.fun
 
 # this is about 40% slower than the old method
-.slab <- function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...){
+.slab <- function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...){
 	# issue a message for now that things have changed
-# 	message('usage of slab() has changed considerably, please see the manual page for details')
+	#	message('usage of slab() has changed considerably, please see the manual page for details')
 	
 	# get extra arguments: length of 0 if no extra arguments
 	extra.args <- list(...)
@@ -104,7 +123,7 @@
 	# slice into 1cm increments, result is a SPC
 	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
 	
-	# merge site data back into the result
+	# merge site data back into the result, this would include site-level weights
 	data <- join(data, site(object), by=object.ID)
 	
 	# clean-up
@@ -129,7 +148,11 @@
 			message('Note: converting categorical variable to factor.')
 			data[[vars]] <- factor(data[[vars]])
 		}
-			
+		
+		# check for weights
+		if(!missing(weights))
+			stop('weighted aggregation of categorical variables not yet implemented', call.=FALSE)
+		
 		# re-set default function, currently no user-supply-able option
 		slab.fun <- .slab.fun.factor.default
 		
@@ -198,6 +221,15 @@
 # 	message(paste('number of profiles:', n.profiles))
 # 	message(paste('profiles / group [', g, ']:', sep=''), appendLF=TRUE)
 # 	print(profiles.per.group)
+	
+	##
+	## TODO: adding weighted-aggregate functionality here
+	## we can't use aggregate() for this
+	##
+	
+	# check for weights
+	if(!missing(weights))
+		stop('weighted aggregation is not yet supported', call.=FALSE)
 	
 	# convert into long format
 	# throwing out those rows with an NA segment label
