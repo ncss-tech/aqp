@@ -284,7 +284,7 @@
 
 # setup generic function
 if (!isGeneric("slab"))
-	setGeneric("slab", function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, ...) standardGeneric("slab"))
+	setGeneric("slab", function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...) standardGeneric("slab"))
 
 # method dispatch
 setMethod(f='slab', signature='SoilProfileCollection', definition=.slab)

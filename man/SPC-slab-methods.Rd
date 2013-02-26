@@ -207,12 +207,14 @@ a <- slab(sp3, fm=group ~ L + A + B, slab.fun=mean.and.sd)
 # note that 'group' is the column containing group labels
 library(lattice)
 xyplot(
-top ~ mean | variable, data=a, groups=group, subscripts=TRUE, 
-lower=a$lower, upper=a$upper, ylim=c(125,-5),
-layout=c(3,1), scales=list(x=list(relation='free')),
-panel=panel.depth_function, 
-prepanel=prepanel.depth_function,
-auto.key=list(columns=2, lines=TRUE, points=FALSE)
+	top ~ mean | variable, data=a, groups=group,
+	lower=a$lower, upper=a$upper, sync.colors=TRUE, alpha=0.5,
+	cf=a$contributing_fraction,
+	ylim=c(125,-5), layout=c(3,1), scales=list(x=list(relation='free')),
+	par.settings=list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2'))),
+	panel=panel.depth_function, 
+	prepanel=prepanel.depth_function,
+	auto.key=list(columns=2, lines=TRUE, points=FALSE)
 )
 
 
