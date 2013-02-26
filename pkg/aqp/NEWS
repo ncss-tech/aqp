@@ -1,6 +1,8 @@
--------------------------- aqp 1.4-7 (2013-01-24) --------------------------
+-------------------------- aqp 1.5 (2013-01-24) --------------------------
 * profileApply() can now return arbitrary objects = new subsetting/transformation possibilities
   - see ?profileApply for examples
+* panel.depth_function() can now display contributing fraction values with grouped data
+  - see multi-variate example in ?slab
 
 -------------------------- aqp 1.4-7 (2013-01-24) --------------------------
 * HTML version of all documentation (including images) auto-generated via knitr and available on the r-forge website
