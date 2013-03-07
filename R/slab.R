@@ -5,6 +5,9 @@
 ## keep checking on other options:
 ## http://stackoverflow.com/questions/11533438/why-is-plyr-so-slow
 
+## missing horizons:
+## slab will run out of memory when trying to aggregate profiles that are missing horizons-- why?
+
 ## weighted aggregation:
 ## 1. not currently possible with aggregate() as it can only operate on vectors
 ## 2. possible with other functions: https://stat.ethz.ch/pipermail/r-help/2003-June/035321.html
