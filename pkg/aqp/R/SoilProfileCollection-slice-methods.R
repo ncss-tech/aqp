@@ -1,7 +1,7 @@
 ## this scales fairly well:
 ## n = (100, 1000, 10000) --> (0.53, 4.21, 38) seconds
 
-## slice(SPC, ...)
+## TODO: this function cannot deal with overlapping horizons (usually an error):  > 1 row / slice
 
 # this function is run on the horizon data, once for each depth slice
 get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {

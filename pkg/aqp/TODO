@@ -3,14 +3,26 @@ Urgent:
 ** ADD to all modules using data.frame, melt, ... ?
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
-1. slab() breaks when use.wts=TRUE --> generalize and re-factor related code
-2. integrate color styling with 'scales' package in plot.SoilProfileCollection
-3. more aggressive checking of ordering / IDs
-4. Should we move to reshape2? It is faster. (PR)
-5. S4-cleanup of slice / slab / profile_compare
-6. raster::extract method
-7. sp::over method
-8. rgdal::spTransform method
+
+* determine optimal level of checking in validity method for SoilProfileCollection objects
+
+* make slab() faster / more efficient
+
+* slab() no longer supports weighted-aggregates
+
+* integrate color styling with 'scales' package in plot.SoilProfileCollection
+
+* more aggressive checking of ordering / IDs (especially rbind.SoilProfileCollection)
+
+* Should we move to reshape2? It is faster. (PR)
+
+* S4-cleanup of profile_compare
+
+* raster::extract method
+
+* sp::over method
+
+* rgdal::spTransform method
 
 
 Interesting:
