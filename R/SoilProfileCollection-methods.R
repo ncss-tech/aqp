@@ -163,7 +163,8 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 
 
 ## concatentation
-## TODO: check for duplicates, consider using digest
+## TODO: duplicates in @sp will cause errors
+## TODO: duplicates are removed in all other slots... does this make sense?
 rbind.SoilProfileCollection <- function(...) {
 	# setup some defaults
 	options(stringsAsFactors=FALSE)
@@ -210,14 +211,16 @@ rbind.SoilProfileCollection <- function(...) {
 		stop('inconsistent CRS', call.=FALSE)
 	
 	# generate new SPC components
-	o.h <- do.call('rbind', o.h)
-	o.s <- do.call('rbind', o.s)
-	o.d <- do.call('rbind', o.d)
+	o.h <- unique(do.call('rbind', o.h))
+	o.s <- unique(do.call('rbind', o.s))
+	o.d <- unique(do.call('rbind', o.d))
 	
 	# spatial points require some more effort when spatial data are missing
 	o.1.sp <- objects[[1]]@sp
 	if(ncol(coordinates(o.1.sp)) == 1) # missing spatial data
 		o.sp <- o.1.sp # copy the first filler
+	
+	## TODO: how can we make sure that unique-ness is enforced? 
 	else # not missing spatial data
 		o.sp <- do.call('rbind', o.sp) # rbind properly
 	

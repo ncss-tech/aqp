@@ -1,3 +1,5 @@
+## TODO: large gaps in data result in some strange-looking polygons
+
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
 panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NULL, ...) {

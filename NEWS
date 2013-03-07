@@ -1,4 +1,14 @@
--------------------------- aqp 1.5 (2013-01-24) --------------------------
+-------------------------- aqp 1.5-1 (2013-03-07) --------------------------
+* removed excessive checking in SoilProfileCollection init code, this may speed things up
+  - previously identified horizonation errors may no longer result in ERRORS; be sure to test
+* test_hz_logic() now more useful:
+  - always checks for NA and overlapping horizons
+  - no longer called with initialization of SoilProfileCollection objects
+  - note that default behavior has changed since version 1.5
+  - moved related documentation to test_hz_logic manual page
+* next version should have a mini-vignette on dealing with bad data
+
+-------------------------- aqp 1.5 (2013-02-24) --------------------------
 * profileApply() can now return arbitrary objects = new subsetting/transformation possibilities
   - see ?profileApply for examples
 * panel.depth_function() can now display contributing fraction values with grouped data

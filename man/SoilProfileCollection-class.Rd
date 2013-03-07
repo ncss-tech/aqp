@@ -70,16 +70,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
 \author{Pierre Roudier and Dylan E. Beaudette}
 
 \examples{
-## 1. test validity methods
-
-# this should work fine
-data(sp1)
-depths(sp1) <- id ~ top + bottom
-
-# horizon logic can be tested via data.frame and 
-# test_hz_logic(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE)
-
-## 2. use the digest library to detect duplicate data
+## use the digest library to detect duplicate data
 data(sp1)
 
 # make a copy, make new IDs, and stack
@@ -123,12 +114,6 @@ plot(d.new)
 # insert a missing horizon boundary
 data(sp1)
 sp1$top[1] <- NA
-depths(sp1) <- id ~ top + bottom
-
-# insert a bogus horizon boundary
-## NOTE: this is currently valid, as this check breaks slice(SPC, ...)
-data(sp1)
-sp1$top[2] <- 30
 depths(sp1) <- id ~ top + bottom
 }
 }

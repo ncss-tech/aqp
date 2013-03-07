@@ -1,33 +1,38 @@
 ## TODO: this checking assumes that the data are sorted!
-## TODO: `strict` checking may be too strict!
 
 # this should be further documented
-test_hz_logic <- function(i, topcol, bottomcol, test.NA=TRUE, strict=FALSE) {
+test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE) {
   
-  # test for na
-  if(test.NA) { 
-    if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
-      res <- FALSE
-      names(res) <- 'hz_logic_pass'
-      return(res)
-    }
-  }
+	# test for overlapping OR non-contiguous horizon boundaries
+	if(strict) {
+		n <- nrow(i)
+		res <- all.equal(i[[topcol]][-1], i[[bottomcol]][-n])
+		if(res != TRUE)
+			res <- FALSE
+		names(res) <- 'hz_logic_pass'
+		return(res)
+	}
+	
+	# test for NA
+	if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
+		res <- FALSE
+		names(res) <- 'hz_logic_pass'
+		return(res)
+	}
+	  
+	# test for over-lapping horizons
+	# note: this will fail if an O horizon is described using the old style O 3--0cm
+	m <- cbind(i[[topcol]], i[[bottomcol]])
+	unzipped.depths <- unlist(apply(m, 1, function(i) seq(from=i[1], to=i[2], by=1)))
+	len.overlapping <- length(which(table(unzipped.depths) > 1))
+	n.hz <- nrow(i)
+	
+	# there should be 1 fewer segments of overlap than there are horizons  	
+	if(len.overlapping > (n.hz - 1))
+		res <- FALSE
+	else
+		res <- TRUE
+	names(res) <- 'hz_logic_pass'
+	return(res)
   
-  # test for illogical horizon boundaries
-  # note that this will fail with non-contiguous slices!
-  if(strict) {
-    n <- nrow(i)
-    res <- all.equal(i[[topcol]][-1], i[[bottomcol]][-n])
-    if(res != TRUE)
-      res <- FALSE
-    names(res) <- 'hz_logic_pass'
-    return(res)
-  }
-  
-  # PASSES for now
-  else {
-    res <- TRUE
-    names(res) <- 'hz_logic_pass'
-    return(res)
-  }
 }
