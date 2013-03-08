@@ -192,7 +192,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
 ## slice:
 if (!isGeneric("slice"))
-  setGeneric("slice", function(object, ...) standardGeneric("slice"))
+  setGeneric("slice", function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE) standardGeneric("slice"))
 
 
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice

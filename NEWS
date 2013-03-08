@@ -7,6 +7,9 @@
   - note that default behavior has changed since version 1.5
   - moved related documentation to test_hz_logic manual page
 * new mini-vignette on dealing with bad data (dealing-with-bad-data.html)
+* better documentation for slice()
+* new warnings related to missing data in the grouping variable passed to slab()
+
 
 -------------------------- aqp 1.5 (2013-02-24) --------------------------
 * profileApply() can now return arbitrary objects = new subsetting/transformation possibilities

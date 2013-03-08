@@ -54,7 +54,7 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
 	  p <- numeric(n_hz)
 	
 	if(method == 'random_walk') {
-		p[1] <- rnorm(1)
+		p[1] <- rnorm(1, mean=runif(n=1, min=-10, max=10), sd=runif(n=1, min=1, max=10))
 		for(j in 2:n_hz)
 			p[j] <- p[j-1] + rnorm(1, mean=runif(n=1, min=-10, max=10), sd=runif(n=1, min=1, max=10))
 	  }
@@ -65,29 +65,29 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
 	  
 	  # generate LPP parameters from uniform dist if not given as arguments
 	  if(is.null(dots[['lpp.a']]))
-		lpp.a <- runif(n=1, min=5, max=25)
+			lpp.a <- runif(n=1, min=5, max=25)
 	  else
-		lpp.a <- dots[['lpp.a']]
+			lpp.a <- dots[['lpp.a']]
 	  
 	  if(is.null(dots[['lpp.b']]))
-		lpp.b <- runif(n=1, min=20, max=60)
+			lpp.b <- runif(n=1, min=20, max=60)
 	  else
-		lpp.b <- dots[['lpp.b']]
+			lpp.b <- dots[['lpp.b']]
 	  
 	  if(is.null(dots[['lpp.u']]))
-		lpp.u <- runif(n=1, min=10, max=90)
+			lpp.u <- runif(n=1, min=10, max=90)
 	  else
-		lpp.u <- dots[['lpp.u']]
+			lpp.u <- dots[['lpp.u']]
 	  
 	  if(is.null(dots[['lpp.d']]))
-		lpp.d <- runif(n=1, min=1, max=10)
+			lpp.d <- runif(n=1, min=1, max=10)
 	  else
-		lpp.d <- dots[['lpp.d']]
+			lpp.d <- dots[['lpp.d']]
 	  
 	  if(is.null(dots[['lpp.e']]))
-		lpp.e <- runif(n=1, min=5, max=20)
+			lpp.e <- runif(n=1, min=5, max=20)
 	  else
-		lpp.e <- dots[['lpp.e']]
+			lpp.e <- dots[['lpp.e']]
 	  
 	  # generate vector of synthetic values based on LPP
 	  p <- .lpp(mids, a=lpp.a, b=lpp.b, u=lpp.u, d=lpp.d, e=lpp.e)

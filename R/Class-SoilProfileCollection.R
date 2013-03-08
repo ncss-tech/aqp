@@ -1,16 +1,16 @@
 # class def for main class within aqp
 .SoilProfileCollectionValidity <- function(object) {
 	
-	# for now, test only for NA in horizon boundaries
-	dc <- horizonDepths(object)
-	h <- horizons(object)
-	top <- dc[1]
-  bottom <- dc[2]
-	
-	if(any(c(is.na(h[[top]]), is.na(h[[bottom]])))) {
-		msg <- 'horizon top and bottom values cannot contain NA'
-		return(FALSE)
-	}
+# 	# for now, test only for NA in horizon boundaries
+# 	dc <- horizonDepths(object)
+# 	h <- horizons(object)
+# 	top <- dc[1]
+#   bottom <- dc[2]
+# 	
+# 	if(any(c(is.na(h[[top]]), is.na(h[[bottom]])))) {
+# 		msg <- 'horizon top and bottom values cannot contain NA'
+# 		return(FALSE)
+# 	}
 	
 	# otherwise, we are fine
 	return(TRUE)

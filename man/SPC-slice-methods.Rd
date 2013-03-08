@@ -6,16 +6,40 @@
 \alias{slice,SoilProfileCollection-method}
 \title{Slicing of SoilProfilecollection Objects}
 \description{Slicing of SoilProfilecollection Objects}
+
+
+\usage{
+# method for SoilProfileCollection objects
+slice(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE)
+}
+
+\arguments{
+  \item{object}{a SoilProfileCollection}
+  
+  \item{fm}{A formula: either `integer.vector ~ var1 + var2 + var3' where named variables are sliced according to `integer.vector' OR where all variables are sliced accordin to `integer.vector' `integer.vector ~.'.}
+  
+  \item{top.down}{Logical, should slices be defined from the top-down? The default is usually what you want.}
+  
+  \item{just.the.data}{Logical, return just the sliced data or a new SoilProfileCollection object.}
+  
+  \item{strict}{Logical, should the horizonation be strictly checked for self-consistency?}
+}
+
+
 \section{Methods}{
 \describe{
-
-\item{\code{signature(object = "SoilProfileCollection")}}{
-%%  ~~describe this method here~~
+\item{data = "SoilProfileCollection"}{Typical usage, where input is a \code{\link{SoilProfileCollection}}.}
 }
-}}
+}
 
-\references{http://casoilresource.lawr.ucdavis.edu/}
-\author{Dylan E. Beaudette}
+\note{\code{slab()} and \code{slice()} are much faster and require less memory if input data are either numeric or character.}
+
+\value{Either a new SoilProfileCollection with data sliced according to \code{fm}, or a \code{data.frame}.}
+
+\references{
+D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, March 2013, Pages 258-268, 10.1016/j.cageo.2012.10.020.
+}
+\author{D.E. Beaudette}
 
 \seealso{\code{\link{slab}}}
 
