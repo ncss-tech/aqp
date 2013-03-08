@@ -15,7 +15,7 @@ slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.defa
 \arguments{
   \item{object}{a SoilProfileCollection}
   
-  \item{fm}{A formula: either `groups ~ var1 + var2 + var3' where named variables are aggregated within `groups' OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3'}
+  \item{fm}{A formula: either `groups ~ var1 + var2 + var3' where named variables are aggregated within `groups' OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3'. If `groups` is a factor it must not contain NA.}
   
   \item{slab.structure}{A user-defined slab thickness (defined by an integer), or user-defined structure (numeric vector). See details below.}
   
@@ -39,9 +39,9 @@ slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.defa
 }
 
 \details{
-Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps \code{\link{hdquantile}} from the Hmisc package.
+Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps \code{\link{hdquantile}} from the Hmisc package. Note that if `group` is a factor it must not contain NAs.
 
-Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased.
+Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased. \code{slab()} and \code{slice()} are much faster and require less memory if input data are either numeric or character.
 
 There are several possible ways to define slabs, using \code{slab.structure}:
 
@@ -89,7 +89,7 @@ D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A
 
 Harrell FE, Davis CE (1982): A new distribution-free quantile estimator. Biometrika 69:635-640.
 }
-\author{Dylan E Beaudette}
+\author{D.E. Beaudette}
 
 \note{Arguments to \code{slab} have changed with \code{aqp} 1.5 (2012-12-29) as part of a code clean-up and optimization. Calculation of weighted-summaries was broken in \code{aqp} 1.2-6 (2012-06-26), and removed as of \code{aqp} 1.5 (2012-12-29).  \code{slab} replaced the previously defined \code{soil.slot.multiple} function as of \code{aqp} 0.98-8.58 (2011-12-21).}
 

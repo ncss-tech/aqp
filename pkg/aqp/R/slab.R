@@ -8,6 +8,9 @@
 ## missing horizons:
 ## slab will run out of memory when trying to aggregate profiles that are missing horizons-- why?
 
+## groups is a factor and contains NAs:
+## with large data sets join() will run out of memory
+
 ## weighted aggregation:
 ## 1. not currently possible with aggregate() as it can only operate on vectors
 ## 2. possible with other functions: https://stat.ethz.ch/pipermail/r-help/2003-June/035321.html
@@ -113,7 +116,7 @@
 	
 	if(any(vars %in% object.names) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match column names in dataframe', call.=FALSE)
-			
+	
 	# make formula for slicing
 	## TODO: slice() returns an extra row, so only request slices to max-1
 	fm.slice <- formula(paste('0:', max(object)-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
@@ -126,11 +129,21 @@
 	# slice into 1cm increments, result is a SPC
 	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
 	
+	# extract site data
+	site.data <- site(object)
+	
+	# check groups for NA, if grouping variable was given
+	if(g != '.')
+		if(any(is.na(site.data[, g])))
+			stop('grouping variable must not contain NA', call.=FALSE)
+	
+	### !!! this runs out of memory when groups contains NA !!!
+	## this is generating a lot of extra objects and possibly wasting memory
 	# merge site data back into the result, this would include site-level weights
-	data <- join(data, site(object), by=object.ID)
+	data <- join(data, site.data, by=object.ID)
 	
 	# clean-up
-	rm(object)
+	rm(object, site.data)
 	gc()
 	
 	# check variable classes
