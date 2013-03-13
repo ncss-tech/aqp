@@ -4,7 +4,7 @@
 ## scales exponentially (faster) with an increase in num. profiles / group
 ## keep checking on other options:
 ## http://stackoverflow.com/questions/11533438/why-is-plyr-so-slow
-
+## 
 ## missing horizons:
 ## slab will run out of memory when trying to aggregate profiles that are missing horizons-- why?
 
