@@ -165,10 +165,13 @@ setReplaceMethod("site", "SoilProfileCollection",
       # look good, proceed
       object@site <- site.new
 	  }
-  
+  	
+    ## TODO: finer reporting on what the problem might be
     # check to make sure the the number of rows in @site is the same as length(object)
-    if(length(object) != nrow(site(object)))
+    if(length(object) != nrow(site(object))){
+    	print(paste('pedons (', length(object), ') rows of site data (', nrow(site(object)), ')', sep=''))
     	stop('invalid site data, non-unique values present in horizon data?', call.=FALSE)
+    }
     
     # done
     return(object)
