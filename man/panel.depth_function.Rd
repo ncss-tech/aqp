@@ -10,7 +10,7 @@
 
 \usage{
 panel.depth_function(x, y, id, upper = NA, lower = NA, 
-subscripts = NULL, groups = NULL, sync.colors=FALSE, cf=NULL, ...)
+subscripts = NULL, groups = NULL, sync.colors=FALSE, cf=NA, ...)
 }
 
 \arguments{
@@ -26,7 +26,7 @@ subscripts = NULL, groups = NULL, sync.colors=FALSE, cf=NULL, ...)
   \item{\dots}{further arguments to lower-level lattice plotting functions, see below}
 }
 \details{
-This function can be used to replace \code{panel.superpose} when plotting depth function data.
+This function can be used to replace \code{panel.superpose} when plotting depth function data. When requested, contributing fraction data are printed using colors the same color as corresponding depth function lines.
 }
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
