@@ -2,7 +2,7 @@
 
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
-panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NA, cf.col=NA, ...) {
+panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NA, cf.col=NA, cf.interval=20, ...) {
   
 # add grid
 panel.grid(h=-1, v=-1, lty=3, col=1)
@@ -115,7 +115,7 @@ else {
   	
   	# annotate with contributing fraction by group
   	by(d, d$groups, function(d_i){
-  		
+  		  		
   		# lookup linestyle by group
   		m <- match(unique(d_i$group), ll)
   		
@@ -124,14 +124,17 @@ else {
   			cf.col <- line.col[m]
   		}
   		
+  		
+  		
   		# make a function for linear interpolation of CF values based on depth
   		cf.approx.fun <- approxfun(d_i$top, d_i$cf, method='linear')
   		
   		# generate annotated depths: 5 cm to 95th percentile of max depth
   		y.q95 <- quantile(d_i$top, probs=c(0.95), na.rm=TRUE)
-  		a.seq <- seq(from=2, to=y.q95, by=20)
+  		a.seq <- seq(from=2, to=y.q95, by=cf.interval)
   		
-  		a.seq <- a.seq + ((m-1) * 5)
+  		# offset CF sequence according to group index
+  		a.seq <- a.seq + ((m-1) * cf.interval/4)
   		
   		# interpolate CF at annotated depths
   		a.CF <- cf.approx.fun(a.seq)
