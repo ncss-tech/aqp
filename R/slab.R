@@ -44,6 +44,7 @@
 	}
 
 
+## Note: this function requires at least _2_ observations
 # default slab function for continuous variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()

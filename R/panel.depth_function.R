@@ -2,7 +2,7 @@
 
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
-panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NA, ...) {
+panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NA, cf.col=NA, ...) {
   
 # add grid
 panel.grid(h=-1, v=-1, lty=3, col=1)
@@ -95,7 +95,6 @@ else {
 	}
 
 	
-	# TODO: might be interesting to plot group-wise CFs using same colors as lines / polygons
   # annotate with contributing fraction
   if(!missing(cf)) {
     
@@ -116,8 +115,14 @@ else {
   	
   	# annotate with contributing fraction by group
   	by(d, d$groups, function(d_i){
-  		# lookup color
+  		
+  		# lookup linestyle by group
   		m <- match(unique(d_i$group), ll)
+  		
+  		# if there is no user-specified CF color, then use the same as line style
+  		if(is.na(cf.col)) {
+  			cf.col <- line.col[m]
+  		}
   		
   		# make a function for linear interpolation of CF values based on depth
   		cf.approx.fun <- approxfun(d_i$top, d_i$cf, method='linear')
@@ -134,7 +139,7 @@ else {
   		
   		# add to right-hand side of the panel
   		unit <- gpar <- NULL
-  		grid.text(a.text, x=unit(0.99, 'npc'), y=unit(a.seq, 'native'), just='right', gp=gpar(font=3, cex=0.8, col=line.col[m]))
+  		grid.text(a.text, x=unit(0.99, 'npc'), y=unit(a.seq, 'native'), just='right', gp=gpar(font=3, cex=0.8, col=cf.col))
   	})
       
   }
