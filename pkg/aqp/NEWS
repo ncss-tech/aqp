@@ -1,6 +1,7 @@
 -------------------------- aqp 1.5-2 (2013-04-09) --------------------------
 * panel.depth_function() now prints "contributing fraction" values in the same color as corresponding depth-function lines and shaded areas
 * panel.depth_function() gains an argument 'cf.col' for manually specifying the CF color
+* panel.depth_function() gains an argument 'cf.interva;' for manually specifying printed CF depths
 * prepanel.depth_function() now extends x-lim by 5% in either direction for cleaner-looking plots
 * added some details to slab() documentation
 

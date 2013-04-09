@@ -10,7 +10,8 @@
 
 \usage{
 panel.depth_function(x, y, id, upper = NA, lower = NA, 
-subscripts = NULL, groups = NULL, sync.colors=FALSE, cf=NA, cf.col=NA, ...)
+subscripts = NULL, groups = NULL, sync.colors=FALSE, cf=NA, 
+cf.col=NA, cf.interval=20, ...)
 }
 
 \arguments{
@@ -24,6 +25,7 @@ subscripts = NULL, groups = NULL, sync.colors=FALSE, cf=NA, cf.col=NA, ...)
   \item{sync.colors}{optionally sync the fill color within the region bounded by (lower--upper) with the line colors}
   \item{cf}{optionally annotate contributing fraction data at regular depth intervals see \code{\link{slab}}}
   \item{cf.col}{optionall color for contributing fraction values, typically used to override the line color}
+  \item{cf.interval}{number of depth units to space printed contributing fraction values}
   \item{\dots}{further arguments to lower-level lattice plotting functions, see below}
 }
 \details{
