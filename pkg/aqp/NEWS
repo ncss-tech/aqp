@@ -1,3 +1,6 @@
+-------------------------- aqp 1.5-2 (2013-04-09) --------------------------
+* panel.depth_function() now prints "contributing fraction" values in the same color as corresponding depth-function lines and shaded areas
+
 -------------------------- aqp 1.5-1 (2013-03-07) --------------------------
 * removed excessive checking in SoilProfileCollection init code, this may speed things up
   - previously identified horizonation errors may no longer result in ERRORS; be sure to test
