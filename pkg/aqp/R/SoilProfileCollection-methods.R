@@ -40,7 +40,7 @@ setMethod(
     if(nrow(coordinates(object)) == n.profiles) {
     	cat('\nSpatial Data:\n')
     	show(object@sp@bbox)
-    	show(object@sp@proj4string)
+    	show(proj4string(object))
     }
 
   }
@@ -241,10 +241,25 @@ setMethod("names", "SoilProfileCollection",
 
 # overload min() to give us the min depth within a collection
 setMethod(f='min', signature='SoilProfileCollection',
-definition=function(x) {
-  # compute depths by ID
+definition=function(x, v=NULL) {
+  # get bottom depth column name
   hz_bottom_depths <- horizonDepths(x)[2]
-  d <- tapply(unlist(horizons(x)[[hz_bottom_depths]]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
+  
+  # optionally use a horizon-level property refine calculation
+  if(!missing(v)) {
+  	# combine bottom depths with IDs and variable
+  	h <- horizons(x)[, c(hz_bottom_depths, idname(x), v)]
+  }
+  else {
+  	# combine bottom depths with IDs
+  	h <- horizons(x)[, c(hz_bottom_depths, idname(x))]
+  }
+  
+  # filter out missing data
+  h <- h[complete.cases(h), ]
+  # compute max by ID
+  d <- tapply(h[, 1], h[, 2], max, na.rm=TRUE)
+  
   # return the shallowest depth
   return(min(d, na.rm=TRUE))
   }
@@ -252,10 +267,25 @@ definition=function(x) {
 
 # overload max() to give us the max depth within a collection
 setMethod(f='max', signature='SoilProfileCollection',
-definition=function(x){
-  # compute depths by ID
-  hz_bottom_depths <- horizonDepths(x)[2]
-  d <- tapply(unlist(horizons(x)[[hz_bottom_depths]]), unlist(horizons(x)[[idname(x)]]), max, na.rm=TRUE)
+definition=function(x, v=NULL){
+	# get bottom depth column name
+	hz_bottom_depths <- horizonDepths(x)[2]
+	
+	# optionally use a horizon-level property refine calculation
+	if(!missing(v)) {
+		# combine bottom depths with IDs and variable
+		h <- horizons(x)[, c(hz_bottom_depths, idname(x), v)]
+	}
+	else {
+		# combine bottom depths with IDs
+		h <- horizons(x)[, c(hz_bottom_depths, idname(x))]
+	}
+	
+	# filter out missing data
+	h <- h[complete.cases(h), ]
+	# compute max by ID
+	d <- tapply(h[, 1], h[, 2], max, na.rm=TRUE)
+	
   # return the deepest depth
   return(max(d, na.rm=TRUE))
   }
