@@ -4,6 +4,8 @@
 * panel.depth_function() gains an argument 'cf.interva;' for manually specifying printed CF depths
 * prepanel.depth_function() now extends x-lim by 5% in either direction for cleaner-looking plots
 * added some details to slab() documentation
+* fixed minor bug in min() and max() methods for SoilProfileCollection objects in the presence of missing data
+* min() and max() methods for SoilProfileCollection objects now have a second argument for checking depth based on the presence of data in that column
 
 -------------------------- aqp 1.5-1 (2013-03-07) --------------------------
 * removed excessive checking in SoilProfileCollection init code, this may speed things up
