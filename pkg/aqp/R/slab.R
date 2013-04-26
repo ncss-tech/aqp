@@ -45,6 +45,7 @@
 
 
 ## Note: this function requires at least _2_ observations
+## Note: this function can be slow when N is large
 # default slab function for continuous variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
@@ -54,6 +55,14 @@
 	names(res) <- paste('p.q', round(q.probs * 100), sep='')
 	return(res)
 	}
+
+# basic quantile evaluation, better for large datasets
+.slab.fun.numeric.fast <- function(values) {
+	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+	res <- quantile(values, probs=q.probs, na.rm=TRUE)
+	names(res) <- paste('p.q', round(q.probs * 100), sep='')
+	return(res)
+}
 
 
 ## TODO: not yet implemented
@@ -127,7 +136,7 @@
 	if(length(slab.structure) == 2 )
 		fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2]-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
 	
-	# slice into 1cm increments, result is a SPC
+	# slice into 1cm increments, result is a data.frame
 	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
 	
 	# extract site data
@@ -218,12 +227,15 @@
 	}
 	
 	
+	####
+	#### optimization note: use of factor labels could be slowing things down...
+	####
 	## TODO: make sure that nrow(data) == length(factor(rep(seg.label, times=n.profiles), labels=seg.label.levels))
 	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
 	##         seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
 	##         l <- split(data, seg.label, drop=FALSE)
 	# add segmenting label to data
-	data$seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
+ 	data$seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
 	
 	# if there is no left-hand component in the formula, we are aggregating all data in the collection
 	if(g == '.') { 
@@ -236,7 +248,7 @@
 # 	
 # 	# deliver some feedback:
 # 	message(paste('number of profiles:', n.profiles))
-# 	message(paste('profiles / group [', g, ']:', sep=''), appendLF=TRUE)
+# 	message(paste('profiles / ', g, ':', sep=''), appendLF=TRUE)
 # 	print(profiles.per.group)
 	
 	##
@@ -279,6 +291,7 @@
 	# the column 'value' is a matrix with the results of slab.fun
 	if(class(d.slabbed$value) == 'matrix')
 		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
+	
 	
 	# convert the slab.label column into top/bottom as integers
 	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
