@@ -69,6 +69,7 @@ rescale.result=FALSE, verbose=FALSE) {
 	bad.profiles.idx <- which(apply(pct_missing[, vars], 1, function(i) all(i == 100)) )
   
 	if(length(problem.profiles.idx) > 0) {
+	  assign('problem.profiles', value=pct_missing[problem.profiles.idx,], envir=aqp.env)
 		message('Missing data will bias results, check inputs.\nPercent missing:')
 		print(pct_missing[problem.profiles.idx, ])
 	}

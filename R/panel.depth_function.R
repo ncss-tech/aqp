@@ -124,8 +124,6 @@ else {
   			cf.col <- line.col[m]
   		}
   		
-  		
-  		
   		# make a function for linear interpolation of CF values based on depth
   		cf.approx.fun <- approxfun(d_i$top, d_i$cf, method='linear')
   		
