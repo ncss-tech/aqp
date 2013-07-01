@@ -1,6 +1,7 @@
 \name{slab-methods}
 \docType{methods}
 \alias{slab}
+\alias{slab2}
 \alias{slab,SoilProfileCollection-method}
 
 
