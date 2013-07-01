@@ -1,6 +1,7 @@
 \name{aqp-package}
 \alias{aqp-package}
 \alias{aqp}
+\alias{aqp.env}
 \docType{package}
 \title{
 Algorithms for Quantitative Pedology
