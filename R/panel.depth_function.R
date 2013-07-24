@@ -63,7 +63,7 @@ else {
   	  m <- match(unique(d_i$group), ll)
       
 			# cannot have NA in values that define polygon boundaries
-			d_i <- subset(d_i, subset=is.na(d_i$upper) == FALSE & is.na(d_i$lower) == FALSE)
+  	  d_i <- d_i[which(!is.na(d_i$upper) & !is.na(d_i$lower)), ]
 			
 			# make conf.int polygon
 			panel.polygon(x=c(d_i$lower, rev(d_i$upper)), y=c(d_i$top, rev(d_i$top)), col=region.col[m], border=NA, ...)
