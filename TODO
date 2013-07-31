@@ -6,7 +6,7 @@ Urgent:
 
 * determine optimal level of checking in validity method for SoilProfileCollection objects
 
-* make slab() faster / more efficient
+* make slab() faster / more efficient (data.table ? )
 
 * slab() no longer supports weighted-aggregates
 
@@ -14,7 +14,7 @@ Urgent:
 
 * more aggressive checking of ordering / IDs (especially rbind.SoilProfileCollection)
 
-* Should we move to reshape2? It is faster. (PR)
+* switch to reshape2? It is faster (PR) [code-fixes required in slab() before we can do this (DEB)]
 
 * S4-cleanup of profile_compare
 
