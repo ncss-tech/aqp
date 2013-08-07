@@ -45,6 +45,9 @@ sim <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {
 	# upgrade to SoilProfileCollection
 	depths(x.s) <- id ~ top + bottom
 	
+  # copy over depth units
+	depth_units(x.s) <- depth_units(x)
+  
 	## TODO: combine all of the original data back into the result
 	
 	# done
