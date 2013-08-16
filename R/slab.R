@@ -15,6 +15,11 @@
 ## 1. not currently possible with aggregate() as it can only operate on vectors
 ## 2. possible with other functions: https://stat.ethz.ch/pipermail/r-help/2003-June/035321.html
 ## 3. switching to data.table may be required
+## 4. split + lapply + parse list labels may be fast + flexible
+### split(d, list(d$g, d$h), drop=TRUE)
+## 5. pre-standardization of weights based on entire range of weights in collection, or within a slab?
+
+
 
 # default slab function for categorical variables
 # returns a named vector of results
