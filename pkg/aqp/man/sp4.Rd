@@ -24,7 +24,9 @@
 }
 \details{Selected soil physical and chemical data from (McGahan et al., 2009).}
 \source{https://www.soils.org/publications/sssaj/articles/73/6/2087}
-\references{McGahan, D.G., Southard, R.J, Claassen, V.P. 2009. Plant-Available Calcium Varies Widely in Soils on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.}
+\references{McGahan, D.G., Southard, R.J, Claassen, V.P. 2009. 
+Plant-Available Calcium Varies Widely in Soils on Serpentinite Landscapes. 
+Soil Sci. Soc. Am. J. 73: 2087-2095.}
 \examples{
 # setup environment
 library(aqp)

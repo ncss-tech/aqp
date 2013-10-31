@@ -10,7 +10,8 @@
 
 \usage{
 # method for SoilProfileCollection objects
-slab(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
+slab(object, fm, slab.structure=1, strict=FALSE, 
+slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
 }
 
 \arguments{
@@ -236,7 +237,8 @@ xyplot(
 	panel=panel.depth_function, 
 	prepanel=prepanel.depth_function,
 	sync.colors=TRUE, alpha=0.25,
-	par.settings=list(superpose.line=list(col=c('orange', 'royalblue', 'black'), lwd=2, lty=c(1,1,2))),
+	par.settings=list(superpose.line=list(col=c('orange', 'royalblue', 'black'), 
+  lwd=2, lty=c(1,1,2))),
 	auto.key=list(columns=3, lines=TRUE, points=FALSE)
 )
 
