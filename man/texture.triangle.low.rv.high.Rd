@@ -4,7 +4,9 @@
 \title{Soil Texture Low-RV-High as Defined by Quantiles}
 \description{This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles. Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region that encloses a severall likely soil texture classes based on the values in \code{ssc}. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.}
 \usage{
-texture.triangle.low.rv.high(ssc, p = c(0.05, 0.5, 0.95), method = c("approx", "closest"), n.closest = 3, delta = 1, pop.rv.col = "red", range.col = "RoyalBlue", range.alpha = 75)
+texture.triangle.low.rv.high(ssc, p = c(0.05, 0.5, 0.95), 
+method = c("approx", "closest"), n.closest = 3, delta = 1, 
+pop.rv.col = "red", range.col = "RoyalBlue", range.alpha = 75)
 }
 
 \arguments{

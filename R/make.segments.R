@@ -1,9 +1,7 @@
 
 ## TODO: iterate over profile IDs instead of groups
 # TODO: document this
-make.segments <- function(df)
-	{
-	require(lattice)
+make.segments <- function(df) {
 	
 	# group data
 	ll <- levels(df$groups)	

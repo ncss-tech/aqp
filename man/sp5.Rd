@@ -65,7 +65,10 @@ layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
 # plot profiles, with points added to the mid-points of randomly selected horizons
 sub <- sp5[1:25, ]
 plot(sub, max.depth=300) ; mtext('Set 1', 2, line=-0.5, font=2)
-y.p <- profileApply(sub, function(x) {s <- sample(1:nrow(x), 1) ; h <- horizons(x); with(h[s,], (top+bottom)/2)})
+y.p <- profileApply(sub, function(x) {
+  s <- sample(1:nrow(x), 1) 
+  h <- horizons(x); with(h[s,], (top+bottom)/2)
+  })
 points(1:25, y.p, bg='white', pch=21)
 
 # plot profiles, with arrows pointing to profile bottoms
@@ -83,9 +86,15 @@ lines(1:25, y.p, lty=2)
 
 # plot profiles, with polygons connecting horizons with max clay content (+/-) 10 cm
 sub <- sp5[76:100, ]
-y.clay.max <- profileApply(sub, function(x) {i <- which.max(x$clay) ; h <- horizons(x); with(h[i, ], (top+bottom)/2)} )
+y.clay.max <- profileApply(sub, function(x) {
+  i <- which.max(x$clay)
+  h <- horizons(x)
+  with(h[i, ], (top+bottom)/2)
+  } )
+  
 plot(sub, max.depth=300); mtext('Set 4', 2, line=-0.5, font=2)
-polygon(c(1:25, 25:1), c(y.clay.max-10, rev(y.clay.max+10)), border='black', col=rgb(0,0,0.8, alpha=0.25))
+polygon(c(1:25, 25:1), c(y.clay.max-10, rev(y.clay.max+10)), 
+border='black', col=rgb(0,0,0.8, alpha=0.25))
 points(1:25, y.clay.max, pch=21, bg='white')
 
 
@@ -110,14 +119,16 @@ arrows(1:25, r, 1:25, 95, len=0.1)
 # add scale for simulated gradient
 axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
 # depict a secondary environmental gradient with polygons (water table depth, etc.)
-polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)), border='black', col=rgb(0,0,0.8, alpha=0.25))
+polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)), 
+border='black', col=rgb(0,0,0.8, alpha=0.25))
 
 
 ##
 # sample 25 profiles from the collection
 s <- sp5[sample(1:length(sp5), size=25), ]
 # compute pair-wise dissimilarity
-d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0, replace_na=TRUE, add_soil_flag=TRUE, max_d=300)
+d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0, 
+replace_na=TRUE, add_soil_flag=TRUE, max_d=300)
 # keep only the dissimilarity between profile 1 and all others
 d.1 <- as.matrix(d)[1, ]
 # rescale dissimilarities

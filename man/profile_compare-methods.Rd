@@ -174,7 +174,8 @@ if(require(RColorBrewer)) {
   plot(s.sliced, divide.hz=FALSE)
   # legend
   legend.divs <- c(0, .25, .50, .75, 1)
-  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), horiz=TRUE, pt.cex=2, pch=22, bg='white', title='Percent Missing')
+  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), 
+  horiz=TRUE, pt.cex=2, pch=22, bg='white', title='Percent Missing')
 }
 
 

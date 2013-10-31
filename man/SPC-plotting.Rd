@@ -21,12 +21,16 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }}
 
 \usage{
-plotSPC(x, color='soil_color', width=0.2, name='name', alt.label=NULL,
-cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
-id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x),
-max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, 
-abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
-hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, \dots)
+plotSPC(x, color='soil_color', width=0.2, name='name', 
+alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, 
+cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
+id.style='auto', plot.order=1:length(x), add=FALSE, 
+scaling.factor=1, y.offset=0, n=length(x),
+max.depth=max(x), n.depth.ticks=5, shrink=FALSE, 
+shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, 
+hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
+hz.distinctness.offset.lty=2, axis.line.offset=-2.5, 
+density=NULL, \dots)
 }
 
 
