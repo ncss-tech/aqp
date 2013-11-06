@@ -1,6 +1,7 @@
 \name{munsell2rgb}
 \Rdversion{1.1}
 \alias{munsell2rgb}
+\alias{rgb2munsell}
 \title{
 Convert Munsell Notation to RGB
 }
@@ -61,8 +62,7 @@ panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
 )
 
 # try again, this time annotate with LAB coordinates:
-if(require(colorspace))
-  {
+if(require(colorspace)) {
   d.rgb <- with(d, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
   d.lab <- as(with(d.rgb, RGB(r,g,b)), 'LAB')
   d <- data.frame(d, d.lab@coords)
@@ -100,8 +100,7 @@ image(matrix(1:nrow(sp1)), axes=FALSE, col=sp1$soil_color, main='Soil Colors')
 
 # convert into a more useful color space
 # you will need the colorspace package for this to work
-if(require(colorspace))
-{
+if(require(colorspace)) {
 # keep RGB triplets from conversion
 sp1.rgb <- with(sp1, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
 
