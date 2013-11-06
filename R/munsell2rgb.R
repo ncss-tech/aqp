@@ -1,12 +1,38 @@
 ## see the convertColor() function from grDevices
-## ... out function gives "better" looking colors
+## ... our function gives "better" looking colors
 
+## TODO investigate the munsell package
+
+## TODO: implement in LAB / xyz colorspace 
+## TODO: write documentation!!
+## note, this function is not vectorized!
+# color is a vector of RGB values in range of [0,1]
+rgb2munsell <- function(color) {
+  
+  # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
+  munsell <- NULL
+  
+  # load look-up table from our package
+  # This should be moreover more foolproof than data(munsell) c/o PR
+  load(system.file("data/munsell.rda", package="aqp")[1]) 
+  
+  # euclidean distance is our metric for closest-color
+  # d = sqrt(r^2 + g^2 + b^2)
+  sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=color, FUN='-')^2
+  sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
+  idx <- which.min(sq.diff.sum.sqrt)
+  
+  # subset a single color
+  res <- munsell[idx, 1:3]
+  
+  # done
+  return(res)
+}
 
 # convert munsell Hue, Value, Chroma into RGB
 # user can adjust how rgb() function will return an R-friendly color
 # TODO if alpha is greater than maxColorValue, there will be an error
-munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE)
-	{
+munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE) {
 	## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
   
@@ -25,12 +51,11 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   }
   
 
-  # load look-up table from our package
-  
-  # This is a hack to avoid munsell2rgb: "no visible 
-  # binding for global variable ‘munsell’" at package R CMD check
+  # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
   munsell <- NULL
-  # This should be moreover more foolproof than data(munsell)
+  
+  # load look-up table from our package
+  # This should be moreover more foolproof than data(munsell) c/o PR
   load(system.file("data/munsell.rda", package="aqp")[1]) 
   
   # join new data with look-up table
