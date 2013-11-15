@@ -1,4 +1,8 @@
 
+importFrom(RColorBrewer,
+  brewer.pal
+)
+
 importFrom(grid,
   gpar,
 	grid.text,
@@ -6,6 +10,7 @@ importFrom(grid,
 )
 
 importFrom(lattice,
+  levelplot,
   trellis.par.get,
   panel.lines,
   panel.polygon,

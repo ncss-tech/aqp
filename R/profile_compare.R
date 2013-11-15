@@ -19,8 +19,6 @@
 ## TODO: we are suppressing warnings from daisy() when input is all NA
 ##       this is fine for now, but we should figure out a better way
 
-## TODO: decide: rescaling D --  D / max(D) ? or [0,1]
-
 ## TODO: allow for other distance-computing functions
 ## TODO: allow for 'weights' argument (when metric = 'Gower') to daisy()
 
@@ -293,11 +291,11 @@ rescale.result=FALSE, verbose=FALSE) {
 	# remove previous warnings about NA
 	attr(D, 'NA.message') <- NULL
 	
-	# optionally rescale to 0-1
+	# optionally normalize by dividing by max(D)
 	# this is important when incorporating site data
 	# causes problems for some functions like sammon
 	if(rescale.result)
-		D <- rescale(D)
+		D <- D/max(D, na.rm=TRUE)
 	
 	## DEBUG
 	if(verbose) {
