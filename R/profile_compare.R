@@ -350,8 +350,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 			## ... but why ? read-up on daisy
 			if(any(is.na(d.site))) {
 				warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
-				# we have re-scaled to [0,1] so D_min is 0
-				d.site[which(is.na(d.site))] <- 0
+				d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
 			}
 			
 			## TODO: ordering of D_hz vs D_site ... assumptions safe?

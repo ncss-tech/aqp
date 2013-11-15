@@ -12,6 +12,8 @@ importFrom(grid,
 importFrom(lattice,
   levelplot,
   trellis.par.get,
+  panel.levelplot,
+  panel.abline,
   panel.lines,
   panel.polygon,
   panel.grid
