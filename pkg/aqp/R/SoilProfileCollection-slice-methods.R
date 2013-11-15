@@ -18,8 +18,8 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   h <- h[idx, c(id, vars)]
   
   # 2.5 compute fraction missing
-  # note: if no variable has data then NA is returned
   # if there is only 1 variable, don't try to compute this value
+  # if all data are missing NA is returned
   h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
   
   # 3. QA/QC

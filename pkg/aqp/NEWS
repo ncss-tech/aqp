@@ -1,3 +1,6 @@
+-------------------------- aqp 1.5-6 (2013-11-15) --------------------------
+* new function missingDataGrid() for graphically describing the presence of missing data in an SPC object
+
 -------------------------- aqp 1.5-2 (2013-04-09) --------------------------
 * panel.depth_function() now prints "contributing fraction" values in the same color as corresponding depth-function lines and shaded areas
 * panel.depth_function() gains an argument 'cf.col' for manually specifying the CF color

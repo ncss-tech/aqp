@@ -9,7 +9,7 @@
 
 \title{Numerical Soil Profile Comparison}
 \description{
-Performs a numerical comparison of soil profiles using named properties, based on a weighted, summed, depth-segment-aligned dissimilarity calculation. If \code{s} is a \code{\link{SoilProfileCollection}}, site-level variables (2 or more) can also be used. The site-level and horizon-level dissimilarity matricies are then re-scaled to [0,1] and averaged.
+Performs a numerical comparison of soil profiles using named properties, based on a weighted, summed, depth-segment-aligned dissimilarity calculation. If \code{s} is a \code{\link{SoilProfileCollection}}, site-level variables (2 or more) can also be used. The site-level and horizon-level dissimilarity matricies are then re-scaled and averaged.
 }
 
 \usage{
@@ -41,7 +41,7 @@ verbose=FALSE)
   \item{strict_hz_eval}{should horizons be strictly checked for internal self-consistency? (FALSE)}
   \item{progress}{'none' (default): argument passed to \code{ddply} and related functions, see \code{\link{create_progress_bar}} for all possible options; 'text' is usually fine.}
   \item{plot.depth.matrix}{should a plot of the 'soil'/'non-soil' matrix be returned (FALSE)}
-  \item{rescale.result}{should the result be rescaled to [0,1] (FALSE)}
+  \item{rescale.result}{should the result be rescaled by dividing by max(D) (FALSE)}
   \item{verbose}{extra debug output (FALSE)}
 }
 
@@ -57,7 +57,7 @@ A notice is issued if there are any NA values within the matrix used for distanc
 Our approach builds on the work of (Moore, 1972) and the previously mentioned depth-slicing algorithm.
 }
 
-\value{A dissimilarity matrix object of class 'dissimilarity, dist', optionally scaled to [0, 1].}
+\value{A dissimilarity matrix object of class 'dissimilarity, dist', optionally scaled by max(D).}
 
 \references{
 \describe{
@@ -76,12 +76,12 @@ k <- rep(c(0,0.1,0.05,0.01), each=100)
 w <- 100*exp(-k*z)
 
 xyplot(z ~ w, groups=k, ylim=c(105,-5), xlim=c(-5,105), type='l', 
-ylab='Depth', xlab='Weighting Factor', 
-auto.key=list(columns=4, lines=TRUE, points=FALSE, title="k", cex=0.8, size=3),
-panel=function(...) {
-	panel.grid(h=-1,v=-1) 
-	panel.superpose(...)
-	}
+       ylab='Depth', xlab='Weighting Factor', 
+       auto.key=list(columns=4, lines=TRUE, points=FALSE, title="k", cex=0.8, size=3),
+       panel=function(...) {
+         panel.grid(h=-1,v=-1) 
+         panel.superpose(...)
+       }
 )
 
 ## 2. basic implementation, requires at least two properties
@@ -97,6 +97,7 @@ op <- par(mfrow=c(1,2))
 # compare soil/non-soil matrix plot
 d <- profile_compare(sp1, vars=c('prop','group'), max_d=100, k=0.01, 
 plot.depth.matrix=TRUE)
+
 # plot profile collection
 plot(sp1)
 # annotate max depth of profile comparison
@@ -137,46 +138,6 @@ missing.too.much.data.idx <- which(profileApply(s, f.check.NA))
 # remove bad profiles and try again: works
 s.no.na <- profile_compare(s[-missing.too.much.data.idx, ], vars=c('p1','p2'), 
 max_d=100, k=0, plot.depth.matrix=TRUE)
-
-
-## alternate approach for visualizing missing data
-# 10 random profiles
-s <- ldply(paste('soil', 1:10), random_profile)
-
-# randomly sprinkle some missing data
-s[sample(nrow(s), 5), 'p1'] <- NA
-s[sample(nrow(s), 5), 'p2'] <- NA
-s[sample(nrow(s), 5), 'p3'] <- NA
-
-# set all p4 and p5 attributes of `soil 1' to NA
-s[which(s$id == 'soil 1'), 'p5'] <- NA
-s[which(s$id == 'soil 1'), 'p4'] <- NA
-
-# upgrade to SPC
-depths(s) <- id ~ top + bottom
-
-# slice into regular segments
-# note: this will compute slice-wise missing data
-s.sliced <- slice(s, 0:100 ~ .)
-
-# however, when all data are missing, then NA is retured
-# convert these into 1
-s.sliced$.pctMissing[is.na(s.sliced$.pctMissing)] <- 1
-
-
-# symbolize missing data fraction
-if(require(RColorBrewer)) {
-  cols <- rev(brewer.pal(8, 'Spectral'))
-  cr <- colorRamp(cols)
-  # assign color based on fraction of data NOT missing
-  s.sliced$soil_color <- rgb(cr(s.sliced$.pctMissing), max=255)
-  # leave out horizon (slice boundaries)
-  plot(s.sliced, divide.hz=FALSE)
-  # legend
-  legend.divs <- c(0, .25, .50, .75, 1)
-  legend('bottom', legend=legend.divs, pt.bg=rgb(cr(legend.divs), max=255), 
-  horiz=TRUE, pt.cex=2, pch=22, bg='white', title='Percent Missing')
-}
 
 
 ## 4. better plotting of dendrograms with ape package:
