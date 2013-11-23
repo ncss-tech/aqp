@@ -1,3 +1,33 @@
+## TODO: add proper documentation
+# internal function for plotting a bracket (usually defines a diagnostic feature or similar)
+# idx: profile index
+# top: top depth
+# bottom: bottom depth
+# tick.length: bracket tick length
+# offset: left-hand offset from profile center
+addBracket <- function(idx, top, bottom, tick.length=0.05, offset=-0.3, ...) {
+	
+	# normal case: both top and bottom defined
+	if(!missing(top) & !missing(bottom)) {
+		# top tick
+		segments(idx+offset, top, idx+offset+tick.length, top, ...)
+		# bottom tick
+		segments(idx+offset, bottom, idx+offset+tick.length, bottom, ...)
+		# vertical bar
+		segments(idx+offset, top, idx+offset, bottom, ...)
+	}
+	
+	# missing bottom: replace bottom tick with arrow head
+	if(!missing(top) & missing(bottom)) {
+		# top tick
+		segments(idx+offset, top, idx+offset+tick.length, top, ...)
+		# vertical bar is now an arrow
+		arrows(idx+offset, top, idx+offset, top+25, length=tick.length, ...)
+	}
+	
+}
+
+
 
 # simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
 hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
@@ -15,10 +45,10 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 
 # behavior not defined for horizons with an indefinate lower boundary
 
-# TODO: return geometry from last plot
+# TODO: save important elements of geometry from last plot to aqp.env
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
 	
   # get horizons
   h <- horizons(x)
@@ -119,7 +149,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
 	# create horizons + colors
     # default are filled rectangles
     if(divide.hz) {
-	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density)
+	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
 	 
 	 # optionally add horizon boundary distinctiveness
 	 if(! is.null(hz.distinctness.offset)) {
@@ -132,11 +162,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
     
     # otherwise, we only draw the left, top, right borders, and then fill
     else {
-      rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NA, density=this_profile_density)
-      segments(i-width, y0, i-width, y1) # left-hand side
-      segments(i+width, y0, i+width, y1) # right-rand side
-      segments(i-width, min(y1), i+width, min(y1)) # profile top
-      segments(i-width, max(y0), i+width, max(y0)) # profile bottom
+      rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
+      segments(i-width, y0, i-width, y1, lwd=lwd, lty=lty) # left-hand side
+      segments(i+width, y0, i+width, y1, lwd=lwd, lty=lty) # right-rand side
+      segments(i-width, min(y1), i+width, min(y1), lwd=lwd, lty=lty) # profile top
+      segments(i-width, max(y0), i+width, max(y0), lwd=lwd, lty=lty) # profile bottom
     }
       
     

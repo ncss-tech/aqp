@@ -1,6 +1,7 @@
 \name{SoilProfileCollection-plotting-methods}
 \docType{methods}
 \alias{plotSPC}
+\alias{addBracket}
 \alias{plot.SoilProfileCollection}
 \alias{plot,SoilProfileCollection-method}
 \alias{plot,SoilProfileCollection,ANY-method}
@@ -30,7 +31,7 @@ max.depth=max(x), n.depth.ticks=5, shrink=FALSE,
 shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, 
 hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
 hz.distinctness.offset.lty=2, axis.line.offset=-2.5, 
-density=NULL, \dots)
+density=NULL, lwd=1, lty=1, \dots)
 }
 
 
@@ -63,6 +64,8 @@ density=NULL, \dots)
   \item{hz.distinctness.offset.lty}{line style used to encode horizon distinctness (default is 2)}
   \item{axis.line.offset}{horizonatal offset applied to depth axis (default is -2.5)}
   \item{density}{fill density used for horizon color shading, either a single integer or a column name containing integer values (default is NULL, no shading)}
+  \item{lwd}{single numeric value: line width multiplier}
+  \item{lty}{single integert: line style}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
@@ -119,6 +122,40 @@ if(require(RColorBrewer)) {
   depths(sp3) <- id ~ top + bottom
   plot(sp3)
 }
+
+# test out depth bracket annotation
+data(sp1)
+
+# add color vector
+sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+
+# promote to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+
+# plot profiles
+plot(sp1)
+
+# manually add depth brackets
+addBracket(1, 5, 75)
+addBracket(2, 40, col='red')
+
+# extract top/bottom depths associated with all A horizons
+f <- function(i) {
+	h <- horizons(i)
+	idx <- grep('^A', h$name)
+	c(min(h$top[idx]), max(h$bottom[idx], na.rm=TRUE))
+	}
+
+# apply function to sp1, result is a list
+a <- profileApply(sp1, f, simplify=FALSE)
+
+# generate index linking our top/bottom depths with original ordering
+key <- match(names(a), profile_id(sp1))
+
+# plot
+plot(sp1)
+# annotate with brackets 
+for(i in key) addBracket(i, a[[i]][1], a[[i]][2])
 
 
 
