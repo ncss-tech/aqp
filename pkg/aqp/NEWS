@@ -1,3 +1,6 @@
+-------------------------- aqp 1.5-6 (2013-11-25) --------------------------
+* new function addBracket() for annotating profile sketches with depth-brackets; useful for plotting diagnostic features
+
 -------------------------- aqp 1.5-6 (2013-11-15) --------------------------
 * new function missingDataGrid() for graphically describing the presence of missing data in an SPC object
 

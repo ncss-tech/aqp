@@ -1,7 +1,6 @@
 \name{SoilProfileCollection-plotting-methods}
 \docType{methods}
 \alias{plotSPC}
-\alias{addBracket}
 \alias{plot.SoilProfileCollection}
 \alias{plot,SoilProfileCollection-method}
 \alias{plot,SoilProfileCollection,ANY-method}
@@ -80,7 +79,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}}
+\code{\link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}}
 }
 \examples{
 data(sp1)
@@ -122,56 +121,6 @@ if(require(RColorBrewer)) {
   depths(sp3) <- id ~ top + bottom
   plot(sp3)
 }
-
-# test out depth bracket annotation
-data(sp1)
-
-# add color vector
-sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
-
-# promote to SoilProfileCollection
-depths(sp1) <- id ~ top + bottom
-
-# plot profiles
-plot(sp1)
-
-# manually add depth brackets
-addBracket(1, 5, 75)
-addBracket(2, 40, col='red')
-
-# extract top/bottom depths associated with all A horizons
-f <- function(i) {
-	h <- horizons(i)
-	idx <- grep('^A', h$name)
-	c(min(h$top[idx]), max(h$bottom[idx], na.rm=TRUE))
-	}
-
-# apply function to sp1, result is a list
-a <- profileApply(sp1, f, simplify=FALSE)
-
-# generate index linking our top/bottom depths with original ordering
-key <- match(names(a), profile_id(sp1))
-
-# plot
-plot(sp1)
-# annotate with brackets 
-for(i in key) addBracket(i, a[[i]][1], a[[i]][2])
-
-## fix this:
-library(soilDB)
-
-data(loafercreek)
-
-x <- loafercreek[1:15, ]
-s <- site(x)
-
-# plot
-par(mar=c(0,0,0,0))
-plot(x, name='hzname')
-
-addDiagnosticBracket(x, 'argillic horizon', col='red')
-addDiagnosticBracket(x, 'paralithic contact', col='blue')
-addBracket(match(s$pedon_id, profile_id(x)), s$psctopdepth, s$pscbotdepth, offset=-0.4)
 
 }
 

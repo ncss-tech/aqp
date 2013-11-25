@@ -1,13 +1,17 @@
-## TODO: generalize to accomodate data that do not come from NASIS
-# annotate with brackets 
-addDiagnosticBracket <- function(s, kind, ...) {
+
+## TODO: still not completely generalized
+# annotate elements from @diagnostic with brackets 
+# mostly a helper function for addBracket()
+addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='featdepb', ...) {
+  # extract diagnostic horizon information
   d <- diagnostic_hz(s)
   d <- d[which(d$diag_kind == kind), ]
   
   # generate index linking our top/bottom depths with original ordering
-  key <- match(d[, 1], profile_id(s))
-
-  for(i in key) addBracket(i, d$featdept[i], d$featdepb[i], ...)
+  key <- match(d[[id]], profile_id(s))
+  
+  # add backets
+  addBracket(key, d[[top]], d[[bottom]], ...)
 }
 
 ## TODO: add proper documentation
@@ -18,7 +22,7 @@ addDiagnosticBracket <- function(s, kind, ...) {
 # bottom: bottom depth
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
-addBracket <- function(idx, top, bottom, tick.length=0.05, offset=-0.3, ...) {
+addBracket <- function(idx, top, bottom, tick.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
 	
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
@@ -35,7 +39,7 @@ addBracket <- function(idx, top, bottom, tick.length=0.05, offset=-0.3, ...) {
 		# top tick
 		segments(idx+offset, top, idx+offset+tick.length, top, ...)
 		# vertical bar is now an arrow
-		arrows(idx+offset, top, idx+offset, top+25, length=tick.length, ...)
+		arrows(idx+offset, top, idx+offset, top+missing.bottom.depth, length=tick.length, ...)
 	}
 	
 }
