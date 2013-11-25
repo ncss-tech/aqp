@@ -4,7 +4,9 @@
 \title{Add Depth Brackets}
 \description{Add depth-wise brackets to an existing plot of a SoilProfileCollection object.}
 \usage{
-addBracket(idx, top, bottom, tick.length = 0.05, offset = -0.3, missing.bottom.depth = 25, ...)
+addBracket(idx, top, bottom, tick.length = 0.05, 
+arrow.length = 0.05, offset = -0.3, missing.bottom.depth = 25, 
+...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -12,6 +14,7 @@ addBracket(idx, top, bottom, tick.length = 0.05, offset = -0.3, missing.bottom.d
   \item{top}{numeric vector of bracket top depths}
   \item{bottom}{numeric vector of bracket bottom depths}
   \item{tick.length}{length of bracket "tick" mark}
+  \item{arrow.length}{length of arrowhead}
   \item{offset}{numeric, length of left-hand offset from each profile}
   \item{missing.bottom.depth}{distance (in depth units) to extend brackets that are missing a lower depth}
   \item{\dots}{further arguments passed on to \code{segments} or \code{arrows}}

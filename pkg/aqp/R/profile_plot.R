@@ -22,24 +22,24 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='
 # bottom: bottom depth
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
-addBracket <- function(idx, top, bottom, tick.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
+addBracket <- function(idx, top, bottom, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
 	
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
 		# top tick
-		segments(idx+offset, top, idx+offset+tick.length, top, ...)
+		segments(idx+offset, top, idx+offset+tick.length, top, lend=2, ...)
 		# bottom tick
-		segments(idx+offset, bottom, idx+offset+tick.length, bottom, ...)
+		segments(idx+offset, bottom, idx+offset+tick.length, bottom, lend=2, ...)
 		# vertical bar
-		segments(idx+offset, top, idx+offset, bottom, ...)
+		segments(idx+offset, top, idx+offset, bottom, lend=2, ...)
 	}
 	
 	# missing bottom: replace bottom tick with arrow head
 	if(!missing(top) & missing(bottom)) {
 		# top tick
-		segments(idx+offset, top, idx+offset+tick.length, top, ...)
+		segments(idx+offset, top, idx+offset+tick.length, top, lend=2, ...)
 		# vertical bar is now an arrow
-		arrows(idx+offset, top, idx+offset, top+missing.bottom.depth, length=tick.length, ...)
+		arrows(idx+offset, top, idx+offset, top+missing.bottom.depth, length=arrow.length, lend=2, ...)
 	}
 	
 }
