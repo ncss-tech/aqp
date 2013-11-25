@@ -1,4 +1,17 @@
+## TODO: generalize to accomodate data that do not come from NASIS
+# annotate with brackets 
+addDiagnosticBracket <- function(s, kind, ...) {
+  d <- diagnostic_hz(s)
+  d <- d[which(d$diag_kind == kind), ]
+  
+  # generate index linking our top/bottom depths with original ordering
+  key <- match(d[, 1], profile_id(s))
+
+  for(i in key) addBracket(i, d$featdept[i], d$featdepb[i], ...)
+}
+
 ## TODO: add proper documentation
+## NOTE: this function is vectorized
 # internal function for plotting a bracket (usually defines a diagnostic feature or similar)
 # idx: profile index
 # top: top depth
