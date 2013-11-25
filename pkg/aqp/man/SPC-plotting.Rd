@@ -157,7 +157,21 @@ plot(sp1)
 # annotate with brackets 
 for(i in key) addBracket(i, a[[i]][1], a[[i]][2])
 
+## fix this:
+library(soilDB)
 
+data(loafercreek)
+
+x <- loafercreek[1:15, ]
+s <- site(x)
+
+# plot
+par(mar=c(0,0,0,0))
+plot(x, name='hzname')
+
+addDiagnosticBracket(x, 'argillic horizon', col='red')
+addDiagnosticBracket(x, 'paralithic contact', col='blue')
+addBracket(match(s$pedon_id, profile_id(x)), s$psctopdepth, s$pscbotdepth, offset=-0.4)
 
 }
 
