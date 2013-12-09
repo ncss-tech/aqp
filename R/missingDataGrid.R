@@ -19,12 +19,21 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
     rm(h)
   }
   
-  # compute percent missing data by variable
+  
+  # get a list of horizon boundary depths for latter annotation of sliced data
+  obd <- profileApply(s, simplify=FALSE, FUN=function(i) {
+    hd <- horizonDepths(i)
+    h <- horizons(i)
+    hz.boundaries <- unique(c(h[[hd[1]]], h[[hd[2]]]))
+  })
+  
+  
+  # compute percent missing data by pedon/variable
   pct_missing <- ddply(horizons(s), idname(s), .fun=function(i, v=vars) {
     round(sapply(i[, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
   })
   
-   
+    
   # slice according to rules
   s.fm <- as.formula(paste('0:', max_depth, ' ~ ', paste(vars, collapse=' + '), sep=''))
   ss <- slice(s, s.fm)
@@ -52,9 +61,9 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
     panel.levelplot(...)
     panel.abline(v=1:(length(ss)+1)-0.5)
     panel.grid(h=-1, v=FALSE, lty=2, col=grey(0.25))
-#     for(i in 1:length(obd)) {
-#       panel.segments(i-0.5, obd[[i]], i+0.5, obd[[i]])
-#     }
+    for(i in 1:length(obd)) {
+      panel.segments(i-0.5, obd[[i]], i+0.5, obd[[i]], col='black')
+    }
   })
   
   # print level plot
