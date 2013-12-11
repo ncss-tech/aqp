@@ -106,7 +106,8 @@ setMethod("site", "SoilProfileCollection",
   }
 )
 
-## diagnostic horizons: stored as a DF, same order as profile_ids, however, some IDs may be missing
+## diagnostic horizons: stored as a DF, must be join()-ed to other data via ID
+## note: ordering may or may not be the same as in site data
 if (!isGeneric("diagnostic_hz"))
   setGeneric("diagnostic_hz", function(object, ...) standardGeneric("diagnostic_hz"))
 
@@ -163,7 +164,7 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 
 
 ## concatentation
-## WARNING: data are not re-sorted, causes errors in profile_compare()
+## NOTE: data are re-sorted according to idname(objects[[1]])
 ## TODO: duplicates in @sp will cause errors
 ## TODO: duplicates are removed in all other slots... does this make sense?
 rbind.SoilProfileCollection <- function(...) {
@@ -212,24 +213,37 @@ rbind.SoilProfileCollection <- function(...) {
 		stop('inconsistent CRS', call.=FALSE)
 	
 	# generate new SPC components
-	o.h <- unique(do.call('rbind', o.h))
-	o.s <- unique(do.call('rbind', o.s))
-	o.d <- unique(do.call('rbind', o.d))
+	o.h <- unique(do.call('rbind', o.h)) # horizon data, must be re-ordered
+	o.s <- unique(do.call('rbind', o.s)) # site data, must be re-ordered
+	o.d <- unique(do.call('rbind', o.d)) # diagnostic data, leave as-is
 	
+	# generate ording vector for horizon and site data based on new vector of profile IDs
+  id <- o.idname[[1]] # copy ID name from first object into convenience variable
+	new.hz.order <- order(o.h[[id]])
+  new.site.order <- order(o.s[[id]])
+  
+  # re-order horizon/site data: NOTE funky syntax required to accomodate data.frames with only a single column
+	o.h <- o.h[new.hz.order, , drop=FALSE]
+  o.s <- o.s[new.site.order, , drop=FALSE]
+  
 	# spatial points require some more effort when spatial data are missing
 	o.1.sp <- objects[[1]]@sp
 	if(ncol(coordinates(o.1.sp)) == 1) # missing spatial data
 		o.sp <- o.1.sp # copy the first filler
 	
 	## TODO: how can we make sure that unique-ness is enforced? 
-	else # not missing spatial data
+	# not missing spatial data
+	else { 
 		o.sp <- do.call('rbind', o.sp) # rbind properly
-	
+    # re-order based on new ordering of IDs, from site data
+		o.sp <- o.sp[new.site.order, ]
+  }
+  
 	# make SPC and return
 	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
 	
-  # warn user that data are not re-sorted
-  message('notice: data have NOT been re-sorted according to profile ID')
+  # warn user that data have been re-sorted
+  message(paste('resulting SPC has been re-sorted according to', id))
   
 	return(res)
 	}
@@ -513,21 +527,11 @@ setMethod("[", "SoilProfileCollection",
     # keep only the requested horizon data (filtered by pedon ID)
     h <- h[h[[idname(x)]] %in% p.ids, ]
     
-    # site data, with conditional subsetting
+    # keep only the requested site data, (filtered by pedon ID)
     s.all <- site(x)
     s.i <- which(s.all[[idname(x)]] %in% p.ids)
-  	  
-    ## this assumes that ordering is correct
-    ## NOTE:  s[i, ] with a 1-column DF results in a vector
-    if(ncol(s.all) < 2) {
-      s <- data.frame(s.all[s.i, ], stringsAsFactors=FALSE)
-      names(s) <- names(s.all)
-    }
-    # @site has more than 1 column, normal subsetting will work 
-    else {
-      s <- s.all[s.i, ]
-    }
-    
+  	s <- s.all[s.i, , drop=FALSE] # need to use drop=FALSE when @site contains only a single column
+
     # subset spatial data if exists
     if(nrow(coordinates(x)) == length(x))
       sp <- x@sp[i]

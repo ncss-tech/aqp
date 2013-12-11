@@ -130,8 +130,8 @@ rescale.result=FALSE, verbose=FALSE) {
 		# evaluated based on presence of real data in at least 1 variable
 		s.sub <- na.omit(s[, c('id', 'top', 'bottom', vars)])
     
-    ## BUG!!! tapply re-orders the results based on sorting of s.sub$id
-    ## ----> this will cause problems when rbind-ing SPC objects
+    ## BUG!!! tapply() re-orders the results based on sorting of s.sub$id
+    ## ----> this will cause problems when input isn't sorted by ID
 		# get the depth of each profile
 		s.slices_of_soil <- tapply(s.sub$bottom, s.sub$id, max, na.rm=TRUE)
 		

@@ -1,3 +1,8 @@
+-------------------------- aqp 1.6 (2013-12-11) --------------------------
+* rbind.SoilProfileCollection() now re-orders data according to the new set of profile IDs
+  - this fixes several probles associated with assumptions in profile_compare()
+* profile_compare() will ne re-written soon to work natively with SPC objects
+
 -------------------------- aqp 1.5-6 (2013-11-25) --------------------------
 * new function addBracket() for annotating profile sketches with depth-brackets; useful for plotting diagnostic features
 
@@ -24,7 +29,6 @@
 * new mini-vignette on dealing with bad data (dealing-with-bad-data.html)
 * better documentation for slice()
 * new warnings related to missing data in the grouping variable passed to slab()
-
 
 -------------------------- aqp 1.5 (2013-02-24) --------------------------
 * profileApply() can now return arbitrary objects = new subsetting/transformation possibilities
