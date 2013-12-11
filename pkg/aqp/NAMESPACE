@@ -16,6 +16,7 @@ importFrom(lattice,
   panel.abline,
   panel.lines,
   panel.polygon,
+  panel.segments,
   panel.grid
 )
 
