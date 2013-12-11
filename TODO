@@ -1,6 +1,9 @@
 Urgent:
 -------
-** ADD to all modules using data.frame, melt, ... ?
+* add to all functions using data.frame[idx, ] --> data.frame[idx, , drop=FALSE]
+  ## this will return single column data.frame objects as data.frames, instead of coercing to vectors
+
+* ADD to all modules using data.frame, melt, ... ?
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
 
@@ -12,11 +15,11 @@ Urgent:
 
 * integrate color styling with 'scales' package in plot.SoilProfileCollection
 
-* more aggressive checking of ordering / IDs (especially rbind.SoilProfileCollection)
+* more aggressive checking of ordering / IDs --> use joins instead of implicit ordering
 
 * switch to reshape2? It is faster (PR) [code-fixes required in slab() before we can do this (DEB)]
 
-* S4-cleanup of profile_compare
+* S4-cleanup of profile_compare [this would solve several issues related to ordering]
 
 * raster::extract method
 
@@ -27,10 +30,9 @@ Urgent:
 
 Interesting:
 ------------
-1. PCA by depth slice
-2. user-defined slices for profile_compare()
-3. sensitivity analysis on profile_compare()
-4. equal-area splines
+1. user-defined slices for profile_compare()
+2. sensitivity analysis on profile_compare()
+3. equal-area splines
 
 
 Optimisation of slab()

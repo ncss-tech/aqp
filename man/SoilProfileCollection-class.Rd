@@ -91,7 +91,7 @@ if(require(digest)) {
 # note subsetting of SoilProfileCollection
 cbind(dupes=length(s), no.dupes=length(s[u, ]))
 
-## 3. concatonate SoilProfileCollection objects
+## 3. concatenate SoilProfileCollection objects
 require(plyr)
 d <- ldply(1:10, random_profile)
 
@@ -104,7 +104,7 @@ d.1 <- d[1, ]
 d.2 <- d[2, ]
 d.345 <- d[3:5, ]
 
-# recombine
+# recombine, note that profiles are sorted according to ID
 d.new <- rbind(d.345, d.1, d.2)
 plot(d.new)
 

@@ -47,7 +47,7 @@ setReplaceMethod("depth_units", "SoilProfileCollection",
 
 
 ##
-## depths<- setter method - to create AQP objects
+## depths<- setter method - to create AQP objects: sorts based on ID and top depth
 ##
 if (!isGeneric('depths<-'))
   setGeneric('depths<-', function(object, value) standardGeneric('depths<-'))
