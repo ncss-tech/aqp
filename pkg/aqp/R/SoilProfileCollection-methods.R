@@ -163,6 +163,7 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 
 
 ## concatentation
+## WARNING: data are not re-sorted, causes errors in profile_compare()
 ## TODO: duplicates in @sp will cause errors
 ## TODO: duplicates are removed in all other slots... does this make sense?
 rbind.SoilProfileCollection <- function(...) {
@@ -227,6 +228,9 @@ rbind.SoilProfileCollection <- function(...) {
 	# make SPC and return
 	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
 	
+  # warn user that data are not re-sorted
+  message('notice: data have NOT been re-sorted according to profile ID')
+  
 	return(res)
 	}
 

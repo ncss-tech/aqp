@@ -130,6 +130,8 @@ rescale.result=FALSE, verbose=FALSE) {
 		# evaluated based on presence of real data in at least 1 variable
 		s.sub <- na.omit(s[, c('id', 'top', 'bottom', vars)])
     
+    ## BUG!!! tapply re-orders the results based on sorting of s.sub$id
+    ## ----> this will cause problems when rbind-ing SPC objects
 		# get the depth of each profile
 		s.slices_of_soil <- tapply(s.sub$bottom, s.sub$id, max, na.rm=TRUE)
 		
@@ -142,7 +144,7 @@ rescale.result=FALSE, verbose=FALSE) {
 		# init a matrix with dimensions: depth slices, number of profiles
 		soil.matrix <- matrix(ncol=s.slices_of_soil.length, nrow=max_d)
 		
-		# file with TRUE for 'soil' or FALSE for 'non-soil'
+		# fill with TRUE for 'soil' or FALSE for 'non-soil'
 		for(s.i in 1:s.slices_of_soil.length) {
 			soil.matrix[, s.i] <- c(rep(TRUE, s.slices_of_soil[s.i]), rep(FALSE, s.slices_of_non_soil[s.i]))
 		}
@@ -163,6 +165,7 @@ rescale.result=FALSE, verbose=FALSE) {
 		  axis(side=2, at=pretty(c(0, depth_slice_seq)), las=1)
 		  axis(side=1, at=1:n.profiles, labels=labs, las=2, cex.axis=0.75)
 		  }
+    
 		# cleanup
 		rm(s.sub)
 		}
@@ -291,7 +294,7 @@ rescale.result=FALSE, verbose=FALSE) {
 	# remove previous warnings about NA
 	attr(D, 'NA.message') <- NULL
 	
-	# optionally normalize by dividing by max(D)
+	# normalize by dividing by max(D)
 	# this is important when incorporating site data
 	# causes problems for some functions like sammon
 	if(rescale.result)
@@ -335,6 +338,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 		vars <- vars[-matching.idx]
 		
 		
+    ## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
 		## TODO: allow user to pass-in variable type information
 		# compute dissimilarty on site-level data: only works with 2 or more variables
 		# rescale to [0,1]
