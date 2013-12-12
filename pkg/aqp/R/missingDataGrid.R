@@ -1,7 +1,7 @@
 # s: soil profile collection object
 # s.fm: slicing formula, including variables requested for missing data test
 # cols: vector of colors palette
-missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.regex=NULL, cols=NULL) {
+missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.regex=NULL, cols=NULL, ...) {
   
   # default color scheme
   if(is.null(cols))
@@ -47,8 +47,13 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
   # get slice mid-points
   h$mid <- (h[[hd[1]]] + h[[hd[2]]]) / 2
   
+  
+  # NOTE: since we are converting profile IDs to a factor, 
+  # we need to explicitly set levels to match the original ordering of profiles
+  forced.levels <- paste("c('", paste(profile_id(ss), collapse="','"), "')", sep='')
+  
   # construct levelplot formula using horizon top boundaries
-  f <- as.formula(paste('.pctMissing',  ' ~ ', 'factor(', idname(ss), ') * mid', sep=''))
+  f <- as.formula(paste('.pctMissing',  ' ~ ', 'factor(', idname(ss), ', levels=', forced.levels, ') * mid', sep=''))
   
   # ylab adjustments
   ylab <- paste('Depth ', '(', depth_units(ss), ')', sep='')
@@ -57,7 +62,7 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
   ylim <- c(max(h$mid) + 5, -3)
   
   # plot missing data fraction
-  lp <- levelplot(f, data=h, ylim=ylim, col.regions=cols.palette(ncuts), cuts=ncuts-1, ylab=ylab, xlab='', scales=list(x=list(rot=90), y=list(tick.number=10)), main='Missing Data Fraction', panel=function(...) {
+  lp <- levelplot(f, data=h, ylim=ylim, col.regions=cols.palette(ncuts), cuts=ncuts-1, ylab=ylab, xlab='', scales=list(x=list(rot=90), y=list(tick.number=10)), ..., panel=function(...) {
     panel.levelplot(...)
     panel.abline(v=1:(length(ss)+1)-0.5)
     panel.grid(h=-1, v=FALSE, lty=2, col=grey(0.25))
