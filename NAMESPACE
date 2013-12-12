@@ -1,3 +1,14 @@
+importFrom(methods,
+  setClass,
+  representation,
+  prototype,
+  new,
+  isGeneric,
+  setGeneric,
+  setReplaceMethod,
+  setMethod
+)
+
 
 importFrom(RColorBrewer,
   brewer.pal

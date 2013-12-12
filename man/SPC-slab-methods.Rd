@@ -253,7 +253,8 @@ a.wide <- cast(a, group + top + bottom ~ variable, value=c('mean'))
 ## again, this time for a user-defined slab from 40-60 cm
 a <- slab(sp3, fm=group ~ L + A + B, slab.structure=c(40,60), slab.fun=mean.and.sd)
 
-# now we have weighted average properties (within the defined slab) for each variable, and each group
+# now we have weighted average properties (within the defined slab)
+# for each variable, and each group
 (a.wide <- cast(a, group + top + bottom ~ variable, value=c('mean')))
 
 ## this time, compute the weighted mean of selected properties, by profile ID

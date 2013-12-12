@@ -4,7 +4,8 @@
 \title{Missing Data Grid}
 \description{Generate a levelplot of missing data from a SoilProfileCollection object.}
 \usage{
-missingDataGrid(s, max_depth, vars, filter.column = NULL, filter.regex = NULL, cols = NULL)
+missingDataGrid(s, max_depth, vars, filter.column = NULL, 
+filter.regex = NULL, cols = NULL)
 }
 
 \arguments{
