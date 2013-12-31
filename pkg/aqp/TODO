@@ -13,8 +13,6 @@ Urgent:
 
 * slab() no longer supports weighted-aggregates
 
-* integrate color styling with 'scales' package in plot.SoilProfileCollection
-
 * more aggressive checking of ordering / IDs --> use joins instead of implicit ordering
 
 * switch to reshape2? It is faster (PR) [code-fixes required in slab() before we can do this (DEB)]

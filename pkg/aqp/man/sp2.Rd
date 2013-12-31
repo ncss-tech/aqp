@@ -50,6 +50,9 @@ site(sp2) <- ~ surface
 
 # generate a new plotting order, based on the dated surface each soil was described on
 p.order <- order(sp2$surface)
+
+# plot
+par(mar=c(1,0,3,0))
 plot(sp2, plot.order=p.order)
 
 # setup multi-figure output
