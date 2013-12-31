@@ -58,20 +58,57 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 
 # generate a soil profile figure, from a generic dataframe
 # using top and bottom boundaries, annotating with name
-# optionally color with vector that is the same length as number of horizons
 
 # behavior not defined for horizons with an indefinate lower boundary
 
 # TODO: save important elements of geometry from last plot to aqp.env
+# TODO: allow color to be set via formula interface# attempt to guess
+# TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
 	
   # get horizons
   h <- horizons(x)
   
   # get column names from horizon dataframe
   nm <- names(h)
+  
+  # if the user has not specified a column containing horizon designations,
+  # attempt to guess
+  if(missing(name)) {
+    possible.name <- nm[grep('name', nm, ignore.case=TRUE)]
+    # use the first valid guess
+    if(length(possible.name) > 0) {
+      possible.name <- possible.name[1]
+      name <- possible.name
+      message(paste('guessing horizon designations are stored in `', name, '`', sep=''))
+    }
+    else {
+      message('unable to guess column containing horizon designations')
+      name <- NA # set column name to NA, details handled farther down in the function
+    }
+  }
+  
+  # setup horizon colors:
+  # 1. numeric vector, rescale and apply color ramp
+  if(is.numeric(h[[color]])) {
+    col.palette <- rev(brewer.pal(10, 'Spectral'))
+    cr <- colorRamp(col.palette)
+    # note that this may contain NAs
+    c.rgb <- cr(rescale(h[[color]]))
+    cc <- which(complete.cases(c.rgb))
+    h$.color <- NA
+    # convert non-NA values into colors
+    h$.color[cc] <- rgb(c.rgb[cc, ], maxColorValue=254)
+    # generate range / colors for legend
+    pretty.vals <- pretty(h[[color]])
+    color.legend.data <- list(legend=pretty.vals, col=rgb(cr(rescale(pretty.vals)), maxColorValue=254))
+  }
+  # 2. character vector, assume these are valid colors
+  if(is.character(h[[color]])) {
+    h$.color <- h[[color]]
+  }
   
   # get top/bottom column names
   IDcol <- idname(x)
@@ -120,11 +157,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
 	  this_profile_id <- pIDs[profile_i]
 	  this_profile_data <- h[h[IDcol] == this_profile_id, ]
 	  
-    ## TODO: allow color to be set via formula interface
+    # extract column names
+    cn <- names(this_profile_data)
+    
     # extract / generate horizon color
-    m <- match(color, names(this_profile_data))
+    m <- match(color, cn)
     if(! is.na(m))
-      this_profile_colors <- this_profile_data[[m]]
+      this_profile_colors <- this_profile_data$.color
     else # no user-defined color column, or it is missing
       this_profile_colors <- 'white'
     
@@ -135,22 +174,24 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
 	  		this_profile_density <- density
 	  	# otherwise we have a column name
 	  	else {
-	  		m <- match(density, names(this_profile_data))
+	  		m <- match(density, cn)
 	  		if(! is.na(m))
 		  		this_profile_density <- this_profile_data[[m]]
 		  	else # user-defined column is missing
 			  	this_profile_density <- NULL
 	  	}
 	  }
-	  else # no user-defined color column
+	  else # no user-defined density column
 	  	this_profile_density <- NULL
 	  
     # extract / generate horizon name
-    m <- match(name, names(this_profile_data))
+    m <- match(name, cn)
     if(! is.na(m))
       this_profile_names <- this_profile_data[[m]]
-    else # no user-defined horizon name column, or it is missing
+      # otherwise use an empty string
+    else
       this_profile_names <- ''
+    
 	  
 	  # generate rectangle geometry
 	  # get vectors of horizon boundaries, and scale
@@ -233,6 +274,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name='name', alt.label=NUL
   	text(1:length(x), y.offset+3, al, srt=90, adj=c(1, 0.5), font=2, cex=cex.id * 1.5)
   }
   
+  ## experimental color legend
+  if(exists('color.legend.data')) {
+    mtext(side=3, text=color, font=2, line=1.6)
+    legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99))
+  }
   }
 
 

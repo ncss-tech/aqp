@@ -42,8 +42,9 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 6 slots
 \references{F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distances with landform and land cover attributes. Geoderma. 110: 241--263.}
 
 \examples{
+library(scales)
 data(sp5)
-
+par(mar=c(1,1,1,1))
 # plot a random sampling of profiles
 s <- sample(1:length(sp5), size=25)
 plot(sp5[s, ], divide.hz=FALSE)
@@ -55,9 +56,6 @@ plot(sp5[26:50, ], max.depth=300)
 plot(sp5[51:75, ], max.depth=300)
 plot(sp5[76:100, ], max.depth=300)
 
-
-# more fun demos, these require the 'scales' package
-if(require(scales)) {
 
 # 4x1 matrix of plotting areas
 layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
@@ -97,6 +95,8 @@ polygon(c(1:25, 25:1), c(y.clay.max-10, rev(y.clay.max+10)),
 border='black', col=rgb(0,0,0.8, alpha=0.25))
 points(1:25, y.clay.max, pch=21, bg='white')
 
+# close plot
+dev.off()
 
 
 # plotting parameters
@@ -148,7 +148,7 @@ points(1:25, d.1[d.1.order], pch=16)
 arrows(1:25, d.1[d.1.order], 1:25, 95, len=0.1)
 # add an axis for the dissimilarity scale
 axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
-}
+
 
 }
 \keyword{datasets}

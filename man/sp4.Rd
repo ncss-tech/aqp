@@ -30,8 +30,6 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.}
 \examples{
 # setup environment
 library(aqp)
-library(scales)
-library(RColorBrewer)
 
 # load sample data set, a simple data.frame object with horizon-level data from 10 profiles
 data(sp4)
@@ -103,16 +101,10 @@ axis(1, line=-1.5, at=1:10, cex.axis=0.75, font=4, col='blue', lwd=2)
 axis(2, line=-1, at=pretty(1:max(sp4)), cex.axis=0.75, font=4, las=1, col='blue', lwd=2)
 
 
-# setup some colors- to symbolize soil properties
-cols <- rev(brewer.pal(8, 'Spectral'))
-# generate a color ramp function based on the color pallette defined above
-cr <- colorRamp(cols)
-# associate colors with exchangeable Ca:Mg, and save to new horizon-level attribute
-sp4$soil_color <- rgb(cr(rescale(sp4$ex_Ca_to_Mg)), max=255)
-
-# plot again, this time using new colors
-par(mar=c(0,0,0,0))
-plot(sp4) # how does it know about horizon names / colors? see the manual page.
+# symbolize soil properties via color
+par(mar=c(0,0,4,0))
+plot(sp4, color='clay')
+plot(sp4, color='CF')
 
 # apply a function to each profile, returning a single value per profile,
 # in the same order as profile_id(sp4)

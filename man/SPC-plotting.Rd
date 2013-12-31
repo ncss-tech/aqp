@@ -21,7 +21,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }}
 
 \usage{
-plotSPC(x, color='soil_color', width=0.2, name='name', 
+plotSPC(x, color='soil_color', width=0.2, name=NULL, 
 alt.label=NULL, cex.names=0.5, cex.depth.axis=cex.names, 
 cex.id=cex.names+(0.2*cex.names), print.id=TRUE, 
 id.style='auto', plot.order=1:length(x), add=FALSE, 
@@ -37,9 +37,9 @@ density=NULL, lwd=1, lty=1, \dots)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a SoilProfileCollection object}
-  \item{color}{the name of the column containing R-compatible color descriptions}
+  \item{color}{the name of the column containing R-compatible color descriptions, or a column containing numeric data; see details}
   \item{width}{scaling of profile widths}
-  \item{name}{the name of the column containing the horizon designation}
+  \item{name}{the name of the column containing horizon designation labels}
   \item{alt.label}{the name of a column in @site used for seconary annotation}
   \item{cex.names}{character scaling applied to horizon names}
   \item{cex.depth.axis}{character scaling applied to depth scale}
@@ -68,7 +68,13 @@ density=NULL, lwd=1, lty=1, \dots)
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
-Depth limits (max.depth) and number of depth ticks (n.depth.ticks) are *suggestions* to the \code{pretty()} function. You may have to tinker with both parameters to get what you want. The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
+Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are *suggestions* to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want. 
+
+The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long. 
+
+If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations. 
+
+The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing numeric values. In the second case, numeric values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
 }
 \value{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
@@ -84,6 +90,9 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \examples{
 data(sp1)
 
+# usually best to adjust margins
+par(mar=c(0,0,3,0))
+
 # add color vector
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
@@ -94,33 +103,18 @@ depths(sp1) <- id ~ top + bottom
 plot(sp1, id.style='side')
 
 # title, note line argument:
-title('Sample Data 1', line=-1, cex.main=0.75)
+title('Sample Data 1', line=1, cex.main=0.75)
 
 # plot profiles without horizon-line divisions
 plot(sp1, divide.hz=FALSE)
-
-# plot profiles, using alternate profile ID label style
-plot(sp1, id.style='side')
 
 # add dashed lines illustrating horizon boundary distinctness
 sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
 plot(sp1, hz.distinctness.offset='hzD')
 
 # plot horizon color according to some property
-# RColorBrewer helps with nice colors
-if(require(RColorBrewer)) {
-  data(sp3)
-  
-  # setup colors
-  cols <- rev(brewer.pal(8, 'Spectral'))
-  cr <- colorRamp(cols)
-  
-  library(scales)
-  # assign color based on clay content, rescaled to {0,1}
-  sp3$soil_color <- rgb(cr(rescale(sp3$clay)), max=255)
-  depths(sp3) <- id ~ top + bottom
-  plot(sp3)
-}
-
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+plot(sp4, color='clay')
 }
 
