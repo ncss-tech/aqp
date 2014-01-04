@@ -1,3 +1,7 @@
+-------------------------- aqp 1.6 (2013-12-31) --------------------------
+* plotSPC() attempts to guess which column contains horizon designations
+* plotSPC() can now color horizons based on continuous soil properties (e.g. clay content)
+
 -------------------------- aqp 1.6 (2013-12-11) --------------------------
 * rbind.SoilProfileCollection() now re-orders data according to the new set of profile IDs
   - this fixes several probles associated with assumptions in profile_compare()
