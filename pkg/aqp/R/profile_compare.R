@@ -281,9 +281,6 @@ rescale.result=FALSE, verbose=FALSE) {
 		}
 	
 	
-	##
-	message("Computing profile total dissimilarities")
-	
 	# reduce list of dissimilarity matrices by summation
 	D <- .SumDistanceList(d)
 	
