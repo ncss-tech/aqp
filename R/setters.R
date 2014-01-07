@@ -160,7 +160,7 @@ setReplaceMethod("site", "SoilProfileCollection",
       
       # sanity check: site + new data should have same number of rows as original
       if(nrow(s) != nrow(site.new)) {
-      	cat(paste('original data (', nrow(s), ' rows) new data (', nrow(site.new), ' rows)', sep=''))
+      	message(paste('original data (', nrow(s), ' rows) new data (', nrow(site.new), ' rows)', sep=''))
         stop('invalid join condition, site data not changed', call.=FALSE)
       }
             
