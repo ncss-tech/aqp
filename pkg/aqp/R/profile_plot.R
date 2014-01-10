@@ -3,6 +3,10 @@
 # annotate elements from @diagnostic with brackets 
 # mostly a helper function for addBracket()
 addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='featdepb', ...) {
+	
+  # TODO :	# get plotting details from aqp environment
+	# lsp <- get('last_spc_plot', env=aqp.env)
+	
   # extract diagnostic horizon information
   d <- diagnostic_hz(s)
   d <- d[which(d$diag_kind == kind), ]
@@ -23,6 +27,10 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
 addBracket <- function(idx, top, bottom, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
+	
+	  # TODO :	# get plotting details from aqp environment
+	# lsp <- get('last_spc_plot', env=aqp.env)
+	
 	
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
@@ -67,7 +75,11 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 
 ## basic function
 plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
-	
+  
+  # save arguments to aqp env
+  lsp <- list('width'=width, 'plot.order'=plot.order)
+  assign('last_spc_plot', lsp, envir=aqp.env)
+  
   # get horizons
   h <- horizons(x)
   
