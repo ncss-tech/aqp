@@ -1,64 +1,31 @@
 \name{addVolumeFraction}
 \alias{addVolumeFraction}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+\title{Symbolize Volume Fraction on a Soil Profile Collection Plot}
+\description{Symbolize volume fraction on an existing soil profile collection plot.}
+
 \usage{
-addVolumeFraction(x, colname, res = 10, cex.min = 0.1, cex.max = 0.5, pch = 15, col = "black")
-}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
-}
-  \item{colname}{
-%%     ~~Describe \code{colname} here~~
-}
-  \item{res}{
-%%     ~~Describe \code{res} here~~
-}
-  \item{cex.min}{
-%%     ~~Describe \code{cex.min} here~~
-}
-  \item{cex.max}{
-%%     ~~Describe \code{cex.max} here~~
-}
-  \item{pch}{
-%%     ~~Describe \code{pch} here~~
-}
-  \item{col}{
-%%     ~~Describe \code{col} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
+addVolumeFraction(x, colname, res = 10, cex.min = 0.1, cex.max = 0.5, pch = 1, col = "black")
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\arguments{
+  \item{x}{a \code{SoilProfileCollection} object}
+  \item{colname}{character vector of length 1, naming the column containing volume fraction data (horizon-level attribute)}
+  \item{res}{integer, resolution of the grid used to symbolize volume fraction}
+  \item{cex.min}{minimum symbol size}
+  \item{cex.max}{maximum symbol size}
+  \item{pch}{plotting character}
+  \item{col}{color of the symbol}
+}
+
+\details{This function can only be called after plotting a \code{SoilProfileCollection} object.}
+\note{Details associated with a call to plot.SoilProfileCollection are automatically accounted for within this function: e.g. \code{plot.order}, \code{width}, etc.}
+
+\author{D.E. Beaudette}
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{plotSPC}}
 }
+
 \examples{
 # sample data
 data(loafercreek, package='soilDB')
