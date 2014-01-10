@@ -36,7 +36,7 @@
 addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=1, col='black') {
 	
 	# get plotting details from aqp environment
-	lsp <- get('last_spc_plot', env=aqp.env)
+	lsp <- get('last_spc_plot', envir=aqp.env)
 	w <- lsp$width
 	plot.order <- lsp$plot.order
 	
