@@ -1,4 +1,8 @@
--------------------------- aqp 1.6 (2013-12-31) --------------------------
+-------------------------- aqp 1.6-2 (2014-01-10) --------------------------
+* plotSPC() now registers plotting parameters in the environment aqp.env
+* new function addVolumeFraction() for annotating profile plots with volumetric information (e.g. rock fragment volume)
+
+-------------------------- aqp 1.6-1 (2013-12-31) --------------------------
 * plotSPC() attempts to guess which column contains horizon designations
 * plotSPC() can now color horizons based on continuous soil properties (e.g. clay content)
 
