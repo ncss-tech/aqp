@@ -67,19 +67,19 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 			## TODO: still throws errors
 			# just those with data
 			if(nrow(v) > 0 ) {
-				# rescale x-coordinates
-				v$x <- rescale(v$x, to=c(x.left, x.right))
+        # jitter and rescale x-coordinates
+				v$x <- rescale(jitter(v$x), to=c(x.left, x.right))
 		
 				# rescale y-coordinates
 				y.top <- this.hz[[hd[1]]] + depth.offset
 				y.bottom <- this.hz[[hd[2]]] - depth.offset
-				v$y <- rescale(v$y, to=c(y.top, y.bottom))
+				v$y <- rescale(jitter(v$y), to=c(y.top, y.bottom))
 		
 				# generate random symbol size
 				p.cex <- runif(nrow(v), min=cex.min, max=cex.max)
 		
 				# add jittered points
-				points(jitter(v$x), jitter(v$y), cex=p.cex, col=col, pch=pch)
+				points(v$x, v$y, cex=p.cex, col=col, pch=pch)
 			}
 		}
 	}	
