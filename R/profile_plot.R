@@ -6,12 +6,12 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='
 	
   # get plotting details from aqp environment
   lsp <- get('last_spc_plot', envir=aqp.env)
-  plot.order <- lsp$plot.order
-  
+    
   ## TODO: integrate these
   y.offset <- lsp$y.offset
   scaling.factor <- lsp$scaling.factor
-	
+  plot.order <- lsp$plot.order
+  
   # extract diagnostic horizon information
   d <- diagnostic_hz(s)
   d <- d[which(d$diag_kind == kind), ]
@@ -20,44 +20,55 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='
   key <- match(d[[id]], profile_id(s))
   
   # add backets
-  addBracket(key, d[[top]], d[[bottom]], ...)
+  addBracket(top=d[[top]], bottom=d[[bottom]], idx=key, ...)
 }
 
 ## TODO: add proper documentation
 ## NOTE: this function is vectorized
 # internal function for plotting a bracket (usually defines a diagnostic feature or similar)
-# idx: profile index
+# idx: (optional) integer index to profile
 # top: top depth
 # bottom: bottom depth
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
-addBracket <- function(idx, top, bottom, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
+addBracket <- function(top, bottom, idx=NULL, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
 	
   # get plotting details from aqp environment
   lsp <- get('last_spc_plot', envir=aqp.env)
-  w <- lsp$width
-  plot.order <- lsp$plot.order
+  
+  # if missing an specific index, assume plotting order
+  if(is.null(idx))
+    plot.order <- lsp$plot.order
+  else
+    plot.order <- idx
   
   ## TODO: integrate these
   y.offset <- lsp$y.offset
   scaling.factor <- lsp$scaling.factor
+  w <- lsp$width
   
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
+    # x-positions
+    x.1 <- plot.order + offset
+    x.2 <- x.1 + tick.length
 		# top tick
-		segments(idx+offset, top, idx+offset+tick.length, top, lend=2, ...)
+		segments(x.1, top, x.2, top, lend=2, ...)
 		# bottom tick
-		segments(idx+offset, bottom, idx+offset+tick.length, bottom, lend=2, ...)
+		segments(x.1, bottom, x.2, bottom, lend=2, ...)
 		# vertical bar
-		segments(idx+offset, top, idx+offset, bottom, lend=2, ...)
+		segments(x.1, top, x.1, bottom, lend=2, ...)
 	}
 	
 	# missing bottom: replace bottom tick with arrow head
 	if(!missing(top) & missing(bottom)) {
+	  # x-positions
+	  x.1 <- plot.order + offset
+	  x.2 <- x.1 + tick.length
 		# top tick
-		segments(idx+offset, top, idx+offset+tick.length, top, lend=2, ...)
+		segments(x.1, top, x.2, top, lend=2, ...)
 		# vertical bar is now an arrow
-		arrows(idx+offset, top, idx+offset, top+missing.bottom.depth, length=arrow.length, lend=2, ...)
+		arrows(x.1, top, x.1, top+missing.bottom.depth, length=arrow.length, lend=2, ...)
 	}
 	
 }
