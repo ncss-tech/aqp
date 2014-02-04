@@ -4,8 +4,13 @@
 # mostly a helper function for addBracket()
 addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='featdepb', ...) {
 	
-  # TODO :	# get plotting details from aqp environment
-	# lsp <- get('last_spc_plot', env=aqp.env)
+  # get plotting details from aqp environment
+  lsp <- get('last_spc_plot', envir=aqp.env)
+  plot.order <- lsp$plot.order
+  
+  ## TODO: integrate these
+  y.offset <- lsp$y.offset
+  scaling.factor <- lsp$scaling.factor
 	
   # extract diagnostic horizon information
   d <- diagnostic_hz(s)
@@ -28,10 +33,15 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='
 # offset: left-hand offset from profile center
 addBracket <- function(idx, top, bottom, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
 	
-	  # TODO :	# get plotting details from aqp environment
-	# lsp <- get('last_spc_plot', env=aqp.env)
-	
-	
+  # get plotting details from aqp environment
+  lsp <- get('last_spc_plot', envir=aqp.env)
+  w <- lsp$width
+  plot.order <- lsp$plot.order
+  
+  ## TODO: integrate these
+  y.offset <- lsp$y.offset
+  scaling.factor <- lsp$scaling.factor
+  
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
 		# top tick
@@ -64,20 +74,19 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 }
 
 
-# generate a soil profile figure, from a generic dataframe
-# using top and bottom boundaries, annotating with name
 
-# behavior not defined for horizons with an indefinate lower boundary
 
+
+# TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: save important elements of geometry from last plot to aqp.env
-# TODO: allow color to be set via formula interface# attempt to guess
+# TODO: allow color to be set via formula interface
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
   
   # save arguments to aqp env
-  lsp <- list('width'=width, 'plot.order'=plot.order)
+  lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
   assign('last_spc_plot', lsp, envir=aqp.env)
   
   # get horizons
@@ -131,9 +140,12 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, alt.label=NULL,
   # get profile IDs
   pIDs <- profile_id(x)
   
+  # get profile labels from @site
+  pLabels <- site(x)[[label]]
+  
   # if profile style is auto, determin style based on font metrics
   if(id.style == 'auto') {
-  	sum.ID.str.width <- sum(sapply(pIDs, strwidth, units='inches', cex=cex.id, font=2))
+  	sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
   	plot.width <- par('pin')[1]
   	ID.width.ratio <- sum.ID.str.width  / plot.width
 #   	print(ID.width.ratio)
@@ -166,6 +178,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, alt.label=NULL,
 	  profile_i <- plot.order[i]
 	  
 	  # extract the current profile's horizon data
+    this_profile_label <- pLabels[profile_i]
 	  this_profile_id <- pIDs[profile_i]
 	  this_profile_data <- h[h[IDcol] == this_profile_id, ]
 	  
@@ -259,11 +272,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, alt.label=NULL,
 	  if(print.id) {
 			# optionally abbreviate
 			if(abbr)
-		  	id.text <- abbreviate(as.character(this_profile_id), abbr.cutoff)
+		  	id.text <- abbreviate(as.character(this_profile_label), abbr.cutoff)
 	
 			# no abbreviations of th ID
 			else
-	  		id.text <- as.character(this_profile_id)
+	  		id.text <- as.character(this_profile_label)
 		
 			# add the text: according to style
 			if(id.style == 'top')
