@@ -1,3 +1,6 @@
+-------------------------- aqp 1.6-3 (2014-02-04) --------------------------
+* plotSPC() has a new argument: `label`, used to set site-level attribute containing profile labels
+
 -------------------------- aqp 1.6-2 (2014-01-10) --------------------------
 * plotSPC() now registers plotting parameters in the environment aqp.env
 * new function addVolumeFraction() for annotating profile plots with volumetric information (e.g. rock fragment volume)

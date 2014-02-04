@@ -21,7 +21,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }}
 
 \usage{
-plotSPC(x, color='soil_color', width=0.2, name=NULL, 
+plotSPC(x, color='soil_color', width=0.2, name=NULL, label=idname(x),
 alt.label=NULL, alt.label.col='black', cex.names=0.5, 
 cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
 print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, 
@@ -39,8 +39,9 @@ density=NULL, lwd=1, lty=1, \dots)
   \item{x}{a SoilProfileCollection object}
   \item{color}{the name of the column containing R-compatible color descriptions, or a column containing numeric data; see details}
   \item{width}{scaling of profile widths}
-  \item{name}{the name of the column containing horizon designation labels}
-  \item{alt.label}{the name of a column in @site used for seconary annotation}
+  \item{name}{the name of the (horizon-level) attribute containing horizon designation labels}
+  \item{label}{the name of the (site-level) attribute used to identify profiles in the plot}
+  \item{alt.label}{the name of a (site-level) attribute used for seconary annotation}
   \item{alt.label.col}{color used when printing secondary annotation}
   \item{cex.names}{character scaling applied to horizon names}
   \item{cex.depth.axis}{character scaling applied to depth scale}
@@ -117,5 +118,13 @@ plot(sp1, hz.distinctness.offset='hzD')
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 plot(sp4, color='clay')
+
+# another example
+data(sp2)
+depths(sp2) <- id ~ top + bottom
+site(sp2) <- ~ surface
+
+# label with site-level attribute: `surface`
+plot(sp2, label='surface', plot.order=order(sp2$surface))
 }
 
