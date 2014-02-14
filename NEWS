@@ -1,3 +1,9 @@
+-------------------------- aqp 1.6-4 (2014-02-14) --------------------------
+* When applied to a single categorical variable, the results from slab() now contain an attribute 'original.levels'
+  that contains the original factor levels. This is important because when casting from long->wide format, illegal
+  column names are scrubbed by make.names(). This process would convert horizon designations like '2Bt' into 'X2Bt'.
+  You can recover the original horizon names via attr(x, 'original.levels').
+
 -------------------------- aqp 1.6-3 (2014-02-04) --------------------------
 * plotSPC() has a new argument: `label`, used to set site-level attribute containing profile labels
 
