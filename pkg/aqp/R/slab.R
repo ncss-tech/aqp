@@ -42,6 +42,8 @@
 		pt <- pt[-length(pt)]
 	}
 	
+  ## NOTE: this will corrupt hz designations associated with lithologic discontinuities
+  ## ---> 2Bt will become X2Bt
 	# assign safe names to the vector of probabilities
 	names(pt) <- make.names(levels(values))
 	
@@ -116,7 +118,9 @@
 	# get name of ID column in original object for later
 	object.ID <- idname(object)
 	
-	
+  # if we are aggregating a single categorical variable, we need to keep track of the original levels
+	original.levels <- NULL
+  
 	# extract components of the formula:
 	g <- all.vars(update(fm, .~0)) # left-hand side
 	vars <- all.vars(update(fm, 0~.)) # right-hand side
@@ -190,6 +194,9 @@
 		# add extra arguments required by this function
 		# note that we cannot accept additional arguments when processing categorical values
 		extra.args <- list(cpm=cpm)
+    
+    # save factor levels for later
+    original.levels <- levels(data[[vars]])
 		}
 		
 	# generate labels for slabs
@@ -290,13 +297,12 @@
 		d.slabbed <- do.call(what='aggregate', args=the.args)
 	}
 	
-		
+	 
 	# if slab.fun returns a vector of length > 1 we must:
 	# convert the complex data.frame returned by aggregate into a regular data.frame
 	# the column 'value' is a matrix with the results of slab.fun
 	if(class(d.slabbed$value) == 'matrix')
 		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
-	
 	
 	# convert the slab.label column into top/bottom as integers
 	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
@@ -309,10 +315,16 @@
 	
 	# remove seg.label from result
 	d.slabbed$seg.label <- NULL
-		
+	
+  # if categorical data have been aggregated, set an attribute with the original levels
+  # this allows one to recover values that are not legal column names
+  # e.g. 2Bt is corrupted to X2Bt
+  if(! is.null(original.levels))
+    attr(d.slabbed, 'original.levels') <- original.levels
+  
 	# reset options:
 	options(opt.original)
-	
+  
 	# done
 	return(d.slabbed)
 }
