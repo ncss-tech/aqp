@@ -23,7 +23,7 @@ get.ml.hz <- function(x, hz.names) {
 	
 	# extract ML hz sequences
 	x.rle <- rle(as.vector(na.omit(x$name)))
-	x.hz.bounds <- cumsum(x.rle$lengths) - 1
+	x.hz.bounds <- cumsum(x.rle$lengths)
 	
 	# composite into a data.frame
 	# note: we always start from 0
