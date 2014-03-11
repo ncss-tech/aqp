@@ -1,4 +1,5 @@
 ## TODO: this checking assumes that the data are sorted!
+## TODO: give a reason for failing
 
 # this should be further documented
 test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE) {
