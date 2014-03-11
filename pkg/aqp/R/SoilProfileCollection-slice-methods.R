@@ -2,6 +2,7 @@
 ## n = (100, 1000, 10000) --> (0.53, 4.21, 38) seconds
 
 ## TODO: this function cannot deal with overlapping horizons (usually an error):  > 1 row / slice
+## it would be useful to support these kind of data, as many lab-sampled sites have sub-samples
 
 # this function is run on the horizon data, once for each depth slice
 get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
