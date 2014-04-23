@@ -25,11 +25,14 @@ profileApply(object, FUN, simplify=TRUE, ...)
 
 \value{When simplify is TRUE, a vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data). When simplify is FALSE, a list is returned.}
 
-\seealso{ \code{\link{slab}} }
+\seealso{ \code{\link{slab}}, \code{\link{estimateSoilDepth}}}
 
 \examples{
 data(sp1)
 depths(sp1) <- id ~ top + bottom
+
+# estimate soil depth using horizon designations
+profileApply(sp1, estimateSoilDepth, name='name', top='top', bottom='bottom')
 
 # scale properties within each profile
 # scaled = (x - mean(x)) / sd(x)

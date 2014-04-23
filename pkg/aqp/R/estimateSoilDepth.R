@@ -1,13 +1,13 @@
 
 # get soil depth based on morphology
-estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', no.contact.depth=NULL, no.contact.assigned=NULL) {
+estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p='Cr|R|Cd', no.contact.depth=NULL, no.contact.assigned=NULL) {
   # extract horizons
   h <- horizons(f)
   
   # extract possible contact
-  contact.idx <- grep('Cr|R|Cd', h[[name]], ignore.case=TRUE)
+  contact.idx <- grep(p, h[[name]], ignore.case=TRUE)
   # everything else
-  no.contact.idx <- grep('Cr|R|Cd', h[[name]], ignore.case=TRUE, invert=TRUE)
+  no.contact.idx <- grep(p, h[[name]], ignore.case=TRUE, invert=TRUE)
   
   # no contact defined, use deepest hz bottom depth
   if(length(contact.idx) < 1) {
