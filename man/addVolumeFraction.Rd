@@ -4,7 +4,8 @@
 \description{Symbolize volume fraction on an existing soil profile collection plot.}
 
 \usage{
-addVolumeFraction(x, colname, res = 10, cex.min = 0.1, cex.max = 0.5, pch = 1, col = "black")
+addVolumeFraction(x, colname, res = 10, cex.min = 0.1, 
+cex.max = 0.5, pch = 1, col = "black")
 }
 
 \arguments{

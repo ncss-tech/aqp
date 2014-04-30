@@ -3,7 +3,8 @@
 \title{Generate Soil Depth Class Matrix}
 \description{Generate a boolean matrix of soil depth classes from a SoilProfileCollection object.}
 \usage{
-getSoilDepthClass(f, depth.classes = c(very.shallow = 25, shallow = 50, mod.deep = 100, deep = 150, very.deep = 1000), ...)
+getSoilDepthClass(f, depth.classes = c(very.shallow = 25, 
+shallow = 50, mod.deep = 100, deep = 150, very.deep = 1000), ...)
 }
 
 \arguments{
