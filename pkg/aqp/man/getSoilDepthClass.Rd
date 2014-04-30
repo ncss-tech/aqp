@@ -28,6 +28,9 @@ depths(sp1) <- id ~ top + bottom
 # generate depth-class matrix
 sdc <- getSoilDepthClass(sp1, name='name', top='top', bottom='bottom')
 
+# inspect
+head(sdc)
+
 # join back into sp1 as site-level data
 site(sp1) <- sdc
 
