@@ -1,7 +1,7 @@
 Package: aqp
 Version: 1.7
-Date: 2014-04-29
-Packaged: 2014-04-29 00:00:00 UTC; dylan
+Date: 2014-04-30
+Packaged: 2014-04-30 00:00:00 UTC; dylan
 Title: Algorithms for Quantitative Pedology
 Author: Dylan Beaudette <debeaudette@ucdavis.edu>, Pierre Roudier <roudierp@landcareresearch.co.nz>
 Maintainer: Dylan Beaudette <debeaudette@ucdavis.edu>
@@ -12,4 +12,3 @@ Description: A collection of algorithms related to modeling of soil resources, s
 License: GPL (>= 2)
 Repository: CRAN
 URL: http://aqp.r-forge.r-project.org/
-VignetteBuilder: knitr
