@@ -12,11 +12,11 @@ shallow = 50, mod.deep = 100, deep = 150, very.deep = 1000), ...)
   \item{depth.classes}{a named vector of classes and depth breaks}
   \item{\dots}{arguments passed to \code{\link{estimateSoilDepth}}}
 }
-\details{}
+
 \value{a \code{data.frame} containing soil depth and depth class for each profile, see examples}
 
 \author{D.E. Beaudette and J.M. Skovlin}
-\note{}
+
 
 \seealso{
 \code{\link{estimateSoilDepth}}
