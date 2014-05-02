@@ -17,11 +17,11 @@ no.contact.depth = NULL, no.contact.assigned = NULL)
   \item{no.contact.depth}{in the absense of contact with bedrock, a depth at which we can assume a standard depth}
   \item{no.contact.assigned}{assumed standard depth}
 }
-\details{}
+
 \value{a single integer, the soil depth}
 
 \author{D.E. Beaudette and J.M. Skovlin}
-\note{}
+
 
 \seealso{
 \code{\link{getSoilDepthClass}}, \code{\link{profileApply}}
