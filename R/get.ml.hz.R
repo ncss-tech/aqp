@@ -1,25 +1,25 @@
 # generate a data.frame of ML horizonation
 # using the output from slab() and a vector of horizon names
-get.ml.hz <- function(x, hz.names) {
+get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
   
   # trick R CMD check
   top = bottom = NULL
   
+  # just in case, make DF-safe names
+  safe.names <- make.names(o.names)
+  
 	# get index to max probability, 
-	# but only when there is at least one value > 0
-	f.ML.hz <- function(i) {
-		if(any(i > 0))
+	# but only when there is at least one value > 0 and all are not NA
+	.f.ML.hz <- function(i) {
+		if(any(i > 0) & !all(is.na(i)))
 			which.max(i)
 		else
 			NA
 	}
 	
-	# strange boot-strapping experiment, may not be useful
-# 	x.boot <- t(sapply(1:nrow(x), function(i) sample(hz.names, size=1000, replace=TRUE, prob=x[i, hz.names])))
-# 	x.boot.prob <- data.frame(t(sapply(1:nrow(x), function(i) table(factor(x.boot[i, ], levels=hz.names)) / 1000)))
 	
-	# get most probable horizon, by slice
-	x$name <- hz.names[apply(x[, hz.names], 1, f.ML.hz)]
+	# get most probable, original,  horizon designation by slice
+	x$name <- o.names[apply(x[, safe.names], 1, .f.ML.hz)]
 	
 	# extract ML hz sequences
 	x.rle <- rle(as.vector(na.omit(x$name)))
@@ -33,8 +33,8 @@ get.ml.hz <- function(x, hz.names) {
 	# it is necessary to account for overlaps
 	x.ml <- ddply(x.ml, 'hz', summarise, top=min(top), bottom=max(bottom))
 	
-	# re-order using vector of horizon names-- this will result in NAs if a named horizon was not the most likely
-	x.ml <- x.ml[match(hz.names, x.ml$hz), ]
+	# re-order using vector of original horizon names-- this will result in NAs if a named horizon was not the most likely
+	x.ml <- x.ml[match(o.names, x.ml$hz), ]
 	x.ml <- na.omit(x.ml)
 	
 	# integrate probability density function over ML bounds
