@@ -29,16 +29,27 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), method=c('ap
 	range.col <- rgb(t(col2rgb(range.col)), maxColorValue=255, alpha=range.alpha)
 	
 	# compute _univariate_ low - rv - high by variable
-	ssc.stats <- apply(ssc, 2, hdquantile, probs=p)
+	ssc.stats <- apply(ssc, 2, quantile, probs=p)
 	
+  ## TODO: does this make more sense?
+#   library(compositions)
+# 	a <- acomp(ssc)
+# 	a.trans <- alr(a)
+# 	a.q <- apply(a.trans, 2, quantile, p=c(0.05, 0.5, 0.95))
+# 	ssc.stats <- matrix(alrInv(a.q, orig=a.trans), ncol=3) * 100
+  
+  sand.stats <- sort(ssc.stats[, 1])
+	silt.stats <- sort(ssc.stats[, 2])
+	clay.stats <- sort(ssc.stats[, 3])
+  
 	# basic plot of all the data
 	soil.texture(ssc, show.names=FALSE, cex=0.5, col.symbols='black', axis.labels=c('Sand', 'Silt', 'Clay'), show.grid=TRUE)
 	
 	if(method[1] == 'approx') {
 		# make a grid of sand, silt, clay values within the low--high range of the data
-		sand.seq <- round(seq(from=ssc.stats[1, 1], to=ssc.stats[3, 1], by=delta))
-		silt.seq <- round(seq(from=ssc.stats[1, 2], to=ssc.stats[3, 2], by=delta))
-		clay.seq <- round(seq(from=ssc.stats[1, 3], to=ssc.stats[3, 3], by=delta))
+		sand.seq <- round(seq(from=sand.stats[1], to=sand.stats[3], by=delta))
+		silt.seq <- round(seq(from=silt.stats[1], to=silt.stats[3], by=delta))
+		clay.seq <- round(seq(from=clay.stats[1], to=clay.stats[3], by=delta))
 		g <- expand.grid(sand=sand.seq, silt=silt.seq, clay=clay.seq)
 		
 		# subset to only include those sand, silt, clay values that sum to 100%
