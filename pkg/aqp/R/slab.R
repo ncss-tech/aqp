@@ -8,6 +8,9 @@
 ## missing horizons:
 ## slab will run out of memory when trying to aggregate profiles that are missing horizons-- why?
 
+## ideas for parallel code:
+## http://stackoverflow.com/questions/6780091/simple-working-example-of-ddply-in-parallel-on-windows
+
 ## groups is a factor and contains NAs:
 ## with large data sets join() will run out of memory
 
