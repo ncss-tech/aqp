@@ -1,4 +1,5 @@
--------------------------- aqp 1.7 (2014-04-23) --------------------------
+-------------------------- aqp 1.7 (2014-08-28) --------------------------
+* new function rgb2munsell()
 * new function estimateSoilDepth()
 * new function getSoilDepthClass()
 

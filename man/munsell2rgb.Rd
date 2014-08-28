@@ -3,7 +3,7 @@
 \alias{munsell2rgb}
 \alias{rgb2munsell}
 \title{
-Convert Munsell Notation to RGB
+Convert Munsell Notation to and from RGB color coordinates
 }
 \description{
 Color conversion based on a look-up table of common soil colors.
@@ -11,6 +11,7 @@ Color conversion based on a look-up table of common soil colors.
 \usage{
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE)
+rgb2munsell(color)
 }
 \arguments{
   \item{the_hue}{a vector of one or more more hues, upper-case}
@@ -19,11 +20,15 @@ maxColorValue=1, return_triplets=FALSE)
   \item{alpha}{alpha channel value (for transparency effects)}
   \item{maxColorValue}{maximum RGB color value (see \code{\link{rgb})}}
   \item{return_triplets}{should the function return raw RGB triplets instead of an R color}
+  \item{color}{a \code{data.frame} or \code{matrix} object containing color-space coordinates: [R, G, B]}
 }
-\details{This function generalizes to vectorized usage, as long as the length of each argument is the same.}
+\details{These functions generalizes to vectorized usage, as long as the length of each argument is the same. Both functions will pad output with NA if there are any NA present in the inputs.}
+
 \note{Care should be taken when using the resulting RGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.}
 \value{
-A vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
+For Munsell to RGB conversion, a vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
+
+For RGB to Munsell conversion, a dataframe (NA-padded) of hue, value, chroma, and Euclidean distance to nearest matching color is returned.
 }
 \references{
 \url{http://casoilresource.lawr.ucdavis.edu/drupal/node/201}
@@ -36,6 +41,17 @@ A vector of R colors is returned that is the same length as the input data. If \
 
 
 \examples{
+
+# Munsell to RGB triplets: 
+# function is vectorized as long as arguments are the same length
+color <- munsell2rgb(the_hue=c('10YR', '2.5YR'), the_value=c(3, 5), 
+the_chroma=c(5, 6), return_triplets=TRUE)
+
+# RGB triplets to closest Munsell color (in RGB space)
+# function is vectorized
+rgb2munsell(color)
+
+
 # basic example: no factors!
 d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
 d$color <- with(d, munsell2rgb(hue, value, chroma))

@@ -1,13 +1,14 @@
 ## see the convertColor() function from grDevices
 ## ... our function gives "better" looking colors
 
-## TODO investigate the munsell package
-
+## TODO: optimize with arrays
 ## TODO: implement in LAB / xyz colorspace 
-## TODO: write documentation!!
-## note, this function is not vectorized!
-# color is a vector of RGB values in range of [0,1]
+# color is a vector of RGB values in range of [0,1] -- ideally output from munsell2rgb()
 rgb2munsell <- function(color) {
+  
+  # vectorize via for-loop
+  n <- nrow(color)
+  res <- vector(length=n, mode='list')
   
   # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
   munsell <- NULL
@@ -16,17 +17,28 @@ rgb2munsell <- function(color) {
   # This should be moreover more foolproof than data(munsell) c/o PR
   load(system.file("data/munsell.rda", package="aqp")[1]) 
   
-  # euclidean distance is our metric for closest-color
-  # d = sqrt(r^2 + g^2 + b^2)
-  sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=color, FUN='-')^2
-  sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
-  idx <- which.min(sq.diff.sum.sqrt)
+  # iterate over colors
+  for(i in 1:n) {
+    # convert current color to matrix, this will allow matrix and DF as input
+    this.color <- as.matrix(color[i, ])
+    
+    # euclidean distance (in RGB space) is our metric for closest-color
+    # d = sqrt(r^2 + g^2 + b^2)
+    sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=this.color, FUN='-')^2
+    sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
+    idx <- which.min(sq.diff.sum.sqrt)
+    
+    # with NA as an input, there will be no output
+    if(length(idx) == 0)
+      res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
+    
+    # otherwise return the closest color
+    else
+      res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sq.diff.sum.sqrt[idx])
+  }
   
-  # subset a single color
-  res <- munsell[idx, 1:3]
-  
-  # done
-  return(res)
+  # convert to DF and return
+  return(ldply(res))
 }
 
 # convert munsell Hue, Value, Chroma into RGB
