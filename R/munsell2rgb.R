@@ -1,6 +1,7 @@
 ## see the convertColor() function from grDevices
 ## ... our function gives "better" looking colors
 
+## TODO: interpolate '2.5' values for all common soil colors
 ## TODO: optimize with arrays
 ## TODO: implement in LAB / xyz colorspace 
 # color is a vector of RGB values in range of [0,1] -- ideally output from munsell2rgb()
