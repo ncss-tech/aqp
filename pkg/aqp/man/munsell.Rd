@@ -17,7 +17,7 @@
   }
 }
 \details{
-See \code{munsell2rgb} for conversion examples.
+See \code{munsell2rgb} for conversion examples. Note that this table does not currently have entires for values of 2.5-- common in most soil color books. These chips should be added in the next major release of aqp.
 }
 \source{
 Color chip XYZ values: http://www.cis.rit.edu/mcsl/online/munsell.php
