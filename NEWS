@@ -1,4 +1,5 @@
--------------------------- aqp 1.7 (2014-08-28) --------------------------
+-------------------------- aqp 1.7 (2014-09-16) --------------------------
+* get.ml.hz() now returns a "pseudo" Brier Score, using the most-likely horizon label as the "correct" value
 * new function rgb2munsell()
 * new function estimateSoilDepth()
 * new function getSoilDepthClass()
