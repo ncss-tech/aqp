@@ -48,8 +48,7 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 	
   # compute a pseudo-brier score using ML hz as the "true" outcome
   # brier's multi-class score : http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier
-  # note that we have to remove NA first
-  x.bs <- ddply(na.omit(x), 'name', function(x.i) {
+  x.bs <- ddply(x, 'name', function(x.i) {
     # save the gen hz probabilities into new df
     x.pr <- x.i[, safe.names]
     # init new matrix to store most-likely gen hz class
@@ -62,7 +61,7 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
       m[i, ml.hz.i] <- 1
     }
     # compute bs for this gen hz
-    bs <- sum((x.pr - m)^2) / nrow(x.pr)
+    bs <- sum((x.pr - m)^2, na.rm=TRUE) / nrow(x.pr)
   })
   
   # fix names for joining
