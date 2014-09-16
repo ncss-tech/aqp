@@ -1,7 +1,7 @@
 \name{get.ml.hz}
 \alias{get.ml.hz}
 \title{Determine ML Horizon Boundaries}
-\description{This function accepts input from \code{slab()} along with a vector of horizon names, and returns a data.frame of the most likely horizonat boundaries.}
+\description{This function accepts input from \code{slab()} along with a vector of horizon names, and returns a \code{data.frame} of the most likely horizon boundaries.}
 \usage{
 get.ml.hz(x, o.names)
 }
@@ -18,6 +18,7 @@ A dataframe with the following columns:
 	\item{top}{top boundary}
 	\item{bottom}{bottom boundary}
 	\item{confidence}{integrated probability / ML horizon thickness, rounded to the nearest integer}
+  \item{pseudo.brier}{A "pseudo"" Brier Score for a multi-class prediction, where the most-likely horizon label is treated as the "correct" outcome. Details on the calculation for traditional Brier Scores here: \url{http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier}.}
 	}
 
 \author{D.E. Beaudette}

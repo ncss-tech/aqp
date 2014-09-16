@@ -46,5 +46,30 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 		x.ml$confidence[i] <- hz.int.prob.pct
 	}
 	
+  # compute a pseudo-brier score using ML hz as the "true" outcome
+  # brier's multi-class score : http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier
+  # note that we have to remove NA first
+  x.bs <- ddply(na.omit(x), 'name', function(x.i) {
+    # save the gen hz probabilities into new df
+    x.pr <- x.i[, safe.names]
+    # init new matrix to store most-likely gen hz class
+    m <- matrix(0, ncol=ncol(x.pr), nrow=nrow(x.pr))
+    # same structure as x.pr
+    dimnames(m)[[2]] <- names(x.pr)
+    # set appropriate genhz to 1
+    for(i in 1:nrow(x.i)) {
+      ml.hz.i <- x.i$name[i]
+      m[i, ml.hz.i] <- 1
+    }
+    # compute bs for this gen hz
+    bs <- sum((x.pr - m)^2) / nrow(x.pr)
+  })
+  
+  # fix names for joining
+  names(x.bs) <- c('hz', 'pseudo.brier')
+  
+  # join brier scores to ML hz table
+  x.ml <- join(x.ml, x.bs, by='hz')
+  
 	return(x.ml)
 }
