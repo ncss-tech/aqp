@@ -307,6 +307,9 @@
 	if(class(d.slabbed$value) == 'matrix')
 		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
 	
+  # ensure that the names returned from slab.fun are legal
+  names(d.slabbed) <- make.names(names(d.slabbed))
+
 	# convert the slab.label column into top/bottom as integers
 	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
 	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
