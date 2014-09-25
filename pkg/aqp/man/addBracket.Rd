@@ -70,10 +70,6 @@ if(require(soilDB)) {
   par(mar=c(0,0,0,0))
   plot(x, name='hzname', id.style='top')
   
-  # add bracket describing the particle size control section, 
-  # from site-level data
-  addBracket(s$psctopdepth, s$pscbotdepth, offset=-0.4)
-  
   # add brackets describing the argillic horizon
   addDiagnosticBracket(x, 'argillic horizon', col='red')
   # add brackets describing paralithic contact
