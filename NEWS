@@ -1,8 +1,10 @@
--------------------------- aqp 1.7 (2014-09-16) --------------------------
+-------------------------- aqp 1.7-6 (2014-09-26) --------------------------
+* bug fix c/o José Padarian: when promoting coordiantes from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!
 * get.ml.hz() now returns a "pseudo" Brier Score, using the most-likely horizon label as the "correct" value
 * new function rgb2munsell()
 * new function estimateSoilDepth()
 * new function getSoilDepthClass()
+* new documentation / tutorials
 
 -------------------------- aqp 1.6-4 (2014-02-14) --------------------------
 * When applied to a single categorical variable, the results from slab() now contain an attribute 'original.levels'

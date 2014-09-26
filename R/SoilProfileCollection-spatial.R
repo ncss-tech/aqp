@@ -69,7 +69,8 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   
   # remove the named site data from site_data
   # TODO we should use a proper setter!
-  object@site <- site(object)[, -idx]
+  # bug fix c/o José Padarian: drop=FALSE
+  object@site <- site(object)[, -idx, drop=FALSE]
   
   # done
   return(object)
