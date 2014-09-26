@@ -1,6 +1,9 @@
 ## TODO: encode some kind of ID into the dissimilarity matrix for later use
 
 evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE, trace=FALSE, metric='euclidean') {
+  # hack to make R CMD check happy
+  value <- summarize <- NULL
+  
   # extract horizons
   h <- as(obj, 'data.frame')
   
