@@ -27,7 +27,9 @@ random_profile(id, n = c(3, 4, 5, 6), min_thick = 5,
 \value{
 A dataframe with the simulated profile.
 }
-\details{The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Amplitude of the peak is controlled by ("lpp.a + "lpp.b"), depth of the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further description of the method is outlined in (Brenton et al, 2011). Simulated horizon distinctness codes are based on the USDA-NCSS field description methods (\url{http://soils.usda.gov/technical/fieldbook/}). Simulated distinctness codes are constrained according to horizon thickness, i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that are thinner than 3x this vertical distance
+\details{The random walk method produces profiles with considerable variation between horizons and is based on values from the normal distribution seeded with means and standard deviations drawn from the uniform distribtion of [0, 10].
+
+The logistic power peak (LPP) function can be used to generate random soil property depth functions that are sharply peaked. LPP parameters can be hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d", "lpp.e". Amplitude of the peak is controlled by ("lpp.a + "lpp.b"), depth of the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further description of the method is outlined in (Brenton et al, 2011). Simulated horizon distinctness codes are based on the USDA-NCSS field description methods (\url{http://soils.usda.gov/technical/fieldbook/}). Simulated distinctness codes are constrained according to horizon thickness, i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that are thinner than 3x this vertical distance
 }
 \references{
 Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.; Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution soil profile data Geoderma, 2011, 166, 74-83.
@@ -57,37 +59,25 @@ plot(d, hz.distinctness.offset='HzD')
 
 
 
-# make a more interesting color based on the first property
 # depth functions are generated using the LPP function
-if(require(scales)) {
-  opar <- par(mar=c(0,0,0,0), mfrow=c(2,1))
-  
-  # setup color palette and mapping function
-  cols <- rev(brewer_pal(pal='Spectral')(8))
-  grad <- gradient_n_pal(cols)
-  
-  # generate data and color scales
-  d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
-  d$soil_color <- cscale(d$p1, grad)
-  
-  # promote to SPC and plot
-  depths(d) <- id ~ top + bottom
-  plot(d)
-  legend('bottom', legend=pretty(d$p1), pt.bg=cscale(pretty(d$p1), grad),
-  pch=22, pt.cex=2.5, bty='n', horiz=TRUE)
-  
-  
-  # do this again, this time set all of the LPP parameters
-  d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
-  lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
-  d$soil_color <- cscale(d$p1, grad)
-  depths(d) <- id ~ top + bottom
-  plot(d)
-  legend('bottom', legend=pretty(d$p1), pt.bg=cscale(pretty(d$p1), grad),
-  pch=22, pt.cex=2.5, bty='n', horiz=TRUE)
-  
-  par(opar)
-  }
+opar <- par(mfrow=c(2,1), mar=c(0,0,3,0))
+# generate data
+d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
+
+# promote to SPC and plot
+depths(d) <- id ~ top + bottom
+plot(d, color='p1')
+
+# do this again, this time set all of the LPP parameters
+d <- ldply(1:10, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
+lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
+
+depths(d) <- id ~ top + bottom
+plot(d, color='p1')
+
+# reset plotting defaults
+par(opar)
+
 
 
 # try plotting the LPP-derived simulated data
