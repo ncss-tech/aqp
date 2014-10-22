@@ -29,7 +29,7 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
 ## Coercition methods: and sp utilities
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
     message('only site data are extracted')
-    s <- SpatialPointsDataFrame(coordinates(from), data = site(from), proj4string=CRS(proj4string(from)))
+    s <- SpatialPointsDataFrame(coordinates(from), data = site(from), proj4string=CRS(proj4string(from)), match.ID = FALSE)
     return(s)
   }
 )
