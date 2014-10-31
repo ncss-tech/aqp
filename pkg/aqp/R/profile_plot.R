@@ -94,7 +94,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, lwd=1, lty=1, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
   
   # save arguments to aqp env
   lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
@@ -125,17 +125,16 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # setup horizon colors:
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
-    col.palette <- rev(brewer.pal(10, 'Spectral'))
     cr <- colorRamp(col.palette)
     # note that this may contain NAs
     c.rgb <- cr(rescale(h[[color]]))
     cc <- which(complete.cases(c.rgb))
     h$.color <- NA
     # convert non-NA values into colors
-    h$.color[cc] <- rgb(c.rgb[cc, ], maxColorValue=254)
+    h$.color[cc] <- rgb(c.rgb[cc, ], maxColorValue=255)
     # generate range / colors for legend
     pretty.vals <- pretty(h[[color]])
-    color.legend.data <- list(legend=pretty.vals, col=rgb(cr(rescale(pretty.vals)), maxColorValue=254))
+    color.legend.data <- list(legend=pretty.vals, col=rgb(cr(rescale(pretty.vals)), maxColorValue=255))
   }
   # 2. character vector, assume these are valid colors
   if(is.character(h[[color]])) {
