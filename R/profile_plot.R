@@ -94,7 +94,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, col.label=NULL, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
   
   # save arguments to aqp env
   lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
@@ -311,7 +311,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   
   ## experimental color legend
   if(exists('color.legend.data')) {
-    # If no title given, set col.label is set to NULL
+    # If no title given, set col.label is set to color
     mtext(side=3, text=col.label, font=2, line=1.6)
     legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99))
   }
