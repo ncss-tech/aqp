@@ -90,7 +90,6 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: save important elements of geometry from last plot to aqp.env
-# TODO: allow color to be set via formula interface
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function

@@ -30,7 +30,8 @@ max.depth=max(x), n.depth.ticks=5, shrink=FALSE,
 shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, 
 hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
 hz.distinctness.offset.lty=2, axis.line.offset=-2.5, 
-density=NULL, col.label=NULL, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, \dots)
+density=NULL, col.label=color, 
+col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, \dots)
 }
 
 
@@ -65,8 +66,8 @@ density=NULL, col.label=NULL, col.palette = rev(brewer.pal(10, 'Spectral')), lwd
   \item{hz.distinctness.offset.lty}{line style used to encode horizon distinctness (default is 2)}
   \item{axis.line.offset}{horizonatal offset applied to depth axis (default is -2.5)}
   \item{density}{fill density used for horizon color shading, either a single integer or a column name containing integer values (default is NULL, no shading)}
-  \item{col.label}{Title used to plot numeric data}
-  \item{col.palette}{Color palette used to plot numeric data}
+  \item{col.label}{text printed above the color-coded legend}
+  \item{col.palette}{color palette used to plot numeric data}
   \item{lwd}{single numeric value: line width multiplier}
   \item{lty}{single integert: line style}
   \item{\dots}{other arguments passed into lower level plotting functions}
