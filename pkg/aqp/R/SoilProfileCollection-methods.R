@@ -502,12 +502,14 @@ setMethod("[", "SoilProfileCollection",
   	if(missing(i) & missing(j))
   		stop('must provide either a profile index or horizon/slice index, or both', call.=FALSE)
   	
-    # convert to integer
-    if(!missing(i)) {
-      i <- as.integer(i)
-      if(any(is.na(i)))
-        stop('NA not permitted in profile index', call.=FALSE)
-    }
+  	# convert to integer
+  	if(!missing(i)) {
+  	  if(any(is.na(i)))
+  	    stop('NA not permitted in profile index', call.=FALSE)
+      # convert logical to integer per standard vector/list indexing rules (thanks José Padarian for the suggestion!)
+  	  if(is.logical(i)) i <- (1:length(x))[i]
+  	  i <- as.integer(i)
+  	}
     else # if no index is provided, the user wants all profiles
       i <- 1:length(x)
 
