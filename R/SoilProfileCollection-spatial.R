@@ -81,6 +81,7 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 
 
 
+### TODO: consider removing this function
 
 ##
 ## spatial_subset: spatial clipping of a SPC (requires GEOS)

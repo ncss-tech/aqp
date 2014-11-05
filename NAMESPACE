@@ -9,9 +9,13 @@ importFrom(methods,
   setMethod
 )
 
+importFrom(rgeos,
+  gIntersects
+)
+
 importFrom(MASS,
   isoMDS
-  )
+)
 
 importFrom(RColorBrewer,
   brewer.pal
