@@ -1,5 +1,6 @@
--------------------------- aqp 1.7-7 (2014-11-04) --------------------------
+-------------------------- aqp 1.7-7 (2014-11-06) --------------------------
 * bug fix c/o José Padarian: SPC objects now understand logical indexing rules
+* removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package
 
 -------------------------- aqp 1.7-6 (2014-09-26) --------------------------
 * bug fix c/o José Padarian: when promoting coordiantes from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!

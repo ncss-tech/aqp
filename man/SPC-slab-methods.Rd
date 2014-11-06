@@ -177,7 +177,7 @@ xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
 # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
 (gen.hz.ml <- get.ml.hz(a, c('O','A','B','C')))
 
-
+\dontrun{
 ##
 ## multivariate examples
 ##
@@ -275,7 +275,7 @@ depths(sp1) <- id ~ top + bottom
 # generate pretend weights as site-level attribute
 set.seed(10101)
 sp1$site.wts <- runif(n=length(sp1), min=20, max=100)
-
+}
 }
 
 \keyword{methods}
