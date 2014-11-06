@@ -81,44 +81,44 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 
 
 
-### TODO: consider removing this function
-
-##
-## spatial_subset: spatial clipping of a SPC (requires GEOS)
-##
-
-if (!isGeneric("spatial_subset"))
-  setGeneric("spatial_subset", function(object, geom) standardGeneric("spatial_subset"))
-
-setMethod(f='spatial_subset', signature='SoilProfileCollection',
-  function(object, geom){
-
-    # This functionality require the GEOS bindings
-    # provided by rgeos
-    if(require(rgeos)) {
-      spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
-      ids <- which(spc_intersection)
-	
-	# extract relevant info
-	s <- site(object)
-	h <- horizons(object)
-	d <- diagnostic_hz(object)
-  
-	# get indexes to valid site, hz, diagnostic data
-  valid_ids <- s[ids, idname(object)]
-  valid_horizons <- which(h[, idname(object)] %in% valid_ids)
-  valid_sites <- which(s[, idname(object)] %in% valid_ids)
-  valid_diagnostic <- which(d[, idname(object)] %in% valid_ids)
-	
-	# create a new SPC with subset data
-  ## TODO: copy over diagnostic horizon data
-	## TODO: use integer profile index to simplify this process
-	## TODO: @sp bbox may need to be re-computed
-  ## TODO: check diagnostic subset
-      SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = metadata(object), horizons = h[valid_horizons, ], site = s[valid_sites, ], sp = object@sp[ids,], diagnostic = d[valid_diagnostic, ])
-    }
-    else { # no rgeos, return original
-      stop('Spatial subsetting not performed, please install the `rgeos` package.', call.=FALSE)
-    }
-  }
-)
+# ### TODO: consider removing this function
+# 
+# ##
+# ## spatial_subset: spatial clipping of a SPC (requires GEOS)
+# ##
+# 
+# if (!isGeneric("spatial_subset"))
+#   setGeneric("spatial_subset", function(object, geom) standardGeneric("spatial_subset"))
+# 
+# setMethod(f='spatial_subset', signature='SoilProfileCollection',
+#   function(object, geom){
+# 
+#     # This functionality require the GEOS bindings
+#     # provided by rgeos
+#     if(require(rgeos)) {
+#       spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
+#       ids <- which(spc_intersection)
+# 	
+# 	# extract relevant info
+# 	s <- site(object)
+# 	h <- horizons(object)
+# 	d <- diagnostic_hz(object)
+#   
+# 	# get indexes to valid site, hz, diagnostic data
+#   valid_ids <- s[ids, idname(object)]
+#   valid_horizons <- which(h[, idname(object)] %in% valid_ids)
+#   valid_sites <- which(s[, idname(object)] %in% valid_ids)
+#   valid_diagnostic <- which(d[, idname(object)] %in% valid_ids)
+# 	
+# 	# create a new SPC with subset data
+#   ## TODO: copy over diagnostic horizon data
+# 	## TODO: use integer profile index to simplify this process
+# 	## TODO: @sp bbox may need to be re-computed
+#   ## TODO: check diagnostic subset
+#       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = metadata(object), horizons = h[valid_horizons, ], site = s[valid_sites, ], sp = object@sp[ids,], diagnostic = d[valid_diagnostic, ])
+#     }
+#     else { # no rgeos, return original
+#       stop('Spatial subsetting not performed, please install the `rgeos` package.', call.=FALSE)
+#     }
+#   }
+# )

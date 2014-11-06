@@ -9,9 +9,6 @@ importFrom(methods,
   setMethod
 )
 
-importFrom(rgeos,
-  gIntersects
-)
 
 importFrom(MASS,
   isoMDS
@@ -131,8 +128,7 @@ exportMethods(
   site,
   "site<-",
   slab,
-  slice,
-  spatial_subset
+  slice
 )
 
 exportPattern("^[^\\.]")
