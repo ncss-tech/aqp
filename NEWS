@@ -1,3 +1,6 @@
+-------------------------- aqp 1.7-8 (2014-12-08) --------------------------
+* texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method='closest', see manual page for details
+
 -------------------------- aqp 1.7-7 (2014-11-06) --------------------------
 * bug fix c/o José Padarian: SPC objects now understand logical indexing rules
 * removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package
