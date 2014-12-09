@@ -49,8 +49,12 @@ x <- na.omit(data.frame(sand=loafercreek$sand, silt=loafercreek$silt, clay=loafe
 texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95))
 texture.triangle.low.rv.high(x, p=c(0.25, 0.5, 0.75), range.col='darkgreen')
 
-# add simulated low-rv-high
-texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95), sim=TRUE)
+# simulate compositional data from source data
+if(require(compositions)) {
+  # add simulated low-rv-high
+  texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95), sim=TRUE)
+}
+
 }
 
 \keyword{hplot}
