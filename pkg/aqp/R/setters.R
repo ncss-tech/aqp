@@ -204,14 +204,13 @@ setReplaceMethod("site", "SoilProfileCollection",
   )
 
   # if site data is already present in the object, we don't want to erase it
-  if (length(site(object)) > 0)
-    site_data <- join(site(object), new_site_data, by=idname(object))
+  site_data <- join(site(object), new_site_data, by=idname(object))
 
   # remove the named site data from horizon_data
   horizons(object) <- horizons(object)[, -idx]
 	
   # replace existing site data
-  object@site <- new_site_data
+  object@site <- site_data
 
   # done
   return(object)
