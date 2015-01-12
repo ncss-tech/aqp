@@ -109,6 +109,7 @@ setReplaceMethod("depths", "data.frame",
   # create object
   depthcols <- c(nm[2], nm[3])
   res <- SoilProfileCollection(idcol=nm[1], depthcols=depthcols, horizons=data[new.order, ])
+  res@metadata <- data.frame(depth_units = depth_units(from))
 
   # done
   return(res)
@@ -210,7 +211,7 @@ setReplaceMethod("site", "SoilProfileCollection",
   horizons(object) <- horizons(object)[, -idx]
 	
   # replace existing site data
-  object@site <- site_data
+  object@site <- new_site_data
 
   # done
   return(object)
