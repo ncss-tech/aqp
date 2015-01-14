@@ -206,7 +206,7 @@ setReplaceMethod("site", "SoilProfileCollection",
   site_data <- join(site(object), new_site_data, by=idname(object))
 
   # remove the named site data from horizon_data
-  horizons(object) <- horizons(object)[, -idx]
+  object@horizons <- horizons(object)[, -idx]
 	
   # replace existing site data
   object@site <- site_data
