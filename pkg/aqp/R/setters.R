@@ -1,3 +1,40 @@
+
+## set horizon names
+if (!isGeneric('horizonNames<-'))
+  setGeneric('horizonNames<-', function(object, value) standardGeneric('horizonNames<-'))
+
+## TODO: strip-out idname
+setReplaceMethod("horizonNames", "SoilProfileCollection",
+  function(object, value) {
+    
+    # sanity check
+    if(is.na(value) | is.null(value))
+      stop('cannot assign NA or NULL column names', call. = FALSE)
+    
+    names(object@horizons) <- make.names(value)
+    return(object)
+  }
+)
+
+
+
+## set site names
+if (!isGeneric('siteNames<-'))
+  setGeneric('siteNames<-', function(object, value) standardGeneric('siteNames<-'))
+
+## TODO: strip-out idname
+setReplaceMethod("siteNames", "SoilProfileCollection",
+  function(object, value) {
+    # sanity check
+    if(is.na(value) | is.null(value))
+      stop('cannot assign NA or NULL column names', call. = FALSE)
+                   
+      names(object@horizons) <- make.names(value)
+        return(object)
+  }
+)
+
+
 ##
 ## initialize metadata: object modification in-place
 ##
