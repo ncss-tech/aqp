@@ -1,5 +1,6 @@
 \name{SoilProfileCollection-plotting-methods}
 \docType{methods}
+\alias{plot}
 \alias{plotSPC}
 \alias{plot.SoilProfileCollection}
 \alias{plot,SoilProfileCollection-method}

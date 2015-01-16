@@ -1,5 +1,6 @@
 -------------------------- aqp 1.7-10 (2015-01-15) --------------------------
 * names() method for SoilProfileCollection objects returns a concatenated vector of horizon + site names
+* siteNames() and horizonNames() can now be used to extract from SoilProfileCollection
 
 -------------------------- aqp 1.7-8 (2014-12-08) --------------------------
 * texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method='closest', see manual page for details

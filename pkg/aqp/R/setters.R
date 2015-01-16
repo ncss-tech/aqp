@@ -139,7 +139,7 @@ setReplaceMethod("site", "SoilProfileCollection",
     if (inherits(value, "data.frame")) {
       # get column names from proposed site, and existing horizons
       ns <- names(value)
-      nh <- names(object@horizons)
+      nh <- horizonNames(object)
       
       ## remove ID column from names(horizons)
       ID.idx <- match(idname(object), nh)
@@ -188,7 +188,7 @@ setReplaceMethod("site", "SoilProfileCollection",
   # create a numeric index for named site columns, as we will remove them
   # from the horizon data
   names_attr <- names(mf)
-  idx <- match(names_attr, names(horizons(object)))
+  idx <- match(names_attr, horizonNames(object))
   # remove the index to the ID columnm, as we do not want to remove this from
   # the horizon data !
   idx <- idx[-match(idname(object), names_attr)]

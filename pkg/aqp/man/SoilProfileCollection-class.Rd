@@ -10,6 +10,7 @@
 \alias{proj4string<-,SoilProfileCollection,ANY-method}
 \alias{coordinates,SoilProfileCollection-method}
 \alias{coordinates<-,SoilProfileCollection-method}
+\alias{names}
 \alias{names,SoilProfileCollection-method}
 \alias{length,SoilProfileCollection-method}
 \alias{max,SoilProfileCollection-method}
@@ -17,8 +18,11 @@
 \alias{show,SoilProfileCollection-method}
 \alias{nrow,SoilProfileCollection-method}
 \alias{unique,SoilProfileCollection-method}
-\alias{unique,SoilProfileCollection-method}
 \alias{rbind.SoilProfileCollection}
+\alias{horizonNames}
+\alias{siteNames}
+\alias{horizonNames,SoilProfileCollection-method}
+\alias{siteNames,SoilProfileCollection-method}
 
 \title{SoilProfileCollection Class}
 \description{Basic class for storing soil profile collections, associated site data, and metadata.}
@@ -50,6 +54,8 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{horizons<-}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{idname}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{names}{\code{signature(x = "SoilProfileCollection")}: ... }
+    \item{horizonNames}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{siteNames}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{length}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{max}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{metadata}{\code{signature(object = "SoilProfileCollection")}: ... }
