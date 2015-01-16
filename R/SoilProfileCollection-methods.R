@@ -249,10 +249,11 @@ rbind.SoilProfileCollection <- function(...) {
 	}
 
 
-## column names
+# return a concatenated vector of horizon + site names
+# note that we strip out the ID column name from @site
 setMethod("names", "SoilProfileCollection",
   function(x) {
-  res <- list(horizons=names(horizons(x)), site=names(site(x)))
+  res <- c(horizons=names(horizons(x)), site=names(site(x))[-1])
   return(res)
   }
 )
@@ -506,7 +507,7 @@ setMethod("[", "SoilProfileCollection",
   	if(!missing(i)) {
   	  if(any(is.na(i)))
   	    stop('NA not permitted in profile index', call.=FALSE)
-      # convert logical to integer per standard vector/list indexing rules (thanks José Padarian for the suggestion!)
+      # convert logical to integer per standard vector/list indexing rules (thanks Jos? Padarian for the suggestion!)
   	  if(is.logical(i)) i <- (1:length(x))[i]
   	  i <- as.integer(i)
   	}
