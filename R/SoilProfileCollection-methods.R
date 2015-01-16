@@ -157,6 +157,7 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 )
 
 
+## TODO: strip-out idname
 ## get site column names
 if (!isGeneric("siteNames"))
   setGeneric("siteNames", function(object, ...) standardGeneric("siteNames"))
@@ -168,6 +169,7 @@ setMethod("siteNames", "SoilProfileCollection",
           }
 )
 
+## TODO: strip-out idname
 ## get horizon column names
 if (!isGeneric("horizonNames"))
   setGeneric("horizonNames", function(object, ...) standardGeneric("horizonNames"))
