@@ -157,6 +157,30 @@ setMethod(f='depth_units', signature='SoilProfileCollection',
 )
 
 
+## get site column names
+if (!isGeneric("siteNames"))
+  setGeneric("siteNames", function(object, ...) standardGeneric("siteNames"))
+
+setMethod("siteNames", "SoilProfileCollection",
+          function(object) {
+            res <- names(object@site)
+            return(res)
+          }
+)
+
+## get horizon column names
+if (!isGeneric("horizonNames"))
+  setGeneric("horizonNames", function(object, ...) standardGeneric("horizonNames"))
+
+setMethod("horizonNames", "SoilProfileCollection",
+          function(object) {
+            res <- names(object@horizons)
+            return(res)
+          }
+)
+
+
+
 
 ##
 ## overloads
@@ -249,14 +273,19 @@ rbind.SoilProfileCollection <- function(...) {
 	}
 
 
+
+
 # return a concatenated vector of horizon + site names
 # note that we strip out the ID column name from @site
 setMethod("names", "SoilProfileCollection",
-  function(x) {
-  res <- c(horizons=names(horizons(x)), site=names(site(x))[-1])
+  function(object) {
+  res <- c(horizons=horizonNames(object), site=siteNames(object)[-1])
   return(res)
   }
 )
+
+
+
 
 # overload min() to give us the min depth within a collection
 setMethod(f='min', signature='SoilProfileCollection',
