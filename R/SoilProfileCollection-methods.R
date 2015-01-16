@@ -278,8 +278,8 @@ rbind.SoilProfileCollection <- function(...) {
 # return a concatenated vector of horizon + site names
 # note that we strip out the ID column name from @site
 setMethod("names", "SoilProfileCollection",
-  function(object) {
-  res <- c(horizons=horizonNames(object), site=siteNames(object)[-1])
+  function(x) {
+  res <- c(horizons=horizonNames(x), site=siteNames(x)[-1])
   return(res)
   }
 )
@@ -389,8 +389,8 @@ setMethod("$", "SoilProfileCollection",
   function(x, name) {
 
 	# get names from site and hz data
-	s.names <- names(site(x))
-	h.names <- names(horizons(x))
+	s.names <- siteNames(x)
+	h.names <- horizonNames(x)
 
 	# when site data are initialized from an external DF, it is possible that
 	# there will be duplicate column names
