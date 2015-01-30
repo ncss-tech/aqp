@@ -31,10 +31,13 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), top='featdept', bottom='
 # bottom: bottom depth
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
-addBracket <- function(top, bottom, idx=NULL, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
-	
+addBracket <- function(top, bottom=NULL, idx=NULL, label=NULL, label.cex=0.75, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
+  
   # get plotting details from aqp environment
   lsp <- get('last_spc_plot', envir=aqp.env)
+  
+  # get number of brackets ~ number bracket top boundaries
+  n <- length(top)
   
   # if missing an specific index, assume plotting order
   if(is.null(idx))
@@ -50,27 +53,32 @@ addBracket <- function(top, bottom, idx=NULL, tick.length=0.05, arrow.length=0.0
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
     # x-positions
-    x.1 <- plot.order + offset
+    x.1 <- 1:n + offset
     x.2 <- x.1 + tick.length
 		# top tick
-		segments(x.1, top, x.2, top, lend=2, ...)
+		segments(x.1, top[plot.order], x.2, top[plot.order], lend=2, ...)
 		# bottom tick
-		segments(x.1, bottom, x.2, bottom, lend=2, ...)
+		segments(x.1, bottom[plot.order], x.2, bottom[plot.order], lend=2, ...)
 		# vertical bar
-		segments(x.1, top, x.1, bottom, lend=2, ...)
+		segments(x.1, top[plot.order], x.1, bottom[plot.order], lend=2, ...)
 	}
 	
 	# missing bottom: replace bottom tick with arrow head
 	if(!missing(top) & missing(bottom)) {
 	  # x-positions
-	  x.1 <- plot.order + offset
+	  x.1 <- 1:n + offset
 	  x.2 <- x.1 + tick.length
 		# top tick
-		segments(x.1, top, x.2, top, lend=2, ...)
+		segments(x.1, top[plot.order], x.2, top[plot.order], lend=2, ...)
 		# vertical bar is now an arrow
-		arrows(x.1, top, x.1, top+missing.bottom.depth, length=arrow.length, lend=2, ...)
+		arrows(x.1, top[plot.order], x.1, top[plot.order] + missing.bottom.depth, length=arrow.length, lend=2, ...)
 	}
 	
+  # optionally plot label
+  if(!missing(top) & !missing(label)){
+    text(x.1 - 0.05, (top[plot.order] + bottom[plot.order])/2, label, srt=90, cex=label.cex, pos=3)
+  }
+  
 }
 
 
@@ -246,8 +254,8 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 	 # optionally add horizon boundary distinctiveness
 	 if(! is.null(hz.distinctness.offset)) {
 	 	hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
-	 	segments(i-width, y0 - hz.dist.offset, i+width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty)
-		segments(i-width, y0 + hz.dist.offset, i+width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty)	
+	 	segments(i-width, y0 - hz.dist.offset, i+width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
+		segments(i-width, y0 + hz.dist.offset, i+width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
      }
 	    
 	 }
@@ -255,10 +263,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     # otherwise, we only draw the left, top, right borders, and then fill
     else {
       rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-      segments(i-width, y0, i-width, y1, lwd=lwd, lty=lty) # left-hand side
-      segments(i+width, y0, i+width, y1, lwd=lwd, lty=lty) # right-rand side
-      segments(i-width, min(y1), i+width, min(y1), lwd=lwd, lty=lty) # profile top
-      segments(i-width, max(y0), i+width, max(y0), lwd=lwd, lty=lty) # profile bottom
+      segments(i-width, y0, i-width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
+      segments(i+width, y0, i+width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
+      segments(i-width, min(y1), i+width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
+      segments(i-width, max(y0), i+width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
     }
       
     
