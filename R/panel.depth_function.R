@@ -97,18 +97,6 @@ else {
 	
   # annotate with contributing fraction
   if(!missing(cf)) {
-    
-#   	# if plotting with grouped data, inform the user we are computing the mean CF / slice
-#   	if(!missing(groups)) {
-#   		warning('depth-wise mean contributing fraction values are printed', call.=FALSE)
-#   		# add CF data to panel's worth of data
-#   		d$cf <- cf[subscripts]
-#   	}
-#   	else {
-#   		print(d)
-#   		print(cf)
-#   		d$cf <- cf[subscripts]
-#   	}
 		
   	# add CF data to panel's worth of data
   	d$cf <- cf[subscripts]
@@ -137,6 +125,11 @@ else {
   		# interpolate CF at annotated depths
   		a.CF <- cf.approx.fun(a.seq)
   		a.text <- paste(round(a.CF * 100), '%')
+      
+      # remove any NAs in CF sequence and text
+      not.na.idx <- which(! is.na(a.CF))
+      a.seq <- a.seq[not.na.idx]
+      a.text <- a.text[not.na.idx]
   		
   		# add to right-hand side of the panel
   		unit <- gpar <- NULL
