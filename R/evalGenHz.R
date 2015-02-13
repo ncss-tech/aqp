@@ -40,9 +40,11 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
   m <- melt(h, id.vars=genhz, measure.vars=c(vars, 'sil.width'))
   
   # compute group-wise summaries-- note that text is returned
-  m.summary <- ddply(m, c(genhz, 'variable'), summarize, 
-                     stats=format(paste0(round(mean(value, na.rm=TRUE), 2), ' (' , sd=round(sd(value, na.rm=TRUE), 2), ')'), justify='right')
-                     )
+  m.summary <- ddply(m, c(genhz, 'variable'), function(i) {
+    stats <- format(paste0(round(mean(i$value, na.rm=TRUE), 2), ' (' , sd=round(sd(i$value, na.rm=TRUE), 2), ')'), justify='right')
+    return(data.frame(stats=stats))
+  })
+  
   fm <- paste0(genhz, ' ~ variable')
   genhz.stats <- cast(m.summary, fm, value='stats')
   
