@@ -70,7 +70,7 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, pop
   # optionally simulate data from a composition of normally distributed data
   # using means, and var-cov matrix from original data
   if(sim) {
-    if(!require(compositions))
+    if(!requireNamespace(compositions))
       stop('pleast install the `compositions` package.', call.=FALSE)
     # compute RV / range polygon for normally dist data
     # convert to compositional class, note range is now [0,1]

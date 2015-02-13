@@ -15,7 +15,7 @@ hzDistinctnessCodeToOffset(x, codes = c("A", "C", "G", "D"), offset = c(0.5, 1.5
 }
 \details{Missing data (NA) or codes that are not defined in the `codes' argument are returned as 0 offsets.}
 \value{a vector of vertical offsets, with the same length as the number of distinctness codes passed to the function}
-\references{\url{http://soils.usda.gov/technical/fieldbook/}}
+\references{\url{http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_054184}}
 \author{D.E. Beaudette}
 
 \seealso{\code{\link{plotSPC}}}
