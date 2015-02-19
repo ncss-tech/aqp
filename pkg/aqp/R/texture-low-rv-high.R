@@ -74,9 +74,9 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, pop
       stop('pleast install the `compositions` package.', call.=FALSE)
     # compute RV / range polygon for normally dist data
     # convert to compositional class, note range is now [0,1]
-    ssc.acomp <- acomp(ssc)
+    ssc.acomp <- compositions::acomp(ssc)
     # simulate normally-distributed composition based on data
-    ssc.sim <- rnorm.acomp(n=sim.n, mean=meanCol(ssc.acomp), var=cov(ssc.acomp))
+    ssc.sim <- compositions::rnorm.acomp(n=sim.n, mean=compositions::meanCol(ssc.acomp), var=cov(ssc.acomp))
     # get range, and rv after converting back to [0,100] interval
     res.sim <- .get.ssc.low.rv.high(as.data.frame(unclass(ssc.sim) * 100),  p=p, delta=delta)
     
