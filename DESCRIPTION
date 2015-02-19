@@ -1,7 +1,7 @@
 Package: aqp
-Version: 1.7-12
-Date: 2015-02-13
-Packaged: 2015-02-13; dylan
+Version: 1.8
+Date: 2015-02-19
+Packaged: 2015-02-19; dylan
 Title: Algorithms for Quantitative Pedology
 Author: Dylan Beaudette <debeaudette@ucdavis.edu>, Pierre Roudier <roudierp@landcareresearch.co.nz>
 Maintainer: Dylan Beaudette <debeaudette@ucdavis.edu>
