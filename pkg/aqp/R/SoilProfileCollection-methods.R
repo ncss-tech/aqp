@@ -95,6 +95,7 @@ setMethod("coordinates", "SoilProfileCollection",
   }
 )
 
+
 ## site data
 if (!isGeneric("site"))
   setGeneric("site", function(object, ...) standardGeneric("site"))
