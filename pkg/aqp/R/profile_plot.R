@@ -101,7 +101,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
   
   # save arguments to aqp env
   lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
@@ -236,6 +236,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     
 	  
 	  # generate rectangle geometry
+    
+    # get vector of profile indices
+    x0 <- x.idx.offset + i
+    
 	  # get vectors of horizon boundaries, and scale
 	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
 	  y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
@@ -249,24 +253,24 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 	# create horizons + colors
     # default are filled rectangles
     if(divide.hz) {
-	    rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
+	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
 	 
 	 # optionally add horizon boundary distinctiveness
 	 if(! is.null(hz.distinctness.offset)) {
 	 	hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
-	 	segments(i-width, y0 - hz.dist.offset, i+width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
-		segments(i-width, y0 + hz.dist.offset, i+width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
+	 	segments(x0 - width, y0 - hz.dist.offset, x0 + width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
+		segments(x0 - width, y0 + hz.dist.offset, x0 + width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
      }
 	    
 	 }
     
     # otherwise, we only draw the left, top, right borders, and then fill
     else {
-      rect(i-width, y0, i + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-      segments(i-width, y0, i-width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
-      segments(i+width, y0, i+width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
-      segments(i-width, min(y1), i+width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
-      segments(i-width, max(y0), i+width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+      rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
+      segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
+      segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
+      segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
+      segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
     }
       
     
@@ -279,11 +283,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 		  names.to.shrink <- which(nchar(this_profile_names) > shrink.cutoff)
 		  cex.names.shrunk <- rep(cex.names, length(this_profile_data[, tcol]))
 		  cex.names.shrunk[names.to.shrink] <- cex.names.shrunk[names.to.shrink] * 0.8
-		  text(i + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names.shrunk)
+		  text(x0 + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names.shrunk)
 		  }
 	  # standard printing of names, all at the same size
 	  else
-		  text(i + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names)		
+		  text(x0 + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names)		
 	  
 	  # add the profile ID
 	  if(print.id) {
@@ -297,10 +301,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 		
 			# add the text: according to style
 			if(id.style == 'top')
-				text(i, y.offset, id.text, pos=3, font=2, cex=cex.id)
+				text(x0, y.offset, id.text, pos=3, font=2, cex=cex.id)
 	
 			if(id.style == 'side')
-				text(i-(width+0.025), y.offset, id.text, adj=c(1, -width), font=2, cex=cex.id, srt=90)
+				text(x0 - (width+0.025), y.offset, id.text, adj=c(1, -width), font=2, cex=cex.id, srt=90)
 			}
 	  }
   
