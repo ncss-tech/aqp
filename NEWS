@@ -1,3 +1,8 @@
+-------------------------- aqp 1.8-2 (2015-02-27) --------------------------
+* updated documentation
+* plotSPC gets a new argument: `x.idx.offset`: allows for plotting of multiple SPC objects within the same figure, see examples
+
+
 -------------------------- aqp 1.7-11 (2015-01-30) --------------------------
 * fixed bugs in addBrackets(), panel.depth_function(), and plotSPC()
 * new arguments to addBrackets() allow for annotation of brackets
