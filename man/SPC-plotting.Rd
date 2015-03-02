@@ -31,7 +31,7 @@ max.depth=max(x), n.depth.ticks=5, shrink=FALSE,
 shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, 
 hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
 hz.distinctness.offset.lty=2, axis.line.offset=-2.5, 
-density=NULL, col.label=color, 
+plot.depth.axis=TRUE, density=NULL, col.label=color, 
 col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, \dots)
 }
 
@@ -67,6 +67,7 @@ col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, \dots)
   \item{hz.distinctness.offset.col}{color used to encode horizon distinctness (default is 'black')}
   \item{hz.distinctness.offset.lty}{line style used to encode horizon distinctness (default is 2)}
   \item{axis.line.offset}{horizonatal offset applied to depth axis (default is -2.5)}
+  \item{plot.depth.axis}{plot depth axis? (default is TRUE)}
   \item{density}{fill density used for horizon color shading, either a single integer or a column name containing integer values (default is NULL, no shading)}
   \item{col.label}{text printed above the color-coded legend}
   \item{col.palette}{color palette used to plot numeric data}
@@ -94,7 +95,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}}
+\code{\link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
 }
 \examples{
 data(sp1)
