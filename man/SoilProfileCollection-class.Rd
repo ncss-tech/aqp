@@ -103,6 +103,7 @@ if(require(digest)) {
 cbind(dupes=length(s), no.dupes=length(s[u, ]))
 
 ## 3. concatenate SoilProfileCollection objects
+\dontrun{
 require(plyr)
 d <- ldply(1:10, random_profile)
 
@@ -118,7 +119,7 @@ d.345 <- d[3:5, ]
 # recombine, note that profiles are sorted according to ID
 d.new <- rbind(d.345, d.1, d.2)
 plot(d.new)
-
+}
 
 \dontrun{
 # these next examples should throw an error
