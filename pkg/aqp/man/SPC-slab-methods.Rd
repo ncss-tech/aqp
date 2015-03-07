@@ -25,7 +25,7 @@ slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
   
   \item{slab.fun}{Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around \code{hdquantile}. See details.}
   
-  \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 2 values will always sum to the contributing fraction, while mode 1 values will always sum to 1.}
+  \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 1 values will always sum to the contributing fraction, while mode 2 values will always sum to 1.}
   
   \item{weights}{Column name containing weights. NOT YET IMPLEMENTED}
 
@@ -164,14 +164,15 @@ a.1 <- slab(sp1, fm= ~ name, cpm=2, slab.structure=0:150)
 # reshape into long format for plotting
 a.1.long <- melt(a.1, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
 
-# group mode 1 and mode 2 data
-g <- make.groups(mode_1=a.long, mode_2=a.1.long)
+# combine aggregation from `cpm` modes 1 and 2
+g <- make.groups(cmp.mode.1=a.long, cmp.mode.2=a.1.long)
 
 # plot horizon type proportions
 xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
 			 ylim=c(240, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
 			 auto.key=list(lines=TRUE, points=FALSE, columns=2),
-			 par.settings=list(superpose.line=list(col=c(1,2))))
+			 par.settings=list(superpose.line=list(col=c(1,2))),
+       scales=list(alternating=3))
 
 
 # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
