@@ -1,6 +1,6 @@
 
 ## TODO: no mechanism for merged legends
-plotMultipleSPC <- function(spc.list, group.labels, args=list(), arrow.offset=2, bracket.base.depth=95) {
+plotMultipleSPC <- function(spc.list, group.labels, args=list(NA), arrow.offset=2, bracket.base.depth=95) {
   
   # compute group stats
   n.groups <- length(spc.list)
@@ -14,15 +14,17 @@ plotMultipleSPC <- function(spc.list, group.labels, args=list(), arrow.offset=2,
   tick.heights <- yy[c(group.starts, group.ends)] + arrow.offset
   
   # setup plot with first SPC in list
-  do.call(plotSPC, c(x=spc.list[[1]], n=n.pedons, args[[1]]))
+  do.call(plotSPC, c(x=spc.list[[1]], n=n.pedons, na.omit(args[[1]])))
   
   # iterate over remaining SPC objs
-  for(i in 2:n.groups) {
-    this.obj <- spc.list[[i]]
-    this.args <- args[[i]]
-    do.call(plotSPC, c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args))
+  if(n.groups > 1) {
+    for(i in 2:n.groups) {
+      this.obj <- spc.list[[i]]
+      this.args <- na.omit(args[[i]])
+      do.call(plotSPC, c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args))
+    }
   }
-  
+    
   # annotate with group brackets
   profileGroupLabels(x0=group.starts, x1=group.ends, labels=group.labels, y0=bracket.base.depth, y1=tick.heights) 
 }
