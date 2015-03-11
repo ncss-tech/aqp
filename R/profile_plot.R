@@ -1,6 +1,6 @@
-
+## TODO: figure out intellegent recycling of arguments
 ## TODO: no mechanism for merged legends
-plotMultipleSPC <- function(spc.list, group.labels, args=list(NA), arrow.offset=2, bracket.base.depth=95) {
+plotMultipleSPC <- function(spc.list, group.labels, args=rep(list(NA), times=length(spc.list)), arrow.offset=2, bracket.base.depth=95, ...) {
   
   # compute group stats
   n.groups <- length(spc.list)
@@ -14,7 +14,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args=list(NA), arrow.offset=
   tick.heights <- yy[c(group.starts, group.ends)] + arrow.offset
   
   # setup plot with first SPC in list
-  do.call(plotSPC, c(x=spc.list[[1]], n=n.pedons, na.omit(args[[1]])))
+  do.call(plotSPC, c(x=spc.list[[1]], n=n.pedons, na.omit(args[[1]]), ...))
   
   # iterate over remaining SPC objs
   if(n.groups > 1) {
