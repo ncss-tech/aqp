@@ -5,7 +5,9 @@
 \description{Combine multiple SoilProfilecollection objects into a single profile sketch, with annotated groups.}
 \usage{
 plotMultipleSPC(spc.list, group.labels, 
-args = list(), arrow.offset = 2, bracket.base.depth = 95)
+args = rep(list(NA), times=length(spc.list)), 
+arrow.offset = 2, bracket.base.depth = 95,
+...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -14,6 +16,7 @@ args = list(), arrow.offset = 2, bracket.base.depth = 95)
   \item{args}{a list of arguments passed to plotSPC, one for each SoilProfileCollection object}
   \item{arrow.offset}{vertical offset in depth from base of start / end profiles and group bracket arrows}
   \item{bracket.base.depth}{baseline depth used for group brackets}
+  \item{\dots}{additional arguments to the first call to \code{plotSPC}}
 }
 
 \author{D.E. Beaudette and Ben Marshall}
