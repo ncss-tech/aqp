@@ -359,11 +359,12 @@ setMethod(f='nrow', signature='SoilProfileCollection',
 
 
 # overload unique() via digest eval of unique profiles
-# currently only works with horizon-level attributes
-setMethod(f='unique', signature='SoilProfileCollection',
-definition=function(x, vars){
-  if(require(digest)) {
-	md5 <- profileApply(x, function(i) digest(unlist(horizons(i)[, vars])))
+uniqueSPC <- function(x, vars){
+  # compute hash by profile, for selected variables
+  md5 <- profileApply(x, function(i) {
+    # unlist in order to drop row names
+    digest(unlist(as(i, 'data.frame')[, vars]))
+  })
 
 	# get unique hashes
 	u.md5 <- unique(md5)
@@ -377,13 +378,9 @@ definition=function(x, vars){
 	# return an index of unique profiles
 	# down-grade to un-named vector of indices
 	return(as.vector(u.profiles))
-	}
-  else
-		stop('This function requres the `digest` package.', call.=FALSE)
-	
-  }
-)
+}
 
+setMethod(f='unique', signature='SoilProfileCollection', definition=uniqueSPC)
 
 
 

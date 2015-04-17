@@ -1,3 +1,8 @@
+-------------------------- aqp 1.8-5 (2015-04-17) --------------------------
+* bug fixes and documentation updates
+* digest::digest is now imported by default
+* better documentatinon unique-method for SoilProfileCollection objects
+
 -------------------------- aqp 1.8-3 (2015-03-02) --------------------------
 * updated documentation
 * plotSPC gets a new argument: `x.idx.offset`: allows for plotting of multiple SPC objects within the same figure, see examples
