@@ -17,7 +17,6 @@
 \alias{min,SoilProfileCollection-method}
 \alias{show,SoilProfileCollection-method}
 \alias{nrow,SoilProfileCollection-method}
-\alias{unique,SoilProfileCollection-method}
 \alias{rbind.SoilProfileCollection}
 \alias{horizonNames}
 \alias{siteNames}
@@ -74,35 +73,13 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{slab}{\code{signature(data = "SoilProfileCollection")}: ... }
     \item{units}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{units<-}{\code{signature(object = "SoilProfileCollection")}: ... }
-    \item{unique}{\code{signature(object = "SoilProfileCollection"), vars = "character"}: ... }
 	 }
 }
 
 \author{Pierre Roudier and Dylan E. Beaudette}
 
 \examples{
-## use the digest library to detect duplicate data
-data(sp1)
-
-# make a copy, make new IDs, and stack
-s.1 <- sp1 
-s.2 <- sp1
-s.2$id <- paste(s.2$id, '-copy', sep='')
-s <- rbind(s.1, s.2)
-depths(s) <- id ~ top + bottom
-
-# digests are computed from horizon-level data only
-# horizon boundaries and 'prop'
-# result is an index of unqique profiles
-if(require(digest)) {
-	u <- unique(s, vars=c('top', 'bottom', 'prop'))
-}
-
-# compare with and without dupes:
-# note subsetting of SoilProfileCollection
-cbind(dupes=length(s), no.dupes=length(s[u, ]))
-
-## 3. concatenate SoilProfileCollection objects
+# concatenate SoilProfileCollection objects
 \dontrun{
 require(plyr)
 d <- ldply(1:10, random_profile)

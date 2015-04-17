@@ -6,8 +6,8 @@ Title: Algorithms for Quantitative Pedology
 Author: Dylan Beaudette <debeaudette@ucdavis.edu>, Pierre Roudier <roudierp@landcareresearch.co.nz>
 Maintainer: Dylan Beaudette <debeaudette@ucdavis.edu>
 Depends: R (>= 2.15.0), methods
-Imports: plyr, reshape, grid, lattice, cluster, sp, Hmisc, stringr, scales, plotrix, RColorBrewer, MASS
-Suggests: colorspace, maptools, foreign, ape, soilDB, latticeExtra, digest, maps, compositions
+Imports: plyr, reshape, grid, lattice, cluster, sp, Hmisc, stringr, scales, plotrix, RColorBrewer, MASS, digest
+Suggests: colorspace, maptools, foreign, ape, soilDB, latticeExtra, maps, compositions
 Description: A collection of algorithms related to modeling of soil resources, soil classification, soil profile aggregation, and visualization.
 License: GPL (>= 2)
 Repository: CRAN
