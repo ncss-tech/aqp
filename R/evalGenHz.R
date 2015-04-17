@@ -4,20 +4,33 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
   # hack to make R CMD check happy
   value <- summarize <- NULL
   
-  # extract horizons
+  # extract site / horizons as DF
   h <- as(obj, 'data.frame')
   
   # make an index to complete data
   no.na.idx <- which(complete.cases(h[, vars]))
   
+  # test for duplicate data
+  # unique IDs are based on a concatenation of variables used... digest would be safer
+  h.to.test <- h[no.na.idx, c(idname(obj), vars)]
+  h.to.test$id <- apply(h.to.test[, vars], 1, function(i) paste0(i, collapse = '|'))
+  dupe.names <- names(which(table(h.to.test$id) > 1))
+  dupe.rows <- h.to.test[which(h.to.test$id %in% dupe.names), ]
+  dupe.ids <- paste0(unique(dupe.rows[[idname(obj)]]), collapse=', ')
+  warning(paste0('duplicate data associated with pedons: ', dupe.ids), call. = FALSE)
+    
   # compute pair-wise dissimilarities using our variables of interest
   d <- daisy(h[no.na.idx, vars], stand=stand, metric=metric)
   
   # fudge-factor in case of duplicate data (0s in the dissimilarity matrix)
-  fudge <- min(d) / 100
+  dupe.idx <- which(d < 1e-8)
+  if(length(dupe.idx) > 0) {
+    fudge <- min(d[which(d > 0)]) / 100
+    d[dupe.idx] <- fudge
+  }
   
   # perform non-metric MDS of dissimilarity matrix
-  mds <- isoMDS(d + fudge, trace=trace)
+  mds <- isoMDS(d, trace=trace)
   
   # compute silhouette widths after removing not-used genhz class
   sil.idx <-  which(complete.cases(h[, vars]) & h[[genhz]] != non.matching.code)
