@@ -1,3 +1,20 @@
+## TODO: only a single site-level attribute can be used for sorting
+# order profiles by a site-level grouping label
+groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='red', group.line.lwd=2, group.line.lty=2, ...) {
+  s <- site(x)
+  new.order <- order(s[[groups]])
+  lab <- factor(s[[groups]][new.order])
+  unique.lab <- levels(lab)
+  group.lengths <- rle(as.numeric(lab))$lengths
+  lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
+  
+  plot(x, plot.order=new.order, ...)
+  abline(v=cumsum(group.lengths)[-length(group.lengths)] + 0.5, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  text(lab.positions, group.name.offset, unique.lab, cex=group.name.cex, adj=0.5, font=4)
+}
+
+
+
 ## TODO: figure out intellegent recycling of arguments
 ## TODO: no mechanism for merged legends
 plotMultipleSPC <- function(spc.list, group.labels, args=rep(list(NA), times=length(spc.list)), arrow.offset=2, bracket.base.depth=95, ...) {
@@ -186,14 +203,14 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   if(is.numeric(h[[color]])) {
     cr <- colorRamp(col.palette)
     # note that this may contain NAs
-    c.rgb <- cr(rescale(h[[color]]))
+    c.rgb <- cr(scales::rescale(h[[color]]))
     cc <- which(complete.cases(c.rgb))
     h$.color <- NA
     # convert non-NA values into colors
     h$.color[cc] <- rgb(c.rgb[cc, ], maxColorValue=255)
     # generate range / colors for legend
     pretty.vals <- pretty(h[[color]])
-    color.legend.data <- list(legend=pretty.vals, col=rgb(cr(rescale(pretty.vals)), maxColorValue=255))
+    color.legend.data <- list(legend=pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
   }
   # 2. character vector, assume these are valid colors
   if(is.character(h[[color]])) {
