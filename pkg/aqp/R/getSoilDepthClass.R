@@ -27,8 +27,12 @@ getSoilDepthClass <- function(f, depth.classes=c('very.shallow'=25, 'shallow'=50
   
   # add-in ID and actual depth
   d <- data.frame(profile_id(f), depth=soil.depth, depth.class.matrix, depth.class=dc, stringsAsFactors=FALSE)
+  
   # fix ID name
   names(d)[1] <- idname(f)
+  
+  # set factor levels
+  d$depth.class <- factor(d$depth.class, levels=names(depth.classes))
   
   return(d)
 }

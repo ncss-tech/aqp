@@ -11,9 +11,9 @@ arrow.offset = 2, bracket.base.depth = 95,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{spc.list}{a list of SoilProfileCollection objects}
-  \item{group.labels}{a vector of group labels, one for each SoilProfileCollection object}
-  \item{args}{a list of arguments passed to plotSPC, one for each SoilProfileCollection object}
+  \item{spc.list}{a list of \code{SoilProfileCollection} objects}
+  \item{group.labels}{a vector of group labels, one for each \code{SoilProfileCollection} object}
+  \item{args}{a list of arguments passed to \code{plotSPC}, one for each \code{SoilProfileCollection} object}
   \item{arrow.offset}{vertical offset in depth from base of start / end profiles and group bracket arrows}
   \item{bracket.base.depth}{baseline depth used for group brackets}
   \item{\dots}{additional arguments to the first call to \code{plotSPC}}
