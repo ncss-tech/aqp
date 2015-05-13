@@ -1,3 +1,7 @@
+## TODO: add shannon's H index
+# apply(p[, hz.names], 1, function(i) -sum(i*log(i)))
+# note: this will require replacing 0 with a tiny number
+
 # generate a data.frame of ML horizonation
 # using the output from slab() and a vector of horizon names
 get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
