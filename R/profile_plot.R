@@ -4,6 +4,11 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
   s <- site(x)
   new.order <- order(s[[groups]])
   lab <- factor(s[[groups]][new.order])
+  
+  # test for NA
+  if(any(is.na(lab)))
+    stop('NA in grouping label', call. = FALSE)
+  
   unique.lab <- levels(lab)
   group.lengths <- rle(as.numeric(lab))$lengths
   lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5

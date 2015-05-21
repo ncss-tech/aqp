@@ -42,7 +42,8 @@ These data were collected to support research funded by the Kearney Foundation o
 ## this example investigates the concept of a "median profile"
 
 # required packages
-library(ape)
+if(require(ape) & require(cluster)) {
+
 data(sp3)
 
 # generate a RGB version of soil colors
@@ -94,7 +95,7 @@ round(sp3.grouped$cec), '/', round(sp3.grouped$ph,1))
 d <- profile_compare(sp3.grouped, vars=c('clay','cec','ph'), max_d=100, 
 k=0.01, replace_na=TRUE, add_soil_flag=TRUE, rescale.result=TRUE)
 
-require(cluster)
+
 h <- agnes(d, method='ward')
 p <- ladderize(as.phylo(as.hclust(h)))
 
@@ -128,6 +129,8 @@ function(i) which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
 plot(sp3.grouped, color="soil_color", plot.order=new_order,
 scaling.factor=0.01, width=0.1, cex.names=0.5,
 y.offset=max(lastPP$yy)+0.1, add=TRUE)
+
+}
 }
 
 \keyword{datasets}
