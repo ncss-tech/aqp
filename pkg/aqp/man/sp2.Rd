@@ -68,7 +68,7 @@ d <- profile_compare(sp2, vars=c('prop','field_ph','hue'),
 max_d=200, k=0, sample_interval=5, rescale.result=TRUE)
 
 # plot dendrogram with ape package:
-require(ape) ; require(cluster)
+if(require(ape) & require(cluster)) {
 h <- diana(d)
 p <- as.phylo(as.hclust(h))
 plot(p, cex=0.75, label.offset=0.01, font=1, direct='down', srt=90, adj=0.5, y.lim=c(-0.125, 0.5))
@@ -78,5 +78,7 @@ tiplabels(col=as.numeric(sp2$surface), pch=15)
 
 # based on distance matrix values, YMMV
 legend('topleft', legend=levels(sp2$surface), col=1:6, pch=15, bty='n', bg='white', cex=0.75)
+}
+
 }
 \keyword{datasets}
