@@ -141,15 +141,13 @@ max_d=100, k=0, plot.depth.matrix=TRUE)
 
 
 ## 4. better plotting of dendrograms with ape package:
-require(ape)
-require(cluster)
+if(require(ape) & require(cluster) & require(MASS)) {
 h <- diana(d)
 p <- as.phylo(as.hclust(h))
 plot(ladderize(p), cex=0.75, label.offset=1)
 tiplabels(col=cutree(h, 3), pch=15)
 
 ## 5. other uses of the dissimilarity matrix
-require(MASS)
 # Sammon Mapping: doesn't like '0' values in dissimilarity matrix
 d.sam <- sammon(d)
 
@@ -158,6 +156,8 @@ dev.off() ; dev.new()
 plot(d.sam$points, type = "n", xlim=range(d.sam$points[,1] * 1.5))
 text(d.sam$points, labels=row.names(as.data.frame(d.sam$points)), 
 cex=0.75, col=cutree(h, 3))
+
+}
 
 
 ## 6. try out the 'sample_interval' argument
