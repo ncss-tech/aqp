@@ -1,3 +1,8 @@
+-------------------------- aqp 1.9 (2015-07-27) --------------------------
+* new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()
+* more code clean-up and fixes in examples to make R CMD check --as-cran happy
+* this is the last major update before aqp 2.0, expecting a major re-write of core SoilProfileCollection class and methods
+
 -------------------------- aqp 1.8-5 (2015-04-17) --------------------------
 * bug fixes and documentation updates
 * digest::digest is now imported by default
@@ -9,7 +14,6 @@
 * plotSCP gets a new argument: `plot.depth.axis`: enable / disable depth axis, useful for multi-collection plots
 * new function: `profileGroupLabels`: simple annotation for groups of profiles within a profile sketch, see manual page for examples
 * new function: `plotMultipleSPC`: plot several SPC objects on the same axis, see manual page for examples
-
 
 -------------------------- aqp 1.7-11 (2015-01-30) --------------------------
 * fixed bugs in addBrackets(), panel.depth_function(), and plotSPC()
