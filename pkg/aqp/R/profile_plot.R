@@ -3,13 +3,28 @@
 groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='red', group.line.lwd=2, group.line.lty=2, ...) {
   s <- site(x)
   new.order <- order(s[[groups]])
-  lab <- factor(s[[groups]][new.order])
+  
+  # if our groups are already a factor, keep existing levels
+  if(class(s[[groups]]) == 'factor')
+    lab <- s[[groups]][new.order]
+  else # not a factor, need to convert to factor, inherit default levels
+    lab <- factor(s[[groups]][new.order])
   
   # test for NA
-  if(any(is.na(lab)))
-    stop('NA in grouping label', call. = FALSE)
+  NA.lab <- which(is.na(lab))
   
-  unique.lab <- levels(lab)
+  # replace with missing label with '<missing>'
+  # this requires conversion: factor -> character -> replace NA -> factor with new levels
+  if(length(NA.lab) > 0) {
+    message('NA in grouping label, filling with `<missing>`')
+    o.levels <- levels(lab)
+    lab <- as.character(lab)
+    lab[NA.lab] <- '<missing>'
+    lab <- factor(lab, levels=c(o.levels, '<missing>'))
+  }
+    
+  # get just those levels that are in our data, preserving order of original levels
+  unique.lab <- levels(lab)[which(levels(lab) %in% unique(lab))]
   group.lengths <- rle(as.numeric(lab))$lengths
   lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
   
