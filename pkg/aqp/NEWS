@@ -1,6 +1,7 @@
 -------------------------- aqp 1.9 (2015-07-27) --------------------------
 * new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()
 * more code clean-up and fixes in examples to make R CMD check --as-cran happy
+* fixed some ancient examples in the profileApply() manual page
 * this is the last major update before aqp 2.0, expecting a major re-write of core SoilProfileCollection class and methods
 
 -------------------------- aqp 1.8-5 (2015-04-17) --------------------------

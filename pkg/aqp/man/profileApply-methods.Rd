@@ -76,14 +76,14 @@ sp1$dep <- profileApply(sp1, function(i) {round(rnorm(n=1, mean=mean(i$top)))})
 # custom function for subsetting horizon data, by profile
 # keep horizons with lower boundary < site-level attribute 'dep'
 fun <- function(i) {
-	# extract horizons
-	h <- horizons(i)
-	# make an expression to subset horizons
-	exp <- paste('bottom < ', i$dep, sep='')
-	# subset horizons, and write-back into current SPC
-	horizons(i) <- subset(h, subset=eval(parse(text=exp)))
-	# return modified SPC
-	return(i)
+  # extract horizons
+  h <- horizons(i)
+  # make an expression to subset horizons
+  exp <- paste('bottom < ', i$dep, sep='')
+  # subset horizons, and write-back into current SPC
+  horizons(i) <- subset(h, subset=eval(parse(text=exp)))
+  # return modified SPC
+  return(i)
 }
 
 # list of modified SoilProfileCollection objects
@@ -99,8 +99,7 @@ points(1:length(sp1), sp1$dep, col='red', pch=7)
 plot(sp1.sub)
 
 
-
-
+\dontrun{
 ##
 ## helper functions: these must be modified to suit your own data
 ##
@@ -110,41 +109,41 @@ plot(sp1.sub)
 # see ?slab for details on the syntax
 # note that function expects certain columns within 'x'
 f.diag.wt.prop <- function(x, d.hz, prop) {
-	# extract diagnostic horizon data
-	d <- diagnostic_hz(x)
-	# subset to the requested diagnostic hz
-	d <- d[d$diag_kind == d.hz, ]
-	# if missing return NA
-	if(nrow(d) == 0)
-		return(NA)
-	
-	# extract depths and check for missing
-	sv <- c(d$featdept, d$featdepb)
-	if(any(is.na(sv)))
-		return(NA)
-	
-	# create formula from named property
-	fm <- as.formula(paste('~', prop))
-	# return just the (weighted) mean, accessed from @horizons
-	s <- slab(x, fm, seg_vect=sv)$p.mean
-	return(s)
+  # extract diagnostic horizon data
+  d <- diagnostic_hz(x)
+  # subset to the requested diagnostic hz
+  d <- d[d$diag_kind == d.hz, ]
+  # if missing return NA
+  if(nrow(d) == 0)
+    return(NA)
+  
+  # extract depths and check for missing
+  sv <- c(d$featdept, d$featdepb)
+  if(any(is.na(sv)))
+    return(NA)
+  
+  # create formula from named property
+  fm <- as.formula(paste('~', prop))
+  # return just the (weighted) mean, accessed from @horizons
+  s <- slab(x, fm, slab.structure=sv, slab.fun=mean)$value
+  return(s)
 }
 
 
 # conditional eval of thickness of some diagnostic feature or horizon
 # will return a vector of length(x), you can save to @site
 f.diag.thickness <- function(x, d.hz) {
-	# extract diagnostic horizon data
-	d <- diagnostic_hz(x)
-	# subset to the requested diagnostic hz
-	d <- d[d$diag_kind == d.hz, ]
-	# if missing return NA
-	if(nrow(d) == 0)
-		return(NA)
-	
-	# compute thickness
-	thick <- d$featdepb - d$featdept
-	return(thick)
+  # extract diagnostic horizon data
+  d <- diagnostic_hz(x)
+  # subset to the requested diagnostic hz
+  d <- d[d$diag_kind == d.hz, ]
+  # if missing return NA
+  if(nrow(d) == 0)
+    return(NA)
+  
+  # compute thickness
+  thick <- d$featdepb - d$featdept
+  return(thick)
 }
 
 
@@ -156,19 +155,27 @@ f.psc.prop <- function(x, prop) {
   # test for missing PCS data
   if(any(is.na(sv)))
     return(NA) 
-	
-	# this should never happen... unless someone made a mistake
-	# check to make sure that the lower PSC boundary is shallower than the depth
-	if(sv[2] > max(x))
-		return(NA)
-	
+  
+  # this should never happen... unless someone made a mistake
+  # check to make sure that the lower PSC boundary is shallower than the depth
+  if(sv[2] > max(x))
+    return(NA)
+  
   # create formula from named property
   fm <- as.formula(paste('~', prop))
   # return just the (weighted) mean, accessed from @horizons
-  s <- slab(x, fm, seg_vect=sv)$p.mean
+  s <- slab(x, fm, slab.structure=sv, slab.fun=mean)$value
   return(s)
 }
 
+# try with some sample data
+data(loafercreek, package='soilDB')
+
+profileApply(loafercreek, f.diag.wt.prop, d.hz='argillic horizon', prop='clay')
+profileApply(loafercreek, f.diag.thickness, d.hz='argillic horizon')
+profileApply(loafercreek, f.psc.prop, prop='clay')
+
+}
 }
 \keyword{methods}
 \keyword{manip}
