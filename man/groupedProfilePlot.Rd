@@ -25,6 +25,7 @@ group.line.lwd = 2, group.line.lty = 2, ...)
 \seealso{\code{\link{plotSPC}}}
 
 \examples{
+# sample data
 data(sp1)
 # convert colors from Munsell to hex-encoded RGB
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
@@ -33,7 +34,15 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
+# plot profiles, sorted and annotated by 'group'
 groupedProfilePlot(sp1, groups='group', max.depth=150, group.name.offset = -10)
+
+
+\dontrun{
+# more complete example using data from soilDB package
+data(loafercreek, package='soilDB')
+groupedProfilePlot(loafercreek, groups='hillslope_pos', group.name.cex = 0.5)
+}
 }
 
 \keyword{hplots}
