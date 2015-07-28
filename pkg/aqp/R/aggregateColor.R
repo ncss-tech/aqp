@@ -1,5 +1,5 @@
 
-aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon.max') {
+aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon') {
   ## hack to make R CMD check --as-cran happy
   top <- bottom <- NULL
   
@@ -21,7 +21,7 @@ aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon.max
   # note that some genhz will have 0 records
   s <- dlply(h.no.na, hz, function(i){
     # aggregate depth by unique soil color
-    res <- ddply(i, col, summarise, weight=sum(bottom - top) * length(top), n.hz=length(top))
+    res <- ddply(i, col, summarise, weight=sqrt(sum(bottom - top)) * length(top), n.hz=length(top))
     # sort by thickness-- this is our metric for relevance
     res <- res[order(res$weight, decreasing=TRUE), ]
     # back-calculate the closest Munsell color
@@ -31,30 +31,38 @@ aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon.max
     return(res)
   })
   
-  # rescale thickness weights
-  if(scaling == 'profile.max') {
-    max.weight <- max(sapply(s, function(i) max(i$weight)))
+  # rescale using max horizon weight from all horizons
+  if(scaling == 'profile') {
+    max.weight <- max(sapply(s, function(i) sum(i$weight)))
     s.scaled <- lapply(s, function(i) {
       i$weight <- i$weight / max.weight
       return(i)
     })
   }
   
-  if(scaling == 'horizon.max') {
+  # rescale using the sum of the weights within the current horizon
+  if(scaling == 'horizon') {
     s.scaled <- lapply(s, function(i) {
-      i$weight <- i$weight / max(i$weight)
+      i$weight <- i$weight / sum(i$weight)
       return(i)
     })
   }
   
-  ## TODO: HSV may be a better place to perform averaging
+  ## TODO: LAB is the ideal color space for color averaging
   # compute weighted mean color for each GHL
   s.agg <- ldply(s.scaled, function(i) {
+    # convert to RGB
     v <- t(col2rgb(i$soil_color)) / 255
+    
+    # compute weighted mean via matrix manip
     w <- i$weight
     vw <- sweep(v, 1, STATS = w, FUN = '*')
     wm <- colSums(vw) / sum(w)
+    
+    # convert result back to R color specification
     wm.col <- rgb(t(wm), maxColorValue = 1)
+    
+    # get closest Munsell color
     wm.munsell <- rgb2munsell(t(wm))
     res <- data.frame(munsell=wm.munsell, col=wm.col, t(wm), n=nrow(i))
     return(res)
