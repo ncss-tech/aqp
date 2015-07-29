@@ -42,8 +42,16 @@ n <- c('O', 'A', 'B', 'C')
 p <- c('O', 'A', 'B', 'C')
 sp1$genhz <- generalize.hz(sp1$name, n, p)
 
-# aggregate colors by generalized horizon
+# aggregate colors over horizon-level attribute: 'genhz'
 a <- aggregateColor(sp1, 'genhz')
+
+# aggregate colors over site-level attribute: 'group'
+a <- aggregateColor(sp1, 'group')
+
+# aggregate colors over depth-slices
+s <- slice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ soil_color)
+s$slice <- paste0(s$top, ' cm')
+a <- aggregateColor(s, 'slice')
 
 \dontrun{
 # optionally plot with helper function
@@ -51,7 +59,7 @@ if(require(sharpshootR))
   aggregateColorPlot(a)
 }
 
-# more interesting example
+# a more interesting example
 \dontrun{
 data(loafercreek, package = 'soilDB')
 
