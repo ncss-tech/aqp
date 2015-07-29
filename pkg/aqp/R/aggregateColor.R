@@ -1,10 +1,13 @@
-
+## TODO: 'hz' can be either horizon or site level attribute
+## TODO: user-defined weight function
+## TODO: try with slices
+## TODO: try with diagnostic features
 aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon') {
   ## hack to make R CMD check --as-cran happy
   top <- bottom <- NULL
   
   # extract pieces
-  h <- horizons(x)
+  h <- as(x, 'data.frame')
   
   # keep track of generalized horizon names for later
   hz.names <- levels(h[[hz]])
