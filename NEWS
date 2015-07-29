@@ -1,4 +1,5 @@
 -------------------------- aqp 1.9 (2015-07-27) --------------------------
+* new function guessGenHzLevels()
 * new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()
 * more code clean-up and fixes in examples to make R CMD check --as-cran happy
 * fixed some ancient examples in the profileApply() manual page
