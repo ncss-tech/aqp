@@ -1,18 +1,15 @@
-## TODO: 'hz' can be either horizon or site level attribute
 ## TODO: user-defined weight function
-## TODO: try with slices
 ## TODO: try with diagnostic features
-aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon') {
+## Note: 'groups' can be either site/horizon attribute, need not be a factor
+aggregateColor <- function(x, groups='genhz', col='soil_color') {
   ## hack to make R CMD check --as-cran happy
   top <- bottom <- NULL
   
   # extract pieces
   h <- as(x, 'data.frame')
   
-  # keep track of generalized horizon names for later
-  hz.names <- levels(h[[hz]])
-  
-  vars <- c(hz, horizonDepths(x), col)
+  # keep track of just those variables we are using
+  vars <- c(groups, horizonDepths(x), col)
   
   # remove missing data
   h.no.na <- na.omit(h[, vars])
@@ -22,7 +19,7 @@ aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon') {
   
   # split by genhz
   # note that some genhz will have 0 records
-  s <- dlply(h.no.na, hz, function(i){
+  s <- dlply(h.no.na, groups, function(i){
     # aggregate depth by unique soil color
     res <- ddply(i, col, summarise, weight=sqrt(sum(bottom - top)) * length(top), n.hz=length(top))
     # sort by thickness-- this is our metric for relevance
@@ -34,24 +31,15 @@ aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon') {
     return(res)
   })
   
-  # rescale using max horizon weight from all horizons
-  if(scaling == 'profile') {
-    max.weight <- max(sapply(s, function(i) sum(i$weight)))
-    s.scaled <- lapply(s, function(i) {
-      i$weight <- i$weight / max.weight
-      return(i)
-    })
-  }
-  
   # rescale using the sum of the weights within the current horizon
-  if(scaling == 'horizon') {
-    s.scaled <- lapply(s, function(i) {
-      i$weight <- i$weight / sum(i$weight)
-      return(i)
-    })
-  }
+  s.scaled <- lapply(s, function(i) {
+    i$weight <- i$weight / sum(i$weight)
+    return(i)
+  })
+  
   
   ## TODO: LAB is the ideal color space for color averaging
+  ## but this would require an additional dependency on the colorspace package
   # compute weighted mean color for each GHL
   s.agg <- ldply(s.scaled, function(i) {
     # convert to RGB
@@ -70,7 +58,7 @@ aggregateColor <- function(x, hz='genhz', col='soil_color', scaling='horizon') {
     res <- data.frame(munsell=wm.munsell, col=wm.col, t(wm), n=nrow(i))
     return(res)
   })
-  names(s.agg)[1] <- hz
+  names(s.agg)[1] <- groups
   
   # return scaled color data
   return(list(scaled.data=s.scaled, aggregate.data=s.agg))

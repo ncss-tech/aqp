@@ -4,14 +4,13 @@
 \title{Summarize Soil Colors}
 \description{Summarize soil color data, weighted by occurrence and horizon thickness.}
 \usage{
-aggregateColor(x, hz = "genhz", col = "soil_color", scaling = "horizon")
+aggregateColor(x, groups = "genhz", col = "soil_color")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a \code{SoilProfileCollection} object}
-  \item{hz}{the name of a horizon-level attribute containing generalized horizon labels, see examples}
+  \item{groups}{the name of a horizon or site attribute used to group horizons, see examples}
   \item{col}{the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")}
-  \item{scaling}{scaling method, with weights normalized by horizon ("horizon") or over the entire profile ("profile")}
 }
 
 \value{A list with the following components:
@@ -23,7 +22,7 @@ aggregateColor(x, hz = "genhz", col = "soil_color", scaling = "horizon")
 
 \details{Weights are computed by:
 w_i = sqrt(sum(thickness_i)) * n_i
-where w_i is the weight associated with color i, thickness_i is the total thickness of all horizons associated with the color i, and n_i is the number of horizons associated with color i. Weights are computed by generalized horizon label, as specified by \code{hz}. Weights can be normalized by generalized horizon (typical usage and default) or over all horizons.}
+where w_i is the weight associated with color i, thickness_i is the total thickness of all horizons associated with the color i, and n_i is the number of horizons associated with color i. Weights are computed within groups specified by \code{groups}.}
 
 \author{D.E. Beaudette}
 
@@ -66,18 +65,14 @@ loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
 loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
 loafercreek$genhz <- factor(loafercreek$genhz)
 
-# run 2x to compare scaling methods
-a.1 <- aggregateColor(loafercreek, 'genhz', scaling='horizon')
-a.2 <- aggregateColor(loafercreek, 'genhz', scaling='profile')
+a <- aggregateColor(loafercreek, 'genhz')
 
 # plot results with helper function
 par(mar=c(1,4,4,1))
-aggregateColorPlot(a.1,  main='normalized by horizon', print.n.hz = TRUE)
-aggregateColorPlot(a.2, main='normalized by profile')
+aggregateColorPlot(a, print.n.hz = TRUE)
 
-# aggregate results are the same using both scaling methods
-a.1$aggregate.data
-a.2$aggregate.data
+# inspect aggregate data
+a$aggregate.data
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
