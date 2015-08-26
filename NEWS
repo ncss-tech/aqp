@@ -1,4 +1,5 @@
--------------------------- aqp 1.9 (2015-07-27) --------------------------
+-------------------------- aqp 1.9 (2015-08-26) --------------------------
+* added neutral colors to munsell2rgb()
 * new function guessGenHzLevels()
 * new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()
 * more code clean-up and fixes in examples to make R CMD check --as-cran happy
