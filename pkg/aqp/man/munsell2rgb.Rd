@@ -51,6 +51,9 @@ the_chroma=c(5, 6), return_triplets=TRUE)
 # function is vectorized
 rgb2munsell(color)
 
+# neutral colors map to RGB{0.2, 0.2, 0.2}
+munsell2rgb('N', 4, 0)
+
 
 # basic example: no factors!
 d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
