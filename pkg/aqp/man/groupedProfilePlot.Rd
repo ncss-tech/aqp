@@ -7,7 +7,7 @@
 groupedProfilePlot(x, groups, group.name.offset = -5, 
 group.name.cex = 0.75, group.line.col = "RoyalBlue", 
 group.line.lwd = 2, group.line.lty = 2, break.style='line', 
-arrow.offset=group.name.offset + 5, ...)
+arrow.offset=group.name.offset + 5, arrow.length=0.1, ...)
 }
 
 \arguments{
@@ -20,6 +20,7 @@ arrow.offset=group.name.offset + 5, ...)
   \item{group.line.lty}{style of line that splits groups}
   \item{break.style}{style of group boundaries: "line", "arrow", "both"}
   \item{arrow.offset}{vertical offset for "arrow" style boundaries, single numeric value or vector of offsets}
+  \item{arrow.length}{value passed to \code{arrows} to define arrow head size}
   \item{\dots}{further arguments to \code{plotSPC}}
 }
 

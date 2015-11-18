@@ -1,5 +1,6 @@
 -------------------------- aqp 1.9.1 (2015-11-18) --------------------------
-* groupedProfilePlot() gains some new arguments and better documentation
+* groupedProfilePlot() gains some new arguments and better documentation (see manual page)
+* plot.SoilProfileCollection gains argument: default.color (see manual page)
 
 -------------------------- aqp 1.9 (2015-08-26) --------------------------
 * added neutral colors to munsell2rgb()
