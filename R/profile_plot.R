@@ -203,7 +203,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, default.color=grey(0.95), ...) {
   
   # save arguments to aqp env
   lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
@@ -232,6 +232,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   }
   
   # setup horizon colors:
+  
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
     cr <- colorRamp(col.palette)
@@ -249,6 +250,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   if(is.character(h[[color]])) {
     h$.color <- h[[color]]
   }
+  
+  # if the color column doesn't exist, fill with NA
+  if(is.null(h[[color]]))
+    h[[".color"]] <- NA
+  
+  # fill missing colors with a reasonable default
+  h$.color <- ifelse(is.na(h$.color), default.color, h$.color)
   
   # get top/bottom column names
   IDcol <- idname(x)
@@ -308,11 +316,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     cn <- names(this_profile_data)
     
     # extract / generate horizon color
-    m <- match(color, cn)
-    if(! is.na(m))
-      this_profile_colors <- this_profile_data$.color
-    else # no user-defined color column, or it is missing
-      this_profile_colors <- 'white'
+    # note: the ".color" horizon attribute is auto-generated above
+    # missing and NA colors have already been dealt with above
+    this_profile_colors <- this_profile_data$.color
     
 	  # extract / generate horizon fill density
 	  if(! missing(density)) {

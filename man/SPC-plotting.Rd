@@ -32,7 +32,8 @@ shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE,
 hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
 hz.distinctness.offset.lty=2, axis.line.offset=-2.5, 
 plot.depth.axis=TRUE, density=NULL, col.label=color, 
-col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, \dots)
+col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, 
+default.color=grey(0.95), \dots)
 }
 
 
@@ -73,6 +74,7 @@ col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, \dots)
   \item{col.palette}{color palette used to plot numeric data}
   \item{lwd}{single numeric value: line width multiplier}
   \item{lty}{single integert: line style}
+  \item{default.color}{default horizon fill color used when `color` attribute is NA}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }
 \details{
