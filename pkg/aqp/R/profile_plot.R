@@ -1,6 +1,6 @@
 ## TODO: only a single site-level attribute can be used for sorting
 # order profiles by a site-level grouping label
-groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='red', group.line.lwd=2, group.line.lty=2, ...) {
+groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='RoyalBlue', group.line.lwd=2, group.line.lty=2, break.style='line', arrow.offset=group.name.offset + 5, arrow.length=0.1, ...) {
   s <- site(x)
   new.order <- order(s[[groups]])
   
@@ -27,9 +27,22 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
   unique.lab <- levels(lab)[which(levels(lab) %in% unique(lab))]
   group.lengths <- rle(as.numeric(lab))$lengths
   lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
+  boundary.positions <-  cumsum(group.lengths)[-length(group.lengths)] + 0.5
   
+  # setup plot with plot.SoilProfileCollection
   plot(x, plot.order=new.order, ...)
-  abline(v=cumsum(group.lengths)[-length(group.lengths)] + 0.5, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  
+  # add group boundaries
+  if(break.style == 'line')
+    abline(v=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  if(break.style == 'arrow')
+    arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  if(break.style == 'both') {
+    abline(v=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+    arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  }
+  
+  # annotate with group labels
   text(lab.positions, group.name.offset, unique.lab, cex=group.name.cex, adj=0.5, font=4)
 }
 
@@ -263,9 +276,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   	}
   
   
+  ## TODO: extra_y_space should be allocated dynamically, as a function of number of profiles
   # fudge factors
   extra_x_space <- 2
-  extra_y_space <- 2
+  extra_y_space <- 15 # abnout right for n in {1,25}
   
   # pre-compute nice range for depth axis, also used for plot init
   depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
@@ -274,7 +288,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # par(mar=c(0.5,1,0,1)) # is it wise to adjust the plotting area?
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), ylim=c(max(depth_axis_intervals), -4), axes=FALSE, xlab='', ylab='')
+	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), 
+	       ylim=c(max(depth_axis_intervals), -extra_y_space), 
+	       axes=FALSE, xlab='', ylab='')
 	}
   
   

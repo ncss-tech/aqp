@@ -1,3 +1,6 @@
+-------------------------- aqp 1.9.1 (2015-11-18) --------------------------
+* groupedProfilePlot() gains some new arguments and better documentation
+
 -------------------------- aqp 1.9 (2015-08-26) --------------------------
 * added neutral colors to munsell2rgb()
 * new function guessGenHzLevels()
