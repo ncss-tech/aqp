@@ -1,3 +1,19 @@
+# R 3.3 compatibility:
+
+importFrom("grDevices", "chull", "col2rgb", "colorRamp",
+             "colorRampPalette", "grey", "rgb")
+
+importFrom("graphics", "abline", "arrows", "axis", "box", "grid",
+             "image", "legend", "lines", "mtext", "par", "points",
+             "polygon", "rect", "segments", "strwidth", "text")
+
+importFrom("stats", "aggregate", "approxfun", "as.dist", "as.formula",
+             "complete.cases", "cov", "formula", "median", "model.frame",
+             "na.omit", "na.pass", "quantile", "rnorm", "runif", "sd",
+             "splinefun", "update")
+
+importFrom("utils", "head", "object.size")
+
 importFrom(methods,
   setClass,
   representation,
@@ -6,7 +22,9 @@ importFrom(methods,
   isGeneric,
   setGeneric,
   setReplaceMethod,
-  setMethod
+  setMethod,
+  as,
+  show
 )
 
 
