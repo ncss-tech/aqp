@@ -598,7 +598,12 @@ setMethod("[", "SoilProfileCollection",
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     else {
-      SoilProfileCollection(idcol=x@idcol, depthcols=x@depthcols, metadata=x@metadata, horizons=h, site=s, sp=sp, diagnostic=d)
+      res <- SoilProfileCollection(idcol=x@idcol, depthcols=x@depthcols, metadata=x@metadata, horizons=h, site=s, sp=sp, diagnostic=d)
+      # one more final check:
+      if(! all.equal(profile_id(res), site(res)[[idname(res)]]))
+        stop('SPC object corruption. What now?')
+      
+      return(res)
     }
     
   # done
