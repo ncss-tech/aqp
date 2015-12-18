@@ -3,6 +3,7 @@
 \docType{data}
 \title{Soil Data from the Central Sierra Nevada Region of California}
 \description{Site and laboratory data from soils sampled in the central Sierra Nevada Region of California.}
+\note{These data are out of date. Pending some new data + documentation. Use with caution}
 \usage{data(ca630)}
 \format{
 List containing:
@@ -42,6 +43,7 @@ $lab : A data frame containing horizon information.
 \details{These data were extracted from the NSSL database. `ca630` is a list composed of site and lab data, each stored as dataframes. These data are modeled by a 1:many (site:lab) relation, with the `pedon_id` acting as the primary key in the `site` table and as the foreign key in the `lab` table.}
 \source{\url{http://ssldata.nrcs.usda.gov/}}
 \examples{
+\dontrun{
 library(plyr)
 library(lattice)
 library(Hmisc)
@@ -136,5 +138,6 @@ ca.1.to.10 <- ca[1:10, ]
 
 # basic plot method: profile plot
 plot(ca.1.to.10, name='hzn_desgn')
+}
 }
 \keyword{datasets}

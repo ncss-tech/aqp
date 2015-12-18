@@ -24,7 +24,8 @@ importFrom(methods,
   setReplaceMethod,
   setMethod,
   as,
-  show
+  show,
+  slot
 )
 
 
