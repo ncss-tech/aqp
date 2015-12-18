@@ -148,7 +148,7 @@ if (!isGeneric("depth_units"))
 
 setMethod(f='depth_units', signature='SoilProfileCollection',
   function(object){
-	u <- as.character(metadata(object)[['depth_units']])
+	u <- as.character(aqp::metadata(object)[['depth_units']])
 	  # give a warning if not defined
 	if(u == '')
 	  message('Note: depth depth_units have not yet been defined.')
@@ -213,7 +213,7 @@ rbind.SoilProfileCollection <- function(...) {
 	o.idname <- unique(lapply(objects, idname))
 	o.depth.units <- unique(lapply(objects, depth_units))
 	o.hz.depths <- unique(lapply(objects, horizonDepths))
-	o.m <- unique(lapply(objects, metadata))
+	o.m <- unique(lapply(objects, aqp::metadata))
 	o.coords <- unique(lapply(objects, function(i) ncol(coordinates(i))))
 	o.p4s <- unique(lapply(objects, proj4string))
 	
@@ -244,14 +244,7 @@ rbind.SoilProfileCollection <- function(...) {
 	o.s <- unique(do.call('rbind', o.s)) # site data, must be re-ordered
 	o.d <- unique(do.call('rbind', o.d)) # diagnostic data, leave as-is
 	
-	# generate ording vector for horizon and site data based on new vector of profile IDs
-  id <- o.idname[[1]] # copy ID name from first object into convenience variable
-	new.hz.order <- order(o.h[[id]])
-  new.site.order <- order(o.s[[id]])
-  
-  # re-order horizon/site data: NOTE funky syntax required to accomodate data.frames with only a single column
-	o.h <- o.h[new.hz.order, , drop=FALSE]
-  o.s <- o.s[new.site.order, , drop=FALSE]
+	## 2015-12-18: removed re-ordering, was creating corrupt SPC objects
   
 	# spatial points require some more effort when spatial data are missing
 	o.1.sp <- objects[[1]]@sp
@@ -260,17 +253,15 @@ rbind.SoilProfileCollection <- function(...) {
 	
 	## TODO: how can we make sure that unique-ness is enforced? 
 	# not missing spatial data
-	else { 
+	else
 		o.sp <- do.call('rbind', o.sp) # rbind properly
-    # re-order based on new ordering of IDs, from site data
-		o.sp <- o.sp[new.site.order, ]
-  }
-  
+	
 	# make SPC and return
 	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
 	
-  # warn user that data have been re-sorted
-  message(paste('resulting SPC has been re-sorted according to', id))
+	# one more final check:
+	if(! all.equal(profile_id(res), site(res)[[idname(res)]]))
+	  stop('SPC object corruption. What now?')
   
 	return(res)
 	}
@@ -556,10 +547,10 @@ setMethod("[", "SoilProfileCollection",
     # extract all horizon data
     h <- horizons(x)
 	
-    # keep only the requested horizon data (filtered by pedon ID)
+    # keep only the requested horizon data (filtered by profile ID)
     h <- h[h[[idname(x)]] %in% p.ids, ]
     
-    # keep only the requested site data, (filtered by pedon ID)
+    # keep only the requested site data, (filtered by profile ID)
     s.all <- site(x)
     s.i <- which(s.all[[idname(x)]] %in% p.ids)
   	s <- s.all[s.i, , drop=FALSE] # need to use drop=FALSE when @site contains only a single column
