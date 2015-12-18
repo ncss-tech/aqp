@@ -100,7 +100,8 @@ importFrom(sp,
   coordinates, 
   "coordinates<-", 
   proj4string, 
-  "proj4string<-"
+  "proj4string<-",
+  rbind.SpatialPoints
 )
 
 importFrom(Hmisc, 

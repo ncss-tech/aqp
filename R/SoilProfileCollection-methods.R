@@ -221,7 +221,7 @@ rbind.SoilProfileCollection <- function(...) {
 	o.h <- lapply(objects, horizons)
 	o.s <- lapply(objects, site)
 	o.d <- lapply(objects, diagnostic_hz)
-	o.sp <- lapply(objects, function(i) i@sp)
+	o.sp <- lapply(objects, slot, 'sp')
 	
 	# sanity checks:
 	if(length(o.idname) > 1)
@@ -251,10 +251,10 @@ rbind.SoilProfileCollection <- function(...) {
 	if(ncol(coordinates(o.1.sp)) == 1) # missing spatial data
 		o.sp <- o.1.sp # copy the first filler
 	
-	## TODO: how can we make sure that unique-ness is enforced? 
+	## 2015-12-18: added call to specific function: "sp::rbind.SpatialPoints"
 	# not missing spatial data
 	else
-		o.sp <- do.call('rbind', o.sp) # rbind properly
+		o.sp <- do.call("rbind.SpatialPoints", o.sp) # rbind properly
 	
 	# make SPC and return
 	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
