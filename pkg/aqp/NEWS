@@ -1,12 +1,11 @@
 -------------------------- aqp 1.9.4 (2015-12-22) --------------------------
-* new functions...
-
+* better checking for other places where the bug fixed in rbind.SoilProfileCollection (aqp 1.9.3) could occur
+* new functions: 'genhzTableToAdjMat', 'hzTransitionProbabilities'
 
 -------------------------- aqp 1.9.3 (2015-12-18) --------------------------
 * fixed a nasty bug in rbind.SoilProfileCollection() related to object re-ordering
  + in aqp < 1.9.3: there was a chance than profile_id(x) and site(x)[[idname(x)]]) would not match
  + bugs like this will no longer be a possibility after aqp 2.0, new SPC object structure planned
-
 
 -------------------------- aqp 1.9.1 (2015-11-18) --------------------------
 * groupedProfilePlot() gains some new arguments and better documentation (see manual page)
