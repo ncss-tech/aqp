@@ -1,3 +1,7 @@
+-------------------------- aqp 1.9.4 (2015-12-22) --------------------------
+* new functions...
+
+
 -------------------------- aqp 1.9.3 (2015-12-18) --------------------------
 * fixed a nasty bug in rbind.SoilProfileCollection() related to object re-ordering
  + in aqp < 1.9.3: there was a chance than profile_id(x) and site(x)[[idname(x)]]) would not match
