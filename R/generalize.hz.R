@@ -15,3 +15,17 @@ generalize.hz <- function(x, new, pat, non.matching.code='not-used') {
 	g <- factor(g, levels=c(new, non.matching.code))
 	return(g)
 }
+
+
+# convert a cross-tabulation: {original, genhz} to adjacency matrix
+genhzTableToAdjMat <- function(tab) {
+  tab <- as.matrix(tab)
+  # extract unique set of names
+  nm <- sort(unique(unlist(dimnames(tab))))
+  # generate full matrix with named dimensions
+  m <- matrix(nrow=length(nm), ncol=length(nm), data=0)
+  dimnames(m) <- list(nm, nm)
+  # set adjacency information via sub-matrix containing the original cross-tab
+  m[rownames(tab), colnames(tab)] <- tab
+  return(m)
+}
