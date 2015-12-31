@@ -2,10 +2,15 @@
 ## not imported, so list in suggests and address function names with markovchain::
 
 # what is the most likely sequence, given a markovchain and initial state
+# the result isn't likely correct when there are non-zero ties in tp
 mostLikelyHzSequence <- function(mc, t0) {
   
   if(!requireNamespace('markovchain'))
     stop('pleast install the `markovchain` package.', call.=FALSE)
+  
+  # check for ties
+  if(attr(as(mc, 'matrix'), 'ties'))
+    warning('ties in transition probability matrix, results may not be reliable', call. = FALSE)
   
   # store sequence here
   s <- vector(mode = 'character')
@@ -14,13 +19,15 @@ mostLikelyHzSequence <- function(mc, t0) {
   s[i] <- t0
   # compute probabilities for the next state
   cd <- markovchain::conditionalDistribution(mc, t0)
+  
+  ## TODO: this doesn't work when there are ties
   next.state <- names(which.max(cd))
   i <- i + 1
+  s[i] <- next.state
   # continue searching for the most likely next state
   # until reaching the second absorbing state
   # the first absorbing state is retained in 's'
   while(! next.state %in% markovchain::absorbingStates(mc)) {
-    s[i] <- next.state
     cd <- markovchain::conditionalDistribution(mc, next.state)
     next.state <- names(which.max(cd))
     i <- i + 1

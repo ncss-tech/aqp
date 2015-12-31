@@ -67,5 +67,23 @@ hzTransitionProbabilities <- function(x, name, loopTerminalStates=FALSE) {
   # replace NaN with 0
   m[which(is.nan(m))] <- 0
   
+  # test for ties
+  f.ties <- function(i) {
+    # 0 ties aren't important
+    not.zero <- which(! zapsmall(i) == 0)
+    # tabulate ties after rounding to 8 decimal places
+    res <- table(round(i[not.zero], 8))
+    if(any(res > 1))
+      return(TRUE)
+    else
+      return(FALSE)
+  }
+  
+  if(any(apply(m, 1, f.ties))) {
+    warning('ties in transition probability matrix', call. = FALSE)
+    attr(m, 'ties') <- TRUE
+  }
+     
+     
   return(m)
 }
