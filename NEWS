@@ -1,3 +1,6 @@
+-------------------------- aqp 1.9.5 (2015-12-28) --------------------------
+* documentation for new transition probability functions, see ?hzTransitionProbabilities for details
+
 -------------------------- aqp 1.9.4 (2015-12-22) --------------------------
 * better checking for other places where the bug fixed in rbind.SoilProfileCollection (aqp 1.9.3) could occur
 * new functions: 'genhzTableToAdjMat', 'hzTransitionProbabilities'
