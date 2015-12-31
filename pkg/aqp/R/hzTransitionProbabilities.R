@@ -1,19 +1,33 @@
 
 # generate transition probability matrix from horizon designations
 hzTransitionProbabilities <- function(x, name, loopTerminalStates=FALSE) {
-  # get all horizons and split by profile
+  
+  # get all horizons
   h <- horizons(x)
-  h.l <- split(h, h[[idname(x)]])
+  
+  # sanit checks: no missing or NA horizon designation allowed
+  idx <- which(h[[name]] == '' | is.na(h[[name]]) )
+  if(length(idx) > 0) {
+    message('missing or NA in horizon names', call. = FALSE)
+    h <- h[-idx, ]
+  }
+  
   # get all hz names
   hz.names <- sort(unique(h[[name]]))
   n.names <- length(hz.names)
   # get profile IDs and depth column names
-  pIDs <- profile_id(x)
+  # note that we cannot use the full set of IDs, as NA and "" hz names have been filtered
+  # convert to character in case all IDs are integers, this makes it possible to address our list by ID
+  id.name <- idname(x)
+  pIDs <- as.character(unique(h[[id.name]]))
   dc <- horizonDepths(x)
   # init TP matrix with 0's
   m <- matrix(ncol=n.names, nrow=n.names, data = 0)
   # row / col names are entire set of hz names
   dimnames(m) <- list(hz.names, hz.names)
+  
+  # split by profile
+  h.l <- split(h, h[[id.name]])
   
   # iterate over profiles
   for(i in pIDs) {
@@ -22,11 +36,8 @@ hzTransitionProbabilities <- function(x, name, loopTerminalStates=FALSE) {
     # sort names by top depth, ascending order
     z <- this.profile[[name]][order(this.profile[, 2])]
     
-    # remove NA
-    z <- na.omit(z)
-    
-    # if all NA, then we are done with this iteration
-    if(length(z) > 0) {
+    # transition probabilities require at least 2 horizons
+    if(length(z) > 1) {
       # iterate over names
       for(j in 1:(length(z)-1)){
         # increment the current transition by 1
