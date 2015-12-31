@@ -8,7 +8,7 @@ hzTransitionProbabilities <- function(x, name, loopTerminalStates=FALSE) {
   # sanit checks: no missing or NA horizon designation allowed
   idx <- which(h[[name]] == '' | is.na(h[[name]]) )
   if(length(idx) > 0) {
-    message('missing or NA in horizon names', call. = FALSE)
+    message('missing or NA in horizon names')
     h <- h[-idx, ]
   }
   
