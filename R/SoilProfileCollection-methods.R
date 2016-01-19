@@ -260,10 +260,10 @@ rbind.SoilProfileCollection <- function(...) {
 	# make SPC and return
 	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
 	
-	# one more final check:
-	print(profile_id(res))
-	print( site(res)[[idname(res)]])
-	print(site(res))
+# 	# one more final check:
+# 	print(profile_id(res))
+# 	print( site(res)[[idname(res)]])
+# 	print(site(res))
 	
 	if(length(profile_id(res)) != length(site(res)[[idname(res)]]))
 	  stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)
