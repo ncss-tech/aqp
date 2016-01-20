@@ -9,8 +9,9 @@ mostLikelyHzSequence <- function(mc, t0) {
     stop('pleast install the `markovchain` package.', call.=FALSE)
   
   # check for ties
-  if(attr(as(mc, 'matrix'), 'ties'))
-    warning('ties in transition probability matrix, results may not be reliable', call. = FALSE)
+  if(!is.null(attr(as(mc, 'matrix'), 'ties')))
+    if(attr(as(mc, 'matrix'), 'ties'))
+      warning('ties in transition probability matrix, results may not be reliable', call. = FALSE)
   
   # store sequence here
   s <- vector(mode = 'character')

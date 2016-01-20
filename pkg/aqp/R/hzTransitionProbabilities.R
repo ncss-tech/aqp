@@ -8,7 +8,7 @@ hzTransitionProbabilities <- function(x, name, loopTerminalStates=FALSE) {
   # sanit checks: no missing or NA horizon designation allowed
   idx <- which(h[[name]] == '' | is.na(h[[name]]) )
   if(length(idx) > 0) {
-    message('missing or NA in horizon names')
+    message('NA horizon names have been removed from TP matrix')
     h <- h[-idx, ]
   }
   
@@ -83,6 +83,8 @@ hzTransitionProbabilities <- function(x, name, loopTerminalStates=FALSE) {
     warning('ties in transition probability matrix', call. = FALSE)
     attr(m, 'ties') <- TRUE
   }
+  else
+    attr(m, 'ties') <- FALSE
      
      
   return(m)
