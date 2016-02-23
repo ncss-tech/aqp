@@ -10,7 +10,7 @@ hzTransitionProbabilities(x, name, loopTerminalStates = FALSE)
 
 genhzTableToAdjMat(tab)
 
-mostLikelyHzSequence(mc, t0)
+mostLikelyHzSequence(mc, t0, maxIterations=10)
 }
 
 \arguments{
@@ -20,6 +20,7 @@ mostLikelyHzSequence(mc, t0)
   \item{tab}{A cross-tabulation relating original horizon designations to new, generalized horizon designations.}
   \item{mc}{A \code{markovchain} object, initialized from a horizon sequence transition probability matrix with looped terminal states.}
   \item{t0}{Time-zero: a label describing an initial state within a \code{markovchain} object.}
+  \item{maxIterations}{the maximum number of iterations when search for the most-likely horizon sequence}
 }
 
 \details{Details and related tutorial pending...}
