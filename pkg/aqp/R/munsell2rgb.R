@@ -1,3 +1,20 @@
+
+# convert a color string '10YR 4/3' to RGB or R color
+parseMunsell <- function(munsellColor, ...) {
+  # sanity check:
+  if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
+    return(rep(NA, times=length(munsellColor)))
+  
+  pieces <- strsplit(munsellColor, ' ', fixed=TRUE)
+  pieces.2 <- sapply(pieces, function(i) strsplit(i[2], '/', fixed=TRUE))
+  hue <- sapply(pieces, function(i) i[1])
+  value <- sapply(pieces.2, function(i) i[1])
+  chroma <- sapply(pieces.2, function(i) i[2])
+  res <- munsell2rgb(hue, value, chroma, ...)
+  return(res)
+}
+
+
 ## see the convertColor() function from grDevices
 ## ... our function gives "better" looking colors
 

@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \alias{munsell2rgb}
 \alias{rgb2munsell}
+\alias{parseMunsell}
 \title{
 Convert Munsell Notation to and from RGB color coordinates
 }
@@ -12,6 +13,7 @@ Color conversion based on a look-up table of common soil colors.
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE)
 rgb2munsell(color)
+parseMunsell(munsellColor, ...)
 }
 \arguments{
   \item{the_hue}{a vector of one or more more hues, upper-case}
@@ -21,6 +23,8 @@ rgb2munsell(color)
   \item{maxColorValue}{maximum RGB color value (see \code{\link{rgb})}}
   \item{return_triplets}{should the function return raw RGB triplets instead of an R color}
   \item{color}{a \code{data.frame} or \code{matrix} object containing color-space coordinates: [R, G, B]}
+  \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}
+  \item{\dots}{further arguments to \code{munsell2rgb}}
 }
 \details{These functions generalizes to vectorized usage, as long as the length of each argument is the same. Both functions will pad output with NA if there are any NA present in the inputs.}
 
