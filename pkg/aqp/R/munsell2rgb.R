@@ -1,4 +1,5 @@
 
+## TODO: this will not correctly parse gley or neutral colors
 # convert a color string '10YR 4/3' to RGB or R color
 parseMunsell <- function(munsellColor, ...) {
   # sanity check:
@@ -59,9 +60,11 @@ rgb2munsell <- function(color) {
   return(ldply(res))
 }
 
+# TODO if alpha is greater than maxColorValue, there will be an error
+# TODO: properly convert N chips
+# TODO: correctly interpret values of 2.5
 # convert munsell Hue, Value, Chroma into RGB
 # user can adjust how rgb() function will return an R-friendly color
-# TODO if alpha is greater than maxColorValue, there will be an error
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE) {
 	## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
@@ -87,6 +90,18 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   # load look-up table from our package
   # This should be moreover more foolproof than data(munsell) c/o PR
   load(system.file("data/munsell.rda", package="aqp")[1]) 
+  
+  ## 2016-03-07: "fix" neutral hues
+  ## they will typically be missing chroma or have some arbitrary number
+  ## set it to 0 for correct mattching
+  N.idx <- which(the_hue == 'N')
+  if(length(N.idx) > 0)
+    the_chroma[N.idx] <- 0
+  
+  
+  ## 2016-03-07: "fix" values of 2.5 by rounding to 2
+  the_value <- ifelse(the_value == 2.5, 2, the_value)
+  
   
   # join new data with look-up table
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
