@@ -1,3 +1,7 @@
+-------------------------- aqp 1.9.8 (2016-03-07) --------------------------
+* munsell2rgb() can now accommodate neutral hues (N), and values of "2.5"
+ + see manual page for details
+
 -------------------------- aqp 1.9.7 (2016-02-25) --------------------------
 * new function: soilColorSignature(), see manual page
 * new function: parseMunsell() for converting strings of '10YR 2/2' into R colors or RGB triplets

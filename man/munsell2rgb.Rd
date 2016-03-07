@@ -18,7 +18,7 @@ parseMunsell(munsellColor, ...)
 \arguments{
   \item{the_hue}{a vector of one or more more hues, upper-case}
   \item{the_value}{a vector of one or more values}
-  \item{the_chroma}{a vector of one or more chromas}
+  \item{the_chroma}{a vector of one or more chromas, may be NA for neutral hues}
   \item{alpha}{alpha channel value (for transparency effects)}
   \item{maxColorValue}{maximum RGB color value (see \code{\link{rgb})}}
   \item{return_triplets}{should the function return raw RGB triplets instead of an R color}
@@ -26,22 +26,31 @@ parseMunsell(munsellColor, ...)
   \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}
   \item{\dots}{further arguments to \code{munsell2rgb}}
 }
-\details{These functions generalizes to vectorized usage, as long as the length of each argument is the same. Both functions will pad output with NA if there are any NA present in the inputs.}
+
+\details{These functions generalize to vectorized usage, as long as the length of each argument is the same. Both functions will pad output with NA if there are any NA present in the inputs.
+
+Neutral hues are approximated by greyscale shades ranging from 20\% (darker) to 80\% (lighter). No chroma is required for neutral hues.
+
+Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.
+
+Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
+}
 
 \note{Care should be taken when using the resulting RGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.}
+
 \value{
 For Munsell to RGB conversion, a vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
 
 For RGB to Munsell conversion, a dataframe (NA-padded) of hue, value, chroma, and Euclidean distance to nearest matching color is returned.
 }
 \references{
-\url{http://casoilresource.lawr.ucdavis.edu/drupal/node/201}
+\url{http://aqp.r-forge.r-project.org}
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
 \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 }
 \author{Dylan E. Beaudette}
 
-\section{Warning}{As of \code{plyr} 1.6 (CRAN), there are cases when this function will fail (\url{https://github.com/hadley/plyr/issues/43}). The next version of \code{plyr} should address this problem. Until then, be sure not to pass in Munsell (hue, value, chroma) as factors.}
+
 
 
 \examples{
@@ -55,8 +64,10 @@ the_chroma=c(5, 6), return_triplets=TRUE)
 # function is vectorized
 rgb2munsell(color)
 
-# neutral colors map to RGB{0.2, 0.2, 0.2}
-munsell2rgb('N', 4, 0)
+# neutral heues (N) map to approximate greyscale colors
+# chroma may be any number or NA
+g <- expand.grid(hue='N', value=2:8, chroma=NA, stringsAsFactors=FALSE)
+munsell2rgb(g$hue, g$value, g$chroma)
 
 
 # basic example: no factors!
