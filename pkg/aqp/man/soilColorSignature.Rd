@@ -15,7 +15,7 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
   \item{r}{horizon level attribute containing soil color (RGB) red values}
   \item{g}{horizon level attribute containing soil color (RGB) green values}
   \item{b}{horizon level attribute containing soil color (RGB) blue values}
-  \item{method}{algorithm used to compute color signature, currently only 'colorBucket' available}
+  \item{method}{algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`}
   \item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate}
   \item{useProportions}{use proportions or quantities, see details}
   \item{pigmentNames}{names for resulting pigment proportions or quantities}
@@ -24,7 +24,7 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
 
 \details{details pending...}
 
-\value{a \code{data.frame} object containing:
+\value{For the `colorBucket` method, a \code{data.frame} object containing:
 \describe{
   \item{id column}{set according to \code{idname(spc)}}
   \item{.white.pigment}{proportion or quantity of CIE LAB L-values}
@@ -35,6 +35,10 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
 }
 
 Column names can be adjusted with the \code{pigmentNames} argument.
+
+For the `depthSlices` method ...
+
+For the `pam` method ...
 }
 
 \references{https://en.wikipedia.org/wiki/Lab_color_space}
