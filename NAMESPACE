@@ -60,6 +60,7 @@ importFrom(lattice,
 
 importFrom(cluster, 
   daisy,
+  pam,
   silhouette
 )
 
