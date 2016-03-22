@@ -5,8 +5,13 @@
 # it should make sense to do the quasi-multivatiate quantile estmation in additive-log-ratio space, or in the cartesian space used by soil.texture
 #
 # "approximation" of the 2D quantile function only uses clay+silt
+# https://en.wikipedia.org/wiki/Bagplot
 # this is likely wrong, and maybe we can use ideas from aplpack::bagplot() for a more robust version
-
+#
+# 2016-03-21
+# good idea + code here:
+# http://stackoverflow.com/questions/31893559/r-adding-alpha-bags-to-a-2d-or-3d-scatterplot
+# 
 
 ## TODO:
 ## 1. allow iteration over groups for plotting multiple horizons
