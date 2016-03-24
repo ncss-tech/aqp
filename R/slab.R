@@ -1,28 +1,3 @@
-## updated to use aggregate(), now >10x faster than ddply() version
-## slice() can be further optimized, possibly through the use of idata.frame() or data.table()
-## scales linearly with an increas in num. profiles
-## scales exponentially (faster) with an increase in num. profiles / group
-## keep checking on other options:
-## http://stackoverflow.com/questions/11533438/why-is-plyr-so-slow
-## 
-## missing horizons:
-## slab will run out of memory when trying to aggregate profiles that are missing horizons-- why?
-
-## ideas for parallel code:
-## http://stackoverflow.com/questions/6780091/simple-working-example-of-ddply-in-parallel-on-windows
-
-## groups is a factor and contains NAs:
-## with large data sets join() will run out of memory
-
-## weighted aggregation:
-## 1. not currently possible with aggregate() as it can only operate on vectors
-## 2. possible with other functions: https://stat.ethz.ch/pipermail/r-help/2003-June/035321.html
-## 3. switching to data.table may be required:
-#### http://stackoverflow.com/questions/17174653/return-multiple-columns-from-data-table-aggregation
-## 4. split + lapply + parse list labels may be fast + flexible
-### split(d, list(d$g, d$h), drop=TRUE)
-## 5. pre-standardization of weights based on entire range of weights in collection, or within a slab?
-
 
 
 # default slab function for categorical variables

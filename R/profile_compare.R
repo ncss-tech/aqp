@@ -8,22 +8,6 @@
 .SumDistanceList <- function(x) Reduce("+", x)
 
 
-## consider using 'ff' package for file-based storage of VERY large objects. Probably just the dissimilarity matrix
-
-## slice() would be a better approach than using every nth depth slice
-
-## TODO: site/hz properties combined:
-## 2012-02-28: partially implemented, but no way to control weighting
-## D = (D_hz/max(D_hz) * w_hz) + (D_site/max(D_site) * w_site) / (w_hz + w_site)
-
-## TODO: we are suppressing warnings from daisy() when input is all NA
-##       this is fine for now, but we should figure out a better way
-
-## TODO: allow for other distance-computing functions
-## TODO: allow for 'weights' argument (when metric = 'Gower') to daisy()
-
-## TODO: determine practical significance of 'filter' argument
-
 
 ## low-level function that the user will probably not ever use directly
 # Seems to scale to 1000 profiles with 5 variables, could use optimization
