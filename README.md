@@ -17,6 +17,6 @@ Install the development version from Github:
 * migrate tutorials / WWW man pages ("docs")
 * migrate / convert contents of "sandbox" to branches
 * migrate contents of "utils" somewhere
-
+* migrate in-line TODOs -> GH issues
 
 
