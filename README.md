@@ -6,11 +6,11 @@
 
 Install the stable version from CRAN:
 
-`install.packages('aqp')`
+`install.packages('aqp', dep=TRUE)`
 
 Install the development version from Github:
 
-`devtools::install_github("ncss-tech/aqp")`
+`devtools::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade_dependencies=FALSE)`
 
 # TODO:
 * migrate [old r-forge website content](http://aqp.r-forge.r-project.org/)
