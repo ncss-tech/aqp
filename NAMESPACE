@@ -85,7 +85,8 @@ importFrom(reshape,
 )
 
 importFrom(scales,
-  rescale
+  rescale,
+  col_factor
 )
 
 importFrom(stringr, 

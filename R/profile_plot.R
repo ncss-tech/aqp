@@ -196,7 +196,19 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 
 
 
-
+# Function testing the validity of a colour expressed as a character string
+# Uses col2rgb() to test the validity
+# Adapted from: 
+# https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
+#s
+.isColorValid <- function(x) {
+  sapply(x, function(i) {
+    tryCatch(
+      is.matrix(col2rgb(i)), 
+      error = function(e) { FALSE }
+    )
+  })
+}
 
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: save important elements of geometry from last plot to aqp.env
@@ -246,9 +258,31 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     pretty.vals <- pretty(h[[color]])
     color.legend.data <- list(legend=pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
   }
-  # 2. character vector, assume these are valid colors
-  if(is.character(h[[color]])) {
-    h$.color <- h[[color]]
+  # 2. vector of categorical data
+  if(is.character(h[[color]]) | is.factor(h[[color]])) {
+    # Testing if the data in the column are valid columns
+    if( all(.isColorValid(na.exclude(h[[color]]))) ) {
+      # If this is true this is a column of valid colors
+      h$.color <- h[[color]]
+    } else {
+      # Otherwise that means this is a factor
+      
+      # Generate colour values
+      h$.color <- scales::col_factor(
+        palette = col.palette,
+        domain = NULL,
+        na.color = "#FFFFFF"
+      )(h[[color]])
+      
+      # generate range / colors for legend
+      pretty.vals <- na.exclude( unique( h[[color]] ) )
+      color.legend.data <- list(
+        legend = pretty.vals, 
+        col = scales::col_factor(col.palette, NULL, na.color = "#FFFFFF")(pretty.vals), 
+        maxColorValue = 255
+      )
+      
+    }
   }
   
   # if the color column doesn't exist, fill with NA

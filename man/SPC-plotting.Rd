@@ -40,7 +40,7 @@ default.color=grey(0.95), \dots)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a SoilProfileCollection object}
-  \item{color}{the name of the column containing R-compatible color descriptions, or a column containing numeric data; see details}
+  \item{color}{the name of the column containing R-compatible color descriptions, or a column containing numeric or categorical data; see details}
   \item{width}{scaling of profile widths}
   \item{name}{the name of the (horizon-level) attribute containing horizon designation labels}
   \item{label}{the name of the (site-level) attribute used to identify profiles in the plot}
@@ -84,7 +84,7 @@ The 'side' \code{id.style} is useful when plotting a large collection of profile
 
 If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations. 
 
-The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing numeric values. In the second case, numeric values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
+The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
 
 The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
 }
@@ -136,6 +136,9 @@ site(sp2) <- ~ surface
 
 # label with site-level attribute: `surface`
 plot(sp2, label='surface', plot.order=order(sp2$surface))
+
+# example using a categorical attribute
+plot(sp2, color = "plasticity")
 
 # plot two SPC objects in the same figure
 par(mar=c(1,1,1,1))
