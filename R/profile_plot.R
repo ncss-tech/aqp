@@ -261,7 +261,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # 2. vector of categorical data
   if(is.character(h[[color]]) | is.factor(h[[color]])) {
     # Testing if the data in the column are valid columns
-    if( all(.isColorValid(na.exclude(h[[color]]))) ) {
+    if( all(.isColorValid(na.omit(h[[color]]))) ) {
       # If this is true this is a column of valid colors
       h$.color <- h[[color]]
     } else {
@@ -275,7 +275,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       )(h[[color]])
       
       # generate range / colors for legend
-      pretty.vals <- na.exclude( unique( h[[color]] ) )
+      pretty.vals <- na.omit( unique( h[[color]] ) )
       color.legend.data <- list(
         legend = pretty.vals, 
         col = scales::col_factor(col.palette, NULL, na.color = "#FFFFFF")(pretty.vals), 
