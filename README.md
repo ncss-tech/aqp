@@ -29,8 +29,6 @@ plot(sp4, color='CF')
 ```
 
 ## Citation
-To cite the aqp package in publications use:
-
   D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004, http://dx.doi.org/10.1016/j.cageo.2012.10.020.
   
 
