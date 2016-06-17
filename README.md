@@ -31,19 +31,8 @@ plot(sp4, color='CF')
 ## Citation
 To cite the aqp package in publications use:
 
-  Beaudette, D.E., Roudier P., and A.T. O'Geen. Algorithms for Quantitative Pedology: A Toolkit for Soil
-  Scientists. 2012
-
-A BibTeX entry for LaTeX users is:
-```
-@Manual{,
-    title = {Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists},
-    author = {D.E. debeaudette@ucdavis.edu Beaudette and P. Roudier and A.T. O'Geen},
-    year = {2013},
-    url = {http://r-forge.r-project.org/projects/aqp/},
-  }
-```
-
+  D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004, http://dx.doi.org/10.1016/j.cageo.2012.10.020.
+  
 
 ## Related Packages
  * [soilDB](https://github.com/ncss-tech/soilDB)
