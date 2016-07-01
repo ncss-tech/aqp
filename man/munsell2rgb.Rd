@@ -3,6 +3,7 @@
 \alias{munsell2rgb}
 \alias{rgb2munsell}
 \alias{parseMunsell}
+\alias{getClosestMunsellChip}
 \title{
 Convert Munsell Notation to and from RGB color coordinates
 }
@@ -13,7 +14,8 @@ Color conversion based on a look-up table of common soil colors.
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE)
 rgb2munsell(color)
-parseMunsell(munsellColor, ...)
+parseMunsell(munsellColor, convertColors=TRUE, ...)
+getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
 }
 \arguments{
   \item{the_hue}{a vector of one or more more hues, upper-case}
@@ -24,6 +26,7 @@ parseMunsell(munsellColor, ...)
   \item{return_triplets}{should the function return raw RGB triplets instead of an R color}
   \item{color}{a \code{data.frame} or \code{matrix} object containing color-space coordinates: [R, G, B]}
   \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}
+  \item{convertColors}{logical, should parsed Munsell colors be converted into RGB values}
   \item{\dots}{further arguments to \code{munsell2rgb}}
 }
 
@@ -34,6 +37,8 @@ Neutral hues are approximated by greyscale shades ranging from 20\% (darker) to 
 Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.
 
 Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
+
+Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` RGB look-up table via \code{getClosestMunsellChip()}. See examples below.
 }
 
 \note{Care should be taken when using the resulting RGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.}
@@ -44,11 +49,12 @@ For Munsell to RGB conversion, a vector of R colors is returned that is the same
 For RGB to Munsell conversion, a dataframe (NA-padded) of hue, value, chroma, and Euclidean distance to nearest matching color is returned.
 }
 \references{
-\url{http://aqp.r-forge.r-project.org}
+\url{http://ncss-tech.github.io/AQP/}
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
 \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
+\url{http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
 }
-\author{Dylan E. Beaudette}
+\author{D.E. Beaudette}
 
 
 
@@ -143,6 +149,10 @@ sp1.lab <- as(with(sp1.rgb, RGB(r,g,b)), 'LAB')
 plot(sp1.lab)
 }
 
+# convert a non-standard color to closest "chip" in `munsell` look-up table
+getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
+# convert directly to R color
+getClosestMunsellChip('7.9YR 2.7/2.0')
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

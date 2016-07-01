@@ -1,7 +1,84 @@
 
+
+# split standard Munsell hue into character | numeric parts
+# function is vectorized
+# output:
+# hue.numeric hue.character
+# 1         2.3            YR
+.parseMunsellHue <- function(hue) {
+  # extract numeric part from hue
+  hue.numeric <- unlist(strsplit(hue, split='[^0-9.]+'))
+  # extract character part from hue
+  hue.character <- vector(mode='character', length = length(hue))
+  for(i in seq_along(hue)){
+    # check for NA
+    if(is.na(hue.numeric[i])) {
+      hue.character[i] <- NA
+      next
+    }
+    # check for empty string
+    if(hue.numeric[i] == '') {
+      hue.character[i] <- NA
+      next
+    }
+    # otherwise continue processing
+    hue.character[i] <- gsub(hue.numeric[i], '', hue[i], fixed = TRUE)
+  }
+  # convert numeric part to numbers
+  hue.numeric <- as.numeric(hue.numeric)
+  return(data.frame(hue.numeric, hue.character, stringsAsFactors = FALSE))
+}
+
+# return the closest Munsell chip from `munsell` data in aqp package
+# function is vectorized
+getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
+  # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
+  munsell <- NULL
+  
+  # extract hue, value, chroma from single string
+  cd <- parseMunsell(munsellColor, convertColors = FALSE)
+  
+  # extract pieces of hue
+  hue.data <- .parseMunsellHue(cd$hue)
+  
+  # extract pieces from unique Munsell hues
+  load(system.file("data/munsell.rda", package="aqp")[1]) 
+  all.hue.data <- na.omit(.parseMunsellHue(unique(munsell$hue)))
+  
+  # locate closest chip in `munsell` set of hues
+  closest.hue <- vector(mode = 'character', length=nrow(hue.data))
+  for(i in 1:nrow(hue.data)) {
+    # index possible rows based on character part of hue
+    idx <- which(all.hue.data$hue.character == hue.data[i, ]$hue.character)
+    # compute Euclidean distance to all possible numeric parts of hue
+    distances <- abs(hue.data$hue.numeric[i] - all.hue.data$hue.numeric[idx])
+    closest.idx <- which.min(distances)
+    # compile closest hue
+    closest.hue[i] <- paste0(all.hue.data[idx, ][closest.idx, ], collapse = '')
+  }
+  
+  # locate closest value and chroma by rounding
+  closest.value <- round(as.numeric(cd$value))
+  closest.chroma <- round(as.numeric(cd$chroma))
+  
+  # convert values < 1 -> 1
+  closest.value <- ifelse(closest.value < 1, 1, closest.value)
+  closest.chroma <- ifelse(closest.chroma < 1, 1, closest.chroma)
+  
+  # optionally convert closest Munsell chips to RGB
+  if(convertColors)
+    res <- munsell2rgb(closest.hue, closest.value, closest.chroma, ...)
+  # otherwise return closest chip
+  else
+    res <- paste0(closest.hue, ' ', closest.value, '/', closest.chroma)
+  return(res)
+}
+
+
+
 ## TODO: this will not correctly parse gley or neutral colors
 # convert a color string '10YR 4/3' to RGB or R color
-parseMunsell <- function(munsellColor, ...) {
+parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   # sanity check:
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
     return(rep(NA, times=length(munsellColor)))
@@ -11,6 +88,12 @@ parseMunsell <- function(munsellColor, ...) {
   hue <- sapply(pieces, function(i) i[1])
   value <- sapply(pieces.2, function(i) i[1])
   chroma <- sapply(pieces.2, function(i) i[2])
+  
+  # parse, don't convert
+  if(convertColors == FALSE)
+    return(data.frame(hue, value, chroma, stringsAsFactors = FALSE))
+  
+  # otherwise convert
   res <- munsell2rgb(hue, value, chroma, ...)
   return(res)
 }
