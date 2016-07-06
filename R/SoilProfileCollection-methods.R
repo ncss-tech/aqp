@@ -523,8 +523,8 @@ setMethod("subsetProfiles", "SoilProfileCollection",
 ## i = profile index
 ## j = horizon / slice index
 ##
-setMethod("[", "SoilProfileCollection",
-  function(x, i, j, ...) {
+setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
+  function(x, i, j) {
 		
   	# check for missing i and j
   	if(missing(i) & missing(j))

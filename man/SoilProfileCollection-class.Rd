@@ -6,6 +6,7 @@
 \alias{$,SoilProfileCollection-method}
 \alias{$<-,SoilProfileCollection-method}
 \alias{[,SoilProfileCollection-method}
+\alias{[,SoilProfileCollection-method,ANY-method,ANY-method,ANY-method}
 \alias{proj4string,SoilProfileCollection-method}
 \alias{proj4string<-,SoilProfileCollection,ANY-method}
 \alias{coordinates,SoilProfileCollection-method}
@@ -49,9 +50,9 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
   \describe{
     \item{$}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{$<-}{\code{signature(x = "SoilProfileCollection")}: ... }
-    \item{[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
-    \item{[[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
-    \item{[[<-}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "missing")}: ... }
+    \item{[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "ANY")}: ... }
+    \item{[[}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "ANY")}: ... }
+    \item{[[<-}{\code{signature(x = "SoilProfileCollection", i = "ANY", j = "ANY")}: ... }
     \item{coordinates<-}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{horizonDepths}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{horizons}{\code{signature(object = "SoilProfileCollection")}: ... }
