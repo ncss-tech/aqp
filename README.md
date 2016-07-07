@@ -25,7 +25,6 @@ depths(sp4) <- id ~ top + bottom
 par(mar=c(0,0,4,0))
 plot(sp4, color='clay')
 plot(sp4, color='CF')
-
 ```
 
 ## Citation
