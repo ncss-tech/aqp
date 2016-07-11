@@ -12,4 +12,4 @@ Suggests: colorspace, maptools, foreign, ape, soilDB, latticeExtra, maps, compos
 Description: A collection of algorithms related to modeling of soil resources, soil classification, soil profile aggregation, and visualization.
 License: GPL (>= 2)
 Repository: CRAN
-URL: http://aqp.r-forge.r-project.org/
+URL: https://github.com/ncss-tech/aqp
