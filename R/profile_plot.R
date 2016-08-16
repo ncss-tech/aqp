@@ -273,27 +273,21 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       h[[color]] <- droplevels(h[[color]])
       color.levels <- levels(h[[color]])
       
-      # Generate colour values
-      h$.color <- scales::col_factor(
+      # make a color mapping function
+      color.mapper <- scales::col_factor(
         palette = col.palette,
         domain = color.levels,
         na.color = default.color,
-        ordered = is.ordered(h[[color]])
-      )(h[[color]])
-      
-      # generate range / colors for legend
-      pretty.vals <- color.levels
-
-      color.legend.data <- list(
-        legend = pretty.vals, 
-        col =  scales::col_factor(
-          palette = col.palette,
-          domain = color.levels,
-          na.color = default.color,
-          ordered = is.ordered(h[[color]])
-        )(pretty.vals), 
-        maxColorValue = 255
+        ordered = TRUE
       )
+      
+      
+      # apply color mapping
+      h$.color <- color.mapper(h[[color]])
+      
+      # generate colors and labels for legend
+      pretty.vals <- color.levels
+      color.legend.data <- list(legend = pretty.vals, col = color.mapper(pretty.vals))
       
     }
   }
