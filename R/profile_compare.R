@@ -277,6 +277,8 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 	
   ## 2016-02-22: check for missing data moved from pc() to here
   ## TODO: this makes an assumption on the column containing horizon designations
+  ## 2016-08-16: this function ignores vars that don't existin in @horizons
+  
   # iterate over profiles and compute percent missing data by variable
   pct_data <- evalMissingData(s, vars)
   

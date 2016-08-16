@@ -17,6 +17,9 @@
   
   # get all "soil" horizons, for named variables
   soil.hz <- grep(p, h[[n]], ignore.case=TRUE, invert=TRUE)
+  
+  # extract named columns, but only those from @horizons
+  v <- as.vector(na.omit(match(v, horizonNames(x))))
   d <- h[soil.hz, v]
   hz.thick <- hz.thick[soil.hz]
   hz.with.data <- which(complete.cases(d))

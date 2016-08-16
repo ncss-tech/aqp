@@ -14,7 +14,7 @@ evalMissingData(x, vars, name = "hzname", p = "Cr|R|Cd")
   \item{p}{REGEX pattern used to match non-soil horizons}
 }
 
-\details{Data completeness is evaluated by profile, based on the thickness of horizons with complete horizon-level attribute values (specified in \code{vars}) divided by the total thickness. The default REGEX pattern, \code{p}, should catch most non-soil horizons which are excluded from the evaluation.}
+\details{Data completeness is evaluated by profile, based on the thickness of horizons with complete horizon-level attribute values (specified in \code{vars}) divided by the total thickness. The default REGEX pattern, \code{p}, should catch most non-soil horizons which are excluded from the evaluation. Elements of \code{vars} that do not exist in \code{horizonNames(x)} are ignored.}
 
 \value{A vector values ranging from 0 to 1, representing the percentage of non-NA data (as specified in \code{vars}) for each profile.}
 
