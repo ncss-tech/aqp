@@ -38,10 +38,13 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	lsp <- get('last_spc_plot', envir=aqp.env)
 	w <- lsp$width
 	plot.order <- lsp$plot.order
+	depth.offset <- lsp$y.offset
+	sf <- lsp$scaling.factor
 	
 	# horizontal shrinkage factor
+	## TODO: why is this hard-coded at '5' ?
 	w.offset <- w / 5
-	depth.offset <- 0.5
+	
 	
 	# get top/bottom colnames
 	hd <- horizonDepths(x)
@@ -49,8 +52,9 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	# iterate over profiles
 	for(p.i in 1:length(x)) {
 		
+	  # get the current pofile, in plotting order
 		h <- horizons(x[plot.order[p.i], ])
-	
+		
 		# determine left/right extent of symbols
 		x.center <- p.i
 		x.left <- x.center - (w - w.offset)
@@ -70,11 +74,13 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
         # jitter and rescale x-coordinates
 				v$x <- rescale(jitter(v$x), to=c(x.left, x.right))
 		
+				# determine horizon depths in current setting
+				# depth_prime = (depth * scaling factor) + y.offset
+				y.top <- (this.hz[[hd[1]]] * sf) + depth.offset
+				y.bottom <- (this.hz[[hd[2]]] * sf) + depth.offset
 				# rescale y-coordinates
-				y.top <- this.hz[[hd[1]]] + depth.offset
-				y.bottom <- this.hz[[hd[2]]] - depth.offset
 				v$y <- rescale(jitter(v$y), to=c(y.top, y.bottom))
-		
+		    
 				# generate random symbol size
 				p.cex <- runif(nrow(v), min=cex.min, max=cex.max)
 		

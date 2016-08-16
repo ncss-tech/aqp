@@ -265,22 +265,33 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       # If this is true this is a column of valid colors
       h$.color <- h[[color]]
     } else {
-      # Otherwise that means this is a factor
+      # Otherwise that means this is or can be converted into a factor
+      if(!is.factor(h[[color]]))
+        h[[color]] <- factor(h[[color]])
+      
+      # get color mapping levels after dropping missing levels
+      h[[color]] <- droplevels(h[[color]])
+      color.levels <- levels(h[[color]])
       
       # Generate colour values
       h$.color <- scales::col_factor(
         palette = col.palette,
-        domain = NULL,
-        na.color = "#FFFFFF"
+        domain = color.levels,
+        na.color = default.color,
+        ordered = is.ordered(h[[color]])
       )(h[[color]])
       
-      ## TODO: does this respect factor levels?
-      ## TODO: does not generate enough colors...?
       # generate range / colors for legend
-      pretty.vals <- na.omit( unique( h[[color]] ) )
+      pretty.vals <- color.levels
+
       color.legend.data <- list(
         legend = pretty.vals, 
-        col = scales::col_factor(col.palette, NULL, na.color = "#FFFFFF")(pretty.vals), 
+        col =  scales::col_factor(
+          palette = col.palette,
+          domain = color.levels,
+          na.color = default.color,
+          ordered = is.ordered(h[[color]])
+        )(pretty.vals), 
         maxColorValue = 255
       )
       
