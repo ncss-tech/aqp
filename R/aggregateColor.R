@@ -14,8 +14,8 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   # remove missing data
   h.no.na <- na.omit(h[, vars])
   
-  # re-name for simplicity
-  names(h.no.na)[2:4] <- c('top', 'bottom', 'soil_color')
+  # re-name depths
+  names(h.no.na)[2:3] <- c('top', 'bottom')
   
   # split by genhz
   # note that some genhz will have 0 records
@@ -25,7 +25,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
     # sort by thickness-- this is our metric for relevance
     res <- res[order(res$weight, decreasing=TRUE), ]
     # back-calculate the closest Munsell color
-    m <- rgb2munsell(t(col2rgb(res$soil_color)) / 255)
+    m <- rgb2munsell(t(col2rgb(res[[col]])) / 255)
     # format as text
     res$munsell <- paste0(m[, 1], ' ', m[, 2], '/', m[, 3])
     return(res)
@@ -43,7 +43,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   # compute weighted mean color for each GHL
   s.agg <- ldply(s.scaled, function(i) {
     # convert to RGB
-    v <- t(col2rgb(i$soil_color)) / 255
+    v <- t(col2rgb(i[[col]])) / 255
     
     # compute weighted mean via matrix manip
     w <- i$weight
