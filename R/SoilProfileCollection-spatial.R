@@ -3,122 +3,97 @@
 ## wrappers to spatial operations via sp, rgdal, raster
 ##
 
-## Note: this should probably be done with proper S4 methods
+# Utility function that tests if 
+# a SoilProfile has spatial coordinates
+.hasSpatialPoint <- function(x) !identical(x@sp, new('SpatialPoints'))
 
-# spTransform.SoilProfileCollection <- function(spc, ...) {
-# 	spc@sp <- spTransform(spc@sp, ...)
-# 	return(x)
-# }
-# 
-# over.SoilProfileCollection <- function(spc, ...) {
-# 	res <- over(spc@sp, ...)
-# 	return(res)
-# }
-# 
-# extract.SoilProfileCollection <- function(spc, x, ...) {
-# 	res <- extract(spc@sp, ...)
-# 	return(res)
-# }
+# proj4string
 
+setMethod(f = 'proj4string', signature = 'SoilProfile',
+          function(obj){
+            obj@sp@proj4string@projargs
+          }
+)
 
+setMethod(f = 'proj4string', signature = 'SoilProfileCollection',
+          function(obj){
+            unique(unlist(lapply(profiles(obj), proj4string)))
+          }
+)
 
-##
-## proj4string setting
-##
-
-setMethod(f='proj4string', signature='SoilProfileCollection',
-  function(obj){
-    proj4string(obj@sp)
-  }
+setReplaceMethod("proj4string", "SoilProfile",
+                 function(obj, value) {
+                   proj4string(obj@sp) <- value
+                   obj
+                 }
 )
 
 setReplaceMethod("proj4string", "SoilProfileCollection",
-  function(obj, value) {
-  proj4string(obj@sp) <- value
-  obj
-  }
+                 function(obj, value) {
+                   obj <- lapply(profiles(obj), function(x){
+                     proj4string(x) <- value
+                     x
+                   })
+                   
+                   SoilProfileCollection(profiles = obj)
+                 }
 )
 
-##
-## initialize spatial data
-##
+# coordinates
+
+setMethod("coordinates", "SoilProfile",
+          function(obj) {
+            res <- coordinates(obj@sp)
+            # over-writing the default sp::coordinates behaviour: we
+            # return NULL if no coordinates
+            if (ncol(res) < 2) res <- NULL
+            res
+          }
+)
+
+setMethod("coordinates", "SoilProfileCollection",
+          function(obj) {
+            do.call(rbind, lapply(profiles(obj), coordinates))
+          }
+)
+
+setReplaceMethod("coordinates", "SoilProfile",
+                 function(object, value) {
+                   
+                   # basic sanity check... needs work
+                   if(! inherits(value, "formula"))
+                     stop('invalid formula', call. = FALSE)
+                   
+                   # extract coordinates as matrix
+                   mf <- model.frame(value, site(object), na.action = na.pass)
+                   nm <- names(mf)
+                   mf <- data.matrix(mf, rownames.force = FALSE)
+                   
+                   # test for missing coordinates
+                   mf.missing <- apply(mf, 2, is.na)
+                   
+                   if(any(mf.missing))
+                     stop('cannot initialize a SpatialPoints object with missing coordinates', call. = FALSE)
+                   
+                   # Instanciate the sp slot
+                   object@sp <- SpatialPoints(coord = mf)
+                   
+                   # Remove coordinates from site slot
+                   object@site <- object@site[,-1 * which(names(object@site) %in% nm), drop = FALSE]
+                   
+                   object
+                 }
+)
+
 setReplaceMethod("coordinates", "SoilProfileCollection",
-  function(object, value) {
-
-  # basic sanity check... needs work
-  if(! inherits(value, "formula"))
-    stop('invalid formula', call.=FALSE)
-
-  # extract coordinates as matrix
-  mf <- data.matrix(model.frame(value, site(object), na.action=na.pass))
-
-  # test for missing coordinates
-  mf.missing <- apply(mf, 2, is.na)
-
-  if(any(mf.missing))
-	  stop('cannot initialize a SpatialPoints object with missing coordinates', call.=FALSE)
-
-  # assign to sp slot
-  # note that this will clobber any existing spatial data
-  object@sp <- SpatialPoints(coords=mf)
-  
-  # remove coordinates from source data
-  # note that mf is a matrix, so we need to access the colnames differently
-  coord_names <- dimnames(mf)[[2]]
-  idx <- match(coord_names, siteNames(object))
-  
-  # remove the named site data from site_data
-  # TODO we should use a proper setter!
-  # bug fix c/o Jose Padarian: drop=FALSE
-  object@site <- site(object)[, -idx, drop=FALSE]
-  
-  # done
-  return(object)
-  }
+                 function(object, value) {
+                   
+                   lspc <- lapply(profiles(object), function(x) {
+                     coordinates(x) <- value
+                     x
+                   })
+                   
+                   SoilProfileCollection(profiles = lspc)
+                   
+                 }
 )
-
-
-
-
-
-# ### TODO: consider removing this function
-# 
-# ##
-# ## spatial_subset: spatial clipping of a SPC (requires GEOS)
-# ##
-# 
-# if (!isGeneric("spatial_subset"))
-#   setGeneric("spatial_subset", function(object, geom) standardGeneric("spatial_subset"))
-# 
-# setMethod(f='spatial_subset', signature='SoilProfileCollection',
-#   function(object, geom){
-# 
-#     # This functionality require the GEOS bindings
-#     # provided by rgeos
-#     if(require(rgeos)) {
-#       spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
-#       ids <- which(spc_intersection)
-# 	
-# 	# extract relevant info
-# 	s <- site(object)
-# 	h <- horizons(object)
-# 	d <- diagnostic_hz(object)
-#   
-# 	# get indexes to valid site, hz, diagnostic data
-#   valid_ids <- s[ids, idname(object)]
-#   valid_horizons <- which(h[, idname(object)] %in% valid_ids)
-#   valid_sites <- which(s[, idname(object)] %in% valid_ids)
-#   valid_diagnostic <- which(d[, idname(object)] %in% valid_ids)
-# 	
-# 	# create a new SPC with subset data
-#   ## TODO: copy over diagnostic horizon data
-# 	## TODO: use integer profile index to simplify this process
-# 	## TODO: @sp bbox may need to be re-computed
-#   ## TODO: check diagnostic subset
-#       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = metadata(object), horizons = h[valid_horizons, ], site = s[valid_sites, ], sp = object@sp[ids,], diagnostic = d[valid_diagnostic, ])
-#     }
-#     else { # no rgeos, return original
-#       stop('Spatial subsetting not performed, please install the `rgeos` package.', call.=FALSE)
-#     }
-#   }
-# )

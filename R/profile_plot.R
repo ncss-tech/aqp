@@ -1,48 +1,20 @@
 ## TODO: only a single site-level attribute can be used for sorting
 # order profiles by a site-level grouping label
-groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='RoyalBlue', group.line.lwd=2, group.line.lty=2, break.style='line', arrow.offset=group.name.offset + 5, arrow.length=0.1, ...) {
+groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='red', group.line.lwd=2, group.line.lty=2, ...) {
   s <- site(x)
   new.order <- order(s[[groups]])
-  
-  # if our groups are already a factor, keep existing levels
-  if(class(s[[groups]]) == 'factor')
-    lab <- s[[groups]][new.order]
-  else # not a factor, need to convert to factor, inherit default levels
-    lab <- factor(s[[groups]][new.order])
+  lab <- factor(s[[groups]][new.order])
   
   # test for NA
-  NA.lab <- which(is.na(lab))
+  if(any(is.na(lab)))
+    stop('NA in grouping label', call. = FALSE)
   
-  # replace with missing label with '<missing>'
-  # this requires conversion: factor -> character -> replace NA -> factor with new levels
-  if(length(NA.lab) > 0) {
-    message('NA in grouping label, filling with `<missing>`')
-    o.levels <- levels(lab)
-    lab <- as.character(lab)
-    lab[NA.lab] <- '<missing>'
-    lab <- factor(lab, levels=c(o.levels, '<missing>'))
-  }
-    
-  # get just those levels that are in our data, preserving order of original levels
-  unique.lab <- levels(lab)[which(levels(lab) %in% unique(lab))]
+  unique.lab <- levels(lab)
   group.lengths <- rle(as.numeric(lab))$lengths
   lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
-  boundary.positions <-  cumsum(group.lengths)[-length(group.lengths)] + 0.5
   
-  # setup plot with plot.SoilProfileCollection
   plot(x, plot.order=new.order, ...)
-  
-  # add group boundaries
-  if(break.style == 'line')
-    abline(v=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-  if(break.style == 'arrow')
-    arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-  if(break.style == 'both') {
-    abline(v=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-    arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-  }
-  
-  # annotate with group labels
+  abline(v=cumsum(group.lengths)[-length(group.lengths)] + 0.5, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
   text(lab.positions, group.name.offset, unique.lab, cex=group.name.cex, adj=0.5, font=4)
 }
 
@@ -196,26 +168,16 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 
 
 
-# Function testing the validity of a colour expressed as a character string
-# Uses col2rgb() to test the validity
-# Adapted from: 
-# https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
-#s
-.isColorValid <- function(x) {
-  sapply(x, function(i) {
-    tryCatch(
-      is.matrix(col2rgb(i)), 
-      error = function(e) { FALSE }
-    )
-  })
-}
+
 
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: save important elements of geometry from last plot to aqp.env
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
+
+
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=max(x), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), lwd=1, lty=1, ...) {
   
   # save arguments to aqp env
   lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
@@ -244,7 +206,6 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   }
   
   # setup horizon colors:
-  
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
     cr <- colorRamp(col.palette)
@@ -258,50 +219,14 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     pretty.vals <- pretty(h[[color]])
     color.legend.data <- list(legend=pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
   }
-  # 2. vector of categorical data
-  if(is.character(h[[color]]) | is.factor(h[[color]])) {
-    # Testing if the data in the column are valid columns
-    if( all(.isColorValid(na.omit(h[[color]]))) ) {
-      # If this is true this is a column of valid colors
-      h$.color <- h[[color]]
-    } else {
-      # Otherwise that means this is or can be converted into a factor
-      if(!is.factor(h[[color]]))
-        h[[color]] <- factor(h[[color]])
-      
-      # get color mapping levels after dropping missing levels
-      h[[color]] <- droplevels(h[[color]])
-      color.levels <- levels(h[[color]])
-      
-      # make a color mapping function
-      color.mapper <- scales::col_factor(
-        palette = col.palette,
-        domain = color.levels,
-        na.color = default.color,
-        ordered = TRUE
-      )
-      
-      
-      # apply color mapping
-      h$.color <- color.mapper(h[[color]])
-      
-      # generate colors and labels for legend
-      pretty.vals <- color.levels
-      color.legend.data <- list(legend = pretty.vals, col = color.mapper(pretty.vals))
-      
-    }
+  # 2. character vector, assume these are valid colors
+  if(is.character(h[[color]])) {
+    h$.color <- h[[color]]
   }
-  
-  # if the color column doesn't exist, fill with NA
-  if(is.null(h[[color]]))
-    h[[".color"]] <- NA
-  
-  # fill missing colors with a reasonable default
-  h$.color <- ifelse(is.na(h$.color), default.color, h$.color)
   
   # get top/bottom column names
   IDcol <- idname(x)
-  hzDepthCols <- horizonDepths(x)
+  hzDepthCols <- depthNames(x)
   tcol <- hzDepthCols[1]
   bcol <- hzDepthCols[2]
   
@@ -325,10 +250,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   	}
   
   
-  ## TODO: extra_y_space should be allocated dynamically, as a function of number of profiles
   # fudge factors
   extra_x_space <- 2
-  extra_y_space <- 15 # abnout right for n in {1,25}
+  extra_y_space <- 2
   
   # pre-compute nice range for depth axis, also used for plot init
   depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
@@ -337,9 +261,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # par(mar=c(0.5,1,0,1)) # is it wise to adjust the plotting area?
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), 
-	       ylim=c(max(depth_axis_intervals), -extra_y_space), 
-	       axes=FALSE, xlab='', ylab='')
+	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), ylim=c(max(depth_axis_intervals), -4), axes=FALSE, xlab='', ylab='')
 	}
   
   
@@ -357,9 +279,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     cn <- names(this_profile_data)
     
     # extract / generate horizon color
-    # note: the ".color" horizon attribute is auto-generated above
-    # missing and NA colors have already been dealt with above
-    this_profile_colors <- this_profile_data$.color
+    m <- match(color, cn)
+    if(! is.na(m))
+      this_profile_colors <- this_profile_data$.color
+    else # no user-defined color column, or it is missing
+      this_profile_colors <- 'white'
     
 	  # extract / generate horizon fill density
 	  if(! missing(density)) {
@@ -477,13 +401,14 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   if(exists('color.legend.data')) {
     # If no title given, set col.label is set to color
     mtext(side=3, text=col.label, font=2, line=1.6)
-    legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex)
+    legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99))
   }
   }
 
 
 
 # method dispatch
-setMethod("plot", signature("SoilProfileCollection"), definition=plotSPC)
+setMethod("plot", signature("SoilProfile"), definition = function(x) plot(SoilProfileCollection(profiles = list(x))))
+setMethod("plot", signature("SoilProfileCollection"), definition = plotSPC)
 
 
