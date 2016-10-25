@@ -1,5 +1,6 @@
 -------------------------- aqp 1.9.13 (2016-10-20) --------------------------
 * new dataset `soil_minerals` with some common soil mineral colors source: http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286
+* added clarification to Munsell color conversion: changed "RGB" to "sRGB". 
 
 -------------------------- aqp 1.9.10 (2016-07-01) --------------------------
 * new function for estimating the closest Munsell chip: getClosestMunsellChip()

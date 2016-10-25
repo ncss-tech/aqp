@@ -5,7 +5,7 @@
 \alias{parseMunsell}
 \alias{getClosestMunsellChip}
 \title{
-Convert Munsell Notation to and from RGB color coordinates
+Convert Munsell Notation to and from sRGB color coordinates
 }
 \description{
 Color conversion based on a look-up table of common soil colors.
@@ -22,11 +22,11 @@ getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
   \item{the_value}{a vector of one or more values}
   \item{the_chroma}{a vector of one or more chromas, may be NA for neutral hues}
   \item{alpha}{alpha channel value (for transparency effects)}
-  \item{maxColorValue}{maximum RGB color value (see \code{\link{rgb})}}
-  \item{return_triplets}{should the function return raw RGB triplets instead of an R color}
+  \item{maxColorValue}{maximum sRGB color value (see \code{\link{rgb})}}
+  \item{return_triplets}{should the function return raw sRGB triplets instead of an R color}
   \item{color}{a \code{data.frame} or \code{matrix} object containing color-space coordinates: [R, G, B]}
   \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}
-  \item{convertColors}{logical, should parsed Munsell colors be converted into RGB values}
+  \item{convertColors}{logical, should parsed Munsell colors be converted into sRGB values}
   \item{\dots}{further arguments to \code{munsell2rgb}}
 }
 
@@ -38,15 +38,15 @@ Gley soil colors that are missing a chroma will not be correctly interpreted. Co
 
 Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
 
-Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` RGB look-up table via \code{getClosestMunsellChip()}. See examples below.
+Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB look-up table via \code{getClosestMunsellChip()}. See examples below.
 }
 
-\note{Care should be taken when using the resulting RGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.}
+\note{Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.}
 
 \value{
-For Munsell to RGB conversion, a vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
+For Munsell to sRGB conversion, a vector of R colors is returned that is the same length as the input data. If \code{return_triplets} is \code{TRUE}, then a dataframe (of sample length as input) of r,g,b values is returned.
 
-For RGB to Munsell conversion, a dataframe (NA-padded) of hue, value, chroma, and Euclidean distance to nearest matching color is returned.
+For sRGB to Munsell conversion, a dataframe (NA-padded) of hue, value, chroma, and Euclidean distance to nearest matching color is returned.
 }
 \references{
 \url{http://ncss-tech.github.io/AQP/}
@@ -61,12 +61,12 @@ For RGB to Munsell conversion, a dataframe (NA-padded) of hue, value, chroma, an
 
 \examples{
 
-# Munsell to RGB triplets: 
+# Munsell to sRGB triplets: 
 # function is vectorized as long as arguments are the same length
 color <- munsell2rgb(the_hue=c('10YR', '2.5YR'), the_value=c(3, 5), 
 the_chroma=c(5, 6), return_triplets=TRUE)
 
-# RGB triplets to closest Munsell color (in RGB space)
+# RGB triplets to closest Munsell color (in sRGB space)
 # function is vectorized
 rgb2munsell(color)
 
@@ -104,7 +104,7 @@ panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
 # try again, this time annotate with LAB coordinates:
 if(require(colorspace)) {
   d.rgb <- with(d, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
-  d.lab <- as(with(d.rgb, RGB(r,g,b)), 'LAB')
+  d.lab <- as(with(d.rgb, sRGB(r,g,b)), 'LAB')
   d <- data.frame(d, d.lab@coords)
   
   xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
@@ -145,7 +145,7 @@ if(require(colorspace)) {
 sp1.rgb <- with(sp1, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
 
 # convert into LAB color space
-sp1.lab <- as(with(sp1.rgb, RGB(r,g,b)), 'LAB')
+sp1.lab <- as(with(sp1.rgb, sRGB(r,g,b)), 'LAB')
 plot(sp1.lab)
 }
 

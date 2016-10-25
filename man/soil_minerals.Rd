@@ -36,10 +36,10 @@ n <- ceiling(sqrt(nrow(soil_minerals)))
 # read from top-left to bottom-right
 g <- expand.grid(x=1:n, y=n:1)[1:nrow(soil_minerals),]
 
-# convert Munsell -> RGB -> LAB
+# convert Munsell -> sRGB -> LAB
 col.rgb <- munsell2rgb(soil_minerals$hue, soil_minerals$value, 
 soil_minerals$chroma, return_triplets = TRUE)
-col.lab <- as(RGB(as.matrix(col.rgb)), 'LAB')@coords
+col.lab <- as(sRGB(as.matrix(col.rgb)), 'LAB')@coords
 row.names(col.lab) <- soil_minerals$mineral
 
 # divisive hierarchical clustering of LAB coordinates

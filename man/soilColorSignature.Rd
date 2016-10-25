@@ -12,9 +12,9 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
 
 \arguments{
   \item{spc}{a \code{SoilProfileCollection} object}
-  \item{r}{horizon level attribute containing soil color (RGB) red values}
-  \item{g}{horizon level attribute containing soil color (RGB) green values}
-  \item{b}{horizon level attribute containing soil color (RGB) blue values}
+  \item{r}{horizon level attribute containing soil color (sRGB) red values}
+  \item{g}{horizon level attribute containing soil color (sRGB) green values}
+  \item{b}{horizon level attribute containing soil color (sRGB) blue values}
   \item{method}{algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`}
   \item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate}
   \item{useProportions}{use proportions or quantities, see details}
@@ -50,7 +50,7 @@ For the `pam` method ...
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 
-# convert Munsell -> RGB triplets
+# convert Munsell -> sRGB triplets
 rgb.data <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
 sp1$r <- rgb.data$r
 sp1$g <- rgb.data$g
