@@ -99,13 +99,9 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 }
 
 
-## see the convertColor() function from grDevices
-## ... our function gives "better" looking colors
 
-## TODO: interpolate '2.5' values for all common soil colors
-## TODO: optimize with arrays
-## TODO: implement in LAB / xyz colorspace 
-# color is a vector of RGB values in range of [0,1] -- ideally output from munsell2rgb()
+# color is a matrix/vector of sRGB values in range of [0,1]
+# ideally output from munsell2rgb()
 rgb2munsell <- function(color) {
   
   # vectorize via for-loop
@@ -146,7 +142,7 @@ rgb2munsell <- function(color) {
 # TODO if alpha is greater than maxColorValue, there will be an error
 # TODO: properly convert N chips
 # TODO: correctly interpret values of 2.5
-# convert munsell Hue, Value, Chroma into RGB
+# convert munsell Hue, Value, Chroma into sRGB
 # user can adjust how rgb() function will return an R-friendly color
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE) {
 	## important: change the default behavior of data.frame and melt
