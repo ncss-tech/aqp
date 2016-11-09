@@ -12,7 +12,6 @@ Suggests: colorspace, maptools, foreign, ape, soilDB, latticeExtra, maps, compos
 Description: A collection of algorithms related to modeling of soil resources, soil classification, soil profile aggregation, and visualization.
 License: GPL (>= 3)
 LazyLoad: yes
-LazyData: true
 Repository: CRAN
 URL: https://github.com/ncss-tech/aqp
 BugReports: https://github.com/ncss-tech/aqp/issues

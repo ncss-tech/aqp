@@ -1,5 +1,5 @@
 -------------------------- aqp 1.9.15 (2016-11-09) ------------------------
-* converting to "LazyData": no need to use data(sp1) anymore
+* minor updates and license bump
 
 -------------------------- aqp 1.9.13 (2016-10-20) --------------------------
 * new dataset `soil_minerals` with some common soil mineral colors source: http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286
