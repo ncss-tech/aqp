@@ -1,6 +1,6 @@
 Package: aqp
-Version: 1.9.14
-Date: 2016-10-25
+Version: 1.9.14-1
+Date: 2016-11-09
 Title: Algorithms for Quantitative Pedology
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@ca.usda.gov"),
 	      person(given="Pierre", family="Roudier", email="roudierp@landcareresearch.co.nz", role = c("aut", "ctb")))
@@ -10,6 +10,9 @@ Depends: R (>= 3.0.0)
 Imports: grDevices, graphics, stats, utils, methods, plyr, reshape, grid, lattice, cluster, sp, Hmisc, stringr, scales, plotrix, RColorBrewer, MASS, digest
 Suggests: colorspace, maptools, foreign, ape, soilDB, latticeExtra, maps, compositions, sharpshootR, markovchain
 Description: A collection of algorithms related to modeling of soil resources, soil classification, soil profile aggregation, and visualization.
-License: GPL (>= 2)
+License: GPL (>= 3)
+LazyLoad: yes
+LazyData: true
 Repository: CRAN
 URL: https://github.com/ncss-tech/aqp
+BugReports: https://github.com/ncss-tech/aqp/issues
