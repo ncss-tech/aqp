@@ -1,5 +1,5 @@
 Package: aqp
-Version: 1.9.14-1
+Version: 1.9.15
 Date: 2016-11-09
 Title: Algorithms for Quantitative Pedology
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@ca.usda.gov"),
