@@ -41,7 +41,7 @@ $lab : A data frame containing horizon information.
   }
 }
 \details{These data were extracted from the NSSL database. `ca630` is a list composed of site and lab data, each stored as dataframes. These data are modeled by a 1:many (site:lab) relation, with the `pedon_id` acting as the primary key in the `site` table and as the foreign key in the `lab` table.}
-\source{\url{http://ssldata.nrcs.usda.gov/}}
+\source{\url{https://ncsslabdatamart.sc.egov.usda.gov/}}
 \examples{
 \dontrun{
 library(plyr)
