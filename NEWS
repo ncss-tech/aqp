@@ -1,5 +1,6 @@
--------------------------- aqp 1.9.17 (2017-01-03) ------------------------
-* minor updates and license bump
+
+-------------------------- aqp 1.10 (2017-01-05) ------------------------
+* fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after rbinding
 
 -------------------------- aqp 1.9.13 (2016-10-20) --------------------------
 * new dataset `soil_minerals` with some common soil mineral colors source: http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286

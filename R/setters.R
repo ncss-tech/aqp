@@ -286,8 +286,8 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   ## 2017-01-05: holy shit, why are we re-ordering the horizon data? 
   ## causes SPC corruption after rbind with keys that overlap
   ## https://github.com/ncss-tech/aqp/issues/23
-  ## fixed: 
-  ##
+  ## fixed: b959963edca37c2d89fa3994be0027638560f902
+  ## thanks: Andrew Brown
     
   ## replacement: order by IDs, then top horizon boundary
   # hz_top_depths <- horizonDepths(object)[1]
