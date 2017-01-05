@@ -4,6 +4,13 @@ sim <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {
 	h <- horizons(x)
 	thick <- h[[hd[2]]] - h[[hd[1]]]
 	
+	# remove original depth columns
+	h[[hd[1]]] <- NULL
+	h[[hd[2]]] <- NULL
+	
+	# keep track of old id
+	old.id.name <- idname(x)
+	
 	# sanity checks
 	if(length(x) > 1)
 		stop('this function can only simulate data from a SoilProfileCollection containing a single profile')
@@ -33,7 +40,8 @@ sim <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {
 		
 		# convert thickness -> depths
 		s <- cumsum(s)
-		d <- data.frame(id=i, top=c(0, s[-length(s)]), bottom=s)
+		# use a ID column name that isn't likely to conflict with existing column names
+		d <- data.frame(.new_id=i, top=c(0, s[-length(s)]), bottom=s)
 		
 		# combine with original horizon data, and save to list element
 		l[[i]] <- cbind(d, h)
@@ -43,12 +51,14 @@ sim <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {
 	x.s <- do.call(rbind, l)
 	
 	# upgrade to SoilProfileCollection
-	depths(x.s) <- id ~ top + bottom
+	depths(x.s) <- .new_id ~ top + bottom
 	
   # copy over depth units
 	depth_units(x.s) <- depth_units(x)
-  
-	## TODO: combine all of the original data back into the result
+	
+	# move old ID into @site
+	fm <- as.formula(paste0('~ ', old.id.name))
+	site(x.s) <- fm
 	
 	# done
 	return(x.s)
