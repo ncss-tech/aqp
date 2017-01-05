@@ -260,6 +260,8 @@ setReplaceMethod("site", "SoilProfileCollection",
 if (!isGeneric('horizons<-'))
   setGeneric('horizons<-', function(object, value) standardGeneric('horizons<-'))
 
+
+## TODO: the new class structure will eliminate problems caused by this function
 setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
   # testing the class of the horizon data to add to the object
@@ -280,9 +282,19 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
   	stop("there are IDs in the replacement that do not exist in the original data", call.=FALSE)
 
-  # replacement: order by IDs, then top horizon boundary
-  hz_top_depths <- horizonDepths(object)[1]
-  object@horizons <- value[order(value[[idname(object)]], value[[hz_top_depths]]), ]
+  ##
+  ## 2017-01-05: holy shit, why are we re-ordering the horizon data? 
+  ## causes SPC corruption after rbind with keys that overlap
+  ## https://github.com/ncss-tech/aqp/issues/23
+  ## fixed: 
+  ##
+    
+  ## replacement: order by IDs, then top horizon boundary
+  # hz_top_depths <- horizonDepths(object)[1]
+  # object@horizons <- value[order(value[[idname(object)]], value[[hz_top_depths]]), ]
+  
+  # replace existing horizons with modified version
+  object@horizons <- value
 
   # done
   return(object)
