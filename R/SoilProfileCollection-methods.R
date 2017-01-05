@@ -245,7 +245,7 @@ rbind.SoilProfileCollection <- function(...) {
 	o.d <- unique(do.call('rbind', o.d)) # diagnostic data, leave as-is
 	
 	## 2015-12-18: removed re-ordering, was creating corrupt SPC objects
-	##             site and horizon data are implicitly ordered when making a new SoilProfileCollection
+	##             site and horizon data
   
 	# spatial points require some more effort when spatial data are missing
 	o.1.sp <- objects[[1]]@sp
@@ -392,7 +392,7 @@ setMethod("$", "SoilProfileCollection",
 
 	# when site data are initialized from an external DF, it is possible that
 	# there will be duplicate column names
-	if(name %in% h.names & name %in% s.names)
+	if((name %in% h.names) & (name %in% s.names))
 		warning('column name is present in horizon and site data, extracting from horizon data only', call.=FALSE)
 
 	# get column from horizon data
@@ -605,11 +605,11 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     else {
-      res <- SoilProfileCollection(idcol=x@idcol, depthcols=x@depthcols, metadata=x@metadata, horizons=h, site=s, sp=sp, diagnostic=d)
+      res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d)
       # one more final check:
       if(length(profile_id(res)) != length(site(res)[[idname(res)]]))
         stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)
-      if(! all.equal(profile_id(res), site(res)[[idname(res)]]))
+      if(! all(profile_id(res) == site(res)[[idname(res)]]))
         stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)
       
       return(res)

@@ -142,7 +142,6 @@ setReplaceMethod("depths", "data.frame",
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
     
-  
   # create object
   depthcols <- c(nm[2], nm[3])
   res <- SoilProfileCollection(idcol=nm[1], depthcols=depthcols, horizons=data[new.order, ])
