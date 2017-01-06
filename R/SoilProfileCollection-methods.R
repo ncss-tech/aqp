@@ -389,12 +389,14 @@ setMethod("$", "SoilProfileCollection",
 	# get names from site and hz data
 	s.names <- siteNames(x)
 	h.names <- horizonNames(x)
-
-	# when site data are initialized from an external DF, it is possible that
-	# there will be duplicate column names
-	if((name %in% h.names) && (name %in% s.names))
-		warning('column name is present in horizon and site data, extracting from horizon data only', call.=FALSE)
-
+  
+	# ## note: warnings may be issued when using auto-complete feature in RStudio
+	# # when site data are initialized from an external DF, it is possible that
+	# # there will be duplicate column names
+	# if((name %in% h.names) && (name %in% s.names)) {
+	#   warning('column name is present in horizon and site data, extracting from horizon data only', call.=FALSE)
+	# }
+	
 	# get column from horizon data
     if (name %in% h.names) {
       res <- horizons(x)[[name]]
