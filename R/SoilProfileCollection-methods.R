@@ -392,21 +392,21 @@ setMethod("$", "SoilProfileCollection",
 
 	# when site data are initialized from an external DF, it is possible that
 	# there will be duplicate column names
-	if((name %in% h.names) & (name %in% s.names))
+	if((name %in% h.names) && (name %in% s.names))
 		warning('column name is present in horizon and site data, extracting from horizon data only', call.=FALSE)
 
 	# get column from horizon data
-    if (name %in% h.names)
+    if (name %in% h.names) {
       res <- horizons(x)[[name]]
-
-    # otherwise check site data
-    else
-      if (name %in% s.names)
-		res <- site(x)[[name]]
-
-	  # if still missing return NULL
-	  else
-		res <- NULL
+    } else {
+      # otherwise check site data
+      if (name %in% s.names) {
+        res <- site(x)[[name]]
+      } else {
+        # if still missing return NULL
+        res <- NULL
+      }
+    }
 
 	return(res)
   }
