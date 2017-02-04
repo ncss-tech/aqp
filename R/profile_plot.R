@@ -137,6 +137,9 @@ addBracket <- function(top, bottom=NULL, idx=NULL, label=NULL, label.cex=0.75, t
   
   # get plotting details from aqp environment
   lsp <- get('last_spc_plot', envir=aqp.env)
+  depth.offset <- lsp$y.offset
+  sf <- lsp$scaling.factor
+  w <- lsp$width
   
   # get number of brackets ~ number bracket top boundaries
   n <- length(top)
@@ -147,10 +150,11 @@ addBracket <- function(top, bottom=NULL, idx=NULL, label=NULL, label.cex=0.75, t
   else
     plot.order <- idx
   
-  ## TODO: integrate these
-  y.offset <- lsp$y.offset
-  scaling.factor <- lsp$scaling.factor
-  w <- lsp$width
+  
+  # determine horizon depths in current setting
+  # depth_prime = (depth * scaling factor) + y.offset
+  top <- (top * sf) + depth.offset
+  bottom <- (bottom * sf) + depth.offset
   
 	# normal case: both top and bottom defined
 	if(!missing(top) & !missing(bottom)) {
