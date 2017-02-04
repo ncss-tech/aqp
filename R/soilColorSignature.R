@@ -135,7 +135,7 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', R
   
   # note: source colors are sRGB
   # create LAB colors
-  lab.colors <- as(colorspace::sRGB(h[['r']], h[['g']], h[['b']]), 'LAB')@coords
+  lab.colors <- as(colorspace::sRGB(h[[r]], h[[g]], h[[b]]), 'LAB')@coords
   
   ## TODO: does it make sense to normalized based on limited data or entire possible range?
   # normalize the L coordinate
