@@ -12,7 +12,7 @@ generalize.hz <- function(x, new, pat, non.matching.code='not-used', hzdepm = NA
 		g[grep(pat[i], x)] <- new[i]
 	}
 	# # convert to factor, re-level, and sort by median depth
-	if(!any(is.na(hzdepm))) {
+	if(!all(is.na(hzdepm))) {
 	  new_sort <- names(sort(tapply(hzdepm, g, median)))
 	  new_sort <- new_sort[new_sort != non.matching.code]
 	  g <- factor(g, levels = c(new_sort, non.matching.code))
