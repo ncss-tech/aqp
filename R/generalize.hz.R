@@ -2,7 +2,7 @@
 # a vector of new names
 # a vector of patterns
 # code for any non-matching hz designations
-generalize.hz <- function(x, new, pat, non.matching.code='not-used') {
+generalize.hz <- function(x, new, pat, non.matching.code='not-used', hzdepm = NA) {
 	
 	# init vector of 'other', same length as original horizon name vector
 	g <- rep(non.matching.code, times=length(x))
@@ -11,8 +11,13 @@ generalize.hz <- function(x, new, pat, non.matching.code='not-used') {
 	for(i in seq_along(new)) {
 		g[grep(pat[i], x)] <- new[i]
 	}
-	# convert to factor, and re-level
-	g <- factor(g, levels=c(new, non.matching.code))
+	# # convert to factor, re-level, and sort by median depth
+	if(!any(is.na(hzdepm))) {
+	  new_sort <- names(sort(tapply(hzdepm, g, median)))
+	  new_sort <- new_sort[new_sort != non.matching.code]
+	  g <- factor(g, levels = c(new_sort, non.matching.code))
+	  } 
+	else g <- factor(g, levels = c(new, non.matching.code))
 	return(g)
 }
 
