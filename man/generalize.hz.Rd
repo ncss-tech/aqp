@@ -10,7 +10,7 @@
   \item{new}{a character vector of new horizon classes}
   \item{pat}{a character vector of REGEX, same length as \code{x}}
   \item{non.matching.code}{text used to describe any horizon not matching any item in \code{pat}}
-  \item{hzdepm}{ a numeric vector of middle horizon depths}
+  \item{hzdepm}{a numeric vector of horizon mid-points, must not contain NA, same length as \code{x}}
 }
 
 \value{factor of the same length as \code{x}}
