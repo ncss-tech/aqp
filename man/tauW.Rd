@@ -1,33 +1,33 @@
 \name{tau}
 \Rdversion{1}
-\alias{tau.w}
-\alias{summary.tau.w}
-\alias{xtable.tau.w}
+\alias{tauW}
+\alias{summaryTauW}
+\alias{xtableTauW}
 
 \title{
 Compute weighted \enc{naïve}{naive} and \emph{tau} statistics for a cross-classification matrix
 }
 
 \description{
-\code{tau.w}: Computes: (1) unweighted \enc{naïve}{naive}, (2) weighted \enc{naïve}{naive}, (3) unweighted \emph{tau}, (4) weighted \emph{tau} accuracy statistics
+\code{tauW}: Computes: (1) unweighted \enc{naïve}{naive}, (2) weighted \enc{naïve}{naive}, (3) unweighted \emph{tau}, (4) weighted \emph{tau} accuracy statistics
 
-\code{summary.tau.w}: prints a summary of the results from \emph{tau.w}
+\code{summaryTauW}: prints a summary of the results from \emph{tauW}
 
-\code{xtable.tau.w}: formats a LaTeX table with results from \emph{tau.w} and saves it as a \code{.tex} file for import into a LaTeX document.
+\code{xtableTauW}: formats a LaTeX table with results from \emph{tauW} and saves it as a \code{.tex} file for import into a LaTeX document.
 }
 \usage{
-tau.w(CM, W = diag(sqrt(length(as.matrix(CM)))), 
+tauW(CM, W = diag(sqrt(length(as.matrix(CM)))), 
 P = rep(1/nrow(as.matrix(CM)), nrow(as.matrix(CM))))
 
-summary.tau.w(result.tau)
+summaryTauW(result.tau)
 
-xtable.tau.w(result.tau, file.name="tau_results_table.tex")
+xtableTauW(result.tau, file.name="tau_results_table.tex")
 }
 \arguments{
   \item{CM}{a square confusion (cross-classification) matrix (rows: allocation, columns: reference)}
   \item{W}{weights: 1 on diagonals, [-1..1] off giving partial credit to this error}
   \item{P}{prior probability vector, length = number of rows/columns in \code{CM} and \code{W}}
-  \item{result.tau}{results returned by \code{tau.w}}
+  \item{result.tau}{results returned by \code{tauW}}
   \item{file.name}{output LaTeX file}
 }
 
