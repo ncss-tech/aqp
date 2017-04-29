@@ -1,4 +1,5 @@
-
+-------------------------- aqp 1.10-2 (2017-04-28) ------------------------
+* 
 -------------------------- aqp 1.10 (2017-01-05) ------------------------
 * fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after rbinding
 
