@@ -1,6 +1,6 @@
 ## R functions to compute the weighted naive and tau statistics and display the results
-## tau.w : compute
-## summary.tau.w : display
+## tauW : compute
+## summaryTauW : display
 
 ## R function to compute the weighted naive and tau statistics
 ##
@@ -24,7 +24,7 @@
 #
 ## Author: D G Rossiter, 26-Dec-2016, Ithaca, NY (USA)
 #
-tau.w <- function(CM,
+tauW <- function(CM,
                 W = diag(sqrt(length(as.matrix(CM)))),
                 P = rep(1/nrow(as.matrix(CM)), nrow(as.matrix(CM)))) {
 
@@ -128,13 +128,13 @@ tau.w <- function(CM,
               user.weighted=uaw, prod.weighted=paw,
               tau.priors=pv,
               tau=tau,
-              tau.w=tau.w))
+              tauW=tau.w))
 }
 
 ## Print a summary of the various accuracy statistics
-## Argument: result.tau   as returned from function tau.w
+## Argument: result.tau   as returned from function tauW
 ##
-summary.tau.w <- function(result.tau) {
+summaryTauW <- function(result.tau) {
   print("Cross-classification matrix:", quote=F)
   print(result.tau$crossclass)
   print(paste("Number of observations:", result.tau$n), quote=F)
@@ -168,9 +168,9 @@ summary.tau.w <- function(result.tau) {
 ## Format a LaTeX table with results
 ## then \input into your LaTeX document
 ## Arguments
-##   result.tau   result of running tau.w
+##   result.tau   result of running tauW
 ##   file.name    name of file to write
-xtable.tau.w <- function(result.tau, file.name="tau_results_table.tex") {
+xtableTauW <- function(result.tau, file.name="tau_results_table.tex") {
   
   # safely check for required packages
   if(!requireNamespace('xtable'))
@@ -188,7 +188,7 @@ xtable.tau.w <- function(result.tau, file.name="tau_results_table.tex") {
   cat(paste("Unweighted accuracy $A_o$: &", sprintf("%1.4f", result.tau$overall.naive), "\\\\"))
   cat(paste("Weighted accuracy ${A_o}_w$: &", sprintf("%1.4f", result.tau$overall.weighted), "\\\\"))
   cat(paste("Unweighted \\emph{tau} $\\tau$: &", sprintf("%1.4f", result.tau$tau), "\\\\"))
-  cat(paste("Weighted \\emph{tau} $\\tau_w$: &", sprintf("%1.4f", result.tau$tau.w), "\\\\"))
+  cat(paste("Weighted \\emph{tau} $\\tau_w$: &", sprintf("%1.4f", result.tau$tauW), "\\\\"))
   cat("\\end{tabular}\n")
   cat("\\par\n")
   print(x)
