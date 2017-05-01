@@ -38,8 +38,8 @@
   clay.seq <- round(seq(from=clay.stats[1], to=clay.stats[3], by=delta))
   g <- expand.grid(sand=sand.seq, silt=silt.seq, clay=clay.seq)
   
-  # subset to only include those sand, silt, clay values that sum to 100%
-  real.textures <- which(apply(g, 1, sum) - 100 == 0)
+  # subset to only include those sand, silt, clay values that sum to 100% (0.01% tolerance)
+  real.textures <- which(abs(apply(g, 1, sum) - 100) < 0.01 )
   g <- g[real.textures, ]
   
   # plot low and high values with no symbol, so that we can access the {x,y} screen coordinates
@@ -56,7 +56,7 @@
 # compute and plot "low"--"representative value"--"high" soil textures based on:
 # ssc: data.frame/matrix of [sand, silt, clay]
 # p: requested percentiles
-texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...) {
+texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...) {
 	
 	# setup colors
 	range.col <- rgb(t(col2rgb(range.col)), maxColorValue=255, alpha=range.alpha)
@@ -70,23 +70,31 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, pop
 	legend.pch <- c(22, 22)
   
 	# setup plot, without symbols at textures
-  soil.texture(ssc, show.names=FALSE, axis.labels=c('Sand', 'Silt', 'Clay'), show.grid=TRUE, pch=NA)
+  soil.texture(ssc, show.names=texture.names, axis.labels=c('Sand', 'Silt', 'Clay'), show.grid=TRUE, pch=NA)
 	
   # optionally simulate data from a composition of normally distributed data
   # using means, and var-cov matrix from original data
   if(sim) {
     if(!requireNamespace('compositions'))
       stop('pleast install the `compositions` package.', call.=FALSE)
+    
     # compute RV / range polygon for normally dist data
     # convert to compositional class, note range is now [0,1]
     ssc.acomp <- compositions::acomp(ssc)
+    
     # simulate normally-distributed composition based on data
-    ssc.sim <- compositions::rnorm.acomp(n=sim.n, mean=compositions::meanCol(ssc.acomp), var=cov(ssc.acomp))
-    # get range, and rv after converting back to [0,100] interval
+    # Note: it is critical that the mean and variance are estimated using functions from the compositions namespace
+    # BUG in calling var.acomp without loading compositions via library(): must specify default arguments
+    ssc.sim <- compositions::rnorm.acomp(n=sim.n, mean=compositions::meanCol(ssc.acomp), var=compositions::var(ssc.acomp, robust = FALSE, method='pearson'))
+    
+    # get bounding polygon and rv after converting back to [0,100] interval
     res.sim <- .get.ssc.low.rv.high(as.data.frame(unclass(ssc.sim) * 100),  p=p, delta=delta)
     
     # add polgon defining range of normally dist data
     polygon(res.sim$range$x, res.sim$range$y, col=sim.col, lty=2, lwd=2)
+    
+    # testing: add simulated points
+    # triax.points(as.data.frame(unclass(ssc.sim) * 100), col=1, cex=0.5)
   }
 	
   # compute RV / range polygon for data

@@ -5,16 +5,17 @@
 \description{This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles. Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region that encloses a severall likely soil texture classes based on the values in \code{ssc}. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.}
 
 \usage{
-texture.triangle.low.rv.high(ssc, p=c(0.05, 0.5, 0.95), delta=1, 
-pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, 
-sim=FALSE, sim.n=1000, sim.rv.col='yellow', sim.col=grey(0.95), 
-sim.alpha=150, legend.cex=0.75, ...)
+texture.triangle.low.rv.high(ssc, p=c(0.05, 0.5, 0.95), delta=1,
+texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', 
+range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', 
+sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...)
 }
 
 \arguments{
   \item{ssc}{a matrix-like object with columns: 'sand', 'silt', 'clay', values are percentages that should add to 100.}
   \item{p}{percentiles defining 'low', 'representative value', and 'high'}
   \item{delta}{step-size used to form low-high region}
+  \item{texture.names}{logical, should soil texture names be added to the figure?}
   \item{pop.rv.col}{the symbol color used to denote the population representative value on the texture triangle}
   \item{range.col}{color of the polygon enclosing the low-high region}
   \item{range.alpha}{transparency of the low-high range polygon (0-255)}
@@ -49,7 +50,7 @@ x <- na.omit(data.frame(sand=loafercreek$sand, silt=loafercreek$silt, clay=loafe
 texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95))
 texture.triangle.low.rv.high(x, p=c(0.25, 0.5, 0.75), range.col='darkgreen')
 
-# simulate compositional data from source data
+# simulate compositional data from source mean / var-covar matrix
 if(require(compositions)) {
   # add simulated low-rv-high
   texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95), sim=TRUE)
