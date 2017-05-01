@@ -25,7 +25,7 @@
     stop('delta values smaller than 1 may result in memory overflow', call.=FALSE)
   
   # compute _univariate_ low - rv - high by variable
-  ssc.stats <- apply(ssc, 2, quantile, probs=p)
+  ssc.stats <- apply(ssc, 2, Hmisc::hdquantile, probs=p, na.rm=TRUE)
   
   # re-order for plotting
   sand.stats <- sort(ssc.stats[, 1])
