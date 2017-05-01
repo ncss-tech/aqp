@@ -2,7 +2,7 @@
 \alias{texture.triangle.low.rv.high}
 
 \title{Soil Texture Low-RV-High as Defined by Quantiles}
-\description{This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles. Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region that encloses a severall likely soil texture classes based on the values in \code{ssc}. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.}
+\description{This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles (estimated with \code{Hmisc::hdquantile}). Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region that encloses a severall likely soil texture classes based on the values in \code{ssc}. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.}
 
 \usage{
 texture.triangle.low.rv.high(ssc, p=c(0.05, 0.5, 0.95), delta=1,
@@ -28,7 +28,8 @@ sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...)
   \item{\dots}{further arguments passed to \code{triax.points}}
 }
 
-\note{Simulation of samd, silt, and clay values requires the `compositions` package.}
+\note{Simulation of samd, silt, and clay values requires the `compositions` package.
+When using this function within .Rmd, be sure to explicitly load the `compositions` package via \code{library} and use the chunk option \code{fig.keep='last'}. For some reason, the \code{soil.texture} function generates two figures when used within a .Rmd, hence the strange hack.}
 
 \details{Simulated sand, silt, and clay values are based on sampling from a normal distribution as performed by \code{rnorm.acomp} in the `comppositions` package. The mean vector of the sand, silt, and clay values, along with covariance matrix derived from \code{ssc} are used to parametrize sampling.}
 
