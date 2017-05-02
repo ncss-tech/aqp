@@ -1,6 +1,7 @@
--------------------------- aqp 1.10-3 (2017-04-28) ------------------------
-* new argument to texture.triangle.low.rv.high() texture.names: for toggling texture class names
-* minor bug fix in texture.triangle.low.rv.high(..., sim=TRUE), previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.
+-------------------------- aqp 1.10-4 (2017-05-02) ------------------------
+* texture.triangle.low.rv.high() renamed to textureTriangleSummary(). The old name still works, but a message is issued
+* new argument to textureTriangleSummary() texture.names: for toggling texture class names
+* minor bug fix in textureTriangleSummary(..., sim=TRUE), previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.
 * new function tauW(), addd by D.G. Rossiter: see manual page for references
 -------------------------- aqp 1.10 (2017-01-05) ------------------------
 * fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after rbinding

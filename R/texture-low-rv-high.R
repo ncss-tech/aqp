@@ -56,7 +56,7 @@
 # compute and plot "low"--"representative value"--"high" soil textures based on:
 # ssc: data.frame/matrix of [sand, silt, clay]
 # p: requested percentiles
-texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...) {
+textureTriangleSummary <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...) {
 	
 	# setup colors
 	range.col <- rgb(t(col2rgb(range.col)), maxColorValue=255, alpha=range.alpha)
@@ -129,3 +129,10 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, tex
 	
 
 }
+
+# for backwards compatibility
+texture.triangle.low.rv.high <- function(...) {
+  message('This function has been re-named to `textureTriangleSummary`. Please use the new function as this one is now obsolete.')
+  textureTriangleSummary(...)
+}
+

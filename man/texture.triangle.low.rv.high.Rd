@@ -1,11 +1,12 @@
-\name{texture.triangle.low.rv.high}
+\name{textureTriangleSummary}
+\alias{textureTriangleSummary}
 \alias{texture.triangle.low.rv.high}
 
 \title{Soil Texture Low-RV-High as Defined by Quantiles}
 \description{This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles (estimated with \code{Hmisc::hdquantile}). Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region that encloses a severall likely soil texture classes based on the values in \code{ssc}. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.}
 
 \usage{
-texture.triangle.low.rv.high(ssc, p=c(0.05, 0.5, 0.95), delta=1,
+textureTriangleSummary(ssc, p=c(0.05, 0.5, 0.95), delta=1,
 texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', 
 range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', 
 sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...)
@@ -48,13 +49,13 @@ data(loafercreek, package='soilDB')
 x <- na.omit(data.frame(sand=loafercreek$sand, silt=loafercreek$silt, clay=loafercreek$clay))
 
 # test out the function
-texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95))
-texture.triangle.low.rv.high(x, p=c(0.25, 0.5, 0.75), range.col='darkgreen')
+textureTriangleSummary(x, p=c(0.05, 0.5, 0.95))
+textureTriangleSummary(x, p=c(0.25, 0.5, 0.75), range.col='darkgreen')
 
 # simulate compositional data from source mean / var-covar matrix
 if(require(compositions)) {
   # add simulated low-rv-high
-  texture.triangle.low.rv.high(x, p=c(0.05, 0.5, 0.95), sim=TRUE)
+  textureTriangleSummary(x, p=c(0.05, 0.5, 0.95), sim=TRUE)
 }
 
 }
