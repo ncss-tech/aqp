@@ -63,8 +63,9 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, tex
   sim.col <- rgb(t(col2rgb(sim.col)), maxColorValue=255, alpha=sim.alpha)
   
 	# setup legend elements
-	low.high.range.text <- paste0('Low-High Range (', paste(p[c(1,3)], collapse='-'), ')')
-	legend.text <- c('Population RV', low.high.range.text)
+  rv.text <- paste0('Sample RV (', paste(p[c(2)], collapse='-'), ')')
+  low.high.range.text <- paste0('Low-High Range (', paste(p[c(1,3)], collapse='-'), ')')
+	legend.text <- c(rv.text, low.high.range.text)
 	legend.cols <- c('black', 'black')
 	legend.bg <- c(pop.rv.col, range.col)
 	legend.pch <- c(22, 22)
@@ -113,7 +114,7 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, tex
   
   # optionally add legend elements for simulation
   if(sim) {
-    legend.text <- c(legend.text, 'Simulated RV', paste0(sim.n, ' Simulations (normal composition)'))
+    legend.text <- c(legend.text, 'Simulated RV', paste0('Simulated Range (', sim.n, ' draws, normal composition)'))
     legend.bg <- c(legend.bg, sim.rv.col, sim.col)
     legend.cols <- c(legend.cols, 'black', 'black')
     legend.pch <- c(legend.pch, 22, NA)
