@@ -114,7 +114,7 @@ texture.triangle.low.rv.high <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, tex
   
   # optionally add legend elements for simulation
   if(sim) {
-    legend.text <- c(legend.text, 'Simulated RV', paste0('Simulated Range (', sim.n, ' draws, normal composition)'))
+    legend.text <- c(legend.text, 'Simulated RV', paste0('Sim. Range (n=', sim.n, ', normal composition)'))
     legend.bg <- c(legend.bg, sim.rv.col, sim.col)
     legend.cols <- c(legend.cols, 'black', 'black')
     legend.pch <- c(legend.pch, 22, NA)
