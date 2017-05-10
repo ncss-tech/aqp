@@ -132,7 +132,7 @@ textureTriangleSummary <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, texture.n
 
 # for backwards compatibility
 texture.triangle.low.rv.high <- function(...) {
-  message('This function has been re-named to `textureTriangleSummary`. Please use the new function as this one is now obsolete.')
+  .Deprecated('textureTriangleSummary')
   textureTriangleSummary(...)
 }
 
