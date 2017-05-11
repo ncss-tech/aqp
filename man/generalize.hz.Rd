@@ -3,13 +3,14 @@
 
 \title{Generalize Horizon Names}
 \description{Generalize a vector of horizon names, based on new classes, and REGEX patterns.}
-\usage{generalize.hz(x, new, pat, non.matching.code)}
+\usage{generalize.hz(x, new, pat, non.matching.code, hzdepm)}
 
 \arguments{
   \item{x}{a character vector of horizon names}
   \item{new}{a character vector of new horizon classes}
   \item{pat}{a character vector of REGEX, same length as \code{x}}
   \item{non.matching.code}{text used to describe any horizon not matching any item in \code{pat}}
+  \item{hzdepm}{a numeric vector of horizon mid-points, must not contain NA, same length as \code{x}}
 }
 
 \value{factor of the same length as \code{x}}

@@ -120,7 +120,6 @@
 }
 
 ## TODO: move method-specific arguments to ...
-## TODO: init from sRGB() or RGB() ??
 # requires colorspace package
 soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', RescaleLightnessBy=1, useProportions=TRUE, pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
   
@@ -134,8 +133,9 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', R
   # extract horizons
   h <- horizons(spc)
   
+  # note: source colors are sRGB
   # create LAB colors
-  lab.colors <- as(colorspace::RGB(h[['r']], h[['g']], h[['b']]), 'LAB')@coords
+  lab.colors <- as(colorspace::sRGB(h[[r]], h[[g]], h[[b]]), 'LAB')@coords
   
   ## TODO: does it make sense to normalized based on limited data or entire possible range?
   # normalize the L coordinate
