@@ -16,7 +16,7 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
   \item{g}{horizon level attribute containing soil color (sRGB) green values}
   \item{b}{horizon level attribute containing soil color (sRGB) blue values}
   \item{method}{algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`}
-  \item{pam.k}{number of classes to request from \code{cluster::pam()}
+  \item{pam.k}{number of classes to request from \code{cluster::pam()}}
   \item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate}
   \item{useProportions}{use proportions or quantities, see details}
   \item{pigmentNames}{names for resulting pigment proportions or quantities}
