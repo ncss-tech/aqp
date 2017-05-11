@@ -5,7 +5,7 @@
 \description{Generate a color signature for each soil profile in a collection.}
 \usage{
 soilColorSignature(spc, r = "r", g = "g", b = "b", 
-method='colorBucket', RescaleLightnessBy = 1, useProportions=TRUE,
+method='colorBucket', pam.k=3, RescaleLightnessBy = 1, useProportions=TRUE,
 pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', 
 '.yellow.pigment', '.blue.pigment'))
 }
@@ -16,6 +16,7 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
   \item{g}{horizon level attribute containing soil color (sRGB) green values}
   \item{b}{horizon level attribute containing soil color (sRGB) blue values}
   \item{method}{algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`}
+  \item{pam.k}{number of classes to request from \code{cluster::pam()}
   \item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate}
   \item{useProportions}{use proportions or quantities, see details}
   \item{pigmentNames}{names for resulting pigment proportions or quantities}
