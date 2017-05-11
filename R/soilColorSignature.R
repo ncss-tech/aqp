@@ -1,7 +1,7 @@
 
 
-# compute LAB coordinates at select percentiles of depth
-.pigments.pam <- function(x, k=3) {
+# compute LAB coordinates from clusters of slices
+.pigments.pam <- function(x, k) {
   
   # extract just horizons that have color data
   h <- horizons(x)
@@ -93,6 +93,8 @@
 }
 
 
+## TODO: this doesn't always give the best results compared with PAM
+
 # https://en.wikipedia.org/wiki/Lab_color_space
 #
 # L - brightness
@@ -107,6 +109,7 @@
   h <- h[, c('L', 'pos.A', 'neg.A', 'pos.B', 'neg.B')]
   
   # TODO: this may need to be normalized
+  # TODO: this will create NA
   hz.pigments <- sweep(h, MARGIN = 1, STATS = hz.thick, FUN = '*')
   pigment <- colSums(hz.pigments, na.rm = TRUE)
   names(pigment) <- pigmentNames
@@ -114,14 +117,14 @@
   ## NOTE: this removes the effect of soil depth
   # convert to proportions
   if(useProportions)
-    pigment <- pigment / sum(pigment)
+    pigment <- pigment / sum(pigment, na.rm = TRUE)
   
   return(pigment)
 }
 
 ## TODO: move method-specific arguments to ...
 # requires colorspace package
-soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', RescaleLightnessBy=1, useProportions=TRUE, pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
+soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', pam.k=3, RescaleLightnessBy=1, useProportions=TRUE, pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
   
   # warn about methods
   if(! method  %in% c('colorBucket', 'depthSlices', 'pam'))
@@ -182,7 +185,7 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', R
     spc$B <- lab.colors[, 3]
     
     # this is slow
-    col.data <- profileApply(spc, .pigments.pam, simplify = FALSE)
+    col.data <- profileApply(spc, .pigments.pam, k=pam.k, simplify = FALSE)
     col.data <- ldply(col.data)
     names(col.data)[1] <- idname(spc)
   }
