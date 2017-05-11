@@ -74,10 +74,11 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   vars <- formula[[2]] # RHS, simple enough
   # LHS: could be either single integer or vector of slices
   z <- as.numeric(eval(parse(text=formula[[1]])))
-
+  
+  ## TODO: optimise to use new data structure
   # get horizons + depth column names + ID column name
   h <- horizons(object)
-  hd <- horizonDepths(object)
+  hd <- depthNames(object)
   top <- hd[1] ; bottom <- hd[2] # convenience vars
   id <- idname(object)
   id.order <- profile_id(object) # this is the original ordering of profiles
@@ -108,9 +109,6 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   hd.slices <- vector(mode='list', length=length(z))
   # prepare an index for the list
   slice.idx <- seq_along(z)
-  
-  # convert h into an imutable data.frame for speed
-  # h <- idata.frame(h)
   
   # iterate over this index
   for(slice.i in slice.idx) {
@@ -152,7 +150,8 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # if we just want the data:
   if(just.the.data)
     return(hd.slices)
-
+  
+  ## TODO: update to new class methods
   # if spatial data and only a single slice: SPDF
   if(nrow(coordinates(object)) == length(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
