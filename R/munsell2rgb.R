@@ -101,9 +101,10 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 
 
 
+## TODO: test grDevices::convertColor() vs. colorspace::sRGB() conversion between sRGB -- LAB
 # color is a matrix/vector of sRGB values in range of [0,1]
 # ideally output from munsell2rgb()
-rgb2munsell <- function(color) {
+rgb2munsell <- function(color, colorSpace='LAB') {
   
   # vectorize via for-loop
   n <- nrow(color)
@@ -117,16 +118,42 @@ rgb2munsell <- function(color) {
   # This should be more foolproof than data(munsell) c/o PR
   load(system.file("data/munsell.rda", package="aqp")[1])
   
+  ## TODO (this is now the default)
+  ## - test
+  ## - report changes, possibly save for 2.0
+  ## - decide: colorspace or grDevices
+  ## - pre-compute and store in munsell.rda ?
+  ## - Euclidean distance most useful?
+  
+  # pre-convert munsell data if using LAB space for lookup
+  if(colorSpace == 'LAB') {
+   mm <- convertColor(munsell[, 4:6], from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+   dimnames(mm)[[2]] <- c('L', 'A', 'B')
+   munsell <- cbind(munsell, mm)
+  }
+  
   # iterate over colors
   for(i in 1:n) {
     # convert current color to matrix, this will allow matrix and DF as input
-    this.color <- as.matrix(color[i, ])
+    this.color <- as.matrix(color[i, , drop=FALSE])
     
-    # euclidean distance (in RGB space) is our metric for closest-color
-    # d = sqrt(r^2 + g^2 + b^2)
-    sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=this.color, FUN='-')^2
-    sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
-    idx <- which.min(sq.diff.sum.sqrt)
+    if(colorSpace == 'sRGB') {
+      # euclidean distance (in sRGB space) is our metric for closest-color
+      # d = sqrt(r^2 + g^2 + b^2)
+      sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=this.color, FUN='-')^2
+      sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
+      idx <- which.min(sq.diff.sum.sqrt)
+    }
+    if(colorSpace == 'LAB') {
+      # euclidean distance (in LAB space) is our metric for closest-color
+      # convert sRGB to LAB
+      this.color.lab <- convertColor(this.color, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+      # d = sqrt(L^2 + A^2 + B^2)
+      sq.diff <- sweep(munsell[, 7:9], MARGIN=2, STATS=this.color.lab, FUN='-')^2
+      sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
+      idx <- which.min(sq.diff.sum.sqrt)
+    }
+    
     
     # with NA as an input, there will be no output
     if(length(idx) == 0)
