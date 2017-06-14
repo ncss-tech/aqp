@@ -5,11 +5,11 @@
 \alias{xtableTauW}
 
 \title{
-Compute weighted \enc{naïve}{naive} and \emph{tau} statistics for a cross-classification matrix
+Compute weighted naive and \emph{tau} statistics for a cross-classification matrix
 }
 
 \description{
-\code{tauW}: Computes: (1) unweighted \enc{naïve}{naive}, (2) weighted \enc{naïve}{naive}, (3) unweighted \emph{tau}, (4) weighted \emph{tau} accuracy statistics
+\code{tauW}: Computes: (1) unweighted naive, (2) weighted naive, (3) unweighted \emph{tau}, (4) weighted \emph{tau} accuracy statistics
 
 \code{summaryTauW}: prints a summary of the results from \emph{tauW}
 
@@ -49,11 +49,11 @@ Results are returned in a list with obvious R names
 }
 
 \references{
-Rossiter, D. G., Zeng, R., & Zhang, G.-L. (2017). \emph{Accounting for taxonomic distance in accuracy assessment of soil class predictions}. \bold{Geoderma}, 292, 118–127. \url{https://doi.org/10.1016/j.geoderma.2017.01.012}
+Rossiter, D. G., Zeng, R., & Zhang, G.-L. (2017). \emph{Accounting for taxonomic distance in accuracy assessment of soil class predictions}. \bold{Geoderma}, 292, 118--127. \url{https://doi.org/10.1016/j.geoderma.2017.01.012}
 
-Ma, Z. K., & Redmond, R. L. (1995). \emph{Tau-coefficients for accuracy assessment of classification of remote-sensing data}. \bold{Photogrammetric Engineering and Remote Sensing}, 61(4), 435–439.
+Ma, Z. K., & Redmond, R. L. (1995). \emph{Tau-coefficients for accuracy assessment of classification of remote-sensing data}. \bold{Photogrammetric Engineering and Remote Sensing}, 61(4), 435--439.
 
-Naesset, E. (1996). \emph{Conditional tau coefficient for assessment of producer’s accuracy of classified remotely sensed data}. \bold{ISPRS Journal of Photogrammetry and Remote Sensing}, 51(2), 91–98. \url{http://dx.doi.org/10.1016/0924-2716(69)00007-4}
+Naesset, E. (1996). \emph{Conditional tau coefficient for assessment of producer's accuracy of classified remotely sensed data}. \bold{ISPRS Journal of Photogrammetry and Remote Sensing}, 51(2), 91--98. \url{http://dx.doi.org/10.1016/0924-2716(69)00007-4}
 }
 \author{D G Rossiter}
 
