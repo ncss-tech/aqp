@@ -298,11 +298,10 @@ definition=function(x, v=NULL) {
   if(!missing(v)) {
   	# combine bottom depths with IDs and variable
   	h <- horizons(x)[, c(hz_bottom_depths, idname(x), v)]
-  }
-  else {
-  	# combine bottom depths with IDs
+  } else {
+    # combine bottom depths with IDs
   	h <- horizons(x)[, c(hz_bottom_depths, idname(x))]
-  }
+  	}
   
   # filter out missing data
   h <- h[complete.cases(h), ]
@@ -324,11 +323,10 @@ definition=function(x, v=NULL){
 	if(!missing(v)) {
 		# combine bottom depths with IDs and variable
 		h <- horizons(x)[, c(hz_bottom_depths, idname(x), v)]
-	}
-	else {
-		# combine bottom depths with IDs
+	}	else {
+	  # combine bottom depths with IDs
 		h <- horizons(x)[, c(hz_bottom_depths, idname(x))]
-	}
+		}
 	
 	# filter out missing data
 	h <- h[complete.cases(h), ]
