@@ -271,8 +271,12 @@ rbind.SoilProfileCollection <- function(...) {
 	  stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)
   
 	return(res)
-	}
+}
 
+
+## TODO: this doesn't work as expected ... fix in 2.0
+## overload rbind
+#setMethod("rbind", "SoilProfileCollection", .rbind.SoilProfileCollection)
 
 
 
