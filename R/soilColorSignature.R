@@ -123,22 +123,18 @@
 }
 
 ## TODO: move method-specific arguments to ...
-# requires colorspace package
 soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', pam.k=3, RescaleLightnessBy=1, useProportions=TRUE, pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
   
   # warn about methods
   if(! method  %in% c('colorBucket', 'depthSlices', 'pam'))
     message('method must be either `colorBucket` or `depthSlices`')
   
-  if(!requireNamespace('colorspace'))
-    stop('pleast install the `colorspace` package.', call.=FALSE)
-  
   # extract horizons
   h <- horizons(spc)
   
   # note: source colors are sRGB
   # create LAB colors
-  lab.colors <- as(colorspace::sRGB(h[[r]], h[[g]], h[[b]]), 'LAB')@coords
+  lab.colors <- convertColor(h[, c('r', 'g', 'b')], from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
   
   ## TODO: does it make sense to normalized based on limited data or entire possible range?
   # normalize the L coordinate

@@ -39,7 +39,6 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   
   
   ## TODO: LAB is the ideal color space for color averaging
-  ## but this would require an additional dependency on the colorspace package
   # compute weighted mean color for each GHL
   s.agg <- ldply(s.scaled, function(i) {
     # convert to RGB
