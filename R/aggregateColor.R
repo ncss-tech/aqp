@@ -38,23 +38,31 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   })
   
   
-  ## TODO: LAB is the ideal color space for color averaging
-  # compute weighted mean color for each GHL
+  # compute weighted mean color for each GHL, in LAB colorspace
   s.agg <- ldply(s.scaled, function(i) {
-    # convert to RGB
+    # convert to sRGB
     v <- t(col2rgb(i[[col]])) / 255
+    
+    # convert to LAB
+    v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
     
     # compute weighted mean via matrix manip
     w <- i$weight
     vw <- sweep(v, 1, STATS = w, FUN = '*')
     wm <- colSums(vw) / sum(w)
     
-    # convert result back to R color specification
-    wm.col <- rgb(t(wm), maxColorValue = 1)
+    # convert back to sRGB
+    wm <- convertColor(wm, from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65')
+    dimnames(wm)[[2]] <- c('red', 'green', 'blue')
     
+    # convert result back to R color specification
+    wm.col <- rgb(wm, maxColorValue = 1)
+    
+    ## TODO: this is very slow because the entire munsell LUT has to be transformed
+    # https://github.com/ncss-tech/aqp/issues/36
     # get closest Munsell color
-    wm.munsell <- rgb2munsell(t(wm))
-    res <- data.frame(munsell=wm.munsell, col=wm.col, t(wm), n=nrow(i))
+    wm.munsell <- rgb2munsell(wm)
+    res <- data.frame(munsell=wm.munsell, col=wm.col, wm, n=nrow(i))
     return(res)
   })
   names(s.agg)[1] <- groups
