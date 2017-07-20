@@ -13,7 +13,7 @@ Color conversion based on a look-up table of common soil colors.
 \usage{
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE)
-rgb2munsell(color, colorSpace='LAB')
+rgb2munsell(color, colorSpace='LAB', nClosest=1)
 parseMunsell(munsellColor, convertColors=TRUE, ...)
 getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
 }
@@ -26,6 +26,7 @@ getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
   \item{return_triplets}{should the function return raw sRGB triplets instead of an R color}
   \item{color}{a \code{data.frame} or \code{matrix} object containing color-space coordinates: [R, G, B]}
   \item{colorSpace}{the colorspace to use for finding the closest chip, LAB is the most accurate, sRGB is another possibility}
+  \item{nClosest}{number of closest Munsell colors to return}
   \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}
   \item{convertColors}{logical, should parsed Munsell colors be converted into sRGB values}
   \item{\dots}{further arguments to \code{munsell2rgb}}

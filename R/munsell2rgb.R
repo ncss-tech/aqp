@@ -102,9 +102,10 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 
 
 ## TODO: test grDevices::convertColor() vs. colorspace::sRGB() conversion between sRGB -- LAB
+## LAB vs. LUV colorspace for distance calculation?
 # color is a matrix/vector of sRGB values in range of [0,1]
 # ideally output from munsell2rgb()
-rgb2munsell <- function(color, colorSpace='LAB') {
+rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   
   # vectorize via for-loop
   n <- nrow(color)
@@ -142,7 +143,10 @@ rgb2munsell <- function(color, colorSpace='LAB') {
       # d = sqrt(r^2 + g^2 + b^2)
       sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=this.color, FUN='-')^2
       sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
-      idx <- which.min(sq.diff.sum.sqrt)
+      # rescale to 0-1
+      sq.diff.sum.sqrt <- sq.diff.sum.sqrt / max(sq.diff.sum.sqrt)
+      # return the closest n-matches
+      idx <- order(sq.diff.sum.sqrt)[1:nClosest]
     }
     if(colorSpace == 'LAB') {
       # euclidean distance (in LAB space) is our metric for closest-color
@@ -151,10 +155,12 @@ rgb2munsell <- function(color, colorSpace='LAB') {
       # d = sqrt(L^2 + A^2 + B^2)
       sq.diff <- sweep(munsell[, 7:9], MARGIN=2, STATS=this.color.lab, FUN='-')^2
       sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
-      idx <- which.min(sq.diff.sum.sqrt)
+      # rescale to 0-1
+      sq.diff.sum.sqrt <- sq.diff.sum.sqrt / max(sq.diff.sum.sqrt)
+      # return the closest n-matches
+      idx <- order(sq.diff.sum.sqrt)[1:nClosest]
     }
-    
-    
+
     # with NA as an input, there will be no output
     if(length(idx) == 0)
       res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
