@@ -39,6 +39,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   
   
   # compute weighted mean color for each GHL, in LAB colorspace
+  # TODO: this is similar to soilDB::mix_and_clean_colors(), consider consolidation
   s.agg <- ldply(s.scaled, function(i) {
     # convert to sRGB
     v <- t(col2rgb(i[[col]])) / 255
@@ -58,10 +59,10 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
     # convert result back to R color specification
     wm.col <- rgb(wm, maxColorValue = 1)
     
-    ## TODO: this is very slow because the entire munsell LUT has to be transformed
-    # https://github.com/ncss-tech/aqp/issues/36
     # get closest Munsell color
     wm.munsell <- rgb2munsell(wm)
+    
+    # consolidate and return
     res <- data.frame(munsell=wm.munsell, col=wm.col, wm, n=nrow(i))
     return(res)
   })
