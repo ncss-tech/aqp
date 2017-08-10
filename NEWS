@@ -1,4 +1,7 @@
 -------------------------- aqp 1.12 (2017-07-05) ------------------------
+* CIE LAB colors are now in the `munsell` look-up table
+
+-------------------------- aqp 1.12 (2017-07-05) ------------------------
 * plotSPC() now able to deal with missing horizon data (thanks Stephen R.)
 * this is likely the last release before aqp 2.0
 
