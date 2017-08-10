@@ -1,6 +1,10 @@
 
 # get soil depth based on morphology
 estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p='Cr|R|Cd', no.contact.depth=NULL, no.contact.assigned=NULL) {
+  # sanity check: this function works on a single soil profile
+  if(length(profile_id(f)) > 1)
+    stop('This function will only work when applied to a single soil profile, see manual page for details.')
+  
   # extract horizons
   h <- horizons(f)
   
