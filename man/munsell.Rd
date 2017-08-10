@@ -6,7 +6,7 @@
 \description{A lookup table of interpolated Munsell color chips for common soil colors.}
 \usage{data(munsell)}
 \format{
-  A data frame with 8825 observations on the following 6 variables.
+  A data frame with 8825 rows.
   \describe{
     \item{\code{hue}}{Munsell Hue, upper case}
     \item{\code{value}}{Munsell Value}
@@ -14,10 +14,13 @@
     \item{\code{r}}{sRGB "red" value (0-1)}
     \item{\code{g}}{sRGB "green" value (0-1)}
     \item{\code{b}}{sRGB "blue" value (0-1)}
+    \item{\code{L}}{CIE LAB "L" coordinate}
+    \item{\code{A}}{CIE LAB "A" coordinate}
+    \item{\code{B}}{CIE LAB "B" coordinate}
   }
 }
 \details{
-See \code{munsell2rgb} for conversion examples. Note that this table does not currently have entires for values of 2.5--common in most soil color books. These chips should be added in the next major release of aqp.
+See \code{munsell2rgb} for conversion examples. Note that this table does not currently have entires for values of 2.5--common in most soil color books. These chips should be added in the next major release of aqp. Values are referenced to the D65 standard illuminant.
 }
 \source{
 Color chip XYZ values: http://www.rit.edu/cos/colorscience/rc_munsell_renotation.php
