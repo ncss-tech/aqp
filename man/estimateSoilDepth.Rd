@@ -2,7 +2,7 @@
 \alias{estimateSoilDepth}
 
 \title{Estimate Soil Depth}
-\description{Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}.}
+\description{Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}}.}
 \usage{
 estimateSoilDepth(f, name = "hzname", top = "hzdept", bottom = "hzdepb", p = 'Cr|R|Cd', 
 no.contact.depth = NULL, no.contact.assigned = NULL)
