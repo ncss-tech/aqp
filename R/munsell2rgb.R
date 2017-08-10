@@ -120,15 +120,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   ## TODO (this is now the default)
   ## - test
   ## - report changes, possibly save for 2.0
-  ## - pre-compute and store in munsell.rda ?
   ## - Euclidean distance most useful?
-  
-  # pre-convert munsell data if using LAB space for lookup
-  if(colorSpace == 'LAB') {
-   mm <- convertColor(munsell[, 4:6], from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
-   dimnames(mm)[[2]] <- c('L', 'A', 'B')
-   munsell <- cbind(munsell, mm)
-  }
   
   ## TODO: this could probably be optimized
   # iterate over colors
