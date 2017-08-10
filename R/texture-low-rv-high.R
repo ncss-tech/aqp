@@ -16,7 +16,7 @@
 ## TODO:
 ## 1. allow iteration over groups for plotting multiple horizons
 ## 2. consider embedding into lattice panels
-## 3. consider integration with soiltexture package
+## 3. consider integration with soiltexture package (see GH issues)
 
 # helper function
 .get.ssc.low.rv.high <- function(ssc, p, delta) {
