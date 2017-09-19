@@ -36,7 +36,8 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
     
   # slice according to rules
   s.fm <- as.formula(paste('0:', max_depth, ' ~ ', paste(vars, collapse=' + '), sep=''))
-  ss <- slice(s, s.fm)
+  # setting strict = FALSE, no need for robust hz detection
+  ss <- slice(s, s.fm, strict = FALSE)
   
   # get sliced horizon depth names
   hd <- horizonDepths(ss)

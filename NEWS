@@ -1,3 +1,6 @@
+-------------------------- aqp 1.14 (2017-09-19) ------------------------
+* missingDataGrid() relaxing slice() with strict=FALSE
+
 -------------------------- aqp 1.12 (2017-07-05) ------------------------
 * CIE LAB colors are now in the `munsell` look-up table
 
