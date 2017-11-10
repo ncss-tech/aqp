@@ -128,7 +128,7 @@ tauW <- function(CM,
               user.weighted=uaw, prod.weighted=paw,
               tau.priors=pv,
               tau=tau,
-              tauW=tau.w))
+              tau.w=tau.w))
 }
 
 ## Print a summary of the various accuracy statistics
