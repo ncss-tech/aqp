@@ -1,3 +1,6 @@
+-------------------------- aqp 1.15 (2017-11-11) ------------------------
+* push to CRAN, getting ready for aqp 2.0
+
 -------------------------- aqp 1.14 (2017-09-19) ------------------------
 * missingDataGrid() relaxing slice() with strict=FALSE
 
@@ -63,7 +66,6 @@
 * new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()
 * more code clean-up and fixes in examples to make R CMD check --as-cran happy
 * fixed some ancient examples in the profileApply() manual page
-* this is the last major update before aqp 2.0, expecting a major re-write of core SoilProfileCollection class and methods
 
 -------------------------- aqp 1.8-5 (2015-04-17) --------------------------
 * bug fixes and documentation updates

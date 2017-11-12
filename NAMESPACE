@@ -43,7 +43,7 @@ importFrom(RColorBrewer,
 
 importFrom(grid,
   gpar,
-	grid.text,
+  grid.text,
   unit
 )
 
@@ -109,7 +109,7 @@ importFrom(sp,
 
 importFrom(Hmisc, 
   hdquantile,
-	wtd.mean, 
+  wtd.mean, 
   wtd.var, 
   wtd.quantile, 
   wtd.rank, 
@@ -118,10 +118,12 @@ importFrom(Hmisc,
 
 importFrom(plotrix, 
   soil.texture,
-	triax.points
+  triax.points
 )
 
 exportClasses(SoilProfileCollection)
+
+S3method(rbind, SoilProfileCollection)
 
 exportMethods(  
   "[",

@@ -1,6 +1,6 @@
 Package: aqp
 Version: 1.15
-Date: 2017-10-12
+Date: 2017-11-11
 Title: Algorithms for Quantitative Pedology
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@ca.usda.gov"),
 	      person(given="Pierre", family="Roudier", email="roudierp@landcareresearch.co.nz", role = c("aut", "ctb")))
@@ -15,3 +15,4 @@ LazyLoad: yes
 Repository: CRAN
 URL: https://github.com/ncss-tech/aqp
 BugReports: https://github.com/ncss-tech/aqp/issues
+Encoding: UTF-8
