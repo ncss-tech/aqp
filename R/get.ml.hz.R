@@ -9,7 +9,7 @@
 get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
   
   # trick R CMD check
-  top = bottom = NULL
+  H = top = bottom = NULL
   
   # sanity check
   if(missing(o.names) & is.null(attr(x, which='original.levels')))
