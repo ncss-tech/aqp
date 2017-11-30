@@ -1,3 +1,8 @@
+-------------------------- aqp 1.15.2 (2017-11-30) ------------------------
+* added shannonEntropy(), confusionIndex(), and brierScore()
+* bug fix in get.ml.hz() for horizon names that start with number or punctuation
+* get.ml.hz() now uses internal aqp functions for Shannon entropy and Brier scores
+
 -------------------------- aqp 1.15 (2017-11-11) ------------------------
 * push to CRAN, getting ready for aqp 2.0
 

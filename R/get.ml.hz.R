@@ -1,6 +1,8 @@
-## TODO: add shannon's H index
-# apply(p[, hz.names], 1, function(i) -sum(i*log(i)))
-# note: this will require replacing 0 with a tiny number
+
+## TODO: check for rowSums != 1
+##       this will cause shannon H to fail
+
+## TODO: conversion from original <-> safe names is clunky
 
 # generate a data.frame of ML horizonation
 # using the output from slab() and a vector of horizon names
@@ -9,8 +11,16 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
   # trick R CMD check
   top = bottom = NULL
   
-  # just in case, make DF-safe names
+  # sanity check
+  if(missing(o.names) & is.null(attr(x, which='original.levels')))
+    stop('x not derived from slab() or o.names is missing')
+  
+  ## this should accomodate DF-safe names returned by slab()
+  # make DF-safe names for hz that violate DF constraints
   safe.names <- make.names(o.names)
+  
+  # LUT for names
+  names.LUT <- data.frame(original=o.names, safe=safe.names, stringsAsFactors = FALSE)
   
 	# get index to max probability, 
 	# but only when there is at least one value > 0 and all are not NA
@@ -23,7 +33,7 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 	
 	
 	# get most probable, original,  horizon designation by slice
-	x$name <- o.names[apply(x[, safe.names], 1, .f.ML.hz)]
+	x$name <- safe.names[apply(x[, safe.names], 1, .f.ML.hz)]
 	
 	# extract ML hz sequences
 	x.rle <- rle(as.vector(na.omit(x$name)))
@@ -38,7 +48,7 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 	x.ml <- ddply(x.ml, 'hz', summarise, top=min(top), bottom=max(bottom))
 	
 	# re-order using vector of original horizon names-- this will result in NAs if a named horizon was not the most likely
-	x.ml <- x.ml[match(o.names, x.ml$hz), ]
+	x.ml <- x.ml[match(safe.names, x.ml$hz), ]
 	x.ml <- na.omit(x.ml)
 	
 	# integrate probability density function over ML bounds
@@ -52,27 +62,26 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 	
   # compute a pseudo-brier score using ML hz as the "true" outcome
   # brier's multi-class score : http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier
-  x.bs <- ddply(x[!is.na(x$name), ], 'name', function(x.i) {
-    # save the gen hz probabilities into new df
-    x.pr <- x.i[, safe.names]
-    # init new matrix to store most-likely gen hz class
-    m <- matrix(0, ncol=ncol(x.pr), nrow=nrow(x.pr))
-    # same structure as x.pr
-    dimnames(m)[[2]] <- names(x.pr)
-    # set appropriate genhz to 1
-    for(i in 1:nrow(x.i)) {
-      ml.hz.i <- x.i$name[i]
-      m[i, ml.hz.i] <- 1
-    }
-    # compute bs for this gen hz
-    bs <- sum((x.pr - m)^2, na.rm=TRUE) / nrow(x.pr)
-  })
+	# filter NA: why would this happen?
+	idx <- which(!is.na(x$name))
+  x.bs <- ddply(x[idx, ], 'name', brierScore, classLabels=safe.names, actual='name')
   
+  # shannon entropy, (log base 2)bits)
+  x$H <- apply(x[, safe.names], 1, shannonEntropy, b=2)
+  x.H <- ddply(x[idx, ], 'name', plyr::summarize, H=mean(H))
+    
   # fix names for joining
   names(x.bs) <- c('hz', 'pseudo.brier')
+  names(x.H) <- c('hz', 'mean.H')
   
   # join brier scores to ML hz table
   x.ml <- join(x.ml, x.bs, by='hz')
+  
+  # join shannon H to ML hz table
+  x.ml <- join(x.ml, x.H, by='hz')
+  
+  # convert safe names -> original names
+  x.ml$hz <- names.LUT$original[match(x.ml$hz, names.LUT$safe)]
   
 	return(x.ml)
 }
