@@ -204,9 +204,15 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
     the_chroma[N.idx] <- 0
   
   
-  ## 2016-03-07: "fix" values of 2.5 by rounding to 2
-  the_value <- ifelse(the_value == 2.5, 2, the_value)
-  
+  # If the_value or the_chroma are not integers, round them
+  if ( !isTRUE(all.equal(the_value, as.integer(the_value) )) ) {
+    the_value <- round(the_value)
+    warning("'the_value' has been rounded to the nearest integer.")
+  }
+  if ( !isTRUE(all.equal(the_chroma, as.integer(the_chroma) )) ) {
+    the_chroma <- round(the_chroma)
+    warning("'the_chroma' has been rounded to the nearest integer.")
+  }
   
   # join new data with look-up table
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
