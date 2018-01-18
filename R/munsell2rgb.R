@@ -4,7 +4,7 @@
 # function is vectorized
 # output:
 # hue.numeric hue.character
-# 1         2.3            YR
+#     2.3            YR
 .parseMunsellHue <- function(hue) {
   # extract numeric part from hue
   hue.numeric <- unlist(strsplit(hue, split='[^0-9.]+'))
@@ -66,7 +66,7 @@ getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
   closest.value <- ifelse(closest.value < 1, 1, closest.value)
   closest.chroma <- ifelse(closest.chroma < 1, 1, closest.chroma)
   
-  # optionally convert closest Munsell chips to RGB
+  # optionally convert closest Munsell chips to sRGB
   if(convertColors)
     res <- munsell2rgb(closest.hue, closest.value, closest.chroma, ...)
   # otherwise return closest chip
@@ -78,7 +78,7 @@ getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
 
 
 ## TODO: this will not correctly parse gley or neutral colors
-# convert a color string '10YR 4/3' to RGB or R color
+# convert a color string '10YR 4/3' to sRGB or R color
 parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   # sanity check:
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
