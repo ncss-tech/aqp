@@ -23,27 +23,41 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
     lab <- factor(lab, levels=c(o.levels, '<missing>'))
   }
     
-  # get just those levels that are in our data, preserving order of original levels
-  unique.lab <- levels(lab)[which(levels(lab) %in% unique(lab))]
-  group.lengths <- rle(as.numeric(lab))$lengths
-  lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
-  boundary.positions <-  cumsum(group.lengths)[-length(group.lengths)] + 0.5
-  
   # setup plot with plot.SoilProfileCollection
   plot(x, plot.order=new.order, ...)
   
+  # get last plot parameters
+  lsp <- get('last_spc_plot', envir=aqp.env)
+  
+  # get just those levels that are in our data, preserving order of original levels
+  unique.lab <- levels(lab)[which(levels(lab) %in% unique(lab))]
+  group.lengths <- rle(as.numeric(lab))$lengths
+  
+  # label positions
+  lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
+  
+  # group boundaries on x-axis
+  boundary.positions <-  cumsum(group.lengths)[-length(group.lengths)] + 0.5
+  
+  # resonable upper / lower boundaries on y-axis
+  # these are informed by plotting parameters sent to plotSPC()
+  upper.position <- (lsp$y.offset) + (group.name.offset/2 * lsp$scaling.factor)
+  lower.position <- (lsp$y.offset) + (lsp$max.depth * lsp$scaling.factor)
+  
   # add group boundaries
   if(break.style == 'line')
-    abline(v=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+    segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  
   if(break.style == 'arrow')
     arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  
   if(break.style == 'both') {
-    abline(v=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+    segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
     arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
   }
   
   # annotate with group labels
-  text(lab.positions, group.name.offset, unique.lab, cex=group.name.cex, adj=0.5, font=4)
+  text(lab.positions, group.name.offset, unique.lab, cex=group.name.cex, adj=c(0.75, 0), font=4)
 }
 
 
@@ -221,7 +235,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
   # save arguments to aqp env
-  lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor)
+  lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor, 'max.depth'=max.depth)
   assign('last_spc_plot', lsp, envir=aqp.env)
   
   # get horizons
