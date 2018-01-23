@@ -28,6 +28,11 @@ addDiagnosticBracket <- function(s, kind, id=idname(s), feature='featkind', top=
   
 }
 
+
+###
+### this is currently broken for all cases where plotting order != SPC order
+###
+
 ## TODO: more testing!
 ## TODO: add proper documentation
 ## NOTE: this function is vectorized
