@@ -115,110 +115,6 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 }
 
 
-## TODO: still not completely generalized
-# annotate elements from @diagnostic with brackets 
-# mostly a helper function for addBracket()
-addDiagnosticBracket <- function(s, kind, id=idname(s), feature='featkind', top='featdept', bottom='featdepb', ...) {
-	
-  ## note: plot offset / scaling details are applied by addBracket()
-  ## note: we still have to re-order depths based on the plotting order
-  lsp <- get('last_spc_plot', envir=aqp.env)
-  plot.order <- lsp$plot.order
-  
-  # extract diagnostic horizon information
-  d <- diagnostic_hz(s)
-  d <- d[which(d[[feature]] == kind), ]
-  
-  # there may be no matching features, in that case issue a message and do nothing
-  if(nrow(d) < 1) {
-    message('no matching features found')
-  } else {
-    # generate index linking our top/bottom depths with the plotting order
-    # profile_id() returns original order
-    # plot.order re-orders according to last plot
-    key <- match(d[[id]], profile_id(s)[plot.order])
-    
-    # add backets
-    # depths are in the same order as the key
-    addBracket(top=d[[top]], bottom=d[[bottom]], idx=key, ...)
-  }
-  
-}
-
-## TODO: add proper documentation
-## NOTE: this function is vectorized
-# internal function for plotting a bracket (usually defines a diagnostic feature or similar)
-# idx: (optional) integer index to profile, adjusted to correct plotting order
-# top: top depth
-# bottom: bottom depth
-# tick.length: bracket tick length
-# offset: left-hand offset from profile center
-addBracket <- function(top, bottom=NULL, idx=NULL, label=NULL, label.cex=0.75, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
-  
-  # get plotting details from aqp environment
-  lsp <- get('last_spc_plot', envir=aqp.env)
-  depth.offset <- lsp$y.offset
-  sf <- lsp$scaling.factor
-  w <- lsp$width
-  plot.order <- lsp$plot.order
-  
-  # if missing an specific index, assume plotting order from last call to plotSPC()
-  # this index is used to set the base x-coordinate for all brackets
-  if(is.null(idx)) {
-    idx <- plot.order
-  }
-  
-  # determine horizon depths in current setting
-  # depth_prime = (depth * scaling factor) + y.offset
-  top <- (top * sf) + depth.offset
-  bottom <- (bottom * sf) + depth.offset
-  
-  # make a new vector of x-coords, tops, bottoms, and labels
-  # so that indexes are correct in the context of all plotted profiles
-  x.base <- rep(NA, times=length(plot.order))
-  tops <- rep(NA, times=length(plot.order))
-  bottoms <- rep(NA, times=length(plot.order))
-  labels <- rep(NA, times=length(plot.order))
-  
-  # load with data in correct order
-  x.base[idx] <- idx
-  tops[idx] <- top
-  bottoms[idx] <- bottom
-  
-  if(!is.null(label)) {
-    labels[idx] <- label
-  }
-  
-	# normal case: both top and bottom defined
-	if(!missing(top) & !missing(bottom)) {
-    # x-positions
-    x.1 <- x.base + offset
-    x.2 <- x.1 + tick.length
-		# top tick
-		segments(x.1, tops, x.2, tops, lend=2, ...)
-		# bottom tick
-		segments(x.1, bottoms, x.2, bottoms, lend=2, ...)
-		# vertical bar
-		segments(x.1, tops, x.1, bottoms, lend=2, ...)
-	}
-	
-	# missing bottom: replace bottom tick with arrow head
-	if(!missing(top) & missing(bottom)) {
-	  # x-positions
-	  x.1 <- x.base + offset
-	  x.2 <- x.1 + tick.length
-		# top tick
-		segments(x.1, tops, x.2, tops, lend=2, ...)
-		# vertical bar is now an arrow
-		arrows(x.1, tops, x.1, tops + (missing.bottom.depth * sf), length=arrow.length, lend=2, ...)
-	}
-	
-  # optionally plot label
-  if(!missing(top) & !missing(label)){
-    text(x.1 - 0.05, (tops + bottoms)/2, labels, srt=90, cex=label.cex, pos=3)
-  }
-  
-}
 
 
 
@@ -255,7 +151,8 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   
   # save arguments to aqp env
   lsp <- list('width'=width, 'plot.order'=plot.order, 'y.offset'=y.offset, 'scaling.factor'=scaling.factor, 'max.depth'=max.depth, n=n)
-  assign('last_spc_plot', lsp, envir=aqp.env)
+  
+  assign('last_spc_plot', lsp, envir=aqp.env, )
   
   # get horizons
   h <- horizons(x)
