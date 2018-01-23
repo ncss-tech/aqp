@@ -60,23 +60,39 @@ plot(sp1)
 # note that plotting order is derived from the call to `plot(sp1)`
 addBracket(a[, 1], a[, 2], col='red')
 
+# brackets follow plotting order
+plot(sp1, plot.order=length(sp1):1)
+# annotate with brackets
+# note that plotting order is derived from the call to `plot(sp1)`
+addBracket(a[, 1], a[, 2], col='red')
+
+
 # more interesting example using diagnostic horizons
 if(require(soilDB)) {
   # load some sample data with diagnostic horizons
-  data(loafercreek)
+  data("gopheridge")
   
   # extract first 15 profiles
-  x <- loafercreek[1:15, ]
-  s <- site(x)
-
+  x <- gopheridge[1:15, ]
+  
   # plot
   par(mar=c(0,0,0,0))
-  plot(x, name='hzname', id.style='top')
+  plot(x, name='hzname')
   
   # add brackets describing the argillic horizon
-  addDiagnosticBracket(x, 'argillic horizon', col='red')
+  addDiagnosticBracket(x, kind='argillic horizon', col='red')
   # add brackets describing paralithic contact
-  addDiagnosticBracket(x, 'paralithic contact', col='blue')
+  addDiagnosticBracket(x, kind='paralithic contact', col='blue')
+  
+  # adjust plot order, brackets will follow:
+  par(mar=c(0,0,0,0))
+  plot(x, name='hzname', plot.order=15:1)
+  
+  # add brackets describing the argillic horizon
+  addDiagnosticBracket(x, kind='argillic horizon', col='red')
+  # add brackets describing paralithic contact
+  addDiagnosticBracket(x, kind='paralithic contact', col='blue')
 }
+
 
 }

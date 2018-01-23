@@ -1,3 +1,7 @@
+-------------------------- aqp 1.15.3 (2018-01-24) ------------------------
+* added a new argument to addDiagnosticBracket() allowing for specification of column containing diagnostic feature kind
+* fixed bug in addBracket() when plotting order was not the same as internal ordering of SPCs
+
 -------------------------- aqp 1.15.2 (2017-11-30) ------------------------
 * added shannonEntropy(), confusionIndex(), and brierScore()
 * bug fix in get.ml.hz() for horizon names that start with number or punctuation
