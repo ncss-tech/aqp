@@ -6,17 +6,17 @@
 \usage{
 addBracket(x, label.cex=0.75,
 tick.length = 0.05, arrow.length = 0.05, offset = -0.3, 
-missing.bottom.depth = 25, 
+missing.bottom.depth = NULL, 
 ...)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{x}{data.frame containing ID, `top`, `bottom`, and optionally `label` columns}
   \item{label.cex}{scaling factor for label font}
   \item{tick.length}{length of bracket "tick" mark}
   \item{arrow.length}{length of arrowhead}
   \item{offset}{numeric, length of left-hand offset from each profile}
-  \item{missing.bottom.depth}{distance (in depth units) to extend brackets that are missing a lower depth}
+  \item{missing.bottom.depth}{distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)}
   \item{\dots}{further arguments passed on to \code{segments} or \code{arrows}}
 }
 \details{...TODO...}
