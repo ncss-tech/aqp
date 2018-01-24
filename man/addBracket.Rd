@@ -4,17 +4,14 @@
 \title{Add Depth Brackets}
 \description{Add depth-wise brackets to an existing plot of a SoilProfileCollection object.}
 \usage{
-addBracket(top, bottom=NULL, idx=NULL, label=NULL, label.cex=0.75,
+addBracket(x, label.cex=0.75,
 tick.length = 0.05, arrow.length = 0.05, offset = -0.3, 
 missing.bottom.depth = 25, 
 ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{top}{numeric vector of bracket top depths}
-  \item{bottom}{numeric vector of bracket bottom depths}
-  \item{idx}{optional integer index, associating bracket with profile}
-  \item{label}{optional vector of labels for brackets}
+  \item{x}{data.frame containing ID, `top`, `bottom`, and optionally `label` columns}
   \item{label.cex}{scaling factor for label font}
   \item{tick.length}{length of bracket "tick" mark}
   \item{arrow.length}{length of arrowhead}
@@ -22,7 +19,7 @@ missing.bottom.depth = 25,
   \item{missing.bottom.depth}{distance (in depth units) to extend brackets that are missing a lower depth}
   \item{\dots}{further arguments passed on to \code{segments} or \code{arrows}}
 }
-\details{The optional argument \code{idx} can be used to manually specify which profile a given bracket will be associated with. When \code{idx} is NULL, an integer sequence associated with plotting order (via \code{plotSPC}) is used. See examples below.}
+\details{...TODO...}
 
 \note{This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.}
 
@@ -30,6 +27,8 @@ missing.bottom.depth = 25,
 
 \seealso{\code{\link{plotSPC}}}
 \examples{
+library(plyr)
+
 # sample data
 data(sp1)
 
@@ -43,28 +42,32 @@ depths(sp1) <- id ~ top + bottom
 plot(sp1)
 
 # extract top/bottom depths associated with all A horizons
+# return as a single data.frame / profile
 f <- function(i) {
   h <- horizons(i)
   idx <- grep('^A', h$name)
-  c(min(h$top[idx]), max(h$bottom[idx], na.rm=TRUE))
+  res <- data.frame(top=min(h$top[idx]), bottom=max(h$bottom[idx], na.rm=TRUE))
+  return(res)
 }
 
-# apply function to sp1, result is a list
+# apply function to each profile in sp1, result is a list
 a <- profileApply(sp1, f, simplify=FALSE)
-# convert list into matrix
-a <- do.call('rbind', a)
+# convert list into data.frame
+a <- ldply(a)
+# set idname so that addBrackets can locate the correct profile
+names(a)[1] <- idname(sp1)
 
 # plot
 plot(sp1)
 # annotate with brackets
 # note that plotting order is derived from the call to `plot(sp1)`
-addBracket(a[, 1], a[, 2], col='red')
+addBracket(a, col='red')
 
 # brackets follow plotting order
 plot(sp1, plot.order=length(sp1):1)
 # annotate with brackets
 # note that plotting order is derived from the call to `plot(sp1)`
-addBracket(a[, 1], a[, 2], col='red')
+addBracket(a, col='red')
 
 
 # more interesting example using diagnostic horizons

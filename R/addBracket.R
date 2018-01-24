@@ -1,69 +1,97 @@
 ## TODO: still not completely generalized
 # annotate elements from @diagnostic with brackets 
 # mostly a helper function for addBracket()
-addDiagnosticBracket <- function(s, kind, id=idname(s), feature='featkind', top='featdept', bottom='featdepb', ...) {
-  
-  ## note: plot offset / scaling details are applied by addBracket()
-  ## note: we still have to re-order depths based on the plotting order
-  lsp <- get('last_spc_plot', envir=aqp.env)
-  plot.order <- lsp$plot.order
+addDiagnosticBracket <- function(s, kind, feature='featkind', top='featdept', bottom='featdepb', ...) {
   
   # extract diagnostic horizon information
+  # note: the idname is already present in `d`
   d <- diagnostic_hz(s)
   d <- d[which(d[[feature]] == kind), ]
+  
+  # rename columns so that addBracket() can find top/bottom depths
+  nm <- names(d)
+  nm[which(nm == top)] <- 'top'
+  nm[which(nm == bottom)] <- 'bottom'
+  names(d) <- nm
   
   # there may be no matching features, in that case issue a message and do nothing
   if(nrow(d) < 1) {
     message('no matching features found')
   } else {
-    # generate index linking our top/bottom depths with the plotting order
-    # profile_id() returns original order
-    # plot.order re-orders according to last plot
-    key <- match(d[[id]], profile_id(s)[plot.order])
-    
     # add backets
-    # depths are in the same order as the key
-    addBracket(top=d[[top]], bottom=d[[bottom]], idx=key, ...)
+    # sorting is done via matching idname to plot order of idname
+    addBracket(d, ...)
   }
   
 }
 
 
-###
-### this is currently broken for all cases where plotting order != SPC order
-###
-
 ## TODO: more testing!
 ## TODO: add proper documentation
 ## NOTE: this function is vectorized
 # internal function for plotting a bracket (usually defines a diagnostic feature or similar)
-# idx: integer index to profile, adjusted to correct plotting order
-# top: top depth, adjusted to correct plotting order
-# bottom: bottom depth, adjusted to correct plotting order
-# label: optional label, adjusted to correct plotting order
+# x: data.frame with lsp$idname, top, bottom, label (optional)
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
-addBracket <- function(idx, top, bottom=NULL, label=NULL, label.cex=0.75, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=25, ...) {
+addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=NULL, ...) {
   
   # get plotting details from aqp environment
   lsp <- get('last_spc_plot', envir=aqp.env)
   depth.offset <- lsp$y.offset
   sf <- lsp$scaling.factor
-  w <- lsp$width
   
-  ## TODO
-  # sanity check: at the very least, length(top) = length(idx)
+  # test for required columns:
+  # lsp$idname
+  # top
+  # bottom
+  if(is.null(x$top) | is.null(x$bottom) | is.null(x[[lsp$idname]]))
+    stop('required columns missing', call. = FALSE)
   
+  # test for > 0 rows
+  if(nrow(x) < 1) {
+    warning('no rows')
+    return(FALSE)
+  }
+    
+  # test for all missing top depths
+  if(all(is.na(x$top)))
+    stop('no top depths supplied')
+  
+  # test for missing label column
+  do.label <- FALSE
+  if(! is.null(x$label))
+    do.label <- TRUE
+  
+  # test for all bottom depths missing
+  no.bottom <- FALSE
+  if(all(is.na(x$bottom)))
+    no.bottom <- TRUE
+  
+  # if not specified, use the max depth in the last plot
+  if(is.null(missing.bottom.depth)) {
+    missing.bottom.depth <- lsp$max.depth
+  }
+  
+  # apply scale and offset to missing bottom depth
+  missing.bottom.depth <- (missing.bottom.depth * sf) + depth.offset
+  
+  # re-order rows of x, according to IDs
+  idx <- match(lsp$pIDs, x[[lsp$idname]])
+  x <- x[idx, ]
   
   # determine horizon depths in current setting
   # depth_prime = (depth * scaling factor) + y.offset
-  top <- (top * sf) + depth.offset
-  bottom <- (bottom * sf) + depth.offset
-
+  top <- (x$top * sf) + depth.offset
+  bottom <- (x$bottom * sf) + depth.offset
+  
+  # init sequence of x-coordinates
+  # depths are pre-sorted, so this is simple
+  x.base <- 1:nrow(x)
+  
   # normal case: both top and bottom defined
   if(!missing(top) & !missing(bottom)) {
     # x-positions
-    x.1 <- idx + offset
+    x.1 <- x.base + offset
     x.2 <- x.1 + tick.length
     # top tick
     segments(x.1, top, x.2, top, lend=2, ...)
@@ -74,19 +102,22 @@ addBracket <- function(idx, top, bottom=NULL, label=NULL, label.cex=0.75, tick.l
   }
   
   # missing bottom: replace bottom tick with arrow head
-  if(!missing(top) & missing(bottom)) {
+  if(no.bottom) {
     # x-positions
-    x.1 <- idx + offset
+    x.1 <- x.base + offset
     x.2 <- x.1 + tick.length
     # top tick
     segments(x.1, top, x.2, top, lend=2, ...)
     # vertical bar is now an arrow
-    arrows(x.1, top, x.1, top + (missing.bottom.depth * sf), length=arrow.length, lend=2, ...)
+    arrows(x.1, top, x.1, top + missing.bottom.depth, length=arrow.length, lend=2, ...)
   }
   
   # optionally plot label
-  if(!missing(top) & !missing(label)){
-    text(x.1 - 0.05, (top + bottom)/2, label, srt=90, cex=label.cex, pos=3)
+  if(do.label){
+    if(no.bottom)
+      bottom <- rep(missing.bottom.depth, times=length(bottom))
+    # add labels
+    text(x.1 - 0.05, (top + bottom)/2, x$label, srt=90, cex=label.cex, pos=3)
   }
   
 }
