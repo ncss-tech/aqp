@@ -13,7 +13,7 @@ Get the development version from Github, after installing the CRAN version + dep
 
 `devtools::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade_dependencies=FALSE)`
 
-## Documentation
+## Website
 http://ncss-tech.github.io/AQP/
 
 ## Examples
