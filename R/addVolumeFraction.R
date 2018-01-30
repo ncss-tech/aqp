@@ -1,10 +1,17 @@
 
-# convert volume pct [0,100] into DF of points along a res x res grid
+# convert volume pct [0, 100] into DF of points along a res x res grid
 .volume2df <- function(v, depth, res) {
 	# test for no data
 	if(is.na(v))
 		return(data.frame())
 	
+  # test for >= 100%
+  if(v >= 100) {
+    warning(sprintf("%s >= 100, likely a data error", v), call. = FALSE)
+    # truncate at 100%
+    v <- 100
+  }
+  
 	# convert volume pct into fraction
 	v <- v / 100
 	
@@ -44,7 +51,6 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	# horizontal shrinkage factor
 	## TODO: why is this hard-coded at '5' ?
 	w.offset <- w / 5
-	
 	
 	# get top/bottom colnames
 	hd <- horizonDepths(x)
