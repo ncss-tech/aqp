@@ -1,3 +1,6 @@
+-------------------------- aqp 1.15.4 (2018-01-29) ------------------------
+* bug fix for addVolumeFraction() when fragment volume > 100%
+
 -------------------------- aqp 1.15.3 (2018-01-24) ------------------------
 * added a new argument to addDiagnosticBracket() allowing for specification of column containing diagnostic feature kind
 * addBracket() now requires a data.frame with plotting details, see manual page
