@@ -1,0 +1,140 @@
+user_site_id,pedon_key,user_pedon_id,cntrl_depth_to_top,cntrl_depth_to_bot,sampled_taxon_name,sampled_class_name,correlated_taxon_name,correlated_taxon_name,clyavg_d-1,sulews_d-1_S,wa0175_d-1_S,wace7cl_d-1_S,wace7cl_d-4_S,wacltot_d-1_S,wavfg2_d-1_S
+90CA109101,91P0719,90CA109101,25,100,Sierra,"Fine-loamy, mixed, mesic Ultic Haploxeralf",Sierra,"Fine-loamy, mixed, semiactive, mesic Ultic Haploxeralf",33,,39,0.38,,33,5
+90CA109102,91P0720,90CA109102,38,89,Hoda,"Fine, mixed, mesic Ultic Haploxeralf",Hoda,"Fine-loamy, mixed, mesic Ultic Haploxeralf",27,,39,0.56,,27,
+90CA109103,91P0721,90CA109103,25,71,Beckman,"Loamy-skeletal, mixed, mesic Dystric Xerochrept",(unnamed),"Loamy-skeletal, mixed, superactive, mesic Dystric Xerochrept",16,,78,0.83,,16,56
+90CA109104,91P0722,90CA109104,10,46,Maymen,,Maymen,"Loamy-skeletal, mixed, active, mesic Dystric Lithic Xerochrept",17,,77,0.75,,17,53
+90CA109105,91P0723,90CA109105,30,80,(unnamed),"Fine-loamy, mixed, mesic Ultic Haploxeralf",(unnamed),"Fine, mixed, subactive, mesic Typic Haploxerult",44,,28,0.19,,44,7
+90CA109106,91P0724,90CA109106,41,91,Jocal,"Fine-loamy, mixed, mesic Ultic Haploxeralf",Jocal,"Fine, mixed, subactive, mesic Typic Haploxerult",46,,29,0.24,,46,2
+90CA109107,91P0725,90CA109107,56,106,Musick,"Fine-loamy, mixed, mesic Ultic Haploxeralf",Musick,"Fine-loamy, mixed, superactive, mesic Ultic Palexeralf",24,,27,0.87,,24,3
+90CA109108,91P0726,90CA109108,46,96,Cohasset,"Fine-loamy, mixed, mesic Ultic Haploxeralf",Cohasset,"Fine, mixed, superactive, mesic Typic Palexerult",54,,17,0.24,,54,5
+90CA109109,91P0727,90CA109109,10,61,Sites,"Clayey, oxidic, mesic Xeric Haplohumult",(unnamed),"Fine, parasesquic, mesic Typic Haploxerult",33,,34,0.44,,33,
+90CA109110,91P0728,90CA109110,46,96,Stump Springs,,(unnamed),"Fine-loamy, mixed, active, mesic Ultic Palexeralf",28,,50,0.53,,28,11
+90CA109111,91P0729,90CA109111,25,69,Nikal,"Medial, mesic Andic Xerumbrept",(unnamed),"Coarse-loamy, isotic, mesic Andic Xerumbrept",7,,60,2.88,,7,15
+90CA109112,91P0730,90CA109112,18,41,(unnamed),,(unnamed),"Loamy-skeletal, mixed, superactive, mesic Lithic Xerumbrept",8,,70,1.86,,8,35
+90CA109113,91P0731,90CA109113,25,100,Pilliken,"Coarse-loamy, mixed, mesic Entic Xerumbrept",Pilliken,"Coarse-loamy, mixed, active, mesic Entic Xerumbrept",6,,68,1.22,,6,7
+90CA109114,91P0732,90CA109114,25,100,Tethrick,"Coarse-loamy, mixed, mesic Dystric Xerochrept",Tethrick,"Loamy-skeletal, mixed, active, mesic Dystric Xerochrept",7,,67,1.37,,7,29
+90CA109115,91P0733,90CA109115,25,74,Fiddlemod,,(unnamed),"Loamy-skeletal, mixed, active, mesic Typic Xerumbrept",8,,78,1.26,,8,59
+90CA109116,91P0734,90CA109116,25,100,Tish Tang,"Loamy-skeletal, mixed, mesic Dystric Xerochrept",(unnamed),"Loamy-skeletal, mixed, semiactive, mesic Dystric Xerochrept",10,,62,0.53,,10,40
+90CA109117,91P0735,90CA109117,25,66,(unnamed),Haplaquept,(unnamed),"Fine-loamy, mixed, mesic Mollic Epiaquept",31,,34,1.15,,31,
+90CA109118,91P0736,90CA109118,3,54,Bancas,,Bancas,"Fine-loamy, mixed, active, mesic Typic Haploxeralf",25,,46,0.54,,25,3
+90CA109119,91P0737,90CA109119,25,97,Chaix,"Loamy-skeletal, mixed, mesic Dystric Xerochrept",Chaix,"Coarse-loamy, mixed, active, mesic Dystric Xerorthent",5,,90,1.92,,5,67
+90CA109120,91P0738,90CA109120,69,119,Holland,,(unnamed),"Fine-loamy, mixed, semiactive, mesic Typic Haploxerult",20,,40,0.43,,20,2
+90CA109121,91P0739,90CA109121,46,96,Jomod,"Fine-loamy, mixed, mesic Typic Haploxerult",(unnamed),"Fine-loamy, mixed, semiactive, mesic Typic Haploxerult",31,,73,0.25,,31,49
+90CA109122,91P0740,90CA109122,23,76,McCarthy,"Medial-skeletal, mesic Andic Xerumbrept",McCarthy,"Medial-skeletal, amorphic, mesic Humic Haploxerand",7,,84,3.75,,7,65
+90CA109123,91P0741,90CA109123,20,84,Hotaw,,Hotaw,"Fine-loamy, mixed, semiactive, mesic Ultic Haploxeralf",25,,51,0.34,,25,15
+90CA109124,91P0742,90CA109124,25,100,McCarthy,"Medial-skeletal, mesic Andic Xerumbrept",McCarthy,"Medial-skeletal, amorphic, mesic Humic Haploxerand",13,,85,1.27,,13,61
+96CA109001,97P0117,96CA109001,0,29,(unnamed),"Sandy, mixed Lithic Cryumbrept",(unnamed),"Sandy, mixed Lithic Cryumbrept",1,,88,8.19,,1,15
+96CA109002,97P0118,96CA109002,25,100,(unnamed),"Sandy-skeletal, mixed Oxyaquic Cryumbrept",(unnamed),"Sandy-skeletal, mixed Andic Cryumbrept",2,,79,4.08,,2,34
+96CA109003,97P0119,96CA109003,25,100,(unnamed),"Sandy, mixed Oxyaquic Cryochrept",(unnamed),"Sandy, mixed Andic Cryumbrept",1,,81,4.78,,1,10
+96CA109004,97P0120,96CA109004,0,70,(unnamed),"Sandy-skeletal, mixed Typic Cryorthent",(unnamed),"Sandy-skeletal, mixed Vitrandic Cryumbrept",1,,87,5.02,,1,52
+96CA109005,97P0121,96CA109005,29,104,(unnamed),"Loamy-skeletal, mixed Typic Cryochrept",(unnamed),"Sandy, mixed Vitrandic Cryumbrept",2,,85,2.95,,2,36
+96CA109006,97P0122,96CA109006,25,100,(unnamed),"Loamy-skeletal, mixed Oxyaquic Cryumbrept",(unnamed),"Sandy-skeletal, mixed Vitrandic Cryumbrept",3,,67,2.05,,3,15
+96CA109007,97P0123,96CA109007,25,100,(unnamed),"Coarse-loamy, mixed Histic Cryaquept",(unnamed),"Sandy, mixed Histic Cryaquept",3,,67,4.63,,3,19
+96CA109008,97P0124,96CA109008,25,100,(unnamed),"Sandy, mixed Eutric Cryumbrept",(unnamed),"Sandy, mixed Entic Cryumbrept",2,,77,3.02,,2,26
+96CA109009,97P0125,96CA109009,25,100,(unnamed),"Sandy, mixed, frigid Entic Haplumbrept",(unnamed),"Sandy, mixed Oxyaquic Cryumbrept",4,,76,1.93,,4,20
+96CA109010,97P0126,96CA109010,25,100,(unnamed),"Sandy, mixed Entic Cryumbrept",(unnamed),"Sandy, mixed Entic Cryumbrept",3,,82,2.72,,3,10
+96CA109011,97P0127,96CA109011,25,100,(unnamed),"Loamy-skeletal, mixed Entic Cryumbrept",(unnamed),"Sandy-skeletal, mixed Entic Cryumbrept",4,,78,3.56,,4,60
+96CA109012,97P0128,96CA109012,25,100,(unnamed),"Loamy-skeletal, mixed Oxyaquic Cryumbrept",(unnamed),"Sandy-skeletal, mixed Humic Cryaquept",2,,85,3.28,,2,40
+96CA109013,97P0129,96CA109013,25,100,(unnamed),"Sandy-skeletal, mixed Typic Cryorthent",Canisrocks,"Sandy-skeletal, isotic Typic Cryorthent",2,,84,3.15,,2,53
+96CA109014,97P0132,96CA109014,94,110,(unnamed),"Coarse-loamy, mixed, frigid Ultic Haploxeralf",(unnamed),"Coarse-loamy, mixed, frigid Andic Kanhaplohumult",15,,64,0.78,,15,23
+96CA109015,97P0133,96CA109015,25,67,(unnamed),"Sandy-skeletal, mixed Dystric Xerochrept",(unnamed),"Loamy-skeletal, mixed, superactive, allic, frigid Pachic Xerumbrept",9,,64,3.66,,9,53
+97CA109001,98P0202,97CA109001,25,65,(unnamed),"Coarse-loamy, mixed, superactive Dystric Cryochrept",,,2,,66,3.05,,2,63
+97CA109002,98P0203,97CA109002,53,103,(unnamed),"Coarse-loamy, mixed, superactive, frigid Typic Haploxerult",,,25,,54,0.31,,25,5
+97CA109003,98P0204,97CA109003,7,57,(unnamed),"Loamy, mixed, superactive, mesic Ultic Haploxeralf",,,18,,34,0.78,,18,15
+97CA109004,98P0205,97CA109004,25,100,(unnamed),"Sandy-skeletal, mixed Typic Cryorthent",,,1,,77,4.5,,1,36
+97CA109005,98P0206,97CA109005,25,100,(unnamed),"Coarse-loamy, mixed, superactive Oxyaquic Cryumbrept",,,3,,48,1.23,,3,24
+97CA109006,98P0207,97CA109006,3,53,(unnamed),"Loamy-skeletal, mixed, superactive, frigid Typic Haploxerult",,,7,,65,1.84,,7,57
+97CA109007,98P0208,97CA109007,25,100,(unnamed),"Sandy, mixed, frigid Fluvaquentic Humaquept",,,4,,73,3.3,,4,7
+97CA109008,98P0209,97CA109008,0,20,(unnamed),"Sandy, mixed, frigid Lithic Xerumbrept",,,2,,82,6.05,,2,11
+97CA109009,98P0210,97CA109009,25,100,(unnamed),"Fine-loamy, mixed, superactive, frigid Typic Endoaquept",,,22,,45,0.97,,22,1
+97CA109010,98P0211,97CA109010,25,100,(unnamed),"Loamy-skeletal, mixed, superactive Oxyaquic Cryumbrept",,,2,,73,4.58,,2,41
+97CA109011,98P0212,97CA109011,25,80,(unnamed),"Sandy-skeletal, mixed Dystric Cryochrept",Tiogapass,"Loamy-skeletal, isotic Xeric Dystrocryept",4,,80,2.03,,4,63
+97CA109012,98P0213,97CA109012,25,100,(unnamed),"Coarse-silty over sandy or sandy-skeletal, mixed Typic Cryaquept",,,1,,55,7.49,,1,1
+97CA109013,98P0214,97CA109013,25,100,(unnamed),"Coarse-loamy, mixed, superactive Oxyaquic Cryumbrept",,,6,,67,1.65,,6,33
+97CA109014,98P0215,97CA109014,0,34,(unnamed),"Sandy-skeletal, mixed Lithic Cryumbrept",,,4,,74,1.95,,4,20
+97CA109015,98P0216,97CA109015,25,100,(unnamed),"Sandy, mixed Entic Cryumbrept",,,2,,71,5.23,,2,24
+97CA109016,98P0217,97CA109016,25,100,(unnamed),"Sandy-skeletal, mixed Oxyaquic Cryorthent",,,1,,62,4.63,,1,41
+97CA109017,98P0303,97CA109017,25,100,Lyellfork,"Sandy, mixed Oxyaquic Cryumbrept",,,3,,65,1.75,,3,19
+99CA109001,99P0313,99CA109001,25,100,,,,,7,,68,1.27,,7,30
+99CA109006,99P0314,99CA109006,25,100,,,,,4,,88,1.07,,4,43
+99CA109002,99P0316,99CA109002,25,100,,,,,10,,37,1.52,,10,1
+99CA109004,99P0317,99CA109004,25,70,(unnamed),"Isotic, frigid Dystric Xeropsamment",,,2,,73,3.54,,2,25
+99CA109005,99P0318,99CA109005,25,100,,,,,2,,74,2.03,,2,43
+99CA109007,99P0319,99CA109007,25,100,,,,,1,,16,2.59,,1,14
+99CA109008,99P0320,99CA109008,20,100,,,,,5,,46,1.76,,5,1
+99CA109003,99P0322,99CA109003,20,100,(unnamed),"Coarse-loamy, isotic, frigid Ultic Palexeralf",,,6,,63,1.32,,6,2
+00CA109001,00P0780,00CA109001,25,100,(unnamed),"Loamy-skeletal, isotic Typic Cryorthent",,,1,,20,0.67,,1,9
+00CA109002,00P0781,00CA109002,14,64,(unnamed),"Loamy-skeletal, isotic Haplocryalf",,,3,,81,3.33,,3,59
+00CA109003,00P0782,00CA109003,25,100,(unnamed),Coarse-loamy Typic Dystrocryept,,,3,,51,3.79,,3,19
+00CA109004,00P0783,00CA109004,25,100,(unnamed),"Sandy-skeletal, isotic, frigid Dystric Xerorthent",,,3,,83,2.91,,3,62
+00CA109005,00P0784,00CA109005,25,100,(unnamed),"Sandy, isotic, frigid Fluventic Humic Dystropept",,,2,,72,4.25,,2,6
+00CA109006,00P0785,00CA109006,25,100,(unnamed),"Isotic, mesic Oxyaquic Udipsamment",,,2,,54,4.31,,2,2
+00CA109007,00P0786,00CA109007,25,100,(unnamed),"Sandy-skeletal, isotic, mesic Dystric Xerorthent",,,1,,50,2.74,,1,40
+S00CA-109-008,01N0143,S00CA-109-008,,,,"Coarse-loamy, isotic, frigid Typic Dystroxerept",,,,,,,,,
+S00CA-109-009,01N0144,S00CA-109-009,,,,Isotic Typic Cryopsamment,,,,,,,,,
+S00CA-109-010,01N0145,S00CA-109-010,,,,"Coarse-loamy, isotic, frigid Humic Dystroxerept",,,,,,,,,
+S00CA-109-011,01N0146,S00CA-109-011,,,,"Coarse-loamy, isotic, frigid Oxyaquic Dystrudept",,,,,,,,,
+S00CA-109-012,01N0148,S00CA-109-012,,,,"Coarse-loamy, isotic Vitrandic Dystrocryept",,,,,,,,,
+S00CA-109-013,01N0149,S00CA-109-013,,,,"Sandy-skeletal, isotic, frigid Dystric Xerorthent",,,,,,,,,
+S00CA-109-014,01N0151,S00CA-109-014,,,,"Sandy, isotic, frigid Humic Dystroxerept",,,,,,,,,
+S00CA-109-015,01N0152,S00CA-109-015,,,,"Sandy-skeletal, isotic, frigid Humic Dystroxerept",,,,,,,,,
+S01CA-109-001,02N0622,S01CA-109-001,,,,,,,,,,,,,
+07-JCR-001,07N0470,07CA109001,20,70,Motherlode,"Fine, mixed, superactive, thermic Mollic Haploxeralf",,,16,2,55,,0.69,16,18
+07-SMM-009,07N0471,07CA109002,12,48,Hennekenot,"Loamy-skeletal, magnesic, thermic Lithic Argixeroll",,,24,,50,,0.71,24,25
+07-SMM-008,07N0472,07CA109003,0,36,Whiterock,"Loamy, mixed, superactive, thermic Lithic Haploxerept",,,15,,51,,0.77,15,10
+06-JCR-006,07N0473,07CA109004,88,140,Musick,"Fine-loamy, mixed, superactive, mesic Ultic Haploxeralf",,,43,,34,,0.2,43,4
+06-SMM-007,07N0474,07CA109005,48,94,Loafercreek,"Fine-loamy, mixed, active, thermic Mollic Haploxeralf",,,12,,38,,0.7,12,20
+07-SMM-007,07N0475,07CA109006,36,86,Mounthope,"Fine-loamy, mixed, superactive, thermic Ultic Haploxeralf",,,17,,41,,0.45,17,24
+S08CA109001,08N0694,S08CA109001,20,70,Deerflat,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,23,2,19,,0.31,23,6
+S08CA109002,08N0695,S08CA109002,25,80,Moccasinhill,"Loamy-skeletal, mixed, superactive, thermic Typic Haploxeralf",,,18,,81,,0.52,18,77
+08CA630DWB001,09N0865,S09CA009001,8,58,Nedsgulch,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,40,,33,,0.23,40,13
+09CA630SMM004,09N0868,S09CA109001,8,58,Crimeahouse,"Loamy-skeletal, magnesic, thermic Mollic Haploxeralf",,,31,,47,,0.88,31,26
+09CA630BJM017,09N0869,S09CA109002,18,61,Crimeahouse,"Fine, magnesic, thermic Typic Haploxeralf",,,41,,69,,1.07,41,33
+08CA630BJM001,09N0870,S09CA109003,10,60,Auberry,"Fine-loamy, mixed, active, thermic Ultic Haploxeralf",,,16,1,48,,0.65,16,3
+09CA630BJM031,09N0871,S09CA109004,15,65,Fancher,"Loamy-skeletal, magnesic, thermic Aquic Argixeroll",,,30,,57,,0.85,30,35
+09CA630SMM005,09N0872,S09CA109005,25,100,,"Coarse-loamy, mixed, superactive, mesic Typic Haploxerept",,,12,,26,,0.39,12,1
+R07CA630DWB005,10N0447,07DWB005,30,80,Sheepranch,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R07CA630DWB007,10N0448,07DWB007,18,68,Nedsgulch,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630BJM052,10N0457,09BJM052,11,60,Marpatutu,"Loamy-skeletal, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630BAH004,10N0458,09BAH004,12,62,Marpatutu,"Loamy-skeletal, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630BAH003,10N0459,09BAH003,22,72,Marpatutu,"Loamy-skeletal, mixed, thermic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630BJM027,10N0460,09BJM027,12,62,Mariposa,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630BJM035,10N0461,09BJM035,11,60,Mariposa,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+90CA009101,91P0709,90CA009101,,,Windy,"Loamy-skeletal, mixed, frigid Typic Xerumbrept",(unnamed),"Loamy-skeletal, mixed, frigid Typic Xerumbrept",,,,,,,
+90CA009102,91P0710,90CA009102,25,100,Tallac,,(unnamed),"Sandy-skeletal, mixed, frigid Typic Xerumbrept",3,,77,4.7,,3,55
+90CA009103,91P0711,90CA009103,,,Gerle,,(unnamed),"Sandy-skeletal, mixed, frigid Pachic Xerumbrept",,,,,,,
+90CA009104,91P0712,90CA009104,0,30,Nd,Lithic Xerumbrept,(unnamed),"Sandy-skeletal, mixed, frigid Entic Xerumbrept",1,,84,17.14,,1,31
+90CA009105,91P0713,90CA009105,25,100,Euer,"Loamy-skeletal, mixed, frigid Ultic Haploxeralf",(unnamed),"Loamy-skeletal, mixed, semiactive, frigid Typic Palexerult",25,,59,0.72,,25,67
+90CA009106,91P0714,90CA009106,25,100,Gerle,"Coarse-loamy, mixed, frigid Typic Xerumbrept",(unnamed),"Loamy-skeletal, mixed, superactive, frigid Pachic Xerumbrept",6,,72,1.94,,6,33
+90CA009107,91P0715,90CA009107,,,Euer,"Fine-loamy, mixed, frigid Ultic Haploxeralf",(unnamed),"Fine-loamy, mixed, frigid Pachic Ultic Argixeroll",,,,,,,
+90CA009108,91P0716,90CA009108,25,97,Waca,"Medial-skeletal, frigid Andic Xerumbrept",(unnamed),"Medial-skeletal, mixed, frigid Andic Xerumbrept",8,,83,1.65,,8,60
+90CA009109,91P0717,90CA009109,25,100,Windy,"Loamy-skeletal, frigid Andic Xerumbrept",Windy,"Medial-skeletal, mixed, frigid Humic Vitrixerand",6,,86,3.15,,6,62
+90CA009110,91P0718,90CA009110,0,30,(unnamed),Lithic Cryumbrept,(unnamed),"Loamy-skeletal, mixed, superactive Lithic Cryumbrept",7,,84,3.62,,7,51
+07-SMM-015,07N0468,07CA009001,28,78,Sitesnot,"Fine, parasesquic, mesic Xeric Haplohumult",,,37,,25,,0.27,37,7
+07-JCR-002,07N0469,07CA009002,18,68,Gopheridge,"Loamy-skeletal, mixed, superactive, thermic Mollic Haploxeralf",,,35,,23,,0.42,35,7
+07CA630SMM042,08N0157,S07CA009003,38,88,Mantree,"Fine-loamy, isotic, mesic Andic Palexeralf",,,27,,35,,0.27,27,1
+07CA630SMM040,08N0158,S07CA009004,30,80,Andihasset,"Fine-loamy, isotic, mesic Andic Palexeralf",,,37,,19,,0.43,37,1
+07CA630SMM044,08N0159,S07CA009005,8,108,Macmerten,"Medial over loamy, amorphic over isotic, mesic Alfic Humic Haploxerand",,,15,,52,,2.08,15,8
+07CA630SMM017,08N0160,S07CA009006,30,80,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,18,,48,,0.54,18,18
+07CA630SMM045,08N0161,S07CA009008,0,91,McCarthy,"Medial-skeletal, amorphic, mesic Humic Haploxerand",,,first horizon has bad depths or the control section is not contained in the first horizon,,first horizon has bad depths or the control section is not contained in the first horizon,,first horizon has bad depths or the control section is not contained in the first horizon,first horizon has bad depths or the control section is not contained in the first horizon,first horizon has bad depths or the control section is not contained in the first horizon
+S08CA009001,08N0691,S08CA009001,17,67,Nedsgulch,"Fine-loamy, mixed, active, mesic Haplic Palexeralf",,,23,1,31,,0.28,23,9
+S08CA009002,08N0692,S08CA009002,44,94,Marjonmine,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,36,,15,,0.34,36,1
+S08CA009003,08N0693,S08CA009003,36,86,Musick,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,19,,44,,0.56,19,5
+09CA630CKS001,09N0866,S09CA009002,9,59,Loafercreek,"Fine-loamy, mixed, active, thermic Ultic Haploxeralf",,,21,,36,,0.74,21,15
+08CA630DWB003,09N0867,S09CA009003,,,Wallyhill,"Fine-loamy, mixed, mesic Ultic Haploxeralf",,,,,,,,,
+R07CA630DWB015,10N0449,07DWB015,20,70,Sheepranch,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R08CA630DWB020,10N0450,08DWB020,11,61,Nedsgulch,"Fine-loamy, mixed, active, mesic Haplic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R08CA630DWB022,10N0451,08DWB022,23,73,Marjonmine,"Fine-loamy, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630SMM006,10N0452,09SMM006,40,90,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630SMM007,10N0453,09SMM007,41,91,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630SMM009,10N0454,09SMM009,41,91,Marjonmine,"Fine, kaolinitic, mesic Typic Haploxerult",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630SMM011,10N0455,09SMM011,40,90,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630SMM014,10N0456,09SMM014,18,61,,"Loamy-skeletal, mixed, active, mesic Ultic Haploxeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630CKS040,10N0462,09CKS040,14,64,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630CKS043,10N0463,09CKS043,21,71,Marjonmine,"Fine, kaolinitic, mesic Typic Haploxerult",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630CKS049,10N0464,09CKS049,16,66,Nedsgulch,"Fine-loamy, mixed, semiactive, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630CKS054,10N0465,09CKS054,14,64,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+R09CA630CKS044,10N0466,09CKS044,34,84,Schaad,"Fine-loamy, mixed, active, mesic Ultic Palexeralf",,,,,first horizon has bad depths or the control section is not contained in the first horizon,,,,first horizon has bad depths or the control section is not contained in the first horizon
+S09CA009005,10N0443,S09CA009005,28,78,Andihasset,"Fine, mixed, active, mesic Andic Palehumult",,,24,,40,,0.61,24,9
+S09CA009006,10N0444,S09CA009006,5,105,Macmerten,"Medial over loamy, amorphic over isotic, mesic Alfic Humic Haploxerand",,,26,,35,,0.6,26,2
+S09CA009007,10N0445,S09CA009007,10,110,Devilsnose,"Medial over loamy-skeletal, amorphic over isotic, mesic Alfic Humic Haploxerand",,,18,,46,,1.33,18,7
