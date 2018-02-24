@@ -5,13 +5,13 @@ p3 <- person('A.T.', "O'Geen")
 citHeader("To cite the aqp package in publications use:")
 
 citEntry(entry="Manual",
-         title = "Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists",
+         title = "Algorithms for quantitative pedology: A toolkit for soil scientists",
          author = personList(p1,p2,p3),
-         journal = "",
+         journal = "Computers & Geosciences",
          year         = 2013,
-         volume       = '',
-         pages        = '', 
-         url          = "http://r-forge.r-project.org/projects/aqp/",
+         volume       = '52',
+         pages        = '258 - 268', 
+         url          = "http://ncss-tech.github.io/AQP/",
 
-	textVersion = "Beaudette, D.E., Roudier P., and A.T. O'Geen. Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists. 2012" )
+	textVersion = "Beaudette, D.E., Roudier P., and A.T. O'Geen. 2013. Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists. Computers & Geosciences: 258 - 268." )
 
