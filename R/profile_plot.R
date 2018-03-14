@@ -62,6 +62,7 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
 
 
 
+## TODO: labeling is not very helpful
 ## TODO: figure out intellegent recycling of arguments
 ## TODO: no mechanism for merged legends
 plotMultipleSPC <- function(spc.list, group.labels, args=rep(list(NA), times=length(spc.list)), arrow.offset=2, bracket.base.depth=95, ...) {
@@ -94,6 +95,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args=rep(list(NA), times=len
 }
 
 
+## TODO: this doesn't take into account non-default figure geometry
 # annotate profile plots with group labels, usually below
 profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, label.cex=0.75) {
   
