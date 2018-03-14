@@ -1,3 +1,6 @@
+-------------------------- aqp 1.15.5 (2018-03-14) ------------------------
+* enhancement to aggregateColor() for cases when horizon depths are missing or top/bottom logic flipped
+
 -------------------------- aqp 1.15.4 (2018-01-29) ------------------------
 * bug fix for addVolumeFraction() when fragment volume > 100%
 

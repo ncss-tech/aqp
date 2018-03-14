@@ -3,7 +3,7 @@
 ## Note: 'groups' can be either site/horizon attribute, need not be a factor
 aggregateColor <- function(x, groups='genhz', col='soil_color') {
   ## hack to make R CMD check --as-cran happy
-  top <- bottom <- NULL
+  top <- bottom <- thick <- NULL
   
   # extract pieces
   h <- as(x, 'data.frame')
@@ -17,17 +17,34 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   # re-name depths
   names(h.no.na)[2:3] <- c('top', 'bottom')
   
+  # safely compute thickness
+  # abs() used in rare cases where horizon logic is wrong: e.g. old-style O horizons
+  h.no.na$thick <- abs(h.no.na$bottom - h.no.na$top)
+  
+  # 0-thickness will result in NA weights
+  # replace with a 1-unit slice
+  idx <- which(h.no.na$thick == 0)
+  if(length(idx) > 0) {
+    h.no.na$thick[idx] <- 1
+  }
+  
   # split by genhz
   # note that some genhz will have 0 records
   s <- dlply(h.no.na, groups, function(i){
+    
     # aggregate depth by unique soil color
-    res <- ddply(i, col, summarise, weight=sqrt(sum(bottom - top)) * length(top), n.hz=length(top))
+    # this assumes that thickness > 0, otherwise NaN is returned
+    res <- ddply(i, col, summarise, weight=sqrt(sum(thick)) * length(thick), n.hz=length(thick))
+    
     # sort by thickness-- this is our metric for relevance
     res <- res[order(res$weight, decreasing=TRUE), ]
+    
     # back-calculate the closest Munsell color
     m <- rgb2munsell(t(col2rgb(res[[col]])) / 255)
+    
     # format as text
     res$munsell <- paste0(m[, 1], ' ', m[, 2], '/', m[, 3])
+    
     return(res)
   })
   
