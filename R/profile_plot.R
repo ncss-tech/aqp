@@ -44,16 +44,18 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
   upper.position <- (lsp$y.offset) + (group.name.offset/2 * lsp$scaling.factor)
   lower.position <- (lsp$y.offset) + (lsp$max.depth * lsp$scaling.factor)
   
-  # add group boundaries
-  if(break.style == 'line')
-    segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-  
-  if(break.style == 'arrow')
-    arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-  
-  if(break.style == 'both') {
-    segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-    arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+  if(length(boundary.positions)) { # only add grouping symbols if number of groups is > 1
+    # add group boundaries
+    if(break.style == 'line')
+      segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+    
+    if(break.style == 'arrow')
+      arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+    
+    if(break.style == 'both') {
+      segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+      arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
+    }
   }
   
   # annotate with group labels
