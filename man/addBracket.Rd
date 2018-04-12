@@ -19,7 +19,8 @@ missing.bottom.depth = NULL,
   \item{missing.bottom.depth}{distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)}
   \item{\dots}{further arguments passed on to \code{segments} or \code{arrows}}
 }
-\details{...TODO...}
+
+\details{Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.}
 
 \note{This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.}
 
@@ -68,34 +69,6 @@ plot(sp1, plot.order=length(sp1):1)
 # annotate with brackets
 # note that plotting order is derived from the call to `plot(sp1)`
 addBracket(a, col='red')
-
-
-# more interesting example using diagnostic horizons
-if(require(soilDB)) {
-  # load some sample data with diagnostic horizons
-  data("gopheridge")
-  
-  # extract first 15 profiles
-  x <- gopheridge[1:15, ]
-  
-  # plot
-  par(mar=c(0,0,0,0))
-  plot(x, name='hzname')
-  
-  # add brackets describing the argillic horizon
-  addDiagnosticBracket(x, kind='argillic horizon', col='red')
-  # add brackets describing paralithic contact
-  addDiagnosticBracket(x, kind='paralithic contact', col='blue')
-  
-  # adjust plot order, brackets will follow:
-  par(mar=c(0,0,0,0))
-  plot(x, name='hzname', plot.order=15:1)
-  
-  # add brackets describing the argillic horizon
-  addDiagnosticBracket(x, kind='argillic horizon', col='red')
-  # add brackets describing paralithic contact
-  addDiagnosticBracket(x, kind='paralithic contact', col='blue')
-}
 
 
 }
