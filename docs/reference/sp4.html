@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Soil Chemical Data from Serpentinitic Soils of California — sp4" />
+
+<meta property="og:description" content="Soil Chemical Data from Serpentinitic Soils of California" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +38,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +55,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">aqp</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">aqp</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,6 +82,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,10 +90,12 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Soil Chemical Data from Serpentinitic Soils of California</h1>
+    
+    <div class="hidden name"><code>sp4.Rd</code></div>
     </div>
 
     
@@ -321,11 +336,11 @@ on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'</span>
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='input'><span class='co'># inspect plotting area, very simple to overlay graphical elements</span>
 <span class='fu'>abline</span>(<span class='kw'>v</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fu'>length</span>(<span class='no'>sp4</span>), <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'blue'</span>)</div><div class='input'><span class='co'># profiles are centered at integers, from 1 to length(obj)</span>
 <span class='fu'>axis</span>(<span class='fl'>1</span>, <span class='kw'>line</span><span class='kw'>=</span>-<span class='fl'>1.5</span>, <span class='kw'>at</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>cex.axis</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'blue'</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='input'><span class='co'># y-axis is based on profile depths</span>
-<span class='fu'>axis</span>(<span class='fl'>2</span>, <span class='kw'>line</span><span class='kw'>=</span>-<span class='fl'>1</span>, <span class='kw'>at</span><span class='kw'>=</span><span class='fu'>pretty</span>(<span class='fl'>1</span>:<span class='fu'>max</span>(<span class='no'>sp4</span>)), <span class='kw'>cex.axis</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'blue'</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='sp4-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>axis</span>(<span class='fl'>2</span>, <span class='kw'>line</span><span class='kw'>=</span>-<span class='fl'>1</span>, <span class='kw'>at</span><span class='kw'>=</span><span class='fu'>pretty</span>(<span class='fl'>1</span>:<span class='fu'>max</span>(<span class='no'>sp4</span>)), <span class='kw'>cex.axis</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'blue'</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='sp4-1.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'># symbolize soil properties via color</span>
 <span class='fu'>par</span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>4</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'clay'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp4-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'CF'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp4-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'clay'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp4-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'CF'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp4-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># apply a function to each profile, returning a single value per profile,</span>
 <span class='co'># in the same order as profile_id(sp4)</span>
 <span class='no'>soil.depths</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profileApply-methods.html'>profileApply</a></span>(<span class='no'>sp4</span>, <span class='no'>max</span>) <span class='co'># recall that max() gives the depth of a soil profile</span>
@@ -352,7 +367,7 @@ on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'</span>
 <span class='co'># use site-level data to alter plotting order</span>
 <span class='no'>new.order</span> <span class='kw'>&lt;-</span> <span class='fu'>order</span>(<span class='no'>sp4</span>$<span class='no'>depth</span>) <span class='co'># the result is an index of rank</span>
 <span class='fu'>par</span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>new.order</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp4-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp4</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>new.order</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp4-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># deconstruct SoilProfileCollection into a data.frame, with horizon+site data</span>
 <span class='fu'>as</span>(<span class='no'>sp4</span>, <span class='st'>'data.frame'</span>)</div><div class='output co'>#&gt;                id name top bottom   K   Mg   Ca CEC_7 ex_Ca_to_Mg sand silt
 #&gt; 1          colusa    A   0      3 0.3 25.7  9.0  23.0        0.35   46   33
@@ -447,5 +462,8 @@ on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'</span>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

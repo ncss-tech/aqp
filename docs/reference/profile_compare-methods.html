@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Numerical Soil Profile Comparison — profile_compare-methods" />
+
+<meta property="og:description" content="Performs a numerical comparison of soil profiles using named properties, based on a weighted, summed, depth-segment-aligned dissimilarity calculation. If s is a SoilProfileCollection, site-level variables (2 or more) can also be used. The site-level and horizon-level dissimilarity matricies are then re-scaled and averaged." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +38,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +55,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">aqp</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">aqp</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,6 +82,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,10 +90,12 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Numerical Soil Profile Comparison</h1>
+    
+    <div class="hidden name"><code>profile_compare-methods.Rd</code></div>
     </div>
 
     
@@ -93,7 +108,7 @@
 <span class='kw'>progress</span><span class='kw'>=</span><span class='st'>'none'</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
 <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -182,7 +197,7 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='SPC-slice-methods.html'>slice</a></code>, <code><a href='http://www.rdocumentation.org/packages/cluster/topics/daisy'>daisy</a></code></p>
+    <div class='dont-index'><p><code><a href='SPC-slice-methods.html'>slice</a></code>, <code><a href='http://www.rdocumentation.org/packages/cluster/topics/daisy'>daisy</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -199,7 +214,7 @@
          <span class='fu'><a href='http://www.rdocumentation.org/packages/lattice/topics/panel.functions'>panel.grid</a></span>(<span class='kw'>h</span><span class='kw'>=</span>-<span class='fl'>1</span>,<span class='kw'>v</span><span class='kw'>=</span>-<span class='fl'>1</span>)
          <span class='fu'><a href='http://www.rdocumentation.org/packages/lattice/topics/panel.superpose'>panel.superpose</a></span>(<span class='no'>...</span>)
        }
-)</div><div class='img'><img src='profile_compare-methods-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+)</div><div class='img'><img src='profile_compare-methods-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## 2. basic implementation, requires at least two properties</span>
 <span class='co'># implementation for a data.frame class object</span>
 <span class='fu'>data</span>(<span class='no'>sp1</span>)
@@ -214,7 +229,7 @@
 <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 9 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.19 Mb]</span></div><div class='input'>
 <span class='co'># plot profile collection</span>
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='input'><span class='co'># annotate max depth of profile comparison</span>
-<span class='fu'>abline</span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='profile_compare-methods-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>par</span>(<span class='no'>op</span>)
+<span class='fu'>abline</span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='profile_compare-methods-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>par</span>(<span class='no'>op</span>)
 
 
 <span class='co'># more soil properties</span>
@@ -224,7 +239,7 @@
 <span class='co'># add some missing data: </span>
 <span class='no'>sp2</span>$<span class='no'>prop</span>[<span class='fl'>1</span>:<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>d.2</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp2</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>,<span class='st'>'value'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.32 Mb]</span></div><div class='img'><img src='profile_compare-methods-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.32 Mb]</span></div><div class='img'><img src='profile_compare-methods-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># note small changes in D:</span>
 <span class='fu'>cor</span>(<span class='no'>d.1</span>, <span class='no'>d.2</span>)</div><div class='output co'>#&gt; [1] 0.9987445</div><div class='input'>
 <span class='co'>## 3. identify profiles within a collection that contain all NAs</span>
@@ -246,7 +261,7 @@
 
 <span class='co'># remove bad profiles and try again: works</span>
 <span class='no'>s.no.na</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>s</span>[-<span class='no'>missing.too.much.data.idx</span>, ], <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>'p1'</span>,<span class='st'>'p2'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 9 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.19 Mb]</span></div><div class='img'><img src='profile_compare-methods-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 9 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.2 Mb]</span></div><div class='img'><img src='profile_compare-methods-4.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>## 4. better plotting of dendrograms with ape package:</span>
 <span class='kw'>if</span>(<span class='fu'>require</span>(<span class='no'>ape</span>) <span class='kw'>&amp;</span> <span class='fu'>require</span>(<span class='no'>cluster</span>) <span class='kw'>&amp;</span> <span class='fu'>require</span>(<span class='no'>MASS</span>)) {
@@ -268,7 +283,7 @@
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: ape</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: cluster</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MASS</span></div><div class='output co'>#&gt; Initial stress        : 0.00901
 #&gt; stress after  10 iters: 0.00172, magic = 0.500
 #&gt; stress after  20 iters: 0.00155, magic = 0.500
-#&gt; stress after  30 iters: 0.00153, magic = 0.500</div><div class='img'><img src='profile_compare-methods-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+#&gt; stress after  30 iters: 0.00153, magic = 0.500</div><div class='img'><img src='profile_compare-methods-5.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'>## 6. try out the 'sample_interval' argument</span>
 <span class='co'># compute using sucessively larger sampling intervals</span>
@@ -283,7 +298,7 @@
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'>as.dendrogram</span>(<span class='fu'>hclust</span>(<span class='no'>d</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every Depth Slice'</span>)
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'>as.dendrogram</span>(<span class='fu'>hclust</span>(<span class='no'>d.2</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 2nd Depth Slice'</span>)
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'>as.dendrogram</span>(<span class='fu'>hclust</span>(<span class='no'>d.10</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 10th Depth Slice'</span>)
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'>as.dendrogram</span>(<span class='fu'>hclust</span>(<span class='no'>d.20</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 20th Depth Slice'</span>)</div><div class='img'><img src='profile_compare-methods-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>par</span>(<span class='no'>oldpar</span>)</div></pre>
+<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'>as.dendrogram</span>(<span class='fu'>hclust</span>(<span class='no'>d.20</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 20th Depth Slice'</span>)</div><div class='img'><img src='profile_compare-methods-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>par</span>(<span class='no'>oldpar</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -320,5 +335,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

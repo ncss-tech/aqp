@@ -18,13 +18,16 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="pkgdown.css" rel="stylesheet">
 <script src="jquery.sticky-kit.min.js"></script>
 <script src="pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Citation and Authors" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +35,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +52,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">aqp</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="index.html">aqp</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,6 +79,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,22 +87,24 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="contents col-md-9">
-
     <div class="page-header">
       <h1>Citation</h1>
     </div>
 
     <p>Beaudette Dd, Roudier P and O'Geen A (2013).
-<em>Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists</em>.
-<a href="http://r-forge.r-project.org/projects/aqp/">http://r-forge.r-project.org/projects/aqp/</a>. 
+<em>Algorithms for quantitative pedology: A toolkit for soil scientists</em>, volume 52.
+<a href="http://ncss-tech.github.io/AQP/">http://ncss-tech.github.io/AQP/</a>. 
 </p>
     <pre>@Manual{,
-  title = {Algorithms for Quantitative Pedology: A Toolkit for Soil Scientists},
+  title = {Algorithms for quantitative pedology: A toolkit for soil scientists},
   author = {D.E. debeaudette@ucdavis.edu Beaudette and P. Roudier and A.T. O'Geen},
+  journal = {Computers & Geosciences},
   year = {2013},
-  url = {http://r-forge.r-project.org/projects/aqp/},
+  volume = {52},
+  pages = {258 - 268},
+  url = {http://ncss-tech.github.io/AQP/},
 }</pre>
     <div class="page-header">
       <h1>Authors</h1>
@@ -100,11 +112,11 @@
 
     <ul class="list-unstyled">
       <li>
-        <p><strong>Dylan Beaudette</strong>. Author, maintainer.
+        <p><strong>Dylan Beaudette</strong>. Author, maintainer. 
         </p>
       </li>
       <li>
-        <p><strong>Pierre Roudier</strong>. Author, contributor.
+        <p><strong>Pierre Roudier</strong>. Author, contributor. 
         </p>
       </li>
     </ul>
@@ -126,5 +138,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

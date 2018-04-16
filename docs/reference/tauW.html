@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Compute weighted naïve and <em>tau</em> statistics for a cross-classification matrix — tau" />
+
+<meta property="og:description" content="tauW: Computes: (1) unweighted naïve, (2) weighted naïve, (3) unweighted tau, (4) weighted tau accuracy statistics
+summaryTauW: prints a summary of the results from tauW
+xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex file for import into a LaTeX document." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +40,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +57,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">aqp</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">aqp</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,6 +84,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,18 +92,18 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute weighted naïve and <em>tau</em> statistics for a cross-classification matrix</h1>
+    
+    <div class="hidden name"><code>tauW.Rd</code></div>
     </div>
 
     
-    <p><code>tauW</code>: Computes: (1) unweighted naïve, (2) weighted naïve, (3) unweighted <em>tau</em>, (4) weighted <em>tau</em> accuracy statistics
-
-    <code>summaryTauW</code>: prints a summary of the results from <em>tauW</em>
-
-    <code>xtableTauW</code>: formats a LaTeX table with results from <em>tauW</em> and saves it as a <code>.tex</code> file for import into a LaTeX document.</p>
+    <p><code>tauW</code>: Computes: (1) unweighted naïve, (2) weighted naïve, (3) unweighted <em>tau</em>, (4) weighted <em>tau</em> accuracy statistics</p>
+<p><code>summaryTauW</code>: prints a summary of the results from <em>tauW</em></p>
+<p><code>xtableTauW</code>: formats a LaTeX table with results from <em>tauW</em> and saves it as a <code>.tex</code> file for import into a LaTeX document.</p>
     
 
     <pre class="usage"><span class='fu'>tauW</span>(<span class='no'>CM</span>, <span class='kw'>W</span> <span class='kw'>=</span> <span class='fu'>diag</span>(<span class='fu'>sqrt</span>(<span class='fu'>length</span>(<span class='fu'>as.matrix</span>(<span class='no'>CM</span>)))),
@@ -98,7 +113,7 @@
 
 <span class='fu'>xtableTauW</span>(<span class='no'>result.tau</span>, <span class='kw'>file.name</span><span class='kw'>=</span><span class='st'>"tau_results_table.tex"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -333,5 +348,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

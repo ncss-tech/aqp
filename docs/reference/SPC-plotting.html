@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Profile Plot — SoilProfileCollection-plotting-methods" />
+
+<meta property="og:description" content="Generate a simple diagram of a soil profile, with annotated horizon names." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +38,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +55,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">aqp</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">aqp</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,6 +82,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,10 +90,12 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Profile Plot</h1>
+    
+    <div class="hidden name"><code>SPC-plotting.Rd</code></div>
     </div>
 
     
@@ -101,7 +116,7 @@ col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1,
 lwd=1, lty=1, 
 default.color=grey(0.95), &#8230;)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -282,7 +297,7 @@ default.color=grey(0.95), &#8230;)</pre>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='SoilProfileCollection-class.html'>SoilProfileCollection-class</a>, pretty, <a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a>, <a href='addBracket.html'>addBracket</a>, <a href='profileGroupLabels.html'>profileGroupLabels</a></code></p>
+    <div class='dont-index'><p><code><a href='SoilProfileCollection-class.html'>SoilProfileCollection-class</a>, pretty, <a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a>, <a href='addBracket.html'>addBracket</a>, <a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -300,31 +315,31 @@ default.color=grey(0.95), &#8230;)</pre>
 <span class='co'># plot profiles</span>
 <span class='fu'>plot</span>(<span class='no'>sp1</span>, <span class='kw'>id.style</span><span class='kw'>=</span><span class='st'>'side'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='input'>
 <span class='co'># title, note line argument:</span>
-<span class='fu'>title</span>(<span class='st'>'Sample Data 1'</span>, <span class='kw'>line</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>cex.main</span><span class='kw'>=</span><span class='fl'>0.75</span>)</div><div class='img'><img src='SPC-plotting-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>title</span>(<span class='st'>'Sample Data 1'</span>, <span class='kw'>line</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>cex.main</span><span class='kw'>=</span><span class='fl'>0.75</span>)</div><div class='img'><img src='SPC-plotting-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># plot profiles without horizon-line divisions</span>
-<span class='fu'>plot</span>(<span class='no'>sp1</span>, <span class='kw'>divide.hz</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sp1</span>, <span class='kw'>divide.hz</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># add dashed lines illustrating horizon boundary distinctness</span>
 <span class='no'>sp1</span>$<span class='no'>hzD</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></span>(<span class='no'>sp1</span>$<span class='no'>bound_distinct</span>)
-<span class='fu'>plot</span>(<span class='no'>sp1</span>, <span class='kw'>hz.distinctness.offset</span><span class='kw'>=</span><span class='st'>'hzD'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sp1</span>, <span class='kw'>hz.distinctness.offset</span><span class='kw'>=</span><span class='st'>'hzD'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># plot horizon color according to some property</span>
 <span class='fu'>data</span>(<span class='no'>sp4</span>)
 <span class='fu'>depths</span>(<span class='no'>sp4</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='fu'>plot</span>(<span class='no'>sp4</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'clay'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sp4</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'clay'</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># another example</span>
 <span class='fu'>data</span>(<span class='no'>sp2</span>)
 <span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
 <span class='fu'><a href='SPC-utils.html'>site</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>surface</span>
 
 <span class='co'># label with site-level attribute: `surface`</span>
-<span class='fu'>plot</span>(<span class='no'>sp2</span>, <span class='kw'>label</span><span class='kw'>=</span><span class='st'>'surface'</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='fu'>order</span>(<span class='no'>sp2</span>$<span class='no'>surface</span>))</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sp2</span>, <span class='kw'>label</span><span class='kw'>=</span><span class='st'>'surface'</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='fu'>order</span>(<span class='no'>sp2</span>$<span class='no'>surface</span>))</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># example using a categorical attribute</span>
-<span class='fu'>plot</span>(<span class='no'>sp2</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"plasticity"</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>sp2</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"plasticity"</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># plot two SPC objects in the same figure</span>
 <span class='fu'>par</span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
 <span class='co'># plot the first SPC object and </span>
 <span class='co'># allocate space for the second SPC object</span>
 <span class='fu'>plot</span>(<span class='no'>sp1</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fu'>length</span>(<span class='no'>sp1</span>) + <span class='fu'>length</span>(<span class='no'>sp2</span>))</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='input'><span class='co'># plot the second SPC, starting from the first empty space</span>
-<span class='fu'>plot</span>(<span class='no'>sp2</span>, <span class='kw'>x.idx.offset</span><span class='kw'>=</span><span class='fu'>length</span>(<span class='no'>sp1</span>), <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-7.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='fu'>plot</span>(<span class='no'>sp2</span>, <span class='kw'>x.idx.offset</span><span class='kw'>=</span><span class='fu'>length</span>(<span class='no'>sp1</span>), <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-plotting-7.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -361,5 +376,8 @@ default.color=grey(0.95), &#8230;)</pre>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -18,13 +18,23 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Algorithms for Quantitative Pedology — aqp-package" />
+
+<meta property="og:description" content="The aqp (Algorithms for Quantitative Pedology) package for R was developed to address some of the difficulties associated with processing soils information, specifically related to visualization, aggregation, and classification of soil profile data. This package is based on a mix of S3/S4 functions and classes, and most functions use basic dataframes as input, where rows represent soil horizons and columns define properties of those horizons. Common to most functions are the requirements that horizon boundaries are defined as depth from 0, and that profiles are uniquely defined by an id column. The aqp package defines an S4 class, "SoilProfileCollection", for storage of profile-level metadata, as well as summary, print, and plotting methods that have been customized for common tasks related to soils data.
+Demos:
+demo(aqp)
+demo(slope_effect_hz_thickness)
+Project homepage." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +42,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">aqp</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">aqp</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,6 +86,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,26 +94,26 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Algorithms for Quantitative Pedology</h1>
+    
+    <div class="hidden name"><code>aqp-package.Rd</code></div>
     </div>
 
     
     <p>The aqp (Algorithms for Quantitative Pedology) package for R was developed to address some of the difficulties associated with processing soils information, specifically related to visualization, aggregation, and classification of soil profile data. This package is based on a mix of S3/S4 functions and classes, and most functions use basic dataframes as input, where rows represent soil horizons and columns define properties of those horizons. Common to most functions are the requirements that horizon boundaries are defined as depth from 0, and that profiles are uniquely defined by an id column. The aqp package defines an S4 class, "SoilProfileCollection", for storage of profile-level metadata, as well as summary, print, and plotting methods that have been customized for common tasks related to soils data.</p>
 <p>Demos:
-<code>demo(aqp)</code>
-
-    <code>demo(slope_effect_hz_thickness)</code>
-
-    <a href='http://ncss-tech.github.io/AQP/'>Project homepage</a>.</p>
+<code>demo(aqp)</code></p>
+<p><code>demo(slope_effect_hz_thickness)</code></p>
+<p><a href='http://ncss-tech.github.io/AQP/'>Project homepage</a>.</p>
     
 
         
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href='ca630.html'>ca630</a>, <code><a href='sp1.html'>sp1</a>, <a href='sp2.html'>sp2</a>, <a href='sp3.html'>sp3</a>, <a href='sp4.html'>sp4</a>, <a href='sp5.html'>sp5</a></code></p>
+    <div class='dont-index'><p><a href='ca630.html'>ca630</a>, <code><a href='sp1.html'>sp1</a>, <a href='sp2.html'>sp2</a>, <a href='sp3.html'>sp3</a>, <a href='sp4.html'>sp4</a>, <a href='sp5.html'>sp5</a></code></p></div>
     
 
   </div>
@@ -124,5 +141,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
