@@ -1,5 +1,5 @@
--------------------------- aqp 1.16 (2018-04-12) ------------------------
-* CRAN release
+-------------------------- aqp 1.16-1 (2018-04-12) ------------------------
+* fixing #53 and #54
 
 -------------------------- aqp 1.15.5 (2018-03-14) ------------------------
 * enhancement to aggregateColor() for cases when horizon depths are missing or top/bottom logic flipped
