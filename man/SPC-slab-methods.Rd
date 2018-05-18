@@ -43,6 +43,8 @@ slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
 \details{
 Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps \code{\link{hdquantile}} from the Hmisc package, which requires at least 2 observations per chunk. Note that if `group` is a factor it must not contain NAs.
 
+Somtimes \code{slab} is used to conveniently re-arrange data vs. aggregate. This is performed by specifying \code{identity} in \code{slab.fun}. See examples beflow for a demonstration of this functionality.
+
 Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased. \code{slab()} and \code{slice()} are much faster and require less memory if input data are either numeric or character.
 
 There are several possible ways to define slabs, using \code{slab.structure}:
@@ -132,6 +134,32 @@ xyplot(top ~ p.q50 | which, data=ab, ylab='Depth',
 			 cf=ab$contributing_fraction,
 			 layout=c(2,1), scales=list(x=list(alternating=1))
 			 )
+
+
+###
+### re-arrange data / no aggregation
+###
+
+# load sample data, upgrade to SoilProfileCollection
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+
+# arrange data by ID
+a <- slab(sp1, fm = id ~ prop, slab.fun=identity)
+
+# convert id to a factor for plotting
+a$id <- factor(a$id)
+
+# check output
+str(a)
+
+# plot via step function
+xyplot(top ~ value | id, data=a, ylab='Depth',
+       ylim=c(250, -5), as.table=TRUE,
+       panel=panel.depth_function,
+       prepanel=prepanel.depth_function,
+       scales=list(x=list(alternating=1))
+)
 
 
 ##
