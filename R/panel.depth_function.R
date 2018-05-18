@@ -1,5 +1,7 @@
 ## TODO: large gaps in data result in some strange-looking polygons
 
+## TODO: 'id' isn't a very safe argument for defining profile IDs... (e.g. sp1)
+
 ## TODO: iterate over profile IDs instead of groups
 # note: confidence bands not defined when NA is present
 panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NA, cf.col=NA, cf.interval=20, ...) {
@@ -13,22 +15,23 @@ superpose.line <- trellis.par.get("superpose.line")
 # TODO: add uncertainty viz.
 # when the length of 'y' is > 'x', we are plotting a step function
 if(length(y) > length(x)) {
-	if(missing(id))
-		stop('must provide a profile id')
-		
-	message('plotting segments...')
-	
-	# re-make a nice dataframe, assuming that we have 'groups' defined
-	if(!missing(groups))
-		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts], id=id[subscripts])
-	
-	# if 'groups' is missing, add a fake 'groups' column
-	else
-		d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1), id=id[subscripts])
-	
-	# add line segments that form step-function
-	## TODO: iterate over profile IDs instead of groups
-	by(d, d$id, make.segments, ...)	
+  if(missing(id))
+    stop('must provide a profile id')
+  
+  message('plotting segments...')
+  
+  # re-make a nice dataframe, assuming that we have 'groups' defined
+  if(!missing(groups)) {
+    d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts], id=id[subscripts])
+  } else {
+    # 'groups' is missing, add a fake 'groups' column
+    d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1), id=id[subscripts])
+  }
+  
+  
+  # add line segments that form step-function
+  ## TODO: iterate over profile IDs instead of groups
+  by(d, d$id, make.segments, ...)	
 	}
 
 # normal plot -- not a step function
@@ -45,7 +48,9 @@ else {
 		
 		# no grouping, add a fake group for compatiblity
 		if(missing(groups)) {
-			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1))
+		  fake.groups <- factor(1)
+			d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=fake.groups)
+			
 			# levels in the groups, for color matching
 			ll <- levels(d$groups)
 			n_groups <- length(ll)
@@ -72,7 +77,13 @@ else {
 	
 	# no upper/lower polygon boundaries defined
 	else {
-		d <- data.frame(yhat=x, top=y, groups=groups[subscripts])
+	  if(missing(groups)) {
+	    fake.groups <- factor(1)
+	    d <- data.frame(yhat=x, top=y, groups=fake.groups)
+	  } else {
+	    d <- data.frame(yhat=x, top=y, groups=groups[subscripts]) 
+	  }
+		
 		# levels in the groups, for color matching
 		ll <- levels(d$groups)	
 		n_groups <- length(ll)
