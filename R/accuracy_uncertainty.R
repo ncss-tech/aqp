@@ -1,4 +1,5 @@
 
+## TODO: test that sum(x) == 1
 # Shannon Entropy
 # x: vector of probabilities {0,1}, must sum to 1, should not contain NA
 # b: logarithm base
