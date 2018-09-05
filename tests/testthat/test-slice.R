@@ -35,18 +35,4 @@ test_that("basic slice functionality", {
 })
 
 
-test_that("SPC deconstruction into a data.frame", {
-  
-  data(sp1, package = 'aqp')
-  depths(sp1) <- id ~ top + bottom
-  site(sp1) <- ~ group
-  
-  h <- horizons(sp1)
-  s <- site(sp1)
-  d <- as(sp1, 'data.frame')
-  
-  expect_match(class(h), 'data.frame')
-  expect_match(class(s), 'data.frame')
-  expect_match(class(d), 'data.frame')
-})
 
