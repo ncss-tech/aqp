@@ -24,7 +24,7 @@ getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
   \item{alpha}{alpha channel value (for transparency effects)}
   \item{maxColorValue}{maximum sRGB color value (see \code{\link{rgb})}}
   \item{return_triplets}{should the function return raw sRGB triplets instead of an R color}
-  \item{color}{a \code{data.frame} or \code{matrix} object containing color-space coordinates: [R, G, B]}
+  \item{color}{a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of [0,1]}
   \item{colorSpace}{the colorspace to use for finding the closest chip, LAB is the most accurate, sRGB is another possibility}
   \item{nClosest}{number of closest Munsell colors to return}
   \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}

@@ -2,9 +2,13 @@
 aggregateSoilDepth <- function(x, groups, crit.prob=0.9, name='hzname', p='Cr|R|Cd', ...) {
   
   # sanity checks:
-  # 1. does the group label variable exist in @site?
+  # * does the group label variable exist in @site?
   if(! groups %in% siteNames(x))
-    stop('`groups` should specify a site-level attribute')
+    stop('`groups` must specify a site-level attribute')
+  
+  # * does the horizon name variable exist in @horizons?
+  if(! name %in% horizonNames(x))
+    stop('`name` must specify a horizon-level attribute, containing the horizon designation')
   
   # mark soil vs. non-soil horizons
   x$soil.flag <- rep('soil', times=nrow(x))
