@@ -3,7 +3,7 @@
 estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p='Cr|R|Cd', no.contact.depth=NULL, no.contact.assigned=NULL) {
   
   # sanity check: this function will only operate on an SPC
-  if(! class(d) == 'SoilProfileCollection')
+  if(! class(f) == 'SoilProfileCollection')
     stop('`f` must be a SoilProfileCollection object')
   
   # sanity check: this function works on a single soil profile
