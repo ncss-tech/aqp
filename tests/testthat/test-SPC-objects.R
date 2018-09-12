@@ -1,12 +1,16 @@
-context("SoilProfileCollection object construction / deconstruction")
+context("SoilProfileCollection init, methods, coercion")
 
+## make sample data
+data(sp1, package = 'aqp')
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
 
+sp1$x <- seq(-119, -120, length.out = length(sp1))
+sp1$y <- seq(38, 39, length.out = length(sp1))
+
+## tests
 
 test_that("SPC construction from a data.frame", {
-  
-  data(sp1, package = 'aqp')
-  depths(sp1) <- id ~ top + bottom
-  site(sp1) <- ~ group
   
   # did it work?
   expect_match(class(sp1), 'SoilProfileCollection')
@@ -29,13 +33,22 @@ test_that("SPC construction from a data.frame", {
   expect_equal(nrow(sp1), 60)
 })
 
+test_that("SPC data.frame interface", {
+  
+  # init site-level data
+  sp1$x <- seq(-119, -120, length.out = length(sp1))
+  sp1$y <- seq(38, 39, length.out = length(sp1))
+  
+  # init hz-level data
+  sp1$z <- runif(n = nrow(sp1))
+  
+  expect_equal(length(sp1$x), length(sp1))
+  expect_equal(length(sp1$z), nrow(sp1))
+})
 
 test_that("SPC deconstruction into a data.frame", {
   
-  data(sp1, package = 'aqp')
-  depths(sp1) <- id ~ top + bottom
-  site(sp1) <- ~ group
-  
+  # do it here
   h <- horizons(sp1)
   s <- site(sp1)
   d <- as(sp1, 'data.frame')
@@ -47,10 +60,6 @@ test_that("SPC deconstruction into a data.frame", {
 
 
 test_that("SPC subsetting ", {
-  
-  data(sp1, package = 'aqp')
-  depths(sp1) <- id ~ top + bottom
-  site(sp1) <- ~ group
   
   # profile subsets
   expect_match(class(sp1[1, ]), 'SoilProfileCollection')
@@ -67,3 +76,53 @@ test_that("SPC subsetting ", {
   expect_equal(length(sp1[1:5, 1]), 5)
   expect_equal(nrow(sp1[1:5, 1]), 5)
 })
+
+
+test_that("SPC spatial operations ", {
+  
+  # init / extract coordinates
+  sp::coordinates(sp1) <- ~ x + y
+  co <- sp::coordinates(sp1)
+  
+  # coordinates should be a matrix
+  expect_equal(class(co), 'matrix')
+  # as many rows as length and 2 columns
+  expect_equal(dim(co), c(length(sp1), 2))
+  # coordinates should be removed from @site
+  expect_true(all( ! dimnames(co)[[2]] %in% siteNames(sp1)))
+  
+  # CRS
+  sp::proj4string(sp1) <- '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0'
+  sp::proj4string(sp1)
+  
+  # we should get back the same thing we started with
+  expect_equal(sp::proj4string(sp1), '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0')
+  
+  # down-grade site+sp
+  sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
+  expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  
+  ## TODO: this generates spurious messages
+  # implicity down-grade to SPDF via hz-subsetting
+  # sp1.spdf <- suppressMessages(sp1[, 1])
+  # expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  
+})
+
+test_that("SPC misc. ", {
+  
+  # units
+  depth_units(sp1) <- 'inches' 
+  expect_equal(depth_units(sp1), 'inches')
+  
+  # metadata
+  m <- metadata(sp1)
+  m$citation <- 'this is a citation'
+  metadata(sp1) <- m
+  expect_equal(class(metadata(sp1)), 'data.frame')
+  expect_equal(ncol(metadata(sp1)), 2)
+  
+})
+
+
+
