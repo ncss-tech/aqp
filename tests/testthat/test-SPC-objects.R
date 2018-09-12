@@ -31,6 +31,11 @@ test_that("SPC construction from a data.frame", {
   # correct number of profiles and horizons?
   expect_equal(length(sp1), 9)
   expect_equal(nrow(sp1), 60)
+  
+  # diagnostic slot should be initialized as an empty data.frame
+  sp1.dh <- diagnostic_hz(sp1)
+  expect_equal(class(sp1.dh), 'data.frame')
+  expect_equal(nrow(sp1.dh), 0)
 })
 
 test_that("SPC data.frame interface", {
