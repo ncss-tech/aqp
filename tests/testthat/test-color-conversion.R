@@ -52,7 +52,7 @@ test_that("Munsell <--> sRGB and back again", {
   expect_equal(x.neutral$b, 0.2, tolerance=0.01)
   
   # sRGB --> Munsell
-  expect_identical(x.back, data.frame(hue='10YR', value=3, chroma=4, sigma=0, stringsAsFactors = FALSE))
+  expect_equal(x.back, data.frame(hue='10YR', value=3, chroma=4, sigma=0, stringsAsFactors = FALSE))
   expect_equal(x.back.trunc$hue, '10YR')
   expect_equal(x.back.trunc$value, 3)
   expect_equal(x.back.trunc$chroma, 4)

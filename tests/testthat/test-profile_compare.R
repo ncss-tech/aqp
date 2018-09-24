@@ -3,19 +3,19 @@ context("profile_compare")
 # setup horizon-level data: data are from lab sampled pedons
 d <- read.csv(
   textConnection('series,top,bottom,clay,frags,ph
-                 auburn,0,3,21,6,5.6
-                 auburn,3,15,21,13,5.6
-                 auburn,15,25,20,9,5.8
-                 auburn,25,47,21,28,5.8
-                 dunstone,0,5,16,13,6
-                 dunstone,5,17,17,19,6.3
-                 dunstone,17,31,20,6,6.3
-                 dunstone,31,41,21,15,6.3
-                 sobrante,0,5,18,0,5.8
-                 sobrante,5,10,16,2,5.7
-                 sobrante,10,28,15,21,5.8
-                 sobrante,28,51,18,13,6.2
-                 sobrante,51,74,20,12,6.2'))
+auburn,0,3,21,6,5.6
+auburn,3,15,21,13,5.6
+auburn,15,25,20,9,5.8
+auburn,25,47,21,28,5.8
+dunstone,0,5,16,13,6
+dunstone,5,17,17,19,6.3
+dunstone,17,31,20,6,6.3
+dunstone,31,41,21,15,6.3
+sobrante,0,5,18,0,5.8
+sobrante,5,10,16,2,5.7
+sobrante,10,28,15,21,5.8
+sobrante,28,51,18,13,6.2
+sobrante,51,74,20,12,6.2'), stringsAsFactors=FALSE)
 
 # establish site-level data
 s <- data.frame(
