@@ -121,6 +121,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   ## - test
   ## - report changes, possibly save for 2.0
   ## - Euclidean distance most useful?
+  ## - consider shades::distance() for CIE delta-E metric (e.g. perceptual distance)
   
   ## TODO: this could probably be optimized
   # iterate over colors
