@@ -220,7 +220,7 @@
 	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep=''))
 	
 	##
-	## TODO: this might be the place to implement parallel code: 
+	## TODO: this might be the place to implement parallel code in furrr
 	##       1. split into a list based on number of cores/cpus available
 	##       2. aggregate using seg.label + variable in parallel
 	##       3. combine results (a list of data.frames)
