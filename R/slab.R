@@ -178,55 +178,18 @@
     original.levels <- levels(data[[vars]])
 		}
 		
-	# generate labels for slabs
-	# fixed-size slabs
-	if(length(slab.structure) == 1) {
-		# generate sequence of segment labels
-		seg.label <- rep(1:ceiling(max.d / slab.structure), each=slab.structure, length=max.d)
-		# general segment labels
-		seg.label.levels <- tapply(1:max.d, seg.label, function(i) {r <- range(i); paste(c(r[1]-1, r[2]), collapse='-') } )
-	}
-	
-	# user-defined slabs
-	if(length(slab.structure) > 1) {
-		# trival case where segments start from 0
-		if(slab.structure[1] == 0 & length(slab.structure) > 2)
-			seg.label <- rep(slab.structure[-1], times=diff(slab.structure))[1:max.d]
-		
-		# other case: user defines an arbitrary lower and upper limit
-		else {
-			if(length(slab.structure) != 2)
-				stop('user-defined slab boundaries must either start from 0, or contain two values between 0 and the max soil depth')
-			
-			# proceed
-			slab.thickness <- diff(slab.structure)
-			# how many slices of NA before the slab?
-			padding.before <- rep(NA, times=slab.structure[1])
-			# how many slices of NA afer the slab
-			padding.after <- rep(NA, times=max.d - slab.structure[2])
-			# make a new label for the slab
-			new.label <- paste(slab.structure, collapse='-')
-			# generate an index for the slab
-			slab.idx <- rep(new.label, times=slab.thickness)
-			# generate the entire index: padding+slab+padding = total number of slices (max_d)
-			# seg.label <- c(padding.before, slab.idx, padding.after)
-			seg.label <- slab.idx 
-			}
-		
-		# generate segment labels	
-		seg.label.levels <- sapply(1:(length(slab.structure)-1), function(i) paste(c(slab.structure[i], slab.structure[i+1]), collapse='-'))
-	}
-	
 	
 	####
 	#### optimization note: use of factor labels could be slowing things down...
 	####
+	## TODO: this assumes ordering is correct in source data / segment labels 
 	## TODO: make sure that nrow(data) == length(factor(rep(seg.label, times=n.profiles), labels=seg.label.levels))
 	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
 	##         seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
 	##         l <- split(data, seg.label, drop=FALSE)
+	
 	# add segmenting label to data
- 	data$seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
+ 	data$seg.label <- genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
 	
 	# if there is no left-hand component in the formula, we are aggregating all data in the collection
 	if(g == '.') { 
