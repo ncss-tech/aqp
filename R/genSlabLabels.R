@@ -1,4 +1,5 @@
-## TODO: merge this into slab()
+## TODO: documentation / generalization
+# note source data must be normalixed via slice() first, e.g. all share the same number of horizons
 
 # generate labels for slabs
 genSlabLabels <- function(slab.structure=1, max.d, n.profiles) {

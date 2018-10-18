@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{slab}
 \alias{slab2}
+\alias{genSlabLabels}
 \alias{slab,SoilProfileCollection-method}
 
 

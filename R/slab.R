@@ -182,11 +182,13 @@
 	####
 	#### optimization note: use of factor labels could be slowing things down...
 	####
-	## TODO: this assumes ordering is correct in source data / segment labels 
-	## TODO: make sure that nrow(data) == length(factor(rep(seg.label, times=n.profiles), labels=seg.label.levels))
+	## Note: this assumes ordering is correct in source data / segment labels 
+	## TODO: make sure that nrow(data) == genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
 	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
-	##         seg.label <- factor(rep(seg.label, times=n.profiles), labels=seg.label.levels)
-	##         l <- split(data, seg.label, drop=FALSE)
+	##         
+	##         l <- split(data, data$seg.label, drop=FALSE)
+	##
+	## ... parallel processing with furrr
 	
 	# add segmenting label to data
  	data$seg.label <- genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
@@ -197,13 +199,6 @@
 		data[, g] <- 1
 	}
 	
-# 	# determine number of profiles / group
-# 	profiles.per.group <- tapply(data[, object.ID], data[, g], function(i) length(unique(i)))
-# 	
-# 	# deliver some feedback:
-# 	message(paste('number of profiles:', n.profiles))
-# 	message(paste('profiles / ', g, ':', sep=''), appendLF=TRUE)
-# 	print(profiles.per.group)
 	
 	##
 	## TODO: adding weighted-aggregate functionality here
@@ -214,9 +209,11 @@
 	if(!missing(weights))
 		stop('weighted aggregation is not yet supported', call.=FALSE)
 	
-	# convert into long format
+ 	## TODO: why would this ever happen?
 	# throwing out those rows with an NA segment label
 	seg.label.is.not.NA <- which(!is.na(data$seg.label))
+	
+	# convert into long format
 	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(object.ID, 'seg.label', g), measure.vars=vars)
 	
 	# make a formula for aggregate()
