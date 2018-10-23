@@ -29,6 +29,8 @@
   return(data.frame(hue.numeric, hue.character, stringsAsFactors = FALSE))
 }
 
+
+
 # return the closest Munsell chip from `munsell` data in aqp package
 # function is vectorized
 getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
@@ -100,7 +102,6 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 }
 
 
-
 # color is a matrix/data.frame of sRGB values in range of [0,1]
 # ideally output from munsell2rgb()
 rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
@@ -122,6 +123,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   ## - report changes, possibly save for 2.0
   ## - Euclidean distance most useful?
   ## - consider shades::distance() for CIE delta-E metric (e.g. perceptual distance)
+  ## - farver package may be faster and implements distance metrics: https://github.com/thomasp85/farver
   
   ## TODO: this could probably be optimized
   # iterate over colors
