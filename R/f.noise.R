@@ -1,6 +1,11 @@
+## marked for depreciation, now that powdR has been released
+# https://ropensci.org/technotes/2017/01/05/package-evolution/
+
 # example objective function for full pattern matching
 f.noise <- function(inits, pure.patterns, sample.pattern, eps.total=0.05) {
 	
+  .Deprecated(new = 'fps', package = 'powdR', msg = 'https://github.com/benmbutler/powdR')  
+  
 	# how many components in the mixture?
 	# the last element is the noise component
 	n.comp <- length(inits) - 1

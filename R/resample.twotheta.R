@@ -1,8 +1,15 @@
 
-## TODO: generalize to working with several patterns at once
+
+## marked for depreciation, now that powdR has been released
+# https://ropensci.org/technotes/2017/01/05/package-evolution/
+
+
 # resample intensities according to a new 2-theta interval
 resample.twotheta <- function(twotheta, x, tt.min=min(twotheta), tt.max=max(twotheta), new.res=0.02)
 	{
+  
+  .Deprecated(new = 'fps', package = 'powdR', msg = 'https://github.com/benmbutler/powdR')  
+  
 	# fit a spline-function to the data 	
 	sf <- splinefun(twotheta, x)
 	
