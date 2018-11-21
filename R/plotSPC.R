@@ -1,13 +1,4 @@
 
-
-
-
-
-
-
-
-
-
 # simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
 # based on "red book" version 3.0
 hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
@@ -40,6 +31,15 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 ## basic function
 plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
+  ## fudge factors
+  # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
+  
+  # padding along x-axis, prevents crowding
+  extra_x_space <- 2
+  
+  # padding above profiles, 150 is about right for n in {1,25} and depth ~ 150cm
+  extra_y_space <- 15
+  
   # get profile IDs
   pIDs <- profile_id(x)
   
@@ -51,7 +51,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
               'y.offset'=y.offset, 
               'scaling.factor'=scaling.factor, 
               'max.depth'=max.depth, 
-              n=n)
+              'n'=n,
+              'extra_x_space'=extra_x_space,
+              'extra_y_space'=extra_y_space)
   
   assign('last_spc_plot', lsp, envir=aqp.env, )
   
@@ -160,24 +162,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   	}
   
   
-  ## fudge factors
-  
-  # padding along x-axis, prevents crowding
-  extra_x_space <- 2
-  
-  # padding above profiles, about right for n in {1,25} and depth ~ 150cm
-  # TODO: extra_y_space should be allocated dynamically
-  # function of n profiles and max depth
-  extra_y_space <- 15 
-  
-  
   # pre-compute nice range for depth axis, also used for plot init
   depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
   
   # init plotting region, unless we are appending to an existing plot
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
-    # par(mar=c(0.5,1,0,1)) # is it wise to adjust the plotting area?
+    # margins are set outside of this function
 	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), 
 	       ylim=c(max(depth_axis_intervals), -extra_y_space), 
 	       axes=FALSE, xlab='', ylab='')
