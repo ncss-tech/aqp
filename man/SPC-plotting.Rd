@@ -78,7 +78,7 @@ default.color=grey(0.95), \dots)
   \item{col.legend.cex}{scaling of color legend}
   \item{n.legend}{approximate number of classes used in the legend}
   \item{lwd}{single numeric value: line width multiplier}
-  \item{lty}{single integert: line style}
+  \item{lty}{single integer: line style}
   \item{default.color}{default horizon fill color used when `color` attribute is NA}
   \item{\dots}{other arguments passed into lower level plotting functions}
 }

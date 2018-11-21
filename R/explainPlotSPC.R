@@ -16,6 +16,20 @@ explainPlotSPC <- function(x, ...) {
   scaled.max.depths <- lsp$y.offset + (lsp$scaling.factor * max.depths)
   scaled.depth.axis <- lsp$y.offset + (lsp$scaling.factor * pretty(1:max(x)))
   
+  # suitable location for y-space annotation
+  y.space.x <- 2.5
+  
+  # suitable location for x-space annotation
+  # index of last profile + some
+  x.space.x <- lsp$n + (length(x) * 0.05)
+  # 95% of total scaled depths
+  x.space.y <- max(scaled.max.depths) * 0.95
+  
+  # original profile index text y-coordinate
+  # roughly 10% of the max(transformed depths)
+  original.profile.idx.y <- lsp$y.offset + (-max(scaled.max.depths) * 0.1)
+  
+  
   # inspect plotting area, very simple to overlay graphical elements
   segments(x0 = 1:length(x), x1=1:length(x), y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
   
@@ -28,18 +42,17 @@ explainPlotSPC <- function(x, ...) {
   mtext('canvas y-coordinate', side=2, line=1, font=4, col='blue')
   
   # show extra y-space
-  arrows(x0=0.5, x1=0.5, y0=0, y1=-lsp$extra_y_space, length = 0.08, code = 3, col='orange', lwd=1)
-  text(x=0.65, y=-lsp$extra_y_space/2, labels = 'extra y-space', cex=0.65, adj=0, font=3, col='orange')
-  text(x=0.6, y=-lsp$extra_y_space/2, labels = lsp$extra_y_space, cex=0.85, pos=2, font=2, col='orange')
+  arrows(x0=y.space.x, x1=y.space.x, y0=0, y1=-lsp$extra_y_space, length = 0.08, code = 3, col='orange', lwd=1)
+  text(x=y.space.x, y=-lsp$extra_y_space/2, labels = 'extra y-space', cex=0.65, pos=2, font=3, col='orange')
+  text(x=y.space.x, y=-lsp$extra_y_space/2, labels = lsp$extra_y_space, cex=0.85, pos=4, font=2, col='orange')
   
   # show extra x-space
-  arrows(x0=lsp$n, x1=lsp$n + lsp$extra_x_space, y0=-5, y1=-5, length = 0.08, code = 3, col='orange', lwd=1)
-  text(x=lsp$n+1, y=-5, labels = 'extra x-space', cex=0.65, pos=3, font=3, col='orange')
-  text(x=lsp$n+1, y=-4, labels = lsp$extra_x_space, cex=0.85, pos=1, font=2, col='orange')
-  
+  arrows(x0=lsp$n, x1=lsp$n + lsp$extra_x_space, y0=x.space.y, y1=x.space.y, length = 0.08, code = 3, col='orange', lwd=1)
+  text(x=x.space.x, y=x.space.y, labels = 'extra x-space', cex=0.65, pos=3, font=3, col='orange')
+  text(x=x.space.x, y=x.space.y, labels = lsp$extra_x_space, cex=0.85, pos=1, font=2, col='orange')
   
   # plotting order
-  text(x=1:length(x), y=lsp$y.offset-5, labels=lsp$plot.order, col='darkred', font=4, cex=0.75)
+  text(x=1:length(x), y=original.profile.idx.y, labels=lsp$plot.order, col='darkred', font=4, cex=0.75)
   mtext('original profile index', side=3, line=0, font=4, col='darkred')
   
   invisible(lsp)

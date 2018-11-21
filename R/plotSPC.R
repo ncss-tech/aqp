@@ -35,10 +35,18 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
   
   # padding along x-axis, prevents crowding
-  extra_x_space <- 2
-  
-  # padding above profiles, 150 is about right for n in {1,25} and depth ~ 150cm
-  extra_y_space <- 15
+  # dynamic adjustment must also taking into account figure size
+  # roughly 10% of length(x)
+  extra_x_space <- length(x) * 0.1
+
+  # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
+  # a sketch of shalllow profiles could benefit from ~ 5
+  if(max.depth <=50)
+    extra_y_space <- 5
+  if(max.depth > 50 & max.depth <= 100)
+    extra_y_space <- 10
+  if(max.depth > 100)
+    extra_y_space <- 15
   
   # get profile IDs
   pIDs <- profile_id(x)

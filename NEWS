@@ -1,3 +1,7 @@
+-------------------------- aqp 1.16-5 (2018-11-21) ------------------------
+* moved explainPlotSPC from SPC tutorial to aqp::explainPlotSPC()
+* plotSPC() is a little better at estimating "extra" vetical / horizontal space, still needs work (https://github.com/ncss-tech/aqp/issues/62)
+
 -------------------------- aqp 1.16-2 (2018-05-22) ------------------------
 * fixing #53 and #54
 * bug fix for too many decimal places in legend classes (floating point -> character issue)
