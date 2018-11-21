@@ -1,128 +1,15 @@
-## TODO: only a single site-level attribute can be used for sorting
-# order profiles by a site-level grouping label
-groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='RoyalBlue', group.line.lwd=2, group.line.lty=2, break.style='line', arrow.offset=group.name.offset + 5, arrow.length=0.1, ...) {
-  s <- site(x)
-  new.order <- order(s[[groups]])
-  
-  # if our groups are already a factor, keep existing levels
-  if(class(s[[groups]]) == 'factor')
-    lab <- s[[groups]][new.order]
-  else # not a factor, need to convert to factor, inherit default levels
-    lab <- factor(s[[groups]][new.order])
-  
-  # test for NA
-  NA.lab <- which(is.na(lab))
-  
-  # replace with missing label with '<missing>'
-  # this requires conversion: factor -> character -> replace NA -> factor with new levels
-  if(length(NA.lab) > 0) {
-    message('NA in grouping label, filling with `<missing>`')
-    o.levels <- levels(lab)
-    lab <- as.character(lab)
-    lab[NA.lab] <- '<missing>'
-    lab <- factor(lab, levels=c(o.levels, '<missing>'))
-  }
-    
-  # setup plot with plot.SoilProfileCollection
-  plot(x, plot.order=new.order, ...)
-  
-  # get last plot parameters
-  lsp <- get('last_spc_plot', envir=aqp.env)
-  
-  # get just those levels that are in our data, preserving order of original levels
-  unique.lab <- levels(lab)[which(levels(lab) %in% unique(lab))]
-  group.lengths <- rle(as.numeric(lab))$lengths
-  
-  # label positions
-  lab.positions <- (cumsum(group.lengths) - (group.lengths / 2)) + 0.5
-  
-  # group boundaries on x-axis
-  boundary.positions <-  cumsum(group.lengths)[-length(group.lengths)] + 0.5
-  
-  # resonable upper / lower boundaries on y-axis
-  # these are informed by plotting parameters sent to plotSPC()
-  upper.position <- (lsp$y.offset) + (group.name.offset/2 * lsp$scaling.factor)
-  lower.position <- (lsp$y.offset) + (lsp$max.depth * lsp$scaling.factor)
-  
-  if(length(boundary.positions)) { # only add grouping symbols if number of groups is > 1
-    # add group boundaries
-    if(break.style == 'line')
-      segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-    
-    if(break.style == 'arrow')
-      arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-    
-    if(break.style == 'both') {
-      segments(y0 = upper.position, y1=lower.position, x0=boundary.positions, x1=boundary.positions, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-      arrows(x0=c(0.5, boundary.positions), x1=c(boundary.positions, length(x)+0.5), y0=arrow.offset, code=3, length=arrow.length, lty=group.line.lty, lwd=group.line.lwd, col=group.line.col)
-    }
-  }
-  
-  # annotate with group labels
-  text(lab.positions, group.name.offset, unique.lab, cex=group.name.cex, adj=c(0.75, 0), font=4)
-}
 
 
 
-## TODO: labeling is not very helpful
-## TODO: figure out intellegent recycling of arguments
-## TODO: no mechanism for merged legends
-plotMultipleSPC <- function(spc.list, group.labels, args=rep(list(NA), times=length(spc.list)), arrow.offset=2, bracket.base.depth=95, ...) {
-  
-  # compute group stats
-  n.groups <- length(spc.list)
-  spc.lengths <- sapply(spc.list, length)
-  n.pedons <- sum(spc.lengths)
-  group.starts <- c(1, 1 + cumsum(spc.lengths[-n.groups]))
-  group.ends <- cumsum(spc.lengths)
-  
-  # get depths + offset to start / end profiles
-  yy <- unlist(sapply(spc.list, function(i) profileApply(i, max)))
-  tick.heights <- yy[c(group.starts, group.ends)] + arrow.offset
-  
-  # setup plot with first SPC in list
-  do.call(plotSPC, c(x=spc.list[[1]], n=n.pedons, na.omit(args[[1]]), ...))
-  
-  # iterate over remaining SPC objs
-  if(n.groups > 1) {
-    for(i in 2:n.groups) {
-      this.obj <- spc.list[[i]]
-      this.args <- na.omit(args[[i]])
-      do.call(plotSPC, c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args))
-    }
-  }
-    
-  # annotate with group brackets
-  profileGroupLabels(x0=group.starts, x1=group.ends, labels=group.labels, y0=bracket.base.depth, y1=tick.heights) 
-}
 
 
-## TODO: this doesn't take into account non-default figure geometry
-# annotate profile plots with group labels, usually below
-profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, label.cex=0.75) {
-  
-  # sanity check: start / stop / label lengths should be equal
-  if(! all.equal(length(x0), length(x1), length(labels)) )
-    stop('start positions, stop positions, and number of labels must be equal', call. = FALSE)
-  
-  # pre-compute some elements
-  n.groups <- length(x0)
-  label.centers <- (x0 + x1) / 2
-  
-  # add group base lines
-  segments(x0=x0, x1=x1, y0=y0, y1=y0)
-  # add arrows to first / last group members
-  arrows(x0=c(x0, x1), x1=c(x0, x1), y0=c(y0, y0), y1=y1, length=0.1)
-
-  # annotate with group names
-  text(x=label.centers, y=y0 + label.offset, labels=labels, cex=label.cex)
-}
 
 
 
 
 
 # simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
+# based on "red book" version 3.0
 hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
 	x <- as.character(x)
 	x.code <- match(x, codes)
@@ -259,7 +146,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
-  # if profile style is auto, determin style based on font metrics
+  # if profile style is auto, determine style based on font metrics
   if(id.style == 'auto') {
   	sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
   	plot.width <- par('pin')[1]
@@ -273,10 +160,16 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   	}
   
   
-  ## TODO: extra_y_space should be allocated dynamically, as a function of number of profiles
-  # fudge factors
+  ## fudge factors
+  
+  # padding along x-axis, prevents crowding
   extra_x_space <- 2
-  extra_y_space <- 15 # abnout right for n in {1,25}
+  
+  # padding above profiles, about right for n in {1,25} and depth ~ 150cm
+  # TODO: extra_y_space should be allocated dynamically
+  # function of n profiles and max depth
+  extra_y_space <- 15 
+  
   
   # pre-compute nice range for depth axis, also used for plot init
   depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
