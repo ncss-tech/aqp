@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{plot}
 \alias{plotSPC}
+\alias{explainPlotSPC}
 \alias{plot.SoilProfileCollection}
 \alias{plot,SoilProfileCollection-method}
 \alias{plot,SoilProfileCollection,ANY-method}
