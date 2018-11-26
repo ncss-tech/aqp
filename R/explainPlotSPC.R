@@ -2,6 +2,7 @@
 # useful for debugging plotSPC
 explainPlotSPC <- function(x, ...) {
   plot(x, id.style='side', ...)
+  box()
   
   # get last plot parameters
   lsp <- get('last_spc_plot', envir=aqp.env)
@@ -34,12 +35,12 @@ explainPlotSPC <- function(x, ...) {
   segments(x0 = 1:length(x), x1=1:length(x), y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
   
   # profiles are centered at integers, from 1 to length(obj)
-  axis(1, line=0, at=1:lsp$n, cex.axis=0.75, font=4, col='darkgreen', col.axis='darkgreen', lwd=2)
-  mtext('canvas x-coordinate', side=1, line=2, font=4, col='darkgreen')
+  axis(1, line=0.25, at=1:lsp$n, cex.axis=0.75, font=4, col='darkgreen', col.axis='darkgreen', lwd=2)
+  mtext('canvas x-coordinate', side=1, line=2.25, font=4, col='darkgreen')
   
   # y-axis is based on profile depths
-  axis(2, line=-1, at=scaled.depth.axis, cex.axis=0.75, font=4, las=1, col='blue', col.axis='blue', lwd=2)
-  mtext('canvas y-coordinate', side=2, line=1, font=4, col='blue')
+  axis(2, line=0.25, at=scaled.depth.axis, cex.axis=0.75, font=4, las=1, col='blue', col.axis='blue', lwd=2)
+  mtext('canvas y-coordinate', side=2, line=2.25, font=4, col='blue')
   
   # show extra y-space
   arrows(x0=y.space.x, x1=y.space.x, y0=0, y1=-lsp$extra_y_space, length = 0.08, code = 3, col='orange', lwd=1)

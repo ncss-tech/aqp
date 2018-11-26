@@ -38,6 +38,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # dynamic adjustment must also taking into account figure size
   # roughly 10% of length(x)
   extra_x_space <- length(x) * 0.1
+  
+  # add a little extra x-space when n < 5
+  if(length(x) < 5)
+    extra_x_space <- extra_x_space + 0.25
 
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
