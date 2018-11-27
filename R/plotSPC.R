@@ -246,7 +246,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 	##
 	## i.e. clear-wavy = dashed lines at an angle, based on red book
 	  
-	# create horizons + colors
+	  # create horizons + colors
     # default are filled rectangles
     if(divide.hz) {
 	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
@@ -271,7 +271,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       
     
 	  # annotate with names
-	  # first get the horizon mid-point
+	  # get the horizon mid-point
 	  mid <- ( y1 + y0 )/2
 	  
 	  # optionally shrink the size of names if they are longer than a given thresh
@@ -317,12 +317,12 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   	text(1:length(x), y.offset+3, al, srt=90, adj=c(1, 0.5), font=2, cex=cex.id * 1.5, col=alt.label.col)
   }
   
-  ## experimental color legend
+  # add a legend for thematic profile sketch
   if(exists('color.legend.data')) {
-    # If no title given, set col.label is set to color
+    # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
     
-    legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex)
+    legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)
   }
   }
 
