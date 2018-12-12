@@ -1,8 +1,7 @@
 # TODO: better colors
 # take a look at between-profile D
 # for the range of indexes
-plot_distance_graph <- function(D, idx=1:dim(as.matrix((D)))[1])
-	{
+plot_distance_graph <- function(D, idx=1:dim(as.matrix((D)))[1]) {
 	# convert to full matrix representation
 	# careful with very large D
 	d.mat <- as.matrix(D)
@@ -29,12 +28,12 @@ plot_distance_graph <- function(D, idx=1:dim(as.matrix((D)))[1])
 	# add embellishments
 	box()
 	axis(2, las=2)
-	axis(1, at=1:n, labels=labs, las=2)
+	# use original labels
+	axis(1, at=1:n, labels=names(labs), las=2, cex.axis=0.75)
 	grid(col=grey(0.25))
 	
 	# add lines, labels, and symbols
-	for(i in idx)
-		{
+	for(i in idx) {
 		# which individual is the most similar (min distance)
 		min.idx <- which.min(d.mat[, i])
 		# plot a line for each individual
