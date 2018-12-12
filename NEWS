@@ -1,3 +1,6 @@
+-------------------------- aqp 1.16-6 (2018-12-12) ------------------------
+* partial bug fix in test_hz_logic() related to missing top AND bottom depths, needs work: https://github.com/ncss-tech/aqp/issues/65
+
 -------------------------- aqp 1.16-5 (2018-11-21) ------------------------
 * moved explainPlotSPC from SPC tutorial to aqp::explainPlotSPC()
 * plotSPC() is a little better at estimating "extra" vetical / horizontal space, still needs work (https://github.com/ncss-tech/aqp/issues/62)

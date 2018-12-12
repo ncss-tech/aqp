@@ -1,8 +1,17 @@
+## https://github.com/ncss-tech/aqp/issues/65
 ## TODO: this checking assumes that the data are sorted!
 ## TODO: give a reason for failing
+## TODO: perform checks and then report matrix of pass/failure
 
 # this should be further documented
 test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE) {
+  
+  # test for NA
+  if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
+    res <- FALSE
+    names(res) <- 'hz_logic_pass'
+    return(res)
+  }
   
 	# test for overlapping OR non-contiguous horizon boundaries
 	if(strict) {
@@ -14,14 +23,9 @@ test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE) {
 		return(res)
 	}
 	
-	# test for NA
-	if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {
-		res <- FALSE
-		names(res) <- 'hz_logic_pass'
-		return(res)
-	}
+
 	  
-	# test for over-lapping horizons
+	# test for overlapping horizons
 	# note: this will fail if an O horizon is described using the old style O 3--0cm
 	m <- cbind(i[[topcol]], i[[bottomcol]])
 	unzipped.depths <- unlist(apply(m, 1, function(i) seq(from=i[1], to=i[2], by=1)))
