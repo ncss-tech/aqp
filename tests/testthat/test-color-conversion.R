@@ -25,6 +25,7 @@ test_that("parsing Munsell notation", {
   expect_equal(parseMunsell('10YR /5'), as.character(NA))
   expect_equal(parseMunsell('10YR '), as.character(NA))
   expect_equal(parseMunsell('10YR 4/'), as.character(NA))
+  expect_equal(parseMunsell('G1 6/N'), as.character(NA))
   
   # neutral colors
   expect_equal(class(parseMunsell('N 2/', convertColors = FALSE)), 'data.frame')

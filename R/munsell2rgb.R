@@ -1,4 +1,6 @@
 
+## BUG: .parseMunsellHue('G1') adds to row count of results
+# https://github.com/ncss-tech/aqp/issues/66
 
 # split standard Munsell hue into character | numeric parts
 # function is vectorized
@@ -6,8 +8,21 @@
 # hue.numeric hue.character
 #     2.3            YR
 .parseMunsellHue <- function(hue) {
+  
+  # NA not permitted, convert to ''
+  hue <- ifelse(is.na(hue), '', hue)
+  
+  ## TODO: replace with stringr / stringi version for saftey
   # extract numeric part from hue
-  hue.numeric <- unlist(strsplit(hue, split='[^0-9.]+'))
+  # danger! empty strings will result in an empty list element
+  nm.part <- strsplit(hue, split='[^0-9.]+', )
+  
+  # replace empty list elements with ''
+  nm.part[which(sapply(nm.part, length) < 1)] <- ''
+  
+  # convert to vector
+  hue.numeric <- unlist(nm.part)
+  
   # extract character part from hue
   hue.character <- vector(mode='character', length = length(hue))
   for(i in seq_along(hue)){
@@ -79,7 +94,7 @@ getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
 
 
 
-## TODO: this will not correctly parse gley or neutral colors
+## TODO: this will not correctly parse gley
 # convert a color string '10YR 4/3' to sRGB or R color
 parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   # sanity check:
