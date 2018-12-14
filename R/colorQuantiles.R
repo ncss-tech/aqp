@@ -1,6 +1,6 @@
 
 # closest Munsell chip to LAB coordinates and error
-..closestMunselltoCIELABtoCIELAB <- function(lab) {
+.closestMunselltoCIELAB <- function(lab) {
   lab <- as.matrix(lab)
   srgb <- grDevices::convertColor(lab, from = 'Lab', to = 'sRGB', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
   res <- rgb2munsell(srgb)
@@ -141,37 +141,50 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
 
 plotColorQuantiles <- function(res) {
-  par(mar=c(2.5,2,1,1), mfrow=c(3,1))
+  par(mar=c(2,1,0.5,1), mfrow=c(3,1))
+  
+  # styling
+  pt.cex <- 7
+  
+  # vertical spacing
+  m.y <- 2
+  L1.y <- 1
+  y.lim <- c(0.5, 2.5)
+  
+  # pre-make axis
+  L.axis <- pretty(zapsmall(res$marginal$L), n = 10)
+  A.axis <- pretty(zapsmall(res$marginal$A), n = 10)
+  B.axis <- pretty(zapsmall(res$marginal$B), n = 10)
   
   ## L coordinates
-  plot(res$marginal$L, rep(0.75, times=3), pch=22, bg=res$marginal$L_colors, cex=5, ylim=c(0, 1), axes=FALSE, xlab='', ylab='')
-  points(res$L1$L, 0.25, pch=22, bg=res$L1$L1_color, cex=6)
-  text(res$marginal$L, rep(0.75, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
-  text(res$L1$L, 0.25, labels = 'L1', pos = 3, offset = 1.5)
-  text(res$marginal$L, rep(0.75, times=3), res$marginal$L_chip, pos=1, offset = 1.5)
-  text(res$L1$L, 0.25, labels = res$L1$L1_chip, pos = 2, offset = 1.5)
-  axis(1, line = -2)
-  mtext('L-coordinate', side = 1, line=0.5, font=3)
+  plot(res$marginal$L, rep(m.y, times=3), pch=22, bg=res$marginal$L_colors, cex=pt.cex, xlim=range(L.axis), ylim=y.lim, axes=FALSE, xlab='', ylab='')
+  points(res$L1$L, L1.y, pch=22, bg=res$L1$L1_color, cex=pt.cex)
+  text(res$marginal$L, rep(m.y, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
+  text(res$L1$L, L1.y, labels = 'L1', pos = 3, offset = 1.5)
+  text(res$marginal$L, rep(m.y, times=3), res$marginal$L_chip, pos=1, offset = 1.5)
+  text(res$L1$L, L1.y, labels = res$L1$L1_chip, pos = 2, offset = 1.5)
+  axis(1, line = -2, at = L.axis)
+  mtext('L', side = 2, line=-0.5, font=2, las=1)
   title('CIELAB Color Space', cex=1.5, line=-1)
   
   ## A coordinates
-  plot(res$marginal$A, rep(0.75, times=3), pch=22, bg=res$marginal$A_colors, cex=5, ylim=c(0, 1), axes=FALSE, xlab='', ylab='')
-  points(res$L1$A, 0.25, pch=22, bg=res$L1$L1_color, cex=6)
-  text(res$marginal$A, rep(0.75, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
-  text(res$L1$A, 0.25, labels = 'L1', pos = 3, offset = 1.5)
-  text(res$marginal$A, rep(0.75, times=3), res$marginal$A_chip, pos=1, offset = 1.5)
-  text(res$L1$A, 0.25, labels = res$L1$L1_chip, pos = 2, offset = 1.5)
-  axis(1, line = -2)
-  mtext('A-coordinate', side = 1, line=0.5, font=3)
+  plot(res$marginal$A, rep(m.y, times=3), pch=22, bg=res$marginal$A_colors, cex=pt.cex, xlim=range(A.axis), ylim=y.lim, axes=FALSE, xlab='', ylab='')
+  points(res$L1$A, L1.y, pch=22, bg=res$L1$L1_color, cex=pt.cex)
+  text(res$marginal$A, rep(m.y, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
+  text(res$L1$A, L1.y, labels = 'L1', pos = 3, offset = 1.5)
+  text(res$marginal$A, rep(m.y, times=3), res$marginal$A_chip, pos=1, offset = 1.5)
+  text(res$L1$A, L1.y, labels = res$L1$L1_chip, pos = 2, offset = 1.5)
+  axis(1, line = -2, at=A.axis)
+  mtext('A', side = 2, line=-0.5, font=2, las=1)
   
-  plot(res$marginal$B, rep(0.75, times=3), pch=22, bg=res$marginal$B_colors, cex=5, ylim=c(0, 1), axes=FALSE, xlab='', ylab='')
-  points(res$L1$B, 0.25, pch=22, bg=res$L1$L1_color, cex=6)
-  text(res$marginal$B, rep(0.75, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
-  text(res$L1$B, 0.25, labels = 'L1', pos = 3, offset = 1.5)
-  text(res$marginal$B, rep(0.75, times=3), res$marginal$B_chip, pos=1, offset = 1.5)
-  text(res$L1$B, 0.25, labels = res$L1$L1_chip, pos = 2, offset = 1.5)
-  axis(1, line = -2)
-  mtext('B-coordinate', side = 1, line=0.5, font=3)
+  plot(res$marginal$B, rep(m.y, times=3), pch=22, bg=res$marginal$B_colors, cex=pt.cex, xlim=range(B.axis), ylim=y.lim, axes=FALSE, xlab='', ylab='')
+  points(res$L1$B, L1.y, pch=22, bg=res$L1$L1_color, cex=pt.cex)
+  text(res$marginal$B, rep(m.y, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
+  text(res$L1$B, L1.y, labels = 'L1', pos = 3, offset = 1.5)
+  text(res$marginal$B, rep(m.y, times=3), res$marginal$B_chip, pos=1, offset = 1.5)
+  text(res$L1$B, L1.y, labels = res$L1$L1_chip, pos = 2, offset = 1.5)
+  axis(1, line = -2, at=B.axis)
+  mtext('B', side = 2, line=-0.5, font=2, las=1)
   
   
 }
