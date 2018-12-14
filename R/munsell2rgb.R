@@ -137,8 +137,8 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   ## - test
   ## - report changes, possibly save for 2.0
   ## - Euclidean distance most useful?
-  ## - consider shades::distance() for CIE delta-E metric (e.g. perceptual distance)
   ## - farver package may be faster and implements distance metrics: https://github.com/thomasp85/farver
+  ##    + added farver to suggests as of 1.17, distance calc is fully vectorized I think
   
   ## TODO: this could probably be optimized
   # iterate over colors
@@ -163,6 +163,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
       # d = sqrt(L^2 + A^2 + B^2)
       sq.diff <- sweep(munsell[, 7:9], MARGIN=2, STATS=this.color.lab, FUN='-')^2
       sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
+      ## TODO why re-scale?
       # rescale distances to 0-1
       sq.diff.sum.sqrt <- sq.diff.sum.sqrt / max(sq.diff.sum.sqrt)
       # return the closest n-matches
