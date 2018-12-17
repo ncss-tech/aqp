@@ -140,8 +140,8 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 }
 
 
-plotColorQuantiles <- function(res) {
-  par(mar=c(2,1.5,0.5,1), mfrow=c(3,1))
+plotColorQuantiles <- function(res, title='', mar=c(2,1.5,1,1)) {
+  par(mar=mar, mfrow=c(3,1))
   
   # styling
   pt.cex <- 7
@@ -157,7 +157,7 @@ plotColorQuantiles <- function(res) {
   B.axis <- pretty(zapsmall(res$marginal$B), n = 10)
   
   ## L coordinates
-  plot(res$marginal$L, rep(m.y, times=3), pch=22, bg=res$marginal$L_colors, cex=pt.cex, xlim=range(L.axis), ylim=y.lim, axes=FALSE, xlab='', ylab='')
+  plot(res$marginal$L, rep(m.y, times=3), pch=22, bg=res$marginal$L_colors, cex=pt.cex, xlim=range(L.axis), ylim=y.lim, axes=FALSE, xlab='', ylab='', main=title)
   points(res$L1$L, L1.y, pch=22, bg=res$L1$L1_color, cex=pt.cex)
   text(res$marginal$L, rep(m.y, times=3), labels = res$marginal$p, pos = 3, offset = 1.5)
   text(res$L1$L, L1.y, labels = 'L1', pos = 3, offset = 1.5)
