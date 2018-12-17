@@ -1,7 +1,20 @@
 ## TODO: user-defined weight function
 ## TODO: try with diagnostic features
 ## Note: 'groups' can be either site/horizon attribute, need not be a factor
-aggregateColor <- function(x, groups='genhz', col='soil_color') {
+# x: SPC
+# groups: groups to aggregate over
+# col: r-compatible hex notation of color
+# k: number of groups to reduce colors to (within each group), conditioned on unique colors available
+aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
+  
+  # sanity check
+  if(!is.null(k)) {
+    k <- round(k)
+    if(is.na(k)) {
+      stop('k must be a single integer > 0')
+    }
+  }
+  
   ## hack to make R CMD check --as-cran happy
   top <- bottom <- thick <- NULL
   
@@ -12,6 +25,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   vars <- c(groups, horizonDepths(x), col)
   
   # remove missing data
+  # note: missing color data will result in 'white' when converting to sRGB, why?
   h.no.na <- na.omit(h[, vars])
   
   # re-name depths
@@ -28,9 +42,41 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
     h.no.na$thick[idx] <- 1
   }
   
+  # drop empty group levels
+  h.no.na[[groups]] <- factor(h.no.na[[groups]])
+  
   # split by genhz
   # note that some genhz will have 0 records
   s <- dlply(h.no.na, groups, function(i){
+    
+    # optionally reduce to `k` colors via PAM, by group
+    # this will only work if there are >= 1 unique colors
+    n.cols <- length(unique(i[[col]]))
+    
+    if(is.numeric(k) & n.cols > 1) {
+      
+      ## TODO: color conversion should only happen 1 time
+      
+      # condition number of classes on available data
+      k.adj <- pmin(k, n.cols - 1)
+      
+      # convert to sRGB
+      # NA must be removed prior to this step
+      v <- t(col2rgb(i[[col]])) / 255
+      
+      # convert to LAB
+      v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
+      
+      # clustering
+      # TODO: save clustering results for later
+      v.pam <- pam(v, k = k.adj, stand = TRUE)
+      
+      # convert medoids back to sRGB
+      med.sRGB <- convertColor(v.pam$medoids, from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
+      
+      # replace original colors with discretized colors
+      i[[col]] <- rgb(med.sRGB, maxColorValue = 1)[v.pam$clustering]
+    }
     
     # aggregate depth by unique soil color
     # this assumes that thickness > 0, otherwise NaN is returned
@@ -57,12 +103,14 @@ aggregateColor <- function(x, groups='genhz', col='soil_color') {
   
   # compute weighted mean color for each GHL, in LAB colorspace
   # TODO: this is similar to soilDB::mix_and_clean_colors(), consider consolidation
+  # TODO: this is the second pass of color conversion, can it be done in a single pass?
+  # TODO: should aggregate colors be mixed from the discretized colors? probably
   s.agg <- ldply(s.scaled, function(i) {
     # convert to sRGB
     v <- t(col2rgb(i[[col]])) / 255
     
     # convert to LAB
-    v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+    v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
     
     # compute weighted mean via matrix manip
     w <- i$weight

@@ -123,7 +123,7 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
       A_chip=A.closest,
       B_chip=B.closest,
       stringsAsFactors = FALSE
-      ),
+    ),
     L1=data.frame(
       p=0.5,
       L=L1[, 1],
@@ -136,7 +136,7 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   )
   
   return(res)
-
+  
 }
 
 

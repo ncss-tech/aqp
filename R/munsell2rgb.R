@@ -140,6 +140,9 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   ## - farver package may be faster and implements distance metrics: https://github.com/thomasp85/farver
   ##    + added farver to suggests as of 1.17, distance calc is fully vectorized I think
   
+  ### problems described here, with possible solution, needs testing: 
+  ### https://github.com/ncss-tech/aqp/issues/67
+  
   ## TODO: this could probably be optimized
   # iterate over colors
   for(i in 1:n) {
@@ -169,7 +172,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
       # return the closest n-matches
       idx <- order(sq.diff.sum.sqrt)[1:nClosest]
     }
-
+    
     # with NA as an input, there will be no output
     if(length(idx) == 0)
       res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
@@ -184,8 +187,6 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
 }
 
 # TODO if alpha is greater than maxColorValue, there will be an error
-# TODO: properly convert N chips
-# TODO: correctly interpret values of 2.5
 # convert munsell Hue, Value, Chroma into sRGB
 # user can adjust how rgb() function will return an R-friendly color
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE) {
