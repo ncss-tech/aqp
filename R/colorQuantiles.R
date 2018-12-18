@@ -8,31 +8,7 @@
   return(res.txt)
 }
 
-## quick preview of colors, sorted by clustering of CIE LAB representation
-# grid size estimation needs some work
-previewColors <- function(cols, nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black') {
-  
-  # remove NA
-  cols <- na.omit(cols)
-  
-  # hex represntation -> sRGB
-  cols.srgb <- t(col2rgb(cols)) / 255
-  # sRGB -> CIE LAB
-  cols.lab <- grDevices::convertColor(cols.srgb, from = 'sRGB', to = 'Lab', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
-  # convert to DF for use in diana
-  cols.lab <- as.data.frame(cols.lab)
-  
-  # divisive hierarchical clustering for order
-  col.order <- cluster::diana(cols.lab, stand = TRUE)$order
-  
-  # re-order colors and convert into a matrix
-  m <- matrix(NA, nrow=nrow, ncol=ncol)
-  m[1:length(cols)] <- cols[col.order]
-  
-  par(mar=c(1,0,3,0))
-  plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', ylim=c(ncol+0.5, 0.5), xlim=c(0.5, nrow+0.5))
-  rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m, border = border.col, lwd=0.5)
-}
+
 
 
 colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
