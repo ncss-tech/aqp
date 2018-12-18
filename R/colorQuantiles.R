@@ -10,7 +10,7 @@
 
 ## quick preview of colors, sorted by clustering of CIE LAB representation
 # grid size estimation needs some work
-previewColors <- function(cols, nrow=ceiling(sqrt(length(cols))), ncol=nrow) {
+previewColors <- function(cols, nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black') {
   
   # remove NA
   cols <- na.omit(cols)
@@ -31,7 +31,7 @@ previewColors <- function(cols, nrow=ceiling(sqrt(length(cols))), ncol=nrow) {
   
   par(mar=c(1,0,3,0))
   plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', ylim=c(ncol+0.5, 0.5), xlim=c(0.5, nrow+0.5))
-  rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m)
+  rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m, border = border.col, lwd=0.5)
 }
 
 
