@@ -7,7 +7,7 @@
 
 ## quick preview of colors, sorted by clustering of CIE LAB representation
 # grid size estimation needs some work
-previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black') {
+previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black', pt.cex=2) {
   
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver'))
@@ -62,7 +62,7 @@ previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))),
     par(mar=c(1,1,3,1))
     plot(mds, type='n', axes=FALSE)
     grid(nx=10, ny=10, col = 'black')
-    points(mds, pch=15, col=cols, cex=2)
+    points(mds, pch=15, col=cols, cex=pt.cex)
     box()
   }
   
