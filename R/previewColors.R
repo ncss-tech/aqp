@@ -16,9 +16,11 @@ previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))),
   # remove NA
   cols <- na.omit(cols)
   
-  ## TODO
-  # use unique colors when length(cols) > threshold
-  # cols <- unique(cols)
+  # safety catch: a 5000 x 5000 element distance matrix is about all we really need for a preview
+  if(length(cols) > 5000) {
+    cols <- unique(cols)
+    warning('using unique colors')
+  }
   
   # use unique colors when using MDS
   if(method == 'MDS') {
