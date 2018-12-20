@@ -308,7 +308,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
   depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
   if(plot.depth.axis)
-  axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis)
+    axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
   
   # plot alternate labels
   if(!missing(alt.label)) {
