@@ -132,9 +132,10 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', p
   # extract horizons
   h <- horizons(spc)
   
-  # note: source colors are sRGB
   # create LAB colors
-  lab.colors <- convertColor(h[, c(r, g, b)], from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+  # note: source colors are sRGB
+  # note: convertColor() expects a matrix
+  lab.colors <- convertColor(as.matrix(h[, c(r, g, b)]), from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
   
   ## TODO: does it make sense to normalized based on limited data or entire possible range?
   # normalize the L coordinate
