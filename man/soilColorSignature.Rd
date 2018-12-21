@@ -23,7 +23,7 @@ pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment',
   
 }
 
-\details{details pending...}
+\details{\href{http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html}{http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html}}
 
 \value{For the `colorBucket` method, a \code{data.frame} object containing:
 \describe{
