@@ -1,6 +1,7 @@
 -------------------------- aqp 1.17 (2018-12-17) -------------------------
 * CRAN release
-* aggregateColor() gets a new feature, similar colors can be grouped via cluster::pam
+* aggregateColor() gets a new feature, similar colors can be grouped via cluster::pam()
+* new functions: previewColors(), colorQuantiles(), plotColorQuantiles()
 
 -------------------------- aqp 1.16-6 (2018-12-12) ------------------------
 * partial bug fix in test_hz_logic() related to missing top AND bottom depths, needs work: https://github.com/ncss-tech/aqp/issues/65
