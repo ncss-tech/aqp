@@ -101,6 +101,8 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
     return(rep(NA, times=length(munsellColor)))
   
+  ## TODO: switch to stringr::str_split()
+  ## https://github.com/ncss-tech/aqp/issues/66
   pieces <- strsplit(munsellColor, ' ', fixed=TRUE)
   pieces.2 <- sapply(pieces, function(i) strsplit(i[2], '/', fixed=TRUE))
   hue <- sapply(pieces, function(i) i[1])
