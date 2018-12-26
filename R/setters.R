@@ -1,4 +1,53 @@
 
+
+## horizon depth columns
+if (!isGeneric('horizonDepths<-'))
+  setGeneric('horizonDepths<-', function(object, value) standardGeneric('horizonDepths<-'))
+
+setReplaceMethod("horizonDepths", "SoilProfileCollection",
+                 function(object, value) {
+                   
+                   # can't be missing
+                   if(is.null(value)) {
+                     stop('cannot assign NA or NULL depth column names', call. = FALSE) 
+                   }
+                   
+                   if(any(is.na(value)) | any(is.null(value))) {
+                     stop('cannot assign NA or NULL depth column names', call. = FALSE) 
+                   }
+                   
+                   # length
+                   if(length(value) != 2) {
+                     stop('horizon depth names must be a vector with two items', call. = FALSE)
+                   }
+                   
+                   # warn about changes in names
+                   if(any(value != make.names(value))) {
+                     warning('names have been modified to legal data.frame column names')
+                   }
+                   
+                   # must be safely convertable to character and safe for DF
+                   value <- make.names(value)
+                   
+                   # save old values
+                   hd <- horizonDepths(object)
+                   
+                   # change @horizons, just the names
+                   hn <- horizonNames(object)
+                   idx <- match(hd, hn)
+                   hn[idx] <- value
+                   horizonNames(object) <- hn
+                   
+                   # change @depthcols
+                   object@depthcols <- value
+                   
+                   return(object)
+                 }
+)
+
+
+
+
 ## set horizon names
 if (!isGeneric('horizonNames<-'))
   setGeneric('horizonNames<-', function(object, value) standardGeneric('horizonNames<-'))
@@ -8,9 +57,23 @@ setReplaceMethod("horizonNames", "SoilProfileCollection",
   function(object, value) {
     
     # sanity check
-    if(is.na(value) | is.null(value))
+    if(any(is.null(value)))
       stop('cannot assign NA or NULL column names', call. = FALSE)
     
+    if(any(is.na(value)))
+      stop('cannot assign NA or NULL column names', call. = FALSE)
+    
+    # must be same length
+    if(length(value) != length(horizonNames(object))) {
+      stop('replacement must have same length as original', call. = FALSE)
+    }
+    
+    # warn about changes in names
+    if( any(value != make.names(value))) {
+      warning('names have been modified to legal data.frame column names')
+    }
+    
+    # assign
     names(object@horizons) <- make.names(value)
     return(object)
   }

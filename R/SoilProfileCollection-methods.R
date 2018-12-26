@@ -191,6 +191,7 @@ setMethod("horizonNames", "SoilProfileCollection",
 
 ### This will be greatly improved with new class structure
 ## concatentation
+## # https://github.com/ncss-tech/aqp/issues/71
 ## TODO: concatenation of data with duplicated IDs in @site, but unique data in other @site fields, will result in corrupt SPC
 ## TODO: duplicates in @sp will cause errors
 ## TODO: duplicates are removed in all other slots... does this make sense?
@@ -351,6 +352,9 @@ setMethod(f='length', signature='SoilProfileCollection',
 )
 
 # overload nrow() to give us the number of horizons in the collection
+if (!isGeneric('nrow'))
+  setGeneric('nrow', function(x) standardGeneric('nrow'))
+
 setMethod(f='nrow', signature='SoilProfileCollection',
   definition=function(x){
   nrow(x@horizons)

@@ -31,6 +31,8 @@
 
 \alias{horizonDepths}
 \alias{horizonDepths,SoilProfileCollection-method}
+\alias{horizonDepths<-}
+\alias{horizonDepths<-,SoilProfileCollection-method}
 
 \alias{idname}
 \alias{idname,SoilProfileCollection-method}
@@ -93,6 +95,12 @@ site(sp1) <- ~ group
 # note that IDs should all be character class
 d <- data.frame(id=profile_id(sp1), p=runif(n=length(sp1)), stringsAsFactors=FALSE)
 site(sp1) <- d
+
+
+# edit horizon depths
+horizonDepths(sp1) <- c('t', 'b')
+horizonDepths(sp1)
+
 
 }
 \keyword{methods}
