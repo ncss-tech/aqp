@@ -132,9 +132,6 @@ test_that("SPC misc. ", {
 
 test_that("SPC depth columns get/set ", {
   
-  data(sp1, package = 'aqp')
-  depths(sp1) <- id ~ top + bottom
-  
   # getting 
   hd <- horizonDepths(sp1)
   expect_equal(hd, c('top', 'bottom'))
@@ -159,18 +156,16 @@ test_that("SPC depth columns get/set ", {
 
 test_that("SPC horizonNames get/set ", {
   
-  data(sp1, package = 'aqp')
-  depths(sp1) <- id ~ top + bottom
-  
   # getting 
   hn <- horizonNames(sp1)
-  expect_equal(hn, c("group", "id", "top", "bottom", "bound_distinct", "bound_topography", 
+  expect_equal(hn, c("id", "top", "bottom", "bound_distinct", "bound_topography",
                      "name", "texture", "prop", "structure_grade", "structure_size", 
                      "structure_type", "stickiness", "plasticity", "field_ph", "hue", 
                      "value", "chroma"))
   
   # setting
-  hn[1] <- 'g'
+  idx <- match('chroma', hn)
+  hn[idx] <- 'g'
   horizonNames(sp1) <- hn
   expect_equal(horizonNames(sp1), hn)
   
@@ -183,7 +178,7 @@ test_that("SPC horizonNames get/set ", {
   expect_error(horizonNames(sp1) <- hn[-1])
   
   # warnings
-  hn[1] <- '   g'
+  hn[idx] <- '   g'
   expect_warning(horizonNames(sp1) <- hn)
   
 })
