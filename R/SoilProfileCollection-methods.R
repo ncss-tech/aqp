@@ -241,9 +241,12 @@ rbind.SoilProfileCollection <- function(...) {
 		stop('inconsistent CRS', call.=FALSE)
 	
 	# generate new SPC components
-	o.h <- unique(do.call('rbind', o.h)) # horizon data
-	o.s <- unique(do.call('rbind', o.s)) # site data
-	o.d <- unique(do.call('rbind', o.d)) # diagnostic data, leave as-is
+	# using plyr::rbind.fill seems to solve the problem on non-conformal DF
+	# is it safe?
+	# https://github.com/ncss-tech/aqp/issues/71
+	o.h <- unique(do.call('rbind.fill', o.h)) # horizon data
+	o.s <- unique(do.call('rbind.fill', o.s)) # site data
+	o.d <- unique(do.call('rbind.fill', o.d)) # diagnostic data, leave as-is
 	
 	## 2015-12-18: removed re-ordering, was creating corrupt SPC objects
 	##             site and horizon data

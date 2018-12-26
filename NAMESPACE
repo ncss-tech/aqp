@@ -75,7 +75,8 @@ importFrom(plyr,
   ldply,
   dlply,
   join,
-  summarise
+  summarise,
+  rbind.fill
 )
 
 importFrom(reshape, 
