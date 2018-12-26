@@ -182,3 +182,28 @@ test_that("SPC horizonNames get/set ", {
   expect_warning(horizonNames(sp1) <- hn)
   
 })
+
+
+
+test_that("SPC profile ID editing ", {
+  
+  # fake diagnostic hz
+  diagnostic_hz(sp1) <- data.frame(id='P001', kind='pizza')
+  
+  # new ids
+  p <- sprintf("%s-new", profile_id(sp1))
+  profile_id(sp1) <- p
+  
+  # does it work?
+  expect_equal(profile_id(sp1), p)
+  expect_equal(diagnostic_hz(sp1)[[idname(sp1)]], 'P001-new')
+  
+  # error conditions
+  expect_error(profile_id(sp1) <- p[1])
+  expect_error(profile_id(sp1) <- p[c(2:9, 9)])
+  
+})
+
+
+
+

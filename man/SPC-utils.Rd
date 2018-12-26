@@ -39,6 +39,8 @@
 
 \alias{profile_id}
 \alias{profile_id,SoilProfileCollection-method}
+\alias{profile_id<-}
+\alias{profile_id<-,SoilProfileCollection-method}
 
 \title{Getters, Setters, and Utility Methods for SoilProfileCollection Objects}
 \description{Getters, Setters, and Utility Methods for SoilProfileCollection Objects}
@@ -101,6 +103,10 @@ site(sp1) <- d
 horizonDepths(sp1) <- c('t', 'b')
 horizonDepths(sp1)
 
+# edit profile IDs
+p <- sprintf("\%s-new", profile_id(sp1))
+profile_id(sp1) <- p
+profile_id(sp1)
 
 }
 \keyword{methods}

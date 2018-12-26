@@ -1,4 +1,62 @@
 
+## profile IDs
+if (!isGeneric('profile_id<-'))
+  setGeneric('profile_id<-', function(object, value) standardGeneric('profile_id<-'))
+
+setReplaceMethod("profile_id", "SoilProfileCollection",
+                 function(object, value) {
+                   
+                   # can't be missing
+                   if(is.null(value)) {
+                     stop('profile IDs cannot be NULL or NA', call. = FALSE) 
+                   }
+                   
+                   if(any(is.na(value)) | any(is.null(value))) {
+                     stop('profile IDs cannot be NULL or NA', call. = FALSE) 
+                   }
+                   
+                   # length
+                   if(length(value) != length(profile_id(object))) {
+                     stop('replacement IDs must have same length as original', call. = FALSE)
+                   }
+                   
+                   # unique
+                   if(length(value) != length(unique(value))) {
+                     stop('replacement IDs must be unique', call. = FALSE)
+                   }
+                   
+                   # lookup table for converting old -> new IDs
+                   idn <- idname(object)
+                   pids <- profile_id(object)
+                   lut <- cbind(pids, value)
+                   
+                   # change @site
+                   s <- site(object)
+                   s[[idn]] <- value
+                   object@site <- s
+                   
+                   # change @horizons
+                   h <- horizons(object)
+                   update.idx <- match(h[[idn]], lut[, 1])
+                   # apply edits via LUT
+                   h[[idn]] <- lut[update.idx, 2]
+                   object@horizons <- h
+                   
+                   # search in @diagnostic
+                   dg <- diagnostic_hz(object)
+                   dg.nm <- names(dg)
+                   idx <- grep(idn, dg.nm)
+                   
+                   if(length(idx) > 0) {
+                     # apply edits via LUT
+                     update.idx <- match(dg[[idx]], lut[, 1])
+                     dg[[idx]] <- lut[update.idx, 2]
+                     suppressWarnings(diagnostic_hz(object) <- dg)
+                   }
+                   
+                   return(object)
+                 }
+)
 
 ## horizon depth columns
 if (!isGeneric('horizonDepths<-'))
