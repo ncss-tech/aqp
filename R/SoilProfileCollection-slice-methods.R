@@ -173,11 +173,9 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # NOTE: suppressing warning due to non-unique horizon IDs, don't panic
   suppressWarnings(depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom)))
   
-  ## TODO: hack
   # reset auto-generated horizon ID so that we know it is now the slice ID
-  hz.names <- names(hd.slices@horizons)
-  idx <- match(hzidname(hd.slices), hz.names)
-  names(hd.slices@horizons)[idx] <- 'sliceID'
+  idx <- match(hzidname(hd.slices), horizonNames(hd.slices))
+  horizonNames(hd.slices)[idx] <- 'sliceID'
   hzidname(hd.slices) <- 'sliceID'
   
   # copy spatial data
