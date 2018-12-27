@@ -217,8 +217,19 @@ test_that("SPC rbind-ing ", {
 })
 
 
-test_that("SPC ID edits ", {
+test_that("SPC profile ID get/set ", {
   
 })
+
+
+test_that("SPC horizon ID get/set ", {
+  
+})
+
+
+test_that("SPC horizon ID init conflicts", {
+  
+})
+
 
 
