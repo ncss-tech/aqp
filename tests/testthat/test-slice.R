@@ -21,17 +21,24 @@ test_that("basic slice functionality", {
   expect_equal(nrow(horizons(s[1, ])),  101)
   
   # ID correctly initialized?
-  expect_equal(idname(sp1), 'id')
-  expect_true(length(profile_id(sp1)) == length(sp1))
+  expect_equal(idname(s), 'id')
+  expect_true(length(profile_id(s)) == length(s))
+  expect_equivalent(profile_id(s), profile_id(sp1))
   
   # ID in the correct order?
-  expect_identical(profile_id(sp1), site(sp1)[[idname(sp1)]])
+  expect_identical(profile_id(s), site(s)[[idname(s)]])
   
   # depth names?
-  expect_equal(horizonDepths(sp1), c('top', 'bottom'))
+  expect_equal(horizonDepths(s), horizonDepths(sp1))
   
   # site-level attributes correctly initialized?
-  expect_true(length(sp1$group) == length(sp1))
+  expect_true(length(s$group) == length(s))
+  
+  # original horizon IDs
+  expect_true('hzID' %in% horizonNames(s))
+  
+  # new slice IDs
+  expect_true('sliceID' %in% hzidname(s))
 })
 
 
