@@ -187,9 +187,38 @@ test_that("SPC horizonNames get/set ", {
 
 test_that("SPC rbind-ing ", {
   
+  # test data
+  x <- sp1
+  y <- sp1
   
+  # alter horizon and site data in copy
+  y$random <- runif(length(y))
+  y$chroma <- NULL
+  # add diagnostic hz
+  diagnostic_hz(y) <- data.frame(id='P001', type='pizza')
+  
+  # this should not work, IDs aren't unqiue
+  expect_error(rbind(x, y))
+  
+  # fix IDs manually
+  profile_id(y) <- sprintf("%s-copy", profile_id(y))
+  
+  # this should work
+  z <- rbind(x,y)
+  expect_match(class(z), 'SoilProfileCollection')
+  expect_equal(length(z), length(x) + length(y))
+  
+  # full site/hz names
+  expect_equal(siteNames(z), unique(c(siteNames(x), siteNames(y))))
+  expect_equal(horizonNames(z), unique(c(horizonNames(x), horizonNames(y))))
+  
+  # diagnostic features
+  expect_equal(diagnostic_hz(z)[[idname(z)]], 'P001-copy')
 })
 
 
+test_that("SPC ID edits ", {
+  
+})
 
 
