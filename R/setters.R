@@ -1,4 +1,43 @@
 
+## horizon IDs
+if (!isGeneric('hzID<-'))
+  setGeneric('hzID<-', function(object, value) standardGeneric('hzID<-'))
+
+setReplaceMethod("hzID", "SoilProfileCollection",
+                 function(object, value) {
+                   
+                   # can't be missing
+                   if(is.null(value)) {
+                     stop('horizon IDs cannot be NULL or NA', call. = FALSE) 
+                   }
+                   
+                   if(any(is.na(value)) | any(is.null(value))) {
+                     stop('horizon IDs cannot be NULL or NA', call. = FALSE) 
+                   }
+                   
+                   # length
+                   if(length(value) != nrow(object)) {
+                     stop('replacement horizon IDs must have same length as original', call. = FALSE)
+                   }
+                   
+                   # unique
+                   if(length(value) != length(unique(value))) {
+                     stop('replacement horizon IDs must be unique', call. = FALSE)
+                   }
+                   
+                   
+                   # extract horizon and replace IDs
+                   h <- horizons(object)
+                   # note that horizon IDs may be specified in custom-set column
+                   h[[hzidname(object)]] <- value
+                   # re-pack horizons
+                   horizons(object) <- h
+                   
+                   return(object)
+                 }
+)
+
+
 ## profile IDs
 if (!isGeneric('profile_id<-'))
   setGeneric('profile_id<-', function(object, value) standardGeneric('profile_id<-'))
@@ -17,12 +56,12 @@ setReplaceMethod("profile_id", "SoilProfileCollection",
                    
                    # length
                    if(length(value) != length(profile_id(object))) {
-                     stop('replacement IDs must have same length as original', call. = FALSE)
+                     stop('replacement profile IDs must have same length as original', call. = FALSE)
                    }
                    
                    # unique
                    if(length(value) != length(unique(value))) {
-                     stop('replacement IDs must be unique', call. = FALSE)
+                     stop('replacement profile IDs must be unique', call. = FALSE)
                    }
                    
                    # lookup table for converting old -> new IDs
@@ -57,6 +96,7 @@ setReplaceMethod("profile_id", "SoilProfileCollection",
                    return(object)
                  }
 )
+
 
 ## horizon depth columns
 if (!isGeneric('horizonDepths<-'))
@@ -153,6 +193,45 @@ setReplaceMethod("siteNames", "SoilProfileCollection",
       names(object@horizons) <- make.names(value)
         return(object)
   }
+)
+
+
+
+
+
+##
+## reset hz ID name
+##
+if (!isGeneric('hzidname<-'))
+  setGeneric('hzidname<-', function(object, value) standardGeneric('hzidname<-'))
+
+setReplaceMethod("hzidname", "SoilProfileCollection",
+                 function(object, value) {
+                   
+                   # quick sanity check
+                   if(length(value) != 1)
+                     stop("horizon ID name should have length of 1", call.=FALSE)
+                   
+                   
+                   # sanity checks
+                   
+                   # test: does it exist?
+                   if(! value %in% horizonNames(object)) {
+                     stop("ID name not in horizon data", call.=FALSE)
+                   }
+                   
+                   # test: unique?
+                   x <- horizons(object)[[value]]
+                   if(length(unique(x)) != nrow(object)){
+                     stop("target ID name not unique", call.=FALSE)
+                   }
+                   
+                   # replace
+                   object@hzidcol <- value
+                   
+                   # done
+                   return(object)
+                 }
 )
 
 
@@ -262,10 +341,45 @@ setReplaceMethod("depths", "data.frame",
     warning('converting IDs from factor to character', call.=FALSE)
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
-    
-  # create object
+  
+  # depths
   depthcols <- c(nm[2], nm[3])
+  
+  # create object
   res <- SoilProfileCollection(idcol=nm[1], depthcols=depthcols, horizons=data[new.order, ])
+  
+  # check for horizon ID name conflict
+  if(hzidname(res) %in% names(data)) {
+    
+    # original hz ID
+    o.hzid <- hzidname(res)
+    
+    # is this a good candidate horizon ID?
+    res.status <- try(hzID(res) <- data[[o.hzid]], silent = TRUE)
+    
+    # if not, re-make one
+    if(class(res.status) == 'try-error') {
+      # add unique horizon IDs to a new column
+      n.hzid <- sprintf("%s_", o.hzid)
+      
+      # add non-conflicting hz ID
+      res@horizons[[n.hzid]] <- 1:nrow(res)
+      
+      # update object
+      hzidname(res) <- n.hzid
+      
+      # notify
+      warning(sprintf('`%s` is not a unique horizon ID, using `%s`', o.hzid, n.hzid), call. = FALSE)
+    } else {
+      # notify that everything is fine
+      message(sprintf('using `%s` as a unique horizon ID', o.hzid))
+    }
+    
+  } else {
+    # no conflict, add a reasonable horizon ID
+    hzID(res) <- 1:nrow(res)
+  } 
+  
   
   # done
   return(res)

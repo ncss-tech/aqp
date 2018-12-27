@@ -67,6 +67,28 @@ setMethod("idname", "SoilProfileCollection",
     return(object@idcol)
 )
 
+## horizon ID name
+if (!isGeneric("hzidname"))
+  setGeneric("hzidname", function(object, ...) standardGeneric("hzidname"))
+
+setMethod("hzidname", "SoilProfileCollection",
+          function(object)
+            return(object@hzidcol)
+)
+
+## get horizon IDs
+if (!isGeneric("hzID"))
+  setGeneric("hzID", function(object, ...) standardGeneric("hzID"))
+
+setMethod("hzID", "SoilProfileCollection",
+          function(object) {
+            h <- horizons(object)
+            res <- h[[hzidname(object)]]
+            return(res)
+          }
+            
+)
+
 
 ## distinct profile IDs
 if (!isGeneric("profile_id"))
@@ -268,6 +290,9 @@ rbind.SoilProfileCollection <- function(...) {
 	
 	# make SPC and return
 	res <- SoilProfileCollection(idcol=o.idname[[1]], depthcols=o.hz.depths[[1]], metadata=o.m[[1]], horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
+	
+	## reset horizon IDs
+	hzID(res) <- 1:nrow(res)
 	
 # 	# one more final check:
 # 	print(profile_id(res))

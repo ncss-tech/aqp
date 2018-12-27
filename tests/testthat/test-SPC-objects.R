@@ -161,7 +161,7 @@ test_that("SPC horizonNames get/set ", {
   expect_equal(hn, c("id", "top", "bottom", "bound_distinct", "bound_topography",
                      "name", "texture", "prop", "structure_grade", "structure_size", 
                      "structure_type", "stickiness", "plasticity", "field_ph", "hue", 
-                     "value", "chroma"))
+                     "value", "chroma", "hzID"))
   
   # setting
   idx <- match('chroma', hn)

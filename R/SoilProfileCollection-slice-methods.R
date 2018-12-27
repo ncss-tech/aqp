@@ -153,6 +153,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   if(just.the.data)
     return(hd.slices)
 
+  ## TODO: WTF (AGB: loafercreek[, 2])
   # if spatial data and only a single slice: SPDF
   if(nrow(coordinates(object)) == length(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
@@ -169,7 +170,17 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   
   
   # otherwise return an SPC, be sure to copy over the spatial data
-  depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom))
+  # NOTE: suppressing warning due to non-unique horizon IDs, don't panic
+  suppressWarnings(depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom)))
+  
+  ## TODO: hack
+  # reset auto-generated horizon ID so that we know it is now the slice ID
+  hz.names <- names(hd.slices@horizons)
+  idx <- match(hzidname(hd.slices), hz.names)
+  names(hd.slices@horizons)[idx] <- 'sliceID'
+  hzidname(hd.slices) <- 'sliceID'
+  
+  # copy spatial data
   hd.slices@sp <- object@sp
   
   # if site data: return an SPC + @site
