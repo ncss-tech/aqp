@@ -4,8 +4,12 @@
 * new functions: previewColors(), colorQuantiles(), plotColorQuantiles()
 * new function: horizonDepths()<-, edit top/bottom names after SPC init
 * new function: profile_id()<-, edit profile IDs after init; be careful!
-* rbind method for SoilProfileCollection objects [...]
+* new functions: hzID() and hzID()<-, get/set unique horizon IDs
+* new functions: hzidname() and hzidname()<-, get/set column containing unique horizon IDs
+* rbind.SoilProfileCollection() has been deprecated in favor of union(), gains new functionality: 
 * bug fixes in sanity checks for horizonNames()<-
+* !!! SoilProfileCollection internal structure has changed: 
+* 
 
 -------------------------- aqp 1.16-6 (2018-12-12) ------------------------
 * partial bug fix in test_hz_logic() related to missing top AND bottom depths, needs work: https://github.com/ncss-tech/aqp/issues/65
