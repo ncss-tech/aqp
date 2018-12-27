@@ -209,6 +209,11 @@ rbind.SoilProfileCollection <- function(...) {
 	if(length(objects) == 1)
 		return(objects[1])
 	
+	## TODO: normalize idname and horizonDepths
+	# profile_id() <- 
+	# horizonDepths() <- 
+	
+	
 	# combine pieces
 	# should have length of 1
 	o.idname <- unique(lapply(objects, idname))

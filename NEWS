@@ -4,6 +4,7 @@
 * new functions: previewColors(), colorQuantiles(), plotColorQuantiles()
 * new function: horizonDepths()<-, edit top/bottom names after SPC init
 * new function: profile_id()<-, edit profile IDs after init; be careful!
+* rbind method for SoilProfileCollection objects [...]
 * bug fixes in sanity checks for horizonNames()<-
 
 -------------------------- aqp 1.16-6 (2018-12-12) ------------------------
