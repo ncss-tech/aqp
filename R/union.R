@@ -1,17 +1,17 @@
 
 
-## rbind() ---> union() would make more sense
-## 
-## https://github.com/ncss-tech/aqp/issues/71
-## TODO: concatenation of data with duplicated IDs in @site, but unique data in other @site fields, will result in corrupt SPC
-## TODO: duplicates in @sp will cause errors
-## TODO: duplicates are removed in all other slots... does this make sense?
-rbind.SoilProfileCollection <- function(...) {
+
+# TODO: https://github.com/ncss-tech/aqp/issues/71
+#
+# TODO: concatenation of data with duplicated IDs in @site, but unique data in other @site fields, will result in corrupt SPC
+# TODO: duplicates in @sp will cause errors
+# TODO: duplicates are removed in all other slots... does this make sense?
+union <- function(spc=list(), method='all', ...) {
   # setup some defaults
   options(stringsAsFactors=FALSE)
   
   # parse dots
-  objects <- list(...)
+  objects <- spc
   names(objects) <- NULL
   
   # short-circuits
@@ -20,7 +20,7 @@ rbind.SoilProfileCollection <- function(...) {
   if(length(objects) == 1)
     return(objects[1])
   
-  ## TODO: normalize idname and horizonDepths
+  ## TODO: normalize profile ID, horizon ID, horizon depths
   # profile_id() <- 
   # horizonDepths() <- 
   # idname() <-
@@ -95,7 +95,15 @@ rbind.SoilProfileCollection <- function(...) {
 }
 
 
-## TODO: this doesn't work as expected ... fix in 2.0
-## overload rbind
-#setMethod("rbind", "SoilProfileCollection", .rbind.SoilProfileCollection)
+## ease the transition
+rbind.SoilProfileCollection <- function(...) {
+  .Deprecated('please use union()')
+  
+  # parse dots
+  objects <- list(...)
+  names(objects) <- NULL
+  
+  res <- union(spc=objects, method='all', ...)
+  return(res)
+}
 

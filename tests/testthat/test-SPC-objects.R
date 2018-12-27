@@ -185,7 +185,7 @@ test_that("SPC horizonNames get/set ", {
 
 
 
-test_that("SPC rbind-ing ", {
+test_that("SPC union ", {
   
   # test data
   x <- sp1
@@ -198,13 +198,13 @@ test_that("SPC rbind-ing ", {
   diagnostic_hz(y) <- data.frame(id='P001', type='pizza')
   
   # this should not work, IDs aren't unqiue
-  expect_error(rbind(x, y))
+  expect_error(union(list(x, y)))
   
   # fix IDs manually
   profile_id(y) <- sprintf("%s-copy", profile_id(y))
   
   # this should work
-  z <- rbind(x,y)
+  z <- union(list(x,y))
   expect_match(class(z), 'SoilProfileCollection')
   expect_equal(length(z), length(x) + length(y))
   
