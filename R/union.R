@@ -1,3 +1,23 @@
+# 2018-12-17
+# D.E. Beaudette
+# A.G. Brown
+# 
+# This function replaces the previous 
+# 
+
+
+# ease the transition to union()
+rbind.SoilProfileCollection <- function(...) {
+  .Deprecated('please use union()')
+  
+  # parse dots
+  objects <- list(...)
+  names(objects) <- NULL
+  
+  # make compatible
+  res <- union(spc=objects)
+  return(res)
+}
 
 
 
@@ -95,15 +115,4 @@ union <- function(spc=list(), method='all', ...) {
 }
 
 
-## ease the transition
-rbind.SoilProfileCollection <- function(...) {
-  .Deprecated('please use union()')
-  
-  # parse dots
-  objects <- list(...)
-  names(objects) <- NULL
-  
-  res <- union(spc=objects, method='all', ...)
-  return(res)
-}
 
