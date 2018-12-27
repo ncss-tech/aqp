@@ -1,3 +1,4 @@
+# https://github.com/ncss-tech/aqp/issues/75
 # class def for main class within aqp
 .SoilProfileCollectionValidity <- function(object) {
 	

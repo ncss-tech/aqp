@@ -2,7 +2,8 @@
 # D.E. Beaudette
 # A.G. Brown
 # 
-# This function replaces the previous 
+# 
+# This function replaces the previous rbind.SoilProfileCollection function.
 # 
 
 
