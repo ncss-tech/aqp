@@ -6,7 +6,15 @@
 #clod more is a ragged group of soil pedon horizons (each with distinctness, horizons boundaries)
 # not resampled like slice or slab.
 
-clod <- function(p, z1, z2=NA, as.list = FALSE) {
+clod <- function(p, z1, z2=NA, as.data.frame = FALSE) {
+  if(!as.df) {
+    return(spc.clod(p, z1, z2)) 
+  } else {
+    return(hz.clod(p, z1, z2))
+  }
+}
+
+clod.ids <- function(p, z1, z2=NA, as.list = FALSE) {
   #intersect horizons by depth; internal/shorthand alias? 
   # less typing is good, and i was trying to think of a slice/slab analogy
   hzid <- hzidname(p)
@@ -45,12 +53,10 @@ clod <- function(p, z1, z2=NA, as.list = FALSE) {
   return(list(hz.idx = idx.top, value = idval))
 }
 
-spc.by.z <- function(p, top.depth, bottom.depth=NA) {
-  return(p[, which(horizons(p)[[hzidname(p)]] %in%  hz.dz(p, top.depth, bottom.depth, as.list=F))])
+spc.clod <- function(p, top.depth, bottom.depth=NA) {
+  return(p[, which(hzID(p) %in% clod.ids(p, top.depth, bottom.depth))])
 }
 
-hz.by.z <- function(p, top.depth, bottom.depth=NA, ...) {
-  hzid <- hzidname(p)
-  return(horizons(p)[horizons(p)[[hzidname(p)]] %in% 
-                       intersect.horizon(p, top.depth, bottom.depth, ...),])
+hz.clod <- function(p, top.depth, bottom.depth=NA) {
+  return(horizons(p)[hzID(p) %in% clod(p, top.depth, bottom.depth),])
 }
