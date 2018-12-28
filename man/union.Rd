@@ -33,13 +33,38 @@ x <- sp2[1:5, ]
 y <- sp2[6:10, ]
 
 # reset IDs and combine
-profile_id(y) <- sprintf("%s-copy", profile_id(y))
+profile_id(y) <- sprintf("\%s-copy", profile_id(y))
 
 # this should work
 z <- union(list(x,y))
 
 # check
 plot(z)
+
+\dontrun{
+library(plyr)
+
+ids <- sprintf("\%02d", 1:5)
+x <- ldply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
+           lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
+
+# promote to SPC and plot
+depths(x ) <- id ~ top + bottom
+plot(x, color='p1')
+
+# slice and update IDs
+y <- slice(x, 0:150 ~ .)
+profile_id(y) <- sprintf("\%s-sliced", profile_id(x))
+
+# stack, note that @horizons is not the same in x and y
+z <- union(list(x, y))
+
+# lable groups
+z$g <- substr(profile_id(z), 1, 2)
+
+par(mar=c(0,0,3,0))
+groupedProfilePlot(z, groups = 'g', color='p1', group.name.offset = -10, divide.hz=FALSE, name='')
+}
 }
 
 \keyword{ manip }% use one of  RShowDoc("KEYWORDS")
