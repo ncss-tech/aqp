@@ -1,14 +1,14 @@
-context("getArgillicBounds() and supporting low-level functions")
+context("argillic bounds and clay increase")
 
 data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
 p <- sp1[1]
-attr='prop' # clay contents % 
+attr <- 'prop' # clay contents % 
 
 #implicitly testing the basic logic of this function :)
-threshold.fun=crit.clay.argillic 
+threshold.fun <- crit.clay.argillic 
 
 #standard for argillic
 vertical.distance=30

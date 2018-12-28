@@ -11,6 +11,7 @@ estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p
     stop('This function will only work when applied to a single soil profile, see manual page for details.')
   
   # sanity check: horizon name, top, bottom must be present in source SPC
+  # this is less informative than the 
   if(! all(c(name, top, bottom) %in% horizonNames(f)))
      stop('horizon name, top, or bottom column not correctly specified')
   
