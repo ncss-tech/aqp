@@ -39,7 +39,7 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
         if(c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
-          print("Adjusting bottom depth of argillic horizon for lower gradational horizons (peiid: ", site(p)$peiid, ")")
+          print(paste0("Adjusting bottom depth of argillic horizon for lower gradational horizons (peiid: ", site(p)$peiid, ")"))
           depth.last <- c.horizon
         }       
       }

@@ -3,6 +3,9 @@
 # z2 is optional, in which case a single horizon with depth range containing z1 is returned
 # several wrapper functions around this for hzid
 
+#clod more is a ragged group of soil pedon horizons (each with distinctness, horizons boundaries)
+# not resampled like slice or slab.
+
 clod <- function(p, z1, z2=NA, as.list = FALSE) {
   #intersect horizons by depth; internal/shorthand alias? 
   # less typing is good, and i was trying to think of a slice/slab analogy
