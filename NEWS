@@ -1,4 +1,4 @@
--------------------------- aqp 1.17 (2018-12-17) -------------------------
+-------------------------- aqp 1.17 (2018-12-28) -------------------------
 * CRAN release
 * aggregateColor() gets a new feature, similar colors can be grouped via cluster::pam()
 * new functions: previewColors(), colorQuantiles(), plotColorQuantiles()
@@ -6,10 +6,10 @@
 * new function: profile_id()<-, edit profile IDs after init; be careful!
 * new functions: hzID() and hzID()<-, get/set unique horizon IDs
 * new functions: hzidname() and hzidname()<-, get/set column containing unique horizon IDs
-* rbind.SoilProfileCollection() has been deprecated in favor of union(), gains new functionality: 
-* bug fixes in sanity checks for horizonNames()<-
-* !!! SoilProfileCollection internal structure has changed: 
-* 
+* rbind.SoilProfileCollection() has been deprecated in favor of union(), gains new functionality: https://github.com/ncss-tech/aqp/issues/71
+* bug fixes in sanity checks within horizonNames()<-
+* !!! SoilProfileCollection internal structure has changed: https://github.com/ncss-tech/aqp/issues/74
+* see release notes for more: https://github.com/ncss-tech/aqp/releases/tag/v1.17
 
 -------------------------- aqp 1.16-6 (2018-12-12) ------------------------
 * partial bug fix in test_hz_logic() related to missing top AND bottom depths, needs work: https://github.com/ncss-tech/aqp/issues/65
