@@ -22,12 +22,14 @@ rbind.SoilProfileCollection <- function(...) {
 
 
 
+
 # TODO: https://github.com/ncss-tech/aqp/issues/71
 #
 # TODO: concatenation of data with duplicated IDs in @site, but unique data in other @site fields, will result in corrupt SPC
 # TODO: duplicates in @sp will cause errors
 # TODO: duplicates are removed in all other slots... does this make sense?
-union <- function(spc=list(), method='all', ...) {
+# NOTE: union is defined in base, do we need a better name?
+union <- function(spc=list(), method='all') {
   # setup some defaults
   options(stringsAsFactors=FALSE)
   
@@ -114,6 +116,4 @@ union <- function(spc=list(), method='all', ...) {
   
   return(res)
 }
-
-
 
