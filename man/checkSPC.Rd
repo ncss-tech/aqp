@@ -1,11 +1,11 @@
-\name{isValidSPC}
+\name{checkSPC}
 \alias{isValidSPC}
 
 \title{Test for a valid SoilProfileCollection}
 \description{Test for a valid SoilProfileCollection}
 
 \usage{
-isValidSPC(x)
+checkSPC(x)
 }
 
 \arguments{
@@ -14,10 +14,10 @@ isValidSPC(x)
 
 \details{Test for valid \code{SoilProfileCollection} by checking for slots defined in the class prototype. Likely only used between major versions of `aqp` where internal structure of \code{SoilProfileCollection} has changed.}
 
-\value{TRUE or FALSE. Consider using \code{repairSPC()} if FALSE.}
+\value{TRUE or FALSE. Consider using \code{rebuildSPC()} if FALSE.}
 
 \author{D.E. Beaudette}
 
 \seealso{
-\code{\link{repairSPC}}
+\code{\link{rebuildSPC}}
 }
