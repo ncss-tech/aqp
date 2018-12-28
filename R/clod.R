@@ -3,12 +3,9 @@
 # z2 is optional, in which case a single horizon with depth range containing z1 is returned
 # several wrapper functions around this for hzid
 
-hz.dz <- function(p, z1, z2=NA, as.list = FALSE) {
-  #horizons by depth; internal/shorthand alias?
-  return(intersect.horizon(p, z1, z2=z2, as.list = FALSE))
-}
-
-intersect.horizon <- function(p, z1, z2=NA, as.list = FALSE) {
+clod <- function(p, z1, z2=NA, as.list = FALSE) {
+  #intersect horizons by depth; internal/shorthand alias? 
+  # less typing is good, and i was trying to think of a slice/slab analogy
   hzid <- hzidname(p)
   top.depth <- horizonDepths(p)[1]
   depthz <- horizons(p)[[top.depth]]
@@ -45,30 +42,12 @@ intersect.horizon <- function(p, z1, z2=NA, as.list = FALSE) {
   return(list(hz.idx = idx.top, value = idval))
 }
 
-intersect.spc.by.depth <- function(p, top.depth, bottom.depth=NA) {
-  return(p[, which(horizons(p)[[hzid]] %in% 
-                     intersect.horizon(p, top.depth, bottom.depth, as.list=F))])
+spc.by.z <- function(p, top.depth, bottom.depth=NA) {
+  return(p[, which(horizons(p)[[hzidname(p)]] %in%  hz.dz(p, top.depth, bottom.depth, as.list=F))])
 }
 
-getSPCAt50cm <- function(p) {
-  return(intersect.spc.by.depth(p, 50))
-}
-
-intersect.hz.by.depth <- function(p, top.depth, bottom.depth=NA, ...) {
+hz.by.z <- function(p, top.depth, bottom.depth=NA, ...) {
   hzid <- hzidname(p)
-  return(horizons(p)[horizons(p)[[hzid]] %in% 
+  return(horizons(p)[horizons(p)[[hzidname(p)]] %in% 
                        intersect.horizon(p, top.depth, bottom.depth, ...),])
 }
-
-getHorizonAt50cm <- function(p) {
-  return(intersect.hz.by.depth(p, 50))
-}
- 
-getHorizons25to100cm <- function(p) {
-  return(intersect.hz.by.depth(p, 25, 100))
-}
-
-getSPCAt50cm <- function(p) {
-  return(intersect.spc.by.depth(p, 50))
-}
-
