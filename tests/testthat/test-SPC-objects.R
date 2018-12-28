@@ -64,6 +64,31 @@ test_that("SPC deconstruction into a data.frame", {
 })
 
 
+test_that("SPC deconstruction into a list", {
+  
+  # do it here
+  l <- as(sp1, 'list')
+  
+  # result should be a list
+  expect_match(class(l), 'list')
+  
+  # there should be no NULL data, e.g. missing slots
+  res <- sapply(l, is.null)
+  expect_false(any(res))
+  
+  # check internals
+  expect_equivalent(l$idcol, idname(sp1))
+  expect_equivalent(l$hzidcol, hzidname(sp1))
+  expect_equivalent(l$depthcols, horizonDepths(sp1))
+  expect_equivalent(l$metadata, metadata(sp1))
+  expect_equivalent(l$horizons, horizons(sp1))
+  expect_equivalent(l$site, site(sp1))
+  expect_equivalent(l$sp, sp1@sp)
+  expect_equivalent(l$diagnostic, diagnostic_hz(sp1))
+  
+})
+
+
 test_that("SPC subsetting ", {
   
   # profile subsets
@@ -290,36 +315,6 @@ test_that("SPC horizon ID init conflicts", {
 })
 
 
-test_that("SPC union ", {
-  
-  # test data
-  x <- sp1
-  y <- sp1
-  
-  # alter horizon and site data in copy
-  y$random <- runif(length(y))
-  y$chroma <- NULL
-  # add diagnostic hz
-  diagnostic_hz(y) <- data.frame(id='P001', type='pizza')
-  
-  # this should not work, IDs aren't unqiue
-  expect_error(union(list(x, y)))
-  
-  # fix IDs manually
-  profile_id(y) <- sprintf("%s-copy", profile_id(y))
-  
-  # this should work
-  z <- union(list(x,y))
-  expect_match(class(z), 'SoilProfileCollection')
-  expect_equal(length(z), length(x) + length(y))
-  
-  # full site/hz names
-  expect_equal(siteNames(z), unique(c(siteNames(x), siteNames(y))))
-  expect_equal(horizonNames(z), unique(c(horizonNames(x), horizonNames(y))))
-  
-  # diagnostic features
-  expect_equal(diagnostic_hz(z)[[idname(z)]], 'P001-copy')
-})
 
 
 

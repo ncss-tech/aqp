@@ -34,7 +34,7 @@ plot(group.1 <- subsetProfiles(sp1, s="group == '1'"))
 plot(coarse.soils <- subsetProfiles(sp1, h="texture == 'LS'"))
 
 # re-combine subsets, note that duplicates are removed
-g <- rbind(group.1, coarse.soils)
+g <- union(list(group.1, coarse.soils))
 plot(g)
 
 # reset plot area

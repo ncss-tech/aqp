@@ -1,5 +1,5 @@
 \name{checkSPC}
-\alias{isValidSPC}
+\alias{checkSPC}
 
 \title{Test for a valid SoilProfileCollection}
 \description{Test for a valid SoilProfileCollection}

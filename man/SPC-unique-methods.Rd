@@ -32,15 +32,27 @@ uniqueSPC(x, vars)
 
 
 \examples{
-## use the digest library to detect duplicate data
+# use the digest library to detect duplicate data
 data(sp1)
+sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
-# make a copy, make new IDs, and stack
-s.1 <- sp1 
+# upgrade to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
+
+
+# make a copies
+s.1 <- sp1
 s.2 <- sp1
-s.2$id <- paste(s.2$id, '-copy', sep='')
-s <- rbind(s.1, s.2)
-depths(s) <- id ~ top + bottom
+
+# update IDs in second copy
+profile_id(s.2) <- sprintf('\%s-copy', profile_id(s.2))
+
+# union SPCs
+s <- union(list(s.1, s.2))
+
+# check
+plot(s)
 
 # digests are computed from horizon-level data only
 # horizon boundaries and 'prop'
@@ -51,6 +63,12 @@ u <- unique(s, vars=c('top', 'bottom', 'prop'))
 # compare with and without dupes:
 # note subsetting of SoilProfileCollection
 cbind(dupes=length(s), no.dupes=length(s[u, ]))
+
+# get unique profile by index
+s.unique <- s[u, ]
+
+# unique data
+plot(s.unique)
 }
 
 \keyword{methods}
