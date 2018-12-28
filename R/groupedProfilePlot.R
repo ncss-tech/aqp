@@ -1,6 +1,13 @@
-## TODO: only a single site-level attribute can be used for sorting
-# order profiles by a site-level grouping label
+
+# order profiles by a single, site-level attribute
 groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0.75, group.line.col='RoyalBlue', group.line.lwd=2, group.line.lty=2, break.style='line', arrow.offset=group.name.offset + 5, arrow.length=0.1, ...) {
+  
+  # sanity check, `groups` must be a site-level attribute
+  if(! any(groups %in% siteNames(x))) {
+    stop(sprintf("%s is not a site-level attribute", groups), call. = FALSE)
+  }
+  
+  # extract site and derive ordering based on `groups`
   s <- site(x)
   new.order <- order(s[[groups]])
   
