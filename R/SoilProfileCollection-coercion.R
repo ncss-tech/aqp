@@ -1,4 +1,37 @@
 ## Coercition methods: general
+
+# safely deconstruct as list
+setAs("SoilProfileCollection", "list", function(from) {
+  
+  # get slot names from prototype
+  sn <- slotNames(from)
+  
+  # test for presence of all slots
+  # copy contents over to list with same name
+  # if missing return NULL + warning
+  s.list <- lapply(sn, function(i) {
+    if(.hasSlot(from, name=i)) {
+      res <- slot(from, i)
+    } else {
+      res <- NULL
+    }
+    return(res)
+  })
+  
+  # copy slot names
+  names(s.list) <- sn
+  
+  # test for missing slots
+  if(any(sapply(s.list, is.null))) {
+    warning("some slots were missing, use reBuildSPC to fix", call. = FALSE)
+  }
+  
+  return(s.list)
+  
+}
+)
+
+
 setAs("SoilProfileCollection", "data.frame", function(from) {
   
   # horizons + site + coordinates

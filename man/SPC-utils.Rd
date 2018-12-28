@@ -42,6 +42,17 @@
 \alias{profile_id<-}
 \alias{profile_id<-,SoilProfileCollection-method}
 
+\alias{hzID}
+\alias{hzID,SoilProfileCollection-method}
+\alias{hzID<-}
+\alias{hzID<-,SoilProfileCollection-method}
+
+\alias{hzidname}
+\alias{hzidname,SoilProfileCollection-method}
+\alias{hzidname<-}
+\alias{hzidname<-,SoilProfileCollection-method}
+
+
 \title{Getters, Setters, and Utility Methods for SoilProfileCollection Objects}
 \description{Getters, Setters, and Utility Methods for SoilProfileCollection Objects}
 \section{Methods}{

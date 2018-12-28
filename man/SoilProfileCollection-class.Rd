@@ -38,6 +38,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
 \section{Slots}{
   \describe{
     \item{\code{idcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify profiles }
+    \item{\code{hzidcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify horizons }
     \item{\code{depthcols}:}{Object of class \code{"character"} with the names of columns containing the horizon top and bottom boundaries}
     \item{\code{metadata}:}{Object of class \code{"data.frame"} with collection-level metadata, having a single row, and user-defined columns}
     \item{\code{horizons}:}{Object of class \code{"data.frame"} with 1 or more rows per profile}
@@ -95,16 +96,8 @@ d.2 <- d[2, ]
 d.345 <- d[3:5, ]
 
 # recombine, note that profiles are sorted according to ID
-d.new <- rbind(d.345, d.1, d.2)
+d.new <- union(list(d.345, d.1, d.2))
 plot(d.new)
-}
-
-\dontrun{
-# these next examples should throw an error
-# insert a missing horizon boundary
-data(sp1)
-sp1$top[1] <- NA
-depths(sp1) <- id ~ top + bottom
 }
 }
 \keyword{classes}

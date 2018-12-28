@@ -25,7 +25,9 @@ importFrom(methods,
   setMethod,
   as,
   show,
-  slot
+  slot,
+  .hasSlot,
+  slotNames
 )
 
 

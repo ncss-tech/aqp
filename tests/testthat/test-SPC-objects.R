@@ -64,6 +64,31 @@ test_that("SPC deconstruction into a data.frame", {
 })
 
 
+test_that("SPC deconstruction into a list", {
+  
+  # do it here
+  l <- as(sp1, 'list')
+  
+  # result should be a list
+  expect_match(class(l), 'list')
+  
+  # there should be no NULL data, e.g. missing slots
+  res <- sapply(l, is.null)
+  expect_false(any(res))
+  
+  # check internals
+  expect_equivalent(l$idcol, idname(sp1))
+  expect_equivalent(l$hzidcol, hzidname(sp1))
+  expect_equivalent(l$depthcols, horizonDepths(sp1))
+  expect_equivalent(l$metadata, metadata(sp1))
+  expect_equivalent(l$horizons, horizons(sp1))
+  expect_equivalent(l$site, site(sp1))
+  expect_equivalent(l$sp, sp1@sp)
+  expect_equivalent(l$diagnostic, diagnostic_hz(sp1))
+  
+})
+
+
 test_that("SPC subsetting ", {
   
   # profile subsets
@@ -161,7 +186,7 @@ test_that("SPC horizonNames get/set ", {
   expect_equal(hn, c("id", "top", "bottom", "bound_distinct", "bound_topography",
                      "name", "texture", "prop", "structure_grade", "structure_size", 
                      "structure_type", "stickiness", "plasticity", "field_ph", "hue", 
-                     "value", "chroma"))
+                     "value", "chroma", "hzID"))
   
   # setting
   idx <- match('chroma', hn)
@@ -184,41 +209,115 @@ test_that("SPC horizonNames get/set ", {
 })
 
 
-
-test_that("SPC rbind-ing ", {
+test_that("SPC horizon ID get/set ", {
   
-  # test data
+  # automatically generated horizon IDs
+  auto.hz.ids <- hzID(sp1)
+  
+  # should be 1:nrow(sp1)
+  expect_equivalent(auto.hz.ids, seq_len(nrow(sp1)))
+  
+  # try replacing with reasonable IDs
+  hzID(sp1) <- rev(hzID(sp1))
+  expect_equivalent(hzID(sp1), rev(seq_len(nrow(sp1))))
+  
+  # try replacing with bogus values
+  expect_error(hzID(sp1) <- 1)
+  # non-unique
+  expect_error(hzID(sp1) <- sample(hzID(sp1), replace = TRUE))
+  
+})
+
+
+test_that("SPC horizon ID name get/set ", {
+  
+  # check default
+  expect_equivalent(hzidname(sp1), 'hzID')
+  
+  # make a new horizon ID
+  sp1$junk <- 1:nrow(sp1)
+  hzidname(sp1) <- 'junk'
+  expect_equivalent(hzidname(sp1), 'junk')
+  
+  # error conditions:
+  # no column
+  expect_error(hzidname(sp1) <- 'xxx')
+  
+  # not unique
+  expect_error(hzidname(sp1) <- 'top')
+  
+})
+
+test_that("SPC horizon ID get/set ", {
+  
+  # automatically generated horizon IDs
+  auto.hz.ids <- hzID(sp1)
+  
+  # should be 1:nrow(sp1)
+  expect_equivalent(auto.hz.ids, seq_len(nrow(sp1)))
+  
+  # try replacing with reasonable IDs
+  hzID(sp1) <- rev(hzID(sp1))
+  expect_equivalent(hzID(sp1), rev(seq_len(nrow(sp1))))
+  
+  # try replacing with bogus values
+  expect_error(hzID(sp1) <- 1)
+  # non-unique
+  expect_error(hzID(sp1) <- sample(hzID(sp1), replace = TRUE))
+  
+})
+
+
+test_that("SPC profile ID get/set ", {
+  
+  # original
+  pIDs <- profile_id(sp1)
+  
+  # new
+  pIDs.new <- sprintf("%s-copy", pIDs)
+  
+  # try re-setting
+  profile_id(sp1) <- pIDs.new
+  
+  # were the IDs altered?
+  expect_equivalent(profile_id(sp1), pIDs.new)
+  
+  # bogus edits
+  expect_error(profile_id(sp1) <- 1)
+  expect_error(profile_id(sp1) <- sample(pIDs, replace = TRUE))
+  expect_error(profile_id(sp1) <- c(NA, pIDs[-1]))
+  
+})
+
+
+test_that("SPC horizon ID init conflicts", {
+  
+  # decompose, re-init and test for message
   x <- sp1
-  y <- sp1
+  x <- as(x, 'data.frame')
+  expect_message(depths(x) <- id ~ top + bottom, "^using")
+  expect_equivalent(hzidname(x), 'hzID')
   
-  # alter horizon and site data in copy
-  y$random <- runif(length(y))
-  y$chroma <- NULL
-  # add diagnostic hz
-  diagnostic_hz(y) <- data.frame(id='P001', type='pizza')
+  # decompose, add non-unique column conflicing with hzID
+  x <- sp1
+  x <- as(x, 'data.frame')
+  x$hzID <- 1
+  expect_warning(depths(x) <- id ~ top + bottom, "not a unique horizon ID, using")
+  # test backup name
+  expect_equivalent(hzidname(x), 'hzID_')
   
-  # this should not work, IDs aren't unqiue
-  expect_error(rbind(x, y))
+  # special case: IDs resulting from slice()
+  s <- slice(sp1, 0:100 ~ .)
+  expect_equivalent(hzidname(s), 'sliceID')
+  # check to make sure hzID and sliceID are present
+  expect_equal(grep('hzID|sliceID', horizonNames(s)), c(18, 20))
   
-  # fix IDs manually
-  profile_id(y) <- sprintf("%s-copy", profile_id(y))
-  
-  # this should work
-  z <- rbind(x,y)
-  expect_match(class(z), 'SoilProfileCollection')
-  expect_equal(length(z), length(x) + length(y))
-  
-  # full site/hz names
-  expect_equal(siteNames(z), unique(c(siteNames(x), siteNames(y))))
-  expect_equal(horizonNames(z), unique(c(horizonNames(x), horizonNames(y))))
-  
-  # diagnostic features
-  expect_equal(diagnostic_hz(z)[[idname(z)]], 'P001-copy')
 })
 
 
-test_that("SPC ID edits ", {
-  
-})
+
+
+
+
 
 
