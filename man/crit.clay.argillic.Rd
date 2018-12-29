@@ -1,6 +1,5 @@
 \name{crit.clay.argillic}
 \alias{crit.clay.argillic}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 crit.clay.argillic
 }
@@ -10,14 +9,10 @@ Given a vector or matrix of "eluvial" horizon clay contents (\%), \code{crit.cla
 \usage{
 crit.clay.argillic(eluvial_clay_content)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{eluvial_clay_content}{
   A numeric vector or matrix containing clay contents of potential "eluvial" horizons. May contain \code{NA}.
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 A vector or matrix (input-dependent) containing minimum "illuvial" horizon clay contents (thresholds) to be met for argillic horizon clay increase.
@@ -29,7 +24,7 @@ Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed. USDA-Natural Resources 
 Andrew Gene Brown
 }
 \note{
-This function is intended for identifying clay content threshold required for an argillic horizon. These thresholds may not apply depending on the specifics of your soil. E.g. if the upper part of argillic has been plowed (has Ap immediately over upper boundary) the clay increase requirement is waived (Soil Survey Staff, 2014).
+This function is intended for identifying clay content threshold required for an argillic horizon. These thresholds may not apply depending on the specifics of your soil. E.g. if the upper part of argillic has been plowed (has Ap immediately over upper boundary) the clay increase requirement can be waived (Soil Survey Staff, 2014).
 }
 
 \seealso{
@@ -41,6 +36,4 @@ This function is intended for identifying clay content threshold required for an
 
 crit.clay.argillic(eluvial_clay_content=c(5, 20, 45))
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ manip }

@@ -13,12 +13,12 @@ getSurfaceHorizonDepth <-  function(p, pattern, hzdesgn='hzname') {
     
   mod.idx <- c(1, rep(0, length(match.idx) - 1))
   new.idx <- (match.idx + mod.idx) %% 3
-    
+  who.idx <- numeric(0)
   if(new.idx[1] == 2) {
     who.idx <- (rev(which(new.idx > 0 & new.idx <= 2))[1])
-    if(!length(who.idx))
-      return(0)
   }
+  if(!length(who.idx))
+    return(0)
   return(hz[who.idx, horizonDepths(p)[2]])
 }
 

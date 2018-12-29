@@ -14,11 +14,11 @@
 # gloms a set of horizons for a single-profile SPC `p`
 #  the horizons are aggregated by depth using clod.hz.ids() 
 glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
-  # aka glom.by.depth or glom.dz?
+  # aka glom.by.depth; just one type of glomming of many that we can support
   if(!as.data.frame) {
-    return(spc.clod(p, z1, z2)) 
+    return(p[, which(hzID(p) %in% clod.hz.ids(p, z1, z2))]) 
   } else {
-    return(hz.clod(p, z1, z2))
+    return(horizons(p)[hzID(p) %in% clod.hz.ids(p, z1, z2),])
   }
 }
 
@@ -58,14 +58,4 @@ clod.hz.ids <- function(p, z1, z2=NA, as.list = FALSE) {
     return(idval)
   
   return(list(hz.idx = idx.top, value = idval))
-}
-
-#returns a "clod" of type SoilProfileCollection from a single-profile SPC `p`
-spc.clod <- function(p, top.depth, bottom.depth=NA) {
-  return(p[, which(hzID(p) %in% clod.hz.ids(p, top.depth, bottom.depth))])
-}
-
-#returns a "clod" of type data.frame from a single-profile SPC `p`
-hz.clod <- function(p, top.depth, bottom.depth=NA) {
-  return(horizons(p)[hzID(p) %in% clod.hz.ids(p, top.depth, bottom.depth),])
 }

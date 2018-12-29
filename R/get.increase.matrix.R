@@ -18,7 +18,7 @@ get.increase.matrix <- function(p, attr, threshold.fun, vertical.distance) {
     # this function assumes that the threshold.fun() supplied by the user returns either a constant,
     # or a vector of equal length to `increase.var` when called above. otherwise, we cannot calculate the result.
     # note that the threshold.fun() result _is_ allowed to contain NA, but that will result in no output for affected cells
-    stop(paste0('Error: getIncreaseDepth() - profile ID:', id(site(p)), 
+    stop(paste0('Error: getIncreaseDepth() - profile ID:', profile_id(site(p)), 
                 " - threshold.fun() result should be length 1 or equal to length of attribute \'",attr,"\' (n=",length(increase.var),")."))
   }
   

@@ -1,6 +1,5 @@
 \name{get.increase.matrix}
 \alias{get.increase.matrix}
-\alias{get.increase.depths}
 \title{
 get.increase.matrix
 }
@@ -15,9 +14,6 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
 }
 \usage{
 get.increase.matrix(p, attr, threshold.fun, vertical.distance)
-}
-\usage{
-get.increase.depths(p, attr, threshold.fun, vertical.distance)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -46,6 +42,13 @@ Andrew Gene Brown
 \code{getArgillicBounds}, \code{crit.clay.argillic}
 }
 \examples{
+data(sp1, package = 'aqp')
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
 
+p <- sp1[1]
+attr <- 'prop' # clay contents 
+foo <- get.increase.matrix(p, threshold.fun = crit.clay.argillic, attr = attr, vertical.distance = 30)
+foo
 }
 \keyword{ manip }
