@@ -52,6 +52,7 @@ p <- sp1[1]
 
 foo <- glom(p, 25, 100)
 
-nrow(foo) # there are 4 horizons in the clod produced by glomming depths 25 to 100 on profile 1 in sp1
+# there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
+nrow(foo) 
 }
 \keyword{ manip }

@@ -48,7 +48,8 @@ site(sp1) <- ~ group
 
 p <- sp1[1]
 attr <- 'prop' # clay contents 
-foo <- get.increase.matrix(p, threshold.fun = crit.clay.argillic, attr = attr, vertical.distance = 30)
+foo <- get.increase.matrix(p, threshold.fun = crit.clay.argillic,
+                           attr = attr, vertical.distance = 30)
 foo
 }
 \keyword{ manip }

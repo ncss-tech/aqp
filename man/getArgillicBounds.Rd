@@ -18,9 +18,10 @@ There also is an option `require_t` to omit the requirement for evidence of eluv
 Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set `lower.grad.pattern` to something that will not match any horizons in your data.
 }
 \usage{
-getArgillicBounds(p, hzdesgn = "hzname", attr = "clay", require_t = TRUE, bottom.pattern = "Cr|R|Cd", lower.grad.pattern = "^[2-9]*CB*[^rt]*$", as.list = FALSE)
+getArgillicBounds(p, hzdesgn = "hzname", attr = "clay", require_t = TRUE, 
+                  bottom.pattern = "Cr|R|Cd", lower.grad.pattern = "^[2-9]*CB*[^rt]*$",
+                  as.list = FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{p}{
 a single-profile SoilProfileCllection
