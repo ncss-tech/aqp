@@ -43,5 +43,4 @@ crit.clay.argillic(eluvial_clay_content=c(5, 20, 45))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~argillic }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~clay }% __ONLY ONE__ keyword per line
+\keyword{ manip }
