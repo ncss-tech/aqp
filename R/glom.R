@@ -1,22 +1,29 @@
-# intersect.horizon() 
+# glom returns a "clod" of horizons that have a common attribute (currently just depth interval supported)
+
 # returns unique index to all horizons occuring over the depth interval [z1, z2]. 
 # z2 is optional, in which case a single horizon with depth range containing z1 is returned
 # several wrapper functions around this for hzid
 
-#clod more is a ragged group of soil pedon horizons (each with distinctness, horizons boundaries)
-# not resampled like slice or slab.
+# a 'clod' is a ragged group of soil pedon horizons (each with distinctness, horizons boundaries)
+# a clod references the original pedon data, it is not resampled like a slice or slab. 
 
-clod <- function(p, z1, z2=NA, as.data.frame = FALSE) {
-  if(!as.df) {
+# the verb/function that creates a clod is "glom" 
+# "to glom" is "to steal" or to "become stuck or attached to". it is related to the 
+# compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil
+
+# gloms a set of horizons for a single-profile SPC `p`
+#  the horizons are aggregated by depth using clod.hz.ids() 
+glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
+  # aka glom.by.depth or glom.dz?
+  if(!as.data.frame) {
     return(spc.clod(p, z1, z2)) 
   } else {
     return(hz.clod(p, z1, z2))
   }
 }
 
-clod.ids <- function(p, z1, z2=NA, as.list = FALSE) {
-  #intersect horizons by depth; internal/shorthand alias? 
-  # less typing is good, and i was trying to think of a slice/slab analogy
+# create a list of horizons comprising a "clod" by intersection of horizons by depth
+clod.hz.ids <- function(p, z1, z2=NA, as.list = FALSE) {
   hzid <- hzidname(p)
   top.depth <- horizonDepths(p)[1]
   depthz <- horizons(p)[[top.depth]]
@@ -53,10 +60,12 @@ clod.ids <- function(p, z1, z2=NA, as.list = FALSE) {
   return(list(hz.idx = idx.top, value = idval))
 }
 
+#returns a "clod" of type SoilProfileCollection from a single-profile SPC `p`
 spc.clod <- function(p, top.depth, bottom.depth=NA) {
-  return(p[, which(hzID(p) %in% clod.ids(p, top.depth, bottom.depth))])
+  return(p[, which(hzID(p) %in% clod.hz.ids(p, top.depth, bottom.depth))])
 }
 
+#returns a "clod" of type data.frame from a single-profile SPC `p`
 hz.clod <- function(p, top.depth, bottom.depth=NA) {
-  return(horizons(p)[hzID(p) %in% clod(p, top.depth, bottom.depth),])
+  return(horizons(p)[hzID(p) %in% clod.hz.ids(p, top.depth, bottom.depth),])
 }
