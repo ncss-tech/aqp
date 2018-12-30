@@ -21,20 +21,14 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
-
-
 <meta property="og:title" content="Slicing of SoilProfilecollection Objects — slice-methods" />
 
 <meta property="og:description" content="Slicing of SoilProfilecollection Objects" />
 <meta name="twitter:card" content="summary" />
-
 
 
 <!-- mathjax -->
@@ -44,6 +38,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -61,7 +57,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17</span>
       </span>
     </div>
 
@@ -102,11 +98,9 @@
     <div class="hidden name"><code>SPC-slice-methods.Rd</code></div>
     </div>
 
-    <div class="ref-description">
     
     <p>Slicing of SoilProfilecollection Objects</p>
     
-    </div>
 
     <pre class="usage"><span class='co'># method for SoilProfileCollection objects</span>
 <span class='fu'>slice</span>(<span class='no'>object</span>, <span class='no'>fm</span>, <span class='kw'>top.down</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>just.the.data</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>strict</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
@@ -161,18 +155,27 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># simulate some data, IDs are 1:20</span>
-<span class='fu'>library</span>(<span class='no'>plyr</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/plyr/topics/ldply'>ldply</a></span>(<span class='fl'>1</span>:<span class='fl'>20</span>, <span class='no'>random_profile</span>)
+<span class='fu'>library</span>(<span class='no'>plyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘plyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:reshape’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    rename, round_any</span></div><div class='input'><span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/plyr/topics/ldply'>ldply</a></span>(<span class='fl'>1</span>:<span class='fl'>20</span>, <span class='no'>random_profile</span>)
 
 <span class='co'># init SoilProfilecollection object</span>
 <span class='fu'>depths</span>(<span class='no'>d</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='fu'>head</span>(<span class='fu'><a href='SPC-utils.html'>horizons</a></span>(<span class='no'>d</span>))</div><div class='output co'>#&gt;   id top bottom name        p1         p2        p3        p4         p5
-#&gt; 1  1   0     28   H1  4.446149  3.3377015  3.493417 16.480662  -8.845226
-#&gt; 2  1  28     47   H2 11.553486 -0.4358019  4.264137 22.174464  -1.338804
-#&gt; 3  1  47     62   H3  4.228094 17.7734308  4.233955 13.347957   8.072255
-#&gt; 4  1  62     88   H4  5.375542  9.8997497  7.254612 16.576444   9.072543
-#&gt; 5  2   0     11   H1 -8.568180  3.9276893 -6.110441  5.687331 -12.392500
-#&gt; 6  2  11     34   H2 -2.250010 -6.5551087 11.334973  3.185260  -7.490574</div><div class='input'>
+<span class='fu'>head</span>(<span class='fu'><a href='SPC-utils.html'>horizons</a></span>(<span class='no'>d</span>))</div><div class='output co'>#&gt;   id top bottom name         p1        p2          p3          p4         p5
+#&gt; 1  1   0     26   H1  -9.880968 -2.373920  -9.4916236   5.5957194  -6.598741
+#&gt; 2  1  26     46   H2   3.909637 -2.106890 -13.8289232   3.3375539 -23.738050
+#&gt; 3  1  46     55   H3  -6.366017 -5.011810 -18.4179510  12.3092113 -16.622641
+#&gt; 4  2   0      9   H1  -9.362608 10.050328 -15.9908941   0.7136195   5.804698
+#&gt; 5  2   9     38   H2 -11.932030 14.790616  -8.0512952   4.7875385   5.617202
+#&gt; 6  2  38     57   H3  -4.477773  9.853671   0.8425448 -17.8342598  22.714862
+#&gt;   hzID
+#&gt; 1    1
+#&gt; 2    2
+#&gt; 3    3
+#&gt; 4    4
+#&gt; 5    5
+#&gt; 6    6</div><div class='input'>
 <span class='co'># generate single slice at 10 cm</span>
 <span class='co'># output is a SoilProfilecollection object</span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>10</span> ~ <span class='no'>name</span> + <span class='no'>p1</span> + <span class='no'>p2</span> + <span class='no'>p3</span>)
@@ -190,20 +193,20 @@
 #&gt; Depth range: 11-11 cm
 #&gt; 
 #&gt; Horizon attributes:
-#&gt;     id top bottom name       p1       p2       p3       p4        p5
-#&gt; 1    1   0      1   H1 4.446149 3.337702 3.493417 16.48066 -8.845226
-#&gt; 21   1   1      2   H1 4.446149 3.337702 3.493417 16.48066 -8.845226
-#&gt; 41   1   2      3   H1 4.446149 3.337702 3.493417 16.48066 -8.845226
-#&gt; 61   1   3      4   H1 4.446149 3.337702 3.493417 16.48066 -8.845226
-#&gt; 81   1   4      5   H1 4.446149 3.337702 3.493417 16.48066 -8.845226
-#&gt; 101  1   5      6   H1 4.446149 3.337702 3.493417 16.48066 -8.845226
-#&gt;     .pctMissing
-#&gt; 1             0
-#&gt; 21            0
-#&gt; 41            0
-#&gt; 61            0
-#&gt; 81            0
-#&gt; 101           0
+#&gt;     id top bottom name        p1       p2        p3       p4        p5 hzID
+#&gt; 1    1   0      1   H1 -9.880968 -2.37392 -9.491624 5.595719 -6.598741    1
+#&gt; 21   1   1      2   H1 -9.880968 -2.37392 -9.491624 5.595719 -6.598741    1
+#&gt; 41   1   2      3   H1 -9.880968 -2.37392 -9.491624 5.595719 -6.598741    1
+#&gt; 61   1   3      4   H1 -9.880968 -2.37392 -9.491624 5.595719 -6.598741    1
+#&gt; 81   1   4      5   H1 -9.880968 -2.37392 -9.491624 5.595719 -6.598741    1
+#&gt; 101  1   5      6   H1 -9.880968 -2.37392 -9.491624 5.595719 -6.598741    1
+#&gt;     .pctMissing sliceID
+#&gt; 1             0       1
+#&gt; 21            0       2
+#&gt; 41            0       3
+#&gt; 61            0       4
+#&gt; 81            0       5
+#&gt; 101           0       6
 #&gt; 
 #&gt; Sampling site attributes:
 #&gt;   id
@@ -217,48 +220,48 @@
 <span class='co'># if all vars are missing, then NA is returned</span>
 <span class='no'>d</span>$<span class='no'>p1</span>[<span class='fl'>1</span>:<span class='fl'>10</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>10</span> ~ <span class='no'>.</span>, <span class='kw'>just.the.data</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'>print</span>(<span class='no'>s</span>)</div><div class='output co'>#&gt;    id top bottom name         p1          p2          p3          p4         p5
-#&gt; 1   1  10     11   H1         NA   3.3377015   3.4934167  16.4806615  -8.845226
-#&gt; 2   2  10     11   H1         NA   3.9276893  -6.1104405   5.6873310 -12.392500
-#&gt; 3   3  10     11   H2         NA   3.1289593   2.4304043 -10.3993704  -2.356263
-#&gt; 4   4  10     11   H2 15.9605973 -13.1497102  -2.9415531  -2.6089821  18.893447
-#&gt; 5   5  10     11   H1 -9.3570298   3.6988887   2.8264139  -1.5329026   2.248408
-#&gt; 6   6  10     11   H1  6.4217647   8.2626264  11.8702453   1.5472191  13.940940
-#&gt; 7   7  10     11   H2 -2.1433069  14.3525563  -6.0942338 -14.1388702  -8.513853
-#&gt; 8   8  10     11   H1 -7.3130360   0.4225486   3.5899871  -5.3357236  -9.118692
-#&gt; 9   9  10     11   H2 -9.7867610  11.8778233   5.7108742   4.8632376   5.916208
-#&gt; 10 10  10     11   H1 23.7676944  10.8442499  15.4548605  -7.5755003  13.664559
-#&gt; 11 11  10     11   H1 -6.3740772  -1.8824502   9.1303368   2.3523194 -13.371556
-#&gt; 12 12  10     11   H1  2.5125388 -15.9157647   2.1569015  -5.9159213   7.377190
-#&gt; 13 13  10     11   H1 -4.3708589  13.1048747   5.9253316   0.4924962   0.584840
-#&gt; 14 14  10     11   H1 -1.4537386   7.8319239  10.7785362 -10.7833038  -3.598296
-#&gt; 15 15  10     11   H1 -7.6361929  15.8565111  -3.3795423  11.8935039   4.606295
-#&gt; 16 16  10     11   H1 -0.6376007  16.0645380  13.1215065  -0.3177399  -4.845598
-#&gt; 17 17  10     11   H1  2.1379573  -7.7048221 -16.2193006   3.1370257  10.236933
-#&gt; 18 18  10     11   H1 10.6410376  -6.0980045  20.4133962   3.6732925 -11.974751
-#&gt; 19 19  10     11   H1  4.0023465   0.5370330   0.7264241  -0.8989278   2.002907
-#&gt; 20 20  10     11   H2 11.3490964   3.3086300  -5.8053998   7.9996698  -2.537995
-#&gt;    .pctMissing
-#&gt; 1    0.1666667
-#&gt; 2    0.1666667
-#&gt; 3    0.1666667
-#&gt; 4    0.0000000
-#&gt; 5    0.0000000
-#&gt; 6    0.0000000
-#&gt; 7    0.0000000
-#&gt; 8    0.0000000
-#&gt; 9    0.0000000
-#&gt; 10   0.0000000
-#&gt; 11   0.0000000
-#&gt; 12   0.0000000
-#&gt; 13   0.0000000
-#&gt; 14   0.0000000
-#&gt; 15   0.0000000
-#&gt; 16   0.0000000
-#&gt; 17   0.0000000
-#&gt; 18   0.0000000
-#&gt; 19   0.0000000
-#&gt; 20   0.0000000</div><div class='input'>
+<span class='fu'>print</span>(<span class='no'>s</span>)</div><div class='output co'>#&gt;    id top bottom name         p1          p2         p3          p4          p5
+#&gt; 1   1  10     11   H1         NA  -2.3739201  -9.491624   5.5957194  -6.5987413
+#&gt; 2   2  10     11   H2         NA  14.7906156  -8.051295   4.7875385   5.6172021
+#&gt; 3   3  10     11   H1         NA   3.4956804  11.238107  -6.3798914  11.1046394
+#&gt; 4   4  10     11   H1 -0.3151494   5.4510200  -0.970878  14.6620969   3.5689935
+#&gt; 5   5  10     11   H2 10.8218976 -19.4417772   0.178840  17.8443193  -0.8871549
+#&gt; 6   6  10     11   H1  8.9710262  -1.6162887  -8.511729   0.9275438   4.0851110
+#&gt; 7   7  10     11   H1  4.1273031   2.8030557  -6.573646   0.8320687  -1.0152941
+#&gt; 8   8  10     11   H1  9.0695791 -11.5325418   8.446078   4.0334502   0.3106763
+#&gt; 9   9  10     11   H1  6.1203510   8.7370888  -8.290981  -7.7814119   9.1417461
+#&gt; 10 10  10     11   H1  5.1266448  -6.3248754  -4.725449 -14.8243405   2.3769158
+#&gt; 11 11  10     11   H1  7.1081286  -3.6003292 -11.518060  -4.3321614   6.3053586
+#&gt; 12 12  10     11   H2 -8.5847596  13.5610286   4.970858  -7.2511255  -9.8087490
+#&gt; 13 13  10     11   H1 17.9076061  -6.9919793   8.123288  -8.1174246  -4.5526409
+#&gt; 14 14  10     11   H2  3.7791967  -2.2145770 -11.537998   2.9893387  -1.4318843
+#&gt; 15 15  10     11   H2 -3.7263317  -8.1019449 -14.064278  -6.1410526  -4.3261813
+#&gt; 16 16  10     11   H1 -2.9270717  -0.3058326  12.330441   2.2386723  12.6724804
+#&gt; 17 17  10     11   H1  0.5368564  10.1443222   1.697492   7.0226732  10.5336775
+#&gt; 18 18  10     11   H2  2.3282957  -1.2297455   3.394694   7.7779079 -17.0898524
+#&gt; 19 19  10     11   H1  5.6182265  -6.6450444   7.342100 -19.2226153  -7.2356847
+#&gt; 20 20  10     11   H1  8.8058165   1.2927672   5.749925  14.5535667  -9.2760376
+#&gt;    hzID .pctMissing
+#&gt; 1     1   0.1428571
+#&gt; 2     5   0.1428571
+#&gt; 3     9   0.1428571
+#&gt; 4    15   0.0000000
+#&gt; 5    19   0.0000000
+#&gt; 6    23   0.0000000
+#&gt; 7    29   0.0000000
+#&gt; 8    35   0.0000000
+#&gt; 9    39   0.0000000
+#&gt; 10   45   0.0000000
+#&gt; 11   48   0.0000000
+#&gt; 12   53   0.0000000
+#&gt; 13   56   0.0000000
+#&gt; 14   62   0.0000000
+#&gt; 15   67   0.0000000
+#&gt; 16   69   0.0000000
+#&gt; 17   74   0.0000000
+#&gt; 18   81   0.0000000
+#&gt; 19   86   0.0000000
+#&gt; 20   90   0.0000000</div><div class='input'>
 <span class='co'>## </span>
 <span class='co'>## check sliced data</span>
 <span class='co'>##</span>
@@ -309,7 +312,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Pierre Roudier.</p>
+  <p>Developed by Dylan Beaudette, Pierre Roudier, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">

@@ -21,20 +21,14 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
-
-
 <meta property="og:title" content="Getters, Setters, and Utility Methods for SoilProfileCollection Objects — SPC-utils" />
 
 <meta property="og:description" content="Getters, Setters, and Utility Methods for SoilProfileCollection Objects" />
 <meta name="twitter:card" content="summary" />
-
 
 
 <!-- mathjax -->
@@ -44,6 +38,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -61,7 +57,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.16.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17</span>
       </span>
     </div>
 
@@ -102,11 +98,9 @@
     <div class="hidden name"><code>SPC-utils.Rd</code></div>
     </div>
 
-    <div class="ref-description">
     
     <p>Getters, Setters, and Utility Methods for SoilProfileCollection Objects</p>
     
-    </div>
 
         
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -166,7 +160,18 @@
 <span class='co'># a matching ID column must be present in both @site and new data</span>
 <span class='co'># note that IDs should all be character class</span>
 <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>id</span><span class='kw'>=</span><span class='fu'>profile_id</span>(<span class='no'>sp1</span>), <span class='kw'>p</span><span class='kw'>=</span><span class='fu'>runif</span>(<span class='kw'>n</span><span class='kw'>=</span><span class='fu'>length</span>(<span class='no'>sp1</span>)), <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='fu'>site</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>d</span></div></pre>
+<span class='fu'>site</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>d</span>
+
+
+<span class='co'># edit horizon depths</span>
+<span class='fu'>horizonDepths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>'t'</span>, <span class='st'>'b'</span>)
+<span class='fu'>horizonDepths</span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "t" "b"</div><div class='input'>
+<span class='co'># edit profile IDs</span>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>sprintf</span>(<span class='st'>"%s-new"</span>, <span class='fu'>profile_id</span>(<span class='no'>sp1</span>))
+<span class='fu'>profile_id</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>p</span>
+<span class='fu'>profile_id</span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "P001-new" "P002-new" "P003-new" "P004-new" "P005-new" "P006-new" "P007-new"
+#&gt; [8] "P008-new" "P009-new"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -186,7 +191,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Pierre Roudier.</p>
+  <p>Developed by Dylan Beaudette, Pierre Roudier, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
