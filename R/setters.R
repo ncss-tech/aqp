@@ -508,14 +508,29 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   ##
   # testing the number of rows of the horizon data
   # if (nrow(value) != nrow(object))
-	  # stop("inconsistent number of rows")
-
-  # basic test of ids:
-  if(!hzidname(object) %in% names(value)) # is there a matching ID column in the replacement?
-  	stop("there is no matching ID column in replacement", call.=FALSE)
+  # stop("inconsistent number of rows")
+  
+  # create lookup table based on profile ID and horizon ID in original horizon data
+  lut <- object@horizons[[idname(object)]]
+  names(lut) <- object@horizons[[hzidname(object)]]
+  
+  # improved test of IDs for horizon setter
+  # if profile_id attribute is NOT in the new horizon data
+  if(!(idname(object) %in% names(value))) {
+    # try to create one based on the old horizon-site pairing
+    
+    # we can't create one if there isn't at least a horizon id in the new values
+    if(!hzidname(object) %in% names(value))
+      stop("there is no matching horizon ID column in replacement", call.=FALSE)   
+    
+    value[[idname(object)]] <- lut[value[[hzidname(object)]] %in% names(lut)]
+    
+    if(length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) > 0)
+      stop("there are horizon IDs in the replacement that do not exist in the original data", call.=FALSE)
+  }
 
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
-  	stop("there are IDs in the replacement that do not exist in the original data", call.=FALSE)
+  	stop("there are profile IDs in the replacement that do not exist in the original data", call.=FALSE)
 
   ##
   ## 2017-01-05: holy shit, why are we re-ordering the horizon data? 
