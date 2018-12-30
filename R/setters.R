@@ -511,7 +511,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 	  # stop("inconsistent number of rows")
 
   # basic test of ids:
-  if(!idname(object) %in% names(value)) # is there a matching ID column in the replacement?
+  if(!hzidname(object) %in% names(value)) # is there a matching ID column in the replacement?
   	stop("there is no matching ID column in replacement", call.=FALSE)
 
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
