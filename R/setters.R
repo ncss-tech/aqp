@@ -510,23 +510,35 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   # if (nrow(value) != nrow(object))
   # stop("inconsistent number of rows")
   
-  # create lookup table based on profile ID and horizon ID in original horizon data
-  lut <- object@horizons[[idname(object)]]
-  names(lut) <- object@horizons[[hzidname(object)]]
-  
   # improved test of IDs for horizon setter
+  
   # if profile_id attribute is NOT in the new horizon data
   if(!(idname(object) %in% names(value))) {
     # try to create one based on the old horizon-site pairing
+    
+    # check if all old horizon IDs are in rowname of input, and create hzidname column if they are
+    if(all(hzID(loafercreek) %in% rownames(value))) {
+      if(!hzidname(object) %in% names(value)) {
+        value[[hzidname(object)]] <- rownames(value)
+      }
+    }
     
     # we can't create one if there isn't at least a horizon id in the new values
     if(!hzidname(object) %in% names(value))
       stop("there is no matching horizon ID column in replacement", call.=FALSE)   
     
-    value[[idname(object)]] <- lut[value[[hzidname(object)]] %in% names(lut)]
+    # create lookup table for profile ID based on horizon ID in original horizon data
+    lut <- object@horizons[[idname(object)]]
+    names(lut) <- object@horizons[[hzidname(object)]]
     
-    if(length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) > 0)
-      stop("there are horizon IDs in the replacement that do not exist in the original data", call.=FALSE)
+    # only create the profile_id column in the horizon table if we can match all the horizon ids to a profile
+    can.lookup <- value[[hzidname(object)]] %in% names(lut)
+    if(all(can.lookup)) {
+      value[[idname(object)]] <- lut[can.lookup ]
+    } else {
+      if(length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) > 0)
+        stop("there are horizon IDs in the replacement that do not exist in the original data", call.=FALSE)
+    }
   }
 
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
