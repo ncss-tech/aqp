@@ -102,7 +102,7 @@
     <p>Safely combine multiple SoilProfileCollection objects that may not share the same internal structure.</p>
     
 
-    <pre class="usage"><span class='fu'>union</span>(<span class='kw'>spc</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
+    <pre class="usage"><span class='fu'>union</span>(<span class='kw'>spc</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>drop.spatial</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -115,15 +115,19 @@
       <th>method</th>
       <td><p>method ("all" or "intersection" [not yet implemented]) used to collect site and horizon level attributes, see details</p></td>
     </tr>
+    <tr>
+      <th>drop.spatial</th>
+      <td><p>union operation ignores spatial data, useful when only some data have coordinates or incompatible CRS</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Method "all" returns all site and horizon level attributes, padded as needed with NA. Method "intersection" (not yet implemented) returns only those site and horizon level attributes that exist in all objects.</p>
+    <p>Method "all" returns all site and horizon level attributes, padded as needed with NA. Method "intersection" (not yet implemented) returns only those site and horizon level attributes that exist in all objects. Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first <code>SoilProfileCollection</code> is used as a template.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Duplicates are removed.</p>
+    <p>Previously, <code>rbind.SoilProfileCollection</code> would remove duplicates. This is no longer performed and an error will be generated due to non-unique profile IDs.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -166,7 +170,7 @@
 <span class='co'># stack, note that @horizons is not the same in x and y</span>
 <span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'>union</span>(<span class='fu'>list</span>(<span class='no'>x</span>, <span class='no'>y</span>))
 
-<span class='co'># lable groups</span>
+<span class='co'># label groups</span>
 <span class='no'>z</span>$<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'>substr</span>(<span class='fu'><a href='SPC-utils.html'>profile_id</a></span>(<span class='no'>z</span>), <span class='fl'>1</span>, <span class='fl'>2</span>)
 
 <span class='fu'>par</span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
