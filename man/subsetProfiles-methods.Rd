@@ -18,11 +18,6 @@
 \seealso{ \code{\link{profileApply}, \link{site}, \link{horizons}} }
 
 \examples{
-# subset sp1 via horizon and site-level attributes
-plot(tiny.set <- subsetProfiles(sp1, s="group == 2", h='prop < 8'))
-
-
-## other ways to subset SoilProfileCollection objects, via index
 # more interesting sample data
 data(sp2)
 depths(sp2) <- id ~ top + bottom
