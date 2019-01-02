@@ -7,7 +7,7 @@
 
 ## quick preview of colors, sorted by clustering of CIE LAB representation
 # grid size estimation needs some work
-previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black', pt.cex=2) {
+previewColors <- function(cols, method='grid', col.order=NULL, nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black', pt.cex=2) {
   
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver'))
@@ -25,6 +25,24 @@ previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))),
   # use unique colors when using MDS
   if(method == 'MDS') {
     cols <- unique(cols)
+  }
+  
+  # manual ordering, defined by col.order
+  if(method == 'manual') {
+    # sanity check
+    if(is.null(col.order)) {
+      stop('must specify color ordering vector', call. = FALSE)
+    }
+    
+    # re-order colors and convert into a matrix
+    m <- matrix(NA, nrow=nrow, ncol=ncol)
+    m[1:length(cols)] <- cols[col.order]
+    
+    par(mar=c(1,0,3,0))
+    plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', ylim=c(ncol+0.5, 0.5), xlim=c(0.5, nrow+0.5))
+    rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m, border = border.col, lwd=0.5)
+    
+    invisible(col.order)
   }
   
   # hex represntation -> sRGB
@@ -50,6 +68,8 @@ previewColors <- function(cols, method='grid', nrow=ceiling(sqrt(length(cols))),
     par(mar=c(1,0,3,0))
     plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', ylim=c(ncol+0.5, 0.5), xlim=c(0.5, nrow+0.5))
     rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m, border = border.col, lwd=0.5)
+    
+    invisible(col.order)
   }
   
   
