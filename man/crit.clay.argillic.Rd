@@ -1,10 +1,12 @@
 \name{crit.clay.argillic}
 \alias{crit.clay.argillic}
 \title{
-crit.clay.argillic
+Determines threshold (minimum) clay content for argillic upper bound
 }
 \description{
-Given a vector or matrix of "eluvial" horizon clay contents (\%), \code{crit.clay.argillic()} returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase. Result is based on the clay increase criteria in the definition of the argillic horizon  in 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014). It uses standard equations for clay contents less than 15 \%, between 15 and 40 \%, and greater than 40 \%.
+Given a vector or matrix of "eluvial" horizon clay contents (\%), \code{crit.clay.argillic()} returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase. 
+
+ Uses the standard equations for clay contents less than 15 \%, between 15 and 40 \%, and greater than 40 \%. Based on the clay increase criteria in the definition of the argillic horizon from 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014). 
 }
 \usage{
 crit.clay.argillic(eluvial_clay_content)

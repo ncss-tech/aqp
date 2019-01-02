@@ -3,10 +3,12 @@
 \alias{getPlowLayerDepth} 
 \alias{getMineralSoilSurfaceDepth}
 \title{
-getSurfaceHorizonDepth
+Determine thickness of horizons (continuous from surface) matching a pattern
 }
 \description{
-This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0). The horizon designation to match is specified with the regular expression pattern `pattern`. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned.
+This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0). 
+
+The horizon designation to match is specified with the regular expression pattern `pattern`. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned.
 
 \code{getSurfaceHorizonDepth} is used by \code{getPlowLayerDepth} for matching Ap horizons; and, it is used by \code{getMineralSoilSurfaceDepth} to find the thickness of O horizons in lieu of lab data. These examples are taxonomically relevant for both the argillic horizon and the particle size control section.
 }

@@ -1,7 +1,7 @@
 \name{get.increase.matrix}
 \alias{get.increase.matrix}
 \title{
-get.increase.matrix
+compute pair-wise distances to determine where an attribute increases within a vertical distance specified
 }
 \description{
 Uses matrix outer product to determine all pair-wise differences in `attr` for the horizons of `p`. Supplies `attr` to `threshold.fun` to determine the minimum value criterion to return TRUE in output matrix for an "increase". Also, computes all pair-wise distances in depth dimension to determine whether the vertical distance criteria have been met simultaneously with `attr` increase.

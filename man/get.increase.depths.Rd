@@ -1,7 +1,7 @@
 \name{get.increase.depths}
 \alias{get.increase.depths}
 \title{
-get.increase.depths
+Return the horizon top depths from a call to get.increase.matrix()
 }
 \description{
 \code{get.increase.depths} performs the conversion of the square matrix output of \code{get.increase.matrix} back to horizon top depth for where criteria were met.

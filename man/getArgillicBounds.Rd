@@ -19,7 +19,8 @@ Even if "t" subscript is not required for positive identification, the presence 
 }
 \usage{
 getArgillicBounds(p, hzdesgn = "hzname", attr = "clay", require_t = TRUE, 
-                  bottom.pattern = "Cr|R|Cd", lower.grad.pattern = "^[2-9]*CB*[^rt]*$",
+                  bottom.pattern = "Cr|R|Cd", 
+                  lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                   as.list = FALSE)
 }
 \arguments{

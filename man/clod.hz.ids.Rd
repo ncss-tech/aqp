@@ -1,7 +1,7 @@
 \name{clod.hz.ids}
 \alias{clod.hz.ids}
 \title{
-clod.hz.ids
+Return the unique horizon IDs within a "depth-clod"
 }
 \description{
 clod.hz.ids returns a vector of unique indices corresponding to a depth interval. As arguments, it takes a single-profile SoilProfileCollection `p`, a top depth `z1` and an optional bottom depth `z2`. 

@@ -13,7 +13,8 @@ Requires information on taxonomic order (to handle andisols).
 WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for. 
 }
 \usage{
-estimatePSCS(p, attr = "clay", hzdesgn = "hzname", tax_order_field = "tax_order", ...)
+estimatePSCS(p, attr = "clay", hzdesgn = "hzname", tax_order_field = "tax_order",
+bottom.pattern = "Cr|R|Cd", ...)
 }
 \arguments{
   \item{p}{

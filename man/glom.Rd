@@ -2,20 +2,18 @@
 \alias{glom}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-glom
+Return a "ragged" group of horizons selected from SoilProfileCollection
 }
 \description{
-\code{glom()} returns a "clod" of horizons from a SoilProfileCollection that have a common attribute. 
+\code{glom()} returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a "clod". 
+
+A clod is a "ragged" group of horizons. In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from pedon to pedon. 
+
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like \code{slice} or \code{slab}. 
 
 Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 
-You "glom" SPC horizons into a "clod". A clod is a "ragged" group of soil pedon horizons. 
-
-Currently, just depths/depth intervals are supported as common attribute -- but many others are possible and will be implemented perhaps via formula interface like \code{slice}. 
-
-In this case, "ragged" means that horizon depths of interest, distinctness and topography (plus others?) vary from pedon to pedon. All horizons included within the specified interval are returned in their entirety (not just the portion within the interval).
-
-A 'clod' references the original pedon data -- it is not resampled like \code{slice} or \code{slab}. 
+Currently, just depth/depth intervals are supported as common attribute for creating a clod i.e. all horizons overlapping interval 25 to 100 cm -- but many other attributes are possible and will be implemented perhaps via formula interface similar to \code{slice}. 
 }
 \usage{
 glom(p, z1, z2 = NA, as.data.frame = FALSE)
