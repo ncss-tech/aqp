@@ -6,7 +6,7 @@
 getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
                               require_t = TRUE, 
                               bottom.pattern = "Cr|R|Cd",
-                              lower.grad.pattern = "^[2-9]*CB*[^rt]*$",
+                              lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                               as.list = FALSE) {
   # get upper bound...
   upper.bound <- argillic.clay.increase.depth(p, attr)
@@ -31,20 +31,21 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
       # take _very_ last horizon depth first (will be truncated to contact depth if needed)
       depth.last <- horizons(p)[nrow(horizons(p)), horizonDepths(p)[2]]
       
-      # take the top depth of any C horizon (allows litho discontinuituy) without 
-      # a t subscript
+      # take the top depth of any B or C horizon  without t subscript above "depth.last"
       c.idx <- which(grepl(horizons(p)[[hzdesgn]], pattern=lower.grad.pattern))
       if(length(c.idx)) {
         c.horizon <- horizons(p)[c.idx[1], horizonDepths(p)[1]]
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
         if(c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
-          print(paste0("Adjusting bottom depth of argillic horizon for lower gradational horizons (peiid: ", site(p)$peiid, ")"))
+          print(paste0("Lower gradational horizons (peiid: ", site(p)$peiid, ") may be present below argillic. Adjusting lower bound."))
+          # plot(p)
+          # print(c.idx)
           depth.last <- c.horizon
         }       
       }
       
-      # get the bottom depth of the last horizon with a t
+      # get the bottom depth of the last horizon with a t (this could be same as c.horizon above)
       if(require_t)
         depth.last <- horizons(p)[idx.last, horizonDepths(p)[2]]
       
@@ -66,7 +67,8 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
       }
     } else {
       print(paste0("Pedon (",profile_id(p),") meets clay increase but lacks evidence of illuviation (t subscript). Set `require_t=FALSE` to ignore."))
-      return(NA)
+      lower.bound <- NA 
+      upper.bound <- NA 
     }
   } else {
     
