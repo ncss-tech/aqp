@@ -1,8 +1,8 @@
 #estimatePSCS()
 
-estimatePSCS = function(p, attr = "clay", hzdesgn = "hzname", require_t = TRUE, tax_order_field = "tax_order") {
+estimatePSCS = function(p, attr = "clay", hzdesgn = "hzname", tax_order_field = "tax_order", bottom.pattern='Cr|R|Cd', ...) {
   hz.depths <- horizonDepths(p)
-  soildepth <- estimateSoilDepth(f = p, name = hzdesgn, top = hz.depths[1], bottom = hz.depths[2])
+  soildepth <- estimateSoilDepth(f = p, name = hzdesgn, top = hz.depths[1], bottom = hz.depths[2], p = bottom.pattern)
   andisols_flag <- FALSE
   
   # Parts D (argillic starts >100cm  depth) and F (all other mineral soils)
@@ -38,7 +38,7 @@ estimatePSCS = function(p, attr = "clay", hzdesgn = "hzname", require_t = TRUE, 
   
   # Key parts C and E (has argillic/kandic/natric WITHIN 100CM)
   if(!andisols_flag) {
-    argillic_bounds = getArgillicBounds(p, attr = attr, hzdesgn = hzdesgn, require_t = require_t)
+    argillic_bounds = getArgillicBounds(p, attr = attr, hzdesgn = hzdesgn, bottom.pattern=bottom.pattern, ...)
     if(!any(is.na(argillic_bounds))) { 
       if(argillic_bounds[1] < 100) {
         default_t <- argillic_bounds[1]

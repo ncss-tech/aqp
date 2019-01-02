@@ -1,20 +1,19 @@
 \name{estimatePSCS}
 \alias{estimatePSCS}
 \title{
-estimatePSCS
+Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition)
 }
 \description{
 Estimates the upper and lower boundary of the particle size control section by applying a programmatic version of the particle size control section key from the Keys to Soil Taxonomy (12th edition).
 
-Requires information to identify argillic horizons (clay contents, horizon designations) with \code{getArgillicBounds()} as well as the presence of plow layers and surface organic soil material.
+Requires information to identify argillic horizons (clay contents, horizon designations) with \code{getArgillicBounds()} as well as the presence of plow layers and surface organic soil material. Any \code{getArgillicBounds()} arguments may be passed to \code{estimatePSCS}.
 
 Requires information on taxonomic order (to handle andisols). 
 
-WARNING: Soils in arenic and grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for. 
+WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for. 
 }
 \usage{
-estimatePSCS(p, attr = "clay", hzdesgn = "hzname", 
-require_t = TRUE, tax_order_field = "tax_order")
+estimatePSCS(p, attr = "clay", hzdesgn = "hzname", tax_order_field = "tax_order", ...)
 }
 \arguments{
   \item{p}{
@@ -26,11 +25,14 @@ Name of the horizon attribute containing clay contents. Default 'clay'
   \item{hzdesgn}{
 Name of the horizon attribute containing the horizon designation. Default 'hzname'
 }
-  \item{require_t}{
-Require 't' subscript for positive identification of an argillic horizon?
-}
   \item{tax_order_field}{
 Name of the site attribute containing taxonomic order; for handling PSCS rules for Andisols in lieu of lab data. May be NA or column missing altogether, in which case Andisol PSC possibility is ignored.
+}
+  \item{bottom.pattern}{
+Regular expression pattern to match a root-restrictive contact. Default matches Cr, R or Cd. This argument is passed to both estimateSoilDepth and getArgillicBounds.
+}
+  \item{...}{
+additional arguments are passed to getArgillicBounds()
 }
 }
 \value{
