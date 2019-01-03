@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>argillic.clay.increase.depth — argillic.clay.increase.depth • aqp</title>
+<title>Return upper boundary of argillic horizon — argillic.clay.increase.depth • aqp</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="argillic.clay.increase.depth — argillic.clay.increase.depth" />
+<meta property="og:title" content="Return upper boundary of argillic horizon — argillic.clay.increase.depth" />
 
-<meta property="og:description" content="Returns the top and bottom depth of the argillic horizon as a numeric vector.
-Uses crit.clay.argillic to determine threshold clay increase, and get.increase.matrix to determine where depth is met within a vertical distance of 30 cm.
-#" />
+<meta property="og:description" content="Returns the top depth of the argillic horizon as a numeric vector.
+Uses crit.clay.argillic to determine threshold clay increase, and get.increase.matrix to determine where increase is met within a vertical distance of 30 cm." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -95,15 +94,14 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>argillic.clay.increase.depth</h1>
+    <h1>Return upper boundary of argillic horizon</h1>
     
     <div class="hidden name"><code>argillic.clay.increase.depth.Rd</code></div>
     </div>
 
     
-    <p>Returns the top and bottom depth of the argillic horizon as a numeric vector.</p>
-<p>Uses <code>crit.clay.argillic</code> to determine threshold clay increase, and <code>get.increase.matrix</code> to determine where depth is met within a vertical distance of 30 cm.
-#</p>
+    <p>Returns the top depth of the argillic horizon as a numeric vector.</p>
+<p>Uses <code>crit.clay.argillic</code> to determine threshold clay increase, and <code>get.increase.matrix</code> to determine where increase is met within a vertical distance of 30 cm.</p>
     
 
     <pre class="usage"><span class='fu'>argillic.clay.increase.depth</span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>)</pre>
@@ -123,7 +121,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector containing top and bottom depth of argillic horizon, if present, or NA.</p>
+    <p>A numeric vector containing top depth of argillic horizon, if present, or NA.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

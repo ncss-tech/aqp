@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>glom — glom • aqp</title>
+<title>Return a "ragged" group of horizons selected from SoilProfileCollection — glom • aqp</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,14 +25,13 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="glom — glom" />
+<meta property="og:title" content="Return a "ragged" group of horizons selected from SoilProfileCollection — glom" />
 
-<meta property="og:description" content="glom() returns a "clod" of horizons from a SoilProfileCollection that have a common attribute.
+<meta property="og:description" content="glom() returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a "clod".
+A clod is a "ragged" group of horizons. In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from pedon to pedon.
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like slice or slab.
 Horizon intersection is based on unique ID hzidname(spc) and attribute of interest.
-You "glom" SPC horizons into a "clod". A clod is a "ragged" group of soil pedon horizons.
-Currently, just depths/depth intervals are supported as common attribute -- but many others are possible and will be implemented perhaps via formula interface like slice.
-In this case, "ragged" means that horizon depths of interest, distinctness and topography (plus others?) vary from pedon to pedon. All horizons included within the specified interval are returned in their entirety (not just the portion within the interval).
-A 'clod' references the original pedon data -- it is not resampled like slice or slab." />
+Currently, just depth/depth intervals are supported as common attribute for creating a clod i.e. all horizons overlapping interval 25 to 100 cm -- but many other attributes are possible and will be implemented perhaps via formula interface similar to slice." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,18 +97,17 @@ A 'clod' references the original pedon data -- it is not resampled like slice or
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>glom</h1>
+    <h1>Return a "ragged" group of horizons selected from SoilProfileCollection</h1>
     
     <div class="hidden name"><code>glom.Rd</code></div>
     </div>
 
     
-    <p><code>glom()</code> returns a "clod" of horizons from a SoilProfileCollection that have a common attribute.</p>
+    <p><code>glom()</code> returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a "clod".</p>
+<p>A clod is a "ragged" group of horizons. In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from pedon to pedon.</p>
+<p>All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like <code>slice</code> or <code>slab</code>.</p>
 <p>Horizon intersection is based on unique ID <code><a href='SPC-utils.html'>hzidname(spc)</a></code> and attribute of interest.</p>
-<p>You "glom" SPC horizons into a "clod". A clod is a "ragged" group of soil pedon horizons.</p>
-<p>Currently, just depths/depth intervals are supported as common attribute -- but many others are possible and will be implemented perhaps via formula interface like <code>slice</code>.</p>
-<p>In this case, "ragged" means that horizon depths of interest, distinctness and topography (plus others?) vary from pedon to pedon. All horizons included within the specified interval are returned in their entirety (not just the portion within the interval).</p>
-<p>A 'clod' references the original pedon data -- it is not resampled like <code>slice</code> or <code>slab</code>.</p>
+<p>Currently, just depth/depth intervals are supported as common attribute for creating a clod i.e. all horizons overlapping interval 25 to 100 cm -- but many other attributes are possible and will be implemented perhaps via formula interface similar to <code>slice</code>.</p>
     
 
     <pre class="usage"><span class='fu'>glom</span>(<span class='no'>p</span>, <span class='no'>z1</span>, <span class='kw'>z2</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>as.data.frame</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>

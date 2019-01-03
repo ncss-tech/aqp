@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>crit.clay.argillic — crit.clay.argillic • aqp</title>
+<title>Determines threshold (minimum) clay content for argillic upper bound — crit.clay.argillic • aqp</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="crit.clay.argillic — crit.clay.argillic" />
+<meta property="og:title" content="Determines threshold (minimum) clay content for argillic upper bound — crit.clay.argillic" />
 
-<meta property="og:description" content="Given a vector or matrix of "eluvial" horizon clay contents (%), crit.clay.argillic() returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase. Result is based on the clay increase criteria in the definition of the argillic horizon  in 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014). It uses standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %." />
+<meta property="og:description" content="Given a vector or matrix of "eluvial" horizon clay contents (%), crit.clay.argillic() returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase.
+Uses the standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %. Based on the clay increase criteria in the definition of the argillic horizon from 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -93,13 +94,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>crit.clay.argillic</h1>
+    <h1>Determines threshold (minimum) clay content for argillic upper bound</h1>
     
     <div class="hidden name"><code>crit.clay.argillic.Rd</code></div>
     </div>
 
     
-    <p>Given a vector or matrix of "eluvial" horizon clay contents (%), <code>crit.clay.argillic()</code> returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase. Result is based on the clay increase criteria in the definition of the argillic horizon  in 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014). It uses standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %.</p>
+    <p>Given a vector or matrix of "eluvial" horizon clay contents (%), <code>crit.clay.argillic()</code> returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase.</p>
+<p>Uses the standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %. Based on the clay increase criteria in the definition of the argillic horizon from 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014).</p>
     
 
     <pre class="usage"><span class='fu'>crit.clay.argillic</span>(<span class='no'>eluvial_clay_content</span>)</pre>

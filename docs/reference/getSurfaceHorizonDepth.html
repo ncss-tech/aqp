@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>getSurfaceHorizonDepth — getSurfaceHorizonDepth • aqp</title>
+<title>Determine thickness of horizons (continuous from surface) matching a pattern — getSurfaceHorizonDepth • aqp</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="getSurfaceHorizonDepth — getSurfaceHorizonDepth" />
+<meta property="og:title" content="Determine thickness of horizons (continuous from surface) matching a pattern — getSurfaceHorizonDepth" />
 
-<meta property="og:description" content="This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0). The horizon designation to match is specified with the regular expression pattern `pattern`. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned.
+<meta property="og:description" content="This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0).
+The horizon designation to match is specified with the regular expression pattern `pattern`. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned.
 getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; and, it is used by getMineralSoilSurfaceDepth to find the thickness of O horizons in lieu of lab data. These examples are taxonomically relevant for both the argillic horizon and the particle size control section." />
 <meta name="twitter:card" content="summary" />
 
@@ -94,13 +95,14 @@ getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; an
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>getSurfaceHorizonDepth</h1>
+    <h1>Determine thickness of horizons (continuous from surface) matching a pattern</h1>
     
     <div class="hidden name"><code>getSurfaceHorizonDepth.Rd</code></div>
     </div>
 
     
-    <p>This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0). The horizon designation to match is specified with the regular expression pattern `pattern`. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned.</p>
+    <p>This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0).</p>
+<p>The horizon designation to match is specified with the regular expression pattern `pattern`. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned.</p>
 <p><code>getSurfaceHorizonDepth</code> is used by <code>getPlowLayerDepth</code> for matching Ap horizons; and, it is used by <code>getMineralSoilSurfaceDepth</code> to find the thickness of O horizons in lieu of lab data. These examples are taxonomically relevant for both the argillic horizon and the particle size control section.</p>
     
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>estimatePSCS — estimatePSCS • aqp</title>
+<title>Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition) — estimatePSCS • aqp</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,12 +25,12 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="estimatePSCS — estimatePSCS" />
+<meta property="og:title" content="Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition) — estimatePSCS" />
 
 <meta property="og:description" content="Estimates the upper and lower boundary of the particle size control section by applying a programmatic version of the particle size control section key from the Keys to Soil Taxonomy (12th edition).
-Requires information to identify argillic horizons (clay contents, horizon designations) with getArgillicBounds() as well as the presence of plow layers and surface organic soil material.
+Requires information to identify argillic horizons (clay contents, horizon designations) with getArgillicBounds() as well as the presence of plow layers and surface organic soil material. Any getArgillicBounds() arguments may be passed to estimatePSCS.
 Requires information on taxonomic order (to handle andisols).
-WARNING: Soils in arenic and grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for." />
+WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -96,20 +96,20 @@ WARNING: Soils in arenic and grossarenic subgroups, with fragipans, or with stro
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>estimatePSCS</h1>
+    <h1>Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition)</h1>
     
     <div class="hidden name"><code>estimatePSCS.Rd</code></div>
     </div>
 
     
     <p>Estimates the upper and lower boundary of the particle size control section by applying a programmatic version of the particle size control section key from the Keys to Soil Taxonomy (12th edition).</p>
-<p>Requires information to identify argillic horizons (clay contents, horizon designations) with <code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> as well as the presence of plow layers and surface organic soil material.</p>
+<p>Requires information to identify argillic horizons (clay contents, horizon designations) with <code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> as well as the presence of plow layers and surface organic soil material. Any <code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> arguments may be passed to <code>estimatePSCS</code>.</p>
 <p>Requires information on taxonomic order (to handle andisols).</p>
-<p>WARNING: Soils in arenic and grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for.</p>
+<p>WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for.</p>
     
 
-    <pre class="usage"><span class='fu'>estimatePSCS</span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>, <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>,
-<span class='kw'>require_t</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>tax_order_field</span> <span class='kw'>=</span> <span class='st'>"tax_order"</span>)</pre>
+    <pre class="usage"><span class='fu'>estimatePSCS</span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>, <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>, <span class='kw'>tax_order_field</span> <span class='kw'>=</span> <span class='st'>"tax_order"</span>,
+<span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -127,12 +127,16 @@ WARNING: Soils in arenic and grossarenic subgroups, with fragipans, or with stro
       <td><p>Name of the horizon attribute containing the horizon designation. Default 'hzname'</p></td>
     </tr>
     <tr>
-      <th>require_t</th>
-      <td><p>Require 't' subscript for positive identification of an argillic horizon?</p></td>
-    </tr>
-    <tr>
       <th>tax_order_field</th>
       <td><p>Name of the site attribute containing taxonomic order; for handling PSCS rules for Andisols in lieu of lab data. May be NA or column missing altogether, in which case Andisol PSC possibility is ignored.</p></td>
+    </tr>
+    <tr>
+      <th>bottom.pattern</th>
+      <td><p>Regular expression pattern to match a root-restrictive contact. Default matches Cr, R or Cd. This argument is passed to both estimateSoilDepth and getArgillicBounds.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments are passed to getArgillicBounds()</p></td>
     </tr>
     </table>
     
