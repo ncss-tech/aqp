@@ -39,6 +39,7 @@ plot(sp4, color='CF')
    * https://www.pnas.org/content/115/26/6751
    * [as found by Scopus](https://www.scopus.com/results/citedbyresults.uri?sort=plf-f&cite=2-s2.0-84871520076&src=s&imp=t&sid=77a47f45322dcfd492772ab2198cbd60&sot=cite&sdt=a&sl=0&origin=inward&editSaveSearch=&txGid=2178c12c5b47dbcdd8b2f12cd9a81478)
    * [as found by Google Scholar](https://scholar.google.com/scholar?cites=14155970656017510549&as_sdt=5,29&sciodt=0,29&hl=en)
+   * http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-80872019000100121
 
    
    
