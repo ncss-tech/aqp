@@ -2,6 +2,8 @@ library(raster)
 library(rasterVis)
 library(aqp)
 library(RColorBrewer)
+library(latticeExtra)
+library(reshape2)
 
 # rasterized from vector linework, scanned from field notes drawn to scale
 # c/o Nic Jelinski <jeli0026@umn.edu>
@@ -66,7 +68,7 @@ plot(x.1x1, col=pal(n))
 # better plotting
 levelplot(x, att='Horizon', margin=FALSE, par.settings=rasterTheme(region=pal(n)), scales=list(y=list(tick.number=12)))
 
-levelplot(x.1x1, att='Horizon', margin=FALSE, par.settings=rasterTheme(region=pal(n)), scales=list(y=list(tick.number=12)))
+(plot.1 <- levelplot(x.1x1, att='Horizon', margin=FALSE, par.settings=rasterTheme(region=pal(n)), scales=list(y=list(tick.number=12))))
 
 
 # double check cell counts in RAT
@@ -86,7 +88,8 @@ data.frame(hz=rat$Horizon, prop=round(hz.counts.1x1[, 2] / sum(hz.counts.1x1[, 2
 
 ##
 ## likely simpler to do things by depth slice as matrix
-## note: using 1x1 cm resampled raster
+## note: using 1x1 cm resampled raster so that depths are correct
+## 
 
 # convert cell values to matrix
 m <- as.matrix(x.1x1)
@@ -113,10 +116,12 @@ p$top <- 0:(nrow(p)-1)
 p$bottom <- p$top + 1
 
 # reshape to long format for plotting
-p.long <- reshape2::melt(p, id.vars=c('top', 'bottom'))
+p.long <- melt(p, id.vars=c('top', 'bottom'))
 
 # remove very small Pr(Hz)
 # p.long$value[p.long$value == 0] <- NA 
 
-xyplot(top ~ value, data=p.long, groups=variable, ylim=c(110, -10), type='l', par.settings=list(superpose.line=list(lwd=2, col=pal(n))), asp=1)
+# interesting but hard to read
+(plot.2 <- xyplot(top ~ value, data=p.long, groups=variable, ylim=c(110, -10), type='l', par.settings=list(superpose.line=list(lwd=2, col=pal(n))), asp=1, auto.key=list(columns=4, lines=TRUE, points=FALSE), ylab='Depth (cm)', xlab='Pr(Hz | depth)'))
+
 
