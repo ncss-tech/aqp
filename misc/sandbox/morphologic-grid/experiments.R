@@ -125,3 +125,5 @@ p.long <- melt(p, id.vars=c('top', 'bottom'))
 (plot.2 <- xyplot(top ~ value, data=p.long, groups=variable, ylim=c(110, -10), type='l', par.settings=list(superpose.line=list(lwd=2, col=pal(n))), asp=1, auto.key=list(columns=3, lines=TRUE, points=FALSE, cex=0.7), ylab='Depth (cm)', xlab='Pr(Hz | depth)'))
 
 
+
+
