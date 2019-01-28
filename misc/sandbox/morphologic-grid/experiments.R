@@ -110,6 +110,10 @@ p <- t(p)
 # about right
 matplot(p, type = 'l', lty=1, col=pal(n), las=1, lwd=2)
 
+# Shannon Entropy as an index of horizon confusion vs. depth
+xyplot(1:100 ~ apply(p, 1, shannonEntropy), type=c('l', 'g'), lwd=2, col='RoyalBlue', asp=1.5, ylim=c(110, -10), ylab='Depth (cm)', xlab='Shannon Entropy')
+
+
 # convert to data.drame, add depths
 p <- as.data.frame(p)
 p$top <- 0:(nrow(p)-1)
@@ -123,7 +127,5 @@ p.long <- melt(p, id.vars=c('top', 'bottom'))
 
 # interesting but hard to read
 (plot.2 <- xyplot(top ~ value, data=p.long, groups=variable, ylim=c(110, -10), type='l', par.settings=list(superpose.line=list(lwd=2, col=pal(n))), asp=1, auto.key=list(columns=3, lines=TRUE, points=FALSE, cex=0.7), ylab='Depth (cm)', xlab='Pr(Hz | depth)'))
-
-
 
 
