@@ -1,4 +1,4 @@
-Pedon,Horizon,Component,Weight,Top,Bottom,SOC,BD,WC_g
+id,horizon,component,weight,top,bottom,SOC,BD,WC_g
 HV-4,Oi,Oi,1,0,15,42.1,0.13,201
 HV-4,Oe,Oe,1,11,22,35.6,0.17,185
 HV-4,Cg/Oajj,Cg,0.6,30,51,0.89,1.85,52

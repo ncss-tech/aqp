@@ -5,13 +5,20 @@ library(RColorBrewer)
 library(latticeExtra)
 library(reshape2)
 
+# site data
+x.site <- read.csv('examples/hv4-site.csv', stringsAsFactors = FALSE)
+
+# soil morphologic units (SMU)
+x.smu <- read.csv('examples/hv4-smu.csv', stringsAsFactors = FALSE)
+
+
 # rasterized from vector linework, scanned from field notes drawn to scale
 # c/o Nic Jelinski <jeli0026@umn.edu>
-x <- raster('examples/2DMorphologyTest 14JAN2019.tif')
+x <- raster('examples/hv4.tif')
 
 # check RAT via .vat.dbf
 # OK
-foreign::read.dbf('examples/2DMorphologyTest 14JAN2019.tif.vat.dbf')
+foreign::read.dbf('examples/hv4.tif.vat.dbf')
 
 # check RAT
 # same as DBF, good
@@ -35,12 +42,18 @@ NAvalue(x) <- 10
 # ordering is semi-arbitrary but a depth-wise sorting is ideal
 levels(rat$Horizon)
 
+## TODO: consider establishing an ideal vertical ordering in the original raster and RAT 
+
+## TODO: set levels later, using some kind of depth-wise eval
+
 # remove "NA" from levels
-# note: levels are in reverse order
-rat$Horizon <- factor(rat$Horizon, levels = rev(rat$Horizon)[-1])
+# ideal ordering for soil morphologic units (SMU)
+SMU.depthwise <- c('Oi', 'Oe', 'Cg', 'Cg/Oajj', 'Oa/Cgjj', 'Wf/2Cg1', 'Wf', 'Oaf', 'Wf/2Cg2')
+rat$Horizon <- factor(rat$Horizon, levels = SMU.depthwise)
+# re-pack
 levels(x) <- rat
 
-# how about removing NA from the RAT
+# removing NA from the RAT
 rat <- na.omit(rat)
 levels(x) <- rat
 
@@ -65,10 +78,15 @@ plot(x, col=pal(n))
 plot(x.1x1, col=pal(n))
 
 
-# better plotting
+## rasterVis will perform thematic mapping with a nice legend
+## it will not respect levels of 'att'
 levelplot(x, att='Horizon', margin=FALSE, par.settings=rasterTheme(region=pal(n)), scales=list(y=list(tick.number=12)))
 
 (plot.1 <- levelplot(x.1x1, att='Horizon', margin=FALSE, par.settings=rasterTheme(region=pal(n)), scales=list(y=list(tick.number=12))))
+
+
+
+
 
 
 # double check cell counts in RAT
@@ -95,7 +113,7 @@ data.frame(hz=rat$Horizon, prop=round(hz.counts.1x1[, 2] / sum(hz.counts.1x1[, 2
 m <- as.matrix(x.1x1)
 
 # Pr(Hz | depth) via cell counts
-# note: depths are expanded as columns
+# note: equal depths are expanded as columns
 p <- apply(m, 1, function(i) {
   i <- factor(i, levels=rat$Value, labels=rat$Horizon)
   tab <- table(i)
@@ -128,4 +146,35 @@ p.long <- melt(p, id.vars=c('top', 'bottom'))
 # interesting but hard to read
 (plot.2 <- xyplot(top ~ value, data=p.long, groups=variable, ylim=c(110, -10), type='l', par.settings=list(superpose.line=list(lwd=2, col=pal(n))), asp=1, auto.key=list(columns=3, lines=TRUE, points=FALSE, cex=0.7), ylab='Depth (cm)', xlab='Pr(Hz | depth)'))
 
+
+## 
+## determing rough depth ranges
+##
+
+# iteration likely simplest, save to a list
+l <- list()
+
+## TODO: this is kind of messy
+## cell value should == factor level ordering for SMU
+
+# iterate over raster CELL codes for SMU designation, not the same as levels
+# these are stored in the matrix form
+
+for(i in rat$ID) {
+  # rows are the collection of SMU IDs by depth
+  l[[i]] <- row(m)[which(m == i)]
+}
+
+# apply SMU designations / names
+names(l) <- rat$Horizon
+
+# re-order according to depth-wise SMU names
+# note that we have to specify the LUT first in match()
+l <- l[match(levels(rat$Horizon), names(l))]
+
+# that looks about right
+boxplot(l, las=1, ylab='Depth (cm)')
+
+lapply(l, quantile, probs=c(0.25, 0.75))
+sort(sapply(l, median))
 
