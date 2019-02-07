@@ -76,7 +76,7 @@ default.color=grey(0.95), \dots)
   \item{col.label}{text printed above the color-coded legend}
   \item{col.palette}{color palette used to plot numeric data}
   \item{col.legend.cex}{scaling of color legend}
-  \item{n.legend}{approximate number of classes used in the legend}
+  \item{n.legend}{approximate number of classes used in numeric legend, max number of items per row in categorical legend}
   \item{lwd}{single numeric value: line width multiplier}
   \item{lty}{single integer: line style}
   \item{default.color}{default horizon fill color used when `color` attribute is NA}
@@ -90,6 +90,8 @@ The 'side' \code{id.style} is useful when plotting a large collection of profile
 If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations. 
 
 The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
+
+Adjustments to the legend can be specified via \code{col.label} (legend title), \code{col.palette} (palette of colors, automatically expanded), \code{col.legend.cex} (legend scaling), and \code{n.legend} (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, \code{plotSPC} will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
 
 The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
 }
@@ -152,5 +154,27 @@ par(mar=c(1,1,1,1))
 plot(sp1, n=length(sp1) + length(sp2))
 # plot the second SPC, starting from the first empty space
 plot(sp2, x.idx.offset=length(sp1), add=TRUE)
+
+
+##
+## demonstrate adaptive legend
+##
+
+data(sp3)
+depths(sp3) <- id ~ top + bottom
+
+# make some fake categorical data
+horizons(sp3)$fake.data <- sample(letters[1:15], size = nrow(sp3), replace=TRUE)
+
+# better margins
+par(mar=c(0,0,3,1))
+
+# note that there are enough colors for 15 classes (vs. previous limit of 10)
+# note that the legend is split into 2 rows when length(classes) > n.legend argument
+plot(sp3, color='fake.data', name='fake.data', cex.names=0.8)
+
+# make enough room in a single legend row
+plot(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
+
 }
 

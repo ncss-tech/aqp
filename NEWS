@@ -3,7 +3,6 @@
 * plotSPC() will now attempt to create multi-row legends when using a factor > n.legend levels
 * plotSPC() will now generate >  10 colors for legends associated with a factor (https://github.com/ncss-tech/aqp/issues/9)
 
-
 -------------------------- aqp 1.17 (2018-12-28) -------------------------
 * CRAN release
 * aggregateColor() gets a new feature, similar colors can be grouped via cluster::pam()
