@@ -172,10 +172,6 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
         # safely accounts for even / odd n.leg.classes
         leg.row.indices <- .splitLegend(n.leg.classes)
         
-        # compute max space required for legend items
-        # this will ensure that columns line-up
-        leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
-        
         # set flag for later
         multi.row.legend <- TRUE
       }
@@ -365,6 +361,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     
     # possibly split legend across multiple rows
     if(exists('multi.row.legend')) {
+      
+      # compute max space required for legend items
+      # better formatting
+      # note: must be called AFTER high level plot()
+      leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
       
       # row 1
       legend('bottom', inset=c(0, 0.99),
