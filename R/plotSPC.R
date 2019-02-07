@@ -1,4 +1,26 @@
 
+# split legend into two rows, and create indices
+# any more classes than that and things become impossible to read
+# n: total number of classes
+.splitLegend <- function(n) {
+  
+  #  make enough room for even division of odd numbers
+  n.per.row <- ceiling(n / 2)
+  
+  # make indices for first row
+  row.1.idx <- seq(from=1, to=n.per.row)
+  row.2.idx <- seq(from=n.per.row + 1, to=n)
+  
+  res <- list(
+    row.1=row.1.idx, 
+    row.2=row.2.idx
+  )
+  
+  return(res)
+}
+
+
+
 # simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
 # based on "red book" version 3.0
 hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
@@ -127,12 +149,11 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       
       # make a color mapping function
       color.mapper <- scales::col_factor(
-        palette = col.palette,
+        palette = colorRampPalette(col.palette)(length(color.levels)),
         domain = color.levels,
         na.color = default.color,
         ordered = TRUE
       )
-      
       
       # apply color mapping
       h$.color <- color.mapper(h[[color]])
@@ -140,6 +161,25 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       # generate colors and labels for legend
       pretty.vals <- color.levels
       color.legend.data <- list(legend = pretty.vals, col = color.mapper(pretty.vals))
+      
+      # interpret n.legend as max(items) / row
+      n.leg.classes <- length(pretty.vals)
+      
+      # create more room via multiple calls to legend
+      if(n.legend < n.leg.classes) {
+        
+        # make indices to two rows of legends
+        # safely accounts for even / odd n.leg.classes
+        leg.row.indices <- .splitLegend(n.leg.classes)
+        
+        # compute max space required for legend items
+        # this will ensure that columns line-up
+        leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
+        
+        # set flag for later
+        multi.row.legend <- TRUE
+      }
+      
       
     }
   }
@@ -322,7 +362,32 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
     
-    legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)
+    
+    # possibly split legend across multiple rows
+    if(exists('multi.row.legend')) {
+      
+      # row 1
+      legend('bottom', inset=c(0, 0.99),
+             legend=color.legend.data$legend[leg.row.indices$row.1], 
+             col=color.legend.data$col[leg.row.indices$row.1], 
+             text.width = leg.text.width,
+             bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
+             )
+      
+      # row 2
+      legend('bottom', inset=c(0, 0.94),
+             legend=color.legend.data$legend[leg.row.indices$row.2], 
+             col=color.legend.data$col[leg.row.indices$row.2], 
+             text.width = leg.text.width,
+             bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
+      )
+      
+    } else {
+      # standard invocation
+      legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)
+    }
+    
+    
   }
   }
 
