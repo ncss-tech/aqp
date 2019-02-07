@@ -173,8 +173,17 @@ names(l) <- rat$Horizon
 l <- l[match(levels(rat$Horizon), names(l))]
 
 # that looks about right
-boxplot(l, las=1, ylab='Depth (cm)')
+boxplot(l, las=1, ylab='Depth (cm)', ylim=c(100, 0))
 
+lapply(l, range)
 lapply(l, quantile, probs=c(0.25, 0.75))
 sort(sapply(l, median))
+
+
+## notes for next time
+# 1. cell values, SMU names, and integer representation of SMU are easily mixed-up!
+# 2. consider storing SMU levels in matrix form
+
+
+
 
