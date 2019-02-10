@@ -10,7 +10,7 @@ m.rgb <- munsell2rgb(x.p$hue, x.p$value, x.p$chroma, return_triplets = TRUE)
 
 # sRGB --> Munsell
 x.back <- rgb2munsell(color = m.rgb, colorSpace = 'LAB', nClosest = 1)
-# using trunctacted sRGB values
+# using truncated sRGB values
 x.back.trunc <- rgb2munsell(data.frame(r=0.36, g=0.26, b=0.13))
 
 # neutral colors map to shades of grey
@@ -66,6 +66,34 @@ test_that("closest Munsell chip based on sRGB coordinates", {
   expect_equal(getClosestMunsellChip('10YR 3.3/5', convertColors = FALSE), '10YR 3/5')
   expect_equal(getClosestMunsellChip('9YR 3.8/3', convertColors = FALSE), '10YR 4/3')
   expect_equal(getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE), '7.5YR 3/2')
+})
+
+
+# https://github.com/ncss-tech/aqp/issues/69
+test_that("Munsell --> LAB + sRGB coordinates", {
+  
+  # sRGB
+  test.1 <- parseMunsell("10YR 3/5", return_triplets=TRUE)
+  expect_equal(names(test.1), c('r', 'g', 'b'))
+  
+  
+  # sRGB and LAB
+  test.2 <- parseMunsell("10YR 3/5", return_triplets=TRUE, returnLAB=TRUE)
+  expect_equal(names(test.2), c('r', 'g', 'b', 'L', 'A', 'B'))
+  
+  # LAB
+  test.3 <- parseMunsell("10YR 3/5", return_triplets=FALSE, returnLAB=TRUE)
+  expect_equal(names(test.3), c('L', 'A', 'B'))
+  
+  # test the LAB ---> sRGB is close
+  test.4 <- grDevices::convertColor(test.3, from = 'Lab', to='sRGB')
+  
+  # sRGB (r)
+  expect_equal(test.1[, 1], test.4[, 1], tolerance=0.1)
+  # sRGB (g)
+  expect_equal(test.1[, 2], test.4[, 2], tolerance=0.1)
+  # sRGB (b)
+  expect_equal(test.1[, 3], test.4[, 3], tolerance=0.1)
 })
 
 

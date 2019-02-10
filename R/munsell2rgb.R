@@ -191,7 +191,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
 # TODO if alpha is greater than maxColorValue, there will be an error
 # convert munsell Hue, Value, Chroma into sRGB
 # user can adjust how rgb() function will return an R-friendly color
-munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE) {
+munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE) {
 	## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
   
@@ -237,9 +237,16 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   # reset options:
   options(opt.original)
   
-	# if the user wants the raw RGB triplets, give those back
+  # syntax is now a little muddled, test for sRGB and LAB
+  if(return_triplets & returnLAB)
+    return(res[, c('r','g','b', 'L', 'A', 'B')])
+  
+	# if the user wants the raw sRGB triplets, give those back
 	if(return_triplets)
 		return(res[, c('r','g','b')])
+  
+  if(returnLAB)
+    return(res[, c('L','A','B')])
 	
 	# keep track of NA values
 	rgb.na <- which(is.na(res$r))

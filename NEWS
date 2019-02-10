@@ -2,6 +2,7 @@
 * new version number system
 * plotSPC() will now attempt to create multi-row legends when using a factor > n.legend levels
 * plotSPC() will now generate >  10 colors for legends associated with a factor (https://github.com/ncss-tech/aqp/issues/9)
+* munsell2rgb() will now return CIE LAB coordinates if requested (https://github.com/ncss-tech/aqp/issues/69)
 
 -------------------------- aqp 1.17 (2018-12-28) -------------------------
 * CRAN release
@@ -138,11 +139,11 @@
 * texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method='closest', see manual page for details
 
 -------------------------- aqp 1.7-7 (2014-11-06) --------------------------
-* bug fix c/o José Padarian: SPC objects now understand logical indexing rules
+* bug fix c/o Jos? Padarian: SPC objects now understand logical indexing rules
 * removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package
 
 -------------------------- aqp 1.7-6 (2014-09-26) --------------------------
-* bug fix c/o José Padarian: when promoting coordiantes from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!
+* bug fix c/o Jos? Padarian: when promoting coordiantes from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!
 * get.ml.hz() now returns a "pseudo" Brier Score, using the most-likely horizon label as the "correct" value
 * new function rgb2munsell()
 * new function estimateSoilDepth()

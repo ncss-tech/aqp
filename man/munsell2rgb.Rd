@@ -10,20 +10,26 @@ Convert Munsell Notation to and from sRGB color coordinates
 \description{
 Color conversion based on a look-up table of common soil colors.
 }
+
 \usage{
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
-maxColorValue=1, return_triplets=FALSE)
+maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE)
+
 rgb2munsell(color, colorSpace='LAB', nClosest=1)
+
 parseMunsell(munsellColor, convertColors=TRUE, ...)
+
 getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
 }
+
 \arguments{
   \item{the_hue}{a vector of one or more more hues, upper-case}
   \item{the_value}{a vector of one or more values}
   \item{the_chroma}{a vector of one or more chromas, may be NA for neutral hues}
   \item{alpha}{alpha channel value (for transparency effects)}
   \item{maxColorValue}{maximum sRGB color value (see \code{\link{rgb})}}
-  \item{return_triplets}{should the function return raw sRGB triplets instead of an R color}
+  \item{return_triplets}{should the function return sRGB triplets instead of an R color}
+  \item{returnLAB}{should the function return CIE LAB (D65) coordinates}
   \item{color}{a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of [0,1]}
   \item{colorSpace}{the colorspace to use for finding the closest chip, LAB is the most accurate, sRGB is another possibility}
   \item{nClosest}{number of closest Munsell colors to return}
@@ -155,8 +161,19 @@ plot(sp1.lab)
 getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
 # convert directly to R color
 getClosestMunsellChip('7.9YR 2.7/2.0')
+
+##
+## demonstrate options for returning sRGB and/or CIE LAB
+##
+# just sRGB
+parseMunsell("10YR 3/5", return_triplets=TRUE)
+
+# sRGB + CIE LAB (D65 illuminant)
+parseMunsell("10YR 3/5", return_triplets=TRUE, returnLAB=TRUE)
+
+# CIE LAB only
+parseMunsell("10YR 3/5", return_triplets=FALSE, returnLAB=TRUE)
 }
 
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+
 \keyword{manip}
