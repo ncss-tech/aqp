@@ -11,7 +11,7 @@
 mpsplineSPC <- function(p, var, d, ...) {
   
   # https://github.com/obrl-soil/mpspline2
-  p.mps <- mpspline(p, var_name = var, d = d, out_style = 'default', ...)
+  p.mps <- mpspline(p, var_name = var, d = d, ...)
   
   # convert output from mpspline to list of SPCs
   z <- lapply(p.mps, singleMPS2SPC, d=d, id=idname(p), hd=horizonDepths(p), varname=var)

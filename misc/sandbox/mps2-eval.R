@@ -4,6 +4,7 @@ library(plyr)
 library(lattice)
 
 
+source('mps-functions.R')
 
 
 # test data
