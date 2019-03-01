@@ -51,7 +51,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
   ## fudge factors
   # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
@@ -333,10 +333,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 		
 			# add the text: according to style
 			if(id.style == 'top')
-				text(x0, y.offset, id.text, pos=3, font=2, cex=cex.id)
+				text(x0, y.offset, id.text, pos=3, font=font.id, cex=cex.id)
 	
 			if(id.style == 'side')
-				text(x0 - (width+0.025), y.offset, id.text, adj=c(1, -width), font=2, cex=cex.id, srt=90)
+				text(x0 - (width+0.025), y.offset, id.text, adj=c(1, -width), font=font.id, cex=cex.id, srt=90)
 			}
 	  }
   

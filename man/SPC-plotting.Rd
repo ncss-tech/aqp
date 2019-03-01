@@ -25,7 +25,7 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 \usage{
 plotSPC(x, color='soil_color', width=0.2, name=NULL, label=idname(x),
 alt.label=NULL, alt.label.col='black', cex.names=0.5, 
-cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), 
+cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, 
 print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, 
 scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x),
 max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, 
@@ -52,6 +52,7 @@ default.color=grey(0.95), \dots)
   \item{cex.names}{character scaling applied to horizon names}
   \item{cex.depth.axis}{character scaling applied to depth scale}
   \item{cex.id}{character scaling applied to profile id}
+  \item{font.id}{font style applied to profile id, default is 2 (bold)}
   \item{print.id}{should the profile id be printed above each profile? (TRUE)}
   \item{id.style}{profile ID printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
