@@ -1,3 +1,8 @@
+-------------------------- aqp 1.17.02 (2019-03-15) -------------------------
+* fixed nasty bug in [-indexing when SPC contains a single profile (https://github.com/ncss-tech/aqp/issues/85)
+* new function validSpatialData() to test for place-holder contents of @sp
+* rebuildSPC() will now correct invalid, place-holder SpatialPoints in @sp
+
 -------------------------- aqp 1.17.01 (2019-02-07) -------------------------
 * new version number system
 * plotSPC() will now attempt to create multi-row legends when using a factor > n.legend levels
