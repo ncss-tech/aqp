@@ -3,6 +3,7 @@
 
 ## TODO: this function cannot deal with overlapping horizons (usually an error):  > 1 row / slice
 ## it would be useful to support these kind of data, as many lab-sampled sites have sub-samples
+## https://github.com/ncss-tech/aqp/issues/88
 
 # this function is run on the horizon data, once for each depth slice
 get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
