@@ -540,10 +540,37 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     	d <- d[which(d[[idname(x)]] %in% p.ids), ]
     
     
-    ## TODO: convert to list-based methods / map_df
+    ## TODO: this should handle cases where the j-th horizon is missing (https://github.com/ncss-tech/aqp/issues/89)
     # subset horizons/slices based on j --> only when j is given
-    if(!missing(j))
-      h <- ddply(h, idname(x), .fun=function(y) y[j, ])
+    if(!missing(j)) {
+      # work via list-wise iteration
+      hh <- split(h, h[[idname(x)]])
+      
+      # safely extract horizon by index, could have length > 1
+      hh <- lapply(hh, function(this.profile, idx=j) {
+        
+        # total horizon records available
+        this.profile.n <- nrow(this.profile)
+        
+        # the total number that can be collected
+        # assumes correct depth sorting
+        safe.idx <- idx[which(idx <= this.profile.n)]
+        
+        # conditionally return all available records up to this.profile.n
+        if(length(safe.idx) > 0) {
+          res <- this.profile[safe.idx, ]
+        }  else {
+          res <- NULL
+        }
+        
+        # done
+        return(res)
+      })
+      
+      # put it all back together and replace what we started with
+      h <- do.call('rbind', hh)
+    }
+      
 
     # if there is REAL data in @sp, and we only have 1 row of hz per coordinate- return SPDF
     # valid spatial data is now tested via validSpatialData()
@@ -575,11 +602,19 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     else {
       res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d)
       
-      # one more final check:
+      
+      
+      ## integrity checks: these will be implicit in the aqp 2.0 SPC
+      
+      # https://github.com/ncss-tech/aqp/issues/89
+      # there should be as many records in @site as there are profile IDs
       if(length(profile_id(res)) != length(site(res)[[idname(res)]]))
-        stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)
+        warning("Some profiles have been removed from the collection.", call. = FALSE)
+      
+      # the order of profile_ids should be the same as in @site
       if(! all(profile_id(res) == site(res)[[idname(res)]]))
-        stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)
+        warning("profile ID order does not match order in @site", call. = FALSE)
+      
       
       return(res)
     }
