@@ -205,6 +205,26 @@ setMethod("horizonNames", "SoilProfileCollection",
 )
 
 
+## TODO: this seems stupid, NULL would be much simpler to reason over...
+## are the contents of @sp valid: n x 2 matrix?
+## if not, then contents of @sp is an empty SpatialPoints object
+if (!isGeneric("validSpatialData"))
+  setGeneric("validSpatialData", function(object, ...) standardGeneric("validSpatialData"))
+
+setMethod("validSpatialData", "SoilProfileCollection",
+          function(object) {
+            # n x 2 ---> valid / initialized coordinates
+            # n x 1 ---> emtpy SP object
+            res <- dim(coordinates(object))[[2]]
+            
+            if(res == 2)
+              return(TRUE)
+            else
+              return(FALSE)
+          }
+)
+
+
 
 
 ##
@@ -502,12 +522,16 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     s.all <- site(x)
     s.i <- which(s.all[[idname(x)]] %in% p.ids)
   	s <- s.all[s.i, , drop=FALSE] # need to use drop=FALSE when @site contains only a single column
-
-    # subset spatial data if exists
-    if(nrow(coordinates(x)) == length(x))
-      sp <- x@sp[i]
-    else
-      sp <- x@sp
+    
+  	# subset spatial data, but only if valid
+  	if(validSpatialData(x)) {
+  	  sp <- x@sp[i]
+  	}
+  	# copy emtpy SpatialPoints object
+  	else {
+  	  sp <- x@sp
+  	}
+      
     
     # subset diagnostic data, but only if it exists
     # note that not all profiles have diagnostic hz data
@@ -516,17 +540,18 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     	d <- d[which(d[[idname(x)]] %in% p.ids), ]
     
     
+    ## TODO: convert to list-based methods / map_df
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j))
       h <- ddply(h, idname(x), .fun=function(y) y[j, ])
 
     # if there is REAL data in @sp, and we only have 1 row of hz per coordinate- return SPDF
-    # for now test for our custom dummy SP obj: number of coordinates == number of profiles
+    # valid spatial data is now tested via validSpatialData()
     # also need to test that there is only 1 horizon/slice per location
   	# only produces a SPDF when j index is present
-    if(nrow(coordinates(x)) == length(x) & length(p.ids) == nrow(h) & !missing(j)) {
+    if(validSpatialData(x) & length(p.ids) == nrow(h) & !missing(j)) {
       # combine with coordinates
-      cat('result is a SpatialPointsDataFrame object\n')
+      message('result is a SpatialPointsDataFrame object')
       # note that we are filtering based on 'i' - an index of selected profiles
 			
       # since the order of our slices and coordinates are the same
@@ -534,10 +559,12 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       # this gets around a potential problem when dimnames(x)[[1]] aren't consecutive 
       # values-- often the case when subsetting has been performed
       
+      ## TODO: there should always be something in @site
       # if site data, join hz+site
       if(nrow(s) > 0) {
       	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=join(h, s, by=idname(x)), match.ID=FALSE))
       }
+      ## TODO: can this ever happen?
       # no site data
       else {
       	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=h, match.ID=FALSE))	
@@ -547,6 +574,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     else {
       res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d)
+      
       # one more final check:
       if(length(profile_id(res)) != length(site(res)[[idname(res)]]))
         stop("SPC object corruption. This shouldn't happen and will be fixed in aqp 2.0", call. = FALSE)

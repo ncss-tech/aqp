@@ -61,14 +61,18 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
 ## TODO: why does the proj4string get mangled in the conversion?
 ## Coercition methods: and sp utilities
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
-    message('only site data are extracted')
-    s <- SpatialPointsDataFrame(coordinates(from), data = site(from), proj4string=CRS(proj4string(from)), match.ID = FALSE)
     return(s)
   }
 )
 
-## Coercition methods: and sp utilities
+# SoilProfilecollection -> SpatialPoints
+# requires special handling of "emtpy" SpatialPoints Objects
 setAs("SoilProfileCollection", "SpatialPoints", function(from) {
     SpatialPoints(coordinates(from), proj4string=CRS(proj4string(from)))
   }
 )
+
+
+
+
+

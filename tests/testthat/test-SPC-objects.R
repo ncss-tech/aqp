@@ -5,8 +5,11 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
+# add real coordinates
 sp1$x <- seq(-119, -120, length.out = length(sp1))
 sp1$y <- seq(38, 39, length.out = length(sp1))
+
+
 
 ## tests
 
@@ -108,36 +111,65 @@ test_that("SPC subsetting ", {
 })
 
 
+
+test_that("SPC graceful failure of spatial operations when data are missing", {
+  
+  # @sp has not been initialized
+  expect_false(validSpatialData(sp1))
+  
+  # coercion should not work
+  expect_error(as(sp1, 'SpatialPoints'))
+  expect_error(as(sp1, 'SpatialPointsDataFrame'))
+  
+  # square-bracket indexing should work with n = 1
+  # https://github.com/ncss-tech/aqp/issues/85
+  s <- sp1[1, 1]
+  expect_match(class(s), 'SoilProfileCollection')
+  
+})
+
+
 test_that("SPC spatial operations ", {
   
   # init / extract coordinates
   sp::coordinates(sp1) <- ~ x + y
   co <- sp::coordinates(sp1)
   
+  # these are valid coordinates
+  expect_true(validSpatialData(sp1))
+  
   # coordinates should be a matrix
   expect_equal(class(co), 'matrix')
   # as many rows as length and 2 columns
   expect_equal(dim(co), c(length(sp1), 2))
-  # coordinates should be removed from @site
+  
+  # coordinate columns should be removed from @site
   expect_true(all( ! dimnames(co)[[2]] %in% siteNames(sp1)))
   
   # CRS
   sp::proj4string(sp1) <- '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0'
-  sp::proj4string(sp1)
   
   # we should get back the same thing we started with
   expect_equal(sp::proj4string(sp1), '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0')
   
-  # down-grade site+sp
+  # basic coercion
+  expect_match(class(as(sp1, 'SpatialPoints')), 'SpatialPoints')
+  
+  # down-grade to {site + sp} = SpatialPointsDataFrame
+  expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted')
   sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
   expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
   
-  ## TODO: this generates spurious messages
   # implicity down-grade to SPDF via hz-subsetting
-  # sp1.spdf <- suppressMessages(sp1[, 1])
-  # expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  sp1.spdf <- suppressMessages(sp1[, 1])
+  expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  
+  # again, with profile indexing
+  sp1.spdf <- suppressMessages(sp1[1, 1])
+  expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
   
 })
+
 
 test_that("SPC misc. ", {
   
