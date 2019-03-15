@@ -7,6 +7,7 @@
 # this function is run on the horizon data, once for each depth slice
 get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   
+  ## TODO: this is likely very slow
   # 1. get indices to rows matchings current depth slice (z)
   # this is the default method
   if(include == 'top')
@@ -15,6 +16,7 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
   if(include == 'bottom')
   	idx <- which(z > h[[top]] & z <= h[[bottom]])
 
+  ## TODO: split -> list -> process -> combine
   # 2. extract data.frame along slice, and named vars + id
   h <- h[idx, c(id, vars)]
   
@@ -112,6 +114,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # convert h into an imutable data.frame for speed
   # h <- idata.frame(h)
   
+  ## TODO: list-based processing faster
   # iterate over this index
   for(slice.i in slice.idx) {
     
@@ -123,24 +126,26 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     d <- data.frame(temp_id=id.order)
     names(d) <- id
     
-    ## BUG: join doesn't work when ID is a factor
+    ## TODO: convert to merge()
     m.i <- join(d, m.i.sub, by=id, type='left', match='first')
     
     # add depth range:
     # top-down, means that the slice starts from the user-defined depths (default)
     if(top.down) {
-      m.i[[top]] <- z[slice.i]      # "top"
-      m.i[[bottom]] <- z[slice.i] + 1  # "bottom"
+      m.i[[top]] <- z[slice.i]          # "top"
+      m.i[[bottom]] <- z[slice.i] + 1   # "bottom"
     }
     # otherwise, the slice starts at the bottom (why would someone do this?)
     else {
-      m.i[[top]] <- z[slice.i] - 1 # "top"
-      m.i[[bottom]] <- z[slice.i]     # "bottom"
+      m.i[[top]] <- z[slice.i] - 1      # "top"
+      m.i[[bottom]] <- z[slice.i]       # "bottom"
     }
+    
     # save to the list
     hd.slices[[slice.i]] <- m.i
     }
   
+  ## TODO: do all of the work via list, lapply / map / do.call('rbind')
   # convert list into DF
   hd.slices <- ldply(hd.slices)
   
@@ -153,9 +158,8 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   if(just.the.data)
     return(hd.slices)
 
-  ## TODO: WTF (AGB: loafercreek[, 2])
   # if spatial data and only a single slice: SPDF
-  if(nrow(coordinates(object)) == length(object) & length(z) == 1) {
+  if(validSpatialData(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
     # check for site data, if present - join to our sliced data
     if(nrow(site(object)) > 0 )
