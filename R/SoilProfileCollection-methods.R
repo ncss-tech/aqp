@@ -508,7 +508,10 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       if(any(is.na(j)))
       stop('NA not permitted in horizon/slice index', call.=FALSE)
     }
-
+    
+    #### TODO: implicit sub-setting of horizon records should affect all slots 
+    ####      https://github.com/ncss-tech/aqp/issues/89
+    
     # extract requested profile IDs
     p.ids <- profile_id(x)[i]
 
@@ -540,7 +543,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     	d <- d[which(d[[idname(x)]] %in% p.ids), ]
     
     
-    ## TODO: this should handle cases where the j-th horizon is missing (https://github.com/ncss-tech/aqp/issues/89)
+    ## this is almost correct, but subsetting does not propagate to other slots (https://github.com/ncss-tech/aqp/issues/89)
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j)) {
       # work via list-wise iteration

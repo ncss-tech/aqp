@@ -174,6 +174,9 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     }
   
   
+  ## TODO: profile IDs can be re-sorted here, integer -> character conversion?
+  ##       https://github.com/ncss-tech/aqp/issues/90
+  
   # otherwise return an SPC, be sure to copy over the spatial data
   # NOTE: suppressing warning due to non-unique horizon IDs, don't panic
   suppressWarnings(depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom)))
