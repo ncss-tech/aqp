@@ -336,6 +336,11 @@ setReplaceMethod("depths", "data.frame",
   
   ## danger! this will shuffle profile IDs: https://github.com/ncss-tech/aqp/issues/90
   ## 
+  ## convert to character, then sort
+  ## ... test
+  ##
+  ##
+  
   # re-order data: IDs, top hz depths
   new.order <- order(data[[nm[1]]], data[[nm[2]]])
   
