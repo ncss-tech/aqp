@@ -40,16 +40,25 @@
       
   }
 
+##
+## notes:
+##
+
+# 2019-03-15: creating an empty SpatialPoints object requires more effort
+# c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
+# old: new('SpatialPoints')
+# new: SpatialPoints(data.frame(x = 0, y = 0))[-1,]
+
 setClass(
   Class='SoilProfileCollection', 
   representation=representation(
     idcol='character', # column name containing IDs
-    hzidcol='character',
+    hzidcol='character', # column name containing unique horizon IDs
     depthcols='character', # 2 element vector with column names for hz top, bottom
     metadata='data.frame', # single-row dataframe with key-value mapping
     horizons='data.frame', # all horizons sorted by ID, top
     site='data.frame', # data about the sampling sites
-    sp='SpatialPoints', # (optional) spatial data stored here
+    sp='SpatialPoints', # spatial data stored here, initialized as 'empty' SP object
     diagnostic='data.frame' # (optional) diagnostic horizons are stored here
   ),
   prototype=prototype(
@@ -59,7 +68,7 @@ setClass(
     metadata=data.frame(stringsAsFactors=FALSE), # default units are unkown
     horizons=data.frame(stringsAsFactors=FALSE),
     site=data.frame(stringsAsFactors=FALSE),
-    sp=new('SpatialPoints'),
+    sp=SpatialPoints(data.frame(x = 0, y = 0))[-1,],
     diagnostic=data.frame(stringsAsFactors=FALSE)
   ),
   validity=.SoilProfileCollectionValidity
