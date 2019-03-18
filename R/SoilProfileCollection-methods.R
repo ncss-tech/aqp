@@ -495,18 +495,39 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
   	if(!missing(i)) {
   	  if(any(is.na(i)))
   	    stop('NA not permitted in profile index', call.=FALSE)
+  	  
       # convert logical to integer per standard vector/list indexing rules (thanks Jos? Padarian for the suggestion!)
-  	  if(is.logical(i)) i <- (1:length(x))[i]
-  	  i <- as.integer(i)
+  	  if(is.logical(i)) 
+  	    i <- (1:length(x))[i]
+  	  
+  	  can.cast <- is.numeric(i) 
+  	  if(can.cast) {
+  	    can.cast <- can.cast & all(abs(i - round(i)) < .Machine$double.eps^0.5)
+  	    i <- as.integer(i)
+  	  } else {
+  	    stop("Failed to coerce site index to integer.")
+  	  }
   	}
     else # if no index is provided, the user wants all profiles
       i <- 1:length(x)
 
     # sanity check
     if(!missing(j)) {
-      j <- as.integer(j)
+      
+      # AGB -- added logical handling to horizon index -- there have been times I've expected j index to behave like i
+      if(is.logical(j)) 
+        j <- (1:length(x))[j]
+      
+      can.cast <- is.numeric(j) 
+      if(can.cast) {
+        can.cast <- can.cast & all(abs(j - round(j)) < .Machine$double.eps^0.5)
+        j <- as.integer(j)
+      } else {
+        stop("Failed to coerce horizon/slice index to integer.")
+      }
+      
       if(any(is.na(j)))
-      stop('NA not permitted in horizon/slice index', call.=FALSE)
+        stop('NA not permitted in horizon/slice index', call.=FALSE)
     }
     
     #### TODO: implicit sub-setting of horizon records should affect all slots 
