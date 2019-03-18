@@ -504,7 +504,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
   	  if(can.cast) {
   	    if(all(abs(i - round(i)) < .Machine$double.eps^0.5))
   	      i <- as.integer(i)
-  	    else stop("Numeric site index is does not contain whole numbers.")
+  	    else stop("Numeric site index does not contain whole numbers.")
   	  } else {
   	    stop("Failed to coerce site index to integer.")
   	  }
@@ -523,7 +523,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       if(can.cast) {
         if(all(abs(j - round(j)) < .Machine$double.eps^0.5))
           j <- as.integer(j)
-        else stop("Numeric horizon/slice index is does not contain whole numbers.")
+        else stop("Numeric horizon/slice index does not contain whole numbers.")
       } else {
         stop("Failed to coerce horizon/slice index to integer.")
       }
