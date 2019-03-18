@@ -16,9 +16,9 @@
 glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
   # aka glom.by.depth; just one type of glomming of many that we can support
   if(!as.data.frame) {
-    return(p[, which(hzID(p) %in% clod.hz.ids(p, z1, z2))]) 
+    return(p[, which(hzID(p) %in% clod.hz.ids.v2(p, z1, z2))]) 
   } else {
-    return(horizons(p)[hzID(p) %in% clod.hz.ids(p, z1, z2),])
+    return(horizons(p)[hzID(p) %in% clod.hz.ids.v2(p, z1, z2),])
   }
 }
 
@@ -55,6 +55,76 @@ clod.hz.ids <- function(p, z1, z2=NA, as.list = FALSE) {
   idval <- horizons(p)[idx.top, hzid]
   
   if(!as.list)
+    return(idval)
+  
+  return(list(hz.idx = idx.top, value = idval))
+}
+
+clod.hz.ids.v2 <- function (p, z1, z2 = NA, as.list = FALSE) 
+{
+  # access SPC slots to get important info about p
+  hz <- horizons(p)
+  dz <- horizonDepths(p)
+  hzid <- hzidname(p)
+  
+  # get top and bottom horizon depth vectors
+  tdep <- hz[[dz[1]]]
+  bdep <- hz[[dz[2]]]
+  
+  # determine top depths greater than z1
+  gt1 <- tdep > z1
+  
+  # include top depths equal to z1
+  gt1[which(tdep == z1)] <- TRUE 
+  
+  # include horizons whose bottom portion are below z1
+  gt1 <- gt1 | (bdep > z1)
+  
+  # get the index of the first horizon
+  idx.top <- which(gt1)
+  
+  if (!length(idx.top)) 
+    stop('Invalid horizon index. Check argument `z1`.')
+  
+  idx.top <- idx.top[1] # always returns the top horizon
+  
+  # if a bottom depth of the clod interval is specified
+  if (!is.na(z2)) {
+    # determine bottom depths less than z2
+    lt2 <- bdep < z2 
+    
+    # include bottom depths equal to z2
+    lt2[which(bdep == z2)] <- TRUE 
+    
+    # include horizons whose top portion are above z2
+    lt2 <- lt2 | (tdep < z2)
+    
+    # get index of last horizon
+    idx.bot <- rev(which(lt2))
+    
+    if (!length(idx.bot)) 
+      stop('Invalid horizon index. Check arguments `z1` and `z2`.')
+    
+    idx.bot <- idx.bot[1]
+    
+    # not really sure how this could happen ... maybe with wrong depth units for z?
+    if(!(all(idx.top:idx.bot %in% 1:nrow(p))))
+      stop('Invalid horizon index. Check arguments `z1` and `z2`.')
+    
+    # get the ID values out of horizon table
+    idval <- hz[idx.top:idx.bot, hzid]
+    
+    # just the horizon IDs
+    if (!as.list) 
+      return(idval)
+    
+    # list result.
+    return(list(hzid = hzid, hz.idx = idx.top:idx.bot, value = idval))
+  }
+  
+  idval <- hz[idx.top, hzid]
+  
+  if (!as.list) 
     return(idval)
   
   return(list(hz.idx = idx.top, value = idval))

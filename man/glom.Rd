@@ -33,7 +33,7 @@ OPTIONAL: return a data.frame, by intersection with horizons(p)? default: FALSE
 }
 }
 \value{
-\code{glom()} returns a "clod" of horizons that have a common attribute of type data.frame or SoilProfileCllection.
+data.frame or SoilProfileCllection representation of the "clod" of horizons that have a common depth range
 }
 \author{
 Andrew Gene Brown
