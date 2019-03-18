@@ -132,6 +132,7 @@ exportMethods(
   "[",
   "$",
   "$<-",
+  validSpatialData,
   coordinates,
   "coordinates<-",
   "depths<-", 
