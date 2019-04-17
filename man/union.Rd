@@ -16,7 +16,7 @@ union(spc = list(), method = "all", drop.spatial=FALSE)
 
 \details{Method "all" returns all site and horizon level attributes, padded as needed with NA. Method "intersection" (not yet implemented) returns only those site and horizon level attributes that exist in all objects. Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first \code{SoilProfileCollection} is used as a template.}
 
-\note{Previously, \code{rbind.SoilProfileCollection} would remove duplicates. This is no longer performed and an error will be generated due to non-unique profile IDs.}
+\note{Previously, \code{rbind.SoilProfileCollection} would remove duplicates. This is no longer performed and an error will be generated due to non-unique profile IDs. NULL list elements are silently dropped.}
 
 \value{a new \code{SoilProfileCollection} object}
 

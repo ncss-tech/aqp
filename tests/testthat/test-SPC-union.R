@@ -130,3 +130,19 @@ test_that("union with non-conformal spatial data", {
   ## TODO: different coordinate names
 })
 
+
+test_that("filtering NULL elements", {
+  
+  # test data
+  x <- sp1
+  y <- sp1
+  profile_id(y) <- sprintf("%s-copy", profile_id(y))
+  
+  # add NULLs
+  s <- list(NULL, x, y, NULL)
+  
+  # this should work
+  res <- union(s)
+  expect_equivalent(class(res), 'SoilProfileCollection')
+})
+

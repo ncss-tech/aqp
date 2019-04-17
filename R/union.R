@@ -23,16 +23,19 @@ rbind.SoilProfileCollection <- function(...) {
 
 
 
-# TODO: https://github.com/ncss-tech/aqp/issues/71
 union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   # setup some defaults
   options(stringsAsFactors=FALSE)
   
-    # short-circuits
+  # short-circuits
   if(length(spc) == 0)
     return(NULL)
   if(length(spc) == 1)
     return(spc[1])
+  
+  # check/filter for NULL list elements: https://github.com/ncss-tech/aqp/issues/93
+  idx <- which(! sapply(spc, is.null))
+  spc <- spc[idx]
   
   # check for non-conformal depth units
   o.depth.units <- unique(lapply(spc, depth_units))
