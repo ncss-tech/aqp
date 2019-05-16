@@ -1,17 +1,25 @@
+# install mpsline2
+# remotes::install_github('obrl-soil/mpspline2')
+
 library(aqp)
 library(mpspline2)
-library(plyr)
 library(lattice)
 
-
+# helper functions
 source('mps-functions.R')
 
+# fewer moving parts
+options(stringsAsFactors=FALSE)
 
-# test data
+
+# make some example data
 ids <- LETTERS[1:6]
 
 set.seed(10101)
-x <- ldply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
+x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
+x <- do.call('rbind', x)
+
+# promote to SPC
 depths(x) <- id ~ top + bottom
 
 # fake site data
