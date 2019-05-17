@@ -29,6 +29,9 @@
   if(nrow(x.slices) < k+1)
     return(NULL)
   
+  ## TODO: 
+  ##   use distance matrix via delta-E00 as implemented in farver::compare_colour()
+  ##   switch to cluster::clara()
   # use PAM to cluster
   cl <- pam(x.slices[, -1], k = k, stand = FALSE)
   
@@ -137,7 +140,7 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', p
   # note: convertColor() expects a matrix
   lab.colors <- convertColor(as.matrix(h[, c(r, g, b)]), from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
   
-  ## TODO: does it make sense to normalized based on limited data or entire possible range?
+  ## TODO: does it make sense to normalize based on limited data or entire possible range?
   # normalize the L coordinate
   lab.colors[, 1] <- lab.colors[, 1] / RescaleLightnessBy
   
