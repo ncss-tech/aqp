@@ -125,7 +125,10 @@
   return(pigment)
 }
 
-## TODO: move method-specific arguments to ...
+## TODO: 
+#   move method-specific arguments to ...
+#   allow for specification of colors via: hex, sRGB, LAB
+
 soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', pam.k=3, RescaleLightnessBy=1, useProportions=TRUE, pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
   
   # warn about methods

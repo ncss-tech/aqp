@@ -51,8 +51,10 @@ previewColors <- function(cols, method='grid', col.order=NULL, nrow=ceiling(sqrt
   cols.lab <- grDevices::convertColor(cols.srgb, from = 'sRGB', to = 'Lab', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
   
   # distances are based on CIE2000 color comparison
-  d <- farver::compare_colour(cols.lab, cols.lab, from_space='lab', to_space = 'lab', method='CIE2000')
-  d <- as.dist(d)
+  # note: single argument -> all pair-wise distances
+  # output is transposed relative to `dist` object
+  d <- farver::compare_colour(cols.lab, from_space='lab', to_space = 'lab', method='CIE2000')
+  d <- as.dist(t(d))
   
   # distances in CIELAB
   # col.order <- cluster::diana(cols.lab, stand = TRUE)$order
