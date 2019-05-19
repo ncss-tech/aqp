@@ -46,6 +46,8 @@ colorContrast <- function(m1, m2) {
   }
   dE00 <- unlist(d)
   
+  ## TODO: implement rules for color contrast classes
+  
   # combine into DF and return
   res <- data.frame(m1, m2, dH, dV, dC, dE00, stringsAsFactors = FALSE)
   return(res)
