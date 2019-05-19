@@ -6,6 +6,15 @@
 # m2: vector of Munsell colors ('10YR 3/4')
 colorContrast <- function(m1, m2) {
   
+  # sanity check, need this for color distance eval
+  if(!requireNamespace('farver'))
+    stop('pleast install the `farver` package.', call.=FALSE)
+  
+  # sanity check: length of colors to compare should be equal
+  if(length(m1) != length(m2)) {
+    stop('inputs must be the same length', call. = FALSE)
+  }
+  
   # in case colors are encoded as factors
   m1 <- as.character(m1)
   m2 <- as.character(m2)
@@ -33,7 +42,7 @@ colorContrast <- function(m1, m2) {
   # iterate over rows, much more scaleable
   d <- list()
   for(i in 1:nrow(m1.lab)){
-    d[i] <- compare_colour(m1.lab[i, ], m2.lab[i, ], from_space='lab', method = 'CIE2000', white_from = 'D65')
+    d[i] <- farver::compare_colour(m1.lab[i, ], m2.lab[i, ], from_space='lab', method = 'CIE2000', white_from = 'D65')
   }
   dE00 <- unlist(d)
   
