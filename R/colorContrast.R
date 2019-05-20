@@ -1,6 +1,3 @@
-
-
-
 # compute metrics of color contrast: delta-Hue, Value, Chroma and delta-E00
 # m1: vector of Munsell colors ('10YR 3/3')
 # m2: vector of Munsell colors ('10YR 3/4')
@@ -23,14 +20,19 @@ colorContrast <- function(m1, m2) {
   m1.pieces <- parseMunsell(m1, convertColors = FALSE)
   m2.pieces <- parseMunsell(m2, convertColors = FALSE)
   
+  # convert to value and chroma to numeric
+  m1.pieces[[2]] <- as.numeric(m1.pieces[[2]])
+  m1.pieces[[3]] <- as.numeric(m1.pieces[[3]])
+  m2.pieces[[2]] <- as.numeric(m2.pieces[[2]])
+  m2.pieces[[3]] <- as.numeric(m2.pieces[[3]])
   
-  ## https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
-  # difference in number of hue chips
+  # difference in number of hue chips, clock-wise, as specified in:
+  # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
   dH <- abs(huePosition(m1.pieces[[1]]) - huePosition(m2.pieces[[1]]))
   # difference in number of value chips
-  dV <- abs(as.numeric(m1.pieces[[2]]) - as.numeric(m2.pieces[[2]]))
+  dV <- abs(m1.pieces[[2]] - m2.pieces[[2]])
   # difference in number of chroma chips
-  dC <- abs(as.numeric(m1.pieces[[3]]) - as.numeric(m2.pieces[[3]]))
+  dC <- abs(m1.pieces[[3]] - m2.pieces[[3]])
   
   # get CIE LAB representation
   m1.lab <- parseMunsell(m1, convertColors = TRUE, returnLAB=TRUE)
@@ -46,10 +48,13 @@ colorContrast <- function(m1, m2) {
   }
   dE00 <- unlist(d)
   
-  ## TODO: implement rules for color contrast classes
+  # NCSS color contrast classes
+  # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+  # value1, chroma1, value2, chroma2, dH, dV, dC
+  cc <- contrastClass(m1.pieces[[2]], m1.pieces[[3]], m2.pieces[[2]], m2.pieces[[3]], dH, dV, dC)
   
   # combine into DF and return
-  res <- data.frame(m1, m2, dH, dV, dC, dE00, stringsAsFactors = FALSE)
+  res <- data.frame(m1, m2, dH, dV, dC, dE00, cc, stringsAsFactors = FALSE)
   return(res)
 }
 

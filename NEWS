@@ -1,5 +1,5 @@
 -------------------------- aqp 1.17.05 (2019-05-18) -------------------------
-* new functions colorContrast() and huePosition
+* new functions colorContrast(), contrastClass(), and huePosition()
 
 -------------------------- aqp 1.17.02 (2019-03-15) -------------------------
 * fixed nasty bug in [-indexing when SPC contains a single profile (https://github.com/ncss-tech/aqp/issues/85)
