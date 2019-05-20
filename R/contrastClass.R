@@ -1,5 +1,16 @@
-
-
+## fully vectorized
+## determine color contrast class, based on
+## https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+## and 2-5 in the field book (version 3.0)
+#
+# v1: Munsell value of first color
+# c1: Munsell chroma of first color
+# v2: Munsell value of second color
+# c2: Munsell chroma of second color
+# dH: delta Hue
+# dV: delta Value
+# dC: delta Chroma
+# verbose: return a list for testing rules/cases
 contrastClass <- function(v1, c1, v2, c2, dH, dV, dC, verbose=FALSE) {
   
   # sanity check, all inputs must have the same length
