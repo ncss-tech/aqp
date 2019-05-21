@@ -204,7 +204,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 		stop('All inputs must be vectors of equal length.')
 	
   ## plyr <= 1.6 : check to make sure hue is a character
-  if(class(the_hue) == 'factor') {
+  if(is.factor(the_hue)) {
     cat('Notice: converting hue to character\n')
     the_hue <- as.character(the_hue)
   }
