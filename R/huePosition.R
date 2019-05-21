@@ -1,6 +1,7 @@
 # determine index of Munsell hue from 5R ---> 5PB
 # x: vector of Munsell hues
-huePosition <- function(x) {
+# returnHues: return hue ordering, x is ignored
+huePosition <- function(x, returnHues=FALSE) {
   # ordering via Tech Note #2
   # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
   hues <- c('5R', '7.5R', '10R', 
@@ -12,9 +13,13 @@ huePosition <- function(x) {
             '2.5B', '5B', '7.5B', '10B',
             '2.5PB', '5PB')
   
-  # not really needed, but maybe useful later
-  # hues <- factor(hues, levels = hues, ordered = TRUE)
+  # just the hues
+  if(returnHues) {
+    return(hues)
+  } else {
+    # convert hue into position
+    res <- match(x, hues)
+    return(res)
+  }
   
-  res <- match(x, hues)
-  return(res)
 }
