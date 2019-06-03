@@ -53,8 +53,10 @@ colorContrastPlot <- function(m1, m2, col.cex=1, col.font=2, d.cex=1, cc.font=3,
   
   # this is clunky but I can't figure out a better solution
   # iterate over delta-E00, format with plotmath and add text
+  # note on plotmath formatting and bquote() tricks
+  # https://lukemiller.org/index.php/2017/05/r-plotmath-functions-combined-with-variable-values/
   for(i in 1:nx) {
-    dE00.lab.expr <- bquote(Delta~E['00']~.(dE00.lab[i]))
+    dE00.lab.expr <- bquote(Delta*E['00']~.(dE00.lab[i]))
     text(x.pos[i], dE00.y[i], labels = dE00.lab.expr, adj = 0, font=3, cex=d.cex)
   }
 }
