@@ -13,7 +13,7 @@
 # labels: vector of labels for colors being compared
 # printMetrics: add contrast metrics
 # \dots{}: further arguments passed to colorspace::swatchplot
-colorContrastPlot <- function(m1, m2, col.cex=1, col.font=2, d.cex=1, cc.font=3, dE00.font=1, labels=c('m1', 'm2'), printMetrics=TRUE, ...) {
+colorContrastPlot <- function(m1, m2, col.cex=1, col.font=2, d.cex=1, cc.font=3, dE00.font=1, labels=c('m1', 'm2'), label.cex=1, label.font=1, printMetrics=TRUE, ...) {
   
   # compose list of swatchplot
   colors <- list(
@@ -23,7 +23,7 @@ colorContrastPlot <- function(m1, m2, col.cex=1, col.font=2, d.cex=1, cc.font=3,
   names(colors) <- labels
   
   # basic plot
-  colorspace::swatchplot(colors, ...)
+  colorspace::swatchplot(colors, cex=label.cex, font=label.font, ...)
   
   # eval constrat metrics
   d <- colorContrast(m1, m2)
