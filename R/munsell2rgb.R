@@ -118,7 +118,7 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   return(res)
 }
 
-
+## TODO: distance calculation should be delta-E00, sigma is delta-E00 to closest chip
 # color is a matrix/data.frame of sRGB values in range of [0,1]
 # ideally output from munsell2rgb()
 rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
