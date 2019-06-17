@@ -1,4 +1,5 @@
 ## TODO: `sigma` should be delta-E00
+## https://github.com/ncss-tech/aqp/issues/67
 # closest Munsell chip to LAB coordinates and error
 .closestMunselltoCIELAB <- function(lab) {
   lab <- as.matrix(lab)
