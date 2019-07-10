@@ -321,6 +321,38 @@ test_that("SPC profile ID get/set ", {
   
 })
 
+test_that("SPC profile ID reset integrity: site", {
+  
+  # test site 
+  data(sp4)
+  depths(sp4) <- id ~ top + bottom
+  
+  # save old ID and replace with known pattern
+  sp4$old_id <- profile_id(sp4)
+  profile_id(sp4) <- sprintf("%s-zzz", profile_id(sp4))
+  
+  # stripping the pattern should return original labels, in order
+  expect_equal(sp4$old_id, gsub('-zzz', '', profile_id(sp4)))
+  
+})
+
+
+test_that("SPC profile ID reset integrity: horizon", {
+
+  # test hz
+  data(sp4)
+  depths(sp4) <- id ~ top + bottom
+  
+  # save old ID and replace with known pattern
+  sp4$old_id <- as.vector(unlist(horizons(sp4)[idname(sp4)]))
+  profile_id(sp4) <- sprintf("%s-zzz", profile_id(sp4))
+  
+  # stripping the pattern should return original labels, in order
+  new.ids <- as.vector(unlist(horizons(sp4)[idname(sp4)]))
+  new.ids <- gsub(pattern='-zzz', replacement = '', x = new.ids)
+  expect_equal(sp4$old_id, new.ids)
+  
+})
 
 test_that("SPC horizon ID init conflicts", {
   
