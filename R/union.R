@@ -68,7 +68,7 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   # TODO: need a template for coordinate names if spatial data are present in all
   
   # reset profile ID names in all other objects
-  # also rest depth names
+  # also reset depth names
   for(i in 2:n.spc) {
     # save originals
     old.pID <- spc.list[[i]]$idcol
