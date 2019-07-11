@@ -55,3 +55,29 @@ test_that("profile_compare basics", {
 
 
 
+## this is a known failure point
+test_that("profile_compare preserves ID ordering after editing (#7)", {
+  
+  data(sp4)
+  depths(sp4) <- id ~ top + bottom
+  
+  # make copies
+  x <- sp4
+  y <- sp4
+  
+  # edit IDs after SPC init
+  # !! no sorting performed
+  profile_id(y) <- sprintf("%s-zzz", profile_id(y))
+  
+  # compare
+  x.d <- profile_compare(x, vars=c('ex_Ca_to_Mg', 'CEC_7'), k=0, max_d=40)
+  y.d <- profile_compare(y, vars=c('ex_Ca_to_Mg', 'CEC_7'), k=0, max_d=40)
+  
+  ## labels are adjusted, as if sort()-ed
+  x.ids <- attributes(x.d)$Labels
+  y.ids <- attributes(y.d)$Labels
+  expect_equal(x.ids, gsub('-zzz', '', y.ids))
+
+})
+
+
