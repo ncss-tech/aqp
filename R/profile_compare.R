@@ -133,7 +133,6 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 		rm(s.sub)
 		}
 
-	return(soil.matrix)
 	
 	##
 	## new version for computing slice-wise dissimilarities... fast! 
