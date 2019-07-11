@@ -39,9 +39,14 @@ m <- mpsplineSPC(x, var='p1', d=c(0, 5, 15, 30, 60, 100, 200))
 # check: OK
 str(m)
 
+# note sorting
+profile_id(m)
+
 
 # plot by group
 par(mar=c(0, 0, 3, 1))
+plot(m, color='p1', max.depth=175, name='', divide.hz=FALSE)
+
 groupedProfilePlot(m, groups = 'id_group', color='p1', max.depth=175, group.name.offset = -10, name='', divide.hz=FALSE)
 
 groupedProfilePlot(m, groups = 'method_group', color='p1', max.depth=175, group.name.offset = -10, name='', divide.hz=FALSE)
@@ -94,4 +99,12 @@ xyplot(top ~ p.q50 | factor(method_group), data=a, ylab='Depth', asp=1.5,
        cf=a$contributing_fraction,
        scales=list(x=list(alternating=1))
 )
+
+
+## profile compare breaks with just about anything created by union()  --> #7
+# fake property
+m$p2 <- rev(m$p1)
+# broken
+profile_compare(m, vars=c('p1', 'p2'), max_d=150, k=0)
+
 
