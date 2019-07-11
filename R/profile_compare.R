@@ -373,6 +373,13 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 		res <- rescale(res)
 	}
 	
+	## fail-safe check on ordering of input profile IDs vs. labels
+	## #7
+	test.labels <- ! profile_id(s) == attributes(res)$Labels
+	if(any(test.labels)) {
+	  stop('input/output IDs out of order\nthis happens when profile IDs have been changed after SPC init\nsorry, soon to be fixed (#7)', call. = FALSE)
+	}
+	
 	# result is a distance matrix
 	return(res)
 }
