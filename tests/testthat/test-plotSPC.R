@@ -101,4 +101,23 @@ test_that("plotSPC: re-ordering of profiles and relative spacing", {
 })
 
 
+test_that("plotSPC: re-ordering via relative spacing", {
+  
+  # re-order by adjusting the relative positions
+  x.pos <- length(sp1):1
+  
+  # explainer returns `lsp`
+  lsp <- explainPlotSPC(sp1, relative.pos = x.pos)
+  
+  # plotting order / IDs are not modified!
+  expect_equal(profile_id(sp1), lsp$pIDs)
+  expect_equal(lsp$plot.order, 1:length(sp1))
+  
+  # x0 adjusted as expected
+  expect_equal(lsp$x0, x.pos)
+})
+
+
+
+
 
