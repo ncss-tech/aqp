@@ -26,7 +26,8 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 plotSPC(x, color='soil_color', width=0.2, name=NULL, label=idname(x),
 alt.label=NULL, alt.label.col='black', cex.names=0.5, 
 cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, 
-print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, 
+print.id=TRUE, id.style='auto', plot.order=1:length(x), 
+relative.pos=1:length(x), add=FALSE, 
 scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x),
 max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, 
 shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE,
@@ -56,6 +57,7 @@ default.color=grey(0.95), \dots)
   \item{print.id}{should the profile id be printed above each profile? (TRUE)}
   \item{id.style}{profile ID printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
+  \item{relative.pos}{a vector of relative positions along the x-axis, within {1, n}, ignores \code{plot.order} see details}
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 
   \item{y.offset}{vertical offset for top of profiles} 
@@ -94,8 +96,11 @@ The \code{color} argument can either name a column containing R-compatible color
 
 Adjustments to the legend can be specified via \code{col.label} (legend title), \code{col.palette} (palette of colors, automatically expanded), \code{col.legend.cex} (legend scaling), and \code{n.legend} (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, \code{plotSPC} will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
 
+Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within {1,n} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{addDiagnosticBracket} and \code{addVolumeFraction} use the \code{relative.pos} values for subsequent annotation.
+
 The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
 }
+
 \value{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
 }
@@ -105,7 +110,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 \author{Dylan E. Beaudette}
 
 \seealso{
-\code{\link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
+\code{\link{explainPlotSPC}, \link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
 }
 \examples{
 data(sp1)
