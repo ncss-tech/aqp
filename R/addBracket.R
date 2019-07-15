@@ -84,9 +84,8 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   top <- (x$top * sf) + depth.offset
   bottom <- (x$bottom * sf) + depth.offset
   
-  # init sequence of x-coordinates
-  # depths are pre-sorted, so this is simple
-  # x.base <- 1:nrow(x)
+  ## x-coordinates
+  # 2019-07-15: using relative position
   x.base <- lsp$x0
   
   # normal case: both top and bottom defined

@@ -62,7 +62,8 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	  # get the current pofile, in plotting order
 		h <- horizons(x[plot.order[p.i], ])
 		
-		# determine left/right extent of symbols
+		## determine left/right extent of symbols
+		# 2019-07-15: using relative position as indexed by current profile
 		x.center <- x0[p.i]
 		x.left <- x.center - (w - w.offset)
 		x.right <- x.center + (w - w.offset)
