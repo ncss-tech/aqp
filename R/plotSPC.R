@@ -51,7 +51,7 @@ hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=plot.order, add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
   ## fudge factors
   # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
@@ -91,7 +91,6 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
               'extra_y_space'=extra_y_space)
   
   assign('last_spc_plot', lsp, envir=aqp.env, )
-  
   
   # get horizons
   h <- horizons(x)
@@ -225,7 +224,8 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 	}
   
   
-  # add horizons in specified order	
+  ## iterate over profile index from 1 -> n
+  ## note: there may not be `n` profiles
   for(i in 1:n) {
 	  # convert linear sequence into plotting order
 	  profile_i <- plot.order[i]
@@ -269,9 +269,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       this_profile_names <- ''
     
 	  
-	  # generate rectangle geometry
+	  ### generate rectangle geometry
     
-    # left-side of each sketch
+    ## center of each sketch
+    # 2019-07-15: added relative position feature, could use some more testing
     # x0 <- x.idx.offset + i
     x0 <- x.idx.offset + relative.pos[i]
     
