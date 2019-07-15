@@ -28,14 +28,13 @@ explainPlotSPC <- function(x, ...) {
   
   # original profile index text y-coordinate
   # roughly 10% of the max(transformed depths)
-  original.profile.idx.y <- lsp$y.offset + (-max(scaled.max.depths) * 0.1)
-  
+  original.profile.idx.y <- lsp$y.offset + (-max(scaled.max.depths) * 0.08)
   
   # inspect plotting area, very simple to overlay graphical elements
   segments(x0 = lsp$x0, x1=lsp$x0, y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
   
   # profiles are centered at integers, from 1 to length(obj)
-  axis(1, line=0.25, at=1:lsp$n, cex.axis=0.75, font=4, col='darkgreen', col.axis='darkgreen', lwd=2)
+  axis(1, line=0.25, at=round(lsp$x0, 2), cex.axis=0.75, font=4, col='darkgreen', col.axis='darkgreen', lwd=2)
   mtext('canvas x-coordinate', side=1, line=2.25, font=4, col='darkgreen')
   
   # y-axis is based on profile depths
@@ -53,7 +52,7 @@ explainPlotSPC <- function(x, ...) {
   text(x=x.space.x, y=x.space.y, labels = lsp$extra_x_space, cex=0.85, pos=1, font=2, col='orange')
   
   # plotting order
-  text(x=1:length(x), y=original.profile.idx.y, labels=lsp$plot.order, col='darkred', font=4, cex=0.75)
+  text(x=lsp$x0, y=original.profile.idx.y, labels=lsp$plot.order, col='darkred', font=4, cex=0.75)
   mtext('original profile index', side=3, line=0, font=4, col='darkred')
   
   invisible(lsp)
