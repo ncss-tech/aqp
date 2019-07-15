@@ -47,6 +47,7 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	plot.order <- lsp$plot.order
 	depth.offset <- lsp$y.offset
 	sf <- lsp$scaling.factor
+	x0 <- lsp$x0
 	
 	# horizontal shrinkage factor
 	## TODO: why is this hard-coded at '5' ?
@@ -62,7 +63,7 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 		h <- horizons(x[plot.order[p.i], ])
 		
 		# determine left/right extent of symbols
-		x.center <- p.i
+		x.center <- x0[p.i]
 		x.left <- x.center - (w - w.offset)
 		x.right <- x.center + (w - w.offset)
 	

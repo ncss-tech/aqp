@@ -86,7 +86,8 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   
   # init sequence of x-coordinates
   # depths are pre-sorted, so this is simple
-  x.base <- 1:nrow(x)
+  # x.base <- 1:nrow(x)
+  x.base <- lsp$x0
   
   # normal case: both top and bottom defined
   if(!missing(top) & !missing(bottom)) {
