@@ -4,12 +4,10 @@
 \docType{data}
 \title{Create a (redundant) horizon-level attribute from a site-level attribute}
 \description{Create a (redundant) horizon-level attribute from a site-level attribute. Specify a SoilProfileCollection and a site-level attribute from that SPC (by name) to recieve a vector of length equal to the number of horizons containing the site-level values. This vector is directly usable with the SoilProfileCollection horizon setter.}
-\usage{denormalize(spc, attribute)}
+\usage{denormalize(obj, attr)}
 \arguments{
-  \describe{
-    \item{\code{p}}{A SoilProfileCollection}
-    \item{\code{attr}}{Site-level attribute name (character string) to denormalize to horizon.}
-  }
+    \item{obj}{A SoilProfileCollection}
+    \item{attr}{Site-level attribute name (character string) to denormalize to horizon.}
 }
 \details{
 Denormalization is the process of trying to improve the read performance of a database, at the expense of losing some write performance, by adding redundant copies of data or by grouping data. Sometimes it is beneficial to have site-level attributes denormalized for grouping of horizon-level data in analyses. \code{denormalize} achieves this result for SoilProfileCollections. 
