@@ -32,7 +32,7 @@ explainPlotSPC <- function(x, ...) {
   
   
   # inspect plotting area, very simple to overlay graphical elements
-  segments(x0 = 1:length(x), x1=1:length(x), y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
+  segments(x0 = lsp$x0, x1=lsp$x0, y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
   
   # profiles are centered at integers, from 1 to length(obj)
   axis(1, line=0.25, at=1:lsp$n, cex.axis=0.75, font=4, col='darkgreen', col.axis='darkgreen', lwd=2)
