@@ -1,5 +1,6 @@
 -------------------------- aqp 1.17.06 (2019-07-15) -------------------------
 * plotSPC() gains a new argument for relative positioning: relative.pos
+* relative positioning helper function: fixOverlap(), see manual page for examples
 * explainPlotSPC(), addDiagnosticBracket(), and addVolumeFraction() updated accordingly
 
 -------------------------- aqp 1.17.05 (2019-05-18) -------------------------
