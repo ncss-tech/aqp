@@ -27,8 +27,19 @@ findOverlap <- function(x, thresh) {
   return(col.idx)
 }
 
-# fix overlap via random perterbation of affected elements
+## 2019-07-16 | DEB
+## fix overlap via random perterbation of affected elements
+## this function is actually quite stupid as it can converge on bogus results
+## scaled adjustments based on deviation from threshold distances would be better
+## or, SANN style adjustments
+##
 # x: vector of horizontal positions
+# thresh: threshold at which overlap is a problem
+# adj: adjustments are tested from runif(min=adj * -1, max=adj)
+# min.x: left boundary condition
+# max.x: right boundary condition
+# maxIter: maximum number of iterations to attempt before collapsing to integer sequence
+# trace: print diagnostics
 fixOverlap <- function(x, thresh=0.6, adj=0.1, min.x=0.8, max.x=length(x)+0.2, maxIter=1000, trace=FALSE) {
   
   # initial configuration
