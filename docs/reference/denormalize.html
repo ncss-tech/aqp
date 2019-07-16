@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
       </span>
     </div>
 
@@ -110,8 +110,21 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>denormalize</span>(<span class='no'>spc</span>, <span class='no'>attribute</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>denormalize</span>(<span class='no'>obj</span>, <span class='no'>attr</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>obj</th>
+      <td><p>A SoilProfileCollection</p></td>
+    </tr>
+    <tr>
+      <th>attr</th>
+      <td><p>Site-level attribute name (character string) to denormalize to horizon.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Denormalization is the process of trying to improve the read performance of a database, at the expense of losing some write performance, by adding redundant copies of data or by grouping data. Sometimes it is beneficial to have site-level attributes denormalized for grouping of horizon-level data in analyses. <code>denormalize</code> achieves this result for SoilProfileCollections.</p>
@@ -147,6 +160,7 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 

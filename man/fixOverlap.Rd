@@ -7,7 +7,7 @@
 \description{This is a very simple optimization algorithm for adjusting horizontal sketch positions until affected profiles are farter apart than a given threshold. Rank-ordering and boundary conditions are enforced on the adjustments. Failure to converge within \code{maxIter} results in an integer sequence.}
 
 \usage{
-fixOverlap(x, thresh = 0.6, adj = 0.1, 
+fixOverlap(x, thresh = 0.6, adj = 0.2, 
 min.x = 0.8, max.x = length(x) + 0.2, 
 maxIter = 1000, trace = FALSE)
 }

@@ -33,6 +33,11 @@ findOverlap <- function(x, thresh) {
 ## scaled adjustments based on deviation from threshold distances would be better
 ## or, SANN style adjustments
 ##
+## ideas:
+## * cooling ala SANN -> smaller adjustments through time
+## * perturbations should not increase overlap
+## * debugging output
+##
 # x: vector of horizontal positions
 # thresh: threshold at which overlap is a problem
 # adj: adjustments are tested from runif(min=adj * -1, max=adj)
@@ -40,7 +45,7 @@ findOverlap <- function(x, thresh) {
 # max.x: right boundary condition
 # maxIter: maximum number of iterations to attempt before collapsing to integer sequence
 # trace: print diagnostics
-fixOverlap <- function(x, thresh=0.6, adj=0.1, min.x=0.8, max.x=length(x)+0.2, maxIter=1000, trace=FALSE) {
+fixOverlap <- function(x, thresh=0.6, adj=0.2, min.x=0.8, max.x=length(x)+0.2, maxIter=1000, trace=FALSE) {
   
   # initial configuration
   ov <- findOverlap(x, thresh)
@@ -84,6 +89,20 @@ fixOverlap <- function(x, thresh=0.6, adj=0.1, min.x=0.8, max.x=length(x)+0.2, m
         next
       }
       
+      ## this may be too strict: 85% -> 75% success rate if enabled
+      # # perturbations should not increase number of affected positions
+      # # check to be sure
+      # len <- length(findOverlap(x.test, thresh))
+      # # stats[[i]] <- len
+      # if(len > length(ov)) {
+      #   # print('wrong turn')
+      #   i <- i + 1
+      #   next
+      # }
+      
+      ## alternative idea: perturbations should minimize overlap
+      ## how to quantify?
+      
       # apply perturbation to working copy
       x <- x.test
       
@@ -97,6 +116,7 @@ fixOverlap <- function(x, thresh=0.6, adj=0.1, min.x=0.8, max.x=length(x)+0.2, m
     message(sprintf("%s iterations", i))
   }
   
+
   return(x)
 }
 

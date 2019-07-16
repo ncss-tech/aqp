@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
       </span>
     </div>
 
@@ -113,7 +113,8 @@
     <pre class="usage">plotSPC(x, color='soil_color', width=0.2, name=NULL, label=idname(x),
 alt.label=NULL, alt.label.col='black', cex.names=0.5, 
 cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, 
-print.id=TRUE, id.style='auto', plot.order=1:length(x), add=FALSE, 
+print.id=TRUE, id.style='auto', plot.order=1:length(x), 
+relative.pos=1:length(x), add=FALSE, 
 scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x),
 max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, 
 shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE,
@@ -183,6 +184,10 @@ default.color=grey(0.95), &#8230;)</pre>
     <tr>
       <th>plot.order</th>
       <td><p>a vector describing the order in which individual SoilProfile objects from the parent should be plotted</p></td>
+    </tr>
+    <tr>
+      <th>relative.pos</th>
+      <td><p>a vector of relative positions along the x-axis, within 1, n, ignores <code>plot.order</code> see details</p></td>
     </tr>
     <tr>
       <th>add</th>
@@ -303,6 +308,8 @@ default.color=grey(0.95), &#8230;)</pre>
 <p>If the column containing horizon designations is not specified (the <code>name</code> argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations.</p>
 <p>The <code>color</code> argument can either name a column containing R-compatible colors, possibly created via <code><a href='munsell2rgb.html'>munsell2rgb</a></code>, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.</p>
 <p>Adjustments to the legend can be specified via <code>col.label</code> (legend title), <code>col.palette</code> (palette of colors, automatically expanded), <code>col.legend.cex</code> (legend scaling), and <code>n.legend</code> (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, <code>plotSPC</code> will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.</p>
+<p>Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via <code>relative.pos</code> argument. This should be a vector of positions within 1,n that are used for horizontal placement. Default values are <code>1:length(x)</code>. Care must be taken when both <code>plot.order</code> and <code>relative.pos</code> are used simultaneously: <code>relative.pos</code> specifies horizontal placement after sorting. <code>addDiagnosticBracket</code> and <code>addVolumeFraction</code> use the <code>relative.pos</code> values for subsequent annotation.</p>
+<p>Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with <code><a href='fixOverlap.html'>fixOverlap(pos)</a></code>, where <code>pos</code> is the original vector of relative positions.</p>
 <p>The <code>x.idx.offset</code> argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different <code>SoilProfileCollection</code> objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -315,7 +322,7 @@ default.color=grey(0.95), &#8230;)</pre>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='SoilProfileCollection-class.html'>SoilProfileCollection-class</a>, <a href='https://www.rdocumentation.org/packages/base/topics/pretty'>pretty</a>, <a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a>, <a href='addBracket.html'>addBracket</a>, <a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
+    <div class='dont-index'><p><code><a href='fixOverlap.html'>fixOverlap</a>, explainPlotSPC, <a href='SoilProfileCollection-class.html'>SoilProfileCollection-class</a>, <a href='https://www.rdocumentation.org/packages/base/topics/pretty'>pretty</a>, <a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a>, <a href='addBracket.html'>addBracket</a>, <a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
