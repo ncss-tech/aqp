@@ -1,3 +1,5 @@
+## 2019-07-16: moved util functions to `sketch-utils.R`
+
 
 # split legend into two rows, and create indices
 # any more classes than that and things become impossible to read
@@ -18,20 +20,6 @@
   
   return(res)
 }
-
-
-
-# simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
-# based on "red book" version 3.0
-hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
-	x <- as.character(x)
-	x.code <- match(x, codes)
-	x.offset <- offset[x.code]
-	x.offset <- ifelse(is.na(x.offset), 0, x.offset)
-	return(x.offset)
-}
-
-
 
 # Function testing the validity of a colour expressed as a character string
 # Uses col2rgb() to test the validity
