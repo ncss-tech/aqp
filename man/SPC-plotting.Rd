@@ -57,7 +57,7 @@ default.color=grey(0.95), \dots)
   \item{print.id}{should the profile id be printed above each profile? (TRUE)}
   \item{id.style}{profile ID printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'}
   \item{plot.order}{a vector describing the order in which individual SoilProfile objects from the parent should be plotted}
-  \item{relative.pos}{a vector of relative positions along the x-axis, within {1, n}, ignores \code{plot.order} see details}
+  \item{relative.pos}{a vector of relative positions along the x-axis, within \{1, n\}, ignores \code{plot.order} see details}
   \item{add}{add to an existing figure} 
   \item{scaling.factor}{vertical scaling of the profile heights} 
   \item{y.offset}{vertical offset for top of profiles} 
@@ -96,7 +96,7 @@ The \code{color} argument can either name a column containing R-compatible color
 
 Adjustments to the legend can be specified via \code{col.label} (legend title), \code{col.palette} (palette of colors, automatically expanded), \code{col.legend.cex} (legend scaling), and \code{n.legend} (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, \code{plotSPC} will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
 
-Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within {1,n} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{addDiagnosticBracket} and \code{addVolumeFraction} use the \code{relative.pos} values for subsequent annotation.
+Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within \{1,n\} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{addDiagnosticBracket} and \code{addVolumeFraction} use the \code{relative.pos} values for subsequent annotation.
 
 Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with \code{fixOverlap(pos)}, where \code{pos} is the original vector of relative positions. 
 
