@@ -86,7 +86,7 @@ previewColors <- function(cols, method='grid', col.order=NULL, nrow=ceiling(sqrt
     # simple plot, no indication of density
     par(mar=c(1,1,3,1))
     plot(mds, type='n', axes=FALSE)
-    grid(nx=10, ny=10, par()$fg)
+    grid(nx=10, ny=10, col=par('fg'))
     points(mds, pch=15, col=cols, cex=pt.cex)
     box()
   }

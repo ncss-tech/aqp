@@ -8,7 +8,7 @@
 
 \usage{
 colorQuantiles(soilColors, p = c(0.05, 0.5, 0.95))
-plotColorQuantiles(res, title='', mar=c(2,1.5,1,1))
+plotColorQuantiles(res, pt.cex=7, title='', mar=c(2,1.5,1,1))
 }
 
 \arguments{
@@ -16,6 +16,7 @@ plotColorQuantiles(res, title='', mar=c(2,1.5,1,1))
   \item{p}{marginal quantiles of interest}
   
   \item{res}{list returned by \code{colorQuantiles}}
+  \item{pt.cex}{scaling factor for color chips}
   \item{title}{optional title printed above color quantile figure}
   \item{mar}{customized margins, see details}
 }
