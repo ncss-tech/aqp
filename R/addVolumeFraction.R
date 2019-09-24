@@ -38,9 +38,24 @@
 	}
 
 
+## TODO: symbol size must be controlled by `res`
 # add volume fraction information to an existing SPC plot
 addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=1, col='black') {
 	
+  # color should be either:
+  # single color name / code
+  # vector of colors with length == nrow(x)
+  
+  # simplest case, single color vector
+  if(length(col) == 1) {
+    col <- rep(col, times=nrow(x))
+  } else {
+    # check to make sure that vector of colors is the same length as number of horizons
+    if(length(col) != nrow(x))
+      stop('length of `col` should be either 1 or nrow(x)', call. = FALSE)
+  }
+    
+  
 	# get plotting details from aqp environment
 	lsp <- get('last_spc_plot', envir=aqp.env)
 	w <- lsp$width
@@ -50,8 +65,8 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	x0 <- lsp$x0
 	
 	# horizontal shrinkage factor
-	## TODO: why is this hard-coded at '5' ?
-	w.offset <- w / 5
+	## TODO: why is this hard-coded ?
+	w.offset <- w / 7
 	
 	# get top/bottom colnames
 	hd <- horizonDepths(x)
@@ -79,6 +94,11 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 			## TODO: still throws errors
 			# just those with data
 			if(nrow(v) > 0 ) {
+			  
+			  # get the current color from vector of colors
+			  # typically the same color repeated, but could be as many colors as hz
+			  v$color <- col[h.i]
+			  
         # jitter and rescale x-coordinates
 				v$x <- rescale(jitter(v$x), to=c(x.left, x.right))
 		
@@ -93,7 +113,8 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 				p.cex <- runif(nrow(v), min=cex.min, max=cex.max)
 		
 				# add jittered points
-				points(v$x, v$y, cex=p.cex, col=col, pch=pch)
+				# note that color comes from `v`
+				points(v$x, v$y, cex=p.cex, col=v$color, pch=pch)
 			}
 		}
 	}	

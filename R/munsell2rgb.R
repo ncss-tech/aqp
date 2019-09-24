@@ -95,6 +95,9 @@ getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
 
 
 ## TODO: this will not correctly parse gley
+## TODO: re-write with REGEX for extraction from within other text
+## TODO: short-circuit for obviously wrong Munsell codes
+#
 # convert a color string '10YR 4/3' to sRGB or R color
 parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   # sanity check:

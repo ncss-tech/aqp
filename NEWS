@@ -1,5 +1,7 @@
 -------------------------- aqp 1.17.07 (2019-09-17) -------------------------
 * generalize.hz() gets a \dots argument for passing additional arguments to grep(), e.g. perl=TRUE
+* addVolumeFraction() can now accept a vector of colors, as many as number of horizons
+* new sample data
 
 -------------------------- aqp 1.17.06 (2019-07-15) -------------------------
 * plotSPC() gains a new argument for relative positioning: relative.pos

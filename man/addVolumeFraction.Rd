@@ -15,7 +15,7 @@ cex.max = 0.5, pch = 1, col = "black")
   \item{cex.min}{minimum symbol size}
   \item{cex.max}{maximum symbol size}
   \item{pch}{plotting character}
-  \item{col}{color of the symbol}
+  \item{col}{symbol color, either a single color or as many colors as there are horizons in `x`}
 }
 
 \details{This function can only be called after plotting a \code{SoilProfileCollection} object.}
@@ -34,7 +34,7 @@ data(loafercreek, package='soilDB')
 # subset first 10 profiles 
 s <- loafercreek[1:10, ]
 
-# replace 0% frags with NA
+# replace 0 percent frags with NA
 s$total_frags_pct[which(s$total_frags_pct == 0)] <- NA
 
 # plot in random order, note that annotations follow
