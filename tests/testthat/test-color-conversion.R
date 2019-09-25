@@ -96,4 +96,13 @@ test_that("Munsell --> LAB + sRGB coordinates", {
   expect_equal(test.1[, 3], test.4[, 3], tolerance=0.1)
 })
 
+test_that("similar colors result in same, closest chip", {
+  
+  cols <- t(col2rgb(c('#5F5345', '#554636'))) / 255
+  res <-  rgb2munsell(cols)
+  
+  expect_equal(res$hue[1], res$hue[2])
+  expect_equal(res$value[1], res$value[2])
+  expect_equal(res$chroma[1], res$chroma[2])
+})
 
