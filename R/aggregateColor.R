@@ -1,12 +1,14 @@
-## TODO: user-defined weight function
-## TODO: try with diagnostic features
-## working on issues in #98
-## Note: 'groups' can be either site/horizon attribute, need not be a factor
+
 # x: SPC
-# groups: groups to aggregate over
+# groups: groups to aggregate over, can be either site/horizon attribute, need not be a factor
 # col: r-compatible hex notation of color
 # k: number of groups to reduce colors to (within each group), conditioned on unique colors available
-aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
+# profile_wt: weighting via site-level attribute
+aggregateColor2 <- function(x, groups='genhz', col='soil_color', k=NULL, profile_wt=NULL) {
+  
+  # sanity check, need this for color distance eval
+  if(!requireNamespace('farver'))
+    stop('pleast install the `farver` package.', call.=FALSE)
   
   # sanity check
   if(!is.null(k)) {
@@ -16,6 +18,21 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
     }
   }
   
+  # sanity check: profile weight must be a valid site-level attribute
+  if(!is.null(profile_wt)) {
+    if(! profile_wt %in% siteNames(x)) {
+      stop('`profile_wt` must be a site-level attribute of `x`', call. = FALSE)
+    }
+  }
+  
+  # sanity check: groups must be a horizon-level attribute
+  if(! groups %in% horizonNames(x))
+    stop('`groups` must be a horizon-level attribute of `x`', call. = FALSE)
+  
+  # sanity check: col must be a horizon-level attribute
+  if(! col %in% horizonNames(x))
+    stop('`col` must be a horizon-level attribute of `x`', call. = FALSE)
+  
   ## hack to make R CMD check --as-cran happy
   top <- bottom <- thick <- NULL
   
@@ -23,7 +40,8 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
   h <- as(x, 'data.frame')
   
   # keep track of just those variables we are using
-  vars <- c(groups, horizonDepths(x), col)
+  # profile_wt is NULL by default
+  vars <- c(groups, horizonDepths(x), col, profile_wt)
   
   # remove missing data
   # note: missing color data will result in 'white' when converting to sRGB, why?
@@ -43,6 +61,12 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
     h.no.na$thick[idx] <- 1
   }
   
+  # apply site-level weighting here, if present
+  if(!is.null(profile_wt)) {
+    # multiply thickness by site-level weight
+    h.no.na$thick <- h.no.na$thick * h.no.na[[profile_wt]]
+  }
+  
   # drop empty group levels
   h.no.na[[groups]] <- factor(h.no.na[[groups]])
   
@@ -56,32 +80,46 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
     
     if(is.numeric(k) & n.cols > 1) {
       
-      ## TODO: color conversion should only happen 1 time
-      
       # condition number of classes on available data
       k.adj <- pmin(k, n.cols - 1)
       
+      # work with a unique subset, there is no need to compute distances / cluster all colors
+      lut <- data.frame(col=unique(i[[col]]), stringsAsFactors = FALSE)
+      
+      # same order as LUT
       # convert to sRGB
-      # NA must be removed prior to this step
-      v <- t(col2rgb(i[[col]])) / 255
+      # NA will create bogus colors, filtered above
+      v <- t(col2rgb(lut$col) / 255)
       
       # convert to LAB
       v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
       
-      # clustering in CIE LAB space
-      # TODO: save clustering results for later
-      v.pam <- pam(v, k = k.adj, stand = FALSE)
+      # compute perceptually based distance matrix on unique colors
+      dE00 <- farver::compare_colour(v, v, from_space='lab', method='CIE2000', white_from='D65')
+      dE00 <- as.dist(dE00)
       
-      # convert medoids back to sRGB
-      med.sRGB <- convertColor(v.pam$medoids, from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
+      
+      # clustering from distance matrix
+      # TODO: save clustering results for later
+      v.pam <- pam(dE00, k = k.adj, diss = TRUE, pamonce=5)
+      
+      # put clustering vector into LUT
+      lut$cluster <- v.pam$clustering
+      
+      # get medoid colors
+      med.col <- lut$col[v.pam$medoids]
+      
+      # expand original colors to medoid colors based on LUT
+      idx <- base::match(i[[col]], lut$col)
       
       # replace original colors with discretized colors
-      i[[col]] <- rgb(med.sRGB, maxColorValue = 1)[v.pam$clustering]
+      i[[col]] <- med.col[lut$cluster[idx]]
     }
     
     # aggregate depth by unique soil color
     # this assumes that thickness > 0, otherwise NaN is returned
     res <- ddply(i, col, summarise, weight=sqrt(sum(thick)) * length(thick), n.hz=length(thick))
+    
     
     # sort by thickness-- this is our metric for relevance
     res <- res[order(res$weight, decreasing=TRUE), ]
