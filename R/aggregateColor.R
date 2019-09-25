@@ -1,5 +1,6 @@
 ## TODO: user-defined weight function
 ## TODO: try with diagnostic features
+## working on issues in #98
 ## Note: 'groups' can be either site/horizon attribute, need not be a factor
 # x: SPC
 # groups: groups to aggregate over
