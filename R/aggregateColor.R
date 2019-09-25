@@ -68,7 +68,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
       # convert to LAB
       v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
       
-      # clustering
+      # clustering in CIE LAB space
       # TODO: save clustering results for later
       v.pam <- pam(v, k = k.adj, stand = FALSE)
       
