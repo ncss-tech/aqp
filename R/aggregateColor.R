@@ -4,7 +4,7 @@
 # col: r-compatible hex notation of color
 # k: number of groups to reduce colors to (within each group), conditioned on unique colors available
 # profile_wt: weighting via site-level attribute
-aggregateColor2 <- function(x, groups='genhz', col='soil_color', k=NULL, profile_wt=NULL) {
+aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL, profile_wt=NULL) {
   
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver'))
