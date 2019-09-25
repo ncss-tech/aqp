@@ -70,7 +70,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL) {
       
       # clustering
       # TODO: save clustering results for later
-      v.pam <- pam(v, k = k.adj, stand = TRUE)
+      v.pam <- pam(v, k = k.adj, stand = FALSE)
       
       # convert medoids back to sRGB
       med.sRGB <- convertColor(v.pam$medoids, from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
