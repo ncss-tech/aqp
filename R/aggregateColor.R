@@ -1,4 +1,7 @@
 
+## pending TODOs
+# https://github.com/ncss-tech/aqp/issues/98
+
 # x: SPC
 # groups: groups to aggregate over, can be either site/horizon attribute, need not be a factor
 # col: r-compatible hex notation of color
@@ -6,13 +9,14 @@
 # profile_wt: weighting via site-level attribute
 aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL, profile_wt=NULL) {
   
-  # sanity check, need this for color distance eval
-  if(!requireNamespace('farver'))
-    stop('pleast install the `farver` package.', call.=FALSE)
-  
   # sanity check
   if(!is.null(k)) {
     k <- round(k)
+    
+    # sanity check, need this for color distance eval
+    if(!requireNamespace('farver'))
+      stop('pleast install the `farver` package.', call.=FALSE)
+    
     if(is.na(k)) {
       stop('k must be a single integer > 0')
     }
