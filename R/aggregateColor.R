@@ -30,8 +30,8 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', k=NULL, profile_
   }
   
   # sanity check: groups must be a horizon-level attribute
-  if(! groups %in% horizonNames(x))
-    stop('`groups` must be a horizon-level attribute of `x`', call. = FALSE)
+  if(! groups %in% names(x))
+    stop('`groups` must be a site or horizon attribute of `x`', call. = FALSE)
   
   # sanity check: col must be a horizon-level attribute
   if(! col %in% horizonNames(x))
