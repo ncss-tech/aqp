@@ -31,9 +31,9 @@
   
   ## TODO: 
   ##   use distance matrix via delta-E00 as implemented in farver::compare_colour()
-  ##   switch to cluster::clara()
-  # use PAM to cluster
-  cl <- pam(x.slices[, -1], k = k, stand = FALSE)
+  ##   see recent changes in aggregateSoilColor() for dE00 example
+  # use PAM to cluster, note pamonce=5 used for optimization
+  cl <- pam(x.slices[, -1], k = k, stand = FALSE, pamonce = 5)
   
   # get data
   x.medoids <- x.slices[cl$id.med, c(idname(x), 'L', 'A', 'B')]
