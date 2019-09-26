@@ -118,6 +118,39 @@ test_that("plotSPC: re-ordering via relative spacing", {
 })
 
 
+test_that("addVolumeFraction works", {
+  
+  # does it work with default arguments?
+  plotSPC(sp1, name='name')
+  expect_silent(addVolumeFraction(sp1, 'prop'))
+  
+  # additional arguments
+  expect_silent(addVolumeFraction(sp1, 'prop', res = 5))
+  
+  expect_silent(addVolumeFraction(sp1, 'prop', cex.min = 0.5, cex.max = 2))
+  
+  expect_silent(addVolumeFraction(sp1, 'prop', pch = 15))
+  
+  # color specification is important:
+  # single color
+  expect_silent(addVolumeFraction(sp1, 'prop', col = 'red'))
+  
+  # or vector of colors, must be same length as nrow(x)
+  expect_silent(addVolumeFraction(sp1, 'prop', col = rep('green', times=nrow(sp1))))
+
+})
 
 
+test_that("addVolumeFraction expected errors", {
+  
+  plotSPC(sp1, name='name')
+
+  
+  # bad column name
+  expect_error(addVolumeFraction(sp1, 'prop1'))
+  
+  # incorrectly specified colors
+  expect_error(addVolumeFraction(sp1, 'prop', col = c('red', 'green')))
+  
+})
 
