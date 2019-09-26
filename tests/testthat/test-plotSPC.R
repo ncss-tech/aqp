@@ -154,3 +154,19 @@ test_that("addVolumeFraction expected errors", {
   
 })
 
+# https://github.com/ncss-tech/aqp/issues/8
+test_that("addVolumeFraction fractional horizon depths", {
+  
+  plotSPC(sp1, name='name')
+  
+  
+  # modify depths
+  sp1$top[4] <- sp1$top[4] + 0.5
+  sp1$bottom[3] <- sp1$top[4]
+  
+  # fractional horizon depths
+  expect_message(addVolumeFraction(sp1, 'prop'), regexp = 'truncating')
+  
+})
+
+

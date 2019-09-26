@@ -1,4 +1,11 @@
 
+## TODO: this could use an overhaul:
+##  * symbol size / resolution should be determined in context
+##  * area approximation should work with a larger grid, after scaling to avoid frational thickness constraints
+##  * standardize symbology with rect() vs. points() and cex
+##   -> init checkerboard, select squares, fill squares
+##   -> number / size of squares is the only parameter
+
 ## doesn't work with fractional depths: https://github.com/ncss-tech/aqp/issues/8
 # convert volume pct [0, 100] into DF of points along a res x res grid
 .volume2df <- function(v, depth, res) {
@@ -57,10 +64,14 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
       stop('length of `col` should be either 1 or nrow(x)', call. = FALSE)
   }
   
+  # ensure that `colname` is a horizon-level attribute
+  if(! colname %in% horizonNames(x)) {
+    stop(sprintf("%s is not a horizon-level attribute", colname), call. = FALSE)
+  }
   
   # test for values < 0.5, could be a fraction [0,1] vs. percent [0,100]
   if(all( na.omit(horizons(x)[[colname]]) < 0.5) ) {
-    message(sprintf("all %s valuies are < 0.5, likely a fraction vs. percent", colname))
+    message(sprintf("all %s values are < 0.5, likely a fraction vs. percent", colname))
   }
   
 	# get plotting details from aqp environment
