@@ -20,6 +20,7 @@
 \author{Dylan E. Beaudette}
 
 \examples{
+\dontrun{
 data(sp1)
 
 # check original distribution of hz designations
@@ -51,6 +52,7 @@ res <- generalize.hz(x, new = n, pat=p, perl=TRUE)
 
 # double-check: OK
 table(res, x)
+}
 }
 
 \keyword{manip}

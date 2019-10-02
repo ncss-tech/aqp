@@ -50,6 +50,7 @@ importFrom(grid,
 )
 
 importFrom(lattice,
+  xyplot,
   levelplot,
   trellis.par.get,
   panel.levelplot,
@@ -57,7 +58,10 @@ importFrom(lattice,
   panel.lines,
   panel.polygon,
   panel.segments,
-  panel.grid
+  panel.grid,
+  panel.rect,
+  panel.text,
+  strip.custom
 )
 
 importFrom(cluster, 

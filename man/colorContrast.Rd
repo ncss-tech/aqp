@@ -1,8 +1,9 @@
 \name{colorContrast}
 \alias{colorContrast}
+\alias{colorContrastPlot}
 
 \title{Metrics of Contrast Suitable for Comparing Soil Colors}
-\description{}
+\description{Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric.}
 \usage{
 colorContrast(m1, m2)
 }
@@ -34,7 +35,7 @@ A \code{data.frame} with the following columns:
 
 
 \seealso{
-\code{\link{contrastClass}}, \code{\link{huePosition}}
+\code{\link{colorContrastPlot}}, \code{\link{huePosition}}
 }
 
 \examples{
