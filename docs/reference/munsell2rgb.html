@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
       </span>
     </div>
 
@@ -77,6 +77,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -232,8 +235,7 @@
 
 
 <span class='co'># plot: note that we are setting panel order from red--&gt;yellow</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lattice</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/xyplot'>xyplot</a></span>(<span class='no'>value</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>chroma</span>) <span class='kw'>|</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>hue</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='no'>hues</span>),
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lattice</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'lattice' was built under R version 3.5.3</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/xyplot'>xyplot</a></span>(<span class='no'>value</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>chroma</span>) <span class='kw'>|</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>hue</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='no'>hues</span>),
 <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Common Soil Colors"</span>, <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>1</span>), <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>),
 <span class='kw'>strip</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/strip.default'>strip.custom</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/gray'>grey</a></span>(<span class='fl'>0.85</span>)),
 <span class='kw'>data</span><span class='kw'>=</span><span class='no'>d</span>, <span class='kw'>as.table</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>subscripts</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Chroma'</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Value'</span>,
@@ -245,7 +247,7 @@
 <span class='co'># try again, this time annotate with LAB coordinates:</span>
 <span class='kw'>if</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>colorspace</span>)) {
   <span class='no'>d.rgb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='no'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-  <span class='no'>d.lab</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='no'>d.rgb</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/colorspace/topics/sRGB'>sRGB</a></span>(<span class='no'>r</span>,<span class='no'>g</span>,<span class='no'>b</span>)), <span class='st'>'LAB'</span>)
+  <span class='no'>d.lab</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='no'>d.rgb</span>, <span class='fu'><a href='http://colorspace.R-Forge.R-project.org//reference/sRGB.html'>sRGB</a></span>(<span class='no'>r</span>,<span class='no'>g</span>,<span class='no'>b</span>)), <span class='st'>'LAB'</span>)
   <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='no'>d</span>, <span class='no'>d.lab</span>@<span class='kw'>coords</span>)
 
   <span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/xyplot'>xyplot</a></span>(<span class='no'>value</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>chroma</span>) <span class='kw'>|</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>hue</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='no'>hues</span>),
@@ -284,7 +286,7 @@
 <span class='no'>sp1.rgb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='no'>sp1</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
 
 <span class='co'># convert into LAB color space</span>
-<span class='no'>sp1.lab</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='no'>sp1.rgb</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/colorspace/topics/sRGB'>sRGB</a></span>(<span class='no'>r</span>,<span class='no'>g</span>,<span class='no'>b</span>)), <span class='st'>'LAB'</span>)
+<span class='no'>sp1.lab</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='no'>sp1.rgb</span>, <span class='fu'><a href='http://colorspace.R-Forge.R-project.org//reference/sRGB.html'>sRGB</a></span>(<span class='no'>r</span>,<span class='no'>g</span>,<span class='no'>b</span>)), <span class='st'>'LAB'</span>)
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp1.lab</span>)
 }</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'>
 <span class='co'># convert a non-standard color to closest "chip" in `munsell` look-up table</span>

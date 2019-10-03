@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
       </span>
     </div>
 
@@ -77,6 +77,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -110,7 +113,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>aggregateColor</span>(<span class='no'>x</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>"genhz"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"soil_color"</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>aggregateColor</span>(<span class='no'>x</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>"genhz"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"soil_color"</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>profile_wt</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +133,10 @@
     <tr>
       <th>k</th>
       <td><p>single integer specifiying the number of colors discretized via PAM, see details</p></td>
+    </tr>
+    <tr>
+      <th>profile_wt</th>
+      <td><p>the name of a site-level attribute used to modify weighting, e.g. area</p></td>
     </tr>
     </table>
     
@@ -175,8 +182,7 @@ where w_i is the weight associated with color i, thickness_i is the total thickn
 
 <span class='co'># aggregate colors over site-level attribute: 'group'</span>
 <span class='co'># discretize colors to 4 per group</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'group'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'group'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: farver</span></div><div class='input'>
 <span class='co'># aggregate colors over depth-slices</span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>sp1</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>) ~ <span class='no'>soil_color</span>)
 <span class='no'>s</span>$<span class='no'>slice</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='no'>s</span>$<span class='no'>top</span>, <span class='st'>' cm'</span>)

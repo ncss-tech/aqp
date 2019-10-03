@@ -1,3 +1,5 @@
+## TODO: mark as depreciated and move to slice()
+
 # convert a set of horizon depths and property into a continuous sequence
 # returning a vector of standardized length
 # suitable for slotting

@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
       </span>
     </div>
 
@@ -77,6 +77,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -157,7 +160,7 @@
 <span class='co'># convert Munsell -&gt; sRGB -&gt; LAB</span>
 <span class='no'>col.rgb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='no'>soil_minerals</span>$<span class='no'>hue</span>, <span class='no'>soil_minerals</span>$<span class='no'>value</span>,
 <span class='no'>soil_minerals</span>$<span class='no'>chroma</span>, <span class='kw'>return_triplets</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>col.lab</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/colorspace/topics/sRGB'>sRGB</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>col.rgb</span>)), <span class='st'>'LAB'</span>)@<span class='kw'>coords</span>
+<span class='no'>col.lab</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='fu'><a href='http://colorspace.R-Forge.R-project.org//reference/sRGB.html'>sRGB</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>col.rgb</span>)), <span class='st'>'LAB'</span>)@<span class='kw'>coords</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/row.names'>row.names</a></span>(<span class='no'>col.lab</span>) <span class='kw'>&lt;-</span> <span class='no'>soil_minerals</span>$<span class='no'>mineral</span>
 
 <span class='co'># divisive hierarchical clustering of LAB coordinates</span>

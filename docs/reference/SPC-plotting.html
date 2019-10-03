@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
       </span>
     </div>
 
@@ -77,6 +77,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -187,7 +190,7 @@ default.color=grey(0.95), &#8230;)</pre>
     </tr>
     <tr>
       <th>relative.pos</th>
-      <td><p>a vector of relative positions along the x-axis, within 1, n, ignores <code>plot.order</code> see details</p></td>
+      <td><p>a vector of relative positions along the x-axis, within {1, n}, ignores <code>plot.order</code> see details</p></td>
     </tr>
     <tr>
       <th>add</th>
@@ -308,7 +311,7 @@ default.color=grey(0.95), &#8230;)</pre>
 <p>If the column containing horizon designations is not specified (the <code>name</code> argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations.</p>
 <p>The <code>color</code> argument can either name a column containing R-compatible colors, possibly created via <code><a href='munsell2rgb.html'>munsell2rgb</a></code>, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.</p>
 <p>Adjustments to the legend can be specified via <code>col.label</code> (legend title), <code>col.palette</code> (palette of colors, automatically expanded), <code>col.legend.cex</code> (legend scaling), and <code>n.legend</code> (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, <code>plotSPC</code> will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.</p>
-<p>Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via <code>relative.pos</code> argument. This should be a vector of positions within 1,n that are used for horizontal placement. Default values are <code>1:length(x)</code>. Care must be taken when both <code>plot.order</code> and <code>relative.pos</code> are used simultaneously: <code>relative.pos</code> specifies horizontal placement after sorting. <code>addDiagnosticBracket</code> and <code>addVolumeFraction</code> use the <code>relative.pos</code> values for subsequent annotation.</p>
+<p>Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via <code>relative.pos</code> argument. This should be a vector of positions within {1,n} that are used for horizontal placement. Default values are <code>1:length(x)</code>. Care must be taken when both <code>plot.order</code> and <code>relative.pos</code> are used simultaneously: <code>relative.pos</code> specifies horizontal placement after sorting. <code>addDiagnosticBracket</code> and <code>addVolumeFraction</code> use the <code>relative.pos</code> values for subsequent annotation.</p>
 <p>Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with <code><a href='fixOverlap.html'>fixOverlap(pos)</a></code>, where <code>pos</code> is the original vector of relative positions.</p>
 <p>The <code>x.idx.offset</code> argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different <code>SoilProfileCollection</code> objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.</p>
     

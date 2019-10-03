@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
       </span>
     </div>
 
@@ -77,6 +77,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -142,7 +145,7 @@
     </tr>
     <tr>
       <th>col</th>
-      <td><p>color of the symbol</p></td>
+      <td><p>symbol color, either a single color or as many colors as there are horizons in `x`</p></td>
     </tr>
     </table>
     
@@ -166,7 +169,7 @@
 <span class='co'># subset first 10 profiles </span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='no'>loafercreek</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, ]
 
-<span class='co'># replace 0% frags with NA</span>
+<span class='co'># replace 0 percent frags with NA</span>
 <span class='no'>s</span>$<span class='no'>total_frags_pct</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/which'>which</a></span>(<span class='no'>s</span>$<span class='no'>total_frags_pct</span> <span class='kw'>==</span> <span class='fl'>0</span>)] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 
 <span class='co'># plot in random order, note that annotations follow</span>
