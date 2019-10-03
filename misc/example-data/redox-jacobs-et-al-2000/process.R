@@ -10,6 +10,9 @@ str(h)
 s <- read.table('site.txt', header = TRUE, sep='|', quote = '')
 str(s)
 
+# save a copy of these files for full example
+write.csv(h, file='../../../inst/example-data/jacobs2000-hz-data.csv', row.names = FALSE)
+write.csv(s, file='../../../inst/example-data/jacobs2000-site-data.csv', row.names = FALSE)
 
 # extract / split hz depths
 hzd <- strsplit(h$hz_depths, '-', fixed = TRUE)
@@ -98,6 +101,11 @@ h$hz_depths <- NULL
 
 ## init SPC
 depths(h) <- id ~ top + bottom
+
+## save copy to /data
+jacobs2000 <- h
+save(jacobs2000, file='../../../data/jacobs2000.rda')
+
 
 par(mar=c(0,1,3,3))
 plot(h, name='name', color='matrix_color', width=0.3)
