@@ -44,6 +44,5 @@ plot(sp4, color='CF')
    
    
 ## Dependency Graph
-https://cran.microsoft.com/packagedata/graphs/aqp.png
-
+![](https://cran.microsoft.com/packagedata/graphs/aqp.png)
 
