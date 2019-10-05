@@ -147,14 +147,16 @@
   <span class='no'>sp1</span>$<span class='no'>sitevar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>round</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>sp1</span>)))
 
   <span class='co'># use denormalize() to create a mirror of sitevar in the horizon table</span>
-  <span class='co'># name the attribute something different (e.g. `hz.sitevar`) to prevent collision with the site attribute</span>
-  <span class='co'># the attributes can have the same name but you will then need site() or horizons() to access explicitly</span>
+  <span class='co'># name the attribute something different (e.g. `hz.sitevar`) to </span>
+  <span class='co'># prevent collision with the site attribute</span>
+  <span class='co'># the attributes can have the same name but you will then need </span>
+  <span class='co'># site() or horizons() to access explicitly</span>
   <span class='no'>sp1</span>$<span class='no'>hz.sitevar</span> <span class='kw'>&lt;-</span> <span class='fu'>denormalize</span>(<span class='no'>sp1</span>, <span class='st'>'sitevar'</span>)
 
   <span class='co'># compare number of profiles to number of sitevar assignments</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] 41</div><div class='input'>  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>sp1</span>$<span class='no'>sitevar</span>)</div><div class='output co'>#&gt; 
 #&gt;  0  1 
-#&gt; 25 16 </div><div class='input'>
+#&gt; 22 19 </div><div class='input'>
   <span class='co'># compare number of horizons to number of horizon-level copies of sitevar `hz.sitevar`</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] 60</div><div class='input'>  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>sp1</span>$<span class='no'>hz.sitevar</span>)</div><div class='output co'>#&gt; 
 #&gt;  0  1 

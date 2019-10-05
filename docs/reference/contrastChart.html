@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Citation and Authors • aqp</title>
+<title>Color Contrast Chart — contrastChart • aqp</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -25,12 +25,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Citation and Authors" />
+<meta property="og:title" content="Color Contrast Chart — contrastChart" />
+
+<meta property="og:description" content="Compare one or more pages from a simulated Munsell book of soil colors to a reference color." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-citation-authors">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -59,7 +62,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">aqp</a>
+        <a class="navbar-link" href="../index.html">aqp</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
       </span>
     </div>
@@ -67,16 +70,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="news/index.html">Changelog</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -97,48 +100,65 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Citation</h1>
-      <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/inst/CITATION'><code>inst/CITATION</code></a></small>
+    <h1>Color Contrast Chart</h1>
+    
+    <div class="hidden name"><code>contrastChart.Rd</code></div>
     </div>
 
-    <p>Beaudette Dd, Roudier P and O'Geen A (2013).
-<em>Algorithms for quantitative pedology: A toolkit for soil scientists</em>, volume 52.
-<a href="http://ncss-tech.github.io/AQP/">http://ncss-tech.github.io/AQP/</a>. 
-</p>
-    <pre>@Manual{,
-  title = {Algorithms for quantitative pedology: A toolkit for soil scientists},
-  author = {D.E. debeaudette@ucdavis.edu Beaudette and P. Roudier and A.T. O'Geen},
-  journal = {Computers & Geosciences},
-  year = {2013},
-  volume = {52},
-  pages = {258 - 268},
-  url = {http://ncss-tech.github.io/AQP/},
-}</pre>
-    <div class="page-header">
-      <h1>Authors</h1>
+    <div class="ref-description">
+    
+    <p>Compare one or more pages from a simulated Munsell book of soil colors to a reference color.</p>
+    
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Dylan Beaudette</strong>. Author, maintainer. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Pierre Roudier</strong>. Author, contributor. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Andrew Brown</strong>. Author, contributor. 
-        </p>
-      </li>
+    <pre class="usage"><span class='fu'>contrastChart</span>(<span class='no'>m</span>, <span class='no'>hues</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>m</th>
+      <td><p>Munsell representation of a single color for comparison e.g. '10YR 4/3'</p></td>
+    </tr>
+    <tr>
+      <th>hues</th>
+      <td><p>vector of one or more Munsell hue pages to display</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>A simulated Munsell color book page or pages are used to demonstrate color contrast between all chips and the refnerece color <code>m</code> (highlighted in red). NCSS color contrast class and CIE delta-E00 values are printed below all other color chips.</p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>trellis</code> graphics object.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># single hue page</span>
+<span class='fu'>contrastChart</span>(<span class='kw'>m</span> <span class='kw'>=</span> <span class='st'>'10YR 3/3'</span>, <span class='kw'>hues</span> <span class='kw'>=</span> <span class='st'>'10YR'</span>)</div><div class='img'><img src='contrastChart-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># multiple hue pages</span>
+<span class='fu'>contrastChart</span>(<span class='kw'>m</span> <span class='kw'>=</span> <span class='st'>'10YR 3/3'</span>, <span class='kw'>hues</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'10YR'</span>, <span class='st'>'2.5Y'</span>))</div><div class='img'><img src='contrastChart-2.png' alt='' width='700' height='433' /></div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>D.E. Beaudette</p>
   </div>
-
 </div>
-
 
       <footer>
       <div class="copyright">

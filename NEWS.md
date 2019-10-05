@@ -3,7 +3,7 @@
   * addVolumeFraction() can now accept a vector of colors, as many as number of horizons
   * new sample data: `jacobs2000`, pending documentation
   * aggregateColor() faster and more accuracte, using delta-E00 for quantized colors c/o {farver} (see https://github.com/ncss-tech/aqp/issues/98)
-  * new function contrastChart(), pending documentation
+  * new functions contrastChart() and soilPalette()
   * aqp 1.18 scheduled for next CRAN release
 
 # aqp 1.17.06 (2019-07-15)

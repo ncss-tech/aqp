@@ -178,10 +178,8 @@
 <span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>sim.2</span>, ~ <span class='no'>name</span>, <span class='kw'>class_prob_mode</span><span class='kw'>=</span><span class='fl'>2</span>)
 
 <span class='co'># convert to long format for plotting simplicity</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>reshape</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'reshape' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'reshape'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:plyr':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    rename, round_any</span></div><div class='input'><span class='no'>a.long</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/reshape/topics/melt-24'>melt</a></span>(<span class='no'>a</span>, <span class='kw'>id.vars</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'top'</span>,<span class='st'>'bottom'</span>), <span class='kw'>measure.vars</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/levels'>levels</a></span>(<span class='no'>sim.2</span>$<span class='no'>name</span>))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>reshape</span>)
+<span class='no'>a.long</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/reshape/topics/melt-24'>melt</a></span>(<span class='no'>a</span>, <span class='kw'>id.vars</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'top'</span>,<span class='st'>'bottom'</span>), <span class='kw'>measure.vars</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/levels'>levels</a></span>(<span class='no'>sim.2</span>$<span class='no'>name</span>))
 
 <span class='co'># plot horizon probabilities derived from simulated data</span>
 <span class='co'># dashed lines are the original horizon boundaries</span>

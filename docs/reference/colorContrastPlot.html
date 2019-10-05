@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Metrics of Contrast Suitable for Comparing Soil Colors — colorContrast • aqp</title>
+<title>Color Contrast Plot — colorContrastPlot • aqp</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Metrics of Contrast Suitable for Comparing Soil Colors — colorContrast" />
+<meta property="og:title" content="Color Contrast Plot — colorContrastPlot" />
 
-<meta property="og:description" content="Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric." />
+<meta property="og:description" content="A simple display of two sets of colors, NCSS color contrast class and CIE delta-E00." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,60 +102,82 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Metrics of Contrast Suitable for Comparing Soil Colors</h1>
+    <h1>Color Contrast Plot</h1>
     
-    <div class="hidden name"><code>colorContrast.Rd</code></div>
+    <div class="hidden name"><code>colorContrastPlot.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric.</p>
+    <p>A simple display of two sets of colors, NCSS color contrast class and CIE delta-E00.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>colorContrast</span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</pre>
+    <pre class="usage"><span class='fu'>colorContrastPlot</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='kw'>col.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col.font</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>d.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='kw'>cc.font</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>dE00.font</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>),
+<span class='kw'>label.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>label.font</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>printMetrics</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>m1</th>
-      <td><p>vector of Munsell colors ('10YR 3/3')</p></td>
+      <td><p>first set of Munsell colors for comparison (e.g. '5YR 3/2')</p></td>
     </tr>
     <tr>
       <th>m2</th>
-      <td><p>vector of Munsell colors ('10YR 3/6')</p></td>
+      <td><p>second set of Munsell colors for comparison</p></td>
+    </tr>
+    <tr>
+      <th>col.cex</th>
+      <td><p>scaling factor for color labels</p></td>
+    </tr>
+    <tr>
+      <th>col.font</th>
+      <td><p>font for color labels</p></td>
+    </tr>
+    <tr>
+      <th>d.cex</th>
+      <td><p>contrast for contrast metric labels</p></td>
+    </tr>
+    <tr>
+      <th>cc.font</th>
+      <td><p>font for contrast class</p></td>
+    </tr>
+    <tr>
+      <th>dE00.font</th>
+      <td><p>font for delta-E00</p></td>
+    </tr>
+    <tr>
+      <th>labels</th>
+      <td><p>labels for compared colors, vector length 2</p></td>
+    </tr>
+    <tr>
+      <th>label.cex</th>
+      <td><p>scaling factor for labels</p></td>
+    </tr>
+    <tr>
+      <th>label.font</th>
+      <td><p>font for labels</p></td>
+    </tr>
+    <tr>
+      <th>printMetrics</th>
+      <td><p>logical, print metrics between color swatches</p></td>
+    </tr>
+    <tr>
+      <th>&#8230;</th>
+      <td><p>further arguments to <code><a href='http://colorspace.R-Forge.R-project.org//reference/swatchplot.html'>colorspace::swatchplot</a></code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is fully vectorized but expects input to be of the same length. Use <code>expand.grid</code> to generate suitable input from 1:many or many:1 type comparisons. See <a href='http://ncss-tech.github.io/AQP/aqp/color-contrast.html'>this tutorial</a> for an expanded discussion and more examples.</p>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A <code>data.frame</code> with the following columns:</p>
-<dt>m1</dt><dd><p>Munsell color 1</p></dd>
-  <dt>m2</dt><dd><p>Munsell color 2</p></dd>
-  <dt>dH</dt><dd><p>delta-hue, as computed by <code>huePosition</code></p></dd>
-  <dt>dV</dt><dd><p>delta-value, absolute value of difference in Munsell value (m1 vs. m2)</p></dd>
-  <dt>dc</dt><dd><p>delta-chroma, absolute value of difference in Munsell chroma (m1 vs. m2)</p></dd>
-  <dt>dE00</dt><dd><p>delta-E00, e.g. the <a href='https://en.wikipedia.org/wiki/Color_difference#CIEDE2000'>CIE delta-E as refined in 2000</a></p></dd>
-  <dt>c</dt><dd><p>soil color contrast class, as specified in <a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569'>Soil Survey Technical Note 2</a></p></dd>
-
-
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>https://en.wikipedia.org/wiki/Color_difference</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>delta-E00 is computed by the <a href='https://cran.r-project.org/web/packages/farver/index.html'>farver package</a>.</p>
+    <p>This function requires the <code>farver</code> package for calculation of CIE delta-E00</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='colorContrastPlot.html'>colorContrastPlot</a></code>, <code><a href='huePosition.html'>huePosition</a></code></p></div>
+    <div class='dont-index'><p><code><a href='colorContrast.html'>colorContrast</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -164,12 +186,13 @@
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span>)
 
 <span class='co'># contrast metrics</span>
-<span class='fu'>colorContrast</span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</div><div class='output co'>#&gt;          m1        m2 dH dV dC      dE00        cc
+<span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</div><div class='output co'>#&gt;          m1        m2 dH dV dC      dE00        cc
 #&gt; 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent
 #&gt; 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint
 #&gt; 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint
 #&gt; 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.054654  Distinct</div><div class='input'>
-</div></pre>
+<span class='co'># graphical display </span>
+<span class='fu'>colorContrastPlot</span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</div><div class='img'><img src='colorContrastPlot-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -177,12 +200,6 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
       
