@@ -1,6 +1,6 @@
 # R 3.3 compatibility:
 
-importFrom("grDevices", "chull", "col2rgb", "colorRamp",
+importFrom("grDevices", "chull", "col2rgb", "colorRamp", "rgb2hsv", "hsv",
              "colorRampPalette", "grey", "rgb", "convertColor")
 
 importFrom("graphics", "abline", "arrows", "axis", "box", "grid",

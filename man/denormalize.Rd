@@ -28,8 +28,10 @@ Andrew Gene Brown & Dylan Beaudette
   sp1$sitevar <- round(runif(length(sp1)))
   
   # use denormalize() to create a mirror of sitevar in the horizon table
-  # name the attribute something different (e.g. `hz.sitevar`) to prevent collision with the site attribute
-  # the attributes can have the same name but you will then need site() or horizons() to access explicitly
+  # name the attribute something different (e.g. `hz.sitevar`) to 
+  # prevent collision with the site attribute
+  # the attributes can have the same name but you will then need 
+  # site() or horizons() to access explicitly
   sp1$hz.sitevar <- denormalize(sp1, 'sitevar')
   
   # compare number of profiles to number of sitevar assignments

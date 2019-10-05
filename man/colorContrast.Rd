@@ -1,6 +1,5 @@
 \name{colorContrast}
 \alias{colorContrast}
-\alias{colorContrastPlot}
 
 \title{Metrics of Contrast Suitable for Comparing Soil Colors}
 \description{Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric.}

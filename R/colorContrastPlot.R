@@ -1,21 +1,4 @@
 
-## TODO: this may not scale to > 5 colors
-
-## tiny function for a quick swatch with annotation
-# colors: vector of hex colors
-# lab: vector of labels
-# lab.cex: scaling factor for labels
-soilPalette <- function(colors, lab, lab.cex=0.75, ...) {
-  # basic plot
-  colorspace::swatchplot(colors, ...)
-  # annotation
-  nx <- length(colors)
-  x.pos <- seq(from = 0, to = 1, by = 1/nx)[1:nx]
-  y.pos <- rep(0.01, times = nx)
-  text(x.pos, y.pos, labels = lab, cex=lab.cex, col = "white", font = 2, adj = c(-0.125, -0.33))
-}
-
-
 ## quickly display two sets of colors and soil color contrast metrics
 # m1: munsell colors
 # m2: munsell colors
@@ -51,6 +34,8 @@ colorContrastPlot <- function(m1, m2, col.cex=1, col.font=2, d.cex=1, cc.font=3,
   x.pos <- seq(from=0, to=1, by=1/nx)[1:nx]
   y.pos1 <- rep(0.51, times=nx)
   y.pos2 <- rep(0.01, times=nx)
+  
+  ## TODO: consider adding HSV-based adjustment of label colors as in soilPalette()
   
   # annotate top row
   text(x.pos, y.pos1, labels = m1, col='white', font=col.font, cex=col.cex, adj = c(-0.125, -0.33))
