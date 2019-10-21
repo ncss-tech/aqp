@@ -68,7 +68,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # save arguments to aqp env
   lsp <- list('width'=width, 
               'plot.order'=plot.order,
-              'x0'=relative.pos,
+              'x0'=relative.pos + x.idx.offset,
               'pIDs'=pIDs[plot.order],
               'idname'=idname(x),
               'y.offset'=y.offset, 
