@@ -18,11 +18,15 @@ slice(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE)
   
   \item{fm}{A formula: either `integer.vector ~ var1 + var2 + var3' where named variables are sliced according to `integer.vector' OR where all variables are sliced accordin to `integer.vector' `integer.vector ~.'.}
   
-  \item{top.down}{Logical, should slices be defined from the top-down? The default is usually what you want.}
+  \item{top.down}{logical, slices are defined from the top-down: \code{0:10} implies 0-11 depth units.}
   
   \item{just.the.data}{Logical, return just the sliced data or a new SoilProfileCollection object.}
   
   \item{strict}{Logical, should the horizonation be strictly checked for self-consistency?}
+}
+
+\section{Details}{
+By default, slices are defined from the top-down: \code{0:10} implies 0-11 depth units.
 }
 
 
@@ -44,9 +48,11 @@ D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A
 \seealso{\code{\link{slab}}}
 
 \examples{
+library(aqp)
+
 # simulate some data, IDs are 1:20
-library(plyr)
-d <- ldply(1:20, random_profile)
+d <- lapply(1:20, random_profile)
+d <- do.call('rbind', d)
 
 # init SoilProfilecollection object
 depths(d) <- id ~ top + bottom
@@ -59,11 +65,14 @@ s <- slice(d, 10 ~ name + p1 + p2 + p3)
 # generate single slice at 10 cm, output data.frame
 s <- slice(d, 10 ~ name + p1 + p2 + p3, just.the.data=TRUE)
 
-# generate integer slices from 0 - 25 cm
+# generate integer slices from 0 - 26 cm
+# note that slices are specified by default as "top-down"
+# e.g. the lower depth will always by top + 1
 s <- slice(d, 0:25 ~ name + p1 + p2 + p3)
+par(mar=c(0,1,0,1))
 plot(s)
 
-# generate slices from 0 - 10 cm, for all variables
+# generate slices from 0 - 11 cm, for all variables
 s <- slice(d, 0:10 ~ .)
 print(s)
 
@@ -73,6 +82,7 @@ d$p1[1:10] <- NA
 s <- slice(d, 10 ~ ., just.the.data=TRUE)
 print(s)
 
+\dontrun{
 ## 
 ## check sliced data
 ##
@@ -86,8 +96,9 @@ depths(sp1) <- id ~ top + bottom
 sp1.sub <- sp1[which(profile_id(sp1) == 'P009'), ]
 
 # compute hz-thickness wt. mean
-hz.wt.mean <- with(horizons(sp1.sub), 
-sum((bottom - top) * prop) / sum(bottom - top) 
+hz.wt.mean <- with(
+  horizons(sp1.sub),
+  sum((bottom - top) * prop) / sum(bottom - top) 
 )
 
 # hopefully the same value, calculated via slice()
@@ -96,8 +107,8 @@ hz.slice.mean <- mean(s$prop, na.rm=TRUE)
 
 # same?
 if(!all.equal(hz.slice.mean, hz.wt.mean))
-	stop('there is a bug in slice() !!!')
-
+  stop('there is a bug in slice() !!!')
+}
 
 }
 \keyword{methods}

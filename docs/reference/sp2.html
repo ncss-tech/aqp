@@ -165,7 +165,7 @@
 
 <span class='co'># plot</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp2</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>p.order</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp2-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp2</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>p.order</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='sp2-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># setup multi-figure output</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>))
 
@@ -175,7 +175,7 @@
 <span class='co'># compute numerical distances between profiles </span>
 <span class='co'># based on select horizon-level properties, to a depth of 200 cm</span>
 <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profile_compare-methods.html'>profile_compare</a></span>(<span class='no'>sp2</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>200</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>5</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.13 Mb]</span></div><div class='input'>
+<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>200</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>5</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.14 Mb]</span></div><div class='input'>
 <span class='co'># plot dendrogram with ape package:</span>
 <span class='kw'>if</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>ape</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>cluster</span>)) {
 <span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/cluster/topics/diana'>diana</a></span>(<span class='no'>d</span>)
@@ -187,7 +187,7 @@
 
 <span class='co'># based on distance matrix values, YMMV</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/legend'>legend</a></span>(<span class='st'>'topleft'</span>, <span class='kw'>legend</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/levels'>levels</a></span>(<span class='no'>sp2</span>$<span class='no'>surface</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fl'>6</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>, <span class='kw'>bty</span><span class='kw'>=</span><span class='st'>'n'</span>, <span class='kw'>bg</span><span class='kw'>=</span><span class='st'>'white'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>)
-}</div><div class='img'><img src='sp2-2.png' alt='' width='700' height='433' /></div><div class='input'>
+}</div><div class='img'><img src='sp2-2.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
