@@ -78,7 +78,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
               'extra_x_space'=extra_x_space,
               'extra_y_space'=extra_y_space)
   
-  assign('last_spc_plot', lsp, envir=aqp.env, )
+  assign('last_spc_plot', lsp, envir=aqp.env)
   
   # get horizons
   h <- horizons(x)
