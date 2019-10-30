@@ -1,3 +1,8 @@
+# aqp 1.17.10 (2019-10-30)
+  * removing imported functions from `Hmisc` (hdquantile), loading `aqp` is now much faster
+     + `slab()` now uses `stats::quantile()` as the default slab function
+     + details at: https://github.com/ncss-tech/aqp/issues/79
+
 # aqp 1.17.08 (2019-10-03)
   * generalize.hz() gets a \dots argument for passing additional arguments to grep(), e.g. perl=TRUE
   * addVolumeFraction() can now accept a vector of colors, as many as number of horizons
