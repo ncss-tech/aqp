@@ -24,7 +24,7 @@ slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
   
   \item{strict}{logical: should horizons be strictly checked for self-consistency?}
   
-  \item{slab.fun}{Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around \code{stats::quantile()}. See details.}
+  \item{slab.fun}{Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around \code{stats::quantile}. See details.}
   
   \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either: number of profiles with data at the current slice (cpm=1), or by the number of profiles in the collection (cpm=2). Mode 1 values will always sum to the contributing fraction, while mode 2 values will always sum to 1.}
   
@@ -46,7 +46,9 @@ Multiple continuous variables OR a single categorical (factor) variable can be a
 
 Somtimes \code{slab} is used to conveniently re-arrange data vs. aggregate. This is performed by specifying \code{identity} in \code{slab.fun}. See examples beflow for a demonstration of this functionality.
 
-Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased. \code{slab()} and \code{slice()} are much faster and require less memory if input data are either numeric or character.
+The defauly \code{slab.fun} was changed 2019-10-30 from a wrapper around \code{Hmisc::hdquantile} to a wrapper around \code{stats::quantile}. See examples below for a simple way to switch to the HD quantile estimator.
+
+Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased. \code{slab} and \code{slice} are much faster and require less memory if input data are either numeric or character.
 
 There are several possible ways to define slabs, using \code{slab.structure}:
 

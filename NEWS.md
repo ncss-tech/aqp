@@ -2,6 +2,7 @@
   * removing imported functions from `Hmisc` (hdquantile), loading `aqp` is now much faster
      + `slab()` now uses `stats::quantile()` as the default slab function
      + details at: https://github.com/ncss-tech/aqp/issues/79
+     + previous behavior of `slab()` can be activated via argument: `slab.fun = aqp:::.slab.fun.numeric.HD`
 
 # aqp 1.17.08 (2019-10-03)
   * generalize.hz() gets a \dots argument for passing additional arguments to grep(), e.g. perl=TRUE
