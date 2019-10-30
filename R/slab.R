@@ -30,7 +30,8 @@
 	}
 
 
-## TODO: this is slopppy, merge these
+## TODO: make these exported functions with documentation (https://github.com/ncss-tech/aqp/issues/99)
+
 
 # default slab function for continuous variables
 # returns a named vector of results
@@ -42,7 +43,21 @@
 	res <- quantile(values, probs=q.probs, na.rm=TRUE)
 	names(res) <- paste('p.q', round(q.probs * 100), sep='')
 	return(res)
-	}
+}
+
+# easy specification of Hmisc::hdquantile if available
+.slab.fun.numeric.HD <- function(values) {
+  # sanity check, need this for color distance eval
+  if(!requireNamespace('Hmisc'))
+    stop('pleast install the `Hmisc` package.', call.=FALSE)
+  
+  q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+  
+  res <- Hmisc::hdquantile(values, probs=q.probs, na.rm=TRUE)
+  
+  names(res) <- paste('p.q', round(q.probs * 100), sep='')
+  return(res)
+}
 
 # basic quantile evaluation, better for large datasets
 .slab.fun.numeric.fast <- function(values) {

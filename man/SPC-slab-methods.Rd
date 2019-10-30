@@ -212,26 +212,18 @@ xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
 ##
 ## HD quantile estimator
 ##
-library(Hmisc)
+
 library(soilDB)
 library(lattice)
 
-# custom slab function
-SF <- function(values) {
-  q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-  # use HD quantile estimator
-  res <- Hmisc::hdquantile(values, probs=q.probs, na.rm=TRUE)
-  names(res) <- paste('p.q', round(q.probs * 100), sep='')
-  return(res)
-}
-
+# sample data
 data('loafercreek', package = 'soilDB')
 
 # defaul slab.fun wraps stats::quantile()
 a <- slab(loafercreek, fm = ~ total_frags_pct + clay)
 
-# use HD quantile estimator instead
-a.HD <- slab(loafercreek, fm = ~ total_frags_pct + clay, slab.fun = SF)
+# use HD quantile estimator from Hmisc package instead
+a.HD <- slab(loafercreek, fm = ~ total_frags_pct + clay, slab.fun = aqp:::.slab.fun.numeric.HD)
 
 # combine
 g <- make.groups(standard=a, HD=a.HD)
@@ -258,8 +250,6 @@ xyplot(
   prepanel=prepanel.depth_function,
   auto.key=list(columns=2, lines=TRUE, points=FALSE)
 )
-
-
 
 ##
 ## multivariate examples
