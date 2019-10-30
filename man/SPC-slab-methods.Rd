@@ -46,7 +46,7 @@ Multiple continuous variables OR a single categorical (factor) variable can be a
 
 Somtimes \code{slab} is used to conveniently re-arrange data vs. aggregate. This is performed by specifying \code{identity} in \code{slab.fun}. See examples beflow for a demonstration of this functionality.
 
-The defauly \code{slab.fun} was changed 2019-10-30 from a wrapper around \code{Hmisc::hdquantile} to a wrapper around \code{stats::quantile}. See examples below for a simple way to switch to the HD quantile estimator.
+The default \code{slab.fun} was changed 2019-10-30 from a wrapper around \code{Hmisc::hdquantile} to a wrapper around \code{stats::quantile}. See examples below for a simple way to switch to the HD quantile estimator.
 
 Execution time scales linearly (slower) with the total number of profiles in \code{object}, and exponentially (faster) as the number of profiles / group is increased. \code{slab} and \code{slice} are much faster and require less memory if input data are either numeric or character.
 

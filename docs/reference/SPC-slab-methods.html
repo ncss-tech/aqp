@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.10</span>
       </span>
     </div>
 
@@ -138,7 +138,7 @@
     </tr>
     <tr>
       <th>slab.fun</th>
-      <td><p>Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around <code>hdquantile</code>. See details.</p></td>
+      <td><p>Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around <code><a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>stats::quantile</a></code>. See details.</p></td>
     </tr>
     <tr>
       <th>cpm</th>
@@ -162,9 +162,10 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to <code>slab</code>. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (<code>slab.fun</code>) should return a named vector of results. A new, named column will appear in the results of <code>slab</code> for every named element of a vector returned by <code>slab.fun</code>. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps <code>hdquantile</code> from the Hmisc package, which requires at least 2 observations per chunk. Note that if `group` is a factor it must not contain NAs.</p>
+    <p>Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to <code>slab</code>. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (<code>slab.fun</code>) should return a named vector of results. A new, named column will appear in the results of <code>slab</code> for every named element of a vector returned by <code>slab.fun</code>. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps <code><a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>stats::quantile</a></code> from the Hmisc package, which requires at least 2 observations per chunk. Note that if `group` is a factor it must not contain NAs.</p>
 <p>Somtimes <code>slab</code> is used to conveniently re-arrange data vs. aggregate. This is performed by specifying <code>identity</code> in <code>slab.fun</code>. See examples beflow for a demonstration of this functionality.</p>
-<p>Execution time scales linearly (slower) with the total number of profiles in <code>object</code>, and exponentially (faster) as the number of profiles / group is increased. <code>slab()</code> and <code><a href='SPC-slice-methods.html'>slice()</a></code> are much faster and require less memory if input data are either numeric or character.</p>
+<p>The default <code>slab.fun</code> was changed 2019-10-30 from a wrapper around <code><a href='https://www.rdocumentation.org/packages/Hmisc/topics/hdquantile'>Hmisc::hdquantile</a></code> to a wrapper around <code><a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>stats::quantile</a></code>. See examples below for a simple way to switch to the HD quantile estimator.</p>
+<p>Execution time scales linearly (slower) with the total number of profiles in <code>object</code>, and exponentially (faster) as the number of profiles / group is increased. <code>slab</code> and <code>slice</code> are much faster and require less memory if input data are either numeric or character.</p>
 <p>There are several possible ways to define slabs, using <code>slab.structure</code>:</p>
 <dl class='dl-horizontal'>
 	<dt>a single integer</dt><dd><p>e.g. 10: data are aggregated over a regular sequence of 10-unit thickness slabs</p></dd>
@@ -213,7 +214,7 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='SPC-slice-methods.html'>slice</a>, hdquantile</code></p></div>
+    <div class='dont-index'><p><code><a href='SPC-slice-methods.html'>slice</a>, <a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>quantile</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -235,11 +236,11 @@
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>a</span>)</div><div class='output co'>#&gt; 'data.frame':	240 obs. of  10 variables:
 #&gt;  $ variable             : Factor w/ 1 level "prop": 1 1 1 1 1 1 1 1 1 1 ...
 #&gt;  $ all.profiles         : num  1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ p.q5                 : num  0.0083 0.0083 0.0332 0.1541 0.1541 ...
-#&gt;  $ p.q25                : num  0.474 0.474 0.771 1.552 1.552 ...
-#&gt;  $ p.q50                : num  3.44 3.44 3.52 4.53 4.53 ...
-#&gt;  $ p.q75                : num  9.52 9.52 8.34 8.51 8.51 ...
-#&gt;  $ p.q95                : num  13.7 13.7 16.6 16.6 16.6 ...
+#&gt;  $ p.q5                 : num  0 0 0 0.4 0.4 0.4 1.4 1.4 1.4 1.4 ...
+#&gt;  $ p.q25                : num  0 0 1 1 1 3 3 3 3 3 ...
+#&gt;  $ p.q50                : num  3 3 3 5 5 5 5 5 5 5 ...
+#&gt;  $ p.q75                : num  8 8 7 7 7 7 7 7 7 7 ...
+#&gt;  $ p.q95                : num  13.6 13.6 14 14 14 16.4 16.4 16.4 16.4 16.4 ...
 #&gt;  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...
 #&gt;  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...
 #&gt;  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'>
@@ -256,6 +257,7 @@
                          <span class='kw'>panel</span><span class='kw'>=</span><span class='no'>panel.depth_function</span>,
                          <span class='kw'>prepanel</span><span class='kw'>=</span><span class='no'>prepanel.depth_function</span>,
                          <span class='kw'>cf</span><span class='kw'>=</span><span class='no'>ab</span>$<span class='no'>contributing_fraction</span>,
+                         <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.5</span>,
                          <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>))
                          )</div><div class='img'><img src='SPC-slab-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
 
@@ -333,6 +335,48 @@
 #&gt; 3  B  32    145         57    0.3574667 1.0813045
 #&gt; 4  C 145    150         71    0.1250000 0.8112781</div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
+<span class='co'>##</span>
+<span class='co'>## HD quantile estimator</span>
+<span class='co'>##</span>
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>soilDB</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lattice</span>)
+
+<span class='co'># sample data</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>'loafercreek'</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'soilDB'</span>)
+
+<span class='co'># defaul slab.fun wraps stats::quantile()</span>
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>slab</span>(<span class='no'>loafercreek</span>, <span class='kw'>fm</span> <span class='kw'>=</span> ~ <span class='no'>total_frags_pct</span> + <span class='no'>clay</span>)
+
+<span class='co'># use HD quantile estimator from Hmisc package instead</span>
+<span class='no'>a.HD</span> <span class='kw'>&lt;-</span> <span class='fu'>slab</span>(<span class='no'>loafercreek</span>, <span class='kw'>fm</span> <span class='kw'>=</span> ~ <span class='no'>total_frags_pct</span> + <span class='no'>clay</span>, <span class='kw'>slab.fun</span> <span class='kw'>=</span> <span class='kw pkg'>aqp</span><span class='kw ns'>:::</span><span class='no'>.slab.fun.numeric.HD</span>)
+
+<span class='co'># combine</span>
+<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/make.groups'>make.groups</a></span>(<span class='kw'>standard</span><span class='kw'>=</span><span class='no'>a</span>, <span class='kw'>HD</span><span class='kw'>=</span><span class='no'>a.HD</span>)
+
+<span class='co'># note differences</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/histogram'>densityplot</a></span>(~ <span class='no'>p.q50</span> <span class='kw'>|</span> <span class='no'>variable</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>g</span>, <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>which</span>,
+            <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>relation</span><span class='kw'>=</span><span class='st'>'free'</span>, <span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>tick.number</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>rot</span><span class='kw'>=</span><span class='fl'>0</span>)),
+            <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'50th Percentile'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>NA</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Loafercreek'</span>,
+            <span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>),
+            <span class='kw'>par.settings</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>superpose.line</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span>)))
+)
+
+<span class='co'># differences are slight but important</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/xyplot'>xyplot</a></span>(
+  <span class='no'>top</span> ~ <span class='no'>p.q50</span> <span class='kw'>|</span> <span class='no'>variable</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>g</span>, <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>which</span>,
+  <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Value'</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth (cm)'</span>,
+  <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1.5</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Loafercreek'</span>,
+  <span class='kw'>lower</span><span class='kw'>=</span><span class='no'>g</span>$<span class='no'>p.q25</span>, <span class='kw'>upper</span><span class='kw'>=</span><span class='no'>g</span>$<span class='no'>p.q75</span>,
+  <span class='kw'>sync.colors</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.25</span>, <span class='kw'>cf</span><span class='kw'>=</span><span class='no'>g</span>$<span class='no'>contributing_fraction</span>,
+  <span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>115</span>,-<span class='fl'>5</span>), <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>relation</span><span class='kw'>=</span><span class='st'>'free'</span>)),
+  <span class='kw'>par.settings</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>superpose.line</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span>))),
+  <span class='kw'>strip</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lattice/topics/strip.default'>strip.custom</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/gray'>grey</a></span>(<span class='fl'>0.85</span>)),
+  <span class='kw'>panel</span><span class='kw'>=</span><span class='no'>panel.depth_function</span>,
+  <span class='kw'>prepanel</span><span class='kw'>=</span><span class='no'>prepanel.depth_function</span>,
+  <span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+)
+
 <span class='co'>##</span>
 <span class='co'>## multivariate examples</span>
 <span class='co'>##</span>

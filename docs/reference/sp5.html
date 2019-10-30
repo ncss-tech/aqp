@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.10</span>
       </span>
     </div>
 
@@ -220,7 +220,7 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 6 slots
 <span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/vector'>vector</a></span>(<span class='kw'>mode</span><span class='kw'>=</span><span class='st'>'numeric'</span>, <span class='kw'>length</span><span class='kw'>=</span><span class='fl'>25</span>)
 <span class='no'>r</span>[<span class='fl'>1</span>] <span class='kw'>&lt;-</span> -<span class='fl'>50</span> ; <span class='kw'>for</span>(<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>2</span>:<span class='fl'>25</span>) {<span class='no'>r</span>[<span class='no'>i</span>] <span class='kw'>&lt;-</span> <span class='no'>r</span>[<span class='no'>i</span>-<span class='fl'>1</span>] + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='kw'>mean</span><span class='kw'>=</span>-<span class='fl'>1</span>, <span class='kw'>sd</span><span class='kw'>=</span><span class='fl'>25</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>1</span>)}
 <span class='co'># rescale</span>
-<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/scales/topics/rescale'>rescale</a></span>(<span class='no'>r</span>, <span class='kw'>to</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>80</span>, <span class='fl'>0</span>))
+<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://scales.r-lib.org//reference/rescale.html'>rescale</a></span>(<span class='no'>r</span>, <span class='kw'>to</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>80</span>, <span class='fl'>0</span>))
 <span class='co'># illustrate gradient with points/lines/arrows</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='fl'>1</span>:<span class='fl'>25</span>, <span class='no'>r</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/points'>points</a></span>(<span class='fl'>1</span>:<span class='fl'>25</span>, <span class='no'>r</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
@@ -240,7 +240,7 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 6 slots
 <span class='kw'>replace_na</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>add_soil_flag</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>300</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 25 profiles</span></div><div class='output co'>#&gt; <span class='message'> [1.53 Mb]</span></div><div class='input'><span class='co'># keep only the dissimilarity between profile 1 and all others</span>
 <span class='no'>d.1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>d</span>)[<span class='fl'>1</span>, ]
 <span class='co'># rescale dissimilarities</span>
-<span class='no'>d.1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/scales/topics/rescale'>rescale</a></span>(<span class='no'>d.1</span>, <span class='kw'>to</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>80</span>, <span class='fl'>0</span>))
+<span class='no'>d.1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://scales.r-lib.org//reference/rescale.html'>rescale</a></span>(<span class='no'>d.1</span>, <span class='kw'>to</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>80</span>, <span class='fl'>0</span>))
 <span class='co'># sort in ascending order</span>
 <span class='no'>d.1.order</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rev'>rev</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>d.1</span>))
 <span class='co'># plotting parameters</span>
