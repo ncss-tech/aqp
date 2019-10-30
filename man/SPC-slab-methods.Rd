@@ -210,6 +210,58 @@ xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
 
 \dontrun{
 ##
+## HD quantile estimator
+##
+library(Hmisc)
+library(soilDB)
+library(lattice)
+
+# custom slab function
+SF <- function(values) {
+  q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+  # use HD quantile estimator
+  res <- Hmisc::hdquantile(values, probs=q.probs, na.rm=TRUE)
+  names(res) <- paste('p.q', round(q.probs * 100), sep='')
+  return(res)
+}
+
+data('loafercreek', package = 'soilDB')
+
+# defaul slab.fun wraps stats::quantile()
+a <- slab(loafercreek, fm = ~ total_frags_pct + clay)
+
+# use HD quantile estimator instead
+a.HD <- slab(loafercreek, fm = ~ total_frags_pct + clay, slab.fun = SF)
+
+# combine
+g <- make.groups(standard=a, HD=a.HD)
+
+# note differences
+densityplot(~ p.q50 | variable, data=g, groups=which, 
+            scales=list(relation='free', alternating=3, tick.number=10, y=list(rot=0)),
+            xlab='50th Percentile', pch=NA, main='Loafercreek',
+            auto.key=list(columns=2, points=FALSE, lines=TRUE),
+            par.settings=list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2')))
+)
+
+# differences are slight but important
+xyplot(
+  top ~ p.q50 | variable, data=g, groups=which,
+  xlab='Value', ylab='Depth (cm)',
+  asp=1.5, main='Loafercreek',
+  lower=g$p.q25, upper=g$p.q75, 
+  sync.colors=TRUE, alpha=0.25, cf=g$contributing_fraction,
+  ylim=c(115,-5), layout=c(2,1), scales=list(x=list(relation='free')),
+  par.settings=list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2'))),
+  strip=strip.custom(bg=grey(0.85)),
+  panel=panel.depth_function, 
+  prepanel=prepanel.depth_function,
+  auto.key=list(columns=2, lines=TRUE, points=FALSE)
+)
+
+
+
+##
 ## multivariate examples
 ##
 data(sp3)

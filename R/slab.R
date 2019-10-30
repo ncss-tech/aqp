@@ -30,6 +30,7 @@
 	}
 
 
+## TODO: this is slopppy, merge these
 
 # default slab function for continuous variables
 # returns a named vector of results
