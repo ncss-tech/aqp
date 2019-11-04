@@ -389,6 +389,8 @@ test_that("horizon slot set/merge", {
   hnew$prop200 <- hnew$prop / 200
   hnew$prop300 <- hnew$prop / 300
   
+  hnew$prop[1] <- 50
+  
   # utilize horizons() merge() functionality to add all new variables in hnew to horizons
   horizons(x) <- hnew
   
@@ -397,6 +399,9 @@ test_that("horizon slot set/merge", {
   
   # verify old columns have same names (i.e. no issues with duplication of column names in merge)
   expect_true(all(c(idname(x), hzidname(x), 'prop') %in% names(horizons(x))))
+  
+  # verify old columns have been updated
+  expect_equivalent(horizons(x)[1,c('prop')], c(50))
 })
 
 

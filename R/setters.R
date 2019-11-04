@@ -530,11 +530,15 @@ setReplaceMethod("horizons", "SoilProfileCollection",
     # if hzidname for the SPC is present in the new data,
     
     # only merge if all horizon IDs in the SPC are also present in the new data
+    #   and there are new columns in value that are not in horizons already
     if((length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) == 0) &
        any(!unique(names(value)) %in% unique(names(object@horizons)))) {
-      # and there are new columns in value that are not in horizons already
       to_merge <- c(names(value)[!names(value) %in% names(object@horizons)], idname(object), hzidname(object))
       object@horizons <- merge(object@horizons, value[,to_merge], all.x = TRUE, by = c(idname(object), hzidname(object)))
+      
+      # now, do updates to "old" columns so we do not duplicate
+      to_update <- names(value)[!names(value) %in% to_merge]
+      object@horizons[,to_update] <- value[match(object@horizons[,hzidname(object)], value[,hzidname(object)]), to_update]
       return(object)
     }
   }
