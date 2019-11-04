@@ -27,11 +27,11 @@ setReplaceMethod("hzID", "SoilProfileCollection",
                    
                    
                    # extract horizon and replace IDs
-                   h <- horizons(object)
+                   h <- object@horizons
                    # note that horizon IDs may be specified in custom-set column
                    h[[hzidname(object)]] <- value
                    # re-pack horizons
-                   horizons(object) <- h
+                   object@horizons <- h
                    
                    return(object)
                  }
@@ -510,7 +510,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
 	  stop("value must be a data.frame", call.=FALSE)
-  
+    
   ## 
   ## not sure if this test is important... as sometimes we want to delete horizons
   ##
@@ -525,6 +525,20 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
   	stop("there are IDs in the replacement that do not exist in the original data", call.=FALSE)
 
+  # NEW: more extensive test of ids -- is it possible to merge rather than replace?
+  if(hzidname(object) %in% names(value)) {
+    # if hzidname for the SPC is present in the new data,
+    
+    # only merge if all horizon IDs in the SPC are also present in the new data
+    if((length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) == 0) &
+       any(!unique(names(value)) %in% unique(names(object@horizons)))) {
+      # and there are new columns in value that are not in horizons already
+      to_merge <- c(names(value)[!names(value) %in% names(object@horizons)], idname(object), hzidname(object))
+      object@horizons <- merge(object@horizons, value[,to_merge], all.x = TRUE, by = c(idname(object), hzidname(object)))
+      return(object)
+    }
+  }
+    
   ##
   ## 2017-01-05: holy shit, why are we re-ordering the horizon data? 
   ## causes SPC corruption after rbind with keys that overlap
