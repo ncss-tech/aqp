@@ -53,14 +53,14 @@ test_that("non-conformal union tests", {
   # random data
   ids <- sprintf("%02d", 1:5)
   x <- plyr::ldply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', 
-             lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
+                   lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
   
   depths(x) <- id ~ top + bottom
   
   # more random data
   ids <- sprintf("%s", letters[1:5])
   y <- plyr::ldply(ids, random_profile, n=c(6, 7, 8), n_prop=4, method='LPP', 
-             lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
+                   lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
   
   # alter ID, top, bottom column names
   y$pID <- y$id
@@ -74,7 +74,7 @@ test_that("non-conformal union tests", {
   depths(y) <- pID ~ hztop + hzbot
   
   # very different data
-  data('mineralKing', package = 'soilDB')
+  data('jacobs2000', package = 'aqp')
   
   # alter depth units
   depth_units(y) <- 'in'
@@ -86,11 +86,12 @@ test_that("non-conformal union tests", {
   depth_units(y) <- 'cm'
   
   # attempt union
-  z <- union(list(x, y, mineralKing))
+  z <- union(list(x, y, jacobs2000))
   
-  # there should be a total of 20 profiles in the union
-  expect_equal(sum(sapply(list(x, y, mineralKing), length)), 20)
-  expect_equal(length(z), sum(sapply(list(x, y, mineralKing), length)))
+  # there should be a total of 17 profiles in the union
+  expect_equal(sum(sapply(list(x, y, jacobs2000), length)), 17)
+  expect_equal(length(z), sum(sapply(list(x, y, jacobs2000), length)))
+  
   
 })
 
