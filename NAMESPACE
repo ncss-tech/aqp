@@ -156,7 +156,11 @@ exportMethods(
   site,
   "site<-",
   slab,
-  slice
+  slice,
+  hzidname,
+  "hzidname<-",
+  hzID,
+  "hzID<-"
 )
 
 exportPattern("^[^\\.]")
