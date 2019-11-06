@@ -30,7 +30,7 @@ A \code{data.frame} with the following columns:
 
 \author{D.E. Beaudette}
 
-\note{delta-E00 is computed by the \href{https://cran.r-project.org/web/packages/farver/index.html}{farver package}.}
+\note{delta-E00 is computed by the \href{https://CRAN.R-project.org/package=farver}{farver package}.}
 
 
 \seealso{
