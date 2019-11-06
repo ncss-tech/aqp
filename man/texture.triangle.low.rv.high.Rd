@@ -42,6 +42,8 @@ When using this function within .Rmd, be sure to explicitly load the `compositio
 \code{\link{triax.points}, \link{soil.texture}}
 }
 \examples{
+
+\dontrun{
 # sample data
 data(loafercreek, package='soilDB')
 
@@ -58,6 +60,7 @@ if(require(compositions)) {
   textureTriangleSummary(x, p=c(0.05, 0.5, 0.95), sim=TRUE)
 }
 
+}
 }
 
 \keyword{hplot}
