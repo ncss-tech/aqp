@@ -378,9 +378,31 @@ test_that("SPC horizon ID init conflicts", {
   
 })
 
-
-
-
+test_that("horizon slot set/merge", {
+  x <- sp1
+  
+  # take unique site ID, horizon ID, and corresponding property (clay)
+  hnew <- horizons(x)[, c(idname(x), hzidname(x), 'prop')]
+  
+  # do some calculation, create a few new variables
+  hnew$prop100 <- hnew$prop / 100
+  hnew$prop200 <- hnew$prop / 200
+  hnew$prop300 <- hnew$prop / 300
+  
+  hnew$prop[1] <- 50
+  
+  # utilize horizons() merge() functionality to add all new variables in hnew to horizons
+  horizons(x) <- hnew
+  
+  # verify new columns have been added
+  expect_equivalent(horizons(x)[1,c('prop100','prop200','prop300')], c(0.13, 0.13 / 2, 0.13 / 3))
+  
+  # verify old columns have same names (i.e. no issues with duplication of column names in merge)
+  expect_true(all(c(idname(x), hzidname(x), 'prop') %in% names(horizons(x))))
+  
+  # verify old columns have been updated
+  expect_equivalent(horizons(x)[1,c('prop')], c(50))
+})
 
 
 
