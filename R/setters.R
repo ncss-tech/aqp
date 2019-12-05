@@ -345,7 +345,7 @@ setReplaceMethod("depths", "data.frame",
   new.order <- order(data[[nm[1]]], data[[nm[2]]])
   
   # check for factor-class ID
-  if(class(data[[nm[1]]]) == 'factor') {
+  if(inherits(data[[nm[1]]], 'factor')) {
     warning('converting IDs from factor to character', call.=FALSE)
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
@@ -366,7 +366,7 @@ setReplaceMethod("depths", "data.frame",
     res.status <- try(hzID(res) <- data[[o.hzid]], silent = TRUE)
     
     # if not, re-make one
-    if(class(res.status) == 'try-error') {
+    if(inherits(res.status, 'try-error')) {
       # add unique horizon IDs to a new column
       n.hzid <- sprintf("%s_", o.hzid)
       
