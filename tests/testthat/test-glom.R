@@ -22,7 +22,7 @@ test_that("glom by depth returns a SPC clod", {
   # the horizons that are contained within the "clod".
   foo <- glom(p, 25, 100)
   # and returns an SPC
-  expect_equivalent(class(foo), 'SoilProfileCollection')
+  expect_true(inherits(foo, 'SoilProfileCollection'))
   
   # within that SPC there should be only one profile
   expect_equal(length(foo), 1)
@@ -38,8 +38,8 @@ test_that("glom by depth returns a data.frame clod", {
   # the horizons that are contained within the "clod".
   foo <- glom(p, 25, 100, as.data.frame = TRUE)
   
-  # and returns an SPC
-  expect_equivalent(class(foo), 'data.frame')
+  # and returns an data.frame
+  expect_true(inherits(foo, 'data.frame'))
   
   # within that data.frame, length() returns 18
   expect_equal(length(foo), 18)

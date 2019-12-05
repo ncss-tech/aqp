@@ -76,7 +76,7 @@ test_that("soil depth class assignment, using USDA-NRCS class breaks", {
   res <- getSoilDepthClass(d, name='name', top='top', bottom='bottom')
   
   # result should be a data.frame with as many rows as profiles in input
-  expect_equal(class(res), 'data.frame')
+  expect_true(inherits(res, 'data.frame'))
   expect_equal(nrow(res), length(d))
   
   # depths, should be the same as prior tests using estimateSoilDepth

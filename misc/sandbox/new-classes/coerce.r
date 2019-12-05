@@ -79,7 +79,7 @@ as.SoilProfileCollection.SPC <- function(from) {
   new.order <- order(df[[nm_from[1]]], df[[nm_from[2]]])
     
   # check for factor-class ID
-  if(class(df[[nm_from[1]]]) == 'factor') {
+  if(inherits(df[[nm_from[1]]], 'factor')) {
     warning('converting IDs from factor to character', call.=FALSE)
     df[[nm_from[1]]] <- as.character(df[[nm_from[1]]])
   }

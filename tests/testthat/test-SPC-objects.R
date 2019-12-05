@@ -16,7 +16,7 @@ sp1$y <- seq(38, 39, length.out = length(sp1))
 test_that("SPC construction from a data.frame", {
   
   # did it work?
-  expect_match(class(sp1), 'SoilProfileCollection')
+  expect_true(inherits(sp1, 'SoilProfileCollection'))
   
   # ID correctly initialized?
   expect_equal(idname(sp1), 'id')
@@ -37,7 +37,7 @@ test_that("SPC construction from a data.frame", {
   
   # diagnostic slot should be initialized as an empty data.frame
   sp1.dh <- diagnostic_hz(sp1)
-  expect_equal(class(sp1.dh), 'data.frame')
+  expect_true(inherits(sp1.dh, 'data.frame'))
   expect_equal(nrow(sp1.dh), 0)
 })
 
@@ -61,9 +61,9 @@ test_that("SPC deconstruction into a data.frame", {
   s <- site(sp1)
   d <- as(sp1, 'data.frame')
   
-  expect_match(class(h), 'data.frame')
-  expect_match(class(s), 'data.frame')
-  expect_match(class(d), 'data.frame')
+  expect_true(inherits(h, 'data.frame'))
+  expect_true(inherits(s, 'data.frame'))
+  expect_true(inherits(d, 'data.frame'))
 })
 
 
@@ -73,7 +73,7 @@ test_that("SPC deconstruction into a list", {
   l <- as(sp1, 'list')
   
   # result should be a list
-  expect_match(class(l), 'list')
+  expect_true(inherits(l, 'list'))
   
   # there should be no NULL data, e.g. missing slots
   res <- sapply(l, is.null)
@@ -95,11 +95,11 @@ test_that("SPC deconstruction into a list", {
 test_that("SPC subsetting ", {
   
   # profile subsets
-  expect_match(class(sp1[1, ]), 'SoilProfileCollection')
-  expect_match(class(sp1[1:5, ]), 'SoilProfileCollection')
+  expect_true(inherits(sp1[1, ], 'SoilProfileCollection'))
+  expect_true(inherits(sp1[1:5, ], 'SoilProfileCollection'))
   
   # profile and horizon subsets
-  expect_match(class(sp1[1, 1]), 'SoilProfileCollection')
+  expect_true(inherits(sp1[1, 1], 'SoilProfileCollection'))
   
   # there should only be 1 profile and 1 horizon
   expect_equal(length(sp1[1, 1]), 1)
@@ -124,7 +124,7 @@ test_that("SPC graceful failure of spatial operations when data are missing", {
   # square-bracket indexing should work with n = 1
   # https://github.com/ncss-tech/aqp/issues/85
   s <- sp1[1, 1]
-  expect_match(class(s), 'SoilProfileCollection')
+  expect_true(inherits(s, 'SoilProfileCollection'))
   
 })
 
@@ -139,7 +139,7 @@ test_that("SPC spatial operations ", {
   expect_true(validSpatialData(sp1))
   
   # coordinates should be a matrix
-  expect_equal(class(co), 'matrix')
+  expect_true(inherits(co, 'matrix'))
   # as many rows as length and 2 columns
   expect_equal(dim(co), c(length(sp1), 2))
   
@@ -153,20 +153,20 @@ test_that("SPC spatial operations ", {
   expect_equal(sp::proj4string(sp1), '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0')
   
   # basic coercion
-  expect_match(class(as(sp1, 'SpatialPoints')), 'SpatialPoints')
+  expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints'))
   
   # down-grade to {site + sp} = SpatialPointsDataFrame
   expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted')
   sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
-  expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
   # implicity down-grade to SPDF via hz-subsetting
   sp1.spdf <- suppressMessages(sp1[, 1])
-  expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
   # again, with profile indexing
   sp1.spdf <- suppressMessages(sp1[1, 1])
-  expect_match(class(sp1.spdf), 'SpatialPointsDataFrame')
+  expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
 })
 
@@ -181,7 +181,7 @@ test_that("SPC misc. ", {
   m <- metadata(sp1)
   m$citation <- 'this is a citation'
   metadata(sp1) <- m
-  expect_equal(class(metadata(sp1)), 'data.frame')
+  expect_true(inherits(metadata(sp1), 'data.frame'))
   expect_equal(ncol(metadata(sp1)), 2)
   
 })

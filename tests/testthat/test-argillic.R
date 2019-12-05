@@ -17,7 +17,7 @@ test_that("get.increase.matrix() (used for getArgillicBounds())", {
   m <- get.increase.matrix(p, attr, threshold.fun, vertical.distance) 
   
   # correct data type?
-  expect_match(class(m), 'matrix')
+  expect_true(inherits(m, 'matrix'))
   
   # is square matrix?
   expect_true(nrow(m) == ncol(m))

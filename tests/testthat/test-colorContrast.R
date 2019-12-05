@@ -62,7 +62,7 @@ test_that("colorContrast works as expected", {
   d <- colorContrast(m1, m2)
   
   # output should be a data.frame
-  expect_true(class(d) == 'data.frame')
+  expect_true(inherits(d, 'data.frame'))
   expect_true(nrow(d) == length(m1))
   
   # first two columns should contain original colors
