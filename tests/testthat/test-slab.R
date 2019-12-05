@@ -16,9 +16,9 @@ test_that("basic slab functionality", {
   a.3 <- slab(sp1, fm = ~ prop, strict=TRUE, slab.structure=c(0,5,10,25,50))
   
   # did it work?
-  expect_match(class(a.1), 'data.frame')
-  expect_match(class(a.2), 'data.frame')
-  expect_match(class(a.3), 'data.frame')
+  expect_true(inherits(a.1, 'data.frame'))
+  expect_true(inherits(a.2, 'data.frame'))
+  expect_true(inherits(a.3, 'data.frame'))
   
   # number of results, these are in long format
   expect_equal(nrow(a.1), 240)

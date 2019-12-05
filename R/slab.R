@@ -172,10 +172,10 @@
 		stop('mixed variable types and multiple categorical variables are not currently supported in the same call to slab', call.=FALSE)
 	
 	# check for single categorical variable, and convert to factor
-	if(length(vars) == 1 & class(data[, vars]) %in% c('character', 'factor')) {
+	if(length(vars) == 1 & inherits(data[, vars], c('character', 'factor'))) {
 		
 		# if we have a character, then convert to factor
-		if(class(data[[vars]]) == 'character') {
+		if(inherits(data[[vars]],'character')) {
 			message('Note: converting categorical variable to factor.')
 			data[[vars]] <- factor(data[[vars]])
 		}
@@ -257,7 +257,7 @@
 	# if slab.fun returns a vector of length > 1 we must:
 	# convert the complex data.frame returned by aggregate into a regular data.frame
 	# the column 'value' is a matrix with the results of slab.fun
-	if(class(d.slabbed$value) == 'matrix')
+	if(inherits(d.slabbed$value, 'matrix'))
 		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
 	
   # ensure that the names returned from slab.fun are legal

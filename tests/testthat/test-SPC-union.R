@@ -33,7 +33,7 @@ test_that("basic union tests", {
   # this should work
   z <- union(list(x,y))
   
-  expect_match(class(z), 'SoilProfileCollection')
+  expect_true(inherits(z, 'SoilProfileCollection'))
   expect_equal(length(z), length(x) + length(y))
   
   # full site/hz names
@@ -126,7 +126,7 @@ test_that("union with non-conformal spatial data", {
   
   # drop spatial data and no error
   res <- union(list(x, y, z), drop.spatial = TRUE)
-  expect_equivalent(class(res), 'SoilProfileCollection')
+  expect_true(inherits(res, 'SoilProfileCollection'))
   
   ## TODO: different coordinate names
 })
@@ -144,6 +144,6 @@ test_that("filtering NULL elements", {
   
   # this should work
   res <- union(s)
-  expect_equivalent(class(res), 'SoilProfileCollection')
+  expect_true(inherits(res, 'SoilProfileCollection'))
 })
 

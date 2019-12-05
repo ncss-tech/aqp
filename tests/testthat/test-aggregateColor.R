@@ -17,7 +17,7 @@ test_that("basic functionality", {
   a <- aggregateColor(x, groups='genhz', col='soil_color')
   
   # object of correct structure
-  expect_true(class(a) == 'list')
+  expect_true(inherits(a,'list'))
   expect_true(length(a) == 2)
   expect_true(all(names(a) == c('scaled.data', 'aggregate.data')))
   expect_true(names(a$scaled.data) == 'A')

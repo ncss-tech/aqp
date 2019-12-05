@@ -14,8 +14,8 @@ test_that("basic slice functionality", {
   s.d <- slice(sp1, fm = 0:100 ~ ., top.down = TRUE, just.the.data = TRUE, strict = TRUE)
   
   # did it work?
-  expect_match(class(s), 'SoilProfileCollection')
-  expect_match(class(s.d), 'data.frame')
+  expect_true(inherits(s, 'SoilProfileCollection'))
+  expect_true(inherits(s.d, 'data.frame'))
   
   # there should be 101 horizon slices
   expect_equal(nrow(horizons(s[1, ])),  101)

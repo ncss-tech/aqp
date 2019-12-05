@@ -28,7 +28,7 @@ test_that("parsing Munsell notation", {
   expect_equal(parseMunsell('G1 6/N'), as.character(NA))
   
   # neutral colors
-  expect_equal(class(parseMunsell('N 2/', convertColors = FALSE)), 'data.frame')
+  expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
   
   # splitting of text into colums within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))

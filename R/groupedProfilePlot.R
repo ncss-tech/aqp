@@ -13,7 +13,7 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
   
   # if our groups are already a factor, keep existing levels
   # note that an ordered factor has multiple classes: "ordered" , "factor"
-  if(any(grepl('factor', class(s[[groups]]), fixed = TRUE)))
+  if(any(inherits(s[[groups]], 'factor'), fixed = TRUE))
     lab <- s[[groups]][new.order]
   else # not a factor, need to convert to factor, inherit default levels
     lab <- factor(s[[groups]][new.order])

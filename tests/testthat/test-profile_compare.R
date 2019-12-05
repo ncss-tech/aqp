@@ -42,7 +42,7 @@ test_that("profile_compare basics", {
   
   # results should be 3x3 distance matrix
   # this is a cluster package object
-  expect_equal(class(d.dis), c('dissimilarity', 'dist'))
+  expect_true(inherits(d.dis, c('dissimilarity', 'dist')))
   expect_equal(dim(m), c(3, 3))
   
   ## TODO: manually check these

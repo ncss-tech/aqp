@@ -90,7 +90,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     stop('z-slice must be >= 1', call.=FALSE)
 
   ## TODO: this will have to be updated for z-slices defined by data in @site
-  if(! class(z) %in% c('numeric','integer')) # bogus z-slice
+  if(! inherits(z,  c('numeric','integer'))) # bogus z-slice
 		stop('z-slice must be either numeric or integer', call.=FALSE)
 
   # check for '.' --> all variables, minus ID/depths
