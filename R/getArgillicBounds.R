@@ -11,10 +11,11 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
   # get upper bound...
   upper.bound <- argillic.clay.increase.depth(p, attr)
   lower.bound <- -Inf
+  hz <- horizons(p)
   # if upper.bound is non-NA, we might have argillic, because clay increase is met at some depth
   if(!is.na(upper.bound)) {
     # find all horizons with t subscripts; some old/converted horizons have all capital letters
-    has_t <- grepl(as.character(horizons(p)[[hzdesgn]]), pattern="[Tt]")
+    has_t <- grepl(as.character(hz[[hzdesgn]]), pattern="[Tt]")
     ########
     # TODO: allow evidence of illuviation from lab data fine clay ratios etc? how?
     #
@@ -29,12 +30,12 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
       
       ## Partial fix for TODO #2? seems reasnable for the require_t=FALSE lower.bound case
       # take _very_ last horizon depth first (will be truncated to contact depth if needed)
-      depth.last <- horizons(p)[nrow(horizons(p)), horizonDepths(p)[2]]
+      depth.last <- hz[nrow(hz), horizonDepths(p)[2]]
       
       # take the top depth of any B or C horizon  without t subscript above "depth.last"
-      c.idx <- which(grepl(horizons(p)[[hzdesgn]], pattern=lower.grad.pattern))
+      c.idx <- which(grepl(hz[[hzdesgn]], pattern=lower.grad.pattern))
       if(length(c.idx)) {
-        c.horizon <- horizons(p)[c.idx[1], horizonDepths(p)[1]]
+        c.horizon <- hz[c.idx[1], horizonDepths(p)[1]]
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
         if(c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
@@ -47,7 +48,15 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
       
       # get the bottom depth of the last horizon with a t (this could be same as c.horizon above)
       if(require_t)
-        depth.last <- horizons(p)[idx.last, horizonDepths(p)[2]]
+        depth.last <- hz[idx.last, horizonDepths(p)[2]]
+      
+      # in rare cases, the bottom depth of the bedrock/contact is not populated
+      # step back until we find one that is not NA
+      idx.last.i <- idx.last
+      while(is.na(depth.last)) {
+        depth.last <- hz[idx.last.i, horizonDepths(p)[2]]
+        idx.last.i <- idx.last.i - 1
+      }
       
       # estimate the thickness of the soil profile 
       # (you will need to specify alternate pattern if Cr|R|Cd 
