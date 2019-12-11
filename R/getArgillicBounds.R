@@ -39,7 +39,7 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
         if(c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
-          print(paste0("Lower gradational horizons (peiid: ", site(p)$peiid, ") may be present below argillic. Adjusting lower bound."))
+          message(paste0("Lower gradational horizons (",idname(p),": ", profile_id(p), ") may be present below argillic. Adjusting lower bound."))
           # plot(p)
           # print(c.idx)
           depth.last <- c.horizon
@@ -75,7 +75,7 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
         lower.bound <- depth.last
       }
     } else {
-      print(paste0("Pedon (",profile_id(p),") meets clay increase but lacks evidence of illuviation (t subscript). Set `require_t=FALSE` to ignore."))
+      message(paste0("Pedon (",profile_id(p),") meets clay increase but lacks evidence of illuviation (t subscript). Set `require_t=FALSE` to ignore."))
       lower.bound <- NA 
       upper.bound <- NA 
     }
