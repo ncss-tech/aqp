@@ -121,9 +121,10 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   return(res)
 }
 
-## TODO: distance calculation should be delta-E00, sigma is delta-E00 to closest chip
-# color is a matrix/data.frame of sRGB values in range of [0,1]
-# ideally output from munsell2rgb()
+
+# color: matrix/data.frame of sRGB values in range of [0,1]
+# colorSpace: color space / distance metric (sRGB, LAB, CIE2000)
+# nClosest: number of closest chips to return
 rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   
   # vectorize via for-loop
@@ -138,17 +139,9 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   # This should be more foolproof than data(munsell) c/o PR
   load(system.file("data/munsell.rda", package="aqp")[1])
   
-  ## TODO (this is now the default)
-  ## - test
-  ## - report changes, possibly save for 2.0
-  ## - Euclidean distance most useful?
-  ## - farver package may be faster and implements distance metrics: https://github.com/thomasp85/farver
-  ##    + added farver to suggests as of 1.17, distance calc is fully vectorized I think
-  
   ### problems described here, with possible solution, needs testing: 
   ### https://github.com/ncss-tech/aqp/issues/67
   
-  ## TODO: this could probably be optimized
   # iterate over colors
   for(i in 1:n) {
     # convert current color to matrix, this will allow matrix and DF as input
@@ -158,24 +151,49 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
       # euclidean distance (in sRGB space) is our metric for closest-color
       # d = sqrt(r^2 + g^2 + b^2)
       sq.diff <- sweep(munsell[, 4:6], MARGIN=2, STATS=this.color, FUN='-')^2
-      sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
+      sigma <- sqrt(rowSums(sq.diff))
       # rescale distances to 0-1
-      sq.diff.sum.sqrt <- sq.diff.sum.sqrt / max(sq.diff.sum.sqrt)
+      sigma <- sigma / max(sigma)
       # return the closest n-matches
-      idx <- order(sq.diff.sum.sqrt)[1:nClosest]
+      idx <- order(sigma)[1:nClosest]
     }
+    
     if(colorSpace == 'LAB') {
       # euclidean distance (in LAB space) is our metric for closest-color
       # convert sRGB to LAB
       this.color.lab <- convertColor(this.color, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
       # d = sqrt(L^2 + A^2 + B^2)
       sq.diff <- sweep(munsell[, 7:9], MARGIN=2, STATS=this.color.lab, FUN='-')^2
-      sq.diff.sum.sqrt <- sqrt(rowSums(sq.diff))
-      ## TODO why re-scale?
+      sigma <- sqrt(rowSums(sq.diff))
       # rescale distances to 0-1
-      sq.diff.sum.sqrt <- sq.diff.sum.sqrt / max(sq.diff.sum.sqrt)
+      sigma <- sigma / max(sigma)
       # return the closest n-matches
-      idx <- order(sq.diff.sum.sqrt)[1:nClosest]
+      idx <- order(sigma)[1:nClosest]
+    }
+    
+    ## there seems to be a bug in compare_colour() when comparing a vector --> matrix
+    ## very slow until fixed
+    # https://github.com/thomasp85/farver/issues/18
+    if(colorSpace == 'CIE2000') {
+      # CIE dE00 via {farver package}
+      if(!requireNamespace('farver'))
+        stop('pleast install the `farver` package.', call.=FALSE)
+      
+      # convert sRGB to LAB
+      this.color.lab <- convertColor(this.color, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+      dimnames(this.color.lab)[[2]] <- c('L', 'A', 'B')
+      
+      #### hack ####
+      # CIE dE00 very slow (but correct) for-loop
+      sigma <- list()
+      for(i in 1:nrow(munsell)){
+        sigma[i] <- farver::compare_colour(this.color.lab, munsell[i, 7:9], from_space='lab', method = 'CIE2000', white_from = 'D65')
+      }
+      sigma <- unlist(sigma)
+      #### hack ####
+      
+      # return the closest n-matches
+      idx <- order(sigma)[1:nClosest]
     }
     
     # with NA as an input, there will be no output
@@ -184,7 +202,7 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
     
     # otherwise return the closest color
     else
-      res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sq.diff.sum.sqrt[idx])
+      res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
   }
   
   # convert to DF and return

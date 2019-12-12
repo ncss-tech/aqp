@@ -42,6 +42,7 @@ colorContrast <- function(m1, m2) {
   #
   # we don't need the full distance matrix,
   # iterate over rows, much more scaleable
+  # also, avoiding bug (?) https://github.com/thomasp85/farver/issues/18
   d <- list()
   for(i in 1:nrow(m1.lab)){
     d[i] <- farver::compare_colour(m1.lab[i, ], m2.lab[i, ], from_space='lab', method = 'CIE2000', white_from = 'D65')
