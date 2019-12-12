@@ -27,12 +27,37 @@ test_that("parsing Munsell notation", {
   expect_equal(parseMunsell('10YR 4/'), as.character(NA))
   expect_equal(parseMunsell('G1 6/N'), as.character(NA))
   
+  # parsing bogus notation without conversion
+  # doesn't replace with NA
+  bogus <- parseMunsell('G1 3/X', convertColors = FALSE)
+  expect_equal(bogus$hue, 'G1')
+  expect_equal(bogus$value, '3')
+  
   # neutral colors
   expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
   
   # splitting of text into colums within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))
   
+})
+
+
+# addresses #66 (https://github.com/ncss-tech/aqp/issues/66)
+test_that("Munsell hue parsing", {
+  
+  # normal operation
+  res <- aqp:::.parseMunsellHue('10YR')
+  expect_true(inherits(res, 'data.frame'))
+  expect_equal(res$hue.numeric, 10L)
+  expect_equal(res$hue.character, 'YR')
+  expect_equal(nrow(res), 1)
+  
+  # bogus hue
+  res <- aqp:::.parseMunsellHue('G1 ')
+  expect_true(inherits(res, 'data.frame'))
+  expect_true(is.na(res$hue.numeric))
+  expect_true(is.na(res$hue.character))
+  expect_equal(nrow(res), 1)
 })
 
 
