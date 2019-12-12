@@ -21,11 +21,12 @@ x.neutral <- parseMunsell('N 2/', return_triplets=TRUE)
 test_that("parsing Munsell notation", {
 
   # parsing bogus notation generates NA
-  expect_equal(parseMunsell('10YZ 4/5'), as.character(NA))
-  expect_equal(parseMunsell('10YR /5'), as.character(NA))
-  expect_equal(parseMunsell('10YR '), as.character(NA))
-  expect_equal(parseMunsell('10YR 4/'), as.character(NA))
-  expect_equal(parseMunsell('G1 6/N'), as.character(NA))
+  # will also generate a warning from munsell2rgb()
+  expect_equal(suppressWarnings(parseMunsell('10YZ 4/5')), as.character(NA))
+  expect_equal(suppressWarnings(parseMunsell('10YR /5')), as.character(NA))
+  expect_equal(suppressWarnings(parseMunsell('10YR ')), as.character(NA))
+  expect_equal(suppressWarnings(parseMunsell('10YR 4/')), as.character(NA))
+  expect_equal(suppressWarnings(parseMunsell('G1 6/N')), as.character(NA))
   
   # parsing bogus notation without conversion
   # doesn't replace with NA
@@ -58,6 +59,31 @@ test_that("Munsell hue parsing", {
   expect_true(is.na(res$hue.numeric))
   expect_true(is.na(res$hue.character))
   expect_equal(nrow(res), 1)
+})
+
+
+test_that("non-integer value and chroma are rounded", {
+  
+  # rounding of value, throws warning
+  expect_warning(res <- parseMunsell('10YR 3.3/4'), regexp = 'rounded')
+  # this will not throw a warning
+  res <- parseMunsell('10YR 3.3/4', convertColors = FALSE)
+  # results should be the same
+  expect_equal(
+    suppressWarnings(parseMunsell('10YR 3.3/4')),
+    parseMunsell('10YR 3/4')
+  )
+  
+  # rounding of chroma, throws warning
+  expect_warning(res <- parseMunsell('10YR 3/4.6'), regexp = 'rounded')
+  # this will not throw a warning
+  res <- parseMunsell('10YR 3/4.6', convertColors = FALSE)
+  # results should be the same
+  expect_equal(
+    suppressWarnings(parseMunsell('10YR 3/4.6')),
+    parseMunsell('10YR 3/5')
+  )
+  
 })
 
 

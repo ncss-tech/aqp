@@ -223,7 +223,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 		stop('Must supply a valid Munsell color.')
 	
 	# check to make sure that each vector is the same length
-	if(length(unique( c(length(the_hue),length(the_value),length(the_chroma)))) != 1)
+	if(length(unique( c(length(the_hue), length(the_value), length(the_chroma)))) != 1)
 		stop('All inputs must be vectors of equal length.')
 	
   ## plyr <= 1.6 : check to make sure hue is a character
@@ -252,10 +252,21 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   ## 2016-03-07: "fix" values of 2.5 by rounding to 2
   the_value <- ifelse(the_value == 2.5, 2, the_value)
   
+  ## temporary fix for #44 (https://github.com/ncss-tech/aqp/issues/44)
+  # round non integer value and chroma
+  if ( !isTRUE(all.equal(as.character(the_value), as.character(as.integer(the_value)) )) ) {
+    the_value <- round(as.numeric(the_value))
+    warning("'the_value' has been rounded to the nearest integer.", call. = FALSE)
+  }
+  if ( !isTRUE(all.equal(as.character(the_chroma), as.character(as.integer(the_chroma)) )) ) {
+    the_chroma <- round(as.numeric(the_chroma))
+    warning("'the_chroma' has been rounded to the nearest integer.", call. = FALSE)
+  }
   
   # join new data with look-up table
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
-  res <- join(d, munsell, type='left', by=c('hue','value','chroma')) # result has original munsell + r,g,b
+  ## TODO: convert to merge()
+  res <- join(d, munsell, type='left', by=c('hue','value','chroma')) 
 	
   # reset options:
   options(opt.original)
