@@ -2,6 +2,8 @@
 ## pending TODOs
 # https://github.com/ncss-tech/aqp/issues/98
 
+## TODO: replace dlply and ddply with base functions
+
 # x: SPC
 # groups: groups to aggregate over, can be either site/horizon attribute, need not be a factor
 # col: r-compatible hex notation of color

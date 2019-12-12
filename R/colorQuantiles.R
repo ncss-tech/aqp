@@ -11,7 +11,7 @@
 
 
 
-
+## TODO: quantiles should be weighted by thickness, can we do this via slice()?
 colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   
   # sanity check, need this for L1 median
