@@ -1,12 +1,16 @@
 # function is more useful when supplied with a meaningful sd for each horizon
 sim <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {	
-	hd <- horizonDepths(x)
+	
+  hd <- horizonDepths(x)
 	h <- horizons(x)
 	thick <- h[[hd[2]]] - h[[hd[1]]]
 	
 	# remove original depth columns
 	h[[hd[1]]] <- NULL
 	h[[hd[2]]] <- NULL
+	
+	# remove horizon ID so as not to create conflicts later on
+	h[[hzidname(x)]] <- NULL
 	
 	# keep track of old id
 	old.id.name <- idname(x)
