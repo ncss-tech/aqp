@@ -30,8 +30,9 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   # short-circuits
   if(length(spc) == 0)
     return(NULL)
+  
   if(length(spc) == 1)
-    return(spc[1])
+    return(spc[[1]])
   
   # check/filter for NULL list elements: https://github.com/ncss-tech/aqp/issues/93
   idx <- which(! sapply(spc, is.null))
