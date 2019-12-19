@@ -1,7 +1,7 @@
 # miscellaneous soil color indices
 
 #' @title Horizon Color Indices
-#' @description Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index and Buntley-Westin Index. 
+#' @description Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965). 
 #' @param p A SoilProfileCollection
 #' @param hue Column name containing moist hue; default: "m_hue"
 #' @param value Column name containing moist value; default: "m_value"
@@ -61,7 +61,7 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' @title Harden (1982) Rubification
 #' @description Calculate Rubification component of Profile Development Index after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for hue, value and chroma to produce vector output. In Harden (1982) rubification is calculated relative to a reference parent material. Several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 #' @param hue A character vector containing Munsell hues (e.g. "7.5YR")
-#' @param chroma A numeric vector containin Munsell chromas
+#' @param chroma A numeric vector containingMunsell chromas
 #' @param hue_ref A character vector containing Munsell hue(s) (e.g. "10YR") for reference material
 #' @param chroma_ref A numeric vector containing Munsell chroma(s) for reference material
 #' @return A numeric vector reflecting horizon redness increase relative to a reference (e.g. parent) material.
@@ -81,7 +81,7 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' @title Harden (1982) Melanization
 #' @description Calculate Melanization component of Profile Development Index after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for hue and chroma to produce vector output. In Harden (1982), melanization is calculated relative to a reference parent material for all horizons within 100cm of the soil surface. In addition, several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 #' @param value numeric vector containing Munsell values
-#' @param value_ref A numeric vector containin Munsell value(s) for reference material
+#' @param value_ref A numeric vector containingMunsell value(s) for reference material
 #' @return A numeric vector reflecting horizon darkening relative to a reference (e.g. parent) material.
 #' @author Andrew G. Brown.
 #' @rdname harden.melanization

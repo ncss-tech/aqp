@@ -9,7 +9,7 @@ harden.melanization(value, value_ref)
 \arguments{
 \item{value}{numeric vector containing Munsell values}
 
-\item{value_ref}{A numeric vector containin Munsell value(s) for reference material}
+\item{value_ref}{A numeric vector containingMunsell value(s) for reference material}
 }
 \value{
 A numeric vector reflecting horizon darkening relative to a reference (e.g. parent) material.

@@ -19,7 +19,7 @@ horizonColorIndices(p, hue = "m_hue", value = "m_value", chroma = "m_chroma")
 A data.frame containing unique pedon and horizon IDs and horizon-level color indices.
 }
 \description{
-Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index and Buntley-Westin Index.
+Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965).
 }
 \examples{
 horizons(spc) <- horizonColorIndices(spc)

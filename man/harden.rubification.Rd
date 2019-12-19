@@ -9,7 +9,7 @@ harden.rubification(hue, chroma, hue_ref, chroma_ref)
 \arguments{
 \item{hue}{A character vector containing Munsell hues (e.g. "7.5YR")}
 
-\item{chroma}{A numeric vector containin Munsell chromas}
+\item{chroma}{A numeric vector containingMunsell chromas}
 
 \item{hue_ref}{A character vector containing Munsell hue(s) (e.g. "10YR") for reference material}
 
