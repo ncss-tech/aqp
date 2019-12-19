@@ -18,6 +18,8 @@ replace_na=TRUE, add_soil_flag=TRUE,
 return_depth_distances=FALSE, strict_hz_eval=FALSE,
 progress='none', plot.depth.matrix=FALSE, rescale.result=FALSE,
 verbose=FALSE)
+
+pc.SPC(s, vars, rescale.result=FALSE, ...)
 }
 
 
@@ -29,7 +31,7 @@ verbose=FALSE)
 
 
 \arguments{
-  \item{s}{a dataframe with at least 2 columns of soil properties, and an 'id' column for each profile. horizon depths must be integers and self-consistent}
+  \item{s}{a dataframe with at least 2 columns of soil properties, and an 'id' column for each profile. horizon depths must be integers and self-consistent, or a \code{SoilProfileCollection} object}
   \item{vars}{A vector with named properties that will be used in the comparison. These are typically column names describing horizon-level attributes (2 or more), but can also contain site-level attributes (2 or more) if \code{s} is a \code{\link{SoilProfileCollection}}.}
   \item{max_d}{depth-slices up to this depth are considered in the comparison}
   \item{k}{a depth-weighting coeficient, use '0' for no depth-weighting (see examples below)}
@@ -43,6 +45,7 @@ verbose=FALSE)
   \item{plot.depth.matrix}{should a plot of the 'soil'/'non-soil' matrix be returned (FALSE)}
   \item{rescale.result}{should the result be rescaled by dividing by max(D) (FALSE)}
   \item{verbose}{extra debug output (FALSE)}
+  \item{\dots}{additional arguments to \code{pc}}
 }
 
 \details{
@@ -61,9 +64,10 @@ Our approach builds on the work of (Moore, 1972) and the previously mentioned de
 
 \references{
 \describe{
-\item{1.}{http://casoilresource.lawr.ucdavis.edu/}
+\item{1.}{D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, https://doi.org/10.1016/j.cageo.2012.10.020.}
 \item{2.}{Moore, A.; Russell, J. & Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.}
 }
+
 }
 \author{Dylan E. Beaudette}
 

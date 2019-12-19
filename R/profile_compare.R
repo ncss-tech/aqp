@@ -3,6 +3,10 @@
 ## profile classification functions ##
 ##############################################################
 
+
+## lots TODO: https://github.com/ncss-tech/aqp/issues/7
+
+
 # define function for summing a list of dissimilarity matrices
 # that have had NA replaced with 0
 .SumDistanceList <- function(x) Reduce("+", x)
@@ -284,18 +288,19 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
   ## TODO: this makes an assumption on the column containing horizon designations
   ## 2016-08-16: this function ignores vars that don't existin in @horizons
   
-  # iterate over profiles and compute percent missing data by variable
-  pct_data <- evalMissingData(s, vars)
-  
-  ## TODO: review this, and make optional via argument (#7)
-  # keep track of profiles missing any or all of their data
-  problem.profiles.idx <- which(pct_data < 1)
-  # bad.profiles.idx <- which(pct_data == 0)
-  
-  if(length(problem.profiles.idx) > 0) {
-    # assign('problem.profiles', value=pct_missing[problem.profiles.idx,], envir=aqp.env)
-    message('Missing data will bias results, check inputs.')
-  }
+  ## 2019-12-19: disabled until PC is re-factored and / or there is a bette way to get hz name column
+  # # iterate over profiles and compute percent missing data by variable
+  # pct_data <- evalMissingData(s, vars, name = name)
+  # 
+  # ## TODO: review this, and make optional via argument (#7)
+  # # keep track of profiles missing any or all of their data
+  # problem.profiles.idx <- which(pct_data < 1)
+  # # bad.profiles.idx <- which(pct_data == 0)
+  # 
+  # if(length(problem.profiles.idx) > 0) {
+  #   # assign('problem.profiles', value=pct_missing[problem.profiles.idx,], envir=aqp.env)
+  #   message('Missing data will bias results, check inputs.')
+  # }
 
   
   ## 2016-02-22: disabled for now
