@@ -22,7 +22,11 @@ A data.frame containing unique pedon and horizon IDs and horizon-level color ind
 Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965).
 }
 \examples{
-horizons(spc) <- horizonColorIndices(spc)
+data(sp1)
+# promote sp1 data to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
+horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
 }
 \author{
 Andrew G. Brown.

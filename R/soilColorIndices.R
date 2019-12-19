@@ -8,7 +8,12 @@
 #' @param chroma Column name containing moist chroma; default: "m_chroma"
 #' @return A data.frame containing unique pedon and horizon IDs and horizon-level color indices.
 #' @author Andrew G. Brown.
-#' @examples horizons(spc) <- horizonColorIndices(spc)
+#' @examples 
+#' data(sp1)
+#' # promote sp1 data to SoilProfileCollection
+#' depths(sp1) <- id ~ top + bottom
+#' site(sp1) <- ~ group
+#' horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
 #' @rdname horizonColorIndices
 #' @export horizonColorIndices
 horizonColorIndices <- function(p, hue="m_hue", value="m_value", chroma="m_chroma") {
