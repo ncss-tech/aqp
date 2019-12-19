@@ -10,10 +10,22 @@
 #' @author Andrew G. Brown.
 #' @examples 
 #' data(sp1)
+#' 
 #' # promote sp1 data to SoilProfileCollection
 #' depths(sp1) <- id ~ top + bottom
+#' 
+#' # move site data
 #' site(sp1) <- ~ group
+#' 
+#' # compute indices
+#' # merged into `sp1` with implicit left-join on idname(sp1)
 #' horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
+#' 
+#' # visualize
+#' par(mar=c(0, 1, 3, 1))
+#' plot(sp1, color='hurst_redness')
+#' plot(sp1, color='barron_torrent_redness')
+#' plot(sp1, color='buntley_westin')
 #' @rdname horizonColorIndices
 #' @export horizonColorIndices
 horizonColorIndices <- function(p, hue="m_hue", value="m_value", chroma="m_chroma") {

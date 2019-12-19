@@ -16,7 +16,7 @@ evalMissingData(x, vars, name = "hzname", p = "Cr|R|Cd", method='relative')
   \item{method}{'relative' (proportion of total) or 'absolute' depths}
 }
 
-\details{Data completeness is evaluated by profile, based on the thickness of horizons with complete horizon-level attribute values (specified in \code{vars}) divided by the total thickness. The default REGEX pattern, \code{p}, should catch most non-soil horizons which are excluded from the evaluation. Elements of \code{vars} that do not exist in \code{horizonNames(x)} are ignored.}
+\details{Data completeness is evaluated by profile, based on the thickness of horizons with complete horizon-level attribute values (specified in \code{vars}) divided by the total thickness. The default REGEX pattern, \code{p}, should catch most non-soil horizons which are excluded from the evaluation.}
 
 \value{A vector values ranging from 0 to 1 (\code{method='relative'}) or 0 to maximum depth in specified depth units (\code{method='absolute'}), representing the quantity of non-NA data (as specified in \code{vars}) for each profile.}
 
@@ -32,16 +32,24 @@ depths(sp2) <- id ~ top + bottom
 
 # compute data completeness
 sp2$data.complete <- evalMissingData(sp2, vars = c('r', 'g', 'b'), name = 'name')
+sp2$data.complete.abs <- evalMissingData(sp2, vars = c('r', 'g', 'b'), 
+                                         name = 'name', method = 'absolute')
 
 # rank
 new.order <- order(sp2$data.complete)
 
 # plot along data completeness ranking
-plot(sp2, plot.order=new.order)
+plot(sp2, plot.order=new.order, name='name')
 
-# add axis, note re-ordering of axis labels
+# add relative completeness axis
+# note re-ordering of axis labels
 axis(side=1, at=1:length(sp2), labels = round(sp2$data.complete[new.order], 2),
-line=-2, cex.axis=0.75)
+     line=-1.5, cex.axis=0.75)
+
+# add absolute completeness (cm)
+axis(side=1, at=1:length(sp2), labels = sp2$data.complete.abs[new.order],
+     line=1, cex.axis=0.75)
+
 }
 
 \keyword{manip}
