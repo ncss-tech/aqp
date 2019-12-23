@@ -59,7 +59,8 @@ setClass(
     horizons='data.frame', # all horizons sorted by ID, top
     site='data.frame', # data about the sampling sites
     sp='SpatialPoints', # spatial data stored here, initialized as 'empty' SP object
-    diagnostic='data.frame' # (optional) diagnostic horizons are stored here
+    diagnostic='data.frame', # (optional) diagnostic horizons are stored here
+    restrictions='data.frame' # (optional) restrictions are stored here
   ),
   prototype=prototype(
     idcol='id',
@@ -69,7 +70,8 @@ setClass(
     horizons=data.frame(stringsAsFactors=FALSE),
     site=data.frame(stringsAsFactors=FALSE),
     sp=SpatialPoints(data.frame(x = 0, y = 0))[-1,],
-    diagnostic=data.frame(stringsAsFactors=FALSE)
+    diagnostic=data.frame(stringsAsFactors=FALSE),
+    restrictions=data.frame(stringsAsFactors=FALSE)
   ),
   validity=.SoilProfileCollectionValidity
 )

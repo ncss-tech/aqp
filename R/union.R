@@ -89,6 +89,12 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
       names(spc.list[[i]]$diagnostic)[idx] <- new.pID
     }
     
+    # profile ID in restriction, may be missing
+    if(old.pID %in% names(spc.list[[i]]$restriction)) {
+      idx <- match(old.pID, names(spc.list[[i]]$restrictions))
+      names(spc.list[[i]]$restrictions)[idx] <- new.pID
+    }
+    
     # hz depth columns
     idx <- match(old.hzd, names(spc.list[[i]]$horizons))
     names(spc.list[[i]]$horizons)[idx] <- new.hzd
@@ -102,6 +108,7 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   o.h <- lapply(spc.list, '[[', 'horizons')
   o.s <- lapply(spc.list, '[[', 'site')
   o.d <- lapply(spc.list, '[[', 'diagnostic')
+  o.r <- lapply(spc.list, '[[', 'restrictions')
   o.sp <- lapply(spc.list, '[[', 'sp')
   
   # generate new SPC components
@@ -110,6 +117,7 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   o.h <- do.call('rbind.fill', o.h) # horizon data
   o.s <- do.call('rbind.fill', o.s) # site data
   o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
+  o.r <- do.call('rbind.fill', o.r) # diagnostic data, leave as-is
   
   if(! drop.spatial) {
     # check for non-conformal coordinates
@@ -157,7 +165,7 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   }
   
   ## make SPC from pieces
-  res <- SoilProfileCollection(idcol=new.pID, depthcols=new.hzd, metadata=new.metadata, horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d)
+  res <- SoilProfileCollection(idcol=new.pID, depthcols=new.hzd, metadata=new.metadata, horizons=o.h, site=o.s, sp=o.sp, diagnostic=o.d, restrictions=o.r)
   
   ## reset horizon IDs
   hzID(res) <- 1:nrow(res)

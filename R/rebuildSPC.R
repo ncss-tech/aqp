@@ -17,6 +17,7 @@ rebuildSPC <- function(x) {
   metadata(res) <- x.list$metadata
   site(res) <- x.list$site
   diagnostic_hz(res) <- x.list$diagnostic
+  restrictions(res) <- x.list$restrictions
   
   # copy valid spatial data from the source object
   # otherwise, the previous and possibly invalid SpatialPoints object created by horizons() is fine

@@ -93,6 +93,18 @@ setReplaceMethod("profile_id", "SoilProfileCollection",
                      suppressWarnings(diagnostic_hz(object) <- dg)
                    }
                    
+                   # search in @restrictions
+                   re <- restrictions(object)
+                   re.nm <- names(re)
+                   idx <- grep(idn, re.nm)
+                   
+                   if(length(idx) > 0) {
+                     # apply edits via LUT
+                     update.idx <- match(re[[idx]], lut[, 1])
+                     re[[idx]] <- lut[update.idx, 2]
+                     suppressWarnings(restrictions(object) <- re)
+                   }
+                   
                    return(object)
                  }
 )
@@ -593,7 +605,7 @@ setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
   
   # test to make sure that our common ID is present in the new data
   if(! idn %in% nm)
-  	stop(paste("diagnostic horizon data are missing a common ID:", idn), call.=FALSE)
+  	stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call.=FALSE)
   
   # test to make sure that at least one of the IDS in candidate data are present within SPC
   if(all( ! unique(value[[idn]]) %in% pIDs) )
@@ -614,4 +626,56 @@ setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
   # done
   return(object)
   }
+)
+
+
+# restriction data
+# likely to either have no restrictions or possibly more than one
+if (!isGeneric('restrictions<-'))
+  setGeneric('restrictions<-', function(object, value) standardGeneric('restrictions<-'))
+
+setReplaceMethod("restrictions", "SoilProfileCollection",
+                 function(object, value) {
+                   
+                   # get the initial data
+                   d <- restrictions(object)
+                   
+                   # get column and ID names
+                   nm <- names(value)
+                   idn <- idname(object)
+                   pIDs <- profile_id(object)
+                   
+                   # testing the class of the new data
+                   if (!inherits(value, "data.frame"))
+                     stop("restriction data must be a data.frame", call.=FALSE)
+                   
+                   # test for the special case where internally-used functions 
+                   # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
+                   # short-circut, and return original object
+                   if(nrow(d) == 0 & nrow(value) == 0)
+                     return(object)
+                   
+                   # test to make sure that our common ID is present in the new data
+                   if(! idn %in% nm)
+                     stop(paste("restriction data are missing pedon ID column: ", idn), call.=FALSE)
+                   
+                   # test to make sure that at least one of the IDS in candidate data are present within SPC
+                   if(all( ! unique(value[[idn]]) %in% pIDs) )
+                     warning('restriction data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
+                   
+                   # warn user if some of the IDs in the candidate data are missing
+                   if(any( ! unique(value[[idn]]) %in% pIDs) ) {
+                     warning('some records in restriction data have no matching IDs in target SoilProfileCollection object')
+                   }
+                   
+                   # if data are already present, warn the user
+                   if(nrow(d) > 0)
+                     warning('overwriting existing restriction data!', call.=FALSE)
+                   
+                   # copy data over
+                   object@restriction <- value
+                   
+                   # done
+                   return(object)
+                 }
 )

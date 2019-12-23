@@ -34,11 +34,17 @@ test_that("SPC construction from a data.frame", {
   # correct number of profiles and horizons?
   expect_equal(length(sp1), 9)
   expect_equal(nrow(sp1), 60)
-  
-  # diagnostic slot should be initialized as an empty data.frame
+})
+
+test_that("SPC diagnostics and restrictions", {
+  # diagnostic & restriction slot should be initialized as an empty data.frame
   sp1.dh <- diagnostic_hz(sp1)
   expect_true(inherits(sp1.dh, 'data.frame'))
   expect_equal(nrow(sp1.dh), 0)
+  
+  sp1.rh <- restrictions(sp1)
+  expect_true(inherits(sp1.rh, 'data.frame'))
+  expect_equal(nrow(sp1.rh), 0)
 })
 
 test_that("SPC data.frame interface", {
@@ -88,6 +94,7 @@ test_that("SPC deconstruction into a list", {
   expect_equivalent(l$site, site(sp1))
   expect_equivalent(l$sp, sp1@sp)
   expect_equivalent(l$diagnostic, diagnostic_hz(sp1))
+  expect_equivalent(l$restrictions, restrictions(sp1))
   
 })
 

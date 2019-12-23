@@ -194,8 +194,9 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   if(nrow(site(object)) > 0 )
     hd.slices@site <- site(object)
   
-  # copy over any diagnostic features
+  # copy over any diagnostic features/restrictions
   diagnostic_hz(hd.slices) <- diagnostic_hz(object)
+  restrictions(hd.slices) <- restrictions(object)
   
   # copy over metadata
   metadata(hd.slices) <- metadata(object)

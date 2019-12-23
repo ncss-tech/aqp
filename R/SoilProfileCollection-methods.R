@@ -6,10 +6,11 @@ metadata=data.frame(stringsAsFactors=FALSE),
 horizons,
 site=data.frame(stringsAsFactors=FALSE),
 sp=new('SpatialPoints'), # this is a bogus place-holder
-diagnostic=data.frame(stringsAsFactors=FALSE)
+diagnostic=data.frame(stringsAsFactors=FALSE),
+restrictions=data.frame(stringsAsFactors=FALSE)
 ){
   # creation of the object (includes a validity check)
-  new("SoilProfileCollection", idcol=idcol, depthcols=depthcols, metadata=metadata, horizons=horizons, site=site, sp=sp, diagnostic=diagnostic)
+  new("SoilProfileCollection", idcol=idcol, depthcols=depthcols, metadata=metadata, horizons=horizons, site=site, sp=sp, diagnostic=diagnostic, restrictions=restrictions)
 }
 
 
@@ -136,7 +137,18 @@ if (!isGeneric("diagnostic_hz"))
 
 setMethod(f='diagnostic_hz', signature='SoilProfileCollection',
   function(object){
-  return(object@diagnostic)
+    return(object@diagnostic)
+  }
+)
+
+## restrictions: stored as a DF, must be join()-ed to other data via ID
+## note: ordering may or may not be the same as in site data
+if (!isGeneric("restrictions"))
+  setGeneric("restrictions", function(object, ...) standardGeneric("restrictions"))
+
+setMethod(f='restrictions', signature='SoilProfileCollection',
+  function(object){
+    return(object@restrictions)
   }
 )
 
@@ -565,6 +577,11 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     if(length(d) > 0) # some data
     	d <- d[which(d[[idname(x)]] %in% p.ids), ]
     
+    # subset restriction data, but only if it exists
+    # note that not all profiles have restrictions
+    r <- restrictions(x)
+    if(length(r) > 0) # some data
+      r <- r[which(r[[idname(x)]] %in% p.ids), ]
     
     ## this is almost correct, but subsetting does not propagate to other slots (https://github.com/ncss-tech/aqp/issues/89)
     # subset horizons/slices based on j --> only when j is given
@@ -626,7 +643,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     else {
-      res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d)
+      res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d, restrictions=r)
       
       
       
