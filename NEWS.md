@@ -1,3 +1,11 @@
+# aqp 1.18.3 (2019-12-19)
+  * evalMissingData() gets new argument for relative vs. absolute evalulation of missing data
+  * horizonColorIndices() and associated functions c/o Andrew Brown
+  * fix for https://github.com/ncss-tech/aqp/issues/44
+  * fix for https://github.com/ncss-tech/aqp/issues/66
+  * new example data: `rowley2019`
+  * dropped some dependencies
+
 # aqp 1.17.10 (2019-10-30)
   * removing imported functions from `Hmisc` (hdquantile), loading `aqp` is now much faster
      + `slab()` now uses `stats::quantile()` as the default slab function

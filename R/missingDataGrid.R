@@ -19,7 +19,7 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
     rm(h)
   }
   
-  
+  ## TODO: this is not efficient  
   # get a list of horizon boundary depths for latter annotation of sliced data
   obd <- profileApply(s, simplify=FALSE, FUN=function(i) {
     hd <- horizonDepths(i)
