@@ -673,7 +673,7 @@ setReplaceMethod("restrictions", "SoilProfileCollection",
                      warning('overwriting existing restriction data!', call.=FALSE)
                    
                    # copy data over
-                   object@restriction <- value
+                   object@restrictions <- value
                    
                    # done
                    return(object)
