@@ -46,6 +46,7 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{\code{site}:}{Object of class \code{"data.frame"} with 1 row per profile }
     \item{\code{sp}:}{Object of class \code{"SpatialPoints"} with 1 row per profile }
     \item{\code{diagnostic}:}{Object of class \code{"data.frame"} with 0 or more rows per profile}
+    \item{\code{restrictions}:}{Object of class \code{"data.frame"} with 0 or more rows per profile}
   }
 }
 \section{Methods}{

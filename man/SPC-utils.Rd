@@ -29,6 +29,11 @@
 \alias{diagnostic_hz,SoilProfileCollection-method}
 \alias{diagnostic_hz<-,SoilProfileCollection-method}
 
+\alias{restrictions}
+\alias{restrictions<-}
+\alias{restrictions,SoilProfileCollection-method}
+\alias{restrictions<-,SoilProfileCollection-method}
+
 \alias{horizonDepths}
 \alias{horizonDepths,SoilProfileCollection-method}
 \alias{horizonDepths<-}
