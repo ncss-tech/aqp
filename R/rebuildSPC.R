@@ -13,6 +13,9 @@ rebuildSPC <- function(x) {
   fm <- as.formula(sprintf("%s ~ %s + %s", x.list$idcol, x.list$depthcols[1], x.list$depthcols[2]))
   depths(res) <- fm
   
+  # preserve original hzidname (default set by depths())
+  hzidname(res) <- x.list$hzidcol
+  
   # add additional pieces
   metadata(res) <- x.list$metadata
   site(res) <- x.list$site
