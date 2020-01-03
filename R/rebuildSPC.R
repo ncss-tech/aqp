@@ -19,6 +19,18 @@ rebuildSPC <- function(x) {
   # add additional pieces
   metadata(res) <- x.list$metadata
   site(res) <- x.list$site
+  
+  # @diagnostic and @restructions may be missing if `x` is very old
+  # replace with empty data.frame so that setters do not error
+  if(is.null(x.list$diagnostic)) {
+    x.list$diagnostic <- data.frame()
+  }
+  
+  if(is.null(x.list$restrictions)) {
+    x.list$restrictions <- data.frame()
+  }
+  
+  # set
   diagnostic_hz(res) <- x.list$diagnostic
   restrictions(res) <- x.list$restrictions
   
