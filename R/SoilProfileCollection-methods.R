@@ -95,6 +95,8 @@ setMethod("hzID", "SoilProfileCollection",
 if (!isGeneric("profile_id"))
   setGeneric("profile_id", function(object, ...) standardGeneric("profile_id"))
 
+## warning! this assumes that horizon data aren't re-shuffled
+## will be fixed in aqp 2.0
 setMethod("profile_id", "SoilProfileCollection",
   function(object)
     unique(as.character(horizons(object)[[idname(object)]]))
@@ -386,7 +388,7 @@ setMethod("$", "SoilProfileCollection",
 )
 
 
-## problem: when making new columns how  can the function determine where to insert the replacement>?
+
 setReplaceMethod("$", "SoilProfileCollection",
   function(x, name, value) {
   	# extract hz and site data
@@ -402,36 +404,32 @@ setReplaceMethod("$", "SoilProfileCollection",
       
     # working with site data  
     if(name %in% names(s)) {
-	  s[[name]] <- value
+      s[[name]] <- value
       # TODO: use site(x) <- s
       x@site <- s
       return(x)
       }
     
-    # ambiguous: use length of replacement to determing: horizon / site   
-    else {
-      n.site <- nrow(s)
-      n.hz <- nrow(h)
-      l <- length(value)
-
-      if(l == n.hz) {
-      	h[[name]] <- value
-	    horizons(x) <- h
-	    return(x)
-      	}
-      
-      if(l == n.site) {
-      	s[[name]] <- value
-      	# TODO: use site(x) <- s
-      	x@site <- s
-      	return(x)
-      	}
-	
-	  else
-	  	stop('length of replacement must equal number of sites or number of horizons')
-    		
-    }
-  # done  
+    # ambiguous: use length of replacement to determing: horizon / site
+		n.site <- nrow(s)
+		n.hz <- nrow(h)
+		l <- length(value)
+		
+		if(l == n.hz) {
+		  h[[name]] <- value
+		  horizons(x) <- h
+		  return(x)
+		}
+		
+		if(l == n.site) {
+		  s[[name]] <- value
+		  # TODO: use site(x) <- s
+		  x@site <- s
+		  return(x)
+		}
+		
+		# otherwise, there is a problem
+		stop('length of replacement must equal number of sites or number of horizons')
   }
 )
 

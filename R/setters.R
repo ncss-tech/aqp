@@ -546,7 +546,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
     if((length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) == 0) &
        any(!unique(names(value)) %in% unique(names(object@horizons)))) {
       to_merge <- c(names(value)[!names(value) %in% names(object@horizons)], idname(object), hzidname(object))
-      object@horizons <- merge(object@horizons, value[,to_merge], all.x = TRUE, by = c(idname(object), hzidname(object)))
+      object@horizons <- merge(object@horizons, value[,to_merge], all.x = TRUE, by = c(idname(object), hzidname(object)), sort=FALSE)
       
       # now, do updates to "old" columns so we do not duplicate
       to_update <- names(value)[!names(value) %in% to_merge]
