@@ -398,7 +398,7 @@ test_that("horizon slot set/merge", {
   
   hnew$prop[1] <- 50
   
-  # utilize horizons() merge(..., sort=TRUE) functionality to add all new variables in hnew to horizons
+  # utilize horizons() merge(..., sort=FALSE) functionality to add all new variables in hnew to horizons
   horizons(x) <- hnew
   
   # verify new columns have been added
@@ -411,5 +411,26 @@ test_that("horizon slot set/merge", {
   expect_equivalent(horizons(x)[1,c('prop')], c(50))
 })
 
-
+test_that("ordering of profiles and horizons is retained following set/merge", {
+  # IDs that when sorted will no be in this order
+  s <- c('a', "1188707", "1188710", "120786", "1207894", 'z')
+  l <- lapply(s, random_profile)
+  d <- do.call('rbind', l)
+  
+  # init SPC
+  depths(d) <- id ~ top + bottom
+  
+  ## !! bug happens here, when attempting to set a new horizon-level attr
+  ## call stack roughly
+  # $<-
+  # horizons<-
+  # merge(old, new)
+  d$zzz <- rep(NA, times=nrow(d))
+  
+  # previously mysterious warning message
+  z <- d[1:5, ]
+  
+  # ordering of profile IDs (unique, from @horizons) != ordering of IDs in @site
+  expect_true(all(profile_id(d) == site(d)[[idname(d)]]))
+})
 
