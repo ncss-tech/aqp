@@ -1,3 +1,7 @@
+# aqp 1.18.4 (2020-01-06)
+  * bug fix (rare) when setting / replacing horizon attributes (https://github.com/ncss-tech/aqp/issues/105)
+  * bug fix in `colorQuantiles` until `farver` 2.0.2 is available on CRAN
+
 # aqp 1.18.3 (2019-12-19)
   * evalMissingData() gets new argument for relative vs. absolute evalulation of missing data
   * horizonColorIndices() and associated functions c/o Andrew Brown

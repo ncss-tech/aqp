@@ -71,8 +71,14 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   B.closest <- .closestMunselltoCIELAB(soilColors.lab[B.q.idx, ])
   
   
-  # find closest observed color to L1 median, linear CIE2000 distance metric
-  d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
+  ## 1:many distance calcs broken in farver < 2.0.2
+  ## https://github.com/thomasp85/farver/issues/18
+  ## fixed in next CRAN release
+  ## find closest observed color to L1 median via CIE2000 distance metric
+  # d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
+  
+  ## backup plan using Euclidean distance in CIELAB
+  d <- sqrt(rowSums(sweep(soilColors.lab, MARGIN = 2, STATS=L1, FUN = '-')^2))
   L1.color <- soilColors[which.min(d)]
   
   # closest observed colors to marginal quantiles
