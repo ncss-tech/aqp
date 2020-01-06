@@ -60,6 +60,7 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue') {
   cc <- colorContrast(x$munsell, rep(m$queryColor, times=nrow(x)))
   
   # join for plotting
+  # note: data are sorted by merge()
   z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE)
   
   # alternative modes

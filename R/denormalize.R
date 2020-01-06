@@ -13,7 +13,7 @@ denormalize <- function(obj, attr) {
   
   # perform left-join
   # retain only IDs on left side, IDs + attr on the right
-  res <- merge(h[, idn, drop=FALSE], s[, vars], all.x = TRUE)
+  res <- merge(h[, idn, drop=FALSE], s[, vars], all.x = TRUE, sort=FALSE)
   
   # susbet named attr
   res <- res[[attr]]
