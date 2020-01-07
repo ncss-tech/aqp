@@ -9,7 +9,9 @@ Return a "ragged" group of horizons selected from SoilProfileCollection
 
 A clod is a "ragged" group of horizons. In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from pedon to pedon. 
 
-All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like \code{slice} or \code{slab}. 
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like \code{\link{slice}} or \code{\link{slab}}. 
+
+If intersection at the specified boundaries [`z1`, `z2`] results in no horizon data, `NA` is returned with a warning containing the offending pedon ID. If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. End users should handle the possibility of incomplete pedons using \code{\link{evalMissingData}} or similar approach.
 
 Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 

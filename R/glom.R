@@ -55,8 +55,12 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
     warning(paste0('Invalid upper bound. Check argument `z1`. Returning `NA` for profile ID: ', profile_id(p)))
     return(NA)
   }
-    
+  
   idx.top <- idx.top[1] # always returns the top horizon
+  
+  if(z1 < tdep[idx.top]) {
+    warning(paste0('Upper boundary `z1` is shallower than top depth of shallowest horizon. Profile ID: ', profile_id(p)))
+  }
   
   # if a bottom depth of the clod interval is specified
   if (!is.na(z2)) {
@@ -77,7 +81,11 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
       return(NA)
     }
     
-idx.bot <- idx.bot[1]
+    idx.bot <- idx.bot[1]
+    
+    if(z2 > bdep[idx.bot]) {
+      warning(paste0('Upper boundary `z2` is deeper than bottom depth of deepest horizon. Profile ID: ', profile_id(p)))
+    }
     
     # not really sure how this could happen ... maybe with wrong depth units for z?
     if(!(all(idx.top:idx.bot %in% 1:nrow(p)))) {
