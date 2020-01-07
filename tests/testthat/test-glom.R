@@ -4,7 +4,7 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-p <- sp1[1]
+p <- sp1[6]
 attr <- 'prop' # clay contents % 
 
 test_that("intersection of horizons by depth", {
