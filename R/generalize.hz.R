@@ -3,7 +3,7 @@
 # x: a vector of regex patterns
 # non.matching.code: code for any non-matching hz designations
 # hzdepm: vector of hz mid-points
-# dots: additional arguments passed to grep
+# dots: additional arguments passed to grep (e.g. perl=TRUE)
 generalize.hz <- function(x, new, pat, non.matching.code='not-used', hzdepm = NA, ...) {
 	
 	# init vector of 'other', same length as original horizon name vector

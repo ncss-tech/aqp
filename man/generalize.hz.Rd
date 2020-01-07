@@ -11,7 +11,7 @@
   \item{pat}{a character vector of REGEX, same length as \code{x}}
   \item{non.matching.code}{text used to describe any horizon not matching any item in \code{pat}}
   \item{hzdepm}{a numeric vector of horizon mid-points, must not contain NA, same length as \code{x}}
-  \item{\dots}{additional arguments passed to \code{grep()}}
+  \item{\dots}{additional arguments passed to \code{grep()} such as \code{perl=TRUE} for advanced REGEX}
 }
 
 \value{factor of the same length as \code{x}}

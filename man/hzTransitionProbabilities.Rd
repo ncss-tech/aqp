@@ -23,7 +23,10 @@ mostLikelyHzSequence(mc, t0, maxIterations=10)
   \item{maxIterations}{the maximum number of iterations when search for the most-likely horizon sequence}
 }
 
-\details{Details and related tutorial pending...}
+\details{See the following tutorials for some ideas:
+\item{horizon designation TP}{\url{http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html}}
+\item{soil color TP}{\url{http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html}}
+}
 
 \value{The function \code{hzTransitionProbabilities} returns a square matrix of transition probabilities. See examples.
 
