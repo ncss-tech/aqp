@@ -15,10 +15,15 @@
 #  the horizons are aggregated by depth using clod.hz.ids() 
 glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
   # aka glom.by.depth; just one type of glomming of many that we can support
-  if(!as.data.frame) {
-    return(p[, which(hzID(p) %in% clod.hz.ids(p, z1, z2))]) 
+  idx <- clod.hz.ids(p, z1, z2)
+  if(!all(is.na(idx))) {
+    if(!as.data.frame) {
+      return(p[, which(hzID(p) %in% idx)]) 
+    } else {
+      return(horizons(p)[hzID(p) %in% idx,])
+    }
   } else {
-    return(horizons(p)[hzID(p) %in% clod.hz.ids(p, z1, z2),])
+    return(NA)
   }
 }
 
@@ -46,9 +51,11 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
   # get the index of the first horizon
   idx.top <- which(gt1)
   
-  if (!length(idx.top)) 
-    stop('Invalid horizon index. Check argument `z1`.')
-  
+  if (!length(idx.top)) {
+    warning(paste0('Invalid upper bound. Check argument `z1`. Returning `NA` for profile ID: ', profile_id(p)))
+    return(NA)
+  }
+    
   idx.top <- idx.top[1] # always returns the top horizon
   
   # if a bottom depth of the clod interval is specified
@@ -65,15 +72,19 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
     # get index of last horizon
     idx.bot <- rev(which(lt2))
     
-    if (!length(idx.bot)) 
-      stop('Invalid horizon index. Check arguments `z1` and `z2`.')
+    if (!length(idx.bot)) {
+      warning('Invalid lower bound. Check arguments `z1` and `z2`. Returning `NA` for profile ID: ', profile_id(p))
+      return(NA)
+    }
     
-    idx.bot <- idx.bot[1]
+idx.bot <- idx.bot[1]
     
     # not really sure how this could happen ... maybe with wrong depth units for z?
-    if(!(all(idx.top:idx.bot %in% 1:nrow(p))))
-      stop('Invalid horizon index. Check arguments `z1` and `z2`.')
-    
+    if(!(all(idx.top:idx.bot %in% 1:nrow(p)))) {
+      warning('Invalid lower bound. Check arguments `z1` and `z2`. Returning `NA` for profile ID: ', profile_id(p))
+      return(NA)
+    }
+
     # get the ID values out of horizon table
     idval <- hz[idx.top:idx.bot, hzid]
     
