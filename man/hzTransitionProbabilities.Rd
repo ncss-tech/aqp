@@ -24,8 +24,10 @@ mostLikelyHzSequence(mc, t0, maxIterations=10)
 }
 
 \details{See the following tutorials for some ideas:
-\item{horizon designation TP}{\url{http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html}}
-\item{soil color TP}{\url{http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html}}
+\describe{
+  \item{horizon designation TP}{\url{http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html}}
+  \item{soil color TP}{\url{http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html}}
+  }
 }
 
 \value{The function \code{hzTransitionProbabilities} returns a square matrix of transition probabilities. See examples.
