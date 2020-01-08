@@ -1,6 +1,4 @@
 ## TODO: https://github.com/ncss-tech/aqp/issues/68
-# * optional sorting strategies, log(RI) from Barron & Torrent, 1986
-# * plot in MDS-space via CIE2000 distances
 # * plot in layout similar to Munsell Color Book, alpha ~ frequency
 # * distance matrix calculation takes time, careful with n > 1,000
 # * gower's distance of {L,A,B} looks pretty good too

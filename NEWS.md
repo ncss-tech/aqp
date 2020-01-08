@@ -1,6 +1,7 @@
 # aqp 1.18.4 (2020-01-06)
   * bug fix (rare) when setting / replacing horizon attributes (https://github.com/ncss-tech/aqp/issues/105)
   * bug fix in `colorQuantiles` until `farver` 2.0.2 is available on CRAN
+  * `SoilProfileCollection` object gains new slot: `@restrictions`, fix old objects with `rebuildSPC()`
 
 # aqp 1.18.3 (2019-12-19)
   * evalMissingData() gets new argument for relative vs. absolute evalulation of missing data
@@ -17,17 +18,17 @@
      + previous behavior of `slab()` can be activated via argument: `slab.fun = aqp:::.slab.fun.numeric.HD`
 
 # aqp 1.17.08 (2019-10-03)
-  * generalize.hz() gets a \dots argument for passing additional arguments to grep(), e.g. perl=TRUE
-  * addVolumeFraction() can now accept a vector of colors, as many as number of horizons
+  * `generalize.hz()` gets a \dots argument for passing additional arguments to `grep()`, e.g. `perl=TRUE`
+  * `addVolumeFraction()` can now accept a vector of colors, as many as number of horizons
   * new sample data: `jacobs2000`, pending documentation
-  * aggregateColor() faster and more accuracte, using delta-E00 for quantized colors c/o {farver} (see https://github.com/ncss-tech/aqp/issues/98)
-  * new functions contrastChart() and soilPalette()
+  * `aggregateColor()` faster and more accuracte, using delta-E00 for quantized colors c/o {farver} (see https://github.com/ncss-tech/aqp/issues/98)
+  * new functions `contrastChart()` and `soilPalette()`
   * aqp 1.18 scheduled for next CRAN release
 
 # aqp 1.17.06 (2019-07-15)
-   * plotSPC() gains a new argument for relative positioning: relative.pos
-   * relative positioning helper function: fixOverlap(), see manual page for examples
-   * explainPlotSPC(), addDiagnosticBracket(), and addVolumeFraction() updated accordingly
+   * `plotSPC()` gains a new argument for relative positioning: relative.pos
+   * relative positioning helper function: `fixOverlap()`, see manual page for examples
+   * `explainPlotSPC()`, `addDiagnosticBracket()`, and `addVolumeFraction()` updated accordingly
 
 # aqp 1.17.05 (2019-05-18)
    * new functions colorContrast(), contrastClass(), and huePosition()
@@ -39,20 +40,20 @@
 
 # aqp 1.17.01 (2019-02-07)
    * new version number system
-   * plotSPC() will now attempt to create multi-row legends when using a factor > n.legend levels
-   * plotSPC() will now generate >  10 colors for legends associated with a factor (https://github.com/ncss-tech/aqp/issues/9)
-   * munsell2rgb() will now return CIE LAB coordinates if requested (https://github.com/ncss-tech/aqp/issues/69)
+   * `plotSPC()` will now attempt to create multi-row legends when using a factor > n.legend levels
+   * `plotSPC()` will now generate >  10 colors for legends associated with a factor (https://github.com/ncss-tech/aqp/issues/9)
+   * `munsell2rgb()` will now return CIE LAB coordinates if requested (https://github.com/ncss-tech/aqp/issues/69)
 
 # aqp 1.17 (2018-12-28)
    * CRAN release
-   * aggregateColor() gets a new feature, similar colors can be grouped via cluster::pam()
-   * new functions: previewColors(), colorQuantiles(), plotColorQuantiles()
-   * new function: horizonDepths()<-, edit top/bottom names after SPC init
-   * new function: profile_id()<-, edit profile IDs after init; be careful!
-   * new functions: hzID() and hzID()<-, get/set unique horizon IDs
-   * new functions: hzidname() and hzidname()<-, get/set column containing unique horizon IDs
-   * rbind.SoilProfileCollection() has been deprecated in favor of union(), gains new functionality: https://github.com/ncss-tech/aqp/issues/71
-   * bug fixes in sanity checks within horizonNames()<-
+   * `aggregateColor()` gets a new feature, similar colors can be grouped via cluster::pam()
+   * new functions: `previewColors()`, `colorQuantiles()`, `plotColorQuantiles()`
+   * new function: `horizonDepths()<-`, edit top/bottom names after SPC init
+   * new function: `profile_id()<-`, edit profile IDs after init; be careful!
+   * new functions: `hzID()` and `hzID()<-`, get/set unique horizon IDs
+   * new functions: `hzidname()` and `hzidname()<-`, get/set column containing unique horizon IDs
+   * `rbind.SoilProfileCollection()` has been deprecated in favor of `union()`, gains new functionality: https://github.com/ncss-tech/aqp/issues/71
+   * bug fixes in sanity checks within `horizonNames()<-`
    * **!!! SoilProfileCollection internal structure has changed: https://github.com/ncss-tech/aqp/issues/74**
    * see release notes for more: https://github.com/ncss-tech/aqp/releases/tag/v1.17
 
@@ -60,101 +61,101 @@
    * partial bug fix in test_hz_logic() related to missing top AND bottom depths, needs work: https://github.com/ncss-tech/aqp/issues/65
 
 # aqp 1.16-5 (2018-11-21)
-   * moved explainPlotSPC from SPC tutorial to aqp::explainPlotSPC()
-   * plotSPC() is a little better at estimating "extra" vetical / horizontal space, still needs work (https://github.com/ncss-tech/aqp/issues/62)
+   * moved `explainPlotSPC` from SPC tutorial to `aqp::explainPlotSPC()`
+   * `plotSPC()` is a little better at estimating "extra" vetical / horizontal space, still needs work (https://github.com/ncss-tech/aqp/issues/62)
 
 # aqp 1.16-2 (2018-05-22)
    * fixing #53 and #54
    * bug fix for too many decimal places in legend classes (floating point -> character issue)
-   * plotSPC() gets a new argument, n.legend: approximate number of classes
+   * `plotSPC()` gets a new argument, `n.legend`: approximate number of classes
 
 # aqp 1.15.5 (2018-03-14)
-   * enhancement to aggregateColor() for cases when horizon depths are missing or top/bottom logic flipped
+   * enhancement to `aggregateColor()` for cases when horizon depths are missing or top/bottom logic flipped
 
 # aqp 1.15.4 (2018-01-29)
-   * bug fix for addVolumeFraction() when fragment volume > 100%
+   * bug fix for `addVolumeFraction()` when fragment volume > 100%
 
 # aqp 1.15.3 (2018-01-24)
-   * added a new argument to addDiagnosticBracket() allowing for specification of column containing diagnostic feature kind
-   * addBracket() now requires a data.frame with plotting details, see manual page
+   * added a new argument to `addDiagnosticBracket()` allowing for specification of column containing diagnostic feature kind
+   * `addBracket()` now requires a data.frame with plotting details, see manual page
 
 # aqp 1.15.2 (2017-11-30)
-   * added shannonEntropy(), confusionIndex(), and brierScore()
-   * bug fix in get.ml.hz() for horizon names that start with number or punctuation
-   * get.ml.hz() now uses internal aqp functions for Shannon entropy and Brier scores
+   * added `shannonEntropy()`, `confusionIndex()`, and `brierScore()`
+   * bug fix in `get.ml.hz()` for horizon names that start with number or punctuation
+   * `get.ml.hz()` now uses internal aqp functions for Shannon entropy and Brier scores
 
 # aqp 1.15 (2017-11-11)
    * push to CRAN, getting ready for aqp 2.0
 
 # aqp 1.14 (2017-09-19)
-   * missingDataGrid() relaxing slice() with strict=FALSE
+   * `missingDataGrid()` relaxing `slice()` with `strict=FALSE`
 
 # aqp 1.12 (2017-07-05)
-   * CIE LAB colors are now in the `munsell` look-up table
+   * CIELAB colors are now in the `munsell` look-up table
 
 # aqp 1.12 (2017-07-05)
-   * plotSPC() now able to deal with missing horizon data (thanks Stephen R.)
+   * `plotSPC()` now able to deal with missing horizon data (thanks Stephen R.)
    * this is likely the last release before aqp 2.0
 
 # aqp 1.11 (2017-06-13)
-   * rgb2munsell() now uses CIELAB colorspace for lookup, results are more accurate as compared to using sRGB colorspace
+   * `rgb2munsell()` now uses CIELAB colorspace for lookup, results are *more accurate* as compared to using sRGB colorspace
 
 # aqp 1.10-4 (2017-05-02)
-   * texture.triangle.low.rv.high() renamed to textureTriangleSummary(). The old name still works, but a message is issued
+   * `texture.triangle.low.rv.high()` renamed to `textureTriangleSummary()`. The old name still works, but a message is issued
    * new argument to textureTriangleSummary() texture.names: for toggling texture class names
    * minor bug fix in textureTriangleSummary(..., sim=TRUE), previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.
    * new function tauW(), addd by D.G. Rossiter: see manual page for references
 
 # aqp 1.10 (2017-01-05)
-   * fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after rbinding
+   * fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after `rbind`-ing
 
 # aqp 1.9.13 (2016-10-20)
    * new dataset `soil_minerals` with some common soil mineral colors source: http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286
    * added clarification to Munsell color conversion: changed "RGB" to "sRGB". 
 
 # aqp 1.9.10 (2016-07-01)
-   * new function for estimating the closest Munsell chip: getClosestMunsellChip()
-   * new example data set (sp6) based on http://www.sciencedirect.com/science/article/pii/S0016706111001972
+   * new function for estimating the closest Munsell chip: `getClosestMunsellChip()`
+   * new example data set (`sp6`) based on http://www.sciencedirect.com/science/article/pii/S0016706111001972
 
 # aqp 1.9.8 (2016-03-07)
-   * munsell2rgb() can now accommodate neutral hues (N), and values of "2.5", see manual page for details
+   * `munsell2rgb()` can now accommodate neutral hues (N), and values of "2.5", see manual page for details
 
 # aqp 1.9.7 (2016-02-25)
-   * new function: soilColorSignature(), see manual page
-   * new function: parseMunsell() for converting strings of '10YR 2/2' into R colors or RGB triplets
-      + this is a convenience function that calls munsell2rgb on parsed strings of full Munsell notation
+   * new function: `soilColorSignature()`, see manual page
+   * new function: `parseMunsell()` for converting strings of '10YR 2/2' into R colors or RGB triplets
+      + this is a convenience function that calls `munsell2rgb` on parsed strings of full Munsell notation
 
 # aqp 1.9.6 (2016-02-23)
-   * minor changes to profile_compare(), getting ready for a complete overhaul to this function
-   * new function: evalMissingData(), see manual page
+   * minor changes to `profile_compare()`, getting ready for a complete overhaul to this function
+   * new function: `evalMissingData()`, see manual page
 
 # aqp 1.9.5 (2015-12-28)
    * documentation for new transition probability functions, see ?hzTransitionProbabilities for details
 
 # aqp 1.9.4 (2015-12-22)
    * better checking for other places where the bug fixed in rbind.SoilProfileCollection (aqp 1.9.3) could occur
-   * new functions: 'genhzTableToAdjMat', 'hzTransitionProbabilities'
+   * new functions: `genhzTableToAdjMat`, `hzTransitionProbabilities`
 
 # aqp 1.9.3 (2015-12-18)
-   * fixed a nasty bug in rbind.SoilProfileCollection() related to object re-ordering
-      + in aqp < 1.9.3: there was a chance than profile_id(x) and site(x)[[idname(x)]]) would not match
+   * fixed a nasty bug in `rbind.SoilProfileCollection()` related to object re-ordering
+      + in aqp < 1.9.3: there was a chance than `profile_id(x)` and `site(x)[[idname(x)]])` would not match
       + bugs like this will no longer be a possibility after aqp 2.0, new SPC object structure planned
 
 # aqp 1.9.1 (2015-11-18)
-   * groupedProfilePlot() gains some new arguments and better documentation (see manual page)
-   * plot.SoilProfileCollection gains argument: default.color (see manual page)
+   * `groupedProfilePlot()` gains some new arguments and better documentation (see manual page)
+   * `plot.SoilProfileCollection` gains argument: `default.color` (see manual page)
 
 # aqp 1.9 (2015-08-26)
-   * added neutral colors to munsell2rgb()
-   * new function guessGenHzLevels()
-   * new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()
-   * more code clean-up and fixes in examples to make R CMD check --as-cran happy
-   * fixed some ancient examples in the profileApply() manual page
+   * added neutral colors to `munsell2rgb()`
+   * new function `guessGenHzLevels()`
+   * new function `aggregateColor()` and associated helper function `sharpshootR::aggregateColorPlot()`
+   * more code clean-up and fixes in examples to make `R CMD check --as-cran` happy
+   * fixed some ancient examples in the `profileApply()` manual page
 
 # aqp 1.8-5 (2015-04-17)
    * bug fixes and documentation updates
-   * digest::digest is now imported by default
-   * better documentation for unique-method of SoilProfileCollection objects
+   * `digest::digest` is now imported by default
+   * better documentation for unique-method of `SoilProfileCollection` objects
 
 # aqp 1.8-3 (2015-03-02)
    * updated documentation
@@ -164,8 +165,8 @@
    * new function: `plotMultipleSPC`: plot several SPC objects on the same axis, see manual page for examples
 
 # aqp 1.7-11 (2015-01-30)
-   * fixed bugs in addBrackets(), panel.depth_function(), and plotSPC()
-   * new arguments to addBrackets() allow for annotation of brackets
+   * fixed bugs in `addBrackets()`, `panel.depth_function()`, and `plotSPC()`
+   * new arguments to `addBrackets()` allow for annotation of brackets
 
 # aqp 1.7-10 (2015-01-15)
    * names() method for SoilProfileCollection objects returns a concatenated vector of horizon + site names
@@ -452,10 +453,10 @@
 # aqp 0.99-4 (2011-08-15)
    * code and documentation clean-up
    * Soil Sata Access (SDA) query functions have been added
-      + mapunit_geom_by_ll_bbox() : get map unit geometry by bounding box
-      + MUKEYS_by_ll_bbox() : get map unit keys by bounding box
-      + SDA_query() : retrieve soil tabular data via query written in SQL
-   * additional customizations added to profile_plot
+      + `mapunit_geom_by_ll_bbox()` : get map unit geometry by bounding box
+      + `MUKEYS_by_ll_bbox()` : get map unit keys by bounding box
+      + `SDA_query()` : retrieve soil tabular data via query written in SQL
+   * additional customizations added to `plotSPC`
    * two new sample data sets + examples
 
 # aqp 0.99-1 (2011-01-26)
@@ -463,7 +464,7 @@
       + plyr >= 1.4, foreach, and doMC packages are required
       + specific examples are not yet documented, but should be soon
       + this feature is still experimental! testing is advised
-   * profile_compare() now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)
+   * `profile_compare()` now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)
 
 # aqp 0.98-4 (2010-12-15)
    * fixed minor bug in soil.slot() when computing probabilities from profiles that had missing horizons and that had only a single class within the variable to be aggregated
@@ -530,7 +531,6 @@
       + appears to create much more realistic groupings when there are both shallow and deep soils in the collection
       + new functionality requires further testing
    * plotting under dendrograms generated by ape::plot.phylo() may need some manual adjustments
-
 
 # aqp 0.88 (2010-07-06)
    * new version of plyr (1.0) should speed up most functions in aqp pacakge 
