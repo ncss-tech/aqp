@@ -139,8 +139,8 @@ test_that("SPC graceful failure of spatial operations when data are missing", {
 test_that("SPC spatial operations ", {
   
   # init / extract coordinates
-  sp::coordinates(sp1) <- ~ x + y
-  co <- sp::coordinates(sp1)
+  coordinates(sp1) <- ~ x + y
+  co <- coordinates(sp1)
   
   # these are valid coordinates
   expect_true(validSpatialData(sp1))
@@ -154,10 +154,10 @@ test_that("SPC spatial operations ", {
   expect_true(all( ! dimnames(co)[[2]] %in% siteNames(sp1)))
   
   # CRS
-  sp::proj4string(sp1) <- '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0'
+  proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs'
   
   # we should get back the same thing we started with
-  expect_equal(sp::proj4string(sp1), '+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0')
+  expect_equal(proj4string(sp1), '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
   
   # basic coercion
   expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints'))
