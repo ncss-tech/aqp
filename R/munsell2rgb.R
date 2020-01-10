@@ -125,9 +125,9 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 
 
 # color: matrix/data.frame of sRGB values in range of [0,1]
-# colorSpace: color space / distance metric (sRGB, LAB, CIE2000)
+# colorSpace: color space / distance metric (CIE2000, LAB, sRGB)
 # nClosest: number of closest chips to return
-rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
+rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
   
   # vectorize via for-loop
   n <- nrow(color)
@@ -140,6 +140,15 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
   # load look-up table from our package
   # This should be more foolproof than data(munsell) c/o PR
   load(system.file("data/munsell.rda", package="aqp")[1])
+  
+  
+  # CIE2000 requires farver >= 2.0.2
+  if(colorSpace == 'CIE2000') {
+    if( !requireNamespace('farver') | packageVersion("farver") < '2.0.2' ) {
+      message('CIE2000 comparisons require `farver` version 2.0.2 or greater, using Euclidean distance in CIELAB instead', call.=FALSE)
+      colorSpace <- 'LAB';
+    }
+  }
   
   ### problems described here, with possible solution, needs testing: 
   ### https://github.com/ncss-tech/aqp/issues/67
@@ -177,22 +186,13 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
     ## very slow until fixed
     # https://github.com/thomasp85/farver/issues/18
     if(colorSpace == 'CIE2000') {
-      # CIE dE00 via {farver package}
-      if(!requireNamespace('farver'))
-        stop('pleast install the `farver` package.', call.=FALSE)
-      
+      # CIE dE00
       # convert sRGB to LAB
       this.color.lab <- convertColor(this.color, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
       dimnames(this.color.lab)[[2]] <- c('L', 'A', 'B')
       
-      #### hack ####
-      # CIE dE00 very slow (but correct) for-loop
-      sigma <- list()
-      for(i in 1:nrow(munsell)){
-        sigma[i] <- farver::compare_colour(this.color.lab, munsell[i, 7:9], from_space='lab', method = 'CIE2000', white_from = 'D65')
-      }
-      sigma <- unlist(sigma)
-      #### hack ####
+      # fully-vectorized
+      sigma <- farver::compare_colour(this.color.lab, munsell[, 7:9], from_space='lab', method = 'CIE2000', white_from = 'D65')
       
       # return the closest n-matches
       idx <- order(sigma)[1:nClosest]
@@ -207,8 +207,14 @@ rgb2munsell <- function(color, colorSpace='LAB', nClosest=1) {
       res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
   }
   
-  # convert to DF and return
-  return(ldply(res))
+  # convert to DF
+  res <- do.call('rbind', res)
+  row.names(res) <- as.character(1:nrow(res))
+  
+  # save sigma units
+  attr(res, which = 'sigma') <- switch(colorSpace, 'sRGB' = 'distance in sRGB', 'LAB' = 'distance in CIELAB', 'CIE2000' = 'dE00')
+  
+  return(res)
 }
 
 # TODO if alpha is greater than maxColorValue, there will be an error

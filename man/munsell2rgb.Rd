@@ -15,7 +15,7 @@ Color conversion based on a look-up table of common soil colors.
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE)
 
-rgb2munsell(color, colorSpace='LAB', nClosest=1)
+rgb2munsell(color, colorSpace='CIE2000', nClosest=1)
 
 parseMunsell(munsellColor, convertColors=TRUE, ...)
 

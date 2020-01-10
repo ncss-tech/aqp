@@ -18,10 +18,6 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   if(!requireNamespace('Gmedian'))
     stop('pleast install the `Gmedian` package.', call.=FALSE)
   
-  # sanity check, need this for color distance eval
-  if(!requireNamespace('farver'))
-    stop('pleast install the `farver` package.', call.=FALSE)
-  
   # hex represntation -> sRGB
   soilColors.srgb <- t(col2rgb(soilColors)) / 255
   # sRGB -> CIE LAB
@@ -71,14 +67,18 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   B.closest <- .closestMunselltoCIELAB(soilColors.lab[B.q.idx, ])
   
   
-  ## 1:many distance calcs broken in farver < 2.0.2
-  ## https://github.com/thomasp85/farver/issues/18
-  ## fixed in next CRAN release
   ## find closest observed color to L1 median via CIE2000 distance metric
-  # d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
+  ## requires farver >= 2.0.2
+  if( !requireNamespace('farver') | packageVersion("farver") < '2.0.2' ) {
+    message('CIE2000 comparisons require `farver` version 2.0.2 or greater, using Euclidean distance in CIELAB instead', call.=FALSE)
+    d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
+  } else {
+    # backup plan using Euclidean distance in CIELAB
+    d <- sqrt(rowSums(sweep(soilColors.lab, MARGIN = 2, STATS=L1, FUN = '-')^2))
+  }
+
   
-  ## backup plan using Euclidean distance in CIELAB
-  d <- sqrt(rowSums(sweep(soilColors.lab, MARGIN = 2, STATS=L1, FUN = '-')^2))
+  # assign L1 color
   L1.color <- soilColors[which.min(d)]
   
   # closest observed colors to marginal quantiles

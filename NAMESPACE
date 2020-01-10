@@ -12,7 +12,7 @@ importFrom("stats", "aggregate", "approxfun", "as.dist", "as.formula",
              "na.omit", "na.pass", "quantile", "rnorm", "runif", "sd",
              "splinefun", "update", "cmdscale", "dist")
 
-importFrom("utils", "head", "object.size")
+importFrom("utils", "head", "object.size", 'packageVersion')
 
 importFrom(methods,
   setClass,

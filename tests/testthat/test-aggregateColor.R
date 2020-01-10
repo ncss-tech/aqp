@@ -53,5 +53,5 @@ test_that("manual calculation, single profile", {
   ## TODO: double check
   # weighted mean in CIE LAB space
   test <- with(a$aggregate.data, paste0(munsell.hue, ' ', munsell.value, '/', munsell.chroma))
-  expect_equal(test, '10YR 3/2')
+  expect_equal(test, '7.5YR 3/2')
 })
