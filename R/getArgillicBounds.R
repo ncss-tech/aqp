@@ -3,15 +3,19 @@
 # crit.clay.argillic - argillic horizon threshold function
 # argillic.clay.increase.depth() - top depth of argillic
 
-getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
+getArgillicBounds <- function(p, 
+                              hzdesgn='hzname', 
+                              clay.attr = 'clay',
+                              texcl.attr = 'texcl',
                               require_t = TRUE, 
                               bottom.pattern = "Cr|R|Cd",
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                               as.list = FALSE) {
   # get upper bound...
-  upper.bound <- argillic.clay.increase.depth(p, attr)
+  upper.bound <- argillic.clay.increase.depth(p, clay.attr)
   lower.bound <- -Inf
   hz <- horizons(p)
+  depthcol <- horizonDepths(p)
   # if upper.bound is non-NA, we might have argillic, because clay increase is met at some depth
   if(!is.na(upper.bound)) {
     # find all horizons with t subscripts; some old/converted horizons have all capital letters
@@ -30,12 +34,12 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
       
       ## Partial fix for TODO #2? seems reasnable for the require_t=FALSE lower.bound case
       # take _very_ last horizon depth first (will be truncated to contact depth if needed)
-      depth.last <- hz[nrow(hz), horizonDepths(p)[2]]
+      depth.last <- hz[nrow(hz), depthcol[2]]
       
       # take the top depth of any B or C horizon  without t subscript above "depth.last"
       c.idx <- which(grepl(hz[[hzdesgn]], pattern=lower.grad.pattern))
       if(length(c.idx)) {
-        c.horizon <- hz[c.idx[1], horizonDepths(p)[1]]
+        c.horizon <- hz[c.idx[1], depthcol[1]]
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
         if(c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
@@ -48,21 +52,21 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
       
       # get the bottom depth of the last horizon with a t (this could be same as c.horizon above)
       if(require_t)
-        depth.last <- hz[idx.last, horizonDepths(p)[2]]
+        depth.last <- hz[idx.last, depthcol[2]]
       
       # in rare cases, the bottom depth of the bedrock/contact is not populated
       # step back until we find one that is not NA
       idx.last.i <- idx.last
       while(is.na(depth.last)) {
-        depth.last <- hz[idx.last.i, horizonDepths(p)[2]]
+        depth.last <- hz[idx.last.i, depthcol[2]]
         idx.last.i <- idx.last.i - 1
       }
       
       # estimate the thickness of the soil profile 
       # (you will need to specify alternate pattern if Cr|R|Cd 
       # doesn't match your contacts)
-      soil.depth <- estimateSoilDepth(p, name = hzdesgn, top = horizonDepths(p)[1], 
-                                      bottom = horizonDepths(p)[2], 
+      soil.depth <- estimateSoilDepth(p, name = hzdesgn, top = depthcol[1], 
+                                      bottom = depthcol[2], 
                                       p = bottom.pattern)
       
       # if the last horizon with a t is below the contact (Crt or Rt) or some other weird reason
@@ -87,6 +91,23 @@ getArgillicBounds <- function(p, hzdesgn='hzname', attr = 'clay',
   
   if(!is.finite(lower.bound))
     lower.bound <- NA
+  
+  if(all(!is.na(c(upper.bound, lower.bound)))) {
+    # if argi bounds are found check that minimum thickness requirements are met
+    min.thickness <- max(7.5, 
+                         max(glom(p, 0, upper.bound, as.data.frame = TRUE)[depthcol[[2]]], na.rm=TRUE) / 10)
+    is_sandy <- all(grepl(glom(p, upper.bound, lower.bound, as.data.frame = TRUE)[texcl.attr], 
+                          pattern="s$|sand", ignore.case = T))
+    
+    if(is_sandy) {
+      min.thickness <- 15
+    }
+    
+    if(lower.bound - upper.bound < min.thickness) {
+      lower.bound <- NA
+      upper.bound <- NA
+    }
+  }
   
   if(!as.list)
     return(c(upper.bound, lower.bound))
@@ -121,9 +142,9 @@ crit.clay.argillic <- function(eluvial_clay_content) {
 # applies get.increase.depth() identify the argillic horizon upper bound
 # threshold fun()=`crit.clay.argillic` defines the clay increase that must be met within 30 cm vertical distance
 # the default horizon attribute name is `clay`, but it can be adjusted as needed
-argillic.clay.increase.depth <- function(p, attr='clay') {
+argillic.clay.increase.depth <- function(p, clay.attr='clay') {
   vd <- 30
-  return(get.increase.depths(p, attr = attr, 
+  return(get.increase.depths(p, attr = clay.attr, 
                           threshold.fun = crit.clay.argillic, 
                           vertical.distance = vd)[1])
 }

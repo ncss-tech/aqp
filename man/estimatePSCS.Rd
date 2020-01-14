@@ -13,15 +13,22 @@ Requires information on taxonomic order (to handle andisols).
 WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for. 
 }
 \usage{
-estimatePSCS(p, attr = "clay", hzdesgn = "hzname", tax_order_field = "tax_order",
-bottom.pattern = "Cr|R|Cd", ...)
+estimatePSCS(p, 
+             hzdesgn = "hzname", 
+             clay.attr = "clay", 
+             texcl.attr = "texcl", 
+             tax_order_field = "tax_order",
+             bottom.pattern = "Cr|R|Cd", ...)
 }
 \arguments{
   \item{p}{
 A single-profile SoilProfileCollection object
 }
-  \item{attr}{
+  \item{clay.attr}{
 Name of the horizon attribute containing clay contents. Default 'clay'
+}
+  \item{texcl.attr}{
+Name of the horizon attribute containing textural class (used for finding sandy textures). Default 'texcl'
 }
   \item{hzdesgn}{
 Name of the horizon attribute containing the horizon designation. Default 'hzname'
@@ -55,7 +62,7 @@ site(sp1) <- ~ group
 
 p <- sp1[1]
 attr <- 'prop' # clay contents 
-foo <- estimatePSCS(p, hzdesgn='name', attr = attr)
+foo <- estimatePSCS(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 foo
 }
 \keyword{ manip }

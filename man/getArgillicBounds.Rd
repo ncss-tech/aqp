@@ -18,7 +18,11 @@ There also is an option `require_t` to omit the requirement for evidence of eluv
 Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set `lower.grad.pattern` to something that will not match any horizons in your data.
 }
 \usage{
-getArgillicBounds(p, hzdesgn = "hzname", attr = "clay", require_t = TRUE, 
+getArgillicBounds(p, 
+                  hzdesgn = "hzname", 
+                  clay.attr = "clay", 
+                  texcl.attr = "texcl",
+                  require_t = TRUE, 
                   bottom.pattern = "Cr|R|Cd", 
                   lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                   as.list = FALSE)
@@ -30,8 +34,11 @@ a single-profile SoilProfileCllection
   \item{hzdesgn}{
 the name of the column/attribute containing the horizon designation; default="hzname"
 }
-  \item{attr}{
+  \item{clay.attr}{
 the name of the column/attribute containing the clay content; default="clay"
+}
+  \item{texcl.attr}{
+the name of the column/attribute containing the textural class (used for finding sandy horizons); default="texcl"
 }
   \item{require_t}{
 require a "t" subscript for positive identification of upper and lower bound of argillic? default:
@@ -62,7 +69,7 @@ site(sp1) <- ~ group
 
 p <- sp1[1]
 attr <- 'prop' # clay contents 
-foo <- getArgillicBounds(p, hzdesgn='name', attr = attr)
+foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 foo
 }
 \keyword{ manip }

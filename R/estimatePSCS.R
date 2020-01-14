@@ -1,18 +1,20 @@
 #estimatePSCS()
 
-estimatePSCS = function(p, attr = "clay", hzdesgn = "hzname", tax_order_field = "tax_order", bottom.pattern='Cr|R|Cd', ...) {
+estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay", texcl.attr="texcl", tax_order_field = "tax_order", bottom.pattern='Cr|R|Cd', ...) {
   hz.depths <- horizonDepths(p)
   soildepth <- estimateSoilDepth(f = p, name = hzdesgn, top = hz.depths[1], bottom = hz.depths[2], p = bottom.pattern)
   andisols_flag <- FALSE
+  shallow_flag <- FALSE
   
   # Parts D (argillic starts >100cm  depth) and F (all other mineral soils)
   default_t <- 25
   default_b <- 100
   
-  # Key part A (soils with restrictio in shallow depth)
+  # Key part A (soils with restriction in shallow depth)
   if(soildepth <= 36) {
     default_t <- 0
     default_b <- soildepth
+    shallow_flag <- TRUE
   }
   
   # Key part B (Andisols)
@@ -38,7 +40,7 @@ estimatePSCS = function(p, attr = "clay", hzdesgn = "hzname", tax_order_field = 
   
   # Key parts C and E (has argillic/kandic/natric WITHIN 100CM)
   if(!andisols_flag) {
-    argillic_bounds = getArgillicBounds(p, attr = attr, hzdesgn = hzdesgn, bottom.pattern=bottom.pattern, ...)
+    argillic_bounds = getArgillicBounds(p, clay.attr = clay.attr, texcl.attr = texcl.attr, hzdesgn = hzdesgn, bottom.pattern=bottom.pattern, ...)
     if(!any(is.na(argillic_bounds))) { 
       if(argillic_bounds[1] < 100) {
         default_t <- argillic_bounds[1]
@@ -62,8 +64,13 @@ estimatePSCS = function(p, attr = "clay", hzdesgn = "hzname", tax_order_field = 
     if(plow_layer_depth >= 25 + odepth) 
       default_t = plow_layer_depth
   
+  # Adjust PSCS top depth to mineral soil surface for soils <36cm to restriction
+  if(shallow_flag & default_t != 0) {
+    default_t <- odepth
+  }
+  
   # Adjust PSCS bottom depth to restriction depth, if appropriate
-  if(soildepth < default_b) {#truncate to restriction
+  if(soildepth < default_b) { #truncate to restriction
     default_b = soildepth
   }
   
