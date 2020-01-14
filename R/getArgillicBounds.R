@@ -97,7 +97,7 @@ getArgillicBounds <- function(p,
     min.thickness <- max(7.5, 
                          max(glom(p, 0, upper.bound, as.data.frame = TRUE)[depthcol[[2]]], na.rm=TRUE) / 10)
     is_sandy <- all(grepl(glom(p, upper.bound, lower.bound, as.data.frame = TRUE)[texcl.attr], 
-                          pattern="s$|sand", ignore.case = T))
+                          pattern="s$|sand$", ignore.case = T))
     
     if(is_sandy) {
       min.thickness <- 15
