@@ -222,20 +222,20 @@ setReplaceMethod("hzidname", "SoilProfileCollection",
                    
                    # quick sanity check
                    if(length(value) != 1)
-                     stop("horizon ID name should have length of 1", call.=FALSE)
+                     stop("horizon ID name should have length of 1", call.=TRUE)
                    
                    
                    # sanity checks
                    
                    # test: does it exist?
                    if(! value %in% horizonNames(object)) {
-                     stop("ID name not in horizon data", call.=FALSE)
+                     stop("horizon ID name not in horizon data", call.=TRUE)
                    }
                    
                    # test: unique?
                    x <- horizons(object)[[value]]
                    if(length(unique(x)) != nrow(object)){
-                     stop("target ID name not unique", call.=FALSE)
+                     stop("horizon ID name (",value,") not unique", call.=TRUE)
                    }
                    
                    # replace
