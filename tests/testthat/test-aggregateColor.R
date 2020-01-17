@@ -36,22 +36,27 @@ test_that("basic functionality", {
 ## TODO: test for expected error conditions
 
 
-test_that("manual calculation, single profile", {
+test_that("manual calculation using CIE2000 and LAB, single profile", {
   
   x <- sp1[1, ]
   x$genhz <- rep('A', times=nrow(x))
   a <- aggregateColor(x, groups='genhz', col='soil_color')
+  a2 <- aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'LAB')
   
   # known number of horizons / color
   # table(x$soil_color)
   expect_equal(a$scaled.data$A$n.hz, c(2,1,1,1))
   
-  ## TODO: double check
-  # weights
   expect_equal(round(a$scaled.data$A$weight, 3), c(0.342, 0.270, 0.258, 0.129))
   
-  ## TODO: double check
-  # weighted mean in CIE LAB space
   test <- with(a$aggregate.data, paste0(munsell.hue, ' ', munsell.value, '/', munsell.chroma))
-  expect_equal(test, '7.5YR 3/2')
+  test2 <- with(a2$aggregate.data, paste0(munsell.hue, ' ', munsell.value, '/', munsell.chroma))
+  
+  if(requireNamespace('farver') & packageVersion("farver") >= '2.0.2') {
+    expect_equal(test, '7.5YR 3/2')
+    expect_equal(test2, '10YR 3/2')
+  } else {
+    expect_equal(test, '10YR 3/2')
+    expect_equal(test2, '10YR 3/2')
+  }
 })

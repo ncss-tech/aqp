@@ -4,13 +4,15 @@
 \title{Summarize Soil Colors}
 \description{Summarize soil color data, weighted by occurrence and horizon thickness.}
 \usage{
-aggregateColor(x, groups = "genhz", col = "soil_color", k=NULL, profile_wt=NULL)
+aggregateColor(x, groups = "genhz", col = "soil_color", 
+               colorSpace = 'CIE2000', k=NULL, profile_wt=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a \code{SoilProfileCollection} object}
   \item{groups}{the name of a horizon or site attribute used to group horizons, see examples}
   \item{col}{the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")}
+  \item{colorSpace}{the name of color space to use for conversion of aggregate colors to Munsell; either CIE2000, LAB, or sRGB. Default = 'CIE2000'}
   \item{k}{single integer specifiying the number of colors discretized via PAM, see details}
   \item{profile_wt}{the name of a site-level attribute used to modify weighting, e.g. area}
 }

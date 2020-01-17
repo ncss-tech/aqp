@@ -145,7 +145,7 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
   # CIE2000 requires farver >= 2.0.2
   if(colorSpace == 'CIE2000') {
     if( !requireNamespace('farver') | packageVersion("farver") < '2.0.2' ) {
-      message('CIE2000 comparisons require `farver` version 2.0.2 or greater, using Euclidean distance in CIELAB instead', call.=FALSE)
+      message('rgb2munsell: using LAB color space; install farver v2.0.2 or higher for perceptual distance in CIE2000')
       colorSpace <- 'LAB';
     }
   }
