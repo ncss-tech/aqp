@@ -79,7 +79,6 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
       
       # get ids
       pid <- profile_id(object)
-      pid.by.hz <- horizons(object)[[o.name]]
       hz.id <- hzID(object)
       
       # determine if merge of res into @horizon or @site is feasible/reasonable
@@ -89,6 +88,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
       if(o.hname %in% colnames(res) & all(res[[o.hname]] %in% hz.id)) {
         
         # make a master site/horizon id table (all in SPC)
+        pid.by.hz <- horizons(object)[[o.name]]
         id.df <- data.frame(pid.by.hz, hz.id)
         colnames(id.df) <- c(o.name, o.hname)
         
@@ -103,7 +103,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
       } else if(o.name %in% colnames(res) & all(res[[o.name]] %in% pid)) {
         
         # same as above, only for site level summaries (far more common)
-        id.df <- data.frame(pid.by.hz)
+        id.df <- data.frame(pid)
         colnames(id.df) <- c(o.name)
         
         if(!all(pid %in% res[[o.name]])) {
@@ -122,6 +122,9 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
       warning("first result is not class `data.frame` and frameify is TRUE. defaulting to list output.", call. = FALSE)
     }
   }
+  
+  if(simplify)
+   return(unlist(res))
   
   return(res)
 })
