@@ -1,11 +1,15 @@
+# aqp 1.18.5 (2020-01-19)
+  * `profileApply()` enhancement for large `SoilProfileCollection` objects (https://github.com/ncss-tech/aqp/issues/112)
+  * add `profileApply()` `frameify` argument for `data.frame` output (https://github.com/ncss-tech/aqp/issues/111)
+  
 # aqp 1.18.4 (2020-01-06)
   * bug fix (rare) when setting / replacing horizon attributes (https://github.com/ncss-tech/aqp/issues/105)
   * bug fix in `colorQuantiles` until `farver` 2.0.2 is available on CRAN
   * `SoilProfileCollection` object gains new slot: `@restrictions`, fix old objects with `rebuildSPC()`
 
 # aqp 1.18.3 (2019-12-19)
-  * evalMissingData() gets new argument for relative vs. absolute evalulation of missing data
-  * horizonColorIndices() and associated functions c/o Andrew Brown
+  * `evalMissingData()` gets new argument for relative vs. absolute evalulation of missing data
+  * `horizonColorIndices()`, `harden.rubification()`, `harden.melanization()`, `thompson.bell.darkness()` and associated functions in soilColorIndices.R
   * fix for https://github.com/ncss-tech/aqp/issues/44
   * fix for https://github.com/ncss-tech/aqp/issues/66
   * new example data: `rowley2019`

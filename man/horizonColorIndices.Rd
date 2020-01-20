@@ -4,7 +4,8 @@
 \alias{horizonColorIndices}
 \title{Horizon Color Indices}
 \usage{
-horizonColorIndices(p, hue = "m_hue", value = "m_value", chroma = "m_chroma")
+horizonColorIndices(p, hue = "m_hue", value = "m_value",
+  chroma = "m_chroma")
 }
 \arguments{
 \item{p}{A SoilProfileCollection}

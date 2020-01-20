@@ -8,14 +8,18 @@
 
 \usage{
 # method for SoilProfileCollection objects
-profileApply(object, FUN, simplify=TRUE, ...)
+profileApply(object, FUN, simplify = TRUE, frameify = FALSE,
+                    chunk.size = 100, column.names = NULL, ...)
 }
 
 \arguments{
   \item{object}{a SoilProfileCollection}
   \item{FUN}{a function to be applied to each profile within the collection}
-  \item{simplify}{logical, should the result be simplified to a vector? see examples}
-	\item{\dots}{further arguments passsed to FUN}
+  \item{simplify}{logical, should the result be simplified to a vector? default: TRUE; see examples} 
+  \item{frameify}{logical, should the result be collapsed into a data.frame? default: FALSE; overrides simplify argument; see examples}
+  \item{chunk.size}{numeric, size of "chunks" for faster processing of large SoilProfileCollection objects; default: 100}
+  \item{column.names}{character, optional character vector to replace frameify-derived column names; should match length of \code{colnames()} from FUN result; default: NULL}
+	\item{\dots}{additional arguments passsed to FUN}
 }
 
 \section{Methods}{
@@ -23,7 +27,7 @@ profileApply(object, FUN, simplify=TRUE, ...)
 \item{\code{signature(object = "SoilProfileCollection")}}{}
 }}
 
-\value{When simplify is TRUE, a vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data). When simplify is FALSE, a list is returned.}
+\value{When simplify is TRUE, a vector of length \code{nrow(object)} (horizon data) or of length \code{length(object)} (site data). When simplify is FALSE, a list is returned. When frameify is TRUE, a data.frame is returned. An attempt is made to identify \code{idname} and/or \code{hzidname} in the data.frame result, safely ensuring that IDs are preserved to facilitate merging profileApply result downstream.}
 
 \seealso{ \code{\link{slab}}, \code{\link{estimateSoilDepth}}}
 
@@ -34,11 +38,10 @@ depths(sp1) <- id ~ top + bottom
 # estimate soil depth using horizon designations
 profileApply(sp1, estimateSoilDepth, name='name', top='top', bottom='bottom')
 
-# scale properties within each profile
+# scale a single property 'prop' in horizon table
 # scaled = (x - mean(x)) / sd(x)
 sp1$d <- profileApply(sp1, FUN=function(x) round(scale(x$prop), 2))
 plot(sp1, name='d')
-
 
 # compute depth-wise differencing by profile
 # note that our function expects that the column 'prop' exists
@@ -51,7 +54,6 @@ plot(sp1, name='d')
 sp1$d <- profileApply(sp1, FUN=function(x) cumsum(x$prop))
 plot(sp1, name='d')
 
-
 # compute profile-means, and save to @site
 # there must be some data in @site for this to work
 site(sp1) <- ~ group
@@ -60,6 +62,40 @@ sp1$mean_prop <- profileApply(sp1, FUN=function(x) mean(x$prop, na.rm=TRUE))
 # re-plot using ranks defined by computed summaries (in @site)
 plot(sp1, plot.order=rank(sp1$mean_prop))
 
+## iterate over profiles, calculate on each horizon, merge into original SPC
+
+# example data
+data(sp1)
+
+# promote to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
+
+# calculate horizon thickness and proportional thickness
+# returns a data.frame result with multiple attributes per horizon
+thicknessFunction <- function(p) {
+  hz <- horizons(p)
+  depthnames <- horizonDepths(p)
+  res <- data.frame(profile_id(p), hzID(p), 
+                    thk=(hz[[depthnames[[2]]]] - hz[[depthnames[1]]]))
+  res$hz_prop <- res$thk / sum(res$thk)
+  colnames(res) <- c(idname(p), hzidname(p), 'hz_thickness', 'hz_prop')
+  return(res)
+}
+
+# list output option with simplify=F, list names are profile_id(sp1)
+list.output <- profileApply(sp1, thicknessFunction, simplify = FALSE)
+head(list.output)
+
+# data.frame output option with frameify=TRUE
+df.output <- profileApply(sp1, thicknessFunction, frameify = TRUE)
+head(df.output)
+
+# since df.output contains idname(sp1) and hzidname(sp1), 
+# it can safely be merged by a left-join via horizons<- setter
+horizons(sp1) <- df.output
+
+plot(density(sp1$hz_thickness, na.rm=TRUE), main="Density plot of Horizon Thickness")
 
 ## iterate over profiles, subsetting horizon data
 

@@ -4,13 +4,8 @@
 \alias{thompson.bell.darkness}
 \title{Thompson-Bell (1996) Index}
 \usage{
-thompson.bell.darkness(
-  p,
-  name = NULL,
-  pattern = "^A",
-  value = "m_value",
-  chroma = "m_chroma"
-)
+thompson.bell.darkness(p, name = NULL, pattern = "^A",
+  value = "m_value", chroma = "m_chroma")
 }
 \arguments{
 \item{p}{A single-profile SoilProfileCollection (e.g. via profileApply())}
