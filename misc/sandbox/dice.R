@@ -100,10 +100,15 @@ system.time(s <- slice(d, 0:100 ~ .))
 system.time(s <- dice(d))
 
 
-z <- d[1, ]
+z <- d[1:10, ]
 z$bottom[2] <- NA
+z$top[20] <- z$bottom[20]
 
-ck <- checkHzDepthLogic(z)
+z$bottom[32] <- 15
+z$bottom[5]
+z$top[6] <- 95
+
+checkHzDepthLogic(z)
 
 dice(z)
 
