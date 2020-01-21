@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -166,9 +166,11 @@
 <span class='no'>s</span>$<span class='no'>name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>'H'</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='no'>s</span>$<span class='no'>name</span>), <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>''</span>)
 
 <span class='co'># simulate 25 new profiles, using 's' and function defaults</span>
-<span class='no'>sim.1</span> <span class='kw'>&lt;-</span> <span class='fu'>sim</span>(<span class='no'>s</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>25</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `hzID` is not a unique horizon ID, using `hzID_`</span></div><div class='input'>
+<span class='no'>sim.1</span> <span class='kw'>&lt;-</span> <span class='fu'>sim</span>(<span class='no'>s</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>25</span>)
+
 <span class='co'># simulate 25 new profiles using 's' and variable SD for each horizon</span>
-<span class='no'>sim.2</span> <span class='kw'>&lt;-</span> <span class='fu'>sim</span>(<span class='no'>s</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>25</span>, <span class='kw'>hz.sd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: `hzID` is not a unique horizon ID, using `hzID_`</span></div><div class='input'>
+<span class='no'>sim.2</span> <span class='kw'>&lt;-</span> <span class='fu'>sim</span>(<span class='no'>s</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>25</span>, <span class='kw'>hz.sd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>2</span>))
+
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>))
 <span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sim.1</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='st'>'SD = 2'</span>, <span class='kw'>side</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>line</span><span class='kw'>=</span>-<span class='fl'>1.5</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>)

@@ -74,7 +74,7 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -127,7 +127,11 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
 <p>Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set `lower.grad.pattern` to something that will not match any horizons in your data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>, <span class='kw'>require_t</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>,
+                  <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>,
+                  <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>,
+                  <span class='kw'>texcl.attr</span> <span class='kw'>=</span> <span class='st'>"texcl"</span>,
+                  <span class='kw'>require_t</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
                   <span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>,
                   <span class='kw'>lower.grad.pattern</span> <span class='kw'>=</span> <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
                   <span class='kw'>as.list</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
@@ -144,8 +148,12 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
       <td><p>the name of the column/attribute containing the horizon designation; default="hzname"</p></td>
     </tr>
     <tr>
-      <th>attr</th>
+      <th>clay.attr</th>
       <td><p>the name of the column/attribute containing the clay content; default="clay"</p></td>
+    </tr>
+    <tr>
+      <th>texcl.attr</th>
+      <td><p>the name of the column/attribute containing the textural class (used for finding sandy horizons); default="texcl"</p></td>
     </tr>
     <tr>
       <th>require_t</th>
@@ -179,7 +187,7 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
 
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
 <span class='no'>attr</span> <span class='kw'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='no'>attr</span>)
+<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='no'>attr</span>, <span class='kw'>texcl.attr</span><span class='kw'>=</span><span class='st'>"texture"</span>)
 <span class='no'>foo</span></div><div class='output co'>#&gt; [1] 49 89</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

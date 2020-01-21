@@ -70,7 +70,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -119,7 +119,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
 <p>Uses <code>crit.clay.argillic</code> to determine threshold clay increase, and <code>get.increase.matrix</code> to determine where increase is met within a vertical distance of 30 cm.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>argillic.clay.increase.depth</span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>)</pre>
+    <pre class="usage"><span class='fu'>argillic.clay.increase.depth</span>(<span class='no'>p</span>, <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,7 +129,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
       <td><p>A single-profile SoilProfileCllection object.</p></td>
     </tr>
     <tr>
-      <th>attr</th>
+      <th>clay.attr</th>
       <td><p>OPTIONAL: horizon attribute name referring to clay content. default: `clay`</p></td>
     </tr>
     </table>
@@ -148,7 +148,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
 
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
 <span class='no'>attr</span> <span class='kw'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>argillic.clay.increase.depth</span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='no'>attr</span>)
+<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>argillic.clay.increase.depth</span>(<span class='no'>p</span>, <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='no'>attr</span>)
 <span class='no'>foo</span></div><div class='output co'>#&gt; [1] 49</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
