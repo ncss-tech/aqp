@@ -16,8 +16,10 @@ if (!isGeneric("profileApply"))
 		# get profile IDs
 		pIDs <- profile_id(object)
 
-		# init empty list
-		l <- list()
+		# pre-allocate list of correct size
+		l <- vector(mode = 'list', length = length(pIDs))
+		# must set list names based on expected assignment in for() loop
+		names(l) <- pIDs
 
 		# iterate over SPC, spliting into a list of SPC_i ... SPC_n
 		for(i in seq_along(pIDs)) {
@@ -75,7 +77,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
     if(is.data.frame(res[[1]])) {
       
       # make a big data.frame
-      res <- as.data.frame(do.call('rbind', res))
+      res <- as.data.frame(do.call('rbind', res), stringsAsFactors = FALSE)
       
       # get ids
       pid <- profile_id(object)
@@ -89,7 +91,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
         
         # make a master site/horizon id table (all in SPC)
         pid.by.hz <- horizons(object)[[o.name]]
-        id.df <- data.frame(pid.by.hz, hz.id)
+        id.df <- data.frame(pid.by.hz, hz.id, stringsAsFactors = FALSE)
         colnames(id.df) <- c(o.name, o.hname)
         
         # warn if some hz IDs are missing in result
@@ -98,12 +100,12 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
         }
         
         # do a left join, filling in any missing idname, hzidname from res with NA
-        res <- merge(id.df, res, all.x = TRUE)
+        res <- merge(id.df, res, all.x = TRUE, sort=FALSE)
         
       } else if(o.name %in% colnames(res) & all(res[[o.name]] %in% pid)) {
         
         # same as above, only for site level summaries (far more common)
-        id.df <- data.frame(pid)
+        id.df <- data.frame(pid, stringsAsFactors = FALSE)
         colnames(id.df) <- c(o.name)
         
         if(!all(pid %in% res[[o.name]])) {
@@ -112,7 +114,7 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
         }
         
         # do a left join, filling in any missing idname from res with NA
-        res <- merge(id.df, res, all.x = TRUE)
+        res <- merge(id.df, res, all.x = TRUE, sort=FALSE)
       }
       
       if(!is.null(column.names))

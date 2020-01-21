@@ -17,7 +17,7 @@ test_that("profileApply - basic tests of output datatypes", {
   
   r3 <- profileApply(sp1, function(p) {
       d <- estimateSoilDepth(p, name="name", top="top", bottom="bottom")
-      res <- data.frame(profile_id(p), d)
+      res <- data.frame(profile_id(p), d, stringsAsFactors = FALSE)
       colnames(res) <- c(idname(p), "soildepthest")
       return(res)
     }, frameify = TRUE)
