@@ -29,30 +29,30 @@ dice <- function(x) {
   
   ## `h` will eventually be a data.table object
   h <- as.data.table(h)
+  setkeyv(h, hzidname(x))
   
-  # slice ID, expand rows via JOIN
-  h$.sliceID <- sprintf('%s_%s_%s', h[[idn]], h[[htb[1]]], h[[htb[2]]] )
-  setkeyv(h, '.sliceID')
-  
-  ## this is slow, consider alternatives for generating slice sequences
-  ## e.g. single call to mapply
+  ## mapply() call takes 1/2 of total time
+  ## consider custom function
   # expand 1 unit slices
   tops <- mapply(FUN = seq, from=h[[htb[1]]], to=h[[htb[2]]] - 1, by = 1, SIMPLIFY=FALSE)
-  bottoms <- mapply(FUN = seq, from=h[[htb[1]]] + 1, to=h[[htb[2]]], by = 1, SIMPLIFY=FALSE)
+  tops <- unlist(tops)
+  bottoms <- tops + 1
   
-  # expand slice IDs
-  sliceIDs <- sprintf('%s_%s_%s', h[[idn]], h[[htb[1]]], h[[htb[2]]] )
-  sliceIDs <- rep(sliceIDs, times=h[[htb[2]]] - h[[htb[1]]])
+  # expand slice IDs (horizon IDs)
+  sliceIDs <- rep(h[[hzidname(x)]], times=h[[htb[2]]] - h[[htb[1]]])
   
   ## TODO: this will eventually be a data.table object
   # assemble for JOIN
-  s <- data.frame(.sliceID=sliceIDs, .sliceTop=unlist(tops), .sliceBottom=unlist(bottoms), stringsAsFactors = FALSE)
+  s <- data.frame(.sliceID=sliceIDs, .sliceTop=tops, .sliceBottom=bottoms, stringsAsFactors = FALSE)
+  # re-name for simpler JOIN
+  names(s)[1] <- hzidname(x)
+  # init / index data.table
   s <- as.data.table(s)
-  setkeyv(s, '.sliceID')
+  setkeyv(s, hzidname(x))
   
   ## TODO: utilize fast joins via data.table objects with keys SET
   # full JOIN
-  res <- merge.data.table(h, s, by='.sliceID', all=TRUE, sort=FALSE)
+  res <- merge.data.table(h, s, by=hzidname(x), all=TRUE, sort=FALSE)
   
   # copy old horizon IDs
   res[['.oldHzID']] <- res[[hzidname(x)]]
@@ -70,7 +70,6 @@ dice <- function(x) {
   # cleanup
   res[['.sliceTop']] <- NULL
   res[['.sliceBottom']] <- NULL
-  res[['.sliceID']] <- NULL
   
   # pack back into SPC
   res <- as.data.frame(res)
@@ -80,15 +79,15 @@ dice <- function(x) {
 }
 
 
-z <- dice(d[1:10, ])
+z <- dice(d[1, ])
 
 plot(z, color='p2')
 
-# 87 seconds
+# 87 seconds: current slice()
 system.time(s <- slice(d, 0:100 ~ .))
 
-# 39 seconds: merge.data.frame
-# 33 seconds: merge.data.table
+# 39 seconds: 2x mapply, merge.data.frame
+# 12 seconds: 1x mapply, merge.data.table
 system.time(s <- dice(d))
 
 
