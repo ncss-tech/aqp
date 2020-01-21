@@ -68,9 +68,9 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   
   
   ## find closest observed color to L1 median via CIE2000 distance metric
-  ## requires farver >= 2.0.2
-  if( !requireNamespace('farver') | packageVersion("farver") < '2.0.2' ) {
-    message('CIE2000 comparisons require `farver` version 2.0.2 or greater, using Euclidean distance in CIELAB instead', call.=FALSE)
+  ## requires farver >= 2.0.3
+  if( !requireNamespace('farver') | packageVersion("farver") < '2.0.3' ) {
+    message('CIE2000 comparisons require `farver` version 2.0.3 or greater, using Euclidean distance in CIELAB instead', call.=FALSE)
     d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
   } else {
     # backup plan using Euclidean distance in CIELAB

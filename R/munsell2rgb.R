@@ -142,16 +142,13 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
   load(system.file("data/munsell.rda", package="aqp")[1])
   
   
-  # CIE2000 requires farver >= 2.0.2
+  # CIE2000 requires farver >= 2.0.3
   if(colorSpace == 'CIE2000') {
-    if( !requireNamespace('farver') | packageVersion("farver") < '2.0.2' ) {
-      message('rgb2munsell: using LAB color space; install farver v2.0.2 or higher for perceptual distance in CIE2000')
+    if( !requireNamespace('farver') | packageVersion("farver") < '2.0.3' ) {
+      message('rgb2munsell: using LAB color space; install farver v2.0.3 or higher for perceptual distance in CIE2000')
       colorSpace <- 'LAB';
     }
   }
-  
-  ### problems described here, with possible solution, needs testing: 
-  ### https://github.com/ncss-tech/aqp/issues/67
   
   # iterate over colors
   for(i in 1:n) {
@@ -182,9 +179,7 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
       idx <- order(sigma)[1:nClosest]
     }
     
-    ## there seems to be a bug in compare_colour() when comparing a vector --> matrix
-    ## very slow until fixed
-    # https://github.com/thomasp85/farver/issues/18
+    # most accurate / efficient method as of farver >= 2.0.3
     if(colorSpace == 'CIE2000') {
       # CIE dE00
       # convert sRGB to LAB
