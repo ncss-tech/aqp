@@ -22,7 +22,7 @@ checkHzDepthLogic <- function(x) {
     .n <- length(.top)
     
     # bottom depth < top depth?
-      test.1 <- any(.bottom < .top, na.rm = TRUE)
+    test.1 <- any(.bottom < .top, na.rm = TRUE)
     
     # bottom depth == top depth
     test.2 <- any(.top == .bottom, na.rm = TRUE)
@@ -36,7 +36,7 @@ checkHzDepthLogic <- function(x) {
     # pack into DF, 1 row per profile 
     res <- data.frame(
       .id=ID.i,
-      depthLogicError=test.1, 
+      depthLogic=test.1, 
       sameDepth=test.2, 
       missingDepth=test.3,
       overlapOrGap=test.4,
