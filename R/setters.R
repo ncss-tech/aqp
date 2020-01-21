@@ -536,7 +536,8 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 
   if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
   	stop("there are IDs in the replacement that do not exist in the original data", call.=FALSE)
-
+  
+  ## NOTE: this can incur a lot of overhead when length(object) > 1,000
   # NEW: more extensive test of ids -- is it possible to merge rather than replace?
   if(hzidname(object) %in% names(value)) {
     # if hzidname for the SPC is present in the new data,
