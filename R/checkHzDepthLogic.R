@@ -1,0 +1,59 @@
+
+## related issues:
+# ## https://github.com/ncss-tech/aqp/issues/65
+
+## general-purpose hz depth logic check
+# assumes that data are sorted ID, top ASC
+# x: SoilProfileCollection object to check
+checkHzDepthLogic <- function(x) {
+  
+  # used inside / outside of scope of .check()
+  htb <- horizonDepths(x)
+  idn <- idname(x)
+  
+  .check <- function(i) {
+    # extract pieces
+    h <- horizons(i)
+    
+    # convenience vars
+    ID.i <- h[[idn]][1]
+    .top <- h[[htb[1]]]
+    .bottom <- h[[htb[2]]]
+    .n <- length(.top)
+    
+    # bottom depth < top depth?
+    test.1 <- .bottom < .top
+    
+    # bottom depth == top depth
+    test.2 <- .top == .bottom
+    
+    # NA depths
+    test.3 <- is.na(.top) | is.na(.bottom)
+    
+    # bottom != next top
+    test.4 <- .bottom[-.n] != .top[-1]
+    
+    # pack into DF, 1 row per profile 
+    res <- data.frame(
+      .id=ID.i,
+      depthLogicError=any(test.1), 
+      sameDepth=any(test.2), 
+      missingDepth=any(test.3),
+      overlapOrGap=any(test.4),
+      stringsAsFactors = FALSE
+    )
+    
+    # re-name .id -> idname(x)
+    names(res)[1] <- idn
+    
+    return(res)
+  }
+  
+  # iterate over profiles, result is safely packed into a DF ready for splicing into @site
+  res <- profileApply(x, .check, simplify = FALSE, frameify = TRUE)
+  
+  # add 'valid' flag for simple filtering
+  res[['valid']] <- ! apply(res[, -1], 1, any)
+  
+  return(res)
+}

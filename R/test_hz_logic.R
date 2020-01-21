@@ -1,10 +1,11 @@
 ## https://github.com/ncss-tech/aqp/issues/65
-## TODO: this checking assumes that the data are sorted!
-## TODO: give a reason for failing
-## TODO: perform checks and then report matrix of pass/failure
 
-# this should be further documented
+# depricated
 test_hz_logic <- function(i, topcol, bottomcol, strict=FALSE) {
+  
+  ## not using this function any longer, will remove by aqp 2.0
+  .Deprecated('checkHzDepthLogic')
+  
   
   # test for NA
   if(any(c(is.na(i[[topcol]])), is.na(i[[bottomcol]]))) {

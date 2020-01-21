@@ -1,6 +1,7 @@
 # aqp 1.18.5 (2020-01-19)
   * `profileApply()` enhancement for large `SoilProfileCollection` objects (https://github.com/ncss-tech/aqp/issues/112)
   * add `profileApply()` `frameify` argument for `data.frame` output (https://github.com/ncss-tech/aqp/issues/111)
+  * `checkHzDepthLogic()` replaces `test_hz_logic()`
   
 # aqp 1.18.4 (2020-01-06)
   * bug fix (rare) when setting / replacing horizon attributes (https://github.com/ncss-tech/aqp/issues/105)
