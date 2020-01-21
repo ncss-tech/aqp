@@ -12,7 +12,46 @@ d$group <- factor(sample(letters[1:10], size=length(d), replace=TRUE))
 # https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
 # 
 
+## TODO convert to profileApply() invocation
+## general-purpose hz depth logic check + fix
+checkHzDepthLogic <- function(x) {
+  
+  ## profileApply()
+  
+  h <- horizons(x)
+  
+  # bottom depth < top depth?
+  idx.1 <- which(h$bottom < h$top)
+  
+  # bottom depth == top depth
+  idx.2 <- which(h$top == h$bottom)
+  
+  # NA depths
+  idx.3 <- which(is.na(h$top) | is.na(h$bottom))
+  
+  # bottom != next top
+  idx.4 <- which(h$top[-1] != h$bottom[-nrow(h)])
+  
+  if(length(idx.1) > 0 | length(idx.2) > 0 | length(idx.3 > 3)) {
+    warning('depth logic errors present')
+  }
+  
+  
+  ## TODO: return NULL if no errors
+  # convert horizon indexes into profile_ids
+  res <- list(
+    depthLogicError=h[[idname(x)]][idx.1], 
+    sameDepth=h[[idname(x)]][idx.2], 
+    missingDepth=h[[idname(x)]][idx.3],
+    overlapOrGap=h[[idname(x)]][idx.4]
+    )
+  
+  return(res)
+}
+
+
 # simpler, faster version of slice via FULL JOIN
+# less robust to errors than current slice()
 dice <- function(x) {
   
   ## TODO:
@@ -20,7 +59,9 @@ dice <- function(x) {
   # * .pctMissing eval
   # * return as DF vs. SPC
   # * strictness of hz logic eval
-  # * test: what happens with bogus horizonation?
+  # * ERRORS on NA depths
+  # * ERROR on top == bottom
+  # * ERROR on bottom < top
   
   ## extract pieces
   h <- horizons(x)
@@ -79,7 +120,7 @@ dice <- function(x) {
 }
 
 
-z <- dice(d[1, ])
+z <- dice(d[1:20, ])
 
 plot(z, color='p2')
 
@@ -89,5 +130,15 @@ system.time(s <- slice(d, 0:100 ~ .))
 # 39 seconds: 2x mapply, merge.data.frame
 # 12 seconds: 1x mapply, merge.data.table
 system.time(s <- dice(d))
+
+
+
+z <- d[1, ]
+z$bottom[2] <- NA
+
+dice(z)
+
+
+
 
 
