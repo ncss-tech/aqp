@@ -16,7 +16,7 @@ if (!isGeneric("profileApply"))
 		# get profile IDs
 		pIDs <- profile_id(object)
 
-		# pre-allocate list of correct size
+		# pre-allocate list
 		l <- vector(mode = 'list', length = length(pIDs))
 		# must set list names based on expected assignment in for() loop
 		names(l) <- pIDs
