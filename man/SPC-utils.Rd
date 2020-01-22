@@ -57,6 +57,13 @@
 \alias{hzidname<-}
 \alias{hzidname<-,SoilProfileCollection-method}
 
+\alias{hzdesgnname}
+\alias{hzdesgnname,SoilProfileCollection-method}
+\alias{hzdesgnname<-}
+\alias{hzdesgnname<-,SoilProfileCollection-method}
+
+\alias{hzDesgn}
+\alias{hzDesgn,SoilProfileCollection-method}
 
 \title{Getters, Setters, and Utility Methods for SoilProfileCollection Objects}
 \description{Getters, Setters, and Utility Methods for SoilProfileCollection Objects}
@@ -82,6 +89,11 @@ depths(sp1) <- id ~ top + bottom
 (du <- depth_units(sp1))
 depth_units(sp1) <- 'in'
 depth_units(sp1) <- du
+
+## horizon designation
+hzdesgnname(sp1) <- "name"
+hzdesgnname(sp1)
+hzDesgn(sp1)
 
 ## get/set metadata on SoilProfileCollection objects
 # this is a 1-row data.frame
