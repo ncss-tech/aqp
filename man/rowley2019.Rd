@@ -2,7 +2,7 @@
 \alias{rowley2019}
 \docType{data}
 
-\title{Soil Morphologic, Geochemical, and Mineralogy Data from Rowlet et al. 2019.}
+\title{Soil Morphologic, Geochemical, and Mineralogy Data from Rowley et al. 2019.}
 
 \description{Data from Table 1 and Supplementary Tables 1 and 2 from "A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland".}
 
@@ -68,13 +68,10 @@ horizon-level attributes
 }
 
 
-\source{
-  \href{https://www.sciencedirect.com/science/article/pii/S0016706119318683}{A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland}
-}
 
 \references{
 Mike C. Rowley, Stephanie Grand, Thierry Adatte, Eric P. Verrecchia,
-A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland,
+\href{https://www.sciencedirect.com/science/article/pii/S0016706119318683}{A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland},
 Geoderma,
 2019,
 114065,
@@ -83,10 +80,47 @@ https://doi.org/10.1016/j.geoderma.2019.114065.
 }
 
 \examples{
+library(lattice)
+
+# load data
 data('rowley2019')
 
+# check first 5 rows and 10 columns of horizon data
+horizons(rowley2019)[1:5, 1:10]
+
+# check site data
+site(rowley2019)
+
+# graphical summary
 par(mar=c(1,1,3,1))
 plotSPC(rowley2019, color='Feo_Fed', name='name', cex.names=0.85)
+
+plotSPC(rowley2019, color='Ca_exch', name='name', cex.names=0.85)
+
+# grouped plot
+groupedProfilePlot(rowley2019, groups = 'group', color='Ca_exch', 
+name='name', cex.names=0.85, group.name.offset = -10)
+
+# aggregate over 1cm slices, for select properties
+a <- slab(rowley2019, group ~ Reactive_carbonate + Ca_exch + pH + K_Feldspar + Na_Plagioclase + Al)
+
+# plot styling
+tps <- list(superpose.line=list(lwd=2, col=c('royalblue', 'firebrick')))
+
+# make the figure
+xyplot(top ~ p.q50 | variable, data=a, ylab='Depth', groups=group,
+       main='', as.table=TRUE,
+       xlab='median bounded by 25th and 75th percentiles',
+       lower=a$p.q25, upper=a$p.q75, ylim=c(55,-5),
+       panel=panel.depth_function,
+       prepanel=prepanel.depth_function,
+       cf=a$contributing_fraction,
+       alpha=0.33, sync.colors=TRUE,
+       scales=list(x=list(relation='free', alternating=1)),
+       par.settings=tps,
+       auto.key=list(columns=2, lines=TRUE, points=FALSE),
+       strip=strip.custom(bg=grey(0.9))
+)
 
 }
 
