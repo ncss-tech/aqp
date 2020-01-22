@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -183,13 +183,13 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class='co'># check it out</span>
 <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sp4</span>) <span class='co'># class name</span></div><div class='output co'>#&gt; [1] "SoilProfileCollection"
 #&gt; attr(,"package")
-#&gt; [1] "aqp"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>sp4</span>) <span class='co'># internal structure</span></div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots
-#&gt;   ..@ idcol     : chr "id"
-#&gt;   ..@ hzidcol   : chr "hzID"
-#&gt;   ..@ depthcols : chr [1:2] "top" "bottom"
-#&gt;   ..@ metadata  :'data.frame':	1 obs. of  1 variable:
+#&gt; [1] "aqp"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>sp4</span>) <span class='co'># internal structure</span></div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
+#&gt;   ..@ idcol       : chr "id"
+#&gt;   ..@ hzidcol     : chr "hzID"
+#&gt;   ..@ depthcols   : chr [1:2] "top" "bottom"
+#&gt;   ..@ metadata    :'data.frame':	1 obs. of  1 variable:
 #&gt;   .. ..$ depth_units: chr "cm"
-#&gt;   ..@ horizons  :'data.frame':	30 obs. of  14 variables:
+#&gt;   ..@ horizons    :'data.frame':	30 obs. of  14 variables:
 #&gt;   .. ..$ id         : chr [1:30] "colusa" "colusa" "colusa" "colusa" ...
 #&gt;   .. ..$ name       : chr [1:30] "A" "ABt" "Bt1" "Bt2" ...
 #&gt;   .. ..$ top        : int [1:30] 0 3 8 30 0 9 0 4 13 0 ...
@@ -204,14 +204,15 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 #&gt;   .. ..$ clay       : int [1:30] 21 27 32 55 25 34 3 15 27 32 ...
 #&gt;   .. ..$ CF         : num [1:30] 0.12 0.27 0.27 0.16 0.55 0.84 0.5 0.75 0.67 0.25 ...
 #&gt;   .. ..$ hzID       : int [1:30] 1 2 3 4 5 6 7 8 9 10 ...
-#&gt;   ..@ site      :'data.frame':	10 obs. of  1 variable:
+#&gt;   ..@ site        :'data.frame':	10 obs. of  1 variable:
 #&gt;   .. ..$ id: chr [1:10] "colusa" "glenn" "kings" "mariposa" ...
-#&gt;   ..@ sp        :Formal class 'SpatialPoints' [package "sp"] with 3 slots
+#&gt;   ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots
 #&gt;   .. .. ..@ coords     : num [1, 1] 0
 #&gt;   .. .. ..@ bbox       : logi [1, 1] NA
 #&gt;   .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
 #&gt;   .. .. .. .. ..@ projargs: chr NA
-#&gt;   ..@ diagnostic:'data.frame':	0 obs. of  0 variables</div><div class='input'>
+#&gt;   ..@ diagnostic  :'data.frame':	0 obs. of  0 variables
+#&gt;   ..@ restrictions:'data.frame':	0 obs. of  0 variables</div><div class='input'>
 <span class='co'># inspect object properties</span>
 <span class='fu'><a href='SPC-utils.html'>idname</a></span>(<span class='no'>sp4</span>) <span class='co'># self-explanitory</span></div><div class='output co'>#&gt; [1] "id"</div><div class='input'><span class='fu'><a href='SPC-utils.html'>horizonDepths</a></span>(<span class='no'>sp4</span>) <span class='co'># self-explanitory</span></div><div class='output co'>#&gt; [1] "top"    "bottom"</div><div class='input'>
 <span class='co'># you can change these:</span>

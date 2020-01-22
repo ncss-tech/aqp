@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -121,14 +121,16 @@
 <span class='kw'>replace_na</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>add_soil_flag</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
 <span class='kw'>return_depth_distances</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>strict_hz_eval</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
 <span class='kw'>progress</span><span class='kw'>=</span><span class='st'>'none'</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
-<span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
+<span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+
+<span class='fu'>pc.SPC</span>(<span class='no'>s</span>, <span class='no'>vars</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>s</th>
-      <td><p>a dataframe with at least 2 columns of soil properties, and an 'id' column for each profile. horizon depths must be integers and self-consistent</p></td>
+      <td><p>a dataframe with at least 2 columns of soil properties, and an 'id' column for each profile. horizon depths must be integers and self-consistent, or a <code>SoilProfileCollection</code> object</p></td>
     </tr>
     <tr>
       <th>vars</th>
@@ -182,6 +184,10 @@
       <th>verbose</th>
       <td><p>extra debug output (FALSE)</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments to <code>pc</code></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -205,10 +211,11 @@
 
     
 <dl class='dl-horizontal'>
-<dt>1.</dt><dd><p>http://casoilresource.lawr.ucdavis.edu/</p></dd>
+<dt>1.</dt><dd><p>D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers &amp; Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, https://doi.org/10.1016/j.cageo.2012.10.020.</p></dd>
 <dt>2.</dt><dd><p>Moore, A.; Russell, J. &amp; Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.</p></dd>
 
 </dl>
+
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -297,7 +304,7 @@
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: ape</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'ape' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: cluster</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'cluster' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MASS</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'MASS' was built under R version 3.5.3</span></div><div class='output co'>#&gt; Initial stress        : 0.00901
 #&gt; stress after  10 iters: 0.00172, magic = 0.500
 #&gt; stress after  20 iters: 0.00155, magic = 0.500
-#&gt; stress after  30 iters: 0.00153, magic = 0.500</div><div class='output co'>#&gt; <span class='message'>dev.new(): using pdf(file="Rplots71.pdf")</span></div><div class='input'>
+#&gt; stress after  30 iters: 0.00153, magic = 0.500</div><div class='input'>
 
 <span class='co'>## 6. try out the 'sample_interval' argument</span>
 <span class='co'># compute using sucessively larger sampling intervals</span>

@@ -12,6 +12,9 @@ d$group <- factor(sample(letters[1:10], size=length(d), replace=TRUE))
 # https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
 # 
 
+## address TODO and major design questions:
+# https://github.com/ncss-tech/aqp/issues/115
+
 
 # simpler, faster version of slice via data.table / FULL JOIN
 # less robust to errors than current slice()
@@ -25,6 +28,7 @@ dice <- function(x) {
   # * ERRORS on NA depths
   # * ERROR on top == bottom
   # * ERROR on bottom < top
+  # * cannot use A/E type horizons (https://github.com/ncss-tech/aqp/issues/88)
   
   ## extract pieces
   h <- horizons(x)

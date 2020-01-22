@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <pre class="usage"><span class='fu'>munsell2rgb</span>(<span class='no'>the_hue</span>, <span class='no'>the_value</span>, <span class='no'>the_chroma</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>1</span>,
 <span class='kw'>maxColorValue</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>returnLAB</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
 
-<span class='fu'>rgb2munsell</span>(<span class='no'>color</span>, <span class='kw'>colorSpace</span><span class='kw'>=</span><span class='st'>'LAB'</span>, <span class='kw'>nClosest</span><span class='kw'>=</span><span class='fl'>1</span>)
+<span class='fu'>rgb2munsell</span>(<span class='no'>color</span>, <span class='kw'>colorSpace</span><span class='kw'>=</span><span class='st'>'CIE2000'</span>, <span class='kw'>nClosest</span><span class='kw'>=</span><span class='fl'>1</span>)
 
 <span class='fu'>parseMunsell</span>(<span class='no'>munsellColor</span>, <span class='kw'>convertColors</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
@@ -163,7 +163,7 @@
     </tr>
     <tr>
       <th>colorSpace</th>
-      <td><p>the colorspace to use for finding the closest chip, LAB is the most accurate, sRGB is another possibility</p></td>
+      <td><p>the distance metric (colorspace) to use for finding the closest chip: CIE2000 is the most accurate but requires farver &gt;= 2.0.3, Euclidean distance in (CIE)LAB is a close second, while Euclidean distance in sRGB is not at all accurate and should only be used for demonstration</p></td>
     </tr>
     <tr>
       <th>nClosest</th>

@@ -72,7 +72,7 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -123,8 +123,12 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
 <p>WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>estimatePSCS</span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>, <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>, <span class='kw'>tax_order_field</span> <span class='kw'>=</span> <span class='st'>"tax_order"</span>,
-<span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>estimatePSCS</span>(<span class='no'>p</span>,
+             <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>,
+             <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>,
+             <span class='kw'>texcl.attr</span> <span class='kw'>=</span> <span class='st'>"texcl"</span>,
+             <span class='kw'>tax_order_field</span> <span class='kw'>=</span> <span class='st'>"tax_order"</span>,
+             <span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,8 +138,12 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
       <td><p>A single-profile SoilProfileCollection object</p></td>
     </tr>
     <tr>
-      <th>attr</th>
+      <th>clay.attr</th>
       <td><p>Name of the horizon attribute containing clay contents. Default 'clay'</p></td>
+    </tr>
+    <tr>
+      <th>texcl.attr</th>
+      <td><p>Name of the horizon attribute containing textural class (used for finding sandy textures). Default 'texcl'</p></td>
     </tr>
     <tr>
       <th>hzdesgn</th>
@@ -172,7 +180,7 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
 
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
 <span class='no'>attr</span> <span class='kw'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>estimatePSCS</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='no'>attr</span>)
+<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>estimatePSCS</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='no'>attr</span>, <span class='kw'>texcl.attr</span><span class='kw'>=</span><span class='st'>"texture"</span>)
 <span class='no'>foo</span></div><div class='output co'>#&gt; [1] 49 89</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

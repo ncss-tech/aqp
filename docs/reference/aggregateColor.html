@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -117,7 +117,8 @@
     <p>Summarize soil color data, weighted by occurrence and horizon thickness.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>aggregateColor</span>(<span class='no'>x</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>"genhz"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"soil_color"</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>profile_wt</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>aggregateColor</span>(<span class='no'>x</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>"genhz"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"soil_color"</span>,
+               <span class='kw'>colorSpace</span> <span class='kw'>=</span> <span class='st'>'CIE2000'</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>profile_wt</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +134,10 @@
     <tr>
       <th>col</th>
       <td><p>the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")</p></td>
+    </tr>
+    <tr>
+      <th>colorSpace</th>
+      <td><p>the name of color space to use for conversion of aggregate colors to Munsell; either CIE2000, LAB, or sRGB. Default = 'CIE2000'</p></td>
     </tr>
     <tr>
       <th>k</th>
@@ -176,14 +181,14 @@ where w_i is the weight associated with color i, thickness_i is the total thickn
 <span class='no'>sp1</span>$<span class='no'>genhz</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span>(<span class='no'>sp1</span>$<span class='no'>name</span>, <span class='no'>n</span>, <span class='no'>p</span>)
 
 <span class='co'># aggregate colors over horizon-level attribute: 'genhz'</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'genhz'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>)
-
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'genhz'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: farver</span></div><div class='input'>
 <span class='co'># aggregate colors over site-level attribute: 'group'</span>
 <span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'group'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>)
 
 <span class='co'># aggregate colors over site-level attribute: 'group'</span>
 <span class='co'># discretize colors to 4 per group</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'group'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: farver</span></div><div class='input'>
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='no'>sp1</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'group'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'soil_color'</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+
 <span class='co'># aggregate colors over depth-slices</span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>sp1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>) ~ <span class='no'>soil_color</span>)
 <span class='no'>s</span>$<span class='no'>slice</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>s</span>$<span class='no'>top</span>, <span class='st'>' cm'</span>)

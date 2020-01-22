@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.5</span>
       </span>
     </div>
 
@@ -110,6 +110,58 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="aqp-1-19-2020-01-22" class="section level1">
+<h1 class="page-header">
+<a href="#aqp-1-19-2020-01-22" class="anchor"></a>aqp 1.19 (2020-01-22)<small> Unreleased </small>
+</h1>
+<ul>
+<li>CRAN release</li>
+</ul>
+</div>
+    <div id="aqp-1-18-5-2020-01-21" class="section level1">
+<h1 class="page-header">
+<a href="#aqp-1-18-5-2020-01-21" class="anchor"></a>aqp 1.18.5 (2020-01-21)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code><a href="../reference/profileApply-methods.html">profileApply()</a></code> enhancement for large <code>SoilProfileCollection</code> objects (<a href="https://github.com/ncss-tech/aqp/issues/112" class="uri">https://github.com/ncss-tech/aqp/issues/112</a>)</li>
+<li>add <code><a href="../reference/profileApply-methods.html">profileApply()</a></code> <code>frameify</code> argument for <code>data.frame</code> output (<a href="https://github.com/ncss-tech/aqp/issues/111" class="uri">https://github.com/ncss-tech/aqp/issues/111</a>)</li>
+<li>
+<code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code> replaces <code><a href="../reference/checkHzDepthLogic.html">test_hz_logic()</a></code>
+</li>
+<li>thanks to <a href="https://cran.r-project.org/web/packages/farver/">farver &gt;= 2.0.3</a>, <code><a href="../reference/munsell2rgb.html">rgb2munsell()</a></code> now uses the CIE2000 distance metric for color comparison</li>
+</ul>
+</div>
+    <div id="aqp-1-18-4-2020-01-06" class="section level1">
+<h1 class="page-header">
+<a href="#aqp-1-18-4-2020-01-06" class="anchor"></a>aqp 1.18.4 (2020-01-06)<small> Unreleased </small>
+</h1>
+<ul>
+<li>bug fix (rare) when setting / replacing horizon attributes (<a href="https://github.com/ncss-tech/aqp/issues/105" class="uri">https://github.com/ncss-tech/aqp/issues/105</a>)</li>
+<li>bug fix in <code>colorQuantiles</code> until <code>farver</code> 2.0.2 is available on CRAN</li>
+<li>
+<code>SoilProfileCollection</code> object gains new slot: <code>@restrictions</code>, fix old objects with <code><a href="../reference/rebuildSPC.html">rebuildSPC()</a></code>
+</li>
+</ul>
+</div>
+    <div id="aqp-1-18-3-2019-12-19" class="section level1">
+<h1 class="page-header">
+<a href="#aqp-1-18-3-2019-12-19" class="anchor"></a>aqp 1.18.3 (2019-12-19)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code><a href="../reference/evalMissingData.html">evalMissingData()</a></code> gets new argument for relative vs. absolute evalulation of missing data</li>
+<li>
+<code><a href="../reference/horizonColorIndices.html">horizonColorIndices()</a></code>, <code><a href="../reference/harden.rubification.html">harden.rubification()</a></code>, <code><a href="../reference/harden.melanization.html">harden.melanization()</a></code>, <code><a href="../reference/thompson.bell.darkness.html">thompson.bell.darkness()</a></code> and associated functions in soilColorIndices.R</li>
+<li>fix for <a href="https://github.com/ncss-tech/aqp/issues/44" class="uri">https://github.com/ncss-tech/aqp/issues/44</a>
+</li>
+<li>fix for <a href="https://github.com/ncss-tech/aqp/issues/66" class="uri">https://github.com/ncss-tech/aqp/issues/66</a>
+</li>
+<li>new example data: <code>rowley2019</code>
+</li>
+<li>dropped some dependencies</li>
+</ul>
+</div>
     <div id="aqp-1-17-10-2019-10-30" class="section level1">
 <h1 class="page-header">
 <a href="#aqp-1-17-10-2019-10-30" class="anchor"></a>aqp 1.17.10 (2019-10-30)<small> Unreleased </small>
@@ -132,11 +184,16 @@
 <a href="#aqp-1-17-08-2019-10-03" class="anchor"></a>aqp 1.17.08 (2019-10-03)<small> Unreleased </small>
 </h1>
 <ul>
-<li>generalize.hz() gets a \dots argument for passing additional arguments to grep(), e.g. perl=TRUE</li>
-<li>addVolumeFraction() can now accept a vector of colors, as many as number of horizons</li>
+<li>
+<code><a href="../reference/generalize.hz.html">generalize.hz()</a></code> gets a \dots argument for passing additional arguments to <code><a href="https://rdrr.io/r/base/grep.html">grep()</a></code>, e.g. <code>perl=TRUE</code>
+</li>
+<li>
+<code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> can now accept a vector of colors, as many as number of horizons</li>
 <li>new sample data: <code>jacobs2000</code>, pending documentation</li>
-<li>aggregateColor() faster and more accuracte, using delta-E00 for quantized colors c/o {farver} (see <a href="https://github.com/ncss-tech/aqp/issues/98" class="uri">https://github.com/ncss-tech/aqp/issues/98</a>)</li>
-<li>new functions contrastChart() and soilPalette()</li>
+<li>
+<code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> faster and more accuracte, using delta-E00 for quantized colors c/o {farver} (see <a href="https://github.com/ncss-tech/aqp/issues/98" class="uri">https://github.com/ncss-tech/aqp/issues/98</a>)</li>
+<li>new functions <code><a href="../reference/contrastChart.html">contrastChart()</a></code> and <code><a href="../reference/soilPalette.html">soilPalette()</a></code>
+</li>
 <li>aqp 1.18 scheduled for next CRAN release</li>
 </ul>
 </div>
@@ -145,9 +202,11 @@
 <a href="#aqp-1-17-06-2019-07-15" class="anchor"></a>aqp 1.17.06 (2019-07-15)<small> Unreleased </small>
 </h1>
 <ul>
-<li>plotSPC() gains a new argument for relative positioning: relative.pos</li>
-<li>relative positioning helper function: fixOverlap(), see manual page for examples</li>
-<li>explainPlotSPC(), addDiagnosticBracket(), and addVolumeFraction() updated accordingly</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">plotSPC()</a></code> gains a new argument for relative positioning: relative.pos</li>
+<li>relative positioning helper function: <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>, see manual page for examples</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">explainPlotSPC()</a></code>, <code><a href="../reference/addBracket.html">addDiagnosticBracket()</a></code>, and <code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> updated accordingly</li>
 </ul>
 </div>
     <div id="aqp-1-17-05-2019-05-18" class="section level1">
@@ -174,9 +233,12 @@
 </h1>
 <ul>
 <li>new version number system</li>
-<li>plotSPC() will now attempt to create multi-row legends when using a factor &gt; n.legend levels</li>
-<li>plotSPC() will now generate &gt; 10 colors for legends associated with a factor (<a href="https://github.com/ncss-tech/aqp/issues/9" class="uri">https://github.com/ncss-tech/aqp/issues/9</a>)</li>
-<li>munsell2rgb() will now return CIE LAB coordinates if requested (<a href="https://github.com/ncss-tech/aqp/issues/69" class="uri">https://github.com/ncss-tech/aqp/issues/69</a>)</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">plotSPC()</a></code> will now attempt to create multi-row legends when using a factor &gt; n.legend levels</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">plotSPC()</a></code> will now generate &gt; 10 colors for legends associated with a factor (<a href="https://github.com/ncss-tech/aqp/issues/9" class="uri">https://github.com/ncss-tech/aqp/issues/9</a>)</li>
+<li>
+<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> will now return CIE LAB coordinates if requested (<a href="https://github.com/ncss-tech/aqp/issues/69" class="uri">https://github.com/ncss-tech/aqp/issues/69</a>)</li>
 </ul>
 </div>
     <div id="aqp-1-17-2018-12-28" class="section level1">
@@ -185,15 +247,19 @@
 </h1>
 <ul>
 <li>CRAN release</li>
-<li>aggregateColor() gets a new feature, similar colors can be grouped via cluster::pam()</li>
-<li>new functions: previewColors(), colorQuantiles(), plotColorQuantiles()</li>
-<li>new function: horizonDepths()&lt;-, edit top/bottom names after SPC init</li>
-<li>new function: profile_id()&lt;-, edit profile IDs after init; be careful!</li>
-<li>new functions: hzID() and hzID()&lt;-, get/set unique horizon IDs</li>
-<li>new functions: hzidname() and hzidname()&lt;-, get/set column containing unique horizon IDs</li>
-<li>rbind.SoilProfileCollection() has been deprecated in favor of union(), gains new functionality: <a href="https://github.com/ncss-tech/aqp/issues/71" class="uri">https://github.com/ncss-tech/aqp/issues/71</a>
+<li>
+<code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> gets a new feature, similar colors can be grouped via cluster::pam()</li>
+<li>new functions: <code><a href="../reference/previewColors.html">previewColors()</a></code>, <code><a href="../reference/colorQuantiles.html">colorQuantiles()</a></code>, <code><a href="../reference/colorQuantiles.html">plotColorQuantiles()</a></code>
 </li>
-<li>bug fixes in sanity checks within horizonNames()&lt;-</li>
+<li>new function: <code>horizonDepths()&lt;-</code>, edit top/bottom names after SPC init</li>
+<li>new function: <code>profile_id()&lt;-</code>, edit profile IDs after init; be careful!</li>
+<li>new functions: <code><a href="../reference/SPC-utils.html">hzID()</a></code> and <code>hzID()&lt;-</code>, get/set unique horizon IDs</li>
+<li>new functions: <code><a href="../reference/SPC-utils.html">hzidname()</a></code> and <code>hzidname()&lt;-</code>, get/set column containing unique horizon IDs</li>
+<li>
+<code><a href="../reference/SoilProfileCollection-class.html">rbind.SoilProfileCollection()</a></code> has been deprecated in favor of <code><a href="../reference/union.html">union()</a></code>, gains new functionality: <a href="https://github.com/ncss-tech/aqp/issues/71" class="uri">https://github.com/ncss-tech/aqp/issues/71</a>
+</li>
+<li>bug fixes in sanity checks within <code>horizonNames()&lt;-</code>
+</li>
 <li>**!!! SoilProfileCollection internal structure has changed: <a href="https://github.com/ncss-tech/aqp/issues/74**" class="uri">https://github.com/ncss-tech/aqp/issues/74**</a>
 </li>
 <li>see release notes for more: <a href="https://github.com/ncss-tech/aqp/releases/tag/v1.17" class="uri">https://github.com/ncss-tech/aqp/releases/tag/v1.17</a>
@@ -214,8 +280,10 @@
 <a href="#aqp-1-16-5-2018-11-21" class="anchor"></a>aqp 1.16-5 (2018-11-21)<small> Unreleased </small>
 </h1>
 <ul>
-<li>moved explainPlotSPC from SPC tutorial to aqp::explainPlotSPC()</li>
-<li>plotSPC() is a little better at estimating “extra” vetical / horizontal space, still needs work (<a href="https://github.com/ncss-tech/aqp/issues/62" class="uri">https://github.com/ncss-tech/aqp/issues/62</a>)</li>
+<li>moved <code>explainPlotSPC</code> from SPC tutorial to <code><a href="../reference/SPC-plotting.html">aqp::explainPlotSPC()</a></code>
+</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">plotSPC()</a></code> is a little better at estimating “extra” vetical / horizontal space, still needs work (<a href="https://github.com/ncss-tech/aqp/issues/62" class="uri">https://github.com/ncss-tech/aqp/issues/62</a>)</li>
 </ul>
 </div>
     <div id="aqp-1-16-2-2018-05-22" class="section level1">
@@ -225,7 +293,8 @@
 <ul>
 <li>fixing <a href='https://github.com/ncss-tech/aqp/issues/53'>#53</a> and <a href='https://github.com/ncss-tech/aqp/issues/54'>#54</a></li>
 <li>bug fix for too many decimal places in legend classes (floating point -&gt; character issue)</li>
-<li>plotSPC() gets a new argument, n.legend: approximate number of classes</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">plotSPC()</a></code> gets a new argument, <code>n.legend</code>: approximate number of classes</li>
 </ul>
 </div>
     <div id="aqp-1-15-5-2018-03-14" class="section level1">
@@ -233,7 +302,7 @@
 <a href="#aqp-1-15-5-2018-03-14" class="anchor"></a>aqp 1.15.5 (2018-03-14)<small> Unreleased </small>
 </h1>
 <ul>
-<li>enhancement to aggregateColor() for cases when horizon depths are missing or top/bottom logic flipped</li>
+<li>enhancement to <code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> for cases when horizon depths are missing or top/bottom logic flipped</li>
 </ul>
 </div>
     <div id="aqp-1-15-4-2018-01-29" class="section level1">
@@ -241,7 +310,7 @@
 <a href="#aqp-1-15-4-2018-01-29" class="anchor"></a>aqp 1.15.4 (2018-01-29)<small> Unreleased </small>
 </h1>
 <ul>
-<li>bug fix for addVolumeFraction() when fragment volume &gt; 100%</li>
+<li>bug fix for <code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> when fragment volume &gt; 100%</li>
 </ul>
 </div>
     <div id="aqp-1-15-3-2018-01-24" class="section level1">
@@ -249,8 +318,9 @@
 <a href="#aqp-1-15-3-2018-01-24" class="anchor"></a>aqp 1.15.3 (2018-01-24)<small> Unreleased </small>
 </h1>
 <ul>
-<li>added a new argument to addDiagnosticBracket() allowing for specification of column containing diagnostic feature kind</li>
-<li>addBracket() now requires a data.frame with plotting details, see manual page</li>
+<li>added a new argument to <code><a href="../reference/addBracket.html">addDiagnosticBracket()</a></code> allowing for specification of column containing diagnostic feature kind</li>
+<li>
+<code><a href="../reference/addBracket.html">addBracket()</a></code> now requires a data.frame with plotting details, see manual page</li>
 </ul>
 </div>
     <div id="aqp-1-15-2-2017-11-30" class="section level1">
@@ -258,9 +328,11 @@
 <a href="#aqp-1-15-2-2017-11-30" class="anchor"></a>aqp 1.15.2 (2017-11-30)<small> Unreleased </small>
 </h1>
 <ul>
-<li>added shannonEntropy(), confusionIndex(), and brierScore()</li>
-<li>bug fix in get.ml.hz() for horizon names that start with number or punctuation</li>
-<li>get.ml.hz() now uses internal aqp functions for Shannon entropy and Brier scores</li>
+<li>added <code><a href="../reference/shannonEntropy.html">shannonEntropy()</a></code>, <code><a href="../reference/confusionIndex.html">confusionIndex()</a></code>, and <code><a href="../reference/brierScore.html">brierScore()</a></code>
+</li>
+<li>bug fix in <code><a href="../reference/get.ml.hz.html">get.ml.hz()</a></code> for horizon names that start with number or punctuation</li>
+<li>
+<code><a href="../reference/get.ml.hz.html">get.ml.hz()</a></code> now uses internal aqp functions for Shannon entropy and Brier scores</li>
 </ul>
 </div>
     <div id="aqp-1-15-2017-11-11" class="section level1">
@@ -276,7 +348,9 @@
 <a href="#aqp-1-14-2017-09-19" class="anchor"></a>aqp 1.14 (2017-09-19)<small> Unreleased </small>
 </h1>
 <ul>
-<li>missingDataGrid() relaxing slice() with strict=FALSE</li>
+<li>
+<code><a href="../reference/missingDataGrid.html">missingDataGrid()</a></code> relaxing <code><a href="../reference/SPC-slice-methods.html">slice()</a></code> with <code>strict=FALSE</code>
+</li>
 </ul>
 </div>
     <div id="aqp-1-12-2017-07-05" class="section level1">
@@ -284,7 +358,7 @@
 <a href="#aqp-1-12-2017-07-05" class="anchor"></a>aqp 1.12 (2017-07-05)<small> Unreleased </small>
 </h1>
 <ul>
-<li>CIE LAB colors are now in the <code>munsell</code> look-up table</li>
+<li>CIELAB colors are now in the <code>munsell</code> look-up table</li>
 </ul>
 </div>
     <div id="aqp-1-12-2017-07-05-1" class="section level1">
@@ -292,7 +366,8 @@
 <a href="#aqp-1-12-2017-07-05-1" class="anchor"></a>aqp 1.12 (2017-07-05)<small> Unreleased </small>
 </h1>
 <ul>
-<li>plotSPC() now able to deal with missing horizon data (thanks Stephen R.)</li>
+<li>
+<code><a href="../reference/SPC-plotting.html">plotSPC()</a></code> now able to deal with missing horizon data (thanks Stephen R.)</li>
 <li>this is likely the last release before aqp 2.0</li>
 </ul>
 </div>
@@ -301,7 +376,8 @@
 <a href="#aqp-1-11-2017-06-13" class="anchor"></a>aqp 1.11 (2017-06-13)<small> Unreleased </small>
 </h1>
 <ul>
-<li>rgb2munsell() now uses CIELAB colorspace for lookup, results are more accurate as compared to using sRGB colorspace</li>
+<li>
+<code><a href="../reference/munsell2rgb.html">rgb2munsell()</a></code> now uses CIELAB colorspace for lookup, results are <em>more accurate</em> as compared to using sRGB colorspace</li>
 </ul>
 </div>
     <div id="aqp-1-10-4-2017-05-02" class="section level1">
@@ -309,7 +385,8 @@
 <a href="#aqp-1-10-4-2017-05-02" class="anchor"></a>aqp 1.10-4 (2017-05-02)<small> Unreleased </small>
 </h1>
 <ul>
-<li>texture.triangle.low.rv.high() renamed to textureTriangleSummary(). The old name still works, but a message is issued</li>
+<li>
+<code><a href="../reference/texture.triangle.low.rv.high.html">texture.triangle.low.rv.high()</a></code> renamed to <code><a href="../reference/texture.triangle.low.rv.high.html">textureTriangleSummary()</a></code>. The old name still works, but a message is issued</li>
 <li>new argument to textureTriangleSummary() texture.names: for toggling texture class names</li>
 <li>minor bug fix in textureTriangleSummary(…, sim=TRUE), previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.</li>
 <li>new function tauW(), addd by D.G. Rossiter: see manual page for references</li>
@@ -320,7 +397,7 @@
 <a href="#aqp-1-10-2017-01-05" class="anchor"></a>aqp 1.10 (2017-01-05)<small> 2017-01-06 </small>
 </h1>
 <ul>
-<li>fixed major bug (<a href="https://github.com/ncss-tech/aqp/issues/23" class="uri">https://github.com/ncss-tech/aqp/issues/23</a>) related to editing horizon-level attributes after rbinding</li>
+<li>fixed major bug (<a href="https://github.com/ncss-tech/aqp/issues/23" class="uri">https://github.com/ncss-tech/aqp/issues/23</a>) related to editing horizon-level attributes after <code>rbind</code>-ing</li>
 </ul>
 </div>
     <div id="aqp-1-9-13-2016-10-20" class="section level1">
@@ -338,8 +415,9 @@
 <a href="#aqp-1-9-10-2016-07-01" class="anchor"></a>aqp 1.9.10 (2016-07-01)<small> 2016-07-08 </small>
 </h1>
 <ul>
-<li>new function for estimating the closest Munsell chip: getClosestMunsellChip()</li>
-<li>new example data set (sp6) based on <a href="http://www.sciencedirect.com/science/article/pii/S0016706111001972" class="uri">http://www.sciencedirect.com/science/article/pii/S0016706111001972</a>
+<li>new function for estimating the closest Munsell chip: <code><a href="../reference/munsell2rgb.html">getClosestMunsellChip()</a></code>
+</li>
+<li>new example data set (<code>sp6</code>) based on <a href="http://www.sciencedirect.com/science/article/pii/S0016706111001972" class="uri">http://www.sciencedirect.com/science/article/pii/S0016706111001972</a>
 </li>
 </ul>
 </div>
@@ -348,7 +426,8 @@
 <a href="#aqp-1-9-8-2016-03-07" class="anchor"></a>aqp 1.9.8 (2016-03-07)<small> Unreleased </small>
 </h1>
 <ul>
-<li>munsell2rgb() can now accommodate neutral hues (N), and values of “2.5”, see manual page for details</li>
+<li>
+<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> can now accommodate neutral hues (N), and values of “2.5”, see manual page for details</li>
 </ul>
 </div>
     <div id="aqp-1-9-7-2016-02-25" class="section level1">
@@ -356,10 +435,10 @@
 <a href="#aqp-1-9-7-2016-02-25" class="anchor"></a>aqp 1.9.7 (2016-02-25)<small> Unreleased </small>
 </h1>
 <ul>
-<li>new function: soilColorSignature(), see manual page</li>
-<li>new function: parseMunsell() for converting strings of ‘10YR 2/2’ into R colors or RGB triplets
+<li>new function: <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, see manual page</li>
+<li>new function: <code><a href="../reference/munsell2rgb.html">parseMunsell()</a></code> for converting strings of ‘10YR 2/2’ into R colors or RGB triplets
 <ul>
-<li>this is a convenience function that calls munsell2rgb on parsed strings of full Munsell notation</li>
+<li>this is a convenience function that calls <code>munsell2rgb</code> on parsed strings of full Munsell notation</li>
 </ul>
 </li>
 </ul>
@@ -369,8 +448,8 @@
 <a href="#aqp-1-9-6-2016-02-23" class="anchor"></a>aqp 1.9.6 (2016-02-23)<small> Unreleased </small>
 </h1>
 <ul>
-<li>minor changes to profile_compare(), getting ready for a complete overhaul to this function</li>
-<li>new function: evalMissingData(), see manual page</li>
+<li>minor changes to <code><a href="../reference/profile_compare-methods.html">profile_compare()</a></code>, getting ready for a complete overhaul to this function</li>
+<li>new function: <code><a href="../reference/evalMissingData.html">evalMissingData()</a></code>, see manual page</li>
 </ul>
 </div>
     <div id="aqp-1-9-5-2015-12-28" class="section level1">
@@ -387,7 +466,8 @@
 </h1>
 <ul>
 <li>better checking for other places where the bug fixed in rbind.SoilProfileCollection (aqp 1.9.3) could occur</li>
-<li>new functions: ‘genhzTableToAdjMat’, ‘hzTransitionProbabilities’</li>
+<li>new functions: <code>genhzTableToAdjMat</code>, <code>hzTransitionProbabilities</code>
+</li>
 </ul>
 </div>
     <div id="aqp-1-9-3-2015-12-18" class="section level1">
@@ -395,9 +475,9 @@
 <a href="#aqp-1-9-3-2015-12-18" class="anchor"></a>aqp 1.9.3 (2015-12-18)<small> 2015-12-19 </small>
 </h1>
 <ul>
-<li>fixed a nasty bug in rbind.SoilProfileCollection() related to object re-ordering
+<li>fixed a nasty bug in <code><a href="../reference/SoilProfileCollection-class.html">rbind.SoilProfileCollection()</a></code> related to object re-ordering
 <ul>
-<li>in aqp &lt; 1.9.3: there was a chance than profile_id(x) and site(x)[[idname(x)]]) would not match</li>
+<li>in aqp &lt; 1.9.3: there was a chance than <code><a href="../reference/SPC-utils.html">profile_id(x)</a></code> and <code>site(x)[[idname(x)]])</code> would not match</li>
 <li>bugs like this will no longer be a possibility after aqp 2.0, new SPC object structure planned</li>
 </ul>
 </li>
@@ -408,8 +488,10 @@
 <a href="#aqp-1-9-1-2015-11-18" class="anchor"></a>aqp 1.9.1 (2015-11-18)<small> Unreleased </small>
 </h1>
 <ul>
-<li>groupedProfilePlot() gains some new arguments and better documentation (see manual page)</li>
-<li>plot.SoilProfileCollection gains argument: default.color (see manual page)</li>
+<li>
+<code><a href="../reference/groupedProfilePlot.html">groupedProfilePlot()</a></code> gains some new arguments and better documentation (see manual page)</li>
+<li>
+<code>plot.SoilProfileCollection</code> gains argument: <code>default.color</code> (see manual page)</li>
 </ul>
 </div>
     <div id="aqp-1-9-2015-08-26" class="section level1">
@@ -417,11 +499,14 @@
 <a href="#aqp-1-9-2015-08-26" class="anchor"></a>aqp 1.9 (2015-08-26)<small> Unreleased </small>
 </h1>
 <ul>
-<li>added neutral colors to munsell2rgb()</li>
-<li>new function guessGenHzLevels()</li>
-<li>new function aggregateColor() and associated helper function sharpshootR::aggregateColorPlot()</li>
-<li>more code clean-up and fixes in examples to make R CMD check –as-cran happy</li>
-<li>fixed some ancient examples in the profileApply() manual page</li>
+<li>added neutral colors to <code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code>
+</li>
+<li>new function <code><a href="../reference/guessGenHzLevels.html">guessGenHzLevels()</a></code>
+</li>
+<li>new function <code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> and associated helper function <code><a href="https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html">sharpshootR::aggregateColorPlot()</a></code>
+</li>
+<li>more code clean-up and fixes in examples to make <code>R CMD check --as-cran</code> happy</li>
+<li>fixed some ancient examples in the <code><a href="../reference/profileApply-methods.html">profileApply()</a></code> manual page</li>
 </ul>
 </div>
     <div id="aqp-1-8-5-2015-04-17" class="section level1">
@@ -430,8 +515,9 @@
 </h1>
 <ul>
 <li>bug fixes and documentation updates</li>
-<li>digest::digest is now imported by default</li>
-<li>better documentation for unique-method of SoilProfileCollection objects</li>
+<li>
+<code><a href="https://rdrr.io/pkg/digest/man/digest.html">digest::digest</a></code> is now imported by default</li>
+<li>better documentation for unique-method of <code>SoilProfileCollection</code> objects</li>
 </ul>
 </div>
     <div id="aqp-1-8-3-2015-03-02" class="section level1">
@@ -451,8 +537,9 @@
 <a href="#aqp-1-7-11-2015-01-30" class="anchor"></a>aqp 1.7-11 (2015-01-30)<small> Unreleased </small>
 </h1>
 <ul>
-<li>fixed bugs in addBrackets(), panel.depth_function(), and plotSPC()</li>
-<li>new arguments to addBrackets() allow for annotation of brackets</li>
+<li>fixed bugs in <code>addBrackets()</code>, <code><a href="../reference/panel.depth_function.html">panel.depth_function()</a></code>, and <code><a href="../reference/SPC-plotting.html">plotSPC()</a></code>
+</li>
+<li>new arguments to <code>addBrackets()</code> allow for annotation of brackets</li>
 </ul>
 </div>
     <div id="aqp-1-7-10-2015-01-15" class="section level1">
@@ -1039,12 +1126,16 @@
 <li>code and documentation clean-up</li>
 <li>Soil Sata Access (SDA) query functions have been added
 <ul>
-<li>mapunit_geom_by_ll_bbox() : get map unit geometry by bounding box</li>
-<li>MUKEYS_by_ll_bbox() : get map unit keys by bounding box</li>
-<li>SDA_query() : retrieve soil tabular data via query written in SQL</li>
+<li>
+<code>mapunit_geom_by_ll_bbox()</code> : get map unit geometry by bounding box</li>
+<li>
+<code>MUKEYS_by_ll_bbox()</code> : get map unit keys by bounding box</li>
+<li>
+<code>SDA_query()</code> : retrieve soil tabular data via query written in SQL</li>
 </ul>
 </li>
-<li>additional customizations added to profile_plot</li>
+<li>additional customizations added to <code>plotSPC</code>
+</li>
 <li>two new sample data sets + examples</li>
 </ul>
 </div>
@@ -1060,7 +1151,8 @@
 <li>this feature is still experimental! testing is advised</li>
 </ul>
 </li>
-<li>profile_compare() now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)</li>
+<li>
+<code><a href="../reference/profile_compare-methods.html">profile_compare()</a></code> now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)</li>
 </ul>
 </div>
     <div id="aqp-0-98-4-2010-12-15" class="section level1">
@@ -1224,6 +1316,10 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#aqp-1-19-2020-01-22">1.19</a></li>
+        <li><a href="#aqp-1-18-5-2020-01-21">1.18.5</a></li>
+        <li><a href="#aqp-1-18-4-2020-01-06">1.18.4</a></li>
+        <li><a href="#aqp-1-18-3-2019-12-19">1.18.3</a></li>
         <li><a href="#aqp-1-17-10-2019-10-30">1.17.10</a></li>
         <li><a href="#aqp-1-17-08-2019-10-03">1.17.08</a></li>
         <li><a href="#aqp-1-17-06-2019-07-15">1.17.06</a></li>
