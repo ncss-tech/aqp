@@ -47,7 +47,8 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
                    paste0(logic_tests[logic_fail], collapse=","),
                    ' found. Returning `NA` for ',idname(p),': ',
                    profile_id(p)), call.=FALSE)
-    return(NA)
+    # returning NA for hz logic errors is too heavy-handed - warnings sufficient
+    #return(NA)
   }
   
   # determine top depths greater/equal to z1
@@ -100,7 +101,22 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
       warning('Invalid lower bound. Check arguments `z1` and `z2`. Returning `NA` (',idname(p),':', profile_id(p),')', call.=FALSE)
       return(NA)
     }
-
+    
+    # warn if incomplete result
+    target.thickness <- z2 - z1
+    actual.thickness <- sum(bdep[idx.top:idx.bot] - tdep[idx.top:idx.bot])
+    
+    if(actual.thickness < target.thickness) {
+      warning(paste0('Missing data in glom interval (actual/target: ', actual.thickness, '/',target.thickness,' ', depth_units(p), ' (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+      
+      if(z1 < tdep[idx.top]) {
+        warning(paste0('`z1` (',z1,') shallower than top depth (',tdep[idx.top],') of shallowest horizon. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+      }
+      if(z2 > bdep[idx.bot]) {
+        warning(paste0('`z2` (',z2,') deeper than bottom depth of deepest horizon (', bdep[idx.bot],'). (',idname(p),': ', profile_id(p),")"), call.=FALSE)
+      }
+    }
+    
     # get the ID values out of horizon table
     idval <- hz[idx.top:idx.bot, hzid]
     
