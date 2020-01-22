@@ -1,7 +1,3 @@
-
-## pending TODOs
-# https://github.com/ncss-tech/aqp/issues/98
-
 ## TODO: replace dlply and ddply with base functions
 
 # x: SPC
