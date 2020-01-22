@@ -90,6 +90,31 @@ setMethod("hzID", "SoilProfileCollection",
             
 )
 
+## horizon designation name
+if (!isGeneric("hzdesgnname"))
+  setGeneric("hzdesgnname", function(object, ...) standardGeneric("hzdesgnname"))
+
+## get column containing horizon designations (there is a setter of same name)
+setMethod("hzdesgnname", "SoilProfileCollection",
+          function(object)
+            return(object@hzdesgncol)
+)
+
+## get horizon designations (no corresponding setter -- no need)
+if (!isGeneric("hzDesgn"))
+  setGeneric("hzDesgn", function(object, ...) standardGeneric("hzDesgn"))
+
+setMethod("hzDesgn", "SoilProfileCollection",
+          function(object) {
+            h <- horizons(object)
+            res <- h[[hzdesgnname(object)]]
+            return(res)
+          }
+          
+)
+
+
+
 
 ## distinct profile IDs
 if (!isGeneric("profile_id"))

@@ -37,7 +37,6 @@ setReplaceMethod("hzID", "SoilProfileCollection",
                  }
 )
 
-
 ## profile IDs
 if (!isGeneric('profile_id<-'))
   setGeneric('profile_id<-', function(object, value) standardGeneric('profile_id<-'))
@@ -246,6 +245,34 @@ setReplaceMethod("hzidname", "SoilProfileCollection",
                  }
 )
 
+##
+## set hz designation name
+##
+if (!isGeneric('hzdesgnname<-'))
+  setGeneric('hzdesgnname<-', function(object, value) standardGeneric('hzdesgnname<-'))
+
+setReplaceMethod("hzdesgnname", "SoilProfileCollection",
+                 function(object, value) {
+                   # test: does it exist?
+                   if(!length(value))
+                     value <- ""
+                   
+                   if(length(value)) {
+                     # several ways to "reset" the hzdesgnname
+                     if((value == "") | is.na(value) | is.null(value)) {
+                       value <- character(0)
+                       message("set horizon designation name to `character` of length zero")
+                     } else if (! value %in% horizonNames(object)) {
+                       stop("horizon designation name not in horizon data", call.=TRUE)
+                     }
+                   } 
+                   
+                   # replace
+                   object@hzdesgncol <- value
+                   
+                   # done
+                   return(object)
+})
 
 ##
 ## initialize metadata: object modification in-place

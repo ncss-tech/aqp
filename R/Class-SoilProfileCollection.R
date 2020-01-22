@@ -24,6 +24,7 @@ setClass(
   representation=representation(
     idcol='character', # column name containing IDs
     hzidcol='character', # column name containing unique horizon IDs
+    hzdesgncol='character', # column name containing horizon designation
     depthcols='character', # 2 element vector with column names for hz top, bottom
     metadata='data.frame', # single-row dataframe with key-value mapping
     horizons='data.frame', # all horizons sorted by ID, top
@@ -35,6 +36,7 @@ setClass(
   prototype=prototype(
     idcol='id',
     hzidcol='hzID',
+    hzdesgncol=character(0),
     depthcols=c('top','bottom'),
     metadata=data.frame(stringsAsFactors=FALSE), # default units are unkown
     horizons=data.frame(stringsAsFactors=FALSE),

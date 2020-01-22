@@ -19,6 +19,12 @@ rebuildSPC <- function(x) {
     hzidname(res) <- x.list$hzidcol
   }
   
+  # preserve original hzdesgnname
+  # this is missing in old SPC objects
+  if(!is.null(x.list$hzdesgncol)) {
+    hzdesgnname(res) <- x.list$hzdesgncol
+  }
+  
   # add additional pieces
   metadata(res) <- x.list$metadata
   site(res) <- x.list$site
