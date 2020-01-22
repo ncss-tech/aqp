@@ -5,7 +5,7 @@
   * `profileApply()` enhancement for large `SoilProfileCollection` objects (https://github.com/ncss-tech/aqp/issues/112)
   * add `profileApply()` `frameify` argument for `data.frame` output (https://github.com/ncss-tech/aqp/issues/111)
   * `checkHzDepthLogic()` replaces `test_hz_logic()`
-  * thanks to [farver >= 2.0.3](https://cran.r-project.org/web/packages/farver/), `rgb2munsell()` now uses the CIE2000 distance metric for color comparison
+  * thanks to [farver >= 2.0.3](https://CRAN.R-project.org/package=farver), `rgb2munsell()` and `colorQuantiles()` now uses the CIE2000 distance metric for color comparison
   
 # aqp 1.18.4 (2020-01-06)
   * bug fix (rare) when setting / replacing horizon attributes (https://github.com/ncss-tech/aqp/issues/105)
