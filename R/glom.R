@@ -1,20 +1,17 @@
 # glom returns a "clod" of horizons that have a common attribute (currently just depth interval supported)
 
-# returns unique index to all horizons occuring over the depth interval [z1, z2]. 
-# z2 is optional, in which case a single horizon with depth range containing z1 is returned
-# several wrapper functions around this for hzid
-
-# a 'clod' is a ragged group of soil pedon horizons (each with distinctness, horizons boundaries)
-# a clod references the original pedon data, it is not resampled like a slice or slab. 
-
 # the verb/function that creates a clod is "glom" 
 # "to glom" is "to steal" or to "become stuck or attached to". it is related to the 
 # compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil
 
 # gloms a set of horizons for a single-profile SPC `p`
-#  the horizons are aggregated by depth using clod.hz.ids() 
+#  the horizons are aggregated by depth using 
+#  clod.hz.ids() defined below
 glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
-  # aka glom.by.depth; just one type of glomming of many that we can support
+  # aka glom.by.depth; 
+  if(length(p) > 1)
+    stop("glom is intended for single-profile SPCs", call.=FALSE)
+  
   idx <- clod.hz.ids(p, z1, z2)
   if(!all(is.na(idx))) {
     if(!as.data.frame) {
@@ -27,22 +24,10 @@ glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
   }
 }
 
-# create a vector of horizon IDs comprising a "clod" (by depth intersection of horizons)
+# returns unique index to all horizons occuring over the depth interval [z1, z2]. 
+# z2 is optional, in which case a single horizon with depth range containing z1 is returned
 clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE) 
 {
-  # short circuit test of hz logic
-  depthlogic <- checkHzDepthLogic(p)
-  logic_tests <- c('depthLogic','missingDepth','overlapOrGap')
-  logic_fail <- as.logical(depthlogic[logic_tests])
-  if(any(logic_fail)) {
-    # too much could possibly go wrong in presence of overlaps/gaps/missing depths etc
-    warning(paste0('Horizon logic error(s) ',
-                   paste0(logic_tests[logic_fail], collapse=","),
-                   ' found via `aqp::checkHzDepthLogic()`. Returning `NA` for ',idname(p),': ',
-                   profile_id(p)), call.=FALSE)
-    return(NA)
-  }
-  
   # access SPC slots to get important info about p
   hz <- horizons(p)
   dz <- horizonDepths(p)
@@ -51,6 +36,19 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
   # get top and bottom horizon depth vectors
   tdep <- hz[[dz[1]]]
   bdep <- hz[[dz[2]]]
+  
+  # short circuit test of hz logic
+  depthlogic <- .hzTests(tdep, bdep)
+  logic_tests <- c('depthLogic','missingDepth','overlapOrGap')
+  logic_fail <- as.logical(depthlogic[logic_tests])
+  if(any(logic_fail)) {
+    # too much could possibly go wrong in presence of overlaps/gaps/missing depths etc
+    warning(paste0('Horizon logic error(s) ',
+                   paste0(logic_tests[logic_fail], collapse=","),
+                   ' found. Returning `NA` for ',idname(p),': ',
+                   profile_id(p)), call.=FALSE)
+    return(NA)
+  }
   
   # determine top depths greater/equal to z1
   gt1 <- tdep >= z1
@@ -62,14 +60,14 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
   idx.top <- which(gt1)
   
   if (!length(idx.top)) {
-    warning(paste0('Invalid upper bound. Check argument `z1`. Returning `NA` for ',idname(p),': ', profile_id(p)), call.=FALSE)
+    warning(paste0('Invalid upper bound. Check argument `z1`. Returning `NA` (',idname(p),': ', profile_id(p),')'), call.=FALSE)
     return(NA)
   }
   
   idx.top <- idx.top[1] # always returns the top horizon
   
   if(z1 < tdep[idx.top]) {
-    warning(paste0('Upper boundary `z1` (',z1,') shallower than top depth (',tdep[idx.top],') of shallowest horizon in subset. First horizon in profile @ ',min(tdep),'. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+    warning(paste0('Upper boundary `z1` (',z1,') shallower than top depth (',tdep[idx.top],') of shallowest horizon in subset. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
   }
   
   # if a bottom depth of the clod interval is specified
@@ -94,7 +92,7 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
     idx.bot <- idx.bot[1]
     
     if(z2 > bdep[idx.bot]) {
-      warning(paste0('Lower boundary `z2` (',z2,') is deeper than bottom depth of deepest horizon (', bdep[idx.bot],') in subset. ',idname(p),': ', profile_id(p)), call.=FALSE)
+      warning(paste0('Lower boundary `z2` (',z2,') is deeper than bottom depth of deepest horizon (', bdep[idx.bot],') in subset. (',idname(p),': ', profile_id(p),")"), call.=FALSE)
     }
     
     # not really sure how this could happen ... maybe with wrong depth units for z?

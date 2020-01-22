@@ -19,27 +19,17 @@ checkHzDepthLogic <- function(x) {
     ID.i <- h[[idn]][1]
     .top <- h[[htb[1]]]
     .bottom <- h[[htb[2]]]
-    .n <- length(.top)
     
-    # bottom depth < top depth?
-    test.1 <- any(.bottom < .top, na.rm = TRUE)
-    
-    # bottom depth == top depth
-    test.2 <- any(.top == .bottom, na.rm = TRUE)
-    
-    # NA depths
-    test.3 <- any(is.na(.top) | is.na(.bottom), na.rm = TRUE)
-    
-    # bottom != next top
-    test.4 <- any(.bottom[-.n] != .top[-1], na.rm = TRUE)
+    # hzTests takes two numeric vectors and returns named logical
+    test <- .hzTests(.top, .bottom)
     
     # pack into DF, 1 row per profile 
     res <- data.frame(
       .id=ID.i,
-      depthLogic=test.1, 
-      sameDepth=test.2, 
-      missingDepth=test.3,
-      overlapOrGap=test.4,
+      depthLogic=test[1], 
+      sameDepth=test[2], 
+      missingDepth=test[3],
+      overlapOrGap=test[4],
       stringsAsFactors = FALSE
     )
     
@@ -55,5 +45,25 @@ checkHzDepthLogic <- function(x) {
   # add 'valid' flag for simple filtering
   res[['valid']] <- ! apply(res[, -1], 1, any)
   
+  return(res)
+}
+
+.hzTests <- function(top, bottom) {
+  n <- length(top)
+  
+  # bottom depth < top depth?
+  test.1 <- any(bottom < top, na.rm = TRUE)
+  
+  # bottom depth == top depth
+  test.2 <- any(top == bottom, na.rm = TRUE)
+  
+  # NA depths
+  test.3 <- any(is.na(top) | is.na(bottom), na.rm = TRUE)
+  
+  # bottom != next top
+  test.4 <- any(bottom[-n] != top[-1], na.rm = TRUE)
+  
+  res <- as.logical(c(test.1, test.2, test.3, test.4))
+  names(res) <- c("depthLogic","sameDepth","missingDepth","overlapOrGap")
   return(res)
 }
