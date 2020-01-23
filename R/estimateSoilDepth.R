@@ -10,7 +10,7 @@ estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p
   
   # ease removal of attribute name arguments -- deprecate them later
   # for now, just fix em if the defaults dont match the depthcols slot
-  if(any(!c(top, bottom) %in% horizonNames(f))) {
+  if(any(!(c(top, bottom) %in% horizonNames(f)))) {
     top <- depthcols[1]
     bottom <- depthcols[2]
   }
@@ -20,13 +20,16 @@ estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p
     stop('This function will only work when applied to a single soil profile, see manual page for details.')
   
   # if name is not in horizons, look if it is set in hzdesgncol
-  if(any(!name %in% horizonNames(f))) {
+  hznames <- horizonNames(f)
+  
+  if(any(!(name %in% hznames))) {
     hzd <- hzdesgnname(f)
-    if(length(hzd)) {
-      name <- hzd
-    } else {
-      stop("horizon name column not correctly specified -- either set `name` argument or hzdesgnname(spc) <- 'hz_desgn_column'", call.=FALSE)
-    }
+    
+    if(!length(hzd))
+      stop("horizon name column not found. set `name` argument or use `hzdesgnname(spc)`", call.=FALSE)
+    
+    if(hzd %in% hznames)
+       name <- hzd
   }
   
   # extract horizons

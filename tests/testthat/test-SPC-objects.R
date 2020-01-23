@@ -92,12 +92,24 @@ test_that("SPC deconstruction into a list", {
   expect_equivalent(l$hztexclcol, hztexclname(sp1))
   expect_equivalent(l$depthcols, horizonDepths(sp1))
   expect_equivalent(l$metadata, metadata(sp1))
+  
   expect_equivalent(l$horizons, horizons(sp1))
   expect_equivalent(l$site, site(sp1))
   expect_equivalent(l$sp, sp1@sp)
   expect_equivalent(l$diagnostic, diagnostic_hz(sp1))
   expect_equivalent(l$restrictions, restrictions(sp1))
   
+  # check internals after [-subsetting 
+  sp1.sub <- sp1[1:2,]
+  # none of these slots should change, the others will be subset
+  # verifying these are transferred ensures key info slots are handled
+  # by the SPC subset method
+  expect_equivalent(l$idcol, idname(sp1.sub))
+  expect_equivalent(l$hzidcol, hzidname(sp1.sub))
+  expect_equivalent(l$hzdesgncol, hzdesgnname(sp1.sub))
+  expect_equivalent(l$hztexclcol, hztexclname(sp1.sub))
+  expect_equivalent(l$depthcols, horizonDepths(sp1.sub))
+  expect_equivalent(l$metadata, metadata(sp1.sub))
 })
 
 
@@ -315,6 +327,7 @@ test_that("SPC horizon designation/texcl name get/set ", {
   expect_error(hzdesgnname(sp1) <- 'xxx')
   
   # message when setting to empty (sets slot to character(0))
+  # NOTE: cannot have this be so verbose, needs to happen during subsetting
   expect_message(hzdesgnname(sp1) <- '')
   
   # error when slot is empty and using accessor

@@ -46,11 +46,17 @@ test_that("error conditions", {
 
 test_that("basic soil depth evaluation, based on pattern matching of hz designation", {
   
+  # setting hz desgn by argument works
   res <- profileApply(d, estimateSoilDepth, name='name', top='top', bottom='bottom')
-  
   expect_equivalent(res, c(110, 55, 48, 20))
   
+  # setting invalid hz desgn produces estimateSoilDepth error
   expect_error(profileApply(d, estimateSoilDepth, name='goo', top='top', bottom='bottom'))
+  
+  # backup use of S4 hzdesgncol slot in lieu of valid argument
+  hzdesgnname(d) <- "name"
+  res <- estimateSoilDepth(d[1,], name='xxx', top='top', bottom='bottom')  
+  expect_equivalent(res, 110)
 })
 
 

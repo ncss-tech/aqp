@@ -261,9 +261,9 @@ setReplaceMethod("hzdesgnname", "SoilProfileCollection",
                      # several ways to "reset" the hzdesgnname
                      if((value == "") | is.na(value) | is.null(value)) {
                        value <- character(0)
-                       message("set horizon designation name to `character` of length zero")
-                     } else if (! value %in% horizonNames(object)) {
-                       stop("horizon designation name not in horizon data", call.=TRUE)
+                       message("set horizon designation name column to `character` of length zero")
+                     } else if (!(value %in% horizonNames(object))) {
+                       stop(paste0("horizon designation name (",value,") not in horizon data"), call.=FALSE)
                      }
                    } 
                    
@@ -290,7 +290,7 @@ setReplaceMethod("hztexclname", "SoilProfileCollection",
                      # several ways to "reset" the hzdesgnname
                      if((value == "") | is.na(value) | is.null(value)) {
                        value <- character(0)
-                       message("set horizon texture class name to `character` of length zero")
+                       #message("set horizon texture class name to `character` of length zero")
                      } else if (! value %in% horizonNames(object)) {
                        stop("horizon texture class name not in horizon data", call.=TRUE)
                      }
