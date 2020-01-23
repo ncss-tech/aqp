@@ -107,10 +107,17 @@ if (!isGeneric("hzDesgn"))
 setMethod("hzDesgn", "SoilProfileCollection",
           function(object) {
             h <- horizons(object)
-            res <- h[[hzdesgnname(object)]]
-            return(res)
+            hzd <- hzdesgnname(object)
+            if(length(hzd)) {
+              if(hzd %in% horizonNames(object)) {
+                res <- h[[hzd]]
+                return(res)
+              }
+            } else {
+              stop("horizon designation name (",hzd,") not in horizonNames().", call.=FALSE)
+            }
           }
-          
+            
 )
 
 ## horizon texture class name

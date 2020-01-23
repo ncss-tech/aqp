@@ -88,6 +88,8 @@ test_that("SPC deconstruction into a list", {
   # check internals
   expect_equivalent(l$idcol, idname(sp1))
   expect_equivalent(l$hzidcol, hzidname(sp1))
+  expect_equivalent(l$hzdesgncol, hzdesgnname(sp1))
+  expect_equivalent(l$hztexclcol, hztexclname(sp1))
   expect_equivalent(l$depthcols, horizonDepths(sp1))
   expect_equivalent(l$metadata, metadata(sp1))
   expect_equivalent(l$horizons, horizons(sp1))
@@ -285,6 +287,38 @@ test_that("SPC horizon ID name get/set ", {
   # not unique
   expect_error(hzidname(sp1) <- 'top')
   
+})
+
+test_that("SPC horizon designation/texcl name get/set ", {
+  
+  # check intended behavior of setters
+  hzdesgnname(sp1) <- 'name'
+  hztexclname(sp1) <- 'texture'
+  
+  expect_equivalent(hzdesgnname(sp1), 'name')
+  expect_equivalent(hztexclname(sp1), 'texture')
+  
+  # check handy accessor for hz designations
+  designations <- hzDesgn(sp1)
+  expect_type(designations, 'character')
+  expect_equal(length(designations), 60)
+  
+  # make a new horizon column
+  sp1$junk <- rep("foo", nrow(sp1))
+  hzdesgnname(sp1) <- 'junk'
+  hztexclname(sp1) <- 'junk'
+  expect_equivalent(hzdesgnname(sp1), 'junk')
+  expect_equivalent(hztexclname(sp1), 'junk')
+  
+  # error conditions:
+  # no column in horizon table 'xxx'
+  expect_error(hzdesgnname(sp1) <- 'xxx')
+  
+  # message when setting to empty (sets slot to character(0))
+  expect_message(hzdesgnname(sp1) <- '')
+  
+  # error when slot is empty and using accessor
+  expect_error(designations <- hzDesgn(sp1))
 })
 
 test_that("SPC horizon ID get/set ", {
