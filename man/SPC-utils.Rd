@@ -62,6 +62,11 @@
 \alias{hzdesgnname<-}
 \alias{hzdesgnname<-,SoilProfileCollection-method}
 
+\alias{hztexclname}
+\alias{hztexclname,SoilProfileCollection-method}
+\alias{hztexclname<-}
+\alias{hztexclname<-,SoilProfileCollection-method}
+
 \alias{hzDesgn}
 \alias{hzDesgn,SoilProfileCollection-method}
 

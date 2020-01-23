@@ -38,7 +38,7 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
   bdep <- hz[[dz[2]]]
   
   # short circuit test of hz logic
-  depthlogic <- .hzTests(tdep, bdep)
+  depthlogic <- hzDepthTests(tdep, bdep)
   logic_tests <- c('depthLogic','missingDepth','overlapOrGap')
   logic_fail <- as.logical(depthlogic[logic_tests])
   if(any(logic_fail)) {
