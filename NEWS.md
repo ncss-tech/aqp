@@ -1,5 +1,8 @@
 # aqp 1.19 (2020-01-22)
  * CRAN release
+ * new functions: `hzDesgn()`, get horizon designations from a SPC
+ * new functions: `hzdesgnname()`/`hzdesgnname()<-` and `hztexclname()`/`hztexclname()<-` get/set column containing horizon designations and texture classes
+ * better error/logic handling for `glom()`
 
 # aqp 1.18.5 (2020-01-21)
   * `profileApply()` enhancement for large `SoilProfileCollection` objects (https://github.com/ncss-tech/aqp/issues/112)
