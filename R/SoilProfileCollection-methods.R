@@ -113,7 +113,15 @@ setMethod("hzDesgn", "SoilProfileCollection",
           
 )
 
+## horizon texture class name
+if (!isGeneric("hztexclname"))
+  setGeneric("hztexclname", function(object, ...) standardGeneric("hztexclname"))
 
+## get column containing horizon designations (there is a setter of same name)
+setMethod("hztexclname", "SoilProfileCollection",
+          function(object)
+            return(object@hztexclcol)
+)
 
 
 ## distinct profile IDs

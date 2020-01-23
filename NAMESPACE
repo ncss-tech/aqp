@@ -165,7 +165,9 @@ exportMethods(
   "hzID<-",
   hzdesgnname,
   "hzdesgnname<-",
-  hzDesgn
+  hzDesgn,
+  hztexclname,
+  "hztexclname<-"
 )
 
 exportPattern("^[^\\.]")

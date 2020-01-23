@@ -17,12 +17,26 @@ rebuildSPC <- function(x) {
   # this is missing in old SPC objects
   if(!is.null(x.list$hzidcol)) {
     hzidname(res) <- x.list$hzidcol
+  }  
+  
+  if(is.null(x.list$hzdesgncol)) {
+    x.list$hzdesgncol <- character(0)
   }
   
   # preserve original hzdesgnname
   # this is missing in old SPC objects
   if(!is.null(x.list$hzdesgncol)) {
     hzdesgnname(res) <- x.list$hzdesgncol
+  }  
+  
+  if(is.null(x.list$hztexclcol)) {
+    x.list$hztexclcol <- character(0)
+  }
+  
+  # preserve original hztexclname
+  # this is missing in old SPC objects
+  if(!is.null(x.list$hztexclcol)) {
+    hztexclname(res) <- x.list$hztexclcol
   }
   
   # add additional pieces

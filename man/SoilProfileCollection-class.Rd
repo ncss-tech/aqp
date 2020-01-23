@@ -40,7 +40,8 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
   \describe{
     \item{\code{idcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify profiles }
     \item{\code{hzidcol}:}{Object of class \code{"character"} the name of the column used to uniquely identify horizons }
-    \item{\code{hzdesgncol}:}{Object of class \code{"character"} the name of the column used to uniquely identify horizons }
+    \item{\code{hzdesgncol}:}{Object of class \code{"character"} the name of the column containing horizon designations }
+    \item{\code{hztexclcol}:}{Object of class \code{"character"} the name of the column containing horizon texture classes }
     \item{\code{depthcols}:}{Object of class \code{"character"} with the names of columns containing the horizon top and bottom boundaries}
     \item{\code{metadata}:}{Object of class \code{"data.frame"} with collection-level metadata, having a single row, and user-defined columns}
     \item{\code{horizons}:}{Object of class \code{"data.frame"} with 1 or more rows per profile}
@@ -65,6 +66,8 @@ Objects can be created by calls of the form \code{new("SoilProfileCollection", .
     \item{hzidname}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{names}{\code{signature(x = "SoilProfileCollection")}: ... }
     \item{horizonNames}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{hzdesgnname}{\code{signature(object = "SoilProfileCollection")}: ... }
+    \item{hztexclname}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{hzDesgn}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{siteNames}{\code{signature(object = "SoilProfileCollection")}: ... }
     \item{length}{\code{signature(x = "SoilProfileCollection")}: ... }

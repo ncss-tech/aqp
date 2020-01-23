@@ -275,6 +275,35 @@ setReplaceMethod("hzdesgnname", "SoilProfileCollection",
 })
 
 ##
+## set hz designation name
+##
+if (!isGeneric('hztexclname<-'))
+  setGeneric('hztexclname<-', function(object, value) standardGeneric('hztexclname<-'))
+
+setReplaceMethod("hztexclname", "SoilProfileCollection",
+                 function(object, value) {
+                   # test: does it exist?
+                   if(!length(value))
+                     value <- ""
+                   
+                   if(length(value)) {
+                     # several ways to "reset" the hzdesgnname
+                     if((value == "") | is.na(value) | is.null(value)) {
+                       value <- character(0)
+                       message("set horizon texture class name to `character` of length zero")
+                     } else if (! value %in% horizonNames(object)) {
+                       stop("horizon texture class name not in horizon data", call.=TRUE)
+                     }
+                   } 
+                   
+                   # replace
+                   object@hztexclcol <- value
+                   
+                   # done
+                   return(object)
+                 })
+
+##
 ## initialize metadata: object modification in-place
 ##
 if (!isGeneric('metadata<-'))

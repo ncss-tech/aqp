@@ -90,10 +90,16 @@ depths(sp1) <- id ~ top + bottom
 depth_units(sp1) <- 'in'
 depth_units(sp1) <- du
 
-## horizon designation
+## horizon designation column
 hzdesgnname(sp1) <- "name"
 hzdesgnname(sp1)
+
+## all designations in an SPC (useful for single profile SPC)
 hzDesgn(sp1)
+
+## horizon texture class column
+hztexclname(sp1) <- "texture"
+hztexclname(sp1)
 
 ## get/set metadata on SoilProfileCollection objects
 # this is a 1-row data.frame
