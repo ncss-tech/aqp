@@ -11,6 +11,27 @@ getArgillicBounds <- function(p,
                               bottom.pattern = "Cr|R|Cd",
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                               as.list = FALSE) {
+  # ease removal of attribute name arguments -- deprecate them later
+  # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
+  if(any(!hzdesgn %in% horizonNames(p))) {
+    hzd <- hzdesgnname(p)
+    if(length(hzd)) {
+      hzdesgn <- hzd
+    } else {
+      stop("horizon name column not correctly specified -- either set `hzdesgn` argument or hzdesgnname(spc) <- 'hz_desgn_column'", call.=FALSE)
+    }
+  }
+  
+  if(any(!texcl.attr %in% horizonNames(p))) {
+    tca <- hztexclname(p)
+    if(length(tca)) {
+      texcl.attr <- tca
+    } else {
+      stop("horizon texture column not correctly specified -- either set `hzdesgn` argument or hzdesgnname(spc) <- 'hz_desgn_column'", call.=FALSE)
+    }
+  }
+  
+  
   # get upper bound...
   upper.bound <- argillic.clay.increase.depth(p, clay.attr)
   lower.bound <- -Inf

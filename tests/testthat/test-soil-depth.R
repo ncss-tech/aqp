@@ -49,6 +49,8 @@ test_that("basic soil depth evaluation, based on pattern matching of hz designat
   res <- profileApply(d, estimateSoilDepth, name='name', top='top', bottom='bottom')
   
   expect_equivalent(res, c(110, 55, 48, 20))
+  
+  expect_error(profileApply(d, estimateSoilDepth, name='goo', top='top', bottom='bottom'))
 })
 
 

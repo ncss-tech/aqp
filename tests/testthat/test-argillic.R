@@ -44,4 +44,14 @@ test_that("getArgillicBounds()", {
   
   # this makes sure estimateSoilDepth() isn't broken...
   expect_equivalent(d, c(49, 89))
+  
+  # error when hzdesgn and texcl.attr are unknown
+  expect_error(getArgillicBounds(p, hzdesgn='foo', clay.attr='prop', texcl.attr = 'bar'))
+  
+  # set the desgn name and texture class slots
+  hzdesgnname(p) <- "name"
+  hztexclname(p) <- "texture"
+  # deliberately use incorrect hzdesgn, texcl.attr -- returns correct result because of above 2 lines
+  d <- getArgillicBounds(p, hzdesgn='foo', clay.attr='prop', texcl.attr = 'bar')
+  expect_equivalent(d, c(49, 89))
 })
