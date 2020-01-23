@@ -683,6 +683,11 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     else {
       res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d, restrictions=r)
       
+      # preserve one off slots that may have been customised relative to defaults 
+      #  in prototype or resulting from construction of SPC 
+      suppressMessages(hzidname(res) <- hzidname(x))
+      suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
+      suppressMessages(hztexclname(res) <- hztexclname(x))
       
       
       ## integrity checks: these will be implicit in the aqp 2.0 SPC
