@@ -141,6 +141,19 @@
 (<span class='no'>du</span> <span class='kw'>&lt;-</span> <span class='fu'>depth_units</span>(<span class='no'>sp1</span>))</div><div class='output co'>#&gt; [1] "cm"</div><div class='input'><span class='fu'>depth_units</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='st'>'in'</span>
 <span class='fu'>depth_units</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>du</span>
 
+<span class='co'>## horizon designation column</span>
+<span class='fu'>hzdesgnname</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='st'>"name"</span>
+<span class='fu'>hzdesgnname</span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "name"</div><div class='input'>
+<span class='co'>## all designations in an SPC (useful for single profile SPC)</span>
+<span class='fu'>hzDesgn</span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt;  [1] "A1"   "A2"   "AB"   "BA"   "Bt"   "Rt"   "Oi"   "A"    "C1"   "C2"  
+#&gt; [11] "Oa/A" "AB"   "BA"   "Bt1"  "Bt2"  "A1"   "A2"   "A3"   "Bt1"  "Bt2" 
+#&gt; [21] "A"    "AB"   "Bt1"  "Bt2"  "Oi"   "A"    "AB1"  "AB2"  "AB3"  "C1"  
+#&gt; [31] "C2"   "2C1"  "2C2"  "3C"   "A1"   "A2"   "Bw1"  "Bw2"  "Bw3"  "C"   
+#&gt; [41] "2C"   "3Bwb" "3Cb"  "Oi"   "A"    "AB"   "Bw1"  "Bw2"  "2C1"  "2C2" 
+#&gt; [51] "3C"   "Oe"   "A1"   "A2"   "AB"   "Bw1"  "Bw2"  "2C"   "3Ab"  "3Bwb"</div><div class='input'>
+<span class='co'>## horizon texture class column</span>
+<span class='fu'>hztexclname</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='st'>"texture"</span>
+<span class='fu'>hztexclname</span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "texture"</div><div class='input'>
 <span class='co'>## get/set metadata on SoilProfileCollection objects</span>
 <span class='co'># this is a 1-row data.frame</span>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'>metadata</span>(<span class='no'>sp1</span>)
