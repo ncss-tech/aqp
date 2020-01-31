@@ -167,7 +167,8 @@ test_that("SPC spatial operations ", {
   # coordinate columns should be removed from @site
   expect_true(all( ! dimnames(co)[[2]] %in% siteNames(sp1)))
   
-  # CRS
+  # set previously NULL CRS
+  # updated to not include a +datum as this breaks in upstream sp/rgdal
   proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs'
   
   # we should get back the same thing we started with
