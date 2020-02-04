@@ -6,7 +6,7 @@ library(mpspline2)
 library(lattice)
 
 # helper functions
-source('mps-functions.R')
+source('https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/sandbox/mps-functions.R')
 
 # fewer moving parts
 options(stringsAsFactors=FALSE)
@@ -26,6 +26,7 @@ depths(x) <- id ~ top + bottom
 site(x)$fake_site_attr <- 1:length(x)
 
 # check source data
+par(mar=c(0,0,3,1))
 plot(x, color='p1')
 
 
