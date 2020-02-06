@@ -7,6 +7,7 @@
 \alias{$<-,SoilProfileCollection-method}
 \alias{[,SoilProfileCollection-method}
 \alias{[,SoilProfileCollection,ANY,ANY,ANY-method}
+\alias{[[,SoilProfileCollection,character,ANY}
 \alias{proj4string,SoilProfileCollection-method}
 \alias{proj4string<-,SoilProfileCollection,ANY-method}
 \alias{coordinates,SoilProfileCollection-method}
