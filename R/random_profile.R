@@ -12,7 +12,7 @@
   }
 
 
-random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5, exact=FALSE, method='random_walk', HzDistinctSim=FALSE, ...) {
+random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5, exact=FALSE, method='random_walk', HzDistinctSim=FALSE, SPC=FALSE, ...) {
 
   # sanity check
   if(missing(id))
@@ -45,7 +45,9 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
   bottoms <- as.integer(c(tops[-1], sample(min_thick:max_thick, 1)))
 
   # combine into a df
-  d <- data.frame(id=id, top=cumsum(tops), bottom=cumsum(bottoms), name=paste('H',1:n_hz,sep=''))
+  # always treat ID as a character: "solves" some cases of SPC corruption due to re-ordering of integers cast to character:
+  # https://github.com/ncss-tech/aqp/issues/90
+  d <- data.frame(id=as.character(id), top=cumsum(tops), bottom=cumsum(bottoms), name=paste('H',1:n_hz,sep=''), stringsAsFactors = FALSE)
 
   # generate several properties
   # with different means / sd
@@ -95,7 +97,7 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
 	
 	  # add generated depth profile to horizons
 	  new_col <- paste('p',i, sep='')
-	  d[,new_col] <- p
+	  d[, new_col] <- p
 	  }
 	
   # optionally add horizon distinctness codes:
@@ -119,6 +121,11 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
   	}
   	
   	d$HzDistinctCode <- d.codes
+  }
+  
+  # optionally return as SPC
+  if(SPC) {
+    depths(d) <- id ~ top + bottom
   }
   
   # all done
