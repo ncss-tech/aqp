@@ -1,3 +1,8 @@
+# aqp 1.19.1 (2020-02-07)
+ * proof of concept for tidy SoilProfileCollection subsetting
+ * define `[[` subsetting method; an "ambivalent" accessor for site- or horizon-level properties
+ * new subset verbs `grepSPC`, `subSPC`, `subApply` for use in `%>%`-lines 
+ 
 # aqp 1.19 (2020-01-22)
  * CRAN release
  * new functions: `hzDesgn()`, get horizon designations from a SPC
