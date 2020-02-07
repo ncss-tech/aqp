@@ -401,22 +401,20 @@ setReplaceMethod("depths", "data.frame",
   # get column names containing id, top, bottom
   nm <- names(mf)
   
+  # check for factor-class ID
+  if(inherits(data[[nm[1]]], 'factor')) {
+    message('converting IDs from factor to character', call.=FALSE)
+    data[[nm[1]]] <- as.character(data[[nm[1]]])
+  }
   
-  ## danger! this will shuffle profile IDs: https://github.com/ncss-tech/aqp/issues/90
-  ## 
-  ## convert to character, then sort
-  ## ... test
-  ##
-  ##
+  # check for integer IDs
+  if(inherits(data[[nm[1]]], 'integer')) {
+    message('converting IDs from integer to character', call.=FALSE)
+    data[[nm[1]]] <- as.character(data[[nm[1]]])
+  }
   
   # re-order data: IDs, top hz depths
   new.order <- order(data[[nm[1]]], data[[nm[2]]])
-  
-  # check for factor-class ID
-  if(inherits(data[[nm[1]]], 'factor')) {
-    warning('converting IDs from factor to character', call.=FALSE)
-    data[[nm[1]]] <- as.character(data[[nm[1]]])
-  }
   
   # depths
   depthcols <- c(nm[2], nm[3])
