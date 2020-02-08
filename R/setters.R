@@ -406,13 +406,13 @@ setReplaceMethod("depths", "data.frame",
   
   # check for factor-class ID
   if(inherits(data[[nm[1]]], 'factor')) {
-    message('converting IDs from factor to character', call.=FALSE)
+    message('converting IDs from factor to character')
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
   
   # check for integer IDs
   if(inherits(data[[nm[1]]], 'integer')) {
-    message('converting IDs from integer to character', call.=FALSE)
+    message('converting IDs from integer to character')
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
   
