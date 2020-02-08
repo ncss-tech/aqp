@@ -573,10 +573,16 @@ if (!isGeneric('horizons<-'))
 ## TODO: the new class structure will eliminate problems caused by this function
 setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
+    
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
-	  stop("value must be a data.frame", call.=FALSE)
+	  stop("replacement value must be a data.frame", call.=FALSE)
     
+  # we reuse these IDs and names alot
+  .id <- idname(object)
+  .hzid <- hzidname(object)
+  .newnames <- names(value)
+  
   ## 
   ## not sure if this test is important... as sometimes we want to delete horizons
   ##
@@ -585,29 +591,55 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 	  # stop("inconsistent number of rows")
 
   # basic test of ids:
-  if(!idname(object) %in% names(value)) # is there a matching ID column in the replacement?
-  	stop("there is no matching ID column in replacement", call.=FALSE)
+  
+  # check that idname is in the new horizon data
+  if(!.id %in% .newnames) 
+  	stop(paste0("profile ID column (", .id ,") not found in replacement"), call.=FALSE)
 
-  if(length(setdiff(unique(as.character(value[[idname(object)]])), profile_id(object))) > 0)
-  	stop("there are IDs in the replacement that do not exist in the original data", call.=FALSE)
+  # NOTE: should this come after the merge? might be too strict?
+  # check to see if merging in any profiles data that werent in original
+  if(length(setdiff(unique(as.character(value[[.id]])), profile_id(object))) > 0)
+  	stop("there are profile IDs in the replacement that do not exist in the original data", call.=FALSE)
   
   ## NOTE: this can incur a lot of overhead when length(object) > 1,000
-  # NEW: more extensive test of ids -- is it possible to merge rather than replace?
-  if(hzidname(object) %in% names(value)) {
-    # if hzidname for the SPC is present in the new data,
+  
+  # more extensive test of ids -- is it possible to merge rather than replace?
+  # note: this does rely on hzidname being set correctly for your data source
+  #
+  #   are we sure all functions that rebuild SPCs reset hzidname from parent?
+  if(.hzid %in% .newnames) {
     
-    # only merge if all horizon IDs in the SPC are also present in the new data
-    #   and there are new columns in value that are not in horizons already
-    if((length(setdiff(unique(as.character(value[[hzidname(object)]])), hzID(object))) == 0) &
-       any(!unique(names(value)) %in% unique(names(object@horizons)))) {
-      to_merge <- c(names(value)[!names(value) %in% names(object@horizons)], idname(object), hzidname(object))
-      object@horizons <- merge(object@horizons, value[,to_merge], all.x = TRUE, by = c(idname(object), hzidname(object)), sort=FALSE)
+    # determine unique hzIDs in new data
+    .hzid_newdata <- as.character(value[[.hzid]])
+    
+    # all horizon IDs in the SPC are also present in the new data
+    cond1 <- length(setdiff(unique(.hzid_newdata), hzID(object))) == 0
+    
+    # there are new columns in value that are not in horizons already
+    cond2 <- any(!unique(.newnames) %in% unique(names(object@horizons)))
+    
+    # must meet above two conditions for merge & replace ("merge-set")
+    if(cond1 & cond2) {
       
-      # now, do updates to "old" columns so we do not duplicate
-      to_update <- names(value)[!names(value) %in% to_merge]
-      object@horizons[,to_update] <- value[match(object@horizons[,hzidname(object)], value[,hzidname(object)]), to_update]
+      # columns to "merge" are any columns in value that are NOT in @horizons
+      to_merge <- c(.id, .hzid, .newnames[!.newnames %in% names(object@horizons)])
+      
+      # do left join to add new columns (to_merge)
+      object@horizons <- merge(object@horizons, value[, to_merge], 
+                               by = c(.id, .hzid),
+                               all.x = TRUE, sort=FALSE)
+      
+      # columns to "replace" are any columns in value that were previously in horizons
+      to_update <- .newnames[!.newnames %in% to_merge]
+      
+      # set old columns (to_update) to new values from same named columns in value
+      object@horizons[, to_update] <- value[match(object@horizons[,.hzid], value[,.hzid]), to_update]
+      
+      # return the result (avoid ordinary replace)
       return(object)
     }
+  } else {
+    message("horizon unique ID column (",hzidname(object),") not found in replacement!")
   }
     
   ##
