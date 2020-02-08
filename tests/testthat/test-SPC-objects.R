@@ -297,8 +297,9 @@ test_that("SPC horizon ID name get/set ", {
   # no column
   expect_error(hzidname(sp1) <- 'xxx')
   
-  # not unique
-  expect_error(hzidname(sp1) <- 'top')
+  # warning conditions:
+  # not unique, keep default
+  expect_warning(hzidname(sp1) <- 'top')
   
 })
 

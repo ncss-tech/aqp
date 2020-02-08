@@ -234,11 +234,14 @@ setReplaceMethod("hzidname", "SoilProfileCollection",
                    # test: unique?
                    x <- horizons(object)[[value]]
                    if(length(unique(x)) != nrow(object)){
-                     stop("horizon ID name (",value,") not unique", call.=TRUE)
+                     # convert error to warning, 
+                     # prevent stoppage from nonunique, 
+                     # fail gracefully and retain to default
+                     warning("horizon ID name (",value,") not unique. unique ID not changed.", call.=TRUE)
+                   } else {
+                     # replace
+                     object@hzidcol <- value 
                    }
-                   
-                   # replace
-                   object@hzidcol <- value
                    
                    # done
                    return(object)
