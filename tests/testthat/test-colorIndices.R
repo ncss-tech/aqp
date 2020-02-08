@@ -11,6 +11,7 @@ site(sp1) <- ~ group
 ## tests
 
 test_that("horizonColorIndices works as expected", {
+  # implicit left-join
   horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
   expect_equivalent(length(sp1$hurst_redness), 60)
 })

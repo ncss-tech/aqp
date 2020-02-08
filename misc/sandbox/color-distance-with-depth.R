@@ -37,7 +37,7 @@ h <- subset(h, h$m_hue != '' & ! is.na(h$m_hue) & ! is.na(h$m_value) & ! is.na(h
 h$color <- paste0(h$m_hue, ' ', h$m_value, '/', h$m_chroma)
 
 # pack horizon data back into SPC
-horizons(s) <- h
+slot(h, 'horizons') <- h
 
 # https://github.com/thomasp85/farver
 

@@ -18,7 +18,7 @@
 #' site(sp1) <- ~ group
 #' 
 #' # compute indices
-#' # merged into `sp1` with implicit left-join on idname(sp1)
+#' # merged into `sp1` with left-join on hzidname(sp1)
 #' horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
 #' 
 #' # visualize

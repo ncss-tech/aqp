@@ -115,8 +115,8 @@ metadata(sp1) <- m
 ## extract horizon data from SoilProfileCollection objects as data.frame
 h <- horizons(sp1)
 
-# also replace horizon data in SoilProfileCollection objects
-# original order and length must be preserved!
+# also merge (left-join) of new columns and
+# replacement of existing columns via horizons<-
 horizons(sp1) <- h
 
 # get number of horizons

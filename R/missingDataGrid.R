@@ -15,7 +15,7 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
   if(!is.null(filter.column) & !is.null(filter.regex)) {
     h <- horizons(s)
     idx <- grep(filter.regex, h[, filter.column], invert=TRUE)
-    horizons(s) <- h[idx, ]
+    slot(s, 'horizons') <- h[idx, ]
     rm(h)
   }
   

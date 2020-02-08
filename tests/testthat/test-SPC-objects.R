@@ -447,7 +447,7 @@ test_that("horizon slot set/merge", {
   
   hnew$prop[1] <- 50
   
-  # utilize horizons() merge(..., sort=FALSE) functionality to add all new variables in hnew to horizons
+  # utilize horizons() merge-set
   horizons(x) <- hnew
   
   # verify new columns have been added

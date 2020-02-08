@@ -117,7 +117,7 @@ fun <- function(i) {
   # make an expression to subset horizons
   exp <- paste('bottom < ', i$dep, sep='')
   # subset horizons, and write-back into current SPC
-  horizons(i) <- subset(h, subset=eval(parse(text=exp)))
+  slot(i, 'horizons') <- subset(h, subset=eval(parse(text=exp)))
   # return modified SPC
   return(i)
 }

@@ -16,7 +16,7 @@ s.colors <- simplifyColorData(x$morph$phcolor, id.var = 'labsampnum', wt='colorp
 # merge color data into SPC
 h <- horizons(pedons)
 h <- join(h, s.colors, by='labsampnum', type='left', match='first')
-horizons(pedons) <- h
+slot(pedons, 'horizons') <- h
 
 pig <- soilColorSignature(pedons, r = 'm_r', g = 'm_g', b='m_b', method='depthSlices', RescaleLightnessBy = 5)
 
