@@ -438,17 +438,16 @@ setReplaceMethod("$", "SoilProfileCollection",
     # working with horizon data
     if (name %in% names(h)) {
       h[[name]] <- value
-      horizons(x) <- h
+      slot(x, 'horizons') <- h
       return(x)
-      }
+    }
       
     # working with site data  
     if(name %in% names(s)) {
       s[[name]] <- value
-      # TODO: use site(x) <- s
-      x@site <- s
+      slot(x, 'site') <- s
       return(x)
-      }
+    }
     
     # ambiguous: use length of replacement to determing: horizon / site
 		n.site <- nrow(s)
@@ -457,14 +456,13 @@ setReplaceMethod("$", "SoilProfileCollection",
 		
 		if(l == n.hz) {
 		  h[[name]] <- value
-		  horizons(x) <- h
+		  slot(x, 'horizons') <- h
 		  return(x)
 		}
 		
 		if(l == n.site) {
 		  s[[name]] <- value
-		  # TODO: use site(x) <- s
-		  x@site <- s
+		  slot(x, 'site') <- s
 		  return(x)
 		}
 		
