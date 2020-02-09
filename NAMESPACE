@@ -26,6 +26,7 @@ importFrom(methods,
   as,
   show,
   slot,
+  "slot<-",
   .hasSlot,
   slotNames
 )
