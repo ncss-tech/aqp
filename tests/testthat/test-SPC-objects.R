@@ -129,6 +129,17 @@ test_that("SPC subsetting ", {
   # there should be 5 profiles and 1 horizon / profile
   expect_equal(length(sp1[1:5, 1]), 5)
   expect_equal(nrow(sp1[1:5, 1]), 5)
+
+})
+
+test_that("SPC subsetting with tidy verbs ", {
+  
+  expect_equal(length(subSPC(sp1, structure_type == "PL")), 1)
+  
+  expect_equal(length(grepSPC(sp1, texture, "SCL")), 1)
+  
+  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))
+  
 })
 
 

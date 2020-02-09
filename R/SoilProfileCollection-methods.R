@@ -522,7 +522,29 @@ setMethod("subsetProfiles", "SoilProfileCollection",
   	}
 )
 
+# accessor for site and horizon names via double bracket
+#  site names in horizon names results return from site (idname)
+#
+# prevents:
+#   "Error in object[[i]] : this S4 class is not subsettable"
+#   which is an error caused by RStudio? when doing tab completion
+#   with %>% operator on a SPC
+#
+# bonus:
+#  gives access to all site and horizon level vars in tab complete!
+setMethod("[[", signature=c("SoilProfileCollection", i="character"),
+           function(x, i) {
+             if(length(i) == 1) {
+               # site names take precedence for those 
+               #  shared between @site and @horizons
+               if(i %in% siteNames(x))
+                 return(x@site[, i])
 
+               if(i %in% horizonNames(x))
+                 return(x@horizons[, i])
+             }
+           }
+)
 
 
 ### NOTE: this DOES NOT re-order data, only subsets!

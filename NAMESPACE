@@ -120,6 +120,12 @@ importFrom(plotrix,
   triax.points
 )
 
+importFrom(rlang,
+           eval_tidy,
+           enquos,
+           enquo)
+
+
 exportClasses(SoilProfileCollection)
 
 S3method(rbind, SoilProfileCollection)
@@ -128,6 +134,7 @@ exportMethods(
   "[",
   "$",
   "$<-",
+  "[[",
   validSpatialData,
   coordinates,
   "coordinates<-",
