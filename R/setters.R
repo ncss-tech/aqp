@@ -615,7 +615,7 @@ setReplaceMethod("horizons", "SoilProfileCollection",
     # determine unique hzIDs in new data
     .hzid_newdata <- as.character(value[[.hzid]])
     
-    # all horizon IDs in the SPC are also present in the new data
+    # all horizon IDs in the new data are present in the SPC
     cond1 <- length(setdiff(unique(.hzid_newdata), hzID(object))) == 0
     
     # there are new columns in value that are not in horizons already
