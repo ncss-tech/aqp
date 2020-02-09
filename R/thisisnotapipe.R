@@ -95,7 +95,15 @@ subSPC <- function(object, ...) {
       peiid.from.hz <- unique(horizons(object)[unlist(horizonmatch), 
                                                idname(object)])
       hz.idx <- match(peiid.from.hz, profile_id(object))
-      idx <- c(idx, hz.idx)
+      
+      if(length(idx)) {
+        # if we have a site-level subset, only choose from within that
+        idx <- idx[idx %in% hz.idx]
+      } else {
+        # if we have only horizon-level, use just hz.idx
+        idx <- hz.idx
+      }
+         
     }
     
     # return SPC, subsetted using site level index
