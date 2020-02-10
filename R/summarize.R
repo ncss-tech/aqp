@@ -4,7 +4,7 @@
 #' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Currently, each summary expression is applied to individual profiles in the collection. In the future, higher tiers of grouping, based on one or more variables, will be possible.
 #' @param object A SoilProfileCollection
 #' @param ... A set of comma-delimited R expressions that resolve to a summary value; may be named. e.g \code{mean = mean(clay, na.rm=TRUE)}
-#' @return A SoilProfileCollection.
+#' @return A data.frame
 #' @author Andrew G. Brown.
 #' 
 #' @rdname summarize
