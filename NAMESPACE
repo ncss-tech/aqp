@@ -136,6 +136,7 @@ exportMethods(
   "$",
   "$<-",
   "[[",
+  "[[<-",
   validSpatialData,
   coordinates,
   "coordinates<-",

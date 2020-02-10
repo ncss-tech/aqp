@@ -471,6 +471,28 @@ setReplaceMethod("$", "SoilProfileCollection",
   }
 )
 
+setReplaceMethod("[[", signature=c(x="SoilProfileCollection", i="character", j="ANY"),
+                   function(x, i, j, ...) {
+                     if(i %in% siteNames(x) | 
+                        length(value) == length(x)) {
+                       if(length(value) == length(x)) {
+                         x@site[,i] <- value
+                       } else {
+                         stop("replacement length does not match number of profiles!", call. = FALSE)
+                       }
+                     } else if (i %in% horizonNames(x) |
+                                length(value) == nrow(x)) {
+                       if(length(value) == nrow(x)) {
+                         x@horizons[,i] <- value
+                       } else {
+                         stop("replacement length does not match number of horizons!", call. = FALSE)
+                       }
+                     } else {
+                         stop("new data must match either number of profiles or number of horizons", call. = FALSE)
+                     }
+                return(x)
+                     
+})
 #' @title Subset SPC with logical expressions
 #' @name filter
 #' @aliases filter,SoilProfileCollection-method
