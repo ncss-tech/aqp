@@ -175,7 +175,10 @@ exportMethods(
   "hzdesgnname<-",
   hzDesgn,
   hztexclname,
-  "hztexclname<-"
+  "hztexclname<-",
+  filter,
+  grepSPC,
+  subApply
 )
 
 exportPattern("^[^\\.]")

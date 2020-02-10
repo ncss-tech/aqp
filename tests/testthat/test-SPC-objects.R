@@ -134,12 +134,25 @@ test_that("SPC subsetting ", {
 
 test_that("SPC subsetting with tidy verbs ", {
   
-  expect_equal(length(subSPC(sp1, structure_type == "PL")), 1)
+  # filter works as expected
+  expect_equal(length(filter(sp1, structure_type == "PL")), 1)
   
+  # ensure multiple expressions yields same result as single expression
+  l1 <- filter(sp1, !is.na(texture), prop > mean(prop, na.rm=TRUE))
+  l2 <- filter(sp1, !is.na(texture) & prop > mean(prop, na.rm=TRUE))
+  expect_equivalent(length(l1), length(l2))
+  
+  # mixing of site and horizon level expressions is the intersection
+  l1 <- filter(sp1, group == 2, prop > mean(prop, na.rm=TRUE))
+  expect_equivalent(length(l1), 4)
+  
+  # grepSPC works as expected
   expect_equal(length(grepSPC(sp1, texture, "SCL")), 1)
   
+  # subApply works as expected
   expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))
   
+
 })
 
 

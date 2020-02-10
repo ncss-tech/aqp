@@ -471,8 +471,174 @@ setReplaceMethod("$", "SoilProfileCollection",
   }
 )
 
+#' @title Subset SPC with logical expressions
+#' @name filter
+#' @aliases filter,SoilProfileCollection-method
+#' @description \code{filter()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for "tidy" lexical features -- specifically, access to site and horizon-level variables directly by name.
+#' @param object A SoilProfileCollection
+#' @param ... Comma-separated set of R expressions that evaluate as TRUE or FALSE. Length for individual expressions matche number of sites OR number of horizons, in \code{object}. 
+#' @param greedy Use "greedy" matching for combination of site and horizon level matches? \code{greedy=TRUE} is the union, whereas \code{greedy=FALSE} (default) is intersection
+#' @return A SoilProfileCollection.
+#' @author Andrew G. Brown.
+#' 
+#' @rdname filter
+#' @export filter
+#' 
 
+if (!isGeneric("filter"))
+  setGeneric("filter", function(object, ...) standardGeneric("filter"))
 
+setMethod("filter", "SoilProfileCollection",
+          function(object, ..., greedy = FALSE) {
+              if(requireNamespace("rlang")) {
+                # capture expression(s) at function
+                x <- rlang::enquos(...)
+                
+                # create composite object to facilitate eval_tidy
+                # TODO: abstract
+                h <- horizons(object)
+                s <- as.list(site(object))
+                h <- as.list(h[,!horizonNames(object) %in% siteNames(object)])
+                .data <- c(s, h)
+                
+                # loop through list of quosures and evaluate
+                res <- lapply(x, function(q) {
+                  r <- rlang::eval_tidy(q, data = .data)
+                  return(r)
+                })    
+                res.l <- lapply(res, length)
+                
+                # distinguish site and horizon level attributes
+                # in the expression input
+                sitematch <- res[res.l == length(object)]
+                horizonmatch <- res[res.l == nrow(object)]
+                
+                # intersect the multi-prop site constraints
+                if(length(sitematch) > 1) {
+                  sm <- rowSums(do.call('cbind', sitematch))
+                  sitematch <- (sm == length(sitematch))
+                }
+                
+                # intersect the multi-prop horizon constraints
+                if(length(horizonmatch) > 1) {
+                  hm <- rowSums(do.call('cbind', horizonmatch))
+                  horizonmatch <- (hm == length(horizonmatch))
+                }
+                
+                # empty value to hold site level index
+                idx <- numeric()
+                
+                # create site level index from site criteria
+                if(length(sitematch) == 1 | !is.list(sitematch))
+                  idx <- which(unlist(sitematch))
+                
+                # create site level index from matching horizon criteria
+                if(length(horizonmatch) == 1 | !is.list(horizonmatch)) {
+                  peiid.from.hz <- unique(horizons(object)[unlist(horizonmatch), 
+                                                           idname(object)])
+                  hz.idx <- match(peiid.from.hz, profile_id(object))
+                  
+                  if(length(idx) & !greedy) {
+                    # intersection of site and horizon level matches
+                    idx <- idx[idx %in% hz.idx]
+                  } else if(greedy) {
+                    # union of site and horizon level matches
+                    idx <- c(idx, hz.idx)
+                  } else {
+                    # if we have only horizon-level, use just horizon level
+                    idx <- hz.idx
+                  }
+                  
+                }
+                
+                # return SPC, subsetted using site level index
+                object[na.omit(idx), ]
+              } else {
+                stop("package 'rlang' is required", .call=FALSE)
+              }
+            })
+
+# functions tailored for use with magrittr %>% operator / tidyr
+# formerly thisisnotapipe.R
+
+#' @title Subset SPC with pattern-matching for text-based attributes
+#' @name grepSPC
+#' @aliases grepSPC,SoilProfileCollection-method
+#' @description \code{grepSPC()} is a shorthand function for subsetting SoilProfileCollections. For example, by \code{filter(grepl(spc, ...))} or \code{filter(stringr::str_detect(spc, ...))}. It provides pattern matching for a single text-based site or horizon level attribute.
+#' @param object A SoilProfileCollection
+#' @param attr A character vector (column in object) for matching patterns against.
+#' @param pattern REGEX pattern to match in \code{attr}
+#' @param ... Additional arguments are passed to \code{grep()}
+#' @return A SoilProfileCollection.
+#' @author Andrew G. Brown.
+#' 
+#' @rdname grepSPC
+#' @export grepSPC
+
+if (!isGeneric("grepSPC"))
+  setGeneric("grepSPC", function(object, attr, pattern, ...) standardGeneric("grepSPC"))
+
+setMethod("grepSPC", "SoilProfileCollection",
+          function(object, attr, pattern, ...) {
+  if(requireNamespace("rlang")) {
+    # capture expression(s) at function
+    x <- rlang::enquo(attr)
+    
+    # create composite object to facilitate eval_tidy
+    # TODO: abstract
+    h <- horizons(object)
+    s <- as.list(site(object))
+    h <- as.list(h[, !horizonNames(object) %in% siteNames(object)])
+    .data <- c(s, h)
+    
+    # do tidy eval of attr
+    res <- rlang::eval_tidy(x, data = .data)
+    
+    # do the pattern matching
+    idx <- grep(res, pattern=pattern, ...)
+    
+    # subset the SPC for result
+    return(object[idx, ])
+    
+  } else {
+    stop("package 'rlang' is required", .call=FALSE)
+  }
+})
+
+#' @title Subset SPC based on result of performing function on each profile
+#' @name subApply
+#' @aliases subApply,SoilProfileCollection-method
+#' @description \code{subApply()} is a function used for subsetting SoilProfileCollections. It currently does NOT support for "tidy" lexical features in the \code{...} arguments passed to \code{profileApply()}. The expectation is that the function \code{.fun} takes a single-profile SoilProfileCollection and returns a logical value of length one. The use case would be for any logical comparisons that cannot be evaluated inline by \code{subSPC()} because they require more than simple logical operations.
+#' @param object A SoilProfileCollection
+#' @param .fun, A function that takes a single profile, returns _logical_ of length 1.
+#' @param ... Additional arguments are passed to \code{.fun}
+#' @return A SoilProfileCollection.
+#' @author Andrew G. Brown.
+#' 
+#' @rdname subApply
+#' @export subApply
+
+if (!isGeneric("subApply"))
+  setGeneric("subApply", function(object, .fun, ...) standardGeneric("subApply"))
+
+setMethod("subApply", "SoilProfileCollection",
+           function(object, .fun, ...) {
+  if(requireNamespace("rlang")) {
+    
+    #TODO: figure out how to use eval helpers here
+    
+    ## capture expression(s) at function
+    #.dots <- rlang::enquos(...)
+    
+    # apply .fun to elements of x
+    res <- profileApply(object, FUN = .fun, ...)
+    
+    # return subset of x where .fun is true
+    return(object[which(res),])
+  } else {
+    stop("package 'rlang' is required", .call=FALSE)
+  }
+})
 
 ## subset method for SoilProfileCollection objects
 ## s: site-level subsetting criteria (properly quoted)
