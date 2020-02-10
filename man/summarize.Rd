@@ -13,10 +13,10 @@ summarize(object, ...)
 \item{...}{A set of comma-delimited R expressions that resolve to a summary value; may be named. e.g \code{mean = mean(clay, na.rm=TRUE)}}
 }
 \value{
-A SoilProfileCollection.
+A SoilProfileCollection
 }
 \description{
-\code{summarize()} is a function used for summarizing SoilProfileCollections.
+\code{summarize()} is a function used for summarizing SoilProfileCollections. Currently, each summary expression is applied to individual profiles in the collection. In the future, higher tiers of grouping, based on one or more variables, will be possible.
 }
 \author{
 Andrew G. Brown.

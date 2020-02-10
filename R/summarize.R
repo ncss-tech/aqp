@@ -1,10 +1,10 @@
-#' @title Summarize a SPC with a set of functions
+#' @title Reduce multiple site or horizon values to a single site value
 #' @name summarize
 #' @aliases summarize,SoilProfileCollection-method
-#' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Currently, each summary expression is applied to individual profiles in the collection. In the future, higher tiers of grouping, based on one or more variables, will be possible.
+#' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Each summary expression is applied to individual profiles. In the future, higher tiers of grouping, based on one or more variables, will be possible. 
 #' @param object A SoilProfileCollection
 #' @param ... A set of comma-delimited R expressions that resolve to a summary value; may be named. e.g \code{mean = mean(clay, na.rm=TRUE)}
-#' @return A data.frame
+#' @return A SoilProfileCollection
 #' @author Andrew G. Brown.
 #' 
 #' @rdname summarize
@@ -23,6 +23,7 @@ summarize <- function(object, ...) {
     res <- profileApply(object, function(o) {
       # create composite object to facilitate eval_tidy
       # TODO: abstract
+      
       h <- horizons(o)
       s <- as.list(site(o))
       h <- as.list(h[,!horizonNames(o) %in% siteNames(o)])
@@ -45,7 +46,9 @@ summarize <- function(object, ...) {
     names(dfid) <- idname(object)
     rownames(res) <- NULL
     
-    return(cbind(dfid, res))
+    site(object) <- cbind(dfid, res)
+    
+    return(object)
   }
 }
 
