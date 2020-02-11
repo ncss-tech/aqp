@@ -10,7 +10,7 @@
 #' @rdname summarize
 #' @export summarize
 summarize <- function(object, ...) {
-  if(requireNamespace("rlang")) {
+  #if(requireNamespace("rlang")) {
     
     # capture expression(s) at function
     x <- rlang::enquos(..., .named = TRUE)
@@ -21,17 +21,13 @@ summarize <- function(object, ...) {
     
     # apply expressions to each profile, frameify results
     res <- profileApply(object, function(o) {
-      # create composite object to facilitate eval_tidy
-      # TODO: abstract
       
-      h <- horizons(o)
-      s <- as.list(site(o))
-      h <- as.list(h[,!horizonNames(o) %in% siteNames(o)])
-      .data <- c(s, h)
+      # create composite object to facilitate eval_tidy
+      data <- compositeSPC(object)
       
       buf <- data.frame(1)
       for(n in names(x)) {
-        foo <- rlang::eval_tidy(x[[n]], .data)
+        foo <- rlang::eval_tidy(x[[n]], data)
         buf[[n]] <- foo
       }
       buf <- as.data.frame(buf[,names(x)])
@@ -49,6 +45,6 @@ summarize <- function(object, ...) {
     site(object) <- cbind(dfid, res)
     
     return(object)
-  }
+  #}
 }
 

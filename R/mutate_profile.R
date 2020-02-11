@@ -10,7 +10,7 @@
 #' @rdname mutate_profile
 #' @export mutate_profile
 mutate_profile <- function(object, ...) {
-  if(requireNamespace("rlang")) {
+  #if(requireNamespace("rlang")) {
     
     # capture expression(s) at function
     x <- rlang::enquos(..., .named = TRUE)
@@ -26,25 +26,28 @@ mutate_profile <- function(object, ...) {
     
     # apply expressions to each profile, frameify results
     res <- profileApply(object, function(o) {
+      
       # create composite object to facilitate eval_tidy
-      # TODO: abstract
-      h <- horizons(o)
-      s <- as.list(site(o))
-      h <- as.list(h[,!horizonNames(o) %in% siteNames(o)])
-      .data <- c(s, h)
+      data <- compositeSPC(object)
       
       for(n in names(x)) {
-        o[[n]] <- rlang::eval_tidy(x[[n]], .data)
+        o[[n]] <- rlang::eval_tidy(x[[n]], data)
       }
       
       return(list(st=site(o), hz=horizons(o)))
       
     }, simplify = FALSE)
     
-    slot(object, 'site') <- do.call('rbind', lapply(res, function(r) { r$st }))
-    slot(object, 'horizons') <- do.call('rbind',  lapply(res, function(r) { r$hz }))
+    .site <- do.call('rbind', lapply(res, function(r) { r$st }))
+    .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
+    
+    rownames(.site) <- .site[,idname(object)]
+    rownames(.hz) <- .hz[,hzidname(object)]
+    
+    slot(object, 'site') <- .site
+    slot(object, 'horizons') <- .hz
     
     return(object)
-  }
+  #}
 }
 

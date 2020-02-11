@@ -613,7 +613,7 @@ setReplaceMethod("replaceHorizons", "SoilProfileCollection",
 ##
 ## horizon data left join
 ##
-## horizons<- left joinmethod
+## horizons<- left join method
 ##
 if (!isGeneric('horizons<-'))
   setGeneric('horizons<-', function(object, value) standardGeneric('horizons<-'))

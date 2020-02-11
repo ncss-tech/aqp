@@ -14,7 +14,6 @@ restrictions=data.frame(stringsAsFactors=FALSE)
 }
 
 
-
 ## show
 setMethod(
   f='show',
@@ -512,20 +511,17 @@ if (!isGeneric("filter"))
 
 setMethod("filter", "SoilProfileCollection",
           function(object, ..., greedy = FALSE) {
-              if(requireNamespace("rlang")) {
+              #if(requireNamespace("rlang")) {
                 # capture expression(s) at function
                 x <- rlang::enquos(...)
                 
+                
                 # create composite object to facilitate eval_tidy
-                # TODO: abstract
-                h <- horizons(object)
-                s <- as.list(site(object))
-                h <- as.list(h[,!horizonNames(object) %in% siteNames(object)])
-                .data <- c(s, h)
+                data <- compositeSPC(object)
                 
                 # loop through list of quosures and evaluate
                 res <- lapply(x, function(q) {
-                  r <- rlang::eval_tidy(q, data = .data)
+                  r <- rlang::eval_tidy(q, data)
                   return(r)
                 })    
                 res.l <- lapply(res, length)
@@ -575,9 +571,9 @@ setMethod("filter", "SoilProfileCollection",
                 
                 # return SPC, subsetted using site level index
                 object[na.omit(idx), ]
-              } else {
-                stop("package 'rlang' is required", .call=FALSE)
-              }
+            #  } else {
+            #    stop("package 'rlang' is required", .call=FALSE)
+            #  }
             })
 
 # functions tailored for use with magrittr %>% operator / tidyr
@@ -602,19 +598,15 @@ if (!isGeneric("grepSPC"))
 
 setMethod("grepSPC", "SoilProfileCollection",
           function(object, attr, pattern, ...) {
-  if(requireNamespace("rlang")) {
+  #if(requireNamespace("rlang")) {
     # capture expression(s) at function
     x <- rlang::enquo(attr)
     
     # create composite object to facilitate eval_tidy
-    # TODO: abstract
-    h <- horizons(object)
-    s <- as.list(site(object))
-    h <- as.list(h[, !horizonNames(object) %in% siteNames(object)])
-    .data <- c(s, h)
+    data <- compositeSPC(object)
     
     # do tidy eval of attr
-    res <- rlang::eval_tidy(x, data = .data)
+    res <- rlang::eval_tidy(x, data)
     
     # do the pattern matching
     idx <- grep(res, pattern=pattern, ...)
@@ -622,9 +614,9 @@ setMethod("grepSPC", "SoilProfileCollection",
     # subset the SPC for result
     return(object[idx, ])
     
-  } else {
-    stop("package 'rlang' is required", .call=FALSE)
-  }
+  #} else {
+  #  stop("package 'rlang' is required", .call=FALSE)
+  #}
 })
 
 #' @title Subset SPC based on result of performing function on each profile
@@ -645,7 +637,7 @@ if (!isGeneric("subApply"))
 
 setMethod("subApply", "SoilProfileCollection",
            function(object, .fun, ...) {
-  if(requireNamespace("rlang")) {
+  #if(requireNamespace("rlang")) {
     
     #TODO: figure out how to use eval helpers here
     
@@ -657,9 +649,9 @@ setMethod("subApply", "SoilProfileCollection",
     
     # return subset of x where .fun is true
     return(object[which(res),])
-  } else {
-    stop("package 'rlang' is required", .call=FALSE)
-  }
+  #} else {
+  #  stop("package 'rlang' is required", .call=FALSE)
+  #}
 })
 
 ## subset method for SoilProfileCollection objects

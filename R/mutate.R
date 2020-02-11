@@ -10,30 +10,20 @@
 #' @rdname mutate
 #' @export mutate
 mutate <- function(object, ...) {
-  if(requireNamespace("rlang")) {
+  #if(requireNamespace("rlang")) {
     
     # capture expression(s) at function
     x <- rlang::enquos(..., .named = TRUE)
     
     # create composite object to facilitate eval_tidy
-    # TODO: abstract
-    h <- horizons(object)
-    s <- as.list(site(object))
-    h <- as.list(h[,!horizonNames(object) %in% siteNames(object)])
-    .data <- c(s, h)
+    data <- compositeSPC(object)
     
     for(n in names(x)) {
-      foo <- rlang::eval_tidy(x[[n]], .data)
+      foo <- rlang::eval_tidy(x[[n]], data)
       object[[n]] <- foo
-      
-      # refresh composite object to facilitate eval_tidy
-      # TODO: abstract
-      h <- horizons(object)
-      s <- as.list(site(object))
-      h <- as.list(h[,!horizonNames(object) %in% siteNames(object)])
-      .data <- c(s, h)
+      data[[n]] <- foo
     }
     
     return(object)
-  }
+  #}
 }
