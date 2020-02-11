@@ -10,7 +10,11 @@ glomApply(object, .fun = NULL, ..., chunk.size = 100)
 \arguments{
 \item{object}{A SoilProfileCollection}
 
+\item{.fun}{A function that returns vector with top and bottom depth, when supplied a single profile `p` (as by \code{profileApply})}
+
 \item{...}{A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{glomApply(hzdept = max(hzdept) - hzdept)}}
+
+\item{chunk.size}{Chunk size parameter for \code{profileApply}}
 }
 \value{
 A SoilProfileCollection.
