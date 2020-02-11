@@ -44,7 +44,11 @@ plotMultipleSPC <- function(spc.list, group.labels, args=rep(list(NA), times=len
     for(i in 2:n.groups) {
       this.obj <- spc.list[[i]]
       this.args <- na.omit(args[[i]])
-      do.call(plotSPC, c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args))
+      suppressMessages(
+        do.call(
+          plotSPC, c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args)
+        )
+      )
     }
   }
   
