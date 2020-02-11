@@ -469,19 +469,22 @@ test_that("horizon slot set/merge", {
   hnew$prop200 <- hnew$prop / 200
   hnew$prop300 <- hnew$prop / 300
   
+  # change a value of existing variable
   hnew$prop[1] <- 50
   
-  # utilize horizons() merge-set
+  # utilize horizons<- left join
   horizons(x) <- hnew
   
   # verify new columns have been added
-  expect_equivalent(horizons(x)[1,c('prop100','prop200','prop300')], c(0.13, 0.13 / 2, 0.13 / 3))
+  expect_equivalent(horizons(x)[1,c('prop100','prop200','prop300')], 
+                    c(0.07, 0.07 / 2, 0.07 / 3))
   
-  # verify old columns have same names (i.e. no issues with duplication of column names in merge)
+  # verify old columns have same names 
+  # (i.e. no issues with duplication of column names in merge)
   expect_true(all(c(idname(x), hzidname(x), 'prop') %in% names(horizons(x))))
   
-  # verify old columns have been updated
-  expect_equivalent(horizons(x)[1,c('prop')], c(50))
+  # verify old columns have same value
+  expect_equivalent(horizons(x)[1,c('prop')], c(7))
 })
 
 test_that("ordering of profiles and horizons is retained following set/merge", {
