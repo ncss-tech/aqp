@@ -1,4 +1,4 @@
-#' @title Return a named list representation of site and horizon level data
+#' @title Return a vector of contributing fractions over a depth interval
 #' @name depthWeights
 #' @aliases depthWeights,SoilProfileCollection-method
 #' @description \code{depthWeights()} calculates the contributing fraction for each pair of horizon top and bottom depths, given an upper and lower boundary. 

@@ -3,7 +3,7 @@
 \name{depthWeights}
 \alias{depthWeights}
 \alias{depthWeights,SoilProfileCollection-method}
-\title{Return a named list representation of site and horizon level data}
+\title{Return a vector of contributing fractions over a depth interval}
 \usage{
 depthWeights(top, bottom, upper, lower)
 }
