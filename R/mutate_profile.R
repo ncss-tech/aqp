@@ -19,6 +19,11 @@ mutate_profile <- function(object, ...) {
     #       is it safe to assume operations, in general, would
     #       be on the profile basis, and then aggregated by group?
     
+    # TODO: evaluate expressions individually, to handle dependence?
+    # currently, iterates through profiles evaluating each expression on each profile
+    # need to iterate over expressions, then through profiles for each expression
+    # then, mutate_profile(spc, c = b + a, d = c) would not error with 'c' not found
+    
     # apply expressions to each profile, frameify results
     res <- profileApply(object, function(o) {
       # create composite object to facilitate eval_tidy
@@ -29,21 +34,15 @@ mutate_profile <- function(object, ...) {
       .data <- c(s, h)
       
       for(n in names(x)) {
-        foo <- rlang::eval_tidy(x[[n]], .data)
-        o[[n]] <- foo
+        o[[n]] <- rlang::eval_tidy(x[[n]], .data)
       }
+      
       return(list(st=site(o), hz=horizons(o)))
       
     }, simplify = FALSE)
     
-    slot(object, 'site') <- do.call('rbind', 
-                                    lapply(res, function(r) {
-      r$st
-    }))
-    slot(object, 'horizons') <- do.call('rbind', 
-                                        lapply(res, function(r) {
-      r$hz
-    }))
+    slot(object, 'site') <- do.call('rbind', lapply(res, function(r) { r$st }))
+    slot(object, 'horizons') <- do.call('rbind',  lapply(res, function(r) { r$hz }))
     
     return(object)
   }
