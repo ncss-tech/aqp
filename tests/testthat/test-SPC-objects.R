@@ -458,7 +458,7 @@ test_that("SPC horizon ID init conflicts", {
   
 })
 
-test_that("horizon slot set/merge", {
+test_that("horizons<- left-join", {
   x <- sp1
   
   # take unique site ID, horizon ID, and corresponding property (clay)
@@ -487,7 +487,7 @@ test_that("horizon slot set/merge", {
   expect_equivalent(horizons(x)[1,c('prop')], c(7))
 })
 
-test_that("ordering of profiles and horizons is retained following set/merge", {
+test_that("ordering of profiles and horizons is retained after left-join", {
   # IDs that when sorted will no be in this order
   s <- c('a', "1188707", "1188710", "120786", "1207894", 'z')
   l <- lapply(s, random_profile)
@@ -508,5 +508,21 @@ test_that("ordering of profiles and horizons is retained following set/merge", {
   
   # ordering of profile IDs (unique, from @horizons) != ordering of IDs in @site
   expect_true(all(profile_id(d) == site(d)[[idname(d)]]))
+})
+
+test_that("replaceHorizons<- works as expected", {
+  x <- sp1
+  
+  # replacement with existing value
+  expect_success(replaceHorizons(x) <- horizons(x))
+
+  # works when hzidname is missing, defaults to hzID
+  expect_message(replaceHorizons(x) <- horizons(x)[,c(idname(x), horizonDepths(x))])
+  
+  # missing idname = error
+  expect_error(replaceHorizons(x) <- horizons(x)[,c(horizonDepths(x))])
+  
+  # missing depths = error
+  expect_error(replaceHorizons(x) <- horizons(x)[,c(idname(x))])
 })
 

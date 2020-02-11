@@ -563,11 +563,57 @@ setReplaceMethod("site", "SoilProfileCollection",
   return(object)
 }
 
+##
+## horizon replacement method
+##
+if (!isGeneric('replaceHorizons<-'))
+  setGeneric('replaceHorizons<-', function(object, value) standardGeneric('replaceHorizons<-'))
+
+setReplaceMethod("replaceHorizons", "SoilProfileCollection",
+                 function(object, value) {
+  
+  required.columns <-  c(idname(object), horizonDepths(object))                 
+  required.missing <- !required.columns %in% names(value)
+                    
+  if(any(required.missing))
+    stop(paste0("required horizon data are missing: ",
+         paste0(required.columns[required.missing], collapse=", ")), call. = FALSE)
+                   
+  ids.match1 <- all(profile_id(object) %in% value[[idname(object)]])
+  if(!ids.match1)
+    stop("profile IDs in site are missing from replacement horizons!", call. = FALSE)
+  
+  ids.match2 <- all(value[[idname(object)]] %in% profile_id(object)) 
+  if(!ids.match2)
+    stop("profile IDs in replacement are missing from site!", call. = FALSE)
+  
+  optional.columns <-  c(hzidname(object), 
+                         hzdesgnname(object), 
+                         hztexclname(object))
+  
+  optional.missing <- !optional.columns %in% names(value)
+  
+  #if(any(optional.missing))
+    #message(paste0("optional columns are missing: ", 
+    #               paste0(optional.columns[optional.missing], 
+    #               collapse=", ")))
+  
+  # assign hzID if hzidname() is missing
+  if(optional.missing[1]) {
+    value$hzID <- 1:nrow(value)
+    hzidname(object) <- "hzID"
+    message("no horizon ID present, defaulting to `hzID`")
+  }
+  
+  object@horizons <- value
+  
+  return(object)
+})
 
 ##
-## horizon data replacement
+## horizon data left join
 ##
-## horizons<- setter method
+## horizons<- left joinmethod
 ##
 if (!isGeneric('horizons<-'))
   setGeneric('horizons<-', function(object, value) standardGeneric('horizons<-'))
