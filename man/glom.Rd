@@ -18,7 +18,7 @@ Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of
 Currently, just depth/depth intervals are supported as common attribute for creating a clod i.e. all horizons overlapping interval 25 to 100 cm -- but many other attributes are possible and will be implemented perhaps via formula interface similar to \code{slice}. 
 }
 \usage{
-glom(p, z1, z2 = NA, as.data.frame = FALSE)
+glom(p, z1, z2 = NA, ids = FALSE, df = FALSE, truncate = FALSE)
 }
 \arguments{
   \item{p}{
@@ -30,8 +30,14 @@ Top depth (required) - depth to intersect horizon at; if `z2` specified, top dep
   \item{z2}{
 OPTIONAL: Bottom depth - bottom depth of intersection interval
 }
-  \item{as.data.frame}{
-OPTIONAL: return a data.frame, by intersection with horizons(p)? default: FALSE
+  \item{ids}{
+Return just horizon IDs in interval? default: FALSE
+}
+  \item{df}{
+Return a data.frame, by intersection with horizons(p)? default: FALSE
+}
+  \item{truncate}{
+Truncate horizon top and bottom depths to z1 and z2? default: FALSE
 }
 }
 \value{

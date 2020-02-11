@@ -7,14 +7,37 @@
 # gloms a set of horizons for a single-profile SPC `p`
 #  the horizons are aggregated by depth using 
 #  clod.hz.ids() defined below
-glom <- function(p, z1, z2=NA, as.data.frame = FALSE) {
+glom <- function(p, z1, z2=NA, ids = FALSE, df = FALSE, truncate = FALSE) {
   # aka glom.by.depth; 
   if(length(p) > 1)
     stop("glom is intended for single-profile SPCs", call.=FALSE)
   
   idx <- clod.hz.ids(p, z1, z2)
+  
+  # short circuit to get hzIDs of intersection
+  if(ids)
+    return(hzID(p)[ids])
+  
+  depthn <- horizonDepths(p)
+  
+  # truncate ragged edges to PSCS
+  # if we have an interval [z1,z2], option to truncate to z1/z2
+  if(truncate & !is.null(z2)) {
+    .top <- p[[depthn[1]]]
+    .bottom <- p[[depthn[2]]]
+    
+    .top[.top < z1] <- z1
+    .bottom[.bottom < z1] <- z1
+    
+    .top[.top > z2] <- z2
+    .bottom[.bottom > z2] <- z2
+    
+    p[[depthn[1]]] <- .top
+    p[[depthn[2]]] <- .bottom
+  }
+  
   if(!all(is.na(idx))) {
-    if(!as.data.frame) {
+    if(!df) {
       return(p[, which(hzID(p) %in% idx)]) 
     } else {
       return(horizons(p)[hzID(p) %in% idx,])

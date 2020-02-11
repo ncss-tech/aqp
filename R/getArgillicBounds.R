@@ -116,8 +116,8 @@ getArgillicBounds <- function(p,
   if(all(!is.na(c(upper.bound, lower.bound)))) {
     # if argi bounds are found check that minimum thickness requirements are met
     min.thickness <- max(7.5, 
-                         max(glom(p, 0, upper.bound, as.data.frame = TRUE)[depthcol[[2]]], na.rm=TRUE) / 10)
-    is_sandy <- all(grepl(glom(p, upper.bound, lower.bound, as.data.frame = TRUE)[texcl.attr], 
+                         max(glom(p, 0, upper.bound, df = TRUE)[depthcol[[2]]], na.rm=TRUE) / 10)
+    is_sandy <- all(grepl(glom(p, upper.bound, lower.bound, df = TRUE)[texcl.attr], 
                           pattern="s$|sand$", ignore.case = T))
     
     if(is_sandy) {

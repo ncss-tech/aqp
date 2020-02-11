@@ -36,7 +36,7 @@ test_that("glom by depth returns a data.frame clod", {
   
   # currently "clods" can be either represented as an SPC, or a data.frame with just
   # the horizons that are contained within the "clod".
-  foo <- glom(p, 25, 100, as.data.frame = TRUE)
+  foo <- glom(p, 25, 100, df = TRUE)
   
   # and returns an data.frame
   expect_true(inherits(foo, 'data.frame'))
@@ -47,4 +47,22 @@ test_that("glom by depth returns a data.frame clod", {
   # and that data.frame should have 4 horizons (rows) in 25-100cm
   expect_equal(nrow(foo), 4) 
 })
+
+test_that("glom truncate=TRUE works as expected", {
+  # glom 'gloms' your input SPC `p`'s horizons (by depths specified) into a 'clod'
+  
+  # get truncated clod
+  foo <- glom(p, 25, 100, truncate=TRUE)
+  
+  # and returns an data.frame
+  expect_true(inherits(foo, 'SoilProfileCollection'))
+  
+  ## test that:
+  # shallowest top truncated to z1
+  # deepest bottom truncated to z2
+  expect_equal(min(foo$top), 25)
+  expect_equal(max(foo$bottom), 100)
+  
+})
+
 
