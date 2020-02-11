@@ -513,11 +513,15 @@ test_that("ordering of profiles and horizons is retained after left-join", {
 test_that("replaceHorizons<- works as expected", {
   x <- sp1
   
-  # replacement with existing value
-  expect_success(replaceHorizons(x) <- horizons(x))
+  # replacement with existing value -- works
+  hz.before <- horizons(x)
+  replaceHorizons(x) <- hz.before
+  expect_equal(hz.before, horizons(x))
 
   # works when hzidname is missing, defaults to hzID
-  expect_message(replaceHorizons(x) <- horizons(x)[,c(idname(x), horizonDepths(x))])
+  expect_message(replaceHorizons(x) <- horizons(x)[,c(idname(x), 
+                                                      horizonDepths(x))])
+  expect_equal(x$hzID, 1:nrow(x))
   
   # missing idname = error
   expect_error(replaceHorizons(x) <- horizons(x)[,c(horizonDepths(x))])

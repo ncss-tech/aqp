@@ -9,6 +9,9 @@
 \alias{horizons,SoilProfileCollection-method}
 \alias{horizons<-,SoilProfileCollection-method}
 
+\alias{replaceHorizons<-}
+\alias{replaceHorizons<-,SoilProfileCollection-method}
+
 \alias{site}
 \alias{site<-}
 \alias{site,SoilProfileCollection-method}

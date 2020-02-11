@@ -3,7 +3,7 @@
 \name{summarize}
 \alias{summarize}
 \alias{summarize,SoilProfileCollection-method}
-\title{Summarize a SPC with a set of functions}
+\title{Reduce multiple site or horizon values to a single site value}
 \usage{
 summarize(object, ...)
 }
@@ -16,7 +16,7 @@ summarize(object, ...)
 A SoilProfileCollection
 }
 \description{
-\code{summarize()} is a function used for summarizing SoilProfileCollections. Currently, each summary expression is applied to individual profiles in the collection. In the future, higher tiers of grouping, based on one or more variables, will be possible.
+\code{summarize()} is a function used for summarizing SoilProfileCollections. Each summary expression is applied to individual profiles. In the future, higher tiers of grouping, based on one or more variables, will be possible.
 }
 \author{
 Andrew G. Brown.
