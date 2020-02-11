@@ -573,96 +573,54 @@ if (!isGeneric('horizons<-'))
   setGeneric('horizons<-', function(object, value) standardGeneric('horizons<-'))
 
 
-## TODO: the new class structure will eliminate problems caused by this function
 setReplaceMethod("horizons", "SoilProfileCollection",
   function(object, value) {
     
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
 	  stop("replacement value must be a data.frame", call.=FALSE)
-    
-  # we reuse these IDs and names alot
-  .id <- idname(object)
-  .hzid <- hzidname(object)
-  .newnames <- names(value)
   
-  ## 
-  ## not sure if this test is important... as sometimes we want to delete horizons
-  ##
-  # testing the number of rows of the horizon data
-  # if (nrow(value) != nrow(object))
-	  # stop("inconsistent number of rows")
+  # get the corresponding vector of IDs, will be used to compute distinct site attributes
+  ids <- as.character(horizons(object)[[idname(object)]])
 
-  # basic test of ids:
-  
-  # check that idname is in the new horizon data
-  if(!.id %in% .newnames) 
-  	stop(paste0("profile ID column (", .id ,") not found in replacement"), call.=FALSE)
-
-  # NOTE: should this come after the merge? might be too strict?
-  # check to see if merging in any profiles data that werent in original
-  if(length(setdiff(unique(as.character(value[[.id]])), profile_id(object))) > 0)
-  	stop("there are profile IDs in the replacement that do not exist in the original data", call.=FALSE)
-  
-  ## NOTE: this can incur a lot of overhead when length(object) > 1,000
-  
-  # more extensive test of ids -- is it possible to merge rather than replace?
-  # note: this does rely on hzidname being set correctly for your data source
-  #
-  #   are we sure all functions that rebuild SPCs reset hzidname from parent?
-  if(.hzid %in% .newnames) {
+  # get column names from proposed horizons, and existing site    
+  ns <- names(value)
+  nh <- siteNames(object)
     
-    # determine unique hzIDs in new data
-    .hzid_newdata <- as.character(value[[.hzid]])
+  ## remove ID column from names(site)
+  ID.idx <- match(idname(object), nh)
     
-    # all horizon IDs in the new data are present in the SPC
-    cond1 <- length(setdiff(unique(.hzid_newdata), hzID(object))) == 0
+  # check to make sure there is no overlap in proposed site + hz variable names
+  if(any(ns %in% nh[-ID.idx]))
+    stop('duplicate names in new horizon / existing site data not allowed', call.=FALSE)
     
-    # there are new columns in value that are not in horizons already
-    cond2 <- any(!unique(.newnames) %in% unique(names(object@horizons)))
+  # existing horizons data (may be absent == 0-row data.frame)
+  s <- horizons(object)
     
-    # must meet above two conditions for merge & replace ("merge-set")
-    if(cond1 & cond2) {
-      
-      # columns to "merge" are any columns in value that are NOT in @horizons
-      to_merge <- c(.id, .hzid, .newnames[!.newnames %in% names(object@horizons)])
-      
-      # do left join to add new columns (to_merge)
-      object@horizons <- merge(object@horizons, value[, to_merge], 
-                               by = c(.id, .hzid),
-                               all.x = TRUE, sort=FALSE)
-      
-      # columns to "replace" are any columns in value that were previously in horizons
-      to_update <- .newnames[!.newnames %in% to_merge]
-      
-      # set old columns (to_update) to new values from same named columns in value
-      object@horizons[, to_update] <- value[match(object@horizons[,.hzid], value[,.hzid]), to_update]
-      
-      # return the result (avoid ordinary replace)
-      return(object)
-    }
-  } else {
-    message("horizon unique ID column (",hzidname(object),") not found in replacement!")
+  # join to existing data: by default it will only be idname(object)
+    
+  ## an appropriate ID must exist in 'value' AND @site for this to work
+  # LEFT-join in - assumes that appropriate IDs exist in both @site and 'value'
+  # no longer using plyr::join()
+  suppressMessages(horizon.new <- merge(s, value, all.x=TRUE, sort=FALSE))
+    
+  # sanity check: horizons + new data should have same number of rows as original
+  if(nrow(s) != nrow(horizon.new)) {
+    message(paste('original data (', nrow(s), ' rows) new data (', nrow(horizon.new), ' rows)', sep=''))
+    stop('invalid join condition, horizon data not changed', call.=FALSE)
   }
     
-  ##
-  ## 2017-01-05: holy shit, why are we re-ordering the horizon data? 
-  ## causes SPC corruption after rbind with keys that overlap
-  ## https://github.com/ncss-tech/aqp/issues/23
-  ## fixed: b959963edca37c2d89fa3994be0027638560f902
-  ## thanks: Andrew Brown
-    
-  ## replacement: order by IDs, then top horizon boundary
-  # hz_top_depths <- horizonDepths(object)[1]
-  # object@horizons <- value[order(value[[idname(object)]], value[[hz_top_depths]]), ]
+  # look good, proceed
+  object@horizons <- horizon.new
+  # check to make sure same profile IDs are present
+  if(any(!(ids %in% as.character(horizons(object)[[idname(object)]])))) {
+    print(paste('pedons (', nrow(object), ') rows of horizon data (', nrow(horizons(object)), ')', sep=''))
+    stop('invalid horizon data, profile IDs are missing from join result', call.=FALSE)
+  }
   
-  # replace existing horizons with modified version
-  object@horizons <- value
-
   # done
   return(object)
-  }
-)
+})
 
 ##
 ## intit diagnotic horizon data
