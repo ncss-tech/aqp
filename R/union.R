@@ -5,6 +5,8 @@
 # 
 # This function replaces the previous rbind.SoilProfileCollection function.
 # 
+# TODO:
+# * is it possible to implement an S4 interface for a list of SPC?
 
 
 # ease the transition to union()
@@ -117,7 +119,7 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   o.h <- do.call('rbind.fill', o.h) # horizon data
   o.s <- do.call('rbind.fill', o.s) # site data
   o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
-  o.r <- do.call('rbind.fill', o.r) # diagnostic data, leave as-is
+  o.r <- do.call('rbind.fill', o.r) # restriction data, leave as-is
   
   if(! drop.spatial) {
     # check for non-conformal coordinates
