@@ -16,11 +16,8 @@ options(stringsAsFactors=FALSE)
 ids <- LETTERS[1:6]
 
 set.seed(10101)
-x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP')
-x <- do.call('rbind', x)
-
-# promote to SPC
-depths(x) <- id ~ top + bottom
+x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', SPC=TRUE)
+x <- union(x)
 
 # fake site data
 site(x)$fake_site_attr <- 1:length(x)
@@ -42,6 +39,8 @@ str(m)
 
 # note sorting
 profile_id(m)
+
+m$id_group <- factor(m$id_group)
 
 
 # plot by group
