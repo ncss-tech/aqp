@@ -24,28 +24,28 @@ mutate_profile <- function(object, ...) {
     # need to iterate over expressions, then through profiles for each expression
     # then, mutate_profile(spc, c = b + a, d = c) would not error with 'c' not found
     
-    # apply expressions to each profile, frameify results
-    res <- profileApply(object, function(o) {
+    # iterate over expressions left to right
+    for(n in names(x)) {
       
-      # create composite object to facilitate eval_tidy
-      data <- compositeSPC(object)
-      
-      for(n in names(x)) {
+      # then iterate over profiles within expression, frameify results
+      res <- profileApply(object, function(o) {
+        
+        # create composite object to facilitate eval_tidy
+        data <- compositeSPC(o)
         o[[n]] <- rlang::eval_tidy(x[[n]], data)
-      }
+        
+        return(list(st=site(o), hz=horizons(o)))
+      }, simplify = FALSE)
       
-      return(list(st=site(o), hz=horizons(o)))
+      .site <- do.call('rbind', lapply(res, function(r) { r$st }))
+      .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
       
-    }, simplify = FALSE)
-    
-    .site <- do.call('rbind', lapply(res, function(r) { r$st }))
-    .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
-    
-    rownames(.site) <- .site[,idname(object)]
-    rownames(.hz) <- .hz[,hzidname(object)]
-    
-    slot(object, 'site') <- .site
-    slot(object, 'horizons') <- .hz
+      rownames(.site) <- .site[,idname(object)]
+      rownames(.hz) <- .hz[,hzidname(object)]
+      
+      slot(object, 'site') <- .site
+      slot(object, 'horizons') <- .hz
+    }
     
     return(object)
   #}
