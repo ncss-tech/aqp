@@ -472,8 +472,9 @@ setReplaceMethod("$", "SoilProfileCollection",
 
 setReplaceMethod("[[", signature=c(x="SoilProfileCollection", i="character", j="ANY"),
                    function(x, i, j, ...) {
-                     if(i %in% siteNames(x) | 
-                        length(value) == length(x)) {
+                     # default to creating site var, as long as its not in horizon names
+                     if((!i %in% horizonNames(x)) & (i %in% siteNames(x) | 
+                        length(value) == length(x))) {
                        if(length(value) == length(x)) {
                          x@site[,i] <- value
                        } else {
