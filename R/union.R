@@ -25,7 +25,7 @@ rbind.SoilProfileCollection <- function(...) {
 
 
 
-union <- function(spc=list(), method='all', drop.spatial=FALSE) {
+union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   # setup some defaults
   options(stringsAsFactors=FALSE)
   
@@ -36,9 +36,27 @@ union <- function(spc=list(), method='all', drop.spatial=FALSE) {
   if(length(spc) == 1)
     return(spc[[1]])
   
-  # check/filter for NULL list elements: https://github.com/ncss-tech/aqp/issues/93
-  idx <- which(! sapply(spc, is.null))
-  spc <- spc[idx]
+  # check/filter for NULL list elements
+  idx.null <- suppressWarnings(which(sapply(spc, is.null)))
+  if(length(idx.null)) {
+    spc <- spc[-idx.null]
+    message("union: one or more input list elements is NULL")
+  }
+  
+  # check/filter for NA list elements
+  idx.na <- suppressWarnings(which(sapply(spc, is.na)))
+  if(length(idx.na) & na.rm) {
+    spc <- spc[-idx.na]
+    message("union: one or more input list elements is NA")
+  } else if(length(idx.na)) { 
+    stop("union: one or more input list elements is NA and na.rm=FALSE")
+  }
+  
+  idx.notspc <- which(!sapply(spc, inherits, 'SoilProfileCollection'))
+  if(length(idx.notspc)) {
+    spc <- spc[-idx.notspc]
+    message("union: one or more input list elements is not a SoilProfileCollection")
+  }
   
   # check for non-conformal depth units
   o.depth.units <- unique(lapply(spc, depth_units))

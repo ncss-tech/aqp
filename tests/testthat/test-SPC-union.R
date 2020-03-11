@@ -132,7 +132,7 @@ test_that("union with non-conformal spatial data", {
 })
 
 
-test_that("filtering NULL elements", {
+test_that("filtering NULL/NA elements", {
   
   # test data
   x <- sp1
@@ -145,5 +145,15 @@ test_that("filtering NULL elements", {
   # this should work
   res <- union(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
+  
+  # add NAs
+  s <- list(NA, x, y, NA)
+  
+  # this should work
+  res <- union(s)
+  expect_true(inherits(res, 'SoilProfileCollection'))
+  
+  # this should NOT work
+  expect_error(union(s, na.rm=FALSE))
 })
 

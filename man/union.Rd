@@ -5,12 +5,13 @@
 \description{Safely combine multiple SoilProfileCollection objects that may not share the same internal structure.}
 
 \usage{
-union(spc = list(), method = "all", drop.spatial=FALSE)
+union(spc = list(), method = "all", na.rm=TRUE, drop.spatial=FALSE)
 }
 
 \arguments{
   \item{spc}{a \code{list} of \code{SoilProfileCollection} objects}
   \item{method}{method ("all" or "intersection" [not yet implemented]) used to collect site and horizon level attributes, see details}
+  \item{na.rm}{remove NA values from \code{spc}?}
   \item{drop.spatial}{union operation ignores spatial data, useful when only some data have coordinates or incompatible CRS}
 }
 
