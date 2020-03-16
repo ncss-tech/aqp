@@ -5,6 +5,7 @@
 #' @param object A SoilProfileCollection
 #' @param .fun A function that returns vector with top and bottom depth (z1 and z2 arguments to \code{glom}) for a single profile `p` (as passed by \code{profileApply})
 #' @param truncate Truncate horizon top and bottom depths to z1 and z2? 
+#' @param modality Aggregation method for glom result. Default "all": all horizons; "thickest": return (shallowest) thickest horizon
 #' @param ... A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{glomApply(hzdept = max(hzdept) - hzdept)}
 #' @param chunk.size Chunk size parameter for \code{profileApply}
 #' @return A SoilProfileCollection.
@@ -12,11 +13,11 @@
 #' 
 #' @rdname glomApply
 #' @export glomApply
-glomApply <- function(object, .fun=NULL, truncate = FALSE, ..., chunk.size = 100) {
+glomApply <- function(object, .fun=NULL, truncate = FALSE, modality="all", ..., chunk.size = 100) {
   if(is.null(.fun) | !inherits(.fun, 'function'))
     stop("function `.fun`` to return glom boundaries for profiles is missing", call. = FALSE)
   aqp::union(profileApply(object, function(p, ...) {
     dep <- .fun(p, ...)
-    return(glom(p, dep[1], dep[2], truncate = truncate))
+    return(glom(p, dep[1], dep[2], truncate = truncate, modality = modality))
   }, simplify = FALSE, chunk.size = chunk.size))
 }

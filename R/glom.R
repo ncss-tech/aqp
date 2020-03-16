@@ -7,12 +7,12 @@
 # gloms a set of horizons for a single-profile SPC `p`
 #  the horizons are aggregated by depth using 
 #  clod.hz.ids() defined below
-glom <- function(p, z1, z2=NA, ids = FALSE, df = FALSE, truncate = FALSE) {
+glom <- function(p, z1, z2=NA, ids = FALSE, df = FALSE, truncate = FALSE, modality = "all") {
   # aka glom.by.depth; 
   if(length(p) > 1)
     stop("glom is intended for single-profile SPCs", call.=FALSE)
   
-  idx <- clod.hz.ids(p, z1, z2)
+  idx <- clod.hz.ids(p, z1, z2, modality)
   
   # short circuit to get hzIDs of intersection
   if(ids)
@@ -49,7 +49,7 @@ glom <- function(p, z1, z2=NA, ids = FALSE, df = FALSE, truncate = FALSE) {
 
 # returns unique index to all horizons occuring over the depth interval [z1, z2]. 
 # z2 is optional, in which case a single horizon with depth range containing z1 is returned
-clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE) 
+clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) 
 {
   # access SPC slots to get important info about p
   hz <- horizons(p)
@@ -140,6 +140,13 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
       }
     }
     
+    if(modality == "thickest") {
+      sub.thk <- bdep[idx.top:idx.bot] - tdep[idx.top:idx.bot]
+      max.sub.thk <- max(sub.thk)
+      first.thickest.idx <- which(sub.thk == max.sub.thk)[1]
+      idx.top <- idx.bot <- idx.top - 1 + first.thickest.idx
+    }
+    
     # get the ID values out of horizon table
     idval <- hz[idx.top:idx.bot, hzid]
     
@@ -149,6 +156,11 @@ clod.hz.ids <- function (p, z1, z2 = NA, as.list = FALSE)
     
     # list result.
     return(list(hzid = hzid, hz.idx = idx.top:idx.bot, value = idval))
+  }
+  
+  if(modality == "thickest") {
+    first.thickest.idx <- which(bdep - tdep == max(bdep - tdep))[1]
+    idx.top <- first.thickest.idx
   }
   
   idval <- hz[idx.top, hzid]
