@@ -8,7 +8,9 @@ explainPlotSPC <- function(x, ...) {
   lsp <- get('last_spc_plot', envir=aqp.env)
   
   # get max depth by profile
-  max.depths <- profileApply(x, max)
+  max.depths <- c(rep(NA, lsp$buffer.spc), 
+                  profileApply(x, max),
+                  rep(NA, lsp$buffer.spc))
   
   # re-order max depths
   max.depths <- max.depths[lsp$plot.order]
@@ -22,13 +24,13 @@ explainPlotSPC <- function(x, ...) {
   
   # suitable location for x-space annotation
   # index of last profile + some
-  x.space.x <- lsp$n + (length(x) * 0.05)
+  x.space.x <- lsp$n + lsp$buffer.spc + (length(x) * 0.05)
   # 95% of total scaled depths
-  x.space.y <- max(scaled.max.depths) * 0.95
+  x.space.y <- max(scaled.max.depths, na.rm=TRUE) * 0.95
   
   # original profile index text y-coordinate
   # roughly 10% of the max(transformed depths)
-  original.profile.idx.y <- lsp$y.offset + (-max(scaled.max.depths) * 0.08)
+  original.profile.idx.y <- lsp$y.offset + (-max(scaled.max.depths, na.rm=TRUE) * 0.08)
   
   # inspect plotting area, very simple to overlay graphical elements
   segments(x0 = lsp$x0, x1=lsp$x0, y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
@@ -57,3 +59,4 @@ explainPlotSPC <- function(x, ...) {
   
   invisible(lsp)
 }
+

@@ -37,21 +37,80 @@
 
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
-
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), buffer.spc = 0, ...) {
+  
+  if(!inherits(x, 'SoilProfileCollection')) {
+    stop('plotSPC expects \'x\' to be a SoilProfileCollection', call. = FALSE)
+  }  
   
   ## fudge factors
   # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
+
+  ## add empty profiles on left and right hand side of x
+  if(!is.integer(as.integer(buffer.spc))) {
+    stop('buffer.spc (number of profiles; zero or more) must be (coercible to) an integer', call.=FALSE)
+  }
   
-  # padding along x-axis, prevents crowding
+  # default: 0 profiles on either side
+  # - 1 profiles significantly improves plotting of <5 profiles.
+  # - makes default margins more usable for all n
+
+  # get profile IDs
+  pIDs <- profile_id(x)
+  
+  # get profile labels from @site
+  pLabels <- site(x)[[label]]
+  
+  # mask in fake pIDs/positions for buffer profiles
+  if(buffer.spc > 0) {
+    pIDs <- c(rep(NA, buffer.spc), pIDs, rep(NA, buffer.spc))
+    pLabels <- c(rep(NA, buffer.spc), site(x)[[label]], rep(NA, buffer.spc))
+    
+    n <- length(pIDs)
+    buf.i <- 1:buffer.spc
+    
+    new.order <- 1:n
+    new.order[(buffer.spc+1):(buffer.spc+length(plot.order))] <- plot.order+buffer.spc
+    plot.order <- new.order
+    
+    relative.pos <- c(buf.i, 
+                      max(buf.i) + relative.pos, 
+                      (max(relative.pos) + max(buf.i)) + buf.i)
+  } 
+  
+  # padding along x-axis, prevents crowding beyond last profile
   # dynamic adjustment must also taking into account figure size
   # roughly 10% of length(x)
   extra_x_space <- length(x) * 0.1
   
-  # add a little extra x-space when n < 5
-  if(length(x) < 5)
+  # multiplier (width * x_left_spac_mult) used to set left-side space along x-axis
+  x_left_space_mult <- 2
+  
+  # add a little extra x-space when n <= 5
+  if(length(x) <= 5 & length(x) > 2) {
     extra_x_space <- extra_x_space + 0.25
+    x_left_space_mult <- 2
+    
+  } 
+  
+  # special cases
+  if(length(x) == 2) {
+    extra_x_space <- extra_x_space + 0.5
+    x_left_space_mult <- 2.75
+    
+  } 
+  
+  # special cases
+  if(length(x) == 1) {
+    extra_x_space <- extra_x_space + 0.5
+    x_left_space_mult <- 3.5
+  }
+    
+    
+  
+  
+  
 
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
@@ -61,9 +120,6 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     extra_y_space <- 10
   if(max.depth > 100)
     extra_y_space <- 15
-  
-  # get profile IDs
-  pIDs <- profile_id(x)
   
   # save arguments to aqp env
   lsp <- list('width'=width, 
@@ -76,7 +132,8 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
               'max.depth'=max.depth, 
               'n'=n,
               'extra_x_space'=extra_x_space,
-              'extra_y_space'=extra_y_space)
+              'extra_y_space'=extra_y_space,
+              'buffer.spc'=buffer.spc)
   
   assign('last_spc_plot', lsp, envir=aqp.env)
   
@@ -181,9 +238,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   hzDepthCols <- horizonDepths(x)
   tcol <- hzDepthCols[1]
   bcol <- hzDepthCols[2]
-  
-  # get profile labels from @site
-  pLabels <- site(x)[[label]]
+
   
   # if profile style is auto, determine style based on font metrics
   if(id.style == 'auto') {
@@ -206,7 +261,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), 
+	  plot(0, 0, type='n', xlim=c(width * x_left_space_mult, n+(extra_x_space)), 
 	       ylim=c(max(depth_axis_intervals), -extra_y_space), 
 	       axes=FALSE, xlab='', ylab='')
 	}

@@ -83,7 +83,8 @@ default.color=grey(0.95), \dots)
   \item{lwd}{single numeric value: line width multiplier}
   \item{lty}{single integer: line style}
   \item{default.color}{default horizon fill color used when `color` attribute is NA}
-  \item{\dots}{other arguments passed into lower level plotting functions}
+  \item{buffer.spc}{number of blank profiles to add to margins of collection (default is 0)}
+  \item{\dots}{additional arguments are passed to lower-level plotting functions}
 }
 \details{
 Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are *suggestions* to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want. 
