@@ -72,14 +72,38 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     relative.pos <- plot.order
   } 
   
-  # padding along x-axis, prevents crowding
+  # padding along x-axis, prevents crowding beyond last profile
   # dynamic adjustment must also taking into account figure size
   # roughly 10% of length(x)
   extra_x_space <- length(x) * 0.1
   
-  # add a little extra x-space when n < 5
-  if(length(x) < 5)
+  # multiplier (width * x_left_spac_mult) used to set left-side space along x-axis
+  x_left_space_mult <- 2
+  
+  # add a little extra x-space when n <= 5
+  if(length(x) <= 5 & length(x) > 2) {
     extra_x_space <- extra_x_space + 0.25
+    x_left_space_mult <- 2
+    
+  } 
+  
+  # special cases
+  if(length(x) == 2) {
+    extra_x_space <- extra_x_space + 0.5
+    x_left_space_mult <- 2.75
+    
+  } 
+  
+  # special cases
+  if(length(x) == 1) {
+    extra_x_space <- extra_x_space + 0.5
+    x_left_space_mult <- 3.5
+  }
+    
+    
+  
+  
+  
 
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
@@ -229,7 +253,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
-	  plot(0, 0, type='n', xlim=c(1-(extra_x_space/5), n+(extra_x_space)), 
+	  plot(0, 0, type='n', xlim=c(width * x_left_space_mult, n+(extra_x_space)), 
 	       ylim=c(max(depth_axis_intervals), -extra_y_space), 
 	       axes=FALSE, xlab='', ylab='')
 	}
