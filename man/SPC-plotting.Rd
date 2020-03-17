@@ -83,7 +83,9 @@ default.color=grey(0.95), \dots)
   \item{lwd}{single numeric value: line width multiplier}
   \item{lty}{single integer: line style}
   \item{default.color}{default horizon fill color used when `color` attribute is NA}
-  \item{\dots}{other arguments passed into lower level plotting functions}
+  \item{buffer.small.spc}{add an empty profile slot on either side of SPC for small SPCs (n < 5) (default is TRUE)}
+  \item{n.buffer}{number of empty profile slots to add to each side of small SPCs (default is 1)}
+  \item{\dots}{additional arguments are passed to lower-level plotting functions}
 }
 \details{
 Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are *suggestions* to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want. 
