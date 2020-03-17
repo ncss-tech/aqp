@@ -35,33 +35,6 @@
   })
 }
 
-.bufferSPC <- function(spc, n, drop.spatial=TRUE) {
-  # random seed for unique "site" ID for buffer SPC
-  set.seed(Sys.time())
-  seed <- floor(runif(1, 1e6, 1e7))
-  
-  # short circuit
-  if(n == 0)
-    return(spc)
-  
-  # construct buffer spc using parent hs table as template
-  bufspc <- horizons(spc)[0,]
-  bufspc[1:n,] <- rep(NA, length(names(bufspc)))
-  bufspc[[hzidname(spc)]] <- NULL
-  bufspc[[idname(spc)]] <- paste0("a", seed:(seed+n-1))
-  bufspc2 <- bufspc
-  bufspc2[[idname(spc)]] <- paste0("z", seed:(seed+n-1))
-  
-  depth.names <- horizonDepths(spc)
-  fm <- as.formula(sprintf("%s ~ %s + %s", 
-                           idname(spc), depth.names[1], depth.names[2]))
-  depths(bufspc) <- fm
-  depths(bufspc2) <- fm
-  
-  # return buffered SPC result
-  return(union(list(bufspc, spc, bufspc2), drop.spatial = drop.spatial))
-}
-
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
 ## basic function
@@ -82,25 +55,21 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # default: 0 profiles on either side
   # - 1 profiles significantly improves plotting of <5 profiles.
   # - makes default margins more usable for all n
-  if(buffer.spc > 0) {
-    x <- .bufferSPC(x, buffer.spc)
-  }
-  
+
   # get profile IDs
   pIDs <- profile_id(x)
   
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
-  # mask the fake pIDs for buffer profiles
+  # mask in fake pIDs/positions for buffer profiles
   if(buffer.spc > 0) {
-    pIDs[1:buffer.spc] <- NA
-    pIDs[(length(pIDs) - (buffer.spc-1)):length(pIDs)] <- NA
+    pIDs <- c(rep(NA, buffer.spc), pIDs, rep(NA, buffer.spc))
+    pLabels <- c(rep(NA, buffer.spc), site(x)[[label]], rep(NA, buffer.spc))
     
-    # if using default labels, replace buffer profile labels with masked pIDs
-    if(label == idname(x)) {
-      pLabels <- pIDs
-    }  
+    n <- length(pIDs)
+    plot.order <- 1:length(pIDs)
+    relative.pos <- plot.order
   } 
   
   # padding along x-axis, prevents crowding
