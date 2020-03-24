@@ -53,6 +53,11 @@ explainPlotSPC <- function(x, ...) {
   text(x=x.space.x, y=x.space.y, labels = 'extra x-space', cex=0.65, pos=3, font=3, col='orange')
   text(x=x.space.x, y=x.space.y, labels = lsp$extra_x_space, cex=0.85, pos=1, font=2, col='orange')
   
+  # demonstrate width on first profile
+  arrows(x0=lsp$x0[1] - lsp$width, x1=lsp$x0[1] + lsp$width, y0=x.space.y, y1=x.space.y, length = 0.08, code = 3, col='orange', lwd=1)
+  text(x=lsp$x0[1], y=x.space.y, labels = 'width', cex=0.65, pos=3, font=3, col='orange')
+  text(x=lsp$x0[1], y=x.space.y, labels = lsp$width, cex=0.85, pos=1, font=2, col='orange')
+  
   # plotting order
   text(x=lsp$x0, y=original.profile.idx.y, labels=lsp$plot.order, col='darkred', font=4, cex=0.75)
   mtext('original profile index', side=3, line=0, font=4, col='darkred')
