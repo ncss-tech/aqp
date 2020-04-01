@@ -206,13 +206,21 @@ test_that("SPC spatial operations ", {
   sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
   expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
-  # implicity down-grade to SPDF via hz-subsetting
-  sp1.spdf <- suppressMessages(sp1[, 1])
-  expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
+  # Unit-length j-index SPDF downgrading DEPRECATED
   
+  # implicity down-grade to SPDF via hz-subsetting
+  # sp1.spdf <- suppressMessages(sp1[, 1])
+  # expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   # again, with profile indexing
-  sp1.spdf <- suppressMessages(sp1[1, 1])
-  expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
+  # sp1.spdf <- suppressMessages(sp1[1, 1])
+  # expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
+  
+  # retain SPC object when using unit-length j index
+  sp1.spc <- suppressMessages(sp1[, 1])
+  expect_true(inherits(sp1.spc, 'SoilProfileCollection'))
+  # again, with profile indexing
+  sp1.spc <- suppressMessages(sp1[1, 1])
+  expect_true(inherits(sp1.spc, 'SoilProfileCollection'))
   
 })
 

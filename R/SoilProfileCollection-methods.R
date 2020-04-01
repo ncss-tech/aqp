@@ -858,31 +858,38 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     # valid spatial data is now tested via validSpatialData()
     # also need to test that there is only 1 horizon/slice per location
   	# only produces a SPDF when j index is present
-    if(validSpatialData(x) & length(p.ids) == nrow(h) & !missing(j)) {
-      # combine with coordinates
-      message('result is a SpatialPointsDataFrame object')
-      # note that we are filtering based on 'i' - an index of selected profiles
-			
-      # since the order of our slices and coordinates are the same
-      # it is safe to use 'match.ID=FALSE'
-      # this gets around a potential problem when dimnames(x)[[1]] aren't consecutive 
-      # values-- often the case when subsetting has been performed
-      
-      ## TODO: there should always be something in @site
-      # if site data, join hz+site
-      if(nrow(s) > 0) {
-      	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=join(h, s, by=idname(x)), match.ID=FALSE))
-      }
-      ## TODO: can this ever happen?
-      # no site data
-      else {
-      	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=h, match.ID=FALSE))	
-      }
-    }
+    # if(validSpatialData(x) & length(p.ids) == nrow(h) & !missing(j)) {
+    #   # combine with coordinates
+    #   message('result is a SpatialPointsDataFrame object')
+    #   # note that we are filtering based on 'i' - an index of selected profiles
+    # 
+    #   # since the order of our slices and coordinates are the same
+    #   # it is safe to use 'match.ID=FALSE'
+    #   # this gets around a potential problem when dimnames(x)[[1]] aren't consecutive 
+    #   # values-- often the case when subsetting has been performed
+    #   
+    #   ## TODO: there should always be something in @site
+    #   # if site data, join hz+site
+    #   if(nrow(s) > 0) {
+    #   	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=join(h, s, by=idname(x)), match.ID=FALSE))
+    #   }
+    #   ## TODO: can this ever happen?
+    #   # no site data
+    #   else {
+    #   	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=h, match.ID=FALSE))	
+    #   }
+    # }
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
-    else {
-      res <- SoilProfileCollection(idcol=idname(x), depthcols=horizonDepths(x), metadata=aqp::metadata(x), horizons=h, site=s, sp=sp, diagnostic=d, restrictions=r)
+    #else {
+      res <- SoilProfileCollection(idcol = idname(x), 
+                                   depthcols = horizonDepths(x), 
+                                   metadata = aqp::metadata(x), 
+                                   horizons = h, 
+                                   site = s, 
+                                   sp = sp, 
+                                   diagnostic = d, 
+                                   restrictions = r)
       
       # preserve one off slots that may have been customised relative to defaults 
       #  in prototype or resulting from construction of SPC 
@@ -904,7 +911,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       
       
       return(res)
-    }
+    #}
     
   # done
   }
