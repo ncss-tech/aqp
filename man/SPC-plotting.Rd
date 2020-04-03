@@ -83,7 +83,8 @@ default.color=grey(0.95), \dots)
   \item{lwd}{single numeric value: line width multiplier}
   \item{lty}{single integer: line style}
   \item{default.color}{default horizon fill color used when `color` attribute is NA}
-  \item{buffer.spc}{number of blank profiles to add to margins of collection (default is 0)}
+  \item{buffer.small.spc}{add an empty profile slot on either side of SPC for small SPCs (n < 5) (default is TRUE)}
+  \item{n.buffer}{number of empty profile slots to add to each side of small SPCs (default is 1)}
   \item{\dots}{additional arguments are passed to lower-level plotting functions}
 }
 \details{

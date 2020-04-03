@@ -34,8 +34,7 @@
     )
   })
 }
-
-.bufferSPC <- function(spc, n, drop.spatial=TRUE) {
+.bufferSmallSPC <- function(spc, n, drop.spatial=TRUE) {
   # random seed for unique "site" ID for buffer SPC
   set.seed(Sys.time())
   seed <- floor(runif(1, 1e6, 1e7))
@@ -47,16 +46,13 @@
   # construct buffer spc using parent hs table as template
   bufspc <- horizons(spc)[0,]
   bufspc[1:n,] <- rep(NA, length(names(bufspc)))
-  bufspc[[hzidname(spc)]] <- NULL
-  bufspc[[idname(spc)]] <- paste0("a", seed:(seed+n-1))
+  bufspc$hzID <- NULL
+  bufspc$peiid <- paste0("a", seed:(seed+n-1))
   bufspc2 <- bufspc
-  bufspc2[[idname(spc)]] <- paste0("z", seed:(seed+n-1))
+  bufspc2$peiid <- paste0("z", seed:(seed+n-1))
   
-  depth.names <- horizonDepths(spc)
-  fm <- as.formula(sprintf("%s ~ %s + %s", 
-                           idname(spc), depth.names[1], depth.names[2]))
-  depths(bufspc) <- fm
-  depths(bufspc2) <- fm
+  depths(bufspc) <- peiid ~ hzdept + hzdepb
+  depths(bufspc2) <- peiid ~ hzdept + hzdepb
   
   # return buffered SPC result
   return(union(list(bufspc, spc, bufspc2), drop.spatial = drop.spatial))
@@ -65,43 +61,38 @@
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), buffer.spc = 0, ...) {
-  
-  if(!inherits(x, 'SoilProfileCollection')) {
-    stop('plotSPC expects \'x\' to be a SoilProfileCollection', call. = FALSE)
-  }  
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), buffer.small.spc = TRUE, n.buffer = 1, ...) {
   
   ## fudge factors
   # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
-
-  ## add empty profiles on left and right hand side of x
-  if(!is.integer(as.integer(buffer.spc))) {
-    stop('buffer.spc (number of profiles; zero or more) must be (coercible to) an integer', call.=FALSE)
+  
+  if(!inherits(x, 'SoilProfileCollection')) {
+    stop('plotSPC expects \'x\' to be a SoilProfileCollection', call. = FALSE)
   }
   
-  # default: 0 profiles on either side
-  # - 1 profiles significantly improves plotting of <5 profiles.
-  # - makes default margins more usable for all n
-  if(buffer.spc > 0) {
-    x <- .bufferSPC(x, buffer.spc)
+  # try to capture cases where default settings completely break down
+  # typically with small profile collections ~n<5
+  if(length(x) < 5 & buffer.small.spc) {
+    x <- .bufferSmallSPC(x, n.buffer)
+    message(paste("small (n < 5) SoilProfileCollection; buffering with empty profile(s) before plotting"))
   }
   
   # get profile IDs
   pIDs <- profile_id(x)
   
+  # mask the fake pIDs for buffer profiles
+  if(length(x) < 5 & buffer.small.spc) {
+    pIDs[1:n.buffer] <- NA
+    pIDs[(length(pIDs) - (n.buffer-1)):length(pIDs)] <- NA
+  }  
+  
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
-  # mask the fake pIDs for buffer profiles
-  if(buffer.spc > 0) {
-    pIDs[1:buffer.spc] <- NA
-    pIDs[(length(pIDs) - (buffer.spc-1)):length(pIDs)] <- NA
-    
-    # if using default labels, replace buffer profile labels with masked pIDs
-    if(label == idname(x)) {
-      pLabels <- pIDs
-    }  
-  } 
+  # if using default labels, replace buffer profile labels with masked pIDs
+  if(label == idname(x) & length(x) < 5 & buffer.small.spc) {
+    pLabels <- pIDs
+  }
   
   # padding along x-axis, prevents crowding beyond last profile
   # dynamic adjustment must also taking into account figure size
