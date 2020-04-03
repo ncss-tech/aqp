@@ -68,13 +68,8 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     pLabels <- c(rep(NA, buffer.spc), site(x)[[label]], rep(NA, buffer.spc))
     
     n <- length(pIDs)
-    buf.i <- 1:buffer.spc
-    
-    new.order <- 1:n
-    new.order[(buffer.spc+1):(buffer.spc+length(plot.order))] <- plot.order+buffer.spc
-    plot.order <- new.order
-    
-    relative.pos <- c(buf.i, max(buf.i) + relative.pos, max(relative.pos) + buf.i + 1)
+    plot.order <- 1:length(pIDs)
+    relative.pos <- plot.order
   } 
   
   # padding along x-axis, prevents crowding beyond last profile
