@@ -5,12 +5,23 @@
 \alias{glomApply,SoilProfileCollection-method}
 \title{Subset an SPC by applying glom to each profile}
 \usage{
-glomApply(object, .fun = NULL, ..., chunk.size = 100)
+glomApply(
+  object,
+  .fun = NULL,
+  truncate = FALSE,
+  modality = "all",
+  ...,
+  chunk.size = 100
+)
 }
 \arguments{
 \item{object}{A SoilProfileCollection}
 
-\item{.fun}{A function that returns vector with top and bottom depth, when supplied a single profile `p` (as by \code{profileApply})}
+\item{.fun}{A function that returns vector with top and bottom depth (z1 and z2 arguments to \code{glom}) for a single profile `p` (as passed by \code{profileApply})}
+
+\item{truncate}{Truncate horizon top and bottom depths to z1 and z2?}
+
+\item{modality}{Aggregation method for glom result. Default "all": all horizons; "thickest": return (shallowest) thickest horizon}
 
 \item{...}{A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{glomApply(hzdept = max(hzdept) - hzdept)}}
 

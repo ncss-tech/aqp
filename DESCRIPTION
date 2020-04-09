@@ -16,4 +16,4 @@ Repository: CRAN
 URL: https://github.com/ncss-tech/aqp
 BugReports: https://github.com/ncss-tech/aqp/issues
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
