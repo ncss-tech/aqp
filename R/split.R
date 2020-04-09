@@ -6,7 +6,7 @@
     
     # grouping factor, make sure to use original ordering
     fg <- site(x)[[idname(x)]]
-    fg <- factor(fg, level=fg)
+    fg <- factor(fg, levels=fg)
     
   } else {
     # standard, site-level group split
@@ -61,8 +61,8 @@
 
 
 # S4 magic
-if (!isGeneric("split"))
-  setGeneric("split", function(x, f=NULL, drop=TRUE, ...) standardGeneric("split"))
+# if (!isGeneric("split"))
+setGeneric("split", function(x, f=NULL, drop=TRUE, ...) standardGeneric("split"))
 
 setMethod(f='split', signature='SoilProfileCollection', .splitSPC)
 
