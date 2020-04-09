@@ -1,40 +1,54 @@
 
-.splitSPC <- function(x, f, drop=TRUE, ...) {
+.splitSPC <- function(x, f=NULL, drop=TRUE, ...) {
   
-  ## TODO: maybe safe for hz attr?
-  # for now this is only safe for site-level attr
-  if(! f %in% siteNames(x)) {
-    stop(sprintf('%s must be site-level attribute', f), call. = FALSE)
+  # identity split, use idname
+  if(is.null(f)) {
+    
+    # grouping factor, make sure to use original ordering
+    fg <- site(x)[[idname(x)]]
+    fg <- factor(fg, level=fg)
+    
+  } else {
+    # standard, site-level group split
+    if(! f %in% siteNames(x)) {
+      stop(sprintf('%s must be site-level attribute', f), call. = FALSE)
+    }
+    
+    # no NA allowed
+    if(any(is.na(x[[f]]))) {
+      stop(sprintf('NA not allowed in %s', f), call. = FALSE)
+    }
+    
+    # extract to local variable, so as not to modify original data
+    fg <- x[[f]]
+    
+    # splitting variable should be a factor
+    if(! inherits(fg, 'factor')) {
+      fg <- factor(fg)
+      message(sprintf('converting %s to a factor', f))
+    }
   }
   
-  # no NA allowed
-  if(any(is.na(x[[f]]))) {
-    stop(sprintf('NA not allowed in %s', f), call. = FALSE)
-  }
-  
-  # splitting variable should be a factor
-  if(! inherits(x[[f]], 'factor')) {
-    x[[f]] <- factor(x[[f]])
-    message(sprintf('converting %s to a factor', f))
-  }
   
   ## TODO: test this
   # is this really neccessary?
   if(drop) {
-    x[[f]] <- droplevels(x[[f]])
+    fg <- droplevels(fg)
   }
   
   # iterate over levels
-  lv <- levels(x[[f]])  
+  lv <- levels(fg)  
   
   # index and split
   res <- lapply(lv, function(i) {
     
     # simple indexing on site-level data only
-    x[which(x[[f]] == i), ]
+    rr <- x[which(fg == i), ]
     
     # c/o AGB: this should work, but will require fancier imports from rlang
     # filter(x, !!sym(f) == i)
+    
+    return(rr)
   })
   
   # save names
@@ -48,7 +62,7 @@
 
 # S4 magic
 if (!isGeneric("split"))
-  setGeneric("split", function(x, f, drop=TRUE, ...) standardGeneric("split"))
+  setGeneric("split", function(x, f=NULL, drop=TRUE, ...) standardGeneric("split"))
 
 setMethod(f='split', signature='SoilProfileCollection', .splitSPC)
 
