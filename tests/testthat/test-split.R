@@ -41,6 +41,11 @@ test_that("identity split", {
 
 
 ## errors
+test_that("split fails as expected", {
+  
+  # group variable that is not site-level attribute
+  expect_error(split(sp6, f = 'XXX'))
+})
 
 ## warnings
 

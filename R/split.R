@@ -60,8 +60,8 @@
 
 
 
-# S4 magic
-# if (!isGeneric("split"))
+## S4 magic
+# already exists, but we are modifying it... good idea or bad idea?
 setGeneric("split", function(x, f=NULL, drop=TRUE, ...) standardGeneric("split"))
 
 setMethod(f='split', signature='SoilProfileCollection', .splitSPC)
