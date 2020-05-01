@@ -7,16 +7,19 @@
 # gloms a set of horizons for a single-profile SPC `p`
 #  the horizons are aggregated by depth using 
 #  clod.hz.ids() defined below
-glom <- function(p, z1, z2=NA, ids = FALSE, df = FALSE, truncate = FALSE, modality = "all") {
+glom <- function(p, z1, z2 = NA, ids = FALSE, df = FALSE, truncate = FALSE, modality = "all") {
   # aka glom.by.depth; 
-  if(length(p) > 1)
-    stop("glom is intended for single-profile SPCs", call.=FALSE)
+  if(!inherits(p, 'SoilProfileCollection') | length(p) > 1) {
+    # TODO: alternately, recursively call glom by invoking glomApply with constant depths z1, z2?
+    stop("`p` must be a SoilProfileCollection containing one profile", call.=FALSE)
+  }
   
   idx <- clod.hz.ids(p, z1, z2, modality)
   
   # short circuit to get hzIDs of intersection
-  if(ids)
+  if(ids) {
     return(hzID(p)[ids])
+  }
   
   depthn <- horizonDepths(p)
   
@@ -64,14 +67,12 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
   depthlogic <- hzDepthTests(tdep, bdep)
   logic_tests <- c('depthLogic','missingDepth','overlapOrGap')
   logic_fail <- as.logical(depthlogic[logic_tests])
+  
   if(any(logic_fail)) {
-    # too much could possibly go wrong in presence of overlaps/gaps/missing depths etc
     warning(paste0('Horizon logic error(s) ',
                    paste0(logic_tests[logic_fail], collapse=","),
-                   ' found. Returning `NA` for ',idname(p),': ',
-                   profile_id(p)), call.=FALSE)
-    # returning NA for hz logic errors is too heavy-handed - warnings sufficient
-    #return(NA)
+                   ' found. (',idname(p),': ',
+                   profile_id(p),")"), call.=FALSE)
   }
   
   # determine top depths greater/equal to z1
@@ -84,18 +85,23 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
   idx.top <- which(gt1)
   
   if (!length(idx.top)) {
-    warning(paste0('Invalid upper bound. Check argument `z1`. Returning `NA` (',idname(p),': ', profile_id(p),')'), call.=FALSE)
+    warning(paste0('Invalid upper bound `z1` (',z1,'), returning `NA` (',
+                   idname(p),': ', profile_id(p),')'), call.=FALSE)
     return(NA)
   }
   
-  idx.top <- idx.top[1] # always returns the top horizon
+  # always returns the top horizon
+  idx.top <- idx.top[1] 
   
   if(z1 < tdep[idx.top]) {
-    warning(paste0('Upper boundary `z1` (',z1,') shallower than top depth (',tdep[idx.top],') of shallowest horizon in subset. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+    warning(paste0('Upper boundary `z1` (',z1,') shallower than top depth (',
+                   tdep[idx.top],') of shallowest horizon in subset. (',
+                   idname(p),': ', profile_id(p), ')'), call.=FALSE)
   }
   
   # if a bottom depth of the clod interval is specified
   if (!is.na(z2)) {
+
     # determine bottom depths less than z2
     lt2 <- bdep < z2 
     
@@ -109,19 +115,24 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
     idx.bot <- rev(which(lt2))
     
     if (!length(idx.bot)) {
-      warning('Invalid lower bound. Check arguments `z1` and `z2`. Returning `NA` (',idname(p),':', profile_id(p),')', call.=FALSE)
+      warning('Invalid bounds (',z1,"-",z2,') returning `NA` (',
+              idname(p),':', profile_id(p),')', call.=FALSE)
       return(NA)
     }
     
     idx.bot <- idx.bot[1]
     
     if(z2 > bdep[idx.bot]) {
-      warning(paste0('Lower boundary `z2` (',z2,') is deeper than bottom depth of deepest horizon (', bdep[idx.bot],') in subset. (',idname(p),': ', profile_id(p),")"), call.=FALSE)
+      warning(paste0('Lower boundary `z2` (',z2,
+                     ') is deeper than bottom depth of deepest horizon (',
+                     bdep[idx.bot],') in subset. (',idname(p),': ',
+                     profile_id(p),")"), call.=FALSE)
     }
     
     # not really sure how this could happen ... maybe with wrong depth units for z?
     if(!(all(idx.top:idx.bot %in% 1:nrow(p)))) {
-      warning('Invalid lower bound. Check arguments `z1` and `z2`. Returning `NA` (',idname(p),':', profile_id(p),')', call.=FALSE)
+      warning('Invalid bounds (',z1,"-",z2,') returning `NA` (',
+              idname(p),':', profile_id(p),')', call.=FALSE)
       return(NA)
     }
     
@@ -130,13 +141,18 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
     actual.thickness <- sum(bdep[idx.top:idx.bot] - tdep[idx.top:idx.bot])
     
     if(actual.thickness < target.thickness) {
-      warning(paste0('Missing data in glom interval (actual/target: ', actual.thickness, '/',target.thickness,' ', depth_units(p), ' (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+      warning(paste0('Missing data in glom interval (actual/target: ', 
+                     actual.thickness,'/',target.thickness,' ',
+                     depth_units(p),' (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
       
       if(z1 < tdep[idx.top]) {
-        warning(paste0('`z1` (',z1,') shallower than top depth (',tdep[idx.top],') of shallowest horizon. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+        warning(paste0('glom boundary `z1` (',z1,') shallower than top depth (',tdep[idx.top],
+                       ') of shallowest horizon. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
       }
+      
       if(z2 > bdep[idx.bot]) {
-        warning(paste0('`z2` (',z2,') deeper than bottom depth of deepest horizon (', bdep[idx.bot],'). (',idname(p),': ', profile_id(p),")"), call.=FALSE)
+        warning(paste0('`z2` (',z2,') deeper than bottom depth of deepest horizon (', bdep[idx.bot],
+                       '). (',idname(p),': ', profile_id(p),")"), call.=FALSE)
       }
     }
     
@@ -165,8 +181,9 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
   
   idval <- hz[idx.top, hzid]
   
-  if (!as.list) 
+  if (!as.list) {
     return(idval)
+  }
   
   return(list(hz.idx = idx.top, value = idval))
 }

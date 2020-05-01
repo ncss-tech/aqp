@@ -4,7 +4,7 @@ estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p
   
   # sanity check: this function will only operate on an SPC
   if(! inherits(f, 'SoilProfileCollection'))
-    stop('`f` must be a SoilProfileCollection object')
+    stop('`f` must be a SoilProfileCollection containing one profile')
   
   depthcols <- horizonDepths(f)
   
@@ -17,19 +17,14 @@ estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p
   
   # sanity check: this function works on a single soil profile
   if(length(f) > 1)
-    stop('This function will only work when applied to a single soil profile, see manual page for details.')
+    stop('`f` can contain only one profile, see manual page for details')
   
   # if name is not in horizons, look if it is set in hzdesgncol
   hznames <- horizonNames(f)
   
-  if(any(!(name %in% hznames))) {
-    hzd <- hzdesgnname(f)
-    
-    if(!length(hzd))
-      stop("horizon name column not found. set `name` argument or use `hzdesgnname(spc)`", call.=FALSE)
-    
-    if(hzd %in% hznames)
-       name <- hzd
+  # if the user has not specified a column containing horizon designations
+  if(!name %in% hznames) {
+    name <- guessHzDesgnName(f)
   }
   
   # extract horizons

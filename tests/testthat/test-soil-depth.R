@@ -40,30 +40,40 @@ test_that("error conditions", {
   expect_error(estimateSoilDepth(d, name='name', top='top', bottom='bottom'))
   
   # required column names: name, top, bottom not specified, defaults not appropriate
-  expect_error(estimateSoilDepth(d[1, ]))
+  # AGB: now capable of basic guessing of hzdesgn, and uses hzdepthcol slot internally
+  # expect_error(estimateSoilDepth(d[1, ]))
 })
 
 
 test_that("basic soil depth evaluation, based on pattern matching of hz designation", {
   
-  # setting hz desgn by argument works
-  res <- profileApply(d, estimateSoilDepth, name='name', top='top', bottom='bottom')
+  # setting hz desgn by argument works 
+  res <- profileApply(d, estimateSoilDepth, name='name')
   expect_equivalent(res, c(110, 55, 48, 20))
   
-  # setting invalid hz desgn produces estimateSoilDepth error
-  expect_error(profileApply(d, estimateSoilDepth, name='goo', top='top', bottom='bottom'))
+  # setting hz desgn by argument works by guessing hzname
+  res <- profileApply(d, estimateSoilDepth)
+  expect_equivalent(res, c(110, 55, 48, 20))
   
-  # backup use of S4 hzdesgncol slot in lieu of valid argument
-  hzdesgnname(d) <- "name"
-  res <- estimateSoilDepth(d[1,], name='xxx', top='top', bottom='bottom')  
+  # setting nonexistent hzdesgn produces no error (by guessing hzname)
+  res <- profileApply(d, estimateSoilDepth, name='goo')
+  expect_equivalent(res, c(110, 55, 48, 20))
+  
+  # remove the guessable name, expect warning and bogus (-Inf) value
+  d$xxx <- d$name
+  d$name <- NULL
+  expect_warning(expect_equivalent(estimateSoilDepth(d[1,], name='name'), -Inf))
+  
+  # backup use of S4 hzdesgncol slot in lieu of valid argument/guessable name column
+  hzdesgnname(d) <- "xxx"
+  res <- estimateSoilDepth(d[1,], name='name')  
   expect_equivalent(res, 110)
 })
 
 
 test_that("application of reasonable depth assumption of 150, given threshold of 100", {
   
-  res <- profileApply(d, estimateSoilDepth, name='name', top='top', bottom='bottom', 
-                      no.contact.depth=100, no.contact.assigned=150)
+  res <- profileApply(d, estimateSoilDepth, no.contact.depth=100, no.contact.assigned=150)
   
   expect_equivalent(res, c(150, 55, 48, 20))
 })
@@ -72,8 +82,7 @@ test_that("application of reasonable depth assumption of 150, given threshold of
 test_that("depth to feature using REGEX on hzname: [Bt]", {
   
   # example from manual page, NA used when there is no 'Bt' found
-  res <- profileApply(d, estimateSoilDepth, name='name', top='top', bottom='bottom', 
-                      p='Bt', no.contact.depth=0, no.contact.assigned=NA)
+  res <- profileApply(d, estimateSoilDepth, p='Bt', no.contact.depth=0, no.contact.assigned=NA)
   
   expect_equivalent(res, c(20, 20, 20, NA))
 })
@@ -81,7 +90,7 @@ test_that("depth to feature using REGEX on hzname: [Bt]", {
 
 test_that("soil depth class assignment, using USDA-NRCS class breaks", {
   
-  res <- getSoilDepthClass(d, name='name', top='top', bottom='bottom')
+  res <- getSoilDepthClass(d)
   
   # result should be a data.frame with as many rows as profiles in input
   expect_true(inherits(res, 'data.frame'))
