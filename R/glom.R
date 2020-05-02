@@ -7,25 +7,33 @@
 # gloms a set of horizons for a single-profile SPC `p`
 #  the horizons are aggregated by depth using 
 #  clod.hz.ids() defined below
-glom <- function(p, z1, z2 = NA, ids = FALSE, df = FALSE, truncate = FALSE, modality = "all") {
+glom <- function(p, z1, z2 = NA, 
+                 ids = FALSE, df = FALSE, 
+                 truncate = FALSE, invert = FALSE, 
+                 modality = "all") {
   # aka glom.by.depth; 
   if(!inherits(p, 'SoilProfileCollection') | length(p) > 1) {
     # TODO: alternately, recursively call glom by invoking glomApply with constant depths z1, z2?
     stop("`p` must be a SoilProfileCollection containing one profile", call.=FALSE)
   }
   
-  idx <- clod.hz.ids(p, z1, z2, modality)
+  depthn <- horizonDepths(p)
+  
+  if(!invert) {
+    idx <- clod.hz.ids(p, z1, z2, modality)
+  } else {
+    idx <- c(clod.hz.ids(p, min(p[[depthn[1]]], na.rm=T), z1, modality),
+             clod.hz.ids(p, z2, max(p[[depthn[2]]], na.rm=T), modality))
+  }
   
   # short circuit to get hzIDs of intersection
   if(ids) {
     return(hzID(p)[ids])
   }
   
-  depthn <- horizonDepths(p)
-  
   # truncate ragged edges to PSCS
   # if we have an interval [z1,z2], option to truncate to z1/z2
-  if(truncate & !is.null(z2)) {
+  if(!invert  & truncate & !is.null(z2)) {
     .top <- p[[depthn[1]]]
     .bottom <- p[[depthn[2]]]
     
@@ -34,6 +42,16 @@ glom <- function(p, z1, z2 = NA, ids = FALSE, df = FALSE, truncate = FALSE, moda
     
     .top[.top > z2] <- z2
     .bottom[.bottom > z2] <- z2
+    
+    p[[depthn[1]]] <- .top
+    p[[depthn[2]]] <- .bottom
+    
+  } else if (invert & truncate & !is.null(z2)) {
+    .top <- p[[depthn[1]]]
+    .bottom <- p[[depthn[2]]]
+    
+    .top[.top > z1 & .top < z2] <- z2
+    .bottom[.bottom > z1 & .bottom < z2] <- z1
     
     p[[depthn[1]]] <- .top
     p[[depthn[2]]] <- .bottom
