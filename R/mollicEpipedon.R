@@ -32,15 +32,18 @@ depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
   if(any(res > no.contact.depth))
     res <- res[-which(res > no.contact.depth)]
   
-  if(all(is.na(res)) & length(res))
-    return(res[1])
+  if(all(!is.na(res)) & length(res))
+    return(res)
   
   return(no.contact.assigned)
 }
 
 # calculates the minimum thickness of a mollic epipedon per requirements in criterion 6 of mollic epipedon;
 #   keys to soil taxonomy 12th edition
-mollic.thickness.requirement <- function(p) {
+# truncate=TRUE will truncate sliding scale thicknesses to [18,25]
+# otherwise returns "most restrictive" thickness which is helpful to see where sliding scale is used
+
+mollic.thickness.requirement <- function(p, truncate=TRUE) {
   
   # determine boundaries  
   # For purposes of identification of minimum thickness of mollic for field descriptions
@@ -66,7 +69,8 @@ mollic.thickness.requirement <- function(p) {
   
   # get horizon data from mineral soil surface to bedrock, physical root restriction, 
   #  or pedogenic cementation >90% OR bottom of profile OR 250
-  soil.bottom <- min(soil_depth, max(p[[horizonDepths(p)[1]]], na.rm=TRUE), 250, na.rm = TRUE)
+  soil.bottom <- min(soil_depth, max(p[[horizonDepths(p)[1]]], na.rm=TRUE), 
+                     250, na.rm = TRUE)
   sol <- glom(p, mss, soil.bottom, truncate=TRUE)
   
   if(!inherits(sol, 'SoilProfileCollection'))
@@ -103,8 +107,9 @@ mollic.thickness.requirement <- function(p) {
   natric_bottom <- max.depth.of(p, pattern="n", top=FALSE, no.contact.assigned = NA)
   oxic_bottom <- max.depth.of(p, pattern="o", top=FALSE, no.contact.assigned = NA)
   spodic_bottom <- max.depth.of(p, pattern="h|s", top=FALSE, no.contact.assigned = NA)
-  #   the w == cambic is particularly egregious and prone to errors -- fix ASAP
-  cambic_bottom <- max.depth.of(p, pattern="w", top=FALSE, no.contact.assigned = NA)
+  
+  #   the B|w == cambic was particularly egregious 
+  cambic_bottom <- max(getPseudoCambicBounds(p, argi_bounds))
   
   # calculate "deepest of lower boundary of argillic/natric, cambic, oxic, spodic"
   crit6c2 <- suppressWarnings(max(c(argillic_bottom, 
@@ -116,6 +121,7 @@ mollic.thickness.requirement <- function(p) {
   # SHORT CIRCUITS
   sandy.textures <- (grepl("S$", epi[[hztexclname(epi)]], ignore.case = TRUE) & 
                      !grepl("LVFS|LFS$", epi[[hztexclname(epi)]], ignore.case = TRUE))
+  
   if(all(sandy.textures)) {
     # 6A - assumes you must check for sandy textures throughout 0-25 to trigger minimum thickness of 25cm
     #      there is an implicit assumption that after mixing any non-sandy texture into sandy texture you would have 
@@ -171,20 +177,88 @@ mollic.thickness.requirement <- function(p) {
   
   # the thickness requirement is based on the most restrictive condition
   sixcdepths.t <- sixcdepths
-  sixcdepths.t[sixcdepths > 25] <- 25
-  sixcdepths.t[sixcdepths < 18] <- 18
+  
+  # sliding scale depths based on diagnostics are truncated to [18, 25]
+  #  for investigations evaluating particular criteria, may be useful to ignore this limit
+  if(truncate) {
+    sixcdepths.t[sixcdepths > 25] <- 25
+    sixcdepths.t[sixcdepths < 18] <- 18
+  }
   most.restrictive <- max(sixcdepths.t)
   
-  # this should not happen with properly populated pedons (missing horizon designations or bottom depths?)
+  # this should not happen with properly populated pedons 
+  #  (missing horizon designations or bottom depths?)
   if(is.infinite(most.restrictive)) {
-    warning(paste0("cannot evaluate mollic miniumum thickness requirement (",idname(p),":",profile_id(p),")"))
+    warning(paste0("cannot evaluate mollic miniumum thickness requirement (",
+                   idname(p),":",profile_id(p),")"))
   }
+  
   return(most.restrictive)
+}
+
+getPseudoCambicBounds <- function(p, ..., 
+                                  argi_bounds=NULL,
+                                  d_value = "d_value", 
+                                  m_value = "m_value", 
+                                  m_chroma = "m_chroma") {
+  if(is.null(argi_bounds)) {
+    argi_bounds <- getArgillicBounds(p, ...)
+  }
+  
+  cambic_top <- min.depth.of(p, pattern="A|B|w", no.contact.assigned = NA)
+  cambic_bottom <- max.depth.of(p, pattern="A|B|w", top=FALSE, no.contact.assigned = NA)
+  
+  if(any(is.na(cambic_top), is.na(cambic_bottom))) {
+    return(NA)
+  }
+  
+  if(all(c(cambic_bottom <= argi_bounds[2], cambic_top >= argi_bounds[1]))) {
+    return(NA) 
+  }
+  
+  cambic <- glom(p, cambic_top, cambic_bottom, truncate=TRUE)
+  
+  dark.colors <- has.dark.colors(cambic)
+  cambic.hz <- horizons(cambic)
+  cambic.hz$w <- 1
+  
+  sandy.textures <- (grepl("S$", cambic.hz[[hztexclname(cambic)]], ignore.case = TRUE) & 
+                       !grepl("LVFS|LFS$", cambic.hz[[hztexclname(cambic)]], ignore.case = TRUE))
+  
+  if(any(all(is.na(sandy.textures)), all(is.na(dark.colors)))) {
+    return(NA)
+  }
+  
+  # remove horizons that are sandy or have dark colors
+  if(any(sandy.textures, na.rm=TRUE) | any(dark.colors, na.rm = TRUE)) {
+    cambic.hz$w[which(sandy.textures | dark.colors)] <- 0
+  }
+  
+  glom(cambic, argi_bounds[1], argi_bounds[2], ids=TRUE)
 }
 
 # default arguments are for mollic/umbric darkness, 
 #   results are combined after being applied to both dry and moist colors
-has.dark.colors <-  function(p, d_value=5, d_chroma=NA, m_value=3, chroma=3) {
+has.dark.colors <-  function(p, dvalnm = "d_value", dchrnm="d_chroma", 
+                             mvalnm = "m_value", mchrnm = "m_chroma",
+                             d_value=5, d_chroma=NA, m_value=3, m_chroma=3) {
   hz <- horizons(p)
+  r1 <- hz[[dvalnm]] <= d_value
+  r2 <- hz[[dchrnm]] <= d_chroma
+  r3 <- hz[[mvalnm]] <= m_value
+  r4 <- hz[[mchrnm]] <= m_chroma
   
+  r <- cbind(r1, r2, r3, r4)
+  
+  required <- !is.na(c(d_value, d_chroma, m_value, m_chroma))
+  risna <- apply(r, 2, function(x) all(is.na(x)))
+  
+  # this only happens if all data are missing
+  if(any(required != !risna))
+    return(rep(NA, nrow(p)))
+  
+  r <- r[,required]
+  
+  # result may contain NA for individual horizon
+  return(apply(r, 1, all))
 }
