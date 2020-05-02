@@ -6,19 +6,6 @@
 # this is a helper function to calculate maximum depth of occurence of a specified horizon designation pattern
 #  it is used primarily in the place of functions that are capable of reasoning over taxonomic criteria for things
 #  like calcic, spodic, natric horizons -- and temporarily for cambic horizons too :*(
-max.depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p), 
-                         no.contact.depth = NULL, 
-                         no.contact.assigned = NULL, na.rm = TRUE) {
-  res <- depth.of(p, pattern, top, hzdesgn, no.contact.depth, no.contact.assigned)
-  return(max(res, na.rm))
-}
-
-min.depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p), 
-                         no.contact.depth = NULL, 
-                         no.contact.assigned = NULL, na.rm = TRUE) {
-  res <- depth.of(p, pattern, top, hzdesgn, no.contact.depth, no.contact.assigned)
-  return(min(res, na.rm))
-}
 
 depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p), 
                      no.contact.depth = NULL, no.contact.assigned=NULL) {
@@ -38,6 +25,24 @@ depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
   return(no.contact.assigned)
 }
 
+max.depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p), 
+                         no.contact.depth = NULL, no.contact.assigned=NULL) {
+  res <- suppressWarnings(min(depth.of(p, pattern=pattern, top=FALSE, 
+                                       no.contact.depth, no.contact.assigned), na.rm=T))
+  if(is.infinite(res))
+    return(no.contact.assigned)
+  return(res)
+}
+
+min.depth.of <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p), 
+                         no.contact.depth = NULL, no.contact.assigned=NULL) {
+  res <- suppressWarnings(min(depth.of(p, pattern=pattern, top=FALSE, 
+                                       no.contact.depth, no.contact.assigned), na.rm=T))
+  if(is.infinite(res))
+    return(no.contact.assigned)
+  return(res)
+}
+
 # calculates the minimum thickness of a mollic epipedon per requirements in criterion 6 of mollic epipedon;
 #   keys to soil taxonomy 12th edition
 # truncate=TRUE will truncate sliding scale thicknesses to [18,25]
@@ -50,7 +55,7 @@ mollic.thickness.requirement <- function(p, truncate=TRUE) {
   #   technically it is not applying the true taxonomic rules b/c it is based on hz desgn
   mss <- getMineralSoilSurfaceDepth(p)
   
-  soil_depth <- depth.of(p, "Cr|R|Cd|m", 
+  soil_depth <- min.depth.of(p, "Cr|R|Cd|m", 
                          no.contact.depth = 200, 
                          no.contact.assigned = NA)
   
@@ -104,12 +109,15 @@ mollic.thickness.requirement <- function(p, truncate=TRUE) {
   
   # AGAIN, for purposes of identification of minimum thickness of mollic this is fast and probably fine
   #   but technically it is not applying the true taxonomic rules b/c it is based on hz desgn
-  natric_bottom <- max.depth.of(p, pattern="n", top=FALSE, no.contact.assigned = NA)
-  oxic_bottom <- max.depth.of(p, pattern="o", top=FALSE, no.contact.assigned = NA)
-  spodic_bottom <- max.depth.of(p, pattern="h|s", top=FALSE, no.contact.assigned = NA)
+  natric_bottom <- max.depth.of(p, pattern="n", top=FALSE, 
+                                no.contact.assigned = NA)
+  oxic_bottom <- max.depth.of(p, pattern="o", top=FALSE, 
+                              no.contact.assigned = NA)
+  spodic_bottom <- max.depth.of(p, pattern="h|s", top=FALSE, 
+                                no.contact.assigned = NA)
   
   #   the B|w == cambic was particularly egregious 
-  cambic_bottom <- max(getPseudoCambicBounds(p, argi_bounds))
+  cambic_bottom <- max(getPseudoCambicBounds(p, argi_bounds=argi_bounds))
   
   # calculate "deepest of lower boundary of argillic/natric, cambic, oxic, spodic"
   crit6c2 <- suppressWarnings(max(c(argillic_bottom, 
@@ -201,40 +209,69 @@ getPseudoCambicBounds <- function(p, ...,
                                   d_value = "d_value", 
                                   m_value = "m_value", 
                                   m_chroma = "m_chroma") {
+  depths <- horizonDepths(p)
+  
   if(is.null(argi_bounds)) {
     argi_bounds <- getArgillicBounds(p, ...)
   }
   
-  cambic_top <- min.depth.of(p, pattern="A|B|w", no.contact.assigned = NA)
-  cambic_bottom <- max.depth.of(p, pattern="A|B|w", top=FALSE, no.contact.assigned = NA)
+  cambic_top <- min.depth.of(p, pattern="B", 
+                             no.contact.assigned = NA)
+  cambic_bottom <- max.depth.of(p, pattern="B", top=FALSE, 
+                                no.contact.assigned = NA)
   
   if(any(is.na(cambic_top), is.na(cambic_bottom))) {
     return(NA)
   }
   
-  if(all(c(cambic_bottom <= argi_bounds[2], cambic_top >= argi_bounds[1]))) {
-    return(NA) 
-  }
-  
   cambic <- glom(p, cambic_top, cambic_bottom, truncate=TRUE)
   
-  dark.colors <- has.dark.colors(cambic)
-  cambic.hz <- horizons(cambic)
-  cambic.hz$w <- 1
+  if(!all(is.na(argi_bounds))) {
+    if(all(c(cambic_bottom <= argi_bounds[2], cambic_top >= argi_bounds[1]))) {
+      return(NA) 
+    }
+    # if an argillic is presnt, remove with glom truncate+invert
+    non.argillic <- glom(cambic, argi_bounds[1], argi_bounds[2], 
+                         truncate=TRUE, invert=TRUE)
+  } else {
+    non.argillic <- cambic
+  }
+    
+  dark.colors <- has.dark.colors(non.argillic)
+  non.argillic$w <- rep(1, nrow(non.argillic))
   
-  sandy.textures <- (grepl("S$", cambic.hz[[hztexclname(cambic)]], ignore.case = TRUE) & 
-                       !grepl("LVFS|LFS$", cambic.hz[[hztexclname(cambic)]], ignore.case = TRUE))
+  textures <- non.argillic[[hztexclname(non.argillic)]]
+  sandy.textures <- (grepl("S$", textures, ignore.case = TRUE) & 
+                       !grepl("LVFS|LFS$", textures, ignore.case = TRUE))
   
-  if(any(all(is.na(sandy.textures)), all(is.na(dark.colors)))) {
+  if(!length(sandy.textures) | !length(dark.colors)) {
     return(NA)
   }
   
   # remove horizons that are sandy or have dark colors
-  if(any(sandy.textures, na.rm=TRUE) | any(dark.colors, na.rm = TRUE)) {
-    cambic.hz$w[which(sandy.textures | dark.colors)] <- 0
+  if(any(sandy.textures | dark.colors, na.rm = TRUE)) {
+    non.argillic$w[which(sandy.textures | dark.colors)] <- 0
   }
   
-  glom(cambic, argi_bounds[1], argi_bounds[2], ids=TRUE)
+  nhz <- horizons(non.argillic)
+  
+  final <- numeric(0)
+  # iterate through combinations of horizons, check topology and thickness
+  # finds multiple occurences of cambic horizons, excluding argillics
+  for(j in 1:nrow(nhz)) {
+    for(i in j:nrow(nhz)) {
+      if(any(hzDepthTests(nhz[j:i, depths[1]], nhz[j:i, depths[2]]))) {
+        i <- i - 1
+        break;
+      }
+    }
+    pcamb.thickness <- nhz[j:i, depths[2]] - nhz[j:i, depths[1]]
+    if(sum(pcamb.thickness) >= 15) {
+        final <- c(final, c(min(nhz[j:i, depths[1]], na.rm=T), 
+                            max(nhz[j:i, depths[2]], na.rm=T)))
+    }
+  }
+  return(final)
 }
 
 # default arguments are for mollic/umbric darkness, 
@@ -253,12 +290,12 @@ has.dark.colors <-  function(p, dvalnm = "d_value", dchrnm="d_chroma",
   required <- !is.na(c(d_value, d_chroma, m_value, m_chroma))
   risna <- apply(r, 2, function(x) all(is.na(x)))
   
-  # this only happens if all data are missing
-  if(any(required != !risna))
+  # if all data are missing, return NA for each horizon
+  if(all(required == risna))
     return(rep(NA, nrow(p)))
   
   r <- r[,required]
   
-  # result may contain NA for individual horizon
+  # result may contain NA for individual horizons
   return(apply(r, 1, all))
 }
