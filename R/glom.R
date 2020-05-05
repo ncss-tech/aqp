@@ -26,13 +26,13 @@ glom <- function(p, z1, z2 = NA,
              clod.hz.ids(p, z2, max(p[[depthn[2]]], na.rm=T), modality))
   }
   
-  # short circuit to get hzIDs of intersection
+  # short circuit to get hzIDs of result
   if(ids) {
-    return(hzID(p)[ids])
+    return(hzID(p)[idx])
   }
   
   # truncate ragged edges to PSCS
-  # if we have an interval [z1,z2], option to truncate to z1/z2
+  # if we have an interval [z1, z2], option to truncate to it
   if(!invert  & truncate & !is.null(z2)) {
     .top <- p[[depthn[1]]]
     .bottom <- p[[depthn[2]]]
