@@ -4,7 +4,7 @@
 # return the last bottom depth of a horizon that is contiguous with surface
 # for instance horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth
 #
-getSurfaceHorizonDepth <-  function(p, pattern, hzdesgn = hzdesgnname(p)) { 
+getSurfaceHorizonDepth <-  function(p, pattern, hzdesgn = guessHzDesgnName(p)) { 
   hz <- horizons(p)
   depths <- horizonDepths(p)
   shallowest.depth <- min(hz[[depths[1]]], na.rm=TRUE)
@@ -43,13 +43,13 @@ getSurfaceHorizonDepth <-  function(p, pattern, hzdesgn = hzdesgnname(p)) {
   return(hz[who.idx, depths[2]])
 }
 
-getMineralSoilSurfaceDepth <-  function(p, hzdesgn = hzdesgnname(p), pattern=".*O.*") { 
+getMineralSoilSurfaceDepth <-  function(p, hzdesgn = guessHzDesgnName(p), pattern=".*O.*") { 
   #assumes OSM is given O designation;
   #TODO: add support for lab-sampled organic measurements
   #      keep organic horizons with andic soil properties
   return(getSurfaceHorizonDepth(p, hzdesgn=hzdesgn, pattern=pattern))
 }
 
-getPlowLayerDepth <- function(p, hzdesgn = hzdesgnname(p), pattern="^Ap[^b]") {
+getPlowLayerDepth <- function(p, hzdesgn = guessHzDesgnName(p), pattern="^Ap[^b]") {
   return(getSurfaceHorizonDepth(p, hzdesgn, pattern=pattern))
 }
