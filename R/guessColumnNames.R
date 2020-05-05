@@ -1,10 +1,12 @@
 # guessColumnNames.R
 
 #' Guess Horizon Designation Column Name
-#'
+#' 
+#' @description This follows the historic convention used by \code{aqp::plotSPC()} looking for 'hzname' or other column names containing the regular expression \code{name}. In the future, more patterns may be added.
+#' 
 #' @param x A SoilProfileCollection
 #'
-#' @return Character containing horizon designation column name. This follows the historic convention used by \code{aqp::plotSPC()} looking for 'hzname' or other column  names containing the regular expression \code{name}.
+#' @return Character containing horizon designation column name. 
 #' 
 #' @author Andrew G. Brown
 #' 
@@ -56,9 +58,11 @@ guessHzDesgnName <- function(x) {
 
 #' Guess Horizon Texture Class Column Name
 #'
+#' @description This function is used to provide texture class attribute column name to functions that use it to determine taxonomic criteria. It will use regular expressions to match \code{'texcl'} which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match \code{'texture'} for cases where \code{'texcl'} is absent (e.g. in NASIS components).
+#' 
 #' @param x A SoilProfileCollection
 #'
-#' @return Character containing horizon texture class column name. This function is used to provide texture class attribute column name to functions that use it to determine various taxonomic criteria. One of the most common uses of this attribute is for identifying horizons with sandy textures to trigger special criteria related to those materials. It will use regular expressions to match \code{'texcl'} which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match \code{'texture'} for cases where texcl is absent (e.g. NASIS components).
+#' @return Character containing horizon texture class column name. 
 #' 
 #' @author Andrew G. Brown
 #' 
@@ -111,16 +115,11 @@ guessHzTexClName <- function(x) {
   return(name)
 }
 
-# 
-
-
 #' Guess Arbitrary Horizon Column Name
 #'
-#' @description This works for arbitrary columns where possible/preferred formative elements are known 
-#  there is a preference for records where more optional requirements are met to handle cases where there will be many matchesfor example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could easily distinguish between these for analyses using standard formative elements from the database schema of interest. The 
+#' @description Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 #'
-#' e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))}
-#'        matches (claytotal_r == totalclay_r) over (clay_r == claytotal == totalclay) over clay
+#' e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (\code{claytotal_r == totalclay_r}) over (\code{clay_r == claytotal == totalclay}) over \code{clay}. 
 #'
 #' @param x A SoilProfileCollection
 #' @param attr A regular expression containing required formative element of attribute name.

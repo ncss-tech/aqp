@@ -1,9 +1,10 @@
 #' Calculate the minimum thickness requirement for Mollic epipedon
 #' 
-#' @description Utilize horizon depths, designations and textures in a profile to estimate the thickness requirement for the mollic or umbric epipedon, per criterion 6 in the U.S. Keys to Soil Taxonomy (12th Edition).
+#' @description Utilize horizon depths, designations and textures in a profile to estimate the thickness requirement for the Mollic or Umbric epipedon, per criterion 6 in the U.S. Keys to Soil Taxonomy (12th Edition).
+#' 
 #' @param p A single-profile SoilProfileCollection.
-#' @param texcl Column in horizon table containing texture classes. Default: \code{aqp::guessHzTexClName(p)}
-#' @param truncate Should results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
+#' @param texcl Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}
+#' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
 #'
 #' @return A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.
 #' 
@@ -103,7 +104,7 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), truncat
                                 no.contact.assigned = NA)
   
   #   the B|w == cambic was particularly egregious 
-  cambic_bottom <- max(getCambicBounds(p, argi_bounds=argi_bounds))
+  cambic_bottom <- max(getCambicBounds(p, argi_bounds=argi_bounds)$cambic_bottom)
   
   # calculate "deepest of lower boundary of argillic/natric, cambic, oxic, spodic"
   crit6c2 <- suppressWarnings(max(c(argillic_bottom, 
@@ -193,11 +194,11 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), truncat
   return(most.restrictive)
 }
 
-#' Find colors darker than a specified Munsell hue, value, chroma threshold(s)
+#' Find horizons with colors darker than a Munsell hue, value, chroma threshold
 #' 
-#' @description \code{hasDarkColors} returns a boolean value by horizon for whether darkness thresholds specified are met. The code is fully vectorized and deals with missing data and optional thresholds. The function can can be applied directly to multi-profile SoilProfileCollections. 
+#' @description \code{hasDarkColors} returns a boolean value by horizon representing whether darkness thresholds are met. The code is fully vectorized and deals with missing data and optional thresholds. 
 #' 
-#' Default arguments are set up for "5-3-3 colors" -- or the basic criteria for Mollic/Umbric epipedon/mineral soil darkness. Any of the column names can be missing and any thresholds that are set equal to \code{NA} will be ignored -- allowing for novel analyses with other thresholds.
+#' Default arguments are set up for "5-3-3 colors" -- the basic criteria for Mollic/Umbric epipedon/mineral soil darkness. Any of the thresholds or column names can be altered. Any thresholds that are set equal to \code{NA} will be ignored.
 #' 
 #' @param p A SoilProfileCollection.
 #' @param d_hue Optional: character vector of dry hues to match (default: NA)

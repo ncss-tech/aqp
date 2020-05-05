@@ -2,18 +2,57 @@
 # excluding those that are part of an argillic horizon
 # (defined either by depth interval or getArgillicBounds)
 
+#' Find all intervals that are potentially part of a Cambic horizon
+#' @description Find all intervals that are potentially part of a Cambic horizon excluding those that are part of an argillic horizon (defined either by depth interval or \code{getArgillicBounds()}). 
+#' 
+#' There may be multiple cambic horizons (indexes) in a profile. Each cambic index has a top and bottom depth associated: cambic_top and cambic_bottom. This result is designed to be used for single profiles, or with \code{profileApply(..., frameify = TRUE)}
+#'
+#' @param p A single-profile SoilProfileCollection
+#' @param ... Arguments to \code{getArgillicBounds()}
+#' @param argi_bounds Optional: numeric vector of length 2 with top and bottom of argillic; (Default: NULL)
+#' @param d_value Column name containing dry value. Default: d_value
+#' @param m_value Column name containing moist value. Default: m_value
+#' @param m_chroma Column name containing moist crhoma. Default: m_chroma
+#'
+#' @return A \code{data.frame} containing profile, cambic indexes, along with top and bottom depths.
+#' 
+#' @author Andrew G. Brown
+#' 
+#' @export
+#'
+#' @examples 
+#' # construct a fake profile
+#' spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxerepts",
+#'                   hzname   = c("A","AB","Bw","BC","R"),
+#'                   hzdept   = c(0,  20, 32, 42,  49), 
+#'                   hzdepb   = c(20, 32, 42, 49, 200), 
+#'                   clay     = c(19, 22, 22, 21,  NA),
+#'                   texcl    = c("l","l","l", "l","br"),
+#'                   d_value  = c(5,   5,  5,  6,  NA),
+#'                   m_value  = c(2.5, 3,  3,  4,  NA),
+#'                   m_chroma = c(2,   3,  4,  4,  NA))
+#'                   
+#' # promote to SoilProfileCollection
+#' depths(spc) <- id ~ hzdept + hzdepb
+#' hzdesgnname(spc) <- 'hzname'
+#' hztexclname(spc) <- 'texcl'
+#' 
+#' # print results in table
+#' getCambicBounds(spc)
+#'
 getCambicBounds <- function(p, ..., 
                             argi_bounds=NULL,
                             d_value = "d_value", 
                             m_value = "m_value", 
                             m_chroma = "m_chroma") {
+  
   depths <- horizonDepths(p)
   
   if(is.null(argi_bounds)) {
     argi_bounds <- getArgillicBounds(p, ...)
   }
   
-  cambic_top <- minDepthOf(p, pattern="B", 
+  cambic_top <- minDepthOf(p, pattern="B",
                            no.contact.assigned = NA)
   cambic_bottom <- maxDepthOf(p, pattern="B", top=FALSE, 
                               no.contact.assigned = NA)
@@ -24,7 +63,7 @@ getCambicBounds <- function(p, ...,
   
   cambic <- glom(p, cambic_top, cambic_bottom, truncate=TRUE)
   
-  if(!all(is.na(argi_bounds))) {
+  if(all(is.finite(argi_bounds))) {
     if(all(c(cambic_bottom <= argi_bounds[2], cambic_top >= argi_bounds[1]))) {
       return(NA) 
     }
@@ -38,7 +77,7 @@ getCambicBounds <- function(p, ...,
   dark.colors <- hasDarkColors(non.argillic)
   non.argillic$w <- rep(1, nrow(non.argillic))
   
-  textures <- non.argillic[[hztexclname(non.argillic)]]
+  textures <- non.argillic[[hztexclname(p)]]
   sandy.textures <- (grepl("S$", textures, ignore.case = TRUE) & 
                        !grepl("LVFS|LFS$", textures, ignore.case = TRUE))
   
@@ -46,14 +85,13 @@ getCambicBounds <- function(p, ...,
     return(NA)
   }
   
+  nhz <- horizons(non.argillic)
   # remove horizons that are sandy or have dark colors
   if(any(sandy.textures | dark.colors, na.rm = TRUE)) {
-    non.argillic$w[which(sandy.textures | dark.colors)] <- 0
+    nhz <- nhz[-which(sandy.textures | dark.colors),] 
   }
   
-  nhz <- horizons(non.argillic)
-  
-  final <- numeric(0)
+  final <- data.frame(cambic_top=numeric(0), cambic_bottom=numeric(0))
   # iterate through combinations of horizons, check topology and thickness
   # finds multiple occurences of cambic horizons, excluding argillics
   for(j in 1:nrow(nhz)) {
@@ -65,9 +103,13 @@ getCambicBounds <- function(p, ...,
     }
     pcamb.thickness <- nhz[j:i, depths[2]] - nhz[j:i, depths[1]]
     if(sum(pcamb.thickness) >= 15) {
-      final <- c(final, c(min(nhz[j:i, depths[1]], na.rm=T), 
-                          max(nhz[j:i, depths[2]], na.rm=T)))
+      final <- rbind(final, 
+                     data.frame(cambic_top = min(nhz[j:i, depths[1]], na.rm=T), 
+                          cambic_bottom = max(nhz[j:i, depths[2]], na.rm=T)))
     }
   }
-  return(final)
+  # construct data.frame result
+  iddf <- data.frame(id=profile_id(p), cambic_index=1:nrow(final))
+  colnames(iddf) <- c(idname(p), "cambic_id")
+  return(cbind(iddf, final))
 }
