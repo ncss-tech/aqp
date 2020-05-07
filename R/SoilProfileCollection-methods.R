@@ -45,12 +45,12 @@ setMethod(
   	)
   	
   	# header
-  	header.txt <- sprintf("SoilProfileCollection: %s profiles | %s horizons\n", n.profiles, n.hz)
+  	header.txt <- sprintf("SoilProfileCollection: %s profiles | %s horizons\nprofile ID: %s\nhorizon ID: %s\n", n.profiles, n.hz, idname(object), hzidname(object))
     cat(header.txt)
   	
-  	if(n.profiles > 1)
-			cat("Depth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
-		
+#   	if(n.profiles > 1)
+# 			cat("\nDepth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
+# 		
     # make note of additional hz attributes
   	cat(hz.txt)
   	print(head(horizons(object))[, hz.show], row.names = FALSE)
