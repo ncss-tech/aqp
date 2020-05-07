@@ -38,19 +38,26 @@ setMethod(
   	h <- h[rows.show, , drop=FALSE]
   	s <- s[rows.show, , drop=FALSE]
   	
-  	# move IDs to first two columns
-  	
-  	# move depths to next two columns
-  	idx <- match(horizonDepths(object), names(h))
-  	h <- h[, c(names(h)[idx], names(h)[-idx])]
-  	
-  	# if defined, move horizon designation to the 3rd column
-  	# missing horizon designation evaluates to character(0)
+  	# move IDs and depths, horizon designation if available
   	hzd <- hzdesgnname(object)
   	if(length(hzd) > 0) {
-  	  idx <- match(hzd, names(h))
-  	  h <- h[, c(names(h)[idx], names(h)[-idx])]
+  	  # registered in a slot
+  	  idx <- match(c(idname(object), hzidname(object), horizonDepths(object), hzdesgnname(object)), names(h))
+  	  } else {
+  	    # undefined
+  	    idx <- match(c(idname(object), hzidname(object), horizonDepths(object)), names(h))
   	}
+  	
+  	h <- h[, c(names(h)[idx], names(h)[-idx])]
+  	
+  	
+  	# # if defined, move horizon designation to the 3rd column
+  	# # missing horizon designation evaluates to character(0)
+  	# hzd <- hzdesgnname(object)
+  	# if(length(hzd) > 0) {
+  	#   idx <- match(hzd, names(h))
+  	#   h <- h[, c(names(h)[idx], names(h)[-idx])]
+  	# }
   	
   		
   	# determine number of columns to show, and index to hz / site data
