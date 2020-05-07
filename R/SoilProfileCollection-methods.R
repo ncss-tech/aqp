@@ -20,21 +20,46 @@ setMethod(
   signature='SoilProfileCollection',
   definition=function(object) {
   	n.profiles <- length(object)
+  	n.hz <- nrow(object)
   	
-    cat("Object of class ", class(object), "\n", sep = "")
-    cat("Number of profiles: ", n.profiles, "\n", sep="")
+  	# count number of hz and site columns for reporting truncated listing
+  	n.hz.cols <- length(horizonNames(object))
+  	n.site.cols <- length(siteNames(object))
+  	
+  	# determine number of columns to show, and index to hz / site data
+  	show.cols <- 12  
+  	hz.show <- seq(from=1, to=n.cols, by=1)
+  	site.show <- seq(from=1, to=n.cols, by=1)
+  	
+  	# generate text explaining truncated summary
+  	hz.txt <- sprintf(
+  	  "\nHorizon Attributes (%s of %s columns):\n--------------------------------------\n", 
+  	  show.cols, 
+  	  n.hz.cols
+  	)
+  	
+  	site.txt <- sprintf(
+  	  "\nSite Attributes (%s of %s columns):\n-----------------------------------\n", 
+  	  show.cols, 
+  	  n.site.cols
+  	)
+  	
+  	# header
+  	header.txt <- sprintf("SoilProfileCollection: %s profiles | %s horizons\n", n.profiles, n.hz)
+    cat(header.txt)
   	
   	if(n.profiles > 1)
 			cat("Depth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
 		
-  	cat("\nHorizon attributes:\n")
-  	print(head(horizons(object)))
+    # make note of additional hz attributes
+  	cat(hz.txt)
+  	print(head(horizons(object))[, hz.show], row.names = FALSE)
+  	cat('[... more rows ...]\n')
 
-		# in the presence of site data
-    if (nrow(site(object)) > 0) {
-      cat("\nSampling site attributes:\n")
-      print(head(site(object)))
-    }
+		# make note of additional site attributes
+  	cat(site.txt)
+  	print(head(site(object))[, site.show], row.names = FALSE)
+  	cat('[... more rows ...]\n')
 
     # presence of spatial data
     if(nrow(coordinates(object)) == n.profiles) {
