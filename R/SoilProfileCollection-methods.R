@@ -19,6 +19,7 @@ setMethod(
   f='show',
   signature='SoilProfileCollection',
   definition=function(object) {
+    # stats for later
   	n.profiles <- length(object)
   	n.hz <- nrow(object)
   	
@@ -26,37 +27,53 @@ setMethod(
   	n.hz.cols <- length(horizonNames(object))
   	n.site.cols <- length(siteNames(object))
   	
+  	# local copies
+  	s <- site(object)
+  	h <- horizons(object)
+  	
   	# determine number of rows to show
-  	rows.show <- 1:6
+  	rows.show <- 1:pmin(6, nrow(s), nrow(h))
   	
+  	# subset rows
+  	h <- h[rows.show, , drop=FALSE]
+  	s <- s[rows.show, , drop=FALSE]
   	
-  	## TODO: remove IDs from column listings
+  	# move IDs to first two columns
   	
+  	# move depths to next two columns
+  	idx <- match(horizonDepths(object), names(h))
+  	h <- h[, c(names(h)[idx], names(h)[-idx])]
+  	
+  	# if defined, move horizon designation to the 3rd column
+  	# missing horizon designation evaluates to character(0)
+  	hzd <- hzdesgnname(object)
+  	if(length(hzd) > 0) {
+  	  idx <- match(hzd, names(h))
+  	  h <- h[, c(names(h)[idx], names(h)[-idx])]
+  	}
+  	
+  		
   	# determine number of columns to show, and index to hz / site data
   	# user sett-able
   	show.cols <- getOption('.aqp.show.n.cols')
   	
-  	# show first n/2
-  	hz.show.start <- seq(from=1, to=pmin(show.cols, n.hz.cols), by=1)
-  	site.show.start <- seq(from=1, to=pmin(show.cols, n.site.cols), by=1)
+  	# show first n
+  	hz.show <- seq(from=1, to=pmin(show.cols, n.hz.cols), by=1)
+  	site.show <- seq(from=1, to=pmin(show.cols, n.site.cols), by=1)
   	
-  	# show last n/2
-  	hz.show.end <- seq(from=n.hz.cols - show.cols, to=n.hz.cols, by=1)
-  	site.show.end <- seq(from=n.site.cols - show.cols, to=n.site.cols, by=1)
-  	
-  	# combine indexes
-  	hz.show <- c(hz.show.start, hz.show.end)
-  	site.show <- c(site.show.start, site.show.end)
+  	# column subseting
+  	h <- h[, hz.show, drop=FALSE]
+  	s <- s[, site.show, drop=FALSE]
   	
   	# generate text explaining truncated summary
   	hz.txt <- sprintf(
-  	  "\nHorizon Attributes (first/last %s of %s columns):\n------------------------------------------------\n", 
+  	  "\nHorizon Attributes (first %s of %s columns):\n------------------------------------------------\n", 
   	  pmin(show.cols, n.hz.cols), 
   	  n.hz.cols
   	)
   	
   	site.txt <- sprintf(
-  	  "\nSite Attributes (first/last %s of %s columns):\n---------------------------------------------\n", 
+  	  "\nSite Attributes (first %s of %s columns):\n---------------------------------------------\n", 
   	  pmin(show.cols, n.site.cols), 
   	  n.site.cols
   	)
@@ -70,12 +87,12 @@ setMethod(
 # 		
     # make note of additional hz attributes
   	cat(hz.txt)
-  	print(horizons(object)[rows.show, hz.show], row.names = FALSE)
+  	print(h, row.names = FALSE)
   	cat('[... more rows ...]\n')
 
 		# make note of additional site attributes
   	cat(site.txt)
-  	print(site(object)[rows.show, site.show], row.names = FALSE)
+  	print(s, row.names = FALSE)
   	cat('[... more rows ...]\n')
 
     # presence of spatial data
