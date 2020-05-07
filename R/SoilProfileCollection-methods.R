@@ -26,21 +26,38 @@ setMethod(
   	n.hz.cols <- length(horizonNames(object))
   	n.site.cols <- length(siteNames(object))
   	
+  	# determine number of rows to show
+  	rows.show <- 1:6
+  	
+  	
+  	## TODO: remove IDs from column listings
+  	
   	# determine number of columns to show, and index to hz / site data
-  	show.cols <- 12  
-  	hz.show <- seq(from=1, to=n.cols, by=1)
-  	site.show <- seq(from=1, to=n.cols, by=1)
+  	# user sett-able
+  	show.cols <- getOption('.aqp.show.n.cols')
+  	
+  	# show first n/2
+  	hz.show.start <- seq(from=1, to=pmin(show.cols, n.hz.cols), by=1)
+  	site.show.start <- seq(from=1, to=pmin(show.cols, n.site.cols), by=1)
+  	
+  	# show last n/2
+  	hz.show.end <- seq(from=n.hz.cols - show.cols, to=n.hz.cols, by=1)
+  	site.show.end <- seq(from=n.site.cols - show.cols, to=n.site.cols, by=1)
+  	
+  	# combine indexes
+  	hz.show <- c(hz.show.start, hz.show.end)
+  	site.show <- c(site.show.start, site.show.end)
   	
   	# generate text explaining truncated summary
   	hz.txt <- sprintf(
-  	  "\nHorizon Attributes (%s of %s columns):\n--------------------------------------\n", 
-  	  show.cols, 
+  	  "\nHorizon Attributes (first/last %s of %s columns):\n------------------------------------------------\n", 
+  	  pmin(show.cols, n.hz.cols), 
   	  n.hz.cols
   	)
   	
   	site.txt <- sprintf(
-  	  "\nSite Attributes (%s of %s columns):\n-----------------------------------\n", 
-  	  show.cols, 
+  	  "\nSite Attributes (first/last %s of %s columns):\n---------------------------------------------\n", 
+  	  pmin(show.cols, n.site.cols), 
   	  n.site.cols
   	)
   	
@@ -53,12 +70,12 @@ setMethod(
 # 		
     # make note of additional hz attributes
   	cat(hz.txt)
-  	print(head(horizons(object))[, hz.show], row.names = FALSE)
+  	print(horizons(object)[rows.show, hz.show], row.names = FALSE)
   	cat('[... more rows ...]\n')
 
 		# make note of additional site attributes
   	cat(site.txt)
-  	print(head(site(object))[, site.show], row.names = FALSE)
+  	print(site(object)[rows.show, site.show], row.names = FALSE)
   	cat('[... more rows ...]\n')
 
     # presence of spatial data
