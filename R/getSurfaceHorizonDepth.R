@@ -21,7 +21,7 @@
 #' @usage getMineralSoilSurfaceDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "O")
 #' 
 #' @aliases getPlowLayerDepth
-#' @usage getPlowLayerDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]")
+#' @usage getPlowLayerDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]*")
 #' 
 #' @export getSurfaceHorizonDepth
 #' @export getMineralSoilSurfaceDepth
@@ -69,44 +69,114 @@
 # starting from the surface, match patterns to horizon
 # return the last bottom depth of a horizon that is contiguous with surface
 # for instance horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth
-#
-getSurfaceHorizonDepth <-  function(p, pattern, hzdesgn = guessHzDesgnName(p)) { 
+getSurfaceHorizonDepth <- function (p, pattern, hzdesgn = guessHzDesgnName(p))
+
+{
+  
   hz <- horizons(p)
+  
   depths <- horizonDepths(p)
-  shallowest.depth <- min(hz[[depths[1]]], na.rm=TRUE)
   
-  if(is.infinite(shallowest.depth)) {
-    warning(paste0("Profile (",profile_id(p),") is missing horizon top depths."))
+  shallowest.depth <- min(hz[[depths[1]]], na.rm = TRUE)
+  
+  if (is.infinite(shallowest.depth)) {
+    
+    warning(paste0("Profile (", profile_id(p), ") is missing horizon top depths."))
+    
     return(NA)
-  }
     
-  if(shallowest.depth > 0) {
-    warning(paste0("Profile (",profile_id(p),") top depth is greater than zero."))
   }
   
-  if(shallowest.depth < 0) {
-    warning(paste0("Profile (",profile_id(p),") top depth is less than zero."))
+  if (shallowest.depth > 0) {
+    
+    warning(paste0("Profile (", profile_id(p), ") top depth is greater than zero."))
+    
   }
   
-  match.idx <- grepl(hz[[hzdesgn]], pattern=pattern)
+  if (shallowest.depth < 0) {
     
-  if(length(which(match.idx)) < 1) {
+    warning(paste0("Profile (", profile_id(p), ") top depth is less than zero."))
+    
+  }
+  
+  
+  
+  # identify horizons matching pattern
+  
+  match.idx <- grepl(hz[[hzdesgn]], pattern = pattern)
+  
+  
+  
+  # no match? return zero or shallowest top depth
+  
+  if (length(which(match.idx)) < 1) {
+    
     return(shallowest.depth)
-  }
     
+  }
+  
+  
+  
+  # identify surface horizon
+  
   mod.idx <- c(1, rep(0, length(match.idx) - 1))
+  
+  
+  
+  # identify where matches and surface horizon co-occur
+  
   new.idx <- (match.idx + mod.idx) %% 3
   
+  
+  
   who.idx <- numeric(0)
-  if(new.idx[1] == 2) {
-    who.idx <- (rev(which(new.idx > 0 & new.idx <= 2))[1])
+  
+  
+  
+  # we only have a contiguous surface if the first value is 2 (meets both above crit)
+  
+  if (new.idx[1] == 2) {
+    
+    # contiguous matching horizons get a 1, surface horizon gets a 2, 0s kick us out
+    
+    contig <- new.idx > 0 & new.idx <= 2
+    
+    dcontig <- diff(contig)
+    
+    max.idx <- length(contig)
+    
+    if(length(max.idx)) {
+      
+      # if we have a negative change at any depth, adjust max depth
+      
+      if(any(dcontig < 0)) {
+        
+        max.idx <- which(dcontig < 0)[1] + 1
+        
+      }
+      
+      
+      
+      # return last value from
+      
+      who.idx <- rev(which(contig[1:max.idx]))[1]
+      
+    }
+    
   }
   
-  if(!length(who.idx)) {
+  
+  
+  if (!length(who.idx)) {
+    
     return(shallowest.depth)
+    
   }
+  
+  
   
   return(hz[who.idx, depths[2]])
+  
 }
  
 getMineralSoilSurfaceDepth <-  function(p, hzdesgn = guessHzDesgnName(p), pattern = "O") { 
@@ -116,6 +186,6 @@ getMineralSoilSurfaceDepth <-  function(p, hzdesgn = guessHzDesgnName(p), patter
   return(getSurfaceHorizonDepth(p, hzdesgn = hzdesgn, pattern = pattern))
 }
 
-getPlowLayerDepth <- function(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]") {
+getPlowLayerDepth <- function(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]*") {
   return(getSurfaceHorizonDepth(p, hzdesgn = hzdesgn, pattern = pattern))
 }
