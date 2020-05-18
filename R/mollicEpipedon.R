@@ -106,7 +106,7 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.at
                                 no.contact.assigned = NA)
   
   #   the B|w == cambic was particularly egregious 
-  cambic_bottom <- max(getCambicBounds(p, argi_bounds=argi_bounds)$cambic_bottom)
+  cambic_bottom <- max(getCambicBounds(p, argi_bounds=argi_bounds)$cambic_bottom, na.rm=TRUE)
   
   # calculate "deepest of lower boundary of argillic/natric, cambic, oxic, spodic"
   crit6c2 <- suppressWarnings(max(c(argillic_bottom, 

@@ -116,7 +116,12 @@ getCambicBounds <- function(p, ...,
     }
   }
   # construct data.frame result
-  iddf <- data.frame(id=profile_id(p), cambic_index=1:nrow(final))
+  final <- final[complete.cases(final),]
+  if(nrow(final) == 0) {
+    return(empty_frame)
+  }
+  iddf <- data.frame(id=profile_id(p), 
+                     cambic_index=1:nrow(final))
   colnames(iddf) <- c(idname(p), "cambic_id")
   return(cbind(iddf, final))
 }
