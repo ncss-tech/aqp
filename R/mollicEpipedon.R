@@ -4,7 +4,8 @@
 #' 
 #' @param p A single-profile SoilProfileCollection.
 #' @param texcl Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}
-#' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
+#' @param clay.attr Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
+#' #' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
 #'
 #' @return A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.
 #' 
@@ -17,7 +18,7 @@
 #'                   hzname   = c("A","AB","Bt","BCt","R"),
 #'                   hzdept   = c(0,  20, 32, 42,  49), 
 #'                   hzdepb   = c(20, 32, 42, 49, 200), 
-#'                   clay     = c(18, 22, 28, 24,  NA),
+#'                   prop     = c(18, 22, 28, 24,  NA),
 #'                   texcl    = c("l","l","cl", "l","br"),
 #'                   d_value  = c(5,   5,  5,  6,  NA),
 #'                   m_value  = c(2.5, 3,  3,  4,  NA),
@@ -30,10 +31,10 @@
 #' 
 #' # print results in table
 #' data.frame(id = spc[[idname(spc)]], 
-#'            thickness_req = mollic.thickness.requirement(spc), 
+#'            thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'), 
 #'            thickness_req_nobound = mollic.thickness.requirement(spc, truncate=FALSE))
 #'
-mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), truncate=TRUE) {
+mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.attr = guessHzAttrName(p, 'clay', c('total','_r')), truncate = TRUE) {
   
   if(length(p) > 1) {
     stop("`p` must be a single-profile SoilProfileCollection")
@@ -62,8 +63,9 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), truncat
     return(NA)
   }
   # get horizon data from mineral soil surface to bedrock, physical root restriction, 
-  #  or pedogenic cementation >90% OR bottom of profile OR 250
-  soil.bottom <- min(soil_depth, max(p[[horizonDepths(p)[1]]], na.rm=TRUE), 250, na.rm = TRUE)
+  #  or pedogenic cementation >90% OR bottom of profile OR 250cm (~beyond SCS)
+  deepest.bot.depth <- max(p[[horizonDepths(p)[2]]], na.rm=TRUE)
+  soil.bottom <- min(soil_depth, deepest.bot.depth, 250, na.rm = TRUE)
   sol <- glom(p, mss, soil.bottom, truncate=TRUE)
   
   if(!inherits(sol, 'SoilProfileCollection')) {
@@ -127,7 +129,8 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), truncat
     #      the 10cm requirement.
       return(25) 
   } else {
-    if(max(sol$hzdepb, na.rm=TRUE) < 25) {
+    maxdepth <- suppressWarnings(max(sol$hzdepb, na.rm=TRUE))
+    if(is.finite(maxdepth) & maxdepth < 25) {
     # 6B - if all horizons above a contact are non-sandy and meet all mollic characteristics then
     #      the minimum thickness could be only 10cm, we have filtered out sandy textures
     #  

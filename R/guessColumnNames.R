@@ -50,7 +50,7 @@ guessHzDesgnName <- function(x) {
         message('unable to guess column containing horizon designations')
       }
     }
-    message(paste('guessing horizon designations are stored in `', name, '`', sep=''))
+    #message(paste('guessing horizon designations are stored in `', name, '`', sep=''))
   }
   
   return(name)
@@ -98,7 +98,7 @@ guessHzTexClName <- function(x) {
     if(length(possible.name) > 0) {
       possible.name <- possible.name[1]
       name <- possible.name
-      message(paste('guessing horizon texture classes are stored in `', name, '`', sep=''))
+      #message(paste('guessing horizon texture classes are stored in `', name, '`', sep=''))
     } else { 
       # alternately, try for something called "texture"
       possible.name <- nm[grep('texture', nm, ignore.case=TRUE)]
@@ -193,7 +193,7 @@ guessHzAttrName <- function(x, attr, optional) {
     res <- nm[idx3[1]]
   }
   if(!is.na(res)) {
-    message(sprintf('guessing horizon attribute \'%s\' is stored in `%s`', attr, res))
+    #message(sprintf('guessing horizon attribute \'%s\' is stored in `%s`', attr, res))
   } else {
     message(sprintf('unable to guess column containing horizon attribute \'%s\'', attr))
   }

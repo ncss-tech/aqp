@@ -45,6 +45,12 @@ getCambicBounds <- function(p, ...,
                             d_value = "d_value", 
                             m_value = "m_value", 
                             m_chroma = "m_chroma") {
+  # construct data.frame result for no-cambic-found (NA)
+  empty_frame <- data.frame(id=profile_id(p),
+                            cambic_id=NA, cambic_top=NA, cambic_bottom=NA)
+  empty_frame_names <- names(empty_frame)
+  empty_frame_names[1] <- idname(p)
+  names(empty_frame) <- empty_frame_names
   
   depths <- horizonDepths(p)
   
@@ -58,18 +64,19 @@ getCambicBounds <- function(p, ...,
                               no.contact.assigned = NA)
   
   if(any(is.na(cambic_top), is.na(cambic_bottom))) {
-    return(NA)
+    return(empty_frame)
   }
   
   cambic <- glom(p, cambic_top, cambic_bottom, truncate=TRUE)
   
   if(all(is.finite(argi_bounds))) {
     if(all(c(cambic_bottom <= argi_bounds[2], cambic_top >= argi_bounds[1]))) {
-      return(NA) 
+      return(empty_frame) 
     }
     # if an argillic is presnt, remove with glom truncate+invert
-    non.argillic <- glom(cambic, argi_bounds[1], argi_bounds[2], 
-                         truncate=TRUE, invert=TRUE)
+    non.argillic <- suppressWarnings(glom(cambic, argi_bounds[1], argi_bounds[2], 
+                         truncate=TRUE, invert=TRUE))
+    # commonly, a warning occurs due to argillic bottom depth at contact
   } else {
     non.argillic <- cambic
   }
@@ -82,7 +89,7 @@ getCambicBounds <- function(p, ...,
                        !grepl("LVFS|LFS$", textures, ignore.case = TRUE))
   
   if(!length(sandy.textures) | !length(dark.colors)) {
-    return(NA)
+    return(empty_frame)
   }
   
   nhz <- horizons(non.argillic)
@@ -91,7 +98,7 @@ getCambicBounds <- function(p, ...,
     nhz <- nhz[-which(sandy.textures | dark.colors),] 
   }
   
-  final <- data.frame(cambic_top=numeric(0), cambic_bottom=numeric(0))
+  final <- data.frame(cambic_top=NA, cambic_bottom=NA)
   # iterate through combinations of horizons, check topology and thickness
   # finds multiple occurences of cambic horizons, excluding argillics
   for(j in 1:nrow(nhz)) {
