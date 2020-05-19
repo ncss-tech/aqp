@@ -69,114 +69,80 @@
 # starting from the surface, match patterns to horizon
 # return the last bottom depth of a horizon that is contiguous with surface
 # for instance horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth
-getSurfaceHorizonDepth <- function (p, pattern, hzdesgn = guessHzDesgnName(p))
-
-{
+getSurfaceHorizonDepth <- function (p, pattern, hzdesgn = guessHzDesgnName(p)) {
   
+  # reused variables
   hz <- horizons(p)
+  depthz <- horizonDepths(p)
+  shallowest.depth <- min(hz[[depthz[1]]], na.rm = TRUE)
   
-  depths <- horizonDepths(p)
-  
-  shallowest.depth <- min(hz[[depths[1]]], na.rm = TRUE)
-  
+  # warning messages for incomplete profiles
   if (is.infinite(shallowest.depth)) {
-    
     warning(paste0("Profile (", profile_id(p), ") is missing horizon top depths."))
-    
     return(NA)
-    
   }
   
   if (shallowest.depth > 0) {
-    
     warning(paste0("Profile (", profile_id(p), ") top depth is greater than zero."))
-    
   }
   
   if (shallowest.depth < 0) {
-    
     warning(paste0("Profile (", profile_id(p), ") top depth is less than zero."))
-    
   }
-  
-  
   
   # identify horizons matching pattern
-  
   match.idx <- grepl(hz[[hzdesgn]], pattern = pattern)
   
-  
-  
-  # no match? return zero or shallowest top depth
-  
+  # no match? return zero or shallowest top depth (the minimum depth)
   if (length(which(match.idx)) < 1) {
-    
     return(shallowest.depth)
-    
   }
   
-  
-  
   # identify surface horizon
-  
   mod.idx <- c(1, rep(0, length(match.idx) - 1))
   
-  
-  
   # identify where matches and surface horizon co-occur
-  
-  new.idx <- (match.idx + mod.idx) %% 3
-  
-  
+  # matching horizons get a 1, matching surface horizon gets a 2, 
+  #   0s kick us out
+  new.idx <- match.idx + mod.idx
   
   who.idx <- numeric(0)
-  
-  
-  
-  # we only have a contiguous surface if the first value is 2 (meets both above crit)
-  
+  # we only have a matching surface if the first value is 2 
+  #  (meets both above crit)
   if (new.idx[1] == 2) {
-    
-    # contiguous matching horizons get a 1, surface horizon gets a 2, 0s kick us out
-    
+    # convert that into logical to identify contiguous matches
     contig <- new.idx > 0 & new.idx <= 2
     
-    dcontig <- diff(contig)
+    # calculate difference between contiguous matches/nonmatches
+    dcontig <- diff(as.integer(contig))
     
+    # max depth is, at first, the bottom depth of last contiguous hz
     max.idx <- length(contig)
     
     if(length(max.idx)) {
+      # if we have a negative change at any depth, 
+      #  we have a discontinuity
       
-      # if we have a negative change at any depth, adjust max depth
-      
+      # adjust max index (depth) accordingly
       if(any(dcontig < 0)) {
-        
+        # take first index of negative dcontig
+        # add one to correct for indexing offset due to diff()
         max.idx <- which(dcontig < 0)[1] + 1
-        
       }
       
-      
-      
-      # return last value from
-      
+      # return last value from contig 
+      # (last contiguous horizon with surface)
       who.idx <- rev(which(contig[1:max.idx]))[1]
-      
     }
-    
   }
   
-  
-  
+  # if no horizons are contiguous with surface return the minimum depth
   if (!length(who.idx)) {
-    
     return(shallowest.depth)
-    
   }
   
-  
-  
-  return(hz[who.idx, depths[2]])
-  
+  # get bottom depth from last horizon
+  return(hz[who.idx, depthz[2]])
 }
  
 getMineralSoilSurfaceDepth <-  function(p, hzdesgn = guessHzDesgnName(p), pattern = "O") { 
