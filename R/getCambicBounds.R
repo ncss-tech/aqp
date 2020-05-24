@@ -103,17 +103,18 @@ getCambicBounds <- function(p, ...,
   # finds multiple occurences of cambic horizons, excluding argillics
   for(j in 1:nrow(nhz)) {
     for(i in j:nrow(nhz)) {
-      if(any(hzDepthTests(nhz[j:i, depths[1]], nhz[j:i, depths[2]]))) {
+      ftop <- nhz[j:i, depths[1]]
+      fbot <- nhz[j:i, depths[2]]
+      if(any(hzDepthTests(ftop, fbot))) {
         i <- i - 1
         break;
       }
     }
-    pcamb.thickness <- nhz[j:i, depths[2]] - nhz[j:i, depths[1]]
+    pcamb.thickness <- ftop - fbot
     if(length(pcamb.thickness) > 0 &
        sum(pcamb.thickness, na.rm = TRUE) >= 15) {
-      final <- rbind(final, 
-                     data.frame(cambic_top = min(nhz[j:i, depths[1]], na.rm=T), 
-                          cambic_bottom = max(nhz[j:i, depths[2]], na.rm=T)))
+      final <- rbind(final, data.frame(cambic_top = min(ftop, na.rm=T), 
+                          cambic_bottom = max(fbot, na.rm=T)))
     }
   }
   # construct data.frame result

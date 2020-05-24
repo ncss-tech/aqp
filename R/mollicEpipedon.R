@@ -3,7 +3,7 @@
 #' @description Utilize horizon depths, designations and textures in a profile to estimate the thickness requirement for the Mollic or Umbric epipedon, per criterion 6 in the U.S. Keys to Soil Taxonomy (12th Edition).
 #' 
 #' @param p A single-profile SoilProfileCollection.
-#' @param texcl Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}
+#' @param texcl.attr Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}
 #' @param clay.attr Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
 #' #' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
 #'
@@ -34,7 +34,7 @@
 #'            thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'), 
 #'            thickness_req_nobound = mollic.thickness.requirement(spc, truncate=FALSE))
 #'
-mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.attr = guessHzAttrName(p, 'clay', c('total','_r')), truncate = TRUE) {
+mollic.thickness.requirement <- function(p, texcl.attr = guessHzTexClName(p), clay.attr = guessHzAttrName(p, 'clay', c('total','_r')), truncate = TRUE) {
   
   if(length(p) > 1) {
     stop("`p` must be a single-profile SoilProfileCollection")
@@ -58,16 +58,21 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.at
   #  are only calculating the thickness _requirement_
   
   # get horizon data within mineral soil surface "critical zone"
-  epi <- glom(p, mss, min(soil_depth, 25, na.rm=TRUE), truncate=TRUE)
+  cztop <- mss
+  czbot <- mss + min(soil_depth - mss, 25, na.rm = TRUE)
+  deepest.bot.depth <- max(p[[horizonDepths(p)[2]]], na.rm=TRUE)
+  if(cztop >= deepest.bot.depth) {
+    warning("no mineral soil material present in profile")
+    return(NA)
+  }
+  epi <- glom(p, cztop, czbot, truncate=TRUE)
   if(!inherits(epi, 'SoilProfileCollection')) {
     return(NA)
   }
   # get horizon data from mineral soil surface to bedrock, physical root restriction, 
   #  or pedogenic cementation >90% OR bottom of profile OR 250cm (~beyond SCS)
-  deepest.bot.depth <- max(p[[horizonDepths(p)[2]]], na.rm=TRUE)
   soil.bottom <- min(soil_depth, deepest.bot.depth, 250, na.rm = TRUE)
   sol <- glom(p, mss, soil.bottom, truncate=TRUE)
-  
   if(!inherits(sol, 'SoilProfileCollection')) {
     return(NA)
   }
@@ -90,7 +95,7 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.at
   # 6C2 - identify argillic boundaries via aqp::getArgillicBounds  
   # TODO: create functions for testing basic field criteria for these diagnostics (color structure)
   #       and lab data extension for spodic materials; can use logic from "sandy cambic" demo -- but more is needed
-  argi_bounds <- profileApply(p, getArgillicBounds)
+  argi_bounds <- getArgillicBounds(p, clay.attr = clay.attr, texcl.attr = texcl.attr)
   argillic_bottom <- NA
   if(is.finite(argi_bounds[2])) {
     argillic_bottom <- argi_bounds[2]
@@ -106,7 +111,7 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.at
                                 no.contact.assigned = NA)
   
   #   the B|w == cambic was particularly egregious 
-  cambic_bottom <- max(getCambicBounds(p, argi_bounds=argi_bounds)$cambic_bottom, na.rm=TRUE)
+  cambic_bottom <- suppressWarnings(max(getCambicBounds(p, argi_bounds=argi_bounds)$cambic_bottom, na.rm=TRUE))
   
   # calculate "deepest of lower boundary of argillic/natric, cambic, oxic, spodic"
   crit6c2 <- suppressWarnings(max(c(argillic_bottom, 
@@ -116,8 +121,8 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.at
                                     spodic_bottom), na.rm=TRUE))
   
   # SHORT CIRCUITS
-  sandy.textures <- (grepl("S$", epi[[texcl]], ignore.case = TRUE) & 
-                     !grepl("LVFS|LFS$", epi[[texcl]], ignore.case = TRUE))
+  sandy.textures <- (grepl("S$", epi[[texcl.attr]], ignore.case = TRUE) & 
+                     !grepl("LVFS|LFS$", epi[[texcl.attr]], ignore.case = TRUE))
   
   if(all(sandy.textures)) {
     # 6A - assumes you must check for sandy textures throughout 0-25 to trigger minimum thickness of 25cm
@@ -227,7 +232,7 @@ mollic.thickness.requirement <- function(p, texcl = guessHzTexClName(p), clay.at
 #' # construct a fake profile
 #' spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxeralfs",
 #'                   hzdesgn  = c("A","AB","Bt","BCt","R"),
-#'                   hzdept   = c(10, 25, 32, 42,  49), 
+#'                   hzdept   = c(0, 20, 32, 42,  49), 
 #'                   hzdepb   = c(20, 32, 42, 49, 200), 
 #'                   d_value  = c(5,   5,  5,  6,  NA),
 #'                   m_value  = c(2.5, 3,  3,  4,  NA),
