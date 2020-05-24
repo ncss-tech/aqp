@@ -109,7 +109,8 @@ getCambicBounds <- function(p, ...,
       }
     }
     pcamb.thickness <- nhz[j:i, depths[2]] - nhz[j:i, depths[1]]
-    if(sum(pcamb.thickness) >= 15) {
+    if(length(pcamb.thickness) > 0 &
+       sum(pcamb.thickness, na.rm = TRUE) >= 15) {
       final <- rbind(final, 
                      data.frame(cambic_top = min(nhz[j:i, depths[1]], na.rm=T), 
                           cambic_bottom = max(nhz[j:i, depths[2]], na.rm=T)))
