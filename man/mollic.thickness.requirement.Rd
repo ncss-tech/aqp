@@ -4,14 +4,20 @@
 \alias{mollic.thickness.requirement}
 \title{Calculate the minimum thickness requirement for Mollic epipedon}
 \usage{
-mollic.thickness.requirement(p, texcl = guessHzTexClName(p), truncate = TRUE)
+mollic.thickness.requirement(
+  p,
+  texcl = guessHzTexClName(p),
+  clay.attr = guessHzAttrName(p, "clay", c("total", "_r")),
+  truncate = TRUE
+)
 }
 \arguments{
 \item{p}{A single-profile SoilProfileCollection.}
 
 \item{texcl}{Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}}
 
-\item{truncate}{Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)}
+\item{clay.attr}{Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
+#' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)}
 }
 \value{
 A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.
@@ -25,7 +31,7 @@ spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxeralfs",
                   hzname   = c("A","AB","Bt","BCt","R"),
                   hzdept   = c(0,  20, 32, 42,  49), 
                   hzdepb   = c(20, 32, 42, 49, 200), 
-                  clay     = c(18, 22, 28, 24,  NA),
+                  prop     = c(18, 22, 28, 24,  NA),
                   texcl    = c("l","l","cl", "l","br"),
                   d_value  = c(5,   5,  5,  6,  NA),
                   m_value  = c(2.5, 3,  3,  4,  NA),
@@ -38,7 +44,7 @@ hztexclname(spc) <- 'texcl'
 
 # print results in table
 data.frame(id = spc[[idname(spc)]], 
-           thickness_req = mollic.thickness.requirement(spc), 
+           thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'), 
            thickness_req_nobound = mollic.thickness.requirement(spc, truncate=FALSE))
 
 }

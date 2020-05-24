@@ -47,11 +47,11 @@
 #' getSurfaceHorizonDepth(p, pattern = '^A', hzdesgn = 'name')
 #' 
 #' # thickness of all surface horizons that start with A, and the A is not followed by B
-#' getSurfaceHorizonDepth(p, pattern = '^A[^B]', hzdesgn = 'name')
+#' getSurfaceHorizonDepth(p, pattern = '^A[^B]*', hzdesgn = 'name')
 #' 
 #' # thickness of all surface horizons that start with A 
 #' #  followed by a number from _2_ to 9 (returns ZERO)
-#' getSurfaceHorizonDepth(p, pattern = '^A[2-9]', hzdesgn = 'name')
+#' getSurfaceHorizonDepth(p, pattern = '^A[2-9]*', hzdesgn = 'name')
 #' 
 #' # getPlowLayerDepth matches first two horizons in fake Ap horizon data with "buried Ap"
 #' p$aphorizons <- c("Ap1","Ap2","AB", rep('C', nrow(p) - 4), "Apb")
