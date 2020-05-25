@@ -830,32 +830,54 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     ## this is almost correct, but subsetting does not propagate to other slots (https://github.com/ncss-tech/aqp/issues/89)
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j)) {
-      # work via list-wise iteration
-      hh <- split(h, h[[idname(x)]])
       
-      # safely extract horizon by index, could have length > 1
-      hh <- lapply(hh, function(this.profile, idx=j) {
+      # faster replacement of j subsetting of horizon data
+      j.res <- as.list(aggregate(h[[hzidname(x)]], by = list(h[[idname(x)]]), function(hh) { 1:length(hh) %in% j })$x)
+      i.missing <- which(as.logical(lapply(j.res, function(jr) !any(jr))))
+      j.idx <- which(do.call('c', j.res))
+      h <- h[j.idx,]
+      
+      # fix #89, where i with no matching j e.g. @site data returned
+      if(length(i.missing) > 0) {
+        # remove sites that have no j
+        pids <- s[i.missing, idname(x)]
+        s <- s[-i.missing, , drop=FALSE]
         
-        # total horizon records available
-        this.profile.n <- nrow(this.profile)
+        # remove also: diagnostics, restrictions, spatial
+        d <- d[-which(pids %in% d[[idname(x)]]),]
+        r <- r[-which(pids %in% r[[idname(x)]]),]
         
-        # the total number that can be collected
-        # assumes correct depth sorting
-        safe.idx <- idx[which(idx <= this.profile.n)]
-        
-        # conditionally return all available records up to this.profile.n
-        if(length(safe.idx) > 0) {
-          res <- this.profile[safe.idx, ]
-        }  else {
-          res <- NULL
+        if(validSpatialData(x)) {
+          sp <- sp[-i.missing, ]
         }
-        
-        # done
-        return(res)
-      })
-      
-      # put it all back together and replace what we started with
-      h <- do.call('rbind', hh)
+      }
+
+      # work via list-wise iteration
+      # hh <- split(h, h[[idname(x)]])
+      # 
+      # # safely extract horizon by index, could have length > 1
+      # hh <- lapply(hh, function(this.profile, idx=j) {
+      # 
+      #   # total horizon records available
+      #   this.profile.n <- nrow(this.profile)
+      # 
+      #   # the total number that can be collected
+      #   # assumes correct depth sorting
+      #   safe.idx <- idx[which(idx <= this.profile.n)]
+      # 
+      #   # conditionally return all available records up to this.profile.n
+      #   if(length(safe.idx) > 0) {
+      #     res <- this.profile[safe.idx, ]
+      #   }  else {
+      #     res <- NULL
+      #   }
+      # 
+      #   # done
+      #   return(res)
+      # })
+      # 
+      # # put it all back together and replace what we started with
+      # h <- do.call('rbind', hh)
     }
 
     # if there is REAL data in @sp, and we only have 1 row of hz per coordinate- return SPDF
@@ -886,6 +908,9 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
 
     # in this case there may be missing coordinates, or we have more than 1 slice of hz data
     #else {
+    
+    rownames(h) <- NULL
+    
       res <- SoilProfileCollection(idcol = idname(x), 
                                    depthcols = horizonDepths(x), 
                                    metadata = aqp::metadata(x), 
