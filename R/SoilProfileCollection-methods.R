@@ -744,48 +744,58 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
   function(x, i, j) {
 		
   	# check for missing i and j
-  	if(missing(i) & missing(j))
+  	if(missing(i) & missing(j)) {
   		stop('must provide either a profile index or horizon/slice index, or both', call.=FALSE)
-  	
+  	}
+    
   	# convert to integer
   	if(!missing(i)) {
-  	  if(any(is.na(i)))
+  	  if(any(is.na(i))) {
   	    stop('NA not permitted in profile index', call.=FALSE)
+  	  }
   	  
-      # convert logical to integer per standard vector/list indexing rules (thanks Jos? Padarian for the suggestion!)
-  	  if(is.logical(i)) 
+      # convert logical to integer 
+  	  # (thanks Jos? Padarian for the suggestion!)
+  	  if(is.logical(i)) {
   	    i <- (1:length(x))[i]
-  	  
+  	  }
+    
   	  can.cast <- is.numeric(i) 
   	  if(can.cast) {
-  	    if(all(abs(i - round(i)) < .Machine$double.eps^0.5))
+  	    if(all(abs(i - round(i)) < .Machine$double.eps^0.5)) {
   	      i <- as.integer(i)
-  	    else stop("Numeric site index does not contain whole numbers.")
+  	    } else {
+  	      stop("Numeric site index does not contain whole numbers.")
+  	    }
   	  } else {
   	    stop("Failed to coerce site index to integer.")
   	  }
-  	}
-    else # if no index is provided, the user wants all profiles
+  	} else {
+  	  # if no index is provided, the user wants all profiles
       i <- 1:length(x)
-
-    # sanity check
+  	}
+    
     if(!missing(j)) {
       
-      # AGB -- added logical handling to horizon index -- there have been times I've expected j index to behave like i
-      if(is.logical(j)) 
+      # AGB added logical handling to horizon index
+      if(is.logical(j)) {
         j <- (1:length(x))[j]
+      }
       
       can.cast <- is.numeric(j) 
       if(can.cast) {
-        if(all(abs(j - round(j)) < .Machine$double.eps^0.5))
+        if(all(abs(j - round(j)) < .Machine$double.eps^0.5)) {
           j <- as.integer(j)
-        else stop("Numeric horizon/slice index does not contain whole numbers.")
+        } else {
+          stop("Numeric horizon/slice index does not contain whole numbers.")
+        }
       } else {
         stop("Failed to coerce horizon/slice index to integer.")
       }
       
-      if(any(is.na(j)))
+      if(any(is.na(j))) {
         stop('NA not permitted in horizon/slice index', call.=FALSE)
+      }
     }
     
     # extract all site and horizon data
@@ -800,56 +810,67 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     
     # keep only the requested site data, (filtered by profile ID)
     s.i <- which(s.all[[idname(x)]] %in% p.ids)
-  	s <- s.all[s.i, , drop=FALSE] 
+    
   	# need to use drop=FALSE when @site contains only a single column
+  	s <- s.all[s.i, , drop=FALSE] 
     
   	# subset spatial data, but only if valid
   	if(validSpatialData(x)) {
   	  sp <- x@sp[i]
-  	}
-  	# copy emtpy SpatialPoints object
-  	else {
+  	} else {
+  	  # copy empty SpatialPoints object
   	  sp <- x@sp
   	}
     
-    # subset diagnostic data, but only if it exists
-    # note that not all profiles have diagnostic hz data
+    # subset diagnostic data
     d <- diagnostic_hz(x)
-    if(length(d) > 0) # some data
-    	d <- d[which(d[[idname(x)]] %in% p.ids), ]
+    if(length(d) > 0) {
+      d <- d[which(d[[idname(x)]] %in% p.ids), ]
+    }
     
-    # subset restriction data, but only if it exists
-    # note that not all profiles have restrictions
+    # subset restriction data
     r <- restrictions(x)
-    if(length(r) > 0) # some data
+    if(length(r) > 0) {
       r <- r[which(r[[idname(x)]] %in% p.ids), ]
-    
+    }
+
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j)) {
       
       # faster replacement of j subsetting of horizon data
-      j.res <- as.list(aggregate(h[[hzidname(x)]], by = list(h[[idname(x)]]), function(hh) { list(1:length(hh) %in% j) })$x)
-      i.missing <- which(as.logical(lapply(j.res, function(jr) !any(jr))))
+      j.res <- as.list(aggregate(h[[hzidname(x)]], 
+                                 by = list(h[[idname(x)]]), 
+                                 FUN = function(hh) { 
+                                   list(1:length(hh) %in% j) 
+                                  }, 
+                                 drop = FALSE)$x)
       j.idx <- which(do.call('c', j.res))
       h <- h[j.idx,]
       
       ##  https://github.com/ncss-tech/aqp/issues/89
       # fix #89, where i with no matching j e.g. @site data returned
+      i.missing <- which(as.logical(lapply(j.res, function(jr) !any(jr))))
+      
+      # if some profiles have been removed based on the j-index constraints
       if(length(i.missing) > 0) {
         
-        # remove sites that have no j
-        pids <- s[i.missing, idname(x)]
+        # remove sites that have no matching j
+        h.ids <- s[i.missing, idname(x)]
         s <- s[-i.missing, , drop=FALSE]
         
-        # remove also: diagnostics, restrictions, spatial
-        d.idx <- which(d[[idname(x)]] %in% pids)
-        if(length(d.idx) > 0) 
+        # remove also: diagnostics
+        d.idx <- which(d[[idname(x)]] %in% h.ids)
+        if(length(d.idx) > 0) {
           d <- d[-d.idx, , drop=FALSE]
+        }
         
-        r.idx <- which(r[[idname(x)]] %in% pids)
-        if(length(r.idx) > 0)
+        # restrictions
+        r.idx <- which(r[[idname(x)]] %in% h.ids)
+        if(length(r.idx) > 0) {
           r <- r[-r.idx, , drop=FALSE]
+        }
         
+        # spatial
         if(validSpatialData(x)) {
           sp <- sp[-i.missing, ]
         }
@@ -858,6 +879,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     
     rownames(h) <- NULL
     
+    # rebuild SPC object from slots
     res <- SoilProfileCollection(idcol = idname(x), 
                                    depthcols = horizonDepths(x), 
                                    metadata = aqp::metadata(x), 
@@ -867,30 +889,25 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
                                    diagnostic = d, 
                                    restrictions = r)
       
-      # preserve one off slots that may have been customised relative to defaults 
-      #  in prototype or resulting from construction of SPC 
-      suppressMessages(hzidname(res) <- hzidname(x))
-      suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
-      suppressMessages(hztexclname(res) <- hztexclname(x))
+    # preserve one off slots that may have been customised relative to defaults 
+    #  in prototype or resulting from construction of SPC 
+    suppressMessages(hzidname(res) <- hzidname(x))
+    suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
+    suppressMessages(hztexclname(res) <- hztexclname(x))
       
-      ## integrity checks: these will be implicit in the aqp 2.0 SPC
-      
-      # https://github.com/ncss-tech/aqp/issues/89
-      # there should be as many records in @site as there are profile IDs
-      pid.res <- profile_id(res)
-      site.res <- site(res)[[idname(res)]]
-      if(length(pid.res) != length(site.res))
-        warning("Some profiles have been removed from the collection.", call. = FALSE)
-      
-      # the order of profile_ids should be the same as in @site
-      if(! all(pid.res == site.res))
-        warning("profile ID order does not match order in @site", call. = FALSE)
-      
-      return(res)
-    #}
+    # there should be as many records in @site as there are profile IDs
+    pid.res <- profile_id(res)
+    site.res <- site(res)[[idname(res)]]
     
-  # done
+    if(length(pid.res) != length(site.res)) {
+      warning("Some profiles have been removed from the collection.", call. = FALSE)
+    }
+      
+     # the order of profile_ids should be the same as in @site
+     if(! all(pid.res == site.res)) {
+       warning("profile ID order does not match order in @site", call. = FALSE)
+     }
+    
+     return(res)
   }
 )
-
-
