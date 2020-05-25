@@ -1,12 +1,41 @@
-# glom returns a "clod" of horizons that have a common attribute (currently just depth interval supported)
-
-# the verb/function that creates a clod is "glom" 
-# "to glom" is "to steal" or to "become stuck or attached to". it is related to the 
-# compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil
-
-# gloms a set of horizons for a single-profile SPC `p`
-#  the horizons are aggregated by depth using 
-#  clod.hz.ids() defined below
+#' Subset soil horizon data using a depth or depth interval
+#'
+#' @param p A single-profile SoilProfileCollection; e.g. glom is called via profileApply()
+#' @param z1 Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersect interval.
+#' @param z2 OPTIONAL: Bottom depth - bottom depth of intersection interval
+#' @param ids Return just horizon IDs in interval? default: FALSE
+#' @param df Return a data.frame, by intersection with horizons(p)? default: FALSE
+#' @param truncate Truncate horizon top and bottom depths to z1 and z2? default: FALSE
+#' @param invert Get the horizons/depth ranges of the profile outside the interval z1/z2? default: FALSE
+#' @param modality Return all data (default: "all") or first, thickest (\code{modality = "thickest"}) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)
+#' 
+#' @description glom() returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile. 
+#' 
+#' All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest. 
+#' 
+#' If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID. 
+#' 
+#' If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using \code{evalMissingData} or similar approach. 
+#' 
+#' @details The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
+#' 
+#' @author Andrew G. Brown
+#' 
+#' @return A SoilProfileCollection, data.frame, or a vector of horizon IDs.
+#' 
+#' @export glom
+#'
+#' @examples
+#' data(sp1, package = 'aqp')
+#' depths(sp1) <- id ~ top + bottom
+#' site(sp1) <- ~ group
+#' 
+#' p <- sp1[1]
+#' 
+#' foo <- glom(p, 25, 100)
+#' 
+#' # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
+#' nrow(foo) 
 glom <- function(p, z1, z2 = NA, 
                  ids = FALSE, df = FALSE, 
                  truncate = FALSE, invert = FALSE, 
@@ -68,10 +97,30 @@ glom <- function(p, z1, z2 = NA,
   }
 }
 
-# returns unique index to all horizons occuring over the depth interval [z1, z2]. 
-# z2 is optional, in which case a single horizon with depth range containing z1 is returned
-clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) 
-{
+#'  Return index to all horizons occuring in a depth interval
+#'
+#' @param p A single-profile SoilProfileCollection
+#' @param z1 Top depth (required) - depth to intersect horizon at; if 'z2' specified, top depth of intersect interval.
+#' @param z2 Top depth (required) - depth to intersect horizon at; if 'z2' specified, top depth of intersect interval.
+#' @param modality Return all data (default: "all") or first, thickest (\code{modality = "thickest"}) horizon in interval.
+#' @param as.list OPTIONAL: return a list? default: FALSE
+#'
+#' @description \code{clod.hz.ids} returns a vector of unique indices corresponding to a depth interval. As arguments, it takes a single-profile SoilProfileCollection 'p', a top depth 'z1' and an optional bottom depth 'z2'.
+#'  
+#' If just top depth is specified, the unique index of the horizon intersected by that depth is returned. If bottom depth is specified, all horizon IDs that are intersected by the depth interval are returned.
+#' @details This function is a workhorse used by glom() to create an index of unique horizon IDs intersecting the attribute of interest (depth) at the specified levels. This function returns the horizon IDs required to index an SPC and produce either a subset SPC or data.frame representation of the "clod" returned.
+#' @author Andrew G. Brown
+#' @return A vector of unique horizon IDs.
+#' 
+#' @export clod.hz.ids
+#' @examples
+#' data(sp1, package = 'aqp')
+#' depths(sp1) <- id ~ top + bottom
+#' site(sp1) <- ~ group
+#' p <- sp1[1]
+#' foo <- clod.hz.ids(p, 25, 100)
+#' foo
+clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
   # access SPC slots to get important info about p
   hz <- horizons(p)
   dz <- horizonDepths(p)

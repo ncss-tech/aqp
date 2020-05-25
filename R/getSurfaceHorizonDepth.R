@@ -15,7 +15,6 @@
 #' @author Andrew G. Brown
 #' 
 #' @aliases getSurfaceHorizon
-#' @usage getSurfaceHorizonDepth(p, hzdesgn = guessHzDesgnName(p), pattern)
 #' 
 #' @aliases getMineralSoilSurfaceDepth
 #' @usage getMineralSoilSurfaceDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "O")

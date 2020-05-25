@@ -7,8 +7,6 @@
 \alias{getPlowLayerDepth}
 \title{Determine thickness of horizons (continuous from surface) matching a pattern}
 \usage{
-getSurfaceHorizonDepth(p, hzdesgn = guessHzDesgnName(p), pattern)
-
 getMineralSoilSurfaceDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "O")
 
 getPlowLayerDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]*")

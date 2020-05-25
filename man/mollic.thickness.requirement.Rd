@@ -16,8 +16,9 @@ mollic.thickness.requirement(
 
 \item{texcl.attr}{Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}}
 
-\item{clay.attr}{Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
-#' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)}
+\item{clay.attr}{Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}}
+
+\item{truncate}{Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)}
 }
 \value{
 A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.
@@ -45,7 +46,8 @@ hztexclname(spc) <- 'texcl'
 # print results in table
 data.frame(id = spc[[idname(spc)]], 
            thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'), 
-           thickness_req_nobound = mollic.thickness.requirement(spc, truncate=FALSE))
+           thickness_req_nobound = mollic.thickness.requirement(spc, 
+                                        clay.attr='prop', truncate=FALSE))
 
 }
 \author{

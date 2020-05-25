@@ -5,7 +5,7 @@
 #' @param p A single-profile SoilProfileCollection.
 #' @param texcl.attr Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}
 #' @param clay.attr Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
-#' #' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
+#' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
 #'
 #' @return A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.
 #' 
@@ -32,7 +32,8 @@
 #' # print results in table
 #' data.frame(id = spc[[idname(spc)]], 
 #'            thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'), 
-#'            thickness_req_nobound = mollic.thickness.requirement(spc, truncate=FALSE))
+#'            thickness_req_nobound = mollic.thickness.requirement(spc, 
+#'                                         clay.attr='prop', truncate=FALSE))
 #'
 mollic.thickness.requirement <- function(p, texcl.attr = guessHzTexClName(p), clay.attr = guessHzAttrName(p, 'clay', c('total','_r')), truncate = TRUE) {
   
