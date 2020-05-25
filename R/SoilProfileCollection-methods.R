@@ -828,7 +828,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     if(!missing(j)) {
       
       # faster replacement of j subsetting of horizon data
-      j.res <- as.list(aggregate(h[[hzidname(x)]], by = list(h[[idname(x)]]), function(hh) { 1:length(hh) %in% j })$x)
+      j.res <- as.list(aggregate(h[[hzidname(x)]], by = list(h[[idname(x)]]), function(hh) { list(1:length(hh) %in% j) })$x)
       i.missing <- which(as.logical(lapply(j.res, function(jr) !any(jr))))
       j.idx <- which(do.call('c', j.res))
       h <- h[j.idx,]
