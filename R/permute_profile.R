@@ -136,8 +136,6 @@ permute_profile <- function(p, n = 100, boundary.attr,
     
     test <- hzDepthTests(p.sub[[depthz[1]]], p.sub[[depthz[2]]])
     if(any(test)) {
-      print(cbind(horizons(p.sub)[,horizonDepths(p.sub),]), bounds=bounds)
-      print(test)
       stop(paste("one or more horizon logic tests failed for realization:", i))
     }
     

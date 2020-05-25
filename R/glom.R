@@ -103,9 +103,9 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
   idx.top <- which(gt1)
   
   if (!length(idx.top)) {
-    warning(paste0('Invalid upper bound `z1` (',z1,'), returning `NA` (',
+    warning(paste0('Invalid upper bound `z1` (',z1,'), returning `NULL` (',
                    idname(p),': ', profile_id(p),')'), call.=FALSE)
-    return(NA)
+    return(NULL)
   }
   
   # always returns the top horizon
@@ -133,9 +133,9 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
     idx.bot <- rev(which(lt2))
     
     if (!length(idx.bot)) {
-      warning('Invalid bounds (',z1,"-",z2,') returning `NA` (',
+      warning('Invalid bounds (',z1,"-",z2,') returning `NULL` (',
               idname(p),':', profile_id(p),')', call.=FALSE)
-      return(NA)
+      return(NULL)
     }
     
     idx.bot <- idx.bot[1]
@@ -149,9 +149,9 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE)
     
     # not really sure how this could happen ... maybe with wrong depth units for z?
     if(!(all(idx.top:idx.bot %in% 1:nrow(p)))) {
-      warning('Invalid bounds (',z1,"-",z2,') returning `NA` (',
+      warning('Invalid bounds (',z1,"-",z2,') returning `NULL` (',
               idname(p),':', profile_id(p),')', call.=FALSE)
-      return(NA)
+      return(NULL)
     }
     
     # warn if incomplete result
