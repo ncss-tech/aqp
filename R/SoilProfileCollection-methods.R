@@ -308,10 +308,10 @@ definition=function(x, v=NULL) {
   # optionally use a horizon-level property refine calculation
   if(!missing(v)) {
   	# combine bottom depths with IDs and variable
-  	h <- horizons(x)[, c(hz_bottom_depths, idname(x), v)]
+  	h <- x@horizons[, c(hz_bottom_depths, idname(x), v)]
   } else {
     # combine bottom depths with IDs
-  	h <- horizons(x)[, c(hz_bottom_depths, idname(x))]
+  	h <- x@horizons[, c(hz_bottom_depths, idname(x))]
   	}
   
   # filter out missing data
@@ -333,10 +333,10 @@ definition=function(x, v=NULL){
 	# optionally use a horizon-level property refine calculation
 	if(!missing(v)) {
 		# combine bottom depths with IDs and variable
-		h <- horizons(x)[, c(hz_bottom_depths, idname(x), v)]
+		h <- x@horizons[, c(hz_bottom_depths, idname(x), v)]
 	}	else {
 	  # combine bottom depths with IDs
-		h <- horizons(x)[, c(hz_bottom_depths, idname(x))]
+		h <- x@horizons[, c(hz_bottom_depths, idname(x))]
 		}
 	
 	# filter out missing data
@@ -352,7 +352,9 @@ definition=function(x, v=NULL){
 # overload length() to give us the number of profiles in the collection
 setMethod(f='length', signature='SoilProfileCollection',
   definition=function(x){
-  l <- length(profile_id(x))
+  # faster replacement for profile_id() 
+  #   which calls unique(horizons(x)[[idname(x)]]) -- expensive
+  l <- length(x@site[[idname(x)]])#profile_id(x))
   return(l)
   }
 )
@@ -411,11 +413,11 @@ setMethod("$", "SoilProfileCollection",
 	
 	# get column from horizon data
     if (name %in% h.names) {
-      res <- horizons(x)[[name]]
+      res <- x@horizons[[name]]
     } else {
       # otherwise check site data
       if (name %in% s.names) {
-        res <- site(x)[[name]]
+        res <- x@site[[name]]
       } else {
         # if still missing return NULL
         res <- NULL
@@ -431,37 +433,37 @@ setMethod("$", "SoilProfileCollection",
 setReplaceMethod("$", "SoilProfileCollection",
   function(x, name, value) {
   	# extract hz and site data
-  	h <- horizons(x)
-		s <- site(x)
+  	h <- x@horizons
+		s <- x@site
 
     # working with horizon data
     if (name %in% names(h)) {
       h[[name]] <- value
-      slot(x, 'horizons') <- h
+      x@horizons <- h
       return(x)
     }
       
     # working with site data  
     if(name %in% names(s)) {
       s[[name]] <- value
-      slot(x, 'site') <- s
+      x@site <- s
       return(x)
     }
     
-    # ambiguous: use length of replacement to determing: horizon / site
+    # ambiguous: use length of replacement to determine: horizon / site
 		n.site <- nrow(s)
 		n.hz <- nrow(h)
 		l <- length(value)
 		
 		if(l == n.hz) {
 		  h[[name]] <- value
-		  slot(x, 'horizons') <- h
+		  x@horizons <- h
 		  return(x)
 		}
 		
 		if(l == n.site) {
 		  s[[name]] <- value
-		  slot(x, 'site') <- s
+		  x@site <- s
 		  return(x)
 		}
 		
@@ -472,17 +474,20 @@ setReplaceMethod("$", "SoilProfileCollection",
 
 setReplaceMethod("[[", signature=c(x="SoilProfileCollection", i="character", j="ANY"),
                    function(x, i, j, ...) {
+                     lv <- length(value)
+                     lx <- length(x)
+                     nx <- nrow(x)
+                     hznames <- horizonNames(x)
+                     stnames <- siteNames(x)
                      # default to creating site var, as long as its not in horizon names
-                     if((!i %in% horizonNames(x)) & (i %in% siteNames(x) | 
-                        length(value) == length(x))) {
-                       if(length(value) == length(x)) {
+                     if((!i %in% hznames) & (i %in% stnames | lv == lx)) {
+                       if(lv == lx) {
                          x@site[,i] <- value
                        } else {
                          stop("replacement length does not match number of profiles!", call. = FALSE)
                        }
-                     } else if (i %in% horizonNames(x) |
-                                length(value) == nrow(x)) {
-                       if(length(value) == nrow(x)) {
+                     } else if (i %in% hznames | lv == nx) {
+                       if(lv == nx) {
                          x@horizons[,i] <- value
                        } else {
                          stop("replacement length does not match number of horizons!", call. = FALSE)
@@ -786,19 +791,20 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     #### TODO: implicit sub-setting of horizon records should affect all slots 
     ####      https://github.com/ncss-tech/aqp/issues/89
     
-    # extract requested profile IDs
-    p.ids <- profile_id(x)[i]
-
-    # extract all horizon data
+    # extract all site and horizon data
     h <- horizons(x)
+    s.all <- site(x)
 	
+    # extract requested profile IDs
+    p.ids <- s.all[[idname(x)]][unique(i)]
+
     # keep only the requested horizon data (filtered by profile ID)
     h <- h[h[[idname(x)]] %in% p.ids, ]
     
     # keep only the requested site data, (filtered by profile ID)
-    s.all <- site(x)
     s.i <- which(s.all[[idname(x)]] %in% p.ids)
-  	s <- s.all[s.i, , drop=FALSE] # need to use drop=FALSE when @site contains only a single column
+  	s <- s.all[s.i, , drop=FALSE] 
+  	# need to use drop=FALSE when @site contains only a single column
     
   	# subset spatial data, but only if valid
   	if(validSpatialData(x)) {
@@ -808,7 +814,6 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
   	else {
   	  sp <- x@sp
   	}
-      
     
     # subset diagnostic data, but only if it exists
     # note that not all profiles have diagnostic hz data
@@ -852,7 +857,6 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       # put it all back together and replace what we started with
       h <- do.call('rbind', hh)
     }
-      
 
     # if there is REAL data in @sp, and we only have 1 row of hz per coordinate- return SPDF
     # valid spatial data is now tested via validSpatialData()
@@ -896,7 +900,6 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       suppressMessages(hzidname(res) <- hzidname(x))
       suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
       suppressMessages(hztexclname(res) <- hztexclname(x))
-      
       
       ## integrity checks: these will be implicit in the aqp 2.0 SPC
       
