@@ -848,67 +848,11 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
           sp <- sp[-i.missing, ]
         }
       }
-
-      # work via list-wise iteration
-      # hh <- split(h, h[[idname(x)]])
-      # 
-      # # safely extract horizon by index, could have length > 1
-      # hh <- lapply(hh, function(this.profile, idx=j) {
-      # 
-      #   # total horizon records available
-      #   this.profile.n <- nrow(this.profile)
-      # 
-      #   # the total number that can be collected
-      #   # assumes correct depth sorting
-      #   safe.idx <- idx[which(idx <= this.profile.n)]
-      # 
-      #   # conditionally return all available records up to this.profile.n
-      #   if(length(safe.idx) > 0) {
-      #     res <- this.profile[safe.idx, ]
-      #   }  else {
-      #     res <- NULL
-      #   }
-      # 
-      #   # done
-      #   return(res)
-      # })
-      # 
-      # # put it all back together and replace what we started with
-      # h <- do.call('rbind', hh)
     }
-
-    # if there is REAL data in @sp, and we only have 1 row of hz per coordinate- return SPDF
-    # valid spatial data is now tested via validSpatialData()
-    # also need to test that there is only 1 horizon/slice per location
-  	# only produces a SPDF when j index is present
-    # if(validSpatialData(x) & length(p.ids) == nrow(h) & !missing(j)) {
-    #   # combine with coordinates
-    #   message('result is a SpatialPointsDataFrame object')
-    #   # note that we are filtering based on 'i' - an index of selected profiles
-    # 
-    #   # since the order of our slices and coordinates are the same
-    #   # it is safe to use 'match.ID=FALSE'
-    #   # this gets around a potential problem when dimnames(x)[[1]] aren't consecutive 
-    #   # values-- often the case when subsetting has been performed
-    #   
-    #   ## TODO: there should always be something in @site
-    #   # if site data, join hz+site
-    #   if(nrow(s) > 0) {
-    #   	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=join(h, s, by=idname(x)), match.ID=FALSE))
-    #   }
-    #   ## TODO: can this ever happen?
-    #   # no site data
-    #   else {
-    #   	return(SpatialPointsDataFrame(as(x, 'SpatialPoints')[i, ], data=h, match.ID=FALSE))	
-    #   }
-    # }
-
-    # in this case there may be missing coordinates, or we have more than 1 slice of hz data
-    #else {
     
     rownames(h) <- NULL
     
-      res <- SoilProfileCollection(idcol = idname(x), 
+    res <- SoilProfileCollection(idcol = idname(x), 
                                    depthcols = horizonDepths(x), 
                                    metadata = aqp::metadata(x), 
                                    horizons = h, 
