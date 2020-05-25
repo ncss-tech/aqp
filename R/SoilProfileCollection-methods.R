@@ -836,13 +836,19 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       ##  https://github.com/ncss-tech/aqp/issues/89
       # fix #89, where i with no matching j e.g. @site data returned
       if(length(i.missing) > 0) {
+        
         # remove sites that have no j
         pids <- s[i.missing, idname(x)]
         s <- s[-i.missing, , drop=FALSE]
         
         # remove also: diagnostics, restrictions, spatial
-        d <- d[-which(pids %in% d[[idname(x)]]), , drop=FALSE]
-        r <- r[-which(pids %in% r[[idname(x)]]), , drop=FALSE]
+        d.idx <- which(d[[idname(x)]] %in% pids)
+        if(length(d.idx) > 0) 
+          d <- d[-d.idx, , drop=FALSE]
+        
+        r.idx <- which(r[[idname(x)]] %in% pids)
+        if(length(r.idx) > 0)
+          r <- r[-r.idx, , drop=FALSE]
         
         if(validSpatialData(x)) {
           sp <- sp[-i.missing, ]
