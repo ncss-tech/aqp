@@ -902,13 +902,14 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       
       # https://github.com/ncss-tech/aqp/issues/89
       # there should be as many records in @site as there are profile IDs
-      if(length(profile_id(res)) != length(site(res)[[idname(res)]]))
+      pid.res <- profile_id(res)
+      site.res <- site(res)[[idname(res)]]
+      if(length(pid.res) != length(site.res))
         warning("Some profiles have been removed from the collection.", call. = FALSE)
       
       # the order of profile_ids should be the same as in @site
-      if(! all(profile_id(res) == site(res)[[idname(res)]]))
+      if(! all(pid.res == site.res))
         warning("profile ID order does not match order in @site", call. = FALSE)
-      
       
       return(res)
     #}
