@@ -6,7 +6,7 @@
 \usage{
 mollic.thickness.requirement(
   p,
-  texcl = guessHzTexClName(p),
+  texcl.attr = guessHzTexClName(p),
   clay.attr = guessHzAttrName(p, "clay", c("total", "_r")),
   truncate = TRUE
 )
@@ -14,7 +14,7 @@ mollic.thickness.requirement(
 \arguments{
 \item{p}{A single-profile SoilProfileCollection.}
 
-\item{texcl}{Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}}
+\item{texcl.attr}{Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}}
 
 \item{clay.attr}{Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
 #' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)}

@@ -59,7 +59,7 @@ Default arguments are set up for "5-3-3 colors" -- the basic criteria for Mollic
 # construct a fake profile
 spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxeralfs",
                   hzdesgn  = c("A","AB","Bt","BCt","R"),
-                  hzdept   = c(10, 25, 32, 42,  49), 
+                  hzdept   = c(0, 20, 32, 42,  49), 
                   hzdepb   = c(20, 32, 42, 49, 200), 
                   d_value  = c(5,   5,  5,  6,  NA),
                   m_value  = c(2.5, 3,  3,  4,  NA),
