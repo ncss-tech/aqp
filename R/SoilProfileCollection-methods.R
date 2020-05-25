@@ -788,9 +788,6 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
         stop('NA not permitted in horizon/slice index', call.=FALSE)
     }
     
-    #### TODO: implicit sub-setting of horizon records should affect all slots 
-    ####      https://github.com/ncss-tech/aqp/issues/89
-    
     # extract all site and horizon data
     h <- horizons(x)
     s.all <- site(x)
@@ -827,7 +824,6 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
     if(length(r) > 0) # some data
       r <- r[which(r[[idname(x)]] %in% p.ids), ]
     
-    ## this is almost correct, but subsetting does not propagate to other slots (https://github.com/ncss-tech/aqp/issues/89)
     # subset horizons/slices based on j --> only when j is given
     if(!missing(j)) {
       
@@ -837,6 +833,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
       j.idx <- which(do.call('c', j.res))
       h <- h[j.idx,]
       
+      ##  https://github.com/ncss-tech/aqp/issues/89
       # fix #89, where i with no matching j e.g. @site data returned
       if(length(i.missing) > 0) {
         # remove sites that have no j
@@ -844,8 +841,8 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
         s <- s[-i.missing, , drop=FALSE]
         
         # remove also: diagnostics, restrictions, spatial
-        d <- d[-which(pids %in% d[[idname(x)]]),]
-        r <- r[-which(pids %in% r[[idname(x)]]),]
+        d <- d[-which(pids %in% d[[idname(x)]]), , drop=FALSE]
+        r <- r[-which(pids %in% r[[idname(x)]]), , drop=FALSE]
         
         if(validSpatialData(x)) {
           sp <- sp[-i.missing, ]
