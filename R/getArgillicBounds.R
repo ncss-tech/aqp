@@ -10,7 +10,8 @@ getArgillicBounds <- function(p,
                               require_t = TRUE, 
                               bottom.pattern = "Cr|R|Cd",
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
-                              as.list = FALSE) {
+                              as.list = FALSE,
+                              verbose = FALSE) {
   
   # ease removal of attribute name arguments -- deprecate them later
   # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
@@ -68,7 +69,8 @@ getArgillicBounds <- function(p,
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
         if(c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
-          message(paste0("Found ",paste0(hz[[hzdesgn]][c.idx], collapse=","),
+          if(verbose)
+            message(paste0("Found ",paste0(hz[[hzdesgn]][c.idx], collapse=","),
                          " below argillic, adjusting lower bound (",
                          idname(p),": ", profile_id(p),")"))
           # plot(p)
@@ -107,7 +109,8 @@ getArgillicBounds <- function(p,
         lower.bound <- depth.last
       }
     } else {
-      message(paste0("Profile (",profile_id(p),
+      if(verbose)
+        message(paste0("Profile (",profile_id(p),
                      ") has clay increase with no evidence of illuviation (t), to ignore: `require_t = FALSE`."))
       lower.bound <- NA 
       upper.bound <- NA 
