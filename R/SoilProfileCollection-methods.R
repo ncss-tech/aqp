@@ -472,7 +472,9 @@ setReplaceMethod("$", "SoilProfileCollection",
   }
 )
 
-setReplaceMethod("[[", signature=c(x="SoilProfileCollection", i="character", j="ANY"),
+setReplaceMethod("[[", signature(x = "SoilProfileCollection", 
+                                 i = "character", 
+                                 j = "ANY"),
                    function(x, i, j, ...) {
                      lv <- length(value)
                      lx <- length(x)
@@ -515,7 +517,7 @@ setReplaceMethod("[[", signature=c(x="SoilProfileCollection", i="character", j="
 if (!isGeneric("filter"))
   setGeneric("filter", function(object, ...) standardGeneric("filter"))
 
-setMethod("filter", "SoilProfileCollection",
+setMethod("filter", signature(object = "SoilProfileCollection"),
           function(object, ..., greedy = FALSE) {
               #if(requireNamespace("rlang")) {
                 # capture expression(s) at function
@@ -602,7 +604,7 @@ setMethod("filter", "SoilProfileCollection",
 if (!isGeneric("grepSPC"))
   setGeneric("grepSPC", function(object, attr, pattern, ...) standardGeneric("grepSPC"))
 
-setMethod("grepSPC", "SoilProfileCollection",
+setMethod("grepSPC", signature(object = "SoilProfileCollection"),
           function(object, attr, pattern, ...) {
   #if(requireNamespace("rlang")) {
     # capture expression(s) at function
@@ -641,7 +643,7 @@ setMethod("grepSPC", "SoilProfileCollection",
 if (!isGeneric("subApply"))
   setGeneric("subApply", function(object, .fun, ...) standardGeneric("subApply"))
 
-setMethod("subApply", "SoilProfileCollection",
+setMethod("subApply", signature(object = "SoilProfileCollection"),
            function(object, .fun, ...) {
   #if(requireNamespace("rlang")) {
     
@@ -667,7 +669,7 @@ setMethod("subApply", "SoilProfileCollection",
 if (!isGeneric("subsetProfiles"))
   setGeneric("subsetProfiles", function(object, s, h, ...) standardGeneric("subsetProfiles"))
   
-setMethod("subsetProfiles", "SoilProfileCollection",
+setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
   function(object, s, h, ...) {
   	
   	# sanity checks
@@ -718,7 +720,8 @@ setMethod("subsetProfiles", "SoilProfileCollection",
 #
 # bonus:
 #  gives access to all site and horizon level vars in tab complete!
-setMethod("[[", signature=c("SoilProfileCollection", i="character"),
+setMethod("[[", signature(x = "SoilProfileCollection", 
+                          i = "character"),
            function(x, i) {
              if(length(i) == 1) {
                # site names take precedence for those 
@@ -740,7 +743,9 @@ setMethod("[[", signature=c("SoilProfileCollection", i="character"),
 ## i = profile index
 ## j = horizon / slice index
 ##
-setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
+setMethod("[", signature(x = "SoilProfileCollection", 
+                         i = "ANY", 
+                         j = "ANY"),
   function(x, i, j) {
 		
   	# check for missing i and j
@@ -889,7 +894,7 @@ setMethod("[", signature=c("SoilProfileCollection", i="ANY", j="ANY"),
                                    diagnostic = d, 
                                    restrictions = r)
       
-    # preserve one off slots that may have been customised relative to defaults 
+    # preserve one off slots that may have been customized relative to defaults 
     #  in prototype or resulting from construction of SPC 
     suppressMessages(hzidname(res) <- hzidname(x))
     suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
