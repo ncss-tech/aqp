@@ -25,8 +25,8 @@ estimateSoilDepth <- function(f, name='hzname', top='hzdept', bottom='hzdepb', p
   # if the user has not specified a column containing horizon designations
   if(!name %in% hznames) {
     name <- guessHzDesgnName(f)
-    if(!name %in% hznames) {
-      stop("soil depth estimation relies on a column containing horizon designations")
+    if(is.na(name)) {
+      stop("soil depth estimation relies on a column containing horizon designations", call.=FALSE)
     }
   }
   
