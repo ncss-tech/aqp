@@ -4,7 +4,7 @@
 \alias{guessHzAttrName}
 \title{Guess Arbitrary Horizon Column Name}
 \usage{
-guessHzAttrName(x, attr, optional)
+guessHzAttrName(x, attr, optional, verbose = TRUE)
 }
 \arguments{
 \item{x}{A SoilProfileCollection}
@@ -12,6 +12,8 @@ guessHzAttrName(x, attr, optional)
 \item{attr}{A regular expression containing required formative element of attribute name.}
 
 \item{optional}{A character vector of regular expression(s) containing one or more optional formative elements of attribute name.}
+
+\item{verbose}{A boolean value for whether to produce message output about guesses.}
 }
 \value{
 Character containing horizon attribute column name. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.

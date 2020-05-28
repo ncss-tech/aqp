@@ -4,9 +4,6 @@
 \alias{summarize}
 \alias{summarize,SoilProfileCollection-method}
 \title{Reduce multiple site or horizon values to a single site value}
-\usage{
-summarize(object, ...)
-}
 \arguments{
 \item{object}{A SoilProfileCollection}
 

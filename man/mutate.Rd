@@ -4,9 +4,6 @@
 \alias{mutate}
 \alias{mutate,SoilProfileCollection-method}
 \title{Transform a SPC with expressions based on site or horizon level attributes}
-\usage{
-mutate(object, ...)
-}
 \arguments{
 \item{object}{A SoilProfileCollection}
 

@@ -6,7 +6,9 @@
 \usage{
 getCambicBounds(
   p,
-  ...,
+  hzdesgn,
+  texcl.attr,
+  clay.attr,
   argi_bounds = NULL,
   d_value = "d_value",
   m_value = "m_value",
@@ -16,7 +18,11 @@ getCambicBounds(
 \arguments{
 \item{p}{A single-profile SoilProfileCollection}
 
-\item{...}{Arguments to \code{getArgillicBounds()}}
+\item{hzdesgn}{Column name containing horizon designations.}
+
+\item{texcl.attr}{Arguments to \code{getArgillicBounds()}}
+
+\item{clay.attr}{Arguments to \code{getArgillicBounds()}}
 
 \item{argi_bounds}{Optional: numeric vector of length 2 with top and bottom of argillic; (Default: NULL)}
 
@@ -25,6 +31,8 @@ getCambicBounds(
 \item{m_value}{Column name containing moist value. Default: m_value}
 
 \item{m_chroma}{Column name containing moist crhoma. Default: m_chroma}
+
+\item{...}{Arguments to \code{getArgillicBounds()}}
 }
 \value{
 A \code{data.frame} containing profile, cambic indexes, along with top and bottom depths.
