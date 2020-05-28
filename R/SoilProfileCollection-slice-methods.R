@@ -215,4 +215,4 @@ if (!isGeneric("slice"))
 
 
 ## TODO: allow the use of site data (PSC etc.) to determine the z-slice
-setMethod(f='slice', signature='SoilProfileCollection', slice.fast)
+setMethod(f='slice', signature(object = 'SoilProfileCollection'), slice.fast)
