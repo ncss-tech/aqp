@@ -9,7 +9,10 @@
 #' 
 #' @rdname mutate
 #' @export mutate
-mutate <- function(object, ...) {
+if (!isGeneric("mutate"))
+  setGeneric("mutate", function(object, ...) standardGeneric("mutate"))
+
+setMethod("mutate", signature(object = "SoilProfileCollection"), function(object, ...) {
   #if(requireNamespace("rlang")) {
     
     # capture expression(s) at function
@@ -26,4 +29,4 @@ mutate <- function(object, ...) {
     
     return(object)
   #}
-}
+})

@@ -10,8 +10,8 @@
 #' @export compositeSPC
 compositeSPC <- function(object) {
   # create composite object to facilitate eval_tidy
-  h <- horizons(object)
-  s <- as.list(site(object))
-  h <- as.list(h[,!horizonNames(object) %in% siteNames(object)])
+  h <- object@horizons
+  s <- as.list(object@site)
+  h <- as.list(h[,!colnames(h) %in% names(s)])
   return(c(s, h))
 }

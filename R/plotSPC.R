@@ -71,11 +71,6 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     extra_x_space <- extra_x_space + 0.5
     x_left_space_mult <- 3.5
   }
-    
-    
-  
-  
-  
 
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
@@ -110,22 +105,17 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # get column names from horizon dataframe
   nm <- names(h)
   
-  # if the user has not specified a column containing horizon designations,
-  # attempt to guess
+  # if the user has not specified a column containing horizon designations
+  #   or, if the specified value is not in the horizon names vector
+  #   try to make a guess
   if(missing(name)) {
-    possible.name <- nm[grep('name', nm, ignore.case=TRUE)]
-    # use the first valid guess
-    if(length(possible.name) > 0) {
-      possible.name <- possible.name[1]
-      name <- possible.name
-      message(paste('guessing horizon designations are stored in `', name, '`', sep=''))
-    }
-    else {
-      message('unable to guess column containing horizon designations')
-      name <- NA # set column name to NA, details handled farther down in the function
-    }
+    name <- guessHzDesgnName(x)
   }
   
+  if(!is.na(name) & !all((name %in% horizonNames(x)))) {
+    name <- guessHzDesgnName(x)
+  }
+
   # setup horizon colors:
   
   # 1. numeric vector, rescale and apply color ramp

@@ -1,8 +1,32 @@
 #estimatePSCS()
 
 estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay", texcl.attr="texcl", tax_order_field = "tax_order", bottom.pattern='Cr|R|Cd', ...) {
+  
   hz.depths <- horizonDepths(p)
-  soildepth <- estimateSoilDepth(f = p, name = hzdesgn, top = hz.depths[1], bottom = hz.depths[2], p = bottom.pattern)
+  
+  # ease removal of attribute name arguments -- deprecate them later
+  # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
+  if(missing(hzdesgn) | all(!hzdesgn %in% horizonNames(p))) {
+    hzdesgn <- guessHzDesgnName(p)
+    if(is.na(hzdesgn))
+      stop("horizon designation column not correctly specified")
+  }
+  
+  if(missing(clay.attr) | all(!clay.attr %in% horizonNames(p))) {
+    clay.attr <- guessHzAttrName(p, attr="clay", optional=c("total","_r"))
+    if(is.na(clay.attr))
+      stop("horizon clay content column not correctly specified")
+  }  
+  
+  if(missing(texcl.attr) | all(!texcl.attr %in% horizonNames(p))) {
+    texcl.attr <- guessHzTexClName(p)
+    if(is.na(texcl.attr))
+      stop("horizon texture class column not correctly specified")
+  }
+  
+  soildepth <- estimateSoilDepth(f = p, name = hzdesgn, 
+                                 top = hz.depths[1], bottom = hz.depths[2],
+                                 p = bottom.pattern)
   andisols_flag <- FALSE
   shallow_flag <- FALSE
   
