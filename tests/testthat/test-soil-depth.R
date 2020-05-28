@@ -59,10 +59,10 @@ test_that("basic soil depth evaluation, based on pattern matching of hz designat
   res <- profileApply(d, estimateSoilDepth, name='goo')
   expect_equivalent(res, c(110, 55, 48, 20))
   
-  # remove the guessable name, expect warning and bogus (-Inf) value
+  # remove the guessable name, expect error
   d$xxx <- d$name
   d$name <- NULL
-  expect_warning(expect_equivalent(estimateSoilDepth(d[1,], name='name'), -Inf))
+  expect_error(estimateSoilDepth(d[1,], name='name'))
   
   # backup use of S4 hzdesgncol slot in lieu of valid argument/guessable name column
   hzdesgnname(d) <- "xxx"

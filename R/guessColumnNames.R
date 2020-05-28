@@ -43,7 +43,7 @@ guessHzDesgnName <- function(x) {
       name <- possible.name
     } else {
       # hail mary
-      try.again <- guessHzAttrName(x, "desgn", c("hz"))
+      try.again <- guessHzAttrName(x, "desgn", c("hz"), verbose = FALSE)
       if(!is.na(try.again)) {
         name <- possible.name
       } else {
@@ -124,7 +124,8 @@ guessHzTexClName <- function(x) {
 #' @param x A SoilProfileCollection
 #' @param attr A regular expression containing required formative element of attribute name.
 #' @param optional A character vector of regular expression(s) containing one or more optional formative elements of attribute name.
-#'
+#' @param verbose A boolean value for whether to produce message output about guesses.
+#' 
 #' @return Character containing horizon attribute column name. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 #' 
 #' @author Andrew G. Brown
@@ -157,7 +158,7 @@ guessHzTexClName <- function(x) {
 #' 
 #' guessHzAttrName(c, attr="clay", optional=c("total", "_r"))
 #' 
-guessHzAttrName <- function(x, attr, optional) {
+guessHzAttrName <- function(x, attr, optional, verbose = TRUE) {
   nm <- horizonNames(x)
   
   if(!inherits(x, 'SoilProfileCollection')) {
@@ -168,10 +169,6 @@ guessHzAttrName <- function(x, attr, optional) {
   req <- grepl(attr, nm, ignore.case=TRUE)
   opt <- lapply(as.list(optional), function(i) grepl(i, nm, ignore.case=TRUE))
   opt <- rowSums(do.call('cbind', opt))
-  
-  if(!any(req)) {
-    message(sprintf('unable to guess column containing horizon attribute \'%s\'', attr))
-  }
   
   # all optional requirements met
   idx1 <- which(req & opt == length(optional))
@@ -193,9 +190,11 @@ guessHzAttrName <- function(x, attr, optional) {
     res <- nm[idx3[1]]
   }
   if(!is.na(res)) {
-    #message(sprintf('guessing horizon attribute \'%s\' is stored in `%s`', attr, res))
+    if(verbose)
+      message(sprintf('guessing horizon attribute \'%s\' is stored in `%s`', attr, res))
   } else {
-    message(sprintf('unable to guess column containing horizon attribute \'%s\'', attr))
+    if(verbose)
+      message(sprintf('unable to guess column containing horizon attribute \'%s\'', attr))
   }
   return(res)
 }

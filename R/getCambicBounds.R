@@ -8,6 +8,9 @@
 #' There may be multiple cambic horizons (indexes) in a profile. Each cambic index has a top and bottom depth associated: cambic_top and cambic_bottom. This result is designed to be used for single profiles, or with \code{profileApply(..., frameify = TRUE)}
 #'
 #' @param p A single-profile SoilProfileCollection
+#' @param hzdesgn Column name containing horizon designations.
+#' @param texcl.attr Arguments to \code{getArgillicBounds()}
+#' @param clay.attr Arguments to \code{getArgillicBounds()}
 #' @param ... Arguments to \code{getArgillicBounds()}
 #' @param argi_bounds Optional: numeric vector of length 2 with top and bottom of argillic; (Default: NULL)
 #' @param d_value Column name containing dry value. Default: d_value
@@ -40,8 +43,8 @@
 #' # print results in table
 #' getCambicBounds(spc)
 #'
-getCambicBounds <- function(p, ..., 
-                            argi_bounds=NULL,
+getCambicBounds <- function(p, hzdesgn, texcl.attr, clay.attr,
+                            argi_bounds = NULL,
                             d_value = "d_value", 
                             m_value = "m_value", 
                             m_chroma = "m_chroma") {
@@ -55,12 +58,12 @@ getCambicBounds <- function(p, ...,
   depths <- horizonDepths(p)
   
   if(is.null(argi_bounds)) {
-    argi_bounds <- getArgillicBounds(p, ...)
+    argi_bounds <- getArgillicBounds(p, hzdesgn, clay.attr, texcl.attr, ...)
   }
   
-  cambic_top <- minDepthOf(p, pattern="B",
+  cambic_top <- minDepthOf(p, pattern = "B",
                            no.contact.assigned = NA)
-  cambic_bottom <- maxDepthOf(p, pattern="B", top=FALSE, 
+  cambic_bottom <- maxDepthOf(p, pattern = "B", top = FALSE, 
                               no.contact.assigned = NA)
   
   if(any(is.na(cambic_top), is.na(cambic_bottom))) {
