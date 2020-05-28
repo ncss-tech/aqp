@@ -9,7 +9,11 @@
 #' 
 #' @rdname summarize
 #' @export summarize
-summarize <- function(object, ...) {
+if (!isGeneric("summarize"))
+  setGeneric("summarize", function(object, ...) standardGeneric("summarize"))
+
+setMethod("summarize", signature(object = "SoilProfileCollection"), 
+          function(object, ...) {
   #if(requireNamespace("rlang")) {
     
     # capture expression(s) at function
@@ -42,9 +46,10 @@ summarize <- function(object, ...) {
     names(dfid) <- idname(object)
     rownames(res) <- NULL
     
+    
     site(object) <- cbind(dfid, res)
     
     return(object)
   #}
-}
+})
 

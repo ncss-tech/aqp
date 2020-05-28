@@ -9,7 +9,11 @@
 #' 
 #' @rdname mutate_profile
 #' @export mutate_profile
-mutate_profile <- function(object, ...) {
+if (!isGeneric("mutate_profile"))
+  setGeneric("mutate_profile", function(object, ...) standardGeneric("mutate_profile"))
+
+setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
+          function(object, ...) {
   #if(requireNamespace("rlang")) {
     
     # capture expression(s) at function
@@ -49,5 +53,4 @@ mutate_profile <- function(object, ...) {
     
     return(object)
   #}
-}
-
+})
