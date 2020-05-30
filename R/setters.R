@@ -624,9 +624,15 @@ setReplaceMethod("horizons", "SoilProfileCollection",
     
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
-	  stop("replacement value must be a data.frame", call.=FALSE)
-  
-  # get the corresponding vector of IDs, will be used to compute distinct site attributes
+	  stop("horizons left join value must be a data.frame", call.=FALSE)
+    
+  # idname(object) should be present in value at minimum
+  idnames <- c(idname(object))#, hzidname(object))
+  if(!all(idnames %in% names(value)))
+    stop(sprintf("horizons left join value should contain column names: %s",
+                 paste0(idnames, collapse=",")))
+    
+  # get the corresponding vector of IDs, will be used to compute distinct attributes
   ids <- as.character(horizons(object)[[idname(object)]])
 
   # get column names from proposed horizons, and existing site    
@@ -638,30 +644,43 @@ setReplaceMethod("horizons", "SoilProfileCollection",
     
   # check to make sure there is no overlap in proposed site + hz variable names
   if(any(ns %in% nh[-ID.idx]))
-    stop('duplicate names in new horizon / existing site data not allowed', call.=FALSE)
+    stop('horizons left join value contains duplicate names', call.=FALSE)
     
   # existing horizons data (may be absent == 0-row data.frame)
   s <- horizons(object)
-    
-  # join to existing data: by default it will only be idname(object)
-    
-  ## an appropriate ID must exist in 'value' AND @site for this to work
-  # LEFT-join in - assumes that appropriate IDs exist in both @site and 'value'
-  # no longer using plyr::join()
+  original.order <- s[[hzidname(object)]][order(s[[idname(object)]], 
+                                              s[[hzidname(object)]])]
+  ## debug
+  #print(original.order)
+  
+  # join to existing data
   suppressMessages(horizon.new <- merge(s, value, all.x=TRUE, sort=FALSE))
-    
+  
+  ## debug
+  #print(horizon.new[[hzidname(object)]])
+  
+  # the join is open-ended, requiring only the idname on the right hand side
+  #  this is convenient but generates NA in general case resulting in sorting. profile and/or horizon order no longer reflects the original.
+  if(any(!site(object)[[idname(object)]] == unique(horizon.new[[idname(object)]])) &
+     any(!horizons(object)[[idname(object)]] == horizon.new[[idname(object)]])) {
+    message("join condition resulted in sorting of profiles, re-implementing original order")
+    horizon.new <- horizon.new[match(original.order,
+                                     horizon.new[[hzidname(object)]]),]
+  }
+  
   # sanity check: horizons + new data should have same number of rows as original
   if(nrow(s) != nrow(horizon.new)) {
     message(paste('original data (', nrow(s), ' rows) new data (', nrow(horizon.new), ' rows)', sep=''))
-    stop('invalid join condition, horizon data not changed', call.=FALSE)
+    stop("invalid horizons left join condition, data not changed", call.=FALSE)
   }
     
   # look good, proceed
   object@horizons <- horizon.new
+  
   # check to make sure same profile IDs are present
   if(any(!(ids %in% as.character(horizons(object)[[idname(object)]])))) {
     print(paste('pedons (', nrow(object), ') rows of horizon data (', nrow(horizons(object)), ')', sep=''))
-    stop('invalid horizon data, profile IDs are missing from join result', call.=FALSE)
+    stop('profile IDs are missing from join result, data not changed', call.=FALSE)
   }
   
   # done
