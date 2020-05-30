@@ -3,15 +3,20 @@
 if (!isGeneric('hzID<-'))
   setGeneric('hzID<-', function(object, value) standardGeneric('hzID<-'))
 
-setReplaceMethod("hzID", "SoilProfileCollection",
+setReplaceMethod("hzID", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    
+                   if (!inherits(value, 'character')) {
+                     message("converting horizon IDs from integer to character")
+                     value <- as.character(value)
+                   }
+                   
                    # can't be missing
-                   if(is.null(value)) {
+                   if (is.null(value)) {
                      stop('horizon IDs cannot be NULL or NA', call. = FALSE) 
                    }
                    
-                   if(any(is.na(value)) | any(is.null(value))) {
+                   if (any(is.na(value)) | any(is.null(value))) {
                      stop('horizon IDs cannot be NULL or NA', call. = FALSE) 
                    }
                    
@@ -25,13 +30,8 @@ setReplaceMethod("hzID", "SoilProfileCollection",
                      stop('replacement horizon IDs must be unique', call. = FALSE)
                    }
                    
-                   
                    # extract horizon and replace IDs
-                   h <- object@horizons
-                   # note that horizon IDs may be specified in custom-set column
-                   h[[hzidname(object)]] <- value
-                   # re-pack horizons
-                   object@horizons <- h
+                   object@horizons[[hzidname(object)]] <- value
                    
                    return(object)
                  }
@@ -41,7 +41,7 @@ setReplaceMethod("hzID", "SoilProfileCollection",
 if (!isGeneric('profile_id<-'))
   setGeneric('profile_id<-', function(object, value) standardGeneric('profile_id<-'))
 
-setReplaceMethod("profile_id", "SoilProfileCollection",
+setReplaceMethod("profile_id", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    
                    # can't be missing
@@ -71,14 +71,14 @@ setReplaceMethod("profile_id", "SoilProfileCollection",
                    # change @site
                    s <- site(object)
                    s[[idn]] <- value
-                   object@site <- s
+                   object@site <- .as.data.frame.aqp(s, metadata(object)$aqp_df_class)
                    
                    # change @horizons
-                   h <- horizons(object)
+                   h <- object@horizons
                    update.idx <- match(h[[idn]], lut[, 1])
                    # apply edits via LUT
                    h[[idn]] <- lut[update.idx, 2]
-                   object@horizons <- h
+                   object@horizons <- .as.data.frame.aqp(h, metadata(object)$aqp_df_class)
                    
                    # search in @diagnostic
                    dg <- diagnostic_hz(object)
@@ -113,7 +113,7 @@ setReplaceMethod("profile_id", "SoilProfileCollection",
 if (!isGeneric('horizonDepths<-'))
   setGeneric('horizonDepths<-', function(object, value) standardGeneric('horizonDepths<-'))
 
-setReplaceMethod("horizonDepths", "SoilProfileCollection",
+setReplaceMethod("horizonDepths", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    
                    # can't be missing
@@ -154,15 +154,12 @@ setReplaceMethod("horizonDepths", "SoilProfileCollection",
                  }
 )
 
-
-
-
 ## set horizon names
 if (!isGeneric('horizonNames<-'))
   setGeneric('horizonNames<-', function(object, value) standardGeneric('horizonNames<-'))
 
 ## TODO: strip-out idname
-setReplaceMethod("horizonNames", "SoilProfileCollection",
+setReplaceMethod("horizonNames", signature(object = "SoilProfileCollection"),
   function(object, value) {
     
     # sanity check
@@ -195,14 +192,14 @@ if (!isGeneric('siteNames<-'))
   setGeneric('siteNames<-', function(object, value) standardGeneric('siteNames<-'))
 
 ## TODO: strip-out idname
-setReplaceMethod("siteNames", "SoilProfileCollection",
+setReplaceMethod("siteNames", signature(object = "SoilProfileCollection"),
   function(object, value) {
     # sanity check
     if(is.na(value) | is.null(value))
       stop('cannot assign NA or NULL column names', call. = FALSE)
                    
-      names(object@horizons) <- make.names(value)
-        return(object)
+    names(object@horizons) <- make.names(value)
+    return(object)
   }
 )
 
@@ -216,7 +213,7 @@ setReplaceMethod("siteNames", "SoilProfileCollection",
 if (!isGeneric('hzidname<-'))
   setGeneric('hzidname<-', function(object, value) standardGeneric('hzidname<-'))
 
-setReplaceMethod("hzidname", "SoilProfileCollection",
+setReplaceMethod("hzidname", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    
                    # quick sanity check
@@ -254,7 +251,7 @@ setReplaceMethod("hzidname", "SoilProfileCollection",
 if (!isGeneric('hzdesgnname<-'))
   setGeneric('hzdesgnname<-', function(object, value) standardGeneric('hzdesgnname<-'))
 
-setReplaceMethod("hzdesgnname", "SoilProfileCollection",
+setReplaceMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    # test: does it exist?
                    if(!length(value))
@@ -283,7 +280,7 @@ setReplaceMethod("hzdesgnname", "SoilProfileCollection",
 if (!isGeneric('hztexclname<-'))
   setGeneric('hztexclname<-', function(object, value) standardGeneric('hztexclname<-'))
 
-setReplaceMethod("hztexclname", "SoilProfileCollection",
+setReplaceMethod("hztexclname", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    # test: does it exist?
                    if(!length(value))
@@ -312,7 +309,7 @@ setReplaceMethod("hztexclname", "SoilProfileCollection",
 if (!isGeneric('metadata<-'))
   setGeneric('metadata<-', function(object, value) standardGeneric('metadata<-'))
 
-setReplaceMethod("metadata", "SoilProfileCollection",
+setReplaceMethod("metadata", signature(object = "SoilProfileCollection"),
   function(object, value) {
 
 	# quick sanity check
@@ -333,7 +330,7 @@ setReplaceMethod("metadata", "SoilProfileCollection",
 if (!isGeneric('depth_units<-'))
   setGeneric('depth_units<-', function(object, value) standardGeneric('depth_units<-'))
 
-setReplaceMethod("depth_units", "SoilProfileCollection",
+setReplaceMethod("depth_units", signature(object = "SoilProfileCollection"),
   function(object, value) {
 
 	# quick sanity check: character, length 1
@@ -360,7 +357,7 @@ setReplaceMethod("depth_units", "SoilProfileCollection",
 if (!isGeneric('depths<-'))
   setGeneric('depths<-', function(object, value) standardGeneric('depths<-'))
 
-setReplaceMethod("depths", "SoilProfileCollection",
+setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 	function(object, value) {
 		message('This is already a SoilProfilecollection-class object, doing nothing.')
 		object
@@ -372,24 +369,22 @@ setReplaceMethod("depths", "data.frame",
     if (inherits(value, "formula")) {
       # extract components of formula: 1. user id, 2. top, 3. bottom
       mf <- model.frame(value, object)
-      res <- .initSPCfromMF(data=object, mf=mf)
-    }
-    else {
+      res <- .initSPCfromMF(data = object, mf = mf)
+    } else {
       if (inherits(value, "character")) { # initialization by colnames
 	      mf <- object[,value]
-	      res <- .initSPCfromMF(data=object, mf=mf)
+	      res <- .initSPCfromMF(data = object, mf = mf)
+      } else {
+	      stop('invalid initilization for SoilProfileCollection object', call. = FALSE)
       }
-      else
-	      stop('invalid initialization for SoilProfile object', call.=FALSE)
     }
-
-    # add default metadata: depths are cm
-    metadata(res) <- data.frame(depth_units='cm', stringsAsFactors=FALSE)
     
-    # add default site data: profile IDs in same order as hz
-    site.temp <- data.frame(xxx=profile_id(res), stringsAsFactors=FALSE)
+    # add default site data: profile IDs in site same order as horizons
+    site.temp <- data.frame(id = profile_id(res), stringsAsFactors = FALSE)
     names(site.temp) <- idname(res)
-    res@site <- site.temp
+    
+    res@site <- .as.data.frame.aqp(site.temp, aqp_df_class(res))
+    res@horizons <- .as.data.frame.aqp(res@horizons, aqp_df_class(res))
     
     # done
     return(res)
@@ -405,14 +400,14 @@ setReplaceMethod("depths", "data.frame",
   nm <- names(mf)
   
   # check for factor-class ID
-  if(inherits(data[[nm[1]]], 'factor')) {
-    message('converting IDs from factor to character')
+  if (inherits(data[[nm[1]]], 'factor')) {
+    message('converting profile IDs from factor to character')
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
   
   # check for integer IDs
-  if(inherits(data[[nm[1]]], 'integer')) {
-    message('converting IDs from integer to character')
+  if (inherits(data[[nm[1]]], 'integer')) {
+    message('converting profile IDs from integer to character')
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
   
@@ -423,7 +418,9 @@ setReplaceMethod("depths", "data.frame",
   depthcols <- c(nm[2], nm[3])
   
   # create object
-  res <- SoilProfileCollection(idcol=nm[1], depthcols=depthcols, horizons=data[new.order, ])
+  res <- SoilProfileCollection(idcol = nm[1], 
+                               depthcols = depthcols, 
+                               horizons = data[new.order, ])
   
   # check for horizon ID name conflict
   if(hzidname(res) %in% names(data)) {
@@ -457,7 +454,6 @@ setReplaceMethod("depths", "data.frame",
     hzID(res) <- 1:nrow(res)
   } 
   
-  
   # done
   return(res)
 }
@@ -467,23 +463,26 @@ setReplaceMethod("depths", "data.frame",
 ## initialize site data
 ##
 if (!isGeneric('site<-'))
-  setGeneric('site<-', function(object, value) standardGeneric('site<-'))
+  setGeneric('site<-', function(object, value) 
+    standardGeneric('site<-'))
 
-setReplaceMethod("site", "SoilProfileCollection",
+setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   function(object, value) {
-	# get the corresponding vector of IDs, will be used to compute distinct site attributes
+
+    # get profile IDs from horizon table
     ids <- as.character(horizons(object)[[idname(object)]])
+    ids.coalesce <- .coalesce.idx(ids)
 
 	# creation of site data from horizon data
     if (inherits(value, "formula")) {
-      mf <- model.frame(value, horizons(object), na.action=na.pass)
+      mf <- model.frame(value, object@horizons, na.action = na.pass)
       nm <- names(mf)
-      mf <- data.frame(ids, mf, stringsAsFactors=FALSE) # don't automatically make strings into factors
+      mf <- data.frame(ids, mf, stringsAsFactors = FALSE)
       names(mf) <- c(idname(object), nm)
       object <- .createSiteFromHorizon(object, mf)
     }
     
-    # creation of site data from an external data.frame via join(..., type='left')
+    # creation of site data from an external data.frame via merge (LEFT JOIN)
     if (inherits(value, "data.frame")) {
       # get column names from proposed site, and existing horizons
       ns <- names(value)
@@ -494,17 +493,26 @@ setReplaceMethod("site", "SoilProfileCollection",
       
       # check to make sure there is no overlap in proposed site + hz variable names
       if(any(ns %in% nh[-ID.idx]))
-        stop('duplicate names in new site / existing horizon data not allowed', call.=FALSE)
+        stop('duplicate names in new site / existing horizon data not allowed', call. = FALSE)
       
       # existing site data (may be absent == 0-row data.frame)
-      s <- site(object)
+      s <- object@site
+      
+      if(any(s[[idname(object)]] != ids.coalesce)) {
+        warning("site and horizon data are out of sync!")
+      }
       
       # join to existing data: by default it will only be idname(object)
       
       ## an appropriate ID must exist in 'value' AND @site for this to work
-      # LEFT-join in - assumes that appropriate IDs exist in both @site and 'value'
-      # we are suppressing the 'Joining by:' output from join()
-      suppressMessages(site.new <- join(s, value, type='left'))
+      # LEFT JOIN
+      suppressMessages(site.new <- merge(s, value, all.x = TRUE, sort = FALSE))
+      
+      new.id.order <- site.new[[idname(object)]]
+      if(any(new.id.order != ids.coalesce)) {
+        message("join condition resulted in sorting of sites, re-applying original order")
+        site.new <- site.new[match(ids.coalesce, new.id.order),]
+      }     
       
       # sanity check: site + new data should have same number of rows as original
       if(nrow(s) != nrow(site.new)) {
@@ -512,8 +520,8 @@ setReplaceMethod("site", "SoilProfileCollection",
         stop('invalid join condition, site data not changed', call.=FALSE)
       }
             
-      # look good, proceed
-      object@site <- site.new
+      # 2020-05-30: subclasses of data.frame have more than one class
+      object@site <- .as.data.frame.aqp(site.new, metadata(object)$aqp_df_class)
 	  }
   	
     ## TODO: finer reporting on what the problem might be
@@ -533,10 +541,12 @@ setReplaceMethod("site", "SoilProfileCollection",
 # remove named columns from horizons
 # return new SPC object
 .createSiteFromHorizon <- function(object, mf){
+  
   # create a numeric index for named site columns, as we will remove them
   # from the horizon data
   names_attr <- names(mf)
   idx <- match(names_attr, horizonNames(object))
+  
   # remove the index to the ID columnm, as we do not want to remove this from
   # the horizon data !
   idx <- idx[-match(idname(object), names_attr)]
@@ -546,18 +556,28 @@ setReplaceMethod("site", "SoilProfileCollection",
   # and it ensures that the result is in the same order as the IDs
   new_site_data <- ddply(mf, idname(object),
       .fun=function(x) {
-	      unique(x[, names_attr])
+	      unique(x[, names_attr, drop = FALSE])
       }
   )
 
-  # if site data is already present in the object, we don't want to erase it
-  site_data <- join(site(object), new_site_data, by=idname(object))
+  # if site data is already present, we don't overwrite/erase it
+  site_data <- merge(object@site, new_site_data, by = idname(object),
+                     all.x = TRUE, sort = FALSE)
 
   # remove the named site data from horizon_data
-  object@horizons <- horizons(object)[, -idx]
+  h <- object@horizons
+  hnames <- colnames(h)
+  for(i in idx) {
+    h[[hnames[i]]] <- NULL
+  }
+  
+  if(!inherits(h, 'data.frame'))
+     print(h)
+     
+  object@horizons <- .as.data.frame.aqp(h, aqp_df_class(object))
 	
   # replace existing site data
-  object@site <- site_data
+  object@site <- .as.data.frame.aqp(site_data, aqp_df_class(object))
 
   # done
   return(object)
@@ -567,9 +587,11 @@ setReplaceMethod("site", "SoilProfileCollection",
 ## horizon replacement method
 ##
 if (!isGeneric('replaceHorizons<-'))
-  setGeneric('replaceHorizons<-', function(object, value) standardGeneric('replaceHorizons<-'))
+  setGeneric('replaceHorizons<-', function(object, value) 
+    standardGeneric('replaceHorizons<-'))
 
-setReplaceMethod("replaceHorizons", "SoilProfileCollection",
+setReplaceMethod("replaceHorizons", 
+                 signature(object = "SoilProfileCollection"),
                  function(object, value) {
   
   required.columns <-  c(idname(object), horizonDepths(object))                 
@@ -605,8 +627,7 @@ setReplaceMethod("replaceHorizons", "SoilProfileCollection",
     message("no horizon ID present, defaulting to `hzID`")
   }
   
-  object@horizons <- value
-  
+  object@horizons <- .as.data.frame.aqp(value, aqp_df_class(object))
   return(object)
 })
 
@@ -616,22 +637,22 @@ setReplaceMethod("replaceHorizons", "SoilProfileCollection",
 ## horizons<- left join method
 ##
 if (!isGeneric('horizons<-'))
-  setGeneric('horizons<-', function(object, value) standardGeneric('horizons<-'))
+  setGeneric('horizons<-', function(object, value) 
+    standardGeneric('horizons<-'))
 
-
-setReplaceMethod("horizons", "SoilProfileCollection",
+setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   function(object, value) {
     
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
-	  stop("horizons left join value must be a data.frame", call.=FALSE)
+	  stop("new horizon data input value must inherit from data.frame", call.=FALSE)
     
-  # idname(object) should be present in value at minimum
-  idnames <- c(idname(object))#, hzidname(object))
-  if(!all(idnames %in% names(value)))
-    stop(sprintf("horizons left join value should contain column names: %s",
-                 paste0(idnames, collapse=",")))
-    
+  # not required: enforce idname and/or hzidname presence
+  # idnames <- c(idname(object), hzidname(object))
+  # if(!all(idnames %in% names(value)))
+  #   stop(sprintf("new horizon data input value should contain column names: %s",
+  #                paste0(idnames, collapse=",")))
+  #   
   # get the corresponding vector of IDs, will be used to compute distinct attributes
   ids <- as.character(horizons(object)[[idname(object)]])
 
@@ -645,41 +666,45 @@ setReplaceMethod("horizons", "SoilProfileCollection",
   # check to make sure there is no overlap in proposed site + hz variable names
   if(any(ns %in% nh[-ID.idx]))
     stop('horizons left join value contains duplicate names', call.=FALSE)
+  
+  h.id <- as.character(object@horizons[[hzidname(object)]])
+  original.horizon.order <- 1:length(h.id)
+  names(original.horizon.order) <- h.id
+
+  original.site.order <- match(.coalesce.idx(object@site[[idname(object)]]),
+                               object@site[[idname(object)]])
     
-  # existing horizons data (may be absent == 0-row data.frame)
-  s <- horizons(object)
-  original.order <- s[[hzidname(object)]][order(s[[idname(object)]], 
-                                              s[[hzidname(object)]])]
   ## debug
-  #print(original.order)
+  # print(original.order)
   
-  # join to existing data
-  suppressMessages(horizon.new <- merge(s, value, all.x=TRUE, sort=FALSE))
+  # in keeping with tradition of site<-, we let the join happen 
+  # left join to existing data
+  suppressMessages(horizon.new <- merge(object@horizons, 
+                                        value, 
+                                        #by = c(idname(object), hzidname(object)),
+                                        all.x = TRUE, sort = FALSE))
   
-  ## debug
-  #print(horizon.new[[hzidname(object)]])
-  
-  # the join is open-ended, requiring only the idname on the right hand side
-  #  this is convenient but generates NA in general case resulting in sorting. profile and/or horizon order no longer reflects the original.
-  if(any(!site(object)[[idname(object)]] == unique(horizon.new[[idname(object)]])) &
-     any(!horizons(object)[[idname(object)]] == horizon.new[[idname(object)]])) {
-    message("join condition resulted in sorting of profiles, re-implementing original order")
-    horizon.new <- horizon.new[match(original.order,
-                                     horizon.new[[hzidname(object)]]),]
+  new.horizon.order <- match(names(original.horizon.order), 
+                             horizon.new[[hzidname(object)]])
+  chnew <- .coalesce.idx(horizon.new[[idname(object)]])
+  if(length(chnew) != length(original.site.order) |
+     sum(suppressWarnings(original.site.order != chnew)) > 0) {
+    message("join condition resulted in sorting of horizons, re-applying original order")
+    horizon.new <- horizon.new[new.horizon.order,]
   }
   
   # sanity check: horizons + new data should have same number of rows as original
-  if(nrow(s) != nrow(horizon.new)) {
+  if(nrow(object@horizons) != nrow(horizon.new)) {
     message(paste('original data (', nrow(s), ' rows) new data (', nrow(horizon.new), ' rows)', sep=''))
     stop("invalid horizons left join condition, data not changed", call.=FALSE)
   }
     
-  # look good, proceed
-  object@horizons <- horizon.new
+  # 2020-05-30: subclasses of data.frame have more than one class
+  object@horizons <- .as.data.frame.aqp(horizon.new, aqp_df_class(object))
   
   # check to make sure same profile IDs are present
-  if(any(!(ids %in% as.character(horizons(object)[[idname(object)]])))) {
-    print(paste('pedons (', nrow(object), ') rows of horizon data (', nrow(horizons(object)), ')', sep=''))
+  if(any(!(ids %in% as.character(object@horizons[[idname(object)]])))) {
+    print(paste('pedons (', nrow(object), ') rows of horizon data (', nrow(object@horizons), ')', sep=''))
     stop('profile IDs are missing from join result, data not changed', call.=FALSE)
   }
   
@@ -688,14 +713,16 @@ setReplaceMethod("horizons", "SoilProfileCollection",
 })
 
 ##
-## intit diagnotic horizon data
+## init diagnostic horizon data
 ##
 ## NOTE: these data are likely to be free-form, may not exist for every profile, and are usually 1:many
 ##
 if (!isGeneric('diagnostic_hz<-'))
-  setGeneric('diagnostic_hz<-', function(object, value) standardGeneric('diagnostic_hz<-'))
+  setGeneric('diagnostic_hz<-', function(object, value) 
+    standardGeneric('diagnostic_hz<-'))
 
-setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
+setReplaceMethod("diagnostic_hz", 
+                 signature(object = "SoilProfileCollection"),
   function(object, value) {
   
   # get the initial data
@@ -734,20 +761,19 @@ setReplaceMethod("diagnostic_hz", "SoilProfileCollection",
   	warning('overwriting existing diagnostic horizon data!', call.=FALSE)
   
   # copy data over
-  object@diagnostic <- value
+  object@diagnostic <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
   
   # done
   return(object)
-  }
-)
-
+})
 
 # restriction data
 # likely to either have no restrictions or possibly more than one
 if (!isGeneric('restrictions<-'))
-  setGeneric('restrictions<-', function(object, value) standardGeneric('restrictions<-'))
+  setGeneric('restrictions<-', function(object, value) 
+    standardGeneric('restrictions<-'))
 
-setReplaceMethod("restrictions", "SoilProfileCollection",
+setReplaceMethod("restrictions", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    
                    # get the initial data
@@ -764,7 +790,7 @@ setReplaceMethod("restrictions", "SoilProfileCollection",
                    
                    # test for the special case where internally-used functions 
                    # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
-                   # short-circut, and return original object
+                   # short-circuit, and return original object
                    if(nrow(d) == 0 & nrow(value) == 0)
                      return(object)
                    
@@ -772,9 +798,9 @@ setReplaceMethod("restrictions", "SoilProfileCollection",
                    if(! idn %in% nm)
                      stop(paste("restriction data are missing pedon ID column: ", idn), call.=FALSE)
                    
-                   # test to make sure that at least one of the IDS in candidate data are present within SPC
-                   if(all( ! unique(value[[idn]]) %in% pIDs) )
-                     warning('restriction data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
+                   # test to make sure that at least one of the IDs in candidate data are present within SPC
+                   if(all(!unique(value[[idn]]) %in% pIDs) )
+                     warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
                    
                    # warn user if some of the IDs in the candidate data are missing
                    if(any( ! unique(value[[idn]]) %in% pIDs) ) {
@@ -786,7 +812,7 @@ setReplaceMethod("restrictions", "SoilProfileCollection",
                      warning('overwriting existing restriction data!', call.=FALSE)
                    
                    # copy data over
-                   object@restrictions <- value
+                   object@restrictions <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
                    
                    # done
                    return(object)

@@ -9,8 +9,6 @@ site(sp1) <- ~ group
 sp1$x <- seq(-119, -120, length.out = length(sp1))
 sp1$y <- seq(38, 39, length.out = length(sp1))
 
-
-
 ## tests
 
 test_that("SPC construction from a data.frame", {
@@ -150,12 +148,7 @@ test_that("SPC subsetting with tidy verbs ", {
   expect_equal(length(grepSPC(sp1, texture, "SCL")), 1)
   
   # subApply works as expected
-  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))
-  
-
-})
-
-
+  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))})
 
 test_that("SPC graceful failure of spatial operations when data are missing", {
   
@@ -236,7 +229,7 @@ test_that("SPC misc. ", {
   m$citation <- 'this is a citation'
   metadata(sp1) <- m
   expect_true(inherits(metadata(sp1), 'data.frame'))
-  expect_equal(ncol(metadata(sp1)), 2)
+  expect_equal(ncol(metadata(sp1)), 3)
   
 })
 
@@ -301,11 +294,11 @@ test_that("SPC horizon ID get/set ", {
   auto.hz.ids <- hzID(sp1)
   
   # should be 1:nrow(sp1)
-  expect_equivalent(auto.hz.ids, seq_len(nrow(sp1)))
+  expect_equivalent(auto.hz.ids, as.character(seq_len(nrow(sp1))))
   
   # try replacing with reasonable IDs
   hzID(sp1) <- rev(hzID(sp1))
-  expect_equivalent(hzID(sp1), rev(seq_len(nrow(sp1))))
+  expect_equivalent(hzID(sp1), as.character(rev(seq_len(nrow(sp1)))))
   
   # try replacing with bogus values
   expect_error(hzID(sp1) <- 1)
@@ -374,14 +367,15 @@ test_that("SPC horizon ID get/set ", {
   auto.hz.ids <- hzID(sp1)
   
   # should be 1:nrow(sp1)
-  expect_equivalent(auto.hz.ids, seq_len(nrow(sp1)))
+  expect_equivalent(auto.hz.ids, as.character(seq_len(nrow(sp1))))
   
   # try replacing with reasonable IDs
   hzID(sp1) <- rev(hzID(sp1))
-  expect_equivalent(hzID(sp1), rev(seq_len(nrow(sp1))))
+  expect_equivalent(hzID(sp1), as.character(rev(seq_len(nrow(sp1)))))
   
   # try replacing with bogus values
   expect_error(hzID(sp1) <- 1)
+  
   # non-unique
   expect_error(hzID(sp1) <- sample(hzID(sp1), replace = TRUE))
   
@@ -481,22 +475,26 @@ test_that("horizons<- left-join", {
   hnew$prop[1] <- 50
   
   # utilize horizons<- left join
-  horizons(x) <- hnew
-  
-  # verify new columns have been added
-  expect_equivalent(horizons(x)[1,c('prop100','prop200','prop300')], 
-                    c(0.07, 0.07 / 2, 0.07 / 3))
+  expect_message(horizons(x) <- hnew, "join condition resulted in sorting of horizons, re-applying original order")
   
   # verify old columns have same names 
   # (i.e. no issues with duplication of column names in merge)
   expect_true(all(c(idname(x), hzidname(x), 'prop') %in% names(horizons(x))))
   
   # verify old columns have same value
-  expect_equivalent(horizons(x)[1,c('prop')], c(7))
+  clay_prop <- horizons(sp1)[2,'prop']
+  expect_equivalent(horizons(x)[2, c('prop')], clay_prop)
+  
+  # verify new columns have been added
+  # now with proper sorting; first profile, first horizon
+  expect_equivalent(horizons(x)[2, c('prop100','prop200','prop300')], 
+                    c(clay_prop /  100, clay_prop / 200, clay_prop / 300))
+  
+  
 })
 
 test_that("ordering of profiles and horizons is retained after left-join", {
-  # IDs that when sorted will no be in this order
+  # IDs that when sorted will not be in this order
   s <- c('a', "1188707", "1188710", "120786", "1207894", 'z')
   l <- lapply(s, random_profile)
   d <- do.call('rbind', l)
@@ -504,11 +502,7 @@ test_that("ordering of profiles and horizons is retained after left-join", {
   # init SPC
   depths(d) <- id ~ top + bottom
   
-  ## !! bug happens here, when attempting to set a new horizon-level attr
-  ## call stack roughly
-  # $<-
-  # horizons<-
-  # merge(old, new)
+  ## former bug on set of a new horizon-level attr
   d$zzz <- rep(NA, times=nrow(d))
   
   # previously mysterious warning message
