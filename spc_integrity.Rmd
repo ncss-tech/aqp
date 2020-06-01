@@ -1,0 +1,54 @@
+---
+title: "SPC Integrity"
+author: "Andrew Gene Brown"
+date: "6/1/2020"
+output: html_document
+---
+
+### Integrity of the SoilProfileCollection
+
+"Integrity" refers to the relative state of the `data.frame` slot components of a `SoilProfileCollection` and methods we use to maintain them. Specifically, integrity is relevant to `@site` and `@horizon` slots, but also, `@diagnostic` and `@restrictions`. 
+
+Three major issues pertain to this matter of SoilProfileCollection "integrity":
+
+  1.   Initialization from `data.frame`, `data.table` or `tbl_df`
+  
+  2.   JOINs
+  
+  2.   Horizon and site ordering with respect to `profile_id()` output
+  
+#### 1. Initialization from `data.frame`, `data.table` or `tbl_df`
+
+Currently, much of the logic in aqp relies on the sort order that is derived from the input horizon data at object creation. It is assumed, but not strictly enforced everywhere, that the site IDs follow the exact same order and do not get rearranged.
+
+ - As part of initialization of the SPC object, the horizon data are sorted first based on `as.character(idname(object))` (profile ID) and then on `as.numeric(horizonDepths(object)[1])` (top depth). This ensures that any unusual sorting in the input data do not interfere with topologic checks -- which require that individual profiles be continuously top-depth ordered for profiles within `@horizons`. Continuous does not necessarily mean "without gaps or overlaps" [a separate topologic check] it means that if there is a horizon at a particular depth, it is in the right top depth order relative to other horizons in that profile. In this sense, an SPC comprised of one or more topologically "invalid" profiles can still have valid integrity -- the results for the topologically valid profiles are valid.
+
+ - Two new functions have been added to aqp/aqpdf that address the identification of relative site/horizon state. Several additional diagnostics would need to be added to keep track of profiles without horizon data -- with more changes to several functions that change horizon data -- but it is imminently possible.
+
+ - At initialization, the `@metadata` slot will be populated with two vectors: un-sorted order of original input data, ID+top depth sortings of the profile IDs and horizon IDs and the current "target" sort order. The setters of `profile_id<-` and `hzID<-` will update these when the values need to change to correctly track state.
+
+ - Any operations that cause a re-sorting of horizon data should ensure that the top depth relationship is maintained within profiles, relative to site. This can be checked with new function `.spc_in_sync()`. 
+
+ - In theory, the profile IDs do not have to follow the default sort order (which sorts based on character representation of profile ID) as long as depths are in order within IDs. Alternate orders could be permitted and maintained by providing a method that updates the metadata entry and then re-sorts the collection as needed based on a vector of profile IDs or indexes. 
+
+ - Additional methods to add horizon-less sites would augment this index to add values that did not have a corresponding value in the horizon data in the correct relative positio. The lack of corresponding horizon index indicating its (lack of) depth measurements. 
+
+ - We could also add an option (`na.hz.omit`) to strip all-NA horizons out at promotion, setting those "profiles" up as truly horizonless, to allow for a toggle to get back to old behavior. There is still value in being able to create an SPC from a single (site-denormalized) `data.frame`. Since we will not be outright prohibiting NA -- due to the fact that performing topologic checks on an SPC provides added value -- this is the best way to force the new, logical behavior while allowing historic behavior to be retained with an option and a warning.
+
+ - I think the current behavior of `[` not re-arranging data is probably worth keeping for the sake of efficiency and backwards compatibility. I think a `rearrangeSites` methods should be created first, and eventually implemented into `[` with an option to turn on rearranging (versus operating on unique/sorted values, and then returning input sort order). It is a relatively rare operation -- I can't think of a single case where it is "needed". But I could imagine for some cases setting a more sensible quasi-numeric ordering for profile IDs that cannot be coerced to numeric for order. E.g. soil1, soil10, soil100, soil101, soil2 versus soil1, soil2, soil3, soil4, soil5. The internal datasets have been set up this way to protect against unintentional sorting at the cost of being forced to follow character ordering.
+
+
+#### 2. JOINs
+
+Following LEFT JOIN of new data (`site<-`, `horizons<-`) when site and horizon IDs are integers, and some new attributes contain `NA`, the object's site/horizon order _must_ be preserved. 
+
+ - This has been fixed in branch aqp/aqpdf for base R `data.frame` as well as `tbl_df`. Default behavior of `merge.data.frame(..., all.x = TRUE, sort = FALSE)` is insufficient to handle the effect of `NA` on sorting when in the presence of a mixture of integer and character-sorted indices (i.e `any(1:10 != sort(as.character(1:10)))`). No order corrections are needed for `merge.data.table` (that applies when the slots are `data.table`s). 
+ 
+- Almost all cases of `data.table` are working; one matter related to the difference in use of `j` index and internal use of `[[` is relevant -- and may be fixed by employing either a lookup table or merge-based logic instead. I am still experimenting with how minimally we can tie in `data.table` and `tbl_df` while still allowing them to persist within the SPC for normal slot operations. I would prefer, wherever possible, to not have special logic in individual slot-altering that handles `data.frame` subclasses. The only instance, other than coercion that I have encountered so far that might require special handling is the `data.table` `j` index -- which was an expected deviation. An `aqp` wrapper around `merge` and `[[` might allow for code to be written in a universal way, allowing for dispatch to relevant classes handled just within the wrapper function.
+
+ - `horizons<-` was changed to be an "open-ended" LEFT JOIN with no constraints on the right hand side other than at least one key:value pair that "works." Historically `plyr::join` was used for `site<-`, and only replacement was available for `horizons<-`. JOIN logic has far more potential utility than slot replacement and is consistent with `site<-`. The `replaceHorizons<-` method was created to provide a setter equivalent to historic full-slot replacements.
+ 
+   - The first version of the `horizons<-` join required a "complete" set -- all profile IDs and horizon IDs present on right hand side to get around potential sorting/non-uniqueness issues. Otherwise, the method triggered replacement: leaving the user to construct a suitable input value that would maintain SPC integrity. Aside from incomplete backwards compatibility, this almost as much extra, error-prone, work for end user as replacing the horizons, with the added possibility of a bad JOIN -- though tests prevented this in most cases.
+
+#### 3. decouple `profile_id()` from `@horizons` to support horizon-less sites
+
