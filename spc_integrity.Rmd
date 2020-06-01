@@ -1,9 +1,64 @@
 ---
-title: "SPC Integrity"
-author: "Andrew Gene Brown"
-date: "6/1/2020"
+title: "Guide to the new SoilProfileCollection Updates"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
+
+This document performs some basic demonstrations of new and revised functionality of the SoilProfileCollection.
+
+By and large, the familiar idioms are retained -- with several capabilities now being more refined and robust.
+
+## SoilProfileCollection - changes to the definition
+
+The `SoilProfileCollection()` constructor returns an empty object containing default values. Default metadata are assigned in the main constructor: `aqp_df_class` _data.frame_ and `depth_units` _centimeters_.
+
+```r 
+library(aqp)
+
+str(SoilProfileCollection())
+```
+
+```
+Formal class 'SoilProfileCollection' [package "aqp"] with 11 slots
+  ..@ idcol       : chr "id"
+  ..@ hzidcol     : chr "hzID"
+  ..@ hzdesgncol  : chr(0) 
+  ..@ hztexclcol  : chr(0) 
+  ..@ depthcols   : chr [1:2] "top" "bottom"
+  ..@ metadata    :'data.frame':	1 obs. of  2 variables:
+  .. ..$ aqp_df_class: chr "data.frame"
+  .. ..$ depth_units : chr "cm"
+  ..@ horizons    :'data.frame':	0 obs. of  0 variables
+  ..@ site        :'data.frame':	0 obs. of  0 variables
+  ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots
+  .. .. ..@ coords     : num [1, 1] 0
+  .. .. ..@ bbox       : logi [1, 1] NA
+  .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
+  .. .. .. .. ..@ projargs: chr NA
+  ..@ diagnostic  :'data.frame':	0 obs. of  0 variables
+  ..@ restrictions:'data.frame':	0 obs. of  0 variables
+```
+
+Which, in the new `show` method, appears in console as:
+
+```
+SoilProfileCollection: 0 profiles | 0 horizons
+profile ID: id
+horizon ID: hzID
+[EMPTY]
+data frame with 0 columns and 0 rows
+[EMPTY]
+data frame with 0 columns and 0 rows
+```
+
+### Extending SoilProfileCollections with _data.table_ and _tbl_df_ 
+
+By inheritance, the S3 classes _data.table_ and _tbl_df_ can be used seamlessly [experimental] with most internal _SoilProfileCollection_ methods. This can allow for additional efficiencies, enhanced compatibility with external methods, aesthetically pleasing output and more. 
+
+The `aqp_df_class` record in `@metadata` is new to allow for _data.table_ and _tibble_ subclasses of _data.frame_ use with _SoilProfileCollection_. The value stored refers to the class used for the `@horizons`, `@site`, `@diagnostics` and `@restrictions` slots. 
+
+A safe accessor for `aqp_df_class` is provided `aqp_df_class(object)`, where object is a _SoilProfileCollection_. The default value is _data.frame_. Internal methods that modify _data.frame_ slots are set up to keep track of the class of object used at initialization via `aqp_df_class`. The value is used for internal methods to ensure that slots are maintained in the correct class as processing occurs or in case various external operations revert to `data.frame`. Normal operations that subset, join or modify data regularly check class via `.as.data.frame.aqp` using the highest-level class `class(object)[1]` of the new data. If it has changed from the initial value, it is coerced using the appropriate method.
 
 ### Integrity of the SoilProfileCollection
 
