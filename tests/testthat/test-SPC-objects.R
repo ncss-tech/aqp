@@ -186,17 +186,18 @@ test_that("SPC spatial operations ", {
   
   # set previously NULL CRS
   # updated to not include a +datum as this breaks in upstream sp/rgdal
-  proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs'
+  # 2020/06/01 now expect warning
+  expect_warning(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
   
   # we should get back the same thing we started with
   expect_equal(proj4string(sp1), '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
   
   # basic coercion
-  expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints'))
+  expect_true(expect_warning(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
   
   # down-grade to {site + sp} = SpatialPointsDataFrame
-  expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted')
-  sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
+  expect_message(expect_warning(as(sp1, 'SpatialPointsDataFrame')), 'only site data are extracted')
+  sp1.spdf <- suppressMessages(expect_warning(as(sp1, 'SpatialPointsDataFrame')))
   expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
   # Unit-length j-index SPDF downgrading DEPRECATED
