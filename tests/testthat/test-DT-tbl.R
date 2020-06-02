@@ -127,7 +127,14 @@ res <- lapply(dfclasses, function(use_class) {
     horizons(test)$siteprop_hz <- denormalize(test, "siteprop")
     
     # check that siteprop_hz is in horizons 
-    expect_equal(horizons(test)$siteprop_hz, rep(8, 40))
+    # print(str(names(horizons(test)$siteprop_hz)))
+    if(use_class == "tbl_df") {
+      expect_equivalent(horizons(test)$siteprop_hz, rep(8, 40))
+      # note: tbl_df will have names attribute attached to result
+      #       which precludes expect_equal
+    } else {
+      expect_equal(horizons(test)$siteprop_hz, rep(8, 40))
+    }
     
     # add some site data, for only two sites
     value <- test_object(data.frame(id = as.character(2:3),
@@ -181,5 +188,162 @@ res <- lapply(dfclasses, function(use_class) {
     
     expect_equal(horizons(test)[[horizonDepths(test)[2]]], cc(rep(1:10, 4)))
     
+    
+    ## make sample data using current class type
+    data(sp1, package = 'aqp')
+    sp1df <- aqp:::.as.data.frame.aqp(sp1, use_class, stripFactors = TRUE)
+    depths(sp1df) <- id ~ top + bottom
+    site(sp1df) <- ~ group
+    
+    # add real coordinates
+    sp1df$x <- seq(-119, -120, length.out = length(sp1df))
+    sp1df$y <- seq(38, 39, length.out = length(sp1df))
+    
+    ## tests
+    
+    test_that(sprintf("SPC construction from a %s", use_class), {
+      
+      # did it work?
+      expect_true(inherits(sp1df, 'SoilProfileCollection'))
+      
+      # ID correctly initialized?
+      expect_equal(idname(sp1df), 'id')
+      expect_true(length(profile_id(sp1df)) == length(sp1df))
+      
+      # ID in the correct order?
+      expect_identical(profile_id(sp1df), site(sp1df)[[idname(sp1df)]])
+      
+      # depth names?
+      expect_equal(horizonDepths(sp1df), c('top', 'bottom'))
+      
+      # site-level attributes correctly initialized?
+      expect_true(length(sp1df$group) == length(sp1df))
+      
+      # correct number of profiles and horizons?
+      expect_equal(length(sp1df), 9)
+      expect_equal(nrow(sp1df), 60)
+    })
+    
+    test_that(sprintf("SPC diagnostics and restrictions (%s)", use_class), {
+      # diagnostic & restriction slot should be initialized as an empty data.frame
+      sp1.dh <- diagnostic_hz(sp1df)
+      expect_true(inherits(sp1.dh, 'data.frame'))
+      expect_equal(nrow(sp1.dh), 0)
+      
+      sp1.rh <- restrictions(sp1df)
+      expect_true(inherits(sp1.rh, 'data.frame'))
+      expect_equal(nrow(sp1.rh), 0)
+    })
+    
+    test_that(sprintf("SPC data.frame interface (%s)", use_class), {
+      
+      # init site-level data
+      sp1df$x <- seq(-119, -120, length.out = length(sp1df))
+      sp1df$y <- seq(38, 39, length.out = length(sp1df))
+      
+      # init hz-level data
+      sp1df$z <- runif(n = nrow(sp1df))
+      
+      expect_equal(length(sp1df$x), length(sp1df))
+      expect_equal(length(sp1df$z), nrow(sp1df))
+    })
+    
+    test_that(sprintf("SPC deconstruction into a data.frame (%s)", use_class), {
+      
+      # do it here
+      h <- horizons(sp1df)
+      s <- site(sp1df)
+      d <- aqp:::.as.data.frame.aqp(as(sp1df, 'data.frame'), use_class)
+      
+      expect_true(inherits(h, use_class))
+      expect_true(inherits(s, use_class))
+      expect_true(inherits(d, use_class))
+    })
+    
+    
+    test_that(sprintf("SPC deconstruction into a list (%s)", use_class), {
+      
+      # do it here
+      l <- as(sp1df, 'list')
+      
+      # result should be a list
+      expect_true(inherits(l, 'list'))
+      
+      # there should be no NULL data, e.g. missing slots
+      res <- sapply(l, is.null)
+      expect_false(any(res))
+      
+      # check internals
+      expect_equivalent(l$idcol, idname(sp1df))
+      expect_equivalent(l$hzidcol, hzidname(sp1df))
+      expect_equivalent(l$hzdesgncol, hzdesgnname(sp1df))
+      expect_equivalent(l$hztexclcol, hztexclname(sp1df))
+      expect_equivalent(l$depthcols, horizonDepths(sp1df))
+      expect_equivalent(l$metadata, metadata(sp1df))
+      
+      expect_equivalent(l$horizons, horizons(sp1df))
+      expect_equivalent(l$site, site(sp1df))
+      expect_equivalent(l$sp, sp1df@sp)
+      expect_equivalent(l$diagnostic, diagnostic_hz(sp1df))
+      expect_equivalent(l$restrictions, restrictions(sp1df))
+      
+      # check internals after [-subsetting 
+      sp1.sub <- sp1df[1:2,]
+      # none of these slots should change, the others will be subset
+      # verifying these are transferred ensures key info slots are handled
+      # by the SPC subset method
+      expect_equivalent(l$idcol, idname(sp1.sub))
+      expect_equivalent(l$hzidcol, hzidname(sp1.sub))
+      expect_equivalent(l$hzdesgncol, hzdesgnname(sp1.sub))
+      expect_equivalent(l$hztexclcol, hztexclname(sp1.sub))
+      expect_equivalent(l$depthcols, horizonDepths(sp1.sub))
+      expect_equivalent(l$metadata, metadata(sp1.sub))
+    })
+    
+    
+    test_that(sprintf("SPC subsetting (%s)", use_class), {
+      
+      # profile subsets
+      expect_true(inherits(sp1df[1, ], 'SoilProfileCollection'))
+      expect_true(inherits(sp1df[1:5, ], 'SoilProfileCollection'))
+      
+      # profile and horizon subsets
+      expect_true(inherits(sp1df[1, 1], 'SoilProfileCollection'))
+      
+      # there should only be 1 profile and 1 horizon
+      expect_equal(length(sp1df[1, 1]), 1)
+      expect_equal(nrow(sp1df[1, 1]), 1)
+      
+      # there should be 5 profiles and 1 horizon / profile
+      expect_equal(length(sp1df[1:5, 1]), 5)
+      expect_equal(nrow(sp1df[1:5, 1]), 5)
+      
+    })
+    
+    test_that(sprintf("SPC subsetting with tidy verbs (%s)", use_class), {
+      
+      # filter works as expected
+      expect_equal(length(filter(sp1df, structure_type == "PL")), 1)
+      
+      # ensure multiple expressions yields same result as single expression
+      l1 <-  filter(sp1df, !is.na(texture), 
+                    prop > mean(prop, na.rm = TRUE))
+      l2 <-  filter(sp1df, !is.na(texture) &
+                    prop > mean(prop, na.rm = TRUE))
+      expect_equivalent(length(l1), length(l2))
+      
+      # mixing of site and horizon level expressions is the intersection
+      l1 <- filter(sp1df, group == 2, prop > mean(prop, na.rm = TRUE))
+      expect_equivalent(length(l1), 4)
+      
+      # grepSPC works as expected
+      expect_equal(length(grepSPC(sp1df, texture, "SCL")), 1)
+      
+      # subApply works as expected
+      expect_equal(length(subApply(sp1df, function(p)
+        TRUE)), length(sp1df))})
+    
   })
+  
+  
 })

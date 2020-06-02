@@ -703,6 +703,15 @@ if (!isGeneric("filter"))
 setMethod("filter", signature(object = "SoilProfileCollection"),
           function(object, ..., greedy = FALSE) {
             #if(requireNamespace("rlang")) {
+            # 
+            # debug: 
+            #   
+            #   f <- function(...) {
+            #     rlang::enquos(...)
+            #   }
+            #   x <- f(structure_type == "PL")
+            #   
+            
             # capture expression(s) at function
             x <- rlang::enquos(...)
             
@@ -743,9 +752,14 @@ setMethod("filter", signature(object = "SoilProfileCollection"),
             # create site level index from matching horizon criteria
             if (length(horizonmatch) == 1 |
                 !is.list(horizonmatch)) {
-              peiid.from.hz <- unique(horizons(object)[unlist(horizonmatch),
-                                                       idname(object)])
+              peiid.from.hz <- unique(object@horizons[[idname(object)]][unlist(horizonmatch)])
               hz.idx <- match(peiid.from.hz, profile_id(object))
+              # check that we wont be filtering erroneously
+              integrity <- aqp:::.spc_in_sync(object)
+              if(!integrity$valid) {
+                print(integrity)
+                stop("SPC integrity checks failed!")
+              }
               
               if (length(idx) & !greedy) {
                 # intersection of site and horizon level matches
@@ -761,7 +775,7 @@ setMethod("filter", signature(object = "SoilProfileCollection"),
             }
             
             # return SPC, subsetted using site level index
-            object[na.omit(idx),]
+            return(object[na.omit(idx),])
             #  } else {
             #    stop("package 'rlang' is required", .call=FALSE)
             #  }
@@ -912,12 +926,12 @@ setMethod("[[", signature(x = "SoilProfileCollection",
           function(x, i) {
             if (length(i) == 1) {
               # site names take precedence for those
-              #  shared between @site and @horizons
+              #  shared between @site and @horizons (idname)
               if (i %in% siteNames(x))
-                return(x@site[, i])
+                return(x@site[[i]])
               
               if (i %in% horizonNames(x))
-                return(x@horizons[, i])
+                return(x@horizons[[i]])
             }
           })
 

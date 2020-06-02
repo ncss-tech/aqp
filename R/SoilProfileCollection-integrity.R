@@ -24,7 +24,7 @@
   hhzid <- h[[hzidname(object)]]
   
   # top depths from horizon
-  tdep <- h[,horizonDepths(object)[1]]
+  tdep <- h[[horizonDepths(object)[1]]]
   
   # coalesced horizon IDs 
   # identifies intermingling of profiles within horizon
@@ -46,7 +46,8 @@
   
   # check 3: horizon IDs are in order of profile ID in site
   #          and, within profiles, have correct top-depth sequence
-  three <- all(.coalesce.idx(h[order(hid,hhzid,tdep),oid]) == sid)
+  hid2 <- h[[idname(object)]]
+  three <- all(.coalesce.idx(hid2[order(hid,hhzid,tdep)]) == sid)
   
   return(data.frame(siteDepth = one,
                     relativeOrder = two,

@@ -9,9 +9,21 @@
 #' @rdname compositeSPC
 #' @export compositeSPC
 compositeSPC <- function(object) {
-  # create composite object to facilitate eval_tidy
+  
+  # create composite horizon/site list object to facilitate eval_tidy
   h <- object@horizons
-  s <- as.list(object@site)
-  h <- as.list(h[,!colnames(h) %in% names(s)])
-  return(c(s, h))
+  s <- object@site
+  h[[idname(object)]] <- NULL
+  
+  # convert all factors to character for logical comparison/matching?
+  .unfactor <-  function(x) {
+    if (is.factor(x))
+      return(as.character(x))
+    return(x)
+  }
+  h[] <- lapply(h, .unfactor)
+  s[] <- lapply(s, .unfactor)
+  
+  res <- c(as.list(s), as.list(h))
+  return(res)
 }

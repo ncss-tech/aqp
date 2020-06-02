@@ -14,11 +14,10 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
           function(x, as.class = "data.frame", ...) {
             
             # 2020-05-30: sub-classes of data.frame have more than one class
-            
             # debug
 #            if (as.class == 'data.frame')
 #              stop("foo")
-            
+
             # don't invoke coercion methods if not needed
             if (!inherits(x, 'data.frame')) {
               warning("input data class does not inherit from `data.frame`", call.=TRUE)
