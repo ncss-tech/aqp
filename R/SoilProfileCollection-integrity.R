@@ -21,14 +21,16 @@
   
   # profile ID from horizon
   hid <- h[[oid]]
-  hhzid <- h[[hzidname(object)]]
+  hzid <- h[[hzidname(object)]]
+  s.hid <- match(sort(hid), hid)
+  s.hzid <- match(sort(hzid), hzid)
   
   # top depths from horizon
   tdep <- h[[horizonDepths(object)[1]]]
   
   # coalesced horizon IDs 
   # identifies intermingling of profiles within horizon
-  cohid <- .coalesce.idx(hid)
+  cohid <- aqp:::.coalesce.idx(hid)
   
   # if cohid is longer than sid, horizons from different profiles
   # are mixed or IDs have been corrupted (by e.g. direct edit)
@@ -46,8 +48,7 @@
   
   # check 3: horizon IDs are in order of profile ID in site
   #          and, within profiles, have correct top-depth sequence
-  hid2 <- h[[idname(object)]]
-  three <- all(.coalesce.idx(hid2[order(hid,hhzid,tdep)]) == sid)
+  three <- length(aqp:::.coalesce.idx(order(hid, hzid, tdep))) == length(hzid)
   
   return(data.frame(siteDepth = one,
                     relativeOrder = two,
