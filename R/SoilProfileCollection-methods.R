@@ -110,7 +110,7 @@ setMethod(f = 'show',
             
             # column subseting
             if(length(hz.show) > 0) {
-              h <- h[, hz.show, drop = FALSE]
+              h <- head(h, n = length(hz.show))[, , drop = FALSE]
               # generate text explaining truncated summary
               hz.txt <- sprintf(
                 "\nHorizon Attributes (first %s of %s columns):\n------------------------------------------------\n",
@@ -122,7 +122,7 @@ setMethod(f = 'show',
             }
             
             if(length(site.show) > 0) {
-              s <- s[, site.show, drop = FALSE]
+              s <- head(s, n = length(site.show))[, , drop = FALSE]
               site.txt <- sprintf(
                 "\nSite Attributes (first %s of %s columns):\n---------------------------------------------\n",
                 pmin(show.cols, n.site.cols),
@@ -143,21 +143,22 @@ setMethod(f = 'show',
               )
             cat(header.txt)
             
-            #   	if(n.profiles > 1)
-            # 			cat("\nDepth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
-            #
+           
+            cat("\nDepth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
+
             
             # make note of additional hz attributes
             cat(hz.txt)
             print(h, row.names = FALSE)
             
-            if(n.h > rows.show.h)
+            if(n.h > max(rows.show.h))
               cat('[... more horizons ...]\n')
             
             # make note of additional site attributes
             cat(site.txt)
             print(s, row.names = FALSE)
-            if(n.s > rows.show.s)
+            
+            if(n.s > max(rows.show.s))
               cat('[... more sites ...]\n')
             
             # presence of spatial data
@@ -441,6 +442,10 @@ setMethod(
     # get bottom depth column name
     hz_bottom_depths <- horizonDepths(x)[2]
     
+    # handle empty spc
+    if(length(x@horizons[[hz_bottom_depths]]) == 0)
+      return(NA)
+    
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
       # combine bottom depths with IDs and variable
@@ -452,6 +457,7 @@ setMethod(
     
     # filter out missing data
     h <- h[complete.cases(h),]
+    
     # compute max by ID
     d <- tapply(h[, 1], h[, 2], max, na.rm = TRUE)
     
@@ -467,6 +473,10 @@ setMethod(
   definition = function(x, v = NULL) {
     # get bottom depth column name
     hz_bottom_depths <- horizonDepths(x)[2]
+    
+    # handle empty spc
+    if(length(x@horizons[[hz_bottom_depths]]) == 0)
+      return(NA)
     
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
