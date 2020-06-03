@@ -15,16 +15,32 @@
   
   # object profile ID name
   oid <- idname(object)
-  
+  hzidnm <- hzidname(object)
   # profile ID from site
-  sid <- s[[oid]]
+  sid <- as.character(s[[oid]])
   
   # profile ID from horizon
-  hid <- h[[oid]]
-  hzid <- h[[hzidname(object)]]
+  hid <- as.character(h[[oid]])
+  hzid <- as.character(h[[hzidnm]])
   s.hid <- match(sort(hid), hid)
   s.hzid <- match(sort(hzid), hzid)
+
+  res1 <- length(hid)
+  res2 <- length(hzid) 
   
+  if(res1 == 0 & res2 == 0)  {
+    # this is an empty soil profile collection
+    return(data.frame(siteDepth = TRUE,
+                    relativeOrder = TRUE,
+                    depthOrder = TRUE,
+                    valid = TRUE))
+  } else if(res1 != 0 | res2 == 0) {
+    # this is before automatic hzID is assigned
+    return(data.frame(siteDepth = TRUE,
+                      relativeOrder = TRUE,
+                      depthOrder = TRUE,
+                      valid = TRUE))
+  }
   # top depths from horizon
   tdep <- h[[horizonDepths(object)[1]]]
   

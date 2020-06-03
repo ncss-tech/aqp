@@ -5,9 +5,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-This document performs some basic demonstrations of new and revised functionality of the SoilProfileCollection.
-
-By and large, the familiar idioms are retained -- with several capabilities now being more refined and robust.
+This document performs some basic demonstrations of new and revised functionality of the _SoilProfileCollection_.
 
 ## SoilProfileCollection - changes to the definition
 
@@ -62,9 +60,9 @@ A safe accessor for `aqp_df_class` is provided `aqp_df_class(object)`, where obj
 
 ### Integrity of the SoilProfileCollection
 
-"Integrity" refers to the relative state of the `data.frame` slot components of a `SoilProfileCollection` and methods we use to maintain them. Specifically, integrity is relevant to `@site` and `@horizon` slots, but also, `@diagnostic` and `@restrictions`. 
+"Integrity" refers to the relative state of the `data.frame` slot components of a `SoilProfileCollection` and methods we use to maintain them. Specifically, integrity is relevant to `@site` and `@horizons` slots, but also, `@diagnostic` and `@restrictions`. 
 
-Three major issues pertain to this matter of SoilProfileCollection "integrity":
+Three major issues pertain to this matter of _SoilProfileCollection_ "integrity":
 
   1.   Initialization from `data.frame`, `data.table` or `tbl_df`
   
@@ -76,7 +74,9 @@ Three major issues pertain to this matter of SoilProfileCollection "integrity":
 
 Currently, much of the logic in aqp relies on the sort order that is derived from the input horizon data at object creation. It is assumed, but not strictly enforced everywhere, that the site IDs follow the exact same order and do not get rearranged.
 
- - As part of initialization of the SPC object, the horizon data are sorted first based on `as.character(idname(object))` (profile ID) and then on `as.numeric(horizonDepths(object)[1])` (top depth). This ensures that any unusual sorting in the input data do not interfere with topologic checks -- which require that individual profiles be continuously top-depth ordered for profiles within `@horizons`. Continuous does not necessarily mean "without gaps or overlaps" [a separate topologic check] it means that if there is a horizon at a particular depth, it is in the right top depth order relative to other horizons in that profile. In this sense, an SPC comprised of one or more topologically "invalid" profiles can still have valid integrity -- the results for the topologically valid profiles are valid.
+ - As part of initialization of the SPC object, the horizon data are sorted first based on profile ID [character] and then on (top depth) [numeric]. This ensures that any unusual sorting in the input data do not interfere with topologic checks -- which require that individual profiles be continuously top-depth ordered for profiles within `@horizons`. 
+ 
+Continuous does not necessarily mean "without gaps or overlaps" [a separate topologic check] it means that if there is a horizon at a particular depth, it is in the right top depth order relative to other horizons in that profile. In this sense, an SPC comprised of one or more topologically "invalid" profiles can still have valid integrity -- the results for the topologically valid profiles are valid.
 
  - Two new functions have been added to aqp/aqpdf that address the identification of relative site/horizon state. Several additional diagnostics would need to be added to keep track of profiles without horizon data -- with more changes to several functions that change horizon data -- but it is imminently possible.
 
@@ -86,20 +86,19 @@ Currently, much of the logic in aqp relies on the sort order that is derived fro
 
  - In theory, the profile IDs do not have to follow the default sort order (which sorts based on character representation of profile ID) as long as depths are in order within IDs. Alternate orders could be permitted and maintained by providing a method that updates the metadata entry and then re-sorts the collection as needed based on a vector of profile IDs or indexes. 
 
- - Additional methods to add horizon-less sites would augment this index to add values that did not have a corresponding value in the horizon data in the correct relative positio. The lack of corresponding horizon index indicating its (lack of) depth measurements. 
+ - Additional methods to add horizon-less sites would augment this index to add values that did not have a corresponding value in the horizon data in the correct relative position. The lack of corresponding horizon index indicating its (lack of) depth measurements. 
 
  - We could also add an option (`na.hz.omit`) to strip all-NA horizons out at promotion, setting those "profiles" up as truly horizonless, to allow for a toggle to get back to old behavior. There is still value in being able to create an SPC from a single (site-denormalized) `data.frame`. Since we will not be outright prohibiting NA -- due to the fact that performing topologic checks on an SPC provides added value -- this is the best way to force the new, logical behavior while allowing historic behavior to be retained with an option and a warning.
 
- - I think the current behavior of `[` not re-arranging data is probably worth keeping for the sake of efficiency and backwards compatibility. I think a `rearrangeSites` methods should be created first, and eventually implemented into `[` with an option to turn on rearranging (versus operating on unique/sorted values, and then returning input sort order). It is a relatively rare operation -- I can't think of a single case where it is "needed". But I could imagine for some cases setting a more sensible quasi-numeric ordering for profile IDs that cannot be coerced to numeric for order. E.g. soil1, soil10, soil100, soil101, soil2 versus soil1, soil2, soil3, soil4, soil5. The internal datasets have been set up this way to protect against unintentional sorting at the cost of being forced to follow character ordering.
-
+ - I think the current behavior of `[` not re-arranging data is probably worth keeping for the sake of efficiency and backwards compatibility. I think a `rearrangeSites` method should be created first. It is a relatively rare operation -- I can't think of a single case where it is "needed". I could imagine for some cases setting a more sensible quasi-numeric ordering for profile IDs that cannot be coerced to numeric for order. E.g. soil1, soil10, soil100, soil101, soil2 versus soil1, soil2, soil3, soil4, soil5. The internal datasets have been set up this way to protect against unintentional sorting at the cost of being forced to follow character ordering.
 
 #### 2. JOINs
 
-Following LEFT JOIN of new data (`site<-`, `horizons<-`) when site and horizon IDs are integers, and some new attributes contain `NA`, the object's site/horizon order _must_ be preserved. 
+Following LEFT JOIN (`site<-`, `horizons<-`) to add data the object's site/horizon order _must_ be preserved. 
 
  - This has been fixed in branch aqp/aqpdf for base R `data.frame` as well as `tbl_df`. Default behavior of `merge.data.frame(..., all.x = TRUE, sort = FALSE)` is insufficient to handle the effect of `NA` on sorting when in the presence of a mixture of integer and character-sorted indices (i.e `any(1:10 != sort(as.character(1:10)))`). 
  
- - No order corrections are needed for `merge.data.table` (that applies when the slots are `data.table`s). Other than ensuring that the `data.frame` `j` index was used unambiguously, `data.table` was a drop-in replacement.
+ - No order corrections are needed for `merge.data.table` (that applies when the slots are `data.table`s). Other than ensuring that the `j` index was used unambiguously, `data.table` was a drop-in replacement.
 
  - `horizons<-` was changed to be an "open-ended" LEFT JOIN with no constraints on the right hand side other than at least one key:value pair that "works." Historically `plyr::join` was used for `site<-`, and only replacement was available for `horizons<-`. JOIN logic has far more potential utility than slot replacement and is consistent with `site<-`. The `replaceHorizons<-` method was created to provide a setter equivalent to historic full-slot replacements.
  

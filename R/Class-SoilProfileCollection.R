@@ -1,3 +1,65 @@
+
+setClass(
+  Class = 'SoilProfileCollection',
+  representation = representation(
+    idcol = 'character', # column name containing IDs
+    hzidcol = 'character', # column name containing unique horizon IDs
+    
+    hzdesgncol = 'character', # column name containing horizon designation
+    hztexclcol = 'character', # column name containing horizon texture class
+    
+    depthcols = 'character', # 2 element vector with column names for hz top, bottom
+    
+    metadata = 'data.frame', # single-row dataframe with key-value mapping
+    
+    horizons = 'data.frame', # all horizons sorted by ID & top depth
+    site = 'data.frame', # data about the sampling sites
+    
+    sp = 'SpatialPoints', # spatial data stored here, initialized as 'empty' sp object
+    
+    diagnostic = 'data.frame',# (optional) diagnostic horizons are stored here
+    restrictions = 'data.frame' # (optional) restrictions are stored here
+  ),
+  prototype = prototype(
+    idcol = 'id',
+    hzidcol = 'hzID',
+    hzdesgncol = character(0),
+    hztexclcol = character(0),
+    depthcols = c('top', 'bottom'),
+    metadata = data.frame(aqp_df_class = "data.frame", 
+                          stringsAsFactors = FALSE),
+    horizons = data.frame(id = character(0), hzID = character(0),
+                          top = numeric(0), bottom = numeric(0),
+                          stringsAsFactors = FALSE),
+    site = data.frame(id = character(0), stringsAsFactors = FALSE),
+    sp = SpatialPoints(data.frame(x = 0, y = 0))[-1, ],
+    diagnostic = data.frame(stringsAsFactors = FALSE),
+    restrictions = data.frame(stringsAsFactors = FALSE)
+  ),
+  validity = function(object) {
+    return(aqp::.spc_in_sync(object)$valid)
+  }
+)
+
+# https://github.com/ncss-tech/aqp/issues/75
+## init-time validity checks
+# too-strict checking precludes analysis of E/B type horizons and common errors and over-checking incurs performance penalty
+# .SoilProfileCollectionValidity <- function(object) {
+#   # over-checking incurs performance penalty
+#   # for now we do nothing
+#   return(aqp::.spc_in_sync(object)$valid)
+# }
+
+##
+## notes:
+##
+
+# 2019-03-15: creating an empty SpatialPoints object requires more effort
+# c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
+# old: new('SpatialPoints')
+# new: SpatialPoints(data.frame(x = 0, y = 0))[-1,]
+
+
 # 2020-05-30: make data.table, tbl_df and data.frame slots "co-exist"
 #
 # see: https://stackoverflow.com/questions/35642191/tbl-df-with-s4-object-slots
@@ -78,59 +140,3 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
               )
           })
 
-
-# https://github.com/ncss-tech/aqp/issues/75
-
-## init-time validity checks
-# too-strict checking precludes analysis of E/B type horizons and common errors
-.SoilProfileCollectionValidity <- function(object) {
-  # over-checking incurs performance penalty
-  # for now we do nothing
-  return(TRUE)
-}
-
-##
-## notes:
-##
-
-# 2019-03-15: creating an empty SpatialPoints object requires more effort
-# c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
-# old: new('SpatialPoints')
-# new: SpatialPoints(data.frame(x = 0, y = 0))[-1,]
-
-setClass(
-  Class = 'SoilProfileCollection',
-  representation = representation(
-    idcol = 'character', # column name containing IDs
-    hzidcol = 'character', # column name containing unique horizon IDs
-    
-    hzdesgncol = 'character', # column name containing horizon designation
-    hztexclcol = 'character', # column name containing horizon texture class
-    
-    depthcols = 'character', # 2 element vector with column names for hz top, bottom
-    
-    metadata = 'data.frame', # single-row dataframe with key-value mapping
-    
-    horizons = 'data.frame', # all horizons sorted by ID & top depth
-    site = 'data.frame', # data about the sampling sites
-    
-    sp = 'SpatialPoints', # spatial data stored here, initialized as 'empty' sp object
-    
-    diagnostic = 'data.frame',# (optional) diagnostic horizons are stored here
-    restrictions = 'data.frame' # (optional) restrictions are stored here
-  ),
-  prototype = prototype(
-    idcol = 'id',
-    hzidcol = 'hzID',
-    hzdesgncol = character(0),
-    hztexclcol = character(0),
-    depthcols = c('top', 'bottom'),
-    metadata = data.frame(aqp_df_class = "data.frame", stringsAsFactors = FALSE),
-    horizons = data.frame(stringsAsFactors = FALSE),
-    site = data.frame(stringsAsFactors = FALSE),
-    sp = SpatialPoints(data.frame(x = 0, y = 0))[-1, ],
-    diagnostic = data.frame(stringsAsFactors = FALSE),
-    restrictions = data.frame(stringsAsFactors = FALSE)
-  ),
-  validity = .SoilProfileCollectionValidity
-)
