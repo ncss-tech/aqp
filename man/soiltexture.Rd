@@ -13,7 +13,7 @@ This table is a snapshot generated using the results of TT.points.in.classes fro
 \usage{data("soiltexture")}
 
 \format{
-  A data frame with 101 observations on the following 4 variables.
+  A data frame with 5151 observations on the following 4 variables.
   \describe{
     \item{\code{clay}}{clay percentage of the fine earth fraction, a integer vector}
     \item{\code{sand}}{sand percentage of the fine earth fraction, a integer vector}

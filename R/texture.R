@@ -1,12 +1,11 @@
 # # this creates a map from ssc to texcl using the soiltexture package function TT.points.in.classes, which is not really inituitive
-# soiltexture <- data.frame(clay = 0:100, sand = 100:0)
-# soiltexture$silt <- with(soiltexture, 100 - clay - sand)
-# 
+# soiltexture <- expand.grid(clay = 0:100, sand = 0:100, silt = 0:100)
+# soiltexture <- subset(soiltexture, (clay + silt + sand) == 100)
 # soiltexture$texcl <- apply(soiltexture, 1, FUN = function(x) {
-#   
+# 
 #   y <- soiltexture::TT.points.in.classes(data.frame(CLAY = x[1], SILT = x[3], SAND = x[2]), class.sys = "USDA-NCSS.TT")
 #   texcl <- names(y[, y > 0])
-#   
+# 
 #   return(texcl[1])
 # })
 # 
@@ -22,6 +21,7 @@ ssc_to_texcl <- function(df) {
     stop("missing columns with clay|CLAY|sand|SAND in the heading", call. = FALSE)
   }
   
+  df$rn <- row.names(df)
   names(df) <- tolower(names(df))
   df$clay <- df[, grep("clay", names(df))]
   df$sand <- df[, grepl("sand", names(df))]
@@ -31,14 +31,17 @@ ssc_to_texcl <- function(df) {
     df$silt <- 100 - df$clay - df$sand
   }
   
-  df <- df[c("clay", "silt", "sand")]
-  df <- round(df)
+  df <- df[c("rn", "clay", "silt", "sand")]
+  df[2:4] <- round(df[2:4])
   df$idx <- with(df, paste(clay, silt, sand))
   
   soiltexture$idx <- with(soiltexture, paste(clay, silt, sand))
   
-  df <- merge(df, soiltexture[c("idx", "texcl")], by = "idx", all.x = TRUE)
+  df <- merge(df, soiltexture[c("idx", "texcl")], by = "idx", all.x = TRUE, sort = FALSE)
+  df <- df[order(as.integer(df$rn)), ]
+  df$rn  <- NULL
   df$idx <- NULL
+  
   
   return(df$texcl)
 }
