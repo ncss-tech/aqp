@@ -51,8 +51,8 @@ glom <- function(p, z1, z2 = NA,
   if(!invert) {
     idx <- clod.hz.ids(p, z1, z2, modality)
   } else {
-    idx <- c(clod.hz.ids(p, min(p[[depthn[1]]], na.rm=T), z1, modality),
-             clod.hz.ids(p, z2, max(p[[depthn[2]]], na.rm=T), modality))
+    idx <- c(clod.hz.ids(p, min(p[[depthn[1]]], na.rm = T), z1, modality),
+             clod.hz.ids(p, z2, max(p[[depthn[2]]], na.rm = T), modality))
   }
   
   # short circuit to get hzIDs of result

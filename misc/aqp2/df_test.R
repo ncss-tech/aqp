@@ -8,7 +8,7 @@ library(tibble)
 ###  use: class to use 
 ###       data.frame [1], data.table [2], or tbl_df [3]
 ### 
-     use <- 1
+     use <- 3
 
      use_class <- switch(as.character(use),
                          "1" = "data.frame", 
