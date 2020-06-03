@@ -9,6 +9,9 @@
 #   return(texcl[1])
 # })
 # 
+# idx <- with(soiltexture, clay == 40 & sand == 45)
+# soiltexture$texcl[idx] <- "SCL" 
+# 
 # save(soiltexture, file = "C:/workspace2/github/ncss-tech/aqp/data/soiltexture.rda")
 
 
