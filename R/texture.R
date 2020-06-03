@@ -9,14 +9,17 @@
 #   return(texcl[1])
 # })
 # 
+# soiltexture$texcl <- tolower(soiltexture$texcl)
+# 
 # idx <- with(soiltexture, clay == 40 & sand == 45)
-# soiltexture$texcl[idx] <- "SCL" 
+# soiltexture$texcl[idx] <- "scl"
 # 
 # save(soiltexture, file = "C:/workspace2/github/ncss-tech/aqp/data/soiltexture.rda")
 
 
+
 # convert sand, silt and clay to texture class
-ssc_to_texcl <- function(df) {
+ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE) {
   
   load(system.file("data/soiltexture.rda", package="aqp")[1])
   
@@ -24,26 +27,49 @@ ssc_to_texcl <- function(df) {
     stop("missing columns with clay|CLAY|sand|SAND in the heading", call. = FALSE)
   }
   
+  # standardize inputs
   df$rn <- row.names(df)
   names(df) <- tolower(names(df))
   df$clay <- df[, grep("clay", names(df))]
   df$sand <- df[, grepl("sand", names(df))]
   
+  # check if silt is missing
   if (all(! grepl("silt", names(df)))) {
     message("missing columns with silt|SILT in the heading, therefore silt will be calculated as 100 - clay - sand")
     df$silt <- 100 - df$clay - df$sand
   }
   
+  
+  # round and index
   df <- df[c("rn", "clay", "silt", "sand")]
   df[2:4] <- round(df[2:4])
   df$idx <- with(df, paste(clay, silt, sand))
   
-  soiltexture$idx <- with(soiltexture, paste(clay, silt, sand))
+  
+  # check sand, silt and clay sum to 100
+  idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
+  if (any(idx)) {
+    message("some records do not sum to 100 %")
+    if (rmHzErrors == TRUE) {
+      df$silt <- 100 - df$clay - df$sand
+    } else message("if records do not sum to 100% the returned values will be NA")
+  }
+  
+    soiltexture$idx <- with(soiltexture, paste(clay, silt, sand))
   
   df <- merge(df, soiltexture[c("idx", "texcl")], by = "idx", all.x = TRUE, sort = FALSE)
   df <- df[order(as.integer(df$rn)), ]
   df$rn  <- NULL
   df$idx <- NULL
+  
+  
+  if (as.is == FALSE) {
+    df$texcl <- factor(df$texcl, levels = c("s",  "si", "ls", "sl", "sil", "l", "scl",  "cl", "sicl", "sc", "sic", "c"), ordered = TRUE)
+  }
+  
+  if (droplevels == TRUE) {
+    df$texcl <- droplevels(df$texcl)
+  }
   
   
   return(df$texcl)
