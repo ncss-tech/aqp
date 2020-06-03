@@ -10,9 +10,10 @@ setClass(
     
     depthcols = 'character', # 2 element vector with column names for hz top, bottom
     
-    metadata = 'data.frame', # single-row dataframe with key-value mapping
+    metadata = 'list', # list with key-value mapping
     
     horizons = 'data.frame', # all horizons sorted by ID & top depth
+    
     site = 'data.frame', # data about the sampling sites
     
     sp = 'SpatialPoints', # spatial data stored here, initialized as 'empty' sp object
@@ -26,9 +27,9 @@ setClass(
     hzdesgncol = character(0),
     hztexclcol = character(0),
     depthcols = c('top', 'bottom'),
-    metadata = data.frame(aqp_df_class = "data.frame", 
+    metadata = list(aqp_df_class = "data.frame", 
                           stringsAsFactors = FALSE),
-    horizons = data.frame(id = character(0), hzID = character(0),
+    horizons = data.frame(id  = character(0), hzID = character(0),
                           top = numeric(0), bottom = numeric(0),
                           stringsAsFactors = FALSE),
     site = data.frame(id = character(0), stringsAsFactors = FALSE),
@@ -37,7 +38,7 @@ setClass(
     restrictions = data.frame(stringsAsFactors = FALSE)
   ),
   validity = function(object) {
-    return(aqp::.spc_in_sync(object)$valid)
+    return(aqp:::.spc_in_sync(object)$valid)
   }
 )
 

@@ -411,16 +411,13 @@ setReplaceMethod("depths", "data.frame",
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
   
-  # re-order data: IDs, top hz depths
-  new.order <- order(data[[nm[1]]], data[[nm[2]]])
-  
-  # depths
+  # depths 
   depthcols <- c(nm[2], nm[3])
   
   # create object
   res <- SoilProfileCollection(idcol = nm[1], 
                                depthcols = depthcols, 
-                               horizons = data[new.order, ])
+                               horizons = data)
   
   # check for horizon ID name conflict
   if(hzidname(res) %in% names(data)) {

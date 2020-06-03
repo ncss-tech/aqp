@@ -1,28 +1,52 @@
 
 ## init
-
-"SoilProfileCollection" <- function(idcol = 'id',
-                                    depthcols = c('top', 'bottom'),
-                                    metadata = data.frame(stringsAsFactors = FALSE),
-                                    horizons = data.frame(stringsAsFactors = FALSE),
-                                    site = data.frame(stringsAsFactors = FALSE),
-                                    sp = new('SpatialPoints'),
-                                    diagnostic = data.frame(stringsAsFactors = FALSE),
-                                    restrictions = data.frame(stringsAsFactors = FALSE)) {
+# constructor for the SoilProfileCollection object
+"SoilProfileCollection" <-
+  function(idcol = 'id',
+           hzidcol = 'hzID',
+           hzdesgncol = character(0),
+           hztexclcol = character(0),
+           depthcols = c('top', 'bottom'),
+           metadata = list(aqp_df_class = "data.frame",
+                                 stringsAsFactors = FALSE),
+           horizons = data.frame(
+             id  = character(0),
+             hzID = character(0),
+             top = numeric(0),
+             bottom = numeric(0),
+             stringsAsFactors = FALSE
+           ),
+           site = data.frame(id = character(0), stringsAsFactors = FALSE),
+           sp = new('SpatialPoints'),
+           diagnostic = data.frame(stringsAsFactors = FALSE),
+           restrictions = data.frame(stringsAsFactors = FALSE)) {
   
-  # set metadata (default: data.frame, centimeters)
+  # retrieve highest-level data.frame subclass of horizon data
   hzclass <- class(horizons)[1]
   
-  metadata <- data.frame(
+  # set metadata (default: data.frame, centimeters)
+  metadata <- list(
     aqp_df_class = hzclass,
     depth_units = 'cm',
-    stringsAsFactors = FALSE
+    stringsAsFactors = FALSE,
+    
+    # calculate data order (original)
+    new.order = order(horizons[[depthcols[1]]], horizons[[depthcols[2]]]),
+    
+    # calculate default order: IDs, top horizon depths
+    default.order = match(sort(horizons[[idcol]]), 1:nrow(horizons))
   )
+  # by default, the target order to check/maintain is the default
+  metadata$target.order <- metadata$default.order
+  
+  if(!"hzID" %in% names(horizons))
+    horizons$hzID <- 1:nrow(horizons)
   
   # create object
   new(
     "SoilProfileCollection",
     idcol = idcol,
+    hzidcol = hzidcol,
     depthcols = depthcols,
     metadata = metadata,
     horizons = .as.data.frame.aqp(horizons, hzclass),
@@ -297,7 +321,7 @@ if (!isGeneric("site"))
 # retrieves the site data frame
 setMethod("site", signature(object = "SoilProfileCollection"),
           function(object) {
-            return(.as.data.frame.aqp(object@site, metadata(object)$aqp_df_class))
+            return(.as.data.frame.aqp(object@site, aqp_df_class(object)))
           })
 
 ## diagnostic horizons: stored as a data.frame
