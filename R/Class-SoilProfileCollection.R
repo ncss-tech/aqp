@@ -38,7 +38,7 @@ setClass(
     restrictions = data.frame(stringsAsFactors = FALSE)
   ),
   validity = function(object) {
-    return(aqp:::.spc_in_sync(object)$valid)
+    return(spc_in_sync(object)$valid)
   }
 )
 
@@ -48,7 +48,7 @@ setClass(
 # .SoilProfileCollectionValidity <- function(object) {
 #   # over-checking incurs performance penalty
 #   # for now we do nothing
-#   return(aqp::.spc_in_sync(object)$valid)
+#   return(TRUE)
 # }
 
 ##

@@ -312,9 +312,11 @@ if (!isGeneric('metadata<-'))
 setReplaceMethod("metadata", signature(object = "SoilProfileCollection"),
   function(object, value) {
 
+  # metadata() is now stored in a list()
+  # 
 	# quick sanity check
-	if(nrow(value) > 1 | nrow(value) < 1)
-	  stop("metadata should be a 1-row data frame", call.=FALSE)
+	#if(nrow(value) > 1 | nrow(value) < 1)
+	#  stop("metadata should be a 1-row data frame", call.=FALSE)
 
 	# otherwise assign
 	object@metadata <- value
@@ -340,7 +342,7 @@ setReplaceMethod("depth_units", signature(object = "SoilProfileCollection"),
 
 	# default depth_units are always in metadata
 	# replace what ever is there
-	md[['depth_units']] <- value
+	md$depth_units <- value
 
 	# replace metadata
 	metadata(object) <- md
@@ -395,7 +397,7 @@ setReplaceMethod("depths", "data.frame",
 ##
 ## initialize SP/SPC objects from a model.frame
 ##
-.initSPCfromMF <- function(data, mf){
+.initSPCfromMF <- function(data, mf, use_class){
   # get column names containing id, top, bottom
   nm <- names(mf)
   
@@ -414,9 +416,23 @@ setReplaceMethod("depths", "data.frame",
   # depths 
   depthcols <- c(nm[2], nm[3])
   
+  # create a site table with just IDs
+  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]])), class(data)[1])
+  names(nusite) <- nm[1]
+  
+  if(nrow(nusite) != length(unique(data[[nm[1]]]))) {
+    warning("unsorted input data will be ordered during promotion to SoilProfileCollection", call. = FALSE)
+  
+    # reorder based on site ID and top depth column
+    ## note: forced character sort on ID -- need to impose some order to check depths
+    data <- data[order(as.character(data[[nm[1]]]), data[[depthcols[1]]]), ]
+  }
+  
   # create object
   res <- SoilProfileCollection(idcol = nm[1], 
+                               hzidcol = 'hzID',
                                depthcols = depthcols, 
+                               site = nusite,
                                horizons = data)
   
   # check for horizon ID name conflict

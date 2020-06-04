@@ -1,6 +1,6 @@
 # Quickly assess relative state of site and horizon slots
 # 
-# .spc_in_sync
+# spc_in_sync
 # 
 # Function to relatively rapidly determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents. The speed comes from not using match/unique based logic. Ideally, checking the state of object by this method will allow the match/%in%/unique -based methods to be used more sparingly -- i.e. only when an exact index needs to be made.
 # 
@@ -8,7 +8,7 @@
 # Andrew G. Brown
 # 
 #  
-.spc_in_sync <- function(object) {
+spc_in_sync <- function(object) {
   # get site and horizon slot contents
   s <- object@site
   h <- object@horizons
@@ -16,6 +16,7 @@
   # object profile ID name
   oid <- idname(object)
   hzidnm <- hzidname(object)
+  
   # profile ID from site
   sid <- as.character(s[[oid]])
   
@@ -25,28 +26,22 @@
   s.hid <- match(sort(hid), hid)
   s.hzid <- match(sort(hzid), hzid)
 
-  res1 <- length(hid)
-  res2 <- length(hzid) 
   
-  if(res1 == 0 & res2 == 0)  {
+  if(length(hid) == 0 & length(hzid)  == 0)  {
     # this is an empty soil profile collection
     return(data.frame(siteDepth = TRUE,
                     relativeOrder = TRUE,
                     depthOrder = TRUE,
                     valid = TRUE))
-  } else if(res1 != 0 | res2 == 0) {
-    # this is before automatic hzID is assigned
-    return(data.frame(siteDepth = TRUE,
-                      relativeOrder = TRUE,
-                      depthOrder = TRUE,
-                      valid = TRUE))
   }
+  
   # top depths from horizon
   tdep <- h[[horizonDepths(object)[1]]]
   
   # coalesced horizon IDs 
   # identifies intermingling of profiles within horizon
   cohid <- aqp:::.coalesce.idx(hid)
+  cohzid <- aqp:::.coalesce.idx(hzid)
   
   # if cohid is longer than sid, horizons from different profiles
   # are mixed or IDs have been corrupted (by e.g. direct edit)
@@ -60,11 +55,11 @@
   # check 2: site IDs match coalesced profile ID from horizon
   #          this ensures the same _relative_ ordering, but
   #          horizons still may be out of order within profiles
-  two <- all(sid == cohid)
+  two <- ifelse(one, all(sid == cohid), FALSE)
   
   # check 3: horizon IDs are in order of profile ID in site
   #          and, within profiles, have correct top-depth sequence
-  three <- length(aqp:::.coalesce.idx(order(hid, hzid, tdep))) == length(hzid)
+  three <- TRUE #TODO
   
   return(data.frame(siteDepth = one,
                     relativeOrder = two,

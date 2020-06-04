@@ -31,16 +31,12 @@
     stringsAsFactors = FALSE,
     
     # calculate data order (original)
-    new.order = order(horizons[[depthcols[1]]], horizons[[depthcols[2]]]),
+    original.order = order(as.character(horizons[[idcol]]), horizons[[depthcols[1]]])
     
-    # calculate default order: IDs, top horizon depths
-    default.order = match(sort(horizons[[idcol]]), 1:nrow(horizons))
   )
-  # by default, the target order to check/maintain is the default
-  metadata$target.order <- metadata$default.order
   
-  if(!"hzID" %in% names(horizons))
-    horizons$hzID <- 1:nrow(horizons)
+  # by default, the target order to check/maintain is the default
+  metadata$target.order <- metadata$original.order
   
   # create object
   new(
@@ -789,7 +785,8 @@ setMethod("filter", signature(object = "SoilProfileCollection"),
               peiid.from.hz <- unique(object@horizons[[idname(object)]][unlist(horizonmatch)])
               hz.idx <- match(peiid.from.hz, profile_id(object))
               # check that we wont be filtering erroneously
-              integrity <- aqp:::.spc_in_sync(object)
+              # 
+              integrity <- spc_in_sync(object)
               if(!integrity$valid) {
                 print(integrity)
                 stop("SPC integrity checks failed!")
