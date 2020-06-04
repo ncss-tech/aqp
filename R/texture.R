@@ -1,4 +1,4 @@
-# # this creates a map from ssc to texcl using the soiltexture package function TT.points.in.classes, which is not really inituitive
+# # this creates a lookup from ssc to texcl using the soiltexture package function TT.points.in.classes, which is not really inituitive
 # soiltexture <- expand.grid(clay = 0:100, sand = 0:100, silt = 0:100)
 # soiltexture <- subset(soiltexture, (clay + silt + sand) == 100)
 # soiltexture$texcl <- apply(soiltexture, 1, FUN = function(x) {
@@ -12,7 +12,7 @@
 # soiltexture$texcl <- tolower(soiltexture$texcl)
 # 
 # idx <- with(soiltexture, clay == 40 & sand == 45)
-# soiltexture$texcl[idx] <- "scl"
+# soiltexture$texcl[idx] <- "sc"
 # 
 # save(soiltexture, file = "C:/workspace2/github/ncss-tech/aqp/data/soiltexture.rda")
 
