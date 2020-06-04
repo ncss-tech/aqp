@@ -5,7 +5,20 @@ get.increase.matrix <- function(p, attr, threshold.fun, vertical.distance) {
   # attr - attribute name to get the "increase" of
   # threshold.fun - a function that returns the threshold (as a function of attr); may return a constant single value
   # vertical distance - the vertical distance (determined from difference SPC top depth variable) within which increase must be met
-  topdepth <- horizons(p)[[horizonDepths(p)[1]]]
+  
+  # NOTE: should topdepths or midpoints be used? typically the same horizon index is chosen
+  #
+  #       with thick horizons/diffuse transitions -- the midpoint is probably more appropriate.
+  #
+  #       I originally chose top depth because it is more straightforward to validate against known data
+  #       whereas the midpoints required some more thought. now that I am pleased with stability of algo,
+  #       I think it is worth switching to midpoint given it probably gives a better estimate of
+  #       the thickness of transitional zone between horizons when it matters
+  #
+  h <- horizons(p)
+  depthz <- horizonDepths(p)
+  middepth <- h[[depthz[1]]] + (h[[depthz[2]]] - h[[depthz[1]]]) / 2
+  
   increase.var <- horizons(p)[[attr]]
   
   threshold.vector <- threshold.fun(increase.var)
@@ -32,7 +45,7 @@ get.increase.matrix <- function(p, attr, threshold.fun, vertical.distance) {
   attr.inc.mat <- outer(increase.var, increase.var, `-`)
   
   # calculate a vertical distance matrix (between all horizons)
-  vdist.mat <- outer(topdepth, topdepth, `-`)
+  vdist.mat <- outer(middepth, middepth, `-`)
   
   # crit1 "an increase of at least [thresh.mat]"
   increase.met <- (attr.mat - thresh.mat) > (attr.inc.mat * upper.tri(attr.inc.mat))
