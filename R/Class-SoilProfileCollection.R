@@ -83,8 +83,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
 
             # don't invoke coercion methods if not needed
             if (!inherits(x, 'data.frame')) {
-              warning("input data class does not inherit from `data.frame`", call.=TRUE)
-              return(x)
+              stop("input data class does not inherit from `data.frame`", call.=TRUE)
             }
             
             # NULL x -- probably from unusual use cases
@@ -95,10 +94,15 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
             #       by letting it fall through default switch EXPR
             #       a warning is generated for non-data.frames
             cond <- class(x)[1] == as.class
+            test <- all(length(cond) > 0 & cond)
             
-            if (all(length(cond) > 0 & cond)) {
+            # this happens if a SPC has had its metadata entry wiped out or old SPC object in Rda file
+            if(is.null(test) | is.na(test)) {
+              as.class <- "data.frame"
+              message("missing metadata for aqp_df_class -- run aqp::rebuildSPC(object) to fix slots and metadata")
+            } else if (test) {
               
-              # rm rownames in slots
+              # rm rownames in slots 
               rownames(x) <- NULL
               
               return(x)
@@ -127,6 +131,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
                 #  make a warning with a stack trace
                 if (as.class != "data.frame") {
                   message(sprintf("failed to use %s as data.frame class", as.class))
+                  metadata(object)$aqp_df_class <- "data.frame"
                   warning("data.table and tbl_df in SoilProfileCollection data.frame slots are EXPERIMENTAL, defaulting to data.frame", call. = FALSE)
                 }
                 

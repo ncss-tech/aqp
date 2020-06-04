@@ -229,7 +229,7 @@ setReplaceMethod("hzidname", signature(object = "SoilProfileCollection"),
                    }
                    
                    # test: unique?
-                   x <- horizons(object)[[value]]
+                   x <- object@horizons[[value]]
                    if(length(unique(x)) != nrow(object)){
                      # convert error to warning, 
                      # prevent stoppage from nonunique, 
@@ -237,7 +237,14 @@ setReplaceMethod("hzidname", signature(object = "SoilProfileCollection"),
                      warning("horizon ID name (",value,") not unique. unique ID not changed.", call.=TRUE)
                    } else {
                      # replace
-                     object@hzidcol <- value 
+                     object@hzidcol <- value
+                     
+                     # convert contents to character, if needed
+                     print(is.character(x))
+                     if(!is.character(x)) {
+                       message(sprintf("converting horizon IDs in column `%s` from integer to character", value))
+                       object@horizons[[value]] <- as.character(object@horizons[[value]])
+                     }
                    }
                    
                    # done

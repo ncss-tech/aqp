@@ -115,14 +115,14 @@ setMethod(f = 'show',
             site.show <- numeric(0)
             
             if (length(h.n) > 0) {
-              h <- h[, c(h.n[idx], h.n[-idx])]
+              h <- .data.frame.j(h, c(h.n[idx], h.n[-idx]), aqp_df_class(object))
               # # if defined, move horizon designation to the 3rd column
               # # missing horizon designation evaluates to character(0)
-              # hzd <- hzdesgnname(object)
-              # if (length(hzd) > 0) {
-              #   idx <- match(hzd, names(h))
-              #   h <- h[, c(names(h)[idx], names(h)[-idx])]
-              # }
+              hzd <- hzdesgnname(object)
+              if (length(hzd) > 0) {
+                idx <- match(hzd, names(h))
+                h <- .data.frame.j(h, c(names(h)[idx], names(h)[-idx]), aqp_df_class(object))
+              }
               
               # show first n
               hz.show <- seq(from = 1,
@@ -175,14 +175,14 @@ setMethod(f = 'show',
             
             # make note of additional hz attributes
             cat(hz.txt)
-            print(h, row.names = FALSE)
+            print(.as.data.frame.aqp(h, aqp_df_class(object)), row.names = FALSE)
             
             if(n.h > max(rows.show.h))
               cat('[... more horizons ...]\n')
             
             # make note of additional site attributes
             cat(site.txt)
-            print(s, row.names = FALSE)
+            print(.as.data.frame.aqp(s, aqp_df_class(object)), row.names = FALSE)
             
             if(n.s > max(rows.show.s))
               cat('[... more sites ...]\n')
@@ -192,6 +192,8 @@ setMethod(f = 'show',
               cat('\nSpatial Data:\n')
               show(object@sp@bbox)
               show(proj4string(object))
+            } else {
+              cat('\nSpatial Data: [EMPTY]\n')
             }
             
           })
@@ -383,7 +385,7 @@ setMethod(f = 'aqp_df_class', signature(object = 'SoilProfileCollection'),
             if (all(u == '')) {
               message("aqp_df_class metadata entry not found")
               warning("data.table and tbl_df in SoilProfileCollection data.frame slots are EXPERIMENTAL, defaulting to data.frame", call. = FALSE)
-              return("data.frame")
+              return(NA)
             }
             
             return(u)
