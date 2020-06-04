@@ -8,7 +8,7 @@ library(tibble)
 ###  use: class to use 
 ###       data.frame [1], data.table [2], or tbl_df [3]
 ### 
-     use <- 2
+     use <- 2 
 
      use_class <- switch(as.character(use),
                          "1" = "data.frame", 
@@ -43,6 +43,7 @@ site(test) <- ~ siteprop
 # inspect site table
 site(test)
 
+# inspect show method output for irregularities
 test
 
 # add some site data, for only two sites
@@ -65,8 +66,8 @@ test[["foo"]] <- new
 all(horizons(test)$foo / 2 == (new - 100))
 
 # add some horizon data
-value <-  test_object(data.frame(id = c(rep(1,10),rep(2,10),3),
-                                 hzID = 1:21,
+value <-  test_object(data.frame(id = as.character(c(rep(1,10),rep(2,10),3)),
+                                 hzID = as.character(1:21),
                                  hzclass = letters[1:21]), use_class)
 
 horizons(test) <- value
@@ -75,15 +76,15 @@ horizons(test) <- value
 horizons(test)[15:25,]
 
 # this time we have given an impossible condition: id=2 hzid=21
-value <-  test_object(data.frame(id = c(2,2),
-                                 hzID = 20:21,
+value <-  test_object(data.frame(id = as.character(c(2,2)),
+                                 hzID = as.character(20:21),
                                  another = letters[1:2]), use_class)
 
 horizons(test) <- value
 horizons(test)[15:25,]
 
 # this is fun. we can do joins without hzID too
-value <-  test_object(data.frame(id = 2,
+value <-  test_object(data.frame(id = as.character(2),
                                  almostdone = letters[3]), use_class)
 
 horizons(test) <- value
@@ -98,4 +99,12 @@ horizons(test) <- value
 
 # this time we have used a different horizon attribute (clay content)
 horizons(test)
+
+# ensure rebuilt SPC slot contents for hzID are preserved (and converted to character)
+data("sp5")
+sp5$foo <- rev(1:nrow(sp5))
+hzidname(sp5) <- "foo"
+res <- rebuildSPC(sp5)
+hzidname(res)
+is.character(hzID(res))
 

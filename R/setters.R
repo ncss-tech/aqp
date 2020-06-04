@@ -240,9 +240,8 @@ setReplaceMethod("hzidname", signature(object = "SoilProfileCollection"),
                      object@hzidcol <- value
                      
                      # convert contents to character, if needed
-                     print(is.character(x))
                      if(!is.character(x)) {
-                       message(sprintf("converting horizon IDs in column `%s` from integer to character", value))
+                       message(sprintf("converting horizon IDs in column `%s` to character", value))
                        object@horizons[[value]] <- as.character(object@horizons[[value]])
                      }
                    }
