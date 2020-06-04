@@ -40,7 +40,10 @@ rebuildSPC <- function(x) {
   }
   
   # add additional pieces
-  metadata(res) <- x.list$metadata
+  
+  # metadata is a list now
+  metadata(res) <- as.list(x.list$metadata)
+  
   site(res) <- x.list$site
   
   # @diagnostic and may be missing if `x` is very old
