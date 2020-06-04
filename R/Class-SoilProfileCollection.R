@@ -141,3 +141,16 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
               )
           })
 
+
+# basic wrapper function for multi-j index subsetting of data.frames compatible with data.table
+.data.frame.j <- function(df, col.names, use_class) {
+  dfnames <- names(df)
+  res <- lapply(dfnames[dfnames %in% col.names], function(nombre) {
+    if(nombre %in% col.names) {
+      df <- data.frame(df[[nombre]], stringsAsFactors = FALSE)
+      names(df) <- nombre
+      return(df)
+    }
+  })
+  h <- aqp:::.as.data.frame.aqp(do.call('cbind', res), use_class)
+}
