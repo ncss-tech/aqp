@@ -89,7 +89,7 @@ test_that("SPC deconstruction into a list", {
   expect_equivalent(l$hzdesgncol, hzdesgnname(sp1))
   expect_equivalent(l$hztexclcol, hztexclname(sp1))
   expect_equivalent(l$depthcols, horizonDepths(sp1))
-  expect_equivalent(l$metadata, metadata(sp1))
+  expect_equivalent(names(l$metadata), names(metadata(sp1)))
   
   expect_equivalent(l$horizons, horizons(sp1))
   expect_equivalent(l$site, site(sp1))
@@ -107,7 +107,7 @@ test_that("SPC deconstruction into a list", {
   expect_equivalent(l$hzdesgncol, hzdesgnname(sp1.sub))
   expect_equivalent(l$hztexclcol, hztexclname(sp1.sub))
   expect_equivalent(l$depthcols, horizonDepths(sp1.sub))
-  expect_equivalent(l$metadata, metadata(sp1.sub))
+  expect_equivalent(names(l$metadata), names(metadata(sp1.sub)))
 })
 
 
@@ -208,7 +208,10 @@ test_that("SPC spatial operations ", {
   else
     expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
   
-  sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
+  if(version$major >= 4)
+    expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
+  else
+    sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
 
   expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
@@ -241,8 +244,10 @@ test_that("SPC misc. ", {
   m <- metadata(sp1)
   m$citation <- 'this is a citation'
   metadata(sp1) <- m
-  expect_true(inherits(metadata(sp1), 'data.frame'))
-  expect_equal(ncol(metadata(sp1)), 3)
+  expect_true(is.list(metadata(sp1)))
+  
+  
+  expect_equal(length(metadata(sp1)$citation), 1)
   
 })
 

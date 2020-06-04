@@ -288,7 +288,7 @@ res <- lapply(dfclasses, function(use_class) {
       expect_equivalent(l$restrictions, restrictions(sp1df))
       
       # check internals after [-subsetting 
-      sp1.sub <- sp1df[1:2,]
+      sp1.sub <- sp1df[2:3,]
       # none of these slots should change, the others will be subset
       # verifying these are transferred ensures key info slots are handled
       # by the SPC subset method
@@ -297,7 +297,12 @@ res <- lapply(dfclasses, function(use_class) {
       expect_equivalent(l$hzdesgncol, hzdesgnname(sp1.sub))
       expect_equivalent(l$hztexclcol, hztexclname(sp1.sub))
       expect_equivalent(l$depthcols, horizonDepths(sp1.sub))
-      expect_equivalent(l$metadata, metadata(sp1.sub))
+      
+      # TODO: better checking of metadata consistency
+      #       offload more important things to slots
+      #       use units package for depth units, and offer conversion?
+      #       inches to centimeters could be usefl
+      expect_equivalent(names(l$metadata), names(metadata(sp1.sub)))
     })
     
     

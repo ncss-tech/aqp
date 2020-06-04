@@ -3,7 +3,7 @@ context("denormalize - redundant horizon attributes from site")
 data(sp1, package = 'aqp')
 
 # create a SoilProfileCollection from horizon data
-depths(sp1) <- ~ top + bottom
+depths(sp1) <- id ~ top + bottom
 
 # create random site-level attribute `sitevar` with a binary (0/1) outcome
 sp1$sitevar <- round(runif(length(sp1)))
