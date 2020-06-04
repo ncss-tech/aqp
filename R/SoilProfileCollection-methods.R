@@ -73,16 +73,21 @@ setMethod(f = 'show',
             # determine number of rows to show
             n.s <- nrow(s)
             n.h <- nrow(h)
+            
+            # show up to 6 rows for each slot, or max rows if less
             rows.show.s <- 1:pmin(6, nrow(s))
             rows.show.h <- 1:pmin(6, nrow(h))
             
-            # handle zero row
-            if (n.h == 0) rows.show.h <- 0
-            if (n.s == 0) rows.show.s <- 0
+            # handle zero row case (so it doesnt fill with NA)
+            if (n.h == 0) 
+              rows.show.h <- 0
+            
+            if (n.s == 0) 
+              rows.show.s <- 0
             
             # subset rows
-            h <- h[rows.show.s, , drop = FALSE]
-            s <- s[rows.show.h, , drop = FALSE]
+            h <- h[rows.show.h, , drop = FALSE]
+            s <- s[rows.show.s, , drop = FALSE]
             
             # move IDs and depths, horizon designation if available
             hzd <- hzdesgnname(object)
@@ -130,10 +135,11 @@ setMethod(f = 'show',
             
             # column subseting
             if(length(hz.show) > 0) {
-              h <- head(h, n = length(hz.show))[, , drop = FALSE]
               # generate text explaining truncated summary
               hz.txt <- sprintf(
-                "\nHorizon Attributes (first %s of %s columns):\n------------------------------------------------\n",
+                "\nHorizons (%s / %s rows  |  %s / %s columns):\n------------------------------------------------\n",
+                nrow(h),
+                n.h,
                 pmin(show.cols, n.hz.cols),
                 n.hz.cols
               )
@@ -142,9 +148,10 @@ setMethod(f = 'show',
             }
             
             if(length(site.show) > 0) {
-              s <- head(s, n = length(site.show))[, , drop = FALSE]
               site.txt <- sprintf(
-                "\nSite Attributes (first %s of %s columns):\n---------------------------------------------\n",
+                "\nSites (%s / %s rows  |  %s / %s columns):\n---------------------------------------------\n",
+                nrow(s),
+                n.s,
                 pmin(show.cols, n.site.cols),
                 n.site.cols
               )
@@ -155,17 +162,16 @@ setMethod(f = 'show',
             # header
             header.txt <-
               sprintf(
-                "SoilProfileCollection: %s profiles | %s horizons\nprofile ID: %s\nhorizon ID: %s\n",
+                "SoilProfileCollection with %s profiles and %s horizons\nprofile ID: %s  |  horizon ID: %s \nDepth range: %s - %s %s\n",
                 n.profiles,
                 n.hz,
                 idname(object),
-                hzidname(object)
+                hzidname(object),
+                min(object),
+                max(object),
+                depth_units(object)
               )
             cat(header.txt)
-            
-           
-            cat("\nDepth range: ", min(object), "-", max(object), " ", depth_units(object), "\n", sep="")
-
             
             # make note of additional hz attributes
             cat(hz.txt)
@@ -478,10 +484,10 @@ setMethod(
     # filter out missing data
     h <- h[complete.cases(h),]
     
-    # compute max by ID
-    d <- tapply(h[, 1], h[, 2], max, na.rm = TRUE)
+    # compute max depth within each profile
+    d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
     
-    # return the shallowest depth
+    # return the shallowest (of the deepest depths in each profile)
     return(min(d, na.rm = TRUE))
   }
 )
@@ -509,10 +515,11 @@ setMethod(
     
     # filter out missing data
     h <- h[complete.cases(h),]
-    # compute max by ID
-    d <- tapply(h[, 1], h[, 2], max, na.rm = TRUE)
     
-    # return the deepest depth
+    # compute max depth within each profile
+    d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
+    
+    # return the deepest depth (of the deepest depths in each profile)
     return(max(d, na.rm = TRUE))
   }
 )

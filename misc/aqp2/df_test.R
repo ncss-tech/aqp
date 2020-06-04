@@ -8,7 +8,7 @@ library(tibble)
 ###  use: class to use 
 ###       data.frame [1], data.table [2], or tbl_df [3]
 ### 
-     use <- 3
+     use <- 2
 
      use_class <- switch(as.character(use),
                          "1" = "data.frame", 
@@ -42,6 +42,8 @@ site(test) <- ~ siteprop
 
 # inspect site table
 site(test)
+
+test
 
 # add some site data, for only two sites
 site(test) <- test_object(data.frame(id = as.character(2:3), 
