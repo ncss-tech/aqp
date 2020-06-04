@@ -465,6 +465,8 @@ setMethod(
   f = 'min',
   signature(x = "SoilProfileCollection"),
   definition = function(x, v = NULL) {
+    h <- x@horizons
+    
     # get bottom depth column name
     hz_bottom_depths <- horizonDepths(x)[2]
     
@@ -474,14 +476,13 @@ setMethod(
     
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
-      # combine bottom depths with IDs and variable
-      h <- x@horizons[, c(hz_bottom_depths, idname(x), v)]
+      target.names <- c(hz_bottom_depths, idname(x), v)
     } else {
-      # combine bottom depths with IDs
-      h <- x@horizons[, c(hz_bottom_depths, idname(x))]
+      target.names <- c(hz_bottom_depths, idname(x))
     }
     
     # filter out missing data
+    h <- .data.frame.j(h, target.names, aqp_df_class(x))
     h <- h[complete.cases(h),]
     
     # compute max depth within each profile
@@ -498,22 +499,22 @@ setMethod(
   signature(x = "SoilProfileCollection"),
   definition = function(x, v = NULL) {
     # get bottom depth column name
+    h <- x@horizons
     hz_bottom_depths <- horizonDepths(x)[2]
     
     # handle empty spc
-    if(length(x@horizons[[hz_bottom_depths]]) == 0)
+    if(length(h[[hz_bottom_depths]]) == 0)
       return(NA)
     
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
-      # combine bottom depths with IDs and variable
-      h <- x@horizons[, c(hz_bottom_depths, idname(x), v)]
-    }	else {
-      # combine bottom depths with IDs
-      h <- x@horizons[, c(hz_bottom_depths, idname(x))]
+      target.names <- c(hz_bottom_depths, idname(x), v)
+    } else {
+      target.names <- c(hz_bottom_depths, idname(x))
     }
     
     # filter out missing data
+    h <- .data.frame.j(h, target.names, aqp_df_class(x))
     h <- h[complete.cases(h),]
     
     # compute max depth within each profile

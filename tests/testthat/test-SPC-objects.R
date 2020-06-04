@@ -275,6 +275,22 @@ test_that("SPC depth columns get/set ", {
   
 })
 
+test_that("SPC min/max overrides work as expected", {
+  # helper function: vector concatenation
+  cc <- function(l) do.call('c', as.list(l))
+  
+  # create test data
+  df <- data.frame(id = cc(lapply(1:4, function(i) rep(i, 10))),
+                   top = cc(rep(0:9, 4)), bottom = cc(rep(1:10, 4)),
+                   siteprop = 8, prop = 18)
+  
+  # promote to SPC
+  depths(df) <- id ~ top + bottom
+  
+  # both min and max should return 10cm
+  expect_equal(min(df), 10)
+  expect_equal(min(df) == max(df), TRUE)
+})
 
 test_that("SPC horizonNames get/set ", {
   
@@ -549,4 +565,3 @@ test_that("replaceHorizons<- works as expected", {
   # missing depths = error
   expect_error(replaceHorizons(x) <- horizons(x)[,c(idname(x))])
 })
-
