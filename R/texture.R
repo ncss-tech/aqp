@@ -14,7 +14,51 @@
 # idx <- with(soiltexture, clay == 40 & sand == 45)
 # soiltexture$texcl[idx] <- "sc"
 # 
+# soiltexture <- list(values = soiltexture)
+# 
+# 
+# library(compositions)
+# 
+# st <- soiltexture
+# split(st, st$texcl) ->.;
+# lapply(., function(x) {
+# 
+#   co <- clo(x, parts = c("sand", "silt", "clay"), total = 100)
+#   rco <- rplus(co, total = 100)
+#   ds  <- mean(rco)
+#   df <- data.frame(
+#     texcl    = x$texcl[1],
+#     avg_clay = round(mean(x$clay)),
+#     ravg_clay = round(ds[3]),
+#     avg_sand = round(mean(x$sand))
+#     ravg_sand = round(ds[1])
+#   )
+#   df$silt <- 100 - df$clay - df$sand
+# }) ->.;
+# do.call("rbind", .) ->.;
+# st2 <- .
+# # I see no difference in the compositional statistics
+# 
+# 
+# st <- aggregate(cbind(clay, sand) ~ texcl, data = soiltexture$values, function(x) round(mean(x)))
+# st[st$texcl == "c", "clay"] <- 50
+# st <- rbind(st,
+#             c(texcl = "cos",  st[st$texcl == "s",  -1]),
+#             c(texcl = "fs",   st[st$texcl == "s",  -1]),
+#             c(texcl = "vfs",  st[st$texcl == "s",  -1]),
+#             c(texcl = "lcos", st[st$texcl == "ls", -1]),
+#             c(texcl = "lfs",  st[st$texcl == "ls", -1]),
+#             c(texcl = "lvfs", st[st$texcl == "ls", -1]),
+#             c(texcl = "cosl", st[st$texcl == "sl", -1]),
+#             c(texcl = "fsl",  st[st$texcl == "sl", -1]),
+#             c(texcl = "vfsl", st[st$texcl == "sl", -1])
+#             )
+# st$silt <- 100 - st$clay - st$sand
+# 
+# soiltexture$averages <- st
+# 
 # save(soiltexture, file = "C:/workspace2/github/ncss-tech/aqp/data/soiltexture.rda")
+
 
 
 
@@ -22,16 +66,21 @@
 ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE) {
   
   load(system.file("data/soiltexture.rda", package="aqp")[1])
+
   
   if (all(! grepl("clay|CLAY", names(df))) & all(! grepl("sand|SAND", names(df)))) {
     stop("missing columns with clay|CLAY|sand|SAND in the heading", call. = FALSE)
   }
   
   # standardize inputs
+  row.names(df) <- NULL
   df$rn <- row.names(df)
+  
   names(df) <- tolower(names(df))
+  
   df$clay <- df[, grep("clay", names(df))]
   df$sand <- df[, grepl("sand", names(df))]
+  
   
   # check if silt is missing
   if (all(! grepl("silt", names(df)))) {
@@ -55,9 +104,9 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
     } else message("if records do not sum to 100% the returned values will be NA")
   }
   
-    soiltexture$idx <- with(soiltexture, paste(clay, silt, sand))
+    soiltexture$values$idx <- with(soiltexture$values, paste(clay, silt, sand))
   
-  df <- merge(df, soiltexture[c("idx", "texcl")], by = "idx", all.x = TRUE, sort = FALSE)
+  df <- merge(df, soiltexture$values[c("idx", "texcl")], by = "idx", all.x = TRUE, sort = FALSE)
   df <- df[order(as.integer(df$rn)), ]
   df$rn  <- NULL
   df$idx <- NULL
@@ -76,40 +125,71 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
 }
   
 
+# impute sand, silt, and clay with texcl averages
+texcl_to_ssc <- function(x) {
+  
+  # standardize the inputs
+  df <- data.frame(texcl = tolower(x), stringsAsFactors = FALSE)
+  df$rn <- row.names(df)
+  
+  
+  if (TRUE) {
+    load(system.file("data/soiltexture.rda", package="aqp")[1])
+  }
+  
+  
+  # check for texcl that don't match
+  if (all(! df$texcl %in% soiltexture$averages$texcl)) {
+    message("not all the texcl supplied match the lookup table")
+  }
+  
+  df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
+  
+  df <- df[(order(as.integer(df$rn))), ]
+  df$rn    <- NULL
+  df$texcl <- NULL
+  
+  return(df)
+}
+  
+
+
 # # convert sand, silt and clay to the family particle size class
-# ssc_to_fpsc <- function(df) {
-#   
+# psc_to_taxpartsize <- function(df) {
+# 
 #   df$frags[is.na(df$frags)] <- 0
-#   df$pscs <- NA
+#   df$fpsc <- NA
 #   
+#   sandytextures <- c("cos", "s", "fs", "lcos", "ls", "lfs")
+# 
 #   idx <- df$frags >= 35
 #   if (any(idx)) {
 #     df[idx,] <- within(df[idx,], {
-#       pscs = NA
-#       pscs[texcl %in% c("cos", "s", "fs", "lcos", "ls", "lfs")
+#       fpsc = NA
+#       fpsc[texcl %in% sandytextures
 #            ] = "sandy-skeletal"
-#       pscs[clay < 35] = "loamy-skeletal"
-#       pscs[clay >= 35] = "clayey-skeletal"
+#       fpsc[clay < 35] = "loamy-skeletal"
+#       fpsc[clay >= 35] = "clayey-skeletal"
 #       })
 #   }
-#   
-#   idx <- df$frags < 35 & df$texcl %in% c("cos", "s", "fs", "lcos", "ls", "lfs")
+# 
+#   idx <- df$frags < 35 & df$texcl %in% sandytextures
 #   if (any(idx)) {
-#     df[idx, ]$pscs <- "sandy"
+#     df[idx, ]$fpsc <- "sandy"
 #   }
-#   
-#   idx <- df$frags <- 35 & (df$texcl %in% "lvfs" | ! df$texcl %in% c("cos", "s", "fs", "lcos", "ls", "lfs"))
+# 
+#   idx <- df$frags < 35 & ! df$texcl %in% sandytextures
 #   if (any(idx)) {
 #     df[idx, ] <- within(df[idx,], {
-#       pscs[clay < 18 & sand >= 15] = "coarse-loamy"
-#       pscs[clay < 18 & sand <  15] = "coarse-silty"
-#       pscs[clay >= 18 & clay < 35] = "fine-loamy"
-#       pscs[clay >= 18 & clay < 35 & sand < 15] = "fine-silty"
-#       pscs[clay >= 35 & clay < 60] = "fine"
-#       pscs[clay > 60] = "very-fine"
+#       fpsc[clay < 18 & sand >= 15] = "coarse-loamy"
+#       fpsc[clay < 18 & sand <  15] = "coarse-silty"
+#       fpsc[clay >= 18 & clay < 35] = "fine-loamy"
+#       fpsc[clay >= 18 & clay < 35 & sand < 15] = "fine-silty"
+#       fpsc[clay >= 35 & clay < 60] = "fine"
+#       fpsc[clay > 60] = "very-fine"
 #       })
 #   }
-#   
-#   return(df)
+# 
+#   return(df$fpsc)
 # }
-
+# 
