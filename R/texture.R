@@ -42,7 +42,7 @@
 # 
 # 
 # st <- aggregate(cbind(clay, sand) ~ texcl, data = soiltexture$values, function(x) round(mean(x)))
-# st[st$texcl == "c", "clay"] <- 50
+# st[st$texcl == "c", "clay"] <- 55
 # st <- rbind(st,
 #             c(texcl = "cos",  st[st$texcl == "s",  -1]),
 #             c(texcl = "fs",   st[st$texcl == "s",  -1]),
@@ -131,7 +131,7 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
   
   # standardize the inputs
   df <- data.frame(texcl = tolower(as.character(texcl)), 
-                   clay  = ifelse(!is.null(clay), round(clay), as.integer(NULL)), 
+                   clay  = ifelse(!is.null(clay), as.integer(round(clay)), as.integer(NULL)), 
                    stringsAsFactors = FALSE
                    )
   df$rn <- row.names(df)
