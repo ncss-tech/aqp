@@ -423,7 +423,7 @@ setReplaceMethod("depths", "data.frame",
   depthcols <- c(nm[2], nm[3])
   
   # create a site table with just IDs
-  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]])), class(data)[1])
+  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
   
   if(nrow(nusite) != length(unique(data[[nm[1]]]))) {
