@@ -126,6 +126,7 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
 }
   
 
+
 # impute sand, silt, and clay with texcl averages
 texcl_to_ssc <- function(texcl, clay = NULL) {
   
@@ -133,11 +134,16 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
     message("some texcl records missing")
   }
   
+  # clay is not NULL
+  clay_not_null <- all(!is.null(clay))
+  
   # standardize the inputs
   df <- data.frame(texcl = tolower(as.character(texcl)), 
-                   clay  = ifelse(!is.null(clay), as.integer(round(clay)), as.integer(NULL)), 
                    stringsAsFactors = FALSE
                    )
+  if (clay_not_null) {
+    df$clay <- as.integer(round(clay))
+  }
   df$rn <- row.names(df)
   
   
@@ -147,18 +153,19 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
   
   
   # check for texcl that don't match
-  if (any(! df$texcl %in% unique(soiltexture$averages$texcl))) {
+  idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
+  if (any(idx)) {
     message("not all the texcl supplied match the lookup table, removing nomatches")
-    df$texcl <- ifelse(! df$texcl %in% unique(soiltexture$averages$texcl), NA, df$texcl)
+    df$texcl <- ifelse(idx, NA, df$texcl)
   }
   
   # check clay ranges 0-100
-  if (!all(is.null(clay)) & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)) {
+  if (clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)) {
     message("some clay records < 0 or > 100%")
     }
   
   # if clay is present
-  if (!is.null(clay)) {
+  if (clay_not_null) {
     df <- within(df, {
       texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
       texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
