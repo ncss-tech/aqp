@@ -129,6 +129,10 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
 # impute sand, silt, and clay with texcl averages
 texcl_to_ssc <- function(texcl, clay = NULL) {
   
+  if (any(is.na(texcl))) {
+    message("some texcl records missing")
+  }
+  
   # standardize the inputs
   df <- data.frame(texcl = tolower(as.character(texcl)), 
                    clay  = ifelse(!is.null(clay), as.integer(round(clay)), as.integer(NULL)), 
@@ -144,11 +148,12 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
   
   # check for texcl that don't match
   if (any(! df$texcl %in% unique(soiltexture$averages$texcl))) {
-    message("not all the texcl supplied match the lookup table")
+    message("not all the texcl supplied match the lookup table, removing nomatches")
+    df$texcl <- ifelse(! df$texcl %in% unique(soiltexture$averages$texcl), NA, df$texcl)
   }
   
   # check clay ranges 0-100
-  if (!is.null(clay) & (any(clay < 0) & any(clay > 100))) {
+  if (!all(is.null(clay)) & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)) {
     message("some clay records < 0 or > 100%")
     }
   
@@ -163,7 +168,7 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
     st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
     st$silt <- 100 - st$clay - st$sand
     
-    df <- merge(df[c("texcl", "clay", "rn"), ], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
+    df <- merge(df[c("texcl", "clay", "rn")], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
   } else {
     df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
   }
