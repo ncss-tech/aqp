@@ -13,6 +13,7 @@
 # 
 # idx <- with(soiltexture, clay == 40 & sand == 45)
 # soiltexture$texcl[idx] <- "sc"
+# row.names(soiltexture) <- NULL
 # 
 # soiltexture <- list(values = soiltexture)
 # 
@@ -126,10 +127,13 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
   
 
 # impute sand, silt, and clay with texcl averages
-texcl_to_ssc <- function(x) {
+texcl_to_ssc <- function(texcl, clay = NULL) {
   
   # standardize the inputs
-  df <- data.frame(texcl = tolower(x), stringsAsFactors = FALSE)
+  df <- data.frame(texcl = tolower(as.character(texcl)), 
+                   clay  = ifelse(!is.null(clay), round(clay), as.integer(NULL)), 
+                   stringsAsFactors = FALSE
+                   )
   df$rn <- row.names(df)
   
   
@@ -139,13 +143,33 @@ texcl_to_ssc <- function(x) {
   
   
   # check for texcl that don't match
-  if (all(! df$texcl %in% soiltexture$averages$texcl)) {
+  if (any(! df$texcl %in% unique(soiltexture$averages$texcl))) {
     message("not all the texcl supplied match the lookup table")
   }
   
-  df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
+  # check clay ranges 0-100
+  if (!is.null(clay) & (any(clay < 0) & any(clay > 100))) {
+    message("some clay records < 0 or > 100%")
+    }
   
-  df <- df[(order(as.integer(df$rn))), ]
+  # if clay is present
+  if (!is.null(clay)) {
+    df <- within(df, {
+      texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
+      texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
+      texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
+    })
+    
+    st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
+    st$silt <- 100 - st$clay - st$sand
+    
+    df <- merge(df[c("texcl", "clay", "rn"), ], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
+  } else {
+    df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
+  }
+  
+  vars <- c("sand", "silt", "clay")
+  df <- df[(order(as.integer(df$rn))), vars]
   df$rn    <- NULL
   df$texcl <- NULL
   
