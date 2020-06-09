@@ -692,23 +692,23 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                        # } else {
                        #   x@site[[i]] <- value
                        # }
-                       # s <- as.data.frame.data.frame(x@site)
-                       # s[[i]] <- value
-                       # x@horizons <- aqp:::.as.data.frame.aqp(s, aqp_df_class(s))
+                       s <- data.frame(x@site, stringsAsFactors = FALSE)
+                       s[[i]] <- value
+                       x@site <- aqp:::.as.data.frame.aqp(s, aqp_df_class(x))
                      } else {
                        stop("replacement length does not match number of profiles!",
                             call. = FALSE)
                      }
                    } else if (i %in% hznames | lv == nx) {
                      if (lv == nx | is.null(value)) {
-                       if(inherits(x@horizons, "data.table")) {
-                        x@horizons[, eval(substitute(i))] <- value
-                       } else {
-                        x@horizons[[i]] <- value
-                       }
-                       # h <- as.data.frame(x@horizons)
-                       # h[[i]] <- value
-                       # x@horizons <- aqp:::.as.data.frame.aqp(h, aqp_df_class(x))
+                       # if(inherits(x@horizons, "data.table")) {
+                       #  x@horizons[, eval(substitute(i))] <- value
+                       # } else {
+                       #  x@horizons[[i]] <- value
+                       # }
+                       h <- data.frame(x@horizons, stringsAsFactors = FALSE)
+                       h[[i]] <- value
+                       x@horizons <- aqp:::.as.data.frame.aqp(h, aqp_df_class(x))
                      } else {
                        stop("replacement length does not match number of horizons!",
                             call. = FALSE)
