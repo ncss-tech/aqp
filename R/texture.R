@@ -120,7 +120,7 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
     texcl[clay >=  6.99 & clay <  26.99 & silt >= 27.99 & silt < 49.99 & sand <= 52.01] = "l"
     texcl[clay >= 19.99 & clay <  34.99 & silt <  27.99 & sand > 45.01] = "scl"
     texcl[clay >= 34.99 & sand >  45.01] = "sc"
-    texcl[sand > 89.9] = "s"
+    texcl[(silt + 2 * clay) <= 29.99] = "s"
     texcl[(silt + 1.5 * clay) >= 14.99 & (silt + 2 * clay) < 29.99] = "ls"
     texcl[!is.na(sand) & !is.na(clay) & is.na(texcl)] = "sl"
   })
