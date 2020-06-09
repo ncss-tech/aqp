@@ -40,6 +40,15 @@
 # st2 <- .
 # # I see no difference in the compositional statistics
 # 
+#
+# # logic from the particle size estimator NASIS calculation
+# tex <- expand.grid(sand = 0:100, silt = 0:100)
+# tex <- subset(tex, (sand + silt) < 101)
+# row.names(tex) <- NULL
+# tex$clay <- 100 - tex$sand - tex$silt
+# tex$texcl <- ssc_to_texcl(tex, as.is = TRUE)
+# 
+# soiltexture = list(values = tex)
 # 
 # st <- aggregate(cbind(clay, sand) ~ texcl, data = soiltexture$values, function(x) round(mean(x)))
 # st[st$texcl == "c", "clay"] <- 55
@@ -66,17 +75,11 @@
 # convert sand, silt and clay to texture class
 ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE) {
   
-  load(system.file("data/soiltexture.rda", package="aqp")[1])
-
-  
   if (all(! grepl("clay|CLAY", names(df))) & all(! grepl("sand|SAND", names(df)))) {
     stop("missing columns with clay|CLAY|sand|SAND in the heading", call. = FALSE)
   }
   
   # standardize inputs
-  row.names(df) <- NULL
-  df$rn <- row.names(df)
-  
   names(df) <- tolower(names(df))
   
   df$clay <- df[, grep("clay", names(df))]
@@ -91,10 +94,9 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
   
   
   # round and index
-  df <- df[c("rn", "clay", "silt", "sand")]
-  df[2:4] <- round(df[2:4])
-  df$idx <- with(df, paste(clay, silt, sand))
-  
+  df <- df[c("clay", "silt", "sand")]
+  df <- round(df)
+   
   
   # check sand, silt and clay sum to 100
   idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
@@ -105,19 +107,30 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
     } else message("if records do not sum to 100% the returned values will be NA")
   }
   
-    soiltexture$values$idx <- with(soiltexture$values, paste(clay, silt, sand))
   
-  df <- merge(df, soiltexture$values[c("idx", "texcl")], by = "idx", all.x = TRUE, sort = FALSE)
-  df <- df[order(as.integer(df$rn)), ]
-  df$rn  <- NULL
-  df$idx <- NULL
+  # logic from the particle size estimator calculation from NASIS
+  df <- within(df, {
+    texcl = NA
+    texcl[silt >= 79.99 & clay <  11.99] = "si"
+    texcl[silt >= 49.99 & clay <  26.99 & (silt < 79.99 | clay >= 11.99)] = "sil"
+    texcl[clay >= 26.99 & clay <  39.99 & sand <= 20.01] = "sicl"
+    texcl[clay >= 39.99 & silt >= 39.99] = "sic"
+    texcl[clay >= 39.99 & sand <= 45.01 & silt <  39.99] = "c"
+    texcl[clay >= 26.99 & clay <  39.99 & sand >  20.01 & sand <= 45.01] = "cl"
+    texcl[clay >=  6.99 & clay <  26.99 & silt >= 27.99 & silt < 49.99 & sand <= 52.01] = "l"
+    texcl[clay >= 19.99 & clay <  34.99 & silt <  27.99 & sand > 45.01] = "scl"
+    texcl[clay >= 34.99 & sand >  45.01] = "sc"
+    texcl[sand > 89.9] = "s"
+    texcl[(silt + 1.5 * clay) >= 14.99 & (silt + 2 * clay) < 29.99] = "ls"
+    texcl[!is.na(sand) & !is.na(clay) & is.na(texcl)] = "sl"
+  })
   
   
   if (as.is == FALSE) {
     df$texcl <- factor(df$texcl, levels = c("s",  "si", "ls", "sl", "sil", "l", "scl",  "cl", "sicl", "sc", "sic", "c"), ordered = TRUE)
   }
   
-  if (droplevels == TRUE) {
+  if (droplevels == TRUE & as.is == FALSE) {
     df$texcl <- droplevels(df$texcl)
   }
   

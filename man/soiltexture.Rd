@@ -7,7 +7,7 @@ Lookup tables of sand, silt, clay, and texture class values and averages.
 }
 
 \description{
-A list that contains a snapshot of the values generated using the results of TT.points.in.classes from the soiltexture package, and the average values per texture class.
+A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, and the average values per texture class.
 }
 
 \usage{data("soiltexture")}
@@ -23,7 +23,7 @@ A list that contains a snapshot of the values generated using the results of TT.
 }
 
 \details{
-A list that contains a snapshot of the values generated using the results of TT.points.in.classes from the soiltexture package, and the average values per texture class. Texture classes for values that overlap classes were rounded up to the class with more clay.
+A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, and the average values per texture class. Texture classes for values that overlap classes were rounded up to the class with more clay.
 }
 
 \examples{
