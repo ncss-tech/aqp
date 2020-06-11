@@ -136,39 +136,28 @@
 
 
 # convert sand, silt and clay to texture class
-ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE) {
+ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = TRUE) {
   
-  if (all(! grepl("clay|CLAY", names(df))) & all(! grepl("sand|SAND", names(df)))) {
-    stop("missing columns with clay|CLAY|sand|SAND in the heading", call. = FALSE)
+  # check lengths
+  idx <- all(length(clay) != length(sand))
+  if (idx) {
+    stop("length of inputs do not match")
   }
+  
   
   # standardize inputs
-  names(df) <- tolower(names(df))
+  df <- data.frame(sand = as.integer(round(sand)), 
+                   clay = as.integer(round(clay)), 
+                   stringsAsFactors = FALSE
+                   )
+  df$silt <- 100 - df$clay - df$sand
   
-  df$clay <- df[, grep("clay", names(df))]
-  df$sand <- df[, grepl("sand", names(df))]
-  
-  
-  # check if silt is missing
-  if (all(! grepl("silt", names(df)))) {
-    message("missing columns with silt|SILT in the heading, therefore silt will be calculated as 100 - clay - sand")
-    df$silt <- 100 - df$clay - df$sand
-  }
-  
-  
-  # round and index
-  df <- df[c("clay", "silt", "sand")]
-  df <- round(df)
-   
   
   # check sand, silt and clay sum to 100
   idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
   if (any(idx)) {
-    message("some records do not sum to 100 %")
-    if (rmHzErrors == TRUE) {
-      df$silt <- 100 - df$clay - df$sand
-    } else message("if records do not sum to 100% the returned values will be NA")
-  }
+    warning("some records sand, silt, and clay do not sum to 100 %")
+    } else message("if records do not sum to 100% the returned texcl values will be NA")
   
   
   # logic from the particle size estimator calculation from NASIS
@@ -197,14 +186,13 @@ ssc_to_texcl <- function(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE
     df$texcl <- droplevels(df$texcl)
   }
   
-  
   return(df$texcl)
 }
   
 
 
 # impute sand, silt, and clay with texcl averages
-texcl_to_ssc <- function(texcl, clay = NULL) {
+texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
   
   if (any(is.na(texcl))) {
     message("some texcl records missing")
@@ -231,13 +219,13 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
   # check for texcl that don't match
   idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
   if (any(idx)) {
-    message("not all the texcl supplied match the lookup table, removing nomatches")
+    warning("not all the texcl supplied match the lookup table, removing nomatches")
     df$texcl <- ifelse(idx, NA, df$texcl)
   }
   
   # check clay ranges 0-100
   if (clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)) {
-    message("some clay records < 0 or > 100%")
+    warning("some clay records < 0 or > 100%")
     }
   
   # if clay is present
@@ -267,11 +255,11 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
 
 
 # modifer to fragvoltot
-texmod_to_fragvoltot <- function(texmod, lieutex = NULL) {
+texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   
   # check
   if (any(!is.na(texmod) & !is.na(lieutex))) {
-    message("texmod and lieutex should not both be present, they are mutually exclusive, only the texmod will be returned")
+    warning("texmod and lieutex should not both be present, they are mutually exclusive, only the texmod will be returned")
   }
   
   
@@ -333,42 +321,92 @@ texmod_to_fragvoltot <- function(texmod, lieutex = NULL) {
 
 
 
-# # convert sand, silt and clay to the family particle size class
-# psc_to_taxpartsize <- function(df) {
-# 
-#   df$frags[is.na(df$frags)] <- 0
-#   df$fpsc <- NA
-#   
-#   sandytextures <- c("cos", "s", "fs", "lcos", "ls", "lfs")
-# 
-#   idx <- df$frags >= 35
-#   if (any(idx)) {
-#     df[idx,] <- within(df[idx,], {
-#       fpsc = NA
-#       fpsc[texcl %in% sandytextures
-#            ] = "sandy-skeletal"
-#       fpsc[clay < 35] = "loamy-skeletal"
-#       fpsc[clay >= 35] = "clayey-skeletal"
-#       })
-#   }
-# 
-#   idx <- df$frags < 35 & df$texcl %in% sandytextures
-#   if (any(idx)) {
-#     df[idx, ]$fpsc <- "sandy"
-#   }
-# 
-#   idx <- df$frags < 35 & ! df$texcl %in% sandytextures
-#   if (any(idx)) {
-#     df[idx, ] <- within(df[idx,], {
-#       fpsc[clay < 18 & sand >= 15] = "coarse-loamy"
-#       fpsc[clay < 18 & sand <  15] = "coarse-silty"
-#       fpsc[clay >= 18 & clay < 35] = "fine-loamy"
-#       fpsc[clay >= 18 & clay < 35 & sand < 15] = "fine-silty"
-#       fpsc[clay >= 35 & clay < 60] = "fine"
-#       fpsc[clay > 60] = "very-fine"
-#       })
-#   }
-# 
-#   return(df$fpsc)
-# }
-# 
+# convert sand, silt and clay to the family particle size class
+gsc_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL) {
+  
+  # check lengths
+  idx <- all(length(texcl) == length(clay) & length(clay) == length(sand) & length(sand) == length(fragvoltot))
+  if (!idx) {
+    stop("length of inputs do not match")
+  }
+    
+    
+  # standarize inputs
+  df <- data.frame(texcl      = tolower(texcl), 
+                   clay       = as.integer(round(clay)), 
+                   sand       = as.integer(round(sand)), 
+                   fragvoltot = as.integer(round(fragvoltot)),
+                   fpsc       = as.character(NA),
+                   stringsAsFactors = FALSE
+                   )
+  df$silt <- 100 - df$sand - df$clay
+  
+  sandytextures <- c("cos", "s", "fs", "lcos", "ls", "lfs")
+  
+  
+  # load lookup table
+  load(system.file("data/soiltexture.rda", package="aqp")[1])
+  
+  
+  # check texcl lookup
+  idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
+  if (any(idx)) {
+    warning("not all the texcl supplied match the lookup table")
+  }
+  
+  
+  # check percentages
+  idx <- df$silt > 100 | df$silt < 0 | df$clay > 100 | df$clay < 0 | df$sand > 100 | df$sand < 0 | df$fragvoltot > 100 | df$fragvoltot < 0
+  if (any(idx)) {
+    warning("some records are > 100 % or < 0%, or the calcuated silt fraction is > 100 or < 0")
+  }
+  
+  
+  # check ssc_to_texcl() vs texcl
+  df$texcl_calc <- suppressMessages(ssc_to_texcl(sand = df$sand, clay = df$clay, as.is = TRUE))
+  
+  df <- within(df, {
+    texcl_calc = ifelse(texcl_calc == "s"  & grepl("^cos$|^fs$|^vfs$",    texcl), texcl, texcl_calc)
+    texcl_calc = ifelse(texcl_calc == "ls" & grepl("^lcos$|^lfs$|^lvfs$", texcl), texcl, texcl_calc)
+    texcl_calc = ifelse(texcl_calc == "sl" & grepl("^cosl$|^fsl$|^vfsl$", texcl), texcl, texcl_calc)
+  })
+  
+  idx <- any(df$texcl != df$texcl_calc)
+  if (idx) {
+    warning("some of the texcl records don't match the calculated texcl via ssc_to_texcl()")
+  }
+  
+  
+  # calculate family particle size control section
+  df$fpsc <- ifelse(df$fragvoltot > 90, "fragmental", df$fpsc)
+  
+  idx <- df$fragvoltot >= 35
+  if (any(idx)) {
+    df[idx,] <- within(df[idx,], {
+      fpsc[texcl %in% sandytextures
+           ] = "sandy-skeletal"
+      fpsc[clay < 35] = "loamy-skeletal"
+      fpsc[clay >= 35] = "clayey-skeletal"
+      })
+  }
+
+  idx <- df$fragvoltot < 35 & df$texcl %in% sandytextures
+  if (any(idx)) {
+    df[idx, ]$fpsc <- "sandy"
+  }
+
+  idx <- df$fragvoltot < 35 & ! df$texcl %in% sandytextures
+  if (any(idx)) {
+    df[idx, ] <- within(df[idx,], {
+      fpsc[clay < 18 & sand >= 15] = "coarse-loamy"
+      fpsc[clay < 18 & sand <  15] = "coarse-silty"
+      fpsc[clay >= 18 & clay < 35] = "fine-loamy"
+      fpsc[clay >= 18 & clay < 35 & sand < 15] = "fine-silty"
+      fpsc[clay >= 35 & clay < 60] = "fine"
+      fpsc[clay > 60] = "very-fine"
+      })
+  }
+
+  return(df$fpsc)
+}
+
