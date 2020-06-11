@@ -10,13 +10,14 @@ texcl_to_ssc(texcl, clay = NULL)
 
 ssc_to_texcl(df, rmHzErrors = TRUE, as.is = FALSE, droplevels = TRUE)
 
-texmod_to_fragvoltot(texmod)
+texmod_to_fragvoltot(texmod, lieutex = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{texcl}{vector of texture classes than conform to the USDA code conventions (e.g. c, sil, sl, cos)}
   \item{clay}{vector of clay value percents (default: NULL)}
   \item{texmod}{vector of textural modifers that conform to the USDA code convenctions (e.g. gr|GR, grv|GRV)}
+  \item{lieutex}{vector of in lieu of texture terms that conform to the USDA code convenctions (e.g. gr|GR, pg|PG), only used when fragments or artifacts are > 90 percent by volume (default: NULL))}
   \item{df}{data.frame with columns containing clay|CLAY|sand|SAND in the heading}
   \item{rmHzErrors}{should records that sum(sand + silt + clay) != 0 be removed (default: TRUE)}
   \item{as.is}{logical: should character vectors be converted to factors? (default: TRUE)}

@@ -267,10 +267,18 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
 
 
 # modifer to fragvoltot
-texmod_to_fragvoltot <- function(texmod) {
+texmod_to_fragvoltot <- function(texmod, lieutex = NULL) {
+  
+  # check
+  if (any(!is.na(texmod) & !is.na(lieutex))) {
+    message("texmod and lieutex should not both be present, they are mutually exclusive, only the texmod will be returned")
+  }
+  
   
   # standardize inputs
-  df <- data.frame(texmod = tolower(texmod), stringsAsFactors = FALSE)
+  df <- data.frame(texmod = tolower(texmod),
+                   stringsAsFactors = FALSE
+                   )
   df$rn = row.names(df)
   
   
@@ -278,17 +286,46 @@ texmod_to_fragvoltot <- function(texmod) {
   load(system.file("data/soiltexture.rda", package="aqp")[1])
   
   
-  # check for texcl that don't match
-  idx <- ! df$texmod %in% soiltexture$texmod$texmod
-  if (any(idx)) {
+  # check for texmod and lieutex that don't match
+  idx <- any(! df$texmod %in% soiltexture$texmod$texmod)
+  if (idx) {
     message("not all the texmod supplied match the lookup table, removing nomatches")
     df$texmod <- ifelse(idx, NA, df$texmod)
   }
+  
+  idx <- all(!is.null(lieutex)) & any(! toupper(lieutex) %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W"))
+  if (idx) {
+    message("not all the lieutex supplied match the lookup table")
+    df$texmod <- ifelse(idx, NA, df$texmod)
+  }
+  
 
   # merge
   df <- merge(df, soiltexture$texmod, by = "texmod", all.x = TRUE, sort = FALSE)
   df <- df[(order(as.integer(df$rn))), ]
-  df$rn    <- NULL
+  df$rn     <- NULL
+  
+  
+  # lieutex
+  if (all(!is.null(lieutex))) {
+    
+    idx1 <- is.na(texmod) & !is.na(lieutex) & grepl("GR|CB|ST|BY|CN|FL", lieutex)
+    idx2 <- is.na(texmod) & !is.na(lieutex) & grepl("PG|PCB|PST|PBY|PCN|PFL", lieutex)
+    
+    df$lieutex <- toupper(lieutex)
+    
+    df <- within(df, {
+      fragvoltot_l = ifelse(idx1, 90, fragvoltot_l)
+      fragvoltot_r = ifelse(idx1, 95, fragvoltot_l)
+      fragvoltot_h = ifelse(idx1, 100, fragvoltot_l)
+      
+      fragvoltot_l_nopf = ifelse(idx2, 0,  fragvoltot_l)
+      fragvoltot_r_nopf = ifelse(idx2, 0,  fragvoltot_l)
+      fragvoltot_h_nopf = ifelse(idx2, 0, fragvoltot_l)
+      })
+    df$lieutex <- lieutex
+  }
+  
   
   
   return(df)
