@@ -66,6 +66,69 @@
 # st$silt <- 100 - st$clay - st$sand
 # 
 # soiltexture$averages <- st
+#
+#
+# soiltexture$texmod <- data.frame(
+#   texmod     = c("gr", "grf", "grm", "grc", "grv", "grx",
+#                  "cb", "cbv", "cbx",
+#                  "st", "stv", "stx",
+#                  "by", "byv", "byx",
+#                  "cn", "cnv", "cnx",
+#                  "fl", "flv", "flx",
+#                  "pgr", "pgrv", "pgrx",
+#                  "pcb", "pcbv", "pcbx",
+#                  "pst", "pstv", "pstx",
+#                  "pby", "pbyv", "pbyx",
+#                  "pcn", "pcnv", "pcnx",
+#                  "pfl", "pflv", "pflx"
+#                  ),
+#   fragvoltot_l  = c(15, 15, 15, 15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60,
+#                  15, 35, 60
+#                  ),
+#   fragvoltot_r  = c(25, 25, 25, 25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75,
+#                  25, 48, 75
+#   ),
+#   fragvoltot_h = c(34, 34, 34, 34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89,
+#                  34, 59, 89
+#   ),
+#   stringsAsFactors = FALSE
+# )
+# soiltexture$texmod <- within(soiltexture$texmod, {
+#   fragvoltot_l_nopf <- ifelse(grepl("^p", texmod), 0, fragvoltot_l)
+#   fragvoltot_r_nopf <- ifelse(grepl("^p", texmod), 0, fragvoltot_r)
+#   fragvoltot_h_nopf <- ifelse(grepl("^p", texmod), 0, fragvoltot_h)
+#   })
+#
 # 
 # save(soiltexture, file = "C:/workspace2/github/ncss-tech/aqp/data/soiltexture.rda")
 
@@ -201,6 +264,36 @@ texcl_to_ssc <- function(texcl, clay = NULL) {
   return(df)
 }
   
+
+
+# modifer to fragvoltot
+texmod_to_fragvoltot <- function(texmod) {
+  
+  # standardize inputs
+  df <- data.frame(texmod = tolower(texmod), stringsAsFactors = FALSE)
+  df$rn = row.names(df)
+  
+  
+  # load lookup table
+  load(system.file("data/soiltexture.rda", package="aqp")[1])
+  
+  
+  # check for texcl that don't match
+  idx <- ! df$texmod %in% soiltexture$texmod$texmod
+  if (any(idx)) {
+    message("not all the texmod supplied match the lookup table, removing nomatches")
+    df$texmod <- ifelse(idx, NA, df$texmod)
+  }
+
+  # merge
+  df <- merge(df, soiltexture$texmod, by = "texmod", all.x = TRUE, sort = FALSE)
+  df <- df[(order(as.integer(df$rn))), ]
+  df$rn    <- NULL
+  
+  
+  return(df)
+}
+
 
 
 # # convert sand, silt and clay to the family particle size class
