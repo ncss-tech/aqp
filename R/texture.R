@@ -157,7 +157,7 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
   idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
   if (any(idx)) {
     warning("some records sand, silt, and clay do not sum to 100 %")
-    } else message("if records do not sum to 100% the returned texcl values will be NA")
+    }
   
   
   # logic from the particle size estimator calculation from NASIS
