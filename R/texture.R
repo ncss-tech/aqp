@@ -344,12 +344,9 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   sandytextures <- c("cos", "s", "fs", "lcos", "ls", "lfs")
   
   
-  # load lookup table
-  load(system.file("data/soiltexture.rda", package="aqp")[1])
-  
-  
   # check texcl lookup
-  idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
+  var <- c("c", "cl", "l", "ls", "s", "sc", "scl", "si", "sic", "sicl", "sil", "sl", "cos", "fs", "vfs", "lcos", "lfs", "lvfs", "cosl", "fsl", "vfsl")
+  idx <- ! df$texcl %in% var
   if (any(idx)) {
     warning("not all the texcl supplied match the lookup table")
   }
