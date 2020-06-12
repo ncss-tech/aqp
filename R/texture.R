@@ -380,7 +380,7 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   # calculate family particle size control section
   df$fpsc <- ifelse(df$fragvoltot > 90, "fragmental", df$fpsc)
   
-  idx <- df$fragvoltot >= 35
+  idx <- df$fragvoltot >= 35 & df$fragvoltot <= 90
   if (any(idx)) {
     df[idx,] <- within(df[idx,], {
       fpsc[texcl %in% sandytextures
@@ -390,12 +390,12 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
       })
   }
 
-  idx <- df$fragvoltot < 35 & df$texcl %in% sandytextures
+  idx <- df$fragvoltot < 35 & df$texcl %in% sandytextures & df$fragvoltot <= 90
   if (any(idx)) {
     df[idx, ]$fpsc <- "sandy"
   }
 
-  idx <- df$fragvoltot < 35 & ! df$texcl %in% sandytextures
+  idx <- df$fragvoltot < 35 & ! df$texcl %in% sandytextures & df$fragvoltot <= 90
   if (any(idx)) {
     df[idx, ] <- within(df[idx,], {
       fpsc[clay < 18 & sand >= 15] = "coarse-loamy"
