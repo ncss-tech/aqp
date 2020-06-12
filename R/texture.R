@@ -322,7 +322,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 
 
 # convert sand, silt and clay to the family particle size class
-gsc_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL) {
+texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL) {
   
   # check lengths
   idx <- all(length(texcl) == length(clay) & length(clay) == length(sand) & length(sand) == length(fragvoltot))
