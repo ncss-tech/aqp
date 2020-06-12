@@ -29,7 +29,7 @@ texture_to_taxpartsize(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL
   
 \details{These functions are intended to impute missing values or check existing values. The ssc_to_texcl() function uses the same logic as the particle size estimator calculation in NASIS to classify sand and clay into texture class. The results are stored in data(soiltexture) and used by texcl_to_ssc() as a lookup table to convert texture class to sand, silt and clay. The function texcl_to_ssc() replicates the functionality described by Levi (2017).
 
-Unlike the other functions, texture_to_taxpartsize() is intended to be computed on weighted averages within the family particle size control section.
+Unlike the other functions, texture_to_taxpartsize() is intended to be computed on weighted averages within the family particle size control section. Also recall from the criteria that carbonate clay should be subtracted from clay content and added to silt content. Similarily, if the percent of very fine sand is known it should be substracted from the sand, and added to the silt content.
 }
 
 \references{
@@ -78,12 +78,19 @@ head(texmod_to_fragvoltot(frags))
 
 
 # example of texture_to_taxpartsize()
-st <- soiltexture$values
-idx <- sample(1:length(st$texcl), 10)
-st <- st[idx, ]
-st$fragvoltot <- round(rnorm(10, 35, 3))
-st$fpsc <- texture_to_taxpartsize(texcl = st$texcl, clay = st$clay, sand = st$sand, fragvoltot = st$fragvoltot)
-head(st)
+tex <- data.frame(texcl = c("c", "cl", "l", "ls", "s"), 
+                  clay  = c(55, 33, 18, 6, 3), 
+                  sand  = c(20, 33, 42, 82, 93), 
+                  fragvoltot = c(35, 15, 34, 60, 91)) 
+tex$fpsc<-texture_to_taxpartsize(texcl = tex$texcl, clay = tex$clay,sand = tex$sand, fragvoltot = tex$fragvoltot) 
+head(tex)
+
+
+# example of texture_to_taxpartsize() with carbonate clay and very fine sand
+carbclay <- rnorm(5, 2, 3)
+vfs <- rnorm(5, 10, 3)
+st$fpsc <- texture_to_taxpartsize(texcl = tex$texcl, clay = tex$clay - carbclay, sand = tex$sand - vfs, fragvoltot = tex$fragvoltot)
+head(tex)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
