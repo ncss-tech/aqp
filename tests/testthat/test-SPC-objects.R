@@ -188,29 +188,29 @@ test_that("SPC spatial operations ", {
   # updated to not include a +datum as this breaks in upstream sp/rgdal
   
   # 2020/06/01 now expect warning on R 4.0+/latest sp
-  if(version$major >= 4)
-    expect_warning(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
-  else 
+#  if(version$major >= 4)
+#    expect_warning(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
+#  else 
     expect_silent(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
   
   # we should get back the same thing we started with
   expect_equal(proj4string(sp1), '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
 
   # basic coercion
-  if(version$major >= 4)
-    expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
-  else 
+#  if(version$major >= 4)
+#    expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
+#  else 
     expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
   
   # down-grade to {site + sp} = SpatialPointsDataFrame
-  if(version$major >= 4)
-    expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
-  else
+#  if(version$major >= 4)
+#    expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
+#  else
     expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
   
-  if(version$major >= 4)
-    expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
-  else
+#  if(version$major >= 4)
+#    expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
+#  else
     sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
 
   expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
