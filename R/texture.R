@@ -139,7 +139,7 @@
 ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = TRUE) {
   
   # check lengths
-  idx <- all(length(clay) != length(sand))
+  idx <- length(clay) != length(sand)
   if (idx) {
     stop("length of inputs do not match")
   }
@@ -211,9 +211,7 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
   df$rn <- row.names(df)
   
   
-  if (TRUE) {
-    load(system.file("data/soiltexture.rda", package="aqp")[1])
-  }
+  load(system.file("data/soiltexture.rda", package="aqp")[1])
   
   
   # check for texcl that don't match
@@ -224,7 +222,8 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
   }
   
   # check clay ranges 0-100
-  if (clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)) {
+  idx <- clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)
+  if (idx) {
     warning("some clay records < 0 or > 100%")
     }
   
@@ -258,7 +257,8 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
 texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   
   # check
-  if (any(!is.na(texmod) & !is.na(lieutex))) {
+  idx <- any(!is.na(texmod) & !is.na(lieutex))
+  if (idx) {
     warning("texmod and lieutex should not both be present, they are mutually exclusive, only the texmod will be returned")
   }
   
@@ -275,15 +275,15 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   
   
   # check for texmod and lieutex that don't match
-  idx <- any(! df$texmod %in% soiltexture$texmod$texmod)
-  if (idx) {
+  idx <- ! df$texmod %in% soiltexture$texmod$texmod
+  if (any(idx)) {
     message("not all the texmod supplied match the lookup table, removing nomatches")
     df$texmod <- ifelse(idx, NA, df$texmod)
   }
   
-  idx <- all(!is.null(lieutex)) & any(! toupper(lieutex) %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W"))
-  if (idx) {
-    message("not all the lieutex supplied match the lookup table")
+  idx <-  ! toupper(lieutex) %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
+  if (all(!is.null(lieutex)) & any(idx)) {
+    message("not all the texmod supplied match the lookup table")
     df$texmod <- ifelse(idx, NA, df$texmod)
   }
   
@@ -325,7 +325,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL) {
   
   # check lengths
-  idx <- all(length(texcl) == length(clay) & length(clay) == length(sand) & length(sand) == length(fragvoltot))
+  idx <- length(texcl) == length(clay) & length(clay) == length(sand) & length(sand) == length(fragvoltot)
   if (!idx) {
     stop("length of inputs do not match")
   }
@@ -346,8 +346,8 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   
   # check texcl lookup
   var <- c("c", "cl", "l", "ls", "s", "sc", "scl", "si", "sic", "sicl", "sil", "sl", "cos", "fs", "vfs", "lcos", "lfs", "lvfs", "cosl", "fsl", "vfsl")
-  idx <- ! df$texcl %in% var
-  if (any(idx)) {
+  idx <- any(! df$texcl %in% var)
+  if (idx) {
     warning("not all the texcl supplied match the lookup table")
   }
   
@@ -375,9 +375,8 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   
   
   # calculate family particle size control section
-  df$fpsc <- ifelse(df$fragvoltot > 90, "fragmental", df$fpsc)
   
-  idx <- df$fragvoltot >= 35 & df$fragvoltot <= 90
+  idx <- df$fragvoltot >= 35
   if (any(idx)) {
     df[idx,] <- within(df[idx,], {
       fpsc[texcl %in% sandytextures
@@ -387,12 +386,12 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
       })
   }
 
-  idx <- df$fragvoltot < 35 & df$texcl %in% sandytextures & df$fragvoltot <= 90
+  idx <- df$fragvoltot < 35 & df$texcl %in% sandytextures
   if (any(idx)) {
     df[idx, ]$fpsc <- "sandy"
   }
 
-  idx <- df$fragvoltot < 35 & ! df$texcl %in% sandytextures & df$fragvoltot <= 90
+  idx <- df$fragvoltot < 35 & ! df$texcl %in% sandytextures
   if (any(idx)) {
     df[idx, ] <- within(df[idx,], {
       fpsc[clay < 18 & sand >= 15] = "coarse-loamy"
@@ -403,7 +402,9 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
       fpsc[clay > 60] = "very-fine"
       })
   }
-
+  
+  df$fpsc <- ifelse(df$fragvoltot > 90, "fragmental", df$fpsc)
+  
   return(df$fpsc)
 }
 
