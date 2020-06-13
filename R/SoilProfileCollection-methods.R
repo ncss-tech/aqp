@@ -552,7 +552,6 @@ setMethod(
   }
 )
 
-
 # overload unique() via digest eval of unique profiles
 uniqueSPC <- function(x, vars) {
   # compute hash by profile, for selected variables
@@ -581,8 +580,6 @@ uniqueSPC <- function(x, vars) {
 setMethod(f = 'unique',
           signature(x = "SoilProfileCollection"),
           definition = uniqueSPC)
-
-
 
 ## standard column access: search horizons, then site
 setMethod("$", signature(x = "SoilProfileCollection"),

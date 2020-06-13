@@ -91,3 +91,28 @@ spc_in_sync <- function(object) {
     lut <- as.integer(factor(x, ordered = TRUE))
   x[which(diff(c(0,lut)) != 0)]
 }
+
+if (!isGeneric('reorderHorizons'))
+  setGeneric('reorderHorizons', function(object, target.order = NULL)
+    standardGeneric('reorderHorizons'))
+
+setMethod('reorderHorizons',
+          signature('SoilProfileCollection'),
+          function(object, target.order = NULL) {
+            
+            h <- object@horizons
+            
+            if (is.null(target.order))
+              target.order <- metadata(object)$target.order
+              if (is.null(target.order))
+                target.order <- 1:nrow(h)
+            
+            current.order <- match(target.order,
+                                   order(as.character(h[[idname(object)]]),
+                                         h[[horizonDepths(object)[1]]]))
+            
+            h <- aqp:::.as.data.frame.aqp(h[current.order,], 
+                                          aqp_df_class(object))
+            object@horizons <- h
+            return(object)
+          })
