@@ -194,10 +194,6 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
 # impute sand, silt, and clay with texcl averages
 texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
   
-  if (any(is.na(texcl))) {
-    message("some texcl records missing")
-  }
-  
   # clay is not NULL
   clay_not_null <- all(!is.null(clay))
   
@@ -217,8 +213,7 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
   # check for texcl that don't match
   idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
   if (any(idx)) {
-    warning("not all the texcl supplied match the lookup table, removing nomatches")
-    df$texcl <- ifelse(idx, NA, df$texcl)
+    warning("not all the texcl supplied match the lookup table")
   }
   
   # check clay ranges 0-100
@@ -277,14 +272,12 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   # check for texmod and lieutex that don't match
   idx <- ! df$texmod %in% soiltexture$texmod$texmod
   if (any(idx)) {
-    message("not all the texmod supplied match the lookup table, removing nomatches")
-    df$texmod <- ifelse(idx, NA, df$texmod)
+    message("not all the texmod supplied match the lookup table")
   }
   
   idx <-  ! toupper(lieutex) %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
   if (all(!is.null(lieutex)) & any(idx)) {
     message("not all the texmod supplied match the lookup table")
-    df$texmod <- ifelse(idx, NA, df$texmod)
   }
   
 
@@ -355,7 +348,7 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   # check percentages
   idx <- df$silt > 100 | df$silt < 0 | df$clay > 100 | df$clay < 0 | df$sand > 100 | df$sand < 0 | df$fragvoltot > 100 | df$fragvoltot < 0
   if (any(idx)) {
-    warning("some records are > 100 % or < 0%, or the calcuated silt fraction is > 100 or < 0")
+    warning("some records are > 100% or < 0%, or the calcuated silt fraction is > 100% or < 0%")
   }
   
   
@@ -379,10 +372,9 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   idx <- df$fragvoltot >= 35
   if (any(idx)) {
     df[idx,] <- within(df[idx,], {
-      fpsc[texcl %in% sandytextures
-           ] = "sandy-skeletal"
-      fpsc[clay < 35] = "loamy-skeletal"
-      fpsc[clay >= 35] = "clayey-skeletal"
+      fpsc[texcl %in% sandytextures] = "sandy-skeletal"
+      fpsc[clay <  35]               = "loamy-skeletal"
+      fpsc[clay >= 35]               = "clayey-skeletal"
       })
   }
 
