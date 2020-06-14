@@ -1,363 +1,4 @@
-
-## horizon IDs
-if (!isGeneric('hzID<-'))
-  setGeneric('hzID<-', function(object, value) standardGeneric('hzID<-'))
-
-setReplaceMethod("hzID", signature(object = "SoilProfileCollection"),
-                 function(object, value) {
-                   
-                   if (!inherits(value, 'character')) {
-                     message("converting horizon IDs from integer to character")
-                     value <- as.character(value)
-                   }
-                   
-                   # can't be missing
-                   if (is.null(value)) {
-                     stop('horizon IDs cannot be NULL or NA', call. = FALSE) 
-                   }
-                   
-                   if (any(is.na(value)) | any(is.null(value))) {
-                     stop('horizon IDs cannot be NULL or NA', call. = FALSE) 
-                   }
-                   
-                   # length
-                   if(length(value) != nrow(object)) {
-                     stop('replacement horizon IDs must have same length as original', call. = FALSE)
-                   }
-                   
-                   # unique
-                   if(length(value) != length(unique(value))) {
-                     stop('replacement horizon IDs must be unique', call. = FALSE)
-                   }
-                   
-                   # extract horizon and replace IDs
-                   object@horizons[[hzidname(object)]] <- value
-                   
-                   return(object)
-                 }
-)
-
-## profile IDs
-if (!isGeneric('profile_id<-'))
-  setGeneric('profile_id<-', function(object, value) standardGeneric('profile_id<-'))
-
-setReplaceMethod("profile_id", signature(object = "SoilProfileCollection"),
-                 function(object, value) {
-                   
-                   # can't be missing
-                   if(is.null(value)) {
-                     stop('profile IDs cannot be NULL or NA', call. = FALSE) 
-                   }
-                   
-                   if(any(is.na(value)) | any(is.null(value))) {
-                     stop('profile IDs cannot be NULL or NA', call. = FALSE) 
-                   }
-                   
-                   # length
-                   if(length(value) != length(profile_id(object))) {
-                     stop('replacement profile IDs must have same length as original', call. = FALSE)
-                   }
-                   
-                   # unique
-                   if(length(value) != length(unique(value))) {
-                     stop('replacement profile IDs must be unique', call. = FALSE)
-                   }
-                   
-                   # lookup table for converting old -> new IDs
-                   idn <- idname(object)
-                   pids <- profile_id(object)
-                   lut <- cbind(pids, value)
-                   
-                   # change @site
-                   s <- site(object)
-                   s[[idn]] <- value
-                   object@site <- .as.data.frame.aqp(s, metadata(object)$aqp_df_class)
-                   
-                   # change @horizons
-                   h <- object@horizons
-                   update.idx <- match(h[[idn]], lut[, 1])
-                   # apply edits via LUT
-                   h[[idn]] <- lut[update.idx, 2]
-                   object@horizons <- .as.data.frame.aqp(h, metadata(object)$aqp_df_class)
-                   
-                   # search in @diagnostic
-                   dg <- diagnostic_hz(object)
-                   dg.nm <- names(dg)
-                   idx <- grep(idn, dg.nm)
-                   
-                   if(length(idx) > 0) {
-                     # apply edits via LUT
-                     update.idx <- match(dg[[idx]], lut[, 1])
-                     dg[[idx]] <- lut[update.idx, 2]
-                     suppressWarnings(diagnostic_hz(object) <- dg)
-                   }
-                   
-                   # search in @restrictions
-                   re <- restrictions(object)
-                   re.nm <- names(re)
-                   idx <- grep(idn, re.nm)
-                   
-                   if(length(idx) > 0) {
-                     # apply edits via LUT
-                     update.idx <- match(re[[idx]], lut[, 1])
-                     re[[idx]] <- lut[update.idx, 2]
-                     suppressWarnings(restrictions(object) <- re)
-                   }
-                   
-                   return(object)
-                 }
-)
-
-
-## horizon depth columns
-if (!isGeneric('horizonDepths<-'))
-  setGeneric('horizonDepths<-', function(object, value) standardGeneric('horizonDepths<-'))
-
-setReplaceMethod("horizonDepths", signature(object = "SoilProfileCollection"),
-                 function(object, value) {
-                   
-                   # can't be missing
-                   if(is.null(value)) {
-                     stop('cannot assign NA or NULL depth column names', call. = FALSE) 
-                   }
-                   
-                   if(any(is.na(value)) | any(is.null(value))) {
-                     stop('cannot assign NA or NULL depth column names', call. = FALSE) 
-                   }
-                   
-                   # length
-                   if(length(value) != 2) {
-                     stop('horizon depth names must be a vector with two items', call. = FALSE)
-                   }
-                   
-                   # warn about changes in names
-                   if(any(value != make.names(value))) {
-                     warning('names have been modified to legal data.frame column names')
-                   }
-                   
-                   # must be safely convertable to character and safe for DF
-                   value <- make.names(value)
-                   
-                   # save old values
-                   hd <- horizonDepths(object)
-                   
-                   # change @horizons, just the names
-                   hn <- horizonNames(object)
-                   idx <- match(hd, hn)
-                   hn[idx] <- value
-                   horizonNames(object) <- hn
-                   
-                   # change @depthcols
-                   object@depthcols <- value
-                   
-                   return(object)
-                 }
-)
-
-## set horizon names
-if (!isGeneric('horizonNames<-'))
-  setGeneric('horizonNames<-', function(object, value) standardGeneric('horizonNames<-'))
-
-## TODO: strip-out idname
-setReplaceMethod("horizonNames", signature(object = "SoilProfileCollection"),
-  function(object, value) {
-    
-    # sanity check
-    if(any(is.null(value)))
-      stop('cannot assign NA or NULL column names', call. = FALSE)
-    
-    if(any(is.na(value)))
-      stop('cannot assign NA or NULL column names', call. = FALSE)
-    
-    # must be same length
-    if(length(value) != length(horizonNames(object))) {
-      stop('replacement must have same length as original', call. = FALSE)
-    }
-    
-    # warn about changes in names
-    if( any(value != make.names(value))) {
-      warning('names have been modified to legal data.frame column names')
-    }
-    
-    # assign
-    names(object@horizons) <- make.names(value)
-    return(object)
-  }
-)
-
-
-
-## set site names
-if (!isGeneric('siteNames<-'))
-  setGeneric('siteNames<-', function(object, value) standardGeneric('siteNames<-'))
-
-## TODO: strip-out idname
-setReplaceMethod("siteNames", signature(object = "SoilProfileCollection"),
-  function(object, value) {
-    # sanity check
-    if(is.na(value) | is.null(value))
-      stop('cannot assign NA or NULL column names', call. = FALSE)
-                   
-    names(object@horizons) <- make.names(value)
-    return(object)
-  }
-)
-
-
-
-
-
-##
-## reset hz ID name
-##
-if (!isGeneric('hzidname<-'))
-  setGeneric('hzidname<-', function(object, value) standardGeneric('hzidname<-'))
-
-setReplaceMethod("hzidname", signature(object = "SoilProfileCollection"),
-                 function(object, value) {
-                   
-                   # quick sanity check
-                   if(length(value) != 1)
-                     stop("horizon ID name should have length of 1", call.=TRUE)
-                   
-                   
-                   # sanity checks
-                   
-                   # test: does it exist?
-                   if(! value %in% horizonNames(object)) {
-                     stop("horizon ID name not in horizon data", call.=TRUE)
-                   }
-                   
-                   # test: unique?
-                   x <- object@horizons[[value]]
-                   if(length(unique(x)) != nrow(object)){
-                     # convert error to warning, 
-                     # prevent stoppage from nonunique, 
-                     # fail gracefully and retain to default
-                     warning("horizon ID name (",value,") not unique. unique ID not changed.", call.=TRUE)
-                   } else {
-                     # replace
-                     object@hzidcol <- value
-                     
-                     # convert contents to character, if needed
-                     if(!is.character(x)) {
-                       message(sprintf("converting horizon IDs in column `%s` to character", value))
-                       object@horizons[[value]] <- as.character(object@horizons[[value]])
-                     }
-                   }
-                   
-                   # done
-                   return(object)
-                 }
-)
-
-##
-## set hz designation name
-##
-if (!isGeneric('hzdesgnname<-'))
-  setGeneric('hzdesgnname<-', function(object, value) standardGeneric('hzdesgnname<-'))
-
-setReplaceMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
-                 function(object, value) {
-                   # test: does it exist?
-                   if(!length(value))
-                     value <- ""
-                   
-                   if(length(value)) {
-                     # several ways to "reset" the hzdesgnname
-                     if((value == "") | is.na(value) | is.null(value)) {
-                       value <- character(0)
-                       message("set horizon designation name column to `character` of length zero")
-                     } else if (!(value %in% horizonNames(object))) {
-                       stop(paste0("horizon designation name (",value,") not in horizon data"), call.=FALSE)
-                     }
-                   } 
-                   
-                   # replace
-                   object@hzdesgncol <- value
-                   
-                   # done
-                   return(object)
-})
-
-##
-## set hz designation name
-##
-if (!isGeneric('hztexclname<-'))
-  setGeneric('hztexclname<-', function(object, value) standardGeneric('hztexclname<-'))
-
-setReplaceMethod("hztexclname", signature(object = "SoilProfileCollection"),
-                 function(object, value) {
-                   # test: does it exist?
-                   if(!length(value))
-                     value <- ""
-                   
-                   if(length(value)) {
-                     # several ways to "reset" the hzdesgnname
-                     if((value == "") | is.na(value) | is.null(value)) {
-                       value <- character(0)
-                       #message("set horizon texture class name to `character` of length zero")
-                     } else if (! value %in% horizonNames(object)) {
-                       stop("horizon texture class name not in horizon data", call.=TRUE)
-                     }
-                   } 
-                   
-                   # replace
-                   object@hztexclcol <- value
-                   
-                   # done
-                   return(object)
-                 })
-
-##
-## initialize metadata: object modification in-place
-##
-if (!isGeneric('metadata<-'))
-  setGeneric('metadata<-', function(object, value) standardGeneric('metadata<-'))
-
-setReplaceMethod("metadata", signature(object = "SoilProfileCollection"),
-  function(object, value) {
-
-  # metadata() is now stored in a list()
-  # 
-	# quick sanity check
-	#if(nrow(value) > 1 | nrow(value) < 1)
-	#  stop("metadata should be a 1-row data frame", call.=FALSE)
-
-	# otherwise assign
-	object@metadata <- value
-
-	# done
-	return(object)
-	}
-)
-
-##
-## initialize depth_units: object modification in-place, depth_units stored in @metadata
-##
-if (!isGeneric('depth_units<-'))
-  setGeneric('depth_units<-', function(object, value) standardGeneric('depth_units<-'))
-
-setReplaceMethod("depth_units", signature(object = "SoilProfileCollection"),
-  function(object, value) {
-
-	# quick sanity check: character, length 1
-
-	# keep existing metadata
-	md <- metadata(object)
-
-	# default depth_units are always in metadata
-	# replace what ever is there
-	md$depth_units <- value
-
-	# replace metadata
-	metadata(object) <- md
-
-	# done
-	return(object)
-	}
-)
-
+# setters -- functions that substantially modify data.frame slot contents
 
 ##
 ## depths<- setter method - to create AQP objects: sorts based on ID and top depth
@@ -371,8 +12,33 @@ setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 		object
 	})
 
-
+#' Initialize a SoilProfilCollection from a data.frame object
+#' @name depths<-
+#' @param object 
+#' @param value A formula specifying the unique profile ID, top and bottom depth column names
+#'
+#' @aliases depths<-,SoilProfileCollection-method
+#' @rdname depths
+#' @examples
+#' ## init SoilProfileCollection objects from data.frame of horizon data
+#' 
+#' # load demo data
+#' data(sp1)
+#' 
+#' # promote to SPC
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # plot
+#' plot(sp1)
+#' 
+#' # number of profiles
+#' length(sp1)
+#' 
+#' # number of horizons
+#' nrow(sp1)
+#' 
 setReplaceMethod("depths", "data.frame",
+
   function(object, value) {
     if (inherits(value, "formula")) {
       # extract components of formula: 1. user id, 2. top, 3. bottom
@@ -481,6 +147,49 @@ setReplaceMethod("depths", "data.frame",
 ##
 ## initialize site data
 ##
+#' Create or add data to the site slot
+#' 
+#' @name site<-
+#' 
+#' @description 
+#' There are two options available via the \code{site<-} setter. 
+#' 
+#' The first is a "normalization" by formula interface, whereby one specifies an attribute that is constant in horizons within profiles to be promoted to a site-level variable: \code{site(spc) <- ~ horizonvariable}
+#' 
+#' The second is creation of site data from an external \code{data.frame} via merge (LEFT JOIN). There must be one or more same-named columns (with at least some matching data) on the left and right hand side to facilitate the join: \code{site(spc) <- newdata}
+#' 
+#' @param object A SoilProfileCollection
+#' @param value A formula or object inheriting \code{data.frame}
+#' @aliases site<-,SoilProfileCollection-method
+#' @docType methods
+#' 
+#' @rdname site
+#'
+#' @examples
+#' 
+#' # load test data
+#' data(sp2)
+#' 
+#' # promote to SPC
+#' depths(sp2) <- id ~ top + bottom
+#' 
+#' # normalize a horizon-level attribute to site
+#' site(sp2) <- ~ surface
+#' 
+#' # inspect site table
+#' site(sp2)
+#' 
+#' # make some data: classify two geomorphic surfaces with numeric value
+#' newdata <- data.frame(surface = c("holocene",
+#'                                   "lower riverbank"),
+#'                       newvalue = c(1,2))
+#'                       
+#' # do left join based on newly-normalized "surface" attribute
+#' site(sp2) <- newdata
+#' 
+#' # inspect site table: holocene & lower riverbank have values 
+#' site(sp2)
+#' 
 if (!isGeneric('site<-'))
   setGeneric('site<-', function(object, value) 
     standardGeneric('site<-'))
@@ -602,9 +311,39 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   return(object)
 }
 
-##
-## horizon replacement method
-##
+#' Replace data in the horizon slot
+#' 
+#' @name replaceHorizons<-
+#' 
+#' @description Replaces horizon data with new data.frame object.
+#' 
+#' @param object A SoilProfileCollection
+#' @param value An object inheriting \code{data.frame}
+#' @aliases replaceHorizons<-,SoilProfileCollection-method
+#' @docType methods
+#' 
+#' @rdname replaceHorizons
+#'
+#' @examples
+#' 
+#' # load test data
+#' data(sp2)
+#' 
+#' # promote to SPC
+#' depths(sp2) <- id ~ top + bottom
+#' 
+#' # one profile
+#' p <- sp2[1,]
+#' 
+#' # 23 variables in horizon data
+#' length(horizonNames(sp2))
+#' 
+#' # remove all but essential ones
+#' replaceHorizons(p) <- horizons(p)[,c(idname(p),hzidname(p),horizonDepths(p))]
+#' 
+#' # inspect result (a clean slate)
+#' horizons(p)
+#' 
 if (!isGeneric('replaceHorizons<-'))
   setGeneric('replaceHorizons<-', function(object, value) 
     standardGeneric('replaceHorizons<-'))
@@ -650,11 +389,39 @@ setReplaceMethod("replaceHorizons",
   return(object)
 })
 
-##
-## horizon data left join
-##
-## horizons<- left join method
-##
+#' Add data to the horizons slot
+#' 
+#' @name horizons<-
+#' 
+#' @description 
+#' Horizon data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns (with at least some matching data) on the left and right hand side to facilitate the join: \code{horizons(spc) <- newdata}
+#' 
+#' @param object A SoilProfileCollection
+#' @param value An object inheriting \code{data.frame}
+#' @aliases horizons<-,SoilProfileCollection-method
+#' @docType methods
+#' 
+#' @rdname horizons
+#'
+#' @examples
+#' 
+#' # load test data
+#' data(sp2)
+#' 
+#' # promote to SPC
+#' depths(sp2) <- id ~ top + bottom
+#' 
+#' # assign true to surface horizon
+#' newdata <- data.frame(top = 0,
+#'                       newvalue = TRUE)
+#'                       
+#' # do left join                       
+#' horizons(sp2) <- newdata
+#' 
+#' # inspect site table: newvalue TRUE only for horizons 
+#' #  with top depth equal to zero
+#' horizons(sp2)
+#' 
 if (!isGeneric('horizons<-'))
   setGeneric('horizons<-', function(object, value) 
     standardGeneric('horizons<-'))
@@ -731,11 +498,40 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   return(object)
 })
 
-##
-## init diagnostic horizon data
-##
-## NOTE: these data are likely to be free-form, may not exist for every profile, and are usually 1:many
-##
+#' Add data to the diagnostic slot
+#' 
+#' @name diagnostic_hz<-
+#' 
+#' Diagnostic data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
+#' 
+#' @param object A SoilProfileCollection
+#' @param value An object inheriting \code{data.frame}
+#' @aliases diagnostic_hz<-,SoilProfileCollection-method
+#' @docType methods
+#' 
+#' @rdname diagnostic_hz
+#'
+#' @examples
+#' 
+#' # load test data
+#' data(sp2)
+#' 
+#' # promote to SPC
+#' depths(sp2) <- id ~ top + bottom
+#' 
+#' # assign two profiles a zone related to the mollic epipedon
+#' newdata <- data.frame(id = c("hon-1","hon-17"),
+#'                       featkind = "fixed-depth surface sample",
+#'                       featdept = 0,
+#'                       featdepb = 18)
+#'                       
+#' # do left join                       
+#' diagnostic_hz(sp2) <- newdata
+#' 
+#' # inspect site table: newvalue TRUE only for horizons 
+#' #  with top depth equal to zero
+#' diagnostic_hz(sp2)
+#' 
 if (!isGeneric('diagnostic_hz<-'))
   setGeneric('diagnostic_hz<-', function(object, value) 
     standardGeneric('diagnostic_hz<-'))
@@ -786,8 +582,40 @@ setReplaceMethod("diagnostic_hz",
   return(object)
 })
 
-# restriction data
-# likely to either have no restrictions or possibly more than one
+
+#' Add data to the restrictions slot
+#' 
+#' @name restrictions<-
+#' 
+#' Restrictions data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named profile ID columns on the left and right hand side to facilitate the join: \code{restrictions(spc) <- newdata}. 
+#' 
+#' @param object A SoilProfileCollection
+#' @param value An object inheriting \code{data.frame}
+#' @aliases restrictions<-,SoilProfileCollection-method
+#' @docType methods
+#' 
+#' @rdname restrictions
+#'
+#' @examples
+#' 
+#' # load test data
+#' data(sp2)
+#' 
+#' # promote to SPC
+#' depths(sp2) <- id ~ top + bottom
+#' 
+#' # assign abrupt textural change to a profile
+#' newdata <- data.frame(id = c("hon-21"),
+#'                       restrkind = "abrupt textural change",
+#'                       restrdep)
+#'                       
+#' # do left join                       
+#' restrictions(sp2) <- newdata
+#' 
+#' # inspect site table: newvalue TRUE only for horizons 
+#' #  with top depth equal to zero
+#' restrictions(sp2)
+#' 
 if (!isGeneric('restrictions<-'))
   setGeneric('restrictions<-', function(object, value) 
     standardGeneric('restrictions<-'))
