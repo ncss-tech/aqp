@@ -437,6 +437,8 @@ test_that("SPC profile ID get/set ", {
   
 })
 
+context("SoilProfileCollection integrity")
+
 test_that("SPC profile ID reset integrity: site", {
   
   # test site 
@@ -564,4 +566,42 @@ test_that("replaceHorizons<- works as expected", {
   
   # missing depths = error
   expect_error(replaceHorizons(x) <- horizons(x)[,c(idname(x))])
+})
+
+spc <- data.frame(id = do.call('c', as.list((lapply(1:4, function(i) rep(i, 10))))),
+                  top = rep(0:9, 4), bottom = rep(1:10, 4))
+
+depths(spc) <- id ~ top+bottom
+
+rev.ord <- rev(1:nrow(spc@horizons))
+
+test_that("basic integrity checks", {
+  
+  # a new SPC is valid
+  expect_true(spc_in_sync(spc)$valid)
+  
+  spc@horizons <- spc@horizons[rev.ord,]
+  
+  # inverting the horizon order makes it invalid
+  expect_true(!spc_in_sync(spc)$valid)
+    
+  # reordering the horizons with reorderHorizons resolves integrity issues
+  expect_true(spc_in_sync(reorderHorizons(spc))$valid)
+  
+  # reordering horizons with any order works, even if invalid
+  spc <- reorderHorizons(spc, target.order = c(20:40,1:19))
+  expect_true(!spc_in_sync(spc)$valid)
+   
+  # inspect the hzids -- in this case we know they should be 20:40 then 1:19
+  expect_true(all(spc[[hzidname(spc)]] == c(20:40,1:19)))
+  
+  # subset the broken SPC to get the 4th profile
+  spc4 <- filter(spc, id == "4")
+  
+  # the target order reflects a reasonable result for the single profile SPC
+  expect_true(all(metadata(spc4)$target.order == 1:10))
+  
+  # the subset of the broken SPC is valid
+  expect_true(spc_in_sync(spc4)$valid)
+  
 })
