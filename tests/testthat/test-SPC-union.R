@@ -155,5 +155,13 @@ test_that("filtering NULL/NA elements", {
   
   # this should NOT work
   expect_error(union(s, na.rm=FALSE))
+  
+  # all NA ---> result is NULL
+  s <- list(NA, NA, NA)
+  expect_null(union(s))
+  
+  # all NULL ---> result is NULL
+  s <- list(NULL, NULL, NULL)
+  expect_null(union(s))
 })
 

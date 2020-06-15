@@ -6,7 +6,7 @@
 # This function replaces the previous rbind.SoilProfileCollection function.
 # 
 # TODO:
-# * is it possible to implement an S4 interface for a list of SPC?
+# * is it possible to implement an S4 interface for a list of SPC? (cleaner code)
 
 
 # ease the transition to union()
@@ -30,11 +30,24 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   options(stringsAsFactors=FALSE)
   
   # short-circuits
+  
+  # empty list
   if(length(spc) == 0)
     return(NULL)
   
+  # singleton
   if(length(spc) == 1)
     return(spc[[1]])
+  
+  # ALL NULL
+  if(all(sapply(spc, is.null)))
+    return(NULL)
+  
+  # ALL NA
+  # must suppress warnings because is.na(SoilProfileCollection) throws a warning
+  if(suppressWarnings(all(sapply(spc, is.na))))
+    return(NULL)
+  
   
   # check/filter for NULL list elements
   idx.null <- suppressWarnings(which(sapply(spc, is.null)))
@@ -85,6 +98,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   new.pID <- spc.list[[1]]$idcol
   new.hzd <- spc.list[[1]]$depthcols
   new.metadata <- spc.list[[1]]$metadata
+  
   
   # TODO: need a template for coordinate names if spatial data are present in all
   
