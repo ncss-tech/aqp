@@ -62,7 +62,7 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
   
   # check sand, silt and clay sum to 100
   idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
-  if (any(idx)) {
+  if (any(idx) & any(complete.cases(df[c("sand", "clay")]))) {
     warning("some records sand, silt, and clay do not sum to 100 %")
     }
   
