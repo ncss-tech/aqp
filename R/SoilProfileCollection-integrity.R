@@ -1,13 +1,27 @@
-# Quickly assess relative state of site and horizon slots
-# 
-# spc_in_sync
-# 
-# Function to relatively rapidly determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents. The speed comes from not using match/unique based logic. Ideally, checking the state of object by this method will allow the match/%in%/unique -based methods to be used more sparingly -- i.e. only when an exact index needs to be made.
-# 
-# 
-# Andrew G. Brown
-# 
-#  
+#' Quickly assess relative state of site and horizon slots
+#'
+#' @description
+#' 
+#' Determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents. 
+#' 
+#' Three logical checks are performed on the site and horizon tables, and a fourth attribute \code{valid} returns \code{TRUE} when all three checks are \code{TRUE}.
+#'
+#' Check 1: Site order is reflected in horizons. Which means: mo intermingling of sites within horizon table. Each profile is a block of contiguous rows in the horizon table. Though, they _may_ be out of order within profiles.
+#' 
+#' Check 2: Site IDs match coalesced profile ID from horizon. This check ensures the same _relative_ ordering, but horizons still may be out of order within profiles
+#' 
+#' Check 3: Horizon IDs are in order of profile ID in site and within profiles, have correct top-depth sequence.
+#' 
+#' @param object A SoilProfileCollection 
+#' @return data.table
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @author Andrew G. Brown
+#'
+#' data(sp5)
+#' 
+#' spc_in_sync(sp5)
+#' 
 spc_in_sync <- function(object) {
   # get site and horizon slot contents
   s <- object@site
@@ -91,3 +105,42 @@ spc_in_sync <- function(object) {
     lut <- as.integer(factor(x, ordered = TRUE))
   x[which(diff(c(0,lut)) != 0)]
 }
+
+if (!isGeneric('reorderHorizons'))
+  setGeneric('reorderHorizons', function(object, target.order = NULL)
+    standardGeneric('reorderHorizons'))
+
+#' Re-order corrupted horizon data
+#' 
+#' @name reorderHorizons
+#' @description This is a method made available primarily to repair horizon data that have been corrupted relative to their order at time of SoilProfileCollection construction. 
+#' 
+#' There is an option to specify the target order, but this will not update the corresponding metadata entry tracking the original order. Use this functionality at your own risk.
+#' 
+#' @param object A SoilProfileCollection
+#' @param target.order A numeric vector of equal length to \code{object}. Default value is \code{NULL} which restores the internal order of the collection. 
+#' 
+#' @return SoilProfileCollection
+#' @docType methods
+#' @rdname reorderHorizons
+#'
+setMethod('reorderHorizons',
+          signature('SoilProfileCollection'),
+          function(object, target.order = NULL) {
+            
+            h <- object@horizons
+            
+            if (is.null(target.order))
+              target.order <- metadata(object)$target.order
+              if (is.null(target.order))
+                target.order <- 1:nrow(h)
+            
+            current.order <- match(target.order,
+                                   order(as.character(h[[idname(object)]]),
+                                         h[[horizonDepths(object)[1]]]))
+            
+            h <- aqp:::.as.data.frame.aqp(h[current.order,], 
+                                          aqp_df_class(object))
+            object@horizons <- h
+            return(object)
+          })

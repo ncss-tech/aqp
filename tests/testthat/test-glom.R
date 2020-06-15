@@ -9,10 +9,10 @@ attr <- 'prop' # clay contents %
 
 test_that("intersection of horizons by depth", {
     # intersection at a single depth should return only one horizon
-    expect_equal(sum(clod.hz.ids(p, 50) %in% hzID(p)), 1)
+    expect_equal(sum(glom(p, 50, ids = TRUE) %in% hzID(p)), 1)
     
     # intersection from 25 to 100 should return four horizons
-    expect_equal(sum(clod.hz.ids(p, 25, 100) %in% hzID(p)), 4)
+    expect_equal(sum(glom(p, 25, 100, ids = TRUE) %in% hzID(p)), 4)
 })
 
 test_that("glom by depth returns a SPC clod", {
@@ -48,7 +48,7 @@ test_that("glom by depth returns a data.frame clod", {
   expect_equal(nrow(foo), 4) 
 })
 
-test_that("glom truncate=TRUE works as expected", {
+test_that("glom truncate = TRUE works as expected", {
   # glom 'gloms' your input SPC `p`'s horizons (by depths specified) into a 'clod'
   
   # get truncated clod

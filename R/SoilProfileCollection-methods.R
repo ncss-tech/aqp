@@ -1,440 +1,15 @@
 
-## init
-# constructor for the SoilProfileCollection object
-"SoilProfileCollection" <-
-  function(idcol = 'id',
-           hzidcol = 'hzID',
-           hzdesgncol = character(0),
-           hztexclcol = character(0),
-           depthcols = c('top', 'bottom'),
-           metadata = list(aqp_df_class = "data.frame",
-                                 stringsAsFactors = FALSE),
-           horizons = data.frame(
-             id  = character(0),
-             hzID = character(0),
-             top = numeric(0),
-             bottom = numeric(0),
-             stringsAsFactors = FALSE
-           ),
-           site = data.frame(id = character(0), stringsAsFactors = FALSE),
-           sp = new('SpatialPoints'),
-           diagnostic = data.frame(stringsAsFactors = FALSE),
-           restrictions = data.frame(stringsAsFactors = FALSE)) {
-  
-  # retrieve highest-level data.frame subclass of horizon data
-  hzclass <- class(horizons)[1]
-  
-  # set metadata (default: data.frame, centimeters)
-  metadata <- list(
-    aqp_df_class = hzclass,
-    depth_units = 'cm',
-    stringsAsFactors = FALSE,
-    
-    # calculate data order (original)
-    original.order = order(as.character(horizons[[idcol]]), horizons[[depthcols[1]]])
-    
-  )
-  
-  # by default, the target order to check/maintain is the default
-  metadata$target.order <- metadata$original.order
-  
-  # create object
-  new(
-    "SoilProfileCollection",
-    idcol = idcol,
-    hzidcol = hzidcol,
-    depthcols = depthcols,
-    metadata = metadata,
-    horizons = .as.data.frame.aqp(horizons, hzclass),
-    site = .as.data.frame.aqp(site, hzclass),
-    sp = sp,
-    diagnostic = .as.data.frame.aqp(diagnostic, hzclass),
-    restrictions = .as.data.frame.aqp(restrictions, hzclass)
-  )
-}
 
-## show
-setMethod(f = 'show',
-          signature(object = 'SoilProfileCollection'),
-          function(object) {
-            
-            # stats for later
-            n.profiles <- length(object)
-            n.hz <- nrow(object)
-            
-            # count number of hz and site columns for reporting truncated listing
-            n.hz.cols <- length(horizonNames(object))
-            n.site.cols <- length(siteNames(object))
-            
-            # local copies
-            s <- object@site
-            h <- object@horizons
-            
-            # determine number of rows to show
-            n.s <- nrow(s)
-            n.h <- nrow(h)
-            
-            # show up to 6 rows for each slot, or max rows if less
-            rows.show.s <- 1:pmin(6, nrow(s))
-            rows.show.h <- 1:pmin(6, nrow(h))
-            
-            # handle zero row case (so it doesnt fill with NA)
-            if (n.h == 0) 
-              rows.show.h <- 0
-            
-            if (n.s == 0) 
-              rows.show.s <- 0
-            
-            # subset rows
-            h <- h[rows.show.h, , drop = FALSE]
-            s <- s[rows.show.s, , drop = FALSE]
-            
-            # move IDs and depths, horizon designation if available
-            hzd <- hzdesgnname(object)
-            if (length(hzd) > 0) {
-              
-              # registered in a slot
-              idx <- match(c(idname(object),
-                             hzidname(object),
-                             horizonDepths(object),
-                             hzdesgnname(object)), names(h))
-            } else {
-              # undefined
-              idx <-
-                match(c(idname(object), hzidname(object), horizonDepths(object)), names(h))
-            }
-            
-            # determine number of columns to show, and index to hz / site data
-            # user sett-able
-            show.cols <- getOption('.aqp.show.n.cols')
-            
-            h.n <- names(h)
-            
-            # handle empty case
-            hz.show <- numeric(0)
-            site.show <- numeric(0)
-            
-            if (length(h.n) > 0) {
-              h <- .data.frame.j(h, c(h.n[idx], h.n[-idx]), aqp_df_class(object))
-              # # if defined, move horizon designation to the 3rd column
-              # # missing horizon designation evaluates to character(0)
-              hzd <- hzdesgnname(object)
-              if (length(hzd) > 0) {
-                idx <- match(hzd, names(h))
-                h <- .data.frame.j(h, c(names(h)[idx], names(h)[-idx]), aqp_df_class(object))
-              }
-              
-              # show first n
-              hz.show <- seq(from = 1,
-                             to = pmin(show.cols, n.hz.cols),
-                             by = 1)
-              site.show <- seq(from = 1,
-                               to = pmin(show.cols, n.site.cols),
-                               by = 1)
-            }
-            
-            # column subseting
-            if(length(hz.show) > 0) {
-              # generate text explaining truncated summary
-              hz.txt <- sprintf(
-                "\nHorizons (%s / %s rows  |  %s / %s columns):\n------------------------------------------------\n",
-                nrow(h),
-                n.h,
-                pmin(show.cols, n.hz.cols),
-                n.hz.cols
-              )
-            } else {
-              hz.txt <- "[EMPTY]\n"
-            }
-            
-            if(length(site.show) > 0) {
-              site.txt <- sprintf(
-                "\nSites (%s / %s rows  |  %s / %s columns):\n---------------------------------------------\n",
-                nrow(s),
-                n.s,
-                pmin(show.cols, n.site.cols),
-                n.site.cols
-              )
-            } else {
-              site.txt <- "[EMPTY]\n"
-            }
-            
-            # header
-            header.txt <-
-              sprintf(
-                "SoilProfileCollection with %s profiles and %s horizons\nprofile ID: %s  |  horizon ID: %s \nDepth range: %s - %s %s\n",
-                n.profiles,
-                n.hz,
-                idname(object),
-                hzidname(object),
-                min(object),
-                max(object),
-                depth_units(object)
-              )
-            cat(header.txt)
-            
-            # make note of additional hz attributes
-            cat(hz.txt)
-            print(.as.data.frame.aqp(h, aqp_df_class(object)), row.names = FALSE)
-            
-            if(n.h > max(rows.show.h))
-              cat('[... more horizons ...]\n')
-            
-            # make note of additional site attributes
-            cat(site.txt)
-            print(.as.data.frame.aqp(s, aqp_df_class(object)), row.names = FALSE)
-            
-            if(n.s > max(rows.show.s))
-              cat('[... more sites ...]\n')
-            
-            # presence of spatial data
-            if (nrow(coordinates(object)) == n.profiles) {
-              cat('\nSpatial Data:\n')
-              show(object@sp@bbox)
-              show(proj4string(object))
-            } else {
-              cat('\nSpatial Data: [EMPTY]\n')
-            }
-            
-          })
-
-##
-## accessors
-##
-
-## ID column name
-if (!isGeneric("idname"))
-  setGeneric("idname", function(object, ...)
-    standardGeneric("idname"))
-
-setMethod("idname", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(object@idcol))
-
-## horizon ID name
-if (!isGeneric("hzidname"))
-  setGeneric("hzidname", function(object, ...)
-    standardGeneric("hzidname"))
-
-setMethod("hzidname", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(object@hzidcol))
-
-## get horizon IDs
-if (!isGeneric("hzID"))
-  setGeneric("hzID", function(object, ...)
-    standardGeneric("hzID"))
-
-setMethod("hzID", signature(object = "SoilProfileCollection"),
-          function(object) {
-            return(object@horizons[[hzidname(object)]])
-          })
-
-## horizon designation name
-if (!isGeneric("hzdesgnname"))
-  setGeneric("hzdesgnname", function(object, ...)
-    standardGeneric("hzdesgnname"))
-
-## get column containing horizon designations (there is a setter of same name)
-setMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(object@hzdesgncol))
-
-## get horizon designations (no corresponding setter -- no need)
-if (!isGeneric("hzDesgn"))
-  setGeneric("hzDesgn", function(object, ...)
-    standardGeneric("hzDesgn"))
-
-setMethod("hzDesgn", signature(object = "SoilProfileCollection"),
-          function(object) {
-            
-            h <- object@horizons
-            hzd <- hzdesgnname(object)
-            
-            if (length(hzd)) {
-              
-              if (hzd %in% horizonNames(object)) {
-                res <- h[[hzd]]
-                return(res)
-              }
-              
-            } else {
-              
-              stop("horizon designation name (",
-                   hzd,
-                   ") not in horizonNames().",
-                   call. = FALSE)
-            }
-            
-          })
-
-## horizon texture class name
-if (!isGeneric("hztexclname"))
-  setGeneric("hztexclname", function(object, ...)
-    standardGeneric("hztexclname"))
-
-## get column containing horizon designations (there is a setter of same name)
-setMethod("hztexclname", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(object@hztexclcol))
-
-
-## distinct profile IDs
-if (!isGeneric("profile_id"))
-  setGeneric("profile_id", function(object, ...)
-    standardGeneric("profile_id"))
-
-## relies on ordering of profile IDs in horizons matching site
-##
-##  TODO: eliminate implicit C SORT by unique -- what relies on this?
-##
-##        checks in functions that rebuild slots for integrity,
-##        see commit 4f27a60 for fix for rare degenerate merge case
-##        when joining in incomplete horizon data
-
-setMethod("profile_id", signature(object = "SoilProfileCollection"),
-          function(object)
-            
-            # ideally, we could rely on site(object)[[idname(object)]]
-            
-            unique(as.character(object@horizons[[idname(object)]])))
-
-
-## horizon depth column names
-if (!isGeneric("horizonDepths"))
-  setGeneric("horizonDepths", function(object, ...)
-    standardGeneric("horizonDepths"))
-
-setMethod("horizonDepths", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(object@depthcols))
-
-
-## spatial data: coordinates
-setMethod("coordinates", signature(obj = "SoilProfileCollection"),
-          function(obj) {
-            return(coordinates(obj@sp))
-          })
-
-
-## site data
-if (!isGeneric("site"))
-  setGeneric("site", function(object, ...)
-    standardGeneric("site"))
-
-# retrieves the site data frame
-setMethod("site", signature(object = "SoilProfileCollection"),
-          function(object) {
-            return(.as.data.frame.aqp(object@site, aqp_df_class(object)))
-          })
-
-## diagnostic horizons: stored as a data.frame
-if (!isGeneric("diagnostic_hz"))
-  setGeneric("diagnostic_hz", function(object, ...)
-    standardGeneric("diagnostic_hz"))
-
-setMethod(f = 'diagnostic_hz', signature(object = 'SoilProfileCollection'),
-          function(object) {
-            return(.as.data.frame.aqp(object@diagnostic, aqp_df_class(object)))
-          })
-
-## restrictions: stored as data.frame
-if (!isGeneric("restrictions"))
-  setGeneric("restrictions", function(object, ...)
-    standardGeneric("restrictions"))
-
-setMethod(f = 'restrictions', signature(object = 'SoilProfileCollection'),
-          function(object) {
-            return(.as.data.frame.aqp(object@restrictions, aqp_df_class(object)))
-          })
-
-## horizon data
-# returns a data.frame with horizons data
-if (!isGeneric("horizons"))
-  setGeneric("horizons", function(object, ...)
-    standardGeneric("horizons"))
-
-setMethod(f = 'horizons', signature(object = 'SoilProfileCollection'),
-          function(object) {
-            return(.as.data.frame.aqp(object@horizons, metadata(object)$aqp_df_class))
-          })
-
-## metadata
-# returns a data.frame
-if (!isGeneric("metadata"))
-  setGeneric("metadata", function(object, ...)
-    standardGeneric("metadata"))
-
-setMethod(f = 'metadata', signature(object = 'SoilProfileCollection'),
-          function(object) {
-            return(object@metadata)
-          })
-
-## aqp_df_class
-##   data.frame class in use (from constructor)
-## 
-if (!isGeneric("aqp_df_class"))
-  setGeneric("aqp_df_class", function(object, ...)
-    standardGeneric("aqp_df_class"))
-
-setMethod(f = 'aqp_df_class', signature(object = 'SoilProfileCollection'),
-          function(object) {
-            u <- as.character(metadata(object)[['aqp_df_class']])
-            
-            # all handles the logical(0) for undefined
-            if (all(u == '')) {
-              message("aqp_df_class metadata entry not found")
-              warning("data.table and tbl_df in SoilProfileCollection data.frame slots are EXPERIMENTAL, defaulting to data.frame", call. = FALSE)
-              return(NA)
-            }
-            
-            return(u)
-          })
-
-## depth_units
-# returns a data.frame
-if (!isGeneric("depth_units"))
-  setGeneric("depth_units", function(object, ...)
-    standardGeneric("depth_units"))
-
-setMethod(f = 'depth_units', signature(object = 'SoilProfileCollection'),
-          function(object) {
-            u <- as.character(metadata(object)[['depth_units']])
-            # give a warning if not defined
-            if (length(u) == 0 | u == '')
-              message('depth_units have not been defined')
-            return(u)
-          })
-
-
-## TODO: strip-out idname
-## get site column names
-if (!isGeneric("siteNames"))
-  setGeneric("siteNames", function(object, ...)
-    standardGeneric("siteNames"))
-
-setMethod("siteNames", signature(object = "SoilProfileCollection"),
-          function(object) {
-            res <- names(object@site)
-            return(res)
-          })
-
-## TODO: strip-out idname
-## get horizon column names
-if (!isGeneric("horizonNames"))
-  setGeneric("horizonNames", function(object, ...)
-    standardGeneric("horizonNames"))
-
-setMethod("horizonNames", signature(object = "SoilProfileCollection"),
-          function(object) {
-            res <- names(object@horizons)
-            return(res)
-          })
-
-
-## TODO: this seems stupid, NULL would be much simpler to reason over...
-## are the contents of @sp valid: n x 2 matrix?
-## if not, then contents of @sp is an empty SpatialPoints object
+#' Get names of columns in site table
+#' 
+#' @name validSpatialData
+#' 
+#' @description Are the contents of @sp valid: n x 2 matrix? If not, then contents of @sp in the SoilProfileCollection are an empty SpatialPoints object.
+#' @param object a SoilProfileCollection
+#' @aliases validSpatialData,SoilProfileCollection-method
+#' @docType methods
+#' @rdname validSpatialData
+#'
 if (!isGeneric("validSpatialData"))
   setGeneric("validSpatialData", function(object, ...)
     standardGeneric("validSpatialData"))
@@ -456,6 +31,17 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
 
 # return a concatenated vector of horizon + site names
 # note that we strip out the ID column name from @site
+
+#' Get names of columns in site and horizons table
+#' 
+#' @name names
+#' 
+#' @description Get names of columns in site and horizons table of a SoilProfileCollection.
+#' @param object a SoilProfileCollection
+#' @aliases names,SoilProfileCollection-method
+#' @docType methods
+#' @rdname names
+#'
 setMethod("names", signature(x = "SoilProfileCollection"),
           function(x) {
             res <- c(horizons = horizonNames(x), site = siteNames(x)[-1])
@@ -463,6 +49,15 @@ setMethod("names", signature(x = "SoilProfileCollection"),
           })
 
 # overload min() to give us the min depth within a collection
+#' Get the minimum bottom depth in a SoilProfileCollection
+#' 
+#' @name min
+#' 
+#' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection.
+#' @param object a SoilProfileCollection
+#' @aliases min,SoilProfileCollection-method
+#' @docType methods
+#' @rdname min
 setMethod(
   f = 'min',
   signature(x = "SoilProfileCollection"),
@@ -496,6 +91,15 @@ setMethod(
 )
 
 # overload max() to give us the max depth within a collection
+#' Get the maximum bottom depth in a SoilProfileCollection
+#' 
+#' @name max
+#' 
+#' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection.
+#' @param object a SoilProfileCollection
+#' @aliases max,SoilProfileCollection-method
+#' @docType methods
+#' @rdname max
 setMethod(
   f = 'max',
   signature(x = "SoilProfileCollection"),
@@ -528,6 +132,15 @@ setMethod(
 )
 
 # overload length() to give us the number of profiles in the collection
+#' Get the number of profiles in a SoilProfileCollection
+#' 
+#' @name length
+#' 
+#' @description Get the number of profiles in a SoilProfileCollection
+#' @param object a SoilProfileCollection
+#' @aliases length,SoilProfileCollection-method
+#' @docType methods
+#' @rdname length
 setMethod(
   f = 'length',
   signature(x = "SoilProfileCollection"),
@@ -540,6 +153,15 @@ setMethod(
 )
 
 # overload nrow() to give us the number of horizons in the collection
+#' Get the number of horizons in a SoilProfileCollection
+#' 
+#' @name nrow
+#' 
+#' @description Get the number of horizons in a SoilProfileCollection
+#' @param object a SoilProfileCollection
+#' @aliases nrow,SoilProfileCollection-method
+#' @docType methods
+#' @rdname nrow
 if (!isGeneric('nrow'))
   setGeneric('nrow', function(x)
     standardGeneric('nrow'))
@@ -551,10 +173,29 @@ setMethod(
     nrow(x@horizons)
   }
 )
-
-
-# overload unique() via digest eval of unique profiles
-uniqueSPC <- function(x, vars) {
+#' Get the indexes of unique profiles in a SoilProfileCollection
+#' 
+#' @name unique
+#' 
+#' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
+#' 
+#' @param object a SoilProfileCollection
+#' @aliases unique,SoilProfileCollection-method
+#' @docType methods
+#' @rdname unique
+#' @examples 
+#'
+#' data(sp5)
+#' 
+#' # find indices where all specified vars are unique
+#' #  these match the indices of all profiles in sp5
+#' #  therefore, all profiles in sp5 are unique
+#' 
+#' all(unique(sp5, vars=c("id","sand","silt","clay") == 1:length(sp5)))
+#' 
+setMethod(f = 'unique',
+          signature(x = "SoilProfileCollection"),
+          definition = function(x, vars) {
   # compute hash by profile, for selected variables
   md5 <- profileApply(x, function(i) {
     # unlist in order to drop row names
@@ -576,155 +217,10 @@ uniqueSPC <- function(x, vars) {
   # return an index of unique profiles
   # down-grade to un-named vector of indices
   return(as.vector(u.profiles))
-}
+})
 
-setMethod(f = 'unique',
-          signature(x = "SoilProfileCollection"),
-          definition = uniqueSPC)
-
-
-
-## standard column access: search horizons, then site
-setMethod("$", signature(x = "SoilProfileCollection"),
-          function(x, name) {
-            # get names from site and hz data
-            s.names <- siteNames(x)
-            h.names <- horizonNames(x)
-            
-            # ## note: warnings may be issued when using auto-complete feature in RStudio
-            # # when site data are initialized from an external DF, it is possible that
-            # # there will be duplicate column names
-            # if((name %in% h.names) && (name %in% s.names)) {
-            #   warning('column name is present in horizon and site data, extracting from horizon data only', call.=FALSE)
-            # }
-            
-            # get column from horizon data
-            if (name %in% h.names) {
-              res <- x@horizons[[name]]
-            } else {
-              # otherwise check site data
-              if (name %in% s.names) {
-                res <- x@site[[name]]
-              } else {
-                # if still missing return NULL
-                res <- NULL
-              }
-            }
-            
-            return(res)
-          })
-
-setReplaceMethod("$", "SoilProfileCollection",
-                 function(x, name, value) {
-                   #print(name)
-                   
-                   # extract hz and site data
-                   h <- x@horizons
-                   s <- x@site
-                   
-                   # working with horizon data
-                   if (name %in% names(h)) {
-                     h[[name]] <- value
-                     x@horizons <- h
-                     return(x)
-                   }
-                   
-                   # working with site data  
-                   if(name %in% names(s)) {
-                     s[[name]] <- value
-                     x@site <- s
-                     return(x)
-                   }
-                   
-                   # ambiguous: use length of replacement to determine: horizon / site
-                   n.site <- nrow(s)
-                   n.hz <- nrow(h)
-                   l <- length(value)
-                   
-                   if(l == n.hz) {
-                     h[[name]] <- value
-                     x@horizons <- h
-                     return(x)
-                   }
-                   
-                   if(l == n.site) {
-                     s[[name]] <- value
-                     x@site <- s
-                     return(x)
-                   }
-                   
-                   # otherwise, there is a problem
-                   stop('length of replacement must equal number of sites or number of horizons')
-                 }
-)
-# setReplaceMethod("$", signature(x = "SoilProfileCollection"),
-#                  function(x, name, value) {
-#                    #
-#                    # existing values: replace by name
-#                    #
-#                    # new values: use length of value to 
-#                    #             determine site/horizon names
-#                    #
-#                    # cannot change site->horizon or vice versa
-#                    # use NULL to remove a value from site or horizon
-#                    x[[name]] <- value
-#                    return(x)
-#                   })
-
-setReplaceMethod("[[", signature(x = "SoilProfileCollection",
-                                 i = "ANY",
-                                 j = "ANY"),
-                 function(x, i, j, ...) {
-                   lv <- length(value)
-                   lx <- length(x)
-                   nx <- nrow(x)
-                   
-                   hznames <- horizonNames(x)
-                   stnames <- siteNames(x)
-                   
-                   # default to creating site var
-                   #  as long as its not in horizon names
-                   if ((!i %in% hznames) &
-                       (i %in% stnames | lv == lx)) {
-                     if (lv == lx | is.null(value)) {
-                       # if(inherits(x@site, "data.table")) {
-                       #   x@site[,eval(quote(list(i)))] <- value
-                       # } else {
-                       #   x@site[[i]] <- value
-                       # }
-                       s <- data.frame(x@site, stringsAsFactors = FALSE)
-                       s[[i]] <- value
-                       x@site <- aqp:::.as.data.frame.aqp(s, aqp_df_class(x))
-                     } else {
-                       stop("replacement length does not match number of profiles!",
-                            call. = FALSE)
-                     }
-                   } else if (i %in% hznames | lv == nx) {
-                     if (lv == nx | is.null(value)) {
-                       # if(inherits(x@horizons, "data.table")) {
-                       #  x@horizons[, eval(substitute(i))] <- value
-                       # } else {
-                       #  x@horizons[[i]] <- value
-                       # }
-                       h <- data.frame(x@horizons, stringsAsFactors = FALSE)
-                       h[[i]] <- value
-                       x@horizons <- aqp:::.as.data.frame.aqp(h, aqp_df_class(x))
-                     } else {
-                       stop("replacement length does not match number of horizons!",
-                            call. = FALSE)
-                     }
-                   } else {
-                     stop("new data must match either number of profiles or number of horizons",
-                          call. = FALSE)
-                   }
-                   
-                   return(x)
-                   
-                 })
-
-#' @title Subset SPC with logical expressions
+#' @title Subset a SoilProfileCollection with logical expressions
 #' @name filter
-#' @aliases filter,SoilProfileCollection-method
 #' @description \code{filter()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for "tidy" lexical features -- specifically, access to site and horizon-level variables directly by name.
 #' @param object A SoilProfileCollection
 #' @param ... Comma-separated set of R expressions that evaluate as TRUE or FALSE. Length for individual expressions matche number of sites OR number of horizons, in \code{object}.
@@ -734,7 +230,8 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
 #'
 #' @rdname filter
 #' @export filter
-#'
+#' @aliases filter,SoilProfileCollection-method
+#' @docType methods
 
 if (!isGeneric("filter"))
   setGeneric("filter", function(object, ...)
@@ -952,210 +449,3 @@ setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
             return(object[idx,])
           })
 
-# accessor for site and horizon names via double bracket
-#  site names in horizon names results return from site (idname)
-#
-# prevents:
-#   "Error in object[[i]] : this S4 class is not subsettable"
-#   which is an error caused by RStudio? when doing tab completion
-#   with %>% operator on a SPC
-#
-# bonus:
-#  gives access to all site and horizon level vars in tab complete!
-setMethod("[[", signature(x = "SoilProfileCollection",
-                          i = "character"),
-          function(x, i) {
-            if (length(i) == 1) {
-              # site names take precedence for those
-              #  shared between @site and @horizons (idname)
-              if (i %in% siteNames(x))
-                return(x@site[[i]])
-              
-              if (i %in% horizonNames(x))
-                return(x@horizons[[i]])
-            }
-          })
-
-
-### NOTE: this DOES NOT re-order data, only subsets!
-##
-## matrix / DF style access: only to horizon data
-##
-## i = profile index
-## j = horizon / slice index
-##
-setMethod("[", signature(x = "SoilProfileCollection",
-                         i = "ANY",
-                         j = "ANY"),
-          function(x, i, j) {
-            # check for missing i and j
-            if (missing(i) & missing(j)) {
-              stop('must provide either a profile index or horizon/slice index, or both',
-                   call. = FALSE)
-            }
-            
-            # convert to integer
-            if (!missing(i)) {
-              if (any(is.na(i))) {
-                stop('NA not permitted in profile index', call. = FALSE)
-              }
-              
-              # convert logical to integer
-              # (thanks Jos? Padarian for the suggestion!)
-              if (is.logical(i)) {
-                i <- (1:length(x))[i]
-              }
-              
-              can.cast <- is.numeric(i)
-              if (can.cast) {
-                if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5)) {
-                  i <- as.integer(i)
-                } else {
-                  stop("Numeric site index does not contain whole numbers.")
-                }
-              } else {
-                stop("Failed to coerce site index to integer.")
-              }
-            } else {
-              # if no index is provided, the user wants all profiles
-              i <- 1:length(x)
-            }
-            
-            if (!missing(j)) {
-              # AGB added logical handling to horizon index
-              if (is.logical(j)) {
-                j <- (1:length(x))[j]
-              }
-              
-              can.cast <- is.numeric(j)
-              if (can.cast) {
-                if (all(abs(j - round(j)) < .Machine$double.eps ^ 0.5)) {
-                  j <- as.integer(j)
-                } else {
-                  stop("Numeric horizon/slice index does not contain whole numbers.")
-                }
-              } else {
-                stop("Failed to coerce horizon/slice index to integer.")
-              }
-              
-              if (any(is.na(j))) {
-                stop('NA not permitted in horizon/slice index', call. = FALSE)
-              }
-            }
-            
-            # extract all site and horizon data
-            h <- x@horizons
-            s.all <- x@site
-            
-            # extract requested profile IDs
-            p.ids <- s.all[[idname(x)]][unique(i)]
-            
-            # keep only the requested horizon data (filtered by profile ID)
-            h <- h[h[[idname(x)]] %in% p.ids,]
-            
-            # keep only the requested site data, (filtered by profile ID)
-            s.i <- which(s.all[[idname(x)]] %in% p.ids)
-            
-            # need to use drop=FALSE when @site contains only a single column
-            s <- s.all[s.i, , drop = FALSE]
-            
-            # subset spatial data, but only if valid
-            if (validSpatialData(x)) {
-              sp <- x@sp[i]
-            } else {
-              # copy empty SpatialPoints object
-              sp <- x@sp
-            }
-            
-            # subset diagnostic data
-            d <- diagnostic_hz(x)
-            if (length(d) > 0) {
-              d <- d[which(d[[idname(x)]] %in% p.ids),]
-            }
-            
-            # subset restriction data
-            r <- restrictions(x)
-            if (length(r) > 0) {
-              r <- r[which(r[[idname(x)]] %in% p.ids),]
-            }
-            
-            # subset horizons/slices based on j --> only when j is given
-            if (!missing(j)) {
-              # faster replacement of j subsetting of horizon data
-              j.res <- as.list(aggregate(
-                h[[hzidname(x)]],
-                by = list(h[[idname(x)]]),
-                FUN = function(hh) {
-                  list(1:length(hh) %in% j)
-                },
-                drop = FALSE
-              )$x)
-              j.idx <- which(do.call('c', j.res))
-              h <- h[j.idx, ]
-              
-              ##  https://github.com/ncss-tech/aqp/issues/89
-              # fix #89, where i with no matching j e.g. @site data returned
-              i.missing <-
-                which(as.logical(lapply(j.res, function(jr)
-                  ! any(jr))))
-              
-              # if some profiles have been removed based on the j-index constraints
-              if (length(i.missing) > 0) {
-                # remove sites that have no matching j
-                h.ids <- s[i.missing, idname(x)]
-                s <- s[-i.missing, , drop = FALSE]
-                
-                # remove also: diagnostics
-                d.idx <- which(d[[idname(x)]] %in% h.ids)
-                if (length(d.idx) > 0) {
-                  d <- d[-d.idx, , drop = FALSE]
-                }
-                
-                # restrictions
-                r.idx <- which(r[[idname(x)]] %in% h.ids)
-                if (length(r.idx) > 0) {
-                  r <- r[-r.idx, , drop = FALSE]
-                }
-                
-                # spatial
-                if (validSpatialData(x)) {
-                  sp <- sp[-i.missing,]
-                }
-              }
-            }
-            
-            rownames(h) <- NULL
-            
-            # rebuild SPC object from slots
-            res <- SoilProfileCollection(
-              idcol = idname(x),
-              depthcols = horizonDepths(x),
-              metadata = aqp::metadata(x),
-              horizons = h,
-              site = s,
-              sp = sp,
-              diagnostic = d,
-              restrictions = r
-            )
-            
-            # preserve one off slots that may have been customized relative to defaults
-            #  in prototype or resulting from construction of SPC
-            suppressMessages(hzidname(res) <- hzidname(x))
-            suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
-            suppressMessages(hztexclname(res) <- hztexclname(x))
-            
-            # there should be as many records in @site as there are profile IDs
-            pid.res <- profile_id(res)
-            site.res <- site(res)[[idname(res)]]
-            
-            if (length(pid.res) != length(site.res)) {
-              warning("Some profiles have been removed from the collection.", call. = FALSE)
-            }
-            
-            # the order of profile_ids should be the same as in @site
-            if (!all(pid.res == site.res)) {
-              warning("profile ID order does not match order in @site", call. = FALSE)
-            }
-            
-            return(res)
-          })

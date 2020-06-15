@@ -41,28 +41,29 @@ glom <- function(p, z1, z2 = NA,
                  truncate = FALSE, invert = FALSE, 
                  modality = "all") {
   # aka glom.by.depth; 
-  if(!inherits(p, 'SoilProfileCollection') | length(p) > 1) {
+  if (!inherits(p, 'SoilProfileCollection') | length(p) > 1) {
     # TODO: alternately, recursively call glom by invoking glomApply with constant depths z1, z2?
     stop("`p` must be a SoilProfileCollection containing one profile", call.=FALSE)
   }
   
   depthn <- horizonDepths(p)
   
-  if(!invert) {
-    idx <- clod.hz.ids(p, z1, z2, modality)
+  if (!invert) {
+    idx <- .glom(p, z1, z2, modality)
   } else {
-    idx <- c(clod.hz.ids(p, min(p[[depthn[1]]], na.rm = T), z1, modality),
-             clod.hz.ids(p, z2, max(p[[depthn[2]]], na.rm = T), modality))
+    idx <- c(.glom(p, min(p[[depthn[1]]], na.rm = T), z1, modality),
+             .glom(p, z2, max(p[[depthn[2]]], na.rm = T), modality))
   }
   
   # short circuit to get hzIDs of result
-  if(ids) {
-    return(hzID(p)[idx])
+  if (ids) {
+    hids <- hzID(p)
+    return(hids[match(idx, hzID(p))])
   }
   
   # truncate ragged edges to PSCS
   # if we have an interval [z1, z2], option to truncate to it
-  if(!invert  & truncate & !is.null(z2)) {
+  if (!invert  & truncate & !is.null(z2)) {
     .top <- p[[depthn[1]]]
     .bottom <- p[[depthn[2]]]
     
@@ -86,8 +87,8 @@ glom <- function(p, z1, z2 = NA,
     p[[depthn[2]]] <- .bottom
   }
   
-  if(!all(is.na(idx))) {
-    if(!df) {
+  if (!all(is.na(idx))) {
+    if (!df) {
       return(p[, which(hzID(p) %in% idx)]) 
     } else {
       return(horizons(p)[hzID(p) %in% idx,])
@@ -97,33 +98,12 @@ glom <- function(p, z1, z2 = NA,
   }
 }
 
-#'  Return index to all horizons occuring in a depth interval
-#'
-#' @param p A single-profile SoilProfileCollection
-#' @param z1 Top depth (required) - depth to intersect horizon at; if 'z2' specified, top depth of intersect interval.
-#' @param z2 Top depth (required) - depth to intersect horizon at; if 'z2' specified, top depth of intersect interval.
-#' @param modality Return all data (default: "all") or first, thickest (\code{modality = "thickest"}) horizon in interval.
-#' @param as.list OPTIONAL: return a list? default: FALSE
-#'
-#' @description \code{clod.hz.ids} returns a vector of unique indices corresponding to a depth interval. As arguments, it takes a single-profile SoilProfileCollection 'p', a top depth 'z1' and an optional bottom depth 'z2'.
-#'  
-#' If just top depth is specified, the unique index of the horizon intersected by that depth is returned. If bottom depth is specified, all horizon IDs that are intersected by the depth interval are returned.
-#' @details This function is a workhorse used by glom() to create an index of unique horizon IDs intersecting the attribute of interest (depth) at the specified levels. This function returns the horizon IDs required to index an SPC and produce either a subset SPC or data.frame representation of the "clod" returned.
-#' @author Andrew G. Brown
-#' @return A vector of unique horizon IDs.
-#' 
-#' @export clod.hz.ids
-#' @examples
-#' data(sp1, package = 'aqp')
-#' depths(sp1) <- id ~ top + bottom
-#' site(sp1) <- ~ group
-#' p <- sp1[1]
-#' foo <- clod.hz.ids(p, 25, 100)
-#' foo
-clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
+.glom <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
   # access SPC slots to get important info about p
   hz <- horizons(p)
-  dz <- horizonDepths(p)
+  dz <- horizonDepths(p) 
+  id <- idname(p)
+  pid <- profile_id(p)
   hzid <- hzidname(p)
   
   # get top and bottom horizon depth vectors
@@ -138,8 +118,8 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
   if(any(logic_fail)) {
     warning(paste0('Horizon logic error(s) ',
                    paste0(logic_tests[logic_fail], collapse=","),
-                   ' found. (',idname(p),': ',
-                   profile_id(p),")"), call.=FALSE)
+                   ' found. (',id,': ',
+                   pid,")"), call.=FALSE)
   }
   
   # determine top depths greater/equal to z1
@@ -153,7 +133,7 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
   
   if (!length(idx.top)) {
     warning(paste0('Invalid upper bound `z1` (',z1,'), returning `NULL` (',
-                   idname(p),': ', profile_id(p),')'), call.=FALSE)
+                   id,': ', pid,')'), call.=FALSE)
     return(NULL)
   }
   
@@ -163,7 +143,7 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
   if(z1 < tdep[idx.top]) {
     warning(paste0('Upper boundary `z1` (',z1,') shallower than top depth (',
                    tdep[idx.top],') of shallowest horizon in subset. (',
-                   idname(p),': ', profile_id(p), ')'), call.=FALSE)
+                   id,': ', pid, ')'), call.=FALSE)
   }
   
   # if a bottom depth of the clod interval is specified
@@ -183,7 +163,7 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
     
     if (!length(idx.bot)) {
       warning('Invalid bounds (',z1,"-",z2,') returning `NULL` (',
-              idname(p),':', profile_id(p),')', call.=FALSE)
+              id,':', pid,')', call.=FALSE)
       return(NULL)
     }
     
@@ -192,14 +172,15 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
     if(z2 > bdep[idx.bot]) {
       warning(paste0('Lower boundary `z2` (',z2,
                      ') is deeper than bottom depth of deepest horizon (',
-                     bdep[idx.bot],') in subset. (',idname(p),': ',
-                     profile_id(p),")"), call.=FALSE)
+                     bdep[idx.bot],') in subset. (',id,': ',
+                     pid,")"), call.=FALSE)
     }
     
-    # not really sure how this could happen ... maybe with wrong depth units for z?
+    # not really sure how this could happen ... 
+    # maybe with wrong depth units for z?
     if(!(all(idx.top:idx.bot %in% 1:nrow(p)))) {
       warning('Invalid bounds (',z1,"-",z2,') returning `NULL` (',
-              idname(p),':', profile_id(p),')', call.=FALSE)
+              id,':', pid,')', call.=FALSE)
       return(NULL)
     }
     
@@ -210,16 +191,16 @@ clod.hz.ids <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
     if(actual.thickness < target.thickness) {
       warning(paste0('Missing data in glom interval (actual/target: ', 
                      actual.thickness,'/',target.thickness,' ',
-                     depth_units(p),' (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+                     depth_units(p),' (',id,': ', pid, ')'), call.=FALSE)
       
       if(z1 < tdep[idx.top]) {
         warning(paste0('glom boundary `z1` (',z1,') shallower than top depth (',tdep[idx.top],
-                       ') of shallowest horizon. (',idname(p),': ', profile_id(p), ')'), call.=FALSE)
+                       ') of shallowest horizon. (',id,': ', pid, ')'), call.=FALSE)
       }
       
       if(z2 > bdep[idx.bot]) {
         warning(paste0('`z2` (',z2,') deeper than bottom depth of deepest horizon (', bdep[idx.bot],
-                       '). (',idname(p),': ', profile_id(p),")"), call.=FALSE)
+                       '). (',id,': ', pid,")"), call.=FALSE)
       }
     }
     
