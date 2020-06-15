@@ -62,3 +62,76 @@ library(aqp)
 library(reshape)
 ixWhere <- match(c("package:aqp","package:reshape"), search())
 foodweb(where = ixWhere, prune = ls("package:reshape"), descendents = FALSE)
+
+# on usage of get in base::
+res <- getNamespaceExports("base")
+res[grepl("^get", res)]
+# [1] "getNativeSymbolInfo"                "getOption"                         
+# [3] "getNamespace"                       "getNamespaceVersion"               
+# [5] "getElement"                         "get0"                              
+# [7] "getDLLRegisteredRoutines.character" "getwd"                             
+# [9] "gettext"                            "getTaskCallbackNames"              
+# [11] "getSrcLines"                        "getNamespaceInfo"                  
+# [13] "getExportedValue"                   "getDLLRegisteredRoutines.DLLInfo"  
+# [15] "get"                                "gettextf"                          
+# [17] "getNamespaceExports"                "geterrmessage"                     
+# [19] "getRversion"                        "getConnection"                     
+# [21] "getLoadedDLLs"                      "getHook"                           
+# [23] "getNamespaceUsers"                  "getDLLRegisteredRoutines"          
+# [25] "getAllConnections"                  "getNamespaceImports"               
+# [27] "getCallingDLLe"                     "getCallingDLL"                     
+# [29] "getNamespaceName"                  
+length(res[grepl("^get", res)])
+# [1] 29
+
+# on usage of get in aqp::
+res <- getNamespaceExports("aqp")
+res[grepl("^get", res)]
+# [1] "get.slice"                  "getClosestMunsellChip"      "get.increase.depths"       
+# [4] "get.ml.hz"                  "getArgillicBounds"          "getSurfaceHorizonDepth"    
+# [7] "getSoilDepthClass"          "getMineralSoilSurfaceDepth" "get.increase.matrix"       
+# [10] "getPlowLayerDepth"          "getCambicBounds"  
+length(res[grepl("^get", res)])
+# [1] 11
+
+# on usage of get in soilDB::
+res <- getNamespaceExports("soilDB")
+res[grepl("^get", res)]
+# [1] "get_vegplot_species_from_NASIS_db"            "get_chorizon_from_NASISWebReport"            
+# [3] "get_copedon_from_NASIS_db"                    "get_extended_data_from_pedon_db"             
+# [5] "get_lmuaoverlap_from_NASISWebReport"          "get_mapunit_from_NASIS"                      
+# [7] "get_colors_from_pedon_db"                     "get_cosoilmoist_from_SDA"                    
+# [9] "get_vegplot_transect_from_NASIS_db"           "get_component_otherveg_data_from_NASIS_db"   
+# [11] "getHzErrorsPedonPC"                           "get_concentrations_from_NASIS_db"            
+# [13] "get_vegplot_tree_si_details_from_NASIS_db"    "get_colors_from_NASIS_db"                    
+# [15] "get_comonth_from_NASIS_db"                    "get_veg_data_from_NASIS_db"                  
+# [17] "get_cointerp_from_SDA"                        "get_mapunit_from_NASISWebReport"             
+# [19] "getHzErrorsNASIS"                             "get_sitesoilmoist_from_NASISWebReport"       
+# [21] "get_vegplot_location_from_NASIS_db"           "get_RMF_from_NASIS_db"                       
+# [23] "get_mapunit_from_SDA"                         "get_vegplot_trhi_from_NASIS_db"              
+# [25] "get_lablayer_data_from_NASIS_db"              "get_component_esd_data_from_NASIS_db"        
+# [27] "get_veg_species_from_MT_veg_db"               "get_chorizon_from_SDA"                       
+# [29] "get_lmuaoverlap_from_SDA"                     "get_component_correlation_data_from_NASIS_db"
+# [31] "get_vegplot_textnote_from_NASIS_db"           "get_component_cogeomorph_data_from_NASIS_db" 
+# [33] "get_cosoilmoist_from_NASIS"                   "get_projectmapunit_from_NASIS"               
+# [35] "get_veg_from_MT_veg_db"                       "get_text_notes_from_NASIS_db"                
+# [37] "get_hz_data_from_pedon_db"                    "get_labpedon_data_from_NASIS_db"             
+# [39] "get_lmuaoverlap_from_NASIS"                   "get_component_restrictions_from_NASIS_db"    
+# [41] "get_component_diaghz_from_NASIS_db"           "get_hz_data_from_NASIS_db"                   
+# [43] "get_legend_from_NASIS"                        "get_component_from_NASISWebReport"           
+# [45] "get_vegplot_tree_si_summary_from_NASIS_db"    "get_site_data_from_pedon_db"                 
+# [47] "get_phfmp_from_NASIS_db"                      "get_project_correlation_from_NASISWebReport" 
+# [49] "get_vegplot_transpecies_from_NASIS_db"        "get_extended_data_from_NASIS_db"             
+# [51] "get_mutext_from_NASIS_db"                     "get_vegplot_from_NASIS_db"                   
+# [53] "get_NOAA_GHCND_by_stationyear"                "get_soilseries_from_NASIS"                   
+# [55] "get_NOAA_stations_nearXY"                     "get_veg_other_from_MT_veg_db"                
+# [57] "get_component_data_from_NASIS_db"             "get_component_copm_data_from_NASIS_db"       
+# [59] "get_component_horizon_data_from_NASIS_db"     "get_legend_from_SDA"                         
+# [61] "get_site_data_from_NASIS_db"                  "get_component_from_SDA"                      
+# [63] "get_veg_from_AK_Site"                         "get_veg_from_NPS_PLOTS_db"                   
+# [65] "get_cosoilmoist_from_NASISWebReport"          "get_NOAA_GHCND"                            
+# [67] "get_legend_from_NASISWebReport"               "get_soilseries_from_NASISWebReport"        
+# [69] "get_project_from_NASISWebReport"              "get_projectmapunit_from_NASISWebReport"    
+# [71] "get_projectmapunit2_from_NASISWebReport"      "get_progress_from_NASISWebReport"  
+length(res[grepl("^get", res)])
+# [1] 72
