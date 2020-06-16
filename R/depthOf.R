@@ -59,11 +59,11 @@
 depthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p), 
                      no.contact.depth = NULL, no.contact.assigned = NA) {
   # if name is not in horizons, look if it is set in hzdesgncol
-  hznames <- horizonNames(f)
+  hznames <- horizonNames(p)
   
   # if the user has not specified a column containing horizon designations
   if(!hzdesgn %in% hznames) {
-    hzdesgn <- guessHzDesgnName(f)
+    hzdesgn <- guessHzDesgnName(p)
     if(!hzdesgn %in% hznames) {
       stop("depth estimation relies on a column containing horizon designations")
     }
