@@ -42,13 +42,13 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
     texcl[!is.na(sand) & !is.na(clay) & is.na(texcl)] = "sl"
   })
   
-  
+  # encoding according to approximate AWC, from Red Book version 3.0
   if (as.is == FALSE) {
-    df$texcl <- factor(df$texcl, levels = c("s",  "si", "ls", "sl", "sil", "l", "scl",  "cl", "sicl", "sc", "sic", "c"), ordered = TRUE)
-  }
-  
-  if (droplevels == TRUE & as.is == FALSE) {
-    df$texcl <- droplevels(df$texcl)
+    df$texcl <- factor(df$texcl, levels = SoilTextureLevels(which = 'codes'), ordered = TRUE)
+    
+    if (droplevels == TRUE) {
+      df$texcl <- droplevels(df$texcl)
+    }
   }
   
   return(df$texcl)
@@ -210,8 +210,7 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   
   
   # check texcl lookup
-  var <- c("c", "cl", "l", "ls", "s", "sc", "scl", "si", "sic", "sicl", "sil", "sl", "cos", "fs", "vfs", "lcos", "lfs", "lvfs", "cosl", "fsl", "vfsl")
-  idx <- any(! df$texcl %in% var)
+  idx <- any(! df$texcl %in% SoilTextureLevels(which = 'codes'))
   if (idx) {
     warning("not all the texcl supplied match the lookup table")
   }
