@@ -20,6 +20,7 @@
   }
 }
 
+\details{See \href{https://ncss-tech.github.io/AQP/soilDB/fetchKSSL-VG-demo.html}{the related tutorial}.}
 
 \source{
 \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-class-average-hydraulic-parameters/}{ROSETTA documentation}
