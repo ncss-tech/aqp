@@ -1,3 +1,4 @@
+library(aqp)
 library(soilDB)
 library(latticeExtra)
 
