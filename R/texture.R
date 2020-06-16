@@ -140,6 +140,13 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
     st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
     st$silt <- 100 - st$clay - st$sand
     
+    # some missing clay
+    idx <- is.na(df$clay)
+     if (any(idx)) {
+       df_na <- merge(df[idx, c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)[c("texcl", "clay", "rn")]
+       df[idx, ] <- df_na 
+     }
+    
     df <- merge(df[c("texcl", "clay", "rn")], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
   } else {
     df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
