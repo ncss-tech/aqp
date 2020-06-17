@@ -71,6 +71,6 @@ setMethod("summarize", signature(object = "SoilProfileCollection"),
     colnames(final) <- c(group.by.col, names(x))
     
     # return result in same class as SPC slots
-    return(aqp:::.as.data.frame.aqp(final, aqp_df_class(object)))
+    return(.as.data.frame.aqp(final, aqp_df_class(object)))
 })
 

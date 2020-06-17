@@ -12,13 +12,14 @@ setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 		object
 	})
 
-#' Initialize a SoilProfilCollection from a data.frame object
+#' Initialize a SoilProfileCollection from a data.frame object
 #' @name depths<-
-#' @param object 
+#' @param object An object to promote to SoilProfileCollection (inherits from data.frame)
 #' @param value A formula specifying the unique profile ID, top and bottom depth column names
 #'
-#' @aliases depths<-,SoilProfileCollection-method
+#' @aliases depths<-,data.frame-method
 #' @rdname depths
+#' 
 #' @examples
 #' ## init SoilProfileCollection objects from data.frame of horizon data
 #' 
@@ -160,7 +161,7 @@ setReplaceMethod("depths", "data.frame",
 #' 
 #' @param object A SoilProfileCollection
 #' @param value A formula or object inheriting \code{data.frame}
-#' @aliases site<-,SoilProfileCollection-method
+#' @aliases site<-SoilProfileCollection-method
 #' @docType methods
 #' 
 #' @rdname site
@@ -298,9 +299,6 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   for(i in idx) {
     h[[hnames[i]]] <- NULL
   }
-  
-  if(!inherits(h, 'data.frame'))
-     print(h)
      
   object@horizons <- .as.data.frame.aqp(h, aqp_df_class(object))
 	

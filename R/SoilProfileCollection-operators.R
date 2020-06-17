@@ -24,7 +24,7 @@
 #' @param object a SoilProfileCollection
 #' @param i a numeric or logical value denoting profile indices to select in a subset
 #' @param j a numeric or logical value denoting profile indices to select in a subset
-#' @aliases [,SoilProfileCollection-method
+#' @aliases [,SoilProfileCollection,ANY,ANY-method
 #' @docType methods
 #' @rdname singlebracket
 #' 
@@ -223,8 +223,9 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #' @param x a SoilProfileCollection
 #' @param i an expression resolving to a single column name in site or horizon table
 #' @param j [not used]
+#' @param ... [not used]
 #' 
-#' @aliases [[,SoilProfileCollection-method
+#' @aliases [[,SoilProfileCollection,character,ANY-method
 #' @docType methods
 #' @rdname doublebracket
 
@@ -253,6 +254,8 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #' 
 #' # some column names to work with
 #' rgb.columns <- c("R25","G25","B25")
+#' 
+#' 
 #' 
 #' res <- lapply(rgb.columns, function(x) {
 #' 
@@ -311,7 +314,7 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                        # }
                        s <- data.frame(x@site, stringsAsFactors = FALSE)
                        s[[i]] <- value
-                       x@site <- aqp:::.as.data.frame.aqp(s, aqp_df_class(x))
+                       x@site <- .as.data.frame.aqp(s, aqp_df_class(x))
                      } else {
                        stop("replacement length does not match number of profiles!",
                             call. = FALSE)
@@ -325,7 +328,7 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                        # }
                        h <- data.frame(x@horizons, stringsAsFactors = FALSE)
                        h[[i]] <- value
-                       x@horizons <- aqp:::.as.data.frame.aqp(h, aqp_df_class(x))
+                       x@horizons <- .as.data.frame.aqp(h, aqp_df_class(x))
                      } else {
                        stop("replacement length does not match number of horizons!",
                             call. = FALSE)
@@ -348,7 +351,7 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
 #' 
 #' When using \code{$<-}, the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.
 #' 
-#' @param object a SoilProfileCollection
+#' @param x a SoilProfileCollection
 #' @param name a single column name in site or horizon table
 #' @aliases $,SoilProfileCollection-method,$<-,SoilProfileCollection-method
 #' @docType methods

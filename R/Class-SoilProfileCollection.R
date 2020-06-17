@@ -472,7 +472,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
       return(df)
     }
   })
-  h <- aqp:::.as.data.frame.aqp(do.call('cbind', res), use_class)
+  h <- .as.data.frame.aqp(do.call('cbind', res), use_class)
 }
 
 
@@ -1322,7 +1322,7 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
 #' @param object A SoilProfileCollection
 #' @param value character, a value representing units. Default \code{'cm'}.
 #'
-#' @aliases depth_units<-,SoilProfileCollection-method
+#' @aliases metadata<-,SoilProfileCollection-method
 #' @rdname metadata
 #' @examples
 #' data(sp5)
@@ -1334,7 +1334,8 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
 #' metadata(sp5)$newvalue
 #' 
 if (!isGeneric('metadata<-'))
-  setGeneric('metadata<-', function(object, value) standardGeneric('metadata<-'))
+  setGeneric('metadata<-', function(object, value)
+    standardGeneric('metadata<-'))
 
 setReplaceMethod("metadata", signature(object = "SoilProfileCollection"),
                  function(object, value) {

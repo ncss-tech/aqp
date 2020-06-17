@@ -1,9 +1,10 @@
 ## Coercion methods: general
 
 #' Coerce SoilProfileCollection with \code{as()}
+#' 
 #' @description SoilProfileCollections can be coerced to other R object types using \code{as(spc, 'type')}.
 #' 
-#' Possible endpoints include: \code{list}, \code{data.frame}, \code{tbl_df}, \code{data.table}, \code{SpatialPointsDataFrame} and \code{SpatialPoints}.
+#' Possible endpoints include: \code{list}, \code{data.frame}, \code{SpatialPointsDataFrame} and \code{SpatialPoints}.
 #'
 #' @name as
 #' @return list
@@ -15,23 +16,20 @@
 #' # load example data stored as SoilProfileCollection
 #' data(sp5)
 #' 
+#' # sp5
+#' str(sp5)
+#' 
 #' # list output
-#' as(sp5, 'list')
+#' str(as(sp5, 'list'))
 #'
 #' # data.frame output
-#' as(sp5, 'data.frame')
-#' 
-#' # tbl_df output
-#' as(sp5, 'tbl_df')
-#' 
-#' # data.table output
-#' as(sp5, 'data.table')
+#' str(as(sp5, 'data.frame'))
 #' 
 #' # SPDF output
-#' as(sp5, 'SpatialPointsDataFrame')
+#' str(as(sp5, 'SpatialPointsDataFrame'))
 #' 
 #' # SP output
-#' as(sp5, 'SpatialPoints')
+#' str(as(sp5, 'SpatialPoints'))
 #' 
 setAs("SoilProfileCollection", "list", function(from) {
   

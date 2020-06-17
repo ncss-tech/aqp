@@ -54,8 +54,8 @@ spc_in_sync <- function(object) {
   
   # coalesced horizon IDs 
   # identifies intermingling of profiles within horizon
-  cohid <- aqp:::.coalesce.idx(hid)
-  cohzid <- aqp:::.coalesce.idx(hzid)
+  cohid <- .coalesce.idx(hid)
+  cohzid <- .coalesce.idx(hzid)
   
   # if cohid is longer than sid, horizons from different profiles
   # are mixed or IDs have been corrupted (by e.g. direct edit)
@@ -107,7 +107,8 @@ spc_in_sync <- function(object) {
 }
 
 if (!isGeneric('reorderHorizons'))
-  setGeneric('reorderHorizons', function(object, target.order = NULL)
+  setGeneric('reorderHorizons', 
+             function(object, target.order = NULL)
     standardGeneric('reorderHorizons'))
 
 #' Re-order corrupted horizon data
@@ -119,13 +120,13 @@ if (!isGeneric('reorderHorizons'))
 #' 
 #' @param object A SoilProfileCollection
 #' @param target.order A numeric vector of equal length to \code{object}. Default value is \code{NULL} which restores the internal order of the collection. 
-#' 
+#' @aliases reorderHorizons,SoilProfileCollection-method
 #' @return SoilProfileCollection
 #' @docType methods
 #' @rdname reorderHorizons
 #'
 setMethod('reorderHorizons',
-          signature('SoilProfileCollection'),
+          signature(object = 'SoilProfileCollection', target.order = "ANY"),
           function(object, target.order = NULL) {
             
             h <- object@horizons
@@ -139,7 +140,7 @@ setMethod('reorderHorizons',
                                    order(as.character(h[[idname(object)]]),
                                          h[[horizonDepths(object)[1]]]))
             
-            h <- aqp:::.as.data.frame.aqp(h[current.order,], 
+            h <- .as.data.frame.aqp(h[current.order,], 
                                           aqp_df_class(object))
             object@horizons <- h
             return(object)

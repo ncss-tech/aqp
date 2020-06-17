@@ -37,12 +37,12 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
 #' @name names
 #' 
 #' @description Get names of columns in site and horizons table of a SoilProfileCollection.
-#' @param object a SoilProfileCollection
+#' @param x a SoilProfileCollection
 #' @aliases names,SoilProfileCollection-method
 #' @docType methods
 #' @rdname names
 #'
-setMethod("names", signature(x = "SoilProfileCollection"),
+setMethod("names", signature("SoilProfileCollection"),
           function(x) {
             res <- c(horizons = horizonNames(x), site = siteNames(x)[-1])
             return(res)
@@ -53,8 +53,9 @@ setMethod("names", signature(x = "SoilProfileCollection"),
 #' 
 #' @name min
 #' 
-#' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection.
-#' @param object a SoilProfileCollection
+#' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
+#' @param x a SoilProfileCollection
+#' @param v optional: a vector of horizon attribute names to refine calculation
 #' @aliases min,SoilProfileCollection-method
 #' @docType methods
 #' @rdname min
@@ -95,7 +96,7 @@ setMethod(
 #' 
 #' @name max
 #' 
-#' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection.
+#' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 #' @param object a SoilProfileCollection
 #' @aliases max,SoilProfileCollection-method
 #' @docType methods
@@ -137,7 +138,7 @@ setMethod(
 #' @name length
 #' 
 #' @description Get the number of profiles in a SoilProfileCollection
-#' @param object a SoilProfileCollection
+#' @param x a SoilProfileCollection
 #' @aliases length,SoilProfileCollection-method
 #' @docType methods
 #' @rdname length
@@ -179,7 +180,7 @@ setMethod(
 #' 
 #' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
 #' 
-#' @param object a SoilProfileCollection
+#' @param x a SoilProfileCollection
 #' @aliases unique,SoilProfileCollection-method
 #' @docType methods
 #' @rdname unique
