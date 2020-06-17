@@ -6,8 +6,8 @@
 \usage{
 getCambicBounds(
   p,
-  hzdesgn,
-  texcl.attr,
+  hzdesgn = guessHzDesgnName(p),
+  texcl.attr = guessHzTexClName(p),
   clay.attr,
   argi_bounds = NULL,
   d_value = "d_value",
