@@ -1,22 +1,31 @@
+library(aqp)
 library(soilDB)
 library(latticeExtra)
 
+data("ROSETTA.centroids")
+
 # iterate over horizons and generate VG model curve
-res <- lapply(1:nrow(x), function(i) {
-  m <- KSSL_VG_model(VG_params = x[i, ], phi_min = 10^-3, phi_max=10^6)$VG_curve
+res <- lapply(1:nrow(ROSETTA.centroids), function(i) {
+  m <- KSSL_VG_model(VG_params = ROSETTA.centroids[i, ], phi_min = 10^-3, phi_max=10^6)$VG_curve
   # copy generalized hz label
-  m$hz <- x$hz[i]
+  m$hz <- ROSETTA.centroids$hz[i]
   # copy ID
-  m$texture_class <- x$texture[i]
+  m$texture_class <- ROSETTA.centroids$texture[i]
   return(m)
 })
 
 # copy over lab sample number as ID
 res <- do.call('rbind', res)
 
+# check: OK
 str(res)
 
 
+## there is no need to pre-make these curves, move to a new function
+## prepareCurves or something like that
+
+
+# visual check: OK
 xyplot(
   phi ~ theta | texture_class, data=res, 
   type=c('l', 'g'), 
@@ -41,6 +50,9 @@ xyplot(
   strip=strip.custom(bg=grey(0.85)), 
   auto.key=list(columns=4, lines=TRUE, points=FALSE, cex=0.8)
 )
+
+
+
 
 
 
@@ -84,7 +96,7 @@ d <- split(x, x$texture)
 dd <- lapply(d, .sim)
 dd <- do.call('rbind', dd)
 
-
+str(dd)
 
 
 

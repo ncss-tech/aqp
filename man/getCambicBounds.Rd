@@ -12,7 +12,8 @@ getCambicBounds(
   argi_bounds = NULL,
   d_value = "d_value",
   m_value = "m_value",
-  m_chroma = "m_chroma"
+  m_chroma = "m_chroma",
+  ...
 )
 }
 \arguments{

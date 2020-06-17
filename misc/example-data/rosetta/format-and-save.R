@@ -1,12 +1,15 @@
-## set factor levels
 
-# from Rosetta manual, then manually edited
-x <- read.csv('centroids.csv', stringsAsFactors = FALSE)
+## TODO: consolidte factor levels / codes: https://github.com/ncss-tech/aqp/issues/141
 
-# borrowed from fetchOSD()
-textures <- c('coarse sand', 'sand', 'fine sand', 'very fine sand', 'loamy coarse sand', 'loamy sand', 'loamy fine sandy', 'loamy very fine sand', 'coarse sandy loam', 'sandy loam', 'fine sandy loam', 'very fine sandy loam', 'loam', 'silt loam', 'silt', 'sandy clay loam', 'clay loam', 'silty clay loam', 'sandy clay', 'silty clay', 'clay')
+# from Rosetta documentation, then _manually_ edited
+x <- read.csv('centroids-edited.csv', stringsAsFactors = FALSE)
 
-# set levels
-x$texture <- droplevels(factor(x$texture, levels = textures, ordered = TRUE))
+# encode factors according to approx AWC
+x$texture <- factor(x$texture, levels=SoilTextureLevels(which = 'names'), ordered = TRUE)
 
+# drop extra levels
+x$texture <- droplevels(x$texture)
 
+# rename and save
+ROSETTA.centroids <- x
+save(ROSETTA.centroids, file='../../../data/ROSETTA.centroids.rda')

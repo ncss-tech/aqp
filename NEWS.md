@@ -1,4 +1,10 @@
-# aqp 1.19.1 (2020-02-07)
+# aqp 1.20 (2020-06-18)
+ * taxonomic eval code (TODO: add descriptions)
+ * soil texture helper code (TODO: add descriptions)
+ * bug fixes (TODO: list issues)
+ * ROSETTA centroids
+ 
+# aqp 1.19.01 (2020-02-07)
  * proof of concept for tidy SoilProfileCollection subsetting
  * define `[[` subsetting method; an "ambivalent" accessor for site- or horizon-level properties
  * new subset verbs `grepSPC`, `filter`, `subApply` for use in `%>%`-lines 
