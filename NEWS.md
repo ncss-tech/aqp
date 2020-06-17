@@ -2,7 +2,7 @@
  * taxonomic eval code (TODO: add descriptions)
  * soil texture helper code (TODO: add descriptions)
  * bug fixes (TODO: list issues)
- * ROSETTA centroids
+ * ROSETTA centroids and water retention by texture class
  
 # aqp 1.19.01 (2020-02-07)
  * proof of concept for tidy SoilProfileCollection subsetting
