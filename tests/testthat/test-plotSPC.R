@@ -169,4 +169,6 @@ test_that("addVolumeFraction fractional horizon depths", {
   
 })
 
-
+# cleanup
+if (file.exists("Rplots.pdf"))
+   file.remove("Rplots.pdf")
