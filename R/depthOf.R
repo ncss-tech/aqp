@@ -60,7 +60,7 @@ depthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
                      no.contact.depth = NULL, no.contact.assigned = NA) {
   
   if(!inherits(p, 'SoilProfileCollection'))
-    return(no.contact.assigned)
+    stop("`p` must be a SoilProfileCollection containing one profile")
   
   # if name is not in horizons, look if it is set in hzdesgncol
   hznames <- horizonNames(p)
