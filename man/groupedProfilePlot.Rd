@@ -40,7 +40,7 @@ depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
 # add a groups
-sp1$group.2 <- sprintf("%s-%s", rev(LETTERS[1:3]), sp1$group)
+sp1$group.2 <- sprintf("\%s-\%s", rev(LETTERS[1:3]), sp1$group)
 
 # convert fake groupt to factor with new levels
 sp1$group.3 <- factor(sp1$group.2, levels=c('C-2', 'B-2', 'A-2', 'C-1', 'B-1', 'A-1'))
