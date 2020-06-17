@@ -2,7 +2,7 @@
 % Please edit documentation in R/factor-level-setters.R
 \name{SoilTextureLevels}
 \alias{SoilTextureLevels}
-\title{Generate a vector of USDA soil texture codes or class names, sorted according to approximate AWC}
+\title{Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size}
 \usage{
 SoilTextureLevels(which = "codes")
 }
@@ -13,7 +13,7 @@ SoilTextureLevels(which = "codes")
 an ordered factor
 }
 \description{
-Generate a vector of USDA soil texture codes or class names, sorted according to approximate AWC
+Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size
 }
 \examples{
 
