@@ -1,7 +1,7 @@
 ##
 ##
 
-#' Generate a vector of USDA soil texture codes or class names, sorted according to approximate AWC
+#' Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size
 #'
 #' @references \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
 #' @param which 'codes' (texture codes) or 'names' (texture class names)
@@ -15,6 +15,8 @@
 #' SoilTextureLevels(which = 'names')
 #'  
 
+## TODO: consider various sorting strategies: WMPD, AWC, etc.
+
 SoilTextureLevels <- function(which='codes') {
   
   # sanity check
@@ -23,7 +25,7 @@ SoilTextureLevels <- function(which='codes') {
   }
   
   # from the Field Book version 3.0
-  # sorted by approximate AWC
+  # sorted by approximate particle size
   tx <- structure(
     list(
       texture = c("coarse sand", "sand", "fine sand", 
