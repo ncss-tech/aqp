@@ -7,16 +7,20 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
     stop(sprintf("%s is not a site-level attribute", groups), call. = FALSE)
   }
   
-  # extract site and derive ordering based on `groups`
+  # extract site data, used for ordering and labeling
   s <- site(x)
-  new.order <- order(s[[groups]])
   
-  # if our groups are already a factor, keep existing levels
+  # if groups are already a factor, keep existing levels
   # note that an ordered factor has multiple classes: "ordered" , "factor"
-  if(any(inherits(s[[groups]], 'factor'), fixed = TRUE))
-    lab <- s[[groups]][new.order]
-  else # not a factor, need to convert to factor, inherit default levels
-    lab <- factor(s[[groups]][new.order])
+  if(! any(inherits(s[[groups]], 'factor'))) {
+    s[[groups]] <- factor(as.character(s[[groups]]))
+  }
+  
+  # derive ordering based on `groups`
+  # alpha sorting when `gopups` is numeric or character
+  # factor levels when `groups` is a factor
+  new.order <- order(s[[groups]])
+  lab <- s[[groups]][new.order]
   
   # test for NA
   NA.lab <- which(is.na(lab))
