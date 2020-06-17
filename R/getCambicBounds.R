@@ -47,7 +47,7 @@ getCambicBounds <- function(p, hzdesgn, texcl.attr, clay.attr,
                             argi_bounds = NULL,
                             d_value = "d_value", 
                             m_value = "m_value", 
-                            m_chroma = "m_chroma") {
+                            m_chroma = "m_chroma", ...) {
   # construct data.frame result for no-cambic-found (NA)
   empty_frame <- data.frame(id=profile_id(p),
                             cambic_id=NA, cambic_top=NA, cambic_bottom=NA)
