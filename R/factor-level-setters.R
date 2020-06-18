@@ -15,7 +15,7 @@
 #' SoilTextureLevels(which = 'names')
 #'  
 
-## TODO: consider various sorting strategies: WMPD, AWC, etc.
+## TODO: consider various sorting strategies: WMPD, AWC, {PWP,FC,SAT}
 
 SoilTextureLevels <- function(which='codes') {
   
