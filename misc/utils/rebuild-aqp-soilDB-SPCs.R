@@ -37,3 +37,4 @@ hzdesgnname(mineralKing) <- 'hzname'
 hztexclname(mineralKing) <- 'texcl'
 mineralKing <- rebuildSPC(mineralKing)
 save(mineralKing, file = '../soilDB/data/mineralKing.rda')
+

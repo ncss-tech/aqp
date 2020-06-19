@@ -20,28 +20,50 @@
 # 	return(res)
 # }
 
-
-
 ##
 ## proj4string setting
 ##
 
-setMethod(f='proj4string', signature='SoilProfileCollection',
+#' Set PROJ4 string for the SoilProfileCollection
+#'
+#' @param obj A SoilProfileCollection
+setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
   function(obj){
     proj4string(obj@sp)
   }
 )
-
-setReplaceMethod("proj4string", "SoilProfileCollection",
+#' Set PROJ4 string for the SoilProfileCollection
+#'
+#' @param obj A SoilProfileCollection
+#' @param value A proj4string
+#' 
+setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
   function(obj, value) {
-  proj4string(obj@sp) <- value
-  obj
+    proj4string(obj@sp) <- value
+    obj
   }
 )
 
 ##
 ## initialize spatial data
 ##
+#' @aliases coordinates<-,SoilProfileCollection-method
+#' @param object A SoilProfileCollection
+#' @param value A formula specifying columns containing x and y coordinates
+#' 
+#' @rdname coordinates
+#' 
+#' @examples 
+#' 
+#' data(sp5)
+#' 
+#' # coordinates are stored in x and y column of site
+#' sp5$x <- rnorm(length(sp5))
+#' sp5$y <- rnorm(length(sp5))
+#' 
+#' # coordinates takes a formula object as input
+#' coordinates(sp5) <- ~ x + y
+#' 
 setReplaceMethod("coordinates", "SoilProfileCollection",
   function(object, value) {
 
@@ -76,10 +98,6 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   return(object)
   }
 )
-
-
-
-
 
 # ### TODO: consider removing this function
 # 

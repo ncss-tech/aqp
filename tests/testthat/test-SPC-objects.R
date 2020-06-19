@@ -9,8 +9,6 @@ site(sp1) <- ~ group
 sp1$x <- seq(-119, -120, length.out = length(sp1))
 sp1$y <- seq(38, 39, length.out = length(sp1))
 
-
-
 ## tests
 
 test_that("SPC construction from a data.frame", {
@@ -91,7 +89,7 @@ test_that("SPC deconstruction into a list", {
   expect_equivalent(l$hzdesgncol, hzdesgnname(sp1))
   expect_equivalent(l$hztexclcol, hztexclname(sp1))
   expect_equivalent(l$depthcols, horizonDepths(sp1))
-  expect_equivalent(l$metadata, metadata(sp1))
+  expect_equivalent(names(l$metadata), names(metadata(sp1)))
   
   expect_equivalent(l$horizons, horizons(sp1))
   expect_equivalent(l$site, site(sp1))
@@ -109,7 +107,7 @@ test_that("SPC deconstruction into a list", {
   expect_equivalent(l$hzdesgncol, hzdesgnname(sp1.sub))
   expect_equivalent(l$hztexclcol, hztexclname(sp1.sub))
   expect_equivalent(l$depthcols, horizonDepths(sp1.sub))
-  expect_equivalent(l$metadata, metadata(sp1.sub))
+  expect_equivalent(names(l$metadata), names(metadata(sp1.sub)))
 })
 
 
@@ -150,12 +148,7 @@ test_that("SPC subsetting with tidy verbs ", {
   expect_equal(length(grepSPC(sp1, texture, "SCL")), 1)
   
   # subApply works as expected
-  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))
-  
-
-})
-
-
+  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))})
 
 test_that("SPC graceful failure of spatial operations when data are missing", {
   
@@ -193,17 +186,33 @@ test_that("SPC spatial operations ", {
   
   # set previously NULL CRS
   # updated to not include a +datum as this breaks in upstream sp/rgdal
-  proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs'
+  
+  # 2020/06/01 now expect warning on R 4.0+/latest sp
+#  if(version$major >= 4)
+#    expect_warning(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
+#  else 
+    expect_silent(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
   
   # we should get back the same thing we started with
   expect_equal(proj4string(sp1), '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
-  
+
   # basic coercion
-  expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints'))
+#  if(version$major >= 4)
+#    expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
+#  else 
+    expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
   
   # down-grade to {site + sp} = SpatialPointsDataFrame
-  expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted')
-  sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
+#  if(version$major >= 4)
+#    expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
+#  else
+    expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
+  
+#  if(version$major >= 4)
+#    expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
+#  else
+    sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
+
   expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
   
   # Unit-length j-index SPDF downgrading DEPRECATED
@@ -235,8 +244,10 @@ test_that("SPC misc. ", {
   m <- metadata(sp1)
   m$citation <- 'this is a citation'
   metadata(sp1) <- m
-  expect_true(inherits(metadata(sp1), 'data.frame'))
-  expect_equal(ncol(metadata(sp1)), 2)
+  expect_true(is.list(metadata(sp1)))
+  
+  
+  expect_equal(length(metadata(sp1)$citation), 1)
   
 })
 
@@ -264,6 +275,22 @@ test_that("SPC depth columns get/set ", {
   
 })
 
+test_that("SPC min/max overrides work as expected", {
+  # helper function: vector concatenation
+  cc <- function(l) do.call('c', as.list(l))
+  
+  # create test data
+  df <- data.frame(id = cc(lapply(1:4, function(i) rep(i, 10))),
+                   top = cc(rep(0:9, 4)), bottom = cc(rep(1:10, 4)),
+                   siteprop = 8, prop = 18)
+  
+  # promote to SPC
+  depths(df) <- id ~ top + bottom
+  
+  # both min and max should return 10cm
+  expect_equal(min(df), 10)
+  expect_equal(min(df) == max(df), TRUE)
+})
 
 test_that("SPC horizonNames get/set ", {
   
@@ -301,11 +328,11 @@ test_that("SPC horizon ID get/set ", {
   auto.hz.ids <- hzID(sp1)
   
   # should be 1:nrow(sp1)
-  expect_equivalent(auto.hz.ids, seq_len(nrow(sp1)))
+  expect_equivalent(auto.hz.ids, as.character(seq_len(nrow(sp1))))
   
   # try replacing with reasonable IDs
   hzID(sp1) <- rev(hzID(sp1))
-  expect_equivalent(hzID(sp1), rev(seq_len(nrow(sp1))))
+  expect_equivalent(hzID(sp1), as.character(rev(seq_len(nrow(sp1)))))
   
   # try replacing with bogus values
   expect_error(hzID(sp1) <- 1)
@@ -374,14 +401,15 @@ test_that("SPC horizon ID get/set ", {
   auto.hz.ids <- hzID(sp1)
   
   # should be 1:nrow(sp1)
-  expect_equivalent(auto.hz.ids, seq_len(nrow(sp1)))
+  expect_equivalent(auto.hz.ids, as.character(seq_len(nrow(sp1))))
   
   # try replacing with reasonable IDs
   hzID(sp1) <- rev(hzID(sp1))
-  expect_equivalent(hzID(sp1), rev(seq_len(nrow(sp1))))
+  expect_equivalent(hzID(sp1), as.character(rev(seq_len(nrow(sp1)))))
   
   # try replacing with bogus values
   expect_error(hzID(sp1) <- 1)
+  
   # non-unique
   expect_error(hzID(sp1) <- sample(hzID(sp1), replace = TRUE))
   
@@ -408,6 +436,8 @@ test_that("SPC profile ID get/set ", {
   expect_error(profile_id(sp1) <- c(NA, pIDs[-1]))
   
 })
+
+context("SoilProfileCollection integrity")
 
 test_that("SPC profile ID reset integrity: site", {
   
@@ -481,22 +511,26 @@ test_that("horizons<- left-join", {
   hnew$prop[1] <- 50
   
   # utilize horizons<- left join
-  horizons(x) <- hnew
-  
-  # verify new columns have been added
-  expect_equivalent(horizons(x)[1,c('prop100','prop200','prop300')], 
-                    c(0.07, 0.07 / 2, 0.07 / 3))
+  expect_message(horizons(x) <- hnew, "join condition resulted in sorting of horizons, re-applying original order")
   
   # verify old columns have same names 
   # (i.e. no issues with duplication of column names in merge)
   expect_true(all(c(idname(x), hzidname(x), 'prop') %in% names(horizons(x))))
   
   # verify old columns have same value
-  expect_equivalent(horizons(x)[1,c('prop')], c(7))
+  clay_prop <- horizons(sp1)[2,'prop']
+  expect_equivalent(horizons(x)[2, c('prop')], clay_prop)
+  
+  # verify new columns have been added
+  # now with proper sorting; first profile, first horizon
+  expect_equivalent(horizons(x)[2, c('prop100','prop200','prop300')], 
+                    c(clay_prop /  100, clay_prop / 200, clay_prop / 300))
+  
+  
 })
 
 test_that("ordering of profiles and horizons is retained after left-join", {
-  # IDs that when sorted will no be in this order
+  # IDs that when sorted will not be in this order
   s <- c('a', "1188707", "1188710", "120786", "1207894", 'z')
   l <- lapply(s, random_profile)
   d <- do.call('rbind', l)
@@ -504,11 +538,7 @@ test_that("ordering of profiles and horizons is retained after left-join", {
   # init SPC
   depths(d) <- id ~ top + bottom
   
-  ## !! bug happens here, when attempting to set a new horizon-level attr
-  ## call stack roughly
-  # $<-
-  # horizons<-
-  # merge(old, new)
+  ## former bug on set of a new horizon-level attr
   d$zzz <- rep(NA, times=nrow(d))
   
   # previously mysterious warning message
@@ -538,3 +568,40 @@ test_that("replaceHorizons<- works as expected", {
   expect_error(replaceHorizons(x) <- horizons(x)[,c(idname(x))])
 })
 
+spc <- data.frame(id = do.call('c', as.list((lapply(1:4, function(i) rep(i, 10))))),
+                  top = rep(0:9, 4), bottom = rep(1:10, 4))
+
+depths(spc) <- id ~ top+bottom
+
+rev.ord <- rev(1:nrow(spc@horizons))
+
+test_that("basic integrity checks", {
+  
+  # a new SPC is valid
+  expect_true(spc_in_sync(spc)$valid)
+  
+  spc@horizons <- spc@horizons[rev.ord,]
+  
+  # inverting the horizon order makes it invalid
+  expect_true(!spc_in_sync(spc)$valid)
+    
+  # reordering the horizons with reorderHorizons resolves integrity issues
+  expect_true(spc_in_sync(reorderHorizons(spc))$valid)
+  
+  # reordering horizons with any order works, even if invalid
+  spc <- reorderHorizons(spc, target.order = c(20:40,1:19))
+  expect_true(!spc_in_sync(spc)$valid)
+   
+  # inspect the hzids -- in this case we know they should be 20:40 then 1:19
+  expect_true(all(spc[[hzidname(spc)]] == c(20:40,1:19)))
+  
+  # subset the broken SPC to get the 4th profile
+  spc4 <- filter(spc, id == "4")
+  
+  # the target order reflects a reasonable result for the single profile SPC
+  expect_true(all(metadata(spc4)$target.order == 1:10))
+  
+  # the subset of the broken SPC is valid
+  expect_true(spc_in_sync(spc4)$valid)
+  
+})

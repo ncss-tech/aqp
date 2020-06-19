@@ -39,8 +39,20 @@ rebuildSPC <- function(x) {
     hztexclname(res) <- x.list$hztexclcol
   }
   
-  # add additional pieces
+  # metadata is a list now
+  x.list$metadata <- as.list(x.list$metadata)
+  
+  # add the new default entry for tracking data.frame subclass type
+  #  this is only to cover things that are stored as SPCs -- example datasets, big queries using soilDB etc
+  #  the constructor now sets defaults for this
+  if(!("aqp_df_class" %in% names(x.list$metadata))) {
+    x.list$metadata$aqp_df_class <- "data.frame"
+  }
+  
+  # replace metadata
   metadata(res) <- x.list$metadata
+  
+  # replace site
   site(res) <- x.list$site
   
   # @diagnostic and may be missing if `x` is very old

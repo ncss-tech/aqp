@@ -1,55 +1,76 @@
-#' @title Reduce multiple site or horizon values to a single site value
+#' @title Perform summaries on groups (from \code{group_by}) and create new site or horizon level attributes
 #' @name summarize
+#' 
 #' @aliases summarize,SoilProfileCollection-method
-#' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Each summary expression is applied to individual profiles. In the future, higher tiers of grouping, based on one or more variables, will be possible. 
+#' 
+#' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
+#' 
 #' @param object A SoilProfileCollection
-#' @param ... A set of comma-delimited R expressions that resolve to a summary value; may be named. e.g \code{mean = mean(clay, na.rm=TRUE)}
-#' @return A SoilProfileCollection
-#' @author Andrew G. Brown.
+#' @param ... A set of (named) comma-delimited R expressions that resolve to a summary value. e.g \code{groupmean = mean(clay, na.rm = TRUE)}
+#' 
+#' @return A data.frame with one row per level in the grouping variable, and one column for each summary 
+#' 
+#' @author Andrew G. Brown
 #' 
 #' @rdname summarize
 #' @export summarize
+#' 
 if (!isGeneric("summarize"))
   setGeneric("summarize", function(object, ...) standardGeneric("summarize"))
 
 setMethod("summarize", signature(object = "SoilProfileCollection"), 
           function(object, ...) {
-  #if(requireNamespace("rlang")) {
+    
+    # TODO: safe setter and accessor methods for grouping variable
+    group.by.col <- object@metadata$.spc_group_by
+    groups <- levels(factor(object[[group.by.col]]))
     
     # capture expression(s) at function
     x <- rlang::enquos(..., .named = TRUE)
-  
-    # TODO: group_by iterator would operate above profile?
-    #       is it safe to assume operations, in general, would
-    #       be on the profile basis, and then aggregated by group?
     
-    # apply expressions to each profile, frameify results
-    res <- profileApply(object, function(o) {
+    dfout <- data.frame(matrix(nrow=0, ncol=length(names(x))))
+    colnames(dfout) <- names(x)
+    
+    # TODO: generalize split for n site or horizon level attributes 
+    
+    res <- lapply(aqp::split(object, f = group.by.col), function(obj) {
       
-      # create composite object to facilitate eval_tidy
-      data <- compositeSPC(object)
+      # TODO: what else would be needed to do similar splits on the horizon data? 
+      #       essentially, base::split of horizons(obj) + summary on groups within SPC? pretty simple in principle
       
-      buf <- data.frame(1)
-      for(n in names(x)) {
-        foo <- rlang::eval_tidy(x[[n]], data)
-        buf[[n]] <- foo
-      }
-      buf <- as.data.frame(buf[,names(x)])
-      names(buf) <- names(x)
-      return(buf)
+      #       summarize could operate on groups at multiple levels -- just need another loop in here for horizons
+      #       this depends on aqp::split() being able to make splits based on criteria at multiple levels, then
+      #       parsing up of the profiles in resulting list elements based on unique levels of horizon-level groups
+      #
+      #       new behavior of aqp::split would possibly result in a list with overlap of profiles across elements
+      #       also, could use diagnostics and or restrictions -- future compositeSPC will include these
       
-    }, frameify = TRUE)
+      # apply expressions to each group, frameify results
+       data <- compositeSPC(obj)
+       
+       for(n in names(x)) {
+          output <- rlang::eval_tidy(x[[n]], data)
+          names(output) <- n
+          
+          if(length(output) > 1) {
+            stop("summary value '%s' has length greater than one", call.=FALSE)
+          } else if(length(output) == 0) {
+            stop("summary value '%s' has length zero", call.=FALSE)
+          }
+          if(any(c(nrow(dfout), length(dfout)) == 0)) {
+            dfout <- output
+          } else {
+            dfout <- cbind(dfout, output)
+          }
+       }
+       return(dfout)
+    })
     
-    # would include other grouping vars here
-    dfid <- data.frame(profile_id(object))
+    # recombine results for each group into a single data.frame
+    final <- data.frame(groups, do.call('rbind', res))
+    colnames(final) <- c(group.by.col, names(x))
     
-    names(dfid) <- idname(object)
-    rownames(res) <- NULL
-    
-    
-    site(object) <- cbind(dfid, res)
-    
-    return(object)
-  #}
+    # return result in same class as SPC slots
+    return(.as.data.frame.aqp(final, aqp_df_class(object)))
 })
 

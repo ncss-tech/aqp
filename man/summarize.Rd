@@ -3,18 +3,18 @@
 \name{summarize}
 \alias{summarize}
 \alias{summarize,SoilProfileCollection-method}
-\title{Reduce multiple site or horizon values to a single site value}
+\title{Perform summaries on groups (from \code{group_by}) and create new site or horizon level attributes}
 \arguments{
 \item{object}{A SoilProfileCollection}
 
-\item{...}{A set of comma-delimited R expressions that resolve to a summary value; may be named. e.g \code{mean = mean(clay, na.rm=TRUE)}}
+\item{...}{A set of (named) comma-delimited R expressions that resolve to a summary value. e.g \code{groupmean = mean(clay, na.rm = TRUE)}}
 }
 \value{
-A SoilProfileCollection
+A data.frame with one row per level in the grouping variable, and one column for each summary
 }
 \description{
-\code{summarize()} is a function used for summarizing SoilProfileCollections. Each summary expression is applied to individual profiles. In the future, higher tiers of grouping, based on one or more variables, will be possible.
+\code{summarize()} is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
 }
 \author{
-Andrew G. Brown.
+Andrew G. Brown
 }

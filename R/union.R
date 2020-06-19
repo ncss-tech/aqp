@@ -9,21 +9,32 @@
 # * is it possible to implement an S4 interface for a list of SPC? (cleaner code)
 
 
-# ease the transition to union()
+# # ease the transition to union()
+#' [DEPRECATED] rbind.SoilProfileCollection
+#'
+#' @param ... One or more SoilProfileCollection objects to \code{union()}
+#'
+#' @return A SoilProfileCollection
+#' @export rbind.SoilProfileCollection
+#'
+#' @examples
+#'
+#' data(sp5)
+#' 
+#' # rbind is deprecated, use aqp::union()
+#' # rbind(sp5[1:2,], sp5[(length(sp5) - 1):length(sp5),])
+#' 
 rbind.SoilProfileCollection <- function(...) {
   .Deprecated('please use union()')
-  
+
   # parse dots
   objects <- list(...)
   names(objects) <- NULL
-  
+
   # make compatible
-  res <- union(spc=objects)
+  res <- union(spc = objects)
   return(res)
 }
-
-
-
 
 union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   # setup some defaults

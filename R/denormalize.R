@@ -6,17 +6,14 @@ denormalize <- function(obj, attr) {
   # extract relevant pieces
   h <- horizons(obj)
   s <- site(obj)
-  idn <- idname(obj)
   
-  # varibles required for join
-  vars <- c(idn, attr)
+  if(!attr %in% names(s))
+    stop("column name %s not found", call. = FALSE)
   
-  # perform left-join
-  # retain only IDs on left side, IDs + attr on the right
-  res <- merge(h[, idn, drop=FALSE], s[, vars], all.x = TRUE, sort=FALSE)
+  # make a lookup table of attr in site
+  lut <- s[[attr]]
+  names(lut) <- s[[idname(obj)]]
   
-  # susbet named attr
-  res <- res[[attr]]
-  
-  return(res)
+  # return a horizon level attribute for same site IDs
+  return(lut[h[[idname(obj)]]])
 }

@@ -1,6 +1,41 @@
-## Coercition methods: general
+## Coercion methods: general
 
-# safely deconstruct as list
+#' Coerce SoilProfileCollection with \code{as()}
+#' 
+#' @description SoilProfileCollections can be coerced to other R object types using \code{as(spc, 'type')}.
+#' 
+#' Possible endpoints include: \code{list}, \code{data.frame}, \code{SpatialPointsDataFrame} and \code{SpatialPoints}.
+#'
+#' @name as
+#' @return list
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
+#'
+#' @examples 
+#' # load example data stored as SoilProfileCollection
+#' data(sp5)
+#' 
+#' # sp5
+#' str(sp5)
+#' 
+#' # list output
+#' str(as(sp5, 'list'))
+#'
+#' # data.frame output
+#' str(as(sp5, 'data.frame'))
+#' 
+#' # Spatial Objects
+#' # make some random coordinate data for each profile
+#' sp5$x <- sp5$y <- rnorm(length(sp5))
+#' coordinates(sp5) <- ~ x + y
+#' 
+#' # SpatialPointsDataFrame output
+#' str(as(sp5, 'SpatialPointsDataFrame'))
+#' 
+#' # SpatialPoints output
+#' str(as(sp5, 'SpatialPoints'))
+
 setAs("SoilProfileCollection", "list", function(from) {
   
   # get slot names from prototype
@@ -23,20 +58,24 @@ setAs("SoilProfileCollection", "list", function(from) {
   
   # test for missing slots
   if(any(sapply(s.list, is.null))) {
-    warning("some slots were missing, use reBuildSPC to fix", call. = FALSE)
+    warning("some slots were missing, use rebuildSPC to fix", call. = FALSE)
   }
   
   return(s.list)
   
-}
-)
+})
 
-
+#' @name as
+#' @return data.frame
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
+#'
 setAs("SoilProfileCollection", "data.frame", function(from) {
   
   # horizons + site + coordinates
   if(nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
-    site.coords <- data.frame(site(from), coordinates(from), stringsAsFactors=FALSE)
+    site.coords <- data.frame(site(from), coordinates(from), stringsAsFactors = FALSE)
     return(join(horizons(from), site.coords, by=idname(from)))
   }
   
@@ -46,35 +85,54 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
     
   # horizons + coordinates
   if(! nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
-    ids.coords <- data.frame(profile_id(from), coordinates(from), stringsAsFactors=FALSE)
-    return(data.frame(horizons(from), ids.coords, stringsAsFactors=FALSE))
+    ids.coords <- data.frame(profile_id(from), coordinates(from), stringsAsFactors = FALSE)
+    return(data.frame(horizons(from), ids.coords, stringsAsFactors = FALSE))
   }
   
   # just horizons
   else {
     return(horizons(from))
   }
-  
+})
+
+#' @name as
+#' @return tbl_df
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
+#'
+setAs("SoilProfileCollection", "tbl_df", function(from) {
+  .as.data.frame.aqp(as(from,'data.frame'), 'tbl_df')
+})
+
+#' @name as
+#' @return data.table
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
+#'
+setAs("SoilProfileCollection", "data.table", function(from) {
+  .as.data.frame.aqp(as(from, 'data.frame'), 'data.table')
+})
+
+#' @name as
+#' @return SpatialPointsDataFrame
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
+setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
+  s <- SpatialPointsDataFrame(coordinates(from), data = site(from), proj4string=CRS(proj4string(from)), match.ID = FALSE)
+  message('only site data are extracted')
+  return(s)
 }
 )
 
-## TODO: why does the proj4string get mangled in the conversion?
-## Coercition methods: and sp utilities
-setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
-    s <- SpatialPointsDataFrame(coordinates(from), data = site(from), proj4string=CRS(proj4string(from)), match.ID = FALSE)
-    message('only site data are extracted')
-    return(s)
-  }
-)
-
-# SoilProfilecollection -> SpatialPoints
-# requires special handling of "emtpy" SpatialPoints Objects
+#' @name as
+#' @return SpatialPoints
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPoints", function(from) {
-    SpatialPoints(coordinates(from), proj4string=CRS(proj4string(from)))
+    SpatialPoints(coordinates(from), proj4string = CRS(proj4string(from)))
   }
 )
-
-
-
-
-

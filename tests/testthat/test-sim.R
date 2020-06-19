@@ -15,8 +15,10 @@ s$name <- paste('H', seq_along(s$name), sep='')
 test_that("sim() works as expected", {
   
   # simulate 25 new profiles
-  sim.1 <- sim(s, n=25)
-  sim.2 <- sim(s, n=25, hz.sd=c(1, 2, 5, 5, 5, 10, 2))
+  sim.1 <- sim(s, n = 25)
+  
+  # NOTE: now following numeric id order for numeric id
+  sim.2 <- sim(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10))
   
   # result is an SPC
   expect_true(inherits(sim.1, 'SoilProfileCollection'))
@@ -31,10 +33,11 @@ test_that("sim() works as expected", {
 test_that("expected errors", {
   
   # only 1 seed can be used
-  expect_error(sim(sp3[1:2, ], n=25))
+  expect_error(sim(sp3[1:2, ], n = 25))
   
   # sd must recycle evenly over number of original horizons
-  expect_error(sim(s, n=25, hz.sd = 1:2))
+  # NOTE: now following numeric id order for numeric id
+  expect_error(sim(s, n = 25, hz.sd = 1:4))
   
 })
 
