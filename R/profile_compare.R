@@ -316,6 +316,8 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
   ## this is only a problem when using profile IDs that are numeric and not stable when alpha-sorted
   ##
   ## However, this will result in changes to sorting of profile_id(), @site, @horizon
+  ##
+  ## Also, this will break with merge of aqpdf branch were sorting by ID is not performed at init time
   s <- rebuildSPC(s)
   
   

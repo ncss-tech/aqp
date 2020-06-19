@@ -72,7 +72,7 @@ test_that("profile_compare gracefully handles numeric IDs (#7)", {
   rebuilt.ids <- profile_id(rebuildSPC(s))
   expect_equal(rebuilt.ids, c("1", "10", "2", "3", "4", "5", "6", "7", "8", "9"))
   
-  # this works as of 2020-06-09
+  # this works as of 2020-06-09, but will not work with aqpdf branch
   # rebuildSPC() called by profile_compare, on input SPC re-orders via alpha-sort
   d <- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)
   
