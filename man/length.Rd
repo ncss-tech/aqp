@@ -9,7 +9,7 @@
 \S4method{length}{SoilProfileCollection}(x)
 }
 \arguments{
-\item{object}{a SoilProfileCollection}
+\item{x}{a SoilProfileCollection}
 }
 \description{
 Get the number of profiles in a SoilProfileCollection

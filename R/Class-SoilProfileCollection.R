@@ -835,6 +835,7 @@ setReplaceMethod("hzidname",
 #' @param object a SoilProfileCollection
 #' @param value character, name of column containing horizon designations
 #' @docType methods
+#' @aliases hzdesgnname<-,SoilProfileCollection-method
 #' @rdname hzdesgnname-set
 #' @examples 
 #' 
@@ -853,12 +854,8 @@ if (!isGeneric('hzdesgnname<-'))
   setGeneric('hzdesgnname<-', function(object, value) 
     standardGeneric('hzdesgnname<-'))
 
-#' Set column name containing, horizon designation name.
-#'
-#' @param object A SoilProfileCollection  
-#' @param value A unit length chcaracter containing target column name for horizon designation name.
-#'
-setReplaceMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
+setReplaceMethod("hzdesgnname",
+                signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    # test: does it exist?
                    if(!length(value))

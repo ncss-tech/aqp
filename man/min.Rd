@@ -9,8 +9,10 @@
 \S4method{min}{SoilProfileCollection}(x, v = NULL)
 }
 \arguments{
-\item{object}{a SoilProfileCollection}
+\item{x}{a SoilProfileCollection}
+
+\item{v}{optional: a vector of horizon attribute names to refine calculation}
 }
 \description{
-Get the shallowest depth of description out of all profiles in a SoilProfileCollection.
+Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 }

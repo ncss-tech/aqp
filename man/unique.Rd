@@ -9,7 +9,9 @@
 \S4method{unique}{SoilProfileCollection}(x, vars)
 }
 \arguments{
-\item{object}{a SoilProfileCollection}
+\item{x}{a SoilProfileCollection}
+
+\item{vars}{Variables to consider in uniqueness.}
 }
 \description{
 Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.

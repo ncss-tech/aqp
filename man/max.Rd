@@ -9,8 +9,10 @@
 \S4method{max}{SoilProfileCollection}(x, v = NULL)
 }
 \arguments{
-\item{object}{a SoilProfileCollection}
+\item{x}{a SoilProfileCollection}
+
+\item{v}{optional: horizon-level column name to refine calculation}
 }
 \description{
-Get the deepest depth of description out of all profiles in a SoilProfileCollection.
+Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 }

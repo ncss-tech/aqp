@@ -21,28 +21,29 @@ SpatialPoints
 \description{
 SoilProfileCollections can be coerced to other R object types using \code{as(spc, 'type')}.
 
-Possible endpoints include: \code{list}, \code{data.frame}, \code{tbl_df}, \code{data.table}, \code{SpatialPointsDataFrame} and \code{SpatialPoints}.
+Possible endpoints include: \code{list}, \code{data.frame}, \code{SpatialPointsDataFrame} and \code{SpatialPoints}.
 }
 \examples{
 # load example data stored as SoilProfileCollection
 data(sp5)
 
+# sp5
+str(sp5)
+
 # list output
-as(sp5, 'list')
+str(as(sp5, 'list'))
 
 # data.frame output
-as(sp5, 'data.frame')
+str(as(sp5, 'data.frame'))
 
-# tbl_df output
-as(sp5, 'tbl_df')
+# Spatial Objects
+# make some random coordinate data for each profile
+sp5$x <- sp5$y <- rnorm(length(sp5))
+coordinates(sp5) <- ~ x + y
 
-# data.table output
-as(sp5, 'data.table')
+# SpatialPointsDataFrame output
+str(as(sp5, 'SpatialPointsDataFrame'))
 
-# SPDF output
-as(sp5, 'SpatialPointsDataFrame')
-
-# SP output
-as(sp5, 'SpatialPoints')
-
+# SpatialPoints output
+str(as(sp5, 'SpatialPoints'))
 }

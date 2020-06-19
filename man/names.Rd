@@ -9,7 +9,7 @@
 \S4method{names}{SoilProfileCollection}(x)
 }
 \arguments{
-\item{object}{a SoilProfileCollection}
+\item{x}{a SoilProfileCollection}
 }
 \description{
 Get names of columns in site and horizons table of a SoilProfileCollection.

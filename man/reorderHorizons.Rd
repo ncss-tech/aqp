@@ -3,6 +3,7 @@
 \docType{methods}
 \name{reorderHorizons}
 \alias{reorderHorizons}
+\alias{reorderHorizons,SoilProfileCollection-method}
 \title{Re-order corrupted horizon data}
 \usage{
 \S4method{reorderHorizons}{SoilProfileCollection}(object, target.order = NULL)
