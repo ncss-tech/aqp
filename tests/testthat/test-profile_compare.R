@@ -33,7 +33,7 @@ site(d) <- s
 
 ## tests
 
-test_that("profile_compare basics", {
+test_that("profile_compare works as expected", {
   
   # compute betwee-profile dissimilarity, no depth weighting
   d.dis <- suppressMessages(profile_compare(d, vars=c('clay', 'ph', 'frags'), k=0, 
@@ -52,7 +52,6 @@ test_that("profile_compare basics", {
   expect_equal(m[1,3], 49.02092, tolerance=0.00001)
   expect_equal(m[2,3], 45.94683, tolerance=0.00001)
 })
-
 
 
 
