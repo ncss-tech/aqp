@@ -41,14 +41,14 @@ s$name <- paste('H', seq_along(s$name), sep='')
 sim.1 <- sim(s, n=25)
 
 # simulate 25 new profiles using 's' and variable SD for each horizon
-sim.2 <- sim(s, n=25, hz.sd=c(1, 2, 5, 5, 5, 10, 2))
+sim.2 <- sim(s, n=25, hz.sd=c(1, 2, 5, 5, 5, 10))
 
 # plot
 par(mfrow=c(2,1), mar=c(0, 0, 0, 0))
 plot(sim.1)
 mtext('SD = 2', side=2, line=-1.5, font=2, cex=0.75)
 plot(sim.2)
-mtext('SD = c(1, 2, 5, 5, 5, 10, 2)', side=2, line=-1.5, font=2, cex=0.75)
+mtext('SD = c(1, 2, 5, 5, 5, 10)', side=2, line=-1.5, font=2, cex=0.75)
 
 # aggregate horizonation of simulated data
 # note: set class_prob_mode=2 as profiles were not defined to a constant depth
@@ -73,4 +73,5 @@ panel.abline(h=s$top, lty=2, lwd=2)
 
 }
 \keyword{manip}
+																																																																																																																																													
 																																																																																																																																													
