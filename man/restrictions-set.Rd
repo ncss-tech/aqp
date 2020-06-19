@@ -24,7 +24,7 @@ depths(sp2) <- id ~ top + bottom
 # assign abrupt textural change to a profile
 newdata <- data.frame(id = c("hon-21"),
                       restrkind = "abrupt textural change",
-                      restrdep)
+                      restrdep = 46)
                       
 # do left join                       
 restrictions(sp2) <- newdata

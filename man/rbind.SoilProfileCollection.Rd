@@ -19,6 +19,7 @@ A SoilProfileCollection
 
 data(sp5)
 
-rbind(sp5[1:2,], sp5[(length(sp5) - 1):length(sp5),])
+# rbind is deprecated, use aqp::union()
+# rbind(sp5[1:2,], sp5[(length(sp5) - 1):length(sp5),])
 
 }
