@@ -58,7 +58,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	
 	# compute a weighting vector based on k	
 	w <- 1 * exp(-k * depth_slice_seq)
-		
+	
 	## TODO: convert to slice() (#7)
 	## BUG: !!! this step re-orders via string-factor-string conversion step by split() (#7)
 	## --> this is only a bug when profile IDs have been altered after SPC init
@@ -150,6 +150,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) {
 	  
 	  ## this could be a source of slowness, esp. the t()
+	  ## TODO: new implementatoin will require drop=FALSE
 	  ps <- sapply(su, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
 	  sp <- t(ps)
 	  
@@ -309,6 +310,14 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 #     bad.profiles <- profile_id(s)[bad.profiles.idx]
 #     stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', '), '\nConsider removing these profiles and re-running.'), call.=FALSE)
 #   }
+  
+  ## 2020-06-19: DEB
+  ## temporary fix for #7, related to profile ID ordering in site, horizon, and results from tapply()
+  ## this is only a problem when using profile IDs that are numeric and not stable when alpha-sorted
+  ##
+  ## However, this will result in changes to sorting of profile_id(), @site, @horizon
+  s <- rebuildSPC(s)
+  
   
 	# extract horizons
 	s.hz <- horizons(s)

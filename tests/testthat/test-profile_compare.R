@@ -55,19 +55,24 @@ test_that("profile_compare basics", {
 
 
 
-## this is a known failure point
-test_that("profile_compare preserves ID ordering after editing (#7)", {
+# ensure that tapply-based re sort of profile IDs doesn't throw an error
+# this will not be a problem after the re-write
+# https://github.com/ncss-tech/aqp/issues/7
+test_that("profile_compare gracefully handles numeric IDs (#7)", {
   
-  data(sp4)
-  depths(sp4) <- id ~ top + bottom
+  # this has been a problem for years, alpha-sorting changes ordering
+  set.seed(1010101)
+  s <- union(lapply(1:10, random_profile, SPC=TRUE))
   
-  # edit IDs after SPC init
-  # !! SPC records are not re-sorted
-  profile_id(sp4) <- sprintf("%s-zzz", profile_id(sp4))
+  # this works as of 2020-06-09
+  # rebuildSPC() called on input SPC re-orders via alpha-sort
+  d <- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)
   
-  # fail-safe triggered
-  # expect an error until #7 is resolved
-  expect_error(d <- profile_compare(sp4, vars=c('ex_Ca_to_Mg', 'CEC_7'), k=0, max_d=40))
+  # sorting after union() of random profiles
+  expect_equal(profile_id(s), c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+  
+  # new sorting by rebuildSPC / tapply in profile_compare
+  expect_equal(attr(d, 'Labels'), profile_id(rebuildSPC(s)))
 })
 
 
