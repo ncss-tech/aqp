@@ -58,7 +58,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	
 	# compute a weighting vector based on k	
 	w <- 1 * exp(-k * depth_slice_seq)
-		
+	
 	## TODO: convert to slice() (#7)
 	## BUG: !!! this step re-orders via string-factor-string conversion step by split() (#7)
 	## --> this is only a bug when profile IDs have been altered after SPC init
@@ -150,6 +150,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) {
 	  
 	  ## this could be a source of slowness, esp. the t()
+	  ## TODO: new implementatoin will require drop=FALSE
 	  ps <- sapply(su, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
 	  sp <- t(ps)
 	  
@@ -288,7 +289,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
   ## TODO: this makes an assumption on the column containing horizon designations
   ## 2016-08-16: this function ignores vars that don't existin in @horizons
   
-  ## 2019-12-19: disabled until PC is re-factored and / or there is a bette way to get hz name column
+  ## 2019-12-19: disabled until PC is re-factored and / or there is a better way to get hz name column
   # # iterate over profiles and compute percent missing data by variable
   # pct_data <- evalMissingData(s, vars, name = name)
   # 
@@ -310,6 +311,14 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 #     stop(paste('no non-NA values associated with profiles:', paste(bad.profiles, collapse=', '), '\nConsider removing these profiles and re-running.'), call.=FALSE)
 #   }
   
+  ## 2020-06-19: DEB
+  ## temporary fix for #7, related to profile ID ordering in site, horizon, and results from tapply()
+  ## this is only a problem when using profile IDs that are numeric and not stable when alpha-sorted
+  ##
+  ## However, this will result in changes to sorting of profile_id(), @site, @horizon
+  s <- rebuildSPC(s)
+  
+  
 	# extract horizons
 	s.hz <- horizons(s)
 	
@@ -327,36 +336,32 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 		# remove from hz-level vars
 		vars <- vars[-matching.idx]
 		
-		
-    ## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
+		## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
 		## TODO: allow user to pass-in variable type information
 		# compute dissimilarty on site-level data: only works with 2 or more variables
 		# rescale to [0,1]
-		if(length(site.vars) >= 2) {
-			message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
-			d.site <- daisy(s.site[, site.vars], metric='gower')
-			d.site <- rescale(d.site)
-			
-			# reset default behavior of hz-level D
-			rescale.result=TRUE
-			
-			## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
-			## ... but why ? read-up on daisy
-			if(any(is.na(d.site))) {
-				warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
-				d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
-			}
-			
-			## TODO: ordering of D_hz vs D_site ... assumptions safe?
+		
+		message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
+		d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
+		d.site <- rescale(d.site)
+		
+		# reset default behavior of hz-level D
+		rescale.result=TRUE
+		
+		## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
+		## ... but why ? read-up on daisy
+		if(any(is.na(d.site))) {
+		  warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
+		  d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
 		}
 		
-		else
-			stop("cannot compute site-level dissimilarity with fewer than 2 variables", call.=FALSE)	
+		## TODO: ordering of D_hz vs D_site ... assumptions safe?
+		
+	} else {
+	  # setup a dummy D_site
+	  d.site <- NULL
 	}
-	
-	# setup a dummy D_site
-	else
-		d.site <- NULL
+		
 	
 	## 
 	## TODO: update this next part
