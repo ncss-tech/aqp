@@ -475,7 +475,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
                              horizon.new[[hzidname(object)]])
   chnew <- .coalesce.idx(horizon.new[[idname(object)]])
   if(length(chnew) != length(original.site.order) |
-     sum(suppressWarnings(original.site.order != chnew)) > 0) {
+     suppressWarnings(any(original.site.order != chnew))) {
     message("join condition resulted in sorting of horizons, re-applying original order")
     horizon.new <- horizon.new[new.horizon.order,]
   }
