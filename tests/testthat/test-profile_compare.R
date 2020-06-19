@@ -55,6 +55,7 @@ test_that("profile_compare basics", {
 
 
 
+
 # ensure that tapply-based re sort of profile IDs doesn't throw an error
 # this will not be a problem after the re-write
 # https://github.com/ncss-tech/aqp/issues/7
