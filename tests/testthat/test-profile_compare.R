@@ -65,15 +65,19 @@ test_that("profile_compare gracefully handles numeric IDs (#7)", {
   set.seed(1010101)
   s <- union(lapply(1:10, random_profile, SPC=TRUE))
   
-  # this works as of 2020-06-09
-  # rebuildSPC() called on input SPC re-orders via alpha-sort
-  d <- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)
-  
-  # sorting after union() of random profiles
+  # expected ID orering after union() of random profiles
   expect_equal(profile_id(s), c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
   
+  # expected ID ordering after rebuildSPC
+  rebuilt.ids <- profile_id(rebuildSPC(s))
+  expect_equal(rebuilt.ids, c("1", "10", "2", "3", "4", "5", "6", "7", "8", "9"))
+  
+  # this works as of 2020-06-09
+  # rebuildSPC() called by profile_compare, on input SPC re-orders via alpha-sort
+  d <- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)
+  
   # new sorting by rebuildSPC / tapply in profile_compare
-  expect_equal(attr(d, 'Labels'), profile_id(rebuildSPC(s)))
+  expect_equal(attr(d, 'Labels'), rebuilt.ids)
 })
 
 
