@@ -6,9 +6,9 @@
 \usage{
 getCambicBounds(
   p,
-  hzdesgn,
-  texcl.attr,
-  clay.attr,
+  hzdesgn = guessHzDesgnName(p),
+  texcl.attr = guessHzTexClName(p),
+  clay.attr = guessHzAttrName(p, attr = "clay", c("total", "_r")),
   argi_bounds = NULL,
   d_value = "d_value",
   m_value = "m_value",

@@ -43,14 +43,20 @@
 #' # print results in table
 #' getCambicBounds(spc)
 #'
-getCambicBounds <- function(p, hzdesgn, texcl.attr, clay.attr,
+getCambicBounds <- function(p, 
+                            hzdesgn = guessHzDesgnName(p), 
+                            texcl.attr = guessHzTexClName(p), 
+                            clay.attr = guessHzAttrName(p, attr = 'clay', 
+                                                        c("total", "_r")),
                             argi_bounds = NULL,
                             d_value = "d_value", 
                             m_value = "m_value", 
                             m_chroma = "m_chroma", ...) {
+  
   # construct data.frame result for no-cambic-found (NA)
   empty_frame <- data.frame(id=profile_id(p),
                             cambic_id=NA, cambic_top=NA, cambic_bottom=NA)
+  
   empty_frame_names <- names(empty_frame)
   empty_frame_names[1] <- idname(p)
   names(empty_frame) <- empty_frame_names
