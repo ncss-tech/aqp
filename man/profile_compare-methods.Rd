@@ -73,6 +73,7 @@ Our approach builds on the work of (Moore, 1972) and the previously mentioned de
 
 \seealso{\code{\link{slice}}, \code{\link{daisy}}}
 \examples{
+\donttest{
 ## 1. check out the influence depth-weight coef:
 library(lattice)
 
@@ -106,7 +107,7 @@ cor(d.1, d.2)
 
 ## 3. identify profiles within a collection that contain all NAs
 set.seed(1010101)
-s <- union(lapply(1:10, random_profile, SPC=TRUE))
+s <- union(lapply(letters[1:10], random_profile, SPC=TRUE))
 
 # replace first profile's data with NA
 na.required <- nrow(s[1, ])
@@ -173,6 +174,7 @@ plot(as.dendrogram(hclust(d.10)), horiz=TRUE, main='Every 10th Depth Slice')
 plot(as.dendrogram(hclust(d.20)), horiz=TRUE, main='Every 20th Depth Slice')
 par(oldpar)
 
+}
 }
 
 
