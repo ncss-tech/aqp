@@ -139,11 +139,20 @@ s$p2[1:na.required] <- NA
 f.check.NA <- function(i) length(which(is.na(i$p1) | is.na(i$p2))) / nrow(i) == 1
 missing.too.much.data.idx <- which(profileApply(s, f.check.NA))
 
+
+
 # remove bad profiles and try again: works
-s.no.na <- profile_compare(s[-missing.too.much.data.idx, ], vars=c('p1','p2'), 
-max_d=100, k=0, plot.depth.matrix=TRUE)
 
-
+## AGB: this says the IDs are out of order... but I think it is probably
+##  mis-calculating... See:
+## 
+##    s[-missing.too.much.data.idx, ]$id
+##    site(s[-missing.too.much.data.idx, ])$id
+##    spc_in_sync(s)
+##    spc_in_sync(s[-missing.too.much.data.idx,])
+   
+# s.no.na <- profile_compare(s[-missing.too.much.data.idx, ], vars=c('p1','p2'), 
+#                            max_d=100, k=0, plot.depth.matrix=TRUE)
 ## 4. better plotting of dendrograms with ape package:
 if(require(ape) & require(cluster) & require(MASS)) {
 h <- diana(d)
