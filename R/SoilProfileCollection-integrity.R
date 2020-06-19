@@ -14,7 +14,7 @@
 #' 
 #' @param object A SoilProfileCollection 
 #' @return data.table
-#' @aliases as,SoilProfileCollection-method
+#' @aliases spc_in_sync,SoilProfileCollection-method
 #' @docType methods
 #' @author Andrew G. Brown
 #'

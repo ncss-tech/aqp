@@ -1,7 +1,15 @@
 if (!isGeneric("group_by"))
-  setGeneric("group_by", function(object, ...) standardGeneric("group_by"))
+  setGeneric("group_by", function(object, ...) 
+    standardGeneric("group_by"))
 
-setMethod("group_by", signature(object = "SoilProfileCollection"), function(object, ...) { 
+#' [EXPERIMENTAL] Store groupings within a profile collection.  
+#' @name group_by
+#' @param object SoilProfileCollection. 
+#' @param ... One or more expressions evaluated within the context of \code{object} that resolve to vectors that can be coerced to factor "groups."
+#' @aliases group_by,SoilProfileCollection-method
+#' @rdname group_by
+setMethod("group_by", signature(object = "SoilProfileCollection"), 
+          function(object, ...) { 
   
   # capture expression(s) at function
   x <- rlang::enquos(..., .named = TRUE)    

@@ -6,6 +6,9 @@
 if (!isGeneric('depths<-'))
   setGeneric('depths<-', function(object, value) standardGeneric('depths<-'))
 
+
+#' @aliases depths<-,SoilProfileCollection-method
+#' @rdname depths
 setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 	function(object, value) {
 		message('This is already a SoilProfilecollection-class object, doing nothing.')
@@ -161,8 +164,8 @@ setReplaceMethod("depths", "data.frame",
 #' 
 #' @param object A SoilProfileCollection
 #' @param value A formula or object inheriting \code{data.frame}
-#' @aliases site<-SoilProfileCollection-method
-#' @docType methods
+#' @aliases site<-,SoilProfileCollection-method
+#' @usage site(object) <- value
 #' 
 #' @rdname site
 #'
@@ -479,7 +482,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   
   # sanity check: horizons + new data should have same number of rows as original
   if(nrow(object@horizons) != nrow(horizon.new)) {
-    message(paste('original data (', nrow(s), ' rows) new data (', nrow(horizon.new), ' rows)', sep=''))
+    message(paste('original data (', nrow(object@horizons), ' rows) new data (', nrow(horizon.new), ' rows)', sep=''))
     stop("invalid horizons left join condition, data not changed", call.=FALSE)
   }
     
@@ -500,14 +503,15 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
 #' 
 #' @name diagnostic_hz<-
 #' 
-#' Diagnostic data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
+#' @description Diagnostic data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
 #' 
 #' @param object A SoilProfileCollection
 #' @param value An object inheriting \code{data.frame}
+#' 
 #' @aliases diagnostic_hz<-,SoilProfileCollection-method
 #' @docType methods
 #' 
-#' @rdname diagnostic_hz
+#' @rdname diagnostic_hz-set
 #'
 #' @examples
 #' 
@@ -548,7 +552,7 @@ setReplaceMethod("diagnostic_hz",
   
   # testing the class of the new data
   if (!inherits(value, "data.frame"))
-    stop("diagnostic horizon data must be a data.frame", call.=FALSE)
+    stop("diagnostic horizon data must be a data.frame", call. = FALSE)
 	
   # test for the special case where internally-used functions 
   # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
@@ -585,14 +589,15 @@ setReplaceMethod("diagnostic_hz",
 #' 
 #' @name restrictions<-
 #' 
-#' Restrictions data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named profile ID columns on the left and right hand side to facilitate the join: \code{restrictions(spc) <- newdata}. 
+#' @description Restrictions data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named profile ID columns on the left and right hand side to facilitate the join: \code{restrictions(spc) <- newdata}. 
 #' 
 #' @param object A SoilProfileCollection
 #' @param value An object inheriting \code{data.frame}
+#' 
 #' @aliases restrictions<-,SoilProfileCollection-method
 #' @docType methods
 #' 
-#' @rdname restrictions
+#' @rdname restrictions-set
 #'
 #' @examples
 #' 

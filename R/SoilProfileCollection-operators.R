@@ -12,7 +12,7 @@
 ##
 #' Matrix/data.frame-like access to profiles and horizons in a SoilProfileCollection
 #' 
-#' @name [
+#' @aliases  [,SoilProfileCollection-method
 #' 
 #' @description You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, repectively: \code{spc[i, j]}. Subsetting operations are propagated to other slots when they result in removal of sites from a collection.
 #' 
@@ -21,13 +21,10 @@
 #' \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. `j` returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
 #' 
 #' 
-#' @param object a SoilProfileCollection
+#' @param x a SoilProfileCollection
 #' @param i a numeric or logical value denoting profile indices to select in a subset
 #' @param j a numeric or logical value denoting profile indices to select in a subset
-#' @aliases [,SoilProfileCollection,ANY,ANY-method
-#' @docType methods
 #' @rdname singlebracket
-#' 
 setMethod("[", signature(x = "SoilProfileCollection",
                          i = "ANY",
                          j = "ANY"),
@@ -210,8 +207,6 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
 #' Get, add or change column of horizon or site data in a SoilProfileCollection
 #' 
-#' @name [[
-#'
 #' @description 
 #' 
 #' Get, add or change the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons. The benefit of using double bracket setter over \code{$} is that \code{name} can be calculated, whereas with \code{$}, it must be known a priori and hard coded. 
@@ -224,7 +219,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #' @param i an expression resolving to a single column name in site or horizon table
 #' @param j [not used]
 #' @param ... [not used]
-#' 
+#' @param value New value to replace -- unit length or equal in length to number of sites or horizons in the collection.
 #' @aliases [[,SoilProfileCollection,character,ANY-method
 #' @docType methods
 #' @rdname doublebracket
@@ -345,18 +340,16 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
 
 #' Access column of horizon or site data in a SoilProfileCollection
 #' 
-#' @name $
-#' 
 #' @description Get/set the data from a column accessed by name \code{spc$name}. Horizon data takes precedence. Column names are not shared between site and horizons. 
 #' 
 #' When using \code{$<-}, the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.
 #' 
 #' @param x a SoilProfileCollection
 #' @param name a single column name in site or horizon table
-#' @aliases $,SoilProfileCollection-method,$<-,SoilProfileCollection-method
 #' @docType methods
 #' @rdname dollarsign
 #' 
+#' @aliases `$`,SoilProfileCollection-method,`$<-`,SoilProfileCollection-method
 #' @examples 
 #' 
 #' data(sp1)
@@ -394,8 +387,10 @@ setMethod("$", signature(x = "SoilProfileCollection"),
             
             return(res)
           })
-
-setReplaceMethod("$", "SoilProfileCollection",
+#' @aliases `$<-`,SoilProfileCollection-method
+#' @param value Replacement values: unit length or equal to number of horizons or sites.
+#' @rdname dollarsign
+setReplaceMethod("$", signature(x="SoilProfileCollection"),
                  function(x, name, value) {
                    #print(name)
                    

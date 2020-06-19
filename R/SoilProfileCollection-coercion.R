@@ -25,12 +25,17 @@
 #' # data.frame output
 #' str(as(sp5, 'data.frame'))
 #' 
-#' # SPDF output
+#' # Spatial Objects
+#' # make some random coordinate data for each profile
+#' sp5$x <- sp5$y <- rnorm(length(sp5))
+#' coordinates(sp5) <- ~ x + y
+#' 
+#' # SpatialPointsDataFrame output
 #' str(as(sp5, 'SpatialPointsDataFrame'))
 #' 
-#' # SP output
+#' # SpatialPoints output
 #' str(as(sp5, 'SpatialPoints'))
-#' 
+
 setAs("SoilProfileCollection", "list", function(from) {
   
   # get slot names from prototype

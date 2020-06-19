@@ -97,7 +97,9 @@ setMethod(
 #' @name max
 #' 
 #' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
-#' @param object a SoilProfileCollection
+#' 
+#' @param x a SoilProfileCollection
+#' @param v optional: horizon-level column name to refine calculation
 #' @aliases max,SoilProfileCollection-method
 #' @docType methods
 #' @rdname max
@@ -181,6 +183,7 @@ setMethod(
 #' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
 #' 
 #' @param x a SoilProfileCollection
+#' @param vars Variables to consider in uniqueness.
 #' @aliases unique,SoilProfileCollection-method
 #' @docType methods
 #' @rdname unique
