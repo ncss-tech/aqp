@@ -311,12 +311,18 @@ setMethod(f = 'show',
             site.show <- numeric(0)
             
             if (length(h.n) > 0) {
+              
+              # aqp:::.data.frame.j is the safe way to use the j index the data.frame way
+              #  if you might encounter a data.table
               h <- .data.frame.j(h, c(h.n[idx], h.n[-idx]), aqp_df_class(object))
+              
+              
               # # if defined, move horizon designation to the 3rd column
               # # missing horizon designation evaluates to character(0)
               hzd <- hzdesgnname(object)
               if (length(hzd) > 0) {
                 idx <- match(hzd, names(h))
+                
                 h <- .data.frame.j(h, c(names(h)[idx], 
                                         names(h)[-idx]), 
                                    aqp_df_class(object))
@@ -373,7 +379,10 @@ setMethod(f = 'show',
             
             # make note of additional hz attributes
             cat(hz.txt)
-            print(.as.data.frame.aqp(h[, hz.show, drop = FALSE], 
+            
+            # note: use of the j index here is not compatible with data.table
+            #  no need to use aqp:::.data.frame.j here -- this is just for output
+            print(.as.data.frame.aqp(data.frame(h)[, hz.show, drop = FALSE], 
                                      aqp_df_class(object)), row.names = FALSE)
             
             if(n.h > max(rows.show.h))
@@ -381,7 +390,9 @@ setMethod(f = 'show',
             
             # make note of additional site attributes
             cat(site.txt)
-            print(.as.data.frame.aqp(s[, site.show, drop = FALSE], 
+            
+            # again: use of the j index here is not compatible with data.table
+            print(.as.data.frame.aqp(data.frame(s)[, site.show, drop = FALSE], 
                                      aqp_df_class(object)), row.names = FALSE)
             
             if(n.s > max(rows.show.s))
