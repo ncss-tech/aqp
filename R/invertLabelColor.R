@@ -1,4 +1,4 @@
-
+#' @title Make High Contrast Label Colors
 #' @description Generate a vector of white or black label colors conditioned on a vector of colors to maximize label contrast.
 #' 
 #' @param colors vector of colors
