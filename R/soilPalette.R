@@ -1,3 +1,5 @@
+
+
 ## TODO: this may not scale to > 5 colors
 
 ## tiny function for a quick swatch with annotation
@@ -20,13 +22,10 @@ soilPalette <- function(colors, lab, lab.cex=0.75, dynamic.labels=TRUE, ...) {
   
   # label color varies as a function of value
   if(dynamic.labels) {
-    hsv.cols <- t(rgb2hsv(col2rgb(colors)))
-    hsv.cols[, 1] <- 0
-    hsv.cols[, 2] <- 0
-    hsv.cols[, 3] <- ifelse(hsv.cols[, 3] > 0.6, 0, 1)
-    label.color <- hsv(hsv.cols[, 1], hsv.cols[, 2], hsv.cols[, 3])
+    label.color <- invertLabelColor(colors)
   } else {
-    label.color <- 'white'
+    # use device background color
+    label.color <- par()$bg
   }
   
   # annotate
