@@ -39,7 +39,7 @@
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='right-center', label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='right-center', label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.palette.bias=1, col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
   ###################
   ## sanity checks ##
@@ -136,7 +136,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
-    cr <- colorRamp(col.palette)
+    cr <- colorRamp(col.palette, bias = col.palette.bias)
     # note that this may contain NAs
     c.rgb <- cr(scales::rescale(h[[color]]))
     cc <- which(complete.cases(c.rgb))
@@ -168,7 +168,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
       
       # make a color mapping function
       color.mapper <- scales::col_factor(
-        palette = colorRampPalette(col.palette)(length(color.levels)),
+        palette = colorRampPalette(col.palette, bias = col.palette.bias)(length(color.levels)),
         domain = color.levels,
         na.color = default.color,
         ordered = TRUE

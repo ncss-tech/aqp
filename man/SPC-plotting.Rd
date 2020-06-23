@@ -35,8 +35,9 @@ shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE,
 hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', 
 hz.distinctness.offset.lty=2, axis.line.offset=-2.5, 
 plot.depth.axis=TRUE, density=NULL, col.label=color, 
-col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1,
-n.legend=8,
+col.palette = rev(brewer.pal(10, 'Spectral')), 
+col.palette.bias = 1,
+col.legend.cex=1,n.legend=8,
 lwd=1, lty=1, 
 default.color=grey(0.95), \dots)
 }
@@ -80,6 +81,7 @@ default.color=grey(0.95), \dots)
   \item{density}{fill density used for horizon color shading, either a single integer or a column name containing integer values (default is NULL, no shading)}
   \item{col.label}{text printed above the color-coded legend}
   \item{col.palette}{color palette used to plot numeric data}
+  \item{col.palette.bias}{color ramp bias (skew), see \code{\link{colorRamp}}}
   \item{col.legend.cex}{scaling of color legend}
   \item{n.legend}{approximate number of classes used in numeric legend, max number of items per row in categorical legend}
   \item{lwd}{single numeric value: line width multiplier}
