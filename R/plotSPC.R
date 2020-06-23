@@ -39,10 +39,24 @@
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='right-center', label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
-  ## fudge factors
-  # should be adjusted dynamically https://github.com/ncss-tech/aqp/issues/62
+  ###################
+  ## sanity checks ##
+  ###################
+  
+  # horizon name style
+  if(! name.style %in% c('right-center', 'left-center', 'left-top')) {
+    warning('invalid `name.style`', call. = FALSE)
+    name.style <- 'right-center'
+  }
+  
+  
+  ###################
+  ## fudge factors ##
+  ###################
+  
+  # TODO: base calculations on strwidth() AFTER plot() has been called
 
   # padding along x-axis, prevents crowding
   # dynamic adjustment must also taking into account figure size
@@ -116,7 +130,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
     name <- guessHzDesgnName(x)
   }
 
-  # setup horizon colors:
+  ####################
+  ## horizon colors ##
+  ####################
   
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
@@ -199,6 +215,7 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
+  ## this should probably use strwidth() AFTER plot() has been called
   # if profile style is auto, determine style based on font metrics
   if(id.style == 'auto') {
   	sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
@@ -223,8 +240,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 	  plot(0, 0, type='n', xlim=c(width * x_left_space_mult, n+(extra_x_space)), 
 	       ylim=c(max(depth_axis_intervals), -extra_y_space), 
 	       axes=FALSE, xlab='', ylab='')
-	}
+  }
   
+  
+  # calculate width of a single character on current plot device
+  one.char.width <- strwidth('W')
+  
+  # TODO dynamically adjust `width` based on strwidth(longest.hz.name)
   
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
@@ -271,7 +293,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
       this_profile_names <- ''
     
 	  
-	  ### generate rectangle geometry
+    #################################
+	  ## generate rectangle geometry ##
+    #################################
     
     ## center of each sketch
     # 2019-07-15: added relative position feature, could use some more testing
@@ -282,52 +306,100 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
 	  y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
 	
-	
-	##
-	## TODO: use horizon boundary type and topography to modify figures
-	##
-	## i.e. clear-wavy = dashed lines at an angle, based on red book
 	  
-	  # create horizons + colors
-    # default are filled rectangles
-    if(divide.hz) {
+	  ##
+	  ## TODO: use horizon boundary type and topography to modify figures
+	  ##
+	  ## i.e. clear-wavy = dashed lines at an angle, based on red book
+	  
+	  
+	  ##############################
+	  ## create horizons + colors ##
+	  ##############################
+	  
+	  # default are filled rectangles
+	  if(divide.hz) {
 	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
-	 
-	 # optionally add horizon boundary distinctiveness
-	 if(! is.null(hz.distinctness.offset)) {
-	 	hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
-	 	segments(x0 - width, y0 - hz.dist.offset, x0 + width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
-		segments(x0 - width, y0 + hz.dist.offset, x0 + width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
-     }
 	    
-	 }
-    
-    # otherwise, we only draw the left, top, right borders, and then fill
-    else {
-      rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-      segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
-      segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
-      segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
-      segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
-    }
+	    # optionally add horizon boundary distinctiveness
+	    if(! is.null(hz.distinctness.offset)) {
+	      hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
+	      segments(x0 - width, y0 - hz.dist.offset, x0 + width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
+	      segments(x0 - width, y0 + hz.dist.offset, x0 + width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
+	    }
+	    
+	  } else {
+	    # otherwise, we only draw the left, top, right borders, and then fill
+	    
+	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
+	    segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
+	    segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
+	    segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
+	    segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+	  }
       
     
-	  # annotate with names
-	  # get the horizon mid-point
-	  mid <- ( y1 + y0 )/2
+	  ##################################
+	  ## horizon designations (names) ##
+	  ##################################
+	  
+	  switch(
+	    name.style, 
+	    'right-center' = {
+	      # standard annotation
+	      # offset from right-hand side
+	      hzname.x0 <- x0 + width + (one.char.width * 0.1)
+	      # horizon depth mid-point
+	      hzname.y0 <- ( y1 + y0 ) / 2
+	      # left-hand / vertical center justification
+	      hzname.adj <- c(0, 0.5)
+	      hzname.col <- 'black'
+	    },
+	    'left-center' = {
+	      # experimental
+	      # inset from left-hand side
+	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
+	      # horizon depth mid-point
+	      hzname.y0 <- ( y1 + y0 ) / 2
+	      # left-hand / vertical center justification
+	      hzname.adj <- c(0, 0.5)
+	      # high-contrast labels
+	      hzname.col <- invertLabelColor(this_profile_colors)
+	    },
+	    'left-top' = {
+	      # soilweb style
+	      # inset from upper-left corner
+	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
+	      hzname.y0 <- y1
+	      # left-hand / vertical top justification
+	      hzname.adj <- c(0, 1)
+	      # high-contrast labels
+	      hzname.col <- invertLabelColor(this_profile_colors)
+	    }
+	               
+	  )
+	  
+	  
 	  
 	  # optionally shrink the size of names if they are longer than a given thresh
 	  if(shrink) {
 		  names.to.shrink <- which(nchar(this_profile_names) > shrink.cutoff)
 		  cex.names.shrunk <- rep(cex.names, length(this_profile_data[, tcol]))
 		  cex.names.shrunk[names.to.shrink] <- cex.names.shrunk[names.to.shrink] * 0.8
-		  text(x0 + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names.shrunk)
-		  }
-	  # standard printing of names, all at the same size
-	  else
-		  text(x0 + width, mid, this_profile_names, pos=4, offset=0.1, cex=cex.names)		
+		  
+		  text(hzname.x0, hzname.y0, labels = this_profile_names, cex=cex.names.shrunk, adj=hzname.adj, col=hzname.col)
+		  } else {
+	    # standard printing of names, all at the same size
+	    text(hzname.x0, hzname.y0, labels = this_profile_names, cex=cex.names, adj=hzname.adj, col=hzname.col)
+	    
+	    ## old approach: label rigth-center, left justified, 0.1 charwidth offset
+	    # text(x0 + width, hzname.y0, this_profile_names, offset=0.1, cex=cex.names, pos=4)
+	  }
+		  		
 	  
-	  # add the profile ID
+	  #################
+	  ## profile IDs ##
+	  #################
 	  if(print.id) {
 			# optionally abbreviate
 			if(abbr)
@@ -346,13 +418,19 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, label=idname(x)
 			}
 	  }
   
-  # depth axis:
+  
+  ################
+  ## depth axis ##
+  ################
   depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
   depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
   if(plot.depth.axis)
     axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
   
-  # plot alternate labels
+  
+  ######################
+  ## alternate labels ##
+  ######################
   if(!missing(alt.label)) {
   	al <- site(x)[[alt.label]]
   	al <- al[plot.order]

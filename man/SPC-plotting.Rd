@@ -23,7 +23,8 @@ Generate a simple diagram of a soil profile, with annotated horizon names.
 }}
 
 \usage{
-plotSPC(x, color='soil_color', width=0.2, name=NULL, label=idname(x),
+plotSPC(x, color='soil_color', width=0.2, name=NULL, name.style='right-center',
+label=idname(x),
 alt.label=NULL, alt.label.col='black', cex.names=0.5, 
 cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, 
 print.id=TRUE, id.style='auto', plot.order=1:length(x), 
@@ -47,6 +48,7 @@ default.color=grey(0.95), \dots)
   \item{color}{the name of the column containing R-compatible color descriptions, or a column containing numeric or categorical data; see details}
   \item{width}{scaling of profile widths}
   \item{name}{the name of the (horizon-level) attribute containing horizon designation labels}
+  \item{name.style}{one of several possible horizon name labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'}
   \item{label}{the name of the (site-level) attribute used to identify profiles in the plot}
   \item{alt.label}{the name of a (site-level) attribute used for seconary annotation}
   \item{alt.label.col}{color used when printing secondary annotation}
