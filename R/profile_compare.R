@@ -318,7 +318,9 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
   ## However, this will result in changes to sorting of profile_id(), @site, @horizon
   ##
   ## Also, this will break with merge of aqpdf branch were sorting by ID is not performed at init time
-  s <- rebuildSPC(s)
+  ##
+  ## this was a dump idea -> going to remove these comments after re-write
+  # s <- rebuildSPC(s)
   
   
 	# extract horizons
@@ -389,7 +391,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 	## #7
 	test.labels <- ! profile_id(s) == attributes(res)$Labels
 	if(any(test.labels)) {
-	  stop('input/output IDs out of order\nthis happens when profile IDs have been changed after SPC init\nsorry, soon to be fixed (#7)', call. = FALSE)
+	  warning('SPC / distance matrix IDs out of order, soon to be fixed (#7)', call. = FALSE)
 	}
 	
 	# result is a distance matrix
