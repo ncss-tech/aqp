@@ -4,7 +4,7 @@
 \alias{invertLabelColor}
 \title{Make High Contrast Label Colors}
 \usage{
-invertLabelColor(colors, threshold = 0.6)
+invertLabelColor(colors, threshold = 0.65)
 }
 \arguments{
 \item{colors}{vector of colors}
