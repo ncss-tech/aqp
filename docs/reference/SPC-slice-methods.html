@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Slicing of SoilProfilecollection Objects — slice-methods" />
 <meta property="og:description" content="Slicing of SoilProfilecollection Objects" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
       </span>
     </div>
 
@@ -90,7 +93,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ncss-tech/aqp">
+  <a href="https://github.com/ncss-tech/aqp/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -151,7 +154,7 @@
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<dl class='dl-horizontal'>
+<dl'>
 <dt>data = "SoilProfileCollection"</dt><dd><p>Typical usage, where input is a <code><a href='SoilProfileCollection-class.html'>SoilProfileCollection</a></code>.</p></dd>
 
 </dl>
@@ -177,110 +180,96 @@
 <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'rbind'</span>, <span class='no'>d</span>)
 
 <span class='co'># init SoilProfilecollection object</span>
-<span class='fu'>depths</span>(<span class='no'>d</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='SPC-utils.html'>horizons</a></span>(<span class='no'>d</span>))</div><div class='output co'>#&gt;   id top bottom name          p1         p2         p3         p4        p5
-#&gt; 1  1   0     11   H1  -8.4806098  -5.854858  -6.455397  9.9110966  1.698955
-#&gt; 2  1  11     27   H2  -1.3730031 -21.313076  -6.813521 14.0540765 -8.968694
-#&gt; 3  1  27     49   H3   0.3075573 -30.042518  -2.072430 17.0510381  2.268630
-#&gt; 4  2   0     21   H1   2.6883412 -13.438373  -9.214566 -3.9675757  3.397193
-#&gt; 5  2  21     43   H2   0.8334879  -5.097752 -18.412770  0.5610075  6.606700
-#&gt; 6  2  43     67   H3 -11.5348197  -5.483949 -16.327257  2.5464138  5.102266
-#&gt;   hzID
-#&gt; 1    1
-#&gt; 2    2
-#&gt; 3    3
-#&gt; 4    4
-#&gt; 5    5
-#&gt; 6    6</div><div class='input'>
+<span class='fu'>depths</span>(<span class='no'>d</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>d</span>))</div><div class='output co'>#&gt;   id top bottom name         p1         p2        p3         p4        p5 hzID
+#&gt; 1  1   0     27   H1   6.890414  -2.200790 -0.290553  -2.211486  4.264161    1
+#&gt; 2  1  27     38   H2   3.757269  -9.312658  1.724278 -11.587014 10.789093    2
+#&gt; 3  1  38     48   H3   9.972540  -7.189621 19.977616  -5.522868  3.078704    3
+#&gt; 4  1  48     70   H4   5.610491 -30.351865 15.349865 -16.106523  4.714717    4
+#&gt; 5  2   0      7   H1 -10.405546  -3.644261  1.015257   1.971816  7.166193    5
+#&gt; 6  2   7     28   H2 -16.023289  -6.152889  9.389471   1.820850  3.931871    6</div><div class='input'>
 <span class='co'># generate single slice at 10 cm</span>
 <span class='co'># output is a SoilProfilecollection object</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>10</span> ~ <span class='no'>name</span> + <span class='no'>p1</span> + <span class='no'>p2</span> + <span class='no'>p3</span>)
-
+<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>10</span> ~ <span class='no'>name</span> + <span class='no'>p1</span> + <span class='no'>p2</span> + <span class='no'>p3</span>)</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
 <span class='co'># generate single slice at 10 cm, output data.frame</span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>10</span> ~ <span class='no'>name</span> + <span class='no'>p1</span> + <span class='no'>p2</span> + <span class='no'>p3</span>, <span class='kw'>just.the.data</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 
 <span class='co'># generate integer slices from 0 - 26 cm</span>
 <span class='co'># note that slices are specified by default as "top-down"</span>
 <span class='co'># e.g. the lower depth will always by top + 1</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>0</span>:<span class='fl'>25</span> ~ <span class='no'>name</span> + <span class='no'>p1</span> + <span class='no'>p2</span> + <span class='no'>p3</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>s</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='img'><img src='SPC-slice-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>0</span>:<span class='fl'>25</span> ~ <span class='no'>name</span> + <span class='no'>p1</span> + <span class='no'>p2</span> + <span class='no'>p3</span>)</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>s</span>)</div><div class='img'><img src='SPC-slice-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># generate slices from 0 - 11 cm, for all variables</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>0</span>:<span class='fl'>10</span> ~ <span class='no'>.</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>s</span>)</div><div class='output co'>#&gt; Object of class SoilProfileCollection
-#&gt; Number of profiles: 20
-#&gt; Depth range: 11-11 cm
+<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>0</span>:<span class='fl'>10</span> ~ <span class='no'>.</span>)</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `hzID_` to character</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>s</span>)</div><div class='output co'>#&gt; SoilProfileCollection with 20 profiles and 220 horizons
+#&gt; profile ID: id  |  horizon ID: sliceID 
+#&gt; Depth range: 11 - 11 cm
 #&gt; 
-#&gt; Horizon attributes:
-#&gt;     id top bottom name       p1        p2        p3       p4       p5 hzID
-#&gt; 1    1   0      1   H1 -8.48061 -5.854858 -6.455397 9.911097 1.698955    1
-#&gt; 21   1   1      2   H1 -8.48061 -5.854858 -6.455397 9.911097 1.698955    1
-#&gt; 41   1   2      3   H1 -8.48061 -5.854858 -6.455397 9.911097 1.698955    1
-#&gt; 61   1   3      4   H1 -8.48061 -5.854858 -6.455397 9.911097 1.698955    1
-#&gt; 81   1   4      5   H1 -8.48061 -5.854858 -6.455397 9.911097 1.698955    1
-#&gt; 101  1   5      6   H1 -8.48061 -5.854858 -6.455397 9.911097 1.698955    1
-#&gt;     .pctMissing sliceID
-#&gt; 1             0       1
-#&gt; 21            0       2
-#&gt; 41            0       3
-#&gt; 61            0       4
-#&gt; 81            0       5
-#&gt; 101           0       6
+#&gt; ----- Horizons (6 / 220 rows  |  10 / 12 columns) -----
+#&gt;  id top bottom name       p1       p2        p3        p4       p5 hzID
+#&gt;   1   0      1   H1 6.890414 -2.20079 -0.290553 -2.211486 4.264161    1
+#&gt;   1   1      2   H1 6.890414 -2.20079 -0.290553 -2.211486 4.264161    1
+#&gt;   1   2      3   H1 6.890414 -2.20079 -0.290553 -2.211486 4.264161    1
+#&gt;   1   3      4   H1 6.890414 -2.20079 -0.290553 -2.211486 4.264161    1
+#&gt;   1   4      5   H1 6.890414 -2.20079 -0.290553 -2.211486 4.264161    1
+#&gt;   1   5      6   H1 6.890414 -2.20079 -0.290553 -2.211486 4.264161    1
+#&gt; [... more horizons ...]
 #&gt; 
-#&gt; Sampling site attributes:
-#&gt;   id
-#&gt; 1  1
-#&gt; 2  2
-#&gt; 3  3
-#&gt; 4  4
-#&gt; 5  5
-#&gt; 6  6</div><div class='input'>
+#&gt; ----- Sites (6 / 20 rows  |  1 / 1 columns) -----
+#&gt;  id
+#&gt;   1
+#&gt;   2
+#&gt;   3
+#&gt;   4
+#&gt;   5
+#&gt;   6
+#&gt; [... more sites ...]
+#&gt; 
+#&gt; Spatial Data: [EMPTY]</div><div class='input'>
 <span class='co'># note that pct missing is computed for each slice,</span>
 <span class='co'># if all vars are missing, then NA is returned</span>
 <span class='no'>d</span>$<span class='no'>p1</span>[<span class='fl'>1</span>:<span class='fl'>10</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>d</span>, <span class='fl'>10</span> ~ <span class='no'>.</span>, <span class='kw'>just.the.data</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>s</span>)</div><div class='output co'>#&gt;    id top bottom name          p1          p2         p3          p4
-#&gt; 1   1  10     11   H1          NA  -5.8548578  -6.455397   9.9110966
-#&gt; 2   2  10     11   H1          NA -13.4383730  -9.214566  -3.9675757
-#&gt; 3   3  10     11   H1          NA -10.3855526  -7.098375   2.5332992
-#&gt; 4   4  10     11   H1  -8.5901997   2.9627848  10.151193 -11.2306271
-#&gt; 5   5  10     11   H1   0.6424483   3.8496457 -10.588296  -6.4422818
-#&gt; 6   6  10     11   H2  23.7399859  -0.2591901  -9.052555 -20.8919059
-#&gt; 7   7  10     11   H2  -1.7906226  12.5631182  10.155041 -11.2166802
-#&gt; 8   8  10     11   H2  16.2605369  30.5254192  -2.981834   4.4444243
-#&gt; 9   9  10     11   H1   5.9901877  -3.5102472   8.008558  10.0751648
-#&gt; 10 10  10     11   H1   3.5629678  -7.8370519 -12.682764   0.5135446
-#&gt; 11 11  10     11   H1 -10.4759609  11.0835563   6.091898 -11.0158648
-#&gt; 12 12  10     11   H1   2.7944855   3.3068807   7.344062   8.7263927
-#&gt; 13 13  10     11   H1   7.2643545  -1.5727642  -2.398947  -5.9866148
-#&gt; 14 14  10     11   H1   7.2887889 -15.5892160  -2.359251  -6.9244674
-#&gt; 15 15  10     11   H1  -6.2007632   5.0945328  -1.224811   9.4654761
-#&gt; 16 16  10     11   H1  -8.5552239   8.1917766 -10.093131   0.1293687
-#&gt; 17 17  10     11   H1  11.0809634   5.9647662  -3.048876  14.5724328
-#&gt; 18 18  10     11   H2 -28.2566058 -17.0327355   5.304949   6.7725202
-#&gt; 19 19  10     11   H1  -8.0746561   0.1143239  11.269240  21.3979607
-#&gt; 20 20  10     11   H1  -0.4986890   6.8664951  -1.350062   1.3553288
-#&gt;             p5 hzID .pctMissing
-#&gt; 1    1.6989552    1   0.1428571
-#&gt; 2    3.3971934    4   0.1428571
-#&gt; 3    3.7690728    7   0.1428571
-#&gt; 4  -14.3265582   11   0.0000000
-#&gt; 5    3.0935461   17   0.0000000
-#&gt; 6   -7.1430230   24   0.0000000
-#&gt; 7  -14.2737518   27   0.0000000
-#&gt; 8   -0.6313337   30   0.0000000
-#&gt; 9    4.8464993   33   0.0000000
-#&gt; 10  -3.3416537   37   0.0000000
-#&gt; 11  -2.2006346   40   0.0000000
-#&gt; 12 -11.2828046   45   0.0000000
-#&gt; 13  -2.9775371   50   0.0000000
-#&gt; 14   0.7831330   55   0.0000000
-#&gt; 15   8.4991186   61   0.0000000
-#&gt; 16  -6.9663440   67   0.0000000
-#&gt; 17  15.3749098   71   0.0000000
-#&gt; 18   0.9608613   75   0.0000000
-#&gt; 19  -8.6409595   78   0.0000000
-#&gt; 20  -2.8449711   81   0.0000000</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>s</span>)</div><div class='output co'>#&gt;    id top bottom name         p1          p2          p3         p4          p5
+#&gt; 1   1  10     11   H1         NA  -2.2007903  -0.2905530  -2.211486   4.2641615
+#&gt; 2   2  10     11   H2         NA  -6.1528890   9.3894713   1.820850   3.9318709
+#&gt; 3   3  10     11   H1  -6.963026   0.1416359   7.9615063  -3.400500   3.3858414
+#&gt; 4   4  10     11   H1   8.393822  -1.3056341  -1.2405110   6.063853   1.5583770
+#&gt; 5   5  10     11   H2  -4.907120   7.7392101  -0.2447441 -13.040039  14.7322314
+#&gt; 6   6  10     11   H2   4.644005   3.6955421 -12.3967679  12.343442  -2.6321169
+#&gt; 7   7  10     11   H1  -9.934029   0.7113311  -2.4294887  -7.898977  -2.0117186
+#&gt; 8   8  10     11   H1   4.300451   4.5529656  -5.2851955   2.637607   7.1242040
+#&gt; 9   9  10     11   H1  21.317296 -16.8190491  -3.5875320  -9.087182   1.9856734
+#&gt; 10 10  10     11   H1   9.012757  10.0192220 -14.4272109  -7.814301   3.1137039
+#&gt; 11 11  10     11   H1 -11.957766  -9.3336167 -10.1825774  12.907428  -5.0506876
+#&gt; 12 12  10     11   H1  -9.823736  -5.2004663   5.2655879   4.244027  -5.9419727
+#&gt; 13 13  10     11   H2   2.089974   4.5401075 -21.8833357   1.940483   9.8422946
+#&gt; 14 14  10     11   H2   4.355879   2.9551683 -19.0344636 -17.329413  -6.3669669
+#&gt; 15 15  10     11   H1  -8.489539  14.4637367  17.7194898   2.713977  -9.8772432
+#&gt; 16 16  10     11   H2   9.722280  -7.3072666  27.3598160   4.089197 -20.1275565
+#&gt; 17 17  10     11   H1  -9.143065  -3.5342741  11.7734014   8.110293  -7.7867489
+#&gt; 18 18  10     11   H1  -6.361547  -7.2208877  -9.8293918  -5.897784  -9.1645390
+#&gt; 19 19  10     11   H1   1.860521  -5.5614125  14.0353940  -3.204601   1.7308204
+#&gt; 20 20  10     11   H1   8.268205   1.7686856  -5.5148527  10.156186  -0.5423897
+#&gt;    hzID .pctMissing
+#&gt; 1     1   0.1428571
+#&gt; 2     6   0.1428571
+#&gt; 3    11   0.0000000
+#&gt; 4    16   0.0000000
+#&gt; 5    23   0.0000000
+#&gt; 6    28   0.0000000
+#&gt; 7    30   0.0000000
+#&gt; 8    36   0.0000000
+#&gt; 9    40   0.0000000
+#&gt; 10   46   0.0000000
+#&gt; 11   50   0.0000000
+#&gt; 12   53   0.0000000
+#&gt; 13   58   0.0000000
+#&gt; 14   64   0.0000000
+#&gt; 15   67   0.0000000
+#&gt; 16   71   0.0000000
+#&gt; 17   73   0.0000000
+#&gt; 18   77   0.0000000
+#&gt; 19   81   0.0000000
+#&gt; 20   86   0.0000000</div><div class='input'>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>## </span>
 <span class='co'>## check sliced data</span>
@@ -292,16 +281,16 @@
 <span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
 
 <span class='co'># get the first profile</span>
-<span class='no'>sp1.sub</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='SPC-utils.html'>profile_id</a></span>(<span class='no'>sp1</span>) <span class='kw'>==</span> <span class='st'>'P009'</span>), ]
+<span class='no'>sp1.sub</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>sp1</span>) <span class='kw'>==</span> <span class='st'>'P009'</span>), ]
 
 <span class='co'># compute hz-thickness wt. mean</span>
 <span class='no'>hz.wt.mean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(
-  <span class='fu'><a href='SPC-utils.html'>horizons</a></span>(<span class='no'>sp1.sub</span>),
+  <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>sp1.sub</span>),
   <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>((<span class='no'>bottom</span> - <span class='no'>top</span>) * <span class='no'>prop</span>) / <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>bottom</span> - <span class='no'>top</span>)
 )
 
 <span class='co'># hopefully the same value, calculated via slice()</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>sp1.sub</span>, <span class='fl'>0</span>:<span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>sp1.sub</span>) ~ <span class='no'>prop</span>)
+<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>slice</span>(<span class='no'>sp1.sub</span>, <span class='fl'>0</span>:<span class='fu'><a href='max.html'>max</a></span>(<span class='no'>sp1.sub</span>) ~ <span class='no'>prop</span>)
 <span class='no'>hz.slice.mean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>s</span>$<span class='no'>prop</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 
 <span class='co'># same?</span>
@@ -309,21 +298,10 @@
   <span class='fu'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span>(<span class='st'>'there is a bug in slice() !!!'</span>)
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>D.E. Beaudette</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -334,7 +312,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Thompson-Bell (1996) Index — thompson.bell.darkness • aqp</title>
+<title>Split a SoilProfileCollection object into a list of SoilProfileCollection objects. — split-methods • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Thompson-Bell (1996) Index — thompson.bell.darkness" />
-<meta property="og:description" content="Calculate the &quot;Profile Darkness Index&quot; by the method of Thompson &amp;amp; Bell (1996) &quot;Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota&quot; DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces)." />
+<meta property="og:title" content="Split a SoilProfileCollection object into a list of SoilProfileCollection objects. — split-methods" />
+<meta property="og:description" content="This function splits a SoilProfileCollection into a list of SoilProfileCollection objects using a site-level attribute to define groups or profile ID (idname(x))." />
 
 
 
@@ -111,51 +111,51 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Thompson-Bell (1996) Index</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/soilColorIndices.R'><code>R/soilColorIndices.R</code></a></small>
-    <div class="hidden name"><code>thompson.bell.darkness.Rd</code></div>
+    <h1>Split a SoilProfileCollection object into a list of SoilProfileCollection objects.</h1>
+    
+    <div class="hidden name"><code>SPC-split-methods.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate the "Profile Darkness Index" by the method of Thompson &amp; Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota" DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces).</p>
+    <p>This function splits a <code>SoilProfileCollection</code> into a <code>list</code> of <code>SoilProfileCollection</code> objects using a site-level attribute to define groups or profile ID (<code><a href='idname.html'>idname(x)</a></code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>thompson.bell.darkness</span>(
-  <span class='no'>p</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"^A"</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"m_value"</span>,
-  <span class='kw'>chroma</span> <span class='kw'>=</span> <span class='st'>"m_chroma"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>split</span>(<span class='no'>x</span>, <span class='kw'>f</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>drop</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>p</th>
-      <td><p>A single-profile SoilProfileCollection (e.g. via profileApply())</p></td>
+      <th>x</th>
+      <td><p>a <code>SoilProfileCollection</code> object</p></td>
     </tr>
     <tr>
-      <th>name</th>
-      <td><p>Column name containing horizon designations used to find A horizons (default: first column name containing 'name')</p></td>
+      <th>f</th>
+      <td><p>character vector naming a single site-level attribute that defines groups, values are automatically converted to factors if not already</p></td>
     </tr>
     <tr>
-      <th>pattern</th>
-      <td><p>Regular expression to match A horizons (default: "^A" which means horizon designation _starts with_ A)</p></td>
+      <th>drop</th>
+      <td><p>logical vector, drop unused levels of <code>f</code>?</p></td>
     </tr>
     <tr>
-      <th>value</th>
-      <td><p>Column name containing horizon color values (default: "m_value")</p></td>
-    </tr>
-    <tr>
-      <th>chroma</th>
-      <td><p>Column name containing horizon color chromas (default: "m_chroma")</p></td>
+      <th>...</th>
+      <td><p>ignored</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    <p></p><dl'>
+    
+    <dt><code>signature(x = "SoilProfileCollection")</code></dt><dd><p></p></dd>
+  
+</dl>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Ommision of <code>f</code> will result in an "identity" split, according to <code><a href='idname.html'>idname(x)</a></code>, e.g. a list as long as <code><a href='length.html'>length(x)</a></code>, with a single <code>SoilProfileCollection</code> per list element.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector reflecting horizon redness (higher values = redder).</p>
+    <p>A list object.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

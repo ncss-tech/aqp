@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Thompson-Bell (1996) Index — thompson.bell.darkness • aqp</title>
+<title>Quickly assess relative state of site and horizon slots — spc_in_sync • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,12 @@
 
 
 
-<meta property="og:title" content="Thompson-Bell (1996) Index — thompson.bell.darkness" />
-<meta property="og:description" content="Calculate the &quot;Profile Darkness Index&quot; by the method of Thompson &amp;amp; Bell (1996) &quot;Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota&quot; DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces)." />
+<meta property="og:title" content="Quickly assess relative state of site and horizon slots — spc_in_sync" />
+<meta property="og:description" content="Determine &quot;state&quot; of SoilProfileCollection before or after major modifications of site or horizon slot contents.
+Three logical checks are performed on the site and horizon tables, and a fourth attribute valid returns TRUE when all three checks are TRUE.
+Check 1: Site order is reflected in horizons. Which means: mo intermingling of sites within horizon table. Each profile is a block of contiguous rows in the horizon table. Though, they _may_ be out of order within profiles.
+Check 2: Site IDs match coalesced profile ID from horizon. This check ensures the same _relative_ ordering, but horizons still may be out of order within profiles
+Check 3: Horizon IDs are in order of profile ID in site and within profiles, have correct top-depth sequence." />
 
 
 
@@ -111,51 +115,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Thompson-Bell (1996) Index</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/soilColorIndices.R'><code>R/soilColorIndices.R</code></a></small>
-    <div class="hidden name"><code>thompson.bell.darkness.Rd</code></div>
+    <h1>Quickly assess relative state of site and horizon slots</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/SoilProfileCollection-integrity.R'><code>R/SoilProfileCollection-integrity.R</code></a></small>
+    <div class="hidden name"><code>spc_in_sync.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate the "Profile Darkness Index" by the method of Thompson &amp; Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota" DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces).</p>
+    <p>Determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents.</p>
+<p>Three logical checks are performed on the site and horizon tables, and a fourth attribute <code>valid</code> returns <code>TRUE</code> when all three checks are <code>TRUE</code>.</p>
+<p>Check 1: Site order is reflected in horizons. Which means: mo intermingling of sites within horizon table. Each profile is a block of contiguous rows in the horizon table. Though, they _may_ be out of order within profiles.</p>
+<p>Check 2: Site IDs match coalesced profile ID from horizon. This check ensures the same _relative_ ordering, but horizons still may be out of order within profiles</p>
+<p>Check 3: Horizon IDs are in order of profile ID in site and within profiles, have correct top-depth sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>thompson.bell.darkness</span>(
-  <span class='no'>p</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"^A"</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"m_value"</span>,
-  <span class='kw'>chroma</span> <span class='kw'>=</span> <span class='st'>"m_chroma"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>spc_in_sync</span>(<span class='no'>object</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>p</th>
-      <td><p>A single-profile SoilProfileCollection (e.g. via profileApply())</p></td>
-    </tr>
-    <tr>
-      <th>name</th>
-      <td><p>Column name containing horizon designations used to find A horizons (default: first column name containing 'name')</p></td>
-    </tr>
-    <tr>
-      <th>pattern</th>
-      <td><p>Regular expression to match A horizons (default: "^A" which means horizon designation _starts with_ A)</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>Column name containing horizon color values (default: "m_value")</p></td>
-    </tr>
-    <tr>
-      <th>chroma</th>
-      <td><p>Column name containing horizon color chromas (default: "m_chroma")</p></td>
+      <th>object</th>
+      <td><p>A SoilProfileCollection</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector reflecting horizon redness (higher values = redder).</p>
+    <p>data.table</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

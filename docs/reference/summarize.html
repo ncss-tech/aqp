@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Thompson-Bell (1996) Index — thompson.bell.darkness • aqp</title>
+<title>Perform summaries on groups (from <code>group_by</code>) and create new site or horizon level attributes — summarize • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Thompson-Bell (1996) Index — thompson.bell.darkness" />
-<meta property="og:description" content="Calculate the &quot;Profile Darkness Index&quot; by the method of Thompson &amp;amp; Bell (1996) &quot;Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota&quot; DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces)." />
+<meta property="og:title" content="Perform summaries on groups (from <code>group_by</code>) and create new site or horizon level attributes — summarize" />
+<meta property="og:description" content="summarize() is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable." />
 
 
 
@@ -111,51 +111,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Thompson-Bell (1996) Index</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/soilColorIndices.R'><code>R/soilColorIndices.R</code></a></small>
-    <div class="hidden name"><code>thompson.bell.darkness.Rd</code></div>
+    <h1>Perform summaries on groups (from <code>group_by</code>) and create new site or horizon level attributes</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/summarize.R'><code>R/summarize.R</code></a></small>
+    <div class="hidden name"><code>summarize.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate the "Profile Darkness Index" by the method of Thompson &amp; Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota" DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces).</p>
+    <p><code>summarize()</code> is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>thompson.bell.darkness</span>(
-  <span class='no'>p</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"^A"</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"m_value"</span>,
-  <span class='kw'>chroma</span> <span class='kw'>=</span> <span class='st'>"m_chroma"</span>
-)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>p</th>
-      <td><p>A single-profile SoilProfileCollection (e.g. via profileApply())</p></td>
+      <th>object</th>
+      <td><p>A SoilProfileCollection</p></td>
     </tr>
     <tr>
-      <th>name</th>
-      <td><p>Column name containing horizon designations used to find A horizons (default: first column name containing 'name')</p></td>
-    </tr>
-    <tr>
-      <th>pattern</th>
-      <td><p>Regular expression to match A horizons (default: "^A" which means horizon designation _starts with_ A)</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>Column name containing horizon color values (default: "m_value")</p></td>
-    </tr>
-    <tr>
-      <th>chroma</th>
-      <td><p>Column name containing horizon color chromas (default: "m_chroma")</p></td>
+      <th>...</th>
+      <td><p>A set of (named) comma-delimited R expressions that resolve to a summary value. e.g <code>groupmean = mean(clay, na.rm = TRUE)</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector reflecting horizon redness (higher values = redder).</p>
+    <p>A data.frame with one row per level in the grouping variable, and one column for each summary</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
