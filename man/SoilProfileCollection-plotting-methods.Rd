@@ -38,8 +38,7 @@ plotSPC(
   abbr.cutoff = 5,
   divide.hz = TRUE,
   hz.distinctness.offset = NULL,
-  hz.distinctness.offset.col = "black",
-  hz.distinctness.offset.lty = 2,
+  hz.topography.lty = NULL,
   axis.line.offset = -2.5,
   plot.depth.axis = TRUE,
   density = NULL,
@@ -66,6 +65,8 @@ plotSPC(
 \item{name.style}{one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'}
 
 \item{label}{quoted column name of the (site-level) attribute used to identify profile sketches}
+
+\item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (FALSE)}
 
 \item{alt.label}{quoted column name of the (site-level) attribute used for secondary annotation}
 
@@ -113,9 +114,7 @@ plotSPC(
 
 \item{hz.distinctness.offset}{quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}}
 
-\item{hz.distinctness.offset.col}{color used to encode horizon distinctness (default is 'black')}
-
-\item{hz.distinctness.offset.lty}{line style used to encode horizon distinctness (default is 2)}
+\item{hz.topography.lty}{quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography}
 
 \item{axis.line.offset}{horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)}
 

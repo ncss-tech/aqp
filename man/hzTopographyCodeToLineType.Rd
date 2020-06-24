@@ -25,7 +25,7 @@ This function will convert USDA-NCSS horizon boundary topography codes into line
 }
 \examples{
 
-example data
+# example data
 data(sp1)
 
 # compute 1/2 transitional zone thickness from distinctness codes
