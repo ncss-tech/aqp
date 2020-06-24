@@ -39,7 +39,7 @@
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 ## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='right-center', label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.palette.bias=1, col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='right-center', label=idname(x), hz.depths=FALSE, alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.palette.bias=1, col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
   
   ###################
   ## sanity checks ##
@@ -317,32 +317,100 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
 	  ## create horizons + colors ##
 	  ##############################
 	  
-	  # default are filled rectangles
-	  if(divide.hz) {
-	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
+	  # horizons are parallelograms, with offset described by hz.distinctness.offset
+	  if(! is.null(hz.distinctness.offset)) {
 	    
-	    # optionally add horizon boundary distinctiveness
-	    if(! is.null(hz.distinctness.offset)) {
-	      hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
-	      segments(x0 - width, y0 - hz.dist.offset, x0 + width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
-	      segments(x0 - width, y0 + hz.dist.offset, x0 + width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
+	    hdo <- this_profile_data[, hz.distinctness.offset]
+	    
+	    ## TODO: finish this
+	    # include boundary lines?
+	    # hzb <- ifelse(divide.hz, NULL, NA)
+	    
+	    # TODO: use segments to create hz border line
+	    
+	    ## TODO: finish truncate upper / lower offsets at adjacent horizon depths
+	    
+	    nh <- length(y0)
+	    for(j in 1:nh) {
+	      
+	      # # rectangle
+	      # xx <- c(x0 - width, x0 + width, x0 + width, x0 - width)
+	      # yy <- c(y0[j], y0[j], y1[j], y1[j])
+	      
+	      # parallelograms
+	      # vertex order: ll, lr, ur, ul
+	      x.ll <- x0 - width
+	      x.lr <- x0 + width
+	      x.ur <- x0 + width
+	      x.ul <- x0 - width
+	      xx <- c(x.ll, x.lr, x.ur, x.ul)
+	      
+	      if(j == 1){
+	        # first horizon
+	        y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
+	        y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
+	        y.ur <- y1[j]
+	        y.ul <- y1[j]
+	        
+	        yy <- c(y.ll, y.lr, y.ur, y.ul)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NULL, density=this_profile_density[j], lwd=lwd, lty=lty)
+	        # segments(x0 = x.ll, y0 = y.ll, x1 = x.lr, y1 = y.lr, lwd=lwd, lty=lty)
+	      } else if(j < nh) {
+	        # next horizons before last horizon
+	        y.ll <- y0[j] + hdo[j]
+	        y.lr <- pmax(y0[j] - hdo[j], y0[j-1])
+	        y.ur <- y1[j] - hdo[j-1]
+	        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1])
+	        y.ul <- y1[j] + hdo[j-1]
+	        
+	        yy <- c(y.ll, y.lr, y.ur, y.ul)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NULL, density=this_profile_density[j], lwd=lwd, lty=lty)
+	        # segments(x0 = x.ll, y0 = y.ll, x1 = x.lr, y1 = y.lr, lwd=lwd, lty=lty)
+	        
+	      } else {
+	        # last horizon
+	        y.ll <- y0[j]
+	        y.lr <- y0[j]
+	        y.ur <- y1[j] - hdo[j-1]
+	        y.ul <- y1[j] + hdo[j-1]
+	        
+	        yy <- c(y.ll, y.lr, y.ur, y.ul)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NULL, density=this_profile_density[j], lwd=lwd, lty=lty)
+	        
+	      }
+	      
 	    }
 	    
-	  } else {
-	    # otherwise, we only draw the left, top, right borders, and then fill
+	    ## TODO: final rectangle border around enture profile
 	    
-	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-	    segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
-	    segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
-	    segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
-	    segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+	    ## TODO: make horizon depth marker optional
+	    points(rep(x0, times=nh), y0, pch=15, col='black', cex=0.5)
+	    
+	  } else {
+	    # standard rectanges
+	    # default are filled rectangles
+	    if(divide.hz) {
+	      # classic approach: use rectangles, fully vectorized and automatic recycling over arguments
+	      # x0 and width have length of 1
+	      rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
+	      
+	    } else {
+	      # otherwise, we only draw the left, top, right borders, and then fill
+	      
+	      rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
+	      segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
+	      segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
+	      segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
+	      segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+	    }
 	  }
+	  
+	  
       
     
 	  ##################################
 	  ## horizon designations (names) ##
 	  ##################################
-	  
 	  switch(
 	    name.style, 
 	    'right-center' = {
@@ -394,7 +462,16 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
 	    
 	    ## old approach: label rigth-center, left justified, 0.1 charwidth offset
 	    # text(x0 + width, hzname.y0, this_profile_names, offset=0.1, cex=cex.names, pos=4)
+		  }
+	  
+	  
+	  ##################################
+	  ## horizon top depth annotation ##
+	  ##################################
+	  if(hz.depths) {
+	    text(x0 + width, y1, this_profile_data[, tcol], cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1) 
 	  }
+	  
 		  		
 	  
 	  #################
@@ -422,10 +499,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   ################
   ## depth axis ##
   ################
-  depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
-  depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
-  if(plot.depth.axis)
+  if(plot.depth.axis) {
+    depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
+    depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))  
+    
     axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
+  }
+    
   
   
   ######################
@@ -437,7 +517,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   	text(1:length(x), y.offset+3, al, srt=90, adj=c(1, 0.5), font=2, cex=cex.id * 1.5, col=alt.label.col)
   }
   
-  # add a legend for thematic profile sketch
+  
+  ########################################
+  ## legend for thematic profile sketch ##
+  ########################################
   if(exists('color.legend.data')) {
     # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
