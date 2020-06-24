@@ -49,17 +49,19 @@
 #' @description Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} contains many examples and discussion of the large number of arguments to this function.
 #' 
 #' @param x a \code{SoilProfileCollection} object
-
+#' 
 #' @param color quoted column name containing R-compatible color descriptions, or numeric / categorical data to be displayed thematically; see details
-
+#' 
 #' @param width scaling of profile widths (typically 0.1-0.4)
-
+#' 
 #' @param name quoted column name of the (horizon-level) attribute containing horizon designations, can be left as \code{NULL} and horizon designation column will be selected via \code{hzdesgnname(x)}.
-
+#' 
 #' @param name.style one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'
-
+#' 
 #' @param label quoted column name of the (site-level) attribute used to identify profile sketches
-
+#' 
+#' @param hz.depths logical, annotate horizon top depths to the right of each sketch (FALSE)
+#'
 #' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
 #' 
 #' @param alt.label.col color used for secondary annotation text
@@ -106,9 +108,7 @@
 #' 
 #' @param hz.distinctness.offset quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}
 #' 
-#' @param hz.distinctness.offset.col color used to encode horizon distinctness (default is 'black')
-#' 
-#' @param hz.distinctness.offset.lty line style used to encode horizon distinctness (default is 2)
+#' @param hz.topography.lty quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography
 #' 
 #' @param axis.line.offset horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)
 #' 
@@ -269,8 +269,7 @@ plotSPC <- function(
   abbr.cutoff=5, 
   divide.hz=TRUE, 
   hz.distinctness.offset=NULL, 
-  hz.distinctness.offset.col='black', 
-  hz.distinctness.offset.lty=2, 
+  hz.topography.lty=NULL, 
   axis.line.offset=-2.5, 
   plot.depth.axis=TRUE, 
   density=NULL, 
@@ -293,6 +292,28 @@ plotSPC <- function(
   if(! name.style %in% c('right-center', 'left-center', 'left-top')) {
     warning('invalid `name.style`', call. = FALSE)
     name.style <- 'right-center'
+  }
+  
+  # horizon distinctness offset column name must be valid
+  if(!missing(hz.distinctness.offset)) {
+    # valid name
+    if(! hz.distinctness.offset %in% horizonNames(x))
+      stop('invalid `hz.distinctness.offset` column name', call. = FALSE)
+    
+    # must be numeric
+    if(! is.numeric(x[[hz.distinctness.offset]]))
+      stop('`hz.distinctness.offset` must be numeric', call. = FALSE)
+  }
+  
+  # horizon topography
+  if(!missing(hz.topography.lty)) {
+    # valid name
+    if(! hz.topography.lty %in% horizonNames(x))
+      stop('invalid `hz.topography.lty` column name', call. = FALSE)
+    
+    # must be numeric
+    if(! is.numeric(x[[hz.topography.lty]]))
+      stop('`hz.topography.lty` must be numeric', call. = FALSE)
   }
   
   
@@ -537,9 +558,9 @@ plotSPC <- function(
       this_profile_names <- ''
     
 	  
-    #################################
-	  ## generate rectangle geometry ##
-    #################################
+    ########################################
+	  ## generate baseline horizon geometry ##
+    ########################################
     
     ## center of each sketch
     # 2019-07-15: added relative position feature, could use some more testing
@@ -552,10 +573,8 @@ plotSPC <- function(
 	
 	  
 	  ##
-	  ## TODO: use horizon boundary type and topography to modify figures
+	  ## TODO: use a zig-zag to denote topography
 	  ##
-	  ## i.e. clear-wavy = dashed lines at an angle, based on red book
-	  
 	  
 	  ##############################
 	  ## create horizons + colors ##
@@ -564,24 +583,34 @@ plotSPC <- function(
 	  # horizons are parallelograms, with offset described by hz.distinctness.offset
 	  if(! is.null(hz.distinctness.offset)) {
 	    
+	    # iterate over horizons
+	    nh <- length(y0)
+	    
+	    # extract current set of offsets
 	    hdo <- this_profile_data[, hz.distinctness.offset]
 	    
-	    ## TODO: finish this
-	    # include boundary lines?
-	    # hzb <- ifelse(divide.hz, NULL, NA)
+	    # extract current set of line types if provided
+	    if(! is.null(hz.topography.lty)) {
+	      ht.lty <- this_profile_data[, hz.topography.lty]
+	    } else {
+	      # use constant value
+	      ht.lty <- rep(1, times=nh)
+	    }
 	    
-	    # TODO: use segments to create hz border line
 	    
-	    ## TODO: finish truncate upper / lower offsets at adjacent horizon depths
+	    # empty list for storing y-coordinates
+	    coords.list <- vector(mode = 'list', length = nh)
 	    
-	    nh <- length(y0)
 	    for(j in 1:nh) {
 	      
-	      # # rectangle
+	      ## rectangle for reference
 	      # xx <- c(x0 - width, x0 + width, x0 + width, x0 - width)
 	      # yy <- c(y0[j], y0[j], y1[j], y1[j])
 	      
-	      # parallelograms
+	      # parallelogram geometry: x-coords are fixed, y-coords vary based on horizon sequence
+	      # y0 are bottom depths
+	      # y1 are top depths
+	      #
 	      # vertex order: ll, lr, ur, ul
 	      x.ll <- x0 - width
 	      x.lr <- x0 + width
@@ -589,46 +618,75 @@ plotSPC <- function(
 	      x.ul <- x0 - width
 	      xx <- c(x.ll, x.lr, x.ur, x.ul)
 	      
+	      # make polygons based on 1st, 2nd to j-1, last horizon
 	      if(j == 1){
 	        # first horizon
 	        y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
 	        y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
-	        y.ur <- y1[j]
-	        y.ul <- y1[j]
+	        y.ur <- y1[j] # use upper-right verbatim
+	        y.ul <- y1[j] # use upper-left verbatim
 	        
+	        # assemble y-coords and plot first horizon polygon, without borders
 	        yy <- c(y.ll, y.lr, y.ur, y.ul)
-	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NULL, density=this_profile_density[j], lwd=lwd, lty=lty)
-	        # segments(x0 = x.ll, y0 = y.ll, x1 = x.lr, y1 = y.lr, lwd=lwd, lty=lty)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+	          
 	      } else if(j < nh) {
-	        # next horizons before last horizon
-	        y.ll <- y0[j] + hdo[j]
-	        y.lr <- pmax(y0[j] - hdo[j], y0[j-1])
-	        y.ur <- y1[j] - hdo[j-1]
-	        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1])
-	        y.ul <- y1[j] + hdo[j-1]
+	        # next horizons, except bottom-most horizon
+	        y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
+	        y.lr <- pmax(y0[j] - hdo[j], y0[j-1]) # cannot exceed y.lr of previous horizon
+	        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
+	        y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed y.ul of previous horizon
 	        
+	        # assemble y-coords and plot next n horizon's polygon, without borders
 	        yy <- c(y.ll, y.lr, y.ur, y.ul)
-	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NULL, density=this_profile_density[j], lwd=lwd, lty=lty)
-	        # segments(x0 = x.ll, y0 = y.ll, x1 = x.lr, y1 = y.lr, lwd=lwd, lty=lty)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+	        ## debugging
+	        # polygon(x = xx, y = yy, col=NA, border='red', density=this_profile_density[j], lwd=lwd, lty=lty)
 	        
 	      } else {
 	        # last horizon
-	        y.ll <- y0[j]
-	        y.lr <- y0[j]
-	        y.ur <- y1[j] - hdo[j-1]
-	        y.ul <- y1[j] + hdo[j-1]
+	        y.ll <- y0[j] # user lower-left verbatim
+	        y.lr <- y0[j] # use lower-right verbatim
+	        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
+	        y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed lower depth of profile
 	        
+	        # assemble y-coords and plot last horizon polygon, without borders
 	        yy <- c(y.ll, y.lr, y.ur, y.ul)
-	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NULL, density=this_profile_density[j], lwd=lwd, lty=lty)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
 	        
 	      }
 	      
+	      # save current iteration of coordinates and line type
+	      coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
 	    }
 	    
-	    ## TODO: final rectangle border around enture profile
+	    ## note: have to do this after the polygons, otherwise the lines are over-plotted
+	    # optionally divide horizons with line segment
+	    if(divide.hz) {
+	     
+	      # iterate over coordinates, note includes lty 
+	      lapply(coords.list, function(seg) {
+	        segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd=lwd, lty=seg$lty, lend=1) 
+	      })
+	    }
 	    
-	    ## TODO: make horizon depth marker optional
-	    points(rep(x0, times=nh), y0, pch=15, col='black', cex=0.5)
+	    # final rectangle border around entire profile
+	    rect(xleft = x0 - width, ybottom = min(y1, na.rm = TRUE), xright = x0 + width, ytop = max(y0, na.rm = TRUE), lwd=lwd, lty=lty, lend=2)
+	    
+	    
+	    ## TODO: re-think this next part
+	    if(is.null(hz.topography.lty)) {
+	      
+	      ## TODO: should be optional, and adjustable
+	      # horizon depth 
+	      points(rep(x0, times=nh), y0, pch=15, col=par('fg'), cex=0.66) 
+	    } else {
+	      
+	      ## TODO: think of a better approach
+	      # hz topographic code
+	      text(rep(x0, times=nh), y0, labels = ht.lty, col=invertLabelColor(this_profile_colors), font=2, cex=0.66)
+	    }
+	    
 	    
 	  } else {
 	    # standard rectanges
@@ -806,8 +864,8 @@ plotSPC <- function(
   }
 
 
-
-# method dispatch
+#' generic plot method for \code{SoilProfileCollection} objects
+#'
 setMethod("plot", signature("SoilProfileCollection"), definition=plotSPC)
 
 
