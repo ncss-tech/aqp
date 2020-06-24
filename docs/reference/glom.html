@@ -6,27 +6,31 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a "ragged" group of horizons selected from SoilProfileCollection — glom • aqp</title>
+<title>Subset soil horizon data using a depth or depth interval — glom • aqp</title>
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -35,14 +39,11 @@
 
 
 
-<meta property="og:title" content="Return a "ragged" group of horizons selected from SoilProfileCollection — glom" />
-<meta property="og:description" content="glom() returns a &quot;clod&quot; of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You &quot;glom&quot; SPC horizons into a &quot;clod&quot;.
-A clod is a &quot;ragged&quot; group of horizons. In this case, &quot;ragged&quot; means that number of horizons, horizon depths, distinctness and topography vary from pedon to pedon.
-All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like slice or slab.
-If intersection at the specified boundaries [`z1`, `z2`] results in no horizon data, `NA` is returned with a warning containing the offending pedon ID. If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. End users should handle the possibility of incomplete pedons using evalMissingData or similar approach.
-Horizon intersection is based on unique ID hzidname(spc) and attribute of interest.
-Currently, just depth/depth intervals are supported as common attribute for creating a clod i.e. all horizons overlapping interval 25 to 100 cm -- but many other attributes are possible and will be implemented perhaps via formula interface similar to slice." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Subset soil horizon data using a depth or depth interval — glom" />
+<meta property="og:description" content="glom() returns a &quot;clod&quot; of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You &quot;glom&quot; SPC horizons into a ragged group of horizons or a &quot;clod.&quot; In this case, &quot;ragged&quot; means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID hzidname(spc) and attribute of interest.
+If intersection at the specified boundaries ['z1', 'z2'] results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
+If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using evalMissingData or similar approach." />
 
 
 
@@ -60,7 +61,7 @@ Currently, just depth/depth intervals are supported as common attribute for crea
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,7 +75,7 @@ Currently, just depth/depth intervals are supported as common attribute for crea
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
       </span>
     </div>
 
@@ -95,7 +96,7 @@ Currently, just depth/depth intervals are supported as common attribute for crea
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ncss-tech/aqp">
+  <a href="https://github.com/ncss-tech/aqp/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -113,72 +114,87 @@ Currently, just depth/depth intervals are supported as common attribute for crea
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a "ragged" group of horizons selected from SoilProfileCollection</h1>
-    
+    <h1>Subset soil horizon data using a depth or depth interval</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/glom.R'><code>R/glom.R</code></a></small>
     <div class="hidden name"><code>glom.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>glom()</code> returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a "clod".</p>
-<p>A clod is a "ragged" group of horizons. In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from pedon to pedon.</p>
-<p>All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). A 'clod' references the original pedon data -- it is not resampled like <code><a href='SPC-slice-methods.html'>slice</a></code> or <code><a href='SPC-slab-methods.html'>slab</a></code>.</p>
-<p>If intersection at the specified boundaries [`z1`, `z2`] results in no horizon data, `NA` is returned with a warning containing the offending pedon ID. If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. End users should handle the possibility of incomplete pedons using <code><a href='evalMissingData.html'>evalMissingData</a></code> or similar approach.</p>
-<p>Horizon intersection is based on unique ID <code><a href='SPC-utils.html'>hzidname(spc)</a></code> and attribute of interest.</p>
-<p>Currently, just depth/depth intervals are supported as common attribute for creating a clod i.e. all horizons overlapping interval 25 to 100 cm -- but many other attributes are possible and will be implemented perhaps via formula interface similar to <code>slice</code>.</p>
+    <p>glom() returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.</p>
+<p>All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID <code><a href='hzidname.html'>hzidname(spc)</a></code> and attribute of interest.</p>
+<p>If intersection at the specified boundaries <code>['z1', 'z2']</code> results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.</p>
+<p>If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using <code>evalMissingData</code> or similar approach.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>glom</span>(<span class='no'>p</span>, <span class='no'>z1</span>, <span class='kw'>z2</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>as.data.frame</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>glom</span>(
+  <span class='no'>p</span>,
+  <span class='no'>z1</span>,
+  <span class='kw'>z2</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>invert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>modality</span> <span class='kw'>=</span> <span class='st'>"all"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>p</th>
-      <td><p>A single-profile SoilProfileCollection; e.g. <code>glom</code> is called via <code><a href='profileApply-methods.html'>profileApply()</a></code></p></td>
+      <td><p>A single-profile SoilProfileCollection; e.g. glom is called via profileApply()</p></td>
     </tr>
     <tr>
       <th>z1</th>
-      <td><p>Top depth (required) - depth to intersect horizon at; if `z2` specified, top depth of intersect interval.</p></td>
+      <td><p>Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersect interval.</p></td>
     </tr>
     <tr>
       <th>z2</th>
       <td><p>OPTIONAL: Bottom depth - bottom depth of intersection interval</p></td>
     </tr>
     <tr>
-      <th>as.data.frame</th>
-      <td><p>OPTIONAL: return a data.frame, by intersection with horizons(p)? default: FALSE</p></td>
+      <th>ids</th>
+      <td><p>Return just horizon IDs in interval? default: FALSE</p></td>
+    </tr>
+    <tr>
+      <th>df</th>
+      <td><p>Return a data.frame, by intersection with horizons(p)? default: FALSE</p></td>
+    </tr>
+    <tr>
+      <th>truncate</th>
+      <td><p>Truncate horizon top and bottom depths to z1 and z2? default: FALSE</p></td>
+    </tr>
+    <tr>
+      <th>invert</th>
+      <td><p>Get the horizons/depth ranges of the profile outside the interval z1/z2? default: FALSE</p></td>
+    </tr>
+    <tr>
+      <th>modality</th>
+      <td><p>Return all data (default: "all") or first, thickest (<code>modality = "thickest"</code>) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.frame or SoilProfileCllection representation of the "clod" of horizons that have a common depth range</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>A SoilProfileCollection, data.frame, or a vector of horizon IDs.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <div class='dont-index'><p><code><a href='SPC-slice-methods.html'>slice</a></code>, <code><a href='SPC-slab-methods.html'>slab</a></code></p></div>
+    <p>The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='fu'><a href='SPC-utils.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
 
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
 
 <span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>glom</span>(<span class='no'>p</span>, <span class='fl'>25</span>, <span class='fl'>100</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Lower boundary `z2` (100) is deeper than bottom depth of deepest horizon (89) in subset. (id: P001)</span></div><div class='input'>
 <span class='co'># there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1</span>
-<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>foo</span>)</div><div class='output co'>#&gt; [1] 4</div></pre>
+<span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='no'>foo</span>)</div><div class='output co'>#&gt; [1] 4</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Andrew Gene Brown</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -189,7 +205,7 @@ Currently, just depth/depth intervals are supported as common attribute for crea
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

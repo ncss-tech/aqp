@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
       </span>
     </div>
 
@@ -88,7 +92,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ncss-tech/aqp">
+  <a href="https://github.com/ncss-tech/aqp/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -124,6 +128,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -154,6 +163,12 @@
           <p><code><a href="aqp-package.html">aqp-package</a></code> </p>
         </td>
         <td><p>Algorithms for Quantitative Pedology</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="aqp_df_class.html">aqp_df_class</a></code> </p>
+        </td>
+        <td><p>Get aqp_df_class entry from metadata or return a safe value.</p></td>
       </tr><tr>
         
         <td>
@@ -199,9 +214,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="clod.hz.ids.html">clod.hz.ids()</a></code> </p>
+          <p><code><a href="coercion-methods.html">as</a></code> </p>
         </td>
-        <td><p>Return the unique horizon IDs within a "depth-clod"</p></td>
+        <td><p>Coerce SoilProfileCollection with <code>as()</code></p></td>
       </tr><tr>
         
         <td>
@@ -223,6 +238,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="compositeSPC.html">compositeSPC()</a></code> </p>
+        </td>
+        <td><p>Return a list representation of site and horizon level data</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="confusionIndex.html">confusionIndex()</a></code> </p>
         </td>
         <td><p>Confusion Index</p></td>
@@ -241,6 +262,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="coordinates.html">coordinates(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="coordinates.html">`coordinates&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get coordinates from spatial slot</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="crit.clay.argillic.html">crit.clay.argillic()</a></code> </p>
         </td>
         <td><p>Determines threshold (minimum) clay content for argillic upper bound</p></td>
@@ -250,6 +277,54 @@
           <p><code><a href="denormalize.html">denormalize()</a></code> </p>
         </td>
         <td><p>Create a (redundant) horizon-level attribute from a site-level attribute</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="depthOf.html">depthOf()</a></code> </p>
+        </td>
+        <td><p>Get top or bottom depths of horizons matching a regular expression pattern</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="depths.html">`depths&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="depths.html">`depths&lt;-`(<i>&lt;data.frame&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Initialize a SoilProfileCollection from a data.frame object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="depthWeights.html">depthWeights()</a></code> </p>
+        </td>
+        <td><p>Return a vector of contributing fractions over a depth interval</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="depth_units.html">depth_units</a></code> </p>
+        </td>
+        <td><p>Get depth units from metadata</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="diagnostic_hz-set.html">diagnostic_hz<-</a></code> </p>
+        </td>
+        <td><p>Add data to the diagnostic slot</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="diagnostic_hz.html">diagnostic_hz</a></code> </p>
+        </td>
+        <td><p>Retrieve diagnostic data from SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dollarsign.html">`$`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="dollarsign.html">`$&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Access column of horizon or site data in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="doublebracket.html">`[[`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;character&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="doublebracket.html">`[[&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get, add or change column of horizon or site data in a SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
@@ -277,9 +352,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="explainPlotSPC.html">explainPlotSPC()</a></code> </p>
+        </td>
+        <td><p>Visual Explanation for <code>plotSPC</code></p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="f.noise.html">f.noise()</a></code> </p>
         </td>
         <td><p>Example Objective Function for Full-Pattern Matching</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filter.html">filter</a></code> </p>
+        </td>
+        <td><p>Subset a SoilProfileCollection with logical expressions</p></td>
       </tr><tr>
         
         <td>
@@ -315,7 +402,13 @@
         <td>
           <p><code><a href="getArgillicBounds.html">getArgillicBounds()</a></code> </p>
         </td>
-        <td><p>getArgillicBounds</p></td>
+        <td><p>Estimate upper and lower boundary of argillic diagnostic subsurface horizon</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getCambicBounds.html">getCambicBounds()</a></code> </p>
+        </td>
+        <td><p>Find all intervals that are potentially part of a Cambic horizon</p></td>
       </tr><tr>
         
         <td>
@@ -325,7 +418,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code> </p>
+          <p><code><a href="getSurfaceHorizonDepth.html">getMineralSoilSurfaceDepth()</a></code> <code><a href="getSurfaceHorizonDepth.html">getPlowLayerDepth()</a></code> </p>
         </td>
         <td><p>Determine thickness of horizons (continuous from surface) matching a pattern</p></td>
       </tr><tr>
@@ -333,7 +426,19 @@
         <td>
           <p><code><a href="glom.html">glom()</a></code> </p>
         </td>
-        <td><p>Return a "ragged" group of horizons selected from SoilProfileCollection</p></td>
+        <td><p>Subset soil horizon data using a depth or depth interval</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="glomApply.html">glomApply()</a></code> </p>
+        </td>
+        <td><p>Subset an SPC by applying glom to each profile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="grepSPC.html">grepSPC</a></code> </p>
+        </td>
+        <td><p>Subset SPC with pattern-matching for text-based attributes</p></td>
       </tr><tr>
         
         <td>
@@ -343,9 +448,33 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="group_by.html">group_by(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>[EXPERIMENTAL] Store groupings within a profile collection.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="guessGenHzLevels.html">guessGenHzLevels()</a></code> </p>
         </td>
         <td><p>Guess Appropriate Ordering for Generalized Horizon Labels</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="guessHzAttrName.html">guessHzAttrName()</a></code> </p>
+        </td>
+        <td><p>Guess Arbitrary Horizon Column Name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="guessHzDesgnName.html">guessHzDesgnName()</a></code> </p>
+        </td>
+        <td><p>Guess Horizon Designation Column Name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="guessHzTexClName.html">guessHzTexClName()</a></code> </p>
+        </td>
+        <td><p>Guess Horizon Texture Class Column Name</p></td>
       </tr><tr>
         
         <td>
@@ -361,9 +490,33 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="hasDarkColors.html">hasDarkColors()</a></code> </p>
+        </td>
+        <td><p>Find horizons with colors darker than a Munsell hue, value, chroma threshold</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="horizonColorIndices.html">horizonColorIndices()</a></code> </p>
         </td>
         <td><p>Horizon Color Indices</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="horizonDepths.html">horizonDepths<-</a></code> </p>
+        </td>
+        <td><p>Set horizon depth column names</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="horizonNames.html">horizonNames<-</a></code> </p>
+        </td>
+        <td><p>Set horizon column names</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="horizons.html">horizons</a></code> </p>
+        </td>
+        <td><p>Retrieve horizon data from SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
@@ -385,9 +538,63 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="hzDesgn.html">hzDesgn</a></code> </p>
+        </td>
+        <td><p>Get horizon designation column name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hzdesgnname-set.html">hzdesgnname<-</a></code> </p>
+        </td>
+        <td><p>Set horizon designation column name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hzdesgnname.html">hzdesgnname</a></code> </p>
+        </td>
+        <td><p>Get horizon designation column name</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="hzDistinctnessCodeToOffset.html">hzDistinctnessCodeToOffset()</a></code> </p>
         </td>
-        <td><p>Convert Horizon Distinctness Codes</p></td>
+        <td><p>Convert Horizon Boundary Distinctness to Vertical Offset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hzID-set.html">hzID<-</a></code> </p>
+        </td>
+        <td><p>Set horizon IDs</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hzID.html">hzID</a></code> </p>
+        </td>
+        <td><p>Get horizon IDs</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hzidname.html">hzidname<-</a></code> </p>
+        </td>
+        <td><p>Set horizon ID column name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hztexclname-set.html">hztexclname<-</a></code> </p>
+        </td>
+        <td><p>Set horizon texture class column name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hztexclname.html">hztexclname</a></code> </p>
+        </td>
+        <td><p>Get horizon texture class column name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hzTopographyCodeToLineType.html">hzTopographyCodeToLineType()</a></code> </p>
+        </td>
+        <td><p>Convert Horizon Boundary Topography Distinctness to Line Type</p></td>
       </tr><tr>
         
         <td>
@@ -397,15 +604,63 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="idname.html">idname</a></code> </p>
+        </td>
+        <td><p>Get profile ID column name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="invertLabelColor.html">invertLabelColor()</a></code> </p>
+        </td>
+        <td><p>Make High Contrast Label Colors</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="jacobs2000.html">jacobs2000</a></code> </p>
         </td>
         <td><p>Soil Morphologic Data from Jacobs et al. 2002.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="length.html">length(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the number of profiles in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="lunique.html">lunique()</a></code> </p>
+        </td>
+        <td><p>Eliminate duplicate instances of  profile IDs in a list of SoilProfileCollections</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="max.html">max(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the maximum bottom depth in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="metadata.html">metadata(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="metadata.html">`metadata&lt;-`()</a></code> </p>
+        </td>
+        <td><p>Retrieve metadata from SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="min.html">min(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the minimum bottom depth in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="missingDataGrid.html">missingDataGrid()</a></code> </p>
         </td>
         <td><p>Missing Data Grid</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mollic.thickness.requirement.html">mollic.thickness.requirement()</a></code> </p>
+        </td>
+        <td><p>Calculate the minimum thickness requirement for Mollic epipedon</p></td>
       </tr><tr>
         
         <td>
@@ -421,9 +676,45 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mutate.html">mutate</a></code> </p>
+        </td>
+        <td><p>Transform a SPC with expressions based on site or horizon level attributes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mutate_profile.html">mutate_profile</a></code> </p>
+        </td>
+        <td><p>Transform a SPC (by profile) with a set of expressions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="names.html">names(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get names of columns in site and horizons table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nrow.html">nrow</a></code> </p>
+        </td>
+        <td><p>Get the number of horizons in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="panel.depth_function.html">panel.depth_function()</a></code> </p>
         </td>
         <td><p>Lattice Panel Function for Soil Profiles</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="permute_profile.html">permute_profile()</a></code> </p>
+        </td>
+        <td><p>Permute soil horizon depths using boundary distinctness</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot-SoilProfileCollection-ANY-method.html">plot(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>generic plot method for <code>SoilProfileCollection</code> objects</p></td>
       </tr><tr>
         
         <td>
@@ -445,9 +736,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="profileApply-methods.html">profileApply()</a></code> </p>
+          <p><code><a href="profileApply.html">profileApply(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Apply a function to soil profiles within a SoilProfileCollection object.</p></td>
+        <td><p>Iterate over profiles in a SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
@@ -463,9 +754,33 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="profile_id.html">profile_id<-</a></code> </p>
+        </td>
+        <td><p>Set profile IDs</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="proj4string-set-SoilProfileCollection-ANY-method.html">`proj4string&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set PROJ4 string for the SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="proj4string-SoilProfileCollection-method.html">proj4string(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Set PROJ4 string for the SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="random_profile.html">random_profile()</a></code> </p>
         </td>
         <td><p>Random Profile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rbind.SoilProfileCollection.html">rbind(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>[DEPRECATED] rbind.SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
@@ -475,9 +790,39 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="reorderHorizons.html">reorderHorizons(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Re-order corrupted horizon data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="replaceHorizons.html">replaceHorizons<-</a></code> </p>
+        </td>
+        <td><p>Replace data in the horizon slot</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="resample.twotheta.html">resample.twotheta()</a></code> </p>
         </td>
         <td><p>Resample an XRD Pattern</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="restrictions-set.html">restrictions<-</a></code> </p>
+        </td>
+        <td><p>Add data to the restrictions slot</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="restrictions.html">restrictions</a></code> </p>
+        </td>
+        <td><p>Retrieve restriction data from SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ROSETTA.centroids.html">ROSETTA.centroids</a></code> </p>
+        </td>
+        <td><p>Average Hydraulic Parameters from the ROSETTA Model by USDA Soil Texture Class</p></td>
       </tr><tr>
         
         <td>
@@ -499,9 +844,33 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="show.html">show(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>SoilProfileCollection show method</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="sim.html">sim()</a></code> </p>
         </td>
         <td><p>Simulate Soil Profiles</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="singlebracket.html">`[`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Matrix/data.frame-like access to profiles and horizons in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="site.html">site(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="site.html">`site&lt;-`()</a></code> </p>
+        </td>
+        <td><p>Retrieve site data from SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="siteNames.html">siteNames<-</a></code> </p>
+        </td>
+        <td><p>Set site column names</p></td>
       </tr><tr>
         
         <td>
@@ -517,9 +886,27 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="SoilProfileCollection-class.html">SoilProfileCollection-class</a></code> </p>
+          <p><code><a href="SoilProfileCollection-class.html">SoilProfileCollection()</a></code> </p>
         </td>
-        <td><p>SoilProfileCollection Class</p></td>
+        <td><p>An S4 object representation of a group of soil profiles.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> </p>
+        </td>
+        <td><p>Create Soil Profile Sketches</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="soiltexture.html">soiltexture</a></code> </p>
+        </td>
+        <td><p>Lookup tables for sand, silt, clay, texture class, and textural modifers.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="SoilTextureLevels.html">SoilTextureLevels()</a></code> </p>
+        </td>
+        <td><p>Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size</p></td>
       </tr><tr>
         
         <td>
@@ -565,12 +952,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="SPC-plotting.html">plotSPC()</a></code> </p>
-        </td>
-        <td><p>Profile Plot</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="SPC-slab-methods.html">slab()</a></code> </p>
         </td>
         <td><p>Slab-Wise Aggregation of SoilProfileCollection Objects</p></td>
@@ -583,15 +964,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="SPC-unique-methods.html">uniqueSPC()</a></code> </p>
+          <p><code><a href="SPC-split-methods.html">split()</a></code> </p>
         </td>
-        <td><p>Get Indices to Unique Soil Profiles Within a Collection</p></td>
+        <td><p>Split a SoilProfileCollection object into a list of SoilProfileCollection objects.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="SPC-utils.html">SPC-utils</a></code> </p>
+          <p><code><a href="spc_in_sync.html">spc_in_sync()</a></code> </p>
         </td>
-        <td><p>Getters, Setters, and Utility Methods for SoilProfileCollection Objects</p></td>
+        <td><p>Quickly assess relative state of site and horizon slots</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="subApply.html">subApply</a></code> </p>
+        </td>
+        <td><p>Subset SPC based on result of performing function on each profile</p></td>
       </tr><tr>
         
         <td>
@@ -601,9 +988,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="summarize.html">summarize</a></code> </p>
+        </td>
+        <td><p>Perform summaries on groups (from <code>group_by</code>) and create new site or horizon level attributes</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="tauW.html">tauW()</a></code> <code><a href="tauW.html">summaryTauW()</a></code> <code><a href="tauW.html">xtableTauW()</a></code> </p>
         </td>
         <td><p>Compute weighted naïve and <em>tau</em> statistics for a cross-classification matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="texcl_to_ssc.html">texcl_to_ssc()</a></code> <code><a href="texcl_to_ssc.html">ssc_to_texcl()</a></code> <code><a href="texcl_to_ssc.html">texmod_to_fragvoltot()</a></code> <code><a href="texcl_to_ssc.html">texture_to_taxpartsize()</a></code> </p>
+        </td>
+        <td><p>Textural conversions</p></td>
       </tr><tr>
         
         <td>
@@ -625,19 +1024,30 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="unique.html">unique(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get the indexes of unique profiles in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="unroll.html">unroll()</a></code> </p>
         </td>
         <td><p>Unroll Genetic Horizons</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="validSpatialData.html">validSpatialData</a></code> </p>
+        </td>
+        <td><p>Get names of columns in site table</p></td>
       </tr>
     </tbody>
     </table>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -648,7 +1058,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

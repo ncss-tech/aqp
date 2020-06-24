@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Numerical Soil Profile Comparison — profile_compare-methods" />
 <meta property="og:description" content="Performs a numerical comparison of soil profiles using named properties, based on a weighted, summed, depth-segment-aligned dissimilarity calculation. If s is a SoilProfileCollection, site-level variables (2 or more) can also be used. The site-level and horizon-level dissimilarity matricies are then re-scaled and averaged." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
       </span>
     </div>
 
@@ -90,7 +93,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ncss-tech/aqp">
+  <a href="https://github.com/ncss-tech/aqp/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -210,7 +213,7 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
-<dl class='dl-horizontal'>
+<dl'>
 <dt>1.</dt><dd><p>D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers &amp; Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, https://doi.org/10.1016/j.cageo.2012.10.020.</p></dd>
 <dt>2.</dt><dd><p>Moore, A.; Russell, J. &amp; Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.</p></dd>
 
@@ -222,120 +225,108 @@
     <div class='dont-index'><p><code><a href='SPC-slice-methods.html'>slice</a></code>, <code><a href='https://rdrr.io/pkg/cluster/man/daisy.html'>daisy</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## 1. check out the influence depth-weight coef:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>lattice</span>)
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'>## 1. check out the influence depth-weight coef:</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lattice</span>)
+
 <span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>:<span class='fl'>100</span>,<span class='fl'>4</span>)
 <span class='no'>k</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0.1</span>,<span class='fl'>0.05</span>,<span class='fl'>0.01</span>), <span class='kw'>each</span><span class='kw'>=</span><span class='fl'>100</span>)
 <span class='no'>w</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>*<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(-<span class='no'>k</span>*<span class='no'>z</span>)
 
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>z</span> ~ <span class='no'>w</span>, <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>k</span>, <span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>105</span>,-<span class='fl'>5</span>), <span class='kw'>xlim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>5</span>,<span class='fl'>105</span>), <span class='kw'>type</span><span class='kw'>=</span><span class='st'>'l'</span>,
-       <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth'</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Weighting Factor'</span>,
+       <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth'</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Weighting Factor'</span>, <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1.5</span>,
        <span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>title</span><span class='kw'>=</span><span class='st'>"k"</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.8</span>, <span class='kw'>size</span><span class='kw'>=</span><span class='fl'>3</span>),
        <span class='kw'>panel</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>...</span>) {
          <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.functions.html'>panel.grid</a></span>(<span class='kw'>h</span><span class='kw'>=</span>-<span class='fl'>1</span>,<span class='kw'>v</span><span class='kw'>=</span>-<span class='fl'>1</span>)
          <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.superpose.html'>panel.superpose</a></span>(<span class='no'>...</span>)
        }
 )</div><div class='img'><img src='profile_compare-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'>## 2. basic implementation, requires at least two properties</span>
-<span class='co'># implementation for a data.frame class object</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp1</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'group'</span>), <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>,
-<span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 9 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.21 Mb]</span></div><div class='input'>
-<span class='co'># upgrade to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='no'>op</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='co'># perform comparison on SoilProfileCollection object</span>
-<span class='co'># compare soil/non-soil matrix plot</span>
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp1</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'group'</span>), <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>,
-<span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 9 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.21 Mb]</span></div><div class='input'>
-<span class='co'># plot profile collection</span>
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `name`</span></div><div class='input'><span class='co'># annotate max depth of profile comparison</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='profile_compare-methods-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>op</span>)
-
-
 <span class='co'># more soil properties</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
+<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
 <span class='no'>d.1</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp2</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>,<span class='st'>'value'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.34 Mb]</span></div><div class='input'>
+                       <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.34 Mb]</span></div><div class='input'>
 <span class='co'># add some missing data: </span>
 <span class='no'>sp2</span>$<span class='no'>prop</span>[<span class='fl'>1</span>:<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>d.2</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp2</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>,<span class='st'>'value'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.34 Mb]</span></div><div class='img'><img src='profile_compare-methods-3.png' alt='' width='768' height='475' /></div><div class='input'>
+                       <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.34 Mb]</span></div><div class='img'><img src='profile_compare-methods-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># note small changes in D:</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='no'>d.1</span>, <span class='no'>d.2</span>)</div><div class='output co'>#&gt; [1] 0.9987445</div><div class='input'>
 <span class='co'>## 3. identify profiles within a collection that contain all NAs</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>plyr</span>)
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ldply.html'>ldply</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>random_profile</span>)
-<span class='fu'>depths</span>(<span class='no'>s</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1010101</span>)
+<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='no'>random_profile</span>, <span class='kw'>SPC</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
 <span class='co'># replace first profile's data with NA</span>
-<span class='no'>na.required</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>s</span>[<span class='fl'>1</span>, ])
+<span class='no'>na.required</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='no'>s</span>[<span class='fl'>1</span>, ])
 <span class='no'>s</span>$<span class='no'>p1</span>[<span class='fl'>1</span>:<span class='no'>na.required</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>s</span>$<span class='no'>p2</span>[<span class='fl'>1</span>:<span class='no'>na.required</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 
 <span class='co'># attempt profile comparison: this won't work, throws an error</span>
-<span class='co'># d &lt;- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)</span>
-
+<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>s</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p1'</span>,<span class='st'>'p2'</span>), <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.23 Mb]</span></div><div class='input'>
 <span class='co'># check for soils that are missing all clay / total RF data</span>
-<span class='no'>f.check.NA</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>i</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>i</span>$<span class='no'>p1</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>i</span>$<span class='no'>p2</span>))) / <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>i</span>) <span class='kw'>==</span> <span class='fl'>1</span>
-<span class='no'>missing.too.much.data.idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='profileApply-methods.html'>profileApply</a></span>(<span class='no'>s</span>, <span class='no'>f.check.NA</span>))
+<span class='no'>f.check.NA</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>i</span>) <span class='fu'><a href='length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>i</span>$<span class='no'>p1</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>i</span>$<span class='no'>p2</span>))) / <span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='no'>i</span>) <span class='kw'>==</span> <span class='fl'>1</span>
+<span class='no'>missing.too.much.data.idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='no'>s</span>, <span class='no'>f.check.NA</span>))
 
 <span class='co'># remove bad profiles and try again: works</span>
-<span class='no'>s.no.na</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>s</span>[-<span class='no'>missing.too.much.data.idx</span>, ], <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p1'</span>,<span class='st'>'p2'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>plot.depth.matrix</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 9 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.21 Mb]</span></div><div class='img'><img src='profile_compare-methods-4.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='co'># s.no.na &lt;- profile_compare(s[-missing.too.much.data.idx, ], </span>
+<span class='co'>#                            vars=c('p1','p2'), </span>
+<span class='co'>#                            max_d=100, k=0, plot.depth.matrix=TRUE)</span>
 
 <span class='co'>## 4. better plotting of dendrograms with ape package:</span>
 <span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>ape</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>cluster</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>MASS</span>)) {
-<span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/cluster/man/diana.html'>diana</a></span>(<span class='no'>d</span>)
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ape/man/as.phylo.html'>as.phylo</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/as.hclust.html'>as.hclust</a></span>(<span class='no'>h</span>))
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/ape/man/ladderize.html'>ladderize</a></span>(<span class='no'>p</span>), <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>label.offset</span><span class='kw'>=</span><span class='fl'>1</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/ape/man/nodelabels.html'>tiplabels</a></span>(<span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/cutree.html'>cutree</a></span>(<span class='no'>h</span>, <span class='fl'>3</span>), <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>)
 
-<span class='co'>## 5. other uses of the dissimilarity matrix</span>
-<span class='co'># Sammon Mapping: doesn't like '0' values in dissimilarity matrix</span>
-<span class='no'>d.sam</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/MASS/man/sammon.html'>sammon</a></span>(<span class='no'>d</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
+  <span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
+  <span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>surface</span>
 
-<span class='co'># simple plot</span>
-<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>() ; <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.new</a></span>()
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>xlim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>[,<span class='fl'>1</span>] * <span class='fl'>1.5</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>, <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>)),
-<span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/cutree.html'>cutree</a></span>(<span class='no'>h</span>, <span class='fl'>3</span>))
+  <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp2</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>,<span class='st'>'value'</span>),
+                         <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>)
 
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: ape</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'ape' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: cluster</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'cluster' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MASS</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'MASS' was built under R version 3.5.3</span></div><div class='output co'>#&gt; Initial stress        : 0.00901
-#&gt; stress after  10 iters: 0.00172, magic = 0.500
-#&gt; stress after  20 iters: 0.00155, magic = 0.500
-#&gt; stress after  30 iters: 0.00153, magic = 0.500</div><div class='input'>
+  <span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/cluster/man/diana.html'>diana</a></span>(<span class='no'>d</span>)
+  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ape/man/as.phylo.html'>as.phylo</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/as.hclust.html'>as.hclust</a></span>(<span class='no'>h</span>))
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>p</span>, <span class='kw'>show.tip.label</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/ape/man/nodelabels.html'>tiplabels</a></span>(<span class='no'>sp2</span>$<span class='no'>surface</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/cutree.html'>cutree</a></span>(<span class='no'>h</span>, <span class='fl'>3</span>), <span class='kw'>bg</span><span class='kw'>=</span><span class='fl'>NA</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>)
+
+  <span class='co'>## 5. other uses of the dissimilarity matrix</span>
+  <span class='co'># Sammon Mapping: doesn't like '0' values in dissimilarity matrix</span>
+  <span class='no'>d.sam</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/MASS/man/sammon.html'>sammon</a></span>(<span class='no'>d</span>)
+
+  <span class='co'># simple plot</span>
+  <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>() ; <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.new</a></span>()
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>xlim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>[,<span class='fl'>1</span>] * <span class='fl'>1.5</span>))
+  <span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>, <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>d.sam</span>$<span class='no'>points</span>)),
+       <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/cutree.html'>cutree</a></span>(<span class='no'>h</span>, <span class='fl'>3</span>))
+
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: ape</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: cluster</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MASS</span></div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfilecollection-class object, doing nothing.</span></div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.34 Mb]</span></div><div class='output co'>#&gt; Initial stress        : 0.06149
+#&gt; stress after  10 iters: 0.03420, magic = 0.092
+#&gt; stress after  20 iters: 0.02491, magic = 0.500
+#&gt; stress after  30 iters: 0.02385, magic = 0.500
+#&gt; stress after  40 iters: 0.02327, magic = 0.500
+#&gt; stress after  50 iters: 0.02296, magic = 0.500
+#&gt; stress after  60 iters: 0.02280, magic = 0.500
+#&gt; stress after  70 iters: 0.02273, magic = 0.500</div><div class='input'>
 
 <span class='co'>## 6. try out the 'sample_interval' argument</span>
 <span class='co'># compute using sucessively larger sampling intervals</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp3</span>)
 <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.22 Mb]</span></div><div class='input'><span class='no'>d.2</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.11 Mb]</span></div><div class='input'><span class='no'>d.10</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.02 Mb]</span></div><div class='input'><span class='no'>d.20</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>20</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.01 Mb]</span></div><div class='input'>
+                     <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.22 Mb]</span></div><div class='input'><span class='no'>d.2</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
+                       <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.11 Mb]</span></div><div class='input'><span class='no'>d.10</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
+                        <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.02 Mb]</span></div><div class='input'><span class='no'>d.20</span> <span class='kw'>&lt;-</span> <span class='fu'>profile_compare</span>(<span class='no'>sp3</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>),
+                        <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>20</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 10 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.01 Mb]</span></div><div class='input'>
 <span class='co'># check the results via hclust / dendrograms</span>
 <span class='no'>oldpar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfcol</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>4</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every Depth Slice'</span>)
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d.2</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 2nd Depth Slice'</span>)
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d.10</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 10th Depth Slice'</span>)
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d.20</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 20th Depth Slice'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>oldpar</span>)</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every Depth Slice'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d.2</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 2nd Depth Slice'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d.10</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 10th Depth Slice'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='no'>d.20</span>)), <span class='kw'>horiz</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Every 20th Depth Slice'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>oldpar</span>)
 
-    <h2>Author</h2>
-    <p>Dylan E. Beaudette</p>
+<span class='co'># }</span></div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -346,7 +337,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

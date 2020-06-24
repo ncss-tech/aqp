@@ -6,27 +6,31 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>getArgillicBounds — getArgillicBounds • aqp</title>
+<title>Estimate upper and lower boundary of argillic diagnostic subsurface horizon — getArgillicBounds • aqp</title>
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -35,14 +39,9 @@
 
 
 
-<meta property="og:title" content="getArgillicBounds — getArgillicBounds" />
-<meta property="og:description" content="getArgillicBounds() estimates upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object (`p`). The upper boundary is where the clay increase threshold is met. Uses crit.clay.argillic() as the threshold function for determining whether a clay increase occurs and get.increase.matrix to determine whether the increase is met, whether vertical distance of increase is sufficiently short, and in which horizon.
-The lower boundary is  first approximated as the depth to a lithic/paralithic/densic contact, or some other horizon matchable by a custom regular expression pattern. Subsequently, that boundary is extended upwards to the end of &quot;evidence of illuviation.&quot;
-The depth to contact is estimated using `bottom.pattern` &quot;Cr|R|Cd&quot; by default. It matches anything containing Cr, R or Cd.
-The lower gradational horizon regular expression `lower.grad.pattern` default is '&quot;^[2-9]*CB*[^rt]*$&quot;'. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.
-There also is an option `require_t` to omit the requirement for evidence of eluviation in form of 't' subscript in `hzdesgn`.
-Even if &quot;t&quot; subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set `lower.grad.pattern` to something that will not match any horizons in your data." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Estimate upper and lower boundary of argillic diagnostic subsurface horizon — getArgillicBounds" />
+<meta property="og:description" content="getArgillicBounds estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object ('p').
+The upper boundary is where the clay increase threshold is met. The function uses crit.clay.argillic as the threshold function for determining whether a clay increase occurs and get.increase.matrix to determine whether the increase is met, whether vertical distance of increase is sufficiently small, and in which horizon." />
 
 
 
@@ -60,7 +59,7 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,7 +73,7 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
       </span>
     </div>
 
@@ -95,7 +94,7 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ncss-tech/aqp">
+  <a href="https://github.com/ncss-tech/aqp/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -113,35 +112,34 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>getArgillicBounds</h1>
-    
+    <h1>Estimate upper and lower boundary of argillic diagnostic subsurface horizon</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/getArgillicBounds.R'><code>R/getArgillicBounds.R</code></a></small>
     <div class="hidden name"><code>getArgillicBounds.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>getArgillicBounds()</code> estimates upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object (`p`). The upper boundary is where the clay increase threshold is met. Uses <code><a href='crit.clay.argillic.html'>crit.clay.argillic()</a></code> as the threshold function for determining whether a clay increase occurs and <code>get.increase.matrix</code> to determine whether the increase is met, whether vertical distance of increase is sufficiently short, and in which horizon.</p>
-<p>The lower boundary is  first approximated as the depth to a lithic/paralithic/densic contact, or some other horizon matchable by a custom regular expression pattern. Subsequently, that boundary is extended upwards to the end of "evidence of illuviation."</p>
-<p>The depth to contact is estimated using `bottom.pattern` "Cr|R|Cd" by default. It matches anything containing Cr, R or Cd.</p>
-<p>The lower gradational horizon regular expression `lower.grad.pattern` default is '"^[2-9]*CB*[^rt]*$"'. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.</p>
-<p>There also is an option `require_t` to omit the requirement for evidence of eluviation in form of 't' subscript in `hzdesgn`.</p>
-<p>Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set `lower.grad.pattern` to something that will not match any horizons in your data.</p>
+    <p><code>getArgillicBounds</code> estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object ('p').</p>
+<p>The upper boundary is where the clay increase threshold is met. The function uses <code>crit.clay.argillic</code> as the threshold function for determining whether a clay increase occurs and <code>get.increase.matrix</code> to determine whether the increase is met, whether vertical distance of increase is sufficiently small, and in which horizon.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>,
-                  <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>,
-                  <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>,
-                  <span class='kw'>texcl.attr</span> <span class='kw'>=</span> <span class='st'>"texcl"</span>,
-                  <span class='kw'>require_t</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                  <span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>,
-                  <span class='kw'>lower.grad.pattern</span> <span class='kw'>=</span> <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
-                  <span class='kw'>as.list</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>getArgillicBounds</span>(
+  <span class='no'>p</span>,
+  <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>,
+  <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>,
+  <span class='kw'>texcl.attr</span> <span class='kw'>=</span> <span class='st'>"texcl"</span>,
+  <span class='kw'>require_t</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>,
+  <span class='kw'>lower.grad.pattern</span> <span class='kw'>=</span> <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
+  <span class='kw'>as.list</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>p</th>
-      <td><p>a single-profile SoilProfileCllection</p></td>
+      <td><p>A single-profile SoilProfileCollection</p></td>
     </tr>
     <tr>
       <th>hzdesgn</th>
@@ -157,11 +155,11 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
     </tr>
     <tr>
       <th>require_t</th>
-      <td><p>require a "t" subscript for positive identification of upper and lower bound of argillic? default:</p></td>
+      <td><p>require a "t" subscript for positive identification of upper and lower bound of argillic? default: TRUE</p></td>
     </tr>
     <tr>
       <th>bottom.pattern</th>
-      <td><p>regular expression passed to <code><a href='estimateSoilDepth.html'>estimateSoilDepth()</a></code> to match the lower boundary of the soil. default is "Cr|R|Cd" which approximately matches paralithic, lithic and densic contacts.</p></td>
+      <td><p>regular expression passed to <code>estimateSoilDepth</code> to match the lower boundary of the soil. default is "Cr|R|Cd" which approximately matches paralithic, lithic and densic contacts.</p></td>
     </tr>
     <tr>
       <th>lower.grad.pattern</th>
@@ -169,38 +167,37 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
     </tr>
     <tr>
       <th>as.list</th>
-      <td><p>return result as a 'list'?</p></td>
+      <td><p>return result as a <code>list</code>?</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Print out information about 't' subscripts and lower gradational horizons?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound"</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <div class='dont-index'><p><code>get.increase.matrix</code>, <code>get.argillic.increase.depth</code>, <code>crit.clay.argillic</code></p></div>
+    <p>The lower boundary is first approximated as the depth to a lithic/paralithic/densic contact, or some other horizon matchable by a custom regular expression pattern. Subsequently, that boundary is extended upwards to the end of "evidence of illuviation."</p>
+<p>The depth to contact is estimated using 'bottom.pattern' "Cr|R|Cd" by default. It matches anything containing Cr, R or Cd.</p>
+<p>The lower gradational horizon regular expression ‘lower.grad.pattern' default is ’"^[2-9]*CB*[^rt]*$"'. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.</p>
+<p>There also is an option ‘require_t' to omit the requirement for evidence of eluviation in form of ’t' subscript in 'hzdesgn'. Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set 'lower.grad.pattern' to something that will not match any horizons in your data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='fu'><a href='SPC-utils.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
 
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
 <span class='no'>attr</span> <span class='kw'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
 <span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='no'>attr</span>, <span class='kw'>texcl.attr</span><span class='kw'>=</span><span class='st'>"texture"</span>)
 <span class='no'>foo</span></div><div class='output co'>#&gt; [1] 49 89</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Andrew Gene Brown</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -211,7 +208,7 @@ Even if &quot;t&quot; subscript is not required for positive identification, the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Soil Data from the Central Sierra Nevada Region of California — ca630" />
 <meta property="og:description" content="Site and laboratory data from soils sampled in the central Sierra Nevada Region of California." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
       </span>
     </div>
 
@@ -90,7 +93,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ncss-tech/aqp">
+  <a href="https://github.com/ncss-tech/aqp/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -126,7 +129,7 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>List containing:</p>
-<p>$site : A data frame containing site information.</p><dl class='dl-horizontal'>
+<p>$site : A data frame containing site information.</p><dl'>
     <dt><code>user_site_id</code></dt><dd><p>national user site id</p></dd>
     <dt><code>mlra</code></dt><dd><p>the MLRA</p></dd>
     <dt><code>county</code></dt><dd><p>the county</p></dd>
@@ -141,7 +144,7 @@
   
 </dl>
 
-<p>$lab : A data frame containing horizon information.</p><dl class='dl-horizontal'>
+<p>$lab : A data frame containing horizon information.</p><dl'>
     <dt><code>pedon_key</code></dt><dd><p>national soil profile id</p></dd>
     <dt><code>layer_key</code></dt><dd><p>national horizon id</p></dd>
     <dt><code>layer_sequence</code></dt><dd><p>horizon sequence number</p></dd>
@@ -186,17 +189,17 @@
 <span class='fu'>depths</span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='no'>pedon_key</span> ~ <span class='no'>hzn_top</span> + <span class='no'>hzn_bot</span>
 
 <span class='co'># add site data, based on pedon_key</span>
-<span class='fu'><a href='SPC-utils.html'>site</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='no'>ca630</span>$<span class='no'>site</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='no'>ca630</span>$<span class='no'>site</span>
 
 <span class='co'># ID data missing coordinates: '|' is a logical OR</span>
 (<span class='no'>missing.coords.idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>ca</span>$<span class='no'>lat</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>ca</span>$<span class='no'>lon</span>)))
 
 <span class='co'># remove missing coordinates by safely subsetting</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>missing.coords.idx</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>)
+<span class='kw'>if</span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>missing.coords.idx</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>)
         <span class='no'>ca</span> <span class='kw'>&lt;-</span> <span class='no'>ca</span>[-<span class='no'>missing.coords.idx</span>, ]
 
 <span class='co'># register spatial data</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>lon</span> + <span class='no'>lat</span>
+<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>lon</span> + <span class='no'>lat</span>
 
 <span class='co'># assign a coordinate reference system</span>
 <span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='st'>'+proj=longlat +datum=NAD83'</span>
@@ -206,7 +209,7 @@
 
 <span class='co'># map the data (several ways to do this, here is a simple way)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span>(<span class='kw'>database</span><span class='kw'>=</span><span class='st'>'county'</span>, <span class='kw'>region</span><span class='kw'>=</span><span class='st'>'california'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span>(<span class='no'>ca</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.5</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='no'>ca</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.5</span>)
 
 <span class='co'># aggregate %BS 7 for all profiles into 1 cm slices</span>
 <span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>ca</span>, <span class='kw'>fm</span><span class='kw'>=</span> ~ <span class='no'>bs_7</span>)
@@ -248,7 +251,7 @@
 <span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span>(<span class='no'>s.25</span>, <span class='kw'>zcol</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span>))
 
 <span class='co'># note that the ordering is preserved:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>s.25</span>$<span class='no'>pedon_key</span>, <span class='fu'><a href='SPC-utils.html'>profile_id</a></span>(<span class='no'>ca</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>s.25</span>$<span class='no'>pedon_key</span>, <span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>ca</span>))
 
 <span class='co'># extract a data.frame with horizon data at 10, 20, and 50 cm</span>
 <span class='no'>s.multiple</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>ca</span>, <span class='kw'>fm</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>50</span>) ~ <span class='no'>bs_7</span> + <span class='no'>CEC7</span> + <span class='no'>ex_acid</span>)
@@ -260,19 +263,13 @@
 <span class='no'>ca.1.to.10</span> <span class='kw'>&lt;-</span> <span class='no'>ca</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, ]
 
 <span class='co'># basic plot method: profile plot</span>
-<span class='fu'><a href='SPC-plotting.html'>plot</a></span>(<span class='no'>ca.1.to.10</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'hzn_desgn'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>ca.1.to.10</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'hzn_desgn'</span>)
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#note">Note</a></li>
-      <li><a href="#format">Format</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#source">Source</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -283,7 +280,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>
