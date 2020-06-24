@@ -1,14 +1,6 @@
 
 
-# simple function to convert horizon boundary distinctness codes into vertical (+/-) offsets
-# based on "red book" version 3.0
-hzDistinctnessCodeToOffset <- function(x, codes=c('A','C','G','D'), offset=c(0.5, 1.5, 5, 10)) {	
-  x <- as.character(x)
-  x.code <- match(x, codes)
-  x.offset <- offset[x.code]
-  x.offset <- ifelse(is.na(x.offset), 0, x.offset)
-  return(x.offset)
-}
+
 
 # establish which elements within a vector of horizontal positions overlap beyond a given threshold
 # x: vector of horizontal positions

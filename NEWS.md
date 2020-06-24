@@ -1,4 +1,5 @@
-# aqp 1.20 (2020-06-18)
+# aqp 1.22 (2020-06-24)
+ * `plotSPC` overhaul (TODO: add descriptions)
  * taxonomic eval code (TODO: add descriptions)
  * soil texture helper code (TODO: add descriptions)
  * bug fixes (TODO: list issues)

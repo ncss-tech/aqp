@@ -1,5 +1,16 @@
 
-# useful for debugging plotSPC
+#' @title Visual Explanation for \code{plotSPC}
+#' @description Create a visual explanation for the many arguments to \code{plotSPC}. Call this function instead of \code{plotSPC}, all objects after \code{x} are passed on to \code{plotSPC}. Nearly all of the figures in the \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} are created with this function.
+#' 
+#' @author D.E. Beaudette
+#' @seealso \code{\link{plotSPC}}
+#' @keywords manip
+#' 
+#' @param x a \code{SoilProfilecollection} object
+#' @param \dots arguments passed to \code{\link{plotSPC}}
+#' 
+#' @return a list of internally-used ordering vectors and graphical offsets / scaling factors
+#' 
 explainPlotSPC <- function(x, ...) {
   plot(x, id.style='side', ...)
   box()

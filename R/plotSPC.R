@@ -35,11 +35,254 @@
   })
 }
 
+
+
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
-## basic function
-plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='right-center', label=idname(x), alt.label=NULL, alt.label.col='black', cex.names=0.5, cex.depth.axis=cex.names, cex.id=cex.names+(0.2*cex.names), font.id=2, print.id=TRUE, id.style='auto', plot.order=1:length(x), relative.pos=1:length(x), add=FALSE, scaling.factor=1, y.offset=0, x.idx.offset=0, n=length(x), max.depth=ifelse(is.infinite(max(x)), 200, max(x)), n.depth.ticks=5, shrink=FALSE, shrink.cutoff=3, abbr=FALSE, abbr.cutoff=5, divide.hz=TRUE, hz.distinctness.offset=NULL, hz.distinctness.offset.col='black', hz.distinctness.offset.lty=2, axis.line.offset=-2.5, plot.depth.axis=TRUE, density=NULL, col.label=color, col.palette = rev(brewer.pal(10, 'Spectral')), col.palette.bias=1, col.legend.cex=1, n.legend=8, lwd=1, lty=1, default.color=grey(0.95), ...) {
+
+#' @name SoilProfileCollection-plotting-methods
+#' @docType methods
+#' @aliases plot,plotSPC,plot.SoilProfileCollection,SoilProfileCollection-method,SoilProfileCollection,ANY-method
+#' @title Create Soil Profile Sketches
+#' 
+#' @description Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} contains many examples and discussion of the large number of arguments to this function.
+#' 
+#' @param x a \code{SoilProfileCollection} object
+#' 
+#' @param color quoted column name containing R-compatible color descriptions, or numeric / categorical data to be displayed thematically; see details
+#' 
+#' @param width scaling of profile widths (typically 0.1-0.4)
+#' 
+#' @param name quoted column name of the (horizon-level) attribute containing horizon designations, can be left as \code{NULL} and horizon designation column will be selected via \code{hzdesgnname(x)}.
+#' 
+#' @param name.style one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'
+#' 
+#' @param label quoted column name of the (site-level) attribute used to identify profile sketches
+#' 
+#' @param hz.depths logical, annotate horizon top depths to the right of each sketch (FALSE)
+#'
+#' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
+#' 
+#' @param alt.label.col color used for secondary annotation text
+#' 
+#' @param cex.names baseline character scaling applied to all text labels
+#' 
+#' @param cex.depth.axis character scaling applied to depth scale
+#' 
+#' @param cex.id character scaling applied to \code{label}
+#' 
+#' @param font.id font style applied to \code{label}, default is 2 (bold)
+#' 
+#' @param print.id logical, print \code{label} above/beside each profile? (TRUE)
+#' 
+#' @param id.style \code{label} printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'
+#' 
+#' @param plot.order integer vector describing the order in which individual soil profiles should be plotted
+#' 
+#' @param relative.pos vector of relative positions along the x-axis, within \{1, n\}, ignores \code{plot.order} see details
+#' 
+#' @param add logical, add to an existing figure
+#' 
+#' @param scaling.factor vertical scaling of profile depths, useful for adding profiles to an existing figure
+#' 
+#' @param y.offset vertical offset for top of profiles, useful for adding profiles to an existing figure
+#' 
+#' @param x.idx.offset integer specifying horizontal offset from 0 (left-hand edge)
+#' 
+#' @param n integer describing amount of space along x-axis to allocate, defaults to \code{length(x)}
+#' 
+#' @param max.depth suggested lower depth boundary of plot
+#' 
+#' @param n.depth.ticks suggested number of ticks in depth scale
+#' 
+#' @param shrink logical, reduce character scaling for 'long' horizon by 80\% ?
+#' 
+#' @param shrink.cutoff character length defining 'long' horizon names
+#' 
+#' @param abbr logical, abbreviate \code{label}?
+#' 
+#' @param abbr.cutoff suggested minimum length for abbreviated \code{label}
+#' 
+#' @param divide.hz logical, divide horizons with line segment? (TRUE), see details
+#' 
+#' @param hz.distinctness.offset quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}
+#' 
+#' @param hz.topography.lty quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography
+#' 
+#' @param axis.line.offset horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)
+#' 
+#' @param plot.depth.axis logical, plot depth axis? (default is TRUE)
+#' 
+#' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is NULL, no shading)
+#' 
+#' @param col.label thematic legend title
+#' 
+#' @param col.palette color palette used for thematic sketches (default is \code{rev(brewer.pal(10, 'Spectral'))})
+#' 
+#' @param col.palette.bias color ramp bias (skew), see \code{\link{colorRamp}}
+#' 
+#' @param col.legend.cex scaling of thematic legend
+#' 
+#' @param n.legend approximate number of classes used in numeric legend, max number of items per row in categorical legend
+#' 
+#' @param lwd line width multiplier used for sketches
+#' 
+#' @param lty line style used for sketches
+#' 
+#' @param default.color default horizon fill color used when \code{color} attribute is \code{NA}
+#' 
+#' @param \dots other arguments passed into lower level plotting functions
+#' 
+#' 
+#' @details 
+#' Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are *suggestions* to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want. 
+#' 
+#' The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long. 
+#' 
+#' If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations. 
+#' 
+#' The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
+#' 
+#' Adjustments to the legend can be specified via \code{col.label} (legend title), \code{col.palette} (palette of colors, automatically expanded), \code{col.legend.cex} (legend scaling), and \code{n.legend} (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, \code{plotSPC} will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
+#' 
+#' Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within \{1,n\} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{addDiagnosticBracket} and \code{addVolumeFraction} use the \code{relative.pos} values for subsequent annotation.
+#' 
+#' Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with \code{fixOverlap(pos)}, where \code{pos} is the original vector of relative positions. 
+#' 
+#' The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
+#' 
+#' 
+#' 
+#' @note A new plot of soil profiles is generated, or optionally added to an existing plot.
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @references Beaudette, D.E., Roudier P., and A.T. O'Geen. 2013. Algorithms for Quantitative Pedology: A Toolkit for
+#' Soil Scientists. Computers & Geosciences. 52:258 - 268.
+#' 
+#' @keywords hplots
+#' 
+#' @seealso \code{\link{fixOverlap}, \link{explainPlotSPC}, \link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
+#' 
+#' @examples 
+#' 
+#' # example data
+#' data(sp1)
+#' # usually best to adjust margins
+#' par(mar=c(0,0,3,0))
+#' 
+#' # add color vector
+#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+#' 
+#' # promote to SoilProfileCollection
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # plot profiles
+#' plot(sp1, id.style='side')
+#' 
+#' # title, note line argument:
+#' title('Sample Data 1', line=1, cex.main=0.75)
+#' 
+#' # plot profiles without horizon-line divisions
+#' plot(sp1, divide.hz=FALSE)
+#' 
+#' # add dashed lines illustrating horizon boundary distinctness
+#' sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
+#' plot(sp1, hz.distinctness.offset='hzD')
+#' 
+#' # plot horizon color according to some property
+#' data(sp4)
+#' depths(sp4) <- id ~ top + bottom
+#' plot(sp4, color='clay')
+#' 
+#' # another example
+#' data(sp2)
+#' depths(sp2) <- id ~ top + bottom
+#' site(sp2) <- ~ surface
+#' 
+#' # label with site-level attribute: `surface`
+#' plot(sp2, label='surface', plot.order=order(sp2$surface))
+#' 
+#' # example using a categorical attribute
+#' plot(sp2, color = "plasticity")
+#' 
+#' # plot two SPC objects in the same figure
+#' par(mar=c(1,1,1,1))
+#' # plot the first SPC object and 
+#' # allocate space for the second SPC object
+#' plot(sp1, n=length(sp1) + length(sp2))
+#' # plot the second SPC, starting from the first empty space
+#' plot(sp2, x.idx.offset=length(sp1), add=TRUE)
+#' 
+#' 
+#' ##
+#' ## demonstrate adaptive legend
+#' ##
+#' 
+#' data(sp3)
+#' depths(sp3) <- id ~ top + bottom
+#' 
+#' # make some fake categorical data
+#' horizons(sp3)$fake.data <- sample(letters[1:15], size = nrow(sp3), replace=TRUE)
+#' 
+#' # better margins
+#' par(mar=c(0,0,3,1))
+#' 
+#' # note that there are enough colors for 15 classes (vs. previous limit of 10)
+#' # note that the legend is split into 2 rows when length(classes) > n.legend argument
+#' plot(sp3, color='fake.data', name='fake.data', cex.names=0.8)
+#' 
+#' # make enough room in a single legend row
+#' plot(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
+
+
+
+plotSPC <- function(
+  x, 
+  color='soil_color', 
+  width=0.2, 
+  name=NULL, 
+  name.style='right-center', 
+  label=idname(x), 
+  hz.depths=FALSE, 
+  alt.label=NULL, 
+  alt.label.col='black', 
+  cex.names=0.5, 
+  cex.depth.axis=cex.names, 
+  cex.id=cex.names+(0.2*cex.names), 
+  font.id=2, 
+  print.id=TRUE, 
+  id.style='auto', 
+  plot.order=1:length(x), 
+  relative.pos=1:length(x), 
+  add=FALSE, 
+  scaling.factor=1, 
+  y.offset=0, 
+  x.idx.offset=0, 
+  n=length(x), 
+  max.depth=ifelse(is.infinite(max(x)), 200, max(x)), 
+  n.depth.ticks=5, 
+  shrink=FALSE, 
+  shrink.cutoff=3, 
+  abbr=FALSE, 
+  abbr.cutoff=5, 
+  divide.hz=TRUE, 
+  hz.distinctness.offset=NULL, 
+  hz.topography.lty=NULL, 
+  axis.line.offset=-2.5, 
+  plot.depth.axis=TRUE, 
+  density=NULL, 
+  col.label=color, 
+  col.palette = rev(brewer.pal(10, 'Spectral')), 
+  col.palette.bias=1, 
+  col.legend.cex=1, 
+  n.legend=8, 
+  lwd=1, 
+  lty=1, 
+  default.color=grey(0.95), 
+  ...
+) {
   
   ###################
   ## sanity checks ##
@@ -49,6 +292,28 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   if(! name.style %in% c('right-center', 'left-center', 'left-top')) {
     warning('invalid `name.style`', call. = FALSE)
     name.style <- 'right-center'
+  }
+  
+  # horizon distinctness offset column name must be valid
+  if(!missing(hz.distinctness.offset)) {
+    # valid name
+    if(! hz.distinctness.offset %in% horizonNames(x))
+      stop('invalid `hz.distinctness.offset` column name', call. = FALSE)
+    
+    # must be numeric
+    if(! is.numeric(x[[hz.distinctness.offset]]))
+      stop('`hz.distinctness.offset` must be numeric', call. = FALSE)
+  }
+  
+  # horizon topography
+  if(!missing(hz.topography.lty)) {
+    # valid name
+    if(! hz.topography.lty %in% horizonNames(x))
+      stop('invalid `hz.topography.lty` column name', call. = FALSE)
+    
+    # must be numeric
+    if(! is.numeric(x[[hz.topography.lty]]))
+      stop('`hz.topography.lty` must be numeric', call. = FALSE)
   }
   
   
@@ -293,9 +558,9 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
       this_profile_names <- ''
     
 	  
-    #################################
-	  ## generate rectangle geometry ##
-    #################################
+    ########################################
+	  ## generate baseline horizon geometry ##
+    ########################################
     
     ## center of each sketch
     # 2019-07-15: added relative position feature, could use some more testing
@@ -308,41 +573,146 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
 	
 	  
 	  ##
-	  ## TODO: use horizon boundary type and topography to modify figures
+	  ## TODO: use a zig-zag to denote topography
 	  ##
-	  ## i.e. clear-wavy = dashed lines at an angle, based on red book
-	  
 	  
 	  ##############################
 	  ## create horizons + colors ##
 	  ##############################
 	  
-	  # default are filled rectangles
-	  if(divide.hz) {
-	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
+	  # horizons are parallelograms, with offset described by hz.distinctness.offset
+	  if(! is.null(hz.distinctness.offset)) {
 	    
-	    # optionally add horizon boundary distinctiveness
-	    if(! is.null(hz.distinctness.offset)) {
-	      hz.dist.offset <- this_profile_data[, hz.distinctness.offset]
-	      segments(x0 - width, y0 - hz.dist.offset, x0 + width, y0 - hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)
-	      segments(x0 - width, y0 + hz.dist.offset, x0 + width, y0 + hz.dist.offset, col=hz.distinctness.offset.col, lty=hz.distinctness.offset.lty, lend=2)	
+	    # iterate over horizons
+	    nh <- length(y0)
+	    
+	    # extract current set of offsets
+	    hdo <- this_profile_data[, hz.distinctness.offset]
+	    
+	    # extract current set of line types if provided
+	    if(! is.null(hz.topography.lty)) {
+	      ht.lty <- this_profile_data[, hz.topography.lty]
+	    } else {
+	      # use constant value
+	      ht.lty <- rep(1, times=nh)
 	    }
 	    
-	  } else {
-	    # otherwise, we only draw the left, top, right borders, and then fill
 	    
-	    rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-	    segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
-	    segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
-	    segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
-	    segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+	    # empty list for storing y-coordinates
+	    coords.list <- vector(mode = 'list', length = nh)
+	    
+	    for(j in 1:nh) {
+	      
+	      ## rectangle for reference
+	      # xx <- c(x0 - width, x0 + width, x0 + width, x0 - width)
+	      # yy <- c(y0[j], y0[j], y1[j], y1[j])
+	      
+	      # parallelogram geometry: x-coords are fixed, y-coords vary based on horizon sequence
+	      # y0 are bottom depths
+	      # y1 are top depths
+	      #
+	      # vertex order: ll, lr, ur, ul
+	      x.ll <- x0 - width
+	      x.lr <- x0 + width
+	      x.ur <- x0 + width
+	      x.ul <- x0 - width
+	      xx <- c(x.ll, x.lr, x.ur, x.ul)
+	      
+	      # make polygons based on 1st, 2nd to j-1, last horizon
+	      if(j == 1){
+	        # first horizon
+	        y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
+	        y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
+	        y.ur <- y1[j] # use upper-right verbatim
+	        y.ul <- y1[j] # use upper-left verbatim
+	        
+	        # assemble y-coords and plot first horizon polygon, without borders
+	        yy <- c(y.ll, y.lr, y.ur, y.ul)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+	          
+	      } else if(j < nh) {
+	        # next horizons, except bottom-most horizon
+	        y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
+	        y.lr <- pmax(y0[j] - hdo[j], y0[j-1]) # cannot exceed y.lr of previous horizon
+	        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
+	        y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed y.ul of previous horizon
+	        
+	        # assemble y-coords and plot next n horizon's polygon, without borders
+	        yy <- c(y.ll, y.lr, y.ur, y.ul)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+	        ## debugging
+	        # polygon(x = xx, y = yy, col=NA, border='red', density=this_profile_density[j], lwd=lwd, lty=lty)
+	        
+	      } else {
+	        # last horizon
+	        y.ll <- y0[j] # user lower-left verbatim
+	        y.lr <- y0[j] # use lower-right verbatim
+	        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
+	        y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed lower depth of profile
+	        
+	        # assemble y-coords and plot last horizon polygon, without borders
+	        yy <- c(y.ll, y.lr, y.ur, y.ul)
+	        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+	        
+	      }
+	      
+	      # save current iteration of coordinates and line type
+	      coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
+	    }
+	    
+	    ## note: have to do this after the polygons, otherwise the lines are over-plotted
+	    # optionally divide horizons with line segment
+	    if(divide.hz) {
+	     
+	      # iterate over coordinates, note includes lty 
+	      lapply(coords.list, function(seg) {
+	        segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd=lwd, lty=seg$lty, lend=1) 
+	      })
+	    }
+	    
+	    # final rectangle border around entire profile
+	    rect(xleft = x0 - width, ybottom = min(y1, na.rm = TRUE), xright = x0 + width, ytop = max(y0, na.rm = TRUE), lwd=lwd, lty=lty, lend=2)
+	    
+	    
+	    ## TODO: re-think this next part
+	    if(is.null(hz.topography.lty)) {
+	      
+	      ## TODO: should be optional, and adjustable
+	      # horizon depth 
+	      points(rep(x0, times=nh), y0, pch=15, col=par('fg'), cex=0.66) 
+	    } else {
+	      
+	      ## TODO: think of a better approach
+	      # hz topographic code
+	      text(rep(x0, times=nh), y0, labels = ht.lty, col=invertLabelColor(this_profile_colors), font=2, cex=0.66)
+	    }
+	    
+	    
+	  } else {
+	    # standard rectanges
+	    # default are filled rectangles
+	    if(divide.hz) {
+	      # classic approach: use rectangles, fully vectorized and automatic recycling over arguments
+	      # x0 and width have length of 1
+	      rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
+	      
+	    } else {
+	      # otherwise, we only draw the left, top, right borders, and then fill
+	      
+	      rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
+	      segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
+	      segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
+	      segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
+	      segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+	    }
 	  }
+	  
+	  
       
     
 	  ##################################
 	  ## horizon designations (names) ##
 	  ##################################
-	  
 	  switch(
 	    name.style, 
 	    'right-center' = {
@@ -394,7 +764,16 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
 	    
 	    ## old approach: label rigth-center, left justified, 0.1 charwidth offset
 	    # text(x0 + width, hzname.y0, this_profile_names, offset=0.1, cex=cex.names, pos=4)
+		  }
+	  
+	  
+	  ##################################
+	  ## horizon top depth annotation ##
+	  ##################################
+	  if(hz.depths) {
+	    text(x0 + width, y1, this_profile_data[, tcol], cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1) 
 	  }
+	  
 		  		
 	  
 	  #################
@@ -422,10 +801,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   ################
   ## depth axis ##
   ################
-  depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
-  depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
-  if(plot.depth.axis)
+  if(plot.depth.axis) {
+    depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
+    depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))  
+    
     axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
+  }
+    
   
   
   ######################
@@ -437,7 +819,10 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   	text(1:length(x), y.offset+3, al, srt=90, adj=c(1, 0.5), font=2, cex=cex.id * 1.5, col=alt.label.col)
   }
   
-  # add a legend for thematic profile sketch
+  
+  ########################################
+  ## legend for thematic profile sketch ##
+  ########################################
   if(exists('color.legend.data')) {
     # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
@@ -479,8 +864,13 @@ plotSPC <- function(x, color='soil_color', width=0.2, name=NULL, name.style='rig
   }
 
 
+## TODO: not sure if this is the correct roxygen incantation...
+## https://stackoverflow.com/questions/4396768/how-to-properly-document-s4-and-methods-using-roxygen
 
-# method dispatch
+## TODO: consider removing the generic, and switching to plotSPC
+
+#' generic plot method for \code{SoilProfileCollection} objects
+#'
 setMethod("plot", signature("SoilProfileCollection"), definition=plotSPC)
 
 
