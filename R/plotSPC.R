@@ -864,6 +864,11 @@ plotSPC <- function(
   }
 
 
+## TODO: not sure if this is the correct roxygen incantation...
+## https://stackoverflow.com/questions/4396768/how-to-properly-document-s4-and-methods-using-roxygen
+
+## TODO: consider removing the generic, and switching to plotSPC
+
 #' generic plot method for \code{SoilProfileCollection} objects
 #'
 setMethod("plot", signature("SoilProfileCollection"), definition=plotSPC)
