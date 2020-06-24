@@ -7,7 +7,7 @@
 #' @return vector of label colors
 #' 
 #' @author D.E. Beaudette
-invertLabelColor <- function(colors, threshold=0.6) {
+invertLabelColor <- function(colors, threshold=0.65) {
   
   ## TODO: not NA-safe!!
   # convert colors -> sRGB -> HSV
@@ -18,6 +18,7 @@ invertLabelColor <- function(colors, threshold=0.6) {
   hsv.cols[, 2] <- 0
   
   # conditionally set value according to thresold
+  # V > thresh -> black | else white
   hsv.cols[, 3] <- ifelse(hsv.cols[, 3] > threshold, 0, 1)
   
   # new label color: white | black

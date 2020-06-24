@@ -36,8 +36,8 @@ colorContrastPlot <- function(m1, m2, col.cex=1, col.font=2, d.cex=1, cc.font=3,
   y.pos2 <- rep(0.01, times=nx)
   
   # create high-contrast label colors
-  m1.label.colors <- invertLabelColor(colors$m1)
-  m2.label.colors <- invertLabelColor(colors$m2)
+  m1.label.colors <- invertLabelColor(colors[[1]])
+  m2.label.colors <- invertLabelColor(colors[[2]])
   
   # annotate top row
   text(x.pos, y.pos1, labels = m1, col=m1.label.colors, font=col.font, cex=col.cex, adj = c(-0.125, -0.33))
