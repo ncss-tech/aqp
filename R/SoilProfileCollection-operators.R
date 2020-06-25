@@ -205,32 +205,19 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #### double bracket SoilProfileCollection methods
 #### 
 
-#' Get, add or change column of horizon or site data in a SoilProfileCollection
+#' Get column of horizon or site data in a SoilProfileCollection
 #' 
+#' @name [[
 #' @description 
 #' 
-#' Get, add or change the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons. The benefit of using double bracket setter over \code{$} is that \code{name} can be calculated, whereas with \code{$}, it must be known a priori and hard coded. 
-#' 
+#' Get the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons.  
 #' Bonus: \code{[[} gives access to all site and horizon level variables in tab complete for RStudio using the magrittr pipe operator!
-#' 
-#' When using the double bracket setter the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.
 #' 
 #' @param x a SoilProfileCollection
 #' @param i an expression resolving to a single column name in site or horizon table
-#' @param j [not used]
-#' @param ... [not used]
-#' @param value New value to replace -- unit length or equal in length to number of sites or horizons in the collection.
-#' @aliases [[,SoilProfileCollection,character,ANY-method
+#' @aliases `[[`,SoilProfileCollection,ANY-method, `[[`,SoilProfileCollection,ANY,ANY-method
 #' @docType methods
 #' @rdname doublebracket
-
-# accessor for site and horizon names via double bracket
-#  site names in horizon names results return from site (idname)
-#
-# prevents:
-#   "Error in object[[i]] : this S4 class is not subsettable"
-#   which is an error caused by RStudio? when doing tab completion
-#   with %>% operator on a SPC
 #' @examples 
 #' 
 #' data(sp2)
@@ -268,9 +255,17 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #' 
 #' # join result back into horizons
 #' horizons(sp5) <- result
-#'
+
+# accessor for site and horizon names via double bracket
+#  site names in horizon names results return from site (idname)
+#
+# prevents:
+#   "Error in object[[i]] : this S4 class is not subsettable"
+#   which is an error caused by RStudio? when doing tab completion
+#   with %>% operator on a SPC
+
 setMethod("[[", signature(x = "SoilProfileCollection",
-                          i = "character"),
+                          i = "ANY"),
           function(x, i) {
             if (length(i) == 1) {
               # site names take precedence for those
@@ -283,13 +278,28 @@ setMethod("[[", signature(x = "SoilProfileCollection",
             }
           })
 
-#' @aliases [[<-,SoilProfileCollection-method
+#' Add or change column of horizon or site data in a SoilProfileCollection
+#' 
+#' @name [[<-
+#' 
+#' @description 
+#' 
+#' Add or change the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons. The benefit of using double bracket setter over \code{$} is that \code{name} can be calculated, whereas with \code{$}, it must be known a priori and hard coded. 
+#' 
+#' When using the double bracket setter the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.
+#' 
+#' @param x a SoilProfileCollection
+#' @param i an expression resolving to a single column name in site or horizon table-
+#' @param j [not used]
+#' @param value New value to replace -- unit length or equal in length to number of sites or horizons in the collection.
+#' @aliases `[[<-`,SoilProfileCollection,ANY,ANY-method
 #' @docType methods
-#' @rdname doublebracket
+#' @rdname doublebracket-set
 setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                                  i = "ANY",
-                                 j = "ANY"),
-                 function(x, i, j, ...) {
+                                 j = "ANY",
+                                 value = "ANY"),
+                 function(x, i, j, value) {
                    lv <- length(value)
                    lx <- length(x)
                    nx <- nrow(x)

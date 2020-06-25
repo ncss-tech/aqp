@@ -3,7 +3,7 @@
 \docType{methods}
 \name{$,SoilProfileCollection-method}
 \alias{$,SoilProfileCollection-method}
-\alias{`$`,SoilProfileCollection-method,`$<-`,SoilProfileCollection-method}
+\alias{`$`,SoilProfileCollection-method}
 \alias{$<-,SoilProfileCollection-method}
 \alias{`$<-`,SoilProfileCollection-method}
 \title{Access column of horizon or site data in a SoilProfileCollection}
