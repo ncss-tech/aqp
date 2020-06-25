@@ -349,7 +349,7 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
 #' @docType methods
 #' @rdname dollarsign
 #' 
-#' @aliases `$`,SoilProfileCollection-method,`$<-`,SoilProfileCollection-method
+#' @aliases `$`,SoilProfileCollection-method
 #' @examples 
 #' 
 #' data(sp1)
@@ -387,6 +387,7 @@ setMethod("$", signature(x = "SoilProfileCollection"),
             
             return(res)
           })
+
 #' @aliases `$<-`,SoilProfileCollection-method
 #' @param value Replacement values: unit length or equal to number of horizons or sites.
 #' @rdname dollarsign
