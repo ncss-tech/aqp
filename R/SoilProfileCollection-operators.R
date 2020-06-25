@@ -348,18 +348,16 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                  })
 
 
-#' Access column of horizon or site data in a SoilProfileCollection
-#' 
-#' @description Get/set the data from a column accessed by name \code{spc$name}. Horizon data takes precedence. Column names are not shared between site and horizons. 
-#' 
-#' When using \code{$<-}, the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.
+#' Get data from column of horizon or site data in a SoilProfileCollection
+#' @name $
+#' @description Get the data from a column accessed by name \code{x$name}. Column names other than profile ID are not shared between site and horizons. 
 #' 
 #' @param x a SoilProfileCollection
 #' @param name a single column name in site or horizon table
 #' @docType methods
 #' @rdname dollarsign
 #' 
-#' @aliases `$`,SoilProfileCollection-method
+#' @aliases $,SoilProfileCollection-method
 #' @examples 
 #' 
 #' data(sp1)
@@ -398,10 +396,19 @@ setMethod("$", signature(x = "SoilProfileCollection"),
             return(res)
           })
 
-#' @aliases `$<-`,SoilProfileCollection-method
+#' Set data in column of horizon or site data in a SoilProfileCollection
+#' @name $<-
+#' @description Set the data in a column accessed by name \code{spc$name}. Column names other than profile ID are not shared between site and horizons. 
+#' 
+#' When using \code{$<-}, the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to. Use \code{`site(x)$name <- value`} or  \code{`horizons(x)$name <- value`} to be explicit about which slot is being accessed.
+#' 
+#' @param x a SoilProfileCollection
+#' @param name a single column name in site or horizon table
+#' @docType methods
+#' @aliases $<-,SoilProfileCollection-method
 #' @param value Replacement values: unit length or equal to number of horizons or sites.
-#' @rdname dollarsign
-setReplaceMethod("$", signature(x="SoilProfileCollection"),
+#' @rdname dollarsign-set
+setReplaceMethod("$", signature(x = "SoilProfileCollection"),
                  function(x, name, value) {
                    #print(name)
                    
