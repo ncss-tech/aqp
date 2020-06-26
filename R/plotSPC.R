@@ -679,7 +679,10 @@ plotSPC <- function(
 	      
 	      ## TODO: should be optional, and adjustable
 	      # horizon depth 
-	      points(rep(x0, times=nh), y0, pch=15, col=par('fg'), cex=0.66) 
+	      # center
+	      # points(rep(x0, times=nh), y0, pch=15, col=par('fg'), cex=0.66)
+	      # right edge
+	      points(rep(x0 + width, times=nh - 1), y0[1:(length(y0) - 1)], pch='_', col=par('fg'), cex=cex.names * 0.9)
 	    } else {
 	      
 	      ## TODO: think of a better approach
@@ -728,7 +731,7 @@ plotSPC <- function(
 	    'left-center' = {
 	      # experimental
 	      # inset from left-hand side
-	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
+	      hzname.x0 <- (x0 - width) + (one.char.width * 0.2)
 	      # horizon depth mid-point
 	      hzname.y0 <- ( y1 + y0 ) / 2
 	      # left-hand / vertical center justification
@@ -739,7 +742,7 @@ plotSPC <- function(
 	    'left-top' = {
 	      # soilweb style
 	      # inset from upper-left corner
-	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
+	      hzname.x0 <- (x0 - width) + (one.char.width * 0.2)
 	      hzname.y0 <- y1
 	      # left-hand / vertical top justification
 	      hzname.adj <- c(0, 1)
