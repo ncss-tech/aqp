@@ -289,7 +289,7 @@ plotSPC <- function(
   ###################
   
   # horizon name style
-  if(! name.style %in% c('right-center', 'left-center', 'left-top')) {
+  if(! name.style %in% c('right-center', 'left-center', 'left-top', 'center-center')) {
     warning('invalid `name.style`', call. = FALSE)
     name.style <- 'right-center'
   }
@@ -731,7 +731,7 @@ plotSPC <- function(
 	    'left-center' = {
 	      # experimental
 	      # inset from left-hand side
-	      hzname.x0 <- (x0 - width) + (one.char.width * 0.2)
+	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
 	      # horizon depth mid-point
 	      hzname.y0 <- ( y1 + y0 ) / 2
 	      # left-hand / vertical center justification
@@ -742,10 +742,19 @@ plotSPC <- function(
 	    'left-top' = {
 	      # soilweb style
 	      # inset from upper-left corner
-	      hzname.x0 <- (x0 - width) + (one.char.width * 0.2)
+	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
 	      hzname.y0 <- y1
 	      # left-hand / vertical top justification
 	      hzname.adj <- c(0, 1)
+	      # high-contrast labels
+	      hzname.col <- invertLabelColor(this_profile_colors)
+	    }, 
+	    'center-center' = {
+	      # inset from upper-left corner
+	      hzname.x0 <- x0
+	      hzname.y0 <- (y1 + y0) / 2
+	      # center just
+	      hzname.adj <- c(0.5, 0.5)
 	      # high-contrast labels
 	      hzname.col <- invertLabelColor(this_profile_colors)
 	    }
