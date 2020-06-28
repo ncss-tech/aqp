@@ -60,7 +60,7 @@ getArgillicBounds <- function(p,
   }
 
   if(!clay.attr %in% horizonNames(p)) {
-    clay.attr <- guessHzAttrName(p, attr="clay", optional=c("total","_r"))
+    clay.attr <- guessHzAttrName(p, attr = "clay", optional = c("total","_r"))
     if(is.na(clay.attr))
       stop("horizon clay content column not correctly specified")
   }

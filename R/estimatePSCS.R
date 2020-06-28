@@ -6,21 +6,24 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
 
   hz.depths <- horizonDepths(p)
 
-  # ease removal of attribute name arguments -- deprecate them later
-  # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
-  if(missing(hzdesgn) | all(!hzdesgn %in% horizonNames(p))) {
+  attr.len <- unlist(lapply(c(hzdesgn, clay.attr, texcl.attr), length))
+  if(any(attr.len > 1))
+    stop("horizon designation, clay attribute or texture class attribute must have length 1")
+
+  if(is.null(hzdesgn) | (!hzdesgn %in% horizonNames(p))) {
     hzdesgn <- guessHzDesgnName(p)
     if(is.na(hzdesgn))
       stop("horizon designation column not correctly specified")
   }
 
-  if(missing(clay.attr) | all(!clay.attr %in% horizonNames(p))) {
+  if(is.null(clay.attr) | (!clay.attr %in% horizonNames(p))) {
+    print((clay.attr))
     clay.attr <- guessHzAttrName(p, attr="clay", optional=c("total","_r"))
     if(is.na(clay.attr))
       stop("horizon clay content column not correctly specified")
   }
 
-  if(missing(texcl.attr) | all(!texcl.attr %in% horizonNames(p))) {
+  if(is.null(texcl.attr) | (!texcl.attr %in% horizonNames(p))) {
     texcl.attr <- guessHzTexClName(p)
     if(is.na(texcl.attr))
       stop("horizon texture class column not correctly specified")
