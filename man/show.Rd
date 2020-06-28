@@ -12,7 +12,7 @@
 \item{object}{a SoilProfileCollection}
 }
 \description{
-Pretty output method for SoilProfileCollection objects. By default this method limits output to 10 columns and 6 rows from the site and horizon tables respectively. 
+Pretty output method for SoilProfileCollection objects. By default this method limits output to 10 columns and 6 rows from the site and horizon tables respectively.
 
 There is an aqp environment option you can set to increase the number of columns shown by default: \code{options(.aqp.show.n.cols = 100)},
 }

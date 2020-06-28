@@ -16,7 +16,7 @@
 \description{
 You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, repectively: \code{spc[i, j]}. Subsetting operations are propagated to other slots when they result in removal of sites from a collection.
 
-\code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character. 
+\code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
 
-\code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. `j` returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
+\code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
 }

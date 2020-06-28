@@ -58,7 +58,7 @@ depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
 p <- sp1[1]
-attr <- 'prop' # clay contents 
+attr <- 'prop' # clay contents
 foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 foo
 }

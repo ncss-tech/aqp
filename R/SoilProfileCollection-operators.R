@@ -18,7 +18,7 @@
 #'
 #' \code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
 #'
-#' \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. `j` returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
+#' \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
 #'
 #'
 #' @param x a SoilProfileCollection
@@ -139,7 +139,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
               i.missing <- which(as.logical(lapply(j.res,
                                                    function(jr) { !any(jr) })))
 
-              # if some profiles have been removed based on the j-index constraints
+              # if profiles have been removed based on the j-index constraints
               if (length(i.missing) > 0) {
                 # remove sites that have no matching j
                 h.ids <- s[i.missing, idname(x)]
@@ -195,7 +195,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
             metadata(res)$aqp_df_class <- o.df.class
             metadata(res)$aqp_group_by <- o.group.by
 
-            # preserve one off slots that may have been customized relative to defaults
+            # preserve slots that may have been customized relative to defaults
             #  in prototype or resulting from construction of SPC
             suppressMessages(hzidname(res) <- hzidname(x))
             suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
@@ -206,12 +206,14 @@ setMethod("[", signature(x = "SoilProfileCollection",
             site.res <- site(res)[[idname(res)]]
 
             if (length(pid.res) != length(site.res)) {
-              warning("Some profiles have been removed from the collection.", call. = FALSE)
+              warning("Some profiles have been removed from the collection.",
+                      call. = FALSE)
             }
 
             # the order of profile_ids should be the same as in @site
             if (!all(pid.res == site.res)) {
-              warning("profile ID order does not match order in @site", call. = FALSE)
+              warning("profile ID order does not match order in @site",
+                      call. = FALSE)
             }
 
             return(res)
@@ -231,7 +233,8 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #'
 #' @param x a SoilProfileCollection
 #' @param i an expression resolving to a single column name in site or horizon table
-#' @aliases `[[`,SoilProfileCollection,ANY-method, `[[`,SoilProfileCollection,ANY,ANY-method
+#' @param j [not used]
+#' @aliases [[,SoilProfileCollection,ANY-method, [[,SoilProfileCollection,ANY,ANY-method
 #' @docType methods
 #' @rdname doublebracket
 #' @examples
@@ -252,8 +255,6 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #'
 #' # some column names to work with
 #' rgb.columns <- c("R25","G25","B25")
-#'
-#'
 #'
 #' res <- lapply(rgb.columns, function(x) {
 #'
@@ -281,8 +282,9 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #   with %>% operator on a SPC
 
 setMethod("[[", signature(x = "SoilProfileCollection",
-                          i = "ANY"),
-          function(x, i) {
+                          i = "ANY",
+                          j = "ANY"),
+          function(x, i, j) {
             if (length(i) == 1) {
               # site names take precedence for those
               #  shared between @site and @horizons (idname)
@@ -295,27 +297,31 @@ setMethod("[[", signature(x = "SoilProfileCollection",
           })
 
 #' Add or change column of horizon or site data in a SoilProfileCollection
-#'
 #' @name [[<-
-#'
 #' @description
 #'
-#' Add or change the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons. The benefit of using double bracket setter over \code{$} is that \code{name} can be calculated, whereas with \code{$}, it must be known a priori and hard coded.
+#' Add or change the data from a column accessed by name. Column names other
+#' than profile ID are not shared between site and horizons. The benefit of
+#' using double bracket setter over \code{$} is that \code{name} can be
+#' calculated, whereas with \code{$}, it must be known a priori and hard coded.
 #'
-#' When using the double bracket setter the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.
+#' When using the double bracket setter the length of input and output matching
+#' either the number of sites or number of horizons is used to determine which
+#' slot new columns are assigned to.
 #'
 #' @param x a SoilProfileCollection
-#' @param i an expression resolving to a single column name in site or horizon table-
-#' @param j [not used]
-#' @param value New value to replace -- unit length or equal in length to number of sites or horizons in the collection.
-#' @aliases `[[<-`,SoilProfileCollection,ANY,ANY-method
+#' @param i an expression resolving to a single column name in site or horizon
+#'   table-
+#' @param value New value to replace -- unit length or equal in length to number
+#'   of sites or horizons in the collection.
+#'
+#' @aliases [[<-,SoilProfileCollection,ANY,ANY-method
 #' @docType methods
 #' @rdname doublebracket-set
 setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                                  i = "ANY",
-                                 j = "ANY",
                                  value = "ANY"),
-                 function(x, i, j, value) {
+                 function(x, i, value) {
                    lv <- length(value)
                    lx <- length(x)
                    nx <- nrow(x)
@@ -416,7 +422,7 @@ setMethod("$", signature(x = "SoilProfileCollection"),
 #' @name $<-
 #' @description Set the data in a column accessed by name \code{spc$name}. Column names other than profile ID are not shared between site and horizons.
 #'
-#' When using \code{$<-}, the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to. Use \code{`site(x)$name <- value`} or  \code{`horizons(x)$name <- value`} to be explicit about which slot is being accessed.
+#' When using \code{$<-}, the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to. Use \code{site(x)$name <- value} or  \code{horizons(x)$name <- value} to be explicit about which slot is being accessed.
 #'
 #' @param x a SoilProfileCollection
 #' @param name a single column name in site or horizon table

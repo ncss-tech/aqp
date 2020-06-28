@@ -36,11 +36,11 @@ glom(
 A SoilProfileCollection, data.frame, or a vector of horizon IDs.
 }
 \description{
-glom() returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile. 
+glom() returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.
 
-All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest. 
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 
-If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID. 
+If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
 
 If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using \code{evalMissingData} or similar approach.
 }
@@ -57,7 +57,7 @@ p <- sp1[1]
 foo <- glom(p, 25, 100)
 
 # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
-nrow(foo) 
+nrow(foo)
 }
 \author{
 Andrew G. Brown

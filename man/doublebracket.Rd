@@ -3,19 +3,21 @@
 \docType{methods}
 \name{[[}
 \alias{[[}
-\alias{`[[`,SoilProfileCollection,ANY-method,}
-\alias{`[[`,SoilProfileCollection,ANY,ANY-method}
+\alias{[[,SoilProfileCollection,ANY-method,}
+\alias{[[,SoilProfileCollection,ANY,ANY-method}
 \title{Get column of horizon or site data in a SoilProfileCollection}
 \usage{
-\S4method{[[}{SoilProfileCollection,ANY,ANY}(x, i)
+\S4method{[[}{SoilProfileCollection,ANY,ANY}(x, i, j)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
 
 \item{i}{an expression resolving to a single column name in site or horizon table}
+
+\item{j}{[not used]}
 }
 \description{
-Get the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons.  
+Get the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons.
 Bonus: \code{[[} gives access to all site and horizon level variables in tab complete for RStudio using the magrittr pipe operator!
 }
 \examples{
@@ -25,7 +27,7 @@ depths(sp2) <- id ~ top + bottom
 site(sp2) <- ~ surface
 
 # get with [[
-sp2[['surface']] 
+sp2[['surface']]
 
 # get using "unknown" expression:
 #  "2nd + 3rd horizon column names"
@@ -36,8 +38,6 @@ data(sp5)
 
 # some column names to work with
 rgb.columns <- c("R25","G25","B25")
-
-
 
 res <- lapply(rgb.columns, function(x) {
 

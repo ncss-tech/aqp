@@ -18,7 +18,6 @@ res %>% summarize(clay_mean = mean(clay, na.rm = TRUE),
 
 # compose a deliberately reordered SPC list with subsets of profiles
 #  this is ordered with respect to the phiid ID, not calculated
-#
 #  note: look at character ordering of idname versus the character
 #        ordering of hzidname for profiles in index 1 and 2
 #        i.e. sort(profile_id(union(l)))
