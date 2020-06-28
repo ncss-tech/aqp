@@ -11,9 +11,10 @@ metadata(loafercreek)$aqp_df_class <- "tbl_df"
 res <- loafercreek %>%
     filter(!is.na(taxorder)) %>%
     glomApply(estimatePSCS, truncate = TRUE) %>%
+    mutate_profile(pscs_clay = weighted.mean(clay, hzdepb - hzdept)) %>%
     group_by(taxorder)
 
-res %>% summarize(clay_mean = mean(clay, na.rm = TRUE),
+res %>% summarize(clay_mean = mean(pscs_clay, na.rm = TRUE),
                   n_obs = sum(!is.na(clay)))
 
 # compose a deliberately reordered SPC list with subsets of profiles
@@ -21,8 +22,10 @@ res %>% summarize(clay_mean = mean(clay, na.rm = TRUE),
 #  note: look at character ordering of idname versus the character
 #        ordering of hzidname for profiles in index 1 and 2
 #        i.e. sort(profile_id(union(l)))
-l <- list(glom(loafercreek[1,], 25, 100) %>% group_by(taxorder),
-          glom(loafercreek[2,], 25, 100) %>% group_by(taxorder))
+l <- list(glom(loafercreek[1,], 25, 100) %>%
+            group_by(taxorder),
+          glom(loafercreek[2,], 25, 100) %>%
+            group_by(taxorder))
 
 # check metadata of first element
 metadata(l[[1]])
