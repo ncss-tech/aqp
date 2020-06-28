@@ -118,8 +118,8 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   # template for combined data is based on the first element
   new.pID <- spc.list[[1]]$idcol
   new.hzID <- spc.list[[1]]$hzidcol
-  new.hzdesgn <- spc.list[[1]]$hzdesgnname
-  new.hztexcl <- spc.list[[1]]$hztexclname
+  new.hzdesgn <- spc.list[[1]]$hzdesgncol
+  new.hztexcl <- spc.list[[1]]$hztexclcol
   new.hzd <- spc.list[[1]]$depthcols
   new.metadata <- spc.list[[1]]$metadata
 

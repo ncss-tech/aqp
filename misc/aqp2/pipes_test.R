@@ -6,7 +6,7 @@ library(data.table)
 data("loafercreek")
 
 # try with various df classes (data.frame, data.table, tbl_df)
-metadata(loafercreek)$aqp_df_class <- "tbl_df"
+metadata(loafercreek)$aqp_df_class <- "data.frame"
 
 res <- loafercreek %>%
     filter(!is.na(taxorder)) %>%
