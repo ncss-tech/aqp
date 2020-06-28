@@ -873,17 +873,16 @@ plotSPC <- function(
 
   }
 
-
-## TODO: not sure if this is the correct roxygen incantation...
-## https://stackoverflow.com/questions/4396768/how-to-properly-document-s4-and-methods-using-roxygen
-
-## TODO: consider removing the generic, and switching to plotSPC
-
 #' generic plot method for \code{SoilProfileCollection} objects
 #' @name plot
+#' @param y [not used]
+#' @usage
+#' ## S4 method for signature 'SoilProfileCollection,ANY'
+#' ## note: y argument in generic definition is not currently used
+#' plot(x, y, ...)
 #' @aliases plot,SoilProfileCollection,ANY-method
 #' @rdname SoilProfileCollection-plotting-methods
-setMethod("plot", signature("SoilProfileCollection", "ANY"),
-          definition = plotSPC)
-
-
+#'
+setMethod("plot", signature(x = "SoilProfileCollection",
+                            y = "ANY"),
+          definition = {function(x, y, ...) plotSPC(x, ...)})

@@ -54,51 +54,9 @@ plotSPC(
   ...
 )
 
-\S4method{plot}{SoilProfileCollection,ANY}(
-  x,
-  color = "soil_color",
-  width = 0.2,
-  name = NULL,
-  name.style = "right-center",
-  label = idname(x),
-  hz.depths = FALSE,
-  alt.label = NULL,
-  alt.label.col = "black",
-  cex.names = 0.5,
-  cex.depth.axis = cex.names,
-  cex.id = cex.names + (0.2 * cex.names),
-  font.id = 2,
-  print.id = TRUE,
-  id.style = "auto",
-  plot.order = 1:length(x),
-  relative.pos = 1:length(x),
-  add = FALSE,
-  scaling.factor = 1,
-  y.offset = 0,
-  x.idx.offset = 0,
-  n = length(x),
-  max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
-  n.depth.ticks = 5,
-  shrink = FALSE,
-  shrink.cutoff = 3,
-  abbr = FALSE,
-  abbr.cutoff = 5,
-  divide.hz = TRUE,
-  hz.distinctness.offset = NULL,
-  hz.topography.lty = NULL,
-  axis.line.offset = -2.5,
-  plot.depth.axis = TRUE,
-  density = NULL,
-  col.label = color,
-  col.palette = rev(brewer.pal(10, "Spectral")),
-  col.palette.bias = 1,
-  col.legend.cex = 1,
-  n.legend = 8,
-  lwd = 1,
-  lty = 1,
-  default.color = grey(0.95),
-  ...
-)
+## S4 method for signature 'SoilProfileCollection,ANY'
+## note: y argument in generic definition is not currently used
+plot(x, y, ...)
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}
@@ -186,6 +144,8 @@ plotSPC(
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
+
+\item{y}{[not used]}
 }
 \description{
 Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} contains many examples and discussion of the large number of arguments to this function.
