@@ -881,6 +881,7 @@ plotSPC <- function(
 
 #' generic plot method for \code{SoilProfileCollection} objects
 #' @name plot
+#' @aliases plot,SoilProfileCollection,ANY-method
 #' @rdname SoilProfileCollection-plotting-methods
 setMethod("plot", signature("SoilProfileCollection", "ANY"),
           definition = plotSPC)
