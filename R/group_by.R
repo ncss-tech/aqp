@@ -41,7 +41,7 @@ setMethod("group_by", signature(object = "SoilProfileCollection"),
   # set value of metadata "SPC group" - which defines one or more 
   #   site (or horizon) level attrs that are used for grouping in certain functions
   #   in order of precedence, pipe-delimited.
-  object@metadata$.spc_group_by <- paste0(foo, collapse = "|")
+  object@metadata$aqp_group_by <- paste0(foo, collapse = "|")
   
   return(object)
 })
