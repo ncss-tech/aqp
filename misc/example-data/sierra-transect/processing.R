@@ -74,6 +74,8 @@ g$transect <- factor(g$transect, levels=c('Granite', 'Andesite'))
 g$Fe_o_to_Fe_d <- g$Fe_o / g$Fe_d
 
 
+# set horizon designation
+hzdesgnname(g) <- 'name'
 
 ## save
 sierraTransect <- g
