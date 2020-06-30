@@ -676,11 +676,17 @@ plotSPC <- function(
 	    if(is.null(hz.topography.lty)) {
 
 	      ## TODO: should be optional, and adjustable
-	      # horizon depth
+	      ## * segment?
+	      ## * arrow?
+	      ## --> unicode and plot symbols do not align perfectly with horizontal line placement
+	      ##
+	      # actual horizon depths
+	      #
 	      # center
 	      # points(rep(x0, times=nh), y0, pch=15, col=par('fg'), cex=0.66)
+	      #
 	      # right edge
-	      points(rep(x0 + width, times=nh - 1), y0[1:(length(y0) - 1)], pch='_', col=par('fg'), cex=cex.names * 0.9)
+	      # text(rep(x0 + width, times=nh - 1), y0[1:(length(y0) - 1)], labels = '\u2bc7', col=par('fg'), cex=cex.names * 1.1, adj = c(1, 0.5))
 	    } else {
 
 	      ## TODO: think of a better approach
@@ -781,7 +787,13 @@ plotSPC <- function(
 	  ## horizon top depth annotation ##
 	  ##################################
 	  if(hz.depths) {
-	    text(x0 + width, y1, this_profile_data[, tcol], cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
+	    ## TODO: consider use of unicode arrow markers
+	    # hzd.txt <- sprintf('\u25c4%s', this_profile_data[, tcol])
+	    # text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0, font = 1)
+	    
+	    # just labels
+	    hzd.txt <- this_profile_data[, tcol]
+	    text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
 	  }
 
 
