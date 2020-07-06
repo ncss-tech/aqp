@@ -405,7 +405,7 @@ plotSPC <- function(
     cc <- which(complete.cases(c.rgb))
     h$.color <- NA
     # convert non-NA values into colors
-    h$.color[cc] <- rgb(c.rgb[cc, ], maxColorValue=255)
+    h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue=255)
     # generate range / colors for legend
     pretty.vals <- pretty(h[[color]], n = n.legend)
     # truncate to 3 signif vals and convert to character for correct interpretation of floating point values
@@ -849,36 +849,38 @@ plotSPC <- function(
     # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
 
-
-    # possibly split legend across multiple rows
-    if(exists('multi.row.legend')) {
-
-      # compute max space required for legend items
-      # better formatting
-      # note: must be called AFTER high level plot()
-      leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
-
-      # row 1
-      legend('bottom', inset=c(0, 0.99),
-             legend=color.legend.data$legend[leg.row.indices$row.1],
-             col=color.legend.data$col[leg.row.indices$row.1],
-             text.width = leg.text.width,
-             bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
-             )
-
-      # row 2
-      legend('bottom', inset=c(0, 0.94),
-             legend=color.legend.data$legend[leg.row.indices$row.2],
-             col=color.legend.data$col[leg.row.indices$row.2],
-             text.width = leg.text.width,
-             bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
-      )
-
-    } else {
-      # standard invocation
-      legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)
+    # gracefully handle all-NA in thematic variable
+    if(length(color.legend.data$legend) > 0) {
+      
+      # possibly split legend across multiple rows
+      if(exists('multi.row.legend')) {
+  
+        # compute max space required for legend items
+        # better formatting
+        # note: must be called AFTER high level plot()
+        leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
+  
+        # row 1
+        legend('bottom', inset=c(0, 0.99),
+               legend=color.legend.data$legend[leg.row.indices$row.1],
+               col=color.legend.data$col[leg.row.indices$row.1],
+               text.width = leg.text.width,
+               bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
+               )
+  
+        # row 2
+        legend('bottom', inset=c(0, 0.94),
+               legend=color.legend.data$legend[leg.row.indices$row.2],
+               col=color.legend.data$col[leg.row.indices$row.2],
+               text.width = leg.text.width,
+               bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
+        )
+  
+      } else {
+        # standard invocation
+        legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)
+      }
     }
-
 
   }
 
