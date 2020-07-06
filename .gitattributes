@@ -1,5 +1,9 @@
+*.rda binary
+*.Rda binary
+*.png binary
+
 # Auto detect text files and perform LF normalization
-* text=auto
+* text eof=lf
 
 # Custom for Visual Studio
 *.cs     diff=csharp
