@@ -1,6 +1,7 @@
 ## 2019-07-16: moved util functions to `sketch-utils.R`
 
 
+
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
