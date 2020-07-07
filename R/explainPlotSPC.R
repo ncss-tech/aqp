@@ -12,7 +12,7 @@
 #' @return a list of internally-used ordering vectors and graphical offsets / scaling factors
 #' 
 explainPlotSPC <- function(x, ...) {
-  plot(x, id.style='side', ...)
+  plotSPC(x, id.style='side', ...)
   box()
   
   # get last plot parameters
