@@ -12,18 +12,18 @@ spc_in_sync(object)
 \item{object}{A SoilProfileCollection}
 }
 \value{
-data.table
+data.frame
 }
 \description{
 Determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents. 
 
 Three logical checks are performed on the site and horizon tables, and a fourth attribute \code{valid} returns \code{TRUE} when all three checks are \code{TRUE}.
 
-Check 1: Site order is reflected in horizons. Which means: mo intermingling of sites within horizon table. Each profile is a block of contiguous rows in the horizon table. Though, they _may_ be out of order within profiles.
+Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons
 
-Check 2: Site IDs match coalesced profile ID from horizon. This check ensures the same _relative_ ordering, but horizons still may be out of order within profiles
+Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles
 
-Check 3: Horizon IDs are in order of profile ID in site and within profiles, have correct top-depth sequence.
+Check 3: Horizon IDs match metadata-defined target order.
 }
 \author{
 Andrew G. Brown

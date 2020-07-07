@@ -6,14 +6,14 @@
 #' 
 #' Three logical checks are performed on the site and horizon tables, and a fourth attribute \code{valid} returns \code{TRUE} when all three checks are \code{TRUE}.
 #'
-#' Check 1: Site order is reflected in horizons. Which means: mo intermingling of sites within horizon table. Each profile is a block of contiguous rows in the horizon table. Though, they _may_ be out of order within profiles.
+#' Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons
 #' 
-#' Check 2: Site IDs match coalesced profile ID from horizon. This check ensures the same _relative_ ordering, but horizons still may be out of order within profiles
+#' Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles
 #' 
-#' Check 3: Horizon IDs are in order of profile ID in site and within profiles, have correct top-depth sequence.
+#' Check 3: Horizon IDs match metadata-defined target order.
 #' 
 #' @param object A SoilProfileCollection 
-#' @return data.table
+#' @return data.frame
 #' @aliases spc_in_sync,SoilProfileCollection-method
 #' @docType methods
 #' @author Andrew G. Brown
@@ -73,7 +73,7 @@ spc_in_sync <- function(object) {
   
   # check 3: horizon IDs are in order of profile ID in site
   #          and, within profiles, have correct top-depth sequence
-  three <- TRUE #TODO
+  three <- all(cohzid[metadata(object)$target.order] == cohzid)
   
   return(data.frame(siteDepth = one,
                     relativeOrder = two,
