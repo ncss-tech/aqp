@@ -126,12 +126,6 @@ importFrom(rlang,
            enquos,
            enquo)
 
-importFrom(data.table,
-           as.data.table)
-
-importFrom(tibble,
-           as_tibble)
-
 exportClasses(SoilProfileCollection)
 
 S3method(rbind, SoilProfileCollection)

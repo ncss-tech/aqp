@@ -61,8 +61,11 @@ setClass(
 
 # 2020-05-30: make data.table, tbl_df and data.frame slots "co-exist"
 # see: https://stackoverflow.com/questions/35642191/tbl-df-with-s4-object-slots
-setOldClass(c("data.table", "data.frame"))
-setOldClass(c("tbl_df", "tbl", "data.frame"))
+if(requireNamespace("data.table", quietly = TRUE))
+  setOldClass(c("data.table", "data.frame"))
+
+if(requireNamespace("tibble", quietly = TRUE))
+  setOldClass(c("tbl_df", "tbl", "data.frame"))
 
 # 2019-03-15: creating an empty SpatialPoints object requires more effort
 # c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
