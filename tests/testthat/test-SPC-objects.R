@@ -559,7 +559,7 @@ test_that("replaceHorizons<- works as expected", {
   # works when hzidname is missing, defaults to hzID
   expect_message(replaceHorizons(x) <- horizons(x)[,c(idname(x), 
                                                       horizonDepths(x))])
-  expect_equal(x$hzID, 1:nrow(x))
+  expect_equal(x$hzID, as.character(1:nrow(x)))
   
   # missing idname = error
   expect_error(replaceHorizons(x) <- horizons(x)[,c(horizonDepths(x))])
