@@ -69,16 +69,21 @@ setReplaceMethod("depths", "data.frame",
   }
 )
 
-.checkNAdepths <- function(depth, name) {
-  if(any(is.na(depth)))
-    warning(sprintf("Horizon %s depths contain NA! Check depth logic with aqp::checkHzDepthLogic()", name), call. = FALSE)
-  if(!is.numeric(depth)) {
-    depth <- try(as.numeric(depth))
-    if(!inherits(depth, 'try-error')) {
-      message(sprintf("Horizon %s depths converted to numeric.", name))
-      return(depth)
-    } else stop(sprintf("Unable to convert %s depths to numeric!", name))
+.checkNAdepths <- function(depth, l) {
+  if(is.factor(depth)) {
+    warning(sprintf("Horizon %s depth is a factor! This happens with automatic character to factor conversions!", l), call. = FALSE)
+            
+    # this ensures numeric conversion uses factor labels, not levels
+    depth <- as.character(depth)
   }
+  if(!is.numeric(depth)) {
+    depth <- suppressWarnings(try(as.numeric(depth)))
+    if(!inherits(depth, 'try-error')) {
+      message(sprintf("Horizon %s depths converted to numeric.", l))
+    } else stop(sprintf("Unable to convert %s depths to numeric!", l))
+  }
+  if(any(is.na(depth)))
+    warning(sprintf("Horizon %s depths contain NA! Check depth logic with aqp::checkHzDepthLogic()", l), call. = FALSE)
   return(depth)
 }
 
@@ -106,11 +111,9 @@ setReplaceMethod("depths", "data.frame",
   
   
   # enforce numeric depths and provide QC warnings as needed
-  tdep <- try(as.numeric())
-  bdep <- try(as.numeric(data[[depthcols[2]]]))
+  data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
+  data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
   
-  data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]])
-  data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]])
   # create a site table with just IDs
   nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
