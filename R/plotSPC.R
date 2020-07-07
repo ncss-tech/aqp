@@ -1,41 +1,6 @@
 ## 2019-07-16: moved util functions to `sketch-utils.R`
 
 
-# split legend into two rows, and create indices
-# any more classes than that and things become impossible to read
-# n: total number of classes
-.splitLegend <- function(n) {
-
-  #  make enough room for even division of odd numbers
-  n.per.row <- ceiling(n / 2)
-
-  # make indices for first row
-  row.1.idx <- seq(from=1, to=n.per.row)
-  row.2.idx <- seq(from=n.per.row + 1, to=n)
-
-  res <- list(
-    row.1=row.1.idx,
-    row.2=row.2.idx
-  )
-
-  return(res)
-}
-
-# Function testing the validity of a colour expressed as a character string
-# Uses col2rgb() to test the validity
-# Adapted from:
-# https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
-#s
-.isColorValid <- function(x) {
-  sapply(x, function(i) {
-    tryCatch(
-      is.matrix(col2rgb(i)),
-      error = function(e) { FALSE }
-    )
-  })
-}
-
-
 
 # TODO: behavior not defined for horizons with an indefinate lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
@@ -397,31 +362,48 @@ plotSPC <- function(
   ## horizon colors ##
   ####################
 
+  
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
+    
+    # generate color ramp function
     cr <- colorRamp(col.palette, bias = col.palette.bias)
+    
     # note that this may contain NAs
     c.rgb <- cr(scales::rescale(h[[color]]))
     cc <- which(complete.cases(c.rgb))
     h$.color <- NA
+    
     # convert non-NA values into colors
     h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue=255)
+    
     # generate range / colors for legend
     pretty.vals <- pretty(h[[color]], n = n.legend)
+    
     # truncate to 3 signif vals and convert to character for correct interpretation of floating point values
     leg.pretty.vals <- as.character(signif(pretty.vals, 3))
+    
     # put into a list for later
     color.legend.data <- list(legend=leg.pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
+    
+    # special case: there are < 3 unique values -> convert to factor
+    # previous calculations are ignored
+    low.n.test.vals <- as.character(signif(h[[color]], digits = 3))
+    if(length(unique(na.omit(low.n.test.vals))) < 3) {
+      # replace with character representation with 3 significant digits
+      h[[color]] <- low.n.test.vals
+      message('less than 3 unique values, converting to factor')
+    }
   }
 
   # 2. vector of categorical data
   if(is.character(h[[color]]) | is.factor(h[[color]])) {
-    # Testing if the data in the column are valid columns
-    if( all(.isColorValid(na.omit(h[[color]]))) ) {
-      # If this is true this is a column of valid colors
+    # testing if ALL valid colors
+    if( all(.isColorValid(na.omit(h[[color]])))) {
+      # YES: interpret values directly as colors
       h$.color <- h[[color]]
     } else {
-      # Otherwise that means this is or can be converted into a factor
+      # NO: this is or can be converted into a factor
       if(!is.factor(h[[color]]))
         h[[color]] <- factor(h[[color]])
 
