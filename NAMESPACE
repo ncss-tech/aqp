@@ -1,7 +1,7 @@
 # R 3.3 compatibility:
 
 importFrom("grDevices", "chull", "col2rgb", "colorRamp", "rgb2hsv", "hsv",
-             "colorRampPalette", "grey", "rgb", "convertColor")
+             "colorRampPalette", "grey", "rgb", "convertColor", "colors")
 
 importFrom("graphics", "abline", "arrows", "axis", "box", "grid",
              "image", "legend", "lines", "mtext", "par", "points",
