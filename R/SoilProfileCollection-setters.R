@@ -69,6 +69,18 @@ setReplaceMethod("depths", "data.frame",
   }
 )
 
+.checkNAdepths <- function(depth, name) {
+  if(any(is.na(depth)))
+    warning(sprintf("Horizon %s depths contain NA! Check depth logic with aqp::checkHzDepthLogic()", name), call. = FALSE)
+  if(!is.numeric(depth)) {
+    depth <- try(as.numeric(depth))
+    if(!inherits(depth, 'try-error')) {
+      message(sprintf("Horizon %s depths converted to numeric.", name))
+      return(depth)
+    } else stop(sprintf("Unable to convert %s depths to numeric!", name))
+  }
+  return(depth)
+}
 
 ##
 ## initialize SP/SPC objects from a model.frame
@@ -92,6 +104,13 @@ setReplaceMethod("depths", "data.frame",
   # depths 
   depthcols <- c(nm[2], nm[3])
   
+  
+  # enforce numeric depths and provide QC warnings as needed
+  tdep <- try(as.numeric())
+  bdep <- try(as.numeric(data[[depthcols[2]]]))
+  
+  data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]])
+  data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]])
   # create a site table with just IDs
   nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
@@ -126,7 +145,7 @@ setReplaceMethod("depths", "data.frame",
       n.hzid <- sprintf("%s_", o.hzid)
       
       # add non-conflicting hz ID
-      res@horizons[[n.hzid]] <- 1:nrow(res)
+      res@horizons[[n.hzid]] <- as.character(1:nrow(res))
       
       # update object
       hzidname(res) <- n.hzid
@@ -140,7 +159,7 @@ setReplaceMethod("depths", "data.frame",
     
   } else {
     # no conflict, add a reasonable horizon ID
-    hzID(res) <- 1:nrow(res)
+    hzID(res) <- as.character(1:nrow(res))
   } 
   
   # done
@@ -381,7 +400,7 @@ setReplaceMethod("replaceHorizons",
   
   # assign hzID if hzidname() is missing
   if(optional.missing[1]) {
-    value$hzID <- 1:nrow(value)
+    value$hzID <- as.character(1:nrow(value))
     hzidname(object) <- "hzID"
     message("no horizon ID present, defaulting to `hzID`")
   }

@@ -187,7 +187,7 @@ permute_profile <- function(p, n = 100, boundary.attr,
                                horizons=o.h, site=o.s, sp=o.sp,
                                diagnostic=o.d, restrictions=o.r)
   ## reset horizon IDs
-  hzID(res) <- 1:nrow(res)
+  hzID(res) <- as.character(1:nrow(res))
   return(res)
 }
 

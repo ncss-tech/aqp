@@ -240,7 +240,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
 
   ## reset horizon IDs (if using default hzID)
   if ('hzID' %in% horizonNames(res))
-    res$hzID <- 1:nrow(res)
+    res$hzID <- as.character(1:nrow(res))
 
   return(res)
 }
