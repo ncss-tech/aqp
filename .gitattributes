@@ -105,9 +105,6 @@ NAMESPACE text
 *.pyc binary
 *.pdf binary
 
-# LF normalization for anything else
-* text eof=lf
-
 # Custom for Visual Studio
 *.cs     diff=csharp
 
