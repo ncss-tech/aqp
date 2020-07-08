@@ -446,7 +446,9 @@ test_that("SPC profile ID reset integrity: site", {
   
   # test site 
   data(sp4)
-  depths(sp4) <- id ~ top + bottom
+  
+  # message due to unordered site IDs
+  expect_message(depths(sp4) <- id ~ top + bottom)
   
   # save old ID and replace with known pattern
   sp4$old_id <- profile_id(sp4)
@@ -462,7 +464,9 @@ test_that("SPC profile ID reset integrity: horizon", {
 
   # test hz
   data(sp4)
-  depths(sp4) <- id ~ top + bottom
+  
+  # message due to unordered site IDs
+  expect_message(depths(sp4) <- id ~ top + bottom)
   
   # save old ID and replace with known pattern
   sp4$old_id <- as.vector(unlist(horizons(sp4)[idname(sp4)]))
@@ -535,14 +539,18 @@ test_that("horizons<- left-join", {
 test_that("ordering of profiles and horizons is retained after left-join", {
   # IDs that when sorted will not be in this order
   s <- c('a', "1188707", "1188710", "120786", "1207894", 'z')
+
   l <- lapply(s, random_profile)
+  
   d <- do.call('rbind', l)
   
   # init SPC
-  depths(d) <- id ~ top + bottom
+  # message due to unordered site IDs
+  expect_message({depths(d) <- id ~ top + bottom},
+                 "unsorted input data will be ordered by profile ID and top depth")
   
   ## former bug on set of a new horizon-level attr
-  d$zzz <- rep(NA, times=nrow(d))
+  d$zzz <- rep(NA, times = nrow(d))
   
   # previously mysterious warning message
   z <- d[1:5, ]
