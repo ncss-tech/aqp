@@ -10,8 +10,6 @@
 #' 
 #' Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles
 #' 
-#' Check 3: Horizon IDs match metadata-defined target order.
-#' 
 #' @param object A SoilProfileCollection 
 #' @return data.frame
 #' @aliases spc_in_sync,SoilProfileCollection-method
@@ -23,6 +21,7 @@
 #' spc_in_sync(sp5)
 #' 
 spc_in_sync <- function(object) {
+  
   # get site and horizon slot contents
   s <- object@site
   h <- object@horizons
@@ -37,11 +36,8 @@ spc_in_sync <- function(object) {
   # profile ID from horizon
   hid <- as.character(h[[oid]])
   hzid <- as.character(h[[hzidnm]])
-  s.hid <- match(sort(hid), hid)
-  s.hzid <- match(sort(hzid), hzid)
 
-  
-  if(length(hid) == 0 & length(hzid)  == 0)  {
+  if (length(hid) == 0 & length(hzid)  == 0)  {
     # this is an empty soil profile collection
     return(data.frame(siteDepth = TRUE,
                     relativeOrder = TRUE,
@@ -49,13 +45,9 @@ spc_in_sync <- function(object) {
                     valid = TRUE))
   }
   
-  # top depths from horizon
-  tdep <- h[[horizonDepths(object)[1]]]
-  
   # coalesced horizon IDs 
   # identifies intermingling of profiles within horizon
   cohid <- .coalesce.idx(hid)
-  cohzid <- .coalesce.idx(hzid)
   
   # if cohid is longer than sid, horizons from different profiles
   # are mixed or IDs have been corrupted (by e.g. direct edit)
@@ -69,15 +61,12 @@ spc_in_sync <- function(object) {
   # check 2: site IDs match coalesced profile ID from horizon
   #          this ensures the same _relative_ ordering, but
   #          horizons still may be out of order within profiles
+  #          use checkHzDepthLogic -- as only one problematic pedon will break SPC depth order
   two <- ifelse(one, all(sid == cohid), FALSE)
-  
-  # check 3: horizon IDs are in order of profile ID in site
-  three <- all(.coalesce.idx(match(hid, sid)) == 1:length(sid))
   
   return(data.frame(siteDepth = one,
                     relativeOrder = two,
-                    depthOrder = three,
-                    valid = all(one, two, three)))
+                    valid = all(one, two)))
 }
 
 # Remove duplicate values retaining original order
