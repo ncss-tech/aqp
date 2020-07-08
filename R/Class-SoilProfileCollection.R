@@ -55,7 +55,7 @@ setClass(
   ),
   validity = function(object) {
     # https://github.com/ncss-tech/aqp/issues/75
-    return(TRUE) #spc_in_sync(object)$valid)
+    return(spc_in_sync(object)$valid)
   }
 )
 
