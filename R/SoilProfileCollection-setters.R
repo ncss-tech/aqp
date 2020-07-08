@@ -109,21 +109,25 @@ setReplaceMethod("depths", "data.frame",
   # depths 
   depthcols <- c(nm[2], nm[3])
   
-  
   # enforce numeric depths and provide QC warnings as needed
   data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
   data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
   
   # create a site table with just IDs
-  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), stringsAsFactors = FALSE), class(data)[1])
+  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), 
+                                          stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
   
-  if(nrow(nusite) != length(unique(data[[nm[1]]]))) {
-    warning("unsorted input data will be ordered during promotion to SoilProfileCollection", call. = FALSE)
+  usortid <- .coalesce.idx(sort(data[[nm[1]]]))
+  
+  if (any(nusite[[nm[1]]] != usortid)) {
+    message("unsorted input data will be ordered by profile ID and top depth")
   
     # reorder based on site ID and top depth column
     ## note: forced character sort on ID -- need to impose some order to check depths
-    data <- data[order(as.character(data[[nm[1]]]), data[[depthcols[1]]]), ]
+    
+    data <- data[order(as.character(data[[nm[1]]]), data[[depthcols[1]]]),]
+    nusite[[nm[1]]] <- .coalesce.idx(data[[nm[1]]])
   }
   
   # create object
@@ -134,7 +138,7 @@ setReplaceMethod("depths", "data.frame",
                                horizons = data)
   
   # check for horizon ID name conflict
-  if(hzidname(res) %in% names(data)) {
+  if (hzidname(res) %in% names(data)) {
     
     # original hz ID
     o.hzid <- hzidname(res)

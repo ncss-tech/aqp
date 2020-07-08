@@ -2,7 +2,9 @@ context("SoilProfileCollection depth error checking")
 
 ## sample data
 data(sp3)
-depths(sp3) <- id ~ top + bottom
+
+# warning due to unordered site IDs
+expect_warning(depths(sp3) <- id ~ top + bottom)
 
 test_that("checkHzDepthLogic() works as expected", {
   
