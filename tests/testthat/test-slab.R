@@ -91,4 +91,27 @@ test_that("slab calculations: mean, several profiles", {
 })
 
 
+test_that("edge case: slab.structure[2] > max(x)", {
+  
+  data(sp1, package = 'aqp')
+  depths(sp1) <- id ~ top + bottom
+  
+  # single profile, to max(x)
+  a.max <- slab(sp1[1, ], fm = ~ prop, strict=TRUE, slab.structure=c(0,max(sp1[1, ])), slab.fun = mean, na.rm=TRUE)
+  
+  # single profile
+  # custom interval, exceeding max(sp1)
+  a <- slab(sp1[1, ], fm = ~ prop, strict=TRUE, slab.structure=c(0,300), slab.fun = mean, na.rm=TRUE)
+  
+  # weighted mean should be the same
+  expect_true(a.max$value == a$value)
+  
+  # contributing fractions will be different
+  # smaller value when slab.structure[2] > max.d
+  expect_true(a$contributing_fraction < a.max$contributing_fraction)
+  
+  # compare with hand-calculated value
+  expect_equivalent(a$value, 13.58427, tolerance=0.001)
+})
+
 
