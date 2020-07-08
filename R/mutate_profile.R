@@ -14,7 +14,7 @@ if (!isGeneric("mutate_profile"))
 
 setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
           function(object, ...) {
-  #if(requireNamespace("rlang")) {
+  if(requireNamespace("rlang", quietly = TRUE)) {
 
     # capture expression(s) at function
     x <- rlang::enquos(..., .named = TRUE)
@@ -53,5 +53,7 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
     }
 
     return(object)
-  #}
+  } else {
+    stop("package 'rlang' is required for mutate_profile", .call=FALSE)
+  }
 })

@@ -16,11 +16,12 @@
 #' @export summarize
 #'
 if (!isGeneric("summarize"))
-  setGeneric("summarize", function(object, ...) standardGeneric("summarize"))
+  setGeneric("summarize", function(object, ...) 
+    standardGeneric("summarize"))
 
 setMethod("summarize", signature(object = "SoilProfileCollection"),
           function(object, ...) {
-
+  if(requireNamespace("rlang")) {
     # TODO: safe setter and accessor methods for grouping variable
     group.by.col <- object@metadata$aqp_group_by
 
@@ -77,5 +78,8 @@ setMethod("summarize", signature(object = "SoilProfileCollection"),
 
     # return result in same class as SPC slots
     return(.as.data.frame.aqp(final, aqp_df_class(object)))
+  } else {
+    stop("package 'rlang' is required for summarize", .call=FALSE)
+  }
 })
 

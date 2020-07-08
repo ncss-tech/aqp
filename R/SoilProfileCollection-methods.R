@@ -243,84 +243,77 @@ if (!isGeneric("filter"))
 
 setMethod("filter", signature(object = "SoilProfileCollection"),
           function(object, ..., greedy = FALSE) {
-            #if(requireNamespace("rlang")) {
-            # 
-            # debug: 
-            #   
-            #   f <- function(...) {
-            #     rlang::enquos(...)
-            #   }
-            #   x <- f(structure_type == "PL")
-            #   
-            
-            # capture expression(s) at function
-            x <- rlang::enquos(...)
-            
-            # create composite object to facilitate eval_tidy
-            data <- compositeSPC(object)
-            
-            # loop through list of quosures and evaluate
-            res <- lapply(x, function(q) {
-              r <- rlang::eval_tidy(q, data)
-              return(r)
-            })
-            res.l <- lapply(res, length)
-            
-            # distinguish site and horizon level attributes
-            # in the expression input
-            sitematch <- res[res.l == length(object)]
-            horizonmatch <- res[res.l == nrow(object)]
-            
-            # intersect the multi-prop site constraints
-            if (length(sitematch) > 1) {
-              sm <- rowSums(do.call('cbind', sitematch))
-              sitematch <- (sm == length(sitematch))
-            }
-            
-            # intersect the multi-prop horizon constraints
-            if (length(horizonmatch) > 1) {
-              hm <- rowSums(do.call('cbind', horizonmatch))
-              horizonmatch <- (hm == length(horizonmatch))
-            }
-            
-            # empty value to hold site level index
-            idx <- numeric()
-            
-            # create site level index from site criteria
-            if (length(sitematch) == 1 | !is.list(sitematch))
-              idx <- which(unlist(sitematch))
-            
-            # create site level index from matching horizon criteria
-            if (length(horizonmatch) == 1 |
-                !is.list(horizonmatch)) {
-              peiid.from.hz <- unique(object@horizons[[idname(object)]][unlist(horizonmatch)])
-              hz.idx <- match(peiid.from.hz, profile_id(object))
-              # check that we wont be filtering erroneously
-              # 
-              integrity <- spc_in_sync(object)
-              if(!integrity$valid) {
-                print(integrity)
-                stop("SPC integrity checks failed!")
+            if(requireNamespace("rlang", quietly = TRUE)) {
+  
+              # capture expression(s) at function
+              x <- rlang::enquos(...)
+              
+              # create composite object to facilitate eval_tidy
+              data <- compositeSPC(object)
+              
+              # loop through list of quosures and evaluate
+              res <- lapply(x, function(q) {
+                r <- rlang::eval_tidy(q, data)
+                return(r)
+              })
+              res.l <- lapply(res, length)
+              
+              # distinguish site and horizon level attributes
+              # in the expression input
+              sitematch <- res[res.l == length(object)]
+              horizonmatch <- res[res.l == nrow(object)]
+              
+              # intersect the multi-prop site constraints
+              if (length(sitematch) > 1) {
+                sm <- rowSums(do.call('cbind', sitematch))
+                sitematch <- (sm == length(sitematch))
               }
               
-              if (length(idx) & !greedy) {
-                # intersection of site and horizon level matches
-                idx <- idx[idx %in% hz.idx]
-              } else if (greedy) {
-                # union of site and horizon level matches
-                idx <- c(idx, hz.idx)
-              } else {
-                # if we have only horizon-level, use just horizon level
-                idx <- hz.idx
+              # intersect the multi-prop horizon constraints
+              if (length(horizonmatch) > 1) {
+                hm <- rowSums(do.call('cbind', horizonmatch))
+                horizonmatch <- (hm == length(horizonmatch))
               }
               
+              # empty value to hold site level index
+              idx <- numeric()
+              
+              # create site level index from site criteria
+              if (length(sitematch) == 1 | !is.list(sitematch))
+                idx <- which(unlist(sitematch))
+              
+              # create site level index from matching horizon criteria
+              if (length(horizonmatch) == 1 |
+                  !is.list(horizonmatch)) {
+                peiid.from.hz <- unique(object@horizons[[idname(object)]][unlist(horizonmatch)])
+                hz.idx <- match(peiid.from.hz, profile_id(object))
+                
+                # check that we wont be filtering erroneously
+                # 
+                integrity <- spc_in_sync(object)
+                if(!integrity$valid) {
+                  print(integrity)
+                  stop("Unable to filter! SPC integrity checks failed!")
+                }
+                
+                if (length(idx) & !greedy) {
+                  # intersection of site and horizon level matches
+                  idx <- idx[idx %in% hz.idx]
+                } else if (greedy) {
+                  # union of site and horizon level matches
+                  idx <- c(idx, hz.idx)
+                } else {
+                  # if we have only horizon-level, use just horizon level
+                  idx <- hz.idx
+                }
+                
+              }
+              
+              # return SPC, subsetted using site level index
+              return(object[na.omit(idx),])
+            } else {
+               stop("package 'rlang' is required for filter", .call=FALSE)
             }
-            
-            # return SPC, subsetted using site level index
-            return(object[na.omit(idx),])
-            #  } else {
-            #    stop("package 'rlang' is required", .call=FALSE)
-            #  }
           })
 
 # functions tailored for use with magrittr %>% operator / tidyr
@@ -346,25 +339,25 @@ if (!isGeneric("grepSPC"))
 
 setMethod("grepSPC", signature(object = "SoilProfileCollection"),
           function(object, attr, pattern, ...) {
-            #if(requireNamespace("rlang")) {
-            # capture expression(s) at function
-            x <- rlang::enquo(attr)
+            if(requireNamespace("rlang", quietly = TRUE)) {
+              # capture expression(s) at function
+              x <- rlang::enquo(attr)
+              
+              # create composite object to facilitate eval_tidy
+              data <- compositeSPC(object)
+              
+              # do tidy eval of attr
+              res <- rlang::eval_tidy(x, data)
+              
+              # do the pattern matching
+              idx <- grep(res, pattern = pattern, ...)
+              
+              # subset the SPC for result
+              return(object[idx,])
             
-            # create composite object to facilitate eval_tidy
-            data <- compositeSPC(object)
-            
-            # do tidy eval of attr
-            res <- rlang::eval_tidy(x, data)
-            
-            # do the pattern matching
-            idx <- grep(res, pattern = pattern, ...)
-            
-            # subset the SPC for result
-            return(object[idx,])
-            
-            #} else {
-            #  stop("package 'rlang' is required", .call=FALSE)
-            #}
+            } else {
+              stop("package 'rlang' is required for grepSPC", .call=FALSE)
+            }
           })
 
 #' @title Subset SPC based on result of performing function on each profile
@@ -386,21 +379,21 @@ if (!isGeneric("subApply"))
 
 setMethod("subApply", signature(object = "SoilProfileCollection"),
           function(object, .fun, ...) {
-            #if(requireNamespace("rlang")) {
-            
-            #TODO: figure out how to use eval helpers here
-            
-            ## capture expression(s) at function
-            #.dots <- rlang::enquos(...)
-            
-            # apply .fun to elements of x
-            res <- profileApply(object, FUN = .fun, ...)
-            
-            # return subset of x where .fun is true
-            return(object[which(res), ])
-            #} else {
-            #  stop("package 'rlang' is required", .call=FALSE)
-            #}
+            if(requireNamespace("rlang", quietly = TRUE)) {
+              
+              #TODO: figure out how to use eval helpers here
+              
+              ## capture expression(s) at function
+              #.dots <- rlang::enquos(...)
+              
+              # apply .fun to elements of x
+              res <- profileApply(object, FUN = .fun, ...)
+              
+              # return subset of x where .fun is true
+              return(object[which(res), ])
+            } else {
+             stop("package 'rlang' is required for subApply", .call=FALSE)
+            }
           })
 
 ## subset method for SoilProfileCollection objects
