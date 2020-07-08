@@ -32,6 +32,28 @@ test_that("SPC construction from a data.frame", {
   # correct number of profiles and horizons?
   expect_equal(length(sp1), 9)
   expect_equal(nrow(sp1), 60)
+
+  # test construction with disordered ID and top depths
+  df <- data.frame(id = c(2,2,2,1,1,1), top = c(4,3,2,4,3,2), bottom = c(5,4,3,5,4,3))
+  
+  # the input data profiles both have bad "top depth logic" (reversed order of horizons)
+  expect_true(hzDepthTests(df$top[1:3], df$bottom[1:3])["depthLogic"])
+  
+  expect_message({depths(df) <- id ~ top + bottom},
+                 "unsorted input data will be ordered by profile ID and top depth")
+  # inspect
+  
+  # plot(df) # plot "works" even with invalid depth logic
+  
+  # whole SPC is valid, regardless of whether order is corrected
+  expect_true(spc_in_sync(df)$valid)
+  
+  # however, after promotion, the depth logic from input data has been corrected
+  expect_true(all(checkHzDepthLogic(df)$valid))
+  
+  # the numeric IDs from the input data are in order
+  expect_true(all(profile_id(df) == as.character(1:2)))
+  
 })
 
 test_that("SPC diagnostics and restrictions", {
