@@ -60,17 +60,14 @@ metadata(sp4) # not much to start with
 depth_units(sp4) <- 'inches' # units are really 'cm'
 
 # more generic interface for adjusting metadata
-md <- metadata(sp4) # save original metadata
 
-# add columns
-md$describer <- 'DGM'
-md$date <- as.Date('2009-01-01')
-md$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P. 
+# add attributes to metadata list
+metadata(sp4)$describer <- 'DGM'
+metadata(sp4)$date <- as.Date('2009-01-01')
+metadata(sp4)$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P. 
 2009. Plant-Available Calcium Varies Widely in Soils 
 on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'
 
-# re-assign
-metadata(sp4) <- md
 depth_units(sp4) <- 'cm' # fix depth units, back to 'cm'
 
 # further inspection with common function overloads
@@ -130,5 +127,4 @@ plot(sp4, plot.order=new.order)
 
 # deconstruct SoilProfileCollection into a data.frame, with horizon+site data
 as(sp4, 'data.frame')
-}
 \keyword{datasets}
