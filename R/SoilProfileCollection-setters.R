@@ -118,15 +118,19 @@ setReplaceMethod("depths", "data.frame",
                                           stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
   
-  usortid <- .coalesce.idx(sort(data[[nm[1]]]))
+  iddata <- data[[nm[1]]]
+  tdep <- data[[depthcols[1]]]
   
-  if (any(nusite[[nm[1]]] != usortid)) {
+  usortid <- .coalesce.idx(sort(iddata))
+  hsorttdep <- all(data[order(iddata, tdep),][[depthcols[1]]] == tdep)
+  
+  if (any(nusite[[nm[1]]] != usortid) | !hsorttdep) {
     message("unsorted input data will be ordered by profile ID and top depth")
   
     # reorder based on site ID and top depth column
     ## note: forced character sort on ID -- need to impose some order to check depths
     
-    data <- data[order(as.character(data[[nm[1]]]), data[[depthcols[1]]]),]
+    data <- data[order(as.character(data[[nm[1]]]), tdep),]
     nusite[[nm[1]]] <- .coalesce.idx(data[[nm[1]]])
   }
   
