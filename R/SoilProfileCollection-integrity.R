@@ -72,8 +72,7 @@ spc_in_sync <- function(object) {
   two <- ifelse(one, all(sid == cohid), FALSE)
   
   # check 3: horizon IDs are in order of profile ID in site
-  #          and, within profiles, have correct top-depth sequence
-  three <- all(cohzid[metadata(object)$target.order] == cohzid)
+  three <- all(.coalesce.idx(match(hid, sid)) == 1:length(sid))
   
   return(data.frame(siteDepth = one,
                     relativeOrder = two,
