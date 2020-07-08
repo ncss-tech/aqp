@@ -4,7 +4,7 @@
 #' 
 #' Determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents. 
 #' 
-#' Three logical checks are performed on the site and horizon tables, and a fourth attribute \code{valid} returns \code{TRUE} when all three checks are \code{TRUE}.
+#' Two logical checks are performed on the site and horizon tables, and a third element \code{valid} returns \code{TRUE} when both checks are \code{TRUE}.
 #'
 #' Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons [for now]
 #' 
