@@ -40,18 +40,10 @@ rebuildSPC <- function(x) {
   }
 
   # metadata is a list now
-  x.list$metadata <- as.list(x.list$metadata)
-
-  # add the new default entry for tracking data.frame subclass type
-  #  this is only to cover things that are stored as SPCs -- example datasets, big queries using soilDB etc
-  #  the constructor now sets defaults for this
-  if(!("aqp_df_class" %in% names(x.list$metadata))) {
-    x.list$metadata$aqp_df_class <- "data.frame"
-  }
-
-  if(!("aqp_group_by" %in% names(x.list$metadata))) {
-    x.list$metadata$aqp_df_class <- "data.frame"
-  }
+  olddata <- as.list(x.list$metadata)
+  
+  # depths sets up basic metadata for res, copy over any missing data elements
+  x.list$metadata <- c(metadata(res), olddata[!names(olddata) %in% names(metadata(res))])
 
   # replace metadata
   metadata(res) <- x.list$metadata
