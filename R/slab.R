@@ -81,6 +81,8 @@
 # }
 
 
+## note: slab() uses slice() to resample to 1cm slices, to max(x) or slab.structure[2] if defined
+
 # SoilProfileCollection method
 # object: SoilProfileCollection 
 # fm: formula defining aggregation
@@ -155,7 +157,7 @@
 	### !!! this runs out of memory when groups contains NA !!!
 	## this is generating a lot of extra objects and possibly wasting memory
 	# merge site data back into the result, this would include site-level weights
-	data <- join(data, site.data, by=object.ID)
+	data <- merge(x = data, y = site.data, by=object.ID, all.x=TRUE, sort=FALSE)
 	
 	# clean-up
 	rm(object, site.data)
