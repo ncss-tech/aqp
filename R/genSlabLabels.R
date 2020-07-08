@@ -28,7 +28,7 @@ genSlabLabels <- function(slab.structure=1, max.d, n.profiles) {
       # how many slices of NA before the slab?
       padding.before <- rep(NA, times=slab.structure[1])
       # how many slices of NA afer the slab
-      padding.after <- rep(NA, times=max.d - slab.structure[2])
+      padding.after <- rep(NA, times=abs(max.d - slab.structure[2]))
       # make a new label for the slab
       new.label <- paste(slab.structure, collapse='-')
       # generate an index for the slab
