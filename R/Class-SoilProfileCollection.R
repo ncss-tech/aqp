@@ -1374,7 +1374,7 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
 #'
 #' @name metadata<-
 #' @param object A SoilProfileCollection
-#' @param value character, a value representing units. Default \code{'cm'}.
+#' @param value A named list (see examples)
 #'
 #' @aliases metadata<-,SoilProfileCollection-method
 #' @rdname metadata

@@ -15,7 +15,7 @@ metadata(object) <- value
 \arguments{
 \item{object}{A SoilProfileCollection}
 
-\item{value}{character, a value representing units. Default \code{'cm'}.}
+\item{value}{A named list (see examples)}
 }
 \description{
 Get metadata from SoilProfileCollection. Result is a list. Two entries (aqp_df_class, depth_units) should not be edited in the metadata list directly. There are methods that facilitate changing them -- and propagating their changes throughout the collection. Otherwise, metadata list is a free-form slot used to store arbitrary information about the data, how it was collected, citations, etc.

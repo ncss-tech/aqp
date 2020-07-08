@@ -22,8 +22,6 @@ Three logical checks are performed on the site and horizon tables, and a fourth 
 Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons
 
 Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles
-
-Check 3: Horizon IDs match metadata-defined target order.
 }
 \author{
 Andrew G. Brown
