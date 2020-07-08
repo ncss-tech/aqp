@@ -315,6 +315,9 @@ res <- lapply(dfclasses, function(use_class) {
       # profile and horizon subsets
       expect_true(inherits(sp1df[1, 1], 'SoilProfileCollection'))
       
+      # horizon subsets
+      expect_true(inherits(sp1df[, 2], 'SoilProfileCollection'))
+      
       # there should only be 1 profile and 1 horizon
       expect_equal(length(sp1df[1, 1]), 1)
       expect_equal(nrow(sp1df[1, 1]), 1)

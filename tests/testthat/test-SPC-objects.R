@@ -120,6 +120,9 @@ test_that("SPC subsetting ", {
   # profile and horizon subsets
   expect_true(inherits(sp1[1, 1], 'SoilProfileCollection'))
   
+  # horizon subsets
+  expect_true(inherits(sp1[, 2], 'SoilProfileCollection'))
+  
   # there should only be 1 profile and 1 horizon
   expect_equal(length(sp1[1, 1]), 1)
   expect_equal(nrow(sp1[1, 1]), 1)
