@@ -59,10 +59,29 @@ setClass(
   }
 )
 
+# 2020-07-10: allows for data.table @Suggests without importing
+# https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+.datatable.aware <-  TRUE
+
 # 2020-05-30: make data.table, tbl_df and data.frame slots "co-exist"
 # see: https://stackoverflow.com/questions/35642191/tbl-df-with-s4-object-slots
-if(requireNamespace("data.table", quietly = TRUE))
+if(requireNamespace("data.table", quietly = TRUE)) 
   setOldClass(c("data.table", "data.frame"))
+
+.N <- NULL
+
+#' := (Assignment by reference MASK)
+#' @description Mask to allow for Suggest of data.table \code{`:=`} / no R CMD CHECK error. See the manual page for \code{data.table::set} if interested in how this novel syntax is used.
+#' 
+#' @seealso \code{\link[data.table]{set}}
+#' @param ... 
+#'
+#' @keywords internal
+`:=` <- function(...) {
+  if (!requireNamespace("data.table", quietly = TRUE)) 
+    stop("package `data.table` is required", call. = FALSE)
+  return(data.table::`:=`(...))
+}
 
 if(requireNamespace("tibble", quietly = TRUE))
   setOldClass(c("tbl_df", "tbl", "data.frame"))
