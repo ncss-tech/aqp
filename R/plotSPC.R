@@ -502,7 +502,8 @@ plotSPC <- function(
 	  # extract the current profile's horizon data
     this_profile_label <- pLabels[profile_i]
 	  this_profile_id <- pIDs[profile_i]
-	  this_profile_data <- h[h[IDcol] == this_profile_id, ]
+	  
+	  this_profile_data <- h[h[[IDcol]] == this_profile_id, ]
 
     # extract column names
     cn <- names(this_profile_data)
@@ -548,8 +549,8 @@ plotSPC <- function(
     x0 <- x.idx.offset + relative.pos[i]
 
 	  # get vectors of horizon boundaries, and scale
-	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
-	  y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
+	  y0 <- (this_profile_data[[bcol]] * scaling.factor) + y.offset
+	  y1 <- (this_profile_data[[tcol]] * scaling.factor) + y.offset
 
 
 	  ##
@@ -674,7 +675,7 @@ plotSPC <- function(
 	      ## TODO: think of a better approach
 	      # hz topographic code
 	      text(rep(x0, times=nh), y0, labels = ht.lty, col=invertLabelColor(this_profile_colors), font=2, cex=0.66)
-	    }
+	   } 
 
 
 	  } else {

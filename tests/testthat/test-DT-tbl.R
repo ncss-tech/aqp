@@ -1,5 +1,6 @@
 context("data.table and tbl_df inheritance from data.frame")
 
+
 test_that("basic coercion", {
   ###  create empty frames
   empty_df <- data.frame()
@@ -222,6 +223,10 @@ res <- lapply(dfclasses, function(use_class) {
       # correct number of profiles and horizons?
       expect_equal(length(sp1df), 9)
       expect_equal(nrow(sp1df), 60)
+      
+      # this should work
+      foo <- explainPlotSPC(sp1df)
+      expect_equal(length(foo), 11)
     })
     
     test_that(sprintf("SPC diagnostics and restrictions (%s)", use_class), {
@@ -351,7 +356,7 @@ res <- lapply(dfclasses, function(use_class) {
       expect_equal(length(subApply(sp1df, function(p)
         TRUE)), length(sp1df))})
     
-  })
-  
+  })    
   
 })
+
