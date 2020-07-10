@@ -85,7 +85,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
             }
 
             # extract all site and horizon data
-            h <- x@horizons
+            h <- .as.data.frame.aqp(x@horizons, aqp_df_class(x))
             s.all <- x@site
 
             # extract requested profile IDs
@@ -122,27 +122,64 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
             # subset horizons/slices based on j --> only when j is given
             if (!missing(j)) {
+              
               # faster replacement of j subsetting of horizon data
-              j.res <- as.list(aggregate(
-                h[[hzidname(x)]],
-                by = list(h[[idname(x)]]),
-                FUN = function(hh) {
-                  list(1:length(hh) %in% j)
-                },
-                drop = FALSE
-              )$x)
-              j.idx <- which(do.call('c', j.res))
-              h <- h[j.idx, ]
+              if(aqp_df_class(x) == "data.table") {
+                
+                # data.table can do this much more efficiently
+                if (requireNamespace("data.table")) {
+                  
+                  bylist <- list(h[[idname(x)]])
+                  names(bylist) <- idname(x)
+                  
+                  .idx.in.range <- function(len, jj) {
+                    1:len %in% jj
+                  }
+                  
+                  # this one was a head scratcher but is super cool! and pretty fast
+                  #  the main overhead comes from [,data.table ...
+                  # if(!data.table::is.data.table(h))
+                  #   h <- as.data.table(h)
+                  
+                  h <- h[, `:=`(.jmatch = .idx.in.range(.N, j),
+                                .anyj = any(.idx.in.range(.N, j))), by = bylist]
 
-              ##  https://github.com/ncss-tech/aqp/issues/89
-              # fix #89, where i with no matching j e.g. @site data returned
-              i.missing <- which(as.logical(lapply(j.res,
-                                                   function(jr) { !any(jr) })))
+                  # there is probably a data.table way to do this... 
+                  i.missing <- which((profile_id(x) %in% unique(h[!h$.anyj, ][[idname(x)]])))
+                  
+                  # j.idx is used to select the target horizons
+                  j.idx <- which(as.logical(h$.jmatch))
 
+                  # # cleanup
+                  h[[".jmatch"]] <- NULL
+                  h[[".anyj"]] <- NULL
+                } 
+                
+              } else {
+                # retain a base R way of doing things (plenty fast with SPCs up to ~100k or so)
+                j.res <- as.list(aggregate(
+                  h[[hzidname(x)]],
+                  by = list(h[[idname(x)]]),
+                  FUN = function(hh) {
+                    list(1:length(hh) %in% j)
+                  },
+                  drop = FALSE
+                )$x)
+                
+                ##  https://github.com/ncss-tech/aqp/issues/89
+                # fix #89, where i with no matching j e.g. @site data returned
+                i.missing <- which(as.logical(lapply(j.res, function(jr) { !any(jr) })))
+                
+                j.idx <-  which(do.call('c', j.res)) 
+              }
+
+              # do horizon subset with j index
+              h <- h[j.idx, ]  
+              
               # if profiles have been removed based on the j-index constraints
               if (length(i.missing) > 0) {
                 # remove sites that have no matching j
-                h.ids <- s[i.missing, idname(x)]
+                h.ids <- .data.frame.j(s[i.missing,], idname(x), aqp_df_class(x))
                 s <- s[-i.missing, , drop = FALSE]
 
                 # remove also: diagnostics
