@@ -33,7 +33,7 @@ setMethod("summarize", signature(object = "SoilProfileCollection"),
     # capture expression(s) at function
     x <- rlang::enquos(..., .named = TRUE)
 
-    dfout <- data.frame(matrix(nrow = 0, ncol = length(names(x))))
+    dfout <- .as.data.frame.aqp(data.frame(matrix(nrow = 0, ncol = length(names(x)))), aqp_df_class(object))
     colnames(dfout) <- names(x)
 
     # TODO: generalize split for n site or horizon level attributes
