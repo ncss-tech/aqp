@@ -110,4 +110,4 @@ d <- profile_compare(m, vars=c('p1', 'p1'), max_d=150, k=0)
 plotProfileDendrogram(m, cluster::diana(d), scaling.factor = 0.85, y.offset = 10, color = 'p1', divide.hz=FALSE, width=0.3, name.style = 'left-center')
 
 
-
+## TODO: viz via nMDS and betadispersion
