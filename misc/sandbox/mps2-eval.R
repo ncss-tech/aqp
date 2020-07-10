@@ -2,6 +2,7 @@
 # remotes::install_github('obrl-soil/mpspline2')
 
 library(aqp)
+library(sharpshootR)
 library(mpspline2)
 library(lattice)
 
@@ -16,7 +17,7 @@ options(stringsAsFactors=FALSE)
 ids <- LETTERS[1:6]
 
 set.seed(10101)
-x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP', SPC=TRUE)
+x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=2, method='LPP', SPC=TRUE)
 x <- union(x)
 
 # fake site data
@@ -25,12 +26,12 @@ site(x)$fake_site_attr <- 1:length(x)
 # check source data
 par(mar=c(0,0,3,1))
 plot(x, color='p1')
-
+plot(x, color='p2')
 
 # latest version, integrates most of the code from my previous 
 # m <- mpspline(x, var_name = 'p1', d=c(0, 5, 15, 30, 60, 100, 200), out_style = 'spc')
 
-
+## TODO: this can only perform EAS for single horizon-level attribute
 # SPC -> MPS -> SPC
 m <- mpsplineSPC(x, var='p1', d=c(0, 5, 15, 30, 60, 100, 200))
 
@@ -45,11 +46,11 @@ m$id_group <- factor(m$id_group)
 
 # plot by group
 par(mar=c(0, 0, 3, 1))
-plot(m, color='p1', max.depth=175, name='', divide.hz=FALSE)
+plot(m, color='p1', max.depth=175, name='', divide.hz=FALSE, width = 0.3, name.style = 'left-center')
 
-groupedProfilePlot(m, groups = 'id_group', color='p1', max.depth=175, group.name.offset = -10, name='', divide.hz=FALSE)
+groupedProfilePlot(m, groups = 'id_group', color='p1', max.depth=175, group.name.offset = -10, name='', divide.hz=FALSE, width=0.3, name.style = 'left-center')
 
-groupedProfilePlot(m, groups = 'method_group', color='p1', max.depth=175, group.name.offset = -10, name='', divide.hz=FALSE)
+groupedProfilePlot(m, groups = 'method_group', color='p1', max.depth=175, group.name.offset = -10, name='', divide.hz=FALSE, width = 0.3, name.style = 'left-center')
 
 
 # compare depth-functions by method, no aggregation
@@ -101,10 +102,12 @@ xyplot(top ~ p.q50 | factor(method_group), data=a, ylab='Depth', asp=1.5,
 )
 
 
-## profile compare breaks with just about anything created by union()  --> #7
-# fake property
-m$p2 <- rev(m$p1)
-# broken
-profile_compare(m, vars=c('p1', 'p2'), max_d=150, k=0)
+## TODO: finish this
+# * only using a single property.. need to update EAS code to do more than a single property
+d <- profile_compare(m, vars=c('p1', 'p1'), max_d=150, k=0)
+
+# interesting
+plotProfileDendrogram(m, cluster::diana(d), scaling.factor = 0.85, y.offset = 10, color = 'p1', divide.hz=FALSE, width=0.3, name.style = 'left-center')
+
 
 

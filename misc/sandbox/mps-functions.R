@@ -4,6 +4,8 @@
 # spatial data are lost
 # metadata are lost
 #
+## TODO: extend to multiple variables in a single call to function
+
 # p: SPC
 # var: horizon-level attribute name
 # d: depths to re-sample var
@@ -14,7 +16,7 @@ mpsplineSPC <- function(p, var, d, ...) {
   p.mps <- mpspline(p, var_name = var, d = d, ...)
   
   # convert output from mpspline to list of SPCs
-  z <- lapply(p.mps, singleMPS2SPC, d=d, id=idname(p), hd=horizonDepths(p), varname=var)
+  z <- lapply(p.mps, .singleMPS2SPC, d=d, id=idname(p), hd=horizonDepths(p), varname=var)
   
   # union into single SPC
   z <- union(z)
@@ -56,7 +58,7 @@ mpsplineSPC <- function(p, var, d, ...) {
 # id: id name from source SPC
 # hd: horizon top/bottom field names
 # varname: horizon level attr name
-singleMPS2SPC <- function(s, d, id, hd, varname) {
+.singleMPS2SPC <- function(s, d, id, hd, varname) {
   
   # first SPC to make: 1cm intervals
   
@@ -95,7 +97,6 @@ singleMPS2SPC <- function(s, d, id, hd, varname) {
   
   # add original id for linking site data
   site(s.r)$.original_id <- s$id
-  
   
   # combine
   res <- union(list(s.1cm, s.r))
