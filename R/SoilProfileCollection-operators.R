@@ -207,8 +207,6 @@ setMethod("[", signature(x = "SoilProfileCollection",
             res <- SoilProfileCollection(
               idcol = idname(x),
               hzidcol = hzidname(x),
-              hzdesgncol = hzdesgnname(x),
-              hztexclcol = hztexclname(x),
               depthcols = horizonDepths(x),
               metadata = aqp::metadata(x),
               horizons = .as.data.frame.aqp(h, aqp_df_class(x)),
@@ -243,8 +241,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
             site.res <- site(res)[[idname(res)]]
 
             if (length(pid.res) != length(site.res)) {
-              warning("Some profiles have been removed from the collection.",
-                      call. = FALSE)
+              message("Some profiles have been removed from the collection.")
             }
 
             # the order of profile_ids should be the same as in @site

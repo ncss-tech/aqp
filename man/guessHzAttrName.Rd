@@ -26,7 +26,7 @@ e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (
 \examples{
 
 # a has the required attr pattern, but none of the optional
-a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), 
+a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40),
                 clay=c(18,19))
 depths(a) <- id ~ top + bottom
 
@@ -34,16 +34,16 @@ guessHzAttrName(a, attr="clay", optional=c("total", "_r"))
 
 # b has requried attr pattern, and one of the opional patterns
 #   notice that it also contains "clay" but preferentially matches more optional patterns
-b <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), 
+b <- data.frame(id = 1, top = c(0,10), bottom=c(10,40),
                 clay=c(0.18,0.19), clay_r=c(18,19))
 depths(b) <- id ~ top + bottom
 
 guessHzAttrName(b, attr="clay", optional=c("total", "_r"))
 
-# c has total and _r (both optional) on either side of clay 
-# having all of the optional patterns plus required is best evidence, and first 
+# c has total and _r (both optional) on either side of clay
+# having all of the optional patterns plus required is best evidence, and first
 # column containing that combination will be returned
-c <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), 
+c <- data.frame(id = 1, top = c(0,10), bottom=c(10,40),
                 totalclay_r=c(18,19), claytotal_r=c(0.18,0.19))
 depths(c) <- id ~ top + bottom
 

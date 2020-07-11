@@ -281,8 +281,6 @@ res <- lapply(dfclasses, function(use_class) {
       # check internals
       expect_equivalent(l$idcol, idname(sp1df))
       expect_equivalent(l$hzidcol, hzidname(sp1df))
-      expect_equivalent(l$hzdesgncol, hzdesgnname(sp1df))
-      expect_equivalent(l$hztexclcol, hztexclname(sp1df))
       expect_equivalent(l$depthcols, horizonDepths(sp1df))
       expect_equivalent(l$metadata, metadata(sp1df))
 
@@ -299,8 +297,6 @@ res <- lapply(dfclasses, function(use_class) {
       # by the SPC subset method
       expect_equivalent(l$idcol, idname(sp1.sub))
       expect_equivalent(l$hzidcol, hzidname(sp1.sub))
-      expect_equivalent(l$hzdesgncol, hzdesgnname(sp1.sub))
-      expect_equivalent(l$hztexclcol, hztexclname(sp1.sub))
       expect_equivalent(l$depthcols, horizonDepths(sp1.sub))
 
       # TODO: better checking of metadata consistency

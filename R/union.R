@@ -93,10 +93,22 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     o.df.class <- "data.frame"
   }
 
-  # check for non-conformal df class (revert to data.frame if non-matching)
+  # check for non-conformal group (revert to "" if non-matching)
   o.group.by <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_group_by)))
   if(length(o.group.by) != 1) {
     o.group.by <- ""
+  }
+
+  # check for non-conformal hzdesgn (revert to data.frame if non-matching)
+  o.hzdesgn <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_hzdesgn)))
+  if(length(o.hzdesgn) != 1) {
+    o.hzdesgn <- ""
+  }
+
+  # check for non-conformal hztexcl (revert to data.frame if non-matching)
+  o.hztexcl <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_hztexcl)))
+  if(length(o.hztexcl) != 1) {
+    o.hztexcl <- ""
   }
 
   # test for non-conformal CRS if keeping spatial data
@@ -118,14 +130,27 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   # template for combined data is based on the first element
   new.pID <- spc.list[[1]]$idcol
   new.hzID <- spc.list[[1]]$hzidcol
-  new.hzdesgn <- spc.list[[1]]$hzdesgncol
-  new.hztexcl <- spc.list[[1]]$hztexclcol
+
   new.hzd <- spc.list[[1]]$depthcols
   new.metadata <- spc.list[[1]]$metadata
 
   # get the data.frame class and grouping variable into new metadata
   new.metadata$aqp_df_class <- o.df.class
   new.metadata$aqp_group_by <- o.group.by
+
+  # transfer old slots if they are present
+  hzdold <- spc.list[[1]]$hzdesgncol
+  hztold <- spc.list[[1]]$hztexclcol
+  if(length(hzdold) == 1)
+   new.metadata$aqp_hzdesgn  <- hzdold
+  if(length(hztold) == 1)
+    new.metadata$aqp_hztexcl  <- hztold
+
+  if(!length(new.metadata$aqp_hzdesgn))
+    new.metadata$aqp_hzdesgn <- ""
+
+  if(!length(new.metadata$aqp_hzdesgn))
+    new.metadata$aqp_hztexcl <- ""
 
   # TODO: need a template for coordinate names if spatial data are present in all
 
@@ -228,8 +253,6 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   ## make SPC from pieces
   res <- SoilProfileCollection(idcol = new.pID,
                                hzidcol = new.hzID,
-                               hzdesgncol = new.hzdesgn,
-                               hztexclcol = new.hztexcl,
                                depthcols = new.hzd,
                                metadata = new.metadata,
                                horizons = .as.data.frame.aqp(o.h, o.df.class),

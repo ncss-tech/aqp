@@ -4,8 +4,6 @@
 #'
 #' @slot idcol character.
 #' @slot hzidcol character.
-#' @slot hzdesgncol character.
-#' @slot hztexclcol character.
 #' @slot depthcols character.
 #' @slot metadata list.
 #' @slot horizons data.frame.
@@ -21,9 +19,6 @@ setClass(
   representation = representation(
     idcol = 'character', # column name containing IDs
     hzidcol = 'character', # column name containing unique horizon IDs
-
-    hzdesgncol = 'character', # column name containing horizon designation
-    hztexclcol = 'character', # column name containing horizon texture class
     depthcols = 'character', # 2 element vector with column names for hz top, bottom
 
     metadata = 'list', # list with key-value mapping
@@ -40,11 +35,12 @@ setClass(
   prototype = prototype(
     idcol = 'id',
     hzidcol = 'hzID',
-    hzdesgncol = character(0),
-    hztexclcol = character(0),
     depthcols = c('top', 'bottom'),
-    metadata = list(aqp_df_class = "data.frame",
-                          stringsAsFactors = FALSE),
+    metadata = list(aqp_df_class = "data.frame", # data.frame subclass
+                    aqp_group_by = "",           # grouping variable
+                    aqp_hzdesgn = "",            # horizon designation column
+                    aqp_texcl = "",              # texture class column
+                    stringsAsFactors = FALSE),
     horizons = data.frame(id  = character(0), hzID = character(0),
                           top = numeric(0), bottom = numeric(0),
                           stringsAsFactors = FALSE),
@@ -107,8 +103,6 @@ if(requireNamespace("tibble", quietly = TRUE))
 #'
 #' @param idcol character Profile ID Column Name
 #' @param hzidcol character Horizon ID Column Name
-#' @param hzdesgncol character Horizon Designation Column Name [optional]
-#' @param hztexclcol character Horizon Texture Class Column Name [optional]
 #' @param depthcols character, length 2 Top and Bottom Depth Column Names
 #' @param metadata list, metadata including data.frame class in use and depth units
 #' @param horizons data.frame An object inheriting from data.frame containing Horizon data.
@@ -212,10 +206,11 @@ if(requireNamespace("tibble", quietly = TRUE))
 "SoilProfileCollection" <-
   function(idcol = 'id',
            hzidcol = 'hzID',
-           hzdesgncol = character(0),
-           hztexclcol = character(0),
            depthcols = c('top', 'bottom'),
            metadata = list(aqp_df_class = "data.frame",
+                           aqp_group_by = "",
+                           aqp_hzdesgn = "",
+                           aqp_hztexcl = "",
                            stringsAsFactors = FALSE),
            horizons = data.frame(
              id  = character(0),
@@ -237,6 +232,9 @@ if(requireNamespace("tibble", quietly = TRUE))
     # set metadata (default: data.frame, centimeters)
     metadata <- list(
       aqp_df_class = hzclass,
+      aqp_group_by = "",
+      aqp_hzdesgn = "",
+      aqp_hztexcl = "",
       depth_units = 'cm',
       stringsAsFactors = FALSE,
 
@@ -257,18 +255,16 @@ if(requireNamespace("tibble", quietly = TRUE))
       metadata$aqp_group_by <- ""
 
     # "allow" NULL for the optional slots
-    if(is.null(hzdesgncol))
-      hzdesgncol <- character(0)
-    if(is.null(hztexclcol))
-      hztexclcol <- character(0)
+    if(length(metadata$aqp_hzdesgn) == 0)
+      metadata$aqp_hzdesgn <- ""
+    if(length(metadata$aqp_hztexcl) == 0)
+      metadata$aqp_hztexcl <- ""
 
     # create object
     new(
       "SoilProfileCollection",
       idcol = idcol,
       hzidcol = hzidcol,
-      hzdesgncol = hzdesgncol,
-      hztexclcol = hztexclcol,
       depthcols = depthcols,
       metadata = metadata,
       horizons = .as.data.frame.aqp(horizons, hzclass),
@@ -366,16 +362,15 @@ setMethod(f = 'show',
 
               # aqp:::.data.frame.j is the safe way to use the j index the data.frame way
               #  if you might encounter a data.table
-              h <- .data.frame.j(h, c(h.n[idx], h.n[-idx]), aqp_df_class(object))
-
+              h <- .data.frame.j(h, c(h.n[idx], h.n[-na.omit(idx)]), aqp_df_class(object))
 
               # # if defined, move horizon designation to the 3rd column
               # # missing horizon designation evaluates to character(0)
               hzd <- hzdesgnname(object)
               if (length(hzd) > 0) {
                 idx <- match(hzd, names(h))
-
-                h <- .data.frame.j(h, c(names(h)[idx],
+                if(length(idx))
+                  h <- .data.frame.j(h, c(names(h)[idx],
                                         names(h)[-idx]),
                                    aqp_df_class(object))
               }
@@ -477,14 +472,14 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
 #            if (as.class == 'data.frame')
 #              stop("foo")
 
+            # NULL x -- probably from unusual use cases
+            if (class(x)[1] == "NULL")
+              stop(sprintf("input object is NULL, expected '%s'", as.class))
+
             # don't invoke coercion methods if not needed
             if (!inherits(x, 'data.frame')) {
-              stop("input data class does not inherit from `data.frame`", call.=TRUE)
+              stop(sprintf("input data class %s does not inherit from `data.frame`", class(x)[1]), call.=TRUE)
             }
-
-            # NULL x -- probably from unusual use cases
-            if (is.null(class(x)))
-              stop(sprintf("input object is NULL, expected '%s'", as.class))
 
             # note: we handle the possibly NULL/0-length as.class
             #       by letting it fall through default switch EXPR
@@ -553,7 +548,13 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
       return(df)
     }
   })
-  h <- .as.data.frame.aqp(do.call('cbind', res), use_class)
+  res <- do.call('cbind', res)
+  if(inherits(res, 'data.frame')) {
+   h <- .as.data.frame.aqp(res, use_class)
+   return(h)
+  } else {
+    return(df)
+  }
 }
 
 
@@ -935,7 +936,7 @@ setReplaceMethod("hzdesgnname",
                    }
 
                    # replace
-                   object@hzdesgncol <- value
+                   metadata(object)$aqp_hzdesgn <- value
 
                    # done
                    return(object)
@@ -987,7 +988,7 @@ setReplaceMethod("hztexclname", signature(object = "SoilProfileCollection"),
                    }
 
                    # replace
-                   object@hztexclcol <- value
+                   metadata(object)$aqp_hztexcl <- value
 
                    # done
                    return(object)
@@ -1071,7 +1072,7 @@ if (!isGeneric("hzdesgnname"))
 ## get column containing horizon designations (there is a setter of same name)
 setMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
           function(object)
-            return(object@hzdesgncol))
+            return(metadata(object)$aqp_hzdesgn))
 
 #' Get horizon designation column name
 #'
@@ -1129,7 +1130,7 @@ if (!isGeneric("hztexclname"))
 ## get column containing horizon designations (there is a setter of same name)
 setMethod("hztexclname", signature(object = "SoilProfileCollection"),
           function(object)
-            return(object@hztexclcol))
+            return(metadata(object)$aqp_hztexcl))
 
 #' Get/set unique (sorted) profile IDs
 #'
