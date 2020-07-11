@@ -16,12 +16,12 @@
 #' @export summarize
 #'
 if (!isGeneric("summarize"))
-  setGeneric("summarize", function(object, ...) 
+  setGeneric("summarize", function(object, ...)
     standardGeneric("summarize"))
 
 setMethod("summarize", signature(object = "SoilProfileCollection"),
           function(object, ...) {
-  if(requireNamespace("rlang")) {
+  if(requireNamespace("rlang", quietly = TRUE)) {
     # TODO: safe setter and accessor methods for grouping variable
     group.by.col <- object@metadata$aqp_group_by
 

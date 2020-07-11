@@ -31,19 +31,6 @@ importFrom(methods,
   slotNames
 )
 
-
-importFrom(MASS,
-  isoMDS
-)
-
-importFrom(digest,
-  digest
-)
-
-importFrom(RColorBrewer,
-  brewer.pal
-)
-
 importFrom(grid,
   gpar,
   grid.text,
@@ -65,18 +52,17 @@ importFrom(lattice,
   strip.custom
 )
 
-importFrom(cluster, 
+importFrom(cluster,
   daisy,
   pam,
   silhouette
 )
 
-importFrom(graphics, 
+importFrom(graphics,
   plot
 )
 
-importFrom(plyr, 
-  idata.frame,
+importFrom(plyr,
   ddply,
   llply,
   ldply,
@@ -86,18 +72,13 @@ importFrom(plyr,
   rbind.fill
 )
 
-importFrom(reshape, 
+importFrom(reshape,
   melt,
   melt.data.frame,
   cast
 )
 
-importFrom(scales,
-  rescale,
-  col_factor
-)
-
-importFrom(stringr, 
+importFrom(stringr,
   fixed,
   str_c,
   str_split,
@@ -108,24 +89,18 @@ importFrom(sp,
   CRS,
   SpatialPoints,
   SpatialPointsDataFrame,
-  coordinates, 
-  "coordinates<-", 
-  proj4string, 
+  coordinates,
+  "coordinates<-",
+  proj4string,
   "proj4string<-",
   rbind.SpatialPoints
-)
-
-
-importFrom(plotrix, 
-  soil.texture,
-  triax.points
 )
 
 exportClasses(SoilProfileCollection)
 
 S3method(rbind, SoilProfileCollection)
 
-exportMethods(  
+exportMethods(
   "[",
   "$",
   "$<-",
@@ -134,11 +109,11 @@ exportMethods(
   validSpatialData,
   coordinates,
   "coordinates<-",
-  "depths<-", 
+  "depths<-",
   depth_units,
   "depth_units<-",
   diagnostic_hz,
-  "diagnostic_hz<-",  
+  "diagnostic_hz<-",
   restrictions,
   "restrictions<-",
   horizons,
@@ -148,7 +123,7 @@ exportMethods(
   length,
   max,
   metadata,
-  "metadata<-", 
+  "metadata<-",
   min,
   names,
   nrow,

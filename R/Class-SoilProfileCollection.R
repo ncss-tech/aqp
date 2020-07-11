@@ -507,7 +507,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
             switch(as.class,
               'data.table' = {
                 #print(as.class)
-                if (requireNamespace("data.table"))
+                if (requireNamespace("data.table", quietly = TRUE))
                   return(data.table::as.data.table(x, ...))
                 message(
                   "using data.table class in SoilProfileCollection slots requires the `data.table` package"
@@ -515,7 +515,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
               },
               'tbl_df' = {
                 #print(as.class)
-                if (requireNamespace("tibble"))
+                if (requireNamespace("tibble", quietly = TRUE))
                   return(tibble::as_tibble(x, ...))
                 message(
                   "using tbl_df class in SoilProfileCollection slots requires the `tibble` package"
