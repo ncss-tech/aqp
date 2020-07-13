@@ -2,15 +2,16 @@
 # s.fm: slicing formula, including variables requested for missing data test
 # cols: vector of colors palette
 missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.regex=NULL, cols=NULL, ...) {
-  
+
   # default color scheme
   if(is.null(cols))
-    cols <- rev(brewer.pal(8, 'Spectral'))
-  
+    cols <- c("#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
+              "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F")
+
   # make color pallete and define number of cuts
   cols.palette <- colorRampPalette(cols)
   ncuts <- 20
-  
+
   # optionally filter horizon data in original object and replace
   if(!is.null(filter.column) & !is.null(filter.regex)) {
     h <- horizons(s)
@@ -18,50 +19,50 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
     slot(s, 'horizons') <- h[idx, ]
     rm(h)
   }
-  
-  ## TODO: this is not efficient  
+
+  ## TODO: this is not efficient
   # get a list of horizon boundary depths for latter annotation of sliced data
   obd <- profileApply(s, simplify=FALSE, FUN=function(i) {
     hd <- horizonDepths(i)
     h <- horizons(i)
     hz.boundaries <- unique(c(h[[hd[1]]], h[[hd[2]]]))
   })
-  
-  
+
+
   # compute percent missing data by pedon/variable
   pct_missing <- ddply(horizons(s), idname(s), .fun=function(i, v=vars) {
     round(sapply(i[, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
   })
-  
-    
+
+
   # slice according to rules
   s.fm <- as.formula(paste('0:', max_depth, ' ~ ', paste(vars, collapse=' + '), sep=''))
   # setting strict = FALSE, no need for robust hz detection
   ss <- slice(s, s.fm, strict = FALSE)
-  
+
   # get sliced horizon depth names
   hd <- horizonDepths(ss)
-  
+
   # extract horizons from sliced data
   h <- horizons(ss)
-  
+
   # get slice mid-points
   h$mid <- (h[[hd[1]]] + h[[hd[2]]]) / 2
-  
-  
-  # NOTE: since we are converting profile IDs to a factor, 
+
+
+  # NOTE: since we are converting profile IDs to a factor,
   # we need to explicitly set levels to match the original ordering of profiles
   forced.levels <- paste("c('", paste(profile_id(ss), collapse="','"), "')", sep='')
-  
+
   # construct levelplot formula using horizon top boundaries
   f <- as.formula(paste('.pctMissing',  ' ~ ', 'factor(', idname(ss), ', levels=', forced.levels, ') * mid', sep=''))
-  
+
   # ylab adjustments
   ylab <- paste('Depth ', '(', depth_units(ss), ')', sep='')
-  
+
   # depth-range adjustments
   ylim <- c(max(h$mid) + 5, -3)
-  
+
   # plot missing data fraction
   lp <- levelplot(f, data=h, ylim=ylim, col.regions=cols.palette(ncuts), cuts=ncuts-1, ylab=ylab, xlab='', scales=list(x=list(rot=90), y=list(tick.number=10)), ..., panel=function(...) {
     panel.levelplot(...)
@@ -71,11 +72,11 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
       panel.segments(i-0.5, obd[[i]], i+0.5, obd[[i]], col='black')
     }
   })
-  
+
   # print level plot
   print(lp)
-  
+
   # return missing data percentages by pedon
   return(pct_missing)
-  
+
 }

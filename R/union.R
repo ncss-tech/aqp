@@ -93,16 +93,28 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     o.df.class <- "data.frame"
   }
 
-  # check for non-conformal df class (revert to data.frame if non-matching)
+  # check for non-conformal group (revert to "" if non-matching)
   o.group.by <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_group_by)))
   if(length(o.group.by) != 1) {
     o.group.by <- ""
   }
 
+  # check for non-conformal hzdesgn (revert to data.frame if non-matching)
+  o.hzdesgn <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_hzdesgn)))
+  if(length(o.hzdesgn) != 1) {
+    o.hzdesgn <- ""
+  }
+
+  # check for non-conformal hztexcl (revert to data.frame if non-matching)
+  o.hztexcl <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_hztexcl)))
+  if(length(o.hztexcl) != 1) {
+    o.hztexcl <- ""
+  }
+
   # test for non-conformal CRS if keeping spatial data
   if(!drop.spatial) {
     # check for non-conformal CRS in @sp
-    o.p4s <- unique(lapply(spc, proj4string))
+    o.p4s <- unique(lapply(spc, function(x) suppressWarnings(proj4string(x))))
     if(length(o.p4s) > 1)
       stop('inconsistent CRS', call.=FALSE)
   }
@@ -118,14 +130,27 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   # template for combined data is based on the first element
   new.pID <- spc.list[[1]]$idcol
   new.hzID <- spc.list[[1]]$hzidcol
-  new.hzdesgn <- spc.list[[1]]$hzdesgncol
-  new.hztexcl <- spc.list[[1]]$hztexclcol
+
   new.hzd <- spc.list[[1]]$depthcols
   new.metadata <- spc.list[[1]]$metadata
 
   # get the data.frame class and grouping variable into new metadata
   new.metadata$aqp_df_class <- o.df.class
   new.metadata$aqp_group_by <- o.group.by
+
+  # transfer old slots if they are present
+  hzdold <- spc.list[[1]]$hzdesgncol
+  hztold <- spc.list[[1]]$hztexclcol
+  if(length(hzdold) == 1)
+   new.metadata$aqp_hzdesgn  <- hzdold
+  if(length(hztold) == 1)
+   new.metadata$aqp_hztexcl  <- hztold
+
+  if(!length(new.metadata$aqp_hzdesgn))
+    new.metadata$aqp_hzdesgn <- ""
+
+  if(!length(new.metadata$aqp_hzdesgn))
+    new.metadata$aqp_hztexcl <- ""
 
   # TODO: need a template for coordinate names if spatial data are present in all
 
@@ -173,13 +198,21 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   o.sp <- lapply(spc.list, '[[', 'sp')
 
   # generate new SPC components
-  # using plyr::rbind.fill seems to solve the problem on non-conformal DF
   # https://github.com/ncss-tech/aqp/issues/71
-  o.h <- do.call('rbind.fill', o.h) # horizon data
-  o.s <- do.call('rbind.fill', o.s) # site data
-  o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
-  o.r <- do.call('rbind.fill', o.r) # restriction data, leave as-is
-
+  if(requireNamespace("data.table")) {
+    # preferentially use data.table if available
+    o.h <- data.table::rbindlist(o.h, fill = TRUE)
+    o.s <- data.table::rbindlist(o.s, fill = TRUE)
+    o.d <- data.table::rbindlist(o.d, fill = TRUE)
+    o.r <- data.table::rbindlist(o.r, fill = TRUE)
+  } else if(requireNamespace("plyr")) {
+    o.h <- do.call('rbind.fill', o.h) # horizon data
+    o.s <- do.call('rbind.fill', o.s) # site data
+    o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
+    o.r <- do.call('rbind.fill', o.r) # restriction data, leave as-is
+  } else {
+    stop("package `data.table` or `plyr` is required to union nonconformal data.frames.", call.=FALSE)
+  }
   if(! drop.spatial) {
     # check for non-conformal coordinates
     dim.coords <- sapply(o.sp, function(i) {
@@ -211,7 +244,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     } else {
       # not missing spatial data
       # 2015-12-18: added call to specific function: "sp::rbind.SpatialPoints"
-      o.sp <- do.call("rbind.SpatialPoints", o.sp)
+      o.sp <- suppressMessages(do.call("rbind.SpatialPoints", o.sp))
     }
 
   } else {
@@ -225,23 +258,25 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     stop('non-unique profile IDs detected')
   }
 
-  ## make SPC from pieces
-  res <- SoilProfileCollection(idcol = new.pID,
-                               hzidcol = new.hzID,
-                               hzdesgncol = new.hzdesgn,
-                               hztexclcol = new.hztexcl,
-                               depthcols = new.hzd,
-                               metadata = new.metadata,
-                               horizons = .as.data.frame.aqp(o.h, o.df.class),
-                               site = .as.data.frame.aqp(o.s, o.df.class),
-                               sp = o.sp,
-                               diagnostic = .as.data.frame.aqp(o.d, o.df.class),
-                               restrictions = .as.data.frame.aqp(o.r, o.df.class))
+  # take combined horizon data, convert to target df subclass
+  res <- .as.data.frame.aqp(o.h, o.df.class)
 
-  ## reset horizon IDs (if using default hzID)
-  if ('hzID' %in% horizonNames(res))
-    res$hzID <- as.character(1:nrow(res))
+  ## reset horizon IDs (if the default column hzID is presnt)
+  if ('hzID' %in% colnames(res))
+    res$hzID <- NULL
 
+  # rebuild SPC using safe constructors
+  depths(res) <- formula(sprintf("%s ~ %s + %s", new.pID, new.hzd[1], new.hzd[2]))
+  site(res) <- .as.data.frame.aqp(o.s, o.df.class)
+  diagnostic_hz(res) <- .as.data.frame.aqp(o.d, o.df.class)
+  restrictions(res) <- .as.data.frame.aqp(o.r, o.df.class)
+
+  # append any novel metadata
+  new.names <- !(names(new.metadata) %in% res@metadata)
+  res@metadata <- c(res@metadata, new.metadata[new.names])
+
+  # attempt using a common ID
+  suppressWarnings(hzidname(res) <- new.hzID)
   return(res)
 }
 

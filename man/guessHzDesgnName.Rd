@@ -20,7 +20,7 @@ This follows the historic convention used by \code{aqp::plotSPC()} looking for '
 a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), horizonname=c("A","Bw"))
 depths(a) <- id ~ top + bottom
 
-# store guess in hzdesgncol slot (used internally by some aqp functions)
+# store guess in metadata
 hzdesgnname(a) <- guessHzDesgnName(a)
 
 # inspect result

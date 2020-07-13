@@ -20,7 +20,7 @@ This function is used to provide texture class attribute column name to function
 a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), texture=c("A","Bw"))
 depths(a) <- id ~ top + bottom
 
-# store guess in hzdesgncol slot (used internally by some aqp functions)
+# store guess in metadata
 hzdesgnname(a) <- guessHzTexClName(a)
 
 # inspect result

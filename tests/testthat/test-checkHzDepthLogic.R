@@ -2,7 +2,10 @@ context("SoilProfileCollection depth error checking")
 
 ## sample data
 data(sp3)
-depths(sp3) <- id ~ top + bottom
+
+# message due to unordered site IDs
+expect_message({depths(sp3) <- id ~ top + bottom},
+               "unsorted input data will be ordered by profile ID and top depth")
 
 test_that("checkHzDepthLogic() works as expected", {
   

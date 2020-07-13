@@ -30,14 +30,14 @@ tauW <- function(CM,
 
     ## convert both data frames and vectors to matrices
   cmx <- as.matrix(CM); wx <- as.matrix(W); pv <- as.vector(P)
-  
+
   ## convert a 1-D vector to a square matrix
   if (ncol(cmx) == 1)
     cmx <- matrix(cmx, byrow=TRUE, nrow=sqrt(nrow(cmx)))
   if (ncol(wx) == 1)
     wx <- matrix(wx, byrow=TRUE, nrow=sqrt(nrow(wx)))
   nr <- nrow(cmx); nc <- ncol(cmx)
-  
+
   ## check CM
   if (nr != nc) {
     print("Error: cross-classification matrix is not square")
@@ -57,16 +57,16 @@ tauW <- function(CM,
     print("All weights must be on [-1..1]")
     return(NULL)
   }
-  
+
   ## totals of matrix, rows and columns
   n <- sum(cmx); rsum = apply(cmx, 1, sum); csum = apply(cmx, 2, sum)
-  
+
   ## if P is special value 0, set to reference distribution
   if ((length(pv))==1 && (pv == 0)) {
     print("Setting prior probabilities to reference class distribution")
     pv <- csum/n
   }
-  
+
   ## check P
   if (length(pv) != nc) {
     print("Error: number of prior probabilities not equal to number of classes")
@@ -76,49 +76,49 @@ tauW <- function(CM,
     print("Error: prior probabilities must sum to 1")
     return(NULL)
   }
-  
+
   ## make class names consistent among objects
   row.names(cmx) <- names(cmx)
   row.names(wx) <- names(wx)
   names(pv) <- names(cmx)
-  
+
   ## compute unweighted naive statistics
   d <- diag(cmx); dsum <- sum(d); oa <- dsum/n
   ua <- d/rsum; pa <- d/csum
   names(ua) <- names(pa)
-  
+
   ## compute weighted naive statistics
   ##
-  
+
   ## confusion matrix and marginals as proportions
   cmxp <- cmx/n; cp <- csum/n; rp <- rsum/n;
-  
+
   ## expected proportions
   pp<- rp %o% cp
-  
+
   ## weighted weights
   ## wr <- wx %*% cp; wc <- t(t(wx) %*% rp)
   ## overall weighted accuracy
   oaw <- sum(wx * cmxp)
-  
+
   ## marginal weighted accuracy
   uaw <- apply(wx * cmxp, 1, sum)/rp
   paw <- apply(wx * cmxp, 2, sum)/cp
   names(uaw) <- names(paw)
-  
+
   ## compute unweighted tau
   ##
   th1 <- sum(diag(cmxp))
   th2 <- sum(pv %*% (csum/n))
   tau <- (th1-th2)/(1-th2);
-  
+
   ## compute weighted tau
   ##
   thw1 <- sum(wx * cmxp)
   thw2 <- sum(wx * (pv %o% (csum/n)))
   tau.w <- (thw1-thw2)/(1-thw2);
-  
-  
+
+
   ## return list of results
   return(list(crossclass = cmx, weights=wx,
               obs=rsum, ref=csum, n=n,
@@ -140,12 +140,12 @@ summaryTauW <- function(result.tau) {
   print(paste("Number of observations:", result.tau$n), quote=F)
   print("Weights:", quote=F)
   print(result.tau$weights, quote=F)
-  
+
   print(paste("Overall accuracy (unweighted):",
               round(result.tau$overall.naive,4)), quote=F)
   print(paste("Overall accuracy (weighted):",
               round(result.tau$overall.weighted,4)), quote=F)
-  
+
   print("User's accuracy (unweighted):", quote=F)
   print(round(result.tau$user.naive,4))
   print("User's accuracy (weighted):", quote=F)
@@ -154,7 +154,7 @@ summaryTauW <- function(result.tau) {
   print(round(result.tau$prod.naive,4))
   print("Producer's reliability (weighted):", quote=F)
   print(round(result.tau$prod.weighted,4))
-  
+
   print("Reference class proportions:", quote=F)
   print(round(result.tau$ref/result.tau$n,4), quote=F)
   print("Observed class proportions:", quote=F)
@@ -171,11 +171,11 @@ summaryTauW <- function(result.tau) {
 ##   result.tau   result of running tauW
 ##   file.name    name of file to write
 xtableTauW <- function(result.tau, file.name="tau_results_table.tex") {
-  
+
   # safely check for required packages
-  if(!requireNamespace('xtable'))
+  if(!requireNamespace('xtable', quietly = TRUE))
     stop('this function requires the `xtable` package.', call.=FALSE)
-  
+
   options(xtable.floating = FALSE)
   options(xtable.timestamp = "")
   tab <- data.frame(result.tau$user.naive, result.tau$user.weighted,

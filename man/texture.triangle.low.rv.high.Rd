@@ -7,8 +7,8 @@
 
 \usage{
 textureTriangleSummary(ssc, p=c(0.05, 0.5, 0.95), delta=1,
-texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', 
-range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', 
+texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue',
+range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow',
 sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...)
 }
 
@@ -39,7 +39,7 @@ When using this function within .Rmd, be sure to explicitly load the `compositio
 \author{D.E. Beaudette}
 
 \seealso{
-\code{\link{triax.points}, \link{soil.texture}}
+\code{\link[plotrix]{triax.points}, \link[plotrix]{soil.texture}}
 }
 \examples{
 

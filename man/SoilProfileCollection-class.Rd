@@ -9,10 +9,9 @@
 SoilProfileCollection(
   idcol = "id",
   hzidcol = "hzID",
-  hzdesgncol = character(0),
-  hztexclcol = character(0),
   depthcols = c("top", "bottom"),
-  metadata = list(aqp_df_class = "data.frame", stringsAsFactors = FALSE),
+  metadata = list(aqp_df_class = "data.frame", aqp_group_by = "", aqp_hzdesgn = "",
+    aqp_hztexcl = "", stringsAsFactors = FALSE),
   horizons = data.frame(id = character(0), hzID = character(0), top = numeric(0),
     bottom = numeric(0), stringsAsFactors = FALSE),
   site = data.frame(id = character(0), stringsAsFactors = FALSE),
@@ -25,10 +24,6 @@ SoilProfileCollection(
 \item{idcol}{character Profile ID Column Name}
 
 \item{hzidcol}{character Horizon ID Column Name}
-
-\item{hzdesgncol}{character Horizon Designation Column Name [optional]}
-
-\item{hztexclcol}{character Horizon Texture Class Column Name [optional]}
 
 \item{depthcols}{character, length 2 Top and Bottom Depth Column Names}
 
@@ -53,10 +48,6 @@ In general, one should use \code{depths()} to initiate a SoilProfileCollection o
 \item{\code{idcol}}{character.}
 
 \item{\code{hzidcol}}{character.}
-
-\item{\code{hzdesgncol}}{character.}
-
-\item{\code{hztexclcol}}{character.}
 
 \item{\code{depthcols}}{character.}
 
