@@ -6,6 +6,8 @@
 #
 ## TODO: extend to multiple variables in a single call to function
 
+## TODO: additional wrapper required just before call to mpspline() -> no longer has an SPC method / interface
+
 # p: SPC
 # var: horizon-level attribute name
 # d: depths to re-sample var

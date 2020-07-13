@@ -32,6 +32,8 @@ plot(x, color='p2')
 # m <- mpspline(x, var_name = 'p1', d=c(0, 5, 15, 30, 60, 100, 200), out_style = 'spc')
 
 ## TODO: this can only perform EAS for single horizon-level attribute
+## TODO: this needs an additional wrapper as of mpspline2_0.1.3 
+
 # SPC -> MPS -> SPC
 m <- mpsplineSPC(x, var='p1', d=c(0, 5, 15, 30, 60, 100, 200))
 
