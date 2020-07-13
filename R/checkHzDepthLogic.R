@@ -89,14 +89,14 @@ hzDepthTests <- function(top, bottom) {
   n <- length(top)
   
   # sanity checks, since this will be exported provide a little checking
-  #   for most internal uses these errors will never trigger...
+  #   for most internal usesF these errors will never trigger...
   # but in case of corrupted hz data or bad inputs... anything can happen
   if (length(top) != length(bottom)) {
     stop("cannot evaluate horizon depth logic: vectors do not have same length")
   }
   
   # bottom depth < top depth? or horizons not in top-depth order?
-  test.1 <- any(bottom < top, na.rm = TRUE) | any(sort(top) != top)
+  test.1 <- any(bottom < top, na.rm = TRUE) | any(suppressWarnings(sort(top) != top))
   
   # bottom depth == top depth
   test.2 <- any(top == bottom, na.rm = TRUE)

@@ -113,26 +113,24 @@ setReplaceMethod("depths", "data.frame",
   data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
   data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
   
-  # create a site table with just IDs
-  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), 
-                                          stringsAsFactors = FALSE), class(data)[1])
-  names(nusite) <- nm[1]
-  
   iddata <- data[[nm[1]]]
   tdep <- data[[depthcols[1]]]
   
   usortid <- .coalesce.idx(sort(iddata))
   hsorttdep <- all(data[order(iddata, tdep),][[depthcols[1]]] == tdep)
   
-  if (any(nusite[[nm[1]]] != usortid) | !hsorttdep) {
-    message("unsorted input data will be ordered by profile ID and top depth")
-  
-    # reorder based on site ID and top depth column
+  if (suppressWarnings(any(iddata != usortid) | !hsorttdep)) {
     ## note: forced character sort on ID -- need to impose some order to check depths
+    # no more message
     
-    data <- data[order(as.character(data[[nm[1]]]), tdep),]
-    nusite[[nm[1]]] <- .coalesce.idx(data[[nm[1]]])
+    data <- data[order(as.character(iddata), tdep),]
   }
+  
+  # create a site table with just IDs
+  # d'OH need to do this AFTER re-sorting!!!
+  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]), 
+                                          stringsAsFactors = FALSE), class(data)[1])
+  names(nusite) <- nm[1]
   
   # create object
   res <- SoilProfileCollection(idcol = nm[1], 

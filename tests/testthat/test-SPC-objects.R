@@ -39,8 +39,7 @@ test_that("SPC construction from a data.frame", {
   # the input data profiles both have bad "top depth logic" (reversed order of horizons)
   expect_true(hzDepthTests(daf$top[1:3], daf$bottom[1:3])["depthLogic"])
 
-  expect_message({depths(daf) <- id ~ top + bottom},
-                 "unsorted input data will be ordered by profile ID and top depth")
+  expect_silent({depths(daf) <- id ~ top + bottom})
   # inspect
 
   # plot(df) # plot "works" even with invalid depth logic
@@ -211,13 +210,13 @@ test_that("SPC spatial operations ", {
   # 2020/07/12: warnings expect warning on rgdal 1.5-8+
   # https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html
   # catching all rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-methods
-  expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs')
+  expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0')
 
   # we should get back the same thing we started with
 #  if(packageVersion("rgdal") >= "1.5-8")
 #    expect_warning(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
 #  else
-    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
+    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'))
 
   # basic coercion
 #  if(packageVersion("rgdal") >= "1.5-8")
@@ -469,7 +468,7 @@ test_that("SPC profile ID reset integrity: site", {
   data(sp4)
 
   # message due to unordered site IDs
-  expect_message(depths(sp4) <- id ~ top + bottom)
+  expect_silent(depths(sp4) <- id ~ top + bottom)
 
   # save old ID and replace with known pattern
   sp4$old_id <- profile_id(sp4)
@@ -487,7 +486,7 @@ test_that("SPC profile ID reset integrity: horizon", {
   data(sp4)
 
   # message due to unordered site IDs
-  expect_message(depths(sp4) <- id ~ top + bottom)
+  expect_silent(depths(sp4) <- id ~ top + bottom)
 
   # save old ID and replace with known pattern
   sp4$old_id <- as.vector(unlist(horizons(sp4)[idname(sp4)]))
@@ -567,8 +566,7 @@ test_that("ordering of profiles and horizons is retained after left-join", {
 
   # init SPC
   # message due to unordered site IDs
-  expect_message({depths(d) <- id ~ top + bottom},
-                 "unsorted input data will be ordered by profile ID and top depth")
+  expect_silent({depths(d) <- id ~ top + bottom})
 
   ## former bug on set of a new horizon-level attr
   d$zzz <- rep(NA, times = nrow(d))
