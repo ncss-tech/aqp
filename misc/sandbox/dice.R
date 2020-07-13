@@ -1,11 +1,20 @@
 
 library(aqp)
 library(data.table)
+library(profvis)
 
-d <- lapply(1:1000, random_profile, n=c(6, 7, 8), n_prop=5, method='LPP')
+
+# ~ 10 seconds for 10k profiles
+# much faster to generate as DF, then promote to SPC at the end
+d <- lapply(1:10000, random_profile, n=c(6, 7, 8), n_prop=5, method='LPP', SPC=FALSE)
+
+# much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
+
 d$id <- as.character(d$id)
 depths(d) <- id ~ top + bottom
+
+# fake group
 d$group <- factor(sample(letters[1:10], size=length(d), replace=TRUE))
 
 ## DT full outer join ideas
@@ -36,7 +45,7 @@ dice <- function(x) {
   hzidn <- hzidname(x)
   htb <- horizonDepths(x)
   
-  ## `h` will eventually be a data.table object
+  ## `h` could be a data.table object
   h <- as.data.table(h)
   setkeyv(h, hzidn)
   
@@ -94,15 +103,29 @@ dice <- function(x) {
 z <- dice(d[1:2, ])
 
 par(mar=c(0,1,3,1))
-plotSPC(z, color='hzID', name='', divide.hz = TRUE)
+# supress hz names
+# strange legend, due to character representation of integers
+plotSPC(z, color='hzID', name=NA, divide.hz = TRUE)
 
-# 87 seconds: current slice()
+## current slice()
+# 10k profiles: 22 seconds 
 system.time(s <- slice(d, 0:100 ~ .))
 
-# 39 seconds: 2x mapply, merge.data.frame
-# 10 seconds: 1x mapply, merge.data.table
+## 1x mapply, merge.data.table
+# 10k profiles: 4 seconds
 system.time(s <- dice(d))
 
+
+## profile
+
+# get.slice() wastes a lot of time
+pp.slice <- profvis(s <- slice(d, 0:100 ~ .))
+
+# most time spent: setkey + mapply + setkey
+pp.dice <- profvis(s <- dice(d))
+
+
+## introduce horizonation errors
 
 z <- d[1:10, ]
 z$bottom[2] <- NA
