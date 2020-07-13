@@ -123,6 +123,7 @@ random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5
   	d$HzDistinctCode <- d.codes
   }
   
+  # note: 3-4x performance hit when calling from lapply(1:big.number, ...)
   # optionally return as SPC
   if(SPC) {
     depths(d) <- id ~ top + bottom
