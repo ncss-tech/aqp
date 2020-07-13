@@ -144,7 +144,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   if(length(hzdold) == 1)
    new.metadata$aqp_hzdesgn  <- hzdold
   if(length(hztold) == 1)
-    new.metadata$aqp_hztexcl  <- hztold
+   new.metadata$aqp_hztexcl  <- hztold
 
   if(!length(new.metadata$aqp_hzdesgn))
     new.metadata$aqp_hzdesgn <- ""
@@ -198,13 +198,21 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   o.sp <- lapply(spc.list, '[[', 'sp')
 
   # generate new SPC components
-  # using plyr::rbind.fill seems to solve the problem on non-conformal DF
   # https://github.com/ncss-tech/aqp/issues/71
-  o.h <- do.call('rbind.fill', o.h) # horizon data
-  o.s <- do.call('rbind.fill', o.s) # site data
-  o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
-  o.r <- do.call('rbind.fill', o.r) # restriction data, leave as-is
-
+  if(requireNamespace("data.table")) {
+    # preferentially use data.table if available
+    o.h <- data.table::rbindlist(o.h, fill = TRUE)
+    o.s <- data.table::rbindlist(o.s, fill = TRUE)
+    o.d <- data.table::rbindlist(o.d, fill = TRUE)
+    o.r <- data.table::rbindlist(o.r, fill = TRUE)
+  } else if(requireNamespace("plyr")) {
+    o.h <- do.call('rbind.fill', o.h) # horizon data
+    o.s <- do.call('rbind.fill', o.s) # site data
+    o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
+    o.r <- do.call('rbind.fill', o.r) # restriction data, leave as-is
+  } else {
+    stop("package `data.table` or `plyr` is required to union nonconformal data.frames.", call.=FALSE)
+  }
   if(! drop.spatial) {
     # check for non-conformal coordinates
     dim.coords <- sapply(o.sp, function(i) {
@@ -236,7 +244,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     } else {
       # not missing spatial data
       # 2015-12-18: added call to specific function: "sp::rbind.SpatialPoints"
-      o.sp <- do.call("rbind.SpatialPoints", o.sp)
+      o.sp <- suppressMessages(do.call("rbind.SpatialPoints", o.sp))
     }
 
   } else {
@@ -250,21 +258,25 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     stop('non-unique profile IDs detected')
   }
 
-  ## make SPC from pieces
-  res <- SoilProfileCollection(idcol = new.pID,
-                               hzidcol = new.hzID,
-                               depthcols = new.hzd,
-                               metadata = new.metadata,
-                               horizons = .as.data.frame.aqp(o.h, o.df.class),
-                               site = .as.data.frame.aqp(o.s, o.df.class),
-                               sp = o.sp,
-                               diagnostic = .as.data.frame.aqp(o.d, o.df.class),
-                               restrictions = .as.data.frame.aqp(o.r, o.df.class))
+  # take combined horizon data, convert to target df subclass
+  res <- .as.data.frame.aqp(o.h, o.df.class)
 
-  ## reset horizon IDs (if using default hzID)
-  if ('hzID' %in% horizonNames(res))
-    res$hzID <- as.character(1:nrow(res))
+  ## reset horizon IDs (if the default column hzID is presnt)
+  if ('hzID' %in% colnames(res))
+    res$hzID <- NULL
 
+  # rebuild SPC using safe constructors
+  depths(res) <- formula(sprintf("%s ~ %s + %s", new.pID, new.hzd[1], new.hzd[2]))
+  site(res) <- .as.data.frame.aqp(o.s, o.df.class)
+  diagnostic_hz(res) <- .as.data.frame.aqp(o.d, o.df.class)
+  restrictions(res) <- .as.data.frame.aqp(o.r, o.df.class)
+
+  # append any novel metadata
+  new.names <- !(names(new.metadata) %in% res@metadata)
+  res@metadata <- c(res@metadata, new.metadata[new.names])
+
+  # attempt using a common ID
+  suppressWarnings(hzidname(res) <- new.hzID)
   return(res)
 }
 
