@@ -237,7 +237,8 @@ plotSPC <- function(
   plot.depth.axis=TRUE,
   density=NULL,
   col.label=color,
-  col.palette = rev(brewer.pal(10, 'Spectral')),
+  col.palette = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598",
+                  "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"),
   col.palette.bias=1,
   col.legend.cex=1,
   n.legend=8,
@@ -362,30 +363,33 @@ plotSPC <- function(
   ## horizon colors ##
   ####################
 
-  
+
   # 1. numeric vector, rescale and apply color ramp
   if(is.numeric(h[[color]])) {
-    
+
     # generate color ramp function
     cr <- colorRamp(col.palette, bias = col.palette.bias)
-    
+
+    if(!requireNamespace("scales", quietly = TRUE))
+      stop("package `scales` is required", call.=FALSE)
+
     # note that this may contain NAs
     c.rgb <- cr(scales::rescale(h[[color]]))
     cc <- which(complete.cases(c.rgb))
     h$.color <- NA
-    
+
     # convert non-NA values into colors
     h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue=255)
-    
+
     # generate range / colors for legend
     pretty.vals <- pretty(h[[color]], n = n.legend)
-    
+
     # truncate to 3 signif vals and convert to character for correct interpretation of floating point values
     leg.pretty.vals <- as.character(signif(pretty.vals, 3))
-    
+
     # put into a list for later
     color.legend.data <- list(legend=leg.pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
-    
+
     # special case: there are < 3 unique values -> convert to factor
     # previous calculations are ignored
     low.n.test.vals <- as.character(signif(h[[color]], digits = 3))
@@ -398,6 +402,7 @@ plotSPC <- function(
 
   # 2. vector of categorical data
   if(is.character(h[[color]]) | is.factor(h[[color]])) {
+
     # testing if ALL valid colors
     if( all(.isColorValid(na.omit(h[[color]])))) {
       # YES: interpret values directly as colors
@@ -412,6 +417,9 @@ plotSPC <- function(
       color.levels <- levels(h[[color]])
 
       # make a color mapping function
+      if(!requireNamespace("scales", quietly = TRUE))
+        stop("package `scales` is required", call.=FALSE)
+
       color.mapper <- scales::col_factor(
         palette = colorRampPalette(col.palette, bias = col.palette.bias)(length(color.levels)),
         domain = color.levels,
@@ -502,7 +510,8 @@ plotSPC <- function(
 	  # extract the current profile's horizon data
     this_profile_label <- pLabels[profile_i]
 	  this_profile_id <- pIDs[profile_i]
-	  this_profile_data <- h[h[IDcol] == this_profile_id, ]
+
+	  this_profile_data <- h[h[[IDcol]] == this_profile_id, ]
 
     # extract column names
     cn <- names(this_profile_data)
@@ -548,8 +557,8 @@ plotSPC <- function(
     x0 <- x.idx.offset + relative.pos[i]
 
 	  # get vectors of horizon boundaries, and scale
-	  y0 <- (this_profile_data[, bcol] * scaling.factor) + y.offset
-	  y1 <- (this_profile_data[, tcol] * scaling.factor) + y.offset
+	  y0 <- (this_profile_data[[bcol]] * scaling.factor) + y.offset
+	  y1 <- (this_profile_data[[tcol]] * scaling.factor) + y.offset
 
 
 	  ##
@@ -674,7 +683,7 @@ plotSPC <- function(
 	      ## TODO: think of a better approach
 	      # hz topographic code
 	      text(rep(x0, times=nh), y0, labels = ht.lty, col=invertLabelColor(this_profile_colors), font=2, cex=0.66)
-	    }
+	   }
 
 
 	  } else {
@@ -772,7 +781,7 @@ plotSPC <- function(
 	    ## TODO: consider use of unicode arrow markers
 	    # hzd.txt <- sprintf('\u25c4%s', this_profile_data[, tcol])
 	    # text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0, font = 1)
-	    
+
 	    # just labels
 	    hzd.txt <- this_profile_data[, tcol]
 	    text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
@@ -833,15 +842,15 @@ plotSPC <- function(
 
     # gracefully handle all-NA in thematic variable
     if(length(color.legend.data$legend) > 0) {
-      
+
       # possibly split legend across multiple rows
       if(exists('multi.row.legend')) {
-  
+
         # compute max space required for legend items
         # better formatting
         # note: must be called AFTER high level plot()
         leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
-  
+
         # row 1
         legend('bottom', inset=c(0, 0.99),
                legend=color.legend.data$legend[leg.row.indices$row.1],
@@ -849,7 +858,7 @@ plotSPC <- function(
                text.width = leg.text.width,
                bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
                )
-  
+
         # row 2
         legend('bottom', inset=c(0, 0.94),
                legend=color.legend.data$legend[leg.row.indices$row.2],
@@ -857,7 +866,7 @@ plotSPC <- function(
                text.width = leg.text.width,
                bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
         )
-  
+
       } else {
         # standard invocation
         legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)

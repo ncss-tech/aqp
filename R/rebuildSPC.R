@@ -20,7 +20,7 @@ rebuildSPC <- function(x) {
   }
 
   if(is.null(x.list$hzdesgncol)) {
-    x.list$hzdesgncol <- character(0)
+    x.list$hzdesgncol <- ""
   }
 
   # preserve original hzdesgnname
@@ -30,7 +30,7 @@ rebuildSPC <- function(x) {
   }
 
   if(is.null(x.list$hztexclcol)) {
-    x.list$hztexclcol <- character(0)
+    x.list$hztexclcol <- ""
   }
 
   # preserve original hztexclname
@@ -41,7 +41,7 @@ rebuildSPC <- function(x) {
 
   # metadata is a list now
   olddata <- as.list(x.list$metadata)
-  
+
   # depths sets up basic metadata for res, copy over any missing data elements
   x.list$metadata <- c(metadata(res), olddata[!names(olddata) %in% names(metadata(res))])
 

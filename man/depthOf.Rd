@@ -32,9 +32,9 @@ depthOf(
 A numeric vector containing specified depth(s) of horizons matching a pattern.
 }
 \description{
-The \code{depthOf} family of functions calculate depth of occurence of a horizon designation pattern. They are used primarily in the place of complex qualitative or quantitative data that would confirm taxonomic criteria. 
+The \code{depthOf} family of functions calculate depth of occurence of a horizon designation pattern. They are used primarily in the place of complex qualitative or quantitative data that would confirm taxonomic criteria.
 
-Generally, these functions are used to implement assumptions about relationships between diagnostic properties, features and materials and horizon designations commonly used in the field. Particular assumptions may not apply in all localities and/or data sources. Great care should be taken when inspecting results. 
+Generally, these functions are used to implement assumptions about relationships between diagnostic properties, features and materials and horizon designations commonly used in the field. Particular assumptions may not apply in all localities and/or data sources. Great care should be taken when inspecting results.
 
 If you need all depths of occurence for a particular pattern, \code{depthOf} is what you are looking for. \code{minDepthOf} and \code{maxDepthOf} are wrappers around \code{depthOf} that return the minimum and maximum depth. They are all set up to handle missing values and missing "contacts" with the target pattern.
 }
@@ -42,14 +42,14 @@ If you need all depths of occurence for a particular pattern, \code{depthOf} is 
 # construct a fake profile
 spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxerepts",
                   hzname   = c("A","AB","Bw","BC","R"),
-                  hzdept   = c(0,  20, 32, 42,  49), 
-                  hzdepb   = c(20, 32, 42, 49, 200), 
+                  hzdept   = c(0,  20, 32, 42,  49),
+                  hzdepb   = c(20, 32, 42, 49, 200),
                   clay     = c(19, 22, 22, 21,  NA),
                   texcl    = c("l","l","l", "l","br"),
                   d_value  = c(5,   5,  5,  6,  NA),
                   m_value  = c(2.5, 3,  3,  4,  NA),
                   m_chroma = c(2,   3,  4,  4,  NA))
-                  
+
 # promote to SoilProfileCollection
 depths(spc) <- id ~ hzdept + hzdepb
 hzdesgnname(spc) <- 'hzname'

@@ -4,9 +4,9 @@
 #' 
 #' Determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents. 
 #' 
-#' Three logical checks are performed on the site and horizon tables, and a fourth attribute \code{valid} returns \code{TRUE} when all three checks are \code{TRUE}.
+#' Two logical checks are performed on the site and horizon tables, and a third element \code{valid} returns \code{TRUE} when both checks are \code{TRUE}.
 #'
-#' Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons
+#' Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons [for now]
 #' 
 #' Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles
 #' 
@@ -64,7 +64,7 @@ spc_in_sync <- function(object) {
   #          use checkHzDepthLogic -- as only one problematic pedon will break SPC depth order
   two <- ifelse(one, all(sid == cohid), FALSE)
   
-  return(data.frame(siteDepth = one,
+  return(data.frame(nSites = one,
                     relativeOrder = two,
                     valid = all(one, two)))
 }

@@ -43,14 +43,18 @@ checkHzDepthLogic <- function(x) {
   res <- profileApply(x, .check, simplify = FALSE, frameify = TRUE)
   
   # add 'valid' flag for simple filtering
-  res[['valid']] <- ! apply(res[, -1], 1, any)
+  res[['valid']] <- !apply(res[, -1], 1, any)
   
   return(res)
 }
+
 #' @title Tests of horizon depth logic
-#' @description Function used internally by `checkHzDepthLogic()`, `glom()` and various other functions that operate on horizon data from single soil profiles and require a priori depth logic checks. Checks for bottom depths less than top depth ("depthLogic"), bottom depths equal to top depth ("sameDepth"),,overlaps/gaps ("overlapOrGap") and missing depths ("missingDepth"). Use `names(res)[res]` on result `res` of `hzDepthTest()` to to determine type of logic error(s) found -- see examples below. 
+#' 
+#' @description Function used internally by `checkHzDepthLogic()`, `glom()` and various other functions that operate on horizon data from single soil profiles and require a priori depth logic checks. Checks for bottom depths less than top depth / bad top depth order ("depthLogic"), bottom depths equal to top depth ("sameDepth"), overlaps/gaps ("overlapOrGap") and missing depths ("missingDepth"). Use `names(res)[res]` on result `res` of `hzDepthTest()` to to determine type of logic error(s) found -- see examples below. 
+#' 
 #' @param top A numeric vector containing horizon top depths.
 #' @param bottom A numeric vector containing horizon bottom depths.
+#' 
 #' @return A named logical vector containing TRUE for each type of horizon logic error found in the given data. 
 #' @author Andrew G. Brown & Dylan E. Beaudette
 #' @examples 
@@ -87,12 +91,12 @@ hzDepthTests <- function(top, bottom) {
   # sanity checks, since this will be exported provide a little checking
   #   for most internal uses these errors will never trigger...
   # but in case of corrupted hz data or bad inputs... anything can happen
-  if(length(top) != length(bottom)) {
+  if (length(top) != length(bottom)) {
     stop("cannot evaluate horizon depth logic: vectors do not have same length")
   }
   
-  # bottom depth < top depth?
-  test.1 <- any(bottom < top, na.rm = TRUE)
+  # bottom depth < top depth? or horizons not in top-depth order?
+  test.1 <- any(bottom < top, na.rm = TRUE) | any(sort(top) != top)
   
   # bottom depth == top depth
   test.2 <- any(top == bottom, na.rm = TRUE)

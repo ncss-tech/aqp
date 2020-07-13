@@ -9,12 +9,12 @@
 # 	spc@sp <- spTransform(spc@sp, ...)
 # 	return(x)
 # }
-# 
+#
 # over.SoilProfileCollection <- function(spc, ...) {
 # 	res <- over(spc@sp, ...)
 # 	return(res)
 # }
-# 
+#
 # extract.SoilProfileCollection <- function(spc, x, ...) {
 # 	res <- extract(spc@sp, ...)
 # 	return(res)
@@ -29,17 +29,17 @@
 #' @param obj A SoilProfileCollection
 setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
   function(obj){
-    proj4string(obj@sp)
+    suppressWarnings(proj4string(obj@sp))
   }
 )
 #' Set PROJ4 string for the SoilProfileCollection
 #'
 #' @param obj A SoilProfileCollection
 #' @param value A proj4string
-#' 
+#'
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
   function(obj, value) {
-    proj4string(obj@sp) <- value
+    suppressWarnings(proj4string(obj@sp) <- value)
     obj
   }
 )
@@ -50,20 +50,20 @@ setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
 #' @aliases coordinates<-,SoilProfileCollection-method
 #' @param object A SoilProfileCollection
 #' @param value A formula specifying columns containing x and y coordinates
-#' 
+#'
 #' @rdname coordinates
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' data(sp5)
-#' 
+#'
 #' # coordinates are stored in x and y column of site
 #' sp5$x <- rnorm(length(sp5))
 #' sp5$y <- rnorm(length(sp5))
-#' 
+#'
 #' # coordinates takes a formula object as input
 #' coordinates(sp5) <- ~ x + y
-#' 
+#'
 setReplaceMethod("coordinates", "SoilProfileCollection",
   function(object, value) {
 
@@ -83,40 +83,40 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   # assign to sp slot
   # note that this will clobber any existing spatial data
   object@sp <- SpatialPoints(coords=mf)
-  
+
   # remove coordinates from source data
   # note that mf is a matrix, so we need to access the colnames differently
   coord_names <- dimnames(mf)[[2]]
   idx <- match(coord_names, siteNames(object))
-  
+
   # remove the named site data from site_data
   # TODO we should use a proper setter!
   # bug fix c/o Jose Padarian: drop=FALSE
   object@site <- site(object)[, -idx, drop=FALSE]
-  
+
   # done
   return(object)
   }
 )
 
 # ### TODO: consider removing this function
-# 
+#
 # ##
 # ## spatial_subset: spatial clipping of a SPC (requires GEOS)
 # ##
-# 
+#
 # if (!isGeneric("spatial_subset"))
 #   setGeneric("spatial_subset", function(object, geom) standardGeneric("spatial_subset"))
-# 
+#
 # setMethod(f='spatial_subset', signature='SoilProfileCollection',
 #   function(object, geom){
-# 
+#
 #     # This functionality require the GEOS bindings
 #     # provided by rgeos
 #     if(require(rgeos)) {
 #       spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
 #       ids <- which(spc_intersection)
-# 	
+#
 # 	# extract relevant info
 # 	s <- site(object)
 # 	h <- horizons(object)

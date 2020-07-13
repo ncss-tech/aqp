@@ -1,9 +1,9 @@
 
 
 #' Get names of columns in site table
-#' 
+#'
 #' @name validSpatialData
-#' 
+#'
 #' @description Are the contents of @sp valid: n x 2 matrix? If not, then contents of @sp in the SoilProfileCollection are an empty SpatialPoints object.
 #' @param object a SoilProfileCollection
 #' @aliases validSpatialData,SoilProfileCollection-method
@@ -33,9 +33,9 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
 # note that we strip out the ID column name from @site
 
 #' Get names of columns in site and horizons table
-#' 
+#'
 #' @name names
-#' 
+#'
 #' @description Get names of columns in site and horizons table of a SoilProfileCollection.
 #' @param x a SoilProfileCollection
 #' @aliases names,SoilProfileCollection-method
@@ -50,9 +50,9 @@ setMethod("names", signature("SoilProfileCollection"),
 
 # overload min() to give us the min depth within a collection
 #' Get the minimum bottom depth in a SoilProfileCollection
-#' 
+#'
 #' @name min
-#' 
+#'
 #' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 #' @param x a SoilProfileCollection
 #' @param v optional: a vector of horizon attribute names to refine calculation
@@ -64,28 +64,28 @@ setMethod(
   signature(x = "SoilProfileCollection"),
   definition = function(x, v = NULL) {
     h <- x@horizons
-    
+
     # get bottom depth column name
     hz_bottom_depths <- horizonDepths(x)[2]
-    
+
     # handle empty spc
     if(length(x@horizons[[hz_bottom_depths]]) == 0)
       return(NA)
-    
+
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
       target.names <- c(hz_bottom_depths, idname(x), v)
     } else {
       target.names <- c(hz_bottom_depths, idname(x))
     }
-    
+
     # filter out missing data
     h <- .data.frame.j(h, target.names, aqp_df_class(x))
     h <- h[complete.cases(h),]
-    
+
     # compute max depth within each profile
     d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
-    
+
     # return the shallowest (of the deepest depths in each profile)
     return(min(d, na.rm = TRUE))
   }
@@ -93,11 +93,11 @@ setMethod(
 
 # overload max() to give us the max depth within a collection
 #' Get the maximum bottom depth in a SoilProfileCollection
-#' 
+#'
 #' @name max
-#' 
+#'
 #' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
-#' 
+#'
 #' @param x a SoilProfileCollection
 #' @param v optional: horizon-level column name to refine calculation
 #' @aliases max,SoilProfileCollection-method
@@ -110,25 +110,25 @@ setMethod(
     # get bottom depth column name
     h <- x@horizons
     hz_bottom_depths <- horizonDepths(x)[2]
-    
+
     # handle empty spc
     if(length(h[[hz_bottom_depths]]) == 0)
       return(NA)
-    
+
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
       target.names <- c(hz_bottom_depths, idname(x), v)
     } else {
       target.names <- c(hz_bottom_depths, idname(x))
     }
-    
+
     # filter out missing data
     h <- .data.frame.j(h, target.names, aqp_df_class(x))
     h <- h[complete.cases(h),]
-    
+
     # compute max depth within each profile
     d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
-    
+
     # return the deepest depth (of the deepest depths in each profile)
     return(max(d, na.rm = TRUE))
   }
@@ -136,9 +136,9 @@ setMethod(
 
 # overload length() to give us the number of profiles in the collection
 #' Get the number of profiles in a SoilProfileCollection
-#' 
+#'
 #' @name length
-#' 
+#'
 #' @description Get the number of profiles in a SoilProfileCollection
 #' @param x a SoilProfileCollection
 #' @aliases length,SoilProfileCollection-method
@@ -157,9 +157,9 @@ setMethod(
 
 # overload nrow() to give us the number of horizons in the collection
 #' Get the number of horizons in a SoilProfileCollection
-#' 
+#'
 #' @name nrow
-#' 
+#'
 #' @description Get the number of horizons in a SoilProfileCollection
 #' @param object a SoilProfileCollection
 #' @aliases nrow,SoilProfileCollection-method
@@ -177,47 +177,51 @@ setMethod(
   }
 )
 #' Get the indexes of unique profiles in a SoilProfileCollection
-#' 
+#'
 #' @name unique
-#' 
+#'
 #' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
-#' 
+#'
 #' @param x a SoilProfileCollection
 #' @param vars Variables to consider in uniqueness.
 #' @aliases unique,SoilProfileCollection-method
 #' @docType methods
 #' @rdname unique
-#' @examples 
+#' @examples
 #'
 #' data(sp5)
-#' 
+#'
 #' # find indices where all specified vars are unique
 #' #  these match the indices of all profiles in sp5
 #' #  therefore, all profiles in sp5 are unique
-#' 
+#'
 #' all(unique(sp5, vars=c("id","sand","silt","clay") == 1:length(sp5)))
-#' 
+#'
 setMethod(f = 'unique',
           signature(x = "SoilProfileCollection"),
           definition = function(x, vars) {
   # compute hash by profile, for selected variables
   md5 <- profileApply(x, function(i) {
     # unlist in order to drop row names
-    digest(unlist(as(i, 'data.frame')[, vars]))
+    #
+    if(!requireNamespace("digest", quietly = TRUE))
+       stop("package `digest` is required", call.=FALSE)
+
+    digest::digest(unlist(as(i, 'data.frame')[, vars]))
   })
-  
+
   # get unique hashes
   u.md5 <- unique(md5)
-  
+
   # list profile idx by hash:
   profiles.by.hash <-
     sapply(u.md5, function(i)
       which(md5 == i), simplify = FALSE)
-  
+
   # get an index of the first copy of each profile
   u.profiles <- sapply(profiles.by.hash, function(i)
     i[1])
-  
+
   # return an index of unique profiles
   # down-grade to un-named vector of indices
   return(as.vector(u.profiles))
@@ -244,58 +248,58 @@ if (!isGeneric("filter"))
 setMethod("filter", signature(object = "SoilProfileCollection"),
           function(object, ..., greedy = FALSE) {
             if(requireNamespace("rlang", quietly = TRUE)) {
-  
+
               # capture expression(s) at function
               x <- rlang::enquos(...)
-              
+
               # create composite object to facilitate eval_tidy
               data <- compositeSPC(object)
-              
+
               # loop through list of quosures and evaluate
               res <- lapply(x, function(q) {
                 r <- rlang::eval_tidy(q, data)
                 return(r)
               })
               res.l <- lapply(res, length)
-              
+
               # distinguish site and horizon level attributes
               # in the expression input
               sitematch <- res[res.l == length(object)]
               horizonmatch <- res[res.l == nrow(object)]
-              
+
               # intersect the multi-prop site constraints
               if (length(sitematch) > 1) {
                 sm <- rowSums(do.call('cbind', sitematch))
                 sitematch <- (sm == length(sitematch))
               }
-              
+
               # intersect the multi-prop horizon constraints
               if (length(horizonmatch) > 1) {
                 hm <- rowSums(do.call('cbind', horizonmatch))
                 horizonmatch <- (hm == length(horizonmatch))
               }
-              
+
               # empty value to hold site level index
               idx <- numeric()
-              
+
               # create site level index from site criteria
               if (length(sitematch) == 1 | !is.list(sitematch))
                 idx <- which(unlist(sitematch))
-              
+
               # create site level index from matching horizon criteria
               if (length(horizonmatch) == 1 |
                   !is.list(horizonmatch)) {
                 peiid.from.hz <- unique(object@horizons[[idname(object)]][unlist(horizonmatch)])
                 hz.idx <- match(peiid.from.hz, profile_id(object))
-                
+
                 # check that we wont be filtering erroneously
-                # 
+                #
                 integrity <- spc_in_sync(object)
                 if(!integrity$valid) {
                   print(integrity)
                   stop("Unable to filter! SPC integrity checks failed!")
                 }
-                
+
                 if (length(idx) & !greedy) {
                   # intersection of site and horizon level matches
                   idx <- idx[idx %in% hz.idx]
@@ -306,9 +310,9 @@ setMethod("filter", signature(object = "SoilProfileCollection"),
                   # if we have only horizon-level, use just horizon level
                   idx <- hz.idx
                 }
-                
+
               }
-              
+
               # return SPC, subsetted using site level index
               return(object[na.omit(idx),])
             } else {
@@ -342,19 +346,19 @@ setMethod("grepSPC", signature(object = "SoilProfileCollection"),
             if(requireNamespace("rlang", quietly = TRUE)) {
               # capture expression(s) at function
               x <- rlang::enquo(attr)
-              
+
               # create composite object to facilitate eval_tidy
               data <- compositeSPC(object)
-              
+
               # do tidy eval of attr
               res <- rlang::eval_tidy(x, data)
-              
+
               # do the pattern matching
               idx <- grep(res, pattern = pattern, ...)
-              
+
               # subset the SPC for result
               return(object[idx,])
-            
+
             } else {
               stop("package 'rlang' is required for grepSPC", .call=FALSE)
             }
@@ -380,15 +384,15 @@ if (!isGeneric("subApply"))
 setMethod("subApply", signature(object = "SoilProfileCollection"),
           function(object, .fun, ...) {
             if(requireNamespace("rlang", quietly = TRUE)) {
-              
+
               #TODO: figure out how to use eval helpers here
-              
+
               ## capture expression(s) at function
               #.dots <- rlang::enquos(...)
-              
+
               # apply .fun to elements of x
               res <- profileApply(object, FUN = .fun, ...)
-              
+
               # return subset of x where .fun is true
               return(object[which(res), ])
             } else {
@@ -410,38 +414,38 @@ setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
             if (missing(s) & missing(h))
               stop('must provide either, site or horizon level subsetting criteria',
                    call. = FALSE)
-            
+
             # extract parts
             s.d <- site(object)
             h.d <- horizons(object)
             id.col <- idname(object)
             object.ids <- profile_id(object)
-            
+
             # subset using conventional data.frame methods
             if (!missing(s))
               s.d.sub.IDs <-
               subset(s.d, select = id.col, subset = eval(parse(text = s)))[, 1] # convert to vector
             else
               s.d.sub.IDs <- NA
-            
+
             if (!missing(h))
               h.d.sub.IDs <-
               subset(h.d, select = id.col, subset = eval(parse(text = h)))[, 1] # convert to vector
             else
               h.d.sub.IDs <- NA
-            
+
             # intersect IDs if s and h were used
             if (!missing(h) & !missing(s))
               matching.IDs <- intersect(s.d.sub.IDs, h.d.sub.IDs)
-            
+
             # if only h, or only s were used, then
             else
               matching.IDs <- unique(na.omit(c(s.d.sub.IDs, h.d.sub.IDs)))
-            
+
             # convert IDs into a numerical profile index
             # note: no matches results in idx == 0
             idx <- match(matching.IDs, object.ids)
-            
+
             # subset SoilProfileCollection
             return(object[idx,])
           })

@@ -1,20 +1,26 @@
 ---
-title: "Guide to the new SoilProfileCollection Updates"
-output: html_document
+title: "Guide to Recent SoilProfileCollection Changes"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 2
+    number_sections: true
 editor_options: 
   chunk_output_type: console
 ---
 
-This document performs some basic demonstrations of new and revised functionality of the _SoilProfileCollection_.
+# Guide to Recent SoilProfileCollection Changes
+This document performs some basic demonstrations of new and revised functionality of the _SoilProfileCollection_ (SPC).
 
-## SoilProfileCollection - changes to the definition
+## Changes to the object
 
-The `SoilProfileCollection()` constructor returns an empty object containing default values. Default metadata are assigned in the main constructor: `aqp_df_class` _data.frame_ and `depth_units` _centimeters_.
+The `SoilProfileCollection()` constructor returns an empty object containing default values. 
 
 ```r 
-library(aqp)
-
-str(SoilProfileCollection())
+str(aqp::SoilProfileCollection())
 ```
 
 ```
@@ -24,11 +30,19 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 11 slots
   ..@ hzdesgncol  : chr(0) 
   ..@ hztexclcol  : chr(0) 
   ..@ depthcols   : chr [1:2] "top" "bottom"
-  ..@ metadata    :'data.frame':	1 obs. of  2 variables:
-  .. ..$ aqp_df_class: chr "data.frame"
-  .. ..$ depth_units : chr "cm"
-  ..@ horizons    :'data.frame':	0 obs. of  0 variables
-  ..@ site        :'data.frame':	0 obs. of  0 variables
+  ..@ metadata    :List of 6
+  .. ..$ aqp_df_class    : chr "data.frame"
+  .. ..$ depth_units     : chr "cm"
+  .. ..$ original.order  : int(0) 
+  .. ..$ target.order    : int(0) 
+  .. ..$ aqp_group_by    : chr ""
+  ..@ horizons    :'data.frame':	0 obs. of  4 variables:
+  .. ..$ id    : chr(0) 
+  .. ..$ hzID  : chr(0) 
+  .. ..$ top   : num(0) 
+  .. ..$ bottom: num(0) 
+  ..@ site        :'data.frame':	0 obs. of  1 variable:
+  .. ..$ id: chr(0) 
   ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots
   .. .. ..@ coords     : num [1, 1] 0
   .. .. ..@ bbox       : logi [1, 1] NA
@@ -41,68 +55,242 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 11 slots
 Which, in the new `show` method, appears in console as:
 
 ```
-SoilProfileCollection: 0 profiles | 0 horizons
-profile ID: id
-horizon ID: hzID
-[EMPTY]
-data frame with 0 columns and 0 rows
-[EMPTY]
-data frame with 0 columns and 0 rows
+SoilProfileCollection with 0 profiles and 0 horizons
+profile ID: id  |  horizon ID: hzID 
+Depth range: NA - NA cm
+
+----- Horizons (0 / 0 rows  |  4 / 4 columns) -----
+[1] id     hzID   top    bottom
+<0 rows> (or 0-length row.names)
+
+----- Sites (0 / 0 rows  |  1 / 1 columns) -----
+[1] id
+<0 rows> (or 0-length row.names)
+
+Spatial Data: [EMPTY]
 ```
 
-### Extending SoilProfileCollections with _data.table_ and _tbl_df_ 
+## Extending the object (_data.table_ and _tibble_)
 
-By inheritance, the S3 classes _data.table_ and _tbl_df_ can be used seamlessly [experimental] with most internal _SoilProfileCollection_ methods. This can allow for additional efficiencies, enhanced compatibility with external methods, aesthetically pleasing output and more. 
+By inheritance, the S3 classes _data.table_ and _tibble_ (AKA `tbl_df`) can be used seamlessly [experimental] with most internal SPC methods. The object you initialize the SPC with defines the object type for its slots. 
 
-The `aqp_df_class` record in `@metadata` is new to allow for _data.table_ and _tibble_ subclasses of _data.frame_ use with _SoilProfileCollection_. The value stored refers to the class used for the `@horizons`, `@site`, `@diagnostics` and `@restrictions` slots. 
+The methods defined for subclasses allow for additional efficiencies, enhanced compatibility with external workflows, informative output (e.g. pertaining to datatypes and units), aesthetics and more. Some specialty methods have not yet been converted over to using these functionalities (e.g. `slice`). 
 
-A safe accessor for `aqp_df_class` is provided `aqp_df_class(object)`, where object is a _SoilProfileCollection_. The default value is _data.frame_. Internal methods that modify _data.frame_ slots are set up to keep track of the class of object used at initialization via `aqp_df_class`. The value is used for internal methods to ensure that slots are maintained in the correct class as processing occurs or in case various external operations revert to `data.frame`. Normal operations that subset, join or modify data regularly check class via `.as.data.frame.aqp` using the highest-level class `class(object)[1]` of the new data. If it has changed from the initial value, it is coerced using the appropriate method.
+### `aqp_df_class`
 
-### Integrity of the SoilProfileCollection
+An accessor for the _data.frame_-like object type used in a SPC is: `aqp_df_class(spc)`. The result is used for internal methods to ensure that slots are in the correct class. 
 
-"Integrity" refers to the relative state of the `data.frame` slot components of a `SoilProfileCollection` and methods we use to maintain them. Specifically, integrity is relevant to `@site` and `@horizons` slots, but also, `@diagnostic` and `@restrictions`. 
+The `aqp_df_class` record in `@metadata` is new to allow (and track) _data.table_ and _tibble_ subclasses of _data.frame_ use within a SPC. It is a unit-length character value. The value stored refers to the class used for the `@horizons`, `@site`, `@diagnostics` and `@restrictions` slots. 
 
-Three major issues pertain to this matter of _SoilProfileCollection_ "integrity":
+The method is public so users can check the value if needed -- though there should rarely if ever be a "need" to use it. The default return value is `"data.frame"` but could be: `"data.table"`, `"tbl_df"` OR some **future** _data.frame_ subclass. 
 
-  1.   Initialization from `data.frame`, `data.table` or `tbl_df`
+### Internal methods for compatibility between _data.frame_  subclasses
+
+#### `.as.data.frame.aqp`
+
+This is an internal wrapper method to ensure the correct object type is used. It applies only necessary conversions. The method is checking the class (`class(df)[1]`) of the input `df` (a _data.frame_-like object). 
+
+Normal operations that subset, join or modify data within the SPC regularly "check" object classes via `.as.data.frame.aqp`. If `df` has changed from the "target" class (usually `aqp_df_class(spc)`) it is coerced. 
+
+Conversions to objects other than _data.frame_  require the namespaces for _data.table_ or _tibble_ to be installed. Relevant messages and warnings are generated with a fallback object type of _data.frame_.
+
+For old objects without the `metadata(spc)$aqp_df_class` slot set (e.g from Rda) a large amount of warnings may be generated. Run `spc <- rebuildSPC(spc)` to fix this.
+
+#### Uniqueness of _data.table_ objects
+
+_data.table_ co-opts the `[,j]` index for its own purposes -- which, if the user desires this, can still be accessed from a particular slot e.g. `horizons(yourDTspc)[,dtjindex]`. However, internally, we use unambiguous references to ensure all code is compatible with all subclasses.
+
+#### `.data.frame.j`
+
+An internal method `.data.frame.j` is defined to ensure that _data.frame_ -like j-index subsetting using multiple columns can be applied uniformly to all classes (whether objects are _data.frame_ or _tibble_ v.s. _data.table_).
+
+This is not intended to be a method for users to have access to (though I find it quite useful as a _data.table_ noob).
+
+## Integrity of the SoilProfileCollection
+
+"Integrity" refers to the relative state of the _data.frame_-like slot components of a `SoilProfileCollection` and methods we use to maintain them. 
+
+Specifically, integrity is relevant to `@site` and `@horizons` slots, but also, `@diagnostic`, `@restrictions`, `@sp` and `@metadata`. 
+
+Three major issues pertain to _SoilProfileCollection_ "integrity":
+
+  1.   Initialization from _data.frame_, _data.table_ or _tibble_
   
   2.   JOINs
   
   2.   Horizon and site ordering with respect to `profile_id()` output
   
-#### 1. Initialization from `data.frame`, `data.table` or `tbl_df`
+### Initialization from _data.frame_, _data.table_ or _tibble_
 
-Currently, much of the logic in aqp relies on the sort order that is derived from the input horizon data at object creation. It is assumed, but not strictly enforced everywhere, that the site IDs follow the exact same order and do not get rearranged.
+Much of the internal bookkeeping of the SPC relies on the sort order that is derived from the input horizon data at object creation. It is assumed, but not strictly enforced everywhere, that the site IDs follow the exact same order and do not get rearranged.
 
  - As part of initialization of the SPC object, the horizon data are sorted first based on profile ID [character] and then on (top depth) [numeric]. This ensures that any unusual sorting in the input data do not interfere with topologic checks -- which require that individual profiles be continuously top-depth ordered for profiles within `@horizons`. 
+
+ - At initialization, the `@metadata` slot is be populated with two vectors: the character sorted profile ID + top depth order ("original"), a "target" order that defines permutations relative to original order. One can implement a desired target order using `reorderHorizons`.
+
+### JOINs
+
+Following LEFT JOIN (`site<-`, `horizons<-`) to add data the object's site/horizon order _must_ be preserved.
+
+ - This has been fixed for base R _data.frame_ as well as _tibble_. Default behavior of `merge.data.frame(..., all.x = TRUE, sort = FALSE)` is insufficient to handle the effect of `NA` on sorting when in the presence of a mixture of integer and character-sorted indices (i.e `any(1:10 != sort(as.character(1:10)))`). 
  
-Continuous does not necessarily mean "without gaps or overlaps" [a separate topologic check] it means that if there is a horizon at a particular depth, it is in the right top depth order relative to other horizons in that profile. In this sense, an SPC comprised of one or more topologically "invalid" profiles can still have valid integrity -- the results for the topologically valid profiles are valid.
+ - No order corrections are needed for `merge.data.table` (that applies when the slots are _data.table_s). Other than ensuring that the `j` index was used unambiguously, _data.table_ was a drop-in replacement.
 
- - Two new functions have been added to aqp/aqpdf that address the identification of relative site/horizon state. Several additional diagnostics would need to be added to keep track of profiles without horizon data -- with more changes to several functions that change horizon data -- but it is imminently possible.
+ - `horizons<-` was is a LEFT JOIN. Historically `plyr::join` was used for `site<-`, and only replacement was available for `horizons<-`. Now this all uses `merge` consistently. `site<-` and `horizons<-` are a pretty powerful pair of methods in this form. 
 
- - At initialization, the `@metadata` slot will be populated with two vectors: un-sorted order of original input data, ID+top depth sortings of the profile IDs and horizon IDs and the current "target" sort order. The setters of `profile_id<-` and `hzID<-` will update these when the values need to change to correctly track state.
-
- - Any operations that cause a re-sorting of horizon data should ensure that the top depth relationship is maintained within profiles, relative to site. This can be checked with new function `.spc_in_sync()`. 
-
- - In theory, the profile IDs do not have to follow the default sort order (which sorts based on character representation of profile ID) as long as depths are in order within IDs. Alternate orders could be permitted and maintained by providing a method that updates the metadata entry and then re-sorts the collection as needed based on a vector of profile IDs or indexes. 
-
- - Additional methods to add horizon-less sites would augment this index to add values that did not have a corresponding value in the horizon data in the correct relative position. The lack of corresponding horizon index indicating its (lack of) depth measurements. 
-
- - We could also add an option (`na.hz.omit`) to strip all-NA horizons out at promotion, setting those "profiles" up as truly horizonless, to allow for a toggle to get back to old behavior. There is still value in being able to create an SPC from a single (site-denormalized) `data.frame`. Since we will not be outright prohibiting NA -- due to the fact that performing topologic checks on an SPC provides added value -- this is the best way to force the new, logical behavior while allowing historic behavior to be retained with an option and a warning.
-
- - I think the current behavior of `[` not re-arranging data is probably worth keeping for the sake of efficiency and backwards compatibility. I think a `rearrangeSites` method should be created first. It is a relatively rare operation -- I can't think of a single case where it is "needed". I could imagine for some cases setting a more sensible quasi-numeric ordering for profile IDs that cannot be coerced to numeric for order. E.g. soil1, soil10, soil100, soil101, soil2 versus soil1, soil2, soil3, soil4, soil5. The internal datasets have been set up this way to protect against unintentional sorting at the cost of being forced to follow character ordering.
-
-#### 2. JOINs
-
-Following LEFT JOIN (`site<-`, `horizons<-`) to add data the object's site/horizon order _must_ be preserved. 
-
- - This has been fixed in branch aqp/aqpdf for base R `data.frame` as well as `tbl_df`. Default behavior of `merge.data.frame(..., all.x = TRUE, sort = FALSE)` is insufficient to handle the effect of `NA` on sorting when in the presence of a mixture of integer and character-sorted indices (i.e `any(1:10 != sort(as.character(1:10)))`). 
+**See: [df_test.R](df_test.R) for examples using _data.frame_ , tibble and_data.table_.**
  
- - No order corrections are needed for `merge.data.table` (that applies when the slots are `data.table`s). Other than ensuring that the `j` index was used unambiguously, `data.table` was a drop-in replacement.
+### SPC Integrity, spc_in_sync and horizonless sites
 
- - `horizons<-` was changed to be an "open-ended" LEFT JOIN with no constraints on the right hand side other than at least one key:value pair that "works." Historically `plyr::join` was used for `site<-`, and only replacement was available for `horizons<-`. JOIN logic has far more potential utility than slot replacement and is consistent with `site<-`. The `replaceHorizons<-` method was created to provide a setter equivalent to historic full-slot replacements.
+Two new functions (`spc_in_sync` and `.coalesce.idx`) have been added to aqp that address the identification of relative site/horizon state.
+
+This is _different_ from what was done in the past for SPC validity -- which was enforcing profile-level logic constraints. Profile-level checks ultimately are a little more involved than what we need for the object-wide method -- especially considering the relaxations that were made to create SPCs from "bad" data -- and future changes for horizonless sites.
+
+Several additional diagnostics need to be added to keep track of profiles without horizon data. 
+
+As long as top depths are in order within site IDs, a SPC comprised of one or more topologically "invalid" profiles can still have "valid" object integrity. That is, the results for the topologically valid profiles are "valid" -- but any that are invalid -- for any of the reasons identified in `checkHzDepthLogic` may either a) not work with certain functions or b) return bad / `NA` results.
+
+There is no explicit need to enforce a specific order on the site ID, as long as the order relative to e.g. a character sorted order is known. I walked back my original changes that allowed for data order to be preseved, but I think this is a good goal and achievable.
+
+Now that `spc_in_sync` has been implemented as the internal validity method we can continuously test the constraints we have defined at the OBJECT level. Modifications incrementally will allow us to achieve horizonless sites (#137) and arbitrary site sorting.
+
+#### `reorderHorizons`
+
+ I think the current behavior of `[,SoilProfileCollection-method` **NOT** re-arranging data is worth keeping for the sake of efficiency and backwards compatibility, but I have implemented a `reorderHorizons` method. `reorderHorizons` is primarily intended as a proof of concept/for testing "fixes" to corrupted data.
+
+When coupled with a replacement of a (re-sorted) site slot `reorderHorizons` could be used to define a SPC re-ordering method. 
+
+We would need to require that `depths` respect initial input order of IDs [only sort top depths within IDs]. Several functions (such as `sim` `profile_compare`) that rely on specific sort orders would be broken (for SPCs made by this method).
+
+```
+library(aqp)
+
+df <- data.frame(id = 1, top=0, bottom=1)
+depths(df) <- id ~ top + bottom
+
+# Case 1; this gets first profile
+df[1,]
+
+# Case 2: this gets first horizon
+df[1,]
+
+# Case 3: this returns an _empty_ SPC (after fix for #89)
+df[,0]
+
+# Case 4: incidentally, so does this (since there are currently no indexing errors generated)
+df[1234,]
+```
+
+#### Using zero (or zero-length) indexes
+
+Empty SPCs (including `df[,0]` `df[0,]` `df[numeric(0),]` `df[,numeric(0)]`) look like this:
+
+```
+> SoilProfileCollection with 0 profiles and 0 horizons
+> profile ID: id  |  horizon ID: hzID 
+> Depth range: NA - NA cm
+> 
+> ----- Horizons (0 / 0 rows  |  4 / 4 columns) -----
+>   [1] id     top    bottom hzID  
+> <0 rows> (or 0-length row.names)
+> 
+> ----- Sites (0 / 0 rows  |  1 / 1 columns) -----
+>   [1] id
+> <0 rows> (or 0-length row.names)
+```
+
+In principle one can use a 0 j-index subset with a SPC as they could with a _data.frame_ . Since SPCs must juggle several different objects with the same site index, there is opportunity to reinterpret how this should work.
+
+The following behavior relates to concept of site data  "built" from horizon by normalization in `depths<-` or `site<-` (formula method). 
+
+The issue here is that by "allowing" sites to persist without horizons we might retain the sites after some subsetting operations -- which could affect calculation of object length. 
+
+If made default, it may affect some historic logic in undesirable ways -- and will impact internal functioning of the SPC in "unexpected" (though probably not "wrong") ways too.
+
+**Currently:**
+
+ 1. `df[,0]` drops all _horizon_ data from a multi-profile SPC `df`. 
  
-   - Earlier version of the `horizons<-` join required a "complete" set -- all profile IDs and horizon IDs present on right hand side to get around potential sorting/non-uniqueness issues. Otherwise, the method triggered replacement: leaving the user to construct a suitable input value that would maintain SPC integrity. Aside from incomplete backwards compatibility, this almost as much extra, error-prone, work for end user as replacing the horizons, with the added possibility of a bad JOIN -- though tests prevented this in most cases.
+ 2. If a j-index subset results in removal of all horizons in a profile (e.g. a profile doesn't have 5 horizons, but an j-index of 5 was used) then the corresponding site information is removed as well (#89)
+ 
+ 3. If sites are _removed_ by subsetting, the `length` of the SPC object decreases accordingly.
+ 
+ 4. Since no `i` index is specified, and no profiles can have a 0th horizon, `df[,0]` will remove site, diagnostics, restriction, spatial, etc. from every profile creating an EMPTY SPC.
+ 
+ 5. Similarly, any index that results in all profiles having all sites or horizons out of bounds will return an empty result. e.g. `df[,978]` or `df[123,]`. _[I think these should throw "index out of bounds" errors [only if no profiles have a corresponding index]_
 
-#### 3. decouple `profile_id()` from `@horizons` to support horizon-less sites
+#### `dropsite = FALSE`
 
+`drop = FALSE`-type (e.g. `dropsite`) argument could be used to trigger horizonless site "preserving" behavior.
+
+Case 3 shown above `df[1, 0, dropsite = FALSE]` would create (and SPC would consider "valid") something like the following result: 
+
+```
+> SoilProfileCollection with 1 profiles and 0 horizons
+> profile ID: id  |  horizon ID: hzID 
+> Depth range: ? - ? cm
+> 
+>  ----- Horizons (0 / 0 rows  |  4 / 4 columns) -----
+>    [1] id     top    bottom hzID  
+>  <0 rows> (or 0-length row.names)
+> 
+> ----- Sites (1 / 1 rows  |  1 / 1 columns) -----
+>  id
+>   1
+```
+
+### Generalizing the integrity method for horizonless sites
+
+Since horizonless sites have no horizons, they will not show up in anything based on horizon data -- which will affect integrity calculations for the object _[as currently written]_.
+
+To overcome this we need:
+
+1. Count site IDs that are without horizons in `spc_in_sync` check number 1 
+
+  -  $[n_{sites.in.site}] = [n_{sites.coalesced.from.horizons}] + [n_{horizonless.sites}]$
+
+2. Ignore horizonless site IDs in check number 2 against the coalesced horizon-level site IDs. 
+
+3. Add a check to make sure that all sites that are "supposed" to be horizonless are horizonless.
+
+4. Enhancement: define the argument `dropsite` for `[,SoilProfileCollection-method` 
+
+5. Enhancement: define method `appendSite<-` to add horizonless sites to an existing SPC safely
+
+5. Enhancement: add basic checks to `replaceHorizons<-` to ensure IDs, sorting and metadata are OK [relative to site]
+
+### Backwards compatibility
+
+In order to preserve historic functionality `depths<-` (and for general simplicity of interfaces to the object) we should still allow promotion from horizon-level _data.frame_  containing `NA` in depths. 
+
+Within `.initSPCfromMF` the profiles where every horizon has top and bottom depth equal to `NA` will have their horizon records removed -- setting them up in the object as truly "horizonless". 
+
+The key issue with this is it would not offer an opportunity to use e.g. `site(spc) <- ~ var1 + var2 + var3` to normalize site variables from horizon [if the horizon records were already removed by `depths<-`]. 
+
+### `appendSites<-`
+
+We could add another method for appending to site data for horizonless sites -- say from a separate _data.frame_  containing just site level data (that may or may not overlap with existing sites?). I don't think we currently have functionality to support this aside from `rbind` [replacing the site slot] as the `site<-` LEFT JOIN _data.frame_  method will only handle existing sites. 
+
+An append method would theoretically allow you to build an SPC "in reverse" directly from an empty SPC object... and starting with site data... which I am not sure is a great idea. This is partially due to some extra error checking I added to the base constructor to allow an empty object to "work". 
+
+```
+library(aqp)
+
+your.site.data <- read.csv("foo.csv")
+your.hz.data <- read.csv("foo2.csv")
+
+spc <- SoilProfileCollection()
+
+# hypothetical set up site slot first? you would need to use default ID names and such
+appendSites(spc) <- your.site.data # 
+
+# presuming horizonless sites were allowed, we would be OK up to this point
+# but the user could potentially build something corrupt with replaceHorizons and/or direct slot edits
+# you would still mostly be limited to default ID names (I think) unless we change replaceHorizons
+#   - could take ID + horizon ID as arguments -- which would have to match any some site data and exist in horizon data
+replaceHorizons(spc) <- your.hz.data
+```
+
+### `replaceHorizons<-` etc.
+
+Basic checks in `replaceHorizons`  and other unconventional entry points to make sure everything is in place would be worth while. I think we can make sure SPC init methods get triggered internally. i.e if you call `replaceHorizons`, should it look in site and call initSPCfromMF, rebuild site and then put any extra data (e.g. non-ID columns, rows from horizonless sites) back in?

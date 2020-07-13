@@ -36,7 +36,8 @@ test_that("plotSPC: aqp.env settings", {
 test_that("plotSPC: figure settings", {
   
   # explainer returns `lsp`
-  lsp <- explainPlotSPC(sp1, scaling.factor=0.5, width=0.8, y.offset=8, n=15, max.depth = 100)
+  lsp <- explainPlotSPC(sp1, scaling.factor=0.5, width=0.8, 
+                        y.offset=8, n=15, max.depth = 100)
   
   # check adjustments
   expect_equal(lsp$scaling.factor, 0.5)
@@ -168,7 +169,3 @@ test_that("addVolumeFraction fractional horizon depths", {
   expect_message(addVolumeFraction(sp1, 'prop'), regexp = 'truncating')
   
 })
-
-# cleanup
-if (file.exists("Rplots.pdf"))
-   file.remove("Rplots.pdf")

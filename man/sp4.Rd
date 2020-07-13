@@ -28,15 +28,13 @@
 Plant-Available Calcium Varies Widely in Soils on Serpentinite Landscapes. 
 Soil Sci. Soc. Am. J. 73: 2087-2095.}
 \examples{
-# setup environment
-library(aqp)
-
 # load sample data set, a simple data.frame object with horizon-level data from 10 profiles
+library(aqp)
 data(sp4)
 str(sp4)
+sp4$idbak <- sp4$id
+#sp4 <- sp4[order(match(sp4$id, aqp:::.coalesce.idx(sort(sp4$id))), sp4$top),]
 
-# optionally read about it...
-# ?sp4
 
 # upgrade to SoilProfileCollection
 # 'id' is the name of the column containing the profile ID
@@ -47,6 +45,12 @@ depths(sp4) <- id ~ top + bottom
 # check it out
 class(sp4) # class name
 str(sp4) # internal structure
+
+# check integrity of site:horizon linkage
+spc_in_sync(sp4)
+
+# check horizon depth logic
+checkHzDepthLogic(sp4)
 
 # inspect object properties
 idname(sp4) # self-explanitory
@@ -60,17 +64,14 @@ metadata(sp4) # not much to start with
 depth_units(sp4) <- 'inches' # units are really 'cm'
 
 # more generic interface for adjusting metadata
-md <- metadata(sp4) # save original metadata
 
-# add columns
-md$describer <- 'DGM'
-md$date <- as.Date('2009-01-01')
-md$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P. 
+# add attributes to metadata list
+metadata(sp4)$describer <- 'DGM'
+metadata(sp4)$date <- as.Date('2009-01-01')
+metadata(sp4)$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P. 
 2009. Plant-Available Calcium Varies Widely in Soils 
 on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'
 
-# re-assign
-metadata(sp4) <- md
 depth_units(sp4) <- 'cm' # fix depth units, back to 'cm'
 
 # further inspection with common function overloads
