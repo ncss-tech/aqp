@@ -19,7 +19,7 @@
 #'
 #' @param width scaling of profile widths (typically 0.1 - 0.4)
 #'
-#' @param name quoted column name of the (horizon-level) attribute containing horizon designations, can be left as \code{NULL} and horizon designation column will be selected via \code{hzdesgnname(x)}.
+#' @param name quoted column name of the (horizon-level) attribute containing horizon designations, can be left as \code{NULL} and horizon designation column will be selected via \code{hzdesgnname(x)}. Suppress horizon name printing by setting \code{name=NA}.
 #'
 #' @param name.style one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'
 #'
