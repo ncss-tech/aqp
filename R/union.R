@@ -114,7 +114,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   # test for non-conformal CRS if keeping spatial data
   if(!drop.spatial) {
     # check for non-conformal CRS in @sp
-    o.p4s <- unique(lapply(spc, proj4string))
+    o.p4s <- unique(lapply(spc, function(x) suppressWarnings(proj4string(x))))
     if(length(o.p4s) > 1)
       stop('inconsistent CRS', call.=FALSE)
   }

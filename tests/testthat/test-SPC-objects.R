@@ -34,25 +34,25 @@ test_that("SPC construction from a data.frame", {
   expect_equal(nrow(sp1), 60)
 
   # test construction with disordered ID and top depths
-  df <- data.frame(id = c(2,2,2,1,1,1), top = c(4,3,2,4,3,2), bottom = c(5,4,3,5,4,3))
+  daf <- data.frame(id = c(2,2,2,1,1,1), top = c(4,3,2,4,3,2), bottom = c(5,4,3,5,4,3))
 
   # the input data profiles both have bad "top depth logic" (reversed order of horizons)
-  expect_true(hzDepthTests(df$top[1:3], df$bottom[1:3])["depthLogic"])
+  expect_true(hzDepthTests(daf$top[1:3], daf$bottom[1:3])["depthLogic"])
 
-  expect_message({depths(df) <- id ~ top + bottom},
+  expect_message({depths(daf) <- id ~ top + bottom},
                  "unsorted input data will be ordered by profile ID and top depth")
   # inspect
 
   # plot(df) # plot "works" even with invalid depth logic
 
   # whole SPC is valid, regardless of whether order is corrected
-  expect_true(spc_in_sync(df)$valid)
+  expect_true(spc_in_sync(daf)$valid)
 
   # however, after promotion, the depth logic from input data has been corrected
-  expect_true(all(checkHzDepthLogic(df)$valid))
+  expect_true(all(checkHzDepthLogic(daf)$valid))
 
   # the numeric IDs from the input data are in order
-  expect_true(all(profile_id(df) == as.character(1:2)))
+  expect_true(all(profile_id(daf) == as.character(1:2)))
 
 })
 
@@ -208,31 +208,33 @@ test_that("SPC spatial operations ", {
   # set previously NULL CRS
   # updated to not include a +datum as this breaks in upstream sp/rgdal
 
-  # 2020/06/01 now expect warning on R 4.0+/latest sp
-#  if(version$major >= 4)
-#    expect_warning(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
-#  else
-    expect_silent(proj4string(sp1) <- '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
+  # 2020/07/12: warnings expect warning on rgdal 1.5-8+
+  # https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html
+  # catching all rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-methods
+  expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs')
 
   # we should get back the same thing we started with
-  expect_equal(proj4string(sp1), '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs')
+#  if(packageVersion("rgdal") >= "1.5-8")
+#    expect_warning(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
+#  else
+    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
 
   # basic coercion
-#  if(version$major >= 4)
+#  if(packageVersion("rgdal") >= "1.5-8")
 #    expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
 #  else
     expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
 
   # down-grade to {site + sp} = SpatialPointsDataFrame
-#  if(version$major >= 4)
+#  if(packageVersion("rgdal") >= "1.5-8")
 #    expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
 #  else
     expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
 
-#  if(version$major >= 4)
+#  if(packageVersion("rgdal") >= "1.5-8")
 #    expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
 #  else
-    sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame'))
+    expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
 
   expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
 
@@ -248,6 +250,7 @@ test_that("SPC spatial operations ", {
   # retain SPC object when using unit-length j index
   sp1.spc <- suppressMessages(sp1[, 1])
   expect_true(inherits(sp1.spc, 'SoilProfileCollection'))
+
   # again, with profile indexing
   sp1.spc <- suppressMessages(sp1[1, 1])
   expect_true(inherits(sp1.spc, 'SoilProfileCollection'))
