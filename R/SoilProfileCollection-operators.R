@@ -92,7 +92,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
             p.ids <- s.all[[idname(x)]][unique(i)]
 
             # keep only the requested horizon data (filtered by profile ID)
-            h <- h[h[[idname(x)]] %in% p.ids,]
+            h <- .as.data.frame.aqp(h, aqp_df_class(x))[h[[idname(x)]] %in% p.ids,]
 
             # keep only the requested site data, (filtered by profile ID)
             s.i <- which(s.all[[idname(x)]] %in% p.ids)
@@ -143,9 +143,9 @@ setMethod("[", signature(x = "SoilProfileCollection",
                   #  not using := or . anymore
 
                   # determine j indices to KEEP
-                  j.idx <- h[, .I[1:.N %in% j & abs(j) <= .N], by = bylist]$V1
+                  j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
 
-                  # determine which site indexes to keep
+                  # determine which site indices to keep
                   # in case all horizons are removed, remove sites too
                   if (length(j.idx) == 0) {
                     i.idx <- numeric(0)
@@ -190,9 +190,8 @@ setMethod("[", signature(x = "SoilProfileCollection",
               # if profiles have been removed based on the j-index constraints
               if (length(i.idx) > 0) {
                 # remove sites that have no matching j
-                #h.ids <- aqp:::.data.frame.j(s[i.keep,], idname(x), aqp_df_class(x))
-                h.ids <- .data.frame.j(s[i.idx,], idname(x), aqp_df_class(x))
                 s <- s[i.idx, , drop = FALSE]
+                h.ids <- s[[idname(x)]]
 
                 # remove also: diagnostics
                 d.idx <- which(d[[idname(x)]] %in% h.ids)
