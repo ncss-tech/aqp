@@ -1,17 +1,19 @@
+
+library(data.table)
 library(aqp)
 library(magrittr)
-library(data.table)
-
-# build the data
-system.time(bigrandom <- lapply(1:1000001, random_profile))
-# user  system elapsed 
-# 933.54    1.95  939.94 
-
-# save for later
-save(bigrandom, file="bigrandom.Rda")
+# 
+# # build the data
+# system.time(bigrandom <- lapply(1:1000001, random_profile))
+# # user  system elapsed 
+# # 933.54    1.95  939.94 
+# 
+# # save for later
+# 
+load(file = "E:/bigrandom.Rda")
 
 # combine (better than rbind.fill for this [conforming DFs] case)
-system.time(bigrandom <- rbindlist(bigrandom))
+#system.time(bigrandom <- rbindlist(bigrandom))
 # user  system elapsed 
 # 7.34    0.06    8.17
 
@@ -19,12 +21,16 @@ system.time(bigrandom <- rbindlist(bigrandom))
 # load("bigrandom.Rda")
 
 # promote to SPC (numeric IDs requiring much reordering...)
-system.time(depths(bigrandom) <- id ~ top + bottom)
+#system.time(depths(bigrandom) <- id ~ top + bottom)
 # user  system elapsed 
 # 82.17   10.53   99.89
 
+#save(bigrandom, file = "E:/bigrandom.Rda")
+
 # get first horizon
-system.time(foo <- bigrandom[,1])
+data.table::setkeyv(bigrandom@horizons, c(idname(bigrandom), horizonDepths(bigrandom)[1]))
+data.table::key(bigrandom@horizons)
+system.time(foo <- bigrandom[, 1])
 # user  system elapsed 
 # 21.30    5.27   30.25
 
@@ -102,5 +108,5 @@ microbenchmark::microbenchmark( { foo1 <- foo[1,] },
 # {     foo4 <- foo[, 1:10] } 28264.6826 28264.6826 28264.6826 28264.6826 28264.6826 28264.6826     1
 
 library(profvis)
-profvis::profvis( { foo3 <- bigrandom[,5] })
+profvis::profvis( { foo3 <- bigrandom[,4] })
 dat <- horizons(foo3)
