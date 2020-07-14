@@ -51,21 +51,7 @@ setClass(
   ),
   validity = function(object) {
     # https://github.com/ncss-tech/aqp/issues/75
-    mdf <- aqp_df_class(object)
-    df.slots <- c("horizons","site","diagnostic","restrictions")
-
-    # use wrapper function to "enforce" data.frame subclasses as needed
-    df_class_correct <- all(unlist(lapply(df.slots, function(slt) {
-      # only enforce df class if the metadata are set
-      daf <- slot(object, slt)
-      
-      if (length(mdf) == 1 & class(daf)[1] != mdf)
-        slot(object, slt) <- .as.data.frame.aqp(daf, mdf)
-      
-      return(TRUE)
-    })))
-
-    return(spc_in_sync(object)$valid & df_class_correct)
+    return(spc_in_sync(object)$valid)
   }
 )
 

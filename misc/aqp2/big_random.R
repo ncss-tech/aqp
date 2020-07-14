@@ -9,8 +9,8 @@ library(magrittr)
 # # 933.54    1.95  939.94 
 # 
 # # save for later
-# 
-load(file = "E:/bigrandom.Rda")
+#
+load(file = "bigrandom.Rda")
 
 # combine (better than rbind.fill for this [conforming DFs] case)
 #system.time(bigrandom <- rbindlist(bigrandom))
@@ -25,7 +25,7 @@ load(file = "E:/bigrandom.Rda")
 # user  system elapsed 
 # 82.17   10.53   99.89
 
-#save(bigrandom, file = "E:/bigrandom.Rda")
+#save(bigrandom, file = "bigrandom.Rda")
 
 # get first horizon
 data.table::setkeyv(bigrandom@horizons, c(idname(bigrandom), horizonDepths(bigrandom)[1]))
@@ -33,6 +33,16 @@ data.table::key(bigrandom@horizons)
 system.time(foo <- bigrandom[, 1])
 # user  system elapsed 
 # 21.30    5.27   30.25
+#
+# new code 
+# user  system elapsed
+# 12.602   0.193  11.521
+#
+# slower on windows/work machine 
+#   user  system elapsed 
+# 22.40    9.97   40.42 
+bigrandom <- aqp:::.enforce_df_class(bigrandom, "data.table")
+key(bigrandom@horizons)
 
 # make sure this
 explainPlotSPC(bigrandom[1:10,], color = "p3")

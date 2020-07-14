@@ -125,35 +125,35 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
               # faster replacement of j subsetting of horizon data
               if (aqp_df_class(x) == "data.table") {
-                
+
                 # local vars to make R CMD check happy
                 .N <- NULL
                 .I <- NULL
                 V1 <- NULL
-                
+
                 # data.table can do this much more efficiently
                 if (requireNamespace("data.table", quietly = TRUE)) {
                   idn <- idname(x)
-                  
+
                   # by list @horizons idname (essentially iterating over profiles)
                   bylist <- list(h[[idn]])
                   names(bylist) <- idn
 
                   # figured out the data.table way to do this
                   #  not using := or . anymore
-                  
+
                   # determine j indices to KEEP
                   j.idx <- h[, .I[1:.N %in% j & abs(j) <= .N], by = bylist]$V1
-                  
-                  # determine which profile IDs KEEP
-                  pids <- h[, .I[any(1:.N %in% j)][1], by = bylist]
-                  
-                  # in case all horizons are removed, remove sites too
-                  if (length(j.idx) == 0)
-                    pids <- character(0)
 
                   # determine which site indexes to keep
-                  i.idx <- pids[, .I[!is.na(V1)]]
+                  # in case all horizons are removed, remove sites too
+                  if (length(j.idx) == 0) {
+                    i.idx <- numeric(0)
+                  } else {
+                    # determine which profile IDs KEEP
+                    pids <- h[, .I[any(1:.N %in% j)][1], by = bylist]
+                    i.idx <- pids[, .I[!is.na(V1)]]
+                  }
                 }
 
               } else {
@@ -173,17 +173,17 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                 j.idx <-  which(do.call('c', j.res))
               }
-              
+
               # find any index out of bounds and ignore them
               # j.idx.bad <- which(abs(j.idx) > nrow(h))
               # i.idx.bad <- which(abs(i.idx) > nrow(s))
-              # 
-              # if (length(i.idx)) 
+              #
+              # if (length(i.idx))
               #   i.idx <- i.idx[-i.idx.bad]
-              # 
+              #
               # if (length(j.idx))
               #   j.idx <- j.idx[-j.idx.bad]
-              
+
               # do horizon subset with j index
               h <- h[j.idx, ]
 
