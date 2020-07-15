@@ -6,7 +6,7 @@ library(profvis)
 
 # ~ 10 seconds for 10k profiles
 # much faster to generate as DF, then promote to SPC at the end
-d <- lapply(1:10000, random_profile, n=c(6, 7, 8), n_prop=5, method='LPP', SPC=FALSE)
+d <- lapply(1:100000, random_profile, n=c(6, 7, 8), n_prop=5, method='LPP', SPC=FALSE)
 
 # much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
@@ -109,10 +109,12 @@ plotSPC(z, color='hzID', name=NA, divide.hz = TRUE)
 
 ## current slice()
 # 10k profiles: 22 seconds 
+# 100k profiles: 266 seconds
 system.time(s <- slice(d, 0:100 ~ .))
 
 ## 1x mapply, merge.data.table
 # 10k profiles: 4 seconds
+# 100k profiles: 42 seconds
 system.time(s <- dice(d))
 
 
