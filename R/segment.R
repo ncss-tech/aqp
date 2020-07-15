@@ -31,14 +31,12 @@ segment <- function(object = NULL, intervals = NULL, trim = TRUE, hzdepcols = NU
     peid      <- idname(object)
     hzid      <- hzidname(object)
     hzdepcols <- horizonDepths(object)
-    horizonDepths(object) <- c("hzdept", "hzdepb")
     h  <- horizons(object)
     names(h)[names(h) %in% c(peid, hzid)] <- c("peid", "hzid")
   } else {
     h <- object
-    names(h)[names(h) %in% hzdepcols] <- c("hzdept", "hzdepb")
   }
-  
+  names(h)[names(h) %in% hzdepcols] <- c("hzdept", "hzdepb")
   
   # filter horizons and trim
   .slice <- function(h, top = NULL, bot = NULL) {
@@ -65,41 +63,28 @@ segment <- function(object = NULL, intervals = NULL, trim = TRUE, hzdepcols = NU
     }) ->.;
     do.call("rbind", .) ->.;
     }
-  
-  
+  names(h)[names(h) %in% c("hzdept", "hzdepb")] <- hzdepcols
   
   
   if (test_spc) {
-    h <- h[order(h$peid, h$hzdept), ]
+    h <- h[order(h$peid, h[hzdepcols[1]]), ]
     
     # merge to re-add spc with NA
     h_orig <- data.frame(peid = names(table(horizons(object)[peid])), stringsAsFactors = FALSE)
-    # for some reason this fails randomly if not assigned to a new object
     h <- merge(h_orig, h, by = "peid", all.x = TRUE, sort = FALSE)
     rm(h_orig)
     
     # rebuild SPC
-    suppressWarnings(depths(h) <- peid ~ hzdept + hzdepb)
-    h@idcol   <- peid
-    horizonNames(h)[horizonNames(h) == "peid"] <- peid
-    horizonNames(h)[horizonNames(h) == "hzid"] <- hzid
-    suppressWarnings(hzidname(h) <- hzid)
-    h$hzID <- NULL
-    horizonNames(h)[horizonNames(h) %in% c("hzdept", "hzdepb")] <- hzdepcols
-    names(h@site) <- peid
+    names(h)[names(h) == "peid"] <- peid
+    names(h)[names(h) == "hzid"] <- hzid
+    h$hzID <- 1:nrow(h)
     
-    # copy original slots
-    h@sp    <- object@sp
-    site(h) <- site(object)
-    diagnostic_hz(h) <- diagnostic_hz(object)
-    restrictions(h)  <- restrictions(object)
-    metadata(h)      <- metadata(object)
-  } else {
-    names(h)[names(h) %in% c("hzdept", "hzdepb")] <- hzdepcols
+    replaceHorizons(object) <- h
+    suppressMessages(hzidname(object) <- "hzID")
   }
   
   # return
-  return(h)
+  return(if (test_spc) object else h)
   }
 
 
