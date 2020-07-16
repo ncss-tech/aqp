@@ -63,6 +63,12 @@ horizon-level attributes
 \item{Sand}{percent <2um}
 \item{Silt}{percent 2-50um}
 \item{Clay}{percent 50-2000um}
+
+\item{CaH2O}{Milliq ex}
+\item{Ca2MKCl}{2M KCl}
+\item{CaNa2EDTA}{0.05 M Na2EDTA}
+\item{CaCuCl2}{0.5 M CuCl2}
+
 \item{hzID}{horizon ID}
   }
 }

@@ -26,10 +26,14 @@ geo <- read.table('geochem.txt', header = TRUE, stringsAsFactors = FALSE)
 # removed '*' footnote about calcite peaks
 min <- read.table('min.txt', header = TRUE, stringsAsFactors = FALSE)
 
+## calcium resevoirs
+ca <- read.table('ca-res.txt', header = TRUE, stringsAsFactors = FALSE)
+
 
 ## merge
 x <- merge(hz, geo, by='sample_id', all.x=TRUE, sort = FALSE)
 x <- merge(x, min, by='sample_id', all.x=TRUE, sort = FALSE)
+x <- merge(x, ca, by='sample_id', all.x=TRUE, sort = FALSE)
 
 ## check: ok
 str(x)
