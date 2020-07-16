@@ -95,10 +95,14 @@ res <- lapply(dfclasses, function(use_class) {
 
     # construct a test object of type use_class
     test <- test_object(object = df, use_class = use_class)
+    test2 <- test
 
     # promote to SPC -- convert numeric ids to character
-    expect_message(depths(test) <-
-                     id ~ top + bottom,
+    expect_message(depths(test) <- id ~ top + bottom,
+                   c("converting profile IDs from integer to character"))
+
+    # try the character vector interface too
+    expect_message(depths(test2) <- c("id", "top", "bottom"),
                    c("converting profile IDs from integer to character"))
 
     # "normalize" (horizon -> site) a site-level attribute
