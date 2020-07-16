@@ -1,15 +1,20 @@
+setGeneric("glom", function(p, z1, z2 = NA,
+                            ids = FALSE, df = FALSE,
+                            truncate = FALSE, invert = FALSE,
+                            modality = "all")
+  standardGeneric("glom"))
+
 #' Subset soil horizon data using a depth or depth interval
-#'
-#' @param p A single-profile SoilProfileCollection; e.g. glom is called via profileApply()
+#' @param p A single-profile SoilProfileCollection; usually glom is called via \code{profileApply()}
 #' @param z1 Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersect interval.
 #' @param z2 OPTIONAL: Bottom depth - bottom depth of intersection interval
 #' @param ids Return just horizon IDs in interval? default: FALSE
-#' @param df Return a data.frame, by intersection with horizons(p)? default: FALSE
+#' @param df Return a data.frame, by intersection with \code{horizons(p)}? default: FALSE
 #' @param truncate Truncate horizon top and bottom depths to z1 and z2? default: FALSE
 #' @param invert Get the horizons/depth ranges of the profile outside the interval z1/z2? default: FALSE
 #' @param modality Return all data (default: "all") or first, thickest (\code{modality = "thickest"}) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)
 #'
-#' @description glom() returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.
+#' @description \code{glom()} returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.
 #'
 #' All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 #'
@@ -24,6 +29,7 @@
 #' @return A SoilProfileCollection, data.frame, or a vector of horizon IDs.
 #'
 #' @export glom
+#' @aliases glom
 #'
 #' @examples
 #' data(sp1, package = 'aqp')
@@ -36,7 +42,10 @@
 #'
 #' # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
 #' nrow(foo)
-glom <- function(p, z1, z2 = NA,
+
+
+setMethod(f = 'glom', signature='SoilProfileCollection',
+          function(p, z1, z2 = NA,
                  ids = FALSE, df = FALSE,
                  truncate = FALSE, invert = FALSE,
                  modality = "all") {
@@ -96,7 +105,7 @@ glom <- function(p, z1, z2 = NA,
   } else {
     return(NA)
   }
-}
+})
 
 .glom <- function (p, z1, z2 = NA, modality = "all", as.list = FALSE) {
   # access SPC slots to get important info about p
@@ -236,3 +245,42 @@ glom <- function(p, z1, z2 = NA,
 
   return(list(hz.idx = idx.top, value = idval))
 }
+
+#' Truncate a SoilProfileCollection to specified top and bottom depth
+#'
+#' \code{trunc} is a wrapper method around \code{glomApply} for the case when the same top and bottom depth is required for all profiles in a collection. In contrast, \code{glomApply} allows for arbitrary functions to be run on each profile to calculate a unique set of depths.
+#' @param x A SoilProfileCollection
+#' @param z1 Upper boundary
+#' @param z2 Lower boundary
+#'
+#' @return A SoilProfileCollection truncated to interval \code{[z1, z2]}
+#' @export trunc
+#'
+#' @examples
+#'
+#' # load sample data
+#' data("sp3")
+#'
+#' # promote to SPC
+#' depths(sp3) <- id ~ top + bottom
+#'
+#' ### TRUNCATE all profiles in sp3 to [0,25]
+#'
+#' # set up plot parameters
+#' par(mfrow=c(2,1), mar=c(0,0,0,0))
+#'
+#' # full profiles
+#' plot(sp3)
+#'
+#' # trunc'd profiles
+#' plot(trunc(sp3, 0, 25))
+
+# note, we are using the default method signature: trunc(x, ...)
+#       so this will not show up as being "masked" from base
+#setGeneric("trunc", function(x, ...)
+#  standardGeneric("trunc"))
+
+setMethod(f = 'trunc', signature(x = 'SoilProfileCollection'),
+          function(x, z1, z2) {
+    return(glomApply(x, function(p) c(z1, z2), truncate = TRUE))
+})
