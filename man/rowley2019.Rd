@@ -64,10 +64,10 @@ horizon-level attributes
 \item{Silt}{percent 2-50um}
 \item{Clay}{percent 50-2000um}
 
-\item{CaH2O}{Milliq ex}
-\item{Ca2MKCl}{2M KCl}
-\item{CaNa2EDTA}{0.05 M Na2EDTA}
-\item{CaCuCl2}{0.5 M CuCl2}
+\item{CaH2O}{Milliq ex: grams of Ca per kilogram of dry soil (g kg-1)}
+\item{Ca2MKCl}{2M KCl: grams of Ca per kilogram of dry soil (g kg-1)}
+\item{CaNa2EDTA}{0.05 M Na2EDTA: grams of Ca per kilogram of dry soil (g kg-1)}
+\item{CaCuCl2}{0.5 M CuCl2: grams of Ca per kilogram of dry soil (g kg-1)}
 
 \item{hzID}{horizon ID}
   }
