@@ -26,11 +26,11 @@ newdata <- data.frame(id = c("hon-1","hon-17"),
                       featkind = "fixed-depth surface sample",
                       featdept = 0,
                       featdepb = 18)
-                      
-# do left join                       
+
+# do left join
 diagnostic_hz(sp2) <- newdata
 
-# inspect site table: newvalue TRUE only for horizons 
+# inspect site table: newvalue TRUE only for horizons
 #  with top depth equal to zero
 diagnostic_hz(sp2)
 

@@ -37,13 +37,15 @@
 A SoilProfileCollection, data.frame, or a vector of horizon IDs.
 }
 \description{
-\code{glom()} returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.
+\code{glom()} returns a "clod" of horizons from a single profile SoilProfileCollection that have depth (range) in common. 
 
-All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is speccified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 
 If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
 
-If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using \code{evalMissingData} or similar approach.
+If inverting results with \code{invert}, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from \code{ids = TRUE} different from what you expect, as they will be based on a profile with an "extra" horizon.
+
+If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using \code{evalMissingData} or similar approach. While these warnings can make for messy standard output, it is felt by the author that users need to consciously "choose" to ignore (e.g. via \code{suppressWarnings}) this output. Most commonly these warning occurs when calling \code{glom} on a SPC that is impractical to inspect via \code{glomApply}, so it may be the only warning of a potential problem in a downstream analysis.
 }
 \details{
 The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.

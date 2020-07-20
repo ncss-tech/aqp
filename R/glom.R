@@ -5,28 +5,33 @@ setGeneric("glom", function(p, z1, z2 = NA,
   standardGeneric("glom"))
 
 #' Subset soil horizon data using a depth or depth interval
-#' @param p A single-profile SoilProfileCollection; usually glom is called via \code{profileApply()}
+#' 
+#' @param p A single-profile SoilProfileCollection; usually \code{glom} is called via \code{profileApply()} e.g. via convenience method \code{glomApply}
 #' @param z1 Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersect interval.
 #' @param z2 OPTIONAL: Bottom depth - bottom depth of intersection interval
 #' @param ids Return just horizon IDs in interval? default: FALSE
 #' @param df Return a data.frame, by intersection with \code{horizons(p)}? default: FALSE
-#' @param truncate Truncate horizon top and bottom depths to z1 and z2? default: FALSE
+#' @param truncate Truncate horizon top and bottom depths to \code{z1} and \code{z2}? default: FALSE
 #' @param invert Get the horizons/depth ranges of the profile outside the interval z1/z2? default: FALSE
-#' @param modality Return all data (default: "all") or first, thickest (\code{modality = "thickest"}) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)
+#' @param modality Return all data (default: \code{"all"}) or first, thickest (\code{modality = "thickest"}) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)
 #'
-#' @description \code{glom()} returns a "clod" of horizons from a (often single profile) SoilProfileCollection that have a common attribute. You "glom" SPC horizons into a ragged group of horizons or a "clod." In this case, "ragged" means that number of horizons, horizon depths, distinctness and topography vary from profile to profile.
+#' @description \code{glom()} returns a "clod" of horizons from a single profile SoilProfileCollection that have depth (range) in common. 
 #'
-#' All horizons included within the specified interval are returned in their entirety (not just the portion within the interval). Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
+#' All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is specified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 #'
 #' If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
+#' 
+#' If inverting results with \code{invert}, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from \code{ids = TRUE} different from what you expect, as they will be based on a profile with an "extra" horizon.
 #'
-#' If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using \code{evalMissingData} or similar approach.
+#' If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using \code{evalMissingData} or similar approach. While these warnings can make for messy standard output, it is felt by the author that users need to consciously "choose" to ignore (e.g. via \code{suppressWarnings}) this output. Most commonly these warning occurs when calling \code{glom} on a SPC that is impractical to inspect via \code{glomApply}, so it may be the only warning of a potential problem in a downstream analysis.
 #'
 #' @details The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
-#'
+#' 
+#' @seealso \link{\code{glomApply}}
+#' 
 #' @author Andrew G. Brown
 #'
-#' @return A SoilProfileCollection, data.frame, or a vector of horizon IDs.
+#' @return A SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
 #'
 #' @export glom
 #' @aliases glom
@@ -56,18 +61,12 @@ setMethod(f = 'glom', signature='SoilProfileCollection',
   }
 
   depthn <- horizonDepths(p)
-
+  
   if (!invert) {
     idx <- .glom(p, z1, z2, modality)
   } else {
     idx <- c(.glom(p, min(p[[depthn[1]]], na.rm = T), z1, modality),
              .glom(p, z2, max(p[[depthn[2]]], na.rm = T), modality))
-  }
-
-  # short circuit to get hzIDs of result
-  if (ids) {
-    hids <- hzID(p)
-    return(hids[match(idx, hzID(p))])
   }
 
   # truncate ragged edges to PSCS
@@ -89,13 +88,53 @@ setMethod(f = 'glom', signature='SoilProfileCollection',
     .top <- p[[depthn[1]]]
     .bottom <- p[[depthn[2]]]
 
-    .top[.top > z1 & .top < z2] <- z2
-    .bottom[.bottom > z1 & .bottom < z2] <- z1
-
-    p[[depthn[1]]] <- .top
-    p[[depthn[2]]] <- .bottom
+    # special case: single horizon spans whole invert interval
+    #               and is SPLIT by invert = TRUE
+    if (all(c(z1,z2) < .bottom) & all(c(z1,z2) > .top)) {
+      
+      # make two profiles from one profile (upper and lower)
+      p1 <- suppressWarnings(glom(p, 0, z1, truncate = TRUE))
+      p2 <- suppressWarnings(glom(p, z2, max(p[[depthn[2]]]) + 1, truncate = TRUE))
+      
+      # combine horizon data
+      newhz <- rbind(horizons(p1), horizons(p2))
+      
+      # replace horizon data
+      newhz$hzID <- as.character(1:nrow(newhz))
+      replaceHorizons(p) <- newhz
+      hzidname(p) <- "hzID"
+      
+      # update index to reflect new horizons and modality
+      if (modality == "all") {
+        
+        # all horizons
+        idx <- newhz$hzID 
+        
+      } else if (modality == "thickest") {
+        # take thickest horizon, shallowest
+        thk <- newhz[[depthn[2]]] - newhz[[depthn[1]]]
+        idx <- newhz$hzID[which(thk == max(thk)[1])]
+      }
+      
+      # this should not happen -- this is a single profile SPC!
+      if (!spc_in_sync(p)$valid)
+        warning("inverting glom inteval for profile %s failed; be sure to check SPC validity", 
+                call. = FALSE)
+    } else {
+      .top[.top > z1 & .top < z2] <- z2
+      .bottom[.bottom > z1 & .bottom < z2] <- z1
+      p[[depthn[1]]] <- .top
+      p[[depthn[2]]] <- .bottom
+    }
   }
-
+  # short circuit to get hzIDs of result
+  if (ids & !invert) {
+    hids <- hzID(p)
+    return(hids[match(idx, hzID(p))])
+  } else if (ids & invert) {
+    warning("invert = TRUE option may be unstable with ids = TRUE due to (possible) splitting of horizons!", call. = FALSE)
+  }
+  
   if (!all(is.na(idx))) {
     if (!df) {
       return(p[, which(hzID(p) %in% idx)])

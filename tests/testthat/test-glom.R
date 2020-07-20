@@ -13,6 +13,38 @@ test_that("intersection of horizons by depth", {
     
     # intersection from 25 to 100 should return four horizons
     expect_equal(sum(glom(p, 25, 100, ids = TRUE) %in% hzID(p)), 4)
+    
+    # glom tests with a degenerate case
+    test <- data.frame(id = 1, top = 0, bottom = 100)
+    depths(test) <- id ~ top + bottom
+    
+    # default glom
+    expect_silent(t1 <- glom(test, 25, 50))
+    expect_equal(t1$bottom - t1$top, 100)
+    
+    # thickest-modality default glom
+    expect_silent(t1 <- glom(test, 25, 50, modality = "thickest"))
+    expect_equal(t1$bottom - t1$top, 100)
+    
+    # truncate glom
+    expect_silent(t1 <- glom(test, 25, 50, truncate = TRUE))
+    expect_equal(t1$bottom - t1$top, 25)
+    
+    # thickest-modality truncate glom
+    expect_silent(t1 <- glom(test, 25, 50, truncate = TRUE, modality = "thickest"))
+    expect_equal(t1$bottom - t1$top, 25)
+    
+    # invert glom
+    expect_silent(t1 <- glom(test, 25, 50, invert = TRUE))
+    expect_equal(t1$bottom - t1$top, 100)
+    
+    # invert + truncate glom
+    expect_silent(t1 <- glom(test, 25, 50, invert = TRUE, truncate = TRUE))
+    expect_equal(t1$bottom - t1$top, c(25, 50))
+    
+    # thickest-modality invert + truncate glom
+    expect_silent(t1 <- glom(test, 25, 50, invert = TRUE, truncate = TRUE, modality = "thickest"))
+    expect_equal(t1$bottom - t1$top, 50)
 })
 
 test_that("glom by depth returns a SPC clod", {
