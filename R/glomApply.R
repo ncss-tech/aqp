@@ -22,13 +22,15 @@
 #' 
 #' @param chunk.size Chunk size parameter for \code{profileApply}
 #' 
-#' @seealso \link{\code{glom}}
+#' @seealso \code{\link{glom}}  \code{\link{trunc}} 
 #' 
 #' @return A SoilProfileCollection.
 #' @author Andrew G. Brown.
 #'
 #' @rdname glomApply
 #' @export glomApply
+#' 
+#' @seealso \code{\link{glom}}  \code{\link{glomApply}} 
 #' @examples
 #' 
 #' data(sp3)
@@ -69,3 +71,44 @@ glomApply <- function(object, .fun = NULL, truncate = FALSE, invert = FALSE,
     return(glom(p, dep[1], dep[2], truncate = truncate, modality = modality, invert = invert))
   }, simplify = FALSE, chunk.size = chunk.size))
 }
+
+#' Truncate a SoilProfileCollection to specified top and bottom depth
+#'
+#' \code{trunc} is a wrapper method around \code{glomApply} for the case when the same top and bottom depth is required for all profiles in a collection. In contrast, \code{glomApply} allows for arbitrary functions to be run on each profile to calculate a unique set of depths.
+#' @param x A SoilProfileCollection
+#' @param z1 Upper boundary
+#' @param z2 Lower boundary
+#'
+#' @return A SoilProfileCollection truncated to interval \code{[z1, z2]}
+#' @export trunc
+#' @aliases trunc
+#' @method trunc SoilProfileCollection
+#' @examples
+#'
+#' # load sample data
+#' data("sp3")
+#'
+#' # promote to SPC
+#' depths(sp3) <- id ~ top + bottom
+#'
+#' ### TRUNCATE all profiles in sp3 to [0,25]
+#'
+#' # set up plot parameters
+#' par(mfrow=c(2,1), mar=c(0,0,0,0))
+#'
+#' # full profiles
+#' plot(sp3)
+#'
+#' # trunc'd profiles
+#' plot(trunc(sp3, 0, 25))
+
+# note, we are using the default method signature: trunc(x, ...)
+#       so this will not show up as being "masked" from base
+#setGeneric("trunc", function(x, ...)
+#  standardGeneric("trunc"))
+
+setMethod(f = 'trunc', signature(x = 'SoilProfileCollection'),
+          function(x, z1, z2) {
+            return(glomApply(x, function(p) c(z1, z2), truncate = TRUE))
+          })
+

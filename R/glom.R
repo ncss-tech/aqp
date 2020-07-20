@@ -27,7 +27,7 @@ setGeneric("glom", function(p, z1, z2 = NA,
 #'
 #' @details The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
 #' 
-#' @seealso \link{\code{glomApply}}
+#' @seealso \code{\link{glomApply}} \code{\link{trunc}}
 #' 
 #' @author Andrew G. Brown
 #'
@@ -65,8 +65,8 @@ setMethod(f = 'glom', signature='SoilProfileCollection',
   if (!invert) {
     idx <- .glom(p, z1, z2, modality)
   } else {
-    idx <- c(.glom(p, min(p[[depthn[1]]], na.rm = T), z1, modality),
-             .glom(p, z2, max(p[[depthn[2]]], na.rm = T), modality))
+    idx <- c(.glom(p, min(p[[depthn[1]]], na.rm = TRUE), z1, modality),
+             .glom(p, z2, max(p[[depthn[2]]], na.rm = TRUE), modality))
   }
 
   # truncate ragged edges to PSCS
@@ -90,7 +90,8 @@ setMethod(f = 'glom', signature='SoilProfileCollection',
 
     # special case: single horizon spans whole invert interval
     #               and is SPLIT by invert = TRUE
-    if (all(c(z1,z2) < .bottom) & all(c(z1,z2) > .top)) {
+    if (all(c(z1,z2) < max(.bottom, na.rm = TRUE)) & 
+        all(c(z1,z2) > min(.top, na.rm = TRUE))) {
       
       # make two profiles from one profile (upper and lower)
       p1 <- suppressWarnings(glom(p, 0, z1, truncate = TRUE))
@@ -118,8 +119,8 @@ setMethod(f = 'glom', signature='SoilProfileCollection',
       
       # this should not happen -- this is a single profile SPC!
       if (!spc_in_sync(p)$valid)
-        warning("inverting glom inteval for profile %s failed; be sure to check SPC validity", 
-                call. = FALSE)
+        warning(sprintf("inverting glom inteval for profile %s failed; be sure to check SPC validity", profile_id(p)), call. = FALSE)
+
     } else {
       .top[.top > z1 & .top < z2] <- z2
       .bottom[.bottom > z1 & .bottom < z2] <- z1
@@ -284,42 +285,3 @@ setMethod(f = 'glom', signature='SoilProfileCollection',
 
   return(list(hz.idx = idx.top, value = idval))
 }
-
-#' Truncate a SoilProfileCollection to specified top and bottom depth
-#'
-#' \code{trunc} is a wrapper method around \code{glomApply} for the case when the same top and bottom depth is required for all profiles in a collection. In contrast, \code{glomApply} allows for arbitrary functions to be run on each profile to calculate a unique set of depths.
-#' @param x A SoilProfileCollection
-#' @param z1 Upper boundary
-#' @param z2 Lower boundary
-#'
-#' @return A SoilProfileCollection truncated to interval \code{[z1, z2]}
-#' @export trunc
-#'
-#' @examples
-#'
-#' # load sample data
-#' data("sp3")
-#'
-#' # promote to SPC
-#' depths(sp3) <- id ~ top + bottom
-#'
-#' ### TRUNCATE all profiles in sp3 to [0,25]
-#'
-#' # set up plot parameters
-#' par(mfrow=c(2,1), mar=c(0,0,0,0))
-#'
-#' # full profiles
-#' plot(sp3)
-#'
-#' # trunc'd profiles
-#' plot(trunc(sp3, 0, 25))
-
-# note, we are using the default method signature: trunc(x, ...)
-#       so this will not show up as being "masked" from base
-#setGeneric("trunc", function(x, ...)
-#  standardGeneric("trunc"))
-
-setMethod(f = 'trunc', signature(x = 'SoilProfileCollection'),
-          function(x, z1, z2) {
-    return(glomApply(x, function(p) c(z1, z2), truncate = TRUE))
-})

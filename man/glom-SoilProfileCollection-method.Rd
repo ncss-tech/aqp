@@ -17,7 +17,7 @@
 )
 }
 \arguments{
-\item{p}{A single-profile SoilProfileCollection; usually glom is called via \code{profileApply()}}
+\item{p}{A single-profile SoilProfileCollection; usually \code{glom} is called via \code{profileApply()} e.g. via convenience method \code{glomApply}}
 
 \item{z1}{Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersect interval.}
 
@@ -27,19 +27,19 @@
 
 \item{df}{Return a data.frame, by intersection with \code{horizons(p)}? default: FALSE}
 
-\item{truncate}{Truncate horizon top and bottom depths to z1 and z2? default: FALSE}
+\item{truncate}{Truncate horizon top and bottom depths to \code{z1} and \code{z2}? default: FALSE}
 
 \item{invert}{Get the horizons/depth ranges of the profile outside the interval z1/z2? default: FALSE}
 
-\item{modality}{Return all data (default: "all") or first, thickest (\code{modality = "thickest"}) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)}
+\item{modality}{Return all data (default: \code{"all"}) or first, thickest (\code{modality = "thickest"}) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)}
 }
 \value{
-A SoilProfileCollection, data.frame, or a vector of horizon IDs.
+A SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
 }
 \description{
 \code{glom()} returns a "clod" of horizons from a single profile SoilProfileCollection that have depth (range) in common. 
 
-All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is speccified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
+All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is specified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 
 If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
 
@@ -61,6 +61,9 @@ foo <- glom(p, 25, 100)
 
 # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
 nrow(foo)
+}
+\seealso{
+\code{\link{glomApply}} \code{\link{trunc}}
 }
 \author{
 Andrew G. Brown

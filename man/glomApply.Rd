@@ -72,6 +72,11 @@ sp3$glom_bottom <- profileApply(sp3, estimateSoilDepth)
 plot(glomApply(sp3, function(p) return(c(p$glom_top, p$glom_bottom))))
 
 }
+\seealso{
+\code{\link{glom}}  \code{\link{trunc}}
+
+\code{\link{glom}}  \code{\link{glomApply}}
+}
 \author{
 Andrew G. Brown.
 }
