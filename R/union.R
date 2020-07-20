@@ -272,9 +272,13 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   restrictions(res) <- .as.data.frame.aqp(o.r, o.df.class)
 
   # append any novel metadata
-  new.names <- !(names(new.metadata) %in% res@metadata)
+  #  note that o.df.class is calculated from all elements, and defaults to data.frame
+  #  this line is to cover metadata like citations etc. that are not part of all SPCs
+  new.names <- !(names(new.metadata) %in% names(res@metadata))
+  
+  # explicit slot replacement
   res@metadata <- c(res@metadata, new.metadata[new.names])
-
+  
   # attempt using a common ID
   suppressWarnings(hzidname(res) <- new.hzID)
   return(res)

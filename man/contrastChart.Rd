@@ -4,7 +4,7 @@
 \title{Color Contrast Chart}
 \description{Compare one or more pages from a simulated Munsell book of soil colors to a reference color.}
 \usage{
-contrastChart(m, hues, ccAbbreviate=1, style='hue')
+contrastChart(m, hues, ccAbbreviate=1, style='hue', thresh=NULL)
 }
 
 \arguments{
@@ -12,6 +12,7 @@ contrastChart(m, hues, ccAbbreviate=1, style='hue')
   \item{hues}{vector of one or more Munsell hue pages to display}
   \item{ccAbbreviate}{length of abbreviated contrast classes, use 0 to suppress labels}
   \item{style}{'hue' or 'CC', see details}
+  \item{thresh}{delta-E00 threshold (<) applied to pair-wise comparisons and resulting color chips}
 }
 
 \details{A simulated Munsell color book page or pages are used to demonstrate color contrast between all chips and the refnerece color \code{m} (highlighted in red). NCSS color contrast class and CIE delta-E00 values are printed below all other color chips. Munsell color chips for chroma 5 and 7 are ommitted, but axis labels are retained as a reminder of this fact.
@@ -28,7 +29,7 @@ strip.left = strip.custom(bg=grey(0.85))
 
 }
 
-\value{A \code{trellis} graphics object.}
+\value{A list containing \code{trellis} graphics object (\code{fig}), and input data (\code{data}).}
 
 \author{D.E. Beaudette}
 

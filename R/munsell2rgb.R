@@ -266,7 +266,8 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 
   # join new data with look-up table
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
-  ## TODO: convert to merge()
+  ## TODO: convert to merge() (~ 30% slower than join)
+  ## TODO: experiment with on-the-fly DT invocation if available
   res <- join(d, munsell, type='left', by=c('hue','value','chroma'))
 
   # reset options:

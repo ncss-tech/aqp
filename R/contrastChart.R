@@ -3,7 +3,8 @@
 # hues: vector of Munsell hue pages to display 
 # ccAbbreviate: min length of abbreviated CC
 # style: hue (split by hue / hues) or CC (split be CC / CC + hue)
-contrastChart <- function(m, hues, ccAbbreviate=1, style='hue') {
+# thresh: threshold dE00 value
+contrastChart <- function(m, hues, ccAbbreviate=1, style='hue', thresh=NULL) {
   
   # load Munsell LUT
   # safe for CRAN check
@@ -16,7 +17,7 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue') {
   
   # safety checks on arguments
   # check style
-  if(! style %in% c('hue', 'CC')) {
+  if(! style %in% c('hue', 'CC', 'dE00')) {
     stop("style must be one of: 'hue', 'CC'", call. = FALSE)
   }
   
@@ -60,8 +61,13 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue') {
   cc <- colorContrast(x$munsell, rep(m$queryColor, times=nrow(x)))
   
   # join for plotting
-  # note: data are sorted by merge()
-  z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE)
+  z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE, sort=FALSE)
+  
+  # dE00 thresholding
+  if( ! is.null(thresh) ) {
+    z <- z[which(z$dE00 < thresh), ]
+    
+  }
   
   # alternative modes
   fm <- switch(style, 
@@ -149,7 +155,10 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue') {
                }
   )
   
-  return(pp)
+  # composite results + figure
+  res <- list(fig = pp, data = z)
+  
+  return(res)
   
 }
 

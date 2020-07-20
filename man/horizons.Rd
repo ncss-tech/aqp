@@ -29,11 +29,11 @@ depths(sp2) <- id ~ top + bottom
 # assign true to surface horizon
 newdata <- data.frame(top = 0,
                       newvalue = TRUE)
-                      
-# do left join                       
+
+# do left join
 horizons(sp2) <- newdata
 
-# inspect site table: newvalue TRUE only for horizons 
+# inspect site table: newvalue TRUE only for horizons
 #  with top depth equal to zero
 horizons(sp2)
 

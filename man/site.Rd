@@ -21,7 +21,7 @@ site(object) <- value
 \description{
 Get site data from SoilProfileCollection. Result is returned in the same \code{data.frame} class used to initially construct the SoilProfileCollection.
 
-There are two options available via the \code{site<-} setter. 
+There are two options available via the \code{site<-} setter.
 
 The first is a "normalization" by formula interface, whereby one specifies an attribute that is constant in horizons within profiles to be promoted to a site-level variable: \code{site(spc) <- ~ horizonvariable}
 
@@ -45,11 +45,11 @@ site(sp2)
 newdata <- data.frame(surface = c("holocene",
                                   "lower riverbank"),
                       newvalue = c(1,2))
-                      
+
 # do left join based on newly-normalized "surface" attribute
 site(sp2) <- newdata
 
-# inspect site table: holocene & lower riverbank have values 
+# inspect site table: holocene & lower riverbank have values
 site(sp2)
 
 }

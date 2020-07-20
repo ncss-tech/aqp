@@ -25,11 +25,11 @@ depths(sp2) <- id ~ top + bottom
 newdata <- data.frame(id = c("hon-21"),
                       restrkind = "abrupt textural change",
                       restrdep = 46)
-                      
-# do left join                       
+
+# do left join
 restrictions(sp2) <- newdata
 
-# inspect site table: newvalue TRUE only for horizons 
+# inspect site table: newvalue TRUE only for horizons
 #  with top depth equal to zero
 restrictions(sp2)
 

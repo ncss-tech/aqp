@@ -210,13 +210,13 @@ test_that("SPC spatial operations ", {
   # 2020/07/12: warnings expect warning on rgdal 1.5-8+
   # https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html
   # catching all rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-methods
-  expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0')
+#  expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0')
 
   # we should get back the same thing we started with
 #  if(packageVersion("rgdal") >= "1.5-8")
 #    expect_warning(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
 #  else
-    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'))
+#    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'))
 
   # basic coercion
 #  if(packageVersion("rgdal") >= "1.5-8")
@@ -299,20 +299,18 @@ test_that("SPC depth columns get/set ", {
 })
 
 test_that("SPC min/max overrides work as expected", {
-  # helper function: vector concatenation
-  cc <- function(l) do.call('c', as.list(l))
-
-  # create test data
-  df <- data.frame(id = cc(lapply(1:4, function(i) rep(i, 10))),
-                   top = cc(rep(0:9, 4)), bottom = cc(rep(1:10, 4)),
-                   siteprop = 8, prop = 18)
-
-  # promote to SPC
-  depths(df) <- id ~ top + bottom
-
+  
+  set.seed(20202)
+  df <- lapply(1:10, random_profile, SPC=TRUE)
+  df <- union(df)
+  
+  ## visually inspect output
+  # profileApply(df, min)
+  # profileApply(df, max)
+  
   # both min and max should return 10cm
-  expect_equal(min(df), 10)
-  expect_equal(min(df) == max(df), TRUE)
+  expect_equal(min(df), 44)
+  expect_equal(max(df), 134)
 })
 
 test_that("SPC horizonNames get/set ", {
