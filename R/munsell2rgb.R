@@ -150,6 +150,7 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
     }
   }
 
+  ## TODO: properly account for NA colors: https://github.com/ncss-tech/aqp/issues/160
   # iterate over colors
   for(i in 1:n) {
     # convert current color to matrix, this will allow matrix and DF as input
@@ -192,7 +193,10 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
       # return the closest n-matches
       idx <- order(sigma)[1:nClosest]
     }
-
+    
+    
+    ## TODO: this doesn't actually trap the condition we are attempting to trap!
+    # https://github.com/ncss-tech/aqp/issues/160
     # with NA as an input, there will be no output
     if(length(idx) == 0)
       res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
