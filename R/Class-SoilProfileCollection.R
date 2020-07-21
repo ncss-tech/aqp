@@ -51,19 +51,7 @@ setClass(
   ),
   validity = function(object) {
     # https://github.com/ncss-tech/aqp/issues/75
-    mdf <- aqp_df_class(object)
-    df.slots <- c("horizons","site","diagnostic","restrictions")
-
-    # use wrapper function to "enforce" data.frame subclasses as needed
-    df_class_correct <- all(unlist(lapply(df.slots, function(slt) {
-      # only enforce df class if the metadata are set
-      daf <- slot(object, slt)
-      if (length(mdf) == 1 & class(daf)[1] != mdf)
-        slot(object, slt) <- .as.data.frame.aqp(daf, mdf)
-      return(TRUE)
-    })))
-
-    return(spc_in_sync(object)$valid & df_class_correct)
+    return(spc_in_sync(object)$valid)
   }
 )
 
@@ -75,21 +63,6 @@ setClass(
 # see: https://stackoverflow.com/questions/35642191/tbl-df-with-s4-object-slots
 if(requireNamespace("data.table", quietly = TRUE))
   setOldClass(c("data.table", "data.frame"))
-
-.N <- NULL
-
-#' := (Assignment by reference MASK)
-#' @description Mask to allow for Suggest of data.table \code{`:=`} / no R CMD CHECK error. See the manual page for \code{data.table::set} if interested in how this novel syntax is used.
-#'
-#' @seealso \code{\link[data.table]{set}}
-#' @param ...
-#'
-#' @keywords internal
-`:=` <- function(...) {
-  if (!requireNamespace("data.table", quietly = TRUE))
-    stop("package `data.table` is required", call. = FALSE)
-  return(data.table::`:=`(...))
-}
 
 if(requireNamespace("tibble", quietly = TRUE))
   setOldClass(c("tbl_df", "tbl", "data.frame"))

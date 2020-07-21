@@ -85,14 +85,14 @@ setMethod("[", signature(x = "SoilProfileCollection",
             }
 
             # extract all site and horizon data
-            h <- .as.data.frame.aqp(x@horizons, aqp_df_class(x))
+            h <- x@horizons
             s.all <- x@site
 
             # extract requested profile IDs
             p.ids <- s.all[[idname(x)]][unique(i)]
 
             # keep only the requested horizon data (filtered by profile ID)
-            h <- h[h[[idname(x)]] %in% p.ids,]
+            h <- .as.data.frame.aqp(h, aqp_df_class(x))[h[[idname(x)]] %in% p.ids,]
 
             # keep only the requested site data, (filtered by profile ID)
             s.i <- which(s.all[[idname(x)]] %in% p.ids)
@@ -124,35 +124,36 @@ setMethod("[", signature(x = "SoilProfileCollection",
             if (!missing(j)) {
 
               # faster replacement of j subsetting of horizon data
-              if(aqp_df_class(x) == "data.table") {
+              if (aqp_df_class(x) == "data.table") {
+
+                # local vars to make R CMD check happy
+                .N <- NULL
+                .I <- NULL
+                V1 <- NULL
 
                 # data.table can do this much more efficiently
                 if (requireNamespace("data.table", quietly = TRUE)) {
+                  idn <- idname(x)
 
-                  bylist <- list(h[[idname(x)]])
-                  names(bylist) <- idname(x)
+                  # by list @horizons idname (essentially iterating over profiles)
+                  bylist <- list(h[[idn]])
+                  names(bylist) <- idn
 
-                  .idx.in.range <- function(len, jj) {
-                    1:len %in% jj
+                  # figured out the data.table way to do this
+                  #  not using := or . anymore
+
+                  # determine j indices to KEEP
+                  j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
+
+                  # determine which site indices to keep
+                  # in case all horizons are removed, remove sites too
+                  if (length(j.idx) == 0) {
+                    i.idx <- numeric(0)
+                  } else {
+                    # determine which profile IDs KEEP
+                    pids <- h[, .I[any(1:.N %in% j)][1], by = bylist]
+                    i.idx <- pids[, .I[!is.na(V1)]]
                   }
-
-                  # this one was a head scratcher but is super cool! and pretty fast
-                  #  the main overhead comes from [,data.table ...
-                  # if(!data.table::is.data.table(h))
-                  #   h <- as.data.table(h)
-
-                  h <- h[, `:=`(.jmatch = .idx.in.range(.N, j),
-                                .anyj = any(.idx.in.range(.N, j))), by = bylist]
-
-                  # there is probably a data.table way to do this...
-                  i.missing <- which((profile_id(x) %in% unique(h[!h$.anyj, ][[idname(x)]])))
-
-                  # j.idx is used to select the target horizons
-                  j.idx <- which(as.logical(h$.jmatch))
-
-                  # # cleanup
-                  h[[".jmatch"]] <- NULL
-                  h[[".anyj"]] <- NULL
                 }
 
               } else {
@@ -168,19 +169,29 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                 ##  https://github.com/ncss-tech/aqp/issues/89
                 # fix #89, where i with no matching j e.g. @site data returned
-                i.missing <- which(as.logical(lapply(j.res, function(jr) { !any(jr) })))
+                i.idx <- which(as.logical(lapply(j.res, function(jr) { any(jr) })))
 
                 j.idx <-  which(do.call('c', j.res))
               }
+
+              # find any index out of bounds and ignore them
+              # j.idx.bad <- which(abs(j.idx) > nrow(h))
+              # i.idx.bad <- which(abs(i.idx) > nrow(s))
+              #
+              # if (length(i.idx))
+              #   i.idx <- i.idx[-i.idx.bad]
+              #
+              # if (length(j.idx))
+              #   j.idx <- j.idx[-j.idx.bad]
 
               # do horizon subset with j index
               h <- h[j.idx, ]
 
               # if profiles have been removed based on the j-index constraints
-              if (length(i.missing) > 0) {
+              if (length(i.idx) > 0) {
                 # remove sites that have no matching j
-                h.ids <- .data.frame.j(s[i.missing,], idname(x), aqp_df_class(x))
-                s <- s[-i.missing, , drop = FALSE]
+                s <- s[i.idx, , drop = FALSE]
+                h.ids <- s[[idname(x)]]
 
                 # remove also: diagnostics
                 d.idx <- which(d[[idname(x)]] %in% h.ids)
@@ -196,7 +207,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                 # spatial
                 if (validSpatialData(x)) {
-                  sp <- sp[-i.missing,]
+                  sp <- sp[i.idx,]
                 }
               }
             }

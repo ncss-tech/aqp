@@ -1,26 +1,26 @@
 # miscellaneous soil color indices
 
 #' @title Horizon Color Indices
-#' @description Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965). 
+#' @description Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965).
 #' @param p A SoilProfileCollection
 #' @param hue Column name containing moist hue; default: "m_hue"
 #' @param value Column name containing moist value; default: "m_value"
 #' @param chroma Column name containing moist chroma; default: "m_chroma"
 #' @return A data.frame containing unique pedon and horizon IDs and horizon-level color indices.
 #' @author Andrew G. Brown.
-#' @examples 
+#' @examples
 #' data(sp1)
-#' 
+#'
 #' # promote sp1 data to SoilProfileCollection
 #' depths(sp1) <- id ~ top + bottom
-#' 
+#'
 #' # move site data
 #' site(sp1) <- ~ group
-#' 
+#'
 #' # compute indices
 #' # merged into `sp1` with left-join on hzidname(sp1)
 #' horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
-#' 
+#'
 #' # visualize
 #' par(mar=c(0, 1, 3, 1))
 #' plot(sp1, color='hurst_redness')
@@ -30,14 +30,14 @@
 #' @export horizonColorIndices
 horizonColorIndices <- function(p, hue="m_hue", value="m_value", chroma="m_chroma") {
   hz <- horizons(p)
-  
+
   hz$hurst_redness <- hurst.redness(hz[[hue]], hz[[value]], hz[[chroma]])
-  
+
   hz$barron_torrent_redness <- barron.torrent.redness.LAB(hz[[hue]], hz[[value]], hz[[chroma]])
-  
+
   hz$buntley_westin <- buntley.westin.index(hz[[hue]], hz[[chroma]])
-  
-  return(hz[,c(idname(p), hzidname(p), names(hz)[!names(hz) %in% names(horizons(p))])])
+
+  return(.data.frame.j(hz, c(idname(p), hzidname(p), names(hz)[!names(hz) %in% names(horizons(p))]), aqp_df_class(p)))
 }
 
 #' @title Hurst (1977) Redness Index
@@ -86,7 +86,7 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' @rdname harden.rubification
 #' @export harden.rubification
 harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
-  # after Harden (1982)  "A quantitative index of soil development from field descriptions: 
+  # after Harden (1982)  "A quantitative index of soil development from field descriptions:
   #                       Examples from a chronosequence in central California"
   hue.lookup.table <- 8:0
   names(hue.lookup.table) <- c('5R','7.5R','10R','2.5YR','5YR','7.5YR','10YR','2.5Y')
@@ -105,7 +105,7 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' @export harden.melanization
 harden.melanization <- function(value, value_ref) {
   # for horizons within 100cm of soil surface
-  # after Harden (1982)  "A quantitative index of soil development from field descriptions: 
+  # after Harden (1982)  "A quantitative index of soil development from field descriptions:
   #                       Examples from a chronosequence in central California"
   # 10.1016/0016-7061(82)90037-4
   return(10 * (value_ref - value))
@@ -145,14 +145,14 @@ thompson.bell.darkness <- function(p, name = NULL, pattern="^A", value="m_value"
   hz <- horizons(p)
   depthz <- horizonDepths(p)
   nm <- names(hz)
-  
+
   # TODO: this should be an internal function
   if (missing(name)) {
     possible.name <- nm[grep("name", nm, ignore.case = TRUE)]
     if (length(possible.name) > 0) {
       possible.name <- possible.name[1]
       name <- possible.name
-      message(paste("guessing horizon designations are stored in `", 
+      message(paste("guessing horizon designations are stored in `",
                     name, "`", sep = ""))
     }
     else {
@@ -160,7 +160,7 @@ thompson.bell.darkness <- function(p, name = NULL, pattern="^A", value="m_value"
       name <- NA
     }
   }
-  
+
   a.hz <- hz[grepl(hz[[name]], pattern = pattern),]
   a.hz$pdi_partial <- (a.hz[[depthz[2]]] - a.hz[[depthz[1]]]) / (a.hz[[value]] * a.hz[[chroma]] + 1)
   return(sum(a.hz$pdi_partial))

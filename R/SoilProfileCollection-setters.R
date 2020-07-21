@@ -115,15 +115,17 @@ setReplaceMethod("depths", "data.frame",
 
   iddata <- data[[nm[1]]]
   tdep <- data[[depthcols[1]]]
-
-  usortid <- .coalesce.idx(sort(iddata))
-  hsorttdep <- all(data[order(iddata, tdep),][[depthcols[1]]] == tdep)
-
+  
+  usortid <- unique(sort(iddata))
+  
+  idtdepord <- order(as.character(iddata), tdep)
+  ditd <- data[idtdepord,]
+  hsorttdep <- all(ditd[[depthcols[1]]] == tdep)
+  
+  # re-sort horizon data
   if (suppressWarnings(any(iddata != usortid) | !hsorttdep)) {
     ## note: forced character sort on ID -- need to impose some order to check depths
-    # no more message
-
-    data <- data[order(as.character(iddata), tdep),]
+    data <- ditd
   }
 
   # create a site table with just IDs
