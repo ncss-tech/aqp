@@ -3,6 +3,9 @@ library(reshape2)
 library(latticeExtra)
 
 ## http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
+
+# https://github.com/ncss-tech/aqp/issues/101
+
 # missing odd chroma
 x <- read.table('SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt.gz', skip=13, header=TRUE, stringsAsFactors = FALSE, sep=',')
 
