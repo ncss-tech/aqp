@@ -72,7 +72,7 @@ xyplot(reflectance ~ wavelength, groups=munsell, data=s,
 
 ## investigate slices -- can interpolate reflectance vs chroma (by wavelengths) for odd chroma
 
-idx <- which(m.rel$hue %in% c('10YR') & m.rel$value == 4)
+idx <- which(m.rel$hue %in% c('7.5YR') & m.rel$value == 4)
 s <- m.rel[idx, ]
 
 xyplot(reflectance ~ chroma | factor(wavelength), data=s, 

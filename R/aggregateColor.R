@@ -145,10 +145,11 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', colorSpace = 'CI
   })
 
 
-  # compute weighted mean color for each GHL, in LAB colorspace
-  # TODO: this is similar to soilDB::mix_and_clean_colors(), consider consolidation
+  # compute weighted mean color for each group, in CIE LAB colorspace
+  # TODO: this is similar to soilDB::estimateColorMixture(), consider consolidation
   # TODO: this is the second pass of color conversion, can it be done in a single pass?
   # TODO: should aggregate colors be mixed from the discretized colors? probably
+  # TODO: color mixing should be performed using reflectance spectra
   s.agg <- ldply(s.scaled, function(i) {
     # convert to sRGB
     v <- t(col2rgb(i[[col]])) / 255
