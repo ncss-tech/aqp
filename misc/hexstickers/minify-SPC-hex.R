@@ -7,8 +7,31 @@ library(cluster)
 # remotes::install_github("GuangchuangYu/hexSticker")
 
 # get some different looking soils from around the country
-f <- fetchOSD(c("Agawam","Valentine","Worsham","Cecil","Sites","Scarboro"))
-# f <- fetchOSD(c("Paxton","Montauk","Woodbridge","Ridgebury","Whitman","Catden"))
+# f <- fetchOSD(c("Agawam","Valentine","Worsham","Cecil","Sites","Scarboro"))
+
+# basal till toposequence -- a classic southern new england catena
+f <- fetchOSD(c("Paxton","Montauk","Woodbridge","Ridgebury","Whitman","Catden"))
+
+# generalized sticker, using the 'siblings' OR 'cousins' of a series
+
+my_series <- "Cecil"
+sibs <- siblings(my_series, cousins = TRUE)
+
+## SIBLINGS
+# 
+sibs.maj <- sibs$sib[sibs$sib$majcompflag,]
+
+# ensure order by n in decreasing order, then take top 5
+sibs.maj <- sibs.maj[order(sibs.maj$n, decreasing = TRUE)[1:5],]
+f <- fetchOSD(c(my_series, sibs.maj$sibling))
+
+# ## COUSINS
+# cous.maj <- sibs$cousins[sibs$cousins$majcompflag,]
+# cous.maj <- cous.maj[cous.maj$sibling != my_series,]
+# 
+# # ensure order by n in decreasing order, then 5 at random
+# cous.maj.rnd <- cous.maj[order(cous.maj$n, decreasing = TRUE)[sample(1:nrow(cous.maj), 5)],]
+# f <- fetchOSD(c(my_series, cous.maj.rnd$sibling))
 
 # we want to use blacklock but it has an oldschool O horizon (described in depths above 0)
 # blklock <- fetchOSD('Blacklock')
@@ -24,7 +47,7 @@ f <- fetchOSD(c("Agawam","Valentine","Worsham","Cecil","Sites","Scarboro"))
 # # combine blacklock in with the others
 # f <- aqp::union(list(blklock, f))
 
-f <- glomApply(f, function(p) c(0,min(f)), truncate = TRUE)
+f <- trunc(f, 0, min(f))
 f <- slice(f, 0:(min(f)-1) ~ soil_color + hue + value + chroma)
 horizons(f) <- horizonColorIndices(f, "hue", "value", "chroma")
 
