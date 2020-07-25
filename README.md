@@ -18,7 +18,7 @@ Get the development version from Github, after installing the CRAN version + dep
 <img src = "https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width = "45%" height = "45%" hspace="15" vspace="15" align="right"/></a>
 
 ## Website
-http://ncss-tech.github.io/AQP/
+[http://ncss-tech.github.io/AQP/](http://ncss-tech.github.io/AQP/)
 
 ## Examples
 ```r
