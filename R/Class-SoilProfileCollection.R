@@ -1297,13 +1297,13 @@ setMethod(f = 'aqp_df_class', signature(object = 'SoilProfileCollection'),
 
             # all handles the logical(0) for undefined
             if (all(u == '')) {
-              message("aqp_df_class metadata entry not found")
-              warning("data.table and tbl_df in SoilProfileCollection data.frame slots are EXPERIMENTAL, defaulting to data.frame", call. = FALSE)
-              return(NA)
+              message("aqp_df_class metadata entry not found - run aqp::rebuildSPC() to fix")
+              return("data.frame")
             }
 
             return(u)
           })
+
 #' Get depth units from metadata
 #'
 #' @name depth_units
