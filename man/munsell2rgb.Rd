@@ -84,7 +84,7 @@ g <- expand.grid(hue='N', value=2:8, chroma=NA, stringsAsFactors=FALSE)
 munsell2rgb(g$hue, g$value, g$chroma)
 
 
-# basic example: no factors!
+# basic example
 d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
@@ -94,8 +94,11 @@ plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
 # multiple pages of hue:
 hues <- c('2.5YR','5YR','7.5YR','10YR')
 d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
+# convert Munsell -> sRGB
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
+# extract CIELAB coordinates
+with(d, munsell2rgb(hue, value, chroma, returnLAB=TRUE))
 
 # plot: note that we are setting panel order from red-->yellow
 library(lattice)

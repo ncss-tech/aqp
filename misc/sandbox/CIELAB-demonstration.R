@@ -1,5 +1,107 @@
 library(aqp)
+library(lattice)
+
+# remotes::install_github("JosephCrispell/addTextLabels")
 library(addTextLabels)
+
+
+
+## Munsell -> CIELAB charts
+
+# multiple pages of hue:
+hues <- c('2.5YR', '5YR', '7.5YR', '10YR', '2.5Y')
+d <- expand.grid(hue=hues, value=2:8, chroma=c(1, 2, 3, 4, 6, 8), stringsAsFactors=FALSE)
+d$hue <- factor(d$hue, levels=hues, ordered = TRUE)
+
+# convert Munsell -> sRGB
+d$color <- with(d, munsell2rgb(hue, value, chroma))
+
+# extract CIELAB coordinates
+d.lab <- with(d, munsell2rgb(hue, value, chroma, returnLAB=TRUE))
+
+# this is lame, there has to be a better way
+d$L <- d.lab$L
+d$A <- d.lab$A
+d$B <- d.lab$B
+
+# adjust color label text according to background color
+d$lab.color <- invertLabelColor(d$color)
+# simplified CLIE LAB labels for printing on "chips"
+d$lab.text <- with(d, paste(round(L), round(A), round(B), sep='\n'))
+
+# test figure
+xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
+       main="Common Soil Colors - Annotated with LAB Coordinates", layout=c(4,2), 
+       scales=list(alternating=1), strip=strip.custom(bg=grey(0.85)),
+       data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
+       panel=function(x, y, subscripts, ...) {
+         
+         panel.xyplot(x, y, 
+                      pch=15, 
+                      cex=7, 
+                      col=d$color[subscripts]
+                      )
+         
+         panel.text(x, y, 
+                    labels=d$lab.text[subscripts], 
+                    cex=0.75, 
+                    col=d$lab.color[subscripts], 
+                    font=2
+                    )
+       }
+)
+
+
+
+# iterate over hues and save to PDF
+for(i in hues) {
+ 
+  # adjust as needed
+  path <- 'E:/temp'
+  fname <- sprintf('Munsell-CIELAB-%s.pdf', i)
+  
+  # final plot
+  p <- xyplot(value ~ factor(chroma) | hue,
+              subset = hue == i,
+              main="Common Soil Colors - Annotated with LAB Coordinates",
+              scales=list(alternating=1), strip=strip.custom(bg=grey(0.85)),
+              data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
+              panel=function(x, y, subscripts, ...) {
+                
+                panel.xyplot(x, y, 
+                             pch=15, 
+                             cex=10, 
+                             col=d$color[subscripts]
+                )
+                
+                panel.text(x, y, 
+                           labels=d$lab.text[subscripts], 
+                           cex=0.85, 
+                           col=d$lab.color[subscripts], 
+                           font=2
+                )
+                
+                panel.text(x = rep(0.5, times=length(y)), y = y, 
+                           labels=('L\nA\nB'), 
+                           font=3,
+                           cex=0.85
+                )
+              }
+  )
+  
+  # write to file
+  pdf(file=file.path(path, fname), width=10, height=9)
+  print(p)
+  dev.off()
+   
+}
+
+
+##
+##
+##
+
+
 
 
 data("munsell")
@@ -11,8 +113,6 @@ x.1 <- subset(munsell, subset=hue == '10YR' & value == 2 & chroma  == 2)
 x.2 <- subset(munsell, subset=hue == '7.5YR' & value == 3 & chroma  == 4)
 
 
-# https://stackoverflow.com/questions/7611169/intelligent-point-label-placement-in-r
-# remotes::install_github("JosephCrispell/addTextLabels")
 
 plot(B ~ A, data=x, type='n', las=1)
 grid()
