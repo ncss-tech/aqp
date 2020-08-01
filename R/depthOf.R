@@ -59,15 +59,15 @@
 depthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
                      no.contact.depth = NULL, no.contact.assigned = NA) {
 
-  if(!inherits(p, 'SoilProfileCollection'))
+  if (!inherits(p, 'SoilProfileCollection') | length(p) != 1)
     stop("`p` must be a SoilProfileCollection containing one profile")
 
   hznames <- horizonNames(p)
 
   # if the user has not specified a column containing horizon designations
-  if(!hzdesgn %in% hznames) {
+  if (!hzdesgn %in% hznames) {
     hzdesgn <- guessHzDesgnName(p)
-    if(!hzdesgn %in% hznames) {
+    if (!hzdesgn %in% hznames) {
       stop("depth estimation relies on a column containing horizon designations")
     }
   }
@@ -76,7 +76,7 @@ depthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
   hz.match <- horizons(p)[grepl(pattern, p[[hzdesgn]]),]
 
   # if no horizons match, return `no.contact.assigned`
-  if(nrow(hz.match) == 0) {
+  if (nrow(hz.match) == 0) {
     return(no.contact.assigned)
   }
 

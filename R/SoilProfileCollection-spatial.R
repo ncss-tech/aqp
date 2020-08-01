@@ -82,17 +82,15 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
 
   # assign to sp slot
   # note that this will clobber any existing spatial data
-  object@sp <- SpatialPoints(coords=mf)
+  object@sp <- SpatialPoints(coords = mf)
 
   # remove coordinates from source data
   # note that mf is a matrix, so we need to access the colnames differently
   coord_names <- dimnames(mf)[[2]]
-  idx <- match(coord_names, siteNames(object))
+  sn <- siteNames(object)
 
-  # remove the named site data from site_data
-  # TODO we should use a proper setter!
-  # bug fix c/o Jose Padarian: drop=FALSE
-  object@site <- site(object)[, -idx, drop=FALSE]
+  # @site minus coordinates "promoted" to @sp
+  object@site <- .data.frame.j(object@site, sn[!sn %in% coord_names], aqp_df_class(object))
 
   # done
   return(object)

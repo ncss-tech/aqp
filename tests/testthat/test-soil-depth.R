@@ -1,7 +1,7 @@
 context("soil depth estimation")
 
 ## sample data
-d <- 
+d <-
   rbind(
   data.frame(
     id = c(1, 1, 1),
@@ -35,10 +35,10 @@ depths(d) <- id ~ top + bottom
 ## tests
 
 test_that("error conditions", {
-  
+
   # function will only accept a single profile
   expect_error(estimateSoilDepth(d, name='name', top='top', bottom='bottom'))
-  
+
   # required column names: name, top, bottom not specified, defaults not appropriate
   # AGB: now capable of basic guessing of hzdesgn, and uses hzdepthcol slot internally
   # expect_error(estimateSoilDepth(d[1, ]))
@@ -46,59 +46,85 @@ test_that("error conditions", {
 
 
 test_that("basic soil depth evaluation, based on pattern matching of hz designation", {
-  
-  # setting hz desgn by argument works 
+
+  # setting hz desgn by argument works
   res <- profileApply(d, estimateSoilDepth, name='name')
   expect_equivalent(res, c(110, 55, 48, 20))
-  
+
   # setting hz desgn by argument works by guessing hzname
   res <- profileApply(d, estimateSoilDepth)
   expect_equivalent(res, c(110, 55, 48, 20))
-  
+
   # setting nonexistent hzdesgn produces no error (by guessing hzname)
   res <- profileApply(d, estimateSoilDepth, name='goo')
   expect_equivalent(res, c(110, 55, 48, 20))
-  
+
   # remove the guessable name, expect error
   d$xxx <- d$name
   d$name <- NULL
   expect_error(estimateSoilDepth(d[1,], name='name'))
-  
+
   # backup use of S4 hzdesgncol slot in lieu of valid argument/guessable name column
   hzdesgnname(d) <- "xxx"
-  res <- estimateSoilDepth(d[1,], name='name')  
+  res <- estimateSoilDepth(d[1,], name='name')
   expect_equivalent(res, 110)
 })
 
 
 test_that("application of reasonable depth assumption of 150, given threshold of 100", {
-  
+
   res <- profileApply(d, estimateSoilDepth, no.contact.depth=100, no.contact.assigned=150)
-  
+
   expect_equivalent(res, c(150, 55, 48, 20))
 })
 
 
 test_that("depth to feature using REGEX on hzname: [Bt]", {
-  
+
   # example from manual page, NA used when there is no 'Bt' found
   res <- profileApply(d, estimateSoilDepth, p='Bt', no.contact.depth=0, no.contact.assigned=NA)
-  
+
   expect_equivalent(res, c(20, 20, 20, NA))
 })
 
 
+test_that("depthOf - simple match", {
+  expect_equal(depthOf(d[1,], "Cr|R|Cd"), NA)
+  expect_equal(depthOf(d[2,], "Cr|R|Cd"), 55)
+  expect_equal(minDepthOf(d[2,], "Cr|R|Cd"), 55)
+  expect_equal(maxDepthOf(d[2,], "Cr|R|Cd"), 55)
+  expect_equal(maxDepthOf(d[2,], "Cr|R|Cd", top = FALSE), 80)
+})
+
+test_that("depthOf - multiple match", {
+  expect_equal(depthOf(d[1,], "A|B|C"), c(0,20,35))
+  expect_equal(depthOf(d[1,], "A|B|C", top = FALSE), c(20,35,110))
+  expect_equal(minDepthOf(d[1,],"A|B|C"), 0)
+  expect_equal(maxDepthOf(d[1,],"A|B|C"), 35)
+  expect_equal(minDepthOf(d[1,], "A|B|C", top = FALSE), 20)
+  expect_equal(maxDepthOf(d[1,], "A|B|C", top = FALSE), 110)
+})
+
+test_that("depthOf - no match", {
+  expect_equal(depthOf(d[1,], "X"), NA)
+  expect_equal(depthOf(d[2,], "Cr|R|Cd", no.contact.depth = 50), NA)
+
+  d2 <- d
+  d2$name <- NULL
+  expect_error(depthOf(d2[1,], "A|B|C"))
+})
+
 test_that("soil depth class assignment, using USDA-NRCS class breaks", {
-  
+
   res <- getSoilDepthClass(d)
-  
+
   # result should be a data.frame with as many rows as profiles in input
   expect_true(inherits(res, 'data.frame'))
   expect_equal(nrow(res), length(d))
-  
+
   # depths, should be the same as prior tests using estimateSoilDepth
   expect_equivalent(res$depth, c(110, 55, 48, 20))
-  
+
   # depth classes are returned as a factor sorted from shallow -> deep
   dc <- factor(c('deep', 'mod.deep', 'shallow', 'very.shallow'), levels=c('very.shallow', 'shallow', 'mod.deep', 'deep', 'very.deep'))
   expect_equivalent(res$depth.class, dc)

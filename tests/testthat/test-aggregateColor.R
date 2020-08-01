@@ -34,6 +34,12 @@ test_that("basic functionality", {
 })
 
 ## TODO: test for expected error conditions
+test_that("expected error conditions", {
+  expect_error(aggregateColor(x, groups='foo', col='soil_color'))
+  expect_error(aggregateColor(x, groups='genhz', col='foo'))
+  expect_error(aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'foo'))
+  expect_error(aggregateColor(x, groups='genhz', col='soil_color', k=NA))
+})
 
 
 test_that("manual calculation using CIE2000 and LAB, single profile", {
@@ -42,10 +48,13 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
   x$genhz <- rep('A', times=nrow(x))
   a <- aggregateColor(x, groups='genhz', col='soil_color')
   a2 <- aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'LAB')
+  a3 <- aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'LAB', k=1)
 
   # known number of horizons / color
   # table(x$soil_color)
   expect_equal(a$scaled.data$A$n.hz, c(2,1,1,1))
+  expect_equal(a2$scaled.data$A$n.hz, c(2,1,1,1))
+  expect_equal(a3$scaled.data$A$n.hz, 5)
 
   expect_equal(round(a$scaled.data$A$weight, 3), c(0.342, 0.270, 0.258, 0.129))
 

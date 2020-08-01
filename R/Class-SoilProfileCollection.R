@@ -230,6 +230,7 @@ if(requireNamespace("tibble", quietly = TRUE))
     # "allow" NULL for the optional slots
     if(length(metadata$aqp_hzdesgn) == 0)
       metadata$aqp_hzdesgn <- ""
+
     if(length(metadata$aqp_hztexcl) == 0)
       metadata$aqp_hztexcl <- ""
 
@@ -317,8 +318,7 @@ setMethod(f = 'show',
                              hzdesgnname(object)), names(h))
             } else {
               # undefined
-              idx <-
-                match(c(idname(object), hzidname(object), horizonDepths(object)), names(h))
+              idx <- match(c(idname(object), hzidname(object), horizonDepths(object)), names(h))
             }
 
             # determine number of columns to show, and index to hz / site data
@@ -901,8 +901,8 @@ setReplaceMethod("hzdesgnname",
                    if(length(value)) {
                      # several ways to "reset" the hzdesgnname
                      if((value == "") | is.na(value) | is.null(value)) {
-                       value <- character(0)
-                       message("set horizon designation name column to `character` of length zero")
+                       value <- ""
+                       # message("set horizon designation name column to `character` of length zero")
                      } else if (!(value %in% horizonNames(object))) {
                        stop(paste0("horizon designation name (",value,") not in horizon data"), call.=FALSE)
                      }
@@ -953,7 +953,7 @@ setReplaceMethod("hztexclname", signature(object = "SoilProfileCollection"),
                    if(length(value)) {
                      # several ways to "reset" the hzdesgnname
                      if((value == "") | is.na(value) | is.null(value)) {
-                       value <- character(0)
+                       value <- ""
                        #message("set horizon texture class name to `character` of length zero")
                      } else if (! value %in% horizonNames(object)) {
                        stop("horizon texture class name not in horizon data", call.=TRUE)

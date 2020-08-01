@@ -101,9 +101,37 @@ res <- lapply(dfclasses, function(use_class) {
     expect_message(depths(test) <- id ~ top + bottom,
                    c("converting profile IDs from integer to character"))
 
+    # add fake coordinates
+    crds <- data.frame(id = profile_id(test),
+                       y  = rnorm(length(test)),
+                       x  = rnorm(length(test)))
+    site(test) <- crds
+
+    # promote to spatial
+    coordinates(test) <- ~ x + y
+    proj4string(test) <- "+proj=longlat +datum=WGS84"
+
+    # show method should be produce output without error
+    expect_output(show(test))
+    expect_output(show(test[0,]))
+
+    # fill in diagnostics and restrictions with fake data
+    diagnostic_hz(test) <- data.frame(id = profile_id(test),
+                                   featkind = "foo",
+                                   featdept = 0, featdepb = 10)
+    restrictions(test) <- data.frame(id = profile_id(test),
+                                  restrkind = "bar",
+                                  restrdept = 0, restrdepb = 10)
+
     # try the character vector interface too
     expect_message(depths(test2) <- c("id", "top", "bottom"),
                    c("converting profile IDs from integer to character"))
+
+    # test rebuild
+    expect_message(rebuildSPC(test2), "using `hzID` as a unique horizon ID")
+
+    # test enforce_df_class
+    expect_silent(aqp:::.enforce_df_class(test2, use_class))
 
     # "normalize" (horizon -> site) a site-level attribute
     site(test) <- ~ siteprop
@@ -353,8 +381,15 @@ res <- lapply(dfclasses, function(use_class) {
 
       # subApply works as expected
       expect_equal(length(subApply(sp1df, function(p)
-        TRUE)), length(sp1df))})
+        TRUE)), length(sp1df))
+    })
 
+    if (use_class == "data.table") {
+      test_that("data.table specific", {
+        expect_equal(min(sp1df), 59)
+        expect_equal(max(sp1df), 240)
+      })
+    }
   })
 
 })

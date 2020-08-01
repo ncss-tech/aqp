@@ -12,7 +12,7 @@ aggregateColor <- function(x, groups='genhz', col='soil_color', colorSpace = 'CI
     k <- round(k)
 
     # sanity check, need this for color distance eval
-    if(!requireNamespace('farver', quietly = TRUE))
+    if (!requireNamespace('farver', quietly = TRUE))
       stop('please install the `farver` package.', call.=FALSE)
 
     if(is.na(k)) {

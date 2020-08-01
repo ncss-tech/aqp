@@ -142,7 +142,7 @@ getArgillicBounds <- function(p,
                                       p = bottom.pattern)
 
       # if the last horizon with a t is below the contact (Crt or Rt) or some other weird reason
-      if(soil.depth < depth.last) {
+      if (soil.depth < depth.last) {
         # return the soil depth to contact
         lower.bound <- soil.depth
 
@@ -163,11 +163,15 @@ getArgillicBounds <- function(p,
     lower.bound <- NA
   }
 
-  if(!is.finite(lower.bound))
+  if (!is.finite(lower.bound))
     lower.bound <- NA
 
+  if (is.na(upper.bound))
+    return(c(NA, NA))
+
   bdepths <- glom(p, 0, upper.bound, df = TRUE)[[depthcol[2]]]
-  if(all(!is.na(c(upper.bound, lower.bound)))) {
+  if (all(!is.na(c(upper.bound, lower.bound)))) {
+
     # if argi bounds are found check that minimum thickness requirements are met
     min.thickness <- max(7.5, max(bdepths, na.rm = TRUE) / 10)
 
@@ -188,7 +192,7 @@ getArgillicBounds <- function(p,
   if(!as.list)
     return(c(upper.bound, lower.bound))
 
-  res <- list(ubound=as.numeric(upper.bound), lbound=as.numeric(lower.bound))
+  res <- list(ubound = as.numeric(upper.bound), lbound = as.numeric(lower.bound))
   return(res)
 }
 

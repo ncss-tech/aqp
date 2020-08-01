@@ -301,7 +301,7 @@ test_that("SPC depth columns get/set ", {
 test_that("SPC min/max overrides work as expected", {
 
   set.seed(20202)
-  df <- lapply(1:10, random_profile, SPC=TRUE)
+  df <- lapply(1:10, random_profile, SPC = TRUE)
   df <- union(df)
 
   ## visually inspect output
@@ -311,6 +311,9 @@ test_that("SPC min/max overrides work as expected", {
   # both min and max should return 10cm
   expect_equal(min(df), 44)
   expect_equal(max(df), 134)
+
+  expect_equal(min(df, v = "p2"), 44)
+  expect_equal(max(df, v = "p2"), 134)
 })
 
 test_that("SPC horizonNames get/set ", {
@@ -408,12 +411,12 @@ test_that("SPC horizon designation/texcl name get/set ", {
   # no column in horizon table 'xxx'
   expect_error(hzdesgnname(sp1) <- 'xxx')
 
-  # message when setting to empty (sets slot to character(0))
-  # NOTE: cannot have this be so verbose, needs to happen during subsetting
-  expect_message(hzdesgnname(sp1) <- '')
+  # set to empty
+  expect_silent(hzdesgnname(sp1) <- '')
 
-  # error when slot is empty and using accessor
-  expect_error(designations <- hzDesgn(sp1))
+  # null when cannot find the column name
+  expect_silent(designations <- hzDesgn(sp1))
+  expect_true(is.null(designations))
 })
 
 test_that("SPC horizon ID get/set ", {
@@ -504,6 +507,7 @@ test_that("SPC horizon ID init conflicts", {
   x <- as(x, 'data.frame')
   expect_message(depths(x) <- id ~ top + bottom, "^using")
   expect_equivalent(hzidname(x), 'hzID')
+  expect_true(checkSPC(x))
 
   # decompose, add non-unique column conflicing with hzID
   x <- sp1
@@ -613,7 +617,19 @@ test_that("basic integrity checks", {
   # inverting the horizon order makes it invalid
   expect_true(!spc_in_sync(spc)$valid)
 
+  # an empty spc derived from invalid spc is valid
+  expect_true(spc_in_sync(spc[0,])$valid)
+
   # reordering the horizons with reorderHorizons resolves integrity issues
+  expect_true(spc_in_sync(reorderHorizons(spc))$valid)
+
+  # default reordering relies on intact metadata
+  spc@metadata$target.order <- rev(spc@metadata$target.order)
+  expect_false(spc_in_sync(reorderHorizons(spc))$valid)
+
+  # removing the metadata works because target order matches sequential order
+  #  this cannot be guaranteed to be the case in general but is a reasonable default
+  spc@metadata$target.order <- NULL
   expect_true(spc_in_sync(reorderHorizons(spc))$valid)
 
   # reordering horizons with any order works, even if invalid

@@ -483,14 +483,12 @@ setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
 
             # subset using conventional data.frame methods
             if (!missing(s))
-              s.d.sub.IDs <-
-              subset(s.d, select = id.col, subset = eval(parse(text = s)))[, 1] # convert to vector
+              s.d.sub.IDs <- subset(s.d, select = id.col, subset = eval(parse(text = s)))[, 1] # convert to vector
             else
               s.d.sub.IDs <- NA
 
             if (!missing(h))
-              h.d.sub.IDs <-
-              subset(h.d, select = id.col, subset = eval(parse(text = h)))[, 1] # convert to vector
+              h.d.sub.IDs <- subset(h.d, select = id.col, subset = eval(parse(text = h)))[, 1] # convert to vector
             else
               h.d.sub.IDs <- NA
 
