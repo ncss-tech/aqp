@@ -178,10 +178,9 @@ res <- lapply(dfclasses, function(use_class) {
     switch(
       use_class,
       # data.frame and tbl_df
-      expect_message({
+      expect_silent({
         horizons(test) <- value
-      } ,
-      "join condition resulted in sorting of horizons, re-applying original order"),
+      }),
 
       # note: data.table sorts correctly without invoking re-order
       "data.table" = {

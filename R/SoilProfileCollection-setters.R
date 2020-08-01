@@ -115,13 +115,13 @@ setReplaceMethod("depths", "data.frame",
 
   iddata <- data[[nm[1]]]
   tdep <- data[[depthcols[1]]]
-  
+
   usortid <- unique(sort(iddata))
-  
+
   idtdepord <- order(as.character(iddata), tdep)
   ditd <- data[idtdepord,]
   hsorttdep <- all(ditd[[depthcols[1]]] == tdep)
-  
+
   # re-sort horizon data
   if (suppressWarnings(any(iddata != usortid) | !hsorttdep)) {
     ## note: forced character sort on ID -- need to impose some order to check depths
@@ -460,6 +460,9 @@ if (!isGeneric('horizons<-'))
 setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   function(object, value) {
 
+  if (is.null(value))
+    stop("new horizon data must not be NULL; to remove a site or horizon attribute use `spc$attribute <- NULL`", call.=FALSE)
+
   # testing the class of the horizon data to add to the object
   if (!inherits(value, "data.frame"))
 	  stop("new horizon data input value must inherit from data.frame", call.=FALSE)
@@ -504,9 +507,9 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   new.horizon.order <- match(names(original.horizon.order),
                              horizon.new[[hzidname(object)]])
   chnew <- .coalesce.idx(horizon.new[[idname(object)]])
-  if(length(chnew) != length(original.site.order) |
+  if (length(chnew) != length(original.site.order) |
      suppressWarnings(any(original.site.order != chnew))) {
-    message("join condition resulted in sorting of horizons, re-applying original order")
+    # message("join condition resulted in sorting of horizons, re-applying original order")
     horizon.new <- horizon.new[new.horizon.order,]
   }
 

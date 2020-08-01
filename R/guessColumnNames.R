@@ -97,7 +97,7 @@ guessHzTexClName <- function(x) {
   possible.name1 <- nm[grep('texcl', nm, ignore.case = TRUE)]
 
   # use the first valid guess matching texcl
-  if (length(possible.name1) == 1) {
+  if (length(possible.name1) > 0) {
     possible.name1 <- possible.name1[1]
     return(possible.name1)
   }

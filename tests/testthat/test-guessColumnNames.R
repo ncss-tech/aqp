@@ -32,8 +32,8 @@ test_that("basic functionality", {
   expect_equal(guessHzTexClName(sp3), "texcl")
 
   # texture
-  horizons(sp3)$texture <-  horizons(sp3)$texcl
-  horizons(sp3)$texcl <- NULL
+  sp3$texture <-  sp3$texcl
+  sp3$texcl <- NULL
   expect_equal(guessHzTexClName(sp3), "texture")
 
   # descriptive name

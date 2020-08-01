@@ -299,15 +299,15 @@ test_that("SPC depth columns get/set ", {
 })
 
 test_that("SPC min/max overrides work as expected", {
-  
+
   set.seed(20202)
   df <- lapply(1:10, random_profile, SPC=TRUE)
   df <- union(df)
-  
+
   ## visually inspect output
   # profileApply(df, min)
   # profileApply(df, max)
-  
+
   # both min and max should return 10cm
   expect_equal(min(df), 44)
   expect_equal(max(df), 134)
@@ -536,7 +536,7 @@ test_that("horizons<- left-join", {
   hnew$prop[1] <- 50
 
   # utilize horizons<- left join
-  expect_message(horizons(x) <- hnew, "join condition resulted in sorting of horizons, re-applying original order")
+  expect_silent(horizons(x) <- hnew)
 
   # verify old columns have same names
   # (i.e. no issues with duplication of column names in merge)
