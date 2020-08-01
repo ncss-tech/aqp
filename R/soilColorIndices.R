@@ -144,21 +144,8 @@ thompson.bell.darkness <- function(p, name = NULL, pattern="^A", value="m_value"
   # 10.2136/sssaj1996.03615995006000060051x
   hz <- horizons(p)
   depthz <- horizonDepths(p)
-  nm <- names(hz)
-
-  # TODO: this should be an internal function
   if (missing(name)) {
-    possible.name <- nm[grep("name", nm, ignore.case = TRUE)]
-    if (length(possible.name) > 0) {
-      possible.name <- possible.name[1]
-      name <- possible.name
-      message(paste("guessing horizon designations are stored in `",
-                    name, "`", sep = ""))
-    }
-    else {
-      message("unable to guess column containing horizon designations")
-      name <- NA
-    }
+    name <- guessHzDesgnName(p)
   }
 
   a.hz <- hz[grepl(hz[[name]], pattern = pattern),]

@@ -30,27 +30,27 @@ guessHzDesgnName <- function(x) {
     stop("x must be a SoilProfileCollection")
   }
 
-  if(length(hzdesgnname(x))) {
-    # ideally use metadata if it contains a value. if so, no message
-    name <- hzdesgnname(x)
-  } else {
-    # possible names include column names with name in the name
-    possible.name <- nm[grep('name', nm, ignore.case=TRUE)]
+  hzd <- hzdesgnname(x)
+  if (length(hzd) == 1) {
+    if (hzd != "")
+      return(hzd)
+  }
 
-    # use the first valid guess
-    if(length(possible.name) > 0) {
-      possible.name <- possible.name[1]
-      name <- possible.name
+  # possible names include column names with name in the name
+  possible.name <- nm[grep('name', nm, ignore.case=TRUE)]
+
+  # use the first valid guess
+  if(length(possible.name) > 0) {
+    possible.name <- possible.name[1]
+    name <- possible.name
+  } else {
+    # hail mary
+    try.again <- guessHzAttrName(x, "desgn", c("hz"), verbose = FALSE)
+    if (!is.na(try.again)) {
+      name <- try.again
     } else {
-      # hail mary
-      try.again <- guessHzAttrName(x, "desgn", c("hz"), verbose = FALSE)
-      if(!is.na(try.again)) {
-        name <- possible.name
-      } else {
-        message('unable to guess column containing horizon designations')
-      }
+      message('unable to guess column containing horizon designations')
     }
-    #message(paste('guessing horizon designations are stored in `', name, '`', sep=''))
   }
 
   return(name)
@@ -81,38 +81,36 @@ guessHzDesgnName <- function(x) {
 #'
 guessHzTexClName <- function(x) {
   nm <- horizonNames(x)
-  name <- NA
 
-  if(!inherits(x, 'SoilProfileCollection')) {
+  if (!inherits(x, 'SoilProfileCollection')) {
     stop("x must be a SoilProfileCollection")
   }
 
-  if(length(hztexclname(x))) {
-    # ideally use metadata if it contains a value. if so, no message
+  if (length(hztexclname(x)) == 1) {
+    # ideally use metadata if it contains a value
     name <- hztexclname(x)
-  } else {
-    # possible names include column names with name in the name
-    possible.name <- nm[grep('texcl', nm, ignore.case=TRUE)]
-
-    # use the first valid guess matching texcl
-    if(length(possible.name) > 0) {
-      possible.name <- possible.name[1]
-      name <- possible.name
-      #message(paste('guessing horizon texture classes are stored in `', name, '`', sep=''))
-    } else {
-      # alternately, try for something called "texture"
-      possible.name <- nm[grep('texture', nm, ignore.case=TRUE)]
-      if(length(possible.name) > 0) {
-        possible.name <- possible.name[1]
-        name <- possible.name
-        message(paste('guessing horizon texture classes are stored in `', name, '`', sep=''))
-      } else {
-        message('unable to guess column containing horizon texture classes')
-      }
-    }
+    if(name != "")
+      return(name)
   }
 
-  return(name)
+  # possible names include column names with name in the name
+  possible.name1 <- nm[grep('texcl', nm, ignore.case = TRUE)]
+
+  # use the first valid guess matching texcl
+  if (length(possible.name1) == 1) {
+    possible.name1 <- possible.name1[1]
+    return(possible.name1)
+  }
+
+  # alternately, try for something called "texture"
+  possible.name2 <- nm[grep('texture', nm, ignore.case = TRUE)]
+  if (length(possible.name2) > 0) {
+    possible.name2 <- possible.name2[1]
+    return(possible.name2)
+  } else {
+    message('unable to guess column containing horizon texture classes')
+  }
+  return("")
 }
 
 #' Guess Arbitrary Horizon Column Name
