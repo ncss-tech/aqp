@@ -54,11 +54,11 @@ m.rel <- m.rel[order(m.rel$hue, m.rel$value, m.rel$chroma, m.rel$wavelength), ]
 
 
 # subset
-idx <- which(m.rel$munsell %in% c('10YR 3/4', '5YR 4/6'))
+idx <- which(m.rel$munsell %in% c('10YR 3/4', '7.5YR 4/6'))
 s <- m.rel[idx, ]
 
-idx <- which(m.rel$munsell %in% c('10YR 3/1', '10YR 3/2', '10YR 3/4', '10YR 3/6'))
-s <- m.rel[idx, ]
+# idx <- which(m.rel$munsell %in% c('10YR 3/1', '10YR 3/2', '10YR 3/4', '10YR 3/6'))
+# s <- m.rel[idx, ]
 
 
 cols <- parseMunsell(levels(factor(s$munsell)))
@@ -70,6 +70,19 @@ xyplot(reflectance ~ wavelength, groups=munsell, data=s,
        auto.key=list(lines=TRUE, points=FALSE, cex=1, space='right'),
        par.settings=tps
 )
+
+
+# long -> wide
+s.wide <- dcast(s, munsell ~ wavelength, value.var = 'reflectance')
+
+# mix colors by multiplying spectra (simulate subtractive mixture)
+mixed <- s.wide[1, -1] * s.wide[2, -1] 
+
+# probably need to re-scale
+
+# hack to plot mixture...
+plot(s$wavelength, s$reflectance, ylim=c(0, 0.25))
+lines(as.numeric(names(unlist(mixed))), unlist(mixed) * 10, col='red')
 
 
 
