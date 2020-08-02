@@ -30,23 +30,23 @@ Utilize horizon depths, designations and textures in a profile to estimate the t
 # construct a fake profile
 spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxeralfs",
                   hzname   = c("A","AB","Bt","BCt","R"),
-                  hzdept   = c(0,  20, 32, 42,  49), 
-                  hzdepb   = c(20, 32, 42, 49, 200), 
+                  hzdept   = c(0,  20, 32, 42,  49),
+                  hzdepb   = c(20, 32, 42, 49, 200),
                   prop     = c(18, 22, 28, 24,  NA),
                   texcl    = c("l","l","cl", "l","br"),
                   d_value  = c(5,   5,  5,  6,  NA),
                   m_value  = c(2.5, 3,  3,  4,  NA),
                   m_chroma = c(2,   3,  4,  4,  NA))
-                  
+
 # promote to SoilProfileCollection
 depths(spc) <- id ~ hzdept + hzdepb
 hzdesgnname(spc) <- 'hzname'
 hztexclname(spc) <- 'texcl'
 
 # print results in table
-data.frame(id = spc[[idname(spc)]], 
-           thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'), 
-           thickness_req_nobound = mollic.thickness.requirement(spc, 
+data.frame(id = spc[[idname(spc)]],
+           thickness_req = mollic.thickness.requirement(spc, clay.attr='prop'),
+           thickness_req_nobound = mollic.thickness.requirement(spc,
                                         clay.attr='prop', truncate=FALSE))
 
 }

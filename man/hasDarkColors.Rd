@@ -51,7 +51,7 @@ hasDarkColors(
 Boolean value (for each horizon in \code{p}) reflecting whether "darkness" criteria are met.
 }
 \description{
-\code{hasDarkColors} returns a boolean value by horizon representing whether darkness thresholds are met. The code is fully vectorized and deals with missing data and optional thresholds. 
+\code{hasDarkColors} returns a boolean value by horizon representing whether darkness thresholds are met. The code is fully vectorized and deals with missing data and optional thresholds.
 
 Default arguments are set up for "5-3-3 colors" -- the basic criteria for Mollic/Umbric epipedon/mineral soil darkness. Any of the thresholds or column names can be altered. Any thresholds that are set equal to \code{NA} will be ignored.
 }
@@ -59,18 +59,18 @@ Default arguments are set up for "5-3-3 colors" -- the basic criteria for Mollic
 # construct a fake profile
 spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxeralfs",
                   hzdesgn  = c("A","AB","Bt","BCt","R"),
-                  hzdept   = c(0, 20, 32, 42,  49), 
-                  hzdepb   = c(20, 32, 42, 49, 200), 
+                  hzdept   = c(0, 20, 32, 42,  49),
+                  hzdepb   = c(20, 32, 42, 49, 200),
                   d_value  = c(5,   5,  5,  6,  NA),
                   m_value  = c(2.5, 3,  3,  4,  NA),
                   m_chroma = c(2,   3,  4,  4,  NA))
-                  
+
 # promote to SoilProfileCollection
 depths(spc) <- id ~ hzdept + hzdepb
 
 # print results in table
-data.frame(id = spc[[idname(spc)]], 
-           hz_desgn = spc$hzdesgn, 
+data.frame(id = spc[[idname(spc)]],
+           hz_desgn = spc$hzdesgn,
            has_dark_colors = hasDarkColors(spc))
 
 }

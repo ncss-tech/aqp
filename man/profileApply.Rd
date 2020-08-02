@@ -38,7 +38,7 @@ When simplify is TRUE, a vector of length nrow(object) (horizon data) or of leng
 Iterate over all profiles in a SoilProfileCollection, calling \code{FUN} on a single-profile SoilProfileCollection for each step.
 }
 \examples{
- 
+
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 
@@ -83,7 +83,7 @@ site(sp1) <- ~ group
 thicknessFunction <- function(p) {
   hz <- horizons(p)
   depthnames <- horizonDepths(p)
-  res <- data.frame(profile_id(p), hzID(p), 
+  res <- data.frame(profile_id(p), hzID(p),
                     thk=(hz[[depthnames[[2]]]] - hz[[depthnames[1]]]))
   res$hz_prop <- res$thk / sum(res$thk)
   colnames(res) <- c(idname(p), hzidname(p), 'hz_thickness', 'hz_prop')
@@ -98,7 +98,7 @@ head(list.output)
 df.output <- profileApply(sp1, thicknessFunction, frameify = TRUE)
 head(df.output)
 
-# since df.output contains idname(sp1) and hzidname(sp1), 
+# since df.output contains idname(sp1) and hzidname(sp1),
 # it can safely be merged by a left-join via horizons<- setter
 horizons(sp1) <- df.output
 

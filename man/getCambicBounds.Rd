@@ -39,7 +39,7 @@ getCambicBounds(
 A \code{data.frame} containing profile, cambic indexes, along with top and bottom depths.
 }
 \description{
-Find all intervals that are potentially part of a Cambic horizon excluding those that are part of an argillic horizon (defined either by depth interval or \code{getArgillicBounds()}). 
+Find all intervals that are potentially part of a Cambic horizon excluding those that are part of an argillic horizon (defined either by depth interval or \code{getArgillicBounds()}).
 
 There may be multiple cambic horizons (indexes) in a profile. Each cambic index has a top and bottom depth associated: cambic_top and cambic_bottom. This result is designed to be used for single profiles, or with \code{profileApply(..., frameify = TRUE)}
 }
@@ -47,14 +47,14 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
 # construct a fake profile
 spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxerepts",
                   hzname   = c("A","AB","Bw","BC","R"),
-                  hzdept   = c(0,  20, 32, 42,  49), 
-                  hzdepb   = c(20, 32, 42, 49, 200), 
+                  hzdept   = c(0,  20, 32, 42,  49),
+                  hzdepb   = c(20, 32, 42, 49, 200),
                   clay     = c(19, 22, 22, 21,  NA),
                   texcl    = c("l","l","l", "l","br"),
                   d_value  = c(5,   5,  5,  6,  NA),
                   m_value  = c(2.5, 3,  3,  4,  NA),
                   m_chroma = c(2,   3,  4,  4,  NA))
-                  
+
 # promote to SoilProfileCollection
 depths(spc) <- id ~ hzdept + hzdepb
 hzdesgnname(spc) <- 'hzname'
