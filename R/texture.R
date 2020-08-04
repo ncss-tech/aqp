@@ -19,13 +19,15 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
                    stringsAsFactors = FALSE
                    )
   df$silt <- 100 - df$clay - df$sand
+  
 
-
-  # check sand, silt and clay sum to 100
-  idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
-  if (any(idx) & any(complete.cases(df[c("sand", "clay")]))) {
-    warning("some records sand, silt, and clay do not sum to 100 %")
-    }
+  ## TODO: this needs some more work: sum will always be 100, but silt-by-difference may be illogical
+  
+  # # check sand, silt and clay sum to 100
+  # idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
+  # if (any(idx) & any(complete.cases(df[c("sand", "clay")]))) {
+  #   warning("some records sand, silt, and clay do not sum to 100 %")
+  #   }
 
 
   # logic from the particle size estimator calculation from NASIS
