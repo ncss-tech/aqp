@@ -254,7 +254,7 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
 
 
   ## sanity check: profile IDs should be unique
-  if(length(o.s[[new.pID]]) != length(unique(o.s[[new.pID]]))) {
+  if (length(o.s[[new.pID]]) != length(unique(o.s[[new.pID]]))) {
     stop('non-unique profile IDs detected')
   }
 
@@ -267,7 +267,11 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
 
   # rebuild SPC using safe constructors
   depths(res) <- formula(sprintf("%s ~ %s + %s", new.pID, new.hzd[1], new.hzd[2]))
-  site(res) <- .as.data.frame.aqp(o.s, o.df.class)
+  
+  # resorts for case when "joining" only ID (which is only column in site after above line) and depths<- resorted the horizon data
+  #  site and horizons<- allow short circuiting to ensure that site(x)$<- and horizons(x)$<- work
+  site(res) <- .as.data.frame.aqp(o.s, o.df.class)[ match(.coalesce.idx(horizons(res)[[idname(res)]]), o.s[[new.pID]]),]
+  
   diagnostic_hz(res) <- .as.data.frame.aqp(o.d, o.df.class)
   restrictions(res) <- .as.data.frame.aqp(o.r, o.df.class)
 
