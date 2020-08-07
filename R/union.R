@@ -285,6 +285,14 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
   
   # attempt using a common ID
   suppressWarnings(hzidname(res) <- new.hzID)
+  
+  # check validity; try to do a bandaid to fix common problems if possible
+  if (!spc_in_sync(res)$valid) {
+    warning("SoilProfileCollection integrity checks failed after union. This should not happen! Contact the aqp package developers with your use case on the GitHub Issue Page (https://github.com/ncss-tech/aqp/). Attempting to rebuild object...", call. = FALSE)
+    res <- try(rebuildSPC(res))
+  }
+  
+  # if rebuild fails then this will be a try-error
   return(res)
 }
 
