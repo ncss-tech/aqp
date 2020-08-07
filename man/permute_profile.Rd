@@ -4,7 +4,14 @@
 \alias{permute_profile}
 \title{Permute soil horizon depths using boundary distinctness}
 \usage{
-permute_profile(p, n = 100, boundary.attr, min.thickness = 1, soildepth = NULL)
+permute_profile(
+  p,
+  n = 100,
+  boundary.attr,
+  min.thickness = 1,
+  soildepth = NULL,
+  new.idname = ".pID"
+)
 }
 \arguments{
 \item{p}{A single-profile SoilProfileCollection}
@@ -16,6 +23,8 @@ permute_profile(p, n = 100, boundary.attr, min.thickness = 1, soildepth = NULL)
 \item{min.thickness}{Minimum thickness of permuted horizons (default: 1)}
 
 \item{soildepth}{Depth below which horizon depths are not permuted (default: NULL)}
+
+\item{new.idname}{New column name to contain unique profile ID (default: .pID)}
 }
 \value{
 A SoilProfileCollection with n permutations of p.

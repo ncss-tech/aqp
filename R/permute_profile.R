@@ -5,7 +5,7 @@
 #' @param boundary.attr Horizon attribute containing numeric "standard deviations" reflecting boundary transition distinctness
 #' @param min.thickness Minimum thickness of permuted horizons (default: 1)
 #' @param soildepth Depth below which horizon depths are not permuted (default: NULL)
-#'
+#' @param new.idname New column name to contain unique profile ID (default: pID)
 #' @description This method is most "believable" when used to _gently_ permute the data, on the order of moving boundaries a few centimeters in either direction. The nice thing about it is it can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example).
 #'
 #' If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95% of the "volume" of the boundary.
@@ -55,7 +55,7 @@
 
 permute_profile <- function(p, n = 100, boundary.attr,
                             min.thickness = 1,
-                            soildepth = NULL) {
+                            soildepth = NULL, new.idname = 'pID') {
   hz <- horizons(p)
   bounds <- hz[[boundary.attr]]
   depthz <- horizonDepths(p)
@@ -158,8 +158,18 @@ permute_profile <- function(p, n = 100, boundary.attr,
   })
 
   # fast "union" with no checks since we know the origin
+
+  # horizon
   o.h <- do.call('rbind', profiles)
+  # need to remove duped ID from horizon table! only allowed for current ID
+  o.h[[idname(p)]] <- NULL
+  names(o.h)[which(names(o.h) == 'pID')] <- new.idname
+
+  # site
   o.s <- data.frame(site(p), pID = pID, row.names = NULL)
+  names(o.s)[which(names(o.s) == 'pID')] <- new.idname
+
+  # diagnostic
   d <- diagnostic_hz(p)
   o.d <- data.frame()
   if (length(d) != 0) {
@@ -167,6 +177,9 @@ permute_profile <- function(p, n = 100, boundary.attr,
       data.frame(pID = i, d, row.names = NULL)
     }))
   }
+  names(o.d)[which(names(o.d) == 'pID')] <- new.idname
+
+  # restriction
   re <- restrictions(p)
   o.r <- data.frame()
   if (length(re) > 0) {
@@ -174,6 +187,7 @@ permute_profile <- function(p, n = 100, boundary.attr,
       data.frame(pID = i, re, row.names = NULL)
     }))
   }
+  names(o.r)[which(names(o.r) == 'pID')] <- new.idname
 
   # always drop spatial data -- still present in site
   o.sp <- new('SpatialPoints')
@@ -182,7 +196,7 @@ permute_profile <- function(p, n = 100, boundary.attr,
 
   # TODO: alter metadata to reflect the processing done here?
 
-  res <- SoilProfileCollection(idcol='pID', depthcols=horizonDepths(p),
+  res <- SoilProfileCollection(idcol=new.idname, depthcols=horizonDepths(p),
                                metadata=metadat,
                                horizons=o.h, site=o.s, sp=o.sp,
                                diagnostic=o.d, restrictions=o.r)

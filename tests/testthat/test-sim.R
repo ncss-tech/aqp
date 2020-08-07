@@ -59,5 +59,18 @@ test_that("permute_profile() works as expected", {
 
   # expected lengths
   expect_true(length(perp) == 25)
-})
+
+  perp2 <- permute_profile(s, n = 25, "bdy", new.idname = "foo")
+
+  # result is an SPC
+  expect_true(inherits(perp2, 'SoilProfileCollection'))
+
+  # expected lengths
+  expect_true(length(perp2) == 25)
+
+  # custom idname
+  expect_equal(idname(perp2), "foo")
+
+
+  })
 
