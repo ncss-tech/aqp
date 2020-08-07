@@ -235,7 +235,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
     ids <- as.character(horizons(object)[[idname(object)]])
     ids.coalesce <- .coalesce.idx(ids)
 
-	# creation of site data from horizon data
+  	# creation of site data from horizon data
     if (inherits(value, "formula")) {
       mf <- model.frame(value, object@horizons, na.action = na.pass)
       nm <- names(mf)
@@ -249,6 +249,13 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
       # get column names from proposed site, and existing horizons
       ns <- names(value)
       nh <- horizonNames(object)
+
+      # allow short-circuit
+      if (all(colnames(value) %in% siteNames(object)) &
+          nrow(value) == length(object)) {
+        object@site <- value
+        return(object)
+      }
 
       ## remove ID column from names(horizons)
       ID.idx <- match(idname(object), nh)
@@ -467,12 +474,13 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   if (!inherits(value, "data.frame"))
 	  stop("new horizon data input value must inherit from data.frame", call.=FALSE)
 
-  # not required: enforce idname and/or hzidname presence
-  # idnames <- c(idname(object), hzidname(object))
-  # if(!all(idnames %in% names(value)))
-  #   stop(sprintf("new horizon data input value should contain column names: %s",
-  #                paste0(idnames, collapse=",")))
-  #
+  # allow short circuit
+  if (all(colnames(value) %in% horizonNames(object)) &
+      nrow(value) == nrow(object)) {
+    object@horizons <- value
+    return(object)
+  }
+
   # get the corresponding vector of IDs, will be used to compute distinct attributes
   ids <- as.character(horizons(object)[[idname(object)]])
 

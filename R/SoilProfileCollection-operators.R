@@ -379,11 +379,6 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                    if ((!i %in% hznames) &
                        (i %in% stnames | lv == lx)) {
                      if (lv == lx | is.null(value)) {
-                       # if(inherits(x@site, "data.table")) {
-                       #   x@site[,eval(quote(list(i)))] <- value
-                       # } else {
-                       #   x@site[[i]] <- value
-                       # }
                        s <- data.frame(x@site, stringsAsFactors = FALSE)
                        s[[i]] <- value
                        x@site <- .as.data.frame.aqp(s, aqp_df_class(x))
@@ -393,11 +388,6 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                      }
                    } else if (i %in% hznames | lv == nx) {
                      if (lv == nx | is.null(value)) {
-                       # if(inherits(x@horizons, "data.table")) {
-                       #  x@horizons[, eval(substitute(i))] <- value
-                       # } else {
-                       #  x@horizons[[i]] <- value
-                       # }
                        h <- data.frame(x@horizons, stringsAsFactors = FALSE)
                        h[[i]] <- value
                        x@horizons <- .as.data.frame.aqp(h, aqp_df_class(x))
@@ -406,7 +396,8 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection",
                             call. = FALSE)
                      }
                    } else {
-                     stop("new data must match either number of profiles or number of horizons",
+                     if(!is.null(value))
+                       stop("new data must match either number of profiles or number of horizons",
                           call. = FALSE)
                    }
 
@@ -491,7 +482,7 @@ setReplaceMethod("$", signature(x = "SoilProfileCollection"),
                    }
 
                    # working with site data
-                   if(name %in% names(s)) {
+                   if (name %in% names(s)) {
                      s[[name]] <- value
                      x@site <- s
                      return(x)
@@ -502,7 +493,7 @@ setReplaceMethod("$", signature(x = "SoilProfileCollection"),
                    n.hz <- nrow(h)
                    l <- length(value)
 
-                   if(l == n.hz) {
+                   if (l == n.hz) {
                      h[[name]] <- value
                      x@horizons <- h
                      return(x)

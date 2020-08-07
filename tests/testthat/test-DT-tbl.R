@@ -196,6 +196,27 @@ res <- lapply(dfclasses, function(use_class) {
     expect_equal(horizons(test)[[idname(test)]], as.character(cc(lapply(1:4, rep, 10))))
     expect_equal(horizons(test)[[horizonDepths(test)[2]]], cc(rep(1:10, 4)))
 
+    # creating and destroying site and horizon column vectors
+    site(test)$a <- "foo"
+    site(test)[["b"]] <- "bar"
+    horizons(test)$c <- "baz"
+    horizons(test)[["d"]] <- "qux"
+
+    expect_equal(test$a, rep("foo", length(test)))
+    expect_equal(test$b, rep("bar", length(test)))
+    expect_equal(test$c, rep("baz", nrow(test)))
+    expect_equal(test$d, rep("qux", nrow(test)))
+
+    site(test)$a <- NULL
+    site(test)[["b"]] <- NULL
+    test$c <- NULL
+    horizons(test)$d <- NULL
+
+    expect_null(test$a)
+    expect_null(test$b)
+    expect_null(test$c)
+    expect_null(test$d)
+
     # add some horizon data
     value <- test_object(data.frame(
                           id = as.character(2:3),
@@ -209,7 +230,6 @@ res <- lapply(dfclasses, function(use_class) {
       expect_silent({
         horizons(test) <- value
       }),
-
       # note: data.table sorts correctly without invoking re-order
       "data.table" = {
         expect_silent( { horizons(test) <- value } )
