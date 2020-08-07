@@ -22,9 +22,9 @@ contrastChart(
 
 \item{style}{'hue' or 'CC', see details}
 
-\item{returnData}{logical, return lattice figure + data used to generate the figure}
+\item{thresh}{threshold (<) applied to pair-wise comparisons and resulting color chips}
 
-\item{delta-E00}{threshold (<) applied to pair-wise comparisons and resulting color chips}
+\item{returnData}{logical, return lattice figure + data used to generate the figure}
 }
 \description{
 Compare one or more pages from a simulated Munsell book of soil colors to a reference color.
@@ -34,11 +34,11 @@ A simulated Munsell color book page or pages are used to demonstrate color contr
 
 Setting \code{style='hue'} emphasises the contrast classes and CIE delta-E00 of chips adjacent to \code{m}. Setting \code{style='CC'} emphasises adjacent chips according to respective contrast class via lattice panels.
 
-Two-way panels are used when multiple hues are provided and \code{style='CC'}. The default output can be greatly enhanced via: 
-  
+Two-way panels are used when multiple hues are provided and \code{style='CC'}. The default output can be greatly enhanced via:
+
   \code{
-  latticeExtra::useOuterStrips(..., 
-                               strip = strip.custom(bg=grey(0.85)), 
+  latticeExtra::useOuterStrips(...,
+                               strip = strip.custom(bg=grey(0.85)),
                                strip.left = strip.custom(bg=grey(0.85))
                               )
   }

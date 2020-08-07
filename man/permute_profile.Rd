@@ -10,7 +10,7 @@ permute_profile(
   boundary.attr,
   min.thickness = 1,
   soildepth = NULL,
-  new.idname = ".pID"
+  new.idname = "pID"
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ permute_profile(
 
 \item{soildepth}{Depth below which horizon depths are not permuted (default: NULL)}
 
-\item{new.idname}{New column name to contain unique profile ID (default: .pID)}
+\item{new.idname}{New column name to contain unique profile ID (default: pID)}
 }
 \value{
 A SoilProfileCollection with n permutations of p.
