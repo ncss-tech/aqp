@@ -252,8 +252,9 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 
       # allow short-circuit
       if (all(colnames(value) %in% siteNames(object)) &
+          idname(object) %in% colnames(value) &
           nrow(value) == length(object)) {
-        object@site <- value
+        object@site <- .as.data.frame.aqp(value, aqp_df_class(object))
         return(object)
       }
 
@@ -474,10 +475,11 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   if (!inherits(value, "data.frame"))
 	  stop("new horizon data input value must inherit from data.frame", call.=FALSE)
 
-  # allow short circuit
+  # allow short-circuit
   if (all(colnames(value) %in% horizonNames(object)) &
+      all(c(idname(object), hzidname(object), horizonDepths(object)) %in% colnames(value)) &
       nrow(value) == nrow(object)) {
-    object@horizons <- value
+    object@horizons <- .as.data.frame.aqp(value, aqp_df_class(object))
     return(object)
   }
 
