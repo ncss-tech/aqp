@@ -249,12 +249,15 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
       # get column names from proposed site, and existing horizons
       ns <- names(value)
       nh <- horizonNames(object)
-
-      # allow short-circuit
+      
+      # site and horizons<- allow short circuiting to ensure that site(x)$<- and horizons(x)$<- work
       if (all(colnames(value) %in% siteNames(object)) &
           idname(object) %in% colnames(value) &
-          nrow(value) == length(object)) {
-        object@site <- .as.data.frame.aqp(value, aqp_df_class(object))
+          nrow(value) == length(object)) {  
+        
+        # re-sorts for case when "joining" only ID e.g. when unioning SPCs with only profile id in @site
+        sort.idx <- match(profile_id(object), value[[idname(object)]])
+        object@site <- .as.data.frame.aqp(value, aqp_df_class(object))[sort.idx, , drop = FALSE]
         return(object)
       }
 
