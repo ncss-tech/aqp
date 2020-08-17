@@ -254,7 +254,10 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
       if (all(colnames(value) %in% siteNames(object)) &
           idname(object) %in% colnames(value) &
           nrow(value) == length(object)) {  
-        
+        if (!all(value[[idname(object)]] %in% profile_id(object))) {
+          message("Some profile IDs in input data are not present in object and no new columns to merge. Doing nothing.")
+          return(object)
+        }
         # re-sorts for case when "joining" only ID e.g. when unioning SPCs with only profile id in @site
         sort.idx <- match(profile_id(object), value[[idname(object)]])
         object@site <- .as.data.frame.aqp(value, aqp_df_class(object))[sort.idx, , drop = FALSE]
@@ -482,6 +485,10 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   if (all(colnames(value) %in% horizonNames(object)) &
       all(c(idname(object), hzidname(object), horizonDepths(object)) %in% colnames(value)) &
       nrow(value) == nrow(object)) {
+    if (!all(value[[idname(object)]] %in% profile_id(object))) {
+      message("Some profile IDs in input data are not present in object and no new columns to merge. Doing nothing.")
+      return(object)
+    }
     target.order <- order(object@horizons[[idname(object)]], object@horizons[[horizonDepths(object)[1]]])
     input.order <- order(value[[idname(object)]], value[[horizonDepths(object)[1]]])
     idx.order <- match(input.order, target.order)

@@ -243,9 +243,13 @@ res <- lapply(dfclasses, function(use_class) {
     # deliberately mess up order without adding anything
     expect_silent(horizons(test) <- horizons(test)[c(1:10,20:30,11:19,31:40),])
     
-    # horizons fixes the order
+    # horizons<- fixes the order
     expect_true(spc_in_sync(test)$valid)
 
+    # if there is no new data and IDs don't match, a message is issued and object is unchanged
+    hzbad <- horizons(test)
+    hzbad[[idname(test)]] <- paste0("h",1:nrow(hzbad))
+    expect_message(horizons(test) <- hzbad , "Some profile IDs in input data are not present in object and no new columns to merge. Doing nothing.")
 
     ## make sample data using current class type
     data(sp1, package = 'aqp')
