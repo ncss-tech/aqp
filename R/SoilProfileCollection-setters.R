@@ -283,7 +283,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 
       new.id.order <- site.new[[idname(object)]]
       if(any(new.id.order != ids.coalesce)) {
-        message("join condition resulted in sorting of sites, re-applying original order")
+        # message("join condition resulted in sorting of sites, re-applying original order")
         site.new <- site.new[match(ids.coalesce, new.id.order),]
       }
 
