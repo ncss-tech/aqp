@@ -239,6 +239,12 @@ res <- lapply(dfclasses, function(use_class) {
     expect_equal(horizons(test)[[idname(test)]], as.character(cc(lapply(1:4, rep, 10))))
 
     expect_equal(horizons(test)[[horizonDepths(test)[2]]], cc(rep(1:10, 4)))
+    
+    # deliberately mess up order without adding anything
+    expect_silent(horizons(test) <- horizons(test)[c(1:10,20:30,11:19,31:40),])
+    
+    # horizons fixes the order
+    expect_true(spc_in_sync(test)$valid)
 
 
     ## make sample data using current class type

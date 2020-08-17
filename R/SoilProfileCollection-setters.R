@@ -482,7 +482,11 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   if (all(colnames(value) %in% horizonNames(object)) &
       all(c(idname(object), hzidname(object), horizonDepths(object)) %in% colnames(value)) &
       nrow(value) == nrow(object)) {
-    object@horizons <- .as.data.frame.aqp(value, aqp_df_class(object))
+    target.order <- order(object@horizons[[idname(object)]], object@horizons[[horizonDepths(object)[1]]])
+    input.order <- order(value[[idname(object)]], value[[horizonDepths(object)[1]]])
+    idx.order <- match(input.order, target.order)
+    # print(idx.order)
+    object@horizons <- .as.data.frame.aqp(value, aqp_df_class(object))[idx.order,]
     return(object)
   }
 
