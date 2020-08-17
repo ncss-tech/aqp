@@ -1,10 +1,36 @@
+# aqp 1.24 (2020-08-17)
+* add `returnData` argument to `contrastChart`
+* improvements to `glom(..., invert=TRUE)`, `glomApply, and better tests
+* new wrapper method around `glomApply`: `aqp::trunc` for cases when top and bottom depth interval is the same for all profiles in a _SoilProfileCollection_
+* fix for routing of `NULL` through `$<-` and `horizons<-` or `site<-` (https://github.com/ncss-tech/aqp/issues/163)
+* fix handling of missing metadata in (old) serialized _SoilProfileCollection_ objects
+* fix for promotion of `data.table` with character vector (not formula) interface
+
+# aqp 1.23 (2020-07-14)
+ * enhanced _SoilProfileCollection_ object validity checks via S4; new method `spc_in_sync` (https://github.com/ncss-tech/aqp/pull/152)
+ * optimization of `[` subset method and optional use of `data.table` (https://github.com/ncss-tech/aqp/pull/155)
+ * `depths<-` has been optimized and minimally validates input data
+ * default horizon ID (`hzID`) is now a `character` data type
+ * `aqp::union` uses `depths<-` internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if `union`-ing IDs that "intermingle"  (need to be re-sorted). 
+ * new experimental method is `permute_profile`; similar to `sim` but for boundaries. The interface to this function is likely to change/be expanded.
+ * added `segment` c/o @smroecker
+ * fix for unit-length and zero-length legends in `plotSPC`
+ * fix for `plot` generic to show `aqp::plot` in `?plot`
+
 # aqp 1.22 (2020-06-24)
- * `plotSPC` overhaul (TODO: add descriptions)
- * taxonomic eval code (TODO: add descriptions)
- * soil texture helper code (TODO: add descriptions)
- * bug fixes (TODO: list issues)
- * bug fix in slab when `slab.structure[2] > max(x)`
- * ROSETTA centroids and water retention by texture class
+ * basic support for promotion of `tbl_df` and `data.table` to _SoilProfileCollection_
+ * new method `aqp_df_class` to determine class name in use in a _SoilProfileCollection_ object
+ * `plotSPC` upgrades (https://github.com/ncss-tech/aqp/pull/146)
+ * new methods related to mollic epipedon: `mollic.thickness.requirement`, `hasDarkColors`
+ * new `estimateSoilDepth`-like methods for depth to multiple features via pattern matching: `depthOf`, `minDepthOf`, `maxDepthOf`
+ * soil texture helper functions (`ssc_to_texcl`, `texcl_to_ssc`, `texmod_to_fragvoltot`, `texture_to_taxpartsize`)
+ * optimization of `[i,]` `[,j]` subset methods for _data.frame_-based slots (https://github.com/ncss-tech/aqp/issues/135)
+ * new verbs: `mutate`, `mutate_profile` (https://github.com/ncss-tech/aqp/issues/118)
+ * ROSETTA centroids and water retention by texture class (https://github.com/ncss-tech/aqp/issues/131)
+ * fix for `getSurfaceHorizonDepth` with buried horizons / non-contiguous instances of matching horizons (https://github.com/ncss-tech/aqp/issues/132)
+ * fix for default `plotSPC` with small number of profiles ((https://github.com/ncss-tech/aqp/issues/128)
+ * remove implicit conversion to SpatialPointsDataFrame with unit-length `[` j-index subset ((https://github.com/ncss-tech/aqp/issues/125)
+ * fix in slab when `slab.structure[2] > max(x)`
  
 # aqp 1.19.01 (2020-02-07)
  * proof of concept for tidy SoilProfileCollection subsetting
