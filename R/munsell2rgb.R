@@ -308,4 +308,73 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 
   # default behavior, vector of colors is returned
 	return(res$soil_color)
-	}
+}
+
+
+if (!isGeneric("munsell2spc"))
+  setGeneric("munsell2spc", function(object, ...) standardGeneric("munsell2spc"))
+
+#' Merge Munsell Hue, Value, Chroma converted to RGB & LAB into a SoilProfileCollection 
+#' 
+#' Convert Munsell hue, value and chroma into [R, G, B] and [L, A, B] color coordinates using \code{munsell2rgb}. The converted values are stored in the \code{horizons()} slot unless \code{as.spc} is \code{FALSE}, in which case the results are combined with profile and horizon ID columns and returned as the \code{data.frame} subclass used by the SPC.
+#'  
+#' @param object A SoilProfileCollection
+#' @param hue Column name containing numeric hue values. Default: \code{"hue"}
+#' @param value Column name containing numeric value values. Default: \code{"value"}
+#' @param chroma Column name containing numeric chroma values. Default: \code{"chroma"}
+#' @param as.spc Return a data.frame-like object with ID columns?
+#'
+#' @return A SoilProfileCollection or \code{data.frame}-like object
+#' @aliases munsell2spc
+#' @export munsell2spc,SoilProfileCollection-method
+#'
+#' @examples
+#' 
+#' data(sp3)
+#' depths(sp3) <- id ~ top + bottom
+#' 
+#' # inspect input data
+#' horizons(sp3)[,c("hue","value","chroma")]
+#' 
+#' # do color conversions to RGB and LAB, join into horizon data
+#' sp3 <- munsell2spc(sp3)
+#' 
+#' # plot rgb "R" coordinate by horizon
+#' plot(sp3, color = "rgb_R")
+#' 
+#' # plot lab "A" coordinate by horizon
+#' plot(sp3, color = "lab_A")
+#' 
+setMethod("munsell2spc", signature(object = "SoilProfileCollection"),
+          function(object,
+                   hue = "hue", value = "value", chroma = "chroma",
+                   as.spc = TRUE) {
+            
+  h <- horizons(object)
+  
+  if (!all(c(hue, value, chroma) %in% horizonNames(object)))
+    stop("arguments hue [character], value [numeric] and chroma [numeric] must specify column names in the horizon data", call. = FALSE)
+  
+  # makes a data.frame
+  drgb1 <- t(col2rgb(munsell2rgb(h[[hue]], h[[value]], h[[chroma]])))
+  colnames(drgb1) <- paste0("rgb_", c("R","G","B"))
+  drgb2 <- munsell2rgb(h[[hue]], h[[value]], h[[chroma]], returnLAB = TRUE)
+  colnames(drgb2) <- paste0("lab_", colnames(drgb2))
+  drgb <- cbind(drgb1, drgb2)
+  
+  idn <- idname(object)
+  hidn <- hzidname(object)
+  
+  # munsell2rgb does not return ID names (not inherently aware of the SPC)
+  idcol <- data.frame(h[[idn]], h[[hidn]])
+  colnames(idcol) <- c(idn, hidn)
+  
+  if (as.spc) {
+    # horizons<- will ensure merge.data.table triggers if @horizons is data.table
+    horizons(object) <- cbind(idcol, drgb)
+    
+    return(object)
+  } else {
+    return(.as.data.frame.aqp(cbind(idcol, drgb), aqp_df_class(object)))
+  }
+})

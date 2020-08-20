@@ -161,3 +161,28 @@ test_that("similar colors result in same, closest chip", {
   expect_equal(res$chroma[1], res$chroma[2])
 })
 
+test_that("munsell2SPC wrapper method works as expected", {
+
+  data(sp3)
+  depths(sp3) <- id ~ top + bottom
+
+  # inspect input data
+  # horizons(sp3)[,c("hue","value","chroma")]
+
+  # do color conversions to RGB and LAB, join into horizon data
+  expect_silent( {sp3 <- munsell2spc(sp3)})
+  expect_true(inherits(sp3, 'SoilProfileCollection'))
+
+  # # plot rgb "R" coordinate by horizon
+  # plot(sp3, color = "rgb_R")
+  # 
+  # # plot lab "A" coordinate by horizon
+  # plot(sp3, color = "lab_A")
+  
+  # test returning profile+horizon ID data.frame with results
+  expect_silent( {dftest <- munsell2spc(sp3, as.spc = FALSE)})
+  expect_true(inherits(dftest, 'data.frame'))
+  
+  # foo is not a column in horizons()
+  expect_error( {err1 <- munsell2spc(sp3, hue = "foo")} )
+})
