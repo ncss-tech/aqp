@@ -1,4 +1,5 @@
-# aqp 1.24 (2020-08-17)
+# aqp 1.24 (2020-08-20)
+* two new SoilProfileCollection wrapper methods: munsell2SPC, spc2mpspline
 * add `returnData` argument to `contrastChart`
 * improvements to `glom(..., invert=TRUE)`, `glomApply, and better tests
 * new wrapper method around `glomApply`: `aqp::trunc` for cases when top and bottom depth interval is the same for all profiles in a _SoilProfileCollection_
