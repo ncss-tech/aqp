@@ -219,7 +219,7 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
 # TODO if alpha is greater than maxColorValue, there will be an error
 # convert munsell Hue, Value, Chroma into sRGB
 # user can adjust how rgb() function will return an R-friendly color
-munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE) {
+munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE, colorCoordinates=FALSE) {
 	## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
 
