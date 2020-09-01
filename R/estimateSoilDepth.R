@@ -11,6 +11,12 @@
 #' 
 #' @return single value representing the depth to `contact` or \code{no.contact.assigned}
 #' 
+#' @details The choice of a \code{selection} function usually follows:
+#' 
+#' \code{min}: the top of the first matching horizon, \code{max}: the top bot the last matching horizon, 
+#' or possibly \code{mean}: somewhere in-between.
+#' 
+#' 
 #' @author D.E. Beaudette and J.M. Skovlin
 #' 
 #' @seealso \code{\link{getSoilDepthClass}}, \code{\link{profileApply}}

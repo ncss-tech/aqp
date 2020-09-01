@@ -3,6 +3,7 @@
 getSoilDepthClass <- function(f, depth.classes=c('very.shallow'=25, 'shallow'=50, 'mod.deep'=100, 'deep'=150, 'very.deep'=1000), ...) {
   
   # apply soil-depth finding function
+  # horizon top/bottom depths automatically extracted
   soil.depth <- profileApply(f, estimateSoilDepth, ...)
   
   # convert to 1-column matrix
