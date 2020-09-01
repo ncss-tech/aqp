@@ -90,12 +90,12 @@ p.1 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=HSD$agg, ylab='Dept
 ## TODO:
 # consider filled / open symbols via: pch = HSD$HSD$p.adj < 0.05,
 # automate figures via helper function
-# consider increasing xlim for HSD panel
 
 # experimental HSD viz
 p.2 <- segplot(
   hzn_top ~ lwr + upr, centers = diff, level = p.adj, data = HSD$HSD, 
   col.regions = viridis, ylim = c(105, -5), 
+  xlab = 'HSD',
   at = col.at,
   colorkey = ck,
   panel = function(...) {
@@ -106,15 +106,27 @@ p.2 <- segplot(
 )
 
 
-pp <- c(p.1, p.2, y.same = TRUE, merge.legends = TRUE)
+## this breaks when the data are VERY different, why?
+pp <- c(p.1, p.2, x.same = FALSE, y.same = TRUE, merge.legends = TRUE)
 pp <- update(pp, scales = list(y = list(rot = 0)), ylab = 'Depth (cm)', ylim = c(105, -5))
 pp <- resizePanels(pp, w = c(1, 0.5))
 
 # manually fix panel names
 row.names(pp) <- c('Variable of Interest (units)', 'HSD')
 
-# not too bad
+# wow, this is sometimes required to "fix" the HSD panel
+# https://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plotshttps://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plots
+pp$x.limits[[2]] <- c(min(HSD$HSD$lwr, na.rm = TRUE), max(HSD$HSD$upr, na.rm = TRUE))
+
+# y-axis is perfectly aligned
 pp
+
+
+## alternative approach: not all that much better
+# however, y-axis isn't perfectly alligned
+print(p.1, more = TRUE, position = c(0, 0, 0.66, 1))
+print(p.2, more = FALSE, position = c(0.66, 0, 1, 0.99))
+
 
 
 
@@ -122,7 +134,7 @@ pp
 ## consider adding to panel.depth.function
 
 r <- seq(HSD$min.depth, HSD$max.depth, by = 1)
-cols <- c(grey(0.85), 'royalblue')
+cols <- c(grey(0.85), 'darkgreen')
 idx <- as.numeric(HSD$HSD$p.adj <= 0.05) + 1
 
 p.3 <- p.1 + layer(
