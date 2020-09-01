@@ -29,7 +29,6 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
   }
 
   soildepth <- estimateSoilDepth(f = p, name = hzdesgn,
-                                 top = hz.depths[1], bottom = hz.depths[2],
                                  p = bottom.pattern)
   andisols_flag <- FALSE
   shallow_flag <- FALSE

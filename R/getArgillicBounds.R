@@ -137,8 +137,6 @@ getArgillicBounds <- function(p,
       # (you will need to specify alternate pattern if Cr|R|Cd
       # doesn't match your contacts)
       soil.depth <- estimateSoilDepth(p, name = hzdesgn,
-                                      top = depthcol[1],
-                                      bottom = depthcol[2],
                                       p = bottom.pattern)
 
       # if the last horizon with a t is below the contact (Crt or Rt) or some other weird reason

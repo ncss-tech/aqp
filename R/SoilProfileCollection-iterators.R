@@ -65,7 +65,7 @@ if (!isGeneric("profileApply"))
 #' depths(sp1) <- id ~ top + bottom
 #'
 #' # estimate soil depth using horizon designations
-#' profileApply(sp1, estimateSoilDepth, name='name', top='top', bottom='bottom')
+#' profileApply(sp1, estimateSoilDepth, name='name')
 #'
 #' # scale a single property 'prop' in horizon table
 #' # scaled = (x - mean(x)) / sd(x)

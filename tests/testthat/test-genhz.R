@@ -48,8 +48,8 @@ data(sp3)
 depths(sp3) <- id ~ top + bottom
 
 # crude generalized horizons
-horizons(sp3) <- rbind(data.frame(hzID = sp3[,1]$hzID,     genhz = "A"),
-                       data.frame(hzID = sp3[,2:100]$hzID, genhz = "C"))
+horizons(sp3) <- rbind(data.frame(hzID = sp3[,1]$hzID,     genhz = "A", stringsAsFactors = FALSE),
+                       data.frame(hzID = sp3[,2:100]$hzID, genhz = "C", stringsAsFactors = FALSE))
 # slightly realistic
 sp3$genhz[sp3$clay > 16] <- "Bt"
 
@@ -84,7 +84,7 @@ test_that("hzTransitionProbabilities works as expected", {
 test_that("evalGenHZ works as expected", {
   res <- evalGenHZ(sp3, genhz = "genhz", vars = "clay")
   expect_equal(names(res), c("horizons","stats","dist"))
-  expect_equal(res$stats$clay, c("11.26 (3.46)", "28.29 (11.49)", "8.3 (1.74)"))
+  expect_equal(as.character(res$stats$clay), c("11.26 (3.46)", "28.29 (11.49)", "8.3 (1.74)"))
 })
 
 test_that("generalize.hz works as expected", {
