@@ -61,8 +61,10 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   opt.original <- options(stringsAsFactors = FALSE)
   
   # test for logical input
-  if(! inherits(fm, "formula"))
+  if(! inherits(fm, "formula")) {
     stop('must provide a valid formula: ~ var1 + var2 + ...', call.=FALSE)
+  }
+    
 
   # extract components of the formula:
   formula <- str_c(deparse(fm, 500), collapse="")
@@ -173,13 +175,10 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     return(SpatialPointsDataFrame(coordinates(object), data=hd.slices, match.ID=FALSE))
     }
   
+  ## otherwise return an SPC, be sure to copy over the spatial data
   
-  ## TODO: profile IDs can be re-sorted here, integer -> character conversion?
-  ##       https://github.com/ncss-tech/aqp/issues/90
-  
-  # otherwise return an SPC, be sure to copy over the spatial data
-  # NOTE: suppressing warning due to non-unique horizon IDs, don't panic
-  suppressWarnings(depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom)))
+  # init new SPC
+  depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom))
   
   # reset auto-generated horizon ID so that we know it is now the slice ID
   idx <- match(hzidname(hd.slices), horizonNames(hd.slices))
@@ -189,17 +188,30 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   # copy spatial data
   hd.slices@sp <- object@sp
   
-  # if site data: return an SPC + @site
-  # note that we should have a proper setter for this
-  if(nrow(site(object)) > 0 )
-    hd.slices@site <- site(object)
+  # safely copy site data via JOIN
+  site(hd.slices) <- site(object)
   
   # copy over any diagnostic features/restrictions
-  diagnostic_hz(hd.slices) <- diagnostic_hz(object)
-  restrictions(hd.slices) <- restrictions(object)
+  hd.slices@diagnostic <- object@diagnostic
+  hd.slices@restrictions <- object@restrictions
   
   # copy over metadata
-  metadata(hd.slices) <- metadata(object)
+  hd.slices@metadata <- object@metadata
+  
+  ## un-set horizon designation and texture class metadata if they aren't in the sliced data
+  hn <- horizonNames(hd.slices)
+  
+  # hz designation
+  # this will be TRUE if hzdesgnname(object) is unset ('')
+  if(! hzdesgnname(object) %in% hn) {
+    hzdesgnname(hd.slices) <- ''
+  }
+  
+  # texture class
+  # this will be TRUE if hztexclname(object) is unset ('')
+  if(! hztexclname(object) %in% hn) {
+    hztexclname(hd.slices) <- ''
+  }
   
   # reset options:
   options(opt.original)
