@@ -135,7 +135,7 @@ pp <- update(pp, scales = list(y = list(rot = 0)), ylab = 'Depth (cm)', ylim = c
 pp <- resizePanels(pp, w = c(1, 0.5))
 
 # manually fix panel names
-row.names(pp) <- c('Variable of Interest (units)', 'HSD')
+row.names(pp) <- c('Base Saturation ph 8.2 (%)', 'HSD')
 
 # wow, this is sometimes required to "fix" the HSD panel
 # https://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plotshttps://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plots
