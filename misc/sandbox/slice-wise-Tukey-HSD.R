@@ -6,8 +6,6 @@ library(latticeExtra)
 library(viridis)
 library(grid)
 
-source('HSD-functions.R')
-
 # define plotting style
 tps <- list(superpose.line=list(col=c('RoyalBlue', 'DarkRed', 'DarkGreen'), lwd=2))
 
