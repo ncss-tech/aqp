@@ -134,7 +134,8 @@ estimateSoilDepth <- function(f, name='hzname', p='Cr|R|Cd', selection = min, no
     }
       
   } else {
-    # contact defined
+    # contact pattern matched
+    # apply selection function
     res <- selection(h[[top]][contact.idx], na.rm=TRUE)
   }
     

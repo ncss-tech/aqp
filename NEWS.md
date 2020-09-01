@@ -1,11 +1,12 @@
-# aqp 1.24 (2020-08-20)
-* two new SoilProfileCollection wrapper methods: munsell2SPC, spc2mpspline
-* add `returnData` argument to `contrastChart`
-* improvements to `glom(..., invert=TRUE)`, `glomApply, and better tests
-* new wrapper method around `glomApply`: `aqp::trunc` for cases when top and bottom depth interval is the same for all profiles in a _SoilProfileCollection_
-* fix for routing of `NULL` through `$<-` and `horizons<-` or `site<-` (https://github.com/ncss-tech/aqp/issues/163)
-* fix handling of missing metadata in (old) serialized _SoilProfileCollection_ objects
-* fix for promotion of `data.table` with character vector (not formula) interface
+# aqp 1.24 (2020-08-31)
+ * `estimateSoilDepth` **loses** `top` and `bottom` arguments, these are automatically extracted
+ * two new SoilProfileCollection wrapper methods: munsell2SPC, spc2mpspline
+ * add `returnData` argument to `contrastChart`
+ * improvements to `glom(..., invert=TRUE)`, `glomApply, and better tests
+ * new wrapper method around `glomApply`: `aqp::trunc` for cases when top and bottom depth interval is the same for all profiles in a _SoilProfileCollection_
+ * fix for routing of `NULL` through `$<-` and `horizons<-` or `site<-` (https://github.com/ncss-tech/aqp/issues/163)
+ * fix handling of missing metadata in (old) serialized _SoilProfileCollection_ objects
+ * fix for promotion of `data.table` with character vector (not formula) interface
 
 # aqp 1.23 (2020-07-14)
  * enhanced _SoilProfileCollection_ object validity checks via S4; new method `spc_in_sync` (https://github.com/ncss-tech/aqp/pull/152)
