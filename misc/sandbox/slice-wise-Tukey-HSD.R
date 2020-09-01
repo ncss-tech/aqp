@@ -11,7 +11,7 @@ tps <- list(superpose.line=list(col=c('RoyalBlue', 'DarkRed', 'DarkGreen'), lwd=
 
 # get multiple series' worth of data
 # TODO: add code to deal with those series that return 0 records
-s <- c('holland', 'pierre')
+s <- c('holland', 'chaix')
 g <- fetchKSSL(s)
 
 # check taxonname for variability
@@ -47,7 +47,7 @@ groupedProfilePlot(g, groups = 'taxonname', color='estimated_oc', group.name.off
 # perform slice-wise Tukey HSD
 # results contain a list of HSD + output from slab
 # also, metadata related to depth intervals and confidence
-HSD <- slicedHSD(g, fm = 0:100 ~ estimated_oc | taxonname, conf = 0.8)
+HSD <- slicedHSD(g, fm = 0:100 ~ bs82 | taxonname, conf = 0.9)
 
 # check: looks good
 lapply(HSD, head)
@@ -106,30 +106,6 @@ p.2 <- segplot(
 )
 
 
-## this breaks when the data are VERY different, why?
-pp <- c(p.1, p.2, x.same = FALSE, y.same = TRUE, merge.legends = TRUE)
-pp <- update(pp, scales = list(y = list(rot = 0)), ylab = 'Depth (cm)', ylim = c(105, -5))
-pp <- resizePanels(pp, w = c(1, 0.5))
-
-# manually fix panel names
-row.names(pp) <- c('Variable of Interest (units)', 'HSD')
-
-# wow, this is sometimes required to "fix" the HSD panel
-# https://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plotshttps://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plots
-pp$x.limits[[2]] <- c(min(HSD$HSD$lwr, na.rm = TRUE), max(HSD$HSD$upr, na.rm = TRUE))
-
-# y-axis is perfectly aligned
-pp
-
-
-## alternative approach: not all that much better
-# however, y-axis isn't perfectly alligned
-print(p.1, more = TRUE, position = c(0, 0, 0.66, 1))
-print(p.2, more = FALSE, position = c(0.66, 0, 1, 0.99))
-
-
-
-
 ## entirely different approach, likely better!
 ## consider adding to panel.depth.function
 
@@ -153,6 +129,37 @@ p.3 <- p.1 + layer(
 # manual intervention
 row.names(p.3) <- 'Variable of Interest (units)'
 
+## merge panels
+pp <- c(p.3, p.2, x.same = FALSE, y.same = TRUE, merge.legends = TRUE)
+pp <- update(pp, scales = list(y = list(rot = 0)), ylab = 'Depth (cm)', ylim = c(105, -5))
+pp <- resizePanels(pp, w = c(1, 0.5))
+
+# manually fix panel names
+row.names(pp) <- c('Variable of Interest (units)', 'HSD')
+
+# wow, this is sometimes required to "fix" the HSD panel
+# https://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plotshttps://stackoverflow.com/questions/34645201/change-x-axis-limits-on-stratigraphic-plots-ie-multi-panel-plots
+pp$x.limits[[2]] <- c(min(HSD$HSD$lwr, na.rm = TRUE), max(HSD$HSD$upr, na.rm = TRUE))
+
+# y-axis is perfectly aligned
+pp
+
+
+## inspect pieces
+p.1
+
+p.2
+
 p.3
+
+
+# ## alternative approach: not all that much better
+# # however, y-axis isn't perfectly alligned
+# print(p.1, more = TRUE, position = c(0, 0, 0.66, 1))
+# print(p.2, more = FALSE, position = c(0.66, 0, 1, 0.99))
+# 
+# 
+
+
 
 
