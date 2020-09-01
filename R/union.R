@@ -81,6 +81,13 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     message("union: one or more input list elements is not a SoilProfileCollection")
   }
 
+  # short circuit: 
+  # stop here if the removal of NULL | NA | non-SPC has resulted in a singleton list
+  if(length(spc) == 1) {
+    return(spc[[1]])
+  }
+  
+  
   # check for non-conformal depth units
   o.depth.units <- unique(lapply(spc, depth_units))
   if(length(o.depth.units) > 1)
@@ -153,7 +160,8 @@ union <- function(spc=list(), method='all', na.rm=TRUE, drop.spatial=FALSE) {
     new.metadata$aqp_hztexcl <- ""
 
   # TODO: need a template for coordinate names if spatial data are present in all
-
+  
+  # starting from the second SPC in the list
   # reset profile ID names in all other objects
   # also reset depth names
   for(i in 2:n.spc) {

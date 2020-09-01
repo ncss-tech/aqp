@@ -173,6 +173,15 @@ test_that("filtering NULL/NA elements", {
   res <- union(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
+  
+  # add NULLs, different arrangement
+  s <- list(x, NULL)
+  
+  # should work
+  res <- union(s)
+  expect_true(inherits(res, 'SoilProfileCollection'))
+  
+  
   # add NAs
   s <- list(NA, x, y, NA)
 
