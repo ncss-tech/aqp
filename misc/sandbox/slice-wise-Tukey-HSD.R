@@ -46,82 +46,76 @@ groupedProfilePlot(g, groups = 'taxonname', color='estimated_ph_h2o', group.name
 groupedProfilePlot(g, groups = 'taxonname', color='estimated_oc', group.name.offset = -10, print.id=FALSE)
 
 
-##
-## move the following into a specialized function 
-##
+# perform slice-wise Tukey HSD
+# results contain a list of HSD + output from slab
+# also, metadata related to depth intervals and confidence
+HSD <- slicedHSD(g, fm = 0:100 ~ estimated_oc | taxonname, conf = 0.8)
+
+# check: looks good
+lapply(HSD, head)
 
 
-## aqp TODO: 
-# * hzdesgn / horizon texture class are not preserved over slice (should it be?)
-# [, i] expects it to be (should it?)
-#
+## attempt to vizualize this stuff
 
-# don't enforce strict horizon depth checking
-# use results with caution
-s <- slice(g, 0:100 ~ hzn_desgn + lab_texture_class + estimated_oc, strict = FALSE)
-
-# aggregate by taxoname to check depth patterns
-a <- slab(g, fm = taxonname ~ estimated_oc, slab.structure = 0:100)
-
-
-
-
-# iterate over slice-index and perform Tukey's HSD
-# this likely violates the "multiple comparison" criteria... but I am not a statistician
-HSD <- lapply(1:100, slicedHSD, var = 'estimated_oc', group = 'taxonname', conf = 0.95)
-
-# list -> DF
-HSD <- do.call('rbind', HSD)
-
-# check: not too bad
-head(HSD)
-
-## TODO: there must be something better...
 # color segments according to p.adj
 col.at <- c(0, 0.05, 0.1, 0.5, 1)
 
+# manually created color key
 ck <- list(
   at = col.at,
   labels = list(
     at = col.at,
     labels = col.at, 3,
-    rot = 45
+    rot = 0
   ),
-  space = 'bottom',
-  height = 0.5, width = 1.5
+  space = 'right',
+  height = 0.75, width = 1.5
 )
 
 
-p.1 <- segplot(
-  top ~ lwr + upr, centers = diff, level = p.adj, data = HSD, 
+# standard output from slab()
+p.1 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=HSD$agg, ylab='Depth',
+              xlab='median bounded by 25th and 75th percentiles',
+              lower=HSD$agg$p.q25, upper=HSD$agg$p.q75, ylim=c(105, -5),
+              panel=panel.depth_function, alpha=0.25, sync.colors=TRUE,
+              prepanel=prepanel.depth_function,
+              cf=HSD$agg$contributing_fraction,
+              par.strip.text=list(cex=0.8),
+              strip=strip.custom(bg=grey(0.85)),
+              scales=list(x=list(alternating=1, relation='free'), y=list(alternating=3)),
+              par.settings=tps,
+              auto.key=list(columns=2, lines=TRUE, points=FALSE)
+)
+
+
+
+## TODO:
+# consider filled / open symbols via: pch = HSD$HSD$p.adj < 0.05,
+# automate figures via helper function
+#
+
+# experimental HSD viz
+p.2 <- segplot(
+  hzn_top ~ lwr + upr, centers = diff, level = p.adj, data = HSD$HSD, 
   col.regions = viridis, ylim = c(105, -5), 
   at = col.at,
   colorkey = ck,
   panel = function(...) {
-    panel.abline(v=0, lty = 3)
+    panel.grid(h = -1, v = -1, lty = 3, col = 1)
+    panel.abline(v=0, lwd = 2)
     panel.segplot(...)
   }
 )
 
-# plot grouped, aggregate data
-p.2 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=a, ylab='Depth',
-       xlab='median bounded by 25th and 75th percentiles',
-       lower=a$p.q25, upper=a$p.q75, ylim=c(105, -5),
-       panel=panel.depth_function, alpha=0.25, sync.colors=TRUE,
-       prepanel=prepanel.depth_function,
-       cf=a$contributing_fraction,
-       par.strip.text=list(cex=0.8),
-       strip=strip.custom(bg=grey(0.85)),
-       scales=list(x=list(alternating=1, relation='free'), y=list(alternating=3)),
-       par.settings=tps,
-       auto.key=list(columns=2, lines=TRUE, points=FALSE)
-)
 
-pp <- c(p.1, p.2, y.same = FALSE)
-row.names(pp) <- c('HSD', 'Var')
-pp <- update(pp, scales = list(y = list(rot = 0)), ylab.right = 'Depth (cm)')
-pp <- resizePanels(pp, w = c(0.5, 1))
+pp <- c(p.1, p.2, y.same = TRUE, merge.legends = TRUE)
+pp <- update(pp, scales = list(y = list(rot = 0)), ylab = 'Depth (cm)', ylim = c(105, -5))
+pp <- resizePanels(pp, w = c(1, 0.5))
 
+# manually fix panel names
+row.names(pp) <- c('Variable of Interest (units)', 'HSD')
+
+# not too bad
 pp
 
 
@@ -129,11 +123,11 @@ pp
 ## entirely different approach, likely better!
 ## consider adding to panel.depth.function
 
-r <- seq(0, 100, by = 1)
-cols <- c('grey', 'royalblue')
-idx <- as.numeric(HSD$p.adj <= 0.05) + 1
+r <- seq(HSD$min.depth, HSD$max.depth, by = 1)
+cols <- c(grey(0.85), 'royalblue')
+idx <- as.numeric(HSD$HSD$p.adj <= 0.05) + 1
 
-p.2 + layer(
+p.3 <- p.1 + layer(
   grid.rect(
     x = unit(0.025, 'npc'), 
     y = unit(r[-length(r)], 'native'), 
@@ -146,6 +140,9 @@ p.2 + layer(
     ))
 )
 
+# manual intervention
+row.names(p.3) <- 'Variable of Interest (units)'
 
+p.3
 
 
