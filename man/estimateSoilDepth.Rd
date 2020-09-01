@@ -32,6 +32,12 @@ single value representing the depth to `contact` or \code{no.contact.assigned}
 \description{
 Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}}.
 }
+\details{
+The choice of a \code{selection} function usually follows:
+
+\code{min}: the top of the first matching horizon, \code{max}: the top bot the last matching horizon, 
+or possibly \code{mean}: somewhere in-between.
+}
 \examples{
 data(sp1)
 depths(sp1) <- id ~ top + bottom

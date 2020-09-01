@@ -178,7 +178,9 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   ## otherwise return an SPC, be sure to copy over the spatial data
   
   # init new SPC
-  depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom))
+  # if all horizon attr are requested then a warning will be issued
+  # `hzID` is not a unique horizon ID, using `hzID_`
+  suppressWarnings(depths(hd.slices) <- as.formula(paste(id, '~', top, '+', bottom)))
   
   # reset auto-generated horizon ID so that we know it is now the slice ID
   idx <- match(hzidname(hd.slices), horizonNames(hd.slices))

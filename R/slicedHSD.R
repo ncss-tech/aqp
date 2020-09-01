@@ -37,7 +37,7 @@
 }
 
 
-
+#' @description Safely compute Tukey's HSD within a given slice
 #' @param z data.frame containing basic metadata, horizon top/bottom, variable of interest, and grouping variable
 #' @param aov.fm formula suitable for aov(): variable ~ group
 #' @param conf confidence level for TukeyHSD

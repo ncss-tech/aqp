@@ -90,7 +90,7 @@ p.1 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=HSD$agg, ylab='Dept
 ## TODO:
 # consider filled / open symbols via: pch = HSD$HSD$p.adj < 0.05,
 # automate figures via helper function
-#
+# consider increasing xlim for HSD panel
 
 # experimental HSD viz
 p.2 <- segplot(

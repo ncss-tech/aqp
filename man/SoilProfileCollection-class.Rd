@@ -12,8 +12,8 @@ SoilProfileCollection(
   depthcols = c("top", "bottom"),
   metadata = list(aqp_df_class = "data.frame", aqp_group_by = "", aqp_hzdesgn = "",
     aqp_hztexcl = "", stringsAsFactors = FALSE),
-  horizons = data.frame(id = character(0), hzID = character(0), top = numeric(0), bottom
-    = numeric(0), stringsAsFactors = FALSE),
+  horizons = data.frame(id = character(0), hzID = character(0), top = numeric(0),
+    bottom = numeric(0), stringsAsFactors = FALSE),
   site = data.frame(id = character(0), stringsAsFactors = FALSE),
   sp = new("SpatialPoints"),
   diagnostic = data.frame(stringsAsFactors = FALSE),
