@@ -161,5 +161,41 @@ p.3
 # 
 
 
+## what about LME?
+library(nlme)
+library(rms)
 
+s <- slice(g, 0:25 ~ .)
+horizons(s)$group <- denormalize(s, 'taxonname')
+s$mid <- (s$hzn_top + s$hzn_bot) / 2
+
+z <- horizons(s)
+
+vars <- c('sliceID', 'wmpd', 'group', 'mid')
+idx <- complete.cases(z[, vars])
+z <- z[idx, vars]
+
+dd <- datadist(z)
+options(datadist="dd")
+
+# GLS: I've used this before to parametrize correlation sturcture
+(m.gls <- Gls(wmpd ~ rcs(mid) * group, data = z, correlation = corAR1(form = ~ mid | sliceID)))
+
+plot(Predict(m.gls))
+
+anova(m.gls)
+
+## I don't really know what I am doing here...
+# how to specify the correct random effect structure?
+
+# LME: not sure how to parameterize correlation structure
+# https://bbolker.github.io/mixedmodels-misc/notes/corr_braindump.html
+# this gives a reasonable phi estimate, but clearly something is wrong
+(m.lme <- lme(wmpd ~ group, random = ~ 1 | mid , data = z, correlation = corAR1(form = ~ 1 | mid )))
+
+
+## ??
+anova(m.lme)
+
+intervals(m.lme, which = 'fixed')
 
