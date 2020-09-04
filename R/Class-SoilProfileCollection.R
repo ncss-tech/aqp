@@ -342,7 +342,7 @@ setMethod(f = 'show',
               hzd <- hzdesgnname(object)
               if (length(hzd) > 0) {
                 idx <- match(hzd, names(h))
-                if(length(idx))
+                if (length(idx))
                   h <- .data.frame.j(h, c(names(h)[idx],
                                         names(h)[-idx]),
                                    aqp_df_class(object))
@@ -451,7 +451,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
 
             # don't invoke coercion methods if not needed
             if (!inherits(x, 'data.frame')) {
-              stop(sprintf("input data class %s does not inherit from `data.frame`", class(x)[1]), call.=TRUE)
+              stop(sprintf("input data class %s does not inherit from `data.frame`", class(x)[1]), call. = TRUE)
             }
 
             # note: we handle the possibly NULL/0-length as.class
@@ -461,7 +461,7 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
             test <- all(length(cond) > 0 & cond)
 
             # this happens if a SPC has had its metadata entry wiped out or old SPC object in Rda file
-            if(is.null(test) | is.na(test)) {
+            if (is.null(test) | is.na(test)) {
               as.class <- "data.frame"
               message("missing metadata for aqp_df_class -- run aqp::rebuildSPC(object) to fix slots and metadata")
             } else if (test) {
@@ -512,21 +512,28 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
 
 
 # basic wrapper function for multi-j index subsetting of data.frames compatible with data.table
-.data.frame.j <- function(df, col.names, use_class) {
-  dfnames <- names(df)
-  res <- lapply(dfnames[dfnames %in% col.names], function(nombre) {
-    if(nombre %in% col.names) {
-      df <- data.frame(df[[nombre]], stringsAsFactors = FALSE)
-      names(df) <- nombre
-      return(df)
-    }
+.data.frame.j <- function(dat, col.names, use_class) {
+  dfnames <- names(dat)
+  
+  # allow for re-ordering by column name like data.frame[,j] 
+  dfnamesub <- dfnames[dfnames %in% col.names]
+  dfnamesub <- dfnamesub[match(col.names, dfnamesub)]
+  
+  # access columns one by one in desired order, using "ambivalent" [[ 
+  res <- lapply(dfnamesub, function(new.name) {
+     newcol <- data.frame(dat[[new.name]], stringsAsFactors = FALSE)
+     names(newcol) <- new.name
+     return(newcol)
   })
+  
+  # recombine
   res <- do.call('cbind', res)
-  if(inherits(res, 'data.frame')) {
+  if (inherits(res, 'data.frame')) {
    h <- .as.data.frame.aqp(res, use_class)
    return(h)
   } else {
-    return(df)
+    # return data unchanged if not inheriting from data.frame
+    return(dat)
   }
 }
 
