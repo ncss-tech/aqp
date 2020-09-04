@@ -4,11 +4,11 @@ if (!isGeneric("harmonize"))
 
 #' @title Harmonize a property by profile-level denormalization for convenient visualization or analysis of ranges
 #'
-#' @description  Where calculations are made on a profile basis and ranges or repeated measures are depicted with multi-attribute layers, it is sometimes convenient to be able to "denormalize" to a SoilProfileCollection with fewer attributes but more profiles.
+#' @description It is sometimes convenient to be able to "denormalize" to a SoilProfileCollection with fewer attributes but more profiles. This is helpful wherever calculations are made on a profile basis and ranges or repeated measures are depicted with multiple attributes per soil horizon.
 #' 
 #'  \code{harmonize} is most commonly used for creating "comparison" soil profile sketches with \code{plotSPC} -- where the thematic attribute is derived from multiple data sources or summary statistics (such as quantiles of a property for Low-RV-High). However, the method more generally applies wherever one wants to alias between multiple columns containing "similar" data as input to an algorithm.
 #' 
-#' Data are "harmonized" to a common attribute names specified by the names of list elements in \code{x.names} See examples below.
+#' Data are "harmonized" to a common attribute names specified by the names of list elements in \code{x.names}. Profiles are essentially duplicated. In order to satisfy uniqueness constraints of the SoilProfileCollection, the label from the sub-elements of \code{x.names} are used to disambiguate profiles. A new column in the site table is calculated to reflect these groupings and facilitate filtering. See examples below.
 #'
 #' @param x A SoilProfileCollection.
 #' @param x.names a named list of character vectors specifing target names, profile ID suffixes and source attribute names for harmonization
@@ -19,7 +19,8 @@ if (!isGeneric("harmonize"))
 #' 
 #' @details If attributes reflecting the same or similar property within a soil layer have different names (e.g. \code{socQ05}, \code{socQ50}, \code{socQ95}) it is sometimes inconvenient to work with them as multiple attributes within the same profile. These similar attributes may need to be analyzed together, or in sequence by profile, displayed using the same name or using a common scale. It is also useful to be able to alias different data sources that have the same attributes with different names.
 #' 
-#'  Each list element specifies a single "harmonization," which is comprised of one or more mappings from new to old. Many harmonizations can be specified in a single call as long as they result in common new profile IDs. That is, each harmonization element must contain a named character vector that shares names in common with the other elements. Each named "sub-element" of \code{x.names} specifies the name and attribute to use for updating the profile ID and site table of  the duplicated profiles. 
+#' Each list element in \code{x.names} specifies a single "harmonization," which is comprised of one or more mappings from new to old. Each named "sub-element" of \code{x.names} specifies the name and attribute to use for updating the profile ID and site table of  the duplicated profiles. 
+#' 
 #' @author Andrew G. Brown
 #' @aliases harmonize
 #' @examples
@@ -31,7 +32,12 @@ if (!isGeneric("harmonize"))
 #' 
 #' # assume that p1, p2 and p3 are the low RV and high quantiles for a hypothetical property "foo"
 #' h1 <- harmonize(spc, x.names = list(foo = c(q05 = "p1", q50 = "p2", q95 = "p3")))
+#' 
+#' # inspect result
 #' plot(h1, color = "foo")
+#' 
+#' # filter with calculated "harmonized group" to get just RV profiles
+#' plot(filter(h1, hgroup == "q50"), color="foo")
 #' 
 #' ### single source, two properties at once; with common labels: "method1" "method2"
 #' 
@@ -51,7 +57,7 @@ if (!isGeneric("harmonize"))
 #' 
 #' #' the new labels need not match across harmonizations -- not sure how useful this is but it works
 #' h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),
-#'                                     bar = c(method4 = "p3", method5 = "p4")))
+#'                                     bar = c(method3 = "p3", method4 = "p4")))
 #' plot(h3, color = "foo") # note the pattern of values missing for foo (*_method 3 + 4)
 #' plot(h3, color = "bar") #  likewise for bar (*_method 1 + 2)
 #' 
@@ -73,12 +79,12 @@ if (!isGeneric("harmonize"))
 #' spcs <- lapply(1:10, function(x) aqp::union(lapply(1:3, random_profile, SPC = TRUE)))
 #' 
 #' # randomly varying column name for demo (in each dataset, foo could could be p1 thru p5)
-#' rcolname <- paste0("p", round(runif(100, 1, 5.5)))
+#' rcolname <- paste0("p", round(runif(10, 0.5, 5.5)))
 #' 
 #' # iterate over data sources
 #' bigspc <- aqp::union(lapply(1:length(spcs), function(i) {
 #' 
-#'   # assume each data.source has a unique name for the property "foo"
+#'   # assume each data source has a unique name for the property "foo"
 #'   xn <- rcolname[i]
 #'   
 #'   # set names attribute to be equal to index i [creating unique profile IDs]
