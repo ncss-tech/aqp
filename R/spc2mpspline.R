@@ -1,6 +1,12 @@
+if (!isGeneric("spc2mpspline"))
+  setGeneric("spc2mpspline", function(object, 
+                                      var_name = NULL, 
+                                      pattern = "R|Cr|Cd|qm", 
+                                      hzdesgn = guessHzDesgnName(object), ...)
+    standardGeneric("spc2mpspline"))
+
 #' @title Missing-data-safe, SPC-wide wrapper around mpspline2::mpspline "continuous" 1cm output
 #'
-#' @name spc2mpspline
 #' @description Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with \code{mpspline2::mpspline}. Currently only works with a single attribute.This function will automatically filter profiles with \code{NA} in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggreegated over the full interval where data was available.
 #'
 #' Data completeness is assessed and the input SPC is filtered and truncated to create a container for the 1cm results from \code{mpspline2::mpspline}.
@@ -27,13 +33,6 @@
 #' 
 #' plotSPC(res[1:5,], color = "spline_prop", divide.hz = FALSE)
 #'
-if (!isGeneric("spc2mpspline"))
-  setGeneric("spc2mpspline", function(object, 
-                                      var_name = NULL, 
-                                      pattern = "R|Cr|Cd|qm", 
-                                      hzdesgn = guessHzDesgnName(object), ...)
-    standardGeneric("spc2mpspline"))
-
 setMethod("spc2mpspline", signature(object = "SoilProfileCollection"), 
           function(object, var_name = NULL,
                            pattern = "R|Cr|Cd|qm", 
