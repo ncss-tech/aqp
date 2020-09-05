@@ -309,7 +309,7 @@ setMethod(f = 'show',
 
             # move IDs and depths, horizon designation if available
             hzd <- hzdesgnname(object)
-            if (length(hzd) > 0) {
+            if (hzd != "") {
 
               # registered in a slot
               idx <- match(c(idname(object),
@@ -340,12 +340,10 @@ setMethod(f = 'show',
               # # if defined, move horizon designation to the 3rd column
               # # missing horizon designation evaluates to character(0)
               hzd <- hzdesgnname(object)
-              if (length(hzd) > 0) {
+              if (hzd != "") {
                 idx <- match(hzd, names(h))
                 if (length(idx))
-                  h <- .data.frame.j(h, c(names(h)[idx],
-                                        names(h)[-idx]),
-                                   aqp_df_class(object))
+                  h <- .data.frame.j(h, c(names(h)[idx], names(h)[-idx]), aqp_df_class(object))
               }
 
               # show first n
@@ -358,7 +356,7 @@ setMethod(f = 'show',
             }
 
             # column subseting
-            if(length(hz.show) > 0) {
+            if (length(hz.show) > 0) {
               # generate text explaining truncated summary
               hz.txt <- sprintf(
                 "\n----- Horizons (%s / %s rows  |  %s / %s columns) -----\n",
@@ -1051,8 +1049,12 @@ if (!isGeneric("hzdesgnname"))
 
 ## get column containing horizon designations (there is a setter of same name)
 setMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(metadata(object)$aqp_hzdesgn))
+          function(object) {
+            res <- metadata(object)$aqp_hzdesgn
+            if (length(res) == 0)
+              res <- ""
+            return(res)
+          })
 
 #' Get horizon designation column name
 #'
@@ -1109,8 +1111,12 @@ if (!isGeneric("hztexclname"))
 
 ## get column containing horizon designations (there is a setter of same name)
 setMethod("hztexclname", signature(object = "SoilProfileCollection"),
-          function(object)
-            return(metadata(object)$aqp_hztexcl))
+          function(object) {
+              res <- metadata(object)$aqp_hztexcl
+              if (length(res) == 0)
+                res <- ""
+              return(res)
+            })
 
 #' Get/set unique (sorted) profile IDs
 #'
