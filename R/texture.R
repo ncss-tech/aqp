@@ -62,13 +62,14 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
 
 
 # impute sand, silt, and clay with texcl averages
-texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
+texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
   # fix for R CMD check
   #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
   soiltexture <- NULL
 
   # clay is not NULL
   clay_not_null <- all(!is.null(clay))
+  clay_is_null  <- !clay_not_null
 
   # standardize the inputs
   df <- data.frame(texcl = tolower(as.character(texcl)),
@@ -86,27 +87,44 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
   # check for texcl that don't match
   idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
   if (any(idx)) {
-    warning("not all the texcl supplied match the lookup table")
+    warning("not all the user supplied texcl values match the lookup table")
   }
+  
+  
+  # check clay values within texcl
+  if (clay_not_null) {
+    clay_not_na <- !is.na(df$clay)
+    
+    idx <- paste(df$texcl[clay_not_na], df$clay[clay_not_na]) %in% paste(soiltexture$values$texcl, soiltexture$values$clay)
+    
+    if (any(!idx)) {
+      warning("not all the user supplied clay values fall within the texcl")
+    }
+  }
+  
 
   # check clay ranges 0-100
   idx <- clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)
   if (idx) {
     warning("some clay records < 0 or > 100%")
-    }
+  }
+  
+  
+  # convert fine sand classes to their generic counterparts
+  df <- within(df, {
+    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
+    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
+    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
+  })
+  
 
   # if clay is present
-  if (clay_not_null) {
-    df <- within(df, {
-      texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
-      texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
-      texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
-    })
+  if (clay_not_null & sample == FALSE) {
 
     st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
     st$silt <- 100 - st$clay - st$sand
 
-    # some missing clay
+    # some clay present (compute clay weighted averages)
     idx <- is.na(df$clay)
      if (any(idx)) {
        df_na <- merge(df[idx, c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)[c("texcl", "clay", "rn")]
@@ -115,9 +133,48 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL) {
 
     df <- merge(df[c("texcl", "clay", "rn")], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
   } else {
+    # clay missing (use average)
     df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
   }
-
+  
+  
+  # randomly sample ssc from texcl lookup table 
+  if (sample == TRUE) {
+    
+    if (clay_is_null) df$clay <- NA
+    
+    split(df, df$texcl, drop = TRUE) ->.;
+    lapply(., function(x) {
+      
+      st    <- soiltexture$values
+      
+      # clay present
+      x$idx <- is.na(x$clay)
+      x1 <- x[x$idx == FALSE, ]
+      x2 <- x[x$idx == TRUE,  ]
+      
+      if (clay_not_null) {
+        temp1 <- st[st$texcl == x1$texcl[1] &
+                    st$clay %in% unique(x1$clay), 
+                    ]
+        temp1 <- temp1[sample(1:nrow(temp1), size = nrow(x1), replace = TRUE), ]
+        temp1 <- cbind(x1[x1$idx == FALSE, c("rn", "texcl")], temp1[c("clay", "sand")])
+      } else temp1 <- NULL
+      
+      # clay missing
+      temp2 <- st[st$texcl == x2$texcl[1], ]
+      temp2 <- temp2[sample(1:nrow(temp2), size = nrow(x2), replace = TRUE), ]
+      temp2 <- cbind(x2[x2$idx == TRUE, c("rn", "texcl")], temp2[c("clay", "sand")])
+      
+      return(rbind(temp1, temp2))
+    }) ->.;
+    do.call("rbind", .) -> df
+    df$silt <- 100 - df$clay - df$sand
+    row.names(df) <- NULL
+  }
+  
+  
+  # standardize outputs
   vars <- c("sand", "silt", "clay")
   df <- df[(order(as.integer(df$rn))), vars]
   df$rn    <- NULL
