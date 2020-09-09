@@ -104,8 +104,12 @@ head(tex)
 
 # example of sample = TRUE
 texcl <- rep(c("cl", "sil", "sl"), 10)
-ssc   <- cbind(texcl = texcl, texcl_to_ssc(texcl = texcl, sample = TRUE))
-aggregate(clay ~ sample + texcl, data = temp, summary)
+ssc1 <- cbind(texcl, texcl_to_ssc(texcl = texcl, sample = FALSE))
+ssc2 <- cbind(texcl, texcl_to_ssc(texcl = texcl, sample = TRUE))
+ssc1$sample <- FALSE
+ssc2$sample <- TRUE
+ssc  <- rbind(ssc1, ssc2) 
+aggregate(clay ~ sample + texcl, data = ssc, summary)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
