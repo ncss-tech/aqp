@@ -189,6 +189,8 @@ test_that("SPC graceful failure of spatial operations when data are missing", {
 
 test_that("SPC spatial operations ", {
 
+  skip_if_not_installed("rgdal")
+  
   # init / extract coordinates
   coordinates(sp1) <- ~ x + y
   co <- coordinates(sp1)
