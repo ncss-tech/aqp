@@ -7,9 +7,11 @@ library(scales)
 library(DBI)
 library(RSQLite)
 
-# load soil texture grid points
+## load soil texture grid points
 data("soiltexture", package = 'aqp')
 
+
+## get all soil texture measurements from latest KSSL snapshot
 
 # connect
 db <- dbConnect(RSQLite::SQLite(), 'E:/NASIS-KSSL-LDM/LDM/LDM-compact.sqlite')
@@ -55,13 +57,24 @@ idx <- which(
 
 x <- x[-idx, ]
 
+
+## ~380k recordsa
+nrow(x)
+
+
 # apply texture class rules
 x$class <- ssc_to_texcl(sand = x$SAND, clay = x$CLAY, as.is = TRUE)
-table(x$class)
+sort(round(prop.table(table(x$class)), 2))
 
 # split by class for processing
 cl <- split(x, x$class)
 
+
+## TODO: split this into 
+# 1. data summary
+# 2. data simulation + packaging
+#
+# better to cache the mean/variance for later simulation 
 
 processCompData <- function(i, var = 'class', n = 100) {
   
@@ -70,10 +83,10 @@ processCompData <- function(i, var = 'class', n = 100) {
   # treat as a text label
   this.class <- as.character(i[[var]][1])
   
-  # convert to a compositional object
+  # convert to a closed / proportional composition object
   z <- acomp(i[, 1:3], total = 100)
   
-  # safely compute compositional mean / variance / covariance
+  # safely compute compositional mean / variance-covariance
   mean.comp <- meanCol(z)
   var.comp <- compositions::var(z, robust = FALSE, method = 'pearson')
   
@@ -132,19 +145,33 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
     arrows.show=TRUE
   )
   
-  TT.points(tri.data = zz, geo = TT, col='grey', pch = '.', cex = 0.01)
+  # annotate grid samples
+  # TT.points(tri.data = zz, geo = TT, col='grey', pch = '.', cex = 0.01)
   
+  # full samples, these will extend beyond original class limits
   TT.points(tri.data = ssc$samples.full, geo = TT, col=alpha('royalblue', alpha[1]), cex = 0.5)
   
+  # samples truncated to class boundaries
   TT.points(tri.data = ssc$samples.truncated, geo = TT, col=alpha('firebrick', alpha[2]), pch = 15, cex = 0.5)
   
-  TT.points(tri.data = data.frame(t(ssc$mean)), geo = TT, bg='darkgreen', pch = 22, cex = 1, lwd = 1)
+  # compositional mean
+  TT.points(tri.data = data.frame(t(ssc$mean)), geo = TT, bg='firebrick', pch = 22, cex = 1, lwd = 1)
   
+  # uniform / grid mean
   idx <- which(soiltexture$averages$texcl == ssc$samples.truncated[[tclnm]][1])
   m <- soiltexture$averages[idx, ]
   names(m) <- toupper(names(m))
   
-  TT.points(tri.data = m, geo = TT, bg='orange', pch = 22, cex = 1, lwd = 1)
+  TT.points(tri.data = m, geo = TT, bg='darkgreen', pch = 22, cex = 1, lwd = 1)
+  
+  # uniform / grid samples
+  # same number as simulated
+  ss <- texcl_to_ssc(ssc$samples.truncated[[tclnm]], sample = TRUE)
+  names(ss) <- toupper(names(ss))
+  
+  TT.points(tri.data = ss, geo = TT, col=alpha('darkgreen', alpha[2]), pch = 15, cex = 0.5)
+  
+  legend('topright', legend = c('Uniform / Grid', 'Normal / Compositional'), bty = 'n', pch = 15, col = c('darkgreen', 'firebrick'), horiz = TRUE)
 }
 
 
@@ -161,36 +188,9 @@ plotSummary(z[['scl']], alpha = c(0.215, 0.33))
 plotSummary(z[['sc']], alpha = c(0.215, 0.33))
 plotSummary(z[['s']], alpha = c(0.215, 0.33))
 plotSummary(z[['sicl']], alpha = c(0.215, 0.33))
+plotSummary(z[['l']], alpha = c(0.215, 0.33))
 
 z[['l']]
 
 
-## what?
-texcl_to_ssc('s', sample = 100)
 
-
-# zz <- ssc.i
-# names(zz) <- tolower(names(zz))
-# 
-# textureTriangleSummary(zz[, 1:3], sim = TRUE)
-
-
-# 
-# # plot data
-# # note that there are many arguments used to ajust style
-# TT.plot(
-#   class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
-#   tri.data=z,                 # data.frame with sand, silt, clay values
-#   main= "Soil Textures",          # title
-#   tri.sum.tst=FALSE,            # do not test for exact sum(sand, silt, clay) == 100
-#   cex.lab=0.75,                 # scaling of label text
-#   cex.axis=0.75,                # scaling of axis
-#   cex=0.5,                      # scaling of point symbols
-#   col=alpha('royalblue', 0.125),  # color of point symbols, with transparency
-#   frame.bg.col='white',         # background color
-#   class.lab.col='black',        # color for texture class labels
-#   lwd.axis=1.5,                    # line thickness for axis
-#   arrows.show=TRUE
-# )
-# 
-# 
