@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,14 +120,14 @@
     <p>Color conversion based on a look-up table of common soil colors.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>munsell2rgb</span>(<span class='no'>the_hue</span>, <span class='no'>the_value</span>, <span class='no'>the_chroma</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>1</span>,
-<span class='kw'>maxColorValue</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>returnLAB</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>munsell2rgb</span>(<span class='kw'>the_hue</span>, <span class='kw'>the_value</span>, <span class='kw'>the_chroma</span>, alpha=<span class='fl'>1</span>, 
+maxColorValue=<span class='fl'>1</span>, return_triplets=<span class='fl'>FALSE</span>, returnLAB=<span class='fl'>FALSE</span>)
 
-<span class='fu'>rgb2munsell</span>(<span class='no'>color</span>, <span class='kw'>colorSpace</span><span class='kw'>=</span><span class='st'>'CIE2000'</span>, <span class='kw'>nClosest</span><span class='kw'>=</span><span class='fl'>1</span>)
+<span class='fu'>rgb2munsell</span>(<span class='kw'>color</span>, colorSpace=<span class='st'>'CIE2000'</span>, nClosest=<span class='fl'>1</span>)
 
-<span class='fu'>parseMunsell</span>(<span class='no'>munsellColor</span>, <span class='kw'>convertColors</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>parseMunsell</span>(<span class='kw'>munsellColor</span>, convertColors=<span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>getClosestMunsellChip</span>(<span class='no'>munsellColor</span>, <span class='kw'>convertColors</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>getClosestMunsellChip</span>(<span class='kw'>munsellColor</span>, convertColors=<span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -192,7 +192,7 @@
 <p>Neutral hues are approximated by greyscale shades ranging from 20% (darker) to 80% (lighter). No chroma is required for neutral hues.</p>
 <p>Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.</p>
 <p>Values of "2.5" (common in soil color descriptions) are silently truncated to "2".</p>
-<p>Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB look-up table via <code>getClosestMunsellChip()</code>. See examples below.</p>
+<p>Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via <code>getClosestMunsellChip()</code>. See examples below.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for <code>maxColorValue</code> will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.</p>
@@ -206,107 +206,210 @@
 <a href='http://www.brucelindbloom.com/index.html?ColorCalcHelp.html'>http://www.brucelindbloom.com/index.html?ColorCalcHelp.html</a>
 <a href='http://www.cis.rit.edu/mcsl/online/munsell.php'>http://www.cis.rit.edu/mcsl/online/munsell.php</a>
 <a href='http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html'>http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html</a></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Munsell to sRGB triplets: </span>
 <span class='co'># function is vectorized as long as arguments are the same length</span>
-<span class='no'>color</span> <span class='kw'>&lt;-</span> <span class='fu'>munsell2rgb</span>(<span class='kw'>the_hue</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'10YR'</span>, <span class='st'>'2.5YR'</span>), <span class='kw'>the_value</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>5</span>),
-<span class='kw'>the_chroma</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>6</span>), <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='kw'>color</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2rgb</span>(the_hue=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'10YR'</span>, <span class='st'>'2.5YR'</span>), the_value=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>5</span>), 
+the_chroma=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>6</span>), return_triplets=<span class='fl'>TRUE</span>)
 
 <span class='co'># RGB triplets to closest Munsell color (in sRGB space)</span>
 <span class='co'># function is vectorized</span>
-<span class='fu'>rgb2munsell</span>(<span class='no'>color</span>)</div><div class='output co'>#&gt;     hue value chroma sigma
+<span class='fu'>rgb2munsell</span>(<span class='kw'>color</span>)
+</div><div class='output co'>#&gt;     hue value chroma sigma
 #&gt; 1  10YR     3      5     0
 #&gt; 2 2.5YR     5      6     0</div><div class='input'>
 <span class='co'># neutral heues (N) map to approximate greyscale colors</span>
 <span class='co'># chroma may be any number or NA</span>
-<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>hue</span><span class='kw'>=</span><span class='st'>'N'</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>8</span>, <span class='kw'>chroma</span><span class='kw'>=</span><span class='fl'>NA</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='fu'>munsell2rgb</span>(<span class='no'>g</span>$<span class='no'>hue</span>, <span class='no'>g</span>$<span class='no'>value</span>, <span class='no'>g</span>$<span class='no'>chroma</span>)</div><div class='output co'>#&gt; [1] "#333333FF" "#4D4D4DFF" "#666666FF" "#808080FF" "#999999FF" "#B3B3B3FF"
+<span class='kw'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(hue=<span class='st'>'N'</span>, value=<span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>, chroma=<span class='fl'>NA</span>, stringsAsFactors=<span class='fl'>FALSE</span>)
+<span class='fu'>munsell2rgb</span>(<span class='kw'>g</span><span class='op'>$</span><span class='kw'>hue</span>, <span class='kw'>g</span><span class='op'>$</span><span class='kw'>value</span>, <span class='kw'>g</span><span class='op'>$</span><span class='kw'>chroma</span>)
+</div><div class='output co'>#&gt; [1] "#333333FF" "#4D4D4DFF" "#666666FF" "#808080FF" "#999999FF" "#B3B3B3FF"
 #&gt; [7] "#CCCCCCFF"</div><div class='input'>
 
-<span class='co'># basic example: no factors!</span>
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>hue</span><span class='kw'>=</span><span class='st'>'10YR'</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>8</span>, <span class='kw'>chroma</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fl'>8</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='no'>d</span>$<span class='no'>color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>))
+<span class='co'># basic example</span>
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(hue=<span class='st'>'10YR'</span>, value=<span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>, chroma=<span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>, stringsAsFactors=<span class='fl'>FALSE</span>)
+<span class='kw'>d</span><span class='op'>$</span><span class='kw'>color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
 
 <span class='co'># similar to the 10YR color book page</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>value</span> ~ <span class='no'>chroma</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>d</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>d</span>$<span class='no'>color</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='img'><img src='munsell2rgb-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>value</span> <span class='op'>~</span> <span class='kw'>chroma</span>, data=<span class='kw'>d</span>, col=<span class='kw'>d</span><span class='op'>$</span><span class='kw'>color</span>, pch=<span class='fl'>15</span>, cex=<span class='fl'>3</span>)
+</div><div class='img'><img src='munsell2rgb-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># multiple pages of hue:</span>
-<span class='no'>hues</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'2.5YR'</span>,<span class='st'>'5YR'</span>,<span class='st'>'7.5YR'</span>,<span class='st'>'10YR'</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>hue</span><span class='kw'>=</span><span class='no'>hues</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>8</span>, <span class='kw'>chroma</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>2</span>,<span class='fl'>8</span>,<span class='kw'>by</span><span class='kw'>=</span><span class='fl'>2</span>), <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='no'>d</span>$<span class='no'>color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>))
+<span class='kw'>hues</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'2.5YR'</span>,<span class='st'>'5YR'</span>,<span class='st'>'7.5YR'</span>,<span class='st'>'10YR'</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(hue=<span class='kw'>hues</span>, value=<span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>, chroma=<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>2</span>,<span class='fl'>8</span>,by=<span class='fl'>2</span>), stringsAsFactors=<span class='fl'>FALSE</span>)
+<span class='co'># convert Munsell -&gt; sRGB</span>
+<span class='kw'>d</span><span class='op'>$</span><span class='kw'>color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
 
-
+<span class='co'># extract CIELAB coordinates</span>
+<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>, returnLAB=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt;            L         A         B
+#&gt; 1   20.55436  8.803394  7.082935
+#&gt; 2   20.55897  7.404575  8.620931
+#&gt; 3   20.56333  5.749263 10.048938
+#&gt; 4   20.56675  4.027043 11.088633
+#&gt; 5   30.77683  8.884940  8.661683
+#&gt; 6   30.78129  7.402794 10.088323
+#&gt; 7   30.78488  5.942052 11.199223
+#&gt; 8   30.78856  3.912342 12.210272
+#&gt; 9   41.23454  8.283917  8.798793
+#&gt; 10  41.23956  7.047434 10.475890
+#&gt; 11  41.24347  5.786451 11.738676
+#&gt; 12  41.24855  3.681301 13.297617
+#&gt; 13  51.59454  7.243568  8.356828
+#&gt; 14  51.59928  6.215810  9.916265
+#&gt; 15  51.60314  5.041770 11.129231
+#&gt; 16  51.60822  3.237340 12.698800
+#&gt; 17  61.69922  7.068858  8.505653
+#&gt; 18  61.70415  5.997236 10.102962
+#&gt; 19  61.70852  4.815368 11.485405
+#&gt; 20  61.71385  2.895996 13.088811
+#&gt; 21  71.61412  6.488547  8.042293
+#&gt; 22  71.61977  5.636351  9.928776
+#&gt; 23  71.62480  4.418365 11.531168
+#&gt; 24  71.63044  2.508053 13.229712
+#&gt; 25  81.36368  5.616144  7.308386
+#&gt; 26  81.37052  4.989911  9.656613
+#&gt; 27  81.37637  3.857152 11.564500
+#&gt; 28  81.38258  2.071502 13.487861
+#&gt; 29  20.56344 16.814418 14.488582
+#&gt; 30  20.57184 14.087101 18.201899
+#&gt; 31  20.57891 10.923147 21.406386
+#&gt; 32  20.58452  7.928173 23.958709
+#&gt; 33  30.78889 16.325118 16.933367
+#&gt; 34  30.79580 13.548688 19.547895
+#&gt; 35  30.80201 10.730243 21.982404
+#&gt; 36  30.80768  7.357185 24.027225
+#&gt; 37  41.24892 15.875656 17.613264
+#&gt; 38  41.25710 13.452854 20.845839
+#&gt; 39  41.26403 10.868898 23.591401
+#&gt; 40  41.27066  7.377786 25.999460
+#&gt; 41  51.60995 14.379406 16.918987
+#&gt; 42  51.61858 12.057575 20.148385
+#&gt; 43  51.62525  9.878406 22.663772
+#&gt; 44  51.63296  6.610847 25.480428
+#&gt; 45  61.71555 13.715724 17.028442
+#&gt; 46  61.72377 11.550079 19.982060
+#&gt; 47  61.73075  9.329138 22.491219
+#&gt; 48  61.73915  5.777720 25.372727
+#&gt; 49  71.63198 13.252265 16.950165
+#&gt; 50  71.64089 11.083260 20.102345
+#&gt; 51  71.64852  8.829089 22.803962
+#&gt; 52  71.65754  5.287237 25.868885
+#&gt; 53  81.38522 13.198219 17.685890
+#&gt; 54  81.39402 10.732652 20.649496
+#&gt; 55  81.40177  7.993182 23.189093
+#&gt; 56  81.41025  4.587754 25.953475
+#&gt; 57  20.56911 24.025340 22.305215
+#&gt; 58  20.58071 20.154633 28.579510
+#&gt; 59  20.65437 16.026757 29.909286
+#&gt; 60  20.72129 12.093562 29.790002
+#&gt; 61  30.79796 23.396662 26.027158
+#&gt; 62  30.80674 19.311423 30.215390
+#&gt; 63  30.81408 14.944396 33.703268
+#&gt; 64  30.82068 10.480848 37.016404
+#&gt; 65  41.25969 22.387417 26.284949
+#&gt; 66  41.26934 18.736944 30.686421
+#&gt; 67  41.27724 14.986399 34.346508
+#&gt; 68  41.28482 10.371457 37.715427
+#&gt; 69  51.62348 21.454130 26.339365
+#&gt; 70  51.63431 18.064255 31.110545
+#&gt; 71  51.64277 14.640636 34.876154
+#&gt; 72  51.65181  9.949994 38.814033
+#&gt; 73  61.72975 20.653822 26.129186
+#&gt; 74  61.74123 17.206122 30.852072
+#&gt; 75  61.74994 13.673301 34.361262
+#&gt; 76  61.75969  9.068116 38.346467
+#&gt; 77  71.64771 20.162113 26.320138
+#&gt; 78  71.65925 16.625141 30.792995
+#&gt; 79  71.66887 12.965722 34.519813
+#&gt; 80  71.67921  8.090569 38.448737
+#&gt; 81  81.40098 19.830452 26.729819
+#&gt; 82  81.41250 16.145531 30.970364
+#&gt; 83  81.42235 12.381807 34.598236
+#&gt; 84  81.43302  7.395373 38.445564
+#&gt; 85  20.57257 31.921980 30.642205
+#&gt; 86  20.74440 26.958096 30.631558
+#&gt; 87  20.84986 20.445454 30.389480
+#&gt; 88  20.90081 15.465119 30.183041
+#&gt; 89  30.80405 29.586042 35.965865
+#&gt; 90  30.82143 24.050580 41.566873
+#&gt; 91  30.89446 18.678009 41.171563
+#&gt; 92  30.95077 13.630955 40.806708
+#&gt; 93  41.26804 28.722474 35.806881
+#&gt; 94  41.27823 23.570544 41.040893
+#&gt; 95  41.28692 18.369699 45.792198
+#&gt; 96  41.29905 12.776881 49.524120
+#&gt; 97  51.63422 28.276539 36.322483
+#&gt; 98  51.64596 23.473327 42.230939
+#&gt; 99  51.65521 18.547743 46.905417
+#&gt; 100 51.66414 12.641607 51.309637
+#&gt; 101 61.74098 27.103511 35.136947
+#&gt; 102 61.75451 22.583574 41.614907
+#&gt; 103 61.76468 17.761040 46.355121
+#&gt; 104 61.77496 11.832154 51.154958
+#&gt; 105 71.66031 26.546995 35.435454
+#&gt; 106 71.67345 21.653928 40.984009
+#&gt; 107 71.68472 16.799512 45.947830
+#&gt; 108 71.69579 10.875236 50.760979
+#&gt; 109 79.89559 21.412031 34.482215
+#&gt; 110 80.55378 18.479357 41.439973
+#&gt; 111 81.27596 15.902619 46.764165
+#&gt; 112 81.45209 10.188997 51.368057</div><div class='input'>
 <span class='co'># plot: note that we are setting panel order from red--&gt;yellow</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lattice</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>value</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>chroma</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>hue</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='no'>hues</span>),
-<span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Common Soil Colors"</span>, <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>1</span>), <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>),
-<span class='kw'>strip</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.85</span>)),
-<span class='kw'>data</span><span class='kw'>=</span><span class='no'>d</span>, <span class='kw'>as.table</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>subscripts</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Chroma'</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Value'</span>,
-<span class='kw'>panel</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>subscripts</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='kw'>value</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>chroma</span>) <span class='op'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>hue</span>, levels=<span class='kw'>hues</span>),
+main=<span class='st'>"Common Soil Colors"</span>, layout=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>1</span>), scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(alternating=<span class='fl'>1</span>),
+strip=<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(bg=<span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.85</span>)),
+data=<span class='kw'>d</span>, as.table=<span class='fl'>TRUE</span>, subscripts=<span class='fl'>TRUE</span>, xlab=<span class='st'>'Chroma'</span>, ylab=<span class='st'>'Value'</span>,
+panel=<span class='fu'>function</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>subscripts</span>, <span class='kw'>...</span>)
 {
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.xyplot.html'>panel.xyplot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>d</span>$<span class='no'>color</span>[<span class='no'>subscripts</span>])
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.xyplot.html'>panel.xyplot</a></span>(<span class='kw'>x</span>, <span class='kw'>y</span>, pch=<span class='fl'>15</span>, cex=<span class='fl'>4</span>, col=<span class='kw'>d</span><span class='op'>$</span><span class='kw'>color</span>[<span class='kw'>subscripts</span>])
 }
-)</div><div class='img'><img src='munsell2rgb-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># try again, this time annotate with LAB coordinates:</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>colorspace</span>)) {
-  <span class='no'>d.rgb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>d</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-  <span class='no'>d.lab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='coercion-methods.html'>as</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>d.rgb</span>, <span class='fu'><a href='http://colorspace.R-Forge.R-project.org//reference/sRGB.html'>sRGB</a></span>(<span class='no'>r</span>,<span class='no'>g</span>,<span class='no'>b</span>)), <span class='st'>'LAB'</span>)
-  <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>d</span>, <span class='no'>d.lab</span>@<span class='kw'>coords</span>)
-
-  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>value</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>chroma</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>hue</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='no'>hues</span>),
-  <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Common Soil Colors - Annotated with LAB Coordinates"</span>, <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>1</span>),
-  <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>), <span class='kw'>strip</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.85</span>)),
-  <span class='kw'>data</span><span class='kw'>=</span><span class='no'>d</span>, <span class='kw'>as.table</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>subscripts</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Chroma'</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Value'</span>,
-  <span class='kw'>panel</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>subscripts</span>, <span class='no'>...</span>) {
-    <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.xyplot.html'>panel.xyplot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>7</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>d</span>$<span class='no'>color</span>[<span class='no'>subscripts</span>])
-    <span class='no'>lab.text</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>d</span>[<span class='no'>subscripts</span>, ], <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>L</span>), <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>A</span>), <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>B</span>), <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>'\n'</span>))
-    <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/llines.html'>panel.text</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>labels</span><span class='kw'>=</span><span class='no'>lab.text</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'white'</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>2</span>)
-    }
-  )
-
-  <span class='co'># also demonstrate A ~ hue for each slice of chroma</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>A</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>hue</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='no'>hues</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>value</span>), <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>chroma</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>d</span>,
-  <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>), <span class='kw'>strip</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.85</span>)),
-  <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"A-coordinate vs. Munsell Hue"</span>, <span class='kw'>sub</span><span class='kw'>=</span><span class='st'>'panels are Munsell value, colors are Munsell chroma'</span>,
-  <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Munsell Hue'</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'A-coordinate'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>,
-  <span class='kw'>type</span><span class='kw'>=</span><span class='st'>'b'</span>, <span class='kw'>as.table</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>4</span>))
-
-  }</div><div class='output co'>#&gt; <span class='message'>Loading required package: colorspace</span></div><div class='img'><img src='munsell2rgb-3.png' alt='' width='768' height='475' /></div><div class='input'>
-
+)
+</div><div class='img'><img src='munsell2rgb-2.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'># soils example</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># convert colors</span>
-<span class='no'>sp1</span>$<span class='no'>soil_color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp1</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>))
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1</span>, <span class='fu'>munsell2rgb</span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
 
 <span class='co'># simple plot, may need to tweak gamma-correction...</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>:<span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='no'>sp1</span>)), <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>sp1</span>$<span class='no'>soil_color</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>'Soil Colors'</span>)</div><div class='img'><img src='munsell2rgb-4.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='kw'>sp1</span>)), axes=<span class='fl'>FALSE</span>, col=<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>soil_color</span>, main=<span class='st'>'Soil Colors'</span>)
+</div><div class='img'><img src='munsell2rgb-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># convert into a more useful color space</span>
 <span class='co'># you will need the colorspace package for this to work</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>colorspace</span>)) {
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://colorspace.R-Forge.R-project.org'>colorspace</a></span>)) {
 <span class='co'># keep RGB triplets from conversion</span>
-<span class='no'>sp1.rgb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp1</span>, <span class='fu'>munsell2rgb</span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+<span class='kw'>sp1.rgb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1</span>, <span class='fu'>munsell2rgb</span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>, return_triplets=<span class='fl'>TRUE</span>))
 
 <span class='co'># convert into LAB color space</span>
-<span class='no'>sp1.lab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='coercion-methods.html'>as</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp1.rgb</span>, <span class='fu'><a href='http://colorspace.R-Forge.R-project.org//reference/sRGB.html'>sRGB</a></span>(<span class='no'>r</span>,<span class='no'>g</span>,<span class='no'>b</span>)), <span class='st'>'LAB'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1.lab</span>)
-}</div><div class='img'><img src='munsell2rgb-5.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='kw'>sp1.lab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as.html'>as</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1.rgb</span>, <span class='fu'><a href='http://colorspace.R-Forge.R-project.org//reference/sRGB.html'>sRGB</a></span>(<span class='kw'>r</span>,<span class='kw'>g</span>,<span class='kw'>b</span>)), <span class='st'>'LAB'</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1.lab</span>)
+}
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: colorspace</span></div><div class='img'><img src='munsell2rgb-4.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># convert a non-standard color to closest "chip" in `munsell` look-up table</span>
-<span class='fu'>getClosestMunsellChip</span>(<span class='st'>'7.9YR 2.7/2.0'</span>, <span class='kw'>convertColors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "7.5YR 3/2"</div><div class='input'><span class='co'># convert directly to R color</span>
-<span class='fu'>getClosestMunsellChip</span>(<span class='st'>'7.9YR 2.7/2.0'</span>)</div><div class='output co'>#&gt; [1] "#584537FF"</div><div class='input'>
+<span class='fu'>getClosestMunsellChip</span>(<span class='st'>'7.9YR 2.7/2.0'</span>, convertColors = <span class='fl'>FALSE</span>)
+</div><div class='output co'>#&gt; [1] "7.5YR 3/2"</div><div class='input'><span class='co'># convert directly to R color</span>
+<span class='fu'>getClosestMunsellChip</span>(<span class='st'>'7.9YR 2.7/2.0'</span>)
+</div><div class='output co'>#&gt; [1] "#584537FF"</div><div class='input'>
 <span class='co'>##</span>
 <span class='co'>## demonstrate options for returning sRGB and/or CIE LAB</span>
 <span class='co'>##</span>
 <span class='co'># just sRGB</span>
-<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;           r         g          b
+<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets=<span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt;           r         g          b
 #&gt; 1 0.3817539 0.2599868 0.09323485</div><div class='input'>
 <span class='co'># sRGB + CIE LAB (D65 illuminant)</span>
-<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>returnLAB</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;           r         g          b        L        A        B
+<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets=<span class='fl'>TRUE</span>, returnLAB=<span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt;           r         g          b        L        A        B
 #&gt; 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</div><div class='input'>
 <span class='co'># CIE LAB only</span>
-<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>returnLAB</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;          L        A        B
+<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets=<span class='fl'>FALSE</span>, returnLAB=<span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt;          L        A        B
 #&gt; 1 30.81482 9.000702 30.27227</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -323,7 +426,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

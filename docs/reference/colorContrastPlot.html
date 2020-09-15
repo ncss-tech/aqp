@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,10 +120,10 @@
     <p>A simple display of two sets of colors, NCSS color contrast class and CIE delta-E00.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>colorContrastPlot</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='kw'>col.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col.font</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>d.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-<span class='kw'>cc.font</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>dE00.font</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>),
-<span class='kw'>label.cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>label.font</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>printMetrics</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>colorContrastPlot</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, col.cex = <span class='fl'>1</span>, col.font = <span class='fl'>2</span>, d.cex = <span class='fl'>1</span>, 
+cc.font = <span class='fl'>3</span>, dE00.font = <span class='fl'>1</span>, labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"m1"</span>, <span class='st'>"m2"</span>), 
+label.cex = <span class='fl'>1</span>, label.font = <span class='fl'>1</span>, printMetrics = <span class='fl'>TRUE</span>, 
+<span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,23 +181,28 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function requires the <code>farver</code> package for calculation of CIE delta-E00</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='colorContrast.html'>colorContrast</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># two sets of colors to compare</span>
-<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'10YR 6/3'</span>, <span class='st'>'7.5YR 3/3'</span>, <span class='st'>'10YR 2/2'</span>, <span class='st'>'7.5YR 3/4'</span>)
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span>)
+<span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'10YR 6/3'</span>, <span class='st'>'7.5YR 3/3'</span>, <span class='st'>'10YR 2/2'</span>, <span class='st'>'7.5YR 3/4'</span>)
+<span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span>)
 
 <span class='co'># contrast metrics</span>
-<span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</div><div class='output co'>#&gt;          m1        m2 dH dV dC      dE00        cc
+<span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>)
+</div><div class='output co'>#&gt;          m1        m2 dH dV dC      dE00        cc
 #&gt; 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent
 #&gt; 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint
 #&gt; 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint
 #&gt; 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.054654  Distinct</div><div class='input'>
 <span class='co'># graphical display </span>
-<span class='fu'>colorContrastPlot</span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</div><div class='img'><img src='colorContrastPlot-1.png' alt='' width='768' height='475' /></div></pre>
+<span class='fu'>colorContrastPlot</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>)
+</div><div class='img'><img src='colorContrastPlot-1.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -213,7 +218,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

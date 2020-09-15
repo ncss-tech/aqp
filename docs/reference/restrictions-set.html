@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -138,21 +138,23 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
 
 <span class='co'># promote to SPC</span>
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># assign abrupt textural change to a profile</span>
-<span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hon-21"</span>),
-                      <span class='kw'>restrkind</span> <span class='kw'>=</span> <span class='st'>"abrupt textural change"</span>,
-                      <span class='kw'>restrdep</span> <span class='kw'>=</span> <span class='fl'>46</span>)
+<span class='kw'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hon-21"</span>),
+                      restrkind = <span class='st'>"abrupt textural change"</span>,
+                      restrdep = <span class='fl'>46</span>)
 
-<span class='co'># do left join                       </span>
-<span class='fu'><a href='restrictions.html'>restrictions</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>newdata</span>
+<span class='co'># do left join</span>
+<span class='fu'><a href='restrictions.html'>restrictions</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>newdata</span>
 
-<span class='co'># inspect site table: newvalue TRUE only for horizons </span>
+<span class='co'># inspect site table: newvalue TRUE only for horizons</span>
 <span class='co'>#  with top depth equal to zero</span>
-<span class='fu'><a href='restrictions.html'>restrictions</a></span>(<span class='no'>sp2</span>)</div><div class='output co'>#&gt;       id              restrkind restrdep
+<span class='fu'><a href='restrictions.html'>restrictions</a></span>(<span class='kw'>sp2</span>)
+</div><div class='output co'>#&gt;       id              restrkind restrdep
 #&gt; 1 hon-21 abrupt textural change       46</div><div class='input'>
 </div></pre>
   </div>
@@ -170,7 +172,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

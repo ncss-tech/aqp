@@ -73,7 +73,7 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -118,11 +118,11 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
     </div>
 
     <div class="ref-description">
-    <p>Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in <code><a href='horizonNames.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
+    <p>Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
 <p>e.g. <code>guessHzAttrName(x, attr="clay", optional=c("total", "_r"))</code> matches (<code>claytotal_r == totalclay_r</code>) over (<code>clay_r == claytotal == totalclay</code>) over <code>clay</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guessHzAttrName</span>(<span class='no'>x</span>, <span class='no'>attr</span>, <span class='no'>optional</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>guessHzAttrName</span>(<span class='kw'>x</span>, <span class='kw'>attr</span>, <span class='kw'>optional</span>, verbose = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,28 +147,37 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Character containing horizon attribute column name. Result is the first match in <code><a href='horizonNames.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
+    <p>Character containing horizon attribute column name. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># a has the required attr pattern, but none of the optional</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), <span class='kw'>bottom</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>),
-                <span class='kw'>clay</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>19</span>))
-<span class='fu'>depths</span>(<span class='no'>a</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='fu'>guessHzAttrName</span>(<span class='no'>a</span>, <span class='kw'>attr</span><span class='kw'>=</span><span class='st'>"clay"</span>, <span class='kw'>optional</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>))</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay`</span></div><div class='output co'>#&gt; [1] "clay"</div><div class='input'>
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fl'>1</span>, top = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), bottom=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>),
+                clay=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>19</span>))
+<span class='fu'>depths</span>(<span class='kw'>a</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
+<span class='fu'>guessHzAttrName</span>(<span class='kw'>a</span>, attr=<span class='st'>"clay"</span>, optional=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>))
+</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay`</span></div><div class='output co'>#&gt; [1] "clay"</div><div class='input'>
 <span class='co'># b has requried attr pattern, and one of the opional patterns</span>
 <span class='co'>#   notice that it also contains "clay" but preferentially matches more optional patterns</span>
-<span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), <span class='kw'>bottom</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>),
-                <span class='kw'>clay</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.18</span>,<span class='fl'>0.19</span>), <span class='kw'>clay_r</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>19</span>))
-<span class='fu'>depths</span>(<span class='no'>b</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='fu'>guessHzAttrName</span>(<span class='no'>b</span>, <span class='kw'>attr</span><span class='kw'>=</span><span class='st'>"clay"</span>, <span class='kw'>optional</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>))</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay_r`</span></div><div class='output co'>#&gt; [1] "clay_r"</div><div class='input'>
-<span class='co'># c has total and _r (both optional) on either side of clay </span>
-<span class='co'># having all of the optional patterns plus required is best evidence, and first </span>
+<span class='kw'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fl'>1</span>, top = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), bottom=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>),
+                clay=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.18</span>,<span class='fl'>0.19</span>), clay_r=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>19</span>))
+<span class='fu'>depths</span>(<span class='kw'>b</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
+<span class='fu'>guessHzAttrName</span>(<span class='kw'>b</span>, attr=<span class='st'>"clay"</span>, optional=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>))
+</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay_r`</span></div><div class='output co'>#&gt; [1] "clay_r"</div><div class='input'>
+<span class='co'># c has total and _r (both optional) on either side of clay</span>
+<span class='co'># having all of the optional patterns plus required is best evidence, and first</span>
 <span class='co'># column containing that combination will be returned</span>
-<span class='no'>c</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), <span class='kw'>bottom</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>),
-                <span class='kw'>totalclay_r</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>19</span>), <span class='kw'>claytotal_r</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.18</span>,<span class='fl'>0.19</span>))
-<span class='fu'>depths</span>(<span class='no'>c</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='fu'>guessHzAttrName</span>(<span class='no'>c</span>, <span class='kw'>attr</span><span class='kw'>=</span><span class='st'>"clay"</span>, <span class='kw'>optional</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>))</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `totalclay_r`</span></div><div class='output co'>#&gt; [1] "totalclay_r"</div><div class='input'>
+<span class='kw'>c</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fl'>1</span>, top = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), bottom=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>),
+                totalclay_r=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>19</span>), claytotal_r=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.18</span>,<span class='fl'>0.19</span>))
+<span class='fu'>depths</span>(<span class='kw'>c</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
+<span class='fu'>guessHzAttrName</span>(<span class='kw'>c</span>, attr=<span class='st'>"clay"</span>, optional=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>))
+</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `totalclay_r`</span></div><div class='output co'>#&gt; [1] "totalclay_r"</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -185,7 +194,7 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

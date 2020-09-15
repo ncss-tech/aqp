@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>horizonColorIndices</span>(<span class='no'>p</span>, <span class='kw'>hue</span> <span class='kw'>=</span> <span class='st'>"m_hue"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"m_value"</span>, <span class='kw'>chroma</span> <span class='kw'>=</span> <span class='st'>"m_chroma"</span>)</pre>
+    <pre class="usage"><span class='fu'>horizonColorIndices</span>(<span class='kw'>p</span>, hue = <span class='st'>"m_hue"</span>, value = <span class='st'>"m_value"</span>, chroma = <span class='st'>"m_chroma"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,21 +146,29 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame containing unique pedon and horizon IDs and horizon-level color indices.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew G. Brown.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># promote sp1 data to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># move site data</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
 <span class='co'># compute indices</span>
 <span class='co'># merged into `sp1` with left-join on hzidname(sp1)</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='fu'>horizonColorIndices</span>(<span class='no'>sp1</span>, <span class='kw'>hue</span><span class='kw'>=</span><span class='st'>"hue"</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='st'>"value"</span>, <span class='kw'>chroma</span><span class='kw'>=</span><span class='st'>"chroma"</span>)</div><div class='output co'>#&gt; <span class='message'>join condition resulted in sorting of horizons, re-applying original order</span></div><div class='input'>
+<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='fu'>horizonColorIndices</span>(<span class='kw'>sp1</span>, hue=<span class='st'>"hue"</span>, value=<span class='st'>"value"</span>, chroma=<span class='st'>"chroma"</span>)
+
 <span class='co'># visualize</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'hurst_redness'</span>)</div><div class='img'><img src='horizonColorIndices-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'barron_torrent_redness'</span>)</div><div class='img'><img src='horizonColorIndices-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'buntley_westin'</span>)</div><div class='img'><img src='horizonColorIndices-3.png' alt='' width='768' height='475' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>1</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, color=<span class='st'>'hurst_redness'</span>)
+</div><div class='img'><img src='horizonColorIndices-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, color=<span class='st'>'barron_torrent_redness'</span>)
+</div><div class='img'><img src='horizonColorIndices-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, color=<span class='st'>'buntley_westin'</span>)
+</div><div class='img'><img src='horizonColorIndices-3.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -176,7 +184,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

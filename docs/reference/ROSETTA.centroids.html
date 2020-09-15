@@ -73,7 +73,7 @@ Theoretical water-retention parameters for uniform soil material of each texture
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@ Theoretical water-retention parameters for uniform soil material of each texture
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame:</p><dl'>
+    <p>A data frame:</p><dl>
     
     <dt><code>texture</code></dt><dd><p>soil texture class, ordered from low to high available water holding capacity</p></dd>
     <dt><code>theta_r</code></dt><dd><p>average saturated water content</p></dd>
@@ -160,46 +160,48 @@ Theoretical water-retention parameters for uniform soil material of each texture
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>aqp</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>soilDB</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>latticeExtra</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://ncss-tech.github.io/AQP'>soilDB</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://latticeextra.r-forge.r-project.org'>latticeExtra</a></span>)
 
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ROSETTA.centroids"</span>)
 
 <span class='co'># iterate over horizons and generate VG model curve</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span>:<span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='no'>ROSETTA.centroids</span>), <span class='kw'>function</span>(<span class='no'>i</span>) {
-  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/soilDB/man/KSSL_VG_model.html'>KSSL_VG_model</a></span>(<span class='kw'>VG_params</span> <span class='kw'>=</span> <span class='no'>ROSETTA.centroids</span>[<span class='no'>i</span>, ], <span class='kw'>phi_min</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>, <span class='kw'>phi_max</span><span class='kw'>=</span><span class='fl'>10</span>^<span class='fl'>6</span>)$<span class='no'>VG_curve</span>
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='kw'>ROSETTA.centroids</span>), <span class='fu'>function</span>(<span class='kw'>i</span>) {
+  <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/soilDB/man/KSSL_VG_model.html'>KSSL_VG_model</a></span>(VG_params = <span class='kw'>ROSETTA.centroids</span>[<span class='kw'>i</span>, ], phi_min = <span class='fl'>10</span><span class='op'>^</span><span class='op'>-</span><span class='fl'>3</span>, phi_max=<span class='fl'>10</span><span class='op'>^</span><span class='fl'>6</span>)<span class='op'>$</span><span class='kw'>VG_curve</span>
   <span class='co'># copy generalized hz label</span>
-  <span class='no'>m</span>$<span class='no'>hz</span> <span class='kw'>&lt;-</span> <span class='no'>ROSETTA.centroids</span>$<span class='no'>hz</span>[<span class='no'>i</span>]
+  <span class='kw'>m</span><span class='op'>$</span><span class='kw'>hz</span> <span class='op'>&lt;-</span> <span class='kw'>ROSETTA.centroids</span><span class='op'>$</span><span class='kw'>hz</span>[<span class='kw'>i</span>]
   <span class='co'># copy ID</span>
-  <span class='no'>m</span>$<span class='no'>texture_class</span> <span class='kw'>&lt;-</span> <span class='no'>ROSETTA.centroids</span>$<span class='no'>texture</span>[<span class='no'>i</span>]
-  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>m</span>)
+  <span class='kw'>m</span><span class='op'>$</span><span class='kw'>texture_class</span> <span class='op'>&lt;-</span> <span class='kw'>ROSETTA.centroids</span><span class='op'>$</span><span class='kw'>texture</span>[<span class='kw'>i</span>]
+  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>m</span>)
 })
 
 <span class='co'># copy over lab sample number as ID</span>
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'rbind'</span>, <span class='no'>res</span>)
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'rbind'</span>, <span class='kw'>res</span>)
 
 <span class='co'># check: OK</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>res</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>res</span>)
 
 
 <span class='co'># visual check: OK</span>
-<span class='fu'>xyplot</span>(
-  <span class='no'>phi</span> ~ <span class='no'>theta</span> <span class='kw'>|</span> <span class='no'>texture_class</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>res</span>,
-  <span class='kw'>type</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'l'</span>, <span class='st'>'g'</span>),
-  <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>x</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>tick.number</span><span class='kw'>=</span><span class='fl'>10</span>), <span class='kw'>y</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>log</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>tick.number</span><span class='kw'>=</span><span class='fl'>10</span>)),
-  <span class='kw'>yscale.components</span><span class='kw'>=</span><span class='no'>yscale.components.logpower</span>,
-  <span class='kw'>ylab</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>Suction</span>~~(<span class='no'>kPa</span>)),
-  <span class='kw'>xlab</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>Volumetric</span>~<span class='no'>Water</span>~<span class='no'>Content</span>~~(<span class='no'>cm</span>^<span class='fl'>3</span>/<span class='no'>cm</span>^<span class='fl'>3</span>)),
-  <span class='kw'>par.settings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>superpose.line</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'RoyalBlue'</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)),
-  <span class='kw'>strip</span><span class='kw'>=</span><span class='fu'>strip.custom</span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.85</span>)),
-  <span class='kw'>as.table</span><span class='kw'>=</span><span class='fl'>TRUE</span>
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(
+  <span class='kw'>phi</span> <span class='op'>~</span> <span class='kw'>theta</span> <span class='op'>|</span> <span class='kw'>texture_class</span>, data=<span class='kw'>res</span>, 
+  type=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'l'</span>, <span class='st'>'g'</span>), 
+  scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(alternating=<span class='fl'>3</span>, x=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.number=<span class='fl'>10</span>), y=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(log=<span class='fl'>10</span>, tick.number=<span class='fl'>10</span>)), 
+  yscale.components=<span class='kw'>yscale.components.logpower</span>, 
+  ylab=<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='kw'>Suction</span><span class='op'>~</span><span class='op'>~</span>(<span class='kw'>kPa</span>)), 
+  xlab=<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='kw'>Volumetric</span><span class='op'>~</span><span class='kw'>Water</span><span class='op'>~</span><span class='kw'>Content</span><span class='op'>~</span><span class='op'>~</span>(<span class='kw'>cm</span><span class='op'>^</span><span class='fl'>3</span><span class='op'>/</span><span class='kw'>cm</span><span class='op'>^</span><span class='fl'>3</span>)), 
+  par.settings = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(superpose.line=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(col=<span class='st'>'RoyalBlue'</span>, lwd=<span class='fl'>2</span>)), 
+  strip=<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(bg=<span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.85</span>)), 
+  as.table=<span class='fl'>TRUE</span>
 )
 
 
-}</div></pre>
+}
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -215,7 +217,7 @@ Theoretical water-retention parameters for uniform soil material of each texture
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

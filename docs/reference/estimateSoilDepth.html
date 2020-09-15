@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Estimate Soil Depth</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/estimateSoilDepth.R'><code>R/estimateSoilDepth.R</code></a></small>
     <div class="hidden name"><code>estimateSoilDepth.Rd</code></div>
     </div>
 
@@ -120,91 +120,111 @@
     <p>Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by <code><a href='profileApply.html'>profileApply</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>estimateSoilDepth</span>(<span class='no'>f</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='st'>"hzdept"</span>, <span class='kw'>bottom</span> <span class='kw'>=</span> <span class='st'>"hzdepb"</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='st'>'Cr|R|Cd'</span>,
-<span class='kw'>no.contact.depth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>no.contact.assigned</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>estimateSoilDepth</span>(
+  <span class='kw'>f</span>,
+  name = <span class='st'>"hzname"</span>,
+  p = <span class='st'>"Cr|R|Cd"</span>,
+  selection = <span class='kw'>min</span>,
+  no.contact.depth = <span class='kw'>NULL</span>,
+  no.contact.assigned = <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>f</th>
-      <td><p>A SoilProfileCollection object of length 1, e.g. a single profile</p></td>
+      <td><p>SoilProfileCollection object of length 1, e.g. a single profile</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>the name of the column that contains horizon designations</p></td>
-    </tr>
-    <tr>
-      <th>top</th>
-      <td><p>the name of the column that contains horizon top depths</p></td>
-    </tr>
-    <tr>
-      <th>bottom</th>
-      <td><p>the name of the column that contains horizon bottom depths</p></td>
+      <td><p>name of the column that contains horizon designations</p></td>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>a REGEX pattern for determining contact with bedrock</p></td>
+      <td><p>REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. `Bt`)</p></td>
+    </tr>
+    <tr>
+      <th>selection</th>
+      <td><p>function applied in the presence of multiple matching horizons: <code>min</code> (default), <code>max</code>, <code>mean</code>, etc.</p></td>
     </tr>
     <tr>
       <th>no.contact.depth</th>
-      <td><p>in the absense of contact with bedrock, a depth at which we can assume a standard depth</p></td>
+      <td><p>in the absense of contact matching <code>p</code>, a depth at which we can assume a standard depth-to-contact</p></td>
     </tr>
     <tr>
       <th>no.contact.assigned</th>
-      <td><p>assumed standard depth</p></td>
+      <td><p>value assigned when no contact is encountered at or below <code>no.contact.depth</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a single integer, the soil depth</p>
+    <p>single value representing the depth to `contact` or <code>no.contact.assigned</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The choice of a <code>selection</code> function usually follows:</p>
+<p><code>min</code>: the top of the first matching horizon, <code>max</code>: the top bot the last matching horizon, 
+or possibly <code>mean</code>: somewhere in-between.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='getSoilDepthClass.html'>getSoilDepthClass</a></code>, <code><a href='profileApply.html'>profileApply</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette and J.M. Skovlin</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># apply to each profile in a collection, and save as site-level attribute</span>
-<span class='no'>sp1</span>$<span class='no'>depth</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='no'>sp1</span>, <span class='no'>estimateSoilDepth</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>top</span><span class='kw'>=</span><span class='st'>'top'</span>, <span class='kw'>bottom</span><span class='kw'>=</span><span class='st'>'bottom'</span>)
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>depth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='kw'>sp1</span>, <span class='kw'>estimateSoilDepth</span>, name=<span class='st'>'name'</span>)
 
 <span class='co'># this function can be used to "find" depth to any feature </span>
 <span class='co'># that can be defined via REGEX pattern matching on the horizon name</span>
 <span class='co'># for example, locate the depth to the top "Bt" horizon</span>
 <span class='co'># returning NA when there is no match</span>
-<span class='no'>sp1</span>$<span class='no'>top_Bt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='no'>sp1</span>, <span class='no'>estimateSoilDepth</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>top</span><span class='kw'>=</span><span class='st'>'top'</span>,
-                           <span class='kw'>bottom</span><span class='kw'>=</span><span class='st'>'bottom'</span>, <span class='kw'>p</span><span class='kw'>=</span><span class='st'>'Bt'</span>, <span class='kw'>no.contact.depth</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>no.contact.assigned</span><span class='kw'>=</span><span class='fl'>NA</span>)
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>top_Bt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(
+  <span class='kw'>sp1</span>, <span class='kw'>estimateSoilDepth</span>, 
+  name=<span class='st'>'name'</span>, 
+  p=<span class='st'>'Bt'</span>, 
+  no.contact.depth=<span class='fl'>0</span>, 
+  no.contact.assigned=<span class='fl'>NA</span>
+)
 
 <span class='co'># reduced margins</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='co'># adjust default y-offset and depth scaling for following examples</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>y.offset</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>scaling.factor</span><span class='kw'>=</span><span class='fl'>0.5</span>)</div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>sp1</span>, y.offset=<span class='fl'>10</span>, scaling.factor=<span class='fl'>0.5</span>)
+</div><div class='input'>
 <span class='co'># get plotting parameters for profile widths and depth scaling factors</span>
-<span class='no'>lsp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"last_spc_plot"</span>, <span class='kw'>envir</span> <span class='kw'>=</span> <span class='no'>aqp.env</span>)
+<span class='kw'>lsp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"last_spc_plot"</span>, envir = <span class='kw'>aqp.env</span>)
 
 <span class='co'># positions on x-axis, same for both depth and top "Bt" horizon</span>
-<span class='no'>x.positions</span> <span class='kw'>&lt;-</span> (<span class='fl'>1</span>:<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>sp1</span>)) - <span class='no'>lsp</span>$<span class='no'>width</span>
+<span class='kw'>x.positions</span> <span class='op'>&lt;-</span> (<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>)) <span class='op'>-</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>width</span>
 
 <span class='co'># annotate contact with unicode right-arrow</span>
 <span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span>
-<span class='no'>y.positions</span> <span class='kw'>&lt;-</span> <span class='no'>lsp</span>$<span class='no'>y.offset</span> + (<span class='no'>sp1</span>$<span class='no'>depth</span> * <span class='no'>lsp</span>$<span class='no'>scaling.factor</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>x.positions</span>, <span class='no'>y.positions</span>, <span class='st'>'\u2192'</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>adj</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>1.25</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='input'>
+<span class='kw'>y.positions</span> <span class='op'>&lt;-</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>y.offset</span> <span class='op'>+</span> (<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>depth</span> <span class='op'>*</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>scaling.factor</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span>(<span class='kw'>x.positions</span>, <span class='kw'>y.positions</span>, <span class='st'>'\u2192'</span>, col=<span class='st'>'red'</span>, adj=<span class='fl'>1</span>, cex=<span class='fl'>1.25</span>, lwd=<span class='fl'>2</span>)
+</div><div class='input'>
 <span class='co'># annotate top "Bt" depth with unicode right-arrow</span>
 <span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span>
-<span class='no'>y.positions</span> <span class='kw'>&lt;-</span> <span class='no'>lsp</span>$<span class='no'>y.offset</span> + (<span class='no'>sp1</span>$<span class='no'>top_Bt</span> * <span class='no'>lsp</span>$<span class='no'>scaling.factor</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>x.positions</span>, <span class='no'>y.positions</span>, <span class='st'>'\u2192'</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'blue'</span>, <span class='kw'>adj</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>1.25</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;86&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'â†’' in 'mbcsToSbcs': dot substituted for &lt;92&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for Unicode character U+2192</span></div><div class='img'><img src='estimateSoilDepth-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='kw'>y.positions</span> <span class='op'>&lt;-</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>y.offset</span> <span class='op'>+</span> (<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>top_Bt</span> <span class='op'>*</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>scaling.factor</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span>(<span class='kw'>x.positions</span>, <span class='kw'>y.positions</span>, <span class='st'>'\u2192'</span>, col=<span class='st'>'blue'</span>, adj=<span class='fl'>1</span>, cex=<span class='fl'>1.25</span>, lwd=<span class='fl'>2</span>)
+</div><div class='img'><img src='estimateSoilDepth-1.png' alt='' width='768' height='475' /></div><div class='input'>
 
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>gopheridge</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'soilDB'</span>)
-
-<span class='co'># run on a single profile</span>
-<span class='fu'>estimateSoilDepth</span>(<span class='no'>gopheridge</span>[<span class='fl'>1</span>, ])
-
-<span class='co'># apply to an entire collection</span>
-<span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='no'>gopheridge</span>, <span class='no'>estimateSoilDepth</span>)
-}</div></pre>
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+  <span class='co'># sample data</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>gopheridge</span>, package=<span class='st'>'soilDB'</span>)
+  
+  <span class='co'># run on a single profile</span>
+  <span class='fu'>estimateSoilDepth</span>(<span class='kw'>gopheridge</span>[<span class='fl'>1</span>, ])
+  
+  <span class='co'># apply to an entire collection</span>
+  <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='kw'>gopheridge</span>, <span class='kw'>estimateSoilDepth</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -220,7 +240,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

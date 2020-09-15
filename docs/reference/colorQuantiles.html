@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,8 +120,8 @@
     <p>Estimate central tendency and spread of soil color using marginal quantiles and L1 median of CIELAB coordinates.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>colorQuantiles</span>(<span class='no'>soilColors</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.95</span>))
-<span class='fu'>plotColorQuantiles</span>(<span class='no'>res</span>, <span class='kw'>pt.cex</span><span class='kw'>=</span><span class='fl'>7</span>, <span class='kw'>title</span><span class='kw'>=</span><span class='st'>''</span>, <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1.5</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))</pre>
+    <pre class="usage"><span class='fu'>colorQuantiles</span>(<span class='kw'>soilColors</span>, p = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.95</span>))
+<span class='fu'>plotColorQuantiles</span>(<span class='kw'>res</span>, pt.cex=<span class='fl'>7</span>, title=<span class='st'>''</span>, mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1.5</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,31 +163,35 @@
 <dt>L1</dt><dd><p>L1 median CIELAB (D65) values, closest color and Munsell chip</p></dd>
 
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This is still rather experimental.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># example data, see manual page for details</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp5</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># slice top 25 cm</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>sp5</span>, <span class='fl'>1</span>:<span class='fl'>25</span> ~ <span class='no'>.</span>)
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>sp5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>25</span> <span class='op'>~</span> <span class='kw'>.</span>)
 
 <span class='co'># check some of the data</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>s</span>, <span class='fl'>25</span>), <span class='kw'>divide.hz</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>''</span>, <span class='kw'>print.id</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>width</span><span class='kw'>=</span><span class='fl'>0.5</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>s</span>, <span class='fl'>25</span>), divide.hz=<span class='fl'>FALSE</span>, name=<span class='st'>''</span>, print.id=<span class='fl'>FALSE</span>, width=<span class='fl'>0.5</span>)
 
 <span class='co'># colors</span>
-<span class='fu'><a href='previewColors.html'>previewColors</a></span>(<span class='fu'><a href='unique.html'>unique</a></span>(<span class='no'>s</span>$<span class='no'>soil_color</span>))
+<span class='fu'><a href='previewColors.html'>previewColors</a></span>(<span class='fu'><a href='unique.html'>unique</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>soil_color</span>))
 
 <span class='co'># compute marginal quantiles and L1 median</span>
-<span class='no'>cq</span> <span class='kw'>&lt;-</span> <span class='fu'>colorQuantiles</span>(<span class='no'>s</span>$<span class='no'>soil_color</span>)
+<span class='kw'>cq</span> <span class='op'>&lt;-</span> <span class='fu'>colorQuantiles</span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>soil_color</span>)
 
 <span class='co'># simple graphical display of results</span>
-<span class='fu'>plotColorQuantiles</span>(<span class='no'>cq</span>)
-}</div></pre>
+<span class='fu'>plotColorQuantiles</span>(<span class='kw'>cq</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -203,7 +207,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

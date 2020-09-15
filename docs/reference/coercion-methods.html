@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Coerce SoilProfileCollection with <code>as()</code> — as • aqp</title>
+<title>Coerce SoilProfileCollection with as() — as • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Coerce SoilProfileCollection with <code>as()</code> — as" />
+<meta property="og:title" content="Coerce SoilProfileCollection with as() — as" />
 <meta property="og:description" content="SoilProfileCollections can be coerced to other R object types using as(spc, 'type').
 Possible endpoints include: list, data.frame, SpatialPointsDataFrame and SpatialPoints." />
 
@@ -73,7 +73,7 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -135,20 +135,25 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># load example data stored as SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp5</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># sp5</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>sp5</span>)</div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 11 slots
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>sp5</span>)
+</div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
 #&gt;   ..@ idcol       : chr "soil"
 #&gt;   ..@ hzidcol     : chr "hzID"
-#&gt;   ..@ hzdesgncol  : chr(0) 
-#&gt;   ..@ hztexclcol  : chr(0) 
 #&gt;   ..@ depthcols   : chr [1:2] "top" "bottom"
-#&gt;   ..@ metadata    :List of 4
-#&gt;   .. ..$ depth_units : chr "cm"
-#&gt;   .. ..$ citation    : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__
-#&gt;   .. ..$ dateAdded   : Date[1:1], format: "2018-12-27"
-#&gt;   .. ..$ aqp_df_class: chr "data.frame"
+#&gt;   ..@ metadata    :List of 10
+#&gt;   .. ..$ aqp_df_class    : chr "data.frame"
+#&gt;   .. ..$ aqp_group_by    : chr ""
+#&gt;   .. ..$ aqp_hzdesgn     : chr(0) 
+#&gt;   .. ..$ aqp_hztexcl     : chr(0) 
+#&gt;   .. ..$ depth_units     : chr "cm"
+#&gt;   .. ..$ stringsAsFactors: logi FALSE
+#&gt;   .. ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
+#&gt;   .. ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
+#&gt;   .. ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__
+#&gt;   .. ..$ dateAdded       : Date[1:1], format: "2018-12-27"
 #&gt;   ..@ horizons    :'data.frame':	1539 obs. of  18 variables:
 #&gt;   .. ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...
 #&gt;   .. ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...
@@ -178,17 +183,22 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 #&gt;   ..@ diagnostic  :'data.frame':	0 obs. of  0 variables
 #&gt;   ..@ restrictions:'data.frame':	0 obs. of  0 variables</div><div class='input'>
 <span class='co'># list output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='no'>sp5</span>, <span class='st'>'list'</span>))</div><div class='output co'>#&gt; List of 11
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='kw'>sp5</span>, <span class='st'>'list'</span>))
+</div><div class='output co'>#&gt; List of 9
 #&gt;  $ idcol       : chr "soil"
 #&gt;  $ hzidcol     : chr "hzID"
-#&gt;  $ hzdesgncol  : chr(0) 
-#&gt;  $ hztexclcol  : chr(0) 
 #&gt;  $ depthcols   : chr [1:2] "top" "bottom"
-#&gt;  $ metadata    :List of 4
-#&gt;   ..$ depth_units : chr "cm"
-#&gt;   ..$ citation    : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__
-#&gt;   ..$ dateAdded   : Date[1:1], format: "2018-12-27"
-#&gt;   ..$ aqp_df_class: chr "data.frame"
+#&gt;  $ metadata    :List of 10
+#&gt;   ..$ aqp_df_class    : chr "data.frame"
+#&gt;   ..$ aqp_group_by    : chr ""
+#&gt;   ..$ aqp_hzdesgn     : chr(0) 
+#&gt;   ..$ aqp_hztexcl     : chr(0) 
+#&gt;   ..$ depth_units     : chr "cm"
+#&gt;   ..$ stringsAsFactors: logi FALSE
+#&gt;   ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
+#&gt;   ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
+#&gt;   ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__
+#&gt;   ..$ dateAdded       : Date[1:1], format: "2018-12-27"
 #&gt;  $ horizons    :'data.frame':	1539 obs. of  18 variables:
 #&gt;   ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...
 #&gt;   ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...
@@ -218,7 +228,8 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 #&gt;  $ diagnostic  :'data.frame':	0 obs. of  0 variables
 #&gt;  $ restrictions:'data.frame':	0 obs. of  0 variables</div><div class='input'>
 <span class='co'># data.frame output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='no'>sp5</span>, <span class='st'>'data.frame'</span>))</div><div class='output co'>#&gt; 'data.frame':	1539 obs. of  18 variables:
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='kw'>sp5</span>, <span class='st'>'data.frame'</span>))
+</div><div class='output co'>#&gt; 'data.frame':	1539 obs. of  18 variables:
 #&gt;  $ soil      : chr  "soil1" "soil1" "soil1" "soil1" ...
 #&gt;  $ sand      : num  32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...
 #&gt;  $ silt      : num  10.9 11.2 11.6 10.9 10.8 ...
@@ -239,11 +250,12 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 #&gt;  $ hzID      : chr  "1" "2" "3" "4" ...</div><div class='input'>
 <span class='co'># Spatial Objects</span>
 <span class='co'># make some random coordinate data for each profile</span>
-<span class='no'>sp5</span>$<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>sp5</span>$<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>sp5</span>))
-<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='no'>sp5</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>x</span> + <span class='no'>y</span>
+<span class='kw'>sp5</span><span class='op'>$</span><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>sp5</span><span class='op'>$</span><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp5</span>))
+<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='kw'>y</span>
 
 <span class='co'># SpatialPointsDataFrame output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='no'>sp5</span>, <span class='st'>'SpatialPointsDataFrame'</span>))</div><div class='output co'>#&gt; <span class='message'>only site data are extracted</span></div><div class='output co'>#&gt; Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='kw'>sp5</span>, <span class='st'>'SpatialPointsDataFrame'</span>))
+</div><div class='output co'>#&gt; <span class='message'>only site data are extracted</span></div><div class='output co'>#&gt; Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
 #&gt;   ..@ data       :'data.frame':	296 obs. of  1 variable:
 #&gt;   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...
 #&gt;   ..@ coords.nrs : num(0) 
@@ -258,7 +270,8 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 #&gt;   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
 #&gt;   .. .. ..@ projargs: chr NA</div><div class='input'>
 <span class='co'># SpatialPoints output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='no'>sp5</span>, <span class='st'>'SpatialPoints'</span>))</div><div class='output co'>#&gt; Formal class 'SpatialPoints' [package "sp"] with 3 slots
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>as</span>(<span class='kw'>sp5</span>, <span class='st'>'SpatialPoints'</span>))
+</div><div class='output co'>#&gt; Formal class 'SpatialPoints' [package "sp"] with 3 slots
 #&gt;   ..@ coords     : num [1:296, 1:2] -1.40004 0.25532 -2.43726 -0.00557 0.62155 ...
 #&gt;   .. ..- attr(*, "dimnames")=List of 2
 #&gt;   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...
@@ -284,7 +297,7 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -81,23 +81,31 @@
 <p><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('aqp', dep=TRUE)</a></code></p>
 <p>Get the development version from Github, after installing the CRAN version + dependencies:</p>
 <p><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)</a></code></p>
+<!-- aqp hexsticker! -->
+<p><a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png"> <img src="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width="45%" height="45%" hspace="15" vspace="15" align="right"></a></p>
 </div>
 <div id="website" class="section level2">
 <h2 class="hasAnchor">
 <a href="#website" class="anchor"></a>Website</h2>
-<p><a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a></p>
+<p><a href="http://ncss-tech.github.io/AQP/">http://ncss-tech.github.io/AQP/</a></p>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode" id="cb1"><pre class="r">library(aqp)
-data(sp4)
-depths(sp4) </pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ncss-tech/aqp">aqp</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">sp4</span>)
+<span class="fu">depths</span>(<span class="kw">sp4</span>) <span class="op">&lt;-</span> <span class="kw">id</span> <span class="op">~</span> <span class="kw">top</span> <span class="op">+</span> <span class="kw">bottom</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">0</span>))
+<span class="fu"><a href="reference/plotSPC.html">plot</a></span>(<span class="kw">sp4</span>, color=<span class="st">'clay'</span>)
+<span class="fu"><a href="reference/plotSPC.html">plot</a></span>(<span class="kw">sp4</span>, color=<span class="st">'CF'</span>)
+</pre></div>
 </div>
 <div id="citation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#citation" class="anchor"></a>Citation</h2>
-<p>D.E. Beaudette, P. Roudier, A.T. OâGeen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers &amp; Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004, <a href="http://dx.doi.org/10.1016/j.cageo.2012.10.020" class="uri">http://dx.doi.org/10.1016/j.cageo.2012.10.020</a>.</p>
+<p>D.E. Beaudette, P. Roudier, A.T. O’Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers &amp; Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004, <a href="http://dx.doi.org/10.1016/j.cageo.2012.10.020" class="uri">http://dx.doi.org/10.1016/j.cageo.2012.10.020</a>.</p>
 </div>
 <div id="related-packages" class="section level2">
 <h2 class="hasAnchor">
@@ -176,7 +184,7 @@ depths(sp4) </pre></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

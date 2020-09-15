@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>This function makes an (educated) guess at an appropriate set of levels for generalized horizon labels using the median of horizon depth mid-points.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guessGenHzLevels</span>(<span class='no'>x</span>, <span class='kw'>hz</span> <span class='kw'>=</span> <span class='st'>"genhz"</span>)</pre>
+    <pre class="usage"><span class='fu'>guessGenHzLevels</span>(<span class='kw'>x</span>, hz = <span class='st'>"genhz"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,29 +144,37 @@
 <dt>levels</dt><dd><p>a vector of levels sorted by median horizon depth mid-point</p></dd>
   <dt>median.depths</dt><dd><p>a vector of median horizon mid-points</p></dd>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='generalize.hz.html'>generalize.hz</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># load some example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'aqp'</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package=<span class='st'>'aqp'</span>)
 
 <span class='co'># upgrade to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># generalize horizon names</span>
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span>)
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span>)
-<span class='no'>sp1</span>$<span class='no'>genhz</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span>(<span class='no'>sp1</span>$<span class='no'>name</span>, <span class='no'>n</span>, <span class='no'>p</span>)
+<span class='kw'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span>)
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span>)
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>name</span>, <span class='kw'>n</span>, <span class='kw'>p</span>)
 
 <span class='co'># note: levels are in the order in which originally defined:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>sp1</span>$<span class='no'>genhz</span>)</div><div class='output co'>#&gt; [1] "O"        "A"        "B"        "C"        "not-used"</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>genhz</span>)
+</div><div class='output co'>#&gt; [1] "O"        "A"        "B"        "C"        "not-used"</div><div class='input'>
 <span class='co'># generalize horizons by depth slice</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>sp1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>) ~ <span class='no'>.</span>)</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `hzID_` to character</span></div><div class='input'><span class='no'>s</span>$<span class='no'>slice</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>s</span>$<span class='no'>top</span>, <span class='st'>' cm'</span>)
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>sp1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>) <span class='op'>~</span> <span class='kw'>.</span>)
+<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>top</span>, <span class='st'>' cm'</span>)
 <span class='co'># not a factor</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>s</span>$<span class='no'>slice</span>)</div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span>)
+</div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='co'># the proper ordering of these new labels can be guessed from horizon depths</span>
-<span class='fu'>guessGenHzLevels</span>(<span class='no'>s</span>, <span class='st'>'slice'</span>)</div><div class='output co'>#&gt; $levels
+<span class='fu'>guessGenHzLevels</span>(<span class='kw'>s</span>, <span class='st'>'slice'</span>)
+</div><div class='output co'>#&gt; $levels
 #&gt; [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"
 #&gt; 
 #&gt; $median.depths
@@ -174,10 +182,11 @@
 #&gt;    5.5   10.5   15.5   25.5   50.5  100.5  150.5 
 #&gt; </div><div class='input'>
 <span class='co'># convert to factor, and set proper order</span>
-<span class='no'>s</span>$<span class='no'>slice</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>s</span>$<span class='no'>slice</span>, <span class='kw'>levels</span><span class='kw'>=</span><span class='fu'>guessGenHzLevels</span>(<span class='no'>s</span>, <span class='st'>'slice'</span>)$<span class='no'>levels</span>)
+<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span>, levels=<span class='fu'>guessGenHzLevels</span>(<span class='kw'>s</span>, <span class='st'>'slice'</span>)<span class='op'>$</span><span class='kw'>levels</span>)
 
 <span class='co'># that is better</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>s</span>$<span class='no'>slice</span>)</div><div class='output co'>#&gt; [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span>)
+</div><div class='output co'>#&gt; [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -193,7 +202,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -73,7 +73,7 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
 <p>Uses the standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %. Based on the clay increase criteria in the definition of the argillic horizon from 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crit.clay.argillic</span>(<span class='no'>eluvial_clay_content</span>)</pre>
+    <pre class="usage"><span class='fu'>crit.clay.argillic</span>(<span class='kw'>eluvial_clay_content</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +139,9 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed. USDA-Natural Resources Conservation Service, Washington, DC.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew Gene Brown</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function is intended for identifying clay content threshold required for an argillic horizon. These thresholds may not apply depending on the specifics of your soil. E.g. if the upper part of argillic has been plowed (has Ap immediately over upper boundary) the clay increase requirement can be waived (Soil Survey Staff, 2014).</p>
@@ -150,7 +153,8 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
     <pre class="examples"><div class='input'><span class='co'># crit.clay.argillic uses different equations for clay content</span>
 <span class='co'># less than 15 %, between 15 and 40 %, and &gt;40 %</span>
 
-<span class='fu'>crit.clay.argillic</span>(<span class='kw'>eluvial_clay_content</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>20</span>, <span class='fl'>45</span>))</div><div class='output co'>#&gt; [1]  8 24 53</div></pre>
+<span class='fu'>crit.clay.argillic</span>(eluvial_clay_content=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>20</span>, <span class='fl'>45</span>))
+</div><div class='output co'>#&gt; [1]  8 24 53</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -166,7 +170,7 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

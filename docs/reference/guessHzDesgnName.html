@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -117,10 +117,10 @@
     </div>
 
     <div class="ref-description">
-    <p>This follows the historic convention used by <code><a href='SoilProfileCollection-plotting-methods.html'>aqp::plotSPC()</a></code> looking for 'hzname' or other column names containing the regular expression <code>name</code>. In the future, more patterns may be added.</p>
+    <p>This follows the historic convention used by <code><a href='plotSPC.html'>aqp::plotSPC()</a></code> looking for 'hzname' or other column names containing the regular expression <code>name</code>. In the future, more patterns may be added.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guessHzDesgnName</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>guessHzDesgnName</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,16 +134,21 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Character containing horizon designation column name.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), <span class='kw'>bottom</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>), <span class='kw'>horizonname</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>,<span class='st'>"Bw"</span>))
-<span class='fu'>depths</span>(<span class='no'>a</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='co'># store guess in hzdesgncol slot (used internally by some aqp functions)</span>
-<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='no'>a</span>) <span class='kw'>&lt;-</span> <span class='fu'>guessHzDesgnName</span>(<span class='no'>a</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fl'>1</span>, top = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>), bottom=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>40</span>), horizonname=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>,<span class='st'>"Bw"</span>))
+<span class='fu'>depths</span>(<span class='kw'>a</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
+<span class='co'># store guess in metadata</span>
+<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='kw'>a</span>) <span class='op'>&lt;-</span> <span class='fu'>guessHzDesgnName</span>(<span class='kw'>a</span>)
 
 <span class='co'># inspect result</span>
-<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='no'>a</span>)</div><div class='output co'>#&gt; [1] "horizonname"</div><div class='input'>
+<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='kw'>a</span>)
+</div><div class='output co'>#&gt; [1] "horizonname"</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -160,7 +165,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

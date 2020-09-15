@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,12 +120,12 @@
     <p>Soil Physical and Chemical Data from Manganiferous Soils (Bourgault and Rabenhorst, 2011)</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp6</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp6</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 30 observations on the following 13 variables.</p><dl'>
+    <p>A data frame with 30 observations on the following 13 variables.</p><dl>
     <dt><code>id</code></dt><dd><p>pedon name</p></dd>
     <dt><code>name</code></dt><dd><p>horizon designation</p></dd>
     <dt><code>top</code></dt><dd><p>horizon top boundary in cm</p></dd>
@@ -157,16 +157,22 @@ Eastern Piedmont, USA. Geoderma. 165:84-94.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>  <span class='co'># setup environment</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>aqp</span>)
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp6</span>)
-
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp6</span>)
+  
   <span class='co'># init SPC</span>
-  <span class='fu'>depths</span>(<span class='no'>sp6</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>  <span class='co'># convert non-standard Munsell colors</span>
-  <span class='no'>sp6</span>$<span class='no'>soil_color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>getClosestMunsellChip</a></span>(<span class='no'>sp6</span>$<span class='no'>color</span>)
-
+  <span class='fu'>depths</span>(<span class='kw'>sp6</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+  <span class='co'># convert non-standard Munsell colors</span>
+  <span class='kw'>sp6</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>getClosestMunsellChip</a></span>(<span class='kw'>sp6</span><span class='op'>$</span><span class='kw'>color</span>)
+  
   <span class='co'># profile sketches</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp6</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'soil_color'</span>)</div><div class='img'><img src='sp6-1.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp6</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'Mn'</span>)</div><div class='img'><img src='sp6-2.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp6</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'Fe'</span>)</div><div class='img'><img src='sp6-3.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp6</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'pH'</span>)</div><div class='img'><img src='sp6-4.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp6</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'texture'</span>)</div><div class='img'><img src='sp6-5.png' alt='' width='768' height='475' /></div><div class='input'>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
+  <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp6</span>, color=<span class='st'>'soil_color'</span>)
+</div><div class='img'><img src='sp6-1.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp6</span>, color=<span class='st'>'Mn'</span>)
+</div><div class='img'><img src='sp6-2.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp6</span>, color=<span class='st'>'Fe'</span>)
+</div><div class='img'><img src='sp6-3.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp6</span>, color=<span class='st'>'pH'</span>)
+</div><div class='img'><img src='sp6-4.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp6</span>, color=<span class='st'>'texture'</span>)
+</div><div class='img'><img src='sp6-5.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -183,7 +189,7 @@ Eastern Piedmont, USA. Geoderma. 165:84-94.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

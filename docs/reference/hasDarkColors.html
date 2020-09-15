@@ -73,7 +73,7 @@ Default arguments are set up for &quot;5-3-3 colors&quot; -- the basic criteria 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -123,19 +123,19 @@ Default arguments are set up for &quot;5-3-3 colors&quot; -- the basic criteria 
     </div>
 
     <pre class="usage"><span class='fu'>hasDarkColors</span>(
-  <span class='no'>p</span>,
-  <span class='kw'>d_hue</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>m_hue</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>d_value</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>d_chroma</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>m_value</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>m_chroma</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>dhuenm</span> <span class='kw'>=</span> <span class='st'>"d_hue"</span>,
-  <span class='kw'>dvalnm</span> <span class='kw'>=</span> <span class='st'>"d_value"</span>,
-  <span class='kw'>dchrnm</span> <span class='kw'>=</span> <span class='st'>"d_chroma"</span>,
-  <span class='kw'>mhuenm</span> <span class='kw'>=</span> <span class='st'>"m_hue"</span>,
-  <span class='kw'>mvalnm</span> <span class='kw'>=</span> <span class='st'>"m_value"</span>,
-  <span class='kw'>mchrnm</span> <span class='kw'>=</span> <span class='st'>"m_chroma"</span>
+  <span class='kw'>p</span>,
+  d_hue = <span class='fl'>NA</span>,
+  m_hue = <span class='fl'>NA</span>,
+  d_value = <span class='fl'>5</span>,
+  d_chroma = <span class='fl'>NA</span>,
+  m_value = <span class='fl'>3</span>,
+  m_chroma = <span class='fl'>3</span>,
+  dhuenm = <span class='st'>"d_hue"</span>,
+  dvalnm = <span class='st'>"d_value"</span>,
+  dchrnm = <span class='st'>"d_chroma"</span>,
+  mhuenm = <span class='st'>"m_hue"</span>,
+  mvalnm = <span class='st'>"m_value"</span>,
+  mchrnm = <span class='st'>"m_chroma"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -198,23 +198,28 @@ Default arguments are set up for &quot;5-3-3 colors&quot; -- the basic criteria 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Boolean value (for each horizon in <code>p</code>) reflecting whether "darkness" criteria are met.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># construct a fake profile</span>
-<span class='no'>spc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>taxsubgrp</span> <span class='kw'>=</span> <span class='st'>"Lithic Haploxeralfs"</span>,
-                  <span class='kw'>hzdesgn</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>,<span class='st'>"AB"</span>,<span class='st'>"Bt"</span>,<span class='st'>"BCt"</span>,<span class='st'>"R"</span>),
-                  <span class='kw'>hzdept</span>   <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>,  <span class='fl'>49</span>),
-                  <span class='kw'>hzdepb</span>   <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>, <span class='fl'>49</span>, <span class='fl'>200</span>),
-                  <span class='kw'>d_value</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,   <span class='fl'>5</span>,  <span class='fl'>5</span>,  <span class='fl'>6</span>,  <span class='fl'>NA</span>),
-                  <span class='kw'>m_value</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>, <span class='fl'>3</span>,  <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>),
-                  <span class='kw'>m_chroma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,   <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>))
+<span class='kw'>spc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id=<span class='fl'>1</span>, taxsubgrp = <span class='st'>"Lithic Haploxeralfs"</span>,
+                  hzdesgn  = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>,<span class='st'>"AB"</span>,<span class='st'>"Bt"</span>,<span class='st'>"BCt"</span>,<span class='st'>"R"</span>),
+                  hzdept   = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>,  <span class='fl'>49</span>),
+                  hzdepb   = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>, <span class='fl'>49</span>, <span class='fl'>200</span>),
+                  d_value  = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,   <span class='fl'>5</span>,  <span class='fl'>5</span>,  <span class='fl'>6</span>,  <span class='fl'>NA</span>),
+                  m_value  = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>, <span class='fl'>3</span>,  <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>),
+                  m_chroma = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,   <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>))
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>spc</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>hzdept</span> + <span class='no'>hzdepb</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>spc</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>hzdept</span> <span class='op'>+</span> <span class='kw'>hzdepb</span>
+
 <span class='co'># print results in table</span>
-<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>spc</span><span class='kw'>[[</span><span class='fu'><a href='idname.html'>idname</a></span>(<span class='no'>spc</span>)]],
-           <span class='kw'>hz_desgn</span> <span class='kw'>=</span> <span class='no'>spc</span>$<span class='no'>hzdesgn</span>,
-           <span class='kw'>has_dark_colors</span> <span class='kw'>=</span> <span class='fu'>hasDarkColors</span>(<span class='no'>spc</span>))</div><div class='output co'>#&gt;   id hz_desgn has_dark_colors
+<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='kw'>spc</span>[[<span class='fu'><a href='idname.html'>idname</a></span>(<span class='kw'>spc</span>)]],
+           hz_desgn = <span class='kw'>spc</span><span class='op'>$</span><span class='kw'>hzdesgn</span>,
+           has_dark_colors = <span class='fu'>hasDarkColors</span>(<span class='kw'>spc</span>))
+</div><div class='output co'>#&gt;   id hz_desgn has_dark_colors
 #&gt; 1  1        A            TRUE
 #&gt; 2  1       AB            TRUE
 #&gt; 3  1       Bt           FALSE
@@ -236,7 +241,7 @@ Default arguments are set up for &quot;5-3-3 colors&quot; -- the basic criteria 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

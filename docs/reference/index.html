@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -316,15 +316,27 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="dollarsign.html">`$`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="dollarsign.html">`$&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="dollarsign-set.html">`$&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Access column of horizon or site data in a SoilProfileCollection</p></td>
+        <td><p>Set data in column of horizon or site data in a SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="doublebracket.html">`[[`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;character&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="doublebracket.html">`[[&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+          <p><code><a href="dollarsign.html">`$`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Get, add or change column of horizon or site data in a SoilProfileCollection</p></td>
+        <td><p>Get data from column of horizon or site data in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="doublebracket-set.html">`[[&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add or change column of horizon or site data in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="doublebracket.html">`[[`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Get column of horizon or site data in a SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
@@ -424,7 +436,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="glom.html">glom()</a></code> </p>
+          <p><code><a href="glom-SoilProfileCollection-method.html">glom(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Subset soil horizon data using a depth or depth interval</p></td>
       </tr><tr>
@@ -487,6 +499,12 @@
           <p><code><a href="harden.rubification.html">harden.rubification()</a></code> </p>
         </td>
         <td><p>Harden (1982) Rubification</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="harmonize-SoilProfileCollection-method.html">harmonize(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Harmonize a property by profile-level denormalization for convenient visualization or analysis of ranges</p></td>
       </tr><tr>
         
         <td>
@@ -676,6 +694,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="munsell2spc-SoilProfileCollection-method.html">munsell2spc(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Merge Munsell Hue, Value, Chroma converted to RGB &amp; LAB into a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mutate.html">mutate</a></code> </p>
         </td>
         <td><p>Transform a SPC with expressions based on site or horizon level attributes</p></td>
@@ -709,12 +733,6 @@
           <p><code><a href="permute_profile.html">permute_profile()</a></code> </p>
         </td>
         <td><p>Permute soil horizon depths using boundary distinctness</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot-SoilProfileCollection-ANY-method.html">plot(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>generic plot method for <code>SoilProfileCollection</code> objects</p></td>
       </tr><tr>
         
         <td>
@@ -838,6 +856,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="segment.html">segment()</a></code> </p>
+        </td>
+        <td><p>Segmenting of horizon data into depth intervals</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="shannonEntropy.html">shannonEntropy()</a></code> </p>
         </td>
         <td><p>Shannon Entropy</p></td>
@@ -847,6 +871,12 @@
           <p><code><a href="show.html">show(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>SoilProfileCollection show method</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sierraTransect.html">sierraTransect</a></code> </p>
+        </td>
+        <td><p>Soil Physical and Chemical Data Related to Studies in the Sierra Nevada Mountains, CA, USA.</p></td>
       </tr><tr>
         
         <td>
@@ -874,6 +904,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="slicedHSD.html">slicedHSD()</a></code> </p>
+        </td>
+        <td><p>Tukey's HSD Over Slices</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="soilColorSignature.html">soilColorSignature()</a></code> </p>
         </td>
         <td><p>Soil Profile Color Signatures</p></td>
@@ -892,7 +928,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> </p>
+          <p><code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> <code><a href="SoilProfileCollection-plotting-methods.html">plot()</a></code> </p>
         </td>
         <td><p>Create Soil Profile Sketches</p></td>
       </tr><tr>
@@ -970,6 +1006,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="spc2mpspline-SoilProfileCollection-method.html">spc2mpspline(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Missing-data-safe, SPC-wide wrapper around mpspline2::mpspline "continuous" 1cm output</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="spc_in_sync.html">spc_in_sync()</a></code> </p>
         </td>
         <td><p>Quickly assess relative state of site and horizon slots</p></td>
@@ -1018,6 +1060,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="trunc-SoilProfileCollection-method.html">trunc(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Truncate a SoilProfileCollection to specified top and bottom depth</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="union.html">union()</a></code> </p>
         </td>
         <td><p>Combine Multiple SoilProfileCollection Objects</p></td>
@@ -1058,7 +1106,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

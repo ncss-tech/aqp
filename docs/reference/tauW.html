@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute weighted naïve and <em>tau</em> statistics for a cross-classification matrix — tau • aqp</title>
+<title>Compute weighted naïve and tau statistics for a cross-classification matrix — tau • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Compute weighted naïve and <em>tau</em> statistics for a cross-classification matrix — tau" />
+<meta property="og:title" content="Compute weighted naïve and tau statistics for a cross-classification matrix — tau" />
 <meta property="og:description" content="tauW: Computes: (1) unweighted naïve, (2) weighted naïve, (3) unweighted tau, (4) weighted tau accuracy statistics
 summaryTauW: prints a summary of the results from tauW
 xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex file for import into a LaTeX document." />
@@ -74,7 +74,7 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -124,12 +124,12 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
 <p><code>xtableTauW</code>: formats a LaTeX table with results from <em>tauW</em> and saves it as a <code>.tex</code> file for import into a LaTeX document.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tauW</span>(<span class='no'>CM</span>, <span class='kw'>W</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>CM</span>)))),
-<span class='kw'>P</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>/<span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>CM</span>)), <span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>CM</span>))))
+    <pre class="usage"><span class='fu'>tauW</span>(<span class='kw'>CM</span>, W = <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='kw'>CM</span>)))), 
+P = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='kw'>CM</span>)), <span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='kw'>CM</span>))))
 
-<span class='fu'>summaryTauW</span>(<span class='no'>result.tau</span>)
+<span class='fu'>summaryTauW</span>(<span class='kw'>result.tau</span>)
 
-<span class='fu'>xtableTauW</span>(<span class='no'>result.tau</span>, <span class='kw'>file.name</span><span class='kw'>=</span><span class='st'>"tau_results_table.tex"</span>)</pre>
+<span class='fu'>xtableTauW</span>(<span class='kw'>result.tau</span>, file.name=<span class='st'>"tau_results_table.tex"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,33 +172,37 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
     <p>Rossiter, D. G., Zeng, R., &amp; Zhang, G.-L. (2017). <em>Accounting for taxonomic distance in accuracy assessment of soil class predictions</em>. <b>Geoderma</b>, 292, 118–127. <a href='https://doi.org/10.1016/j.geoderma.2017.01.012'>https://doi.org/10.1016/j.geoderma.2017.01.012</a></p>
 <p>Ma, Z. K., &amp; Redmond, R. L. (1995). <em>Tau-coefficients for accuracy assessment of classification of remote-sensing data</em>. <b>Photogrammetric Engineering and Remote Sensing</b>, 61(4), 435–439.</p>
 <p>Naesset, E. (1996). <em>Conditional tau coefficient for assessment of producer’s accuracy of classified remotely sensed data</em>. <b>ISPRS Journal of Photogrammetry and Remote Sensing</b>, 51(2), 91–98. <a href='http://dx.doi.org/10.1016/0924-2716(69)00007-4'>http://dx.doi.org/10.1016/0924-2716(69)00007-4</a></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D G Rossiter</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># example confusion matrix</span>
 <span class='co'># rows: allocation (user's counts)</span>
 <span class='co'># columns: reference (producer's counts)</span>
-<span class='no'>crossclass</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>5</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,
+<span class='kw'>crossclass</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(data=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>5</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,
                             <span class='fl'>1</span>,<span class='fl'>74</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>6</span>,
                             <span class='fl'>0</span>,<span class='fl'>5</span>,<span class='fl'>8</span>,<span class='fl'>6</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,
                             <span class='fl'>6</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>91</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,
                             <span class='fl'>0</span>,<span class='fl'>4</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>4</span>,
                             <span class='fl'>0</span>,<span class='fl'>6</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>4</span>,<span class='fl'>38</span>),
-                     <span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>6</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>crossclass</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"OP"</span>, <span class='st'>"SA"</span>, <span class='st'>"UA"</span>, <span class='st'>"UC"</span>, <span class='st'>"AV"</span>, <span class='st'>"AC"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>crossclass</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>crossclass</span>)
+                     nrow=<span class='fl'>6</span>, byrow=<span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='kw'>crossclass</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"OP"</span>, <span class='st'>"SA"</span>, <span class='st'>"UA"</span>, <span class='st'>"UC"</span>, <span class='st'>"AV"</span>, <span class='st'>"AC"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>crossclass</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='kw'>crossclass</span>)
 
 <span class='co'># build the weights matrix</span>
 <span class='co'># how much credit for a mis-allocation</span>
-<span class='no'>weights</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.00</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,
+<span class='kw'>weights</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(data=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.00</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,
                          <span class='fl'>0.05</span>,<span class='fl'>1.00</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.35</span>,
                          <span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>1.00</span>,<span class='fl'>0.20</span>,<span class='fl'>0.15</span>,<span class='fl'>0.15</span>,
                          <span class='fl'>0.15</span>,<span class='fl'>0.05</span>,<span class='fl'>0.25</span>,<span class='fl'>1.00</span>,<span class='fl'>0.10</span>,<span class='fl'>0.25</span>,
                          <span class='fl'>0.05</span>,<span class='fl'>0.10</span>,<span class='fl'>0.15</span>,<span class='fl'>0.10</span>,<span class='fl'>1.00</span>,<span class='fl'>0.15</span>,
                          <span class='fl'>0.20</span>,<span class='fl'>0.30</span>,<span class='fl'>0.10</span>,<span class='fl'>0.25</span>,<span class='fl'>0.20</span>,<span class='fl'>1.00</span>),
-                  <span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>6</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+                  nrow=<span class='fl'>6</span>, byrow=<span class='fl'>TRUE</span>)
 
 <span class='co'># unweighted accuracy</span>
-<span class='fu'>summaryTauW</span>(<span class='no'>nnaive</span> <span class='kw'>&lt;-</span> <span class='fu'>tauW</span>(<span class='no'>crossclass</span>))</div><div class='output co'>#&gt; [1] Cross-classification matrix:
+<span class='fu'>summaryTauW</span>(<span class='kw'>nnaive</span> <span class='op'>&lt;-</span> <span class='fu'>tauW</span>(<span class='kw'>crossclass</span>))
+</div><div class='output co'>#&gt; [1] Cross-classification matrix:
 #&gt;      OP SA UA UC AV AC
 #&gt; [1,]  2  1  0  5  0  0
 #&gt; [2,]  1 74  2  1  3  6
@@ -240,12 +244,16 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
 #&gt; [1] Tau (unweighted): 0.7161
 #&gt; [1] Tau (weighted): 0.7161</div><div class='input'>
 <span class='co'># unweighted tau with equal priors, equivalent to Foody (1992) modified Kappa</span>
-<span class='fu'>tauW</span>(<span class='no'>crossclass</span>)$<span class='no'>tau</span></div><div class='output co'>#&gt; [1] 0.716129</div><div class='input'>
+<span class='fu'>tauW</span>(<span class='kw'>crossclass</span>)<span class='op'>$</span><span class='kw'>tau</span>
+</div><div class='output co'>#&gt; [1] 0.716129</div><div class='input'>
 <span class='co'># unweighted tau with user's = producer's marginals, equivalent to original kappa</span>
-(<span class='no'>priors</span> <span class='kw'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>crossclass</span>, <span class='fl'>2</span>, <span class='no'>sum</span>)/<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>crossclass</span>))</div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
-#&gt; 0.03225806 0.32616487 0.05376344 0.37634409 0.02867384 0.18279570 </div><div class='input'><span class='fu'>tauW</span>(<span class='no'>crossclass</span>, <span class='kw'>P</span><span class='kw'>=</span><span class='no'>priors</span>)$<span class='no'>tau</span></div><div class='output co'>#&gt; [1] 0.6685984</div><div class='input'>
+(<span class='kw'>priors</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>crossclass</span>, <span class='fl'>2</span>, <span class='kw'>sum</span>)<span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>crossclass</span>))
+</div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
+#&gt; 0.03225806 0.32616487 0.05376344 0.37634409 0.02867384 0.18279570 </div><div class='input'><span class='fu'>tauW</span>(<span class='kw'>crossclass</span>, P=<span class='kw'>priors</span>)<span class='op'>$</span><span class='kw'>tau</span>
+</div><div class='output co'>#&gt; [1] 0.6685984</div><div class='input'>
 <span class='co'># weighted accuracy; tau with equal priors</span>
-<span class='fu'>summaryTauW</span>(<span class='no'>weighted</span> <span class='kw'>&lt;-</span> <span class='fu'>tauW</span>(<span class='no'>crossclass</span>, <span class='kw'>W</span><span class='kw'>=</span><span class='no'>weights</span>))</div><div class='output co'>#&gt; [1] Cross-classification matrix:
+<span class='fu'>summaryTauW</span>(<span class='kw'>weighted</span> <span class='op'>&lt;-</span> <span class='fu'>tauW</span>(<span class='kw'>crossclass</span>, W=<span class='kw'>weights</span>))
+</div><div class='output co'>#&gt; [1] Cross-classification matrix:
 #&gt;      OP SA UA UC AV AC
 #&gt; [1,]  2  1  0  5  0  0
 #&gt; [2,]  1 74  2  1  3  6
@@ -287,7 +295,8 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
 #&gt; [1] Tau (unweighted): 0.7161
 #&gt; [1] Tau (weighted): 0.7253</div><div class='input'>
 <span class='co'># weighted accuracy; tau with user's = producer's marginals</span>
-<span class='fu'>summaryTauW</span>(<span class='fu'>tauW</span>(<span class='no'>crossclass</span>, <span class='kw'>W</span><span class='kw'>=</span><span class='no'>weights</span>, <span class='kw'>P</span><span class='kw'>=</span><span class='no'>priors</span>))</div><div class='output co'>#&gt; [1] Cross-classification matrix:
+<span class='fu'>summaryTauW</span>(<span class='fu'>tauW</span>(<span class='kw'>crossclass</span>, W=<span class='kw'>weights</span>, P=<span class='kw'>priors</span>))
+</div><div class='output co'>#&gt; [1] Cross-classification matrix:
 #&gt;      OP SA UA UC AV AC
 #&gt; [1,]  2  1  0  5  0  0
 #&gt; [2,]  1 74  2  1  3  6
@@ -329,8 +338,11 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
 #&gt; [1] Tau (unweighted): 0.6686
 #&gt; [1] Tau (weighted): 0.6744</div><div class='input'>
 <span class='co'># change in accuracy statistics weighted vs. non-weighted</span>
-(<span class='no'>weighted</span>$<span class='no'>overall.weighted</span> - <span class='no'>weighted</span>$<span class='no'>overall.naive</span>)</div><div class='output co'>#&gt; [1] 0.04050179</div><div class='input'>(<span class='no'>weighted</span>$<span class='no'>user.weighted</span> - <span class='no'>weighted</span>$<span class='no'>user.naive</span>)</div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
-#&gt; 0.10000000 0.02816092 0.08913043 0.01683168 0.12500000 0.06346154 </div><div class='input'>(<span class='no'>weighted</span>$<span class='no'>prod.weighted</span> - <span class='no'>weighted</span>$<span class='no'>prod.naive</span>)</div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
+(<span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>overall.weighted</span> <span class='op'>-</span> <span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>overall.naive</span>)
+</div><div class='output co'>#&gt; [1] 0.04050179</div><div class='input'>(<span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>user.weighted</span> <span class='op'>-</span> <span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>user.naive</span>)
+</div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
+#&gt; 0.10000000 0.02816092 0.08913043 0.01683168 0.12500000 0.06346154 </div><div class='input'>(<span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>prod.weighted</span> <span class='op'>-</span> <span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>prod.naive</span>)
+</div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
 #&gt; 0.10555556 0.02802198 0.07000000 0.02380952 0.13750000 0.06176471 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -347,7 +359,7 @@ xtableTauW: formats a LaTeX table with results from tauW and saves it as a .tex 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

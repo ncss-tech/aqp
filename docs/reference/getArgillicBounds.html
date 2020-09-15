@@ -73,7 +73,7 @@ The upper boundary is where the clay increase threshold is met. The function use
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -123,15 +123,15 @@ The upper boundary is where the clay increase threshold is met. The function use
     </div>
 
     <pre class="usage"><span class='fu'>getArgillicBounds</span>(
-  <span class='no'>p</span>,
-  <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='st'>"hzname"</span>,
-  <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>,
-  <span class='kw'>texcl.attr</span> <span class='kw'>=</span> <span class='st'>"texcl"</span>,
-  <span class='kw'>require_t</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>bottom.pattern</span> <span class='kw'>=</span> <span class='st'>"Cr|R|Cd"</span>,
-  <span class='kw'>lower.grad.pattern</span> <span class='kw'>=</span> <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
-  <span class='kw'>as.list</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>p</span>,
+  hzdesgn = <span class='st'>"hzname"</span>,
+  clay.attr = <span class='st'>"clay"</span>,
+  texcl.attr = <span class='st'>"texcl"</span>,
+  require_t = <span class='fl'>TRUE</span>,
+  bottom.pattern = <span class='st'>"Cr|R|Cd"</span>,
+  lower.grad.pattern = <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
+  as.list = <span class='fl'>FALSE</span>,
+  verbose = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -184,15 +184,20 @@ The upper boundary is where the clay increase threshold is met. The function use
 <p>The depth to contact is estimated using 'bottom.pattern' "Cr|R|Cd" by default. It matches anything containing Cr, R or Cd.</p>
 <p>The lower gradational horizon regular expression ‘lower.grad.pattern' default is ’"^[2-9]*CB*[^rt]*$"'. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.</p>
 <p>There also is an option ‘require_t' to omit the requirement for evidence of eluviation in form of ’t' subscript in 'hzdesgn'. Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set 'lower.grad.pattern' to something that will not match any horizons in your data.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
-<span class='no'>attr</span> <span class='kw'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='no'>p</span>, <span class='kw'>hzdesgn</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='no'>attr</span>, <span class='kw'>texcl.attr</span><span class='kw'>=</span><span class='st'>"texture"</span>)
-<span class='no'>foo</span></div><div class='output co'>#&gt; [1] 49 89</div></pre>
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
+<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
+<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='kw'>p</span>, hzdesgn=<span class='st'>'name'</span>, clay.attr = <span class='kw'>attr</span>, texcl.attr=<span class='st'>"texture"</span>)
+<span class='kw'>foo</span>
+</div><div class='output co'>#&gt; [1] 49 89</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -208,7 +213,7 @@ The upper boundary is where the clay increase threshold is met. The function use
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Safely combine multiple SoilProfileCollection objects that may not share the same internal structure.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>union</span>(<span class='kw'>spc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>drop.spatial</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>union</span>(spc = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), method = <span class='st'>"all"</span>, na.rm=<span class='fl'>TRUE</span>, drop.spatial=<span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,47 +152,54 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a new <code>SoilProfileCollection</code> object</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette and A.G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>surface</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>, package = <span class='st'>'aqp'</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>surface</span>
 
 <span class='co'># copy pieces</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>sp2</span>[<span class='fl'>1</span>:<span class='fl'>5</span>, ]
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>sp2</span>[<span class='fl'>6</span>:<span class='fl'>10</span>, ]
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>sp2</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, ]
+<span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='kw'>sp2</span>[<span class='fl'>6</span><span class='op'>:</span><span class='fl'>10</span>, ]
 
 <span class='co'># reset IDs and combine</span>
-<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>y</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s-copy"</span>, <span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>y</span>))
+<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>y</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s-copy"</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>y</span>))
 
 <span class='co'># this should work</span>
-<span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'>union</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>x</span>,<span class='no'>y</span>))</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='co'># check</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>z</span>)</div><div class='img'><img src='union-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>plyr</span>)
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>union</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>x</span>,<span class='kw'>y</span>))
 
-<span class='no'>ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%02d"</span>, <span class='fl'>1</span>:<span class='fl'>5</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ldply.html'>ldply</a></span>(<span class='no'>ids</span>, <span class='no'>random_profile</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>), <span class='kw'>n_prop</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>method</span><span class='kw'>=</span><span class='st'>'LPP'</span>,
-           <span class='kw'>lpp.a</span><span class='kw'>=</span><span class='fl'>5</span>, <span class='kw'>lpp.b</span><span class='kw'>=</span><span class='fl'>15</span>, <span class='kw'>lpp.d</span><span class='kw'>=</span><span class='fl'>5</span>, <span class='kw'>lpp.e</span><span class='kw'>=</span><span class='fl'>5</span>, <span class='kw'>lpp.u</span><span class='kw'>=</span><span class='fl'>25</span>)
+<span class='co'># check</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>z</span>)
+</div><div class='img'><img src='union-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://had.co.nz/plyr'>plyr</a></span>)
+
+<span class='kw'>ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%02d"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>)
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ldply.html'>ldply</a></span>(<span class='kw'>ids</span>, <span class='kw'>random_profile</span>, n=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>), n_prop=<span class='fl'>1</span>, method=<span class='st'>'LPP'</span>, 
+           lpp.a=<span class='fl'>5</span>, lpp.b=<span class='fl'>15</span>, lpp.d=<span class='fl'>5</span>, lpp.e=<span class='fl'>5</span>, lpp.u=<span class='fl'>25</span>)
 
 <span class='co'># promote to SPC and plot</span>
-<span class='fu'>depths</span>(<span class='no'>x</span> ) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'p1'</span>)
+<span class='fu'>depths</span>(<span class='kw'>x</span> ) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>x</span>, color=<span class='st'>'p1'</span>)
 
 <span class='co'># slice and update IDs</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>x</span>, <span class='fl'>0</span>:<span class='fl'>150</span> ~ <span class='no'>.</span>)
-<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>y</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s-sliced"</span>, <span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>x</span>))
+<span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>x</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>150</span> <span class='op'>~</span> <span class='kw'>.</span>)
+<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>y</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s-sliced"</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>x</span>))
 
 <span class='co'># stack, note that @horizons is not the same in x and y</span>
-<span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'>union</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>x</span>, <span class='no'>y</span>))
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>union</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>x</span>, <span class='kw'>y</span>))
 
 <span class='co'># label groups</span>
-<span class='no'>z</span>$<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span>(<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>z</span>), <span class='fl'>1</span>, <span class='fl'>2</span>)
+<span class='kw'>z</span><span class='op'>$</span><span class='kw'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span>(<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>z</span>), <span class='fl'>1</span>, <span class='fl'>2</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span>(<span class='no'>z</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'g'</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'p1'</span>, <span class='kw'>group.name.offset</span> <span class='kw'>=</span> -<span class='fl'>10</span>, <span class='kw'>divide.hz</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>''</span>)
-}</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
+<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span>(<span class='kw'>z</span>, groups = <span class='st'>'g'</span>, color=<span class='st'>'p1'</span>, group.name.offset = <span class='op'>-</span><span class='fl'>10</span>, divide.hz=<span class='fl'>FALSE</span>, name=<span class='st'>''</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -208,7 +215,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

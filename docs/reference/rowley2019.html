@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -126,13 +126,13 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A <code>SoilProfileCollection</code> object:</p>
-<p>site-level attributes</p><dl'>
+<p>site-level attributes</p><dl>
     <dt>id</dt><dd><p>profile ID</p></dd>
     <dt>group</dt><dd><p>profile group</p></dd>
   
 </dl>
 
-<p>horizon-level attributes</p><dl'>
+<p>horizon-level attributes</p><dl>
 <dt>sample_id</dt><dd><p>sample ID</p></dd>
 <dt>name</dt><dd><p>horizon name</p></dd>
 <dt>pH</dt><dd><p>pH</p></dd>
@@ -176,6 +176,12 @@
 <dt>Sand</dt><dd><p>percent &lt;2um</p></dd>
 <dt>Silt</dt><dd><p>percent 2-50um</p></dd>
 <dt>Clay</dt><dd><p>percent 50-2000um</p></dd>
+
+<dt>CaH2O</dt><dd><p>Milliq ex: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
+<dt>Ca2MKCl</dt><dd><p>2M KCl: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
+<dt>CaNa2EDTA</dt><dd><p>0.05 M Na2EDTA: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
+<dt>CaCuCl2</dt><dd><p>0.5 M CuCl2: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
+
 <dt>hzID</dt><dd><p>horizon ID</p></dd>
   
 </dl>
@@ -191,13 +197,14 @@ ISSN 0016-7061,
 https://doi.org/10.1016/j.geoderma.2019.114065.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lattice</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
 
 <span class='co'># load data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>'rowley2019'</span>)
 
 <span class='co'># check first 5 rows and 10 columns of horizon data</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>rowley2019</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>1</span>:<span class='fl'>10</span>]</div><div class='output co'>#&gt;   sample_id name  pH Al_exch Ca_exch CEC_sum Ca_exch_saturation
+<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>rowley2019</span>)[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>]
+</div><div class='output co'>#&gt;   sample_id name  pH Al_exch Ca_exch CEC_sum Ca_exch_saturation
 #&gt; 1      B1.1  Ah1 6.3       0    23.2    23.7               97.6
 #&gt; 2      B1.2  Ah2 6.4       0    23.0    23.4               98.4
 #&gt; 3      B1.3  ABh 6.3       0    20.3    20.6               98.5
@@ -210,7 +217,8 @@ https://doi.org/10.1016/j.geoderma.2019.114065.</p>
 #&gt; 4                  0 0.5 4.3
 #&gt; 5                  0 0.4 3.4</div><div class='input'>
 <span class='co'># check site data</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>rowley2019</span>)</div><div class='output co'>#&gt;   id          group
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>rowley2019</span>)
+</div><div class='output co'>#&gt;   id          group
 #&gt; 1 B1 CaCO3-bearing 
 #&gt; 2 B2 CaCO3-bearing 
 #&gt; 3 B3 CaCO3-bearing 
@@ -218,32 +226,36 @@ https://doi.org/10.1016/j.geoderma.2019.114065.</p>
 #&gt; 5 F2     CaCO3-free
 #&gt; 6 F3     CaCO3-free</div><div class='input'>
 <span class='co'># graphical summary</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='SoilProfileCollection-plotting-methods.html'>plotSPC</a></span>(<span class='no'>rowley2019</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'Feo_Fed'</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.85</span>)</div><div class='img'><img src='rowley2019-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='fu'><a href='SoilProfileCollection-plotting-methods.html'>plotSPC</a></span>(<span class='no'>rowley2019</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'Ca_exch'</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.85</span>)</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>rowley2019</span>, color=<span class='st'>'Feo_Fed'</span>, name=<span class='st'>'name'</span>, cex.names=<span class='fl'>0.85</span>)
+</div><div class='img'><img src='rowley2019-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>rowley2019</span>, color=<span class='st'>'Ca_exch'</span>, name=<span class='st'>'name'</span>, cex.names=<span class='fl'>0.85</span>)
+</div><div class='input'>
 <span class='co'># grouped plot</span>
-<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span>(<span class='no'>rowley2019</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='st'>'group'</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'Ca_exch'</span>,
-<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.85</span>, <span class='kw'>group.name.offset</span> <span class='kw'>=</span> -<span class='fl'>10</span>)</div><div class='img'><img src='rowley2019-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span>(<span class='kw'>rowley2019</span>, groups = <span class='st'>'group'</span>, color=<span class='st'>'Ca_exch'</span>, 
+name=<span class='st'>'name'</span>, cex.names=<span class='fl'>0.85</span>, group.name.offset = <span class='op'>-</span><span class='fl'>10</span>)
+</div><div class='img'><img src='rowley2019-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># aggregate over 1cm slices, for select properties</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>rowley2019</span>, <span class='no'>group</span> ~ <span class='no'>Reactive_carbonate</span> + <span class='no'>Ca_exch</span> + <span class='no'>pH</span> + <span class='no'>K_Feldspar</span> + <span class='no'>Na_Plagioclase</span> + <span class='no'>Al</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>rowley2019</span>, <span class='kw'>group</span> <span class='op'>~</span> <span class='kw'>Reactive_carbonate</span> <span class='op'>+</span> <span class='kw'>Ca_exch</span> <span class='op'>+</span> <span class='kw'>pH</span> <span class='op'>+</span> <span class='kw'>K_Feldspar</span> <span class='op'>+</span> <span class='kw'>Na_Plagioclase</span> <span class='op'>+</span> <span class='kw'>Al</span>)
 
 <span class='co'># plot styling</span>
-<span class='no'>tps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>superpose.line</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'royalblue'</span>, <span class='st'>'firebrick'</span>)))
+<span class='kw'>tps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(superpose.line=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(lwd=<span class='fl'>2</span>, col=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'royalblue'</span>, <span class='st'>'firebrick'</span>)))
 
 <span class='co'># make the figure</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>top</span> ~ <span class='no'>p.q50</span> <span class='kw'>|</span> <span class='no'>variable</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>a</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth'</span>, <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>group</span>,
-       <span class='kw'>main</span><span class='kw'>=</span><span class='st'>''</span>, <span class='kw'>as.table</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-       <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'median bounded by 25th and 75th percentiles'</span>,
-       <span class='kw'>lower</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>p.q25</span>, <span class='kw'>upper</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>p.q75</span>, <span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>55</span>,-<span class='fl'>5</span>),
-       <span class='kw'>panel</span><span class='kw'>=</span><span class='no'>panel.depth_function</span>,
-       <span class='kw'>prepanel</span><span class='kw'>=</span><span class='no'>prepanel.depth_function</span>,
-       <span class='kw'>cf</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>contributing_fraction</span>,
-       <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.33</span>, <span class='kw'>sync.colors</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-       <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>relation</span><span class='kw'>=</span><span class='st'>'free'</span>, <span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>)),
-       <span class='kw'>par.settings</span><span class='kw'>=</span><span class='no'>tps</span>,
-       <span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>),
-       <span class='kw'>strip</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.9</span>))
-)</div><div class='img'><img src='rowley2019-3.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span> <span class='op'>|</span> <span class='kw'>variable</span>, data=<span class='kw'>a</span>, ylab=<span class='st'>'Depth'</span>, groups=<span class='kw'>group</span>,
+       main=<span class='st'>''</span>, as.table=<span class='fl'>TRUE</span>,
+       xlab=<span class='st'>'median bounded by 25th and 75th percentiles'</span>,
+       lower=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q25</span>, upper=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q75</span>, ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>55</span>,<span class='op'>-</span><span class='fl'>5</span>),
+       panel=<span class='kw'>panel.depth_function</span>,
+       prepanel=<span class='kw'>prepanel.depth_function</span>,
+       cf=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>contributing_fraction</span>,
+       alpha=<span class='fl'>0.33</span>, sync.colors=<span class='fl'>TRUE</span>,
+       scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(x=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(relation=<span class='st'>'free'</span>, alternating=<span class='fl'>1</span>)),
+       par.settings=<span class='kw'>tps</span>,
+       auto.key=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(columns=<span class='fl'>2</span>, lines=<span class='fl'>TRUE</span>, points=<span class='fl'>FALSE</span>),
+       strip=<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(bg=<span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.9</span>))
+)
+</div><div class='img'><img src='rowley2019-3.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -260,7 +272,7 @@ https://doi.org/10.1016/j.geoderma.2019.114065.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

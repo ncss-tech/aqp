@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -137,16 +137,18 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp5</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'>## get depth units</span>
-<span class='no'>du</span> <span class='kw'>&lt;-</span> <span class='fu'>depth_units</span>(<span class='no'>sp5</span>)
+<span class='kw'>du</span> <span class='op'>&lt;-</span> <span class='fu'>depth_units</span>(<span class='kw'>sp5</span>)
 
 <span class='co'># set alternate units; e.g. inches</span>
-<span class='fu'>depth_units</span>(<span class='no'>sp5</span>) <span class='kw'>&lt;-</span> <span class='st'>'in'</span>
+<span class='fu'>depth_units</span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='st'>'in'</span>
 
 <span class='co'># replace original value (cm)</span>
-<span class='fu'>depth_units</span>(<span class='no'>sp5</span>) <span class='kw'>&lt;-</span> <span class='no'>du</span></div></pre>
+<span class='fu'>depth_units</span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='kw'>du</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -162,7 +164,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Site and laboratory data from soils sampled in the central Sierra Nevada Region of California.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ca630</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>ca630</span>)</pre>
 
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
@@ -129,7 +129,7 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>List containing:</p>
-<p>$site : A data frame containing site information.</p><dl'>
+<p>$site : A data frame containing site information.</p><dl>
     <dt><code>user_site_id</code></dt><dd><p>national user site id</p></dd>
     <dt><code>mlra</code></dt><dd><p>the MLRA</p></dd>
     <dt><code>county</code></dt><dd><p>the county</p></dd>
@@ -144,7 +144,7 @@
   
 </dl>
 
-<p>$lab : A data frame containing horizon information.</p><dl'>
+<p>$lab : A data frame containing horizon information.</p><dl>
     <dt><code>pedon_key</code></dt><dd><p>national soil profile id</p></dd>
     <dt><code>layer_key</code></dt><dd><p>national horizon id</p></dd>
     <dt><code>layer_sequence</code></dt><dd><p>horizon sequence number</p></dd>
@@ -169,102 +169,103 @@
     <p><a href='https://ncsslabdatamart.sc.egov.usda.gov/'>https://ncsslabdatamart.sc.egov.usda.gov/</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>plyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lattice</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>Hmisc</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>maps</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sp</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://had.co.nz/plyr'>plyr</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://hbiostat.org/R/Hmisc'>Hmisc</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>maps</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>)
 
 <span class='co'># check the data out:</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ca630</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>ca630</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>ca630</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>ca630</span>)
 
 <span class='co'># note that pedon_key is the link between the two tables</span>
 
 <span class='co'># make a copy of the horizon data</span>
-<span class='no'>ca</span> <span class='kw'>&lt;-</span> <span class='no'>ca630</span>$<span class='no'>lab</span>
+<span class='kw'>ca</span> <span class='op'>&lt;-</span> <span class='kw'>ca630</span><span class='op'>$</span><span class='kw'>lab</span>
 
 <span class='co'># promote to a SoilProfileCollection class object</span>
-<span class='fu'>depths</span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='no'>pedon_key</span> ~ <span class='no'>hzn_top</span> + <span class='no'>hzn_bot</span>
+<span class='fu'>depths</span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='kw'>pedon_key</span> <span class='op'>~</span> <span class='kw'>hzn_top</span> <span class='op'>+</span> <span class='kw'>hzn_bot</span>
 
 <span class='co'># add site data, based on pedon_key</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='no'>ca630</span>$<span class='no'>site</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='kw'>ca630</span><span class='op'>$</span><span class='kw'>site</span>
 
 <span class='co'># ID data missing coordinates: '|' is a logical OR</span>
-(<span class='no'>missing.coords.idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>ca</span>$<span class='no'>lat</span>) <span class='kw'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>ca</span>$<span class='no'>lon</span>)))
+(<span class='kw'>missing.coords.idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>ca</span><span class='op'>$</span><span class='kw'>lat</span>) <span class='op'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>ca</span><span class='op'>$</span><span class='kw'>lon</span>)))
 
 <span class='co'># remove missing coordinates by safely subsetting</span>
-<span class='kw'>if</span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>missing.coords.idx</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>)
-        <span class='no'>ca</span> <span class='kw'>&lt;-</span> <span class='no'>ca</span>[-<span class='no'>missing.coords.idx</span>, ]
+<span class='co'>if</span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>missing.coords.idx</span>) <span class='op'>&gt;</span> <span class='fl'>0</span>)
+  <span class='kw'>ca</span> <span class='op'>&lt;-</span> <span class='kw'>ca</span>[<span class='op'>-</span><span class='kw'>missing.coords.idx</span>, ]
 
 <span class='co'># register spatial data</span>
-<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>lon</span> + <span class='no'>lat</span>
+<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>lon</span> <span class='op'>+</span> <span class='kw'>lat</span>
 
 <span class='co'># assign a coordinate reference system</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='no'>ca</span>) <span class='kw'>&lt;-</span> <span class='st'>'+proj=longlat +datum=NAD83'</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='st'>'+proj=longlat +datum=NAD83'</span>
 
 <span class='co'># check the result</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ca</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>ca</span>)
 
 <span class='co'># map the data (several ways to do this, here is a simple way)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span>(<span class='kw'>database</span><span class='kw'>=</span><span class='st'>'county'</span>, <span class='kw'>region</span><span class='kw'>=</span><span class='st'>'california'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='no'>ca</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.5</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span>(database=<span class='st'>'county'</span>, region=<span class='st'>'california'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='fu'><a href='coordinates.html'>coordinates</a></span>(<span class='kw'>ca</span>), col=<span class='st'>'red'</span>, cex=<span class='fl'>0.5</span>)
 
 <span class='co'># aggregate %BS 7 for all profiles into 1 cm slices</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>ca</span>, <span class='kw'>fm</span><span class='kw'>=</span> ~ <span class='no'>bs_7</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>ca</span>, fm= <span class='op'>~</span> <span class='kw'>bs_7</span>)
 
 <span class='co'># plot median &amp; IQR by 1 cm slice</span>
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(
-<span class='no'>top</span> ~ <span class='no'>p.q50</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>a</span>, <span class='kw'>lower</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>p.q25</span>, <span class='kw'>upper</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>p.q75</span>,
-<span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>160</span>,-<span class='fl'>5</span>), <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>tick.num</span><span class='kw'>=</span><span class='fl'>7</span>)),
-<span class='kw'>panel</span><span class='kw'>=</span><span class='no'>panel.depth_function</span>, <span class='kw'>prepanel</span><span class='kw'>=</span><span class='no'>prepanel.depth_function</span>,
-<span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth (cm)'</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Base Saturation at pH 7'</span>,
-<span class='kw'>par.settings</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>superpose.line</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'black'</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>))
+<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span>, data=<span class='kw'>a</span>, lower=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q25</span>, upper=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q75</span>, 
+ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span>), alpha=<span class='fl'>0.5</span>, scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(alternating=<span class='fl'>1</span>, y=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.num=<span class='fl'>7</span>)),
+panel=<span class='kw'>panel.depth_function</span>, prepanel=<span class='kw'>prepanel.depth_function</span>,
+ylab=<span class='st'>'Depth (cm)'</span>, xlab=<span class='st'>'Base Saturation at pH 7'</span>, 
+par.settings=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(superpose.line=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(col=<span class='st'>'black'</span>, lwd=<span class='fl'>2</span>))
 )
 
 <span class='co'># aggregate %BS at pH 8.2 for all profiles by MLRA, along 1 cm slices</span>
 <span class='co'># note that mlra is stored in @site</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>ca</span>, <span class='no'>mlra</span> ~ <span class='no'>bs_8.2</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>ca</span>, <span class='kw'>mlra</span> <span class='op'>~</span> <span class='kw'>bs_8.2</span>)
 
 <span class='co'># keep only MLRA 18 and 22</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>a</span>, <span class='kw'>subset</span><span class='kw'>=</span><span class='no'>mlra</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'18'</span>, <span class='st'>'22'</span>))
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>a</span>, subset=<span class='kw'>mlra</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'18'</span>, <span class='st'>'22'</span>))
 
 <span class='co'># plot median &amp; IQR by 1 cm slice, using different colors for each MLRA</span>
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(
-<span class='no'>top</span> ~ <span class='no'>p.q50</span>, <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>mlra</span> , <span class='kw'>data</span><span class='kw'>=</span><span class='no'>a</span>, <span class='kw'>lower</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>p.q25</span>, <span class='kw'>upper</span><span class='kw'>=</span><span class='no'>a</span>$<span class='no'>p.q75</span>,
-<span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>160</span>,-<span class='fl'>5</span>), <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>scales</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>y</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>tick.num</span><span class='kw'>=</span><span class='fl'>7</span>, <span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>3</span>), <span class='kw'>x</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alternating</span><span class='kw'>=</span><span class='fl'>1</span>)),
-<span class='kw'>panel</span><span class='kw'>=</span><span class='no'>panel.depth_function</span>, <span class='kw'>prepanel</span><span class='kw'>=</span><span class='no'>prepanel.depth_function</span>,
-<span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth (cm)'</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Base Saturation at pH 8.2'</span>,
-<span class='kw'>par.settings</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>superpose.line</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'black'</span>,<span class='st'>'blue'</span>), <span class='kw'>lty</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)),
-<span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>title</span><span class='kw'>=</span><span class='st'>'MLRA'</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span>, groups=<span class='kw'>mlra</span> , data=<span class='kw'>a</span>, lower=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q25</span>, upper=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q75</span>, 
+ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span>), alpha=<span class='fl'>0.5</span>, scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.num=<span class='fl'>7</span>, alternating=<span class='fl'>3</span>), x=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(alternating=<span class='fl'>1</span>)),
+panel=<span class='kw'>panel.depth_function</span>, prepanel=<span class='kw'>prepanel.depth_function</span>,
+ylab=<span class='st'>'Depth (cm)'</span>, xlab=<span class='st'>'Base Saturation at pH 8.2'</span>, 
+par.settings=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(superpose.line=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(col=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'black'</span>,<span class='st'>'blue'</span>), lty=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>), lwd=<span class='fl'>2</span>)),
+auto.key=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(columns=<span class='fl'>2</span>, title=<span class='st'>'MLRA'</span>, points=<span class='fl'>FALSE</span>, lines=<span class='fl'>TRUE</span>)
 )
 
 
 <span class='co'># safely compute hz-thickness weighted mean CEC (pH 7)</span>
 <span class='co'># using data.frame objects</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>lab.agg.cec_7</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ddply.html'>ddply</a></span>(<span class='no'>ca630</span>$<span class='no'>lab</span>, <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/quoted.html'>.</a></span>(<span class='no'>pedon_key</span>),
-<span class='kw'>.fun</span><span class='kw'>=</span><span class='no'>summarise</span>, <span class='kw'>CEC_7</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/wtd.stats.html'>wtd.mean</a></span>(<span class='no'>bs_7</span>, <span class='kw'>weights</span><span class='kw'>=</span><span class='no'>hzn_bot</span>-<span class='no'>hzn_top</span>)))
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>lab.agg.cec_7</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ddply.html'>ddply</a></span>(<span class='kw'>ca630</span><span class='op'>$</span><span class='kw'>lab</span>, <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/quoted.html'>.</a></span>(<span class='kw'>pedon_key</span>), 
+.fun=<span class='kw'>summarise</span>, CEC_7=<span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/wtd.stats.html'>wtd.mean</a></span>(<span class='kw'>bs_7</span>, weights=<span class='kw'>hzn_bot</span><span class='op'>-</span><span class='kw'>hzn_top</span>)))
 
 <span class='co'># extract a SPDF with horizon data along a slice at 25 cm</span>
-<span class='no'>s.25</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>ca</span>, <span class='kw'>fm</span><span class='kw'>=</span><span class='fl'>25</span> ~ <span class='no'>bs_7</span> + <span class='no'>CEC7</span> + <span class='no'>ex_acid</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span>(<span class='no'>s.25</span>, <span class='kw'>zcol</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span>))
+<span class='kw'>s.25</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>ca</span>, fm=<span class='fl'>25</span> <span class='op'>~</span> <span class='kw'>bs_7</span> <span class='op'>+</span> <span class='kw'>CEC7</span> <span class='op'>+</span> <span class='kw'>ex_acid</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span>(<span class='kw'>s.25</span>, zcol=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span>))
 
 <span class='co'># note that the ordering is preserved:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>s.25</span>$<span class='no'>pedon_key</span>, <span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>ca</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='kw'>s.25</span><span class='op'>$</span><span class='kw'>pedon_key</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>ca</span>))
 
 <span class='co'># extract a data.frame with horizon data at 10, 20, and 50 cm</span>
-<span class='no'>s.multiple</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>ca</span>, <span class='kw'>fm</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>50</span>) ~ <span class='no'>bs_7</span> + <span class='no'>CEC7</span> + <span class='no'>ex_acid</span>)
+<span class='kw'>s.multiple</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>ca</span>, fm=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>50</span>) <span class='op'>~</span> <span class='kw'>bs_7</span> <span class='op'>+</span> <span class='kw'>CEC7</span> <span class='op'>+</span> <span class='kw'>ex_acid</span>)
 
 <span class='co'># Extract the 2nd horizon from all profiles as SPDF</span>
-<span class='no'>ca.2</span> <span class='kw'>&lt;-</span> <span class='no'>ca</span>[, <span class='fl'>2</span>]
+<span class='kw'>ca.2</span> <span class='op'>&lt;-</span> <span class='kw'>ca</span>[, <span class='fl'>2</span>]
 
 <span class='co'># subset profiles 1 through 10</span>
-<span class='no'>ca.1.to.10</span> <span class='kw'>&lt;-</span> <span class='no'>ca</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, ]
+<span class='kw'>ca.1.to.10</span> <span class='op'>&lt;-</span> <span class='kw'>ca</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, ]
 
 <span class='co'># basic plot method: profile plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>ca.1.to.10</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'hzn_desgn'</span>)
-}</div></pre>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>ca.1.to.10</span>, name=<span class='st'>'hzn_desgn'</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -280,7 +281,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

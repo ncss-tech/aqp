@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,8 +120,8 @@
     <p>Generate a boolean matrix of soil depth classes from a SoilProfileCollection object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getSoilDepthClass</span>(<span class='no'>f</span>, <span class='kw'>depth.classes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>very.shallow</span> <span class='kw'>=</span> <span class='fl'>25</span>,
-<span class='kw'>shallow</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>mod.deep</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>very.deep</span> <span class='kw'>=</span> <span class='fl'>1000</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>getSoilDepthClass</span>(<span class='kw'>f</span>, depth.classes = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(very.shallow = <span class='fl'>25</span>, 
+shallow = <span class='fl'>50</span>, mod.deep = <span class='fl'>100</span>, deep = <span class='fl'>150</span>, very.deep = <span class='fl'>1000</span>), <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,18 +143,23 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <code>data.frame</code> containing soil depth and depth class for each profile, see examples</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette and J.M. Skovlin</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='estimateSoilDepth.html'>estimateSoilDepth</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># generate depth-class matrix</span>
-<span class='no'>sdc</span> <span class='kw'>&lt;-</span> <span class='fu'>getSoilDepthClass</span>(<span class='no'>sp1</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>top</span><span class='kw'>=</span><span class='st'>'top'</span>, <span class='kw'>bottom</span><span class='kw'>=</span><span class='st'>'bottom'</span>)
+<span class='kw'>sdc</span> <span class='op'>&lt;-</span> <span class='fu'>getSoilDepthClass</span>(<span class='kw'>sp1</span>, name=<span class='st'>'name'</span>)
 
 <span class='co'># inspect</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>sdc</span>)</div><div class='output co'>#&gt;     id depth very.shallow shallow mod.deep  deep very.deep depth.class
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>sdc</span>)
+</div><div class='output co'>#&gt;     id depth very.shallow shallow mod.deep  deep very.deep depth.class
 #&gt; 1 P001    89        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
 #&gt; 2 P002    59        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
 #&gt; 3 P003    67        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
@@ -162,14 +167,15 @@
 #&gt; 5 P005    68        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
 #&gt; 6 P006   200        FALSE   FALSE    FALSE FALSE      TRUE   very.deep</div><div class='input'>
 <span class='co'># join back into sp1 as site-level data</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>sdc</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>sdc</span>
 
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>gopheridge</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'soilDB'</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>gopheridge</span>, package=<span class='st'>'soilDB'</span>)
 
-<span class='fu'>getSoilDepthClass</span>(<span class='no'>gopheridge</span>)
-}</div></pre>
+<span class='fu'>getSoilDepthClass</span>(<span class='kw'>gopheridge</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -185,7 +191,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

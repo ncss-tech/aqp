@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,8 +120,8 @@
     <p>Preview colors as a grid arranged according to CIE2000 distances.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>previewColors</span>(<span class='no'>cols</span>, <span class='kw'>method</span><span class='kw'>=</span><span class='st'>'grid'</span>, <span class='kw'>col.order</span><span class='kw'>=</span><span class='kw'>NULL</span>,
-<span class='kw'>nrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>cols</span>))), <span class='kw'>ncol</span><span class='kw'>=</span><span class='no'>nrow</span>, <span class='kw'>border.col</span><span class='kw'>=</span><span class='st'>'black'</span>, <span class='kw'>pt.cex</span><span class='kw'>=</span><span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>previewColors</span>(<span class='kw'>cols</span>, method=<span class='st'>'grid'</span>, col.order=<span class='kw'>NULL</span>, 
+nrow=<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>cols</span>))), ncol=<span class='kw'>nrow</span>, border.col=<span class='st'>'black'</span>, pt.cex=<span class='fl'>2</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,14 +161,20 @@
     <p>Color sorting is based on CIE2000 distances as calcuated by <code><a href='https://farver.data-imaginist.com/reference/compare_colour.html'>farver::compare_colour()</a></code>. The "grid" method arranges colors in a rectangular grid with ordering based on divisive heirarchical clustering of the pair-wise distances. Unique colors are used when <code>cols</code> contains more than 5,000 colors.</p>
 <p>The "MDS" method arranges unique colors via classical multidimensional scaling (principal coordinates) via <code><a href='https://rdrr.io/r/stats/cmdscale.html'>cmdscale()</a></code>.</p>
 <p>Colors can be manually arranged by supplying a vector of integers to <code>col.order</code> and setting <code>method='manual'</code>.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
 
 <span class='co'># convert into SoilProfileCollection object</span>
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='fu'>previewColors</span>(<span class='no'>sp2</span>$<span class='no'>soil_color</span>)</div><div class='img'><img src='previewColors-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'>previewColors</span>(<span class='no'>sp2</span>$<span class='no'>soil_color</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>'MDS'</span>, <span class='kw'>pt.cex</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='previewColors-2.png' alt='' width='768' height='475' /></div></pre>
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
+<span class='fu'>previewColors</span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>soil_color</span>)
+</div><div class='img'><img src='previewColors-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'>previewColors</span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>soil_color</span>, method = <span class='st'>'MDS'</span>, pt.cex = <span class='fl'>3</span>)
+</div><div class='img'><img src='previewColors-2.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -184,7 +190,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

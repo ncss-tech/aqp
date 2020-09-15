@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -122,13 +122,13 @@
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
 <span class='fu'>profileApply</span>(
-  <span class='no'>object</span>,
-  <span class='no'>FUN</span>,
-  <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>frameify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>chunk.size</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>column.names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>object</span>,
+  <span class='kw'>FUN</span>,
+  simplify = <span class='fl'>TRUE</span>,
+  frameify = <span class='fl'>FALSE</span>,
+  chunk.size = <span class='fl'>100</span>,
+  column.names = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -170,53 +170,62 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># estimate soil depth using horizon designations</span>
-<span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='no'>estimateSoilDepth</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>top</span><span class='kw'>=</span><span class='st'>'top'</span>, <span class='kw'>bottom</span><span class='kw'>=</span><span class='st'>'bottom'</span>)</div><div class='output co'>#&gt; P001 P002 P003 P004 P005 P006 P007 P008 P009 
+<span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='kw'>estimateSoilDepth</span>, name=<span class='st'>'name'</span>)
+</div><div class='output co'>#&gt; P001 P002 P003 P004 P005 P006 P007 P008 P009 
 #&gt;   89   59   67   62   68  200  233  200  240 </div><div class='input'>
 <span class='co'># scale a single property 'prop' in horizon table</span>
 <span class='co'># scaled = (x - mean(x)) / sd(x)</span>
-<span class='no'>sp1</span>$<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='kw'>FUN</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>x</span>$<span class='no'>prop</span>), <span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'d'</span>)</div><div class='img'><img src='profileApply-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, FUN=<span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>prop</span>), <span class='fl'>2</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, name=<span class='st'>'d'</span>)
+</div><div class='img'><img src='profileApply-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># compute depth-wise differencing by profile</span>
 <span class='co'># note that our function expects that the column 'prop' exists</span>
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) { <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>x</span>$<span class='no'>prop</span>[<span class='fl'>1</span>], <span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span>(<span class='no'>x</span>$<span class='no'>prop</span>)) }
-<span class='no'>sp1</span>$<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='kw'>FUN</span><span class='kw'>=</span><span class='no'>f</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'d'</span>)</div><div class='img'><img src='profileApply-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='kw'>f</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>x</span>) { <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>prop</span>[<span class='fl'>1</span>], <span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>prop</span>)) }
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, FUN=<span class='kw'>f</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, name=<span class='st'>'d'</span>)
+</div><div class='img'><img src='profileApply-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># compute depth-wise cumulative sum by profile</span>
 <span class='co'># note the use of an anonymous function</span>
-<span class='no'>sp1</span>$<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='kw'>FUN</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span>(<span class='no'>x</span>$<span class='no'>prop</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'d'</span>)</div><div class='img'><img src='profileApply-3.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, FUN=<span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>prop</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, name=<span class='st'>'d'</span>)
+</div><div class='img'><img src='profileApply-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># compute profile-means, and save to @site</span>
 <span class='co'># there must be some data in @site for this to work</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
-<span class='no'>sp1</span>$<span class='no'>mean_prop</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='kw'>FUN</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>$<span class='no'>prop</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>mean_prop</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, FUN=<span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>prop</span>, na.rm=<span class='fl'>TRUE</span>))
 
 <span class='co'># re-plot using ranks defined by computed summaries (in @site)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rank.html'>rank</a></span>(<span class='no'>sp1</span>$<span class='no'>mean_prop</span>))</div><div class='img'><img src='profileApply-4.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, plot.order=<span class='fu'><a href='https://rdrr.io/r/base/rank.html'>rank</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>mean_prop</span>))
+</div><div class='img'><img src='profileApply-4.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'>## iterate over profiles, calculate on each horizon, merge into original SPC</span>
 
 <span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfilecollection-class object, doing nothing.</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'group' not found</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfilecollection-class object, doing nothing.</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'group' not found</span></div><div class='input'>
 <span class='co'># calculate horizon thickness and proportional thickness</span>
 <span class='co'># returns a data.frame result with multiple attributes per horizon</span>
-<span class='no'>thicknessFunction</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>p</span>) {
-  <span class='no'>hz</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>p</span>)
-  <span class='no'>depthnames</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='horizonDepths.html'>horizonDepths</a></span>(<span class='no'>p</span>)
-  <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>p</span>), <span class='fu'><a href='hzID.html'>hzID</a></span>(<span class='no'>p</span>),
-                    <span class='kw'>thk</span><span class='kw'>=</span>(<span class='no'>hz</span><span class='kw'>[[</span><span class='no'>depthnames</span><span class='kw'>[[</span><span class='fl'>2</span>]]]] - <span class='no'>hz</span><span class='kw'>[[</span><span class='no'>depthnames</span>[<span class='fl'>1</span>]]]))
-  <span class='no'>res</span>$<span class='no'>hz_prop</span> <span class='kw'>&lt;-</span> <span class='no'>res</span>$<span class='no'>thk</span> / <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>res</span>$<span class='no'>thk</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>res</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='idname.html'>idname</a></span>(<span class='no'>p</span>), <span class='fu'><a href='hzidname.html'>hzidname</a></span>(<span class='no'>p</span>), <span class='st'>'hz_thickness'</span>, <span class='st'>'hz_prop'</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>res</span>)
+<span class='kw'>thicknessFunction</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>p</span>) {
+  <span class='kw'>hz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>p</span>)
+  <span class='kw'>depthnames</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span>(<span class='kw'>p</span>)
+  <span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>p</span>), <span class='fu'><a href='hzID.html'>hzID</a></span>(<span class='kw'>p</span>),
+                    thk=(<span class='kw'>hz</span>[[<span class='kw'>depthnames</span>[[<span class='fl'>2</span>]]]] <span class='op'>-</span> <span class='kw'>hz</span>[[<span class='kw'>depthnames</span>[<span class='fl'>1</span>]]]))
+  <span class='kw'>res</span><span class='op'>$</span><span class='kw'>hz_prop</span> <span class='op'>&lt;-</span> <span class='kw'>res</span><span class='op'>$</span><span class='kw'>thk</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>res</span><span class='op'>$</span><span class='kw'>thk</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>res</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='idname.html'>idname</a></span>(<span class='kw'>p</span>), <span class='fu'><a href='hzidname<-.html'>hzidname</a></span>(<span class='kw'>p</span>), <span class='st'>'hz_thickness'</span>, <span class='st'>'hz_prop'</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>res</span>)
 }
 
 <span class='co'># list output option with simplify=F, list names are profile_id(sp1)</span>
-<span class='no'>list.output</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='no'>thicknessFunction</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>list.output</span>)</div><div class='output co'>#&gt; $P001
+<span class='kw'>list.output</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='kw'>thicknessFunction</span>, simplify = <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>list.output</span>)
+</div><div class='output co'>#&gt; $P001
 #&gt;     id hzID hz_thickness    hz_prop
 #&gt; 1 P001    1            2 0.02247191
 #&gt; 2 P001    2           12 0.13483146
@@ -269,51 +278,58 @@
 #&gt; 10 P006   34           30   0.150
 #&gt; </div><div class='input'>
 <span class='co'># data.frame output option with frameify=TRUE</span>
-<span class='no'>df.output</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='no'>thicknessFunction</span>, <span class='kw'>frameify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>df.output</span>)</div><div class='output co'>#&gt;     id hzID hz_thickness    hz_prop
-#&gt; 1 P001    1            2 0.02247191
-#&gt; 2 P001    2           12 0.13483146
-#&gt; 3 P001    3           35 0.39325843
-#&gt; 4 P001    4            8 0.08988764
-#&gt; 5 P001    5           32 0.35955056
-#&gt; 6 P001    6            0 0.00000000</div><div class='input'>
-<span class='co'># since df.output contains idname(sp1) and hzidname(sp1), </span>
+<span class='kw'>df.output</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='kw'>thicknessFunction</span>, frameify = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>df.output</span>)
+</div><div class='output co'>#&gt;          id hzID hz_thickness    hz_prop
+#&gt; P001.1 P001    1            2 0.02247191
+#&gt; P001.2 P001    2           12 0.13483146
+#&gt; P001.3 P001    3           35 0.39325843
+#&gt; P001.4 P001    4            8 0.08988764
+#&gt; P001.5 P001    5           32 0.35955056
+#&gt; P001.6 P001    6            0 0.00000000</div><div class='input'>
+<span class='co'># since df.output contains idname(sp1) and hzidname(sp1),</span>
 <span class='co'># it can safely be merged by a left-join via horizons&lt;- setter</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>df.output</span></div><div class='output co'>#&gt; <span class='message'>join condition resulted in sorting of horizons, re-applying original order</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='no'>sp1</span>$<span class='no'>hz_thickness</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>), <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Density plot of Horizon Thickness"</span>)</div><div class='img'><img src='profileApply-5.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>df.output</span>
+
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hz_thickness</span>, na.rm=<span class='fl'>TRUE</span>), main=<span class='st'>"Density plot of Horizon Thickness"</span>)
+</div><div class='img'><img src='profileApply-5.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'>## iterate over profiles, subsetting horizon data</span>
 
 <span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfilecollection-class object, doing nothing.</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'group' not found</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfilecollection-class object, doing nothing.</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'group' not found</span></div><div class='input'>
 <span class='co'># make some fake site data related to a depth of some importance</span>
-<span class='no'>sp1</span>$<span class='no'>dep</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='kw'>function</span>(<span class='no'>i</span>) {<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>n</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>i</span>$<span class='no'>top</span>)))})
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>dep</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='fu'>function</span>(<span class='kw'>i</span>) {<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(n=<span class='fl'>1</span>, mean=<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>i</span><span class='op'>$</span><span class='kw'>top</span>)))})
 
 <span class='co'># custom function for subsetting horizon data, by profile</span>
 <span class='co'># keep horizons with lower boundary &lt; site-level attribute 'dep'</span>
-<span class='no'>fun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
+<span class='kw'>fun</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>i</span>) {
   <span class='co'># extract horizons</span>
-  <span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>i</span>)
+  <span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>i</span>)
   <span class='co'># make an expression to subset horizons</span>
-  <span class='no'>exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>'bottom &lt; '</span>, <span class='no'>i</span>$<span class='no'>dep</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>''</span>)
+  <span class='kw'>exp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>'bottom &lt; '</span>, <span class='kw'>i</span><span class='op'>$</span><span class='kw'>dep</span>, sep=<span class='st'>''</span>)
   <span class='co'># subset horizons, and write-back into current SPC</span>
-  <span class='fu'>slot</span>(<span class='no'>i</span>, <span class='st'>'horizons'</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>h</span>, <span class='kw'>subset</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(<span class='kw'>text</span><span class='kw'>=</span><span class='no'>exp</span>)))
+  <span class='fu'>slot</span>(<span class='kw'>i</span>, <span class='st'>'horizons'</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>h</span>, subset=<span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(text=<span class='kw'>exp</span>)))
   <span class='co'># return modified SPC</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>i</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>i</span>)
 }
 
 <span class='co'># list of modified SoilProfileCollection objects</span>
-<span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='no'>sp1</span>, <span class='no'>fun</span>, <span class='kw'>simplify</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='kw'>l</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='kw'>fun</span>, simplify=<span class='fl'>FALSE</span>)
 
 <span class='co'># re-combine list of SoilProfileCollection objects into a single SoilProfileCollection</span>
-<span class='no'>sp1.sub</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='no'>l</span>)</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='kw'>sp1.sub</span> <span class='op'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>l</span>)
+
 <span class='co'># graphically check</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='fl'>1</span>:<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>sp1</span>), <span class='no'>sp1</span>$<span class='no'>dep</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>7</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1.sub</span>)</div><div class='img'><img src='profileApply-6.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>), <span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>dep</span>, col=<span class='st'>'red'</span>, pch=<span class='fl'>7</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1.sub</span>)
+</div><div class='img'><img src='profileApply-6.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -330,7 +346,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

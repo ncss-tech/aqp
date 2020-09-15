@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -121,18 +121,17 @@
     </div>
 
     <pre class="usage"><span class='fu'>SoilProfileCollection</span>(
-  <span class='kw'>idcol</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
-  <span class='kw'>hzidcol</span> <span class='kw'>=</span> <span class='st'>"hzID"</span>,
-  <span class='kw'>hzdesgncol</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>hztexclcol</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>depthcols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"top"</span>, <span class='st'>"bottom"</span>),
-  <span class='kw'>metadata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>aqp_df_class</span> <span class='kw'>=</span> <span class='st'>"data.frame"</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-  <span class='kw'>horizons</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>hzID</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>top</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>),
-    <span class='kw'>bottom</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>), <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-  <span class='kw'>site</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-  <span class='kw'>sp</span> <span class='kw'>=</span> <span class='fu'>new</span>(<span class='st'>"SpatialPoints"</span>),
-  <span class='kw'>diagnostic</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-  <span class='kw'>restrictions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  idcol = <span class='st'>"id"</span>,
+  hzidcol = <span class='st'>"hzID"</span>,
+  depthcols = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"top"</span>, <span class='st'>"bottom"</span>),
+  metadata = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(aqp_df_class = <span class='st'>"data.frame"</span>, aqp_group_by = <span class='st'>""</span>, aqp_hzdesgn = <span class='st'>""</span>,
+    aqp_hztexcl = <span class='st'>""</span>, stringsAsFactors = <span class='fl'>FALSE</span>),
+  horizons = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), hzID = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), top = <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>),
+    bottom = <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>), stringsAsFactors = <span class='fl'>FALSE</span>),
+  site = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), stringsAsFactors = <span class='fl'>FALSE</span>),
+  sp = <span class='fu'>new</span>(<span class='st'>"SpatialPoints"</span>),
+  diagnostic = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(stringsAsFactors = <span class='fl'>FALSE</span>),
+  restrictions = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(stringsAsFactors = <span class='fl'>FALSE</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -145,14 +144,6 @@
     <tr>
       <th>hzidcol</th>
       <td><p>character Horizon ID Column Name</p></td>
-    </tr>
-    <tr>
-      <th>hzdesgncol</th>
-      <td><p>character Horizon Designation Column Name [optional]</p></td>
-    </tr>
-    <tr>
-      <th>hztexclcol</th>
-      <td><p>character Horizon Texture Class Column Name [optional]</p></td>
     </tr>
     <tr>
       <th>depthcols</th>
@@ -188,14 +179,10 @@
 
     
 
-<dl'>
+<dl>
 <dt><code>idcol</code></dt><dd><p>character.</p></dd>
 
 <dt><code>hzidcol</code></dt><dd><p>character.</p></dd>
-
-<dt><code>hzdesgncol</code></dt><dd><p>character.</p></dd>
-
-<dt><code>hztexclcol</code></dt><dd><p>character.</p></dd>
 
 <dt><code>depthcols</code></dt><dd><p>character.</p></dd>
 
@@ -212,18 +199,23 @@
 <dt><code>restrictions</code></dt><dd><p>data.frame.</p></dd>
 
 </dl>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Pierre Roudier, Dylan E. Beaudette, Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## structure of default, empty SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>SoilProfileCollection</span>())</div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 11 slots
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>SoilProfileCollection</span>())
+</div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
 #&gt;   ..@ idcol       : chr "id"
 #&gt;   ..@ hzidcol     : chr "hzID"
-#&gt;   ..@ hzdesgncol  : chr(0) 
-#&gt;   ..@ hztexclcol  : chr(0) 
 #&gt;   ..@ depthcols   : chr [1:2] "top" "bottom"
-#&gt;   ..@ metadata    :List of 5
+#&gt;   ..@ metadata    :List of 8
 #&gt;   .. ..$ aqp_df_class    : chr "data.frame"
+#&gt;   .. ..$ aqp_group_by    : chr ""
+#&gt;   .. ..$ aqp_hzdesgn     : chr ""
+#&gt;   .. ..$ aqp_hztexcl     : chr ""
 #&gt;   .. ..$ depth_units     : chr "cm"
 #&gt;   .. ..$ stringsAsFactors: logi FALSE
 #&gt;   .. ..$ original.order  : int(0) 
@@ -247,56 +239,67 @@
 <span class='co'>## profile ID, top and bottom depth and set up</span>
 <span class='co'>## a SPC that is topologically correct and complete</span>
 
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'rbind'</span>,<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>random_profile</span>))
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'rbind'</span>,<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>random_profile</span>))
 
 <span class='co'># promote to SoilProfileCollection and plot</span>
-<span class='fu'>depths</span>(<span class='no'>d</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>d</span>)</div><div class='img'><img src='SoilProfileCollection-class-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>d</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>d</span>)
+</div><div class='img'><img src='SoilProfileCollection-class-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># split into new SoilProfileCollection objects by index</span>
-<span class='no'>d.1</span> <span class='kw'>&lt;-</span> <span class='no'>d</span>[<span class='fl'>1</span>, ]
-<span class='no'>d.2</span> <span class='kw'>&lt;-</span> <span class='no'>d</span>[<span class='fl'>2</span>, ]
-<span class='no'>d.345</span> <span class='kw'>&lt;-</span> <span class='no'>d</span>[<span class='fl'>3</span>:<span class='fl'>5</span>, ]
+<span class='kw'>d.1</span> <span class='op'>&lt;-</span> <span class='kw'>d</span>[<span class='fl'>1</span>, ]
+<span class='kw'>d.2</span> <span class='op'>&lt;-</span> <span class='kw'>d</span>[<span class='fl'>2</span>, ]
+<span class='kw'>d.345</span> <span class='op'>&lt;-</span> <span class='kw'>d</span>[<span class='fl'>3</span><span class='op'>:</span><span class='fl'>5</span>, ]
 
 <span class='co'># recombine, note that profiles are sorted according to ID</span>
-<span class='no'>d.new</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>d.345</span>, <span class='no'>d.1</span>, <span class='no'>d.2</span>))</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>d.new</span>)</div><div class='img'><img src='SoilProfileCollection-class-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+<span class='kw'>d.new</span> <span class='op'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>d.345</span>, <span class='kw'>d.1</span>, <span class='kw'>d.2</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>d.new</span>)
+</div><div class='img'><img src='SoilProfileCollection-class-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'>## init SoilProfileCollection objects from data.frame</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'>## depth units</span>
-<span class='no'>du</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='depth_units.html'>depth_units</a></span>(<span class='no'>sp1</span>)
-<span class='fu'><a href='depth_units.html'>depth_units</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='st'>'in'</span>
-<span class='fu'><a href='depth_units.html'>depth_units</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>du</span>
+<span class='kw'>du</span> <span class='op'>&lt;-</span> <span class='fu'><a href='depth_units.html'>depth_units</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'><a href='depth_units.html'>depth_units</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='st'>'in'</span>
+<span class='fu'><a href='depth_units.html'>depth_units</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>du</span>
 
 <span class='co'>## horizon designation column</span>
-<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='st'>"name"</span>
-<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "name"</div><div class='input'>
+<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='st'>"name"</span>
+<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt; [1] "name"</div><div class='input'>
 <span class='co'>## all designations in an SPC (useful for single profile SPC)</span>
-<span class='fu'><a href='hzDesgn.html'>hzDesgn</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt;  [1] "A1"   "A2"   "AB"   "BA"   "Bt"   "Rt"   "Oi"   "A"    "C1"   "C2"  
+<span class='fu'><a href='hzDesgn.html'>hzDesgn</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt;  [1] "A1"   "A2"   "AB"   "BA"   "Bt"   "Rt"   "Oi"   "A"    "C1"   "C2"  
 #&gt; [11] "Oa/A" "AB"   "BA"   "Bt1"  "Bt2"  "A1"   "A2"   "A3"   "Bt1"  "Bt2" 
 #&gt; [21] "A"    "AB"   "Bt1"  "Bt2"  "Oi"   "A"    "AB1"  "AB2"  "AB3"  "C1"  
 #&gt; [31] "C2"   "2C1"  "2C2"  "3C"   "A1"   "A2"   "Bw1"  "Bw2"  "Bw3"  "C"   
 #&gt; [41] "2C"   "3Bwb" "3Cb"  "Oi"   "A"    "AB"   "Bw1"  "Bw2"  "2C1"  "2C2" 
 #&gt; [51] "3C"   "Oe"   "A1"   "A2"   "AB"   "Bw1"  "Bw2"  "2C"   "3Ab"  "3Bwb"</div><div class='input'>
 <span class='co'>## horizon texture class column</span>
-<span class='fu'><a href='hztexclname.html'>hztexclname</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='st'>"texture"</span>
-<span class='fu'><a href='hztexclname.html'>hztexclname</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "texture"</div><div class='input'>
+<span class='fu'><a href='hztexclname.html'>hztexclname</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='st'>"texture"</span>
+<span class='fu'><a href='hztexclname.html'>hztexclname</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt; [1] "texture"</div><div class='input'>
 <span class='co'>## get/set metadata on SoilProfileCollection objects</span>
 <span class='co'># this is a 1-row data.frame</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='metadata.html'>metadata</a></span>(<span class='no'>sp1</span>)
-<span class='no'>m</span>$<span class='no'>sampler</span> <span class='kw'>&lt;-</span> <span class='st'>'Dylan'</span>
-<span class='fu'><a href='metadata.html'>metadata</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>m</span>
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='metadata.html'>metadata</a></span>(<span class='kw'>sp1</span>)
+<span class='kw'>m</span><span class='op'>$</span><span class='kw'>sampler</span> <span class='op'>&lt;-</span> <span class='st'>'Dylan'</span>
+<span class='fu'><a href='metadata.html'>metadata</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>m</span>
 
 <span class='co'>## extract horizon data from SoilProfileCollection objects as data.frame</span>
-<span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>sp1</span>)
+<span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># also merge (left-join) of new columns and</span>
 <span class='co'># replacement of existing columns via horizons&lt;-</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>h</span></div><div class='output co'>#&gt; <span class='message'>join condition resulted in sorting of horizons, re-applying original order</span></div><div class='input'>
+<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>h</span>
+
 <span class='co'># get number of horizons</span>
-<span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] 60</div><div class='input'>
+<span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt; [1] 60</div><div class='input'>
 
 <span class='co'>## getting site-level data</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt;     id
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt;     id
 #&gt; 1 P001
 #&gt; 2 P002
 #&gt; 3 P003
@@ -308,23 +311,25 @@
 #&gt; 9 P009</div><div class='input'>
 <span class='co'>## setting site-level data</span>
 <span class='co'># site-level data from horizon-level data (stored in @horizons)</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
 
 <span class='co'># make some fake site data, and append from data.frame</span>
 <span class='co'># a matching ID column must be present in both @site and new data</span>
 <span class='co'># note that IDs should all be character class</span>
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span><span class='kw'>=</span><span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>sp1</span>), <span class='kw'>p</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='kw'>n</span><span class='kw'>=</span><span class='fu'><a href='length.html'>length</a></span>(<span class='no'>sp1</span>)), <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>d</span>
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id=<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp1</span>), p=<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(n=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>)), stringsAsFactors=<span class='fl'>FALSE</span>)
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>d</span>
 
 
 <span class='co'># edit horizon depths</span>
-<span class='fu'><a href='horizonDepths.html'>horizonDepths</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'t'</span>, <span class='st'>'b'</span>)
-<span class='fu'><a href='horizonDepths.html'>horizonDepths</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "t" "b"</div><div class='input'>
+<span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'t'</span>, <span class='st'>'b'</span>)
+<span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt; [1] "t" "b"</div><div class='input'>
 <span class='co'># edit profile IDs</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s-new"</span>, <span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>sp1</span>))
-<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>p</span>
-<span class='fu'><a href='profile_id.html'>profile_id</a></span>(<span class='no'>sp1</span>)</div><div class='output co'>#&gt; [1] "P001-new" "P002-new" "P003-new" "P004-new" "P005-new" "P006-new" "P007-new"
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s-new"</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp1</span>))
+<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>p</span>
+<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp1</span>)
+</div><div class='output co'>#&gt; [1] "P001-new" "P002-new" "P003-new" "P004-new" "P005-new" "P006-new" "P007-new"
 #&gt; [8] "P008-new" "P009-new"</div><div class='input'>
 </div></pre>
   </div>
@@ -342,7 +347,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -73,7 +73,7 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -123,15 +123,15 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
     </div>
 
     <pre class="usage"><span class='fu'>getCambicBounds</span>(
-  <span class='no'>p</span>,
-  <span class='kw'>hzdesgn</span> <span class='kw'>=</span> <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span>(<span class='no'>p</span>),
-  <span class='kw'>texcl.attr</span> <span class='kw'>=</span> <span class='fu'><a href='guessHzTexClName.html'>guessHzTexClName</a></span>(<span class='no'>p</span>),
-  <span class='kw'>clay.attr</span> <span class='kw'>=</span> <span class='fu'><a href='guessHzAttrName.html'>guessHzAttrName</a></span>(<span class='no'>p</span>, <span class='kw'>attr</span> <span class='kw'>=</span> <span class='st'>"clay"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>)),
-  <span class='kw'>argi_bounds</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>d_value</span> <span class='kw'>=</span> <span class='st'>"d_value"</span>,
-  <span class='kw'>m_value</span> <span class='kw'>=</span> <span class='st'>"m_value"</span>,
-  <span class='kw'>m_chroma</span> <span class='kw'>=</span> <span class='st'>"m_chroma"</span>,
-  <span class='no'>...</span>
+  <span class='kw'>p</span>,
+  hzdesgn = <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span>(<span class='kw'>p</span>),
+  texcl.attr = <span class='fu'><a href='guessHzTexClName.html'>guessHzTexClName</a></span>(<span class='kw'>p</span>),
+  clay.attr = <span class='fu'><a href='guessHzAttrName.html'>guessHzAttrName</a></span>(<span class='kw'>p</span>, attr = <span class='st'>"clay"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"total"</span>, <span class='st'>"_r"</span>)),
+  argi_bounds = <span class='kw'>NULL</span>,
+  d_value = <span class='st'>"d_value"</span>,
+  m_value = <span class='st'>"m_value"</span>,
+  m_chroma = <span class='st'>"m_chroma"</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -178,26 +178,31 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>data.frame</code> containing profile, cambic indexes, along with top and bottom depths.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># construct a fake profile</span>
-<span class='no'>spc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>taxsubgrp</span> <span class='kw'>=</span> <span class='st'>"Lithic Haploxerepts"</span>,
-                  <span class='kw'>hzname</span>   <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>,<span class='st'>"AB"</span>,<span class='st'>"Bw"</span>,<span class='st'>"BC"</span>,<span class='st'>"R"</span>),
-                  <span class='kw'>hzdept</span>   <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,  <span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>,  <span class='fl'>49</span>),
-                  <span class='kw'>hzdepb</span>   <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>, <span class='fl'>49</span>, <span class='fl'>200</span>),
-                  <span class='kw'>clay</span>     <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>19</span>, <span class='fl'>22</span>, <span class='fl'>22</span>, <span class='fl'>21</span>,  <span class='fl'>NA</span>),
-                  <span class='kw'>texcl</span>    <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"l"</span>,<span class='st'>"l"</span>,<span class='st'>"l"</span>, <span class='st'>"l"</span>,<span class='st'>"br"</span>),
-                  <span class='kw'>d_value</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,   <span class='fl'>5</span>,  <span class='fl'>5</span>,  <span class='fl'>6</span>,  <span class='fl'>NA</span>),
-                  <span class='kw'>m_value</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>, <span class='fl'>3</span>,  <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>),
-                  <span class='kw'>m_chroma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,   <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>))
+<span class='kw'>spc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id=<span class='fl'>1</span>, taxsubgrp = <span class='st'>"Lithic Haploxerepts"</span>,
+                  hzname   = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>,<span class='st'>"AB"</span>,<span class='st'>"Bw"</span>,<span class='st'>"BC"</span>,<span class='st'>"R"</span>),
+                  hzdept   = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,  <span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>,  <span class='fl'>49</span>),
+                  hzdepb   = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>32</span>, <span class='fl'>42</span>, <span class='fl'>49</span>, <span class='fl'>200</span>),
+                  clay     = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>19</span>, <span class='fl'>22</span>, <span class='fl'>22</span>, <span class='fl'>21</span>,  <span class='fl'>NA</span>),
+                  texcl    = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"l"</span>,<span class='st'>"l"</span>,<span class='st'>"l"</span>, <span class='st'>"l"</span>,<span class='st'>"br"</span>),
+                  d_value  = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,   <span class='fl'>5</span>,  <span class='fl'>5</span>,  <span class='fl'>6</span>,  <span class='fl'>NA</span>),
+                  m_value  = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>, <span class='fl'>3</span>,  <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>),
+                  m_chroma = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,   <span class='fl'>3</span>,  <span class='fl'>4</span>,  <span class='fl'>4</span>,  <span class='fl'>NA</span>))
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>spc</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>hzdept</span> + <span class='no'>hzdepb</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='no'>spc</span>) <span class='kw'>&lt;-</span> <span class='st'>'hzname'</span>
-<span class='fu'><a href='hztexclname.html'>hztexclname</a></span>(<span class='no'>spc</span>) <span class='kw'>&lt;-</span> <span class='st'>'texcl'</span>
+<span class='fu'>depths</span>(<span class='kw'>spc</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>hzdept</span> <span class='op'>+</span> <span class='kw'>hzdepb</span>
+<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span>(<span class='kw'>spc</span>) <span class='op'>&lt;-</span> <span class='st'>'hzname'</span>
+<span class='fu'><a href='hztexclname.html'>hztexclname</a></span>(<span class='kw'>spc</span>) <span class='op'>&lt;-</span> <span class='st'>'texcl'</span>
 
 <span class='co'># print results in table</span>
-<span class='fu'>getCambicBounds</span>(<span class='no'>spc</span>)</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay`</span></div><div class='output co'>#&gt;   id cambic_id cambic_top cambic_bottom
-#&gt; 1  1        NA         NA            NA</div><div class='input'>
+<span class='fu'>getCambicBounds</span>(<span class='kw'>spc</span>)
+</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay`</span></div><div class='output co'>#&gt;   id cambic_id cambic_top cambic_bottom
+#&gt; 2  1         1         32            49</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -214,7 +219,7 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

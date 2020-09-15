@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Simulate a collection of soil profiles based on the horizonation of a single soil profile.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim</span>(<span class='no'>x</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>iterations</span><span class='kw'>=</span><span class='fl'>25</span>, <span class='kw'>hz.sd</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>min.thick</span><span class='kw'>=</span><span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>sim</span>(<span class='kw'>x</span>, n=<span class='fl'>1</span>, iterations=<span class='fl'>25</span>, hz.sd=<span class='fl'>2</span>, min.thick=<span class='fl'>2</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,51 +153,61 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function generates a collection of simulated soil profiles based on the horizon thickness data associated with a single "template" profile. Simulation is based on sampling from a family of gaussian distribution with means defined by the "template" profile and standard deviation defined by the user.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D. E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='random_profile.html'>random_profile</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># load sample data and convert into SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp3</span>)
-<span class='fu'>depths</span>(<span class='no'>sp3</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># select a profile to use as the basis for simulation</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='no'>sp3</span>[<span class='fl'>3</span>, ]
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='kw'>sp3</span>[<span class='fl'>3</span>, ]
 
 <span class='co'># reset horizon names</span>
-<span class='no'>s</span>$<span class='no'>name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>'H'</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='no'>s</span>$<span class='no'>name</span>), <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>''</span>)
+<span class='kw'>s</span><span class='op'>$</span><span class='kw'>name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>'H'</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>name</span>), sep=<span class='st'>''</span>)
 
 <span class='co'># simulate 25 new profiles, using 's' and function defaults</span>
-<span class='no'>sim.1</span> <span class='kw'>&lt;-</span> <span class='fu'>sim</span>(<span class='no'>s</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>25</span>)</div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='kw'>sim.1</span> <span class='op'>&lt;-</span> <span class='fu'>sim</span>(<span class='kw'>s</span>, n=<span class='fl'>25</span>)
+</div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='input'>
 <span class='co'># simulate 25 new profiles using 's' and variable SD for each horizon</span>
-<span class='no'>sim.2</span> <span class='kw'>&lt;-</span> <span class='fu'>sim</span>(<span class='no'>s</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>25</span>, <span class='kw'>hz.sd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='kw'>sim.2</span> <span class='op'>&lt;-</span> <span class='fu'>sim</span>(<span class='kw'>s</span>, n=<span class='fl'>25</span>, hz.sd=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>3</span>))
+</div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='input'>
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sim.1</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='st'>'SD = 2'</span>, <span class='kw'>side</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>line</span><span class='kw'>=</span>-<span class='fl'>1.5</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sim.2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='st'>'SD = c(1, 2, 5, 5, 5, 10)'</span>, <span class='kw'>side</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>line</span><span class='kw'>=</span>-<span class='fl'>1.5</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>)</div><div class='img'><img src='sim-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sim.1</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='st'>'SD = 2'</span>, side=<span class='fl'>2</span>, line=<span class='op'>-</span><span class='fl'>1.5</span>, font=<span class='fl'>2</span>, cex=<span class='fl'>0.75</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sim.2</span>)
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='st'>'SD = c(1, 2, 5, 5, 5, 10, 3)'</span>, side=<span class='fl'>2</span>, line=<span class='op'>-</span><span class='fl'>1.5</span>, font=<span class='fl'>2</span>, cex=<span class='fl'>0.75</span>)
+</div><div class='img'><img src='sim-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># aggregate horizonation of simulated data</span>
 <span class='co'># note: set class_prob_mode=2 as profiles were not defined to a constant depth</span>
-<span class='no'>sim.2</span>$<span class='no'>name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>sim.2</span>$<span class='no'>name</span>)
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>sim.2</span>, ~ <span class='no'>name</span>, <span class='kw'>class_prob_mode</span><span class='kw'>=</span><span class='fl'>2</span>)
+<span class='kw'>sim.2</span><span class='op'>$</span><span class='kw'>name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>sim.2</span><span class='op'>$</span><span class='kw'>name</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>sim.2</span>, <span class='op'>~</span> <span class='kw'>name</span>, class_prob_mode=<span class='fl'>2</span>)
 
 <span class='co'># convert to long format for plotting simplicity</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>reshape</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://had.co.nz/reshape'>reshape</a></span>)
+</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'reshape'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:plyr':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    rename, round_any</span></div><div class='input'><span class='no'>a.long</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/melt-24.html'>melt</a></span>(<span class='no'>a</span>, <span class='kw'>id.vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'top'</span>,<span class='st'>'bottom'</span>), <span class='kw'>measure.vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>sim.2</span>$<span class='no'>name</span>))
+#&gt; <span class='message'>    rename, round_any</span></div><div class='input'><span class='kw'>a.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/melt-24.html'>melt</a></span>(<span class='kw'>a</span>, id.vars=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'top'</span>,<span class='st'>'bottom'</span>), measure.vars=<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>sim.2</span><span class='op'>$</span><span class='kw'>name</span>))
 
 <span class='co'># plot horizon probabilities derived from simulated data</span>
 <span class='co'># dashed lines are the original horizon boundaries</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lattice</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>top</span> ~ <span class='no'>value</span>, <span class='kw'>groups</span><span class='kw'>=</span><span class='no'>variable</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>a.long</span>, <span class='kw'>subset</span><span class='kw'>=</span><span class='no'>value</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>,
-<span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, -<span class='fl'>5</span>), <span class='kw'>type</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'l'</span>,<span class='st'>'g'</span>), <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1.5</span>,
-<span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>'Depth (cm)'</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>'Probability'</span>,
-<span class='kw'>auto.key</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>lines</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>points</span><span class='kw'>=</span><span class='fl'>FALSE</span>),
-<span class='kw'>panel</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>...</span>) {
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.xyplot.html'>panel.xyplot</a></span>(<span class='no'>...</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.functions.html'>panel.abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='no'>s</span>$<span class='no'>top</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)
-})</div><div class='img'><img src='sim-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>value</span>, groups=<span class='kw'>variable</span>, data=<span class='kw'>a.long</span>, subset=<span class='kw'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,
+ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='op'>-</span><span class='fl'>5</span>), type=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'l'</span>,<span class='st'>'g'</span>), asp=<span class='fl'>1.5</span>,
+ylab=<span class='st'>'Depth (cm)'</span>, xlab=<span class='st'>'Probability'</span>, 
+auto.key=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(columns=<span class='fl'>4</span>, lines=<span class='fl'>TRUE</span>, points=<span class='fl'>FALSE</span>),
+panel=<span class='fu'>function</span>(<span class='kw'>...</span>) {
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.xyplot.html'>panel.xyplot</a></span>(<span class='kw'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/panel.functions.html'>panel.abline</a></span>(h=<span class='kw'>s</span><span class='op'>$</span><span class='kw'>top</span>, lty=<span class='fl'>2</span>, lwd=<span class='fl'>2</span>)
+})
+</div><div class='img'><img src='sim-2.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -214,7 +224,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -121,9 +121,9 @@
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>metadata</span>(<span class='no'>object</span>)
+<span class='fu'>metadata</span>(<span class='kw'>object</span>)
 
-<span class='fu'>metadata</span>(<span class='no'>object</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+<span class='fu'>metadata</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,22 +134,23 @@
     </tr>
     <tr>
       <th>value</th>
-      <td><p>character, a value representing units. Default <code>'cm'</code>.</p></td>
+      <td><p>A named list (see examples)</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp5</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># replace default metadata with itself</span>
-<span class='fu'>metadata</span>(<span class='no'>sp5</span>) <span class='kw'>&lt;-</span> <span class='fu'>metadata</span>(<span class='no'>sp5</span>)
+<span class='fu'>metadata</span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='fu'>metadata</span>(<span class='kw'>sp5</span>)
 
 <span class='co'># set new metadata attribute value</span>
-<span class='fu'>metadata</span>(<span class='no'>sp5</span>)$<span class='no'>newvalue</span> <span class='kw'>&lt;-</span> <span class='st'>'foo'</span>
+<span class='fu'>metadata</span>(<span class='kw'>sp5</span>)<span class='op'>$</span><span class='kw'>newvalue</span> <span class='op'>&lt;-</span> <span class='st'>'foo'</span>
 
 <span class='co'># get metadata attribute</span>
-<span class='fu'>metadata</span>(<span class='no'>sp5</span>)$<span class='no'>newvalue</span></div><div class='output co'>#&gt; [1] "foo"</div><div class='input'>
+<span class='fu'>metadata</span>(<span class='kw'>sp5</span>)<span class='op'>$</span><span class='kw'>newvalue</span>
+</div><div class='output co'>#&gt; [1] "foo"</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -166,7 +167,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

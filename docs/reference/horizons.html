@@ -73,7 +73,7 @@ Horizon data in an object inheriting from data.frame can easily be added via mer
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -140,19 +140,22 @@ Horizon data in an object inheriting from data.frame can easily be added via mer
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
 
 <span class='co'># promote to SPC</span>
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
-<span class='co'># assign true to surface horizon</span>
-<span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>top</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-                      <span class='kw'>newvalue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
-<span class='co'># do left join                       </span>
-<span class='fu'>horizons</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>newdata</span></div><div class='output co'>#&gt; <span class='message'>join condition resulted in sorting of horizons, re-applying original order</span></div><div class='input'>
-<span class='co'># inspect site table: newvalue TRUE only for horizons </span>
+<span class='co'># assign true to surface horizon</span>
+<span class='kw'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(top = <span class='fl'>0</span>,
+                      newvalue = <span class='fl'>TRUE</span>)
+
+<span class='co'># do left join</span>
+<span class='fu'>horizons</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>newdata</span>
+
+<span class='co'># inspect site table: newvalue TRUE only for horizons</span>
 <span class='co'>#  with top depth equal to zero</span>
-<span class='fu'>horizons</span>(<span class='no'>sp2</span>)</div><div class='output co'>#&gt;     top     id         surface bottom bound_distinct bound_topography  name
+<span class='fu'>horizons</span>(<span class='kw'>sp2</span>)
+</div><div class='output co'>#&gt;     top     id         surface bottom bound_distinct bound_topography  name
 #&gt; 1     0  hon-1        holocene     12              A                S     A
 #&gt; 2    12  hon-1        holocene     16              A                S   2A1
 #&gt; 3    16  hon-1        holocene     25              C                S   2A2
@@ -788,7 +791,7 @@ Horizon data in an object inheriting from data.frame can easily be added via mer
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

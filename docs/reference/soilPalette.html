@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>A very simple function for generating labeled swatches of soil colors. Largely based on <code><a href='http://colorspace.R-Forge.R-project.org//reference/swatchplot.html'>colorspace::swatchplot</a></code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>soilPalette</span>(<span class='no'>colors</span>, <span class='no'>lab</span>, <span class='kw'>lab.cex</span> <span class='kw'>=</span> <span class='fl'>0.75</span>, <span class='kw'>dynamic.labels</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>soilPalette</span>(<span class='kw'>colors</span>, <span class='kw'>lab</span>, lab.cex = <span class='fl'>0.75</span>, dynamic.labels=<span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +147,9 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The result is a simple figure on the active plotting device.</p>
@@ -154,21 +157,22 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## maybe useful for teaching about soil color</span>
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
 
 <span class='co'># demonstrate range of Munsell value</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>'10YR %s/4'</span>, <span class='fl'>2</span>:<span class='fl'>8</span>)
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>'10YR %s/4'</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>)
 <span class='co'># convert to hex representation</span>
-<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>parseMunsell</a></span>(<span class='no'>m</span>)
+<span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>parseMunsell</a></span>(<span class='kw'>m</span>)
 <span class='co'># plot</span>
-<span class='fu'>soilPalette</span>(<span class='no'>cols</span>, <span class='no'>m</span>)
+<span class='fu'>soilPalette</span>(<span class='kw'>cols</span>, <span class='kw'>m</span>)
 
 <span class='co'># demonstrate range of Munsell chroma</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>'10YR 4/%s'</span>, <span class='fl'>2</span>:<span class='fl'>8</span>)
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>'10YR 4/%s'</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>)
 <span class='co'># convert to hex representation</span>
-<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>parseMunsell</a></span>(<span class='no'>m</span>)
+<span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>parseMunsell</a></span>(<span class='kw'>m</span>)
 <span class='co'># plot</span>
-<span class='fu'>soilPalette</span>(<span class='no'>cols</span>, <span class='no'>m</span>)</div><div class='img'><img src='soilPalette-1.png' alt='' width='768' height='475' /></div></pre>
+<span class='fu'>soilPalette</span>(<span class='kw'>cols</span>, <span class='kw'>m</span>)
+</div><div class='img'><img src='soilPalette-1.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -184,7 +188,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

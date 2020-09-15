@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,12 +120,12 @@
     <p>Soil samples from 10 soil profiles, taken from the Sierra Foothill Region of California.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp3</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 46 observations on the following 15 variables.</p><dl'>
+    <p>A data frame with 46 observations on the following 15 variables.</p><dl>
     <dt><code>id</code></dt><dd><p>soil id</p></dd>
     <dt><code>top</code></dt><dd><p>horizon upper boundary (cm)</p></dd> 
     <dt><code>bottom</code></dt><dd><p>horizon lower boundary (cm)</p></dd>
@@ -157,95 +157,96 @@
     <pre class="examples"><div class='input'><span class='co'>## this example investigates the concept of a "median profile"</span>
 
 <span class='co'># required packages</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>ape</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>cluster</span>)) {
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://ape-package.ird.fr'>ape</a></span>) <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://svn.r-project.org/R-packages/trunk/cluster'>cluster</a></span>)) {
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp3</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
 
 <span class='co'># generate a RGB version of soil colors</span>
 <span class='co'># and convert to HSV for aggregation</span>
-<span class='no'>sp3</span>$<span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span> ; <span class='no'>sp3</span>$<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span> ; <span class='no'>sp3</span>$<span class='no'>v</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
-<span class='no'>sp3.rgb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp3</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>, <span class='kw'>return_triplets</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-<span class='no'>sp3</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span>)] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp3.rgb</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/rgb2hsv.html'>rgb2hsv</a></span>(<span class='no'>r</span>, <span class='no'>g</span>, <span class='no'>b</span>, <span class='kw'>maxColorValue</span><span class='kw'>=</span><span class='fl'>1</span>)))
+<span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span> ; <span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span> ; <span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>v</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span>
+<span class='kw'>sp3.rgb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp3</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>, return_triplets=<span class='fl'>TRUE</span>))
+<span class='kw'>sp3</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span>)] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp3.rgb</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/rgb2hsv.html'>rgb2hsv</a></span>(<span class='kw'>r</span>, <span class='kw'>g</span>, <span class='kw'>b</span>, maxColorValue=<span class='fl'>1</span>)))
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp3</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
+<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># aggregate across entire collection</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>sp3</span>, <span class='kw'>fm</span><span class='kw'>=</span> ~ <span class='no'>clay</span> + <span class='no'>cec</span> + <span class='no'>ph</span> + <span class='no'>h</span> + <span class='no'>s</span> + <span class='no'>v</span>, <span class='kw'>slab.structure</span><span class='kw'>=</span><span class='fl'>10</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>sp3</span>, fm= <span class='op'>~</span> <span class='kw'>clay</span> <span class='op'>+</span> <span class='kw'>cec</span> <span class='op'>+</span> <span class='kw'>ph</span> <span class='op'>+</span> <span class='kw'>h</span> <span class='op'>+</span> <span class='kw'>s</span> <span class='op'>+</span> <span class='kw'>v</span>, slab.structure=<span class='fl'>10</span>)
 
 <span class='co'># check</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>a</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>a</span>)
 
 <span class='co'># convert back to wide format</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>reshape</span>)
-<span class='no'>a.wide.q25</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/cast-9g.html'>cast</a></span>(<span class='no'>a</span>, <span class='no'>top</span> + <span class='no'>bottom</span> ~ <span class='no'>variable</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p.q25'</span>))
-<span class='no'>a.wide.q50</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/cast-9g.html'>cast</a></span>(<span class='no'>a</span>, <span class='no'>top</span> + <span class='no'>bottom</span> ~ <span class='no'>variable</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p.q50'</span>))
-<span class='no'>a.wide.q75</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/cast-9g.html'>cast</a></span>(<span class='no'>a</span>, <span class='no'>top</span> + <span class='no'>bottom</span> ~ <span class='no'>variable</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p.q75'</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://had.co.nz/reshape'>reshape</a></span>)
+<span class='kw'>a.wide.q25</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/cast-9g.html'>cast</a></span>(<span class='kw'>a</span>, <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span> <span class='op'>~</span> <span class='kw'>variable</span>, value=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p.q25'</span>))
+<span class='kw'>a.wide.q50</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/cast-9g.html'>cast</a></span>(<span class='kw'>a</span>, <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span> <span class='op'>~</span> <span class='kw'>variable</span>, value=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p.q50'</span>))
+<span class='kw'>a.wide.q75</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape/man/cast-9g.html'>cast</a></span>(<span class='kw'>a</span>, <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span> <span class='op'>~</span> <span class='kw'>variable</span>, value=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'p.q75'</span>))
 
 <span class='co'># add a new id for the 25th, 50th, and 75th percentile pedons</span>
-<span class='no'>a.wide.q25</span>$<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='st'>'Q25'</span>
-<span class='no'>a.wide.q50</span>$<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='st'>'Q50'</span>
-<span class='no'>a.wide.q75</span>$<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='st'>'Q75'</span>
+<span class='kw'>a.wide.q25</span><span class='op'>$</span><span class='kw'>id</span> <span class='op'>&lt;-</span> <span class='st'>'Q25'</span>
+<span class='kw'>a.wide.q50</span><span class='op'>$</span><span class='kw'>id</span> <span class='op'>&lt;-</span> <span class='st'>'Q50'</span>
+<span class='kw'>a.wide.q75</span><span class='op'>$</span><span class='kw'>id</span> <span class='op'>&lt;-</span> <span class='st'>'Q75'</span>
 
 <span class='co'># combine original data with "mean profile"</span>
-<span class='no'>vars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'top'</span>,<span class='st'>'bottom'</span>,<span class='st'>'id'</span>,<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>,<span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span>)
+<span class='kw'>vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'top'</span>,<span class='st'>'bottom'</span>,<span class='st'>'id'</span>,<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>,<span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span>)
 <span class='co'># make data.frame version of sp3</span>
-<span class='no'>sp3.df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='coercion-methods.html'>as</a></span>(<span class='no'>sp3</span>, <span class='st'>'data.frame'</span>)
-<span class='no'>sp3.grouped</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
-<span class='no'>sp3.df</span>[, <span class='no'>vars</span>], <span class='no'>a.wide.q25</span>[, <span class='no'>vars</span>], <span class='no'>a.wide.q50</span>[, <span class='no'>vars</span>], <span class='no'>a.wide.q75</span>[, <span class='no'>vars</span>]
+<span class='kw'>sp3.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as.html'>as</a></span>(<span class='kw'>sp3</span>, <span class='st'>'data.frame'</span>)
+<span class='kw'>sp3.grouped</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
+<span class='kw'>sp3.df</span>[, <span class='kw'>vars</span>], <span class='kw'>a.wide.q25</span>[, <span class='kw'>vars</span>], <span class='kw'>a.wide.q50</span>[, <span class='kw'>vars</span>], <span class='kw'>a.wide.q75</span>[, <span class='kw'>vars</span>]
 )
 
 <span class='co'># re-constitute the soil color from HSV triplets</span>
 <span class='co'># convert HSV back to standard R colors</span>
-<span class='no'>sp3.grouped</span>$<span class='no'>soil_color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp3.grouped</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/hsv.html'>hsv</a></span>(<span class='no'>h</span>, <span class='no'>s</span>, <span class='no'>v</span>))
+<span class='kw'>sp3.grouped</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp3.grouped</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/hsv.html'>hsv</a></span>(<span class='kw'>h</span>, <span class='kw'>s</span>, <span class='kw'>v</span>))
 
 <span class='co'># give each horizon a name</span>
-<span class='no'>sp3.grouped</span>$<span class='no'>name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>sp3.grouped</span>$<span class='no'>clay</span>), <span class='st'>'/'</span> ,
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>sp3.grouped</span>$<span class='no'>cec</span>), <span class='st'>'/'</span>, <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>sp3.grouped</span>$<span class='no'>ph</span>,<span class='fl'>1</span>))
+<span class='kw'>sp3.grouped</span><span class='op'>$</span><span class='kw'>name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>sp3.grouped</span><span class='op'>$</span><span class='kw'>clay</span>), <span class='st'>'/'</span> , 
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>sp3.grouped</span><span class='op'>$</span><span class='kw'>cec</span>), <span class='st'>'/'</span>, <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>sp3.grouped</span><span class='op'>$</span><span class='kw'>ph</span>,<span class='fl'>1</span>))
 
 
 
 <span class='co'>## perform comparison, and convert to phylo class object</span>
 <span class='co'>## D is rescaled to [0,]</span>
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profile_compare-methods.html'>profile_compare</a></span>(<span class='no'>sp3.grouped</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>), <span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>100</span>,
-<span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>replace_na</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>add_soil_flag</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profile_compare-methods.html'>profile_compare</a></span>(<span class='kw'>sp3.grouped</span>, vars=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'clay'</span>,<span class='st'>'cec'</span>,<span class='st'>'ph'</span>), max_d=<span class='fl'>100</span>, 
+k=<span class='fl'>0.01</span>, replace_na=<span class='fl'>TRUE</span>, add_soil_flag=<span class='fl'>TRUE</span>, rescale.result=<span class='fl'>TRUE</span>)
 
 
-<span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/cluster/man/agnes.html'>agnes</a></span>(<span class='no'>d</span>, <span class='kw'>method</span><span class='kw'>=</span><span class='st'>'ward'</span>)
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ape/man/ladderize.html'>ladderize</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/ape/man/as.phylo.html'>as.phylo</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/as.hclust.html'>as.hclust</a></span>(<span class='no'>h</span>)))
+<span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/cluster/man/agnes.html'>agnes</a></span>(<span class='kw'>d</span>, method=<span class='st'>'ward'</span>)
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ape/man/ladderize.html'>ladderize</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/ape/man/as.phylo.html'>as.phylo</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/as.hclust.html'>as.hclust</a></span>(<span class='kw'>h</span>)))
 
 
 <span class='co'># look at distance plot-- just the median profile</span>
-<span class='fu'><a href='plot_distance_graph.html'>plot_distance_graph</a></span>(<span class='no'>d</span>, <span class='fl'>12</span>)
+<span class='fu'><a href='plot_distance_graph.html'>plot_distance_graph</a></span>(<span class='kw'>d</span>, <span class='fl'>12</span>)
 
 <span class='co'># similarity relative to median profile (profile #12)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fl'>1</span> - (<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>d</span>)[<span class='fl'>12</span>, ] / <span class='fu'><a href='max.html'>max</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>d</span>)[<span class='fl'>12</span>, ])), <span class='fl'>2</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fl'>1</span> <span class='op'>-</span> (<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='kw'>d</span>)[<span class='fl'>12</span>, ] <span class='op'>/</span> <span class='fu'><a href='max.html'>max</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='kw'>d</span>)[<span class='fl'>12</span>, ])), <span class='fl'>2</span>)
 
 <span class='co'>## make dendrogram + soil profiles</span>
 <span class='co'># first promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp3.grouped</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span>
+<span class='fu'>depths</span>(<span class='kw'>sp3.grouped</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># setup plot: note that D has a scale of [0,1]</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='no'>p.plot</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>p</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.8</span>, <span class='kw'>label.offset</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>direction</span><span class='kw'>=</span><span class='st'>'up'</span>, <span class='kw'>y.lim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>),
-<span class='kw'>x.lim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.25</span>,<span class='fu'><a href='length.html'>length</a></span>(<span class='no'>sp3.grouped</span>)+<span class='fl'>1</span>), <span class='kw'>show.tip.label</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='kw'>p.plot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>p</span>, cex=<span class='fl'>0.8</span>, label.offset=<span class='fl'>3</span>, direction=<span class='st'>'up'</span>, y.lim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>), 
+x.lim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.25</span>,<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp3.grouped</span>)<span class='op'>+</span><span class='fl'>1</span>), show.tip.label=<span class='fl'>FALSE</span>)
 
 <span class='co'># get the last plot geometry</span>
-<span class='no'>lastPP</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"last_plot.phylo"</span>, <span class='kw'>envir</span> <span class='kw'>=</span> <span class='no'>.PlotPhyloEnv</span>)
+<span class='kw'>lastPP</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"last_plot.phylo"</span>, envir = <span class='kw'>.PlotPhyloEnv</span>)
 
 <span class='co'># the original labels, and new (indexed) order of pedons in dendrogram</span>
-<span class='no'>d.labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>, <span class='st'>'Labels'</span>)
+<span class='kw'>d.labels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='kw'>d</span>, <span class='st'>'Labels'</span>)
 
-<span class='no'>new_order</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='no'>lastPP</span>$<span class='no'>Ntip</span>,
-<span class='kw'>function</span>(<span class='no'>i</span>) <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>lastPP</span>$<span class='no'>xx</span>[<span class='fl'>1</span>:<span class='no'>lastPP</span>$<span class='no'>Ntip</span>]) <span class='kw'>==</span> <span class='no'>i</span>))
+<span class='kw'>new_order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='kw'>lastPP</span><span class='op'>$</span><span class='kw'>Ntip</span>,
+<span class='fu'>function</span>(<span class='kw'>i</span>) <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>lastPP</span><span class='op'>$</span><span class='kw'>xx</span>[<span class='fl'>1</span><span class='op'>:</span><span class='kw'>lastPP</span><span class='op'>$</span><span class='kw'>Ntip</span>]) <span class='op'>==</span> <span class='kw'>i</span>))
 
 <span class='co'># plot the profiles, in the ordering defined by the dendrogram</span>
 <span class='co'># with a couple fudge factors to make them fit</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp3.grouped</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>"soil_color"</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>new_order</span>,
-<span class='kw'>scaling.factor</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>width</span><span class='kw'>=</span><span class='fl'>0.1</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.5</span>,
-<span class='kw'>y.offset</span><span class='kw'>=</span><span class='fu'><a href='max.html'>max</a></span>(<span class='no'>lastPP</span>$<span class='no'>yy</span>)+<span class='fl'>0.1</span>, <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp3.grouped</span>, color=<span class='st'>"soil_color"</span>, plot.order=<span class='kw'>new_order</span>,
+scaling.factor=<span class='fl'>0.01</span>, width=<span class='fl'>0.1</span>, cex.names=<span class='fl'>0.5</span>,
+y.offset=<span class='fu'><a href='max.html'>max</a></span>(<span class='kw'>lastPP</span><span class='op'>$</span><span class='kw'>yy</span>)<span class='op'>+</span><span class='fl'>0.1</span>, add=<span class='fl'>TRUE</span>)
 
-}</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='output co'>#&gt; 'data.frame':	72 obs. of  10 variables:
+}
+</div><div class='output co'>#&gt; 'data.frame':	72 obs. of  10 variables:
 #&gt;  $ variable             : Factor w/ 6 levels "clay","cec","ph",..: 1 1 1 1 1 1 1 1 1 1 ...
 #&gt;  $ all.profiles         : num  1 1 1 1 1 1 1 1 1 1 ...
 #&gt;  $ p.q5                 : num  6.55 6.39 6.39 6.39 6.39 ...
@@ -255,7 +256,7 @@
 #&gt;  $ p.q95                : num  21.7 32.3 32.3 51.4 51.4 ...
 #&gt;  $ top                  : int  0 10 20 30 40 50 60 70 80 90 ...
 #&gt;  $ bottom               : int  10 20 30 40 50 60 70 80 90 100 ...
-#&gt;  $ contributing_fraction: num  0.89 1 1 1 1 1 0.9 0.9 0.58 0.15 ...</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 13 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.26 Mb]</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='img'><img src='sp3-1.png' alt='' width='768' height='475' /></div><div class='img'><img src='sp3-2.png' alt='' width='768' height='475' /></div></pre>
+#&gt;  $ contributing_fraction: num  0.89 1 1 1 1 1 0.9 0.9 0.58 0.15 ...</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 13 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.26 Mb]</span></div><div class='img'><img src='sp3-1.png' alt='' width='768' height='475' /></div><div class='img'><img src='sp3-2.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -271,7 +272,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,10 +120,10 @@
     <p>Add depth-wise brackets to an existing plot of a SoilProfileCollection object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>addBracket</span>(<span class='no'>x</span>, <span class='kw'>label.cex</span><span class='kw'>=</span><span class='fl'>0.75</span>,
-<span class='kw'>tick.length</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>arrow.length</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>offset</span> <span class='kw'>=</span> -<span class='fl'>0.3</span>,
-<span class='kw'>missing.bottom.depth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>addBracket</span>(<span class='kw'>x</span>, label.cex=<span class='fl'>0.75</span>,
+tick.length = <span class='fl'>0.05</span>, arrow.length = <span class='fl'>0.05</span>, offset = <span class='op'>-</span><span class='fl'>0.3</span>, 
+missing.bottom.depth = <span class='kw'>NULL</span>, 
+<span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,49 +164,59 @@
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This is a `low-level` plotting function: you must first plot a <code>SoilProfileCollection</code> object before using this function.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='SoilProfileCollection-plotting-methods.html'>plotSPC</a></code></p></div>
+    <div class='dont-index'><p><code><a href='plotSPC.html'>plotSPC</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>plyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://had.co.nz/plyr'>plyr</a></span>)
+</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'plyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:aqp':</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    mutate, summarize</span></div><div class='input'>
 <span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># add color vector</span>
-<span class='no'>sp1</span>$<span class='no'>soil_color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>))
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># plot profiles</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>)</div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>)
+</div><div class='input'>
 <span class='co'># extract top/bottom depths associated with all A horizons</span>
 <span class='co'># return as a single data.frame / profile</span>
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>i</span>) {
-  <span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>i</span>)
-  <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>'^A'</span>, <span class='no'>h</span>$<span class='no'>name</span>)
-  <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>top</span><span class='kw'>=</span><span class='fu'><a href='min.html'>min</a></span>(<span class='no'>h</span>$<span class='no'>top</span>[<span class='no'>idx</span>]), <span class='kw'>bottom</span><span class='kw'>=</span><span class='fu'><a href='max.html'>max</a></span>(<span class='no'>h</span>$<span class='no'>bottom</span>[<span class='no'>idx</span>], <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>res</span>)
+<span class='kw'>f</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>i</span>) {
+  <span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>i</span>)
+  <span class='kw'>idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>'^A'</span>, <span class='kw'>h</span><span class='op'>$</span><span class='kw'>name</span>)
+  <span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(top=<span class='fu'><a href='min.html'>min</a></span>(<span class='kw'>h</span><span class='op'>$</span><span class='kw'>top</span>[<span class='kw'>idx</span>]), bottom=<span class='fu'><a href='max.html'>max</a></span>(<span class='kw'>h</span><span class='op'>$</span><span class='kw'>bottom</span>[<span class='kw'>idx</span>], na.rm=<span class='fl'>TRUE</span>))
+  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>res</span>)
 }
 
 <span class='co'># apply function to each profile in sp1, result is a list</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='no'>sp1</span>, <span class='no'>f</span>, <span class='kw'>simplify</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='kw'>sp1</span>, <span class='kw'>f</span>, simplify=<span class='fl'>FALSE</span>)
 <span class='co'># convert list into data.frame</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ldply.html'>ldply</a></span>(<span class='no'>a</span>)
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ldply.html'>ldply</a></span>(<span class='kw'>a</span>)
 <span class='co'># set idname so that addBrackets can locate the correct profile</span>
-<span class='fu'><a href='names.html'>names</a></span>(<span class='no'>a</span>)[<span class='fl'>1</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='idname.html'>idname</a></span>(<span class='no'>sp1</span>)
+<span class='fu'><a href='names.html'>names</a></span>(<span class='kw'>a</span>)[<span class='fl'>1</span>] <span class='op'>&lt;-</span> <span class='fu'><a href='idname.html'>idname</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>)</div><div class='input'><span class='co'># annotate with brackets</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>)
+</div><div class='input'><span class='co'># annotate with brackets</span>
 <span class='co'># note that plotting order is derived from the call to `plot(sp1)`</span>
-<span class='fu'>addBracket</span>(<span class='no'>a</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='addBracket-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'>addBracket</span>(<span class='kw'>a</span>, col=<span class='st'>'red'</span>)
+</div><div class='img'><img src='addBracket-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># brackets follow plotting order</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp1</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='fu'><a href='length.html'>length</a></span>(<span class='no'>sp1</span>):<span class='fl'>1</span>)</div><div class='input'><span class='co'># annotate with brackets</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp1</span>, plot.order=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>)<span class='op'>:</span><span class='fl'>1</span>)
+</div><div class='input'><span class='co'># annotate with brackets</span>
 <span class='co'># note that plotting order is derived from the call to `plot(sp1)`</span>
-<span class='fu'>addBracket</span>(<span class='no'>a</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='addBracket-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'>addBracket</span>(<span class='kw'>a</span>, col=<span class='st'>'red'</span>)
+</div><div class='img'><img src='addBracket-2.png' alt='' width='768' height='475' /></div><div class='input'>
 
 </div></pre>
   </div>
@@ -224,7 +234,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

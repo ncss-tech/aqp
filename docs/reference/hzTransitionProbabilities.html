@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,11 +120,11 @@
     <p>Functions for creating and working with horizon (sequence) transition probability matrices.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hzTransitionProbabilities</span>(<span class='no'>x</span>, <span class='no'>name</span>, <span class='kw'>loopTerminalStates</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>hzTransitionProbabilities</span>(<span class='kw'>x</span>, <span class='kw'>name</span>, loopTerminalStates = <span class='fl'>FALSE</span>)
 
-<span class='fu'>genhzTableToAdjMat</span>(<span class='no'>tab</span>)
+<span class='fu'>genhzTableToAdjMat</span>(<span class='kw'>tab</span>)
 
-<span class='fu'>mostLikelyHzSequence</span>(<span class='no'>mc</span>, <span class='no'>t0</span>, <span class='kw'>maxIterations</span><span class='kw'>=</span><span class='fl'>10</span>)</pre>
+<span class='fu'>mostLikelyHzSequence</span>(<span class='kw'>mc</span>, <span class='kw'>t0</span>, maxIterations=<span class='fl'>10</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +161,7 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See the following tutorials for some ideas:</p><dl'>
+    <p>See the following tutorials for some ideas:</p><dl>
   <dt>horizon designation TP</dt><dd><p><a href='http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html'>http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html</a></p></dd>
   <dt>soil color TP</dt><dd><p><a href='http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html'>http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html</a></p></dd>
   
@@ -172,6 +172,9 @@
     <p>The function <code>hzTransitionProbabilities</code> returns a square matrix of transition probabilities. See examples.</p>
 <p>The function <code>genhzTableToAdjMat</code> returns a square adjacency matrix. See examples.</p>
 <p>The function <code>mostLikelyHzSequence</code> returns the most likely sequence of horizons, given a <code>markovchain</code> object initialized from horizon transition probabilities and an initial state, <code>t0</code>. See examples.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>These functions are still experimental and subject to change.</p>
@@ -180,10 +183,12 @@
     <div class='dont-index'><p><code><a href='generalize.hz.html'>generalize.hz</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp4</span>)
-<span class='fu'>depths</span>(<span class='no'>sp4</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># horizon transition probabilities: row -&gt; col transitions</span>
-(<span class='no'>tp</span> <span class='kw'>&lt;-</span> <span class='fu'>hzTransitionProbabilities</span>(<span class='no'>sp4</span>, <span class='st'>'name'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: ties in transition probability matrix</span></div><div class='output co'>#&gt;     A A1 A2 AB       ABt        Bt       Bt1 Bt2 Bt3
+(<span class='kw'>tp</span> <span class='op'>&lt;-</span> <span class='fu'>hzTransitionProbabilities</span>(<span class='kw'>sp4</span>, <span class='st'>'name'</span>))
+</div><div class='output co'>#&gt; <span class='warning'>Warning: ties in transition probability matrix</span></div><div class='output co'>#&gt;     A A1 A2 AB       ABt        Bt       Bt1 Bt2 Bt3
 #&gt; A   0  0  0  0 0.1111111 0.4444444 0.4444444   0   0
 #&gt; A1  0  0  1  0 0.0000000 0.0000000 0.0000000   0   0
 #&gt; A2  0  0  0  1 0.0000000 0.0000000 0.0000000   0   0
@@ -196,41 +201,42 @@
 #&gt; attr(,"ties")
 #&gt; [1] TRUE</div><div class='input'>
 
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>## plot TP matrix with functions from sharpshootR package</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sharpshootR</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='kw'>mfcol</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp4</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html'>plotSoilRelationGraph</a></span>(<span class='no'>tp</span>, <span class='kw'>graph.mode</span> <span class='kw'>=</span> <span class='st'>'directed'</span>, <span class='kw'>edge.arrow.size</span><span class='kw'>=</span><span class='fl'>0.5</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>sharpshootR</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), mfcol=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp4</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html'>plotSoilRelationGraph</a></span>(<span class='kw'>tp</span>, graph.mode = <span class='st'>'directed'</span>, edge.arrow.size=<span class='fl'>0.5</span>)
 
 <span class='co'>## demonstrate genhzTableToAdjMat usage</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>loafercreek</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'soilDB'</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>loafercreek</span>, package=<span class='st'>'soilDB'</span>)
 
 <span class='co'># convert contingency table -&gt; adj matrix / TP matrix</span>
-<span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>loafercreek</span>$<span class='no'>hzname</span>, <span class='no'>loafercreek</span>$<span class='no'>genhz</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'>genhzTableToAdjMat</span>(<span class='no'>tab</span>)
+<span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>hzname</span>, <span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>genhz</span>)
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'>genhzTableToAdjMat</span>(<span class='kw'>tab</span>)
 
 <span class='co'># plot </span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='kw'>mfcol</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html'>plotSoilRelationGraph</a></span>(<span class='no'>m</span>, <span class='kw'>graph.mode</span> <span class='kw'>=</span> <span class='st'>'directed'</span>, <span class='kw'>edge.arrow.size</span><span class='kw'>=</span><span class='fl'>0.5</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), mfcol=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html'>plotSoilRelationGraph</a></span>(<span class='kw'>m</span>, graph.mode = <span class='st'>'directed'</span>, edge.arrow.size=<span class='fl'>0.5</span>)
 
 
 <span class='co'>## demonstrate markovchain integration</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>markovchain</span>)
-<span class='no'>tp.loops</span> <span class='kw'>&lt;-</span> <span class='fu'>hzTransitionProbabilities</span>(<span class='no'>sp4</span>, <span class='st'>'name'</span>, <span class='kw'>loopTerminalStates</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/spedygiorgio/markovchain'>markovchain</a></span>)
+<span class='kw'>tp.loops</span> <span class='op'>&lt;-</span> <span class='fu'>hzTransitionProbabilities</span>(<span class='kw'>sp4</span>, <span class='st'>'name'</span>, loopTerminalStates = <span class='fl'>TRUE</span>)
 
 <span class='co'># init new markovchain from TP matrix</span>
-<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>"markovchain"</span>, <span class='kw'>states</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/dimnames.html'>dimnames</a></span>(<span class='no'>tp.loops</span>)<span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>transitionMatrix</span> <span class='kw'>=</span> <span class='no'>tp.loops</span>)
+<span class='kw'>mc</span> <span class='op'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>"markovchain"</span>, states=<span class='fu'><a href='https://rdrr.io/r/base/dimnames.html'>dimnames</a></span>(<span class='kw'>tp.loops</span>)[[<span class='fl'>1</span>]], transitionMatrix = <span class='kw'>tp.loops</span>)
 
 <span class='co'># simple plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mc</span>, <span class='kw'>edge.arrow.size</span><span class='kw'>=</span><span class='fl'>0.5</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>mc</span>, edge.arrow.size=<span class='fl'>0.5</span>)
 
 <span class='co'># check absorbing states</span>
-<span class='fu'><a href='https://rdrr.io/pkg/markovchain/man/structuralAnalysis.html'>absorbingStates</a></span>(<span class='no'>mc</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/markovchain/man/structuralAnalysis.html'>absorbingStates</a></span>(<span class='kw'>mc</span>)
 
 <span class='co'># steady-state:</span>
-<span class='fu'><a href='https://rdrr.io/pkg/markovchain/man/steadyStates.html'>steadyStates</a></span>(<span class='no'>mc</span>)
-}</div></pre>
+<span class='fu'><a href='https://rdrr.io/pkg/markovchain/man/steadyStates.html'>steadyStates</a></span>(<span class='kw'>mc</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -246,7 +252,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

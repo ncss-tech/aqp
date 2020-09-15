@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,9 +120,9 @@
     <p>This is a very simple optimization algorithm for adjusting horizontal sketch positions until affected profiles are farter apart than a given threshold. Rank-ordering and boundary conditions are enforced on the adjustments. Failure to converge within <code>maxIter</code> results in an integer sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fixOverlap</span>(<span class='no'>x</span>, <span class='kw'>thresh</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-<span class='kw'>min.x</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>max.x</span> <span class='kw'>=</span> <span class='fu'><a href='length.html'>length</a></span>(<span class='no'>x</span>) + <span class='fl'>0.2</span>,
-<span class='kw'>maxIter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>trace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>fixOverlap</span>(<span class='kw'>x</span>, thresh = <span class='fl'>0.6</span>, adj = <span class='fl'>0.2</span>, 
+min.x = <span class='fl'>0.8</span>, max.x = <span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>x</span>) <span class='op'>+</span> <span class='fl'>0.2</span>, 
+maxIter = <span class='fl'>1000</span>, trace = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,35 +160,49 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a vector of the same length as <code>x</code>, preserving rank-ordering and boundary conditions.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This is a very naeve function and may fail to converge on a reasonable solution. SANN would be a much more robust framework.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp4</span>)
-<span class='fu'>depths</span>(<span class='no'>sp4</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># proposed vector of relative positions, overlap likely</span>
-<span class='no'>pos</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1.1</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5.2</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>9</span>, <span class='fl'>10</span>)
+<span class='kw'>pos</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1.1</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5.2</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>9</span>, <span class='fl'>10</span>)
 
 <span class='co'># try it</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='no'>pos</span>)</div><div class='img'><img src='fixOverlap-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='kw'>pos</span>)
+</div><div class='img'><img src='fixOverlap-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># attempt to fix using an integer sequence, short-circut will prevent adjustments</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>1 iterations</span></div><div class='img'><img src='fixOverlap-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>1 iterations</span></div><div class='img'><img src='fixOverlap-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># attempt to adjust using defaults</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>56 iterations</span></div><div class='img'><img src='fixOverlap-3.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>43 iterations</span></div><div class='img'><img src='fixOverlap-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># attempt to adjust and tinker with defaults</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>70 iterations</span></div><div class='img'><img src='fixOverlap-4.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>23 iterations</span></div><div class='img'><img src='fixOverlap-4.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># repeatable adjustments</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>10101</span>)
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>thresh</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>16 iterations</span></div><div class='img'><img src='fixOverlap-5.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thresh = <span class='fl'>0.7</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>16 iterations</span></div><div class='img'><img src='fixOverlap-5.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># more complex adjustments required</span>
-<span class='no'>pos</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3.3</span>, <span class='fl'>5</span>, <span class='fl'>5.1</span>, <span class='fl'>5.5</span>, <span class='fl'>8</span>, <span class='fl'>9</span>, <span class='fl'>9.1</span>)
+<span class='kw'>pos</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3.3</span>, <span class='fl'>5</span>, <span class='fl'>5.1</span>, <span class='fl'>5.5</span>, <span class='fl'>8</span>, <span class='fl'>9</span>, <span class='fl'>9.1</span>)
 
 <span class='co'># tinker</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='no'>pos</span>)</div><div class='img'><img src='fixOverlap-6.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>35 iterations</span></div><div class='img'><img src='fixOverlap-7.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>thresh</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>371 iterations</span></div><div class='img'><img src='fixOverlap-8.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>thres</span><span class='kw'>=</span><span class='fl'>0.7</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>496 iterations</span></div><div class='img'><img src='fixOverlap-9.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='kw'>pos</span>)
+</div><div class='img'><img src='fixOverlap-6.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>35 iterations</span></div><div class='img'><img src='fixOverlap-7.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thresh = <span class='fl'>0.7</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>371 iterations</span></div><div class='img'><img src='fixOverlap-8.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thres=<span class='fl'>0.7</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>496 iterations</span></div><div class='img'><img src='fixOverlap-9.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># no solution possible given these constraints</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='no'>sp4</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>relative.pos</span><span class='kw'>=</span><span class='fu'>fixOverlap</span>(<span class='no'>pos</span>, <span class='kw'>thres</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>trace</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'>maximum number of iterations reached, using integer sequence</span></div><div class='img'><img src='fixOverlap-10.png' alt='' width='768' height='475' /></div></pre>
+<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thres=<span class='fl'>1</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
+</div><div class='output co'>#&gt; <span class='message'>maximum number of iterations reached, using integer sequence</span></div><div class='img'><img src='fixOverlap-10.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -204,7 +218,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

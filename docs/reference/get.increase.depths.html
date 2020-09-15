@@ -73,7 +73,7 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
 <p>Note that the `threshold.fun` result is allowed to contain NA, but that will result in no output for affected cells.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get.increase.depths</span>(<span class='no'>p</span>, <span class='no'>attr</span>, <span class='no'>threshold.fun</span>, <span class='no'>vertical.distance</span>)</pre>
+    <pre class="usage"><span class='fu'>get.increase.depths</span>(<span class='kw'>p</span>, <span class='kw'>attr</span>, <span class='kw'>threshold.fun</span>, <span class='kw'>vertical.distance</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,19 +149,24 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
 
     <p>Returns a numeric vector of depths where the increase retuirement is met. Typically the first is the one of interst to taxonomy.</p>
 <p><code>get.increase.depths</code> converts to horizon dop depth by using above matrix output to determine depths where increase is met.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew Gene Brown</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code>getArgillicBounds</code>, <code>crit.clay.argillic</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='no'>sp1</span>[<span class='fl'>1</span>]
-<span class='no'>attr</span> <span class='kw'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>get.increase.depths</span>(<span class='no'>p</span>, <span class='kw'>threshold.fun</span> <span class='kw'>=</span> <span class='no'>crit.clay.argillic</span>,
-                           <span class='kw'>attr</span> <span class='kw'>=</span> <span class='no'>attr</span>, <span class='kw'>vertical.distance</span> <span class='kw'>=</span> <span class='fl'>30</span>)
-<span class='no'>foo</span></div><div class='output co'>#&gt; [1] 49 57</div></pre>
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
+<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
+<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.depths</span>(<span class='kw'>p</span>, threshold.fun = <span class='kw'>crit.clay.argillic</span>, 
+                           attr = <span class='kw'>attr</span>, vertical.distance = <span class='fl'>30</span>)
+<span class='kw'>foo</span>
+</div><div class='output co'>#&gt; [1] 49 57</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -177,7 +182,7 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check a <code>SoilProfileCollection</code> object for errors in horizon depths. — checkHzDepthLogic • aqp</title>
+<title>Check a SoilProfileCollection object for errors in horizon depths. — checkHzDepthLogic • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Check a <code>SoilProfileCollection</code> object for errors in horizon depths. — checkHzDepthLogic" />
+<meta property="og:title" content="Check a SoilProfileCollection object for errors in horizon depths. — checkHzDepthLogic" />
 <meta property="og:description" content="This function inspects a SoilProfileCollection object, looking for 4 common errors in horizon depths: 1) bottom depths shallower than top depths, 2) equal top and bottom depths, 3) missing top or bottom depths (e.g. NA), and, 4) gaps or overlap between adjacent horizons." />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>This function inspects a <code>SoilProfileCollection</code> object, looking for 4 common errors in horizon depths: 1) bottom depths shallower than top depths, 2) equal top and bottom depths, 3) missing top or bottom depths (e.g. NA), and, 4) gaps or overlap between adjacent horizons.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>checkHzDepthLogic</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>checkHzDepthLogic</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,7 +136,7 @@
     <p>This function replaces <code>test_hz_logic</code>, now marked as deprecated.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code> with as many rows as profiles in <code>x</code>.</p><dl'>
+    <p>A <code>data.frame</code> with as many rows as profiles in <code>x</code>.</p><dl>
 		<dt>id</dt><dd><p>Profile IDs, named according to <code><a href='idname.html'>idname(x)</a></code></p></dd>
 
 		<dt>depthLogic</dt><dd><p>boolean, errors related to depth logic</p></dd>
@@ -151,6 +151,9 @@
 		
 </dl>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>There is currently no simple way to fix errors identified by this function. Stay tuned for a <code>fixHzDepthErrors()</code>.</p>
@@ -158,11 +161,14 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp3</span>)
-<span class='fu'>depths</span>(<span class='no'>sp3</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+ 
 <span class='co'># these data should be clean</span>
-(<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span>(<span class='no'>sp3</span>))</div><div class='output co'>#&gt;    id depthLogic sameDepth missingDepth overlapOrGap valid
+(<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span>(<span class='kw'>sp3</span>))
+</div><div class='output co'>#&gt;    id depthLogic sameDepth missingDepth overlapOrGap valid
 #&gt; 1   1      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 10 10      FALSE     FALSE        FALSE        FALSE  TRUE
 #&gt; 2   2      FALSE     FALSE        FALSE        FALSE  TRUE
 #&gt; 3   3      FALSE     FALSE        FALSE        FALSE  TRUE
 #&gt; 4   4      FALSE     FALSE        FALSE        FALSE  TRUE
@@ -170,8 +176,7 @@
 #&gt; 6   6      FALSE     FALSE        FALSE        FALSE  TRUE
 #&gt; 7   7      FALSE     FALSE        FALSE        FALSE  TRUE
 #&gt; 8   8      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 9   9      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 10 10      FALSE     FALSE        FALSE        FALSE  TRUE</div><div class='input'>
+#&gt; 9   9      FALSE     FALSE        FALSE        FALSE  TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -188,7 +193,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

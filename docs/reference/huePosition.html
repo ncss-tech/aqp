@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Munsell hues are typically arranged from 5R to 5PB in Munsell soil color books. This function matches a vector of Munsell hues to the position in this arrangement of 29 hues.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>huePosition</span>(<span class='no'>x</span>, <span class='kw'>returnHues</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>huePosition</span>(<span class='kw'>x</span>, returnHues=<span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,18 +144,23 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='colorContrast.html'>colorContrast</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># get hue ordering for setting levels of a factor</span>
-<span class='fu'>huePosition</span>(<span class='kw'>x</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>returnHues</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] "5R"    "7.5R"  "10R"   "2.5YR" "5YR"   "7.5YR" "10YR"  "2.5Y"  "5Y"   
+<span class='fu'>huePosition</span>(x=<span class='kw'>NULL</span>, returnHues=<span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt;  [1] "5R"    "7.5R"  "10R"   "2.5YR" "5YR"   "7.5YR" "10YR"  "2.5Y"  "5Y"   
 #&gt; [10] "7.5Y"  "10Y"   "2.5GY" "5GY"   "7.5GY" "10GY"  "2.5G"  "5G"    "7.5G" 
 #&gt; [19] "10G"   "2.5BG" "5BG"   "7.5BG" "10BG"  "2.5B"  "5B"    "7.5B"  "10B"  
 #&gt; [28] "2.5PB" "5PB"  </div><div class='input'>
 <span class='co'># get position of the '10YR' hue (7)</span>
-<span class='fu'>huePosition</span>(<span class='kw'>x</span><span class='kw'>=</span><span class='st'>'10YR'</span>)</div><div class='output co'>#&gt; [1] 7</div></pre>
+<span class='fu'>huePosition</span>(x=<span class='st'>'10YR'</span>)
+</div><div class='output co'>#&gt; [1] 7</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -171,7 +176,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

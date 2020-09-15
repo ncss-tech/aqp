@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,12 +120,12 @@
     <p>A collection of 18 soil profiles, consisting of select soil morphologic attributes, associated with a stratigraphic study conducted near Honcut Creek, California.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 154 observations on the following 21 variables.</p><dl'>
+    <p>A data frame with 154 observations on the following 21 variables.</p><dl>
     <dt><code>id</code></dt><dd><p>profile id</p></dd>
     <dt><code>surface</code></dt><dd><p>dated surface</p></dd>
     <dt><code>top</code></dt><dd><p>horizon top in cm</p></dd>
@@ -157,44 +157,51 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>http://casoilresource.lawr.ucdavis.edu/</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Dylan E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
 
 <span class='co'># convert into SoilProfileCollection object</span>
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+
 <span class='co'># transfer site-level data</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>surface</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>surface</span>
 
 <span class='co'># generate a new plotting order, based on the dated surface each soil was described on</span>
-<span class='no'>p.order</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>sp2</span>$<span class='no'>surface</span>)
+<span class='kw'>p.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>surface</span>)
 
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp2</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>p.order</span>)</div><div class='img'><img src='sp2-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp2</span>, plot.order=<span class='kw'>p.order</span>)
+</div><div class='img'><img src='sp2-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># setup multi-figure output</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>))
 
 <span class='co'># truncate plot to 200 cm depth</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp2</span>, <span class='kw'>plot.order</span><span class='kw'>=</span><span class='no'>p.order</span>, <span class='kw'>max.depth</span><span class='kw'>=</span><span class='fl'>200</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>200</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp2</span>, plot.order=<span class='kw'>p.order</span>, max.depth=<span class='fl'>200</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(h=<span class='fl'>200</span>, lty=<span class='fl'>2</span>, lwd=<span class='fl'>2</span>)
 
 <span class='co'># compute numerical distances between profiles </span>
 <span class='co'># based on select horizon-level properties, to a depth of 200 cm</span>
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='profile_compare-methods.html'>profile_compare</a></span>(<span class='no'>sp2</span>, <span class='kw'>vars</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>),
-<span class='kw'>max_d</span><span class='kw'>=</span><span class='fl'>200</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>sample_interval</span><span class='kw'>=</span><span class='fl'>5</span>, <span class='kw'>rescale.result</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.14 Mb]</span></div><div class='input'>
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profile_compare-methods.html'>profile_compare</a></span>(<span class='kw'>sp2</span>, vars=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>), 
+max_d=<span class='fl'>200</span>, k=<span class='fl'>0</span>, sample_interval=<span class='fl'>5</span>, rescale.result=<span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.14 Mb]</span></div><div class='input'>
 <span class='co'># plot dendrogram with ape package:</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>ape</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>cluster</span>)) {
-<span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/cluster/man/diana.html'>diana</a></span>(<span class='no'>d</span>)
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ape/man/as.phylo.html'>as.phylo</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/as.hclust.html'>as.hclust</a></span>(<span class='no'>h</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>p</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>, <span class='kw'>label.offset</span><span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>direct</span><span class='kw'>=</span><span class='st'>'down'</span>, <span class='kw'>srt</span><span class='kw'>=</span><span class='fl'>90</span>, <span class='kw'>adj</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>y.lim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>0.125</span>, <span class='fl'>0.5</span>))
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://ape-package.ird.fr'>ape</a></span>) <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://svn.r-project.org/R-packages/trunk/cluster'>cluster</a></span>)) {
+<span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/cluster/man/diana.html'>diana</a></span>(<span class='kw'>d</span>)
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ape/man/as.phylo.html'>as.phylo</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/as.hclust.html'>as.hclust</a></span>(<span class='kw'>h</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>p</span>, cex=<span class='fl'>0.75</span>, label.offset=<span class='fl'>0.01</span>, font=<span class='fl'>1</span>, direct=<span class='st'>'down'</span>, srt=<span class='fl'>90</span>, adj=<span class='fl'>0.5</span>, y.lim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>0.125</span>, <span class='fl'>0.5</span>))
 
 <span class='co'># add in the dated surface type via color</span>
-<span class='fu'><a href='https://rdrr.io/pkg/ape/man/nodelabels.html'>tiplabels</a></span>(<span class='kw'>col</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='no'>sp2</span>$<span class='no'>surface</span>), <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/ape/man/nodelabels.html'>tiplabels</a></span>(col=<span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>surface</span>), pch=<span class='fl'>15</span>)
 
 <span class='co'># based on distance matrix values, YMMV</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>'topleft'</span>, <span class='kw'>legend</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>sp2</span>$<span class='no'>surface</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fl'>6</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>15</span>, <span class='kw'>bty</span><span class='kw'>=</span><span class='st'>'n'</span>, <span class='kw'>bg</span><span class='kw'>=</span><span class='st'>'white'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.75</span>)
-}</div><div class='img'><img src='sp2-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>'topleft'</span>, legend=<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>surface</span>), col=<span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>, pch=<span class='fl'>15</span>, bty=<span class='st'>'n'</span>, bg=<span class='st'>'white'</span>, cex=<span class='fl'>0.75</span>)
+}
+</div><div class='img'><img src='sp2-2.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -211,7 +218,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

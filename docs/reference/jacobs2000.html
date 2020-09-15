@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -135,37 +135,45 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># load</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>jacobs2000</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>jacobs2000</span>)
 
 <span class='co'># basic plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>jacobs2000</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'matrix_color'</span>, <span class='kw'>width</span><span class='kw'>=</span><span class='fl'>0.3</span>)</div><div class='input'><span class='co'># add concentrations</span>
-<span class='fu'><a href='addVolumeFraction.html'>addVolumeFraction</a></span>(<span class='no'>jacobs2000</span>, <span class='st'>'concentration_pct'</span>,
-<span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>jacobs2000</span>$<span class='no'>concentration_color</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>16</span>, <span class='kw'>cex.max</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='img'><img src='jacobs2000-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>jacobs2000</span>, name=<span class='st'>'name'</span>, color=<span class='st'>'matrix_color'</span>, width=<span class='fl'>0.3</span>)
+</div><div class='input'><span class='co'># add concentrations</span>
+<span class='fu'><a href='addVolumeFraction.html'>addVolumeFraction</a></span>(<span class='kw'>jacobs2000</span>, <span class='st'>'concentration_pct'</span>, 
+col = <span class='kw'>jacobs2000</span><span class='op'>$</span><span class='kw'>concentration_color</span>, pch = <span class='fl'>16</span>, cex.max = <span class='fl'>0.5</span>)
+</div><div class='img'><img src='jacobs2000-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># add depletions</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>jacobs2000</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'name'</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'matrix_color'</span>, <span class='kw'>width</span><span class='kw'>=</span><span class='fl'>0.3</span>)</div><div class='input'><span class='fu'><a href='addVolumeFraction.html'>addVolumeFraction</a></span>(<span class='no'>jacobs2000</span>, <span class='st'>'depletion_pct'</span>,
-<span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>jacobs2000</span>$<span class='no'>depletion_color</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>16</span>, <span class='kw'>cex.max</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='img'><img src='jacobs2000-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>jacobs2000</span>, name=<span class='st'>'name'</span>, color=<span class='st'>'matrix_color'</span>, width=<span class='fl'>0.3</span>)
+</div><div class='input'><span class='fu'><a href='addVolumeFraction.html'>addVolumeFraction</a></span>(<span class='kw'>jacobs2000</span>, <span class='st'>'depletion_pct'</span>, 
+col = <span class='kw'>jacobs2000</span><span class='op'>$</span><span class='kw'>depletion_color</span>, pch = <span class='fl'>16</span>, cex.max = <span class='fl'>0.5</span>)
+</div><div class='img'><img src='jacobs2000-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># time saturated</span>
-<span class='fu'><a href='SoilProfileCollection-plotting-methods.html'>plotSPC</a></span>(<span class='no'>jacobs2000</span>, <span class='kw'>color</span><span class='kw'>=</span><span class='st'>'time_saturated'</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.8</span>, <span class='kw'>col.label</span> <span class='kw'>=</span> <span class='st'>'Time Saturated'</span>)</div><div class='img'><img src='jacobs2000-3.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>jacobs2000</span>, color=<span class='st'>'time_saturated'</span>, cex.names=<span class='fl'>0.8</span>, col.label = <span class='st'>'Time Saturated'</span>)
+</div><div class='img'><img src='jacobs2000-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># color contrast: matrix vs. concentrations</span>
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='no'>jacobs2000</span>$<span class='no'>matrix_color_munsell</span>, <span class='no'>jacobs2000</span>$<span class='no'>concentration_munsell</span>)
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span>(<span class='no'>cc</span>)
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='kw'>jacobs2000</span><span class='op'>$</span><span class='kw'>matrix_color_munsell</span>, <span class='kw'>jacobs2000</span><span class='op'>$</span><span class='kw'>concentration_munsell</span>)
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span>(<span class='kw'>cc</span>)
 
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='no'>cc</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>cc</span>$<span class='no'>dE00</span>), ]
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='unique.html'>unique</a></span>(<span class='no'>cc</span>)
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='kw'>cc</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>cc</span><span class='op'>$</span><span class='kw'>dE00</span>), ]
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='unique.html'>unique</a></span>(<span class='kw'>cc</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='st'>'black'</span>, <span class='kw'>fg</span><span class='kw'>=</span><span class='st'>'white'</span>)
-<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='no'>cc</span>$<span class='no'>m1</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='no'>cc</span>$<span class='no'>m2</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'matrix'</span>, <span class='st'>'concentration'</span>))</div><div class='img'><img src='jacobs2000-4.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='no'>cc</span>$<span class='no'>m1</span>[<span class='fl'>11</span>:<span class='fl'>21</span>], <span class='no'>cc</span>$<span class='no'>m2</span>[<span class='fl'>11</span>:<span class='fl'>21</span>], <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'matrix'</span>, <span class='st'>'concentration'</span>))</div><div class='img'><img src='jacobs2000-5.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(bg=<span class='st'>'black'</span>, fg=<span class='st'>'white'</span>)
+<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='kw'>cc</span><span class='op'>$</span><span class='kw'>m1</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>], <span class='kw'>cc</span><span class='op'>$</span><span class='kw'>m2</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>], labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'matrix'</span>, <span class='st'>'concentration'</span>))
+</div><div class='img'><img src='jacobs2000-4.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='kw'>cc</span><span class='op'>$</span><span class='kw'>m1</span>[<span class='fl'>11</span><span class='op'>:</span><span class='fl'>21</span>], <span class='kw'>cc</span><span class='op'>$</span><span class='kw'>m2</span>[<span class='fl'>11</span><span class='op'>:</span><span class='fl'>21</span>], labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'matrix'</span>, <span class='st'>'concentration'</span>))
+</div><div class='img'><img src='jacobs2000-5.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'># color contrast: depletion vs. concentrations</span>
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='no'>jacobs2000</span>$<span class='no'>depletion_munsell</span>, <span class='no'>jacobs2000</span>$<span class='no'>concentration_munsell</span>)
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span>(<span class='no'>cc</span>)
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='colorContrast.html'>colorContrast</a></span>(<span class='kw'>jacobs2000</span><span class='op'>$</span><span class='kw'>depletion_munsell</span>, <span class='kw'>jacobs2000</span><span class='op'>$</span><span class='kw'>concentration_munsell</span>)
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span>(<span class='kw'>cc</span>)
 
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='no'>cc</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>cc</span>$<span class='no'>dE00</span>), ]
-<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='unique.html'>unique</a></span>(<span class='no'>cc</span>)
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='kw'>cc</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>cc</span><span class='op'>$</span><span class='kw'>dE00</span>), ]
+<span class='kw'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='unique.html'>unique</a></span>(<span class='kw'>cc</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>bg</span><span class='kw'>=</span><span class='st'>'black'</span>, <span class='kw'>fg</span><span class='kw'>=</span><span class='st'>'white'</span>)
-<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='no'>cc</span>$<span class='no'>m1</span>, <span class='no'>cc</span>$<span class='no'>m2</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'depletion'</span>, <span class='st'>'concentration'</span>))</div><div class='img'><img src='jacobs2000-6.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(bg=<span class='st'>'black'</span>, fg=<span class='st'>'white'</span>)
+<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='kw'>cc</span><span class='op'>$</span><span class='kw'>m1</span>, <span class='kw'>cc</span><span class='op'>$</span><span class='kw'>m2</span>, labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'depletion'</span>, <span class='st'>'concentration'</span>))
+</div><div class='img'><img src='jacobs2000-6.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -182,7 +190,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

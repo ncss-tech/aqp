@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -120,12 +120,12 @@
     <p>Soil profile data from Pinnacles National Monument, CA.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 60 observations on the following 21 variables.</p><dl'>
+    <p>A data frame with 60 observations on the following 21 variables.</p><dl>
     <dt><code>group</code></dt><dd><p>a numeric vector</p></dd>
     <dt><code>id</code></dt><dd><p>a character vector</p></dd>
     <dt><code>top</code></dt><dd><p>a numeric vector</p></dd>
@@ -152,29 +152,33 @@
     <p>http://casoilresource.lawr.ucdavis.edu/</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 <span class='co'># convert colors from Munsell to hex-encoded RGB</span>
-<span class='no'>sp1</span>$<span class='no'>soil_color</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='no'>hue</span>, <span class='no'>value</span>, <span class='no'>chroma</span>))
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp1</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>group</span>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
 <span class='co'># re-sample each profile into 1 cm (thick) depth slices</span>
 <span class='co'># for the variables 'prop', 'name', 'soil_color'</span>
 <span class='co'># result is a SoilProfileCollection object</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slice-methods.html'>slice</a></span>(<span class='no'>sp1</span>, <span class='fl'>0</span>:<span class='fl'>25</span> ~ <span class='no'>prop</span> + <span class='no'>name</span> + <span class='no'>soil_color</span>)</div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>sp1</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>25</span> <span class='op'>~</span> <span class='kw'>prop</span> <span class='op'>+</span> <span class='kw'>name</span> <span class='op'>+</span> <span class='kw'>soil_color</span>)
+
 <span class='co'># plot, note slices</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>s</span>)</div><div class='img'><img src='sp1-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>s</span>)
+</div><div class='img'><img src='sp1-1.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'># aggregate all profiles along 1 cm depth slices, </span>
 <span class='co'># using data from column 'prop'</span>
-<span class='no'>s1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SPC-slab-methods.html'>slab</a></span>(<span class='no'>sp1</span>, <span class='kw'>fm</span><span class='kw'>=</span> ~ <span class='no'>prop</span>)
+<span class='kw'>s1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>sp1</span>, fm= <span class='op'>~</span> <span class='kw'>prop</span>)
 
 <span class='co'># check median &amp; IQR</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lattice</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='no'>top</span> ~ <span class='no'>p.q50</span> + <span class='no'>p.q25</span> + <span class='no'>p.q75</span>,
-<span class='kw'>data</span><span class='kw'>=</span><span class='no'>s1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>'S'</span>, <span class='kw'>horizontal</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>),
-<span class='kw'>panel</span><span class='kw'>=</span><span class='no'>panel.superpose</span>, <span class='kw'>ylim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>110</span>,-<span class='fl'>5</span>), <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='sp1-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span> <span class='op'>+</span> <span class='kw'>p.q25</span> <span class='op'>+</span> <span class='kw'>p.q75</span>, 
+data=<span class='kw'>s1</span>, type=<span class='st'>'S'</span>, horizontal=<span class='fl'>TRUE</span>, col=<span class='fl'>1</span>, lty=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>), 
+panel=<span class='kw'>panel.superpose</span>, ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>110</span>,<span class='op'>-</span><span class='fl'>5</span>), asp=<span class='fl'>2</span>)
+</div><div class='img'><img src='sp1-2.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -191,7 +195,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

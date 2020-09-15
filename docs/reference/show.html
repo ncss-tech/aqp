@@ -73,7 +73,7 @@ There is an aqp environment option you can set to increase the number of columns
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@ There is an aqp environment option you can set to increase the number of columns
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>show</span>(<span class='no'>object</span>)</pre>
+<span class='fu'>show</span>(<span class='kw'>object</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,21 +138,22 @@ There is an aqp environment option you can set to increase the number of columns
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># load a SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp5</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># use the show() method</span>
-<span class='fu'>show</span>(<span class='no'>sp5</span>)</div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1539 horizons
+<span class='fu'>show</span>(<span class='kw'>sp5</span>)
+</div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1539 horizons
 #&gt; profile ID: soil  |  horizon ID: hzID 
 #&gt; Depth range: 70 - 841 cm
 #&gt; 
 #&gt; ----- Horizons (6 / 1539 rows  |  10 / 18 columns) -----
-#&gt;    soil sand silt clay  R25  G25  B25   pH   EC CaCO3
-#&gt;   soil1 32.3 10.9 52.8 0.41 0.38 0.34 6.85 24.0  0.05
-#&gt;   soil1 29.0 11.2 58.2 0.31 0.28 0.25 8.08 10.0  0.05
-#&gt;   soil1 34.9 11.6 51.9 0.31 0.28 0.25 9.20 23.9  0.30
-#&gt;   soil1 38.2 10.9 49.7 0.31 0.28 0.25 9.29 41.6  0.40
-#&gt;   soil1 32.2 10.8 55.6 0.55 0.46 0.36 9.24 73.6  0.70
-#&gt;  soil10 25.2 14.4 58.4 0.43 0.37 0.30 8.26 14.5  0.10
+#&gt;    soil hzID top bottom sand silt clay  R25  G25  B25
+#&gt;   soil1    1   0      8 32.3 10.9 52.8 0.41 0.38 0.34
+#&gt;   soil1    2   8     25 29.0 11.2 58.2 0.31 0.28 0.25
+#&gt;   soil1    3  25     55 34.9 11.6 51.9 0.31 0.28 0.25
+#&gt;   soil1    4  55    100 38.2 10.9 49.7 0.31 0.28 0.25
+#&gt;   soil1    5 100    267 32.2 10.8 55.6 0.55 0.46 0.36
+#&gt;  soil10    6   0     10 25.2 14.4 58.4 0.43 0.37 0.30
 #&gt; [... more horizons ...]
 #&gt; 
 #&gt; ----- Sites (6 / 296 rows  |  1 / 1 columns) -----
@@ -167,18 +168,19 @@ There is an aqp environment option you can set to increase the number of columns
 #&gt; 
 #&gt; Spatial Data: [EMPTY]</div><div class='input'>
 <span class='co'># which is same as this (in the console)</span>
-<span class='no'>sp5</span></div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1539 horizons
+<span class='kw'>sp5</span>
+</div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1539 horizons
 #&gt; profile ID: soil  |  horizon ID: hzID 
 #&gt; Depth range: 70 - 841 cm
 #&gt; 
 #&gt; ----- Horizons (6 / 1539 rows  |  10 / 18 columns) -----
-#&gt;    soil sand silt clay  R25  G25  B25   pH   EC CaCO3
-#&gt;   soil1 32.3 10.9 52.8 0.41 0.38 0.34 6.85 24.0  0.05
-#&gt;   soil1 29.0 11.2 58.2 0.31 0.28 0.25 8.08 10.0  0.05
-#&gt;   soil1 34.9 11.6 51.9 0.31 0.28 0.25 9.20 23.9  0.30
-#&gt;   soil1 38.2 10.9 49.7 0.31 0.28 0.25 9.29 41.6  0.40
-#&gt;   soil1 32.2 10.8 55.6 0.55 0.46 0.36 9.24 73.6  0.70
-#&gt;  soil10 25.2 14.4 58.4 0.43 0.37 0.30 8.26 14.5  0.10
+#&gt;    soil hzID top bottom sand silt clay  R25  G25  B25
+#&gt;   soil1    1   0      8 32.3 10.9 52.8 0.41 0.38 0.34
+#&gt;   soil1    2   8     25 29.0 11.2 58.2 0.31 0.28 0.25
+#&gt;   soil1    3  25     55 34.9 11.6 51.9 0.31 0.28 0.25
+#&gt;   soil1    4  55    100 38.2 10.9 49.7 0.31 0.28 0.25
+#&gt;   soil1    5 100    267 32.2 10.8 55.6 0.55 0.46 0.36
+#&gt;  soil10    6   0     10 25.2 14.4 58.4 0.43 0.37 0.30
 #&gt; [... more horizons ...]
 #&gt; 
 #&gt; ----- Sites (6 / 296 rows  |  1 / 1 columns) -----
@@ -208,7 +210,7 @@ There is an aqp environment option you can set to increase the number of columns
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

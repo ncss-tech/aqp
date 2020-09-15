@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get, add or change column of horizon or site data in a SoilProfileCollection — [[,SoilProfileCollection,character,ANY-method • aqp</title>
+<title>Get column of horizon or site data in a SoilProfileCollection — [[ • aqp</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Get, add or change column of horizon or site data in a SoilProfileCollection — [[,SoilProfileCollection,character,ANY-method" />
-<meta property="og:description" content="Get, add or change the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons. The benefit of using double bracket setter over $ is that name can be calculated, whereas with $, it must be known a priori and hard coded.
-Bonus: [[ gives access to all site and horizon level variables in tab complete for RStudio using the magrittr pipe operator!
-When using the double bracket setter the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to." />
+<meta property="og:title" content="Get column of horizon or site data in a SoilProfileCollection — [[" />
+<meta property="og:description" content="Get the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons.
+Bonus: [[ gives access to all site and horizon level variables in tab complete for RStudio using the magrittr pipe operator!" />
 
 
 
@@ -74,7 +73,7 @@ When using the double bracket setter the length of input and output matching eit
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -113,22 +112,18 @@ When using the double bracket setter the length of input and output matching eit
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get, add or change column of horizon or site data in a SoilProfileCollection</h1>
+    <h1>Get column of horizon or site data in a SoilProfileCollection</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/SoilProfileCollection-operators.R'><code>R/SoilProfileCollection-operators.R</code></a></small>
     <div class="hidden name"><code>doublebracket.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get, add or change the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons. The benefit of using double bracket setter over <code>$</code> is that <code>name</code> can be calculated, whereas with <code>$</code>, it must be known a priori and hard coded.</p>
-<p>Bonus: <code>[[</code> gives access to all site and horizon level variables in tab complete for RStudio using the magrittr pipe operator!</p>
-<p>When using the double bracket setter the length of input and output matching either the number of sites or number of horizons is used to determine which slot new columns are assigned to.</p>
+    <p>Get the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons.
+Bonus: <code>[[</code> gives access to all site and horizon level variables in tab complete for RStudio using the magrittr pipe operator!</p>
     </div>
 
-    <pre class="usage"># S4 method for SoilProfileCollection,character,ANY
-[[(x, i)
-
-# S4 method for SoilProfileCollection,ANY,ANY
-[[(x, i, j, ...) <- value</pre>
+    <pre class="usage"># S4 method for SoilProfileCollection,ANY,ANY
+[[(x, i, j)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,24 +140,18 @@ When using the double bracket setter the length of input and output matching eit
       <th>j</th>
       <td><p>[not used]</p></td>
     </tr>
-    <tr>
-      <th>...</th>
-      <td><p>[not used]</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>New value to replace -- unit length or equal in length to number of sites or horizons in the collection.</p></td>
-    </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>surface</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>surface</span>
 
 <span class='co'># get with [[</span>
-<span class='no'>sp2</span><span class='kw'>[[</span><span class='st'>'surface'</span>]]</div><div class='output co'>#&gt;  [1] holocene        lower modesto   lower modesto   upper modesto  
+<span class='kw'>sp2</span>[[<span class='st'>'surface'</span>]]
+</div><div class='output co'>#&gt;  [1] holocene        lower modesto   lower modesto   upper modesto  
 #&gt;  [5] upper modesto   lower riverbank lower riverbank lower riverbank
 #&gt;  [9] holocene        lower riverbank lower laguna    lower laguna   
 #&gt; [13] holocene        holocene        upper modesto   upper modesto  
@@ -170,8 +159,9 @@ When using the double bracket setter the length of input and output matching eit
 #&gt; 6 Levels: holocene lower modesto upper modesto ... lower laguna</div><div class='input'>
 <span class='co'># get using "unknown" expression:</span>
 <span class='co'>#  "2nd + 3rd horizon column names"</span>
-<span class='kw'>for</span>(<span class='no'>i</span> <span class='kw'>in</span> <span class='fu'><a href='horizonNames.html'>horizonNames</a></span>(<span class='no'>sp2</span>)[<span class='fl'>2</span>:<span class='fl'>3</span>])
- <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>sp2</span><span class='kw'>[[</span><span class='no'>i</span>]])</div><div class='output co'>#&gt;   [1]   0  12  16  25  49  85  95 122 140   0  22  40  86 132 150 205   0  18
+<span class='co'>for</span>(<span class='kw'>i</span> <span class='co'>in</span> <span class='fu'><a href='horizonNames<-.html'>horizonNames</a></span>(<span class='kw'>sp2</span>)[<span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span>])
+ <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>sp2</span>[[<span class='kw'>i</span>]])
+</div><div class='output co'>#&gt;   [1]   0  12  16  25  49  85  95 122 140   0  22  40  86 132 150 205   0  18
 #&gt;  [19]  45  94 125 145 179   0  24  33  50  62  86 102 123 157 208 245 266   0
 #&gt;  [37]  28  39  59  76 111 126 150 200 260   0  18  24  76 100 160 201 208   0
 #&gt;  [55]  19  30  90 113 170 190 240   0   7  24  63  91 126 176 218 246 268 300
@@ -191,26 +181,25 @@ When using the double bracket setter the length of input and output matching eit
 #&gt; [121]  113  147   13   23   54   88  102  141  180   10   22   43   91  118  157
 #&gt; [136]  184    8   30   54   88  118  180  230  290  340  370    7   34   57   90
 #&gt; [151]  126  191  240  390</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp5</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># some column names to work with</span>
-<span class='no'>rgb.columns</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"R25"</span>,<span class='st'>"G25"</span>,<span class='st'>"B25"</span>)
+<span class='kw'>rgb.columns</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"R25"</span>,<span class='st'>"G25"</span>,<span class='st'>"B25"</span>)
 
-
-
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>rgb.columns</span>, <span class='kw'>function</span>(<span class='no'>x</span>) {
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>rgb.columns</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) {
 
   <span class='co'># [[ allows you to access column names in a loop</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>sp5</span><span class='kw'>[[</span><span class='no'>x</span>]] * <span class='fl'>255</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>sp5</span>[[<span class='kw'>x</span>]] <span class='op'>*</span> <span class='fl'>255</span>)
 
 })
 
 <span class='co'># rename scaled results</span>
-<span class='fu'><a href='names.html'>names</a></span>(<span class='no'>res</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>rgb.columns</span>,<span class='st'>"_scl"</span>)
+<span class='fu'><a href='names.html'>names</a></span>(<span class='kw'>res</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>rgb.columns</span>,<span class='st'>"_scl"</span>)
 
 <span class='co'># add horizon ID to results</span>
-<span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>hzID</span> <span class='kw'>=</span> <span class='fu'><a href='hzID.html'>hzID</a></span>(<span class='no'>sp5</span>), <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'cbind'</span>, <span class='no'>res</span>))
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>result</span>)</div><div class='output co'>#&gt;   hzID R25_scl G25_scl B25_scl
+<span class='kw'>result</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(hzID = <span class='fu'><a href='hzID.html'>hzID</a></span>(<span class='kw'>sp5</span>), <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'cbind'</span>, <span class='kw'>res</span>))
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>result</span>)
+</div><div class='output co'>#&gt;   hzID R25_scl G25_scl B25_scl
 #&gt; 1    1     105      97      87
 #&gt; 2    2      79      71      64
 #&gt; 3    3      79      71      64
@@ -218,7 +207,7 @@ When using the double bracket setter the length of input and output matching eit
 #&gt; 5    5     140     117      92
 #&gt; 6    6     110      94      76</div><div class='input'>
 <span class='co'># join result back into horizons</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='no'>sp5</span>) <span class='kw'>&lt;-</span> <span class='no'>result</span></div><div class='output co'>#&gt; <span class='message'>join condition resulted in sorting of horizons, re-applying original order</span></div><div class='input'>
+<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='kw'>result</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -235,7 +224,7 @@ When using the double bracket setter the length of input and output matching eit
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

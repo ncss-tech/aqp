@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
       </span>
     </div>
 
@@ -125,7 +125,7 @@
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<dl'>
+<dl>
 <dt><code>signature(object = "SoilProfileCollection", s = 'character', h = 'character', ...)</code></dt><dd><p></p></dd>
 
 </dl>
@@ -141,18 +141,22 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># more interesting sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sp2</span>)
-<span class='fu'>depths</span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> <span class='no'>id</span> ~ <span class='no'>top</span> + <span class='no'>bottom</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs from integer to character</span></div><div class='input'><span class='fu'><a href='site.html'>site</a></span>(<span class='no'>sp2</span>) <span class='kw'>&lt;-</span> ~ <span class='no'>surface</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>surface</span>
 
 <span class='co'># subset by integer index, note that this does not re-order the profiles</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp2</span>[<span class='fl'>1</span>:<span class='fl'>5</span>, ])</div><div class='img'><img src='subsetProfiles-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp2</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, ])
+</div><div class='img'><img src='subsetProfiles-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># generate an integer index via pattern-matching</span>
-<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>'modesto'</span>, <span class='no'>sp2</span>$<span class='no'>surface</span>, <span class='kw'>ignore.case</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp2</span>[<span class='no'>idx</span>, ])</div><div class='img'><img src='subsetProfiles-methods-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='kw'>idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>'modesto'</span>, <span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>surface</span>, ignore.case=<span class='fl'>TRUE</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp2</span>[<span class='kw'>idx</span>, ])
+</div><div class='img'><img src='subsetProfiles-methods-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># generate in index via profileApply:</span>
 <span class='co'># subset those profiles where: min(ph) &lt; 5.6</span>
-<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='no'>sp2</span>, <span class='kw'>function</span>(<span class='no'>i</span>) <span class='fu'><a href='min.html'>min</a></span>(<span class='no'>i</span>$<span class='no'>field_ph</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>) <span class='kw'>&lt;</span> <span class='fl'>5.6</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>sp2</span>[<span class='no'>idx</span>, ])</div><div class='img'><img src='subsetProfiles-methods-3.png' alt='' width='768' height='475' /></div></pre>
+<span class='kw'>idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='kw'>sp2</span>, <span class='fu'>function</span>(<span class='kw'>i</span>) <span class='fu'><a href='min.html'>min</a></span>(<span class='kw'>i</span><span class='op'>$</span><span class='kw'>field_ph</span>, na.rm=<span class='fl'>TRUE</span>) <span class='op'>&lt;</span> <span class='fl'>5.6</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp2</span>[<span class='kw'>idx</span>, ])
+</div><div class='img'><img src='subsetProfiles-methods-3.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -168,7 +172,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
