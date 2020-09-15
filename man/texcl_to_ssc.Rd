@@ -6,6 +6,7 @@
 
 \title{Textural conversions}
 \description{These functions consist of several conversions between sand, silt and clay to texture class and visa versa, textural modifers to rock fragments, and grain size composition to the family particle size class.}
+
 \usage{
 texcl_to_ssc(texcl = NULL, clay = NULL, sample = FALSE)
 
@@ -15,11 +16,11 @@ texmod_to_fragvoltot(texmod, lieutex = NULL)
 
 texture_to_taxpartsize(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
-  \item{sand}{vector of sand percentages (default: NULL)}
-  \item{clay}{vector of clay percentages (default: NULL)}
-  \item{fragvoltot}{vector of rock fragment percentages (default: NULL)}
+  \item{sand}{vector of sand percentages}
+  \item{clay}{vector of clay percentages}
+  \item{fragvoltot}{vector of rock fragment percentages}
   \item{texcl}{vector of texture classes than conform to the USDA code conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)}
   \item{texmod}{vector of textural modifers that conform to the USDA code convenctions (e.g. gr|GR, grv|GRV)}
   \item{lieutex}{vector of in lieu of texture terms that conform to the USDA code convenctions (e.g. gr|GR, pg|PG), only used when fragments or artifacts are > 90 percent by volume (default: NULL))}
@@ -28,11 +29,11 @@ texture_to_taxpartsize(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL
   \item{sample}{logical: should ssc be random sampled from the lookup table? (default: FALSE)}
 }
 
-\details{These functions are intended to impute missing values or check existing values. The ssc_to_texcl() function uses the same logic as the particle size estimator calculation in NASIS to classify sand and clay into texture class. The results are stored in data(soiltexture) and used by texcl_to_ssc() as a lookup table to convert texture class to sand, silt and clay. The function texcl_to_ssc() replicates the functionality described by Levi (2017).
+\details{These functions are intended to estimate missing values or check existing values. The \code{ssc_to_texcl()} function uses the same logic as the particle size estimator calculation in NASIS to classify sand and clay into texture class. The results are stored in \code{soiltexture} and used by \code{texcl_to_ssc()} as a lookup table to convert texture class to sand, silt and clay. The function \code{texcl_to_ssc()} replicates the functionality described by Levi (2017).
 
-When sample = TRUE, the results can be used to estimate ssc distributions (e.g. var() & quantile()) within each soil textural class, provided the number of samples within each class are > 10.
+When \code{sample = TRUE}, the results can be used to estimate within-class, marginal distributions of sand, silt, and clay fractions. It is recommended that at least 10 samples be drawn for reasonable estimates.
 
-Unlike the other functions, texture_to_taxpartsize() is intended to be computed on weighted averages within the family particle size control section. Also recall from the criteria that carbonate clay should be subtracted from clay content and added to silt content. Similarily, if the percent of very fine sand is known it should be substracted from the sand, and added to the silt content.
+Unlike the other functions, \code{texture_to_taxpartsize()} is intended to be computed on weighted averages within the family particle size control section. Also recall from the criteria that carbonate clay should be subtracted from clay content and added to silt content. Similarily, if the percent of very fine sand is known it should be substracted from the sand, and added to the silt content.
 }
 
 \references{
@@ -112,6 +113,5 @@ ssc  <- rbind(ssc1, ssc2)
 aggregate(clay ~ sample + texcl, data = ssc, summary)
 }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{texture}% use one of  RShowDoc("KEYWORDS")
+
+\keyword{manip}

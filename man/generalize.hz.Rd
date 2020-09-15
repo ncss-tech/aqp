@@ -3,6 +3,7 @@
 
 \title{Generalize Horizon Names}
 \description{Generalize a vector of horizon names, based on new classes, and REGEX patterns.}
+
 \usage{generalize.hz(x, new, pat, non.matching.code, hzdepm, ...)}
 
 \arguments{
@@ -17,7 +18,7 @@
 \value{factor of the same length as \code{x}}
 
 
-\author{Dylan E. Beaudette}
+\author{D.E. Beaudette}
 
 \examples{
 \dontrun{
