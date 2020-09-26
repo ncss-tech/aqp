@@ -113,7 +113,7 @@ m$group <- rep('MPS', times=length(m))
 m.dd$group <- rep('MPS-1cm', times=length(m.dd))
 
 # combine SPCs 
-z <- union(list(x, m, m.dd))
+z <- pbindlist(list(x, m, m.dd))
 
 # add new group for profiles
 z$profile.group <- factor(str_sub(profile_id(z), 0, 2))

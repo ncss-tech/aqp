@@ -1,4 +1,4 @@
-context("SoilProfileCollection union method")
+context("SoilProfileCollection pbindlist method")
 
 ## make sample data
 data(sp1, package = 'aqp')
@@ -11,7 +11,7 @@ sp1$y <- seq(38, 39, length.out = length(sp1))
 sp::coordinates(sp1) <- ~ x + y
 sp::proj4string(sp1) <- '+proj=longlat +datum=WGS84'
 
-test_that("basic union tests", {
+test_that("basic pbindlist tests", {
 
   # test data
   x <- sp1
@@ -25,13 +25,13 @@ test_that("basic union tests", {
   diagnostic_hz(y) <- data.frame(id='P001', type='pizza')
 
   # this should not work, IDs aren't unqiue
-  expect_error(union(list(x,y)))
+  expect_error(pbindlist(list(x,y)))
 
   # fix IDs manually
   profile_id(y) <- sprintf("%s-copy", profile_id(y))
 
   # this should work
-  z <- union(list(x,y))
+  z <- pbindlist(list(x,y))
 
   expect_true(inherits(z, 'SoilProfileCollection'))
   expect_equal(length(z), length(x) + length(y))
@@ -48,7 +48,7 @@ test_that("basic union tests", {
 
 
 
-test_that("non-conformal union tests", {
+test_that("non-conformal pbindlist tests", {
 
   # random data
   ids <- sprintf("%02d", 1:5)
@@ -80,15 +80,15 @@ test_that("non-conformal union tests", {
   depth_units(y) <- 'in'
 
   # should throw an error
-  expect_error(union(list(x, y)), "inconsistent depth units")
+  expect_error(pbindlist(list(x, y)), "inconsistent depth units")
 
   # reset depth units
   depth_units(y) <- 'cm'
 
-  # attempt union
-  z <- union(list(x, y, jacobs2000))
+  # attempt pbindlist
+  z <- pbindlist(list(x, y, jacobs2000))
 
-  # there should be a total of 17 profiles in the union
+  # there should be a total of 17 profiles in the result
   expect_equal(sum(sapply(list(x, y, jacobs2000), length)), 17)
   expect_equal(length(z), sum(sapply(list(x, y, jacobs2000), length)))
 
@@ -108,9 +108,9 @@ test_that("non-conformal union tests", {
   site(p)$id <- NULL
 
   # these calls should produce same order result
-  #  .:. union uses depths<- internally
-  z.1 <- union(list(sp4[c(p.idx, spike.idx), ], p))
-  z.2 <- union(list(p, sp4[c(p.idx, spike.idx), ]))
+  #  .:. pbindlist uses depths<- internally
+  z.1 <- pbindlist(list(sp4[c(p.idx, spike.idx), ], p))
+  z.2 <- pbindlist(list(p, sp4[c(p.idx, spike.idx), ]))
 
   expect_true(spc_in_sync(z.1)$valid)
   expect_true(spc_in_sync(z.2)$valid)
@@ -118,7 +118,7 @@ test_that("non-conformal union tests", {
 })
 
 
-test_that("union with non-conformal spatial data", {
+test_that("pbindlist with non-conformal spatial data", {
 
   # test data
   x <- sp1
@@ -133,7 +133,7 @@ test_that("union with non-conformal spatial data", {
 
 
   # this should not work, IDs aren't unqiue
-  expect_error(union(list(x, y)), 'non-unique profile IDs detected')
+  expect_error(pbindlist(list(x, y)), 'non-unique profile IDs detected')
 
 
   # make IDs unique
@@ -148,7 +148,7 @@ test_that("union with non-conformal spatial data", {
   sp::proj4string(y) <- ''
   sp::proj4string(z) <- ''
 
-  expect_message(res <- union(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
+  expect_message(res <- pbindlist(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
   expect_true(inherits(res, 'SoilProfileCollection'))
 
   ## TODO: different coordinate names
@@ -166,7 +166,7 @@ test_that("filtering NULL/NA elements", {
   s <- list(NULL, x, y, NULL)
 
   # this should work
-  res <- union(s)
+  res <- pbindlist(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
 
@@ -174,7 +174,7 @@ test_that("filtering NULL/NA elements", {
   s <- list(x, NULL)
 
   # should work
-  res <- union(s)
+  res <- pbindlist(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
 
@@ -182,18 +182,18 @@ test_that("filtering NULL/NA elements", {
   s <- list(NA, x, y, NA)
 
   # this should work
-  res <- union(s)
+  res <- pbindlist(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
   # this should NOT work
-  expect_error(union(s, na.rm=FALSE))
+  expect_error(pbindlist(s, na.rm=FALSE))
 
   # all NA ---> result is NULL
   s <- list(NA, NA, NA)
-  expect_null(union(s))
+  expect_null(pbindlist(s))
 
   # all NULL ---> result is NULL
   s <- list(NULL, NULL, NULL)
-  expect_null(union(s))
+  expect_null(pbindlist(s))
 })
 

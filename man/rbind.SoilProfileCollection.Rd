@@ -7,7 +7,7 @@
 \method{rbind}{SoilProfileCollection}(...)
 }
 \arguments{
-\item{...}{One or more SoilProfileCollection objects to \code{union()}}
+\item{...}{One or more SoilProfileCollection objects to \code{pbindlist()}}
 }
 \value{
 A SoilProfileCollection

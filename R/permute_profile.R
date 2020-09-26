@@ -157,7 +157,7 @@ permute_profile <- function(p, n = 100, boundary.attr,
     return(p.sub)
   })
 
-  # fast "union" with no checks since we know the origin
+  # fast "pbindlist" with no checks since we know the origin
 
   # horizon
   o.h <- do.call('rbind', profiles)
@@ -196,10 +196,10 @@ permute_profile <- function(p, n = 100, boundary.attr,
 
   # TODO: alter metadata to reflect the processing done here?
 
-  res <- SoilProfileCollection(idcol=new.idname, depthcols=horizonDepths(p),
-                               metadata=metadat,
-                               horizons=o.h, site=o.s, sp=o.sp,
-                               diagnostic=o.d, restrictions=o.r)
+  res <- SoilProfileCollection(idcol = new.idname, depthcols = horizonDepths(p),
+                               metadata = metadat,
+                               horizons = o.h, site = o.s, sp = o.sp,
+                               diagnostic = o.d, restrictions = o.r)
   ## reset horizon IDs
   hzID(res) <- as.character(1:nrow(res))
   return(res)

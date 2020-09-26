@@ -111,7 +111,7 @@ if(requireNamespace("tibble", quietly = TRUE))
 #' d.345 <- d[3:5, ]
 #'
 #' # recombine, note that profiles are sorted according to ID
-#' d.new <- union(list(d.345, d.1, d.2))
+#' d.new <- pbindlist(list(d.345, d.1, d.2))
 #' plot(d.new)
 #'
 #' data(sp1)

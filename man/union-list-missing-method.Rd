@@ -2,46 +2,26 @@
 % Please edit documentation in R/union.R
 \name{union,list,missing-method}
 \alias{union,list,missing-method}
-\alias{pbindlist}
-\title{Combine a list of SoilProfileCollection Objects}
+\title{[DEPRECATED] union}
 \usage{
 \S4method{union}{list,missing}(x, y)
 }
 \arguments{
-\item{x}{aqp::union only: a list of SoilProfileCollection objects}
+\item{x}{a list of SoilProfileCollection objects}
 
-\item{y}{aqp::union only: missing. Necessary for proper S4 dispatch.}
-
-\item{l}{a list of SoilProfileCollection objects}
+\item{y}{Necessary for proper S4 dispatch.}
 }
 \value{
-a SoilProfileCollection object
+a SoilProfileCollection
 }
 \description{
-Combine a list of SoilProfileCollection Objects
-}
-\details{
-Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. Non-conforming spatial data are dropped from the final result.
+[DEPRECATED] union
 }
 \examples{
-# example data
-data(sp2, package = 'aqp')
-depths(sp2) <- id ~ top + bottom
-site(sp2) <- ~ surface
 
-# copy pieces
-x <- sp2[1:5, ]
-y <- sp2[6:10, ]
+# deprecated, see aqp::pbindlist
 
-# reset IDs and combine
-profile_id(y) <- sprintf("\%s-copy", profile_id(y))
-
-# this should work
-z <- union(list(x, y))
-
-# check
-plot(z)
 }
-\author{
-D.E. Beaudette and A.G. Brown
+\seealso{
+\link{pbindlist}
 }

@@ -11,15 +11,27 @@
 # 2020/09/25: yes it is possible [for a list] with the caveat that the y argument _must_ be missing in order to use the base::union generic but dispatch to the aqp method.
 # The problem with this is IDEs like Rstudio that probe the generics to identify missing required arguments will erroneously warn about the aqp-usage of union
 
+#' [DEPRECATED] union
+#'
+#' @param x a list of SoilProfileCollection objects
+#' @param y Necessary for proper S4 dispatch.
+#'
+#' @return a SoilProfileCollection
+#' @export union
+#' @seealso \link{pbindlist}
+#'
+#' @examples
+#'
+#' # deprecated, see aqp::pbindlist
+#'
 setMethod("union", signature(x = "list", y = "missing"), function(x, y)  {
-  # TODO: convert internal usages to pbindlist
   # .Deprecated("aqp::union is deprecated due to conflict with base::union generic; use pbindlist")
   pbindlist(x)
 })
 
 #' rbind.SoilProfileCollection
 #'
-#' @param ... One or more SoilProfileCollection objects to \code{union()}
+#' @param ... One or more SoilProfileCollection objects to \code{pbindlist()}
 #'
 #' @return A SoilProfileCollection
 #' @export rbind.SoilProfileCollection
@@ -40,17 +52,14 @@ rbind.SoilProfileCollection <- function(...) {
   res <- pbindlist(objects)
   return(res)
 }
+
 #' Combine a list of SoilProfileCollection Objects
 #' @param l a list of SoilProfileCollection objects
-#' @param x aqp::union only: a list of SoilProfileCollection objects
-#' @param y aqp::union only: missing. Necessary for proper S4 dispatch.
 #'
 #' @details Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. Non-conforming spatial data are dropped from the final result.
 #'
 #' @return a SoilProfileCollection object
 #' @author D.E. Beaudette and A.G. Brown
-#'
-#' @aliases union
 #'
 #' @examples
 #' # example data
@@ -66,7 +75,7 @@ rbind.SoilProfileCollection <- function(...) {
 #' profile_id(y) <- sprintf("%s-copy", profile_id(y))
 #'
 #' # this should work
-#' z <- union(list(x, y))
+#' z <- pbindlist(list(x, y))
 #'
 #' # check
 #' plot(z)
@@ -99,20 +108,20 @@ pbindlist <- function(l) {
   idx.null <- suppressWarnings(which(sapply(spc, is.null)))
   if (length(idx.null)) {
     spc <- spc[-idx.null]
-    message("union: one or more input list elements is NULL")
+    message("pbindlist: one or more input list elements is NULL")
   }
 
   # check/filter for NA list elements
   idx.na <- suppressWarnings(which(sapply(spc, is.na)))
   if (length(idx.na)) {
     spc <- spc[-idx.na]
-    message("union: one or more input list elements is NA")
+    message("pbindlist: one or more input list elements is NA")
   }
 
   idx.notspc <- which(!sapply(spc, inherits, 'SoilProfileCollection'))
   if (length(idx.notspc)) {
     spc <- spc[-idx.notspc]
-    message("union: one or more input list elements is not a SoilProfileCollection")
+    message("pbindlist: one or more input list elements is not a SoilProfileCollection")
   }
 
   # short circuit:
@@ -129,7 +138,7 @@ pbindlist <- function(l) {
   # check for non-conformal df class (revert to data.frame if non-matching)
   o.df.class <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_df_class)))
   if (length(o.df.class) > 1) {
-    message("data.frame class type inconsistent, reset to \"data.frame\"")
+    message("pbindlist: data.frame class type inconsistent, reset to \"data.frame\"")
     o.df.class <- "data.frame"
   }
 
@@ -155,7 +164,7 @@ pbindlist <- function(l) {
 
   drop.spatial <- FALSE
   if (length(o.p4s) > 1) {
-    message('inconsistent CRS, dropping spatial data')
+    message('pbindlist: inconsistent CRS, dropping spatial data')
     drop.spatial <- TRUE
   }
 
@@ -266,7 +275,7 @@ pbindlist <- function(l) {
 
     # note: an SPC with default @sp is a 1 column matrix
     if (length(unique(dim.coords)) > 1) {
-      message('non-conformal point geometry, dropping spatial data')
+      message('pbindlist: non-conformal point geometry, dropping spatial data')
       drop.spatial <- TRUE
     }
 
@@ -333,7 +342,7 @@ pbindlist <- function(l) {
 
   # check validity; try to do a bandaid to fix common problems if possible
   if (!spc_in_sync(res)$valid) {
-    warning("SoilProfileCollection integrity checks failed. This should not happen! Contact the aqp package developers with your use case on the GitHub Issue Page (https://github.com/ncss-tech/aqp/). Attempting to rebuild object...", call. = FALSE)
+    warning("pbindlist: SoilProfileCollection integrity checks failed. This should not happen! Contact the aqp package developers with your use case on the GitHub Issue Page (https://github.com/ncss-tech/aqp/). Attempting to rebuild object...", call. = FALSE)
     res <- try(rebuildSPC(res))
   }
 

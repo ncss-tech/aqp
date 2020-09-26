@@ -36,7 +36,7 @@ Each list element in \code{x.names} specifies a single "harmonization," which is
 ### single source "harmonization" of single-profile with range -> single attribute, multi-profile
 
 # make some test data
-spc <- aqp::union(lapply(1:10, random_profile, SPC = TRUE))
+spc <- pbindlist(lapply(1:10, random_profile, SPC = TRUE))
 
 # assume that p1, p2 and p3 are the low RV and high quantiles for a hypothetical property "foo"
 h1 <- harmonize(spc, x.names = list(foo = c(q05 = "p1", q50 = "p2", q95 = "p3")))
@@ -55,7 +55,7 @@ h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),
                                     bar = c(method1 = "p3", method2 = "p4")))
 plot(h3, color = "foo")
 plot(h3, color = "bar")
-head(horizons(h3)) 
+head(horizons(h3))
 
 # a slight modification, "method 1" onlyused for "foo" and "method 3" for "bar"
 h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),
@@ -71,34 +71,34 @@ plot(h3, color = "bar") #  likewise for bar (*_method 1 + 2)
 
 ### two-source harmonization
 
-# make test data 
-spc1 <- aqp::union(lapply(LETTERS[1:5], random_profile, SPC = TRUE))
-spc2 <- aqp::union(lapply(letters[1:5], random_profile, SPC = TRUE))
+# make test data
+spc1 <- pbindlist(lapply(LETTERS[1:5], random_profile, SPC = TRUE))
+spc2 <- pbindlist(lapply(letters[1:5], random_profile, SPC = TRUE))
 
-h4 <- aqp::union(list(harmonize(spc1, list(foo = c(transect1 = "p4"))),   # foo is p4 in dataset 1
+h4 <- pbindlist(list(harmonize(spc1, list(foo = c(transect1 = "p4"))),   # foo is p4 in dataset 1
                       harmonize(spc2, list(foo = c(transect2 = "p2")))))  # foo is p2 in dataset 2
-                      
+
 # same property with different name in two different datasets
 plot(h4, color = "foo")
 
 ### many source harmonization
 
 # make test datasets (n=10); highly redundant IDs (1:3 repeated)
-spcs <- lapply(1:10, function(x) aqp::union(lapply(1:3, random_profile, SPC = TRUE)))
+spcs <- lapply(1:10, function(x) pbindlist(lapply(1:3, random_profile, SPC = TRUE)))
 
 # randomly varying column name for demo (in each dataset, foo could could be p1 thru p5)
 rcolname <- paste0("p", round(runif(10, 0.5, 5.5)))
 
 # iterate over data sources
-bigspc <- aqp::union(lapply(1:length(spcs), function(i) {
+bigspc <- pbindlist(lapply(1:length(spcs), function(i) {
 
   # assume each data source has a unique name for the property "foo"
   xn <- rcolname[i]
-  
+
   # set names attribute to be equal to index i [creating unique profile IDs]
   #   i.e. 2_10 will be profile ID 2 from 10th dataset
   names(xn) <- i
-  
+
   # harmonize each data source, using unique column name and target name "foo"
   harmonize(spcs[[i]], x.names = list(foo = xn))
 }))

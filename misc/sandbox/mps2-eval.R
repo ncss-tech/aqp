@@ -18,7 +18,7 @@ ids <- LETTERS[1:6]
 
 set.seed(10101)
 x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=2, method='LPP', SPC=TRUE)
-x <- union(x)
+x <- pbindlist(x)
 
 # fake site data
 site(x)$fake_site_attr <- 1:length(x)

@@ -123,21 +123,21 @@ test_that("glomApply works as expected", {
 
   # above is the same as calling glom with just z1 specified (for first profile in sp1)
 
-  # there are slight differences in hzID due to glomApply using union internally after glom-ing
+  # there are slight differences in hzID due to glomApply using pbindlist internally after glom-ing
   expect_equivalent(res[1,], glom(sp1[1,], 25))
 
   # they are equivalent but not equal
   expect_error(expect_equal(res[1,], glom(sp1[1,], 25)))
 
-  # after union hzID 3 becomes 1 (since sp1 does not have a true hzID specified)
+  # after pbindlist hzID 3 becomes 1 (since sp1 does not have a true hzID specified)
   tdepths <- horizonDepths(sp1)
   expect_equal(horizons(res[1,])[,tdepths], horizons(glom(sp1[1,], 25))[,tdepths])
 
   # every profile returns one horizon (all profiles at least 25cm deep)
   expect_true(all(profileApply(res, nrow) == 1))
 
-    # glom returns empty results for some of these profiles at 200cm
-    #  glom will produce a NULL, and union will drop that profile
+  # glom returns empty results for some of these profiles at 200cm
+  #  glom will produce a NULL, and pbindlist will drop that profile
   expect_warning(res2 <- glomApply(sp1, function(p) return(c(200,200))))
 
     ## 7 profiles have 200 as an invalid upper bound
