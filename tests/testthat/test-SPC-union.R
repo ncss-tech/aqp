@@ -92,26 +92,26 @@ test_that("non-conformal union tests", {
   expect_equal(sum(sapply(list(x, y, jacobs2000), length)), 17)
   expect_equal(length(z), sum(sapply(list(x, y, jacobs2000), length)))
 
-  # see https://github.com/ncss-tech/aqp/issues/163 
+  # see https://github.com/ncss-tech/aqp/issues/163
   data(sp4)
   depths(sp4) <- id ~ top + bottom
-  
+
   # profile to general realizations of
   p.idx <- 1
-  
+
   # spike profile
   spike.idx <- 6
-  
+
   horizons(sp4)$bdy <- 4
   p <- permute_profile(sp4[p.idx, ], n = 10, boundary.attr = 'bdy', min.thickness = 2)
-  
+
   site(p)$id <- NULL
-  
+
   # these calls should produce same order result
   #  .:. union uses depths<- internally
   z.1 <- union(list(sp4[c(p.idx, spike.idx), ], p))
   z.2 <- union(list(p, sp4[c(p.idx, spike.idx), ]))
-  
+
   expect_true(spc_in_sync(z.1)$valid)
   expect_true(spc_in_sync(z.2)$valid)
   expect_true(all(profile_id(z.1) == profile_id(z.2)))
@@ -133,7 +133,7 @@ test_that("union with non-conformal spatial data", {
 
 
   # this should not work, IDs aren't unqiue
-  expect_error(union(list(x,y)), 'inconsistent CRS')
+  expect_error(union(list(x, y)), 'non-unique profile IDs detected')
 
 
   # make IDs unique
@@ -148,11 +148,7 @@ test_that("union with non-conformal spatial data", {
   sp::proj4string(y) <- ''
   sp::proj4string(z) <- ''
 
-  # should throw an error
-  expect_error(union(list(x, y, z)), 'non-conformal point geometry')
-
-  # drop spatial data and no error
-  res <- union(list(x, y, z), drop.spatial = TRUE)
+  expect_message(res <- union(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
   expect_true(inherits(res, 'SoilProfileCollection'))
 
   ## TODO: different coordinate names
@@ -173,15 +169,15 @@ test_that("filtering NULL/NA elements", {
   res <- union(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
-  
+
   # add NULLs, different arrangement
   s <- list(x, NULL)
-  
+
   # should work
   res <- union(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
-  
-  
+
+
   # add NAs
   s <- list(NA, x, y, NA)
 

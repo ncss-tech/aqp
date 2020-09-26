@@ -2,7 +2,7 @@
 % Please edit documentation in R/union.R
 \name{rbind.SoilProfileCollection}
 \alias{rbind.SoilProfileCollection}
-\title{[DEPRECATED] rbind.SoilProfileCollection}
+\title{rbind.SoilProfileCollection}
 \usage{
 \method{rbind}{SoilProfileCollection}(...)
 }
@@ -13,13 +13,12 @@
 A SoilProfileCollection
 }
 \description{
-[DEPRECATED] rbind.SoilProfileCollection
+rbind.SoilProfileCollection
 }
 \examples{
 
 data(sp5)
 
-# rbind is deprecated, use aqp::union()
-# rbind(sp5[1:2,], sp5[(length(sp5) - 1):length(sp5),])
+rbind(sp5[1:2,], sp5[(length(sp5) - 1):length(sp5),])
 
 }
