@@ -196,6 +196,10 @@ permute_profile <- function(p, n = 100, boundary.attr,
 
   # TODO: alter metadata to reflect the processing done here?
 
+  # drop old ID name from horizon table
+  #(can't have it in site and horizon, not the ID any mores)
+  o.h[[idname(p)]] <- NULL
+
   res <- SoilProfileCollection(idcol = new.idname, depthcols = horizonDepths(p),
                                metadata = metadat,
                                horizons = o.h, site = o.s, sp = o.sp,

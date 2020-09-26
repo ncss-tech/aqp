@@ -4,10 +4,14 @@
 \alias{pbindlist}
 \title{Combine a list of SoilProfileCollection Objects}
 \usage{
-pbindlist(l)
+pbindlist(l, new.idname = NULL, verbose = TRUE)
 }
 \arguments{
 \item{l}{a list of SoilProfileCollection objects}
+
+\item{new.idname}{Optional: a character referring to a new column name to put unique profile IDs in; default: \code{NULL} to attempt with existing idname in first element}
+
+\item{verbose}{Produce warnings and messages regarding results? default: \code{TRUE}}
 }
 \value{
 a SoilProfileCollection object
@@ -16,7 +20,7 @@ a SoilProfileCollection object
 Combine a list of SoilProfileCollection Objects
 }
 \details{
-Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. Non-conforming spatial data are dropped from the final result.
+Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. If one or more subsequent list elements has non-unique values in a site level attribute of that name, the ID name from the second list element is attempted, and so on. Non-conforming spatial data are dropped from the final result (returns default empty \code{SpatialPoints}).
 }
 \examples{
 # example data

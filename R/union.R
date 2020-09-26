@@ -54,9 +54,12 @@ rbind.SoilProfileCollection <- function(...) {
 }
 
 #' Combine a list of SoilProfileCollection Objects
-#' @param l a list of SoilProfileCollection objects
 #'
-#' @details Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. Non-conforming spatial data are dropped from the final result.
+#' @param l a list of SoilProfileCollection objects
+#' @param new.idname Optional: a character referring to a new column name to put unique profile IDs in; default: \code{NULL} to attempt with existing idname in first element
+#' @param verbose Produce warnings and messages regarding results? default: \code{TRUE}
+#'
+#' @details Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. If one or more subsequent list elements has non-unique values in a site level attribute of that name, the ID name from the second list element is attempted, and so on. Non-conforming spatial data are dropped from the final result (returns default empty \code{SpatialPoints}).
 #'
 #' @return a SoilProfileCollection object
 #' @author D.E. Beaudette and A.G. Brown
@@ -79,7 +82,7 @@ rbind.SoilProfileCollection <- function(...) {
 #'
 #' # check
 #' plot(z)
-pbindlist <- function(l) {
+pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
   spc <- l
 
   # setup some defaults
@@ -108,20 +111,23 @@ pbindlist <- function(l) {
   idx.null <- suppressWarnings(which(sapply(spc, is.null)))
   if (length(idx.null)) {
     spc <- spc[-idx.null]
-    message("pbindlist: one or more input list elements is NULL")
+    if (verbose)
+      message("pbindlist: one or more input list elements is NULL")
   }
 
   # check/filter for NA list elements
   idx.na <- suppressWarnings(which(sapply(spc, is.na)))
   if (length(idx.na)) {
     spc <- spc[-idx.na]
-    message("pbindlist: one or more input list elements is NA")
+    if (verbose)
+      message("pbindlist: one or more input list elements is NA")
   }
 
   idx.notspc <- which(!sapply(spc, inherits, 'SoilProfileCollection'))
   if (length(idx.notspc)) {
     spc <- spc[-idx.notspc]
-    message("pbindlist: one or more input list elements is not a SoilProfileCollection")
+    if (verbose)
+      message("pbindlist: one or more input list elements is not a SoilProfileCollection")
   }
 
   # short circuit:
@@ -138,7 +144,8 @@ pbindlist <- function(l) {
   # check for non-conformal df class (revert to data.frame if non-matching)
   o.df.class <- unique(unlist(lapply(spc, function(s) metadata(s)$aqp_df_class)))
   if (length(o.df.class) > 1) {
-    message("pbindlist: data.frame class type inconsistent, reset to \"data.frame\"")
+    if (verbose)
+      message("pbindlist: data.frame class type inconsistent, reset to \"data.frame\"")
     o.df.class <- "data.frame"
   }
 
@@ -164,7 +171,8 @@ pbindlist <- function(l) {
 
   drop.spatial <- FALSE
   if (length(o.p4s) > 1) {
-    message('pbindlist: inconsistent CRS, dropping spatial data')
+    if (verbose)
+      message('pbindlist: inconsistent CRS, dropping spatial data')
     drop.spatial <- TRUE
   }
 
@@ -179,6 +187,16 @@ pbindlist <- function(l) {
 
   # template for combined data is based on the first element
   new.pID <- spc.list[[1]]$idcol
+
+  # allow user to specify new idname a priori
+  if (!is.null(new.idname)) {
+    if (is.character(new.idname) & length(new.idname) == 1) {
+      new.pID <- new.idname
+    } else {
+      if (verbose)
+        message("ignored new.idname argument; must be character vector of length 1")
+    }
+  }
   new.hzID <- spc.list[[1]]$hzidcol
 
   new.hzd <- spc.list[[1]]$depthcols
@@ -205,6 +223,56 @@ pbindlist <- function(l) {
     new.metadata$aqp_hztexcl <- ""
 
   # TODO: need a template for coordinate names if spatial data are present in all
+
+  # Make aqp::union() robust to profile ID / site attr collisions.
+  # https://github.com/ncss-tech/aqp/issues/161
+  tries <- 1
+  for (i in 1:n.spc) {
+
+    # if the template ID exists in ith SPC, check it
+    if (new.pID %in% names(spc.list[[i]]$site)) {
+
+      # get the values
+      potential.pid <- spc.list[[i]]$site[[new.pID]]
+
+      # compare length to unique length
+      lupid <- length(unique(potential.pid))
+      if (lupid != length(potential.pid)) {
+
+        # warn on mismatch
+        if (verbose)
+          warning(sprintf("template profile ID '%s' exists as a non-unique value in SPC element #%s, trying '%s'",
+                        new.pID, i, spc.list[[i]]$idcol), call. = FALSE)
+
+        # update the template to ith IDcol
+        new.pID <- spc.list[[i]]$idcol
+
+        # increment counter (present, but nonunique)
+        tries <- tries + 1
+
+        # reset loop (check everything again)
+        i <- 1
+      }
+    }
+    if (tries >= n.spc)
+      stop("result has conflicts in profile ID name, set alternate name with `new.idname` argument", call. = FALSE)
+  }
+
+  # make sure first element template has "correct" pID name and reasonable values
+  splt <- spc.list[[1]]
+  if (splt$idcol != new.pID) {
+    snames <- colnames(splt$site)
+    snames <- c(splt$idcol, snames[!snames %in% splt$idcol])
+    hnames <- colnames(splt$horizons)
+    hnames <- c(splt$idcol, hnames[!hnames %in% splt$idcol])
+    newsite <- .data.frame.j(splt$site, snames, "data.table")
+    newhorizons <- .data.frame.j(splt$horizons, hnames, "data.table")
+    colnames(newsite)[1] <- new.pID
+    colnames(newhorizons)[1] <- new.pID
+    newhorizons[[splt$idcol]] <- NULL
+    spc.list[[1]]$site <- newsite
+    spc.list[[1]]$horizons <- newhorizons
+  }
 
   # starting from the second SPC in the list
   # reset profile ID names in all other objects
@@ -255,10 +323,20 @@ pbindlist <- function(l) {
   if (requireNamespace("data.table")) {
     # preferentially use data.table if available
     o.h <- data.table::rbindlist(o.h, fill = TRUE)
+    # fix nasty duping of names by fill by taking first column of each name
+    # enforcing data.frame/tibble-like column-name uniqueness
+    ohn <- colnames(o.h)
+    o.h <- .data.frame.j(o.h, unique(ohn[match(ohn, ohn)]), "data.table")
     o.s <- data.table::rbindlist(o.s, fill = TRUE)
+    osn <- colnames(o.s)
+    o.s <- .data.frame.j(o.s, unique(osn[match(osn, osn)]), "data.table")
     o.d <- data.table::rbindlist(o.d, fill = TRUE)
+    odn <- colnames(o.d)
+    o.d <- .data.frame.j(o.d, unique(odn[match(odn, odn)]), "data.table")
     o.r <- data.table::rbindlist(o.r, fill = TRUE)
-  } else if(requireNamespace("plyr")) {
+    orn <- colnames(o.r)
+    o.r <- .data.frame.j(o.r, unique(orn[match(orn, orn)]), "data.table")
+  } else if (requireNamespace("plyr")) {
     o.h <- do.call('rbind.fill', o.h) # horizon data
     o.s <- do.call('rbind.fill', o.s) # site data
     o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
@@ -275,7 +353,8 @@ pbindlist <- function(l) {
 
     # note: an SPC with default @sp is a 1 column matrix
     if (length(unique(dim.coords)) > 1) {
-      message('pbindlist: non-conformal point geometry, dropping spatial data')
+      if (verbose)
+        message('pbindlist: non-conformal point geometry, dropping spatial data')
       drop.spatial <- TRUE
     }
 
