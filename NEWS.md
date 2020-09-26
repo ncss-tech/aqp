@@ -1,3 +1,6 @@
+# aqp 1.25 (2020-09-25)
+ * `pbindlist` replaces `aqp::union`; `union` has been deprecated due to conflicts with `base::union`
+ 
 # aqp 1.24 (2020-08-31)
  * `estimateSoilDepth` **loses** `top` and `bottom` arguments, these are automatically extracted
  * two new SoilProfileCollection wrapper methods: munsell2SPC, spc2mpspline
