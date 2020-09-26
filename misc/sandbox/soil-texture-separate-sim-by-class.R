@@ -61,6 +61,24 @@ x <- x[-idx, ]
 ## ~380k recordsa
 nrow(x)
 
+# check entire dataset
+TT <- TT.plot(
+  class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
+  main= "Soil Textures",          # title
+  tri.sum.tst=FALSE,            # do not test for exact sum(sand, silt, clay) == 100
+  cex.lab=0.75,                 # scaling of label text
+  cex.axis=0.75,                # scaling of axis
+  frame.bg.col='white',         # background color
+  class.lab.col='black',        # color for texture class labels
+  lwd.axis=1.5,                    # line thickness for axis
+  arrows.show=TRUE
+)
+
+# super slow
+TT.points(tri.data = x, geo = TT, col=alpha('royalblue', 0.75), cex = 0.125, tri.sum.tst = FALSE)
+
+
+
 
 # apply texture class rules
 x$class <- ssc_to_texcl(sand = x$SAND, clay = x$CLAY, as.is = TRUE)
@@ -86,17 +104,30 @@ processCompData <- function(i, var = 'class', n = 100) {
   # convert to a closed / proportional composition object
   z <- acomp(i[, 1:3], total = 100)
   
+  ## simulate from Dirichlet distribution
+  ## step 1: fit 3-term alpha parameters 
+  D <- fitDirichlet(z)
+  # simulate from Dirichlet
+  s <- rDirichlet.acomp(n, D$alpha)
+  
+  # convert back to format that is suitable for plotting on the TT
+  s <- as.data.frame(unclass(s) * 100)
+  names(s) <- names(i)[1:3]
+  
   # safely compute compositional mean / variance-covariance
   mean.comp <- meanCol(z)
   var.comp <- compositions::var(z, robust = FALSE, method = 'pearson')
-  
-  # generate normally distributed samples on the simplex
-  # these may extend beyond the original class limits
-  # results are in range [0,1]
-  s <- rnorm.acomp(n = n, mean = mean.comp, var = var.comp)
-  
-  # convert back to original range [0,100]
-  s <- as.data.frame(unclass(s) * 100)
+
+  ##
+  ## these values are often WAY outside of the source class
+  ##
+  # # generate normally distributed samples on the simplex
+  # # these may extend beyond the original class limits
+  # # results are in range [0,1]
+  # s <- rnorm.acomp(n = n, mean = mean.comp, var = var.comp)
+  # 
+  # # convert back to original range [0,100]
+  # s <- as.data.frame(unclass(s) * 100)
   
   # apply texture class rules
   s[[var]] <- ssc_to_texcl(sand = s$SAND, clay = s$CLAY, as.is = TRUE)
@@ -114,6 +145,7 @@ processCompData <- function(i, var = 'class', n = 100) {
     mean = mean.comp,
     var = var.comp,
     hit.rate = hit.rate,
+    D.alpha = D$alpha,
     texture.class.varname = var
   )
   
@@ -172,12 +204,15 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
   TT.points(tri.data = ss, geo = TT, col=alpha('darkgreen', alpha[2]), pch = 15, cex = 0.5)
   
   legend('topright', legend = c('Uniform / Grid', 'Normal / Compositional'), bty = 'n', pch = 15, col = c('darkgreen', 'firebrick'), horiz = TRUE)
+  
+  txt <- sprintf("hit rate: %s%%", round(ssc$hit.rate[2] * 100))
+  mtext(txt, side = 3, at = 0, line = -4)
 }
 
 
 
 
-z <- lapply(cl, processCompData, n = 500)
+z <- lapply(cl, processCompData, n = 250)
 
 plotSummary(z[['c']], alpha = c(0.215, 0.33))
 plotSummary(z[['cl']], alpha = c(0.215, 0.33))
@@ -192,5 +227,5 @@ plotSummary(z[['l']], alpha = c(0.215, 0.33))
 
 z[['l']]
 
-
+lapply(z, '[[', 'hit.rate')
 
