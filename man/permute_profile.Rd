@@ -7,6 +7,7 @@
 permute_profile(
   p,
   n = 100,
+  id = NULL,
   boundary.attr,
   min.thickness = 1,
   soildepth = NULL,
@@ -17,6 +18,8 @@ permute_profile(
 \item{p}{A single-profile SoilProfileCollection}
 
 \item{n}{Number of permutations to generate (default: 100)}
+
+\item{id}{Over-rides \code{n}: a vector of (unique) profile IDs equal in length to number of permutations (\code{n}) to generate.}
 
 \item{boundary.attr}{Horizon attribute containing numeric "standard deviations" reflecting boundary transition distinctness}
 

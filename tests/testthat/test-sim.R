@@ -52,7 +52,7 @@ test_that("permute_profile() works as expected", {
   restrictions(s) <- data.frame(id = profile_id(s),
                                  restrkind = "bar",
                                  restrdept = 0, restrdepb = 10)
-  perp <- permute_profile(s, n = 25, "bdy")
+  perp <- permute_profile(s, n = 25, boundary.attr = "bdy")
 
   # result is an SPC
   expect_true(inherits(perp, 'SoilProfileCollection'))
@@ -60,7 +60,7 @@ test_that("permute_profile() works as expected", {
   # expected lengths
   expect_true(length(perp) == 25)
 
-  perp2 <- permute_profile(s, n = 25, "bdy", new.idname = "foo")
+  perp2 <- permute_profile(s, id = 26:50, boundary.attr = "bdy", new.idname = "foo")
 
   # result is an SPC
   expect_true(inherits(perp2, 'SoilProfileCollection'))
@@ -71,6 +71,8 @@ test_that("permute_profile() works as expected", {
   # custom idname
   expect_equal(idname(perp2), "foo")
 
+  # custom IDs
+  expect_equal(profile_id(perp2), 26:50)
 
   })
 

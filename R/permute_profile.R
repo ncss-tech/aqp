@@ -2,6 +2,7 @@
 #'
 #' @param p A single-profile SoilProfileCollection
 #' @param n Number of permutations to generate (default: 100)
+#' @param id Over-rides \code{n}: a vector of (unique) profile IDs equal in length to number of permutations (\code{n}) to generate.
 #' @param boundary.attr Horizon attribute containing numeric "standard deviations" reflecting boundary transition distinctness
 #' @param min.thickness Minimum thickness of permuted horizons (default: 1)
 #' @param soildepth Depth below which horizon depths are not permuted (default: NULL)
@@ -53,9 +54,21 @@
 # quantile(loafercreek$bound_sd)
 # p <- loafercreek[1]
 
-permute_profile <- function(p, n = 100, boundary.attr,
+permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
                             min.thickness = 1,
                             soildepth = NULL, new.idname = 'pID') {
+  custom.ids <- FALSE
+  if (!missing(id)) {
+    custom.ids <- TRUE
+    n <- length(unique(id))
+
+    if (n != length(id))
+      stop("custom profile ID vector `id` contains non-unique values", call. = FALSE)
+
+    if (!missing(n))
+      message("if profile ID vector `id` is specified, `n` argument is ignored")
+  }
+
   hz <- horizons(p)
   bounds <- hz[[boundary.attr]]
   depthz <- horizonDepths(p)
@@ -206,6 +219,10 @@ permute_profile <- function(p, n = 100, boundary.attr,
                                diagnostic = o.d, restrictions = o.r)
   ## reset horizon IDs
   hzID(res) <- as.character(1:nrow(res))
+
+  if (custom.ids & length(unique(id)) == length(res))
+    profile_id(res) <- id
+
   return(res)
 }
 
