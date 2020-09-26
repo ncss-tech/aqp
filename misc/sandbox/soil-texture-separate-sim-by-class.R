@@ -7,6 +7,8 @@ library(scales)
 library(DBI)
 library(RSQLite)
 
+library(ragg)
+
 ## load soil texture grid points
 data("soiltexture", package = 'aqp')
 
@@ -61,12 +63,15 @@ x <- x[-idx, ]
 ## ~380k recordsa
 nrow(x)
 
+
 # check entire dataset
+png(file = 'KSSL-full-texture-distribution.png', width = 1000, height = 1000, res = 96, type = 'cairo', antialias = 'subpixel')
+
 TT <- TT.plot(
   class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
-  main= "Soil Textures",          # title
+  main= "KSSL Soil Texture Database",          # title
   tri.sum.tst=FALSE,            # do not test for exact sum(sand, silt, clay) == 100
-  cex.lab=0.75,                 # scaling of label text
+  cex.lab=1,                 # scaling of label text
   cex.axis=0.75,                # scaling of axis
   frame.bg.col='white',         # background color
   class.lab.col='black',        # color for texture class labels
@@ -74,10 +79,10 @@ TT <- TT.plot(
   arrows.show=TRUE
 )
 
-# super slow
-TT.points(tri.data = x, geo = TT, col=alpha('royalblue', 0.75), cex = 0.125, tri.sum.tst = FALSE)
+# super slow via RStudio graphics device
+TT.points(tri.data = x, geo = TT, col=alpha('royalblue', 0.01), cex = 0.125, tri.sum.tst = FALSE)
 
-
+dev.off()
 
 
 # apply texture class rules
