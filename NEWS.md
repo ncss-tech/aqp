@@ -1,5 +1,7 @@
 # aqp 1.25 (2020-09-25)
- * `pbindlist` replaces `aqp::union`; `union` has been deprecated due to conflicts with `base::union`
+ * `combine` replaces/expands `aqp::union` due to conflicts with `base::union`
+ * `split` receives some upgrades to the S4 definition to increase parity with `split.default`
+ * `filter` is now an alias for new method `subset`, which mirrors `base::subset`
  
 # aqp 1.24 (2020-08-31)
  * `estimateSoilDepth` **loses** `top` and `bottom` arguments, these are automatically extracted
