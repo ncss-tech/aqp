@@ -25,7 +25,7 @@
 #' # deprecated, see aqp::combine and aqp::pbindlist
 #'
 setMethod("union", signature(x = "list", y = "missing"), function(x, y)  {
-  .Deprecated("pbindlist")
+  .Deprecated("combine")
   pbindlist(x)
 })
 
