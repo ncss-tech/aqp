@@ -286,28 +286,32 @@ setMethod(f = 'unique',
   # down-grade to un-named vector of indices
   return(as.vector(u.profiles))
 })
-
+          
 #' @title Subset a SoilProfileCollection with logical expressions
-#' @name filter
-#' @description \code{filter()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for "tidy" lexical features -- specifically, access to site and horizon-level variables directly by name.
-#' @param object A SoilProfileCollection
-#' @param ... Comma-separated set of R expressions that evaluate as TRUE or FALSE. Length for individual expressions matche number of sites OR number of horizons, in \code{object}.
-#' @param greedy Use "greedy" matching for combination of site and horizon level matches? \code{greedy=TRUE} is the union, whereas \code{greedy=FALSE} (default) is intersection
+#' 
+#' @description \code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
+#' 
+#' @param x A SoilProfileCollection
+
+#' @param ... Comma-separated set of R expressions that evaluate as TRUE or FALSE. Length for individual expressions matches number of sites OR number of horizons, in \code{object}.
+#' 
+#' @param greedy Use "greedy" matching for combination of site and horizon level matches? \code{greedy = TRUE} is the union, whereas \code{greedy = FALSE} (default) is the intersection (of site and horizon matches).
+#' 
+#' 
+#' @aliases subset
+#' 
+#' @details In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series. If you need to use the base method after loading aqp, you can use \code{stats::filter} to be explicit about which function you want. We mirror the dplyr package in over-loading the \code{filter} method with a generic that allows for arbitrary number of vectors (\code{...}) to be included in the "filter," which means you may also need to use \code{aqp::filter} or \code{dplyr::filter} as appropriate depending on the order you load packages or your conflict resolution option settings.
+#' 
+#' @seealso \code{\link{filter}}
+#' 
 #' @return A SoilProfileCollection.
+#' 
 #' @author Andrew G. Brown.
 #'
-#' @rdname filter
-#' @export filter
-#' @aliases filter,SoilProfileCollection-method
-#' @docType methods
-
-if (!isGeneric("filter"))
-  setGeneric("filter", function(object, ...)
-    standardGeneric("filter"))
-
-setMethod("filter", signature(object = "SoilProfileCollection"),
-          function(object, ..., greedy = FALSE) {
-            if(requireNamespace("rlang", quietly = TRUE)) {
+setMethod("subset", signature(x = "SoilProfileCollection"),
+          function(x, ..., greedy = FALSE) {
+            object <- x
+            if (requireNamespace("rlang", quietly = TRUE)) {
 
               # capture expression(s) at function
               x <- rlang::enquos(...)
@@ -380,6 +384,23 @@ setMethod("filter", signature(object = "SoilProfileCollection"),
             }
           })
 
+if (!isGeneric("filter"))
+  setGeneric("filter", function(.data, ..., .preserve = FALSE)
+    standardGeneric("filter"))
+
+#' @export
+#' @param .data A SoilProfileCollection (\code{filter} method only, in lieu of \code{x})
+#' @param .preserve Relevant when the .data input is grouped. Not (yet) implemented for \code{SoilProfileCollection} objects.
+#' @aliases filter
+#' @rdname subset-SoilProfileCollection-method
+setMethod("filter", signature(.data = "SoilProfileCollection"), 
+          function(.data, ..., .preserve = FALSE) {
+            # this provides for possible alternate handling of filter() in future
+            #  as discussed, the base R verb for this op is subset
+            #  I like filter a lot, but don't really like masking stats::filter in principle
+            aqp::subset(x = .data, ...)
+          })
+
 # functions tailored for use with magrittr %>% operator / tidyr
 # formerly thisisnotapipe.R
 
@@ -403,7 +424,7 @@ if (!isGeneric("grepSPC"))
 
 setMethod("grepSPC", signature(object = "SoilProfileCollection"),
           function(object, attr, pattern, ...) {
-            if(requireNamespace("rlang", quietly = TRUE)) {
+            if (requireNamespace("rlang", quietly = TRUE)) {
               # capture expression(s) at function
               x <- rlang::enquo(attr)
 
@@ -420,7 +441,7 @@ setMethod("grepSPC", signature(object = "SoilProfileCollection"),
               return(object[idx,])
 
             } else {
-              stop("package 'rlang' is required for grepSPC", .call=FALSE)
+              stop("package 'rlang' is required for grepSPC", .call = FALSE)
             }
           })
 
@@ -443,7 +464,7 @@ if (!isGeneric("subApply"))
 
 setMethod("subApply", signature(object = "SoilProfileCollection"),
           function(object, .fun, ...) {
-            if(requireNamespace("rlang", quietly = TRUE)) {
+            if (requireNamespace("rlang", quietly = TRUE)) {
 
               #TODO: figure out how to use eval helpers here
 
@@ -456,7 +477,7 @@ setMethod("subApply", signature(object = "SoilProfileCollection"),
               # return subset of x where .fun is true
               return(object[which(res), ])
             } else {
-             stop("package 'rlang' is required for subApply", .call=FALSE)
+             stop("package 'rlang' is required for subApply", .call = FALSE)
             }
           })
 
@@ -469,7 +490,10 @@ if (!isGeneric("subsetProfiles"))
     standardGeneric("subsetProfiles"))
 
 setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
-          function(object, s, h, ...) {
+          function(object, s, h, ...) { 
+            
+            .Deprecated("subset")
+            
             # sanity checks
             if (missing(s) & missing(h))
               stop('must provide either, site or horizon level subsetting criteria',
