@@ -107,7 +107,7 @@ cor(d.1, d.2)
 
 ## 3. identify profiles within a collection that contain all NAs
 set.seed(1010101)
-s <- union(lapply(letters[1:10], random_profile, SPC=TRUE))
+s <- pbindlist(lapply(letters[1:10], random_profile, SPC=TRUE))
 
 # replace first profile's data with NA
 na.required <- nrow(s[1, ])

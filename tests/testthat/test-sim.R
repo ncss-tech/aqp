@@ -72,7 +72,7 @@ test_that("permute_profile() works as expected", {
   expect_equal(idname(perp2), "foo")
 
   # custom IDs
-  expect_equal(profile_id(perp2), 26:50)
+  expect_equal(profile_id(perp2), as.character(26:50))
 
   })
 

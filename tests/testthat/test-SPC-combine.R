@@ -1,4 +1,4 @@
-context("SoilProfileCollection pbindlist method")
+context("SoilProfileCollection combination methods")
 
 ## make sample data
 data(sp1, package = 'aqp')
@@ -9,9 +9,12 @@ sp1$x <- seq(-119, -120, length.out = length(sp1))
 sp1$y <- seq(38, 39, length.out = length(sp1))
 
 sp::coordinates(sp1) <- ~ x + y
-sp::proj4string(sp1) <- '+proj=longlat +datum=WGS84'
 
-test_that("basic pbindlist tests", {
+sp::proj4string(sp1) <- '+proj=longlat +datum=WGS84'
+# PROJ6
+# sp::proj4string(sp1) <- sp::CRS(SRS_string = "OGC:CRS84")
+
+test_that("basic combination tests", {
 
   # test data
   x <- sp1
@@ -22,19 +25,24 @@ test_that("basic pbindlist tests", {
   y$chroma <- NULL
 
   # add diagnostic hz
-  diagnostic_hz(y) <- data.frame(id='P001', type='pizza')
+  diagnostic_hz(y) <- data.frame(id = 'P001', type = 'pizza')
 
   # this should not work, IDs aren't unqiue
-  expect_error(pbindlist(list(x,y)))
+  expect_error(combine(list(x, y)))
 
   # fix IDs manually
   profile_id(y) <- sprintf("%s-copy", profile_id(y))
 
   # this should work
-  z <- pbindlist(list(x,y))
+  z <- combine(list(x, y))
+  
+  # as should this
+  z2 <- combine(x, y)
 
   expect_true(inherits(z, 'SoilProfileCollection'))
+  expect_true(inherits(z2, 'SoilProfileCollection'))
   expect_equal(length(z), length(x) + length(y))
+  expect_equal(length(z2), length(x) + length(y))
 
   # full site/hz names
   expect_equal(siteNames(z), unique(c(siteNames(x), siteNames(y))))
@@ -45,10 +53,7 @@ test_that("basic pbindlist tests", {
 
 })
 
-
-
-
-test_that("non-conformal pbindlist tests", {
+test_that("non-conformal combination tests", {
 
   # random data
   ids <- sprintf("%02d", 1:5)
@@ -80,13 +85,13 @@ test_that("non-conformal pbindlist tests", {
   depth_units(y) <- 'in'
 
   # should throw an error
-  expect_error(pbindlist(list(x, y)), "inconsistent depth units")
+  expect_error(combine(x, y), "inconsistent depth units")
 
   # reset depth units
   depth_units(y) <- 'cm'
 
-  # attempt pbindlist
-  z <- pbindlist(list(x, y, jacobs2000))
+  # attempt combine
+  z <- combine(list(x, y, jacobs2000))
 
   # there should be a total of 17 profiles in the result
   expect_equal(sum(sapply(list(x, y, jacobs2000), length)), 17)
@@ -108,9 +113,9 @@ test_that("non-conformal pbindlist tests", {
   site(p)$id <- NULL
 
   # these calls should produce same order result
-  #  .:. pbindlist uses depths<- internally
-  z.1 <- pbindlist(list(sp4[c(p.idx, spike.idx), ], p))
-  z.2 <- pbindlist(list(p, sp4[c(p.idx, spike.idx), ]))
+  #  .:. combine uses depths<- internally
+  z.1 <- combine(list(sp4[c(p.idx, spike.idx), ], p))
+  z.2 <- combine(list(p, sp4[c(p.idx, spike.idx), ]))
 
   expect_true(spc_in_sync(z.1)$valid)
   expect_true(spc_in_sync(z.2)$valid)
@@ -118,7 +123,7 @@ test_that("non-conformal pbindlist tests", {
 })
 
 
-test_that("pbindlist with non-conformal spatial data", {
+test_that("combine with non-conformal spatial data", {
 
   # test data
   x <- sp1
@@ -133,7 +138,7 @@ test_that("pbindlist with non-conformal spatial data", {
 
 
   # this should not work, IDs aren't unqiue
-  expect_error(pbindlist(list(x, y)), 'non-unique profile IDs detected')
+  expect_error(combine(list(x, y)), 'non-unique profile IDs detected')
 
 
   # make IDs unique
@@ -148,7 +153,7 @@ test_that("pbindlist with non-conformal spatial data", {
   sp::proj4string(y) <- ''
   sp::proj4string(z) <- ''
 
-  expect_message(res <- pbindlist(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
+  expect_message(res <- combine(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
   expect_true(inherits(res, 'SoilProfileCollection'))
 
   ## TODO: different coordinate names
@@ -166,7 +171,7 @@ test_that("filtering NULL/NA elements", {
   s <- list(NULL, x, y, NULL)
 
   # this should work
-  res <- pbindlist(s)
+  res <- combine(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
 
@@ -174,7 +179,7 @@ test_that("filtering NULL/NA elements", {
   s <- list(x, NULL)
 
   # should work
-  res <- pbindlist(s)
+  res <- combine(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
 
@@ -182,18 +187,18 @@ test_that("filtering NULL/NA elements", {
   s <- list(NA, x, y, NA)
 
   # this should work
-  res <- pbindlist(s)
+  res <- combine(s)
   expect_true(inherits(res, 'SoilProfileCollection'))
 
   # this should NOT work
-  expect_error(pbindlist(s, na.rm=FALSE))
+  expect_error(combine(s, na.rm = FALSE))
 
   # all NA ---> result is NULL
   s <- list(NA, NA, NA)
-  expect_null(pbindlist(s))
+  expect_null(combine(s))
 
   # all NULL ---> result is NULL
   s <- list(NULL, NULL, NULL)
-  expect_null(pbindlist(s))
+  expect_null(combine(s))
 })
 

@@ -22,38 +22,59 @@
 #'
 #' @examples
 #'
-#' # deprecated, see aqp::pbindlist
+#' # deprecated, see aqp::combine and aqp::pbindlist
 #'
 setMethod("union", signature(x = "list", y = "missing"), function(x, y)  {
-  # .Deprecated("aqp::union is deprecated due to conflict with base::union generic; use pbindlist")
+  .Deprecated("pbindlist")
   pbindlist(x)
 })
 
-#' rbind.SoilProfileCollection
+if (!isGeneric("combine"))
+  setGeneric("combine", function(...)
+    standardGeneric("combine"))
+
+#' Combine SoilProfileCollection objects
+#' 
+#' Combine SoilProfileCollection objects or lists of SoilProfileCollection objects. This method provides \code{...} expansion for the \code{pbindlist} method. 
 #'
-#' @param ... One or more SoilProfileCollection objects to \code{pbindlist()}
+#' @param ... SoilProfileCollection objects or lists of SoilProfileCollection objects to combine
 #'
 #' @return A SoilProfileCollection
-#' @export rbind.SoilProfileCollection
-#'
+#' 
+#' @export
+#' @aliases combine
 #' @examples
-#'
-#' data(sp5)
-#'
-#' rbind(sp5[1:2,], sp5[(length(sp5) - 1):length(sp5),])
-#'
-rbind.SoilProfileCollection <- function(...) {
-  # bring back rbind, no reason not to have a way to parse ...
-  # parse dots
-  objects <- list(...)
-  names(objects) <- NULL
+#' 
+#' spc1 <- random_profile(1, SPC = TRUE)
+#' spc2 <- random_profile(2, SPC = TRUE)
+#' 
+#' spc <- combine(spc1, spc2)
+#' 
+setMethod("combine", signature(... = "SoilProfileCollection"), function(...)  {
+    objects <- list(...)
+    # handle single-list input
+    if (length(objects) == 1)
+      if (is.list(objects[[1]]))
+        objects <- objects[[1]]
+    names(objects) <- NULL
+    res <- pbindlist(objects)
+    return(res)
+})
 
-  # make compatible
+#' @export
+#' @rdname combine-SoilProfileCollection-method
+setMethod("combine", signature(... = "list"), function(...)  {
+  lists <- list(...)
+  objects <- do.call('c', lists)
   res <- pbindlist(objects)
   return(res)
-}
+})
 
-#' Combine a list of SoilProfileCollection Objects
+# TODO: when dplyr::combine() is gone, also define aqp::combine(LIST)?
+
+#' Combine a list of SoilProfileCollection objects
+#'
+#' See \code{combine(...)} for a connotative short-hand method that does not require that SoilProfileCollections be in a list. Profiles will be sorted based on character sorting of profile ID.
 #'
 #' @param l a list of SoilProfileCollection objects
 #' @param new.idname Optional: a character referring to a new column name to put unique profile IDs in; default: \code{NULL} to attempt with existing idname in first element
