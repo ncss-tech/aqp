@@ -93,69 +93,127 @@ sort(round(prop.table(table(x$class)), 2))
 cl <- split(x, x$class)
 
 
-## TODO: split this into 
-# 1. data summary
-# 2. data simulation + packaging
-#
-# better to cache the mean/variance for later simulation 
-
-processCompData <- function(i, var = 'class', n = 100) {
+# extract parameters required to properly simulate SSC samples via texture class label
+prepareCompositionalSummary <- function(i, var = 'class') {
   
-  # current texture class
-  # may be a factor, and levels aren't likely the same later on
-  # treat as a text label
+  # keep track of the texture class
   this.class <- as.character(i[[var]][1])
   
   # convert to a closed / proportional composition object
   z <- acomp(i[, 1:3], total = 100)
   
-  ## simulate from Dirichlet distribution
-  ## step 1: fit 3-term alpha parameters 
+  # fit 3-term alpha parameters of Dirichlet distribution
   D <- fitDirichlet(z)
-  # simulate from Dirichlet
-  s <- rDirichlet.acomp(n, D$alpha)
-  
-  # convert back to format that is suitable for plotting on the TT
-  s <- as.data.frame(unclass(s) * 100)
-  names(s) <- names(i)[1:3]
-  
+ 
   # safely compute compositional mean / variance-covariance
   mean.comp <- meanCol(z)
   var.comp <- compositions::var(z, robust = FALSE, method = 'pearson')
+  
+  # package results
+  res <- list(
+    texture = this.class,
+    mean = mean.comp,
+    var = var.comp,
+    D.alpha = D$alpha,
+    n = nrow(i)
+  )
+  
+  return(res)
+}
 
-  ##
-  ## these values are often WAY outside of the source class
-  ##
-  # # generate normally distributed samples on the simplex
-  # # these may extend beyond the original class limits
-  # # results are in range [0,1]
-  # s <- rnorm.acomp(n = n, mean = mean.comp, var = var.comp)
-  # 
-  # # convert back to original range [0,100]
-  # s <- as.data.frame(unclass(s) * 100)
+
+
+
+sampleComposition <- function(i, var = 'class', n = 100) {
+  # simulate from Dirichlet
+  s <- rDirichlet.acomp(n, i$D.alpha)
+  
+  # convert back to format that is suitable for plotting on the TT
+  s <- as.data.frame(unclass(s) * 100)
+  names(s) <- names(i$mean)
   
   # apply texture class rules
   s[[var]] <- ssc_to_texcl(sand = s$SAND, clay = s$CLAY, as.is = TRUE)
   
   # maybe useful: number of samples in the source texture class
-  hit.rate <- prop.table(table(factor(s[[var]] == this.class)))
+  hit.rate <- prop.table(table(factor(s[[var]] == i$texture)))
   
   # truncate samples to source texture class
-  s.trunc <- s[as.character(s[[var]]) == this.class, ]
+  s.trunc <- s[as.character(s[[var]]) == i$texture, ]
   
   # package results into a list
   res <- list(
     samples.truncated = s.trunc,
     samples.full = s,
-    mean = mean.comp,
-    var = var.comp,
+    mean = i$mean,
+    var = i$var,
     hit.rate = hit.rate,
-    D.alpha = D$alpha,
+    D.alpha = i$D.alpha,
     texture.class.varname = var
   )
   
   return(res)
 }
+
+
+
+# processCompData <- function(i, var = 'class', n = 100) {
+#   
+#   # current texture class
+#   # may be a factor, and levels aren't likely the same later on
+#   # treat as a text label
+#   this.class <- as.character(i[[var]][1])
+#   
+#   # convert to a closed / proportional composition object
+#   z <- acomp(i[, 1:3], total = 100)
+#   
+#   ## simulate from Dirichlet distribution
+#   ## step 1: fit 3-term alpha parameters 
+#   D <- fitDirichlet(z)
+#   # simulate from Dirichlet
+#   s <- rDirichlet.acomp(n, D$alpha)
+#   
+#   # convert back to format that is suitable for plotting on the TT
+#   s <- as.data.frame(unclass(s) * 100)
+#   names(s) <- names(i)[1:3]
+#   
+#   # safely compute compositional mean / variance-covariance
+#   mean.comp <- meanCol(z)
+#   var.comp <- compositions::var(z, robust = FALSE, method = 'pearson')
+# 
+#   ##
+#   ## these values are often WAY outside of the source class
+#   ##
+#   # # generate normally distributed samples on the simplex
+#   # # these may extend beyond the original class limits
+#   # # results are in range [0,1]
+#   # s <- rnorm.acomp(n = n, mean = mean.comp, var = var.comp)
+#   # 
+#   # # convert back to original range [0,100]
+#   # s <- as.data.frame(unclass(s) * 100)
+#   
+#   # apply texture class rules
+#   s[[var]] <- ssc_to_texcl(sand = s$SAND, clay = s$CLAY, as.is = TRUE)
+#   
+#   # maybe useful: number of samples in the source texture class
+#   hit.rate <- prop.table(table(factor(s[[var]] == this.class)))
+#   
+#   # truncate samples to source texture class
+#   s.trunc <- s[as.character(s[[var]]) == this.class, ]
+#   
+#   # package results into a list
+#   res <- list(
+#     samples.truncated = s.trunc,
+#     samples.full = s,
+#     mean = mean.comp,
+#     var = var.comp,
+#     hit.rate = hit.rate,
+#     D.alpha = D$alpha,
+#     texture.class.varname = var
+#   )
+#   
+#   return(res)
+# }
 
 
 plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
@@ -216,8 +274,11 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
 
 
 
+texture.class.parameters <- lapply(cl, prepareCompositionalSummary)
 
-z <- lapply(cl, processCompData, n = 250)
+z <- lapply(texture.class.parameters, sampleComposition, n = 250)
+
+
 
 plotSummary(z[['c']], alpha = c(0.215, 0.33))
 plotSummary(z[['cl']], alpha = c(0.215, 0.33))
