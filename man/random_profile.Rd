@@ -52,7 +52,7 @@ Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.; Sadler, E. J. & Grun
 d <- lapply(1:10, random_profile, SPC=TRUE)
 
 # combine 
-d <- aqp::union(d)
+d <- combine(d)
 
 # plot
 opar <- par(mar=c(0,0,3,2))
@@ -61,7 +61,7 @@ par(opar)
 
 # simulate horizon boundary distinctness codes:
 d <- lapply(1:10, random_profile, SPC=TRUE, HzDistinctSim=TRUE)
-d <- aqp::union(d)
+d <- combine(d)
 
 d$HzD <- hzDistinctnessCodeToOffset(d$HzDistinctCode)
 
@@ -75,7 +75,7 @@ opar <- par(mfrow=c(2,1), mar=c(0,0,3,0))
 
 # generate data
 d.1 <- lapply(1:10, random_profile, SPC=TRUE, n=c(6, 7, 8), n_prop=1, method='LPP')
-d.1 <- aqp::union(d.1)
+d.1 <- combine(d.1)
 
 # plot
 plotSPC(d.1, name='name', color='p1', col.label = 'LPP Defaults')
@@ -84,7 +84,7 @@ plotSPC(d.1, name='name', color='p1', col.label = 'LPP Defaults')
 # do this again, this time set all of the LPP parameters
 d.2 <- lapply(1:10, random_profile, SPC=TRUE, n=c(6, 7, 8), n_prop=1, method='LPP', 
            lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
-d.2 <- aqp::union(d.2)
+d.2 <- combine(d.2)
 
 # plot
 plotSPC(d.2, name='name', color='p1', col.label = 'Custom LPP Parameters')

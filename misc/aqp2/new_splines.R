@@ -229,14 +229,14 @@ res.sub$clay_combined <- res.sub$spline_clay
 # inspect
 plot(res.sub[,48])
 
-# use aqp::union to merge multiple SPCs
-spc.combined <- aqp::union(list(orig.glom, res.sub))
+# use pbindlist to merge multiple SPCs
+spc.combined <- pbindlist(list(orig.glom, res.sub))
 
 # avoid warnings about duplicate phiid
 hzidname(spc.combined) <- "hzID"
 
 # make the comparison plot
-# note with latest AQP, union will impose default sort order
+# note with latest AQP, pbindlist will impose default sort order
 #  and these will sort "correctly" due to their peiid prefix
 plotSPC(spc.combined, color = "clay_combined")
 

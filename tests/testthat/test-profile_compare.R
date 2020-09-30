@@ -65,9 +65,9 @@ test_that("profile_compare works as expected", {
 #   
 #   # this has been a problem for years, alpha-sorting changes ordering
 #   set.seed(1010101)
-#   s <- union(lapply(1:10, random_profile, SPC=TRUE))
+#   s <- pbindlist(lapply(1:10, random_profile, SPC=TRUE))
 #   
-#   # expected ID orering after union() of random profiles
+#   # expected ID orering after pbindlist() of random profiles
 #   expect_equal(profile_id(s), c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
 #   
 #   # expected ID ordering after rebuildSPC

@@ -36,7 +36,7 @@ A SoilProfileCollection.
 \description{
 \code{glomApply()} is a function used for subsetting SoilProfileCollection objects by depth. It is a wrapper around \code{glom} which is intended to subset single-profile SPCs based on depth intervals/intersection.
 
-\code{glomApply} works by accepting a function \code{.fun} as argument. This function is used on each profile to process a multi-profile SPC for input to \code{glom} (via \code{profileApply}). For each profile, \code{.fun} returns a 2-length numeric vector of top and bottom boundaries \code{glom} arguments: \code{z1}, \code{z2}. 
+\code{glomApply} works by accepting a function \code{.fun} as argument. This function is used on each profile to process a multi-profile SPC for input to \code{glom} (via \code{profileApply}). For each profile, \code{.fun} returns a 2-length numeric vector of top and bottom boundaries \code{glom} arguments: \code{z1}, \code{z2}.
 
 \code{glomApply} essentially provides the option to programattically generate profile-specfic glom depths for a large SPC and handles iteration and rebuilding of a subset SPC object. Optional argument sinclude: \code{truncate} to cut the boundaries to specified \code{[z1, z2]}; \code{invert} to the portion outside \code{[z1, z2]}, \code{modality} to either \code{"all"} horizons or \code{"thickest"} horizon in the \code{glom} interval. \code{...} are various expressions you can run on the individual profiles using NSE, similar to \code{mutate}.
 }
@@ -45,18 +45,18 @@ A SoilProfileCollection.
 data(sp3)
 depths(sp3) <- id ~ top + bottom
 
-# constant depths, whole horizon returns by default 
-plot(glomApply(sp3, function(p) c(25,100))) 
+# constant depths, whole horizon returns by default
+plot(glomApply(sp3, function(p) c(25,100)))
 
 # constant depths, truncated
 #(see aqp::trunc for helper function)
-plot(glomApply(sp3, function(p) c(25,30), truncate = TRUE)) 
+plot(glomApply(sp3, function(p) c(25,30), truncate = TRUE))
 
-# constant depths, inverted 
-plot(glomApply(sp3, function(p) c(25,100), invert = TRUE)) 
+# constant depths, inverted
+plot(glomApply(sp3, function(p) c(25,100), invert = TRUE))
 
 # constant depths, inverted + truncated (same as above)
-plot(glomApply(sp3, function(p) c(25,30), invert = TRUE, truncate=TRUE)) 
+plot(glomApply(sp3, function(p) c(25,30), invert = TRUE, truncate=TRUE))
 
 # random boundaries in each profile
 plot(glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3))))))

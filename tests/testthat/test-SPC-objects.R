@@ -312,7 +312,7 @@ test_that("SPC min/max overrides work as expected", {
 
   set.seed(20202)
   df <- lapply(1:10, random_profile, SPC = TRUE)
-  df <- union(df)
+  df <- pbindlist(df)
 
   ## visually inspect output
   # profileApply(df, min)

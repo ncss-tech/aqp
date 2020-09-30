@@ -18,7 +18,7 @@ my_series <- "Cecil"
 sibs <- siblings(my_series, cousins = TRUE)
 
 ## SIBLINGS
-# 
+#
 sibs.maj <- sibs$sib[sibs$sib$majcompflag,]
 
 # ensure order by n in decreasing order, then take top 5
@@ -28,7 +28,7 @@ f <- fetchOSD(c(my_series, sibs.maj$sibling))
 # ## COUSINS
 # cous.maj <- sibs$cousins[sibs$cousins$majcompflag,]
 # cous.maj <- cous.maj[cous.maj$sibling != my_series,]
-# 
+#
 # # ensure order by n in decreasing order, then 5 at random
 # cous.maj.rnd <- cous.maj[order(cous.maj$n, decreasing = TRUE)[sample(1:nrow(cous.maj), 5)],]
 # f <- fetchOSD(c(my_series, cous.maj.rnd$sibling))
@@ -45,7 +45,7 @@ f <- fetchOSD(c(my_series, sibs.maj$sibling))
 # blklock@horizons$bottom <- round(cumsum(delta_cm))
 #
 # # combine blacklock in with the others
-# f <- aqp::union(list(blklock, f))
+# f <- pbindlist(list(blklock, f))
 
 f <- trunc(f, 0, min(f))
 f <- slice(f, 0:(min(f)-1) ~ soil_color + hue + value + chroma)

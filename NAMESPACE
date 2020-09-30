@@ -98,8 +98,6 @@ importFrom(sp,
 
 exportClasses(SoilProfileCollection)
 
-S3method(rbind, SoilProfileCollection)
-
 exportMethods(
   "[",
   "$",

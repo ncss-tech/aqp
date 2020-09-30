@@ -29,7 +29,7 @@ res %>% summarize(clay_mean = mean(pscs_clay, na.rm = TRUE),
 #  this is ordered with respect to the phiid ID, not calculated
 #  note: look at character ordering of idname versus the character
 #        ordering of hzidname for profiles in index 1 and 2
-#        i.e. sort(profile_id(union(l)))
+#        i.e. sort(profile_id(pbindlist(l)))
 l <- list(glom(loafercreek[1,], 25, 100) %>%
             group_by(taxorder),
           glom(loafercreek[2,], 25, 100) %>%
@@ -38,20 +38,20 @@ l <- list(glom(loafercreek[1,], 25, 100) %>%
 # check metadata of first element
 metadata(l[[1]])
 
-# check metadata of union result
-metadata(union(l))
+# check metadata of pbindlist result
+metadata(pbindlist(l))
 
 # ensure glom is working correctly
-p <- union(l[1])
+p <- pbindlist(l[1])
 glom(p, 25, 100, ids = TRUE)
 
 # spc subset preserving hzid
-p <- union(l)
+p <- pbindlist(l)
 pg <- glom(p[1,], 25, 100)
 hzID(pg)
 
 # verify order in horizon slot
 horizons(p)
 
-# optional slots preserved across glom+union
+# optional slots preserved across glom+pbindlist
 hztexclname(pg)

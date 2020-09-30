@@ -2,7 +2,7 @@
 % Please edit documentation in R/lunique.R
 \name{lunique}
 \alias{lunique}
-\title{Eliminate duplicate instances of  profile IDs in a list of SoilProfileCollections}
+\title{Eliminate duplicate instances of profile IDs in a list of SoilProfileCollections}
 \usage{
 lunique(l)
 }
@@ -13,7 +13,7 @@ lunique(l)
 A list of SoilProfileCollections, with duplicate profile IDs removed.
 }
 \description{
-@description Experimental function to "clean" list input where duplicates exist (that would otherwise prevent \code{aqp::union}). Useful for queries that may have overlapping instances of the same data, for instance a list of SoilProfileCollections where each list element contains profiles gathered from a set of (potentially overlapping) extents.
+@description Experimental function to "clean" list input where duplicates exist (that would otherwise prevent \code{pbindlist}). Useful for queries that may have overlapping instances of the same data, for instance a list of SoilProfileCollections where each list element contains profiles gathered from a set of (potentially overlapping) extents.
 }
 \examples{
 
@@ -23,14 +23,14 @@ data(sp5)
 
 # 6 profiles in four sets, and 5,6,7 are missing
 input <- lapply(list(c(1,3,4), c(2,2,3), NA, c(8,9,1)), function(idx) {
-      if(!all(is.na(idx))) 
+      if(!all(is.na(idx)))
        sp5[idx,]
 })
 
 output <- lunique(input)
 
 # 6 profiles are in final SPC; 5,6,7 are missing
-match(profile_id(union(output)), profile_id(sp5))
+match(profile_id(pbindlist(output)), profile_id(sp5))
 
 # EXAMPLE #2 -- exact duplicates
 

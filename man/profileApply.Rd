@@ -133,7 +133,7 @@ fun <- function(i) {
 l <- profileApply(sp1, fun, simplify=FALSE)
 
 # re-combine list of SoilProfileCollection objects into a single SoilProfileCollection
-sp1.sub <- union(l)
+sp1.sub <- pbindlist(l)
 
 # graphically check
 par(mfrow=c(2,1), mar=c(0,0,1,0))
