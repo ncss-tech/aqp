@@ -17,6 +17,8 @@
 ## 1. allow iteration over groups for plotting multiple horizons
 ## 2. consider embedding into lattice panels
 ## 3. consider integration with soiltexture package (see GH issues)
+## 4. fitDirichlet + sample from rDirichlet.acomp is a better simulation
+## 5. bootstrap with rDirichlet.acomp
 
 # helper function
 .get.ssc.low.rv.high <- function(ssc, p, delta) {
