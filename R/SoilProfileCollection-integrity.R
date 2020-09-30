@@ -120,7 +120,7 @@ setMethod('reorderHorizons',
             h <- object@horizons
             
             if (is.null(target.order))
-              target.order <- metadata(object)$target.order
+              target.order <- metadata(object)$original.order
               if (is.null(target.order))
                 target.order <- 1:nrow(h)
             

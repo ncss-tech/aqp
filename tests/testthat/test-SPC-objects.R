@@ -633,9 +633,8 @@ test_that("basic integrity checks", {
   # reordering the horizons with reorderHorizons resolves integrity issues
   expect_true(spc_in_sync(reorderHorizons(spc))$valid)
 
-  # default reordering relies on intact metadata
-  spc@metadata$target.order <- rev(spc@metadata$target.order)
-  expect_false(spc_in_sync(reorderHorizons(spc))$valid)
+  # default reordering uses metadata$original.order, here we override and reverse it
+  expect_false(spc_in_sync(reorderHorizons(spc, rev(spc@metadata$original.order)))$valid)
 
   # removing the metadata works because target order matches sequential order
   #  this cannot be guaranteed to be the case in general but is a reasonable default

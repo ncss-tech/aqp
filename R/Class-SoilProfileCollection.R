@@ -217,7 +217,7 @@ if(requireNamespace("tibble", quietly = TRUE))
     )
 
     # the target order to check/maintain is the default for a new SPC
-    metadata$target.order <- metadata$original.order
+    # metadata$target.order <- metadata$original.order
 
     # add any custom metadata
     metadata <- c(metadata,
