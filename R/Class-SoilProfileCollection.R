@@ -1316,6 +1316,19 @@ setMethod(f = 'aqp_df_class', signature(object = 'SoilProfileCollection'),
 
             return(u)
           })
+if (!isGeneric("aqp_df_class<-"))
+  setGeneric("aqp_df_class<-", function(object, ...)
+    standardGeneric("aqp_df_class<-")) 
+#' @param value "data.frame", "data.table" or "tibble"
+#' @rdname aqp_df_class
+setReplaceMethod("aqp_df_class", signature(object = "SoilProfileCollection"),
+                 function(object, value) {
+                   if (!value %in% c('data.frame',"data.table","tibble"))
+                     stop("aqp_df_class metadata entry must be data.frame, data.table or tibble", 
+                          call.=FALSE)
+                   metadata(object)$aqp_df_class <- value
+                   return(object)
+                 })
 
 #' Get depth units from metadata
 #'

@@ -6,7 +6,7 @@ rebuildSPC <- function(x) {
   x.list <- suppressWarnings(as(x, 'list'))
 
   # seed object for new SPC
-  res <- x.list$horizons
+  res <- .as.data.frame.aqp(x.list$horizons, aqp_df_class(x))
 
   # init SPC from pieces
   # note: using depths<- because it will generate a horizon ID
