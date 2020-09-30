@@ -12,7 +12,7 @@ getArgillicBounds(
   require_t = TRUE,
   bottom.pattern = "Cr|R|Cd",
   lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
-  as.list = FALSE,
+  sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
   verbose = FALSE
 )
 }
@@ -31,9 +31,9 @@ getArgillicBounds(
 
 \item{lower.grad.pattern}{this is a pattern for adjusting the bottom depth of the argillic horizon upwards from the bottom depth of the soil. The absence of illuviation is used as a final control on horizon pattern matching.}
 
-\item{as.list}{return result as a \code{list}?}
+\item{sandy.texture.pattern}{this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"}
 
-\item{verbose}{Print out information about 't' subscripts and lower gradational horizons?}
+\item{verbose}{Print out information about 't' subscripts, sandy textures, plow layers and lower gradational horizons?}
 }
 \value{
 Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound"
@@ -48,7 +48,9 @@ The lower boundary is first approximated as the depth to a lithic/paralithic/den
 
 The depth to contact is estimated using 'bottom.pattern' "Cr|R|Cd" by default. It matches anything containing Cr, R or Cd.
 
-The lower gradational horizon regular expression ‘lower.grad.pattern' default is ’"^[2-9]*CB*[^rt]*$"'. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.
+The lower gradational horizon regular expression ‘lower.grad.pattern' default is \code{^[2-9]*B*CB*[^rtd]*[1-9]*$}. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.
+
+The minimum thickness of the argillic horizon is dependent on whether all subhorizons are "sandy" or not. The \code{sandy.texture.pattern} default \code{-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$} captures USDA textural class fine earth fractions that meet "sandy" particle size class criteria.
 
 There also is an option ‘require_t' to omit the requirement for evidence of eluviation in form of ’t' subscript in 'hzdesgn'. Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set 'lower.grad.pattern' to something that will not match any horizons in your data.
 }
@@ -61,6 +63,7 @@ p <- sp1[1]
 attr <- 'prop' # clay contents
 foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 foo
+
 }
 \author{
 Andrew G. Brown

@@ -13,7 +13,7 @@ guessHzTexClName(x)
 Character containing horizon texture class column name.
 }
 \description{
-This function is used to provide texture class attribute column name to functions that use it to determine taxonomic criteria. It will use regular expressions to match \code{'texcl'} which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match \code{'texture'} for cases where \code{'texcl'} is absent (e.g. in NASIS components).
+This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
 }
 \examples{
 
@@ -26,6 +26,9 @@ hzdesgnname(a) <- guessHzTexClName(a)
 # inspect result
 hzdesgnname(a)
 
+}
+\seealso{
+\code{\link{guessHzDesgnName}}, \code{\link{guessHzAttrName}}
 }
 \author{
 Andrew G. Brown

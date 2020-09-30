@@ -19,7 +19,7 @@ guessHzAttrName(x, attr, optional, verbose = TRUE)
 Character containing horizon attribute column name. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 }
 \description{
-Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
+Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 
 e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (\code{claytotal_r == totalclay_r}) over (\code{clay_r == claytotal == totalclay}) over \code{clay}.
 }
@@ -49,6 +49,9 @@ depths(c) <- id ~ top + bottom
 
 guessHzAttrName(c, attr="clay", optional=c("total", "_r"))
 
+}
+\seealso{
+\code{\link{guessHzDesgnName}}, \code{\link{guessHzTexClName}}
 }
 \author{
 Andrew G. Brown

@@ -13,7 +13,7 @@ guessHzDesgnName(x)
 Character containing horizon designation column name.
 }
 \description{
-This follows the historic convention used by \code{aqp::plotSPC()} looking for 'hzname' or other column names containing the regular expression \code{name}. In the future, more patterns may be added.
+This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
 }
 \examples{
 
@@ -26,6 +26,9 @@ hzdesgnname(a) <- guessHzDesgnName(a)
 # inspect result
 hzdesgnname(a)
 
+}
+\seealso{
+\code{\link{guessHzTexClName}}, \code{\link{guessHzAttrName}}
 }
 \author{
 Andrew G. Brown

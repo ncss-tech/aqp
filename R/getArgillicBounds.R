@@ -12,8 +12,8 @@
 #' @param require_t require a "t" subscript for positive identification of upper and lower bound of argillic? default: TRUE
 #' @param bottom.pattern regular expression passed to \code{estimateSoilDepth} to match the lower boundary of the soil. default is "Cr|R|Cd" which approximately matches paralithic, lithic and densic contacts.
 #' @param lower.grad.pattern this is a pattern for adjusting the bottom depth of the argillic horizon upwards from the bottom depth of the soil. The absence of illuviation is used as a final control on horizon pattern matching.
-#' @param as.list return result as a \code{list}?
-#' @param verbose Print out information about 't' subscripts and lower gradational horizons?
+#' @param sandy.texture.pattern this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"
+#' @param verbose Print out information about 't' subscripts, sandy textures, plow layers and lower gradational horizons?
 #'
 #' @description \code{getArgillicBounds} estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object ('p').
 #'
@@ -23,9 +23,12 @@
 #'
 #' The depth to contact is estimated using 'bottom.pattern' "Cr|R|Cd" by default. It matches anything containing Cr, R or Cd.
 #'
-#' The lower gradational horizon regular expression ‘lower.grad.pattern' default is ’"^[2-9]*CB*[^rt]*$"'. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.
+#' The lower gradational horizon regular expression ‘lower.grad.pattern' default is \code{^[2-9]*B*CB*[^rtd]*[1-9]*$}. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.
+#'
+#' The minimum thickness of the argillic horizon is dependent on whether all subhorizons are "sandy" or not. The \code{sandy.texture.pattern} default \code{-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$} captures USDA textural class fine earth fractions that meet "sandy" particle size class criteria.
 #'
 #' There also is an option ‘require_t' to omit the requirement for evidence of eluviation in form of ’t' subscript in 'hzdesgn'. Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set 'lower.grad.pattern' to something that will not match any horizons in your data.
+#'
 #' @author Andrew G. Brown
 #'
 #' @return Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound"
@@ -41,6 +44,7 @@
 #' attr <- 'prop' # clay contents
 #' foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 #' foo
+#'
 getArgillicBounds <- function(p,
                               hzdesgn = 'hzname',
                               clay.attr = 'clay',
@@ -48,26 +52,26 @@ getArgillicBounds <- function(p,
                               require_t = TRUE,
                               bottom.pattern = "Cr|R|Cd",
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
-                              as.list = FALSE,
+                              sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
                               verbose = FALSE) {
 
   # ease removal of attribute name arguments -- deprecate them later
   # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
-  if(!hzdesgn %in% horizonNames(p)) {
+  if (!hzdesgn %in% horizonNames(p)) {
     hzdesgn <- guessHzDesgnName(p)
-    if(is.na(hzdesgn))
+    if (is.na(hzdesgn))
       stop("horizon designation column not correctly specified")
   }
 
-  if(!clay.attr %in% horizonNames(p)) {
+  if (!clay.attr %in% horizonNames(p)) {
     clay.attr <- guessHzAttrName(p, attr = "clay", optional = c("total","_r"))
-    if(is.na(clay.attr))
+    if (is.na(clay.attr))
       stop("horizon clay content column not correctly specified")
   }
 
-  if(!texcl.attr %in% horizonNames(p)) {
+  if (!texcl.attr %in% horizonNames(p)) {
     texcl.attr <- guessHzTexClName(p)
-    if(is.na(texcl.attr))
+    if (is.na(texcl.attr))
       stop("horizon texture class column not correctly specified")
   }
 
@@ -78,10 +82,10 @@ getArgillicBounds <- function(p,
   depthcol <- horizonDepths(p)
 
   # if upper.bound is non-NA, we might have argillic, because clay increase is met at some depth
-  if(!is.na(upper.bound)) {
+  if (!is.na(upper.bound)) {
 
     # find all horizons with t subscripts; some old/converted horizons have all capital letters
-    has_t <- grepl(as.character(hz[[hzdesgn]]), pattern="[Tt]")
+    has_t <- grepl(as.character(hz[[hzdesgn]]), pattern = "[Tt]")
 
     ########
     # TODO: allow evidence of illuviation from lab data fine clay ratios etc? how?
@@ -92,7 +96,7 @@ getArgillicBounds <- function(p,
     #       could you look for C in master horizon designation for e.g. rock structure / parent material?
     #       in lieu of checking for t and a cemented bedrock contact... is that how lower.bound should be determined?
     ########
-    if(sum(has_t) | !require_t) {
+    if (sum(has_t) | !require_t) {
       # get index of last horizon with t
       idx.last <- rev(which(has_t))[1]
 
@@ -102,13 +106,14 @@ getArgillicBounds <- function(p,
 
       # take the top depth of any B or C horizon  without t subscript above "depth.last"
       c.idx <- which(grepl(hz[[hzdesgn]], pattern = lower.grad.pattern))
-      if(length(c.idx)) {
+      if (length(c.idx)) {
         c.horizon <- as.numeric(.data.frame.j(hz[c.idx[1], ], depthcol[1], aqp_df_class(p)))
+
         # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
-        if(c.horizon < depth.last)  {
+        if (c.horizon < depth.last)  {
           # use the top depth of the first C horizon that matched the pattern
-          if(verbose)
-            message(paste0("Found ",paste0(hz[[hzdesgn]][c.idx], collapse=","),
+          if (verbose)
+            message(paste0("Found ",paste0(hz[[hzdesgn]][c.idx], collapse = ","),
                          " below argillic, adjusting lower bound (",
                          idname(p),": ", profile_id(p),")"))
           # plot(p)
@@ -118,7 +123,7 @@ getArgillicBounds <- function(p,
       }
 
       # get the bottom depth of the last horizon with a t (this could be same as c.horizon above)
-      if(require_t)
+      if (require_t)
         depth.last <- as.numeric(.data.frame.j(hz[idx.last,],
                                                depthcol[2],
                                                aqp_df_class(p)))
@@ -126,7 +131,7 @@ getArgillicBounds <- function(p,
       # in rare cases, the bottom depth of the bedrock/contact is not populated
       # step back until we find one that is not NA
       idx.last.i <- idx.last
-      while(is.na(depth.last) & idx.last.i >= 0) {
+      while (is.na(depth.last) & idx.last.i >= 0) {
         depth.last <- as.numeric(.data.frame.j(hz[idx.last.i,],
                                                depthcol[2],
                                                aqp_df_class(p)))
@@ -149,7 +154,7 @@ getArgillicBounds <- function(p,
         lower.bound <- depth.last
       }
     } else {
-      if(verbose)
+      if (verbose)
         message(paste0("Profile (",profile_id(p),
                      ") has clay increase with no evidence of illuviation (t), to ignore: `require_t = FALSE`."))
       lower.bound <- NA
@@ -174,24 +179,27 @@ getArgillicBounds <- function(p,
     min.thickness <- max(7.5, max(bdepths, na.rm = TRUE) / 10)
 
     textures <- glom(p, upper.bound, lower.bound, df = TRUE)[[texcl.attr]]
-    is_sandy <- all(grepl("S$|SAND$", textures, ignore.case = TRUE) &
-                      !grepl("LVFS|LFS$", textures, ignore.case = TRUE))
+    is_sandy <- all(grepl(sandy.texture.pattern, textures, ignore.case = TRUE))
 
-    if(is_sandy) {
+    if (is_sandy) {
       min.thickness <- 15
     }
 
-    if(lower.bound - upper.bound < min.thickness) {
+    if (lower.bound - upper.bound < min.thickness) {
       lower.bound <- NA
       upper.bound <- NA
     }
   }
 
-  if(!as.list)
-    return(c(upper.bound, lower.bound))
-
-  res <- list(ubound = as.numeric(upper.bound), lbound = as.numeric(lower.bound))
-  return(res)
+  # it is possible that a subhorizon of the Ap horizon meets the clay increase
+  pld <- getPlowLayerDepth(p, hzdesgn = hzdesgn)
+  if (pld > upper.bound) {
+    upper.bound <- pld
+    if (verbose)
+      message(paste0("Profile (",profile_id(p),
+                     ") meets clay increase within plowed layer."))
+  }
+  return(c(ubound = upper.bound, lbound = lower.bound))
 }
 
 crit.clay.argillic <- function(eluvial_clay_content) {
@@ -216,11 +224,10 @@ crit.clay.argillic <- function(eluvial_clay_content) {
 }
 
 # returns the top and bottom depth of the argillic horizon as a numeric vector.
-# optional argument as.list will return top and bottom depth as a list
 # applies get.increase.depth() identify the argillic horizon upper bound
 # threshold fun()=`crit.clay.argillic` defines the clay increase that must be met within 30 cm vertical distance
 # the default horizon attribute name is `clay`, but it can be adjusted as needed
-argillic.clay.increase.depth <- function(p, clay.attr='clay') {
+argillic.clay.increase.depth <- function(p, clay.attr = 'clay') {
   vd <- 30
   return(get.increase.depths(p, attr = clay.attr,
                           threshold.fun = crit.clay.argillic,

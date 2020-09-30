@@ -2,7 +2,7 @@
 
 #' Guess Horizon Designation Column Name
 #'
-#' @description This follows the historic convention used by \code{aqp::plotSPC()} looking for 'hzname' or other column names containing the regular expression \code{name}. In the future, more patterns may be added.
+#' @description This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
 #'
 #' @param x A SoilProfileCollection
 #'
@@ -11,6 +11,9 @@
 #' @author Andrew G. Brown
 #'
 #' @export
+#'
+#' @seealso \code{\link{guessHzTexClName}}, \code{\link{guessHzAttrName}}
+#'
 #' @examples
 #'
 #' a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), horizonname=c("A","Bw"))
@@ -58,7 +61,7 @@ guessHzDesgnName <- function(x) {
 
 #' Guess Horizon Texture Class Column Name
 #'
-#' @description This function is used to provide texture class attribute column name to functions that use it to determine taxonomic criteria. It will use regular expressions to match \code{'texcl'} which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match \code{'texture'} for cases where \code{'texcl'} is absent (e.g. in NASIS components).
+#' @description This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
 #'
 #' @param x A SoilProfileCollection
 #'
@@ -67,7 +70,7 @@ guessHzDesgnName <- function(x) {
 #' @author Andrew G. Brown
 #'
 #' @export guessHzTexClName
-#'
+#' @seealso \code{\link{guessHzDesgnName}}, \code{\link{guessHzAttrName}}
 #' @examples
 #'
 #' a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), texture=c("A","Bw"))
@@ -89,7 +92,7 @@ guessHzTexClName <- function(x) {
   if (length(hztexclname(x)) == 1) {
     # ideally use metadata if it contains a value
     name <- hztexclname(x)
-    if(name != "")
+    if (name != "")
       return(name)
   }
 
@@ -115,20 +118,22 @@ guessHzTexClName <- function(x) {
 
 #' Guess Arbitrary Horizon Column Name
 #'
-#' @description Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
+#' @description Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 #'
 #' e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (\code{claytotal_r == totalclay_r}) over (\code{clay_r == claytotal == totalclay}) over \code{clay}.
 #'
 #' @param x A SoilProfileCollection
 #' @param attr A regular expression containing required formative element of attribute name.
-#' @param optional A character vector of regular expression(s) containing one or more optional formative elements of attribute name.
+#' @param optional A character vector of regular expression(s) containing optional formative elements of attribute name.
 #' @param verbose A boolean value for whether to produce message output about guesses.
 #'
 #' @return Character containing horizon attribute column name. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 #'
 #' @author Andrew G. Brown
 #'
-#' @export guessHzAttrName
+#' @export
+#'
+#' @seealso \code{\link{guessHzDesgnName}}, \code{\link{guessHzTexClName}}
 #'
 #' @examples
 #'
@@ -156,7 +161,7 @@ guessHzTexClName <- function(x) {
 #'
 #' guessHzAttrName(c, attr="clay", optional=c("total", "_r"))
 #'
-guessHzAttrName <- function(x, attr, optional, verbose = TRUE) {
+guessHzAttrName <- function(x, attr, optional = NULL, verbose = TRUE) {
   nm <- horizonNames(x)
 
   if(!inherits(x, 'SoilProfileCollection')) {
@@ -165,7 +170,10 @@ guessHzAttrName <- function(x, attr, optional, verbose = TRUE) {
 
   # possible names include column names with name in the name
   req <- grepl(attr, nm, ignore.case=TRUE)
+
   opt <- lapply(as.list(optional), function(i) grepl(i, nm, ignore.case=TRUE))
+  if(is.null(optional) | length(optional) == 0)
+    opt <- as.list(req)
   opt <- rowSums(do.call('cbind', opt))
 
   # all optional requirements met
