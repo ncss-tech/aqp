@@ -47,16 +47,13 @@ setGeneric("glom", function(p, z1, z2 = NA,
 #'
 #' # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
 #' nrow(foo)
-
-
-setMethod(f = 'glom', signature='SoilProfileCollection',
+setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
           function(p, z1, z2 = NA,
                  ids = FALSE, df = FALSE,
                  truncate = FALSE, invert = FALSE,
                  modality = "all") {
-  # aka glom.by.depth;
-  if (!inherits(p, 'SoilProfileCollection') | length(p) > 1) {
-    # TODO: alternately, recursively call glom by invoking glomApply with constant depths z1, z2?
+            
+  if (!inherits(p, 'SoilProfileCollection') | length(p) > 1) { 
     stop("`p` must be a SoilProfileCollection containing one profile", call.=FALSE)
   }
 
