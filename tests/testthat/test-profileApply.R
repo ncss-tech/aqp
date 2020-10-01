@@ -34,7 +34,7 @@ test_that("profileApply - frameify option", {
   expect_equal(nrow(r1), 9)
 
   # 1 row per horizon
-  expect_silent(r1 <- profileApply(sp1, frameify = TRUE, column.names = c("foo","bar"), function(p) {
+  expect_silent(r1 <- profileApply(sp1, frameify = TRUE, column.names = c("id","foo","bar"), function(p) {
     data.frame(id = profile_id(p),
                hzID = hzID(p),
                depth = estimateSoilDepth(p, name = "name"))

@@ -16,20 +16,12 @@ if (!isGeneric("profileApply"))
 		# get profile IDs
 		pIDs <- profile_id(object)
 
-		## TODO: does this same any time / memory?
-		# pre-allocate list
-		l <- vector(mode = 'list', length = length(pIDs))
-		# must set list names based on expected assignment in for() loop
-		names(l) <- pIDs
-
 		# iterate over SPC, spliting into a list of SPC_i ... SPC_n
-		for(i in seq_along(pIDs)) {
-			pID <- pIDs[i]
-			l[[pID]] <- do.call(FUN, list(object[i, ], ...))
-		}
+		l <- lapply(seq_along(pIDs), function(i) do.call(FUN, list(object[i, ], ...)))
+    names(l) <- pIDs
 
 		# optionally simplify
-		if(simplify)
+		if (simplify)
 			return(unlist(l))
 
 		return(l)
@@ -163,21 +155,19 @@ if (!isGeneric("profileApply"))
 #' points(1:length(sp1), sp1$dep, col='red', pch=7)
 #' plot(sp1.sub)
 #'
-setMethod(f='profileApply', signature='SoilProfileCollection', function(object, FUN,
+setMethod('profileApply', signature(object = 'SoilProfileCollection'), function(object, FUN,
                         simplify = TRUE,
                         frameify = FALSE,
                         chunk.size = 100,
                         column.names = NULL,
                         ...) {
-  if(simplify & frameify) {
-    # simplify and frameify are both TRUE -- ignoring simplify argument
+  if (simplify & frameify) {
+    # simplify and frameify are both TRUE -- ignore simplify argument
     simplify <- FALSE
   }
 
   # total number of profiles we have to iterate over
   n <- length(object)
-  o.name <- idname(object)
-  o.hname <- hzidname(object)
 
   # split the SPC of size n into chunk.size chunks
   chunk <- sort(1:n %% max(1, round(n / chunk.size))) + 1
@@ -191,31 +181,31 @@ setMethod(f='profileApply', signature='SoilProfileCollection', function(object, 
   }))
 
   # return profile IDs if it makes sense for result
-  if(length(res) == length(object))
+  if (length(res) == length(object))
     names(res) <- profile_id(object)
 
   # combine a list (one element per profile) into data.frame result
-  if(!simplify & frameify) {
+  if (!simplify & frameify) {
 
     # make sure the first result is a data.frame (i.e. FUN returns a data.frame)
-    if(is.data.frame(res[[1]])) {
+    if (inherits(res[[1]], 'data.frame')) {
 
       # make a big data.frame
-      res <- as.data.frame(do.call('rbind', res), stringsAsFactors = FALSE)
-
-      # get ids
-      pid <- profile_id(object)
-      hz.id <- hzID(object)
+      if (requireNamespace("data.table")) {
+        res <- .as.data.frame.aqp(data.table::rbindlist(res, fill = TRUE), aqp_df_class(object))
+      } else {
+        res <- .as.data.frame.aqp(do.call('rbind', res), aqp_df_class(object))
+      }
 
       if (!is.null(column.names))
         colnames(res) <- column.names
 
     } else {
-      warning("first result is not class `data.frame` and frameify is TRUE. defaulting to list output.", call. = FALSE)
+      warning("first result does not inherit `data.frame` and frameify is TRUE. defaulting to list output.", call. = FALSE)
     }
   }
 
-  if(simplify)
+  if (simplify)
    return(unlist(res))
 
   return(res)
