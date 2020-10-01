@@ -512,18 +512,18 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
 # basic wrapper function for multi-j index subsetting of data.frames compatible with data.table
 .data.frame.j <- function(dat, col.names, use_class) {
   dfnames <- names(dat)
-  
-  # allow for re-ordering by column name like data.frame[,j] 
+
+  # allow for re-ordering by column name like data.frame[,j]
   dfnamesub <- dfnames[dfnames %in% col.names]
   dfnamesub <- dfnamesub[match(col.names, dfnamesub)]
-  
-  # access columns one by one in desired order, using "ambivalent" [[ 
+
+  # access columns one by one in desired order, using "ambivalent" [[
   res <- lapply(dfnamesub, function(new.name) {
      newcol <- data.frame(dat[[new.name]], stringsAsFactors = FALSE)
      names(newcol) <- new.name
      return(newcol)
   })
-  
+
   # recombine
   res <- do.call('cbind', res)
   if (inherits(res, 'data.frame')) {
@@ -1289,21 +1289,21 @@ setMethod(f = 'metadata', signature(object = 'SoilProfileCollection'),
             return(object@metadata)
           })
 
+
+if (!isGeneric("aqp_df_class"))
+  setGeneric("aqp_df_class", function(object)
+    standardGeneric("aqp_df_class"))
+
 #' Get aqp_df_class entry from metadata or return a safe value.
 #'
 #' @name aqp_df_class
-#'
-#' @description This is an accessor method for the \code{aqp_df_class} entry in the metadata slot. This entry is used internally by methods that interact with \code{data.frame} objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.
+#' @description This is an accessor and replacement method for the \code{aqp_df_class} entry in the metadata slot. This entry is used internally by methods that interact with \code{data.frame} objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.
 #'
 #' @param object a SoilProfileCollection
 #' @aliases aqp_df_class,SoilProfileCollection-method
 #' @docType methods
 #' @rdname aqp_df_class
 #'
-if (!isGeneric("aqp_df_class"))
-  setGeneric("aqp_df_class", function(object, ...)
-    standardGeneric("aqp_df_class"))
-
 setMethod(f = 'aqp_df_class', signature(object = 'SoilProfileCollection'),
           function(object) {
             u <- as.character(metadata(object)[['aqp_df_class']])
@@ -1316,15 +1316,19 @@ setMethod(f = 'aqp_df_class', signature(object = 'SoilProfileCollection'),
 
             return(u)
           })
+
 if (!isGeneric("aqp_df_class<-"))
-  setGeneric("aqp_df_class<-", function(object, ...)
-    standardGeneric("aqp_df_class<-")) 
+  setGeneric("aqp_df_class<-", function(object, value)
+    standardGeneric("aqp_df_class<-"))
+
+#' @name aqp_df_class<-
 #' @param value "data.frame", "data.table" or "tibble"
+#' @aliases aqp_df_class<-,SoilProfileCollection-method
 #' @rdname aqp_df_class
 setReplaceMethod("aqp_df_class", signature(object = "SoilProfileCollection"),
                  function(object, value) {
                    if (!value %in% c('data.frame',"data.table","tibble"))
-                     stop("aqp_df_class metadata entry must be data.frame, data.table or tibble", 
+                     stop("aqp_df_class metadata entry must be data.frame, data.table or tibble",
                           call.=FALSE)
                    metadata(object)$aqp_df_class <- value
                    return(object)

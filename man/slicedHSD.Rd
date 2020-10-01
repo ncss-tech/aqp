@@ -9,7 +9,7 @@ slicedHSD(object, fm, conf = 0.95)
 \arguments{
 \item{object}{\code{SoilProfileCollection} object}
 
-\item{fm}{a formula describing depth sequence, horizon attribute, and site (grouping) attribute. 
+\item{fm}{a formula describing depth sequence, horizon attribute, and site (grouping) attribute.
 For example 0:100 ~ estimated_oc | taxonname}
 
 \item{conf}{confidence applied in \code{TukeyHSD}}
