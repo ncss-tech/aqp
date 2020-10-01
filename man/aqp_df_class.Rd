@@ -4,9 +4,15 @@
 \name{aqp_df_class}
 \alias{aqp_df_class}
 \alias{aqp_df_class,SoilProfileCollection-method}
+\alias{aqp_df_class<-,SoilProfileCollection-method}
 \title{Get aqp_df_class entry from metadata or return a safe value.}
+\usage{
+\S4method{aqp_df_class}{SoilProfileCollection}(object) <- value
+}
 \arguments{
 \item{object}{a SoilProfileCollection}
+
+\item{value}{"data.frame", "data.table" or "tibble"}
 }
 \description{
 This is an accessor method for the \code{aqp_df_class} entry in the metadata slot. This entry is used internally by methods that interact with \code{data.frame} objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.
