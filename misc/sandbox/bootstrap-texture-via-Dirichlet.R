@@ -13,8 +13,8 @@ ssc <- horizons(sp6)[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
 names(ssc) <- toupper(names(ssc))
 
 # ok fine, I'll try dplyr
-ssc <- horizons(sp6) %>% 
-  filter(grepl('^A', x = name)) %>%
+ssc <- horizons(sp6) %>%
+  filter(grepl('^Bt', x = name)) %>%
   select(
     SAND = sand,
     SILT = silt,
@@ -46,15 +46,23 @@ TT.points(tri.data = ssc, geo = TT, bg='royalblue', pch = 22, cex = 1, lwd = 1, 
 legend('top', legend = c('Source', 'Simulated'), pch = c(22, 3), col = c('black', 'firebrick'), pt.bg = c('royalblue', NA), horiz = TRUE, bty = 'n')
 
 
-# not useful
-aqp::textureTriangleSummary(ssc)
-textureTriangleSummary(ssc, cex = 0.5, range.alpha = 50)
-textureTriangleSummary(ssc, cex = 0.5, sim = TRUE)
+# source data
+(ssc.stats <- textureTriangleSummary(ssc, pch = 1, cex = 0.5, range.alpha = 50))
 
-# bootstrapped version
-aqp::textureTriangleSummary(s, pch = 0, cex = 0.125)
-textureTriangleSummary(s, pch = 0, cex = 0.125, range.alpha = 50)
-textureTriangleSummary(s, pch = 0, cex = 0.125, sim = TRUE)
+# simulated data
+(ssc.stats.boot <- textureTriangleSummary(s, pch = 1, cex = 0.5, range.alpha = 50))
+
+# marginal quantiles are pretty close
+round(ssc.stats - ssc.stats.boot)
+
+
+# sweet!
+# you can add to one of these figures
+textureTriangleSummary(s, pch = 1, cex = 0.5, range.alpha = 50, col = grey(0.5), legend = FALSE)
+TT <- TT.geo.get()
+TT.points(tri.data = ssc, geo = TT, col = 'royalblue', pch = 16, cex = 0.5, lwd = 1, tri.sum.tst = FALSE)
+
+
 
 
 
