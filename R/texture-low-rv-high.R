@@ -21,10 +21,10 @@
 ## 5. bootstrap with rDirichlet.acomp
 
 # helper function
-.get.ssc.low.rv.high <- function(ssc, p, delta) {
+.get.ssc.low.rv.high <- function(ssc, p, delta, TT.obj) {
 
-  if(!requireNamespace("plotrix", quietly = TRUE))
-    stop("package `plotrix` is required", call.=FALSE)
+  if(!requireNamespace("soiltexture", quietly = TRUE))
+    stop("package `soiltexture` is required", call.=FALSE)
 
   # sanity checks
   if(delta < 1)
@@ -42,28 +42,44 @@
   sand.seq <- round(seq(from=sand.stats[1], to=sand.stats[3], by=delta))
   silt.seq <- round(seq(from=silt.stats[1], to=silt.stats[3], by=delta))
   clay.seq <- round(seq(from=clay.stats[1], to=clay.stats[3], by=delta))
-  g <- expand.grid(sand=sand.seq, silt=silt.seq, clay=clay.seq)
+  g <- expand.grid(SAND=sand.seq, SILT=silt.seq, CLAY=clay.seq)
 
   # subset to only include those sand, silt, clay values that sum to 100% (0.01% tolerance)
   real.textures <- which(abs(apply(g, 1, sum) - 100) < 0.01 )
   g <- g[real.textures, ]
 
   # plot low and high values with no symbol, so that we can access the {x,y} screen coordinates
-  tp.low.high <- plotrix::triax.points(g, col.symbols='black', pch=NA)
+  tp.low.high <- soiltexture::TT.points(tri.data = g, geo = TT.obj, pch = NA, tri.sum.tst = FALSE)
 
   # create range polygon
   poly.order <- chull(tp.low.high$x, tp.low.high$y)
 
-  # return RV and bounding polygon geometry
-  return(list(stats=ssc.stats, range=list(x=tp.low.high$x[poly.order], y=tp.low.high$y[poly.order])))
+  # package quantiles and bounding polygon geometry
+  res <- list(
+    stats = ssc.stats, 
+    range = list(
+      x = tp.low.high$x[poly.order], 
+      y = tp.low.high$y[poly.order]
+    )
+  )
+  
+  return(res)
 }
 
 
 # compute and plot "low"--"representative value"--"high" soil textures based on:
 # ssc: data.frame/matrix of [sand, silt, clay]
 # p: requested percentiles
-textureTriangleSummary <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, texture.names=FALSE, pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, sim=FALSE, sim.n=1000, sim.rv.col='yellow', sim.col=grey(0.95), sim.alpha=150, legend.cex=0.75, ...) {
 
+
+#' 
+#' @title 
+#' 
+textureTriangleSummary <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, pop.rv.col='red', range.col='RoyalBlue', range.alpha=75, legend.cex=0.75, main = 'Soil Textures', legend = TRUE, ...) {
+
+  if(!requireNamespace("soiltexture", quietly = TRUE))
+    stop("package `soiltexture` is required", call.=FALSE)
+  
 	# setup colors
 	range.col <- rgb(t(col2rgb(range.col)), maxColorValue=255, alpha=range.alpha)
   sim.col <- rgb(t(col2rgb(sim.col)), maxColorValue=255, alpha=sim.alpha)
@@ -75,73 +91,105 @@ textureTriangleSummary <- function(ssc, p=c(0.05, 0.5, 0.95), delta=1, texture.n
 	legend.cols <- c('black', 'black')
 	legend.bg <- c(pop.rv.col, range.col)
 	legend.pch <- c(22, 22)
-
-	# setup plot, without symbols at textures
-  if(!requireNamespace("plotrix", quietly = TRUE))
-    stop("package `plotrix` is required", call.=FALSE)
-
-  plotrix::soil.texture(ssc, show.names=texture.names, axis.labels=c('Sand', 'Silt', 'Clay'), show.grid=TRUE, pch=NA)
-
-  # optionally simulate data from a composition of normally distributed data
-  # using means, and var-cov matrix from original data
-  if(sim) {
-    if(!requireNamespace('compositions', quietly = TRUE))
-      stop('package `compositions` is required', call.=FALSE)
-
-    # compute RV / range polygon for normally dist data
-    # convert to compositional class, note range is now [0,1]
-    ssc.acomp <- compositions::acomp(ssc)
-
-    # simulate normally-distributed composition based on data
-    # Note: it is critical that the mean and variance are estimated using functions from the compositions namespace
-    # BUG in calling var.acomp without loading compositions via library(): must specify default arguments
-    ssc.sim <- compositions::rnorm.acomp(n=sim.n, mean=compositions::meanCol(ssc.acomp), var=compositions::var(ssc.acomp, robust = FALSE, method='pearson'))
-
-    # get bounding polygon and rv after converting back to [0,100] interval
-    res.sim <- .get.ssc.low.rv.high(as.data.frame(unclass(ssc.sim) * 100),  p=p, delta=delta)
-
-    # add polgon defining range of normally dist data
-    polygon(res.sim$range$x, res.sim$range$y, col=sim.col, lty=2, lwd=2)
-
-    # testing: add simulated points
-    # triax.points(as.data.frame(unclass(ssc.sim) * 100), col=1, cex=0.5)
-  }
-
-  # compute RV / range polygon for data
-  res <- .get.ssc.low.rv.high(ssc,  p=p, delta=delta)
-  # add polgon defining range of data
-  polygon(res$range$x, res$range$y, col=range.col)
-
-  # add original data, passing in additional arguments
-  plotrix::triax.points(ssc, ...)
-
+  
+	# setup plot
+	TT <- soiltexture::TT.plot(
+	  class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
+	  main = main,          # title
+	  tri.sum.tst=FALSE,            # do not test for exact sum(sand, silt, clay) == 100
+	  cex.lab=0.75,                 # scaling of label text
+	  cex.axis=0.75,                # scaling of axis
+	  frame.bg.col='white',         # background color
+	  class.lab.col='black',        # color for texture class labels
+	  lwd.axis=1.5,                    # line thickness for axis
+	  arrows.show=TRUE
+	)
+	
+	# compute RV / range polygon for data
+	res <- .get.ssc.low.rv.high(ssc,  p=p, delta=delta, TT.obj = TT)
+	
+	# add polgon defining range of data
+	polygon(res$range$x, res$range$y, col=range.col)
+	
+	# add original data, passing in additional arguments
+	soiltexture::TT.points(tri.data = ssc, geo = TT, tri.sum.tst=FALSE, lwd = 1, ...)
+	
 	# plot population RV
-	suppressWarnings(plotrix::triax.points(matrix(res$stats[2, ], nrow=1), bg.symbols=pop.rv.col, pch=22, cex=1.25))
-  # optionally plot simulated RV
-  if(sim)
-	  suppressWarnings(plotrix::triax.points(matrix(res.sim$stats[2, ], nrow=1), bg.symbols=sim.rv.col, pch=22, cex=1.25))
+	soiltexture::TT.points(
+	  tri.data = data.frame(t(res$stats[2, ])), 
+	  geo = TT, 
+	  bg = pop.rv.col, 
+	  pch = 22, 
+	  cex = 1.25, 
+	  lwd = 1, 
+	  tri.sum.tst = FALSE
+	  )
+	
+	# legend
+	if(legend) {
+	  legend(
+	    'topleft', 
+	    legend = legend.text, 
+	    pt.bg = legend.bg, 
+	    pch = legend.pch, 
+	    col = legend.cols, 
+	    bty = 'n', 
+	    cex = legend.cex, 
+	    pt.cex = 1.25, 
+	    horiz = TRUE
+	  ) 
+	}
+	
 
-  # optionally add legend elements for simulation
-  if(sim) {
-    legend.text <- c(legend.text, 'Simulated RV', paste0('Sim. Range (n=', sim.n, ', normal composition)'))
-    legend.bg <- c(legend.bg, sim.rv.col, sim.col)
-    legend.cols <- c(legend.cols, 'black', 'black')
-    legend.pch <- c(legend.pch, 22, NA)
-    legend.lty <- c(NA, NA, NA, 2)
+	invisible(res$stats)	
+	
+# 
+#   # optionally simulate data from a composition of normally distributed data
+#   # using means, and var-cov matrix from original data
+#   if(sim) {
+#     if(!requireNamespace('compositions', quietly = TRUE))
+#       stop('package `compositions` is required', call.=FALSE)
+# 
+#     # compute RV / range polygon for normally dist data
+#     # convert to compositional class, note range is now [0,1]
+#     ssc.acomp <- compositions::acomp(ssc)
+# 
+#     # simulate normally-distributed composition based on data
+#     # Note: it is critical that the mean and variance are estimated using functions from the compositions namespace
+#     # BUG in calling var.acomp without loading compositions via library(): must specify default arguments
+#     ssc.sim <- compositions::rnorm.acomp(n=sim.n, mean=compositions::meanCol(ssc.acomp), var=compositions::var(ssc.acomp, robust = FALSE, method='pearson'))
+# 
+#     # get bounding polygon and rv after converting back to [0,100] interval
+#     res.sim <- .get.ssc.low.rv.high(as.data.frame(unclass(ssc.sim) * 100),  p=p, delta=delta, TT.obj = TT)
+# 
+#     # add polgon defining range of normally dist data
+#     polygon(res.sim$range$x, res.sim$range$y, col=sim.col, lty=2, lwd=2)
+# 
+#     # testing: add simulated points
+#     # triax.points(as.data.frame(unclass(ssc.sim) * 100), col=1, cex=0.5)
+#   }
 
-    legend('topleft', legend=legend.text, pt.bg=legend.bg, pch=legend.pch, col=legend.cols, lty=legend.lty, bty='n', cex=legend.cex, pt.cex=1.25, ncol=ifelse(sim, 2, 1))
-  }
-  # if no simulation, don't specifiy lty
-  else
-    legend('topleft', legend=legend.text, pt.bg=legend.bg, pch=legend.pch, col=legend.cols, bty='n', cex=legend.cex, pt.cex=1.25, ncol=ifelse(sim, 2, 1))
+  
+# 	
+#   # optionally plot simulated RV
+#   if(sim)
+# 	  suppressWarnings(plotrix::triax.points(matrix(res.sim$stats[2, ], nrow=1), bg.symbols=sim.rv.col, pch=22, cex=1.25))
+# 
+#   # optionally add legend elements for simulation
+#   if(sim) {
+#     legend.text <- c(legend.text, 'Simulated RV', paste0('Sim. Range (n=', sim.n, ', normal composition)'))
+#     legend.bg <- c(legend.bg, sim.rv.col, sim.col)
+#     legend.cols <- c(legend.cols, 'black', 'black')
+#     legend.pch <- c(legend.pch, 22, NA)
+#     legend.lty <- c(NA, NA, NA, 2)
+# 
+#     legend('topleft', legend=legend.text, pt.bg=legend.bg, pch=legend.pch, col=legend.cols, lty=legend.lty, bty='n', cex=legend.cex, pt.cex=1.25, ncol=ifelse(sim, 2, 1))
+#   }
+#   # if no simulation, don't specifiy lty
+#   else
+#     
 
 
 
-}
-
-# for backwards compatibility
-texture.triangle.low.rv.high <- function(...) {
-  .Deprecated('textureTriangleSummary')
-  textureTriangleSummary(...)
 }
 
