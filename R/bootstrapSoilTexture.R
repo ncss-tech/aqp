@@ -7,18 +7,20 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @param ssc a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (%). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100%. See details.
+#' @param ssc a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. See details.
 #' 
 #' @param n number of simulated compositions. See details.
 #' 
-#' @return list containing:
+#' @return a \code{list} containing:
 #' 
-#'  \item `samples`: \code{data.frame} of simulated sand, silt, clay values
-#'  \item `mean`: compositional mean
-#'  \item `var`: compositional variance-covariance matrix
-#'  \item `D.alpha`: (fitted) alpha parameters of the Dirichlet distribution
-#'
-#' @description 
+#' \itemize{
+#'  \item{samples}{\code{data.frame} of simulated sand, silt, clay values}
+#'  \item{mean}{compositional mean}
+#'  \item{var}{compositional variance-covariance matrix}
+#'  \item{D.alpha}{(fitted) alpha parameters of the Dirichlet distribution}
+#' }
+#' 
+#' 
 #' 
 #' @references 
 #' 
