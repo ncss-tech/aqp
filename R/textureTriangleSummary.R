@@ -95,6 +95,44 @@
 #' 
 #' @keywords hplots
 #' 
+#' @examples
+#' 
+#' \donttest{
+#' 
+#' if(
+#' requireNamespace("Hmisc") &
+#'   requireNamespace("compositions") &
+#'   requireNamespace("soiltexture")
+#' ) {
+#'   
+#'   # sample data
+#'   data('sp4')
+#'   
+#'   # subset rows / columns
+#'   ssc <- sp4[grep('^Bt', sp4$name), c('sand', 'silt', 'clay')]
+#'   names(ssc) <- toupper(names(ssc))
+#'   
+#'   # make figure, marginal percentiles are silently returned
+#'   stats <- textureTriangleSummary(
+#'     ssc, pch = 1, cex = 0.5, 
+#'     range.alpha = 50, col = grey(0.5), legend = FALSE
+#'   )
+#'   
+#'   # check
+#'   stats
+#'   
+#'   # simulate some data and try again
+#'   s <- bootstrapSoilTexture(ssc, n = 100)$samples
+#'   
+#'   # make the figure, ignore results
+#'   textureTriangleSummary(
+#'     s, pch = 1, cex = 0.5, 
+#'     range.alpha = 50, col = grey(0.5), legend = FALSE
+#'   )
+#' }
+#' 
+#' }
+#' 
 textureTriangleSummary <- function(ssc, p = c(0.05, 0.5, 0.95), delta = 1, rv.col = 'red', range.col = 'RoyalBlue', range.alpha = 75, main = 'Soil Textures', legend.cex = 0.75, legend = TRUE, ...) {
 
   # sanity check

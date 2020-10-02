@@ -1,4 +1,8 @@
 # aqp 1.25 (2020-10-02)
+ * complete overhaul of `textureTriangleSummary`:
+   + uses `soiltexture` package for visualization
+   + argument names changes (! may break old code, sorry)
+   + dropped simulation via `sim = TRUE` argument, see `bootstrapSoilTexture` for a better approach
  * new function `bootstrapSoilTexture` for simulating realistic sand/silt/clay compositions
  * `combine` replaces/expands `aqp::union` due to conflicts with `base::union`
  * `split` receives some upgrades to the S4 definition to increase parity with `split.default`
@@ -71,7 +75,7 @@
   * dropped some dependencies
 
 # aqp 1.17.10 (2019-10-30)
-  * removing imported functions from `Hmisc` (hdquantile), loading `aqp` is now much faster
+  * removing imported functions from `Hmisc` (`hdquantile`), loading `aqp` is now much faster
      + `slab()` now uses `stats::quantile()` as the default slab function
      + details at: https://github.com/ncss-tech/aqp/issues/79
      + previous behavior of `slab()` can be activated via argument: `slab.fun = aqp:::.slab.fun.numeric.HD`
@@ -161,9 +165,9 @@
 
 # aqp 1.10-4 (2017-05-02)
    * `texture.triangle.low.rv.high()` renamed to `textureTriangleSummary()`. The old name still works, but a message is issued
-   * new argument to textureTriangleSummary() texture.names: for toggling texture class names
-   * minor bug fix in textureTriangleSummary(..., sim=TRUE), previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.
-   * new function tauW(), addd by D.G. Rossiter: see manual page for references
+   * new argument to `textureTriangleSummary()` `texture.names`: for toggling texture class names
+   * minor bug fix in `textureTriangleSummary(..., sim=TRUE)`, previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.
+   * new function `tauW()`, addd by D.G. Rossiter: see manual page for references
 
 # aqp 1.10 (2017-01-05)
    * fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after `rbind`-ing
@@ -305,16 +309,15 @@
 
 # aqp 1.4-7 (2013-01-24)
    * HTML version of all documentation (including images) auto-generated via knitr and available on the r-forge website
-   * new function: texture.triangle.low.rv.high() plots texture data with low-high range defined by quantiles
+   * new function: `texture.triangle.low.rv.high()` plots texture data with low-high range defined by quantiles
 
 # aqp 1.4-6 (2013-01-03)
-   * updated documentation and SoilProfileCollection tutorial here:
-      + https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp
-   * plans laid for parallel processing in slab() and profileApply() via 'parallel' package
-   * plotSPC() gets a 'density' argument for shaded coloring of horizons
+   * updated documentation and SoilProfileCollection tutorial
+   * plans laid for parallel processing in `slab()` and `profileApply()` via 'parallel' package
+   * `plotSPC()` gets a `density` argument for shaded coloring of horizons
 
 # aqp 1.4-5 (2012-12-29)
-   * slab() re-written from scratch, resulting in reduced memory footprint and quicker running time
+   * `slab()` re-written from scratch, resulting in reduced memory footprint and quicker running time
   ! older code based on slab() is likely to now broken- sorry, it won't happen again
       + the new code is much slimmer and based on aggregate() rather than ddply
       + function arguments have changed so be sure to check the manual page
@@ -322,11 +325,11 @@
       + the next major release will contain additional examples of how to use the new features
 
 # aqp 1.4 (2012-12-18)
-   * new function sim() for simulation based on a template soil profile, proper documentation pending...
+   * new function `sim()` for simulation based on a template soil profile, proper documentation pending...
 
 # aqp 1.3-3 (2012-12-06)
-   * new function subsetProfiles() for simpler subsetting of SoilProfileCollection objects via site or horizon-level attributes
-   * get.ml.hz() now returns a 'confidence' for each horizon (as a percent)
+   * new function `subsetProfiles()` for simpler subsetting of `SoilProfileCollection` objects via site or horizon-level attributes
+   * `get.ml.hz()` now returns a 'confidence' for each horizon (as a percent)
    * added experimental 'filter' argument to profile_compare()- see manual page for usage
    * added new argument to plot.SoilProfileCollection()- alt.label: used to add secondary labeling via data in @site
    * plot.SoilProfileCollection() will now do a better job of selecting the location for profile IDs based on label length, font size, and figure size

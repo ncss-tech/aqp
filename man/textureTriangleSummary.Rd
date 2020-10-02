@@ -39,10 +39,49 @@ textureTriangleSummary(
 \item{\dots}{further arguments passed to \code{soiltexture::TT.points}}
 }
 \value{
-an invisible \code{data.frame} with marginal percentiles of sand, silt, and clay
+an invisible \code{matrix} with marginal percentiles of sand, silt, and clay
 }
 \description{
 This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles (estimated with \code{Hmisc::hdquantile}). Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.
+}
+\examples{
+
+\donttest{
+
+if(
+requireNamespace("Hmisc") &
+  requireNamespace("compositions") &
+  requireNamespace("soiltexture")
+) {
+  
+  # sample data
+  data('sp4')
+  
+  # subset rows / columns
+  ssc <- sp4[grep('^Bt', sp4$name), c('sand', 'silt', 'clay')]
+  names(ssc) <- toupper(names(ssc))
+  
+  # make figure, marginal percentiles are silently returned
+  stats <- textureTriangleSummary(
+    ssc, pch = 1, cex = 0.5, 
+    range.alpha = 50, col = grey(0.5), legend = FALSE
+  )
+  
+  # check
+  stats
+  
+  # simulate some data and try again
+  s <- bootstrapSoilTexture(ssc, n = 100)$samples
+  
+  # make the figure, ignore results
+  textureTriangleSummary(
+    s, pch = 1, cex = 0.5, 
+    range.alpha = 50, col = grey(0.5), legend = FALSE
+  )
+}
+
+}
+
 }
 \seealso{
 \code{\link{bootstrapSoilTexture}}

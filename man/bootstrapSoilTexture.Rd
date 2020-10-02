@@ -27,7 +27,9 @@ a \code{list} containing:
 Simulate realistic sand/silt/clay values (a composition) using multivarite Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.
 }
 \details{
-Pending.
+Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates. 
+
+Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in \code{ssc} (\code{n >= 30}?) for a reliable fit.
 }
 \note{
 This is a work in progress.

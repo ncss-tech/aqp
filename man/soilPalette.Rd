@@ -42,14 +42,14 @@ The result is a simple figure on the active plotting device.
 par(mfrow=c(2,1), mar=c(1,1,1,1))
 
 # demonstrate range of Munsell value
-m <- sprintf('10YR \\%s/4', 2:8)
+m <- sprintf('10YR \%s/4', 2:8)
 # convert to hex representation
 cols <- parseMunsell(m)
 # plot
 soilPalette(cols, m)
 
 # demonstrate range of Munsell chroma
-m <- sprintf('10YR 4/\\%s', 2:8)
+m <- sprintf('10YR 4/\%s', 2:8)
 # convert to hex representation
 cols <- parseMunsell(m)
 # plot
