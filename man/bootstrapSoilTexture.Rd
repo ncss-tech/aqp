@@ -4,10 +4,12 @@
 \alias{bootstrapSoilTexture}
 \title{Bootstrap Soil Texture Data}
 \usage{
-bootstrapSoilTexture(ssc, n = 100)
+bootstrapSoilTexture(ssc, method = c("dirichlet", "normal"), n = 100)
 }
 \arguments{
-\item{ssc}{a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. See details.}
+\item{ssc}{a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.}
+
+\item{method}{type of simulation: `dirichlet` or `normal`. See details.}
 
 \item{n}{number of simulated compositions. See details.}
 }
@@ -18,11 +20,17 @@ a \code{list} containing:
  \item{samples}{\code{data.frame} of simulated sand, silt, clay values}
  \item{mean}{compositional mean}
  \item{var}{compositional variance-covariance matrix}
- \item{D.alpha}{(fitted) alpha parameters of the Dirichlet distribution}
+ \item{D.alpha}{(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
 }
 }
 \description{
-Simulate realistic sand/silt/clay values (a composition) using the Dirichlet distribution. Parameters of the Dirichlet distribution are estimated using example data provided to the function.
+Simulate realistic sand/silt/clay values (a composition) using multivarite Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.
+}
+\details{
+Pending.
+}
+\note{
+This is a work in progress.
 }
 \examples{
 
@@ -32,12 +40,11 @@ requireNamespace("compositions") &
   requireNamespace("soiltexture")
 ) {
   
-  # sample data
-  data('sp6')
-  depths(sp6) <- id ~ top + bottom
+  # sample data, data.frame
+  data('sp4')
   
-  # I still like this
-  ssc <- horizons(sp6)[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
+  # filter just Bt horizon data
+  ssc <- sp4[grep('^Bt', sp4$name), c('sand', 'silt', 'clay')]
   names(ssc) <- toupper(names(ssc))
   
   # simulate 100 samples

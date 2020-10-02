@@ -2,17 +2,15 @@ context("soil texture simulation")
 
 # sample data
 data('sp6')
-depths(sp6) <- id ~ top + bottom
 
-# I still like this
-ssc <- horizons(sp6)[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
+ssc <- sp6[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
 names(ssc) <- toupper(names(ssc))
 
 test_that("bootstrapSoilTexture() works as expected", {
 
   # simulated under relatively stable conditions
   set.seed(1010101)
-  s <- bootstrapSoilTexture(ssc, n = 50)
+  s <- bootstrapSoilTexture(ssc, n = 50, method = 'dirichlet')
   
   # result is a list
   expect_true(inherits(s, 'list'))

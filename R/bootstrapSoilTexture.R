@@ -3,11 +3,13 @@
 #'
 #' @title Bootstrap Soil Texture Data
 #' 
-#' @description Simulate realistic sand/silt/clay values (a composition) using the Dirichlet distribution. Parameters of the Dirichlet distribution are estimated using example data provided to the function.
+#' @description Simulate realistic sand/silt/clay values (a composition) using multivarite Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @param ssc a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. See details.
+#' @param ssc a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.
+#' 
+#' @param method type of simulation: `dirichlet` or `normal`. See details.
 #' 
 #' @param n number of simulated compositions. See details.
 #' 
@@ -17,9 +19,12 @@
 #'  \item{samples}{\code{data.frame} of simulated sand, silt, clay values}
 #'  \item{mean}{compositional mean}
 #'  \item{var}{compositional variance-covariance matrix}
-#'  \item{D.alpha}{(fitted) alpha parameters of the Dirichlet distribution}
+#'  \item{D.alpha}{(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
 #' }
 #' 
+#' @details Pending.
+#' 
+#' @note This is a work in progress.
 #' 
 #' 
 #' @references 
@@ -36,12 +41,11 @@
 #'   requireNamespace("soiltexture")
 #' ) {
 #'   
-#'   # sample data
-#'   data('sp6')
-#'   depths(sp6) <- id ~ top + bottom
+#'   # sample data, data.frame
+#'   data('sp4')
 #'   
-#'   # I still like this
-#'   ssc <- horizons(sp6)[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
+#'   # filter just Bt horizon data
+#'   ssc <- sp4[grep('^Bt', sp4$name), c('sand', 'silt', 'clay')]
 #'   names(ssc) <- toupper(names(ssc))
 #'   
 #'   # simulate 100 samples
@@ -90,13 +94,16 @@
 #' 
 #' }
 #' 
-bootstrapSoilTexture <- function(ssc, n = 100) {
+bootstrapSoilTexture <- function(ssc, method = c('dirichlet', 'normal'), n = 100) {
   
   if(!requireNamespace("compositions", quietly = TRUE))
     stop("package `compositions` is required", call.=FALSE)
   
   # filter NA
   ssc <- na.omit(ssc)
+  
+  # method
+  method <- match.arg(method)
   
   # sanity check: should have 3 columns and > 3 rows
   if(ncol(ssc) < 3 | nrow(ssc) < 3) {
@@ -118,18 +125,36 @@ bootstrapSoilTexture <- function(ssc, n = 100) {
   # with max value of 100%
   z <- compositions::acomp(ssc, total = 100)
   
-  # fit 3-term alpha parameters of Dirichlet distribution
-  # note backflips required when not loading entire compositions package
-  # the following is the expanded form of default arguments to fitDirichlet()
-  el <- compositions::mean.rmult(compositions::ult(z), robust = FALSE)
-  D <- compositions::fitDirichlet(z, elog = el)
-  
   # safely compute compositional mean / variance-covariance
   mean.comp <- compositions::meanCol(z)
   var.comp <- compositions::var(z, robust = FALSE, method = 'pearson')
   
-  # draw simulated values
-  s <- compositions::rDirichlet.acomp(n = n, alpha = D$alpha)
+  s <- switch(
+    method,
+    'normal' = {
+      # not used
+      D <- NULL
+      
+      # simulate normal mixture
+      compositions::rnorm.acomp(
+        n = n, 
+        mean = mean.comp, 
+        var = var.comp
+      )
+      
+    },
+    'dirichlet' = {
+      # fit 3-term alpha parameters of Dirichlet distribution
+      # note backflips required when not loading entire compositions package
+      # the following is the expanded form of default arguments to fitDirichlet()
+      el <- compositions::mean.rmult(compositions::ult(z), robust = FALSE)
+      D <- compositions::fitDirichlet(z, elog = el)$alpha
+      
+      # draw simulated values
+      compositions::rDirichlet.acomp(n = n, alpha = D)
+    }
+  )
+  
   
   # convert back to format that is suitable for plotting on the TT
   s <- as.data.frame(unclass(s) * 100)
@@ -140,7 +165,7 @@ bootstrapSoilTexture <- function(ssc, n = 100) {
     samples = s,
     mean = mean.comp,
     var = var.comp,
-    D.alpha = D$alpha
+    D.alpha = D
   )
   
   return(res)
