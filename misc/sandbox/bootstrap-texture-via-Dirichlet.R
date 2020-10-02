@@ -2,65 +2,59 @@ library(aqp)
 library(soilDB)
 library(compositions)
 library(soiltexture)
+library(dplyr)
 
-data("loafercreek")
+# sample data
+data('sp6')
+depths(sp6) <- id ~ top + bottom
 
-table(loafercreek$genhz)
+# I still like this
+ssc <- horizons(sp6)[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
+names(ssc) <- toupper(names(ssc))
 
-h <- horizons(loafercreek)
-h <- h[which(h$genhz == 'Bt1'), ]
+# ok fine, I'll try dplyr
+ssc <- horizons(sp6) %>% 
+  filter(grepl('^A', x = name)) %>%
+  select(
+    SAND = sand,
+    SILT = silt,
+    CLAY = clay
+  )
 
-ssc <- dplyr::select(
-  h,
-  SAND = sand,
-  SILT = silt,
-  CLAY = clay
-)
+# simulate 100 samples
+s <- bootstrapSoilTexture(ssc, n = 100)
+s <- s$samples
 
-ssc <- na.omit(ssc)
-
-ssc <- ssc[sample(1:nrow(ssc), size = 15), ]
-
-# convert to a closed / proportional composition object
-z <- acomp(ssc, total = 100)
-
-# fit 3-term alpha parameters of Dirichlet distribution
-D <- fitDirichlet(z)
-
-# safely compute compositional mean / variance-covariance
-mean.comp <- meanCol(z)
-var.comp <- compositions::var(z, robust = FALSE, method = 'pearson')
-
-s <- rDirichlet.acomp(250, D$alpha)
-
-# convert back to format that is suitable for plotting on the TT
-s <- as.data.frame(unclass(s) * 100)
-names(s) <- names(mean.comp)
-
-
+# empty soil texture triangle
 TT <- TT.plot(
-  class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
-  main= "Soil Textures",          # title
-  tri.sum.tst=FALSE,            # do not test for exact sum(sand, silt, clay) == 100
-  cex.lab=0.75,                 # scaling of label text
-  cex.axis=0.75,                # scaling of axis
-  frame.bg.col='white',         # background color
-  class.lab.col='black',        # color for texture class labels
-  lwd.axis=1.5,                    # line thickness for axis
-  arrows.show=TRUE
+  class.sys= "USDA-NCSS.TT",
+  main= "",
+  tri.sum.tst=FALSE,
+  cex.lab=0.75,
+  cex.axis=0.75,
+  frame.bg.col='white',
+  class.lab.col='black',
+  lwd.axis=1.5,
+  arrows.show=TRUE,
+  new.mar = c(3, 0, 0, 0)
 )
 
-# full samples, these will extend beyond original class limits
-TT.points(tri.data = ssc, geo = TT, col='darkgreen', pch = 15, cex = 1, tri.sum.tst = FALSE)
-TT.points(tri.data = s, geo = TT, col='royalblue', pch = 0, cex = 1, lwd = 1)
+# add original / simulated data
+TT.points(tri.data = s, geo = TT, col='firebrick', pch = 3, cex = 0.5, lwd = 1, tri.sum.tst = FALSE)
+TT.points(tri.data = ssc, geo = TT, bg='royalblue', pch = 22, cex = 1, lwd = 1, tri.sum.tst = FALSE)
+
+legend('top', legend = c('Source', 'Simulated'), pch = c(22, 3), col = c('black', 'firebrick'), pt.bg = c('royalblue', NA), horiz = TRUE, bty = 'n')
 
 
 # not useful
-textureTriangleSummary(ssc, sim = TRUE, sim.n = 1000)
+aqp::textureTriangleSummary(ssc)
+textureTriangleSummary(ssc, cex = 0.5, range.alpha = 50)
+textureTriangleSummary(ssc, cex = 0.5, sim = TRUE)
 
 # bootstrapped version
-textureTriangleSummary(s)
-
+aqp::textureTriangleSummary(s, pch = 0, cex = 0.125)
+textureTriangleSummary(s, pch = 0, cex = 0.125, range.alpha = 50)
+textureTriangleSummary(s, pch = 0, cex = 0.125, sim = TRUE)
 
 
 
