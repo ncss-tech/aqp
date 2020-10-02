@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -280,13 +280,13 @@
 <span class='co'># data.frame output option with frameify=TRUE</span>
 <span class='kw'>df.output</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='kw'>thicknessFunction</span>, frameify = <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>df.output</span>)
-</div><div class='output co'>#&gt;          id hzID hz_thickness    hz_prop
-#&gt; P001.1 P001    1            2 0.02247191
-#&gt; P001.2 P001    2           12 0.13483146
-#&gt; P001.3 P001    3           35 0.39325843
-#&gt; P001.4 P001    4            8 0.08988764
-#&gt; P001.5 P001    5           32 0.35955056
-#&gt; P001.6 P001    6            0 0.00000000</div><div class='input'>
+</div><div class='output co'>#&gt;     id hzID hz_thickness    hz_prop
+#&gt; 1 P001    1            2 0.02247191
+#&gt; 2 P001    2           12 0.13483146
+#&gt; 3 P001    3           35 0.39325843
+#&gt; 4 P001    4            8 0.08988764
+#&gt; 5 P001    5           32 0.35955056
+#&gt; 6 P001    6            0 0.00000000</div><div class='input'>
 <span class='co'># since df.output contains idname(sp1) and hzidname(sp1),</span>
 <span class='co'># it can safely be merged by a left-join via horizons&lt;- setter</span>
 <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>df.output</span>
@@ -313,7 +313,7 @@
   <span class='co'># make an expression to subset horizons</span>
   <span class='kw'>exp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>'bottom &lt; '</span>, <span class='kw'>i</span><span class='op'>$</span><span class='kw'>dep</span>, sep=<span class='st'>''</span>)
   <span class='co'># subset horizons, and write-back into current SPC</span>
-  <span class='fu'>slot</span>(<span class='kw'>i</span>, <span class='st'>'horizons'</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>h</span>, subset=<span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(text=<span class='kw'>exp</span>)))
+  <span class='fu'>slot</span>(<span class='kw'>i</span>, <span class='st'>'horizons'</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>h</span>, subset=<span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(text=<span class='kw'>exp</span>)))
   <span class='co'># return modified SPC</span>
   <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>i</span>)
 }
@@ -322,7 +322,7 @@
 <span class='kw'>l</span> <span class='op'>&lt;-</span> <span class='fu'>profileApply</span>(<span class='kw'>sp1</span>, <span class='kw'>fun</span>, simplify=<span class='fl'>FALSE</span>)
 
 <span class='co'># re-combine list of SoilProfileCollection objects into a single SoilProfileCollection</span>
-<span class='kw'>sp1.sub</span> <span class='op'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>l</span>)
+<span class='kw'>sp1.sub</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pbindlist.html'>pbindlist</a></span>(<span class='kw'>l</span>)
 
 <span class='co'># graphically check</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>))

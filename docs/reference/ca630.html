@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -228,7 +228,7 @@ par.settings=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a
 <span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>ca</span>, <span class='kw'>mlra</span> <span class='op'>~</span> <span class='kw'>bs_8.2</span>)
 
 <span class='co'># keep only MLRA 18 and 22</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>a</span>, subset=<span class='kw'>mlra</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'18'</span>, <span class='st'>'22'</span>))
+<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>a</span>, subset=<span class='kw'>mlra</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'18'</span>, <span class='st'>'22'</span>))
 
 <span class='co'># plot median &amp; IQR by 1 cm slice, using different colors for each MLRA</span>
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(

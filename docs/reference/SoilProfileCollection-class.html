@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -211,7 +211,7 @@
 #&gt;   ..@ idcol       : chr "id"
 #&gt;   ..@ hzidcol     : chr "hzID"
 #&gt;   ..@ depthcols   : chr [1:2] "top" "bottom"
-#&gt;   ..@ metadata    :List of 8
+#&gt;   ..@ metadata    :List of 7
 #&gt;   .. ..$ aqp_df_class    : chr "data.frame"
 #&gt;   .. ..$ aqp_group_by    : chr ""
 #&gt;   .. ..$ aqp_hzdesgn     : chr ""
@@ -219,7 +219,6 @@
 #&gt;   .. ..$ depth_units     : chr "cm"
 #&gt;   .. ..$ stringsAsFactors: logi FALSE
 #&gt;   .. ..$ original.order  : int(0) 
-#&gt;   .. ..$ target.order    : int(0) 
 #&gt;   ..@ horizons    :'data.frame':	0 obs. of  4 variables:
 #&gt;   .. ..$ id    : chr(0) 
 #&gt;   .. ..$ hzID  : chr(0) 
@@ -251,7 +250,7 @@
 <span class='kw'>d.345</span> <span class='op'>&lt;-</span> <span class='kw'>d</span>[<span class='fl'>3</span><span class='op'>:</span><span class='fl'>5</span>, ]
 
 <span class='co'># recombine, note that profiles are sorted according to ID</span>
-<span class='kw'>d.new</span> <span class='op'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>d.345</span>, <span class='kw'>d.1</span>, <span class='kw'>d.2</span>))
+<span class='kw'>d.new</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pbindlist.html'>pbindlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>d.345</span>, <span class='kw'>d.1</span>, <span class='kw'>d.2</span>))
 <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>d.new</span>)
 </div><div class='img'><img src='SoilProfileCollection-class-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)

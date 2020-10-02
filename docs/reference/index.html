@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -166,7 +166,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="aqp_df_class.html">aqp_df_class</a></code> </p>
+          <p><code><a href="aqp_df_class.html">aqp_df_class(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="aqp_df_class.html">`aqp_df_class&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get aqp_df_class entry from metadata or return a safe value.</p></td>
       </tr><tr>
@@ -181,6 +181,12 @@
           <p><code><a href="barron.torrent.redness.LAB.html">barron.torrent.redness.LAB()</a></code> </p>
         </td>
         <td><p>Barron &amp; Torrent (1986) Redness Index in LAB color space</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="bootstrapSoilTexture.html">bootstrapSoilTexture()</a></code> </p>
+        </td>
+        <td><p>Bootstrap Soil Texture Data</p></td>
       </tr><tr>
         
         <td>
@@ -235,6 +241,12 @@
           <p><code><a href="colorQuantiles.html">colorQuantiles()</a></code> <code><a href="colorQuantiles.html">plotColorQuantiles()</a></code> </p>
         </td>
         <td><p>Soil Color Range via Quantiles</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="combine-SoilProfileCollection-method.html">combine(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="combine-SoilProfileCollection-method.html">combine(<i>&lt;list&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Combine SoilProfileCollection objects</p></td>
       </tr><tr>
         
         <td>
@@ -328,6 +340,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="dot-HSD.html">.HSD()</a></code> </p>
+        </td>
+        <td><p>.HSD</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-parseHSD_formula.html">.parseHSD_formula()</a></code> </p>
+        </td>
+        <td><p>.parseHSD_formula</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="doublebracket-set.html">`[[&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add or change column of horizon or site data in a SoilProfileCollection</p></td>
@@ -373,12 +397,6 @@
           <p><code><a href="f.noise.html">f.noise()</a></code> </p>
         </td>
         <td><p>Example Objective Function for Full-Pattern Matching</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="filter.html">filter</a></code> </p>
-        </td>
-        <td><p>Subset a SoilProfileCollection with logical expressions</p></td>
       </tr><tr>
         
         <td>
@@ -648,7 +666,7 @@
         <td>
           <p><code><a href="lunique.html">lunique()</a></code> </p>
         </td>
-        <td><p>Eliminate duplicate instances of  profile IDs in a list of SoilProfileCollections</p></td>
+        <td><p>Eliminate duplicate instances of profile IDs in a list of SoilProfileCollections</p></td>
       </tr><tr>
         
         <td>
@@ -730,6 +748,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="pbindlist.html">pbindlist()</a></code> </p>
+        </td>
+        <td><p>Combine a list of SoilProfileCollection objects</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="permute_profile.html">permute_profile()</a></code> </p>
         </td>
         <td><p>Permute soil horizon depths using boundary distinctness</p></td>
@@ -793,12 +817,6 @@
           <p><code><a href="random_profile.html">random_profile()</a></code> </p>
         </td>
         <td><p>Random Profile</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rbind.SoilProfileCollection.html">rbind(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>[DEPRECATED] rbind.SoilProfileCollection</p></td>
       </tr><tr>
         
         <td>
@@ -918,7 +936,7 @@
         <td>
           <p><code><a href="soilPalette.html">soilPalette()</a></code> </p>
         </td>
-        <td><p>Sol Color Palette</p></td>
+        <td><p>Soil Color Palette</p></td>
       </tr><tr>
         
         <td>
@@ -1000,12 +1018,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="SPC-split-methods.html">split()</a></code> </p>
-        </td>
-        <td><p>Split a SoilProfileCollection object into a list of SoilProfileCollection objects.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="spc2mpspline-SoilProfileCollection-method.html">spc2mpspline(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Missing-data-safe, SPC-wide wrapper around mpspline2::mpspline "continuous" 1cm output</p></td>
@@ -1018,9 +1030,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="split-SoilProfileCollection-method.html">split(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Split a SoilProfileCollection object into a list of SoilProfileCollection objects.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="subApply.html">subApply</a></code> </p>
         </td>
         <td><p>Subset SPC based on result of performing function on each profile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="subset-SoilProfileCollection-method.html">subset(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="subset-SoilProfileCollection-method.html">filter(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Subset a SoilProfileCollection with logical expressions</p></td>
       </tr><tr>
         
         <td>
@@ -1048,7 +1072,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="texture.triangle.low.rv.high.html">textureTriangleSummary()</a></code> </p>
+          <p><code><a href="textureTriangleSummary.html">textureTriangleSummary()</a></code> </p>
         </td>
         <td><p>Soil Texture Low-RV-High as Defined by Quantiles</p></td>
       </tr><tr>
@@ -1066,9 +1090,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="union.html">union()</a></code> </p>
+          <p><code><a href="union-list-missing-method.html">union(<i>&lt;list&gt;</i>,<i>&lt;missing&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Combine Multiple SoilProfileCollection Objects</p></td>
+        <td><p>[DEPRECATED] union</p></td>
       </tr><tr>
         
         <td>

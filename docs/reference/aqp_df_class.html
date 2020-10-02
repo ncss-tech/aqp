@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class" />
-<meta property="og:description" content="This is an accessor method for the aqp_df_class entry in the metadata slot. This entry is used internally by methods that interact with data.frame objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process." />
+<meta property="og:description" content="This is an accessor and replacement method for the aqp_df_class entry in the metadata slot. This entry is used internally by methods that interact with data.frame objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -117,9 +117,14 @@
     </div>
 
     <div class="ref-description">
-    <p>This is an accessor method for the <code>aqp_df_class</code> entry in the metadata slot. This entry is used internally by methods that interact with <code>data.frame</code> objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.</p>
+    <p>This is an accessor and replacement method for the <code>aqp_df_class</code> entry in the metadata slot. This entry is used internally by methods that interact with <code>data.frame</code> objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.</p>
     </div>
 
+    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>)
+
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -127,6 +132,10 @@
     <tr>
       <th>object</th>
       <td><p>a SoilProfileCollection</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>"data.frame", "data.table" or "tibble"</p></td>
     </tr>
     </table>
 

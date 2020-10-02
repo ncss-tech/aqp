@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -195,7 +195,7 @@
 <span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>random_profile</span>, SPC=<span class='fl'>TRUE</span>)
 
 <span class='co'># combine </span>
-<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='kw'>aqp</span>::<span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>d</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='combine,SoilProfileCollection-method.html'>combine</a></span>(<span class='kw'>d</span>)
 
 <span class='co'># plot</span>
 <span class='kw'>opar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>2</span>))
@@ -204,7 +204,7 @@
 
 <span class='co'># simulate horizon boundary distinctness codes:</span>
 <span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>random_profile</span>, SPC=<span class='fl'>TRUE</span>, HzDistinctSim=<span class='fl'>TRUE</span>)
-<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='kw'>aqp</span>::<span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>d</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='combine,SoilProfileCollection-method.html'>combine</a></span>(<span class='kw'>d</span>)
 
 <span class='kw'>d</span><span class='op'>$</span><span class='kw'>HzD</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></span>(<span class='kw'>d</span><span class='op'>$</span><span class='kw'>HzDistinctCode</span>)
 
@@ -218,7 +218,7 @@
 
 <span class='co'># generate data</span>
 <span class='kw'>d.1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>random_profile</span>, SPC=<span class='fl'>TRUE</span>, n=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>), n_prop=<span class='fl'>1</span>, method=<span class='st'>'LPP'</span>)
-<span class='kw'>d.1</span> <span class='op'>&lt;-</span> <span class='kw'>aqp</span>::<span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>d.1</span>)
+<span class='kw'>d.1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='combine,SoilProfileCollection-method.html'>combine</a></span>(<span class='kw'>d.1</span>)
 
 <span class='co'># plot</span>
 <span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>d.1</span>, name=<span class='st'>'name'</span>, color=<span class='st'>'p1'</span>, col.label = <span class='st'>'LPP Defaults'</span>)
@@ -227,7 +227,7 @@
 <span class='co'># do this again, this time set all of the LPP parameters</span>
 <span class='kw'>d.2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>random_profile</span>, SPC=<span class='fl'>TRUE</span>, n=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>), n_prop=<span class='fl'>1</span>, method=<span class='st'>'LPP'</span>, 
            lpp.a=<span class='fl'>5</span>, lpp.b=<span class='fl'>10</span>, lpp.d=<span class='fl'>5</span>, lpp.e=<span class='fl'>5</span>, lpp.u=<span class='fl'>25</span>)
-<span class='kw'>d.2</span> <span class='op'>&lt;-</span> <span class='kw'>aqp</span>::<span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>d.2</span>)
+<span class='kw'>d.2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='combine,SoilProfileCollection-method.html'>combine</a></span>(<span class='kw'>d.2</span>)
 
 <span class='co'># plot</span>
 <span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>d.2</span>, name=<span class='st'>'name'</span>, color=<span class='st'>'p1'</span>, col.label = <span class='st'>'Custom LPP Parameters'</span>)

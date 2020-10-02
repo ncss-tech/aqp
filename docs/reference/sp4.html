@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -191,7 +191,7 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 #&gt;   ..@ idcol       : chr "id"
 #&gt;   ..@ hzidcol     : chr "hzID"
 #&gt;   ..@ depthcols   : chr [1:2] "top" "bottom"
-#&gt;   ..@ metadata    :List of 8
+#&gt;   ..@ metadata    :List of 7
 #&gt;   .. ..$ aqp_df_class    : chr "data.frame"
 #&gt;   .. ..$ aqp_group_by    : chr ""
 #&gt;   .. ..$ aqp_hzdesgn     : chr ""
@@ -199,7 +199,6 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 #&gt;   .. ..$ depth_units     : chr "cm"
 #&gt;   .. ..$ stringsAsFactors: logi FALSE
 #&gt;   .. ..$ original.order  : int [1:30] 1 2 3 4 5 6 7 8 9 10 ...
-#&gt;   .. ..$ target.order    : int [1:30] 1 2 3 4 5 6 7 8 9 10 ...
 #&gt;   ..@ horizons    :'data.frame':	30 obs. of  15 variables:
 #&gt;   .. ..$ id         : chr [1:30] "colusa" "colusa" "colusa" "colusa" ...
 #&gt;   .. ..$ name       : chr [1:30] "A" "ABt" "Bt1" "Bt2" ...
@@ -231,28 +230,17 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 #&gt; 1   TRUE          TRUE  TRUE</div><div class='input'>
 <span class='co'># check horizon depth logic</span>
 <span class='fu'><a href='checkHzDepthLogic.html'>checkHzDepthLogic</a></span>(<span class='kw'>sp4</span>)
-</div><div class='output co'>#&gt;                            id depthLogic sameDepth missingDepth overlapOrGap
-#&gt; colusa                 colusa      FALSE     FALSE        FALSE        FALSE
-#&gt; glenn                   glenn      FALSE     FALSE        FALSE        FALSE
-#&gt; kings                   kings      FALSE     FALSE        FALSE        FALSE
-#&gt; mariposa             mariposa      FALSE     FALSE        FALSE        FALSE
-#&gt; mendocino           mendocino      FALSE     FALSE        FALSE        FALSE
-#&gt; napa                     napa      FALSE     FALSE        FALSE        FALSE
-#&gt; san benito         san benito      FALSE     FALSE        FALSE        FALSE
-#&gt; shasta                 shasta      FALSE     FALSE        FALSE        FALSE
-#&gt; shasta-trinity shasta-trinity      FALSE     FALSE        FALSE        FALSE
-#&gt; tehama                 tehama      FALSE     FALSE        FALSE        FALSE
-#&gt;                valid
-#&gt; colusa          TRUE
-#&gt; glenn           TRUE
-#&gt; kings           TRUE
-#&gt; mariposa        TRUE
-#&gt; mendocino       TRUE
-#&gt; napa            TRUE
-#&gt; san benito      TRUE
-#&gt; shasta          TRUE
-#&gt; shasta-trinity  TRUE
-#&gt; tehama          TRUE</div><div class='input'>
+</div><div class='output co'>#&gt;                id depthLogic sameDepth missingDepth overlapOrGap valid
+#&gt; 1          colusa      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 2           glenn      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 3           kings      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 4        mariposa      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 5       mendocino      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 6            napa      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 7      san benito      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 8          shasta      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 9  shasta-trinity      FALSE     FALSE        FALSE        FALSE  TRUE
+#&gt; 10         tehama      FALSE     FALSE        FALSE        FALSE  TRUE</div><div class='input'>
 <span class='co'># inspect object properties</span>
 <span class='fu'><a href='idname.html'>idname</a></span>(<span class='kw'>sp4</span>) <span class='co'># self-explanitory</span>
 </div><div class='output co'>#&gt; [1] "id"</div><div class='input'><span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span>(<span class='kw'>sp4</span>) <span class='co'># self-explanitory</span>
@@ -279,10 +267,6 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $original.order
-#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
-#&gt; [26] 26 27 28 29 30
-#&gt; 
-#&gt; $target.order
 #&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
 #&gt; [26] 26 27 28 29 30
 #&gt; </div><div class='input'>

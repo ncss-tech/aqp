@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -195,7 +195,7 @@ https://doi.org/10.2136/sssaj2016.09.0301.</p>
 
 <span class='co'># example of ssc_to_texcl()</span>
 <span class='kw'>tex</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(sand = <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span>, clay = <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span>)
-<span class='kw'>tex</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>tex</span>, (<span class='kw'>sand</span> <span class='op'>+</span> <span class='kw'>clay</span>) <span class='op'>&lt;</span> <span class='fl'>101</span>)
+<span class='kw'>tex</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>tex</span>, (<span class='kw'>sand</span> <span class='op'>+</span> <span class='kw'>clay</span>) <span class='op'>&lt;</span> <span class='fl'>101</span>)
 <span class='kw'>tex</span><span class='op'>$</span><span class='kw'>texcl</span> <span class='op'>&lt;-</span> <span class='fu'>ssc_to_texcl</span>(sand = <span class='kw'>tex</span><span class='op'>$</span><span class='kw'>sand</span>, clay = <span class='kw'>tex</span><span class='op'>$</span><span class='kw'>clay</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>tex</span>)
 </div><div class='output co'>#&gt;   sand clay texcl

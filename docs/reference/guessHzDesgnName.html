@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Guess Horizon Designation Column Name — guessHzDesgnName" />
-<meta property="og:description" content="This follows the historic convention used by aqp::plotSPC() looking for 'hzname' or other column names containing the regular expression name. In the future, more patterns may be added." />
+<meta property="og:description" content="This follows the historic convention used by aqp::plotSPC() looking for &quot;hzname&quot; or other column names containing the regular expression &quot;name&quot;. If the pattern &quot;name&quot; is not found, the pattern &quot;desgn&quot; is searched as a fallback, as &quot;hzdesgn&quot; or &quot;hz_desgn&quot; are other common column naming schemes for horizon designation name." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>This follows the historic convention used by <code><a href='plotSPC.html'>aqp::plotSPC()</a></code> looking for 'hzname' or other column names containing the regular expression <code>name</code>. In the future, more patterns may be added.</p>
+    <p>This follows the historic convention used by <code><a href='plotSPC.html'>aqp::plotSPC()</a></code> looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.</p>
     </div>
 
     <pre class="usage"><span class='fu'>guessHzDesgnName</span>(<span class='kw'>x</span>)</pre>
@@ -134,6 +134,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Character containing horizon designation column name.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='guessHzTexClName.html'>guessHzTexClName</a></code>, <code><a href='guessHzAttrName.html'>guessHzAttrName</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>

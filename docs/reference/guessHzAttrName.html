@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Guess Arbitrary Horizon Column Name — guessHzAttrName" />
-<meta property="og:description" content="Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in horizonNames(x) with the most required plus optional patterns matched.
+<meta property="og:description" content="Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have &quot;low, RV and high&quot; total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in horizonNames(x) with the most required plus optional patterns matched.
 e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &quot;_r&quot;)) matches (claytotal_r == totalclay_r) over (clay_r == claytotal == totalclay) over clay." />
 
 
@@ -73,7 +73,7 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -118,11 +118,11 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
     </div>
 
     <div class="ref-description">
-    <p>Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with component data one might have low, RV and high total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
+    <p>Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
 <p>e.g. <code>guessHzAttrName(x, attr="clay", optional=c("total", "_r"))</code> matches (<code>claytotal_r == totalclay_r</code>) over (<code>clay_r == claytotal == totalclay</code>) over <code>clay</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guessHzAttrName</span>(<span class='kw'>x</span>, <span class='kw'>attr</span>, <span class='kw'>optional</span>, verbose = <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>guessHzAttrName</span>(<span class='kw'>x</span>, <span class='kw'>attr</span>, optional = <span class='kw'>NULL</span>, verbose = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,7 +137,7 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
     </tr>
     <tr>
       <th>optional</th>
-      <td><p>A character vector of regular expression(s) containing one or more optional formative elements of attribute name.</p></td>
+      <td><p>A character vector of regular expression(s) containing optional formative elements of attribute name.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -148,6 +148,9 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Character containing horizon attribute column name. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='guessHzDesgnName.html'>guessHzDesgnName</a></code>, <code><a href='guessHzTexClName.html'>guessHzTexClName</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>

@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -114,6 +114,30 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="aqp-125-2020-10-02" class="section level1">
+<h1 class="page-header" data-toc-text="1.25">
+<a href="#aqp-125-2020-10-02" class="anchor"></a>aqp 1.25 (2020-10-02)<small> Unreleased </small>
+</h1>
+<ul>
+<li>complete overhaul of <code>textureTriangleSummary</code>:
+<ul>
+<li>uses <code>soiltexture</code> package for visualization</li>
+<li>argument names changes (! may break old code, sorry)</li>
+<li>dropped simulation via <code>sim = TRUE</code> argument, see <code>bootstrapSoilTexture</code> for a better approach</li>
+</ul>
+</li>
+<li>new function <code>bootstrapSoilTexture</code> for simulating realistic sand/silt/clay compositions</li>
+<li>
+<code>combine</code> replaces/expands <code><a href="https://rdrr.io/r/base/sets.html">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html">base::union</a></code>
+</li>
+<li>
+<code>split</code> receives some upgrades to the S4 definition to increase parity with <code>split.default</code>
+</li>
+<li>
+<code>filter</code> is now an alias for new method <code>subset</code>, which mirrors <code><a href="https://rdrr.io/r/base/subset.html">base::subset</a></code>
+</li>
+</ul>
+</div>
     <div id="aqp-124-2020-08-31" class="section level1">
 <h1 class="page-header" data-toc-text="1.24">
 <a href="#aqp-124-2020-08-31" class="anchor"></a>aqp 1.24 (2020-08-31)<small> Unreleased </small>
@@ -143,7 +167,7 @@
 <code>depths&lt;-</code> has been optimized and minimally validates input data</li>
 <li>default horizon ID (<code>hzID</code>) is now a <code>character</code> data type</li>
 <li>
-<code><a href="../reference/union.html">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
+<code><a href="https://rdrr.io/r/base/sets.html">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
 <li>new experimental method is <code>permute_profile</code>; similar to <code>sim</code> but for boundaries. The interface to this function is likely to change/be expanded.</li>
 <li>added <code>segment</code> c/o <a href='https://github.com/smroecker'>@smroecker</a></li>
 <li>fix for unit-length and zero-length legends in <code>plotSPC</code>
@@ -248,7 +272,7 @@
 <a href="#aqp-11710-2019-10-30" class="anchor"></a>aqp 1.17.10 (2019-10-30)<small> Unreleased </small>
 </h1>
 <ul>
-<li>removing imported functions from <code>Hmisc</code> (hdquantile), loading <code>aqp</code> is now much faster
+<li>removing imported functions from <code>Hmisc</code> (<code>hdquantile</code>), loading <code>aqp</code> is now much faster
 <ul>
 <li>
 <code><a href="../reference/slab-methods.html">slab()</a></code> now uses <code><a href="https://rdrr.io/r/stats/quantile.html">stats::quantile()</a></code> as the default slab function</li>
@@ -337,7 +361,7 @@
 <li>new functions: <code><a href="../reference/hzID.html">hzID()</a></code> and <code>hzID()&lt;-</code>, get/set unique horizon IDs</li>
 <li>new functions: <code><a href="../reference/hzidname&lt;-.html">hzidname()</a></code> and <code>hzidname()&lt;-</code>, get/set column containing unique horizon IDs</li>
 <li>
-<code><a href="../reference/rbind.SoilProfileCollection.html">rbind.SoilProfileCollection()</a></code> has been deprecated in favor of <code><a href="../reference/union.html">union()</a></code>, gains new functionality: <a href="https://github.com/ncss-tech/aqp/issues/71" class="uri">https://github.com/ncss-tech/aqp/issues/71</a>
+<code>rbind.SoilProfileCollection()</code> has been deprecated in favor of <code><a href="https://rdrr.io/r/base/sets.html">union()</a></code>, gains new functionality: <a href="https://github.com/ncss-tech/aqp/issues/71" class="uri">https://github.com/ncss-tech/aqp/issues/71</a>
 </li>
 <li>bug fixes in sanity checks within <code>horizonNames()&lt;-</code>
 </li>
@@ -466,10 +490,10 @@
 </h1>
 <ul>
 <li>
-<code><a href="../reference/textureTriangleSummary.html">texture.triangle.low.rv.high()</a></code> renamed to <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code>. The old name still works, but a message is issued</li>
-<li>new argument to textureTriangleSummary() texture.names: for toggling texture class names</li>
-<li>minor bug fix in textureTriangleSummary(…, sim=TRUE), previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.</li>
-<li>new function tauW(), addd by D.G. Rossiter: see manual page for references</li>
+<code>texture.triangle.low.rv.high()</code> renamed to <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code>. The old name still works, but a message is issued</li>
+<li>new argument to <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code> <code>texture.names</code>: for toggling texture class names</li>
+<li>minor bug fix in <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary(..., sim=TRUE)</a></code>, previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.</li>
+<li>new function <code><a href="../reference/tau.html">tauW()</a></code>, addd by D.G. Rossiter: see manual page for references</li>
 </ul>
 </div>
     <div id="aqp-110-2017-01-05" class="section level1">
@@ -555,7 +579,7 @@
 <a href="#aqp-193-2015-12-18" class="anchor"></a>aqp 1.9.3 (2015-12-18)<small> 2015-12-19 </small>
 </h1>
 <ul>
-<li>fixed a nasty bug in <code><a href="../reference/rbind.SoilProfileCollection.html">rbind.SoilProfileCollection()</a></code> related to object re-ordering
+<li>fixed a nasty bug in <code>rbind.SoilProfileCollection()</code> related to object re-ordering
 <ul>
 <li>in aqp &lt; 1.9.3: there was a chance than <code><a href="../reference/profile_id&lt;-.html">profile_id(x)</a></code> and <code>site(x)[[idname(x)]])</code> would not match</li>
 <li>bugs like this will no longer be a possibility after aqp 2.0, new SPC object structure planned</li>
@@ -786,7 +810,7 @@
 </h1>
 <ul>
 <li>HTML version of all documentation (including images) auto-generated via knitr and available on the r-forge website</li>
-<li>new function: texture.triangle.low.rv.high() plots texture data with low-high range defined by quantiles</li>
+<li>new function: <code>texture.triangle.low.rv.high()</code> plots texture data with low-high range defined by quantiles</li>
 </ul>
 </div>
     <div id="aqp-14-6-2013-01-03" class="section level1">
@@ -794,13 +818,10 @@
 <a href="#aqp-14-6-2013-01-03" class="anchor"></a>aqp 1.4-6 (2013-01-03)<small> Unreleased </small>
 </h1>
 <ul>
-<li>updated documentation and SoilProfileCollection tutorial here:
-<ul>
-<li><a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp" class="uri">https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp</a></li>
-</ul>
-</li>
-<li>plans laid for parallel processing in slab() and profileApply() via ‘parallel’ package</li>
-<li>plotSPC() gets a ‘density’ argument for shaded coloring of horizons</li>
+<li>updated documentation and SoilProfileCollection tutorial</li>
+<li>plans laid for parallel processing in <code><a href="../reference/slab-methods.html">slab()</a></code> and <code><a href="../reference/profileApply.html">profileApply()</a></code> via ‘parallel’ package</li>
+<li>
+<code><a href="../reference/plotSPC.html">plotSPC()</a></code> gets a <code>density</code> argument for shaded coloring of horizons</li>
 </ul>
 </div>
     <div id="aqp-14-5-2012-12-29" class="section level1">
@@ -808,7 +829,8 @@
 <a href="#aqp-14-5-2012-12-29" class="anchor"></a>aqp 1.4-5 (2012-12-29)<small> Unreleased </small>
 </h1>
 <ul>
-<li>slab() re-written from scratch, resulting in reduced memory footprint and quicker running time ! older code based on slab() is likely to now broken- sorry, it won’t happen again
+<li>
+<code><a href="../reference/slab-methods.html">slab()</a></code> re-written from scratch, resulting in reduced memory footprint and quicker running time ! older code based on slab() is likely to now broken- sorry, it won’t happen again
 <ul>
 <li>the new code is much slimmer and based on aggregate() rather than ddply</li>
 <li>function arguments have changed so be sure to check the manual page</li>
@@ -823,7 +845,7 @@
 <a href="#aqp-14-2012-12-18" class="anchor"></a>aqp 1.4 (2012-12-18)<small> 2012-12-21 </small>
 </h1>
 <ul>
-<li>new function sim() for simulation based on a template soil profile, proper documentation pending…</li>
+<li>new function <code><a href="../reference/sim.html">sim()</a></code> for simulation based on a template soil profile, proper documentation pending…</li>
 </ul>
 </div>
     <div id="aqp-13-3-2012-12-06" class="section level1">
@@ -831,8 +853,9 @@
 <a href="#aqp-13-3-2012-12-06" class="anchor"></a>aqp 1.3-3 (2012-12-06)<small> Unreleased </small>
 </h1>
 <ul>
-<li>new function subsetProfiles() for simpler subsetting of SoilProfileCollection objects via site or horizon-level attributes</li>
-<li>get.ml.hz() now returns a ‘confidence’ for each horizon (as a percent)</li>
+<li>new function <code><a href="../reference/subsetProfiles-methods.html">subsetProfiles()</a></code> for simpler subsetting of <code>SoilProfileCollection</code> objects via site or horizon-level attributes</li>
+<li>
+<code><a href="../reference/get.ml.hz.html">get.ml.hz()</a></code> now returns a ‘confidence’ for each horizon (as a percent)</li>
 <li>added experimental ‘filter’ argument to profile_compare()- see manual page for usage</li>
 <li>added new argument to plot.SoilProfileCollection()- alt.label: used to add secondary labeling via data in <a href='https://github.com/site'>@site</a></li>
 <li>plot.SoilProfileCollection() will now do a better job of selecting the location for profile IDs based on label length, font size, and figure size</li>

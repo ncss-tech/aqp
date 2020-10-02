@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sol Color Palette — soilPalette • aqp</title>
+<title>Soil Color Palette — soilPalette • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Sol Color Palette — soilPalette" />
-<meta property="og:description" content="A very simple function for generating labeled swatches of soil colors. Largely based on colorspace::swatchplot" />
+<meta property="og:title" content="Soil Color Palette — soilPalette" />
+<meta property="og:description" content="A very simple function for generating labeled swatches of soil colors. Largely based on colorspace::swatchplot." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -111,16 +111,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sol Color Palette</h1>
-    
+    <h1>Soil Color Palette</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/soilPalette.R'><code>R/soilPalette.R</code></a></small>
     <div class="hidden name"><code>soilPalette.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A very simple function for generating labeled swatches of soil colors. Largely based on <code><a href='http://colorspace.R-Forge.R-project.org//reference/swatchplot.html'>colorspace::swatchplot</a></code></p>
+    <p>A very simple function for generating labeled swatches of soil colors. Largely based on <code><a href='http://colorspace.R-Forge.R-project.org//reference/swatchplot.html'>colorspace::swatchplot</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>soilPalette</span>(<span class='kw'>colors</span>, <span class='kw'>lab</span>, lab.cex = <span class='fl'>0.75</span>, dynamic.labels=<span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>soilPalette</span>(
+  <span class='kw'>colors</span>,
+  <span class='kw'>lab</span>,
+  lab.cex = <span class='fl'>0.75</span>,
+  dynamic.labels = <span class='fl'>TRUE</span>,
+  x.inset = <span class='fl'>0.01</span>,
+  y.inset = <span class='fl'>0.01</span>,
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,11 +143,19 @@
     </tr>
     <tr>
       <th>lab.cex</th>
-      <td><p>chatacter scaling for labels</p></td>
+      <td><p>character scaling for labels</p></td>
     </tr>
     <tr>
       <th>dynamic.labels</th>
-      <td><p>logical, adjust label colors based on HSV value of each swatch</p></td>
+      <td><p>logical, adjust label colors for maximum contrast via <code>invertLabelColor</code></p></td>
+    </tr>
+    <tr>
+      <th>x.inset</th>
+      <td><p>horizontal adjustment for labels</p></td>
+    </tr>
+    <tr>
+      <th>y.inset</th>
+      <td><p>vertical adjustment for labels</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -147,15 +163,16 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The result is a simple figure on the active plotting device.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## maybe useful for teaching about soil color</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># maybe useful for teaching about soil color</span>
 
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
 
@@ -172,7 +189,8 @@
 <span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>parseMunsell</a></span>(<span class='kw'>m</span>)
 <span class='co'># plot</span>
 <span class='fu'>soilPalette</span>(<span class='kw'>cols</span>, <span class='kw'>m</span>)
-</div><div class='img'><img src='soilPalette-1.png' alt='' width='768' height='475' /></div></pre>
+</div><div class='img'><img src='soilPalette-1.png' alt='' width='768' height='475' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

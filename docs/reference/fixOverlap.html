@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -183,10 +183,10 @@ maxIter = <span class='fl'>1000</span>, trace = <span class='fl'>FALSE</span>)</
 </div><div class='output co'>#&gt; <span class='message'>1 iterations</span></div><div class='img'><img src='fixOverlap-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># attempt to adjust using defaults</span>
 <span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>43 iterations</span></div><div class='img'><img src='fixOverlap-3.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>24 iterations</span></div><div class='img'><img src='fixOverlap-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># attempt to adjust and tinker with defaults</span>
 <span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>23 iterations</span></div><div class='img'><img src='fixOverlap-4.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>15 iterations</span></div><div class='img'><img src='fixOverlap-4.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># repeatable adjustments</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>10101</span>)
 <span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thresh = <span class='fl'>0.7</span>, trace=<span class='fl'>TRUE</span>))

@@ -76,7 +76,7 @@ Future implementations may use boundary topography as a second hierarchical leve
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -131,6 +131,7 @@ Future implementations may use boundary topography as a second hierarchical leve
     <pre class="usage"><span class='fu'>permute_profile</span>(
   <span class='kw'>p</span>,
   n = <span class='fl'>100</span>,
+  id = <span class='kw'>NULL</span>,
   <span class='kw'>boundary.attr</span>,
   min.thickness = <span class='fl'>1</span>,
   soildepth = <span class='kw'>NULL</span>,
@@ -147,6 +148,10 @@ Future implementations may use boundary topography as a second hierarchical leve
     <tr>
       <th>n</th>
       <td><p>Number of permutations to generate (default: 100)</p></td>
+    </tr>
+    <tr>
+      <th>id</th>
+      <td><p>Over-rides <code>n</code>: a vector of (unique) profile IDs equal in length to number of permutations (<code>n</code>) to generate.</p></td>
     </tr>
     <tr>
       <th>boundary.attr</th>

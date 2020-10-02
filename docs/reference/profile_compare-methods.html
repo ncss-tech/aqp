@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -262,7 +262,7 @@ verbose=<span class='fl'>FALSE</span>)
 </div><div class='output co'>#&gt; [1] 0.9987445</div><div class='input'>
 <span class='co'>## 3. identify profiles within a collection that contain all NAs</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1010101</span>)
-<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='union.html'>union</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>letters</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>], <span class='kw'>random_profile</span>, SPC=<span class='fl'>TRUE</span>))
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pbindlist.html'>pbindlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>letters</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>], <span class='kw'>random_profile</span>, SPC=<span class='fl'>TRUE</span>))
 
 <span class='co'># replace first profile's data with NA</span>
 <span class='kw'>na.required</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='kw'>s</span>[<span class='fl'>1</span>, ])

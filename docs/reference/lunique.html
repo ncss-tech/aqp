@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Eliminate duplicate instances of  profile IDs in a list of SoilProfileCollections — lunique • aqp</title>
+<title>Eliminate duplicate instances of profile IDs in a list of SoilProfileCollections — lunique • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Eliminate duplicate instances of  profile IDs in a list of SoilProfileCollections — lunique" />
-<meta property="og:description" content="@description Experimental function to &quot;clean&quot; list input where duplicates exist (that would otherwise prevent aqp::union). Useful for queries that may have overlapping instances of the same data, for instance a list of SoilProfileCollections where each list element contains profiles gathered from a set of (potentially overlapping) extents." />
+<meta property="og:title" content="Eliminate duplicate instances of profile IDs in a list of SoilProfileCollections — lunique" />
+<meta property="og:description" content="@description Experimental function to &quot;clean&quot; list input where duplicates exist (that would otherwise prevent pbindlist). Useful for queries that may have overlapping instances of the same data, for instance a list of SoilProfileCollections where each list element contains profiles gathered from a set of (potentially overlapping) extents." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -111,13 +111,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Eliminate duplicate instances of  profile IDs in a list of SoilProfileCollections</h1>
+    <h1>Eliminate duplicate instances of profile IDs in a list of SoilProfileCollections</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/lunique.R'><code>R/lunique.R</code></a></small>
     <div class="hidden name"><code>lunique.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>@description Experimental function to "clean" list input where duplicates exist (that would otherwise prevent <code><a href='union.html'>aqp::union</a></code>). Useful for queries that may have overlapping instances of the same data, for instance a list of SoilProfileCollections where each list element contains profiles gathered from a set of (potentially overlapping) extents.</p>
+    <p>@description Experimental function to "clean" list input where duplicates exist (that would otherwise prevent <code>pbindlist</code>). Useful for queries that may have overlapping instances of the same data, for instance a list of SoilProfileCollections where each list element contains profiles gathered from a set of (potentially overlapping) extents.</p>
     </div>
 
     <pre class="usage"><span class='fu'>lunique</span>(<span class='kw'>l</span>)</pre>
@@ -146,15 +146,15 @@
 
 <span class='co'># 6 profiles in four sets, and 5,6,7 are missing</span>
 <span class='kw'>input</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>4</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='fl'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>,<span class='fl'>9</span>,<span class='fl'>1</span>)), <span class='fu'>function</span>(<span class='kw'>idx</span>) {
-      <span class='co'>if</span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>idx</span>))) 
+      <span class='co'>if</span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>idx</span>)))
        <span class='kw'>sp5</span>[<span class='kw'>idx</span>,]
 })
 
 <span class='kw'>output</span> <span class='op'>&lt;-</span> <span class='fu'>lunique</span>(<span class='kw'>input</span>)
 
 <span class='co'># 6 profiles are in final SPC; 5,6,7 are missing</span>
-<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='fu'><a href='union.html'>union</a></span>(<span class='kw'>output</span>)), <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp5</span>))
-</div><div class='output co'>#&gt; <span class='message'>union: one or more input list elements is NA</span></div><div class='output co'>#&gt; [1] 1 2 3 4 8 9</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='fu'><a href='pbindlist.html'>pbindlist</a></span>(<span class='kw'>output</span>)), <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp5</span>))
+</div><div class='output co'>#&gt; <span class='message'>pbindlist: one or more input list elements is NA</span></div><div class='output co'>#&gt; [1] 1 2 3 4 8 9</div><div class='input'>
 <span class='co'># EXAMPLE #2 -- exact duplicates</span>
 
 <span class='co'># deliberately duplicate an SPC</span>

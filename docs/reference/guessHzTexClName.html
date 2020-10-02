@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Guess Horizon Texture Class Column Name — guessHzTexClName" />
-<meta property="og:description" content="This function is used to provide texture class attribute column name to functions that use it to determine taxonomic criteria. It will use regular expressions to match 'texcl' which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match 'texture' for cases where 'texcl' is absent (e.g. in NASIS components)." />
+<meta property="og:description" content="This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match &quot;texcl&quot; which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match &quot;texture&quot; for cases where &quot;texcl&quot; is absent (e.g. in NASIS Component Horizon)." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>This function is used to provide texture class attribute column name to functions that use it to determine taxonomic criteria. It will use regular expressions to match <code>'texcl'</code> which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match <code>'texture'</code> for cases where <code>'texcl'</code> is absent (e.g. in NASIS components).</p>
+    <p>This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).</p>
     </div>
 
     <pre class="usage"><span class='fu'>guessHzTexClName</span>(<span class='kw'>x</span>)</pre>
@@ -134,6 +134,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Character containing horizon texture class column name.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='guessHzDesgnName.html'>guessHzDesgnName</a></code>, <code><a href='guessHzAttrName.html'>guessHzAttrName</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
