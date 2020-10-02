@@ -16,7 +16,8 @@
 #' @param d_value Column name containing dry value. Default: d_value
 #' @param m_value Column name containing moist value. Default: m_value
 #' @param m_chroma Column name containing moist crhoma. Default: m_chroma
-#'
+#' @param sandy.texture.pattern this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"
+#' 
 #' @return A \code{data.frame} containing profile, cambic indexes, along with top and bottom depths.
 #'
 #' @author Andrew G. Brown
@@ -50,7 +51,9 @@ getCambicBounds <- function(p,
                             argi_bounds = NULL,
                             d_value = "d_value",
                             m_value = "m_value",
-                            m_chroma = "m_chroma", ...) {
+                            m_chroma = "m_chroma", 
+                            sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
+                            ...) {
 
   # construct data.frame result for no-cambic-found (NA)
   empty_frame <- data.frame(id = character(0),
@@ -95,8 +98,7 @@ getCambicBounds <- function(p,
   non.argillic$w <- rep(1, nrow(non.argillic))
 
   textures <- non.argillic[[hztexclname(p)]]
-  sandy.textures <- (grepl("S$", textures, ignore.case = TRUE) &
-                       !grepl("LVFS|LFS$", textures, ignore.case = TRUE))
+  sandy.textures <- grepl(sandy.texture.pattern, textures, ignore.case = TRUE)
 
   if (!length(sandy.textures) | !length(dark.colors)) {
     return(empty_frame)
@@ -125,11 +127,13 @@ getCambicBounds <- function(p,
       }
     }
 
-    pcamb.thickness <- fbot - ftop
-    if (length(pcamb.thickness) > 0 & sum(pcamb.thickness, na.rm = TRUE) >= 15) {
-
-      final <- rbind(final, data.frame(cambic_top = min(ftop, na.rm = TRUE),
-                                       cambic_bottom = max(fbot, na.rm = TRUE)))
+    if (is.numeric(fbot) & is.numeric(ftop)) {
+      pcamb.thickness <- fbot - ftop
+      if (length(pcamb.thickness) > 0 & sum(pcamb.thickness, na.rm = TRUE) >= 15) {
+  
+        final <- rbind(final, data.frame(cambic_top = min(ftop, na.rm = TRUE),
+                                         cambic_bottom = max(fbot, na.rm = TRUE)))
+      }
     }
   }
 

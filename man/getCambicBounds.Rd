@@ -13,6 +13,7 @@ getCambicBounds(
   d_value = "d_value",
   m_value = "m_value",
   m_chroma = "m_chroma",
+  sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
   ...
 )
 }
@@ -32,6 +33,8 @@ getCambicBounds(
 \item{m_value}{Column name containing moist value. Default: m_value}
 
 \item{m_chroma}{Column name containing moist crhoma. Default: m_chroma}
+
+\item{sandy.texture.pattern}{this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"}
 
 \item{...}{Arguments to \code{getArgillicBounds()}}
 }
