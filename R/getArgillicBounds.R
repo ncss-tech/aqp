@@ -54,13 +54,13 @@ getArgillicBounds <- function(p,
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                               sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
                               verbose = FALSE) {
-  
+
   if (length(p) != 1)
    stop("`p` must be a SoilProfileCollection containing one profile", call.=FALSE)
-  
+
   hz <- horizons(p)
   depthcol <- horizonDepths(p)
-  
+
   # ease removal of attribute name arguments -- deprecate them later
   # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
   if (!hzdesgn %in% horizonNames(p)) {
@@ -84,32 +84,32 @@ getArgillicBounds <- function(p,
   # get upper bound...
   mss <- getMineralSoilSurfaceDepth(p, hzdesgn = hzdesgn)
   pld <- getPlowLayerDepth(p, hzdesgn = hzdesgn)
-  
+
   # estimate the thickness of the soil profile
   # (you will need to specify alternate pattern if Cr|R|Cd
   # doesn't match your contacts)
   soil.depth <- estimateSoilDepth(p, name = hzdesgn,
                                   p = bottom.pattern)
-  
+
   # find all horizons with t subscripts; some old/converted horizons have all capital letters
   has_t <- grepl(as.character(hz[[hzdesgn]]), pattern = "[Tt]")
-  
+
   # in lieu of plow layer and LD, the clay increase depth determines upper bound
   upper.bound <- argillic.clay.increase.depth(p, clay.attr)
   lower.bound <- -Inf
-  
+
   # handle case where Ap disturbs upper bound of argillic
   # or a lithologic discontinuity overrides the clay increase req
-  #  eliminiating evidence of accumulation
+  #  eliminating evidence of accumulation
   if (is.na(upper.bound)) {
     shallowest_t <- minDepthOf(p, pattern = "[Tt]", hzdesgn = hzdesgn)
-    shallowest_ld <- depthOf(p, pattern = "^[2-9].*[Tt]", hzdesgn = hzdesgn)
+    depth_ld <- depthOf(p, pattern = "^[2-9].*[Tt]", hzdesgn = hzdesgn)
     if (!is.na(shallowest_t)) {
       if (pld == shallowest_t)
         upper.bound <- shallowest_t
-    
-      if (!is.na(shallowest_ld))
-        if (any(shallowest_t %in% shallowest_ld))
+
+      if (!all(is.na(depth_ld)))
+        if (any(shallowest_t %in% depth_ld))
           upper.bound <- shallowest_t
     }
   }
@@ -179,8 +179,7 @@ getArgillicBounds <- function(p,
       }
     } else {
       if (verbose)
-        message(paste0("Profile (",profile_id(p),
-                     ") has clay increase with no evidence of illuviation (t), to ignore: `require_t = FALSE`."))
+        message(paste0("Profile (",profile_id(p),") has clay increase with no evidence of illuviation (t)."))
       lower.bound <- NA
       upper.bound <- NA
     }
@@ -197,7 +196,7 @@ getArgillicBounds <- function(p,
     return(c(ubound = NA, lbound = NA))
 
   bdepthspc <- glom(p, mss, upper.bound, df = TRUE)
-  
+
   # if there are no overlying horizons, return NA
   if (is.null(bdepthspc) | all(is.na(bdepthspc))) {
     if (verbose)
@@ -205,7 +204,7 @@ getArgillicBounds <- function(p,
                      ") has no horizons overlying a [possible] argillic."))
     return(c(ubound = NA, lbound = NA))
   }
-  
+
   bdepths <- bdepthspc[[depthcol[2]]]
   if (all(!is.na(c(upper.bound, lower.bound)))) {
 
@@ -219,7 +218,7 @@ getArgillicBounds <- function(p,
       min.thickness <- 15
     }
 
-    if (lower.bound - upper.bound < min.thickness) {      
+    if (lower.bound - upper.bound < min.thickness) {
       if (verbose)
         message(paste0("Profile (",profile_id(p),
                      ") does not meet thickness requirement."))

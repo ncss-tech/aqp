@@ -77,16 +77,16 @@ getSurfaceHorizonDepth <- function (p, pattern, hzdesgn = guessHzDesgnName(p)) {
 
   # warning messages for incomplete profiles
   if (is.infinite(shallowest.depth)) {
-    warning(paste0("Profile (", profile_id(p), ") is missing horizon top depths."))
+    warning(paste0("Profile (", profile_id(p), ") is missing horizon top depths."), call. = FALSE)
     return(NA)
   }
 
   if (shallowest.depth > 0) {
-    warning(paste0("Profile (", profile_id(p), ") top depth is greater than zero."))
+    warning(paste0("Profile (", profile_id(p), ") top depth is greater than zero."), call. = FALSE)
   }
 
   if (shallowest.depth < 0) {
-    warning(paste0("Profile (", profile_id(p), ") top depth is less than zero."))
+    warning(paste0("Profile (", profile_id(p), ") top depth is less than zero."), call. = FALSE)
   }
 
   # identify horizons matching pattern
