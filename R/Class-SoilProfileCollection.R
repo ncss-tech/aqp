@@ -1322,14 +1322,17 @@ if (!isGeneric("aqp_df_class<-"))
     standardGeneric("aqp_df_class<-"))
 
 #' @name aqp_df_class<-
-#' @param value "data.frame", "data.table" or "tibble"
+#' @param value "data.frame", "data.table" or "tbl_df"
 #' @aliases aqp_df_class<-,SoilProfileCollection-method
 #' @rdname aqp_df_class
 setReplaceMethod("aqp_df_class", signature(object = "SoilProfileCollection"),
                  function(object, value) {
-                   if (!value %in% c('data.frame',"data.table","tibble"))
-                     stop("aqp_df_class metadata entry must be data.frame, data.table or tibble",
-                          call.=FALSE)
+                   if (length(value) != 1 | !is.character(value))
+                     stop("aqp_df_class metadata entry must be `data.frame`, `data.table` or `tbl_df`",  call.=FALSE)
+                   if (value %in% c("tbl","tibble"))
+                     value <- "tbl_df"
+                   if (!value %in% c('data.frame',"data.table","tbl_df"))
+                     stop("aqp_df_class metadata entry must be `data.frame`, `data.table` or `tbl_df`",  call.=FALSE)
                    metadata(object)$aqp_df_class <- value
                    return(object)
                  })

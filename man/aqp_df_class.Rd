@@ -15,7 +15,7 @@
 \arguments{
 \item{object}{a SoilProfileCollection}
 
-\item{value}{"data.frame", "data.table" or "tibble"}
+\item{value}{"data.frame", "data.table" or "tbl_df"}
 }
 \description{
 This is an accessor and replacement method for the \code{aqp_df_class} entry in the metadata slot. This entry is used internally by methods that interact with \code{data.frame} objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.
