@@ -77,9 +77,15 @@
 #' 
 #' @param rv.col color used for representative value (RV) symbol
 #' 
+#' @param range.border color used for polygon border enclosing the low-high region
+#' 
 #' @param range.col color used for polygon enclosing the low-high region
 #' 
 #' @param range.alpha transparency of the low-high range polygon (0-255)
+#' 
+#' @param range.lty line style for polygon enclosing the low-high region
+#' 
+#' @param range.lwd line weight polygon enclosing the low-high region
 #' 
 #' @param main plot title
 #' 
@@ -115,7 +121,10 @@
 #'   # make figure, marginal percentiles are silently returned
 #'   stats <- textureTriangleSummary(
 #'     ssc, pch = 1, cex = 0.5, 
-#'     range.alpha = 50, col = grey(0.5), legend = FALSE
+#'     range.alpha = 50, 
+#'     range.lwd = 1,
+#'     col = grey(0.5), 
+#'     legend = FALSE
 #'   )
 #'   
 #'   # check
@@ -127,13 +136,16 @@
 #'   # make the figure, ignore results
 #'   textureTriangleSummary(
 #'     s, pch = 1, cex = 0.5, 
-#'     range.alpha = 50, col = grey(0.5), legend = FALSE
+#'     range.alpha = 50, 
+#'     range.lwd = 1,
+#'     col = grey(0.5), 
+#'     legend = FALSE
 #'   )
 #' }
 #' 
 #' }
 #' 
-textureTriangleSummary <- function(ssc, p = c(0.05, 0.5, 0.95), delta = 1, rv.col = 'red', range.col = 'RoyalBlue', range.alpha = 75, main = 'Soil Textures', legend.cex = 0.75, legend = TRUE, ...) {
+textureTriangleSummary <- function(ssc, p = c(0.05, 0.5, 0.95), delta = 1, rv.col = 'red', range.border = 'black', range.col = 'RoyalBlue', range.alpha = 80, range.lty = 1, range.lwd = 2, main = 'Soil Textures', legend.cex = 0.75, legend = TRUE, ...) {
 
   # sanity check
   if(
@@ -189,7 +201,7 @@ textureTriangleSummary <- function(ssc, p = c(0.05, 0.5, 0.95), delta = 1, rv.co
 	res <- .get.ssc.low.rv.high(ssc,  p=p, delta=delta, TT.obj = TT)
 	
 	# add polgon defining range of data
-	polygon(res$range$x, res$range$y, col=range.col)
+	polygon(res$range$x, res$range$y, col=range.col, border = range.border, lty = range.lty, lwd = range.lwd)
 	
 	# add original data, passing in additional arguments
 	soiltexture::TT.points(tri.data = ssc, geo = TT, tri.sum.tst=FALSE, lwd = 1, ...)

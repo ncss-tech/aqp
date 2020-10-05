@@ -9,8 +9,11 @@ textureTriangleSummary(
   p = c(0.05, 0.5, 0.95),
   delta = 1,
   rv.col = "red",
+  range.border = "black",
   range.col = "RoyalBlue",
-  range.alpha = 75,
+  range.alpha = 80,
+  range.lty = 1,
+  range.lwd = 2,
   main = "Soil Textures",
   legend.cex = 0.75,
   legend = TRUE,
@@ -26,9 +29,15 @@ textureTriangleSummary(
 
 \item{rv.col}{color used for representative value (RV) symbol}
 
+\item{range.border}{color used for polygon border enclosing the low-high region}
+
 \item{range.col}{color used for polygon enclosing the low-high region}
 
 \item{range.alpha}{transparency of the low-high range polygon (0-255)}
+
+\item{range.lty}{line style for polygon enclosing the low-high region}
+
+\item{range.lwd}{line weight polygon enclosing the low-high region}
 
 \item{main}{plot title}
 
@@ -64,7 +73,10 @@ requireNamespace("Hmisc") &
   # make figure, marginal percentiles are silently returned
   stats <- textureTriangleSummary(
     ssc, pch = 1, cex = 0.5, 
-    range.alpha = 50, col = grey(0.5), legend = FALSE
+    range.alpha = 50, 
+    range.lwd = 1,
+    col = grey(0.5), 
+    legend = FALSE
   )
   
   # check
@@ -76,7 +88,10 @@ requireNamespace("Hmisc") &
   # make the figure, ignore results
   textureTriangleSummary(
     s, pch = 1, cex = 0.5, 
-    range.alpha = 50, col = grey(0.5), legend = FALSE
+    range.alpha = 50, 
+    range.lwd = 1,
+    col = grey(0.5), 
+    legend = FALSE
   )
 }
 
