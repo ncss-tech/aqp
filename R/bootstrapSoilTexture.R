@@ -112,10 +112,19 @@ bootstrapSoilTexture <- function(ssc, method = c('dirichlet', 'normal'), n = 100
     stop('insufficient observations or incorrect column specification', call. = FALSE)
   }
   
-  # sanity check: columns should be sand, silt, clay
-  if(! all(tolower(names(ssc)) == c('sand', 'silt', 'clay'))) {
-    stop('column names and ordering should follow: `sand`, `silt`, `clay`', call. = FALSE)
+  # check for appropriate column names
+  # all must be present
+  # may be other columns as well, ignore those
+  name.check <- sapply(c('SAND', 'SILT', 'CLAY'), function(i) {
+    any(names(ssc) %in% i)
+  })
+  
+  if(! all(name.check)) {
+    stop('`ssc` must contain columns: `SAND`, `SILT`, `CLAY`.')
   }
+  
+  # subset via column names
+  ssc <- ssc[, c('SAND', 'SILT', 'CLAY')]
   
   # sanity check: data should be in the range of 0-100
   range.check <- range(sapply(ssc, range))

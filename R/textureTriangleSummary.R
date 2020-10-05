@@ -143,7 +143,22 @@ textureTriangleSummary <- function(ssc, p = c(0.05, 0.5, 0.95), delta = 1, rv.co
     stop("packages `Hmisc` and `soiltexture` are required", call.=FALSE)
   }
   
-  # should also filter NA
+  # TODO: filter NA?
+  
+  # check for appropriate column names
+  # all must be present
+  # may be other columns as well, ignore those
+  name.check <- sapply(c('SAND', 'SILT', 'CLAY'), function(i) {
+    any(names(ssc) %in% i)
+  })
+  
+  if(! all(name.check)) {
+    stop('`ssc` must contain columns: `SAND`, `SILT`, `CLAY`.')
+  }
+  
+  # subset via column names
+  ssc <- ssc[, c('SAND', 'SILT', 'CLAY')]
+  
   
 	# setup colors
 	range.col <- rgb(t(col2rgb(range.col)), maxColorValue=255, alpha=range.alpha)
