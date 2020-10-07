@@ -52,37 +52,75 @@ m.rel <- data.frame(
 # sort
 m.rel <- m.rel[order(m.rel$hue, m.rel$value, m.rel$chroma, m.rel$wavelength), ]
 
+## very slow, but implements basic idea
+mixIt <- function(m1, m2, w1 = 1, w2 = 1, mult = 3) {
+  # subset
+  idx <- which(m.rel$munsell %in% c(m1, m2))
+  s <- m.rel[idx, ]
+  s$color <- parseMunsell(s$munsell)
+  
+  
+  # cols <- parseMunsell(levels(factor(s$munsell)))
+  # tps <- list(superpose.line=list(col=cols, lwd=5))
+  # 
+  # print(
+  #   xyplot(reflectance ~ wavelength, groups=munsell, data=s, 
+  #          type=c('l', 'g'),
+  #          scales=list(tick.number=10),
+  #          auto.key=list(lines=TRUE, points=FALSE, cex=1, space='right'),
+  #          par.settings=tps
+  #   )
+  # )
+  # 
+  
+  # long -> wide
+  s.wide <- dcast(s, munsell ~ wavelength, value.var = 'reflectance')
+  
+  # mix colors by multiplying spectra (simulate subtractive mixture)
+  mixed <- (s.wide[1, -1] * w1) * (s.wide[2, -1] * w2) * mult
+  
+  z <- split(m.rel, m.rel$munsell)
+  
+  zz <- lapply(z, function(i) {
+    i.dist <- sqrt(sum((i$reflectance - mixed)^2))
+    
+    res <- data.frame(
+      munsell = i$munsell[1],
+      distance = i.dist,
+      stringsAsFactors = FALSE
+    )
+    
+    return(res)
+  })
+  
+  zz <- do.call('rbind', zz)
+  
+  new.color <- zz$munsell[order(zz$distance)[1]]
+  
+  idx <- which(m.rel$munsell %in% c(m1, m2, new.color))
+  s <- m.rel[idx, ]
+  s$color <- parseMunsell(s$munsell)
+  
+  s$munsell <- factor(s$munsell, levels = c(m1, m2, new.color))
+  
+  cols <- parseMunsell(c(m1, m2, new.color))
+  tps <- list(superpose.line=list(col=cols, lwd=5, lty = c(1, 1, 4)))
+  
+  print(
+  xyplot(reflectance ~ wavelength, groups=munsell, data=s, 
+         type=c('l', 'g'),
+         scales=list(tick.number=10),
+         auto.key=list(lines=TRUE, points=FALSE, cex=1, space='right'),
+         par.settings=tps
+  )
+  )
+  # return(mixed)
+}
 
-# subset
-idx <- which(m.rel$munsell %in% c('10YR 3/4', '7.5YR 4/6'))
-s <- m.rel[idx, ]
 
-# idx <- which(m.rel$munsell %in% c('10YR 3/1', '10YR 3/2', '10YR 3/4', '10YR 3/6'))
-# s <- m.rel[idx, ]
+mixIt('10YR 4/6', '10G 2/2')
+mixIt('10YR 4/6', '10G 2/2', mult = 8)
 
-
-cols <- parseMunsell(levels(factor(s$munsell)))
-tps <- list(superpose.line=list(col=cols, lwd=5))
-
-xyplot(reflectance ~ wavelength, groups=munsell, data=s, 
-       type=c('l', 'g'),
-       scales=list(tick.number=10),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='right'),
-       par.settings=tps
-)
-
-
-# long -> wide
-s.wide <- dcast(s, munsell ~ wavelength, value.var = 'reflectance')
-
-# mix colors by multiplying spectra (simulate subtractive mixture)
-mixed <- s.wide[1, -1] * s.wide[2, -1] 
-
-# probably need to re-scale
-
-# hack to plot mixture...
-plot(s$wavelength, s$reflectance, ylim=c(0, 0.25))
-lines(as.numeric(names(unlist(mixed))), unlist(mixed) * 10, col='red')
 
 
 
