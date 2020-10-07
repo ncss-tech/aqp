@@ -8,8 +8,81 @@
 }
 
 
+# another other possible approach using only sRGB coordinates
+# http://scottburns.us/wp-content/uploads/2015/04/ILSS.txt
 
-mixMunsell <- function(m1, m2, w1 = 0.5, w2 = 0.5) {
+# related ticket
+# https://github.com/ncss-tech/aqp/issues/101
+
+# in response to the dumb commentary here:
+# https://soiltxnmyforum.cals.vt.edu/forum/read.php?3,1984,1987#msg-1987
+
+# inspiration / calculations based on:
+# https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
+
+# related discussion here:
+# https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630
+
+# base spectral library:
+# http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
+
+# see /misc/util/Munsell for:
+# * spectral library prep
+# * interpolation of odd chroma
+# * reshaping for rapid look-up
+
+
+#' 
+#' @title Mix Munsell Colors via Spectral Library
+#' 
+#' @description Simulate subtractive mixing (e.g. pigments) of two colors in Munsell notation.
+#' 
+#' @param x vector of two colors in Munsell notation
+#' 
+#' @param w vector of two weights or proportions, can sum to any number
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @references 
+#' 
+#' inspiration / calculations based on:
+#' https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
+
+#' related discussion here:
+#' https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630
+
+#' base spectral library:
+#' http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
+#'
+#'
+#' @details
+#' Pending
+#'
+#' @return a list containing:
+#' 
+#' \itemize{
+#' 
+#' \item{fig}{lattice graphic}
+#' \item{mixed}{a \code{data.frame} with the closest matching Munsell color}
+#' 
+#' }
+#'  
+mixMunsell <- function(x, w = c(0.5, 0.5)) {
+  
+  ## TODO
+  # sanity checks
+  
+  
+  ## TODO: this is temporary until fully vectorized to n-colors
+  # unpack vectors here
+  m1 <- x[1]
+  m2 <- x[2]
+  w1 <- w[1]
+  w2 <- w[2]
+  
+  # satisfy R CMD check
+  munsell.spectra <- NULL
+  munsell.spectra.wide <- NULL
   
   # safely load reference spectra
   load(system.file("data/munsell.spectra.rda", package="aqp")[1])
@@ -23,7 +96,7 @@ mixMunsell <- function(m1, m2, w1 = 0.5, w2 = 0.5) {
   s <- munsell.spectra[idx, ]
   
   # long -> wide
-  s.wide <- dcast(s, munsell ~ wavelength, value.var = 'reflectance')
+  s.wide <- reshape2::dcast(s, munsell ~ wavelength, value.var = 'reflectance')
   
   # spectra as vectors
   # columns are wavelength
@@ -117,7 +190,7 @@ mixMunsell <- function(m1, m2, w1 = 0.5, w2 = 0.5) {
     subscripts = TRUE,
     panel = function(x, y, groups, ...) {
       # setup plot
-      panel.xyplot(x = x, y = y, groups = groups, ...)
+      lattice::panel.xyplot(x = x, y = y, groups = groups, ...)
       
       # split spectra by groups
       d <- split(y, groups)
@@ -133,10 +206,10 @@ mixMunsell <- function(m1, m2, w1 = 0.5, w2 = 0.5) {
         
         # place symbol with appropriate color
         grid::grid.points(
-          x = unit(750, units = 'native'), 
-          y = unit(last.y, units = 'native'), 
+          x = grid::unit(750, units = 'native'), 
+          y = grid::unit(last.y, units = 'native'), 
           pch = 15, 
-          gp = gpar(
+          gp = grid::gpar(
             col = this.col,
             cex = 6
           )
@@ -145,9 +218,9 @@ mixMunsell <- function(m1, m2, w1 = 0.5, w2 = 0.5) {
         # place label
         grid::grid.text(
           label = lab.text[i],
-          x = unit(750, units = 'native'), 
-          y = unit(last.y, units = 'native'),
-          gp = gpar(
+          x = grid::unit(750, units = 'native'), 
+          y = grid::unit(last.y, units = 'native'),
+          gp = grid::gpar(
             cex = 0.85,
             col = invertLabelColor(this.col)
           )
@@ -159,6 +232,7 @@ mixMunsell <- function(m1, m2, w1 = 0.5, w2 = 0.5) {
     }
   )
   
+  # package up
   return(list(
     fig = pp,
     mixed = res

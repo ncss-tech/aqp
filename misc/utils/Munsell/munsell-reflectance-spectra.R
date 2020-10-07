@@ -7,8 +7,8 @@ library(latticeExtra)
 # http://scottburns.us/wp-content/uploads/2015/04/ILSS.txt
 
 
-
-## http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
+# base spectral library:
+# http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
 
 # https://github.com/ncss-tech/aqp/issues/101
 
@@ -34,29 +34,34 @@ library(latticeExtra)
 # reference <- readRDS('interpolated-Munsell-spectra-wide.rds')
 
 
+mixMunsell(c('10YR 5/3', '10YR 3/2'))
+
+mixMunsell(c('10YR 4/6', '5YR 2/2'))
+
+mixMunsell(c('10YR 4/6', '5YR 2/2'), w = c(0.8, 0.2))
+
+mixMunsell(c('10YR 4/6', '2.5Y 5/4'))
+
+mixMunsell(c('10YR 6/6', '5P 5/4'))
+
+mixMunsell(c('10YR 4/4', '5GY 5/4'))
+
+mixMunsell(c('5G 6/5', '5R 5/4'))
 
 
-mixMunsell('10YR 4/6', '5YR 2/2')
-mixMunsell('10YR 4/6', '5YR 2/2', w1 = 0.8, w2 = 0.2)
+## how does soilDB::estimateColorMixture compare?
 
-mixMunsell('10YR 4/6', '2.5Y 5/4')
-
-mixMunsell('10YR 6/6', '5P 5/4')
-
-mixMunsell('10YR 4/4', '5GY 5/4')
-
-mixMunsell('5G 6/5', '5R 5/4')
-
+colors <- c('10YR 6/2', '7.5YR 3/3')
 
 d <- cbind(
-  parseMunsell(c('5G 6/5', '5Y 5/4'), convertColors=FALSE),
-  parseMunsell(c('5G 6/5', '5Y 5/4'), return_triplets=TRUE, returnLAB=TRUE),
+  parseMunsell(colors, convertColors=FALSE),
+  parseMunsell(colors, return_triplets=TRUE, returnLAB=TRUE),
   pct=c(0.5, 0.5),
-  col=parseMunsell(c('5G 6/5', '5Y 5/4'), convertColors=TRUE)
+  col=parseMunsell(colors, convertColors=TRUE)
 )
 
 estimateColorMixture(d, backTransform = TRUE)
-
+mixMunsell(colors)
 
 
 
