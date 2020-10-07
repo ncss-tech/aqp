@@ -23,7 +23,7 @@ library(latticeExtra)
 
 
 # check: OK
-.wgm(v = c(0.5, 0.8), w = c(0.5, 0.5))
+aqp:::.wgm(v = c(0.5, 0.8), w = c(0.5, 0.5))
 
 ## local, testing copies
 
