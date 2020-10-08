@@ -1,7 +1,7 @@
 library(aqp)
 library(soilDB)
 library(reshape2)
-library(latticeExtra)
+library(lattice)
 
 ## entirely different approach using sRGB only
 # http://scottburns.us/wp-content/uploads/2015/04/ILSS.txt
@@ -36,7 +36,18 @@ aqp:::.wgm(v = c(0.5, 0.8), w = c(0.5, 0.5))
 
 mixMunsell(c('10YR 5/3', '10YR 3/2'))
 
-mixMunsell(c('10YR 4/6', '5YR 2/2'))
+mixMunsell(c('10YR 5/3', '10YR 3/2'), n = 3)
+
+plotColorMixture(c('10YR 5/3', '10YR 3/2'))
+
+# label collision
+plotColorMixture(c('10YR 5/3', '10YR 3/2', '5R 2/2'))
+plotColorMixture(c('10YR 5/3', '10YR 3/2', '5R 2/2'), swatch.cex = 4, label.cex = 0.65)
+
+
+mixMunsell(c('10YR 4/6', '5YR 2/2', '5Y 4/5'))
+
+plotColorMixture(c('10YR 4/6', '2.5Y 6/2', '5Y 2/2'), w = c(1,1,2))
 
 mixMunsell(c('10YR 4/6', '5YR 2/2'), w = c(0.8, 0.2))
 

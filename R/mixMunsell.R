@@ -35,11 +35,13 @@
 #' 
 #' @title Mix Munsell Colors via Spectral Library
 #' 
-#' @description Simulate subtractive mixing (e.g. pigments) of two colors in Munsell notation.
+#' @description Simulate subtractive mixing (pigments) of colors in Munsell notation.
 #' 
-#' @param x vector of two colors in Munsell notation
+#' @param x vector of colors in Munsell notation
 #' 
-#' @param w vector of two weights or proportions, can sum to any number
+#' @param w vector of proportions, can sum to any number
+#' 
+#' @param n number of closest matching color chips
 #' 
 #' @author D.E. Beaudette
 #' 
@@ -58,27 +60,18 @@
 #' @details
 #' Pending
 #'
-#' @return a list containing:
-#' 
-#' \itemize{
-#' 
-#' \item{fig}{lattice graphic}
-#' \item{mixed}{a \code{data.frame} with the closest matching Munsell color}
-#' 
-#' }
+#' @return a \code{data.frame} with the closest matching Munsell color(s)
 #'  
-mixMunsell <- function(x, w = c(0.5, 0.5)) {
+mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   
   ## TODO
   # sanity checks
   
+  # x and w same lengths
   
-  ## TODO: this is temporary until fully vectorized to n-colors
-  # unpack vectors here
-  m1 <- x[1]
-  m2 <- x[2]
-  w1 <- w[1]
-  w2 <- w[2]
+  # x contains valid Munsell
+  
+  # 
   
   # satisfy R CMD check
   munsell.spectra <- NULL
@@ -89,37 +82,28 @@ mixMunsell <- function(x, w = c(0.5, 0.5)) {
   # wide version for fast searches
   load(system.file("data/munsell.spectra.wide.rda", package="aqp")[1])
   
-  ## TODO: generalize to more than 2 colors
   
   # subset reference spectra for colors
-  idx <- which(munsell.spectra$munsell %in% c(m1, m2))
+  idx <- which(munsell.spectra$munsell %in% x)
   s <- munsell.spectra[idx, ]
   
   # long -> wide
   s.wide <- reshape2::dcast(s, munsell ~ wavelength, value.var = 'reflectance')
   
-  # spectra as vectors
-  # columns are wavelength
-  s.1 <- s.wide[1, -1]
-  s.2 <- s.wide[2, -1]
-  
-  # prepare weights
-  wts <- c(w1, w2)
-  
   # empty vector for mixture
-  mixed <- vector(mode = 'numeric', length = length(s.1[1, ]))
+  mixed <- vector(mode = 'numeric', length = ncol(s.wide) - 1)
   
   # iterate over wavelength (columns in first spectra)
-  for(i in seq_along(s.1)) {
+  for(i in seq_along(mixed)) {
     
-    # prepare values
-    vals <- c(
-      s.1[1, i],
-      s.2[1, i]
-    )
+    # prepare values:
+    # remove munsell color (1st column)
+    # select the i-th wavelength (column)
+    # down-grade to a vector
+    vals <- s.wide[, -1][, i, drop = TRUE]
     
     # mix via weighted geometric mean
-    mixed[i] <- .wgm( v = vals, w = wts )
+    mixed[i] <- .wgm( v = vals, w = w )
   }
   
   # subtract the mixture spectra, element-wise, from reference library
@@ -130,8 +114,8 @@ mixMunsell <- function(x, w = c(0.5, 0.5)) {
   # D = sqrt(sum(reference - mixed))
   m.dist <- sqrt(colSums(m.diff^2))
   
-  # get the spectra of the closest munsell chip
-  m.match <- sort(m.dist)[1]
+  # get the spectra of the closest n munsell chip(s)
+  m.match <- sort(m.dist)[1:n]
   
   # compile into data.frame
   res <- data.frame(
@@ -140,102 +124,10 @@ mixMunsell <- function(x, w = c(0.5, 0.5)) {
     stringsAsFactors = FALSE
   )
   
-  # clean-up rownames
+  # clean-up row names
   row.names(res) <- as.character(1:nrow(res))
   
+  return(res)
   
-  ## TODO: this will have to be re-factored for >2 mixes
-  # re-subset reference library for plotting: source colors and the mixture
-  m.1 <- munsell.spectra[which(munsell.spectra$munsell == m1), ]
-  m.1$ID <- 'color 1'
-  
-  m.2 <- munsell.spectra[which(munsell.spectra$munsell == m2), ]
-  m.2$ID <- 'color 2'
-  
-  m.3 <- munsell.spectra[which(munsell.spectra$munsell == res$munsell), ]
-  m.3$ID <- 'mixture'
-  
-  # combine
-  s <- rbind(
-    m.1,
-    m.2,
-    m.3
-  )
-  
-  # set ID factor levels
-  s$ID <- factor(s$ID, levels = c('color 1', 'color 2', 'mixture'))
-  
-  # convert into colors for plotting
-  s$color <- parseMunsell(s$munsell)
-  
-  # plotting style, colors sorted by mixing logic
-  cols <- parseMunsell(c(m1, m2, res$munsell))
-  tps <- list(superpose.line = list(col = cols, lwd = 5, lty = c(1, 1, 4)))
-  
-  # labels for figure
-  munsell.labels <- c(m1, m2, res$munsell)
-  wt.labels <- round((c(w1, w2) / sum(c(w1, w2))) * 100)
-  lab.text <- sprintf('%s\n%s%%', munsell.labels, c(wt.labels, 100))
-  
-  # final figure
-  pp <- xyplot(
-    reflectance ~ wavelength, groups=ID, data=s, 
-    type = c('l', 'g'),
-    ylab = 'Reflectance',
-    xlab = 'Wavelength (nm)',
-    scales = list(tick.number = 12),
-    auto.key = list(lines = TRUE, points = FALSE, cex = 1, space='top', columns = 3),
-    par.settings = tps,
-    xlim = c(370, 780),
-    subscripts = TRUE,
-    panel = function(x, y, groups, ...) {
-      # setup plot
-      lattice::panel.xyplot(x = x, y = y, groups = groups, ...)
-      
-      # split spectra by groups
-      d <- split(y, groups)
-      
-      # iterate over groups and put munsell chip next to last data point
-      for(i in seq_along(d)) {
-        # last spectral value
-        yy <- d[[i]]
-        last.y <- yy[length(yy)]
-        # current color
-        this.col <- tps$superpose.line$col[i]
-        # current label
-        
-        # place symbol with appropriate color
-        grid::grid.points(
-          x = grid::unit(750, units = 'native'), 
-          y = grid::unit(last.y, units = 'native'), 
-          pch = 15, 
-          gp = grid::gpar(
-            col = this.col,
-            cex = 6
-          )
-        )
-        
-        # place label
-        grid::grid.text(
-          label = lab.text[i],
-          x = grid::unit(750, units = 'native'), 
-          y = grid::unit(last.y, units = 'native'),
-          gp = grid::gpar(
-            cex = 0.85,
-            col = invertLabelColor(this.col)
-          )
-          
-        )
-      }
-      
-      
-    }
-  )
-  
-  # package up
-  return(list(
-    fig = pp,
-    mixed = res
-  ))
 }
 
