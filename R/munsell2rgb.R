@@ -2,6 +2,9 @@
 
 # split standard Munsell hue into character | numeric parts
 # function is vectorized
+
+# additional ideas from munsellinterpol::HueNumberFromString
+
 # output:
 # hue.numeric hue.character
 #     2.3            YR
