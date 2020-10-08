@@ -3,6 +3,8 @@ library(soilDB)
 library(reshape2)
 library(lattice)
 
+library(matrixStats)
+
 ## entirely different approach using sRGB only
 # http://scottburns.us/wp-content/uploads/2015/04/ILSS.txt
 
@@ -82,8 +84,16 @@ d <- cbind(
   col=parseMunsell(colors, convertColors=TRUE)
 )
 
-estimateColorMixture(d, backTransform = TRUE)
-mixMunsell(colors)
+e1 <- estimateColorMixture(d, backTransform = TRUE)
+m1 <- mixMunsell(colors)
+
+par(bg = 'black', fg = 'white', mar = c(0,0,0,0))
+colorContrastPlot(
+  m1$munsell,
+  sprintf('%s %s/%s', e1$colorhue, e1$colorvalue, e1$colorchroma),
+  labels = c('Subtractive Mixture', 'Weighted Average CIELAB')  
+  )
+
 
 s <- seq(0, 1, by = 0.2)
 z <- lapply(s, function(i) {

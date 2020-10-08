@@ -1,4 +1,7 @@
 
+
+## TODO: is this generic enough to use elsewhere?
+
 # weighted geometric mean
 # https://en.wikipedia.org/wiki/Weighted_geometric_mean
 .wgm <- function(v, w) {
@@ -31,11 +34,16 @@
 # * interpolation of odd chroma
 # * reshaping for rapid look-up
 
+# optimizations:
+# * 80% of time is spent on sweep() and colSums()
+# * see matrixStats package for a compiled version: colSums2()
+# * https://github.com/HenrikBengtsson/matrixStats
+
 
 #' 
 #' @title Mix Munsell Colors via Spectral Library
 #' 
-#' @description Simulate subtractive mixing (pigments) of colors in Munsell notation.
+#' @description Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
 #' 
 #' @param x vector of colors in Munsell notation
 #' 
@@ -47,20 +55,24 @@
 #' 
 #' @references 
 #' 
-#' inspiration / calculations based on:
-#' https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
-
-#' related discussion here:
-#' https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630
-
-#' base spectral library:
-#' http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
-#'
+#' \itemize{
+#'    \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
+#'    
+#'    \item{related discussion on Stack Overflow: }{\url{https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630}}
+#'    
+#'    \item{spectral library source: }{\url{http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}}
+#' 
+#' }
+#' 
 #'
 #' @details
 #' Pending
 #'
+#' @note This functions is slower than \code{soilDB::estimateColorMixture()} (weighted average of colors in CIELAB coordinates) but more accurate.
+#'
 #' @return a \code{data.frame} with the closest matching Munsell color(s)
+#'  
+#' @seealso \code{\link{munsell.spectra}}
 #'  
 mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   
@@ -75,36 +87,29 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
     stop('input must be valid Munsell notation, neutral hues not supported')
   }
   
-  ## TODO: could possibly do everything with munsell.spectra.wide
-  
   # satisfy R CMD check
-  munsell.spectra <- NULL
   munsell.spectra.wide <- NULL
   
-  # safely load reference spectra
-  load(system.file("data/munsell.spectra.rda", package="aqp")[1])
   # wide version for fast searches
   load(system.file("data/munsell.spectra.wide.rda", package="aqp")[1])
   
-  
   # subset reference spectra for colors
-  idx <- which(munsell.spectra$munsell %in% x)
-  s <- munsell.spectra[idx, ]
-  
-  # long -> wide
-  s.wide <- reshape2::dcast(s, munsell ~ wavelength, value.var = 'reflectance')
+  # note that search results are not in the same order as x
+  # result are columns of spectra
+  munsell.names <- names(munsell.spectra.wide)
+  idx <- which(munsell.names %in% x)
+  s <- munsell.spectra.wide[, idx, drop = FALSE]
   
   # empty vector for mixture
-  mixed <- vector(mode = 'numeric', length = ncol(s.wide) - 1)
+  mixed <- vector(mode = 'numeric', length = nrow(s))
   
   # iterate over wavelength (columns in first spectra)
   for(i in seq_along(mixed)) {
     
     # prepare values:
-    # remove munsell color (1st column)
-    # select the i-th wavelength (column)
+    # select the i-th wavelength (row)
     # down-grade to a vector
-    vals <- s.wide[, -1][, i, drop = TRUE]
+    vals <- unlist(s[i, ])
     
     # mix via weighted geometric mean
     mixed[i] <- .wgm( v = vals, w = w )
@@ -114,6 +119,8 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   # note we are removing the wavelength column
   m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
   
+  ## optimization: matrixStats::colSums2() much faster
+  ## --> syntax slightly different
   # euclidean distance is sufficient
   # D = sqrt(sum(reference - mixed))
   m.dist <- sqrt(colSums(m.diff^2))

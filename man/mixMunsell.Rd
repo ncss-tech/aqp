@@ -4,36 +4,39 @@
 \alias{mixMunsell}
 \title{Mix Munsell Colors via Spectral Library}
 \usage{
-mixMunsell(x, w = c(0.5, 0.5))
+mixMunsell(x, w = rep(1, times = length(x))/length(x), n = 1)
 }
 \arguments{
-\item{x}{vector of two colors in Munsell notation}
+\item{x}{vector of colors in Munsell notation}
 
-\item{w}{vector of two weights or proportions, can sum to any number}
+\item{w}{vector of proportions, can sum to any number}
+
+\item{n}{number of closest matching color chips}
 }
 \value{
-a list containing:
-
-\itemize{
-
-\item{fig}{lattice graphic}
-\item{mixed}{a \code{data.frame} with the closest matching Munsell color}
-
-}
+a \code{data.frame} with the closest matching Munsell color(s)
 }
 \description{
-Simulate subtractive mixing (e.g. pigments) of two colors in Munsell notation.
+Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
 }
 \details{
 Pending
 }
+\note{
+This functions is slower than \code{soilDB::estimateColorMixture()} (weighted average of colors in CIELAB coordinates) but more accurate.
+}
 \references{
-inspiration / calculations based on:
-https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
-related discussion here:
-https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630
-base spectral library:
-http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
+\itemize{
+   \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
+   
+   \item{related discussion on Stack Overflow: }{\url{https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630}}
+   
+   \item{spectral library source: }{\url{http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}}
+
+}
+}
+\seealso{
+\code{\link{munsell.spectra}}
 }
 \author{
 D.E. Beaudette

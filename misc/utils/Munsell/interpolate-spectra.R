@@ -1,4 +1,4 @@
-library(latticeExtra)
+library(lattice)
 library(tactile)
 library(pbapply)
 library(reshape2)
@@ -111,14 +111,14 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
 )
 
 
-# check for reflectance < 0
-m.final[m.final$reflectance < 0, ]
+# check for reflectance <= 0
+m.final[m.final$reflectance <= 0, ]
 
 # hmm
 idx <- which(m.final$hue %in% c('2.5R') & m.final$value == 2)
 s <- m.final[idx, ]
 
-xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance < 0, data=s, 
+xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance <= 0, data=s, 
        type='b', as.table=TRUE,
        scales = list(y = list(tick.number = 10)),
        auto.key=list(lines=FALSE, points=TRUE, cex=1, space='top'),
@@ -126,11 +126,11 @@ xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance < 0, data
 )
 
 # probably spline undershoots
-idx <- which(m.final$reflectance < 0)
+idx <- which(m.final$reflectance <= 0)
 m.final[idx, ]
 
-# replace with 0
-m.final$reflectance[idx] <- 0
+# replace with minimum relfectance, ignoring these values
+m.final$reflectance[idx] <- min(m.final$reflectance[-idx])
 
 
 
@@ -139,8 +139,8 @@ reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 
 
 # save local copy for testing
-saveRDS(m.final, file = 'interpolated-Munsell-spectra.rds')
-saveRDS(reference, file = 'interpolated-Munsell-spectra-wide.rds')
+# saveRDS(m.final, file = 'interpolated-Munsell-spectra.rds')
+# saveRDS(reference, file = 'interpolated-Munsell-spectra-wide.rds')
 
 
 # save package versions
@@ -149,5 +149,8 @@ munsell.spectra.wide <- reference
 
 save(munsell.spectra, file = '../../../data/munsell.spectra.rda')
 save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda')
+
+# cleanup
+unlink(c('interpolated-Munsell-spectra-wide.rds', 'interpolated-Munsell-spectra.rds', 'simplified-Munsell-spectra.rds'))
 
 

@@ -9,6 +9,10 @@
 #' 
 #' @param w vector of proportions, can sum to any number
 #' 
+#' @param swatch.cex scaling factor for color swatch
+#' 
+#' @param label.cex scaling factor for swatch labels
+#' 
 #' @return lattice graphics object
 #' 
 plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatch.cex = 6, label.cex = 0.85) {
@@ -20,6 +24,7 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
   
   # satisfy R CMD check
   munsell.spectra <- NULL
+  ID <- NULL
   
   # safely load reference spectra
   load(system.file("data/munsell.spectra.rda", package="aqp")[1])
