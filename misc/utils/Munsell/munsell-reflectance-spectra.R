@@ -45,6 +45,11 @@ mixMunsell(c('10YR 5/3', '10YR 3/2'), n = 3)
 
 plotColorMixture(c('10YR 5/3', '10YR 3/2'))
 
+plotColorMixture(c('10YR 6/2', '5YR 5/6'))
+
+# is this right? can the resulting spectra be "higher" than the source?
+plotColorMixture(c('10YR 6/2', '5YR 5/6'), w = c(2,1))
+
 # label collision
 plotColorMixture(c('10YR 5/3', '10YR 3/2', '5R 2/2'))
 plotColorMixture(c('10YR 5/3', '10YR 3/2', '5R 2/2'), swatch.cex = 4, label.cex = 0.65)
@@ -80,6 +85,16 @@ d <- cbind(
 estimateColorMixture(d, backTransform = TRUE)
 mixMunsell(colors)
 
+s <- seq(0, 1, by = 0.2)
+z <- lapply(s, function(i) {
+  
+  m <- mixMunsell(c('10YR 6/2', '5YR 5/6'), w = c(i, 1-i))
+  
+  return(m$munsell)
+})
 
+z <- do.call('c', z)
 
+par(bg = 'black', fg = 'white', mar = c(0,0,0,0))
+soilPalette(parseMunsell(z), sprintf('%s (%s / %s))', z, s, 1 - s))
 

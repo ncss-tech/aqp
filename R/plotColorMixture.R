@@ -13,7 +13,7 @@
 #' 
 plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatch.cex = 6, label.cex = 0.85) {
   
-  # sanity checks
+  # TODO sanity checks
   
   # mix colors
   m <- mixMunsell(x = x, w = w)
@@ -24,8 +24,10 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
   # safely load reference spectra
   load(system.file("data/munsell.spectra.rda", package="aqp")[1])
   
+  # vector of colors to mix and result
   colors <- c(x, m$munsell)
   
+  # select spectra from reference library and assign an ID
   s <- lapply(seq_along(colors), function(i) {
     # select current color + spectra
     z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
@@ -51,7 +53,6 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
   
   # plotting style, colors sorted by mixing logic
   cols <- parseMunsell(colors)
-  
   col.lty <- c(rep(1, times = length(x)), 4)
   tps <- list(superpose.line = list(col = cols, lwd = 5, lty = col.lty))
   
