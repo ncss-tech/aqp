@@ -86,9 +86,9 @@ mollic.thickness.requirement <- function(p, texcl.attr = guessHzTexClName(p),
   # Again, for purposes of identification of minimum thickness of mollic this is fast and
   #   probably fine 95% of the time
   #   but technically it is not applying the true taxonomic rules b/c it is based on hz desgn
-  cemented_depth <- depthOf(p, "m", no.contact.depth = 0, no.contact.assigned = NA)
-  carbonate_depth <- depthOf(p, "k", no.contact.depth = 0, no.contact.assigned = NA)
-  fragipan_depth <- depthOf(p, "x", no.contact.depth = 0, no.contact.assigned = NA)
+  cemented_depth <- depthOf(p, "m", no.contact.assigned = NA)
+  carbonate_depth <- depthOf(p, "k", no.contact.assigned = NA)
+  fragipan_depth <- depthOf(p, "x", no.contact.assigned = NA)
 
   # calculate "shallowest of secondary carbonates/calcic, petrocalcic, duripan, fragipan"
   crit6c1 <- suppressWarnings(min(carbonate_depth,
@@ -110,7 +110,7 @@ mollic.thickness.requirement <- function(p, texcl.attr = guessHzTexClName(p),
                                 no.contact.assigned = NA)
   oxic_bottom <- maxDepthOf(p, pattern="o", top=FALSE,
                               no.contact.assigned = NA)
-  spodic_bottom <- maxDepthOf(p, pattern="h|s", top=FALSE,
+  spodic_bottom <- maxDepthOf(p, pattern="h|s[^s]", top=FALSE, #NB slickensides!!!!!
                                 no.contact.assigned = NA)
 
   #   the B|w == cambic was particularly egregious
