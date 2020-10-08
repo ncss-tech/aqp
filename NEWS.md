@@ -1,4 +1,7 @@
-# aqp 1.25 (2020-10-02)
+# aqp 1.25 (2020-10-08)
+ * new sample data `us.state.soils`
+ * simulate subtractive mixtures of Munsell colors with `mixMunsell`
+   + see companion function `plotColorMixture` for visualization of spectra / mixture
  * complete overhaul of `textureTriangleSummary`:
    + uses `soiltexture` package for visualization
    + argument names changes (! may break old code, sorry)

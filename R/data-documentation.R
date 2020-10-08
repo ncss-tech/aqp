@@ -2,6 +2,20 @@
 ## document data here
 ##
 
+#'
+#' @title US State Soils
+#' @description A listing of the 52 US state soils, including Puerto Rico and Virgin Islands.
+#' @keywords datasets
+#' @format 
+#' \describe{
+#'   \item{state}{state name}
+#'   \item{abbreviated}{abbreviated state name}
+#'   \item{series}{soil series name}
+#' }
+#' 
+#' 
+#'
+"us.state.soils"
 
 #'
 #' @title Spectral Library of Munsell Colors
