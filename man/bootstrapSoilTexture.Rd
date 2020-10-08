@@ -17,14 +17,14 @@ bootstrapSoilTexture(ssc, method = c("dirichlet", "normal"), n = 100)
 a \code{list} containing:
 
 \itemize{
- \item{samples}{\code{data.frame} of simulated sand, silt, clay values}
- \item{mean}{compositional mean}
- \item{var}{compositional variance-covariance matrix}
- \item{D.alpha}{(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
+ \item{\code{samples}} - {\code{data.frame} of simulated sand, silt, clay values}
+ \item{\code{mean}} - {compositional mean}
+ \item{\code{var}} - {compositional variance-covariance matrix}
+ \item{\code{D.alpha}} - {(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
 }
 }
 \description{
-Simulate realistic sand/silt/clay values (a composition) using multivarite Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.
+Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.
 }
 \details{
 Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates. 
