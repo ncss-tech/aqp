@@ -67,11 +67,15 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   ## TODO
   # sanity checks
   
+    
   # x and w same lengths
   
   # x contains valid Munsell
+  if(any(is.na(parseMunsell(x)))) {
+    stop('input must be valid Munsell notation, neutral hues not supported')
+  }
   
-  # 
+  ## TODO: could possibly do everything with munsell.spectra.wide
   
   # satisfy R CMD check
   munsell.spectra <- NULL

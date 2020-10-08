@@ -3,6 +3,8 @@
 #' 
 #' @description Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
 #' 
+#' @author D.E. Beaudette
+#' 
 #' @param x vector of colors in Munsell notation
 #' 
 #' @param w vector of proportions, can sum to any number
@@ -103,7 +105,8 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
           y = grid::unit(last.y, units = 'native'),
           gp = grid::gpar(
             cex = label.cex,
-            col = invertLabelColor(this.col)
+            col = invertLabelColor(this.col),
+            font = 2
           )
           
         )

@@ -33,6 +33,11 @@ aqp:::.wgm(v = c(0.5, 0.8), w = c(0.5, 0.5))
 # load wide version used for spectral comparisons
 # reference <- readRDS('interpolated-Munsell-spectra-wide.rds')
 
+# singleton
+mixMunsell(c('10YR 5/3'))
+
+# invalid Munsell notation
+mixMunsell(c('10YR 5/3', '10YR 3/99'))
 
 mixMunsell(c('10YR 5/3', '10YR 3/2'))
 
@@ -47,7 +52,7 @@ plotColorMixture(c('10YR 5/3', '10YR 3/2', '5R 2/2'), swatch.cex = 4, label.cex 
 
 mixMunsell(c('10YR 4/6', '5YR 2/2', '5Y 4/5'))
 
-plotColorMixture(c('10YR 4/6', '2.5Y 6/2', '5Y 2/2'), w = c(1,1,2))
+plotColorMixture(c('10YR 4/6', '2.5Y 6/2', '5Y 2/2'), w = c(1, 1, 2))
 
 mixMunsell(c('10YR 4/6', '5YR 2/2'), w = c(0.8, 0.2))
 
@@ -58,7 +63,8 @@ mixMunsell(c('10YR 6/6', '5P 5/4'))
 mixMunsell(c('10YR 4/4', '5GY 5/4'))
 
 mixMunsell(c('5G 6/5', '5R 5/4'))
-
+plotColorMixture(c('5G 6/5', '5R 5/4'), w = c(1, 2))
+plotColorMixture(c('5G 6/5', '5R 5/4'), w = c(3, 1), swatch.cex = 4, label.cex = 0.65)
 
 ## how does soilDB::estimateColorMixture compare?
 
