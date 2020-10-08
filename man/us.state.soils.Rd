@@ -7,6 +7,7 @@
 \format{
 \describe{
   \item{state}{state name}
+  \item{abbreviated}{abbreviated state name}
   \item{series}{soil series name}
 }
 }
