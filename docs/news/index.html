@@ -114,11 +114,20 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="aqp-125-2020-10-02" class="section level1">
+    <div id="aqp-125-2020-10-08" class="section level1">
 <h1 class="page-header" data-toc-text="1.25">
-<a href="#aqp-125-2020-10-02" class="anchor"></a>aqp 1.25 (2020-10-02)<small> Unreleased </small>
+<a href="#aqp-125-2020-10-08" class="anchor"></a>aqp 1.25 (2020-10-08)<small> Unreleased </small>
 </h1>
 <ul>
+<li>new function <code>duplicate</code> will makes copies of profiles within a <code>SoilProfileCollection</code>
+</li>
+<li>new sample data <code>us.state.soils</code>
+</li>
+<li>simulate subtractive mixtures of Munsell colors with <code>mixMunsell</code>
+<ul>
+<li>see companion function <code>plotColorMixture</code> for visualization of spectra / mixture</li>
+</ul>
+</li>
 <li>complete overhaul of <code>textureTriangleSummary</code>:
 <ul>
 <li>uses <code>soiltexture</code> package for visualization</li>
@@ -145,10 +154,11 @@
 <ul>
 <li>
 <code>estimateSoilDepth</code> <strong>loses</strong> <code>top</code> and <code>bottom</code> arguments, these are automatically extracted</li>
-<li>two new SoilProfileCollection wrapper methods: munsell2SPC, spc2mpspline</li>
+<li>two new SoilProfileCollection wrapper methods: <code>munsell2SPC</code>, <code>spc2mpspline</code>
+</li>
 <li>add <code>returnData</code> argument to <code>contrastChart</code>
 </li>
-<li>improvements to <code><a href="../reference/glom,SoilProfileCollection-method.html">glom(..., invert=TRUE)</a></code>, `glomApply, and better tests</li>
+<li>improvements to <code><a href="../reference/glom,SoilProfileCollection-method.html">glom(..., invert=TRUE)</a></code>, <code>glomApply</code>, and better tests</li>
 <li>new wrapper method around <code>glomApply</code>: <code><a href="../reference/trunc,SoilProfileCollection-method.html">aqp::trunc</a></code> for cases when top and bottom depth interval is the same for all profiles in a <em>SoilProfileCollection</em>
 </li>
 <li>fix for routing of <code>NULL</code> through <code>$&lt;-</code> and <code>horizons&lt;-</code> or <code>site&lt;-</code> (<a href="https://github.com/ncss-tech/aqp/issues/163" class="uri">https://github.com/ncss-tech/aqp/issues/163</a>)</li>

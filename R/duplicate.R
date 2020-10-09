@@ -16,6 +16,20 @@
 #' 
 #' @keywords manip
 #' 
+#' @examples 
+#' 
+#' # sample data
+#' data('sp4')
+#' 
+#' # promote to SPC
+#' depths(sp4) <- id ~ top + bottom
+#' 
+#' # duplicate each profile 2 times
+#' d <- duplicate(sp4, times = 2)
+#' 
+#' # graphical check
+#' par(mar = c(0, 0, 3, 1))
+#' plotSPC(d, color = 'Ca', width = 0.25)
 #' 
 duplicate <- function(x, times = 3, oldID = '.oldID') {
   

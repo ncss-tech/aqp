@@ -22,6 +22,22 @@ A simple function to duplicate the contents of a \code{SoilProfileColection} obj
 \note{
 Duplication is also possible with \code{permute_profile} and \code{sim} by simulation from 0-variance distributions. This is a simpler, likely faster, alternative when duplication vs. simulation is required.
 }
+\examples{
+
+# sample data
+data('sp4')
+
+# promote to SPC
+depths(sp4) <- id ~ top + bottom
+
+# duplicate each profile 2 times
+d <- duplicate(sp4, times = 2)
+
+# graphical check
+par(mar = c(0, 0, 3, 1))
+plotSPC(d, color = 'Ca', width = 0.25)
+
+}
 \author{
 D.E. Beaudette
 }

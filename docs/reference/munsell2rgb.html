@@ -192,7 +192,8 @@ maxColorValue=<span class='fl'>1</span>, return_triplets=<span class='fl'>FALSE<
 <p>Neutral hues are approximated by greyscale shades ranging from 20% (darker) to 80% (lighter). No chroma is required for neutral hues.</p>
 <p>Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.</p>
 <p>Values of "2.5" (common in soil color descriptions) are silently truncated to "2".</p>
-<p>Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via <code>getClosestMunsellChip()</code>. See examples below.</p>
+<p>Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via <code>getClosestMunsellChip()</code>. A more accurate estimate of sRGB values from non-standard notation can be achieved with the <a href='https://CRAN.R-project.org/package=munsellinterpol'>munsellinterpol</a> package.</p>
+<p>See examples below.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for <code>maxColorValue</code> will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.</p>

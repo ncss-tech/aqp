@@ -125,8 +125,11 @@
   p = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.95</span>),
   delta = <span class='fl'>1</span>,
   rv.col = <span class='st'>"red"</span>,
+  range.border = <span class='st'>"black"</span>,
   range.col = <span class='st'>"RoyalBlue"</span>,
-  range.alpha = <span class='fl'>75</span>,
+  range.alpha = <span class='fl'>80</span>,
+  range.lty = <span class='fl'>1</span>,
+  range.lwd = <span class='fl'>2</span>,
   main = <span class='st'>"Soil Textures"</span>,
   legend.cex = <span class='fl'>0.75</span>,
   legend = <span class='fl'>TRUE</span>,
@@ -153,12 +156,24 @@
       <td><p>color used for representative value (RV) symbol</p></td>
     </tr>
     <tr>
+      <th>range.border</th>
+      <td><p>color used for polygon border enclosing the low-high region</p></td>
+    </tr>
+    <tr>
       <th>range.col</th>
       <td><p>color used for polygon enclosing the low-high region</p></td>
     </tr>
     <tr>
       <th>range.alpha</th>
       <td><p>transparency of the low-high range polygon (0-255)</p></td>
+    </tr>
+    <tr>
+      <th>range.lty</th>
+      <td><p>line style for polygon enclosing the low-high region</p></td>
+    </tr>
+    <tr>
+      <th>range.lwd</th>
+      <td><p>line weight polygon enclosing the low-high region</p></td>
     </tr>
     <tr>
       <th>main</th>
@@ -208,7 +223,10 @@
   <span class='co'># make figure, marginal percentiles are silently returned</span>
   <span class='kw'>stats</span> <span class='op'>&lt;-</span> <span class='fu'>textureTriangleSummary</span>(
     <span class='kw'>ssc</span>, pch = <span class='fl'>1</span>, cex = <span class='fl'>0.5</span>, 
-    range.alpha = <span class='fl'>50</span>, col = <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.5</span>), legend = <span class='fl'>FALSE</span>
+    range.alpha = <span class='fl'>50</span>, 
+    range.lwd = <span class='fl'>1</span>,
+    col = <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.5</span>), 
+    legend = <span class='fl'>FALSE</span>
   )
   
   <span class='co'># check</span>
@@ -220,7 +238,10 @@
   <span class='co'># make the figure, ignore results</span>
   <span class='fu'>textureTriangleSummary</span>(
     <span class='kw'>s</span>, pch = <span class='fl'>1</span>, cex = <span class='fl'>0.5</span>, 
-    range.alpha = <span class='fl'>50</span>, col = <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.5</span>), legend = <span class='fl'>FALSE</span>
+    range.alpha = <span class='fl'>50</span>, 
+    range.lwd = <span class='fl'>1</span>,
+    col = <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.5</span>), 
+    legend = <span class='fl'>FALSE</span>
   )
 }
 </div><div class='output co'>#&gt; <span class='message'>Loading required namespace: Hmisc</span></div><div class='img'><img src='textureTriangleSummary-1.png' alt='' width='768' height='475' /></div><div class='img'><img src='textureTriangleSummary-2.png' alt='' width='768' height='475' /></div><div class='input'>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class • aqp</title>
+<title>US State Soils — us.state.soils • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class" />
-<meta property="og:description" content="This is an accessor and replacement method for the aqp_df_class entry in the metadata slot. This entry is used internally by methods that interact with data.frame objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process." />
+<meta property="og:title" content="US State Soils — us.state.soils" />
+<meta property="og:description" content="A listing of the 52 US state soils, including Puerto Rico and Virgin Islands." />
 
 
 
@@ -111,33 +111,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get aqp_df_class entry from metadata or return a safe value.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/Class-SoilProfileCollection.R'><code>R/Class-SoilProfileCollection.R</code></a></small>
-    <div class="hidden name"><code>aqp_df_class.Rd</code></div>
+    <h1>US State Soils</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/data-documentation.R'><code>R/data-documentation.R</code></a></small>
+    <div class="hidden name"><code>us.state.soils.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is an accessor and replacement method for the <code>aqp_df_class</code> entry in the metadata slot. This entry is used internally by methods that interact with <code>data.frame</code> objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.</p>
+    <p>A listing of the 52 US state soils, including Puerto Rico and Virgin Islands.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>)
+    <pre class="usage"><span class='kw'>us.state.soils</span></pre>
 
-<span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>object</th>
-      <td><p>a SoilProfileCollection</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>"data.frame", "data.table" or "tbl_df"</p></td>
-    </tr>
-    </table>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    
+<dl>
+  <dt>state</dt><dd><p>state name</p></dd>
+  <dt>abbreviated</dt><dd><p>abbreviated state name</p></dd>
+  <dt>series</dt><dd><p>soil series name</p></dd>
+
+</dl>
 
 
   </div>

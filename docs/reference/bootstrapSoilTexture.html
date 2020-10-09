@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Bootstrap Soil Texture Data — bootstrapSoilTexture" />
-<meta property="og:description" content="Simulate realistic sand/silt/clay values (a composition) using multivarite Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters." />
+<meta property="og:description" content="Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters." />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Simulate realistic sand/silt/clay values (a composition) using multivarite Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.</p>
+    <p>Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.</p>
     </div>
 
     <pre class="usage"><span class='fu'>bootstrapSoilTexture</span>(<span class='kw'>ssc</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"dirichlet"</span>, <span class='st'>"normal"</span>), n = <span class='fl'>100</span>)</pre>
@@ -143,10 +143,10 @@
 
     <p>a <code>list</code> containing:</p>
 <ul>
-<li><p>samples<code>data.frame</code> of simulated sand, silt, clay values</p></li>
-<li><p>meancompositional mean</p></li>
-<li><p>varcompositional variance-covariance matrix</p></li>
-<li><p>D.alpha(fitted) alpha parameters of the Dirichlet distribution, <code>NULL</code> when <code>method = 'normal'</code></p></li>
+<li><p><code>samples</code> - <code>data.frame</code> of simulated sand, silt, clay values</p></li>
+<li><p><code>mean</code> - compositional mean</p></li>
+<li><p><code>var</code> - compositional variance-covariance matrix</p></li>
+<li><p><code>D.alpha</code> - (fitted) alpha parameters of the Dirichlet distribution, <code>NULL</code> when <code>method = 'normal'</code></p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
