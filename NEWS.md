@@ -1,4 +1,5 @@
 # aqp 1.25 (2020-10-08)
+ * new function `duplicate` will makes copies of profiles within a `SoilProfileCollection`
  * new sample data `us.state.soils`
  * simulate subtractive mixtures of Munsell colors with `mixMunsell`
    + see companion function `plotColorMixture` for visualization of spectra / mixture
