@@ -1,3 +1,5 @@
+# need the latest versions from GitHub
+
 library(aqp)
 library(soilDB)
 
@@ -75,7 +77,7 @@ mtext('aqp::us.state.soils', side = 1, at = 0, font = 2, line = -2, adj = 0)
 
 # hang profiles from a dendrogram
 par(mar=c(0,0,1,1))
-plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2, scaling.factor = 0.25, y.offset = 6, width=0.25, cex.names=0.45)
+plotProfileDendrogram(x, dd, dend.y.scale = max(d) * 2, scaling.factor = 0.25, y.offset = 6, width=0.25, cex.names=0.45, label = 'abbreviated')
 
 
 # nMDS
@@ -94,30 +96,39 @@ mtext('aqp::us.state.soils', side = 1, at = 0, font = 2, line = -2, adj = 0)
 
 
 
-# one more, this time with climate data for CONUS soils
+# this time with climate data for CONUS soils
 library(latticeExtra)
 
+## note: using locally modified version of `us.state.soils`
 # get extended OSD data
-x <- fetchOSD(us.state.soils$series, extended = TRUE)
+x <- fetchOSD(us.state.soils$id, extended = TRUE)
+
+# join state names / abbreviations to SPC
+site(x$SPC) <- us.state.soils
 
 # remove those outside of CONUS
 z <- filter(x$SPC, site(x$SPC)$id %in% x$climate.annual$series)
 
-# join state names / abbreviations to SPC
-site(z) <- us.state.soils
+# plot style
+trellis.par.set(plot.line = list(col = 'RoyalBlue'))
 
-trellis.par.set(plot.line=list(col='RoyalBlue'))
-
-# control centers symbol and size here
+# annual climate summary and clustering object
+# output is very cluttered unless graphics device is large
 res <- vizAnnualClimate(x$climate.annual, IQR.cex = 1.1, cex=1.1, pch=18)
-
 print(res$fig)
 
 
 par(mar=c(0,0,1,1))
-plotProfileDendrogram(z, clust = res$clust, scaling.factor = 0.075, width = 0.2, y.offset = 0.5)
-mtext(fm.name, side = 1, at = 0.5, adj = 0, line = -1.5, font=4)
+plotProfileDendrogram(z, clust = res$clust, scaling.factor = 0.075, width = 0.3, y.offset = 1.25, label = 'abbreviated')
+mtext('aqp::us.state.soils', side = 1, at = 0.5, adj = 0, line = -1.5, font=4)
 mtext('sorted by annual climate summaries', side = 3, at = 0.5, adj = 0, line = -1.5, font=3)
 
+
+# taxonomic breakdown
+# too messy with all of the soils
+SoilTaxonomyDendrogram(x$SPC[1:10, ], label = 'abbreviated', width = 0.3)
+
+
+# weave rug
 
 
