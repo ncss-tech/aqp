@@ -16,7 +16,9 @@
 data(pms.munsell.lut)
 }
 \description{
-A simple lookup table to convert \href{https://en.wikipedia.org/wiki/Pantone}{Pantone spot colors} into Munsell notation. Association is based on the "closest" Munsell color via \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{CIE2000 distance metric (dE00)}.
+A simple lookup table to convert \href{https://en.wikipedia.org/wiki/Pantone}{Pantone spot colors} into Munsell notation. Association is based on the "closest" Munsell color via \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{CIE2000 distance metric (dE00)}. This is an experimental association between the two color systems and should not be used for precision color matching or mixing applications.
+
+Possible uses include rough estimation of soil colors in the field, by means of color swatches based on the Pantone system. This type of color matching is most appropriate in an educational setting where official soil color books may be too expensive.
 }
 \details{
 For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subsetting by way of a join (example 3). Reverse lookup (Munsell -> Pantone) will not always result in a matching color, see example 3 below.
