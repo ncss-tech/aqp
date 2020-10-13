@@ -1,5 +1,7 @@
 library(aqp)
 
+# https://github.com/ncss-tech/aqp/issues/124
+
 # sourced from:
 # https://raw.githubusercontent.com/ajesma/Pantoner/gh-pages/csv/pantone-coated.csv
 # https://github.com/ajesma/Pantoner/raw/gh-pages/csv/pantone-uncoated.csv
