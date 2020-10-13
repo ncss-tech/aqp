@@ -1,10 +1,11 @@
-# aqp 1.25 (2020-10-08)
+# aqp 1.25 (2020-10-13)
+ * new lookup table `pms.munsell.lut` for converting Pantone spot color codes to (closest) Munsell chip
  * new function `duplicate` will makes copies of profiles within a `SoilProfileCollection`
- * new sample data `us.state.soils`
+ * new example data `us.state.soils`: 50 state soils + PR and VI soils
  * simulate subtractive mixtures of Munsell colors with `mixMunsell`
    + see companion function `plotColorMixture` for visualization of spectra / mixture
  * complete overhaul of `textureTriangleSummary`:
-   + uses `soiltexture` package for visualization
+   + uses `soiltexture` package for visualization (`plotrix` implementation dropped)
    + argument names changes (! may break old code, sorry)
    + dropped simulation via `sim = TRUE` argument, see `bootstrapSoilTexture` for a better approach
  * new function `bootstrapSoilTexture` for simulating realistic sand/silt/clay compositions
