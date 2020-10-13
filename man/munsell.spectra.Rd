@@ -17,7 +17,7 @@ A data frame with 89496 rows and 10 variables:
 }
 }
 \usage{
-munsell.spectra
+data(munsell.spectra)
 }
 \description{
 The original database (\href{http://centore.isletech.net/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}{SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}) was provided by Paul Centore and downloaded September, 2020. Reflectance values for odd chroma have been interpolated from adjacent chips. See \code{aqp/misc/utils/Munsell/} for the entire set of processing steps.

@@ -33,7 +33,7 @@
 #'                               )
 #'   }
 #'
-#' @keywords hplots, manip
+#' @keywords hplots manip
 #'
 #' @examples
 #' # single hue page

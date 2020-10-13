@@ -61,5 +61,5 @@ contrastChart(m = '10YR 5/6', hues = c('10YR', '2.5Y'), style='CC')
 \author{
 D.E. Beaudette
 }
-\keyword{hplots,}
+\keyword{hplots}
 \keyword{manip}
