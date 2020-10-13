@@ -114,15 +114,15 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="aqp-125-2020-10-08" class="section level1">
+    <div id="aqp-125-2020-10-13" class="section level1">
 <h1 class="page-header" data-toc-text="1.25">
-<a href="#aqp-125-2020-10-08" class="anchor"></a>aqp 1.25 (2020-10-08)<small> Unreleased </small>
+<a href="#aqp-125-2020-10-13" class="anchor"></a>aqp 1.25 (2020-10-13)<small> Unreleased </small>
 </h1>
 <ul>
+<li>new lookup table <code>pms.munsell.lut</code> for converting Pantone spot color codes to (closest) Munsell chip</li>
 <li>new function <code>duplicate</code> will makes copies of profiles within a <code>SoilProfileCollection</code>
 </li>
-<li>new sample data <code>us.state.soils</code>
-</li>
+<li>new example data <code>us.state.soils</code>: 50 state soils + PR and VI soils</li>
 <li>simulate subtractive mixtures of Munsell colors with <code>mixMunsell</code>
 <ul>
 <li>see companion function <code>plotColorMixture</code> for visualization of spectra / mixture</li>
@@ -130,7 +130,7 @@
 </li>
 <li>complete overhaul of <code>textureTriangleSummary</code>:
 <ul>
-<li>uses <code>soiltexture</code> package for visualization</li>
+<li>uses <code>soiltexture</code> package for visualization (<code>plotrix</code> implementation dropped)</li>
 <li>argument names changes (! may break old code, sorry)</li>
 <li>dropped simulation via <code>sim = TRUE</code> argument, see <code>bootstrapSoilTexture</code> for a better approach</li>
 </ul>
