@@ -25,6 +25,12 @@ For now, lookup is performed by manual subset (see examples 1 and 2 below) or im
 }
 \note{
 The lookup table contains entires for both coated and uncoated colors, these are indentified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.
+
+
+Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.
+ 
+1    2    3    4    5    6    8    9 
+0.65 0.24 0.08 0.02 0.01 0.00 0.00 0.00
 }
 \examples{
 
@@ -73,6 +79,16 @@ horizons(sp6) <- m
 # graphical check
 par(mar = c(0, 0, 2, 1))
 plotSPC(sp6, color = 'hex')
+
+
+## 4. multiple Pantone colors matching a single Munsell color
+# 
+colors <- pms.munsell.lut[pms.munsell.lut$munsell == '5YR 5/5', ]
+colors <- colors[order(colors$dE00), ]
+
+par(mar = c(0, 0, 2, 0), fg = 'white', bg = 'black')
+soilPalette(colors$hex, lab = colors$code)
+title('Pantone Colors Roughly Matching 5YR 5/5', col.main = 'white', line = 0)
 
 }
 \references{

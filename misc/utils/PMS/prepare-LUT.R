@@ -1,5 +1,10 @@
 library(aqp)
 
+
+## TODO: the following creates the Pantone -> Munsell LUT
+##       this isn't the same as the Munsell -> Pantone LUT (entries currently missing)
+
+
 # https://github.com/ncss-tech/aqp/issues/124
 
 # sourced from:
