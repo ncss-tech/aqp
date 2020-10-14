@@ -18,7 +18,7 @@ A dataframe with the following columns:
 	\item{top}{top boundary}
 	\item{bottom}{bottom boundary}
 	\item{confidence}{integrated probability over thickness of each ML horizon, rounded to the nearest integer}
-  \item{pseudo.brier}{A "pseudo"" Brier Score for a multi-class prediction, where the most-likely horizon label is treated as the "correct" outcome. Details on the calculation for traditional Brier Scores here: \url{http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier}. Lower values suggest better agreement between ML horizon label and class-wise probabilities.}
+  \item{pseudo.brier}{A "pseudo"" Brier Score for a multi-class prediction, where the most-likely horizon label is treated as the "correct" outcome. Details on the calculation for traditional Brier Scores here: \url{https://en.wikipedia.org/wiki/Brier_score}. Lower values suggest better agreement between ML horizon label and class-wise probabilities.}
   \item{mean.H}{mean Shannon entropy (bits), derived from probabilities within each most-likely horizon. Larger values suggest more confusion within each ML.}
 	}
 

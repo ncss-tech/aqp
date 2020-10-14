@@ -14,7 +14,7 @@
 
 
 \source{
-\href{https://dl.sciencesocieties.org/publications/sssaj/articles/66/1/315}{Redoximorphic Features as Indicators of Seasonal Saturation, Lowndes County, Georgia}
+\href{https://acsess.onlinelibrary.wiley.com/doi/full/10.2136/sssaj2002.3150}{Redoximorphic Features as Indicators of Seasonal Saturation, Lowndes County, Georgia}
 }
 
 \references{
