@@ -216,40 +216,28 @@ original <- filter(loafercreek, profile_id(loafercreek) %in% profile_id(res.sub)
 max_d <- max(res.sub$hzdepb)
 
 # use glom to truncate inputs to just interval matching spline output
-orig.glom <- glomApply(original, function(p) {
-  return(c(0, max_d)) }, truncate = TRUE)
+orig.glom <- trunc(original, max.d)
 
-# set new profile IDs for the spline'd profiles
-profile_id(res.sub) <- paste0(profile_id(res.sub),"_mpspline")
+# duplicate profiles, create a harmonized thematic variable from spline and original variables
+foo <- harmonize(res.sub, list(clay = c(spline = "spline_clay", original="clay")), keep.cols = NULL)
 
-# put spline results into variable for plotting
-orig.glom$clay_combined <- orig.glom$clay
-res.sub$clay_combined <- res.sub$spline_clay
+# combine with original input geometry truncated to same interval
+spc.combined <- combine(orig.glom, foo)
 
 # inspect
-plot(res.sub[,48])
-
-# use pbindlist to merge multiple SPCs
-spc.combined <- pbindlist(list(orig.glom, res.sub))
-
-# avoid warnings about duplicate phiid
-hzidname(spc.combined) <- "hzID"
-
-# make the comparison plot
-# note with latest AQP, pbindlist will impose default sort order
-#  and these will sort "correctly" due to their peiid prefix
-plotSPC(spc.combined, color = "clay_combined")
-
-# different way of looking at things
-dev.off()
+plot(spc.combined, color = "clay")
 
 # set up an xy plot
-plot(y=spc.combined$hzdept, x=spc.combined$spline_clay, type="n",
-     xlab="Total Clay Content (%)", ylab="Depth (cm)",
-     ylim=c(50,0), xlim=c(10,35))
+plot(y = spc.combined$hzdept, x = spc.combined$spline_clay, type = "n",
+     xlab = "Total Clay Content (%)", ylab = "Depth (cm)",
+     ylim = c(50,0), xlim = c(10,40))
 
 # add line for profiles # 7 and 8
-lapply(7:8, function(i) {
-  lines(y=spc.combined[i,]$hzdept, x=spc.combined[i,]$clay, col=i, lwd=2)
-  lines(y=spc.combined[i,]$hzdept, x=spc.combined[i,]$spline_clay, col=i, lty=2) } )
+pidx <- c(8, 10)
+color <- 7:8
+lapply(1:2, function(i) {
+   p <- spc.combined[pidx[i],]
+   lines(y = p$hzdept, x = p$clay, col = color[i], lwd = 2)
+   lines(y = p$hzdept, x = p$spline_clay, col = color[i], lty = 2) 
+  } )
 
