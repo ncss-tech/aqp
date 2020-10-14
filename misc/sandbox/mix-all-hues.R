@@ -1,9 +1,6 @@
 library(aqp)
 library(stringr)
 
-# x <- c('5Y 6/8', '10YR 6/8', '2.5YR 6/8', '5R 6/8', '5G 6/8')
-
-
 mixIt <- function(x, y) {
   mix <- try(mixMunsell(c(x,y))$munsell)
   if(inherits(mix, 'try-error')) {
@@ -19,11 +16,14 @@ x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
 m <- outer(X = x, Y = x, FUN = Vectorize(mixIt))
 
 
-# diagonal without color / lables
-diag(m) <- NA
+# diagonal without color
+mc <- m
+diag(mc) <- NA
 
 # create hex representation of color matrix
-m.colors <- parseMunsell(m)
+m.colors <- parseMunsell(mc)
+
+
 
 # how many duplicates?
 sort(table(m))
@@ -50,7 +50,7 @@ axis(side = 2, at = s, labels = x, tick = FALSE, las = 1, cex.axis = 0.75, col.a
 points(x = s, y = rep(0.125, times = n), pch= 15, col = cols, cex = 2)
 points(y = s, x = rep(0.125, times = n), pch= 15, col = cols, cex = 2)
 
-title('Spilled Paint', col.main = 'white', font.main = 4, line = 0.5)
+title('Clown Barf', col.main = 'white', font.main = 4, line = 0.5)
 
 dev.off()
 
