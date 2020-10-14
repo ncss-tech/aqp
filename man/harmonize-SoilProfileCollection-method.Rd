@@ -5,7 +5,7 @@
 \alias{harmonize}
 \title{Harmonize a property by profile-level denormalization for convenient visualization or analysis of ranges}
 \usage{
-\S4method{harmonize}{SoilProfileCollection}(x, x.names, keep.cols, grp.name = "hgroup")
+\S4method{harmonize}{SoilProfileCollection}(x, x.names, keep.cols = NULL, grp.name = "hgroup")
 }
 \arguments{
 \item{x}{A SoilProfileCollection.}

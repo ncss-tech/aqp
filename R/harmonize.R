@@ -99,12 +99,12 @@ if (!isGeneric("harmonize"))
 #' plot(bigspc[1:30,], color = "foo")
 #'
 setMethod("harmonize", signature(x = "SoilProfileCollection"),
-          function(x, x.names, keep.cols, grp.name = "hgroup") {
+          function(x, x.names, keep.cols = NULL, grp.name = "hgroup") {
 
   if (is.null(names(x.names)) | is.null(x.names) | !length(x.names) | !is.list(x.names))
     stop("argument `x.names` must be a named list with each element specifying a harmonization", call. = FALSE)
 
-  if (missing(keep.cols))
+  if (missing(keep.cols) | is.null(keep.cols))
     keep.cols <- character(0)
 
   if (!is.character(grp.name) | (!length(keep.cols) > 0 & any(!keep.cols %in% horizonNames(x))))
