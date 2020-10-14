@@ -1,5 +1,5 @@
 if (!isGeneric("harmonize"))
-  setGeneric("harmonize", function(x, x.names, keep.cols, grp.name = "hgroup")
+  setGeneric("harmonize", function(x, x.names, keep.cols = NULL, grp.name = "hgroup")
     standardGeneric("harmonize"))
 
 #' @title Harmonize a property by profile-level denormalization for convenient visualization or analysis of ranges
