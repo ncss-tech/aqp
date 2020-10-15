@@ -10,54 +10,93 @@ mixIt <- function(x, y) {
   }
 }
 
-# iterate over all hues @ 6/8
-# result is a character matrix of Munsell chips
-x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
-m <- outer(X = x, Y = x, FUN = Vectorize(mixIt))
+mixIt <- Vectorize(mixIt)
+
+
+mixtureGrid <- function(x) {
+  
+  # safely mix all permutations
+  m <- outer(X = x, Y = x, FUN = mixIt)
+  
+  # diagonal without color
+  mc <- m
+  diag(mc) <- NA
+  
+  # create hex representation of color matrix
+  m.colors <- parseMunsell(mc)
+  
+  # how many duplicates?
+  # sort(table(m))
+  
+  # parameters required to make image
+  n <- length(x)
+  s <- 1:n
+  cols <- parseMunsell(x)
+  
+  res <- list(
+    x = x,
+    m = m,
+    m.colors = m.colors,
+    n = n,
+    s = s,
+    cols = cols
+  )
+  
+  return(res)
+}
+
+plotMixtureGrid <- function(g, fig.title = '') {
+
+  par(mar = c(4.5, 4.5, 1.4, 1), bg = 'black', fg = 'white', xpd = NA)
+  image(x = g$s, y = g$s, z = matrix(1:g$n^2, ncol = g$n), col = g$m.colors, axes = FALSE, ylab = '', xlab = '')
+  
+  abline(h = g$s - 0.5, v = g$s - 0.5, col = 'black')
+  abline(h = g$n + 0.5, v = g$n + 0.5, col = 'black')
+  
+  text(row(g$m), col(g$m), labels = gsub(' ', '\n', g$m), cex = 0.45)
+  
+  axis(side = 1, at = g$s, labels = g$x, tick = FALSE, cex.axis = 0.75, las = 2, col.axis = 'white', line = 0.5, font.axis = 2)
+  axis(side = 2, at = g$s, labels = g$x, tick = FALSE, las = 1, cex.axis = 0.75, col.axis = 'white', line = 0.5, font.axis = 2)
+  
+  points(x = g$s, y = rep(0.125, times = g$n), pch= 15, col = g$cols, cex = 2)
+  points(y = g$s, x = rep(0.125, times = g$n), pch= 15, col = g$cols, cex = 2)
+  
+  title(fig.title, col.main = 'white', font.main = 4, line = 0.5)
+  
+}
+
+
 
 
 # iterate over 10YR chips
-# result is a character matrix of Munsell chips
+# note that chips for 2/3 -> 2/8 aren't defined (not in the color book)
 x <- expand.grid(hue = "10YR", value = seq(2, 8, by = 2), chroma = seq(2, 8, by = 2))
+x <- x[order(x$value, x$chroma), ]
 x <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
-m <- outer(X = x, Y = x, FUN = Vectorize(mixIt))
 
 
-# diagonal without color
-mc <- m
-diag(mc) <- NA
-
-# create hex representation of color matrix
-m.colors <- parseMunsell(mc)
+g <- mixtureGrid(x)
+plotMixtureGrid(g)
 
 
 
-# how many duplicates?
-sort(table(m))
+plotColorMixture(c('10YR 8/6', '10YR 2/2'))
 
-# parameters required to make image
-n <- length(x)
-s <- 1:n
-cols <- parseMunsell(x)
+mixMunsell(c('10YR 2/4', '10YR 2/4'))
+mixMunsell(c('10YR 2/2', '10YR 2/2'))
+plotColorMixture(c('10YR 2/3', '10YR 2/2'))
 
+
+
+
+# iterate over all hues @ 6/8
+# result is a character matrix of Munsell chips
+x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
+g <- mixtureGrid(x)
 
 png(filename = 'spilled-paint.png', width = 1500, height = 1515, res = 120, type = 'cairo', antialias = 'subpixel')
 
-par(mar = c(4.5, 4.5, 1.4, 1), bg = 'black', fg = 'white', xpd = NA)
-image(x = s, y = s, z = matrix(1:n^2, ncol = n), col = m.colors, axes = FALSE, ylab = '', xlab = '')
-
-abline(h = s - 0.5, v = s - 0.5, col = 'black')
-abline(h = n + 0.5, v = n + 0.5, col = 'black')
-
-text(row(m), col(m), labels = gsub(' ', '\n', m), cex = 0.45)
-
-axis(side = 1, at = s, labels = x, tick = FALSE, cex.axis = 0.75, las = 2, col.axis = 'white', line = 0.5, font.axis = 2)
-axis(side = 2, at = s, labels = x, tick = FALSE, las = 1, cex.axis = 0.75, col.axis = 'white', line = 0.5, font.axis = 2)
-
-points(x = s, y = rep(0.125, times = n), pch= 15, col = cols, cex = 2)
-points(y = s, x = rep(0.125, times = n), pch= 15, col = cols, cex = 2)
-
-title('Clown Barf', col.main = 'white', font.main = 4, line = 0.5)
+plotMixtureGrid(g, fig.title = 'Clown Barf')
 
 dev.off()
 

@@ -4,6 +4,7 @@
 
 # weighted geometric mean
 # https://en.wikipedia.org/wiki/Weighted_geometric_mean
+# note: function will fail if any(v) == 0
 .wgm <- function(v, w) {
   r <- sum(w * log(v)) / sum(w)
   r <- exp(r)
@@ -100,6 +101,18 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   idx <- which(munsell.names %in% x)
   s <- munsell.spectra.wide[, idx, drop = FALSE]
   
+  # sanity check: if there aren't sufficient reference spectra then return NA
+  # must be at least the same number of spectra (columns) as unique colors specified
+  if(ncol(s) < length(unique(x))){
+    message('reference spectra not available')
+    res <- data.frame(
+      munsell = NA,
+      distance = NA,
+      stringsAsFactors = FALSE
+    )
+    return(res)
+  }
+  
   # empty vector for mixture
   mixed <- vector(mode = 'numeric', length = nrow(s))
   
@@ -115,17 +128,23 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
     mixed[i] <- .wgm( v = vals, w = w )
   }
   
-  # subtract the mixture spectra, element-wise, from reference library
-  # note we are removing the wavelength column
-  m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
+  
+  ## TODO: what is the "best" distance metric when comparing 1 spectra to the entire library?
   
   ## optimization: matrixStats::colSums2() much faster
   ## --> syntax slightly different
-  # euclidean distance is sufficient
-  # D = sqrt(sum(reference - mixed))
+  
+  ## for now, using Euclidean distance
+  # D = sqrt(sum( [reference - mixed]^2 ))
+  
+  # subtract the mixture spectra, element-wise, from reference library
+  # note we are removing the wavelength (1st) column
+  m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
+  
+  # finish the distance calculation
   m.dist <- sqrt(colSums(m.diff^2))
   
-  # get the spectra of the closest n munsell chip(s)
+  # get the spectra of the closest n munsell chip(s) via sorting ASC
   m.match <- sort(m.dist)[1:n]
   
   # compile into data.frame

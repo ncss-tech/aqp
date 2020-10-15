@@ -120,7 +120,7 @@
 #' 
 #' @description 
 #' 
-#' The original database "SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt" was provided by \href{http://www.munsellcolourscienceforpainters.com}{Paul Centore} and downloaded July, 2020. Reflectance values for odd chroma have been interpolated from adjacent chips. See \code{aqp/misc/utils/Munsell/} for the entire set of processing steps.
+#' The original database "SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt" was provided by Paul Centore and downloaded July, 2020. Reflectance values for odd chroma have been interpolated from adjacent chips. See \code{aqp/misc/utils/Munsell/} for the entire set of processing steps.
 #' 
 #' The original database contains the following description:
 #' 
@@ -145,3 +145,7 @@
 #'   \item{reflectance}{reflectance}
 #' }
 "munsell.spectra"
+
+
+
+

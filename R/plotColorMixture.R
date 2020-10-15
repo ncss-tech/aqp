@@ -20,7 +20,12 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
   # TODO sanity checks
   
   # mix colors
-  m <- mixMunsell(x = x, w = w)
+  m <- suppressMessages(mixMunsell(x = x, w = w))
+  
+  # sanity check: it could be that reference spectra aren't available for requested colors
+  if(is.na(m$munsell)) {
+    stop('reference spectra not available', call. = FALSE)
+  }
   
   # satisfy R CMD check
   munsell.spectra <- NULL
