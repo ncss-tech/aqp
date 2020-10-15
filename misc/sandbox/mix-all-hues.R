@@ -16,6 +16,13 @@ x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
 m <- outer(X = x, Y = x, FUN = Vectorize(mixIt))
 
 
+# iterate over 10YR chips
+# result is a character matrix of Munsell chips
+x <- expand.grid(hue = "10YR", value = seq(2, 8, by = 2), chroma = seq(2, 8, by = 2))
+x <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
+m <- outer(X = x, Y = x, FUN = Vectorize(mixIt))
+
+
 # diagonal without color
 mc <- m
 diag(mc) <- NA
