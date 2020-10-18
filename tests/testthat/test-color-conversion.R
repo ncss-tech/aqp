@@ -115,6 +115,29 @@ test_that("Munsell <--> sRGB and back again", {
   })
 
 
+test_that("missing data", {
+  
+  # data with missing sRGB coordinates
+  color <- rbind(
+    cbind(NA, NA, NA),
+    cbind(0.5, 0.2, 0.2),
+    cbind(1, 1, 1),
+    cbind(NA, NA, NA)
+  )
+  
+  # conversion should work without error
+  res <- rgb2munsell(color)
+  
+  # same number of rows in / out
+  expect_true(nrow(res) == nrow(color))
+  
+  # row order preserved
+  expect_true(is.na(res$hue[1]) & is.na(res$hue[4]))
+  
+})
+
+
+
 test_that("closest Munsell chip based on sRGB coordinates", {
   
   # closest chip in aqp LUT
@@ -169,7 +192,7 @@ test_that("munsell2SPC wrapper method works as expected", {
   # inspect input data
   # horizons(sp3)[,c("hue","value","chroma")]
 
-  # do color conversions to RGB and LAB, join into horizon data
+  # do color conversions to sRGB and LAB, join into horizon data
   expect_silent( {sp3 <- munsell2spc(sp3)})
   expect_true(inherits(sp3, 'SoilProfileCollection'))
 

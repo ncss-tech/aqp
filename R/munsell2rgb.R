@@ -130,8 +130,11 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 # color: matrix/data.frame of sRGB values in range of [0,1]
 # colorSpace: color space / distance metric (CIE2000, LAB, sRGB)
 # nClosest: number of closest chips to return
-rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
+rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest = 1) {
 
+  # argument check
+  colorSpace <- match.arg(colorSpace)
+  
   # vectorize via for-loop
   n <- nrow(color)
   res <- vector(length=n, mode='list')
@@ -153,12 +156,18 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
     }
   }
 
-  ## TODO: properly account for NA colors: https://github.com/ncss-tech/aqp/issues/160
+  # https://github.com/ncss-tech/aqp/issues/160
+  # accounting for the possibility of NA
+  # result should be an empty record
+  not.na.idx <- which(apply(color, 1, function(i) ! any(is.na(i))))
+  
+  
   # iterate over colors
-  for(i in 1:n) {
+  for(i in not.na.idx) {
     # convert current color to matrix, this will allow matrix and DF as input
     this.color <- as.matrix(color[i, , drop=FALSE])
-
+    
+    # TODO: there isn't any reason to use sRGB other than demonstration
     if(colorSpace == 'sRGB') {
       # euclidean distance (in sRGB space) is our metric for closest-color
       # d = sqrt(r^2 + g^2 + b^2)
@@ -171,7 +180,7 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
     }
 
     if(colorSpace == 'LAB') {
-      # euclidean distance (in LAB space) is our metric for closest-color
+      # euclidean distance (in CIELAB space) is our metric for closest-color
       # convert sRGB to LAB
       this.color.lab <- convertColor(this.color, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
       # d = sqrt(L^2 + A^2 + B^2)
@@ -198,17 +207,30 @@ rgb2munsell <- function(color, colorSpace='CIE2000', nClosest=1) {
     }
     
     
-    ## TODO: this doesn't actually trap the condition we are attempting to trap!
-    # https://github.com/ncss-tech/aqp/issues/160
-    # with NA as an input, there will be no output
-    if(length(idx) == 0)
-      res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
-
-    # otherwise return the closest color
-    else
-      res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
+    # ## TODO: this doesn't actually trap the condition we are attempting to trap!
+    # # https://github.com/ncss-tech/aqp/issues/160
+    # # with NA as an input, there will be no output
+    # if(length(idx) == 0)
+    #   res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
+    # 
+    # # otherwise return the closest color
+    # else
+    #   res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
+    
+    res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
+    
   }
 
+  # pad records with NA in the sRGB input
+  # https://github.com/ncss-tech/aqp/issues/160
+  na.idx <- which(sapply(res, is.null))
+  if(length(na.idx) > 0) {
+    for(i in na.idx){
+      res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
+    }
+  }
+
+  
   # convert to DF
   res <- do.call('rbind', res)
   row.names(res) <- as.character(1:nrow(res))
