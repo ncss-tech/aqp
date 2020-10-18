@@ -15,7 +15,7 @@ Color conversion based on a look-up table of common soil colors.
 munsell2rgb(the_hue, the_value, the_chroma, alpha=1, 
 maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE)
 
-rgb2munsell(color, colorSpace='CIE2000', nClosest=1)
+rgb2munsell(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest=1)
 
 parseMunsell(munsellColor, convertColors=TRUE, ...)
 
@@ -146,10 +146,10 @@ getClosestMunsellChip('7.9YR 2.7/2.0')
 # just sRGB
 parseMunsell("10YR 3/5", return_triplets=TRUE)
 
-# sRGB + CIE LAB (D65 illuminant)
+# sRGB + CIELAB (D65 illuminant)
 parseMunsell("10YR 3/5", return_triplets=TRUE, returnLAB=TRUE)
 
-# CIE LAB only
+# CIELAB only
 parseMunsell("10YR 3/5", return_triplets=FALSE, returnLAB=TRUE)
 }
 
