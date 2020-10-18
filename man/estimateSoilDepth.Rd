@@ -39,6 +39,42 @@ The choice of a \code{selection} function usually follows:
 or possibly \code{mean}: somewhere in-between.
 }
 \examples{
+
+
+## consider a situation where there were multiple candidate
+## "contacts": 2 Cd horizons over an R
+
+# init hypothetical profile
+d <- data.frame(
+  id = '1',
+  top = c(0, 10, 20, 30, 40, 50, 60),
+  bottom = c(10, 20, 30, 40, 50, 60, 80),
+  name = c('A', 'Bt1', 'Bt2', 'BC', 'Cd1', 'Cd2', 'R'),
+  stringsAsFactors = FALSE
+)
+
+# upgrade to SPC
+depths(d) <- id ~ top + bottom
+
+# visual check
+par(mar = c(0, 0, 0, 1))
+plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1)
+
+# top of the first Cd
+estimateSoilDepth(d, name = 'name')
+
+# top of the first Cd
+estimateSoilDepth(d, name = 'name', selection = min)
+
+# top of the R
+estimateSoilDepth(d, name = 'name', selection = max)
+
+# top of the second Cd
+estimateSoilDepth(d, name = 'name', selection = max, p = 'Cd')
+
+
+## another example
+
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 
