@@ -98,6 +98,11 @@ hzDepthTests <- function(top, bottom) {
   # bottom depth < top depth? or horizons not in top-depth order?
   test.1 <- any(bottom < top, na.rm = TRUE) | any(suppressWarnings(sort(top) != top))
   
+  if (is.na(test.1)) {
+    # test.1 is NA if test.3 is true for both top and bottom depth
+    test.1 <- TRUE
+  }
+  
   # bottom depth == top depth
   test.2 <- any(top == bottom, na.rm = TRUE)
   
@@ -108,6 +113,7 @@ hzDepthTests <- function(top, bottom) {
   test.4 <- any(bottom[-n] != top[-1], na.rm = TRUE)
   
   res <- as.logical(c(test.1, test.2, test.3, test.4))
+  
   names(res) <- c("depthLogic","sameDepth","missingDepth","overlapOrGap")
   return(res)
 }

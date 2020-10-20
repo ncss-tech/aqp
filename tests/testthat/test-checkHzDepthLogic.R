@@ -102,4 +102,27 @@ test_that("checkHzDepthLogic() overlap", {
   expect_false(res$valid[1])
 })
 
+test_that("splitLogicErrors", {
+  data(sp4)
+  depths(sp4) <- id ~ top + bottom
+
+  # no errors (all list elements return NULL)
+  expect_equal(unlist(splitLogicErrors(sp4)), c(NULL, NULL, NULL, NULL))
+
+  # NA in top depth triggers depth logic and missing depth errors
+  data(sp4)
+  sp4$top[1] <- NA
+  expect_message(depths(sp4) <- id ~ top + bottom)
+
+  res <- splitLogicErrors(sp4)
+  
+  # the same profile occurs in two groups, since NA causes depth logic and missingDepth errors
+  expect_true(profile_id(res$depthLogic) == profile_id(res$missingDepth))
+
+  # interact = TRUE gets these in the same (interaction) group
+  #  each SPC profile occurs once, name/number elements varies with your data
+  #  (and whether or not you use split.default(..., drop = TRUE))
+  res2 <- splitLogicErrors(sp4, interact = TRUE, sep = "_", drop = TRUE)
+  expect_true(length(res2$depthLogic__missingDepth_) == 1)
+})
 
