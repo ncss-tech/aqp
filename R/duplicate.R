@@ -1,7 +1,7 @@
 
 
-#' @title Duplicte Profiles of a SoilProfileColection
-#' @description A simple function to duplicate the contents of a \code{SoilProfileColection} object. Old profile IDs are saved as a site-level attribute (\code{oldID}) and new IDs are generated using a numeric serial number.
+#' @title Duplicte Profiles of a SoilProfileCollection
+#' @description A simple function to duplicate the contents of a \code{SoilProfileCollection} object. Old profile IDs are saved as a site-level attribute (\code{oldID}) and new IDs are generated using a numeric serial number.
 #' 
 #' @author D.E. Beaudette
 #' 

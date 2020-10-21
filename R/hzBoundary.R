@@ -14,7 +14,7 @@
 #' 
 #' @return vector of offsets with same length as \code{x}
 #' 
-#' @details The default offests are based on the high-end of ranges presented in "transitional zone thickness criteria" from the Field Book version 3.0 (page 2-6). Offsets are returned as 1/2 of the transitional zone thickness so that horizon boundaries can be adjusted up/down from horizon depths. See \code{\link{plotSPC}}, specifically the \code{hz.distinctness.offset} argument for vizualization ideas. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as 0 offsets.
+#' @details The default offests are based on the high-end of ranges presented in "transitional zone thickness criteria" from the Field Book version 3.0 (page 2-6). Offsets are returned as 1/2 of the transitional zone thickness so that horizon boundaries can be adjusted up/down from horizon depths. See \code{\link{plotSPC}}, specifically the \code{hz.distinctness.offset} argument for visualization ideas. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as 0 offsets.
 #' 
 #' @seealso \code{\link{plotSPC}}
 #' 

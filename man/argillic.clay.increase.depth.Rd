@@ -14,7 +14,7 @@ argillic.clay.increase.depth(p, clay.attr = "clay")
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{p}{
-A single-profile SoilProfileCllection object.
+A single-profile \code{SoilProfileCollection} object.
 }
   \item{clay.attr}{
 OPTIONAL: horizon attribute name referring to clay content. default: `clay`

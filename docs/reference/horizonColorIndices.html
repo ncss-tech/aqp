@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Horizon Color Indices — horizonColorIndices" />
-<meta property="og:description" content="Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a &quot;reference&quot; (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965)." />
+<meta property="og:description" content="Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a &quot;reference&quot; (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965). This is a wrapper method around several horizon-level indices. See the individual functions for more details." />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965).</p>
+    <p>Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965). This is a wrapper method around several horizon-level indices. See the individual functions for more details.</p>
     </div>
 
     <pre class="usage"><span class='fu'>horizonColorIndices</span>(<span class='kw'>p</span>, hue = <span class='st'>"m_hue"</span>, value = <span class='st'>"m_value"</span>, chroma = <span class='st'>"m_chroma"</span>)</pre>
@@ -146,6 +146,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame containing unique pedon and horizon IDs and horizon-level color indices.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='hurst.redness.html'>hurst.redness</a></code> <code><a href='barron.torrent.redness.LAB.html'>barron.torrent.redness.LAB</a></code> <code><a href='buntley.westin.index.html'>buntley.westin.index</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown.</p>

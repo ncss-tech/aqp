@@ -39,7 +39,7 @@ If you imagine a normal curve with its mean centered on the vertical (depth axis
 
 So, a standard deviation of 1-2cm would yield a "boundary thickness" in the 3-5cm range ("clear" distinctness class).
 
-Of course, boundaries are not symmetrical and this is at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence within horizons. Also, boundary topography is non-uniform. There are definitely ways to implement other distributions, but invokes more detailed assumptions about field data that are generally only semi-quantiative or are not available.
+Of course, boundaries are not symmetrical and this is at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence within horizons. Also, boundary topography is non-uniform. There are definitely ways to implement other distributions, but invokes more detailed assumptions about field data that are generally only semi-quantitative or are not available.
 
 Future implementations may use boundary topography as a second hierarchical level (e.g. trig-based random functions), but think that distinctness captures the "uncertainty" about horizon separation at a specific "point" on the ground (or line in the profile quite well, and the extra variation may be hard to interpret, in general.
 }

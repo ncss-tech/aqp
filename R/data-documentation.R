@@ -101,7 +101,7 @@
 
 #'
 #' @title US State Soils
-#' @description A listing of the 52 US state soils, including Puerto Rico and Virgin Islands.
+#' @description A listing of the 50 US state soils, along with Puerto Rico and Virgin Islands.
 #' @keywords datasets
 #' @usage data(us.state.soils)
 #' @format 

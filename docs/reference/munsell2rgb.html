@@ -123,7 +123,7 @@
     <pre class="usage"><span class='fu'>munsell2rgb</span>(<span class='kw'>the_hue</span>, <span class='kw'>the_value</span>, <span class='kw'>the_chroma</span>, alpha=<span class='fl'>1</span>, 
 maxColorValue=<span class='fl'>1</span>, return_triplets=<span class='fl'>FALSE</span>, returnLAB=<span class='fl'>FALSE</span>)
 
-<span class='fu'>rgb2munsell</span>(<span class='kw'>color</span>, colorSpace=<span class='st'>'CIE2000'</span>, nClosest=<span class='fl'>1</span>)
+<span class='fu'>rgb2munsell</span>(<span class='kw'>color</span>, colorSpace = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'CIE2000'</span>, <span class='st'>'LAB'</span>, <span class='st'>'sRGB'</span>), nClosest=<span class='fl'>1</span>)
 
 <span class='fu'>parseMunsell</span>(<span class='kw'>munsellColor</span>, convertColors=<span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
@@ -404,11 +404,11 @@ panel=<span class='fu'>function</span>(<span class='kw'>x</span>, <span class='k
 <span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets=<span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt;           r         g          b
 #&gt; 1 0.3817539 0.2599868 0.09323485</div><div class='input'>
-<span class='co'># sRGB + CIE LAB (D65 illuminant)</span>
+<span class='co'># sRGB + CIELAB (D65 illuminant)</span>
 <span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets=<span class='fl'>TRUE</span>, returnLAB=<span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt;           r         g          b        L        A        B
 #&gt; 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</div><div class='input'>
-<span class='co'># CIE LAB only</span>
+<span class='co'># CIELAB only</span>
 <span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets=<span class='fl'>FALSE</span>, returnLAB=<span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt;          L        A        B
 #&gt; 1 30.81482 9.000702 30.27227</div></pre>

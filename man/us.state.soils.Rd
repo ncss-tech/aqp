@@ -15,6 +15,6 @@
 data(us.state.soils)
 }
 \description{
-A listing of the 52 US state soils, including Puerto Rico and Virgin Islands.
+A listing of the 50 US state soils, along with Puerto Rico and Virgin Islands.
 }
 \keyword{datasets}
