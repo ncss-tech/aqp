@@ -1,13 +1,14 @@
 # miscellaneous soil color indices
 
 #' @title Horizon Color Indices
-#' @description Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965).
+#' @description Calculate basic horizon-level color indices for a SoilProfileCollection. Basic indices do not require aggregation over the whole profile or comparison to a "reference" (e.g. parent material) color. Includes Hurst (1977) Redness Index, Barron-Torrent Redness Index (1986) and Buntley-Westin Index (1965). This is a wrapper method around several horizon-level indices. See the individual functions for more details.
 #' @param p A SoilProfileCollection
 #' @param hue Column name containing moist hue; default: "m_hue"
 #' @param value Column name containing moist value; default: "m_value"
 #' @param chroma Column name containing moist chroma; default: "m_chroma"
 #' @return A data.frame containing unique pedon and horizon IDs and horizon-level color indices.
 #' @author Andrew G. Brown.
+#' @seealso \code{\link{hurst.redness}} \code{\link{barron.torrent.redness.LAB}} \code{\link{buntley.westin.index}} 
 #' @examples
 #' data(sp1)
 #'
@@ -47,6 +48,7 @@ horizonColorIndices <- function(p, hue="m_hue", value="m_value", chroma="m_chrom
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector of horizon redness index (lower values = redder).
 #' @author Andrew G. Brown.
+#' @references Hurst, V.J. (1977) Visual estimation of iron in saprolite. GSA Bulletin. 88(2): 174–176. doi: https://doi.org/10.1130/0016-7606(1977)88<174:VEOIIS>2.0.CO;2
 #' @rdname hurst.redness
 #' @export hurst.redness
 hurst.redness <-  function(hue, value, chroma) {
@@ -66,6 +68,7 @@ hurst.redness <-  function(hue, value, chroma) {
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector of horizon redness index (higher values = redder).
 #' @author Andrew G. Brown.
+#' @references Barron, V. and Torrent, J. (1986), Use of the Kubelka—Munk theory to study the influence of iron oxides on soil colour. Journal of Soil Science, 37: 499-510. doi:10.1111/j.1365-2389.1986.tb00382.x
 #' @rdname barron.torrent.redness.LAB
 #' @export barron.torrent.redness.LAB
 barron.torrent.redness.LAB <- function(hue, value, chroma) {
@@ -83,6 +86,7 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' @param chroma_ref A numeric vector containing Munsell chroma(s) for reference material
 #' @return A numeric vector reflecting horizon redness increase relative to a reference (e.g. parent) material.
 #' @author Andrew G. Brown.
+#' @references Harden, J.W. (1982) A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California. Geoderma. 28(1) 1-28. doi:  10.1016/0016-7061(82)90037-4
 #' @rdname harden.rubification
 #' @export harden.rubification
 harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
@@ -101,6 +105,7 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' @param value_ref A numeric vector containingMunsell value(s) for reference material
 #' @return A numeric vector reflecting horizon darkening relative to a reference (e.g. parent) material.
 #' @author Andrew G. Brown.
+#' @references Harden, J.W. (1982) A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California. Geoderma. 28(1) 1-28. doi:  10.1016/0016-7061(82)90037-4
 #' @rdname harden.melanization
 #' @export harden.melanization
 harden.melanization <- function(value, value_ref) {
@@ -115,8 +120,9 @@ harden.melanization <- function(value, value_ref) {
 #' @description Calculate "Color Development Equivalent" by the method of Buntley & Westin (1965) "A Comparative Study of Developmental Color in a Chestnut-Chernozem-Brunizem Soil Climosequence" DOI: 10.2136/sssaj1965.03615995002900050029x. Originally developed for Mollisols, the Buntley-Westin index has been used as a tool to separate soils based on depth to particular colors.
 #' @param hue A character vector containing Munsell hues (e.g. "7.5YR")
 #' @param chroma A numeric vector containing Munsell chromas
-#' @return A numeric vector reflecting horizon redness (higher values = redder).
+#' @return A numeric vector reflecting horizon color development.
 #' @author Andrew G. Brown.
+#' @references Buntley, G.J. and Westin, F.C. (1965), A Comparative Study of Developmental Color in a Chestnut‐Chernozem‐Brunizem Soil Climosequence. Soil Science Society of America Journal, 29: 579-582. doi:10.2136/sssaj1965.03615995002900050029x
 #' @rdname buntley.westin.index
 #' @export buntley.westin.index
 buntley.westin.index <- function(hue, chroma) {
@@ -135,8 +141,9 @@ buntley.westin.index <- function(hue, chroma) {
 #' @param pattern Regular expression to match A horizons (default: "^A" which means horizon designation _starts with_ A)
 #' @param value Column name containing horizon color values (default: "m_value")
 #' @param chroma Column name containing horizon color chromas (default: "m_chroma")
-#' @return A numeric vector reflecting horizon redness (higher values = redder).
+#' @return A numeric vector reflecting horizon darkness (lower values = darker).
 #' @author Andrew G. Brown.
+#' @references Thompson, J.A. and Bell, J.C. (1996), Color Index for Identifying Hydric Conditions for Seasonally Saturated Mollisols in Minnesota. Soil Science Society of America Journal, 60: 1979-1988. doi:10.2136/sssaj1996.03615995006000060051x
 #' @rdname thompson.bell.darkness
 #' @export thompson.bell.darkness
 thompson.bell.darkness <- function(p, name = NULL, pattern="^A", value="m_value", chroma="m_chroma") {

@@ -24,10 +24,13 @@ thompson.bell.darkness(
 \item{chroma}{Column name containing horizon color chromas (default: "m_chroma")}
 }
 \value{
-A numeric vector reflecting horizon redness (higher values = redder).
+A numeric vector reflecting horizon darkness (lower values = darker).
 }
 \description{
 Calculate the "Profile Darkness Index" by the method of Thompson & Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota" DOI: 10.2136/sssaj1996.03615995006000060051x. The Thompson-Bell Index has been shown to reflect catenary relationships in some Mollisols of Minnesota (generally: wetter landscape positions = thicker, darker surfaces).
+}
+\references{
+Thompson, J.A. and Bell, J.C. (1996), Color Index for Identifying Hydric Conditions for Seasonally Saturated Mollisols in Minnesota. Soil Science Society of America Journal, 60: 1979-1988. doi:10.2136/sssaj1996.03615995006000060051x
 }
 \author{
 Andrew G. Brown.

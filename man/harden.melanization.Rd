@@ -17,6 +17,9 @@ A numeric vector reflecting horizon darkening relative to a reference (e.g. pare
 \description{
 Calculate Melanization component of Profile Development Index after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for hue and chroma to produce vector output. In Harden (1982), melanization is calculated relative to a reference parent material for all horizons within 100cm of the soil surface. In addition, several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 }
+\references{
+Harden, J.W. (1982) A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California. Geoderma. 28(1) 1-28. doi:  10.1016/0016-7061(82)90037-4
+}
 \author{
 Andrew G. Brown.
 }

@@ -12,10 +12,13 @@ buntley.westin.index(hue, chroma)
 \item{chroma}{A numeric vector containing Munsell chromas}
 }
 \value{
-A numeric vector reflecting horizon redness (higher values = redder).
+A numeric vector reflecting horizon color development.
 }
 \description{
 Calculate "Color Development Equivalent" by the method of Buntley & Westin (1965) "A Comparative Study of Developmental Color in a Chestnut-Chernozem-Brunizem Soil Climosequence" DOI: 10.2136/sssaj1965.03615995002900050029x. Originally developed for Mollisols, the Buntley-Westin index has been used as a tool to separate soils based on depth to particular colors.
+}
+\references{
+Buntley, G.J. and Westin, F.C. (1965), A Comparative Study of Developmental Color in a Chestnut‐Chernozem‐Brunizem Soil Climosequence. Soil Science Society of America Journal, 29: 579-582. doi:10.2136/sssaj1965.03615995002900050029x
 }
 \author{
 Andrew G. Brown.
