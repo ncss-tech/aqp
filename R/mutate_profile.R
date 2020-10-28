@@ -41,8 +41,14 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
         return(list(st=site(o), hz=horizons(o)))
       }, simplify = FALSE)
 
-      .site <- do.call('rbind', lapply(res, function(r) { r$st }))
-      .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
+      # make a big data.frame
+      if (requireNamespace("data.table")) {
+        .site <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$st }), fill = TRUE), aqp_df_class(object))
+        .hz <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$hz }), fill = TRUE), aqp_df_class(object))
+      } else {
+        .site <- do.call('rbind', lapply(res, function(r) { r$st }))
+        .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
+      }
 
       # never set rownames
       rownames(.site) <- NULL

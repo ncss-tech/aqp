@@ -1,3 +1,6 @@
+# aqp 1.26 (2020-10-28)
+ * `mutate_profile` uses `data.table::rbindlist(fill=TRUE)` to combine site- and horizon-level transformations
+
 # aqp 1.25 (2020-10-15)
  * new lookup table `pms.munsell.lut` for converting Pantone spot color codes to (closest) Munsell chip
  * new function `duplicate` will makes copies of profiles within a `SoilProfileCollection`
