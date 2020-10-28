@@ -29,33 +29,50 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
     # then, mutate_profile(spc, c = b + a, d = c) would not error with 'c' not found
 
     # iterate over expressions left to right
-    for(n in names(x)) {
-
+    for (n in names(x)) {
+      horizon_level <- FALSE
+      # decide whether we are adding/modifying a site or horizon level variable so
+      #  that degenerate cases do not create identical columns in site and horizon table
+      res_eval <- rlang::eval_tidy(x[[n]], compositeSPC(object[1,]))
+      if (length(res_eval) == nrow(object[1,]))
+         horizon_level <- TRUE
+         
       # then iterate over profiles within expression, frameify results
       res <- profileApply(object, function(o) {
 
         # create composite object to facilitate eval_tidy
         data <- compositeSPC(o)
-        o[[n]] <- rlang::eval_tidy(x[[n]], data)
+        res_eval <- rlang::eval_tidy(x[[n]], data)
 
-        return(list(st=site(o), hz=horizons(o)))
+        if (horizon_level) {
+          horizons(o)[[n]] <- res_eval
+        } else {
+          site(o)[[n]] <- res_eval
+        }
+        
+        return(list(st = site(o), hz = horizons(o)))
       }, simplify = FALSE)
 
       # make a big data.frame
       if (requireNamespace("data.table")) {
-        .site <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$st }), fill = TRUE), aqp_df_class(object))
-        .hz <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$hz }), fill = TRUE), aqp_df_class(object))
+        if (!horizon_level)
+         .site <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$st })), aqp_df_class(object))
+        else 
+         .hz <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$hz })), aqp_df_class(object))
       } else {
-        .site <- do.call('rbind', lapply(res, function(r) { r$st }))
-        .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
+        if (!horizon_level)
+         .site <- do.call('rbind', lapply(res, function(r) { r$st }))
+        else 
+         .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
       }
 
-      # never set rownames
-      rownames(.site) <- NULL
-      rownames(.hz) <- NULL
-
-      slot(object, 'site') <- .site
-      slot(object, 'horizons') <- .hz
+      if (!horizon_level) {
+        rownames(.site) <- NULL
+        slot(object, 'site') <- .site
+      } else {
+        rownames(.hz) <- NULL
+        slot(object, 'horizons') <- .hz
+      }
     }
 
     return(object)
