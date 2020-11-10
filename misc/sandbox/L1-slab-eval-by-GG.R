@@ -141,59 +141,88 @@ plotProfileDendrogram(z, clust = hc, y.offset = 3, scaling.factor = 0.6, color =
 
 ### L1 median
 
-## TODO: why the NA vs. slab output, can Gmedian() tolerate any NA?
-
-
+# re-format for slice-wise L1m median
 s <- slice(x, 0:150 ~ sandtotal_r + silttotal_r + claytotal_r + ec_r + om_r + dbthirdbar_r, strict = FALSE)
+
+# work on de-normalized data as a DF
 h <- as(s, 'data.frame')
+# vars of iterest
 vars <- c("sandtotal_r", "silttotal_r", "claytotal_r", "ec_r", "om_r", "dbthirdbar_r")
 
+# iterate over groups
 s.list <- split(h, list(h$taxgrtgroup))
-
 .G <- lapply(s.list, FUN=function(i) {
   
+  # iterate over depth slices
   ll <- split(i, i$hzdept_r)
-  
   res <- lapply(ll, function(j) {
-    G <- data.frame(Gmedian(j[, vars]))
+    
+    # NA not allowed, explicitly filter
+    no.na <- na.omit(j[, vars])
+    
+    # catch conditions where there are no data
+    # TODO: what is the min number of required records?
+    if(nrow(no.na) < 1)
+      return(NULL)
+    
+    # L1 median
+    G <- data.frame(Gmedian(no.na))
+    
+    # original names
     names(G) <- vars
+    
+    # package group + depth slice + L1 data
     data.frame(taxgrtgroup = j$taxgrtgroup[1], top = j$hzdept_r[1], bottom = j$hzdepb_r[1], G)
   })
   
+  # list -> DF
   res <- do.call('rbind', res)
   
   return(res)
 })
 
+# list -> DF
 .G <- do.call('rbind', .G)
 
+# init SPC
 depths(.G) <- taxgrtgroup ~ top + bottom
 
+# check that sand + silt + clay sum to 100
 .G$ssc_total <- .G$sandtotal_r + .G$silttotal_r + .G$claytotal_r
+
+# nice, they do!
 plotSPC(.G, color = 'ssc_total', divide.hz = FALSE, name = NA, width = 0.3)
 
+# other properties
 plotSPC(.G, color = 'sandtotal_r', divide.hz = FALSE, name = NA, width = 0.3)
 plotSPC(.G, color = 'om_r', divide.hz = FALSE, name = NA, width = 0.3)
 plotSPC(.G, color = 'ec_r', divide.hz = FALSE, name = NA, width = 0.3)
 
-
+# subset complete cases of horizon data
 h <- horizons(.G)
 h <- na.omit(h)
 
+# principal components with centering / scaling
 pp <- prcomp(h[, vars], center = TRUE, scale. = TRUE)
 
+# extract PC[1,2,3]
 pr123 <- predict(pp)[, 1:3]
+# rescale to [0,1]
 pr123 <- scales::rescale(pr123, to = c(0, 1))
+# sRGB composite from PC[1,2,3]
 cols <- rgb(pr123[, 1], pr123[, 2], pr123[, 3])
 
+# safely merge via left-join
 horizons(.G) <- data.frame(hzID = h$hzID, pr123, cols = cols, stringsAsFactors = FALSE)
 
 
-
+# pair-wise distances
 d <- profile_compare(.G, vars = vars, max_d = 100, k = 0)
 
+# clustering
 hc <- as.hclust(diana(d))
 
+# viz
 par(mar = c(0, 0, 0, 1), bg = 'black', fg = 'white')
 
 plotProfileDendrogram(.G, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'sandtotal_r', divide.hz = FALSE, name = NA, width = 0.3)
