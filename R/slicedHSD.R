@@ -2,8 +2,8 @@
 #' .parseHSD_formula
 #' @description internally used function to parse slicedHSD formula notation
 #' @param fm to parse, 0:100 ~ variable | group
-#' @return list with formular pieces
-.parseHSD_formula <- function(fm) {
+#' @return list with formula pieces
+.parseGrouped_formula <- function(fm) {
 
   ## testing
   # fm <- 0:100 ~ estimated_oc | taxonname
@@ -105,8 +105,8 @@
 #'
 slicedHSD <- function(object, fm, conf = 0.95) {
 
-  # parse specialized HSD formual
-  fm.data <- .parseHSD_formula(fm)
+  # parse specialized HSD formula
+  fm.data <- .parseGrouped_formula(fm)
 
   # sanity checks: is this an SPC?
   if(! inherits(object, 'SoilProfileCollection')) {
@@ -114,6 +114,7 @@ slicedHSD <- function(object, fm, conf = 0.95) {
   }
 
   # sanity check: do the variables specified in fm exist?
+  # note that there is only a single variable and single group
   if(
     ! fm.data$var %in% horizonNames(object) |
     ! fm.data$group %in% siteNames(object)

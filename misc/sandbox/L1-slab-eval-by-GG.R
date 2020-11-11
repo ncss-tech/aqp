@@ -11,6 +11,127 @@ x <- fetchSDA(WHERE = "areasymbol = 'CA113'")
 
 x <- filter(x, !is.na(taxgrtgroup))
 
+fm <- taxgrtgroup ~ sandtotal_r + silttotal_r + claytotal_r + ec_r + om_r + dbthirdbar_r
+
+z <- L1_profiles(x, fm = fm, method = 'regex', maxDepthRule = 'max')
+
+# check that sand + silt + clay sum to 100
+z$ssc_total <- z$sandtotal_r + z$silttotal_r + z$claytotal_r
+
+par(mar = c(0, 0, 3, 0))
+
+# nice, they do!
+plotSPC(z, color = 'ssc_total', divide.hz = FALSE, name = NA, width = 0.3)
+
+# other properties
+plotSPC(z, color = 'sandtotal_r', divide.hz = FALSE, name = NA, width = 0.3)
+plotSPC(z, color = 'om_r', divide.hz = FALSE, name = NA, width = 0.3)
+plotSPC(z, color = 'ec_r', divide.hz = FALSE, name = NA, width = 0.3)
+
+# subset complete cases of horizon data
+h <- horizons(z)
+h <- na.omit(h)
+
+# principal components with centering / scaling
+## TODO: automatically extract or compute these
+vars <- c("sandtotal_r", "silttotal_r", "claytotal_r", "ec_r", "om_r", "dbthirdbar_r")
+pp <- prcomp(h[, vars], center = TRUE, scale. = TRUE)
+
+# extract PC[1,2,3]
+pr123 <- predict(pp)[, 1:3]
+# rescale to [0,1]
+pr123 <- scales::rescale(pr123, to = c(0, 1))
+# sRGB composite from PC[1,2,3]
+cols <- rgb(pr123[, 1], pr123[, 2], pr123[, 3])
+
+# safely merge via left-join
+horizons(z) <- data.frame(hzID = h$hzID, pr123, cols = cols, stringsAsFactors = FALSE)
+
+
+# pair-wise distances
+d <- profile_compare(z, vars = vars, max_d = 100, k = 0)
+
+# clustering
+hc <- as.hclust(diana(d))
+
+# viz
+par(mar = c(0, 0, 0, 1), bg = 'black', fg = 'white')
+
+plotProfileDendrogram(z, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'sandtotal_r', divide.hz = FALSE, name = NA, width = 0.3)
+
+plotProfileDendrogram(z, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'ec_r', divide.hz = FALSE, name = NA, width = 0.3)
+
+plotProfileDendrogram(z, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'PC1', divide.hz = FALSE, name = NA, width = 0.3)
+
+plotProfileDendrogram(z, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'cols', divide.hz = FALSE, name = NA, width = 0.3, cex.names = 0.75)
+
+
+### overlay with slab data
+
+## TODO: make sure logic is sound
+
+## TODO: this involves a lot of dumb re-naming
+vars <- c("sandtotal_r", "silttotal_r", "claytotal_r", "ec_r", "om_r", "dbthirdbar_r")
+z.long <- melt(as(z, 'data.frame'), id.vars = c(idname(z), horizonDepths(z)), measure.vars = vars)
+
+a <- slab(x, taxgrtgroup ~ sandtotal_r + silttotal_r + claytotal_r + ec_r + om_r + dbthirdbar_r)
+
+new.vars <- c('variable', 'taxgrtgroup', 'top', 'bottom', 'p.q50', 'p.q25', 'p.q75')
+
+# re-name and adjust to match slab output
+names(z.long)[1] <- 'taxgrtgroup'
+names(z.long)[5] <- 'p.q50'
+z.long$p.q25 <- NA
+z.long$p.q75 <- NA
+z.long <- z.long[, new.vars]
+
+g <- make.groups(
+  marginal = a[, new.vars],
+  L1 = z.long
+)
+
+tps <- tactile::tactile.theme(superpose.line=list(col=c('RoyalBlue', 'DarkRed', 'DarkGreen'), lwd=2))
+
+s <- g[g$taxgrtgroup == 'Haploxeralfs', ]
+
+# plot grouped, aggregate data
+xyplot(top ~ p.q50 | variable, groups = which, data=s, ylab='Depth',
+       xlab='median bounded by 25th and 75th percentiles',
+       lower=s$p.q25, upper=s$p.q75, ylim=c(155,-5),
+       panel=panel.depth_function, alpha=0.25, sync.colors=TRUE,
+       prepanel=prepanel.depth_function,
+       par.strip.text=list(cex=0.8),
+       strip=strip.custom(bg=grey(0.85)),
+       layout=c(6,1), scales=list(x=list(alternating=1, relation='free'), y=list(alternating=3)),
+       auto.key = list(lines = TRUE, points = FALSE, columns = 2),
+       par.settings = tps
+)
+
+
+s <- g[g$variable == 'claytotal_r', ]
+
+# plot grouped, aggregate data
+xyplot(top ~ p.q50 | taxgrtgroup, groups = which, data = s, ylab='Depth',
+       xlab='median bounded by 25th and 75th percentiles',
+       lower=s$p.q25, upper=s$p.q75, ylim=c(155,-5),
+       panel=panel.depth_function, alpha=0.25, sync.colors=TRUE,
+       prepanel=prepanel.depth_function,
+       par.strip.text=list(cex=0.8),
+       strip=strip.custom(bg=grey(0.85)),
+       layout=c(5, 4), as.table = TRUE,
+       scales=list(x=list(alternating=1), y=list(alternating=3)),
+       auto.key = list(lines = TRUE, points = FALSE, columns = 2),
+       par.settings=tps
+)
+
+
+
+####
+####
+###
+
+
+
 table(x$taxgrtgroup)
 
 a <- slab(x, taxgrtgroup ~ sandtotal_r + silttotal_r + claytotal_r + ec_r + om_r + dbthirdbar_r)
@@ -141,100 +262,6 @@ plotProfileDendrogram(z, clust = hc, y.offset = 3, scaling.factor = 0.6, color =
 
 ### L1 median
 
-# re-format for slice-wise L1m median
-s <- slice(x, 0:150 ~ sandtotal_r + silttotal_r + claytotal_r + ec_r + om_r + dbthirdbar_r, strict = FALSE)
-
-# work on de-normalized data as a DF
-h <- as(s, 'data.frame')
-# vars of iterest
-vars <- c("sandtotal_r", "silttotal_r", "claytotal_r", "ec_r", "om_r", "dbthirdbar_r")
-
-# iterate over groups
-s.list <- split(h, list(h$taxgrtgroup))
-.G <- lapply(s.list, FUN=function(i) {
-  
-  # iterate over depth slices
-  ll <- split(i, i$hzdept_r)
-  res <- lapply(ll, function(j) {
-    
-    # NA not allowed, explicitly filter
-    no.na <- na.omit(j[, vars])
-    
-    # catch conditions where there are no data
-    # TODO: what is the min number of required records?
-    if(nrow(no.na) < 1)
-      return(NULL)
-    
-    # L1 median
-    G <- data.frame(Gmedian(no.na))
-    
-    # original names
-    names(G) <- vars
-    
-    # package group + depth slice + L1 data
-    data.frame(taxgrtgroup = j$taxgrtgroup[1], top = j$hzdept_r[1], bottom = j$hzdepb_r[1], G)
-  })
-  
-  # list -> DF
-  res <- do.call('rbind', res)
-  
-  return(res)
-})
-
-# list -> DF
-.G <- do.call('rbind', .G)
-
-# init SPC
-depths(.G) <- taxgrtgroup ~ top + bottom
-
-# check that sand + silt + clay sum to 100
-.G$ssc_total <- .G$sandtotal_r + .G$silttotal_r + .G$claytotal_r
-
-# nice, they do!
-plotSPC(.G, color = 'ssc_total', divide.hz = FALSE, name = NA, width = 0.3)
-
-# other properties
-plotSPC(.G, color = 'sandtotal_r', divide.hz = FALSE, name = NA, width = 0.3)
-plotSPC(.G, color = 'om_r', divide.hz = FALSE, name = NA, width = 0.3)
-plotSPC(.G, color = 'ec_r', divide.hz = FALSE, name = NA, width = 0.3)
-
-# subset complete cases of horizon data
-h <- horizons(.G)
-h <- na.omit(h)
-
-# principal components with centering / scaling
-pp <- prcomp(h[, vars], center = TRUE, scale. = TRUE)
-
-# extract PC[1,2,3]
-pr123 <- predict(pp)[, 1:3]
-# rescale to [0,1]
-pr123 <- scales::rescale(pr123, to = c(0, 1))
-# sRGB composite from PC[1,2,3]
-cols <- rgb(pr123[, 1], pr123[, 2], pr123[, 3])
-
-# safely merge via left-join
-horizons(.G) <- data.frame(hzID = h$hzID, pr123, cols = cols, stringsAsFactors = FALSE)
-
-
-# pair-wise distances
-d <- profile_compare(.G, vars = vars, max_d = 100, k = 0)
-
-# clustering
-hc <- as.hclust(diana(d))
-
-# viz
-par(mar = c(0, 0, 0, 1), bg = 'black', fg = 'white')
-
-plotProfileDendrogram(.G, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'sandtotal_r', divide.hz = FALSE, name = NA, width = 0.3)
-
-plotProfileDendrogram(.G, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'ec_r', divide.hz = FALSE, name = NA, width = 0.3)
-
-plotProfileDendrogram(.G, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'PC1', divide.hz = FALSE, name = NA, width = 0.3)
-
-plotProfileDendrogram(.G, clust = hc, y.offset = 3, scaling.factor = 0.6, color = 'cols', divide.hz = FALSE, name = NA, width = 0.3, cex.names = 0.8)
-
-
-par(mfrow = c(2,1))
 
 
 
