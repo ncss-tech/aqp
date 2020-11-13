@@ -588,6 +588,9 @@ plotSPC <- function(
 	    # extract current set of offsets
 	    hdo <- this_profile_data[, hz.distinctness.offset]
 
+	    # apply sketch-wide scaling factor
+	    hdo <- hdo * scaling.factor
+	    
 	    # extract current set of line types if provided
 	    if(! is.null(hz.topography.lty)) {
 	      ht.lty <- this_profile_data[, hz.topography.lty]

@@ -13,6 +13,16 @@ table(x$distinctness)
 x$hzdo <- hzDistinctnessCodeToOffset(x$distinctness, codes=c('very abrupt', 'abrupt', 'clear', 'gradual', 'diffuse'))
 x$hzdo.const <- rep(10, times=nrow(x))
 
+
+
+par(mar=c(0, 0, 0, 0), bg='black', fg='white')
+plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', plot.depth.axis=FALSE, hz.depths = TRUE)
+plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', plot.depth.axis=FALSE, hz.depths = TRUE, hz.distinctness.offset='hzdo')
+
+# scaling factor applied to hz distinctness offsets
+plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', plot.depth.axis=FALSE, hz.depths = TRUE, hz.distinctness.offset='hzdo', scaling.factor = 0.5)
+
+
 par(mar=c(0, 0, 0, 3))
 plotSPC(x, width=0.25, cex.names=0.85, shrink=TRUE)
 plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-top')
@@ -30,10 +40,6 @@ for(i in c('right-center', 'left-center', 'left-top', 'center-center')) {
 
 
 
-par(mar=c(0, 0, 0, 0), bg='black', fg='white')
-plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', plot.depth.axis=FALSE, hz.depths = TRUE)
-plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', plot.depth.axis=FALSE, hz.depths = TRUE, hz.distinctness.offset='hzdo')
-
 
 plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='right-center', plot.depth.axis=FALSE, hz.depths = TRUE, hz.distinctness.offset='hzdo.const')
 
@@ -47,11 +53,13 @@ plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', co
 plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', color='bottom')
 plotSPC(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center', color='bottom', col.palette.bias = 2)
 
-## TODO: need to pass-through new arguments to plotSPC
+
+par(bg='black', fg='white')
 SoilTaxonomyDendrogram(x, width=0.25, shrink=TRUE)
 SoilTaxonomyDendrogram(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-top')
 SoilTaxonomyDendrogram(x, width=0.33, cex.names=0.85, shrink=TRUE, name.style='left-center')
 
+SoilTaxonomyDendrogram(x, width=0.33, cex.names=0.75, shrink=TRUE, name.style='center-center', plot.depth.axis=FALSE, hz.depths = TRUE, hz.distinctness.offset='hzdo')
 
 
 
