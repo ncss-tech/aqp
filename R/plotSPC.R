@@ -753,7 +753,7 @@ plotSPC <- function(
 	      hzname.y0 <- ( y1 + y0 ) / 2
 	      # left-hand / vertical center justification
 	      hzname.adj <- c(0, 0.5)
-	      hzname.col <- 'black'
+	      hzname.col <- par('fg') # use whatever the foreground color is
 	    },
 	    'left-center' = {
 	      # inset from left-hand side
