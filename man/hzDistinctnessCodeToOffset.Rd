@@ -27,9 +27,26 @@ This function will convert USDA-NCSS horizon boundary distinctness codes into ve
 The default offests are based on the high-end of ranges presented in "transitional zone thickness criteria" from the Field Book version 3.0 (page 2-6). Offsets are returned as 1/2 of the transitional zone thickness so that horizon boundaries can be adjusted up/down from horizon depths. See \code{\link{plotSPC}}, specifically the \code{hz.distinctness.offset} argument for visualization ideas. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as 0 offsets.
 }
 \examples{
+# example data
 data(sp1)
-hzDistinctnessCodeToOffset(sp1$bound_distinct)
 
+# compute 1/2 transitional zone thickness from distinctness codes
+sp1$hzdo <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
+
+# convert colors from Munsell to hex-encoded RGB
+sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+
+# promote to SoilProfileCollection
+depths(sp1) <- id ~ top + bottom
+
+# adjust margins
+op <- par(mar=c(0,0,0,1.5))
+
+# sketches, adjust width, adjust text size, include coded hz distinctness offsets
+plotSPC(sp1, width=0.3, cex.names=0.75, hz.distinctness.offset = 'hzdo')
+
+# clean-up
+par(op)
 }
 \references{
 \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}

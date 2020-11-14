@@ -24,9 +24,26 @@
 #' 
 #' 
 #' @examples 
+#' # example data
 #' data(sp1)
-#' hzDistinctnessCodeToOffset(sp1$bound_distinct)
 #' 
+#' # compute 1/2 transitional zone thickness from distinctness codes
+#' sp1$hzdo <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
+#' 
+#' # convert colors from Munsell to hex-encoded RGB
+#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+#' 
+#' # promote to SoilProfileCollection
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # adjust margins
+#' op <- par(mar=c(0,0,0,1.5))
+#' 
+#' # sketches, adjust width, adjust text size, include coded hz distinctness offsets
+#' plotSPC(sp1, width=0.3, cex.names=0.75, hz.distinctness.offset = 'hzdo')
+#' 
+#' # clean-up
+#' par(op)
 
 hzDistinctnessCodeToOffset <- function(
   x, 
@@ -50,7 +67,7 @@ hzDistinctnessCodeToOffset <- function(
 
 
 
-#' @title Convert Horizon Boundary Topography Distinctness to Line Type
+#' @title Convert Horizon Boundary Topography to Line Type
 #' 
 #' @description This function will convert USDA-NCSS horizon boundary topography codes into line types, based on the \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
 #' 
@@ -70,31 +87,6 @@ hzDistinctnessCodeToOffset <- function(
 #' 
 #' @references \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
-#' 
-#' @examples 
-#' 
-#' # example data
-#' data(sp1)
-#' 
-#' # compute 1/2 transitional zone thickness from distinctness codes
-#' sp1$hzdo <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
-#' 
-#' # convert colors from Munsell to hex-encoded RGB
-#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
-#' 
-#' # promote to SoilProfileCollection
-#' depths(sp1) <- id ~ top + bottom
-#' 
-#' # adjust margins
-#' op <- par(mar=c(0,0,0,1.5))
-#' 
-#' # sketches, adjust width, adjust text size, include coded hz distinctness offsets
-#' plotSPC(sp1, width=0.3, cex.names=0.75, hz.distinctness.offset = 'hzdo')
-#' 
-#' # clean-up
-#' par(op)
-
-
 hzTopographyCodeToLineType <- function(
   x, 
   codes =  c('S', 'W', 'I', 'B'), 
@@ -116,4 +108,43 @@ hzTopographyCodeToLineType <- function(
 }
 
 
+#' @title Convert Horizon Boundary Topography to Vertical Offset
+#' 
+#' @description This function will convert USDA-NCSS horizon boundary topography codes into a vertical offset, suitable for use in \code{plotSPC}. Default values are reasonable starting points for encoding smooth, wavy, irregular, or broken style horizon boundary topography as defined in \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @param x vector of boundary topography codes to be converted
+#' 
+#' @param codes code values, adjust as needed
+#' 
+#' @param lty vertical offsets
+#' 
+#' @return vector of vertical offsets with same length as \code{x}
+#' 
+#' @seealso \code{\link{plotSPC}}
+#' 
+#' @keywords manip
+#' 
+#' @references \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
+#' 
+hzTopographyCodeToOffset <- function(
+  x, 
+  codes =  c('S', 'W', 'I', 'B'), 
+  offset = c(0, 4, 8, 12)
+) {	
+  # no factors here
+  x <- as.character(x)
+  
+  # lookup codes
+  x.code <- match(x, codes)
+  
+  # lookup line types
+  x.offset <- offset[x.code]
+  
+  # NA -> line type 1
+  x.offset <- ifelse(is.na(x.offset), 0, x.offset)
+  
+  return(x.offset)
+}
 

@@ -39,7 +39,8 @@ plotSPC(
   abbr.cutoff = 5,
   divide.hz = TRUE,
   hz.distinctness.offset = NULL,
-  hz.topography.lty = NULL,
+  hz.topography.offset = NULL,
+  hz.boundary.lty = NULL,
   axis.line.offset = -2.5,
   plot.depth.axis = TRUE,
   density = NULL,
@@ -118,9 +119,11 @@ plot(x, y, ...)
 
 \item{divide.hz}{logical, divide horizons with line segment? (TRUE), see details}
 
-\item{hz.distinctness.offset}{quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}}
+\item{hz.distinctness.offset}{NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}}
 
-\item{hz.topography.lty}{quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography}
+\item{hz.topography.offset}{NULL, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and code{\link{hzTopographyCodeToOffset}}}
+
+\item{hz.boundary.lty}{quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography}
 
 \item{axis.line.offset}{horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)}
 
