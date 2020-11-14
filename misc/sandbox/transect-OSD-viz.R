@@ -115,6 +115,8 @@ plotSPC(sp1, width=0.33, cex.names=0.7, shrink=TRUE)
 plotSPC(sp1, width=0.33, cex.names=0.7, shrink=TRUE, hz.distinctness.offset='hdo')
 plotSPC(sp1, width=0.33, cex.names=0.7, shrink=TRUE, hz.distinctness.offset='hdo', hz.topography.lty='ht', lwd=2, name.style='left-center')
 
+plotSPC(sp1, width=0.33, cex.names=0.7, shrink=TRUE, hz.distinctness.offset='hdo', hz.topography.lty='ht', lwd=2, name.style='left-center', color = NA)
+
 
 ## TODO: add horizon boundary data to fetchNASIS
 
