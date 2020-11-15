@@ -70,6 +70,11 @@ par(mar=c(0,0,1,1))
 plotSPC(z, width=0.33, print.id=TRUE, hz.distinctness.offset = 'hd', label='code', cex.names=0.8)
 title('Horizon Boundary Distinctness', line = 0)
 
+# # not so very useful legend
+# par(xpd = NA)
+# hzdo.vals <- c(0.5, 2, 5, 15, 20)/2
+# rect(xleft = 0, ybottom = 20, xright = 0.5, ytop = 0)
+# segments(x0 = 0, y0 = 10 + hzdo.vals, x1 = 0.5, y1 = 10 - hzdo.vals)
 
 
 # safely duplicate these data 4 times
@@ -135,3 +140,9 @@ par(mar=c(0,0,1,1), bg = 'black', fg = 'white')
 plotSPC(s, width=0.33, print.id=TRUE, hz.distinctness.offset = 'hd', hz.topography.offset = 'ht', label='code', cex.names=0.8, name = NA, color = NA, default.color = 'black')
 title('Horizon Boundary Types', line = 0, col.main = 'white')
 abline(h = x$top, col = 'green', lty = 3)
+
+
+plot(0,0, type = 'n')
+
+
+
