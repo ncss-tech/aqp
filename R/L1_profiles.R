@@ -75,7 +75,7 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple'), maxDept
     ! all(vars %in% horizonNames(x)) |
     ! g %in% siteNames(x)
   ) {
-    stop('`fm` must reference a single horizon-level attribute and a single site-level attribute', call. = FALSE)
+    stop('`fm` must reference one or more horizon-level attributes and a single site-level attribute', call. = FALSE)
   }
   
   # arguments
@@ -94,10 +94,10 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple'), maxDept
            x.depths <- profileApply(x, estimateSoilDepth, name = hzdesgnname(x))
            switch(maxDepthRule, 
                   min = {
-                    min(sdc$depth, na.rm = TRUE)
+                    min(x.depths, na.rm = TRUE)
                   },
                   max = {
-                    max(sdc$depth, na.rm = TRUE)
+                    max(x.depths, na.rm = TRUE)
                   })
          },
          simple = {
