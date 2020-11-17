@@ -18,8 +18,9 @@
     if(length(idx) < 1)
       return(NULL)
     
+    ## TODO: how do arguments to Gmedian() affect the results?
     # L1 median for non-NA records, variables of interest only
-    G <- data.frame(Gmedian(j[idx, v, drop = FALSE]))
+    G <- data.frame(Gmedian(X = j[idx, v, drop = FALSE]))
     
     # retain original names
     names(G) <- names(j)[v]
@@ -52,14 +53,15 @@
 #' @param x \code{SoilProfileCollection} object
 #' @param fm formula
 #' @param basis aggregation basis
-#' @param method soil depth evaluation method
-#' @param maxDepthRule min | max
+#' @param method soil depth evaluation method: regular expression, simple, constant. See details.
+#' @param maxDepthRule maximum depth rule: min | max. See details.
+#' @param maxDepthConstant depth when \code{maxDepthRule = 'constant'}
 #' @param strict passed to \code{slice}
 #'
 #' @return
 #' @export
 #'
-L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple'), maxDepthRule = c('max', 'min'), strict = FALSE) {
+L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constant'), maxDepthRule = c('max', 'min'), maxDepthConstant = NULL, strict = FALSE) {
   
   # sanity checks: is this an SPC?
   if(! inherits(x, 'SoilProfileCollection')) {
@@ -81,6 +83,11 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple'), maxDept
   # arguments
   method <- match.arg(method)
   maxDepthRule <- match.arg(maxDepthRule)
+  
+  # multi-argument sanity
+  if(method == 'constant' & !is.numeric(maxDepthConstant)) {
+    stop('contant max depth must be specified by single numeric value', call. = FALSE)
+  }
   
   # SPC metadata
   hztb <- horizonDepths(x)
@@ -108,7 +115,12 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple'), maxDept
                   max = {
                     max(x)
                   })
-         })
+         },
+         constant = {
+           maxDepthConstant
+         }
+         
+  )
    
   
   # create slice formula

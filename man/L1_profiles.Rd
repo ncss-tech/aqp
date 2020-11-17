@@ -8,8 +8,9 @@ L1_profiles(
   x,
   fm,
   basis = 1,
-  method = c("regex", "simple"),
+  method = c("regex", "simple", "constant"),
   maxDepthRule = c("max", "min"),
+  maxDepthConstant = NULL,
   strict = FALSE
 )
 }
@@ -20,9 +21,11 @@ L1_profiles(
 
 \item{basis}{aggregation basis}
 
-\item{method}{soil depth evaluation method}
+\item{method}{soil depth evaluation method: regular expression, simple, constant. See details.}
 
-\item{maxDepthRule}{min | max}
+\item{maxDepthRule}{maximum depth rule: min | max. See details.}
+
+\item{maxDepthConstant}{depth when \code{maxDepthRule = 'constant'}}
 
 \item{strict}{passed to \code{slice}}
 }
