@@ -14,10 +14,10 @@ colorQuantiles(soilColors, p = c(0.05, 0.5, 0.95))
 \value{
 A List containing the following elements:
 
-\begin{itemize}
+\itemize{
 \item{marginal: }{data.frame containing marginal quantiles in CIELAB (D65), closest colors and Munsell chips}
 \item{L1: }{L1 median CIELAB (D65) values, closest color and Munsell chip}
-\end{itemize}
+}
 }
 \description{
 Estimate central tendency and spread of soil color using marginal quantiles and L1 median of CIELAB coordinates.

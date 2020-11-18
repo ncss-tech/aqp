@@ -124,7 +124,7 @@ hzTopographyCodeToLineType <- function(
 #' 
 #' @param codes code values, adjust as needed
 #' 
-#' @param lty vertical offsets
+#' @param offset vertical offset (depth units) used to create "chevron" effect
 #' 
 #' @return vector of vertical offsets with same length as \code{x}
 #' 

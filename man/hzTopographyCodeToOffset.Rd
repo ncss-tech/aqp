@@ -15,7 +15,7 @@ hzTopographyCodeToOffset(
 
 \item{codes}{code values, adjust as needed}
 
-\item{lty}{vertical offsets}
+\item{offset}{vertical offset (depth units) used to create "chevron" effect}
 }
 \value{
 vector of vertical offsets with same length as \code{x}

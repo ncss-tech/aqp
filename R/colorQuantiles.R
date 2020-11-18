@@ -31,10 +31,10 @@
 #' 
 #' @return A List containing the following elements:
 #' 
-#' \begin{itemize}
+#' \itemize{
 #' \item{marginal: }{data.frame containing marginal quantiles in CIELAB (D65), closest colors and Munsell chips}
 #' \item{L1: }{L1 median CIELAB (D65) values, closest color and Munsell chip}
-#' \end{itemize}
+#' }
 #' 
 #' @export
 #'

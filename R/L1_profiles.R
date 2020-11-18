@@ -20,7 +20,7 @@
     
     ## TODO: how do arguments to Gmedian() affect the results?
     # L1 median for non-NA records, variables of interest only
-    G <- data.frame(Gmedian(X = j[idx, v, drop = FALSE]))
+    G <- data.frame(Gmedian::Gmedian(X = j[idx, v, drop = FALSE]))
     
     # retain original names
     names(G) <- names(j)[v]
@@ -69,6 +69,11 @@
 #' @export
 #'
 L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constant'), maxDepthRule = c('max', 'min'), maxDepthConstant = NULL, strict = FALSE) {
+  
+  # sanity check, need this for L1 median
+  if(!requireNamespace('Gmedian'))
+    stop('package `Gmedian` is required', call.=FALSE)
+  
   
   # sanity checks: is this an SPC?
   if(! inherits(x, 'SoilProfileCollection')) {
