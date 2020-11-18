@@ -12,6 +12,7 @@
 
 
 ## TODO: quantiles should be weighted by thickness, can we do this via slice()?
+## TODO: finish documentation + links
 
 #' @title Soil Color Range via Quantiles
 #'
