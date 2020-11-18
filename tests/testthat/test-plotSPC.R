@@ -33,7 +33,7 @@ test_that("plotSPC: aqp.env settings", {
   expect_equal(1:length(sp1), lsp$plot.order)
 })
 
-## 2020-11-14: what is with these warnings?
+
 test_that("plotSPC: figure settings", {
 
   # explainer returns `lsp`

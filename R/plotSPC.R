@@ -518,7 +518,7 @@ plotSPC <- function(
 
 
   # pre-compute nice range for depth axis, also used for plot init
-  depth_axis_intervals <- pretty(seq(from=0, to=max.depth, by=1), n=n.depth.ticks)
+  depth_axis_intervals <- pretty(seq(from=0, to = max.depth, by = 1), n = n.depth.ticks)
 
   # init plotting region, unless we are appending to an existing plot
   # note that we are using some fudge-factors to get the plotting region just right
@@ -534,7 +534,9 @@ plotSPC <- function(
   one.char.width <- strwidth('W')
 
   # TODO dynamically adjust `width` based on strwidth(longest.hz.name)
-
+  # TODO abstract single profile sketch code into a single function
+  # TODO skip sketch rendering when i=`n` outside of length(SPC) (depths are NA)
+  
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
   for(i in 1:n) {
@@ -715,8 +717,11 @@ plotSPC <- function(
 	    })
 	  }
 	  
-	  # final rectangle border around entire profile
-	  rect(xleft = x0 - width, ybottom = min(y1, na.rm = TRUE), xright = x0 + width, ytop = max(y0, na.rm = TRUE), lwd=lwd, lty=lty, lend=2)
+	  ## final rectangle border around entire profile
+	  # note: when manually specifying n > length(SPC)
+	  # x0,x1,y0,y1 are NA
+	  # using `na.rm = TRUE` in the following calls to min() or max() will generate warnings
+	  rect(xleft = x0 - width, ybottom = min(y1), xright = x0 + width, ytop = max(y0), lwd = lwd, lty = lty, lend = 2)
 	  
 	  
 	  
