@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
       </span>
     </div>
 
@@ -151,7 +151,8 @@
   abbr.cutoff = <span class='fl'>5</span>,
   divide.hz = <span class='fl'>TRUE</span>,
   hz.distinctness.offset = <span class='kw'>NULL</span>,
-  hz.topography.lty = <span class='kw'>NULL</span>,
+  hz.topography.offset = <span class='kw'>NULL</span>,
+  hz.boundary.lty = <span class='kw'>NULL</span>,
   axis.line.offset = <span class='op'>-</span><span class='fl'>2.5</span>,
   plot.depth.axis = <span class='fl'>TRUE</span>,
   density = <span class='kw'>NULL</span>,
@@ -292,10 +293,14 @@
     </tr>
     <tr>
       <th>hz.distinctness.offset</th>
-      <td><p>quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code<a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></p></td>
+      <td><p>NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code<a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></p></td>
     </tr>
     <tr>
-      <th>hz.topography.lty</th>
+      <th>hz.topography.offset</th>
+      <td><p>NULL, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and code<a href='hzTopographyCodeToOffset.html'>hzTopographyCodeToOffset</a></p></td>
+    </tr>
+    <tr>
+      <th>hz.boundary.lty</th>
       <td><p>quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography</p></td>
     </tr>
     <tr>
@@ -423,7 +428,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class='co'># plot the first SPC object and</span>
 <span class='co'># allocate space for the second SPC object</span>
 <span class='fu'>plot</span>(<span class='kw'>sp1</span>, n=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>) <span class='op'>+</span> <span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp2</span>))
-</div><div class='input'><span class='co'># plot the second SPC, starting from the first empty space</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='input'><span class='co'># plot the second SPC, starting from the first empty space</span>
 <span class='fu'>plot</span>(<span class='kw'>sp2</span>, x.idx.offset=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>), add=<span class='fl'>TRUE</span>)
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-7.png' alt='' width='768' height='475' /></div><div class='input'>
 
