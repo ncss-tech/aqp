@@ -12,6 +12,54 @@
 
 
 ## TODO: quantiles should be weighted by thickness, can we do this via slice()?
+
+#' @title Soil Color Range via Quantiles
+#'
+#' @param soilColors vector of R colors (sRGB colorspace)
+#' @param p marginal quantiles of interest
+#'
+#' @description Estimate central tendency and spread of soil color using marginal quantiles and L1 median of CIELAB coordinates.
+#' 
+#' @details Colors are converted from sRGB to CIELAB (D65 illuminant), marginal quantiles of L,A,B coordinates are estimated, and L1 median {L,A,B} is estimates. The closest Munsell chips (via Musell/CIELAB lookup table provided by \code{munsell}) and R colors are determined by locating chips closest to the marginal quantiles and L1 median.
+#' 
+#' The results can be conveniently inspected using \code{plotColorQuantiles}.
+#'
+#' @note This is a work in progress.
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @return A List containing the following elements:
+#' 
+#' \begin{itemize}
+#' \item{marginal: }{data.frame containing marginal quantiles in CIELAB (D65), closest colors and Munsell chips}
+#' \item{L1: }{L1 median CIELAB (D65) values, closest color and Munsell chip}
+#' \end{itemize}
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#'\dontrun{
+#' # example data, see manual page for details
+#' data(sp5)
+#' 
+#' # slice top 25 cm
+#' s <- slice(sp5, 1:25 ~ .)
+#' 
+#' # check some of the data
+#' par(mar=c(0,0,0,0))
+#' plot(sample(s, 25), divide.hz=FALSE, name='', print.id=FALSE, width=0.5)
+#' 
+#' # colors
+#' previewColors(unique(s$soil_color))
+#' 
+#' # compute marginal quantiles and L1 median
+#' cq <- colorQuantiles(s$soil_color)
+#' 
+#' # simple graphical display of results
+#' plotColorQuantiles(cq)
+#' }
+#' 
 colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   # sanity check, need this for L1 median
@@ -123,6 +171,20 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 }
 
 
+#' @title Visualize Color Quantiles
+#' 
+#' @description This function creates a visualization of the ouptut from \code{colorQuantiles}.
+#' 
+#' @param res list returned by \code{colorQuantiles}
+#' @param pt.cex scaling factor for color chips
+#' @param title optional title printed above color quantile figure
+#' @param mar customized margins, see details
+#'
+#' @author D.E. Beaudette
+#'
+#' @export
+#' 
+#' 
 plotColorQuantiles <- function(res, pt.cex=7, title='', mar=c(2,1.5,1,1)) {
   par(mar=mar, mfrow=c(3,1))
 

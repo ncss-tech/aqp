@@ -37,6 +37,9 @@ The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geome
 
 See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutoral} for additional examples.
 }
+\note{
+This function requires the `Gmedian` package.
+}
 \references{
 Cardot, H., Cenac, P. and Zitt, P-A. (2013). Efficient and fast estimation of the geometric median in Hilbert spaces with an averaged stochastic gradient algorithm. Bernoulli, 19, 18-43.
 }
