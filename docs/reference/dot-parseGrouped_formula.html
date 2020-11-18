@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class • aqp</title>
+<title>.parseHSD_formula — .parseGrouped_formula • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class" />
-<meta property="og:description" content="This is an accessor and replacement method for the aqp_df_class entry in the metadata slot. This entry is used internally by methods that interact with data.frame objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process." />
+<meta property="og:title" content=".parseHSD_formula — .parseGrouped_formula" />
+<meta property="og:description" content="internally used function to parse slicedHSD formula notation" />
 
 
 
@@ -111,34 +111,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get aqp_df_class entry from metadata or return a safe value.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/Class-SoilProfileCollection.R'><code>R/Class-SoilProfileCollection.R</code></a></small>
-    <div class="hidden name"><code>aqp_df_class.Rd</code></div>
+    <h1>.parseHSD_formula</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/slicedHSD.R'><code>R/slicedHSD.R</code></a></small>
+    <div class="hidden name"><code>dot-parseGrouped_formula.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is an accessor and replacement method for the <code>aqp_df_class</code> entry in the metadata slot. This entry is used internally by methods that interact with <code>data.frame</code> objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.</p>
+    <p>internally used function to parse slicedHSD formula notation</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>)
-
-<span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
+    <pre class="usage"><span class='fu'>.parseGrouped_formula</span>(<span class='kw'>fm</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>a SoilProfileCollection</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>"data.frame", "data.table" or "tbl_df"</p></td>
+      <th>fm</th>
+      <td><p>to parse, 0:100 ~ variable | group</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>list with formula pieces</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class • aqp</title>
+<title>Convert Horizon Boundary Topography to Vertical Offset — hzTopographyCodeToOffset • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class" />
-<meta property="og:description" content="This is an accessor and replacement method for the aqp_df_class entry in the metadata slot. This entry is used internally by methods that interact with data.frame objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process." />
+<meta property="og:title" content="Convert Horizon Boundary Topography to Vertical Offset — hzTopographyCodeToOffset" />
+<meta property="og:description" content="This function will convert USDA-NCSS horizon boundary topography codes into a vertical offset, suitable for use in plotSPC. Default values are reasonable starting points for encoding smooth, wavy, irregular, or broken style horizon boundary topography as defined in Field Book for Describing and Sampling Soils, version 3.0." />
 
 
 
@@ -111,34 +111,53 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get aqp_df_class entry from metadata or return a safe value.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/Class-SoilProfileCollection.R'><code>R/Class-SoilProfileCollection.R</code></a></small>
-    <div class="hidden name"><code>aqp_df_class.Rd</code></div>
+    <h1>Convert Horizon Boundary Topography to Vertical Offset</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/hzBoundary.R'><code>R/hzBoundary.R</code></a></small>
+    <div class="hidden name"><code>hzTopographyCodeToOffset.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is an accessor and replacement method for the <code>aqp_df_class</code> entry in the metadata slot. This entry is used internally by methods that interact with <code>data.frame</code> objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.</p>
+    <p>This function will convert USDA-NCSS horizon boundary topography codes into a vertical offset, suitable for use in <code>plotSPC</code>. Default values are reasonable starting points for encoding smooth, wavy, irregular, or broken style horizon boundary topography as defined in <a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184'>Field Book for Describing and Sampling Soils, version 3.0</a>.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>)
-
-<span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
+    <pre class="usage"><span class='fu'>hzTopographyCodeToOffset</span>(
+  <span class='kw'>x</span>,
+  codes = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"W"</span>, <span class='st'>"I"</span>, <span class='st'>"B"</span>),
+  offset = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span>, <span class='fl'>8</span>, <span class='fl'>12</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>a SoilProfileCollection</p></td>
+      <th>x</th>
+      <td><p>vector of boundary topography codes to be converted</p></td>
     </tr>
     <tr>
-      <th>value</th>
-      <td><p>"data.frame", "data.table" or "tbl_df"</p></td>
+      <th>codes</th>
+      <td><p>code values, adjust as needed</p></td>
+    </tr>
+    <tr>
+      <th>lty</th>
+      <td><p>vertical offsets</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>vector of vertical offsets with same length as <code>x</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Additional examples are available in the <a href='https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html'>Visualization of Horizon Boundaries tutorial</a>.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184'>Field Book for Describing and Sampling Soils, version 3.0</a></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='plotSPC.html'>plotSPC</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

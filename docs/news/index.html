@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.25</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
       </span>
     </div>
 
@@ -114,6 +114,28 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="aqp-126-2020-11-18" class="section level1">
+<h1 class="page-header" data-toc-text="1.26">
+<a href="#aqp-126-2020-11-18" class="anchor"></a>aqp 1.26 (2020-11-18)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code>mutate_profile</code> uses <code><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">data.table::rbindlist(fill=TRUE)</a></code> to combine site- and horizon-level transformations</li>
+<li>updates to horizon boundary encoding functions (<code>hzTopographyCodeToOffset</code>, <code>hzTopographyCodeToLineType</code>, <code>hzDistinctnessCodeToOffset</code>)</li>
+<li>new function <code>L1_profiles</code> computes multivariate (L1) medians, compare to marginal medians via <code>slab</code>
+</li>
+<li>
+<code>plotSPC</code> updates:
+<ul>
+<li>argument named changes: <code>hz.boundary.lty</code> is a horizon-level attribute that contains line type codes</li>
+<li>
+<code>hz.topography.offset</code> a horizon-level attribute that contains representative offsets that encode horizon boundary topography</li>
+<li>
+<code>plotSPC</code> now encodes <code>hz.topography.offset</code> using a vertical “bump” (chevron)</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="aqp-125-2020-10-15" class="section level1">
 <h1 class="page-header" data-toc-text="1.25">
 <a href="#aqp-125-2020-10-15" class="anchor"></a>aqp 1.25 (2020-10-15)<small> 2020-10-19 </small>

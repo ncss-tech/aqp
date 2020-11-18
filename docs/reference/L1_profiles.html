@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class • aqp</title>
+<title>Create Representative Soil Profiles via L1 Estimator — L1_profiles • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Get aqp_df_class entry from metadata or return a safe value. — aqp_df_class" />
-<meta property="og:description" content="This is an accessor and replacement method for the aqp_df_class entry in the metadata slot. This entry is used internally by methods that interact with data.frame objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process." />
+<meta property="og:title" content="Create Representative Soil Profiles via L1 Estimator — L1_profiles" />
+<meta property="og:description" content="The L1 estimator, or geometric median, is a multivariate generalization of the (univariate) median concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
+See the L1 Profiles Tutoral for additional examples." />
 
 
 
@@ -111,34 +112,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get aqp_df_class entry from metadata or return a safe value.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/Class-SoilProfileCollection.R'><code>R/Class-SoilProfileCollection.R</code></a></small>
-    <div class="hidden name"><code>aqp_df_class.Rd</code></div>
+    <h1>Create Representative Soil Profiles via L1 Estimator</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/L1_profiles.R'><code>R/L1_profiles.R</code></a></small>
+    <div class="hidden name"><code>L1_profiles.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is an accessor and replacement method for the <code>aqp_df_class</code> entry in the metadata slot. This entry is used internally by methods that interact with <code>data.frame</code> objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.</p>
+    <p>The L1 estimator, or <a href='https://en.wikipedia.org/wiki/Geometric_median'>geometric median</a>, is a multivariate generalization of the (univariate) <a href='https://en.wikipedia.org/wiki/Median'>median</a> concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.</p>
+<p>See the <a href='https://ncss-tech.github.io/AQP/aqp/L1-profiles.html'>L1 Profiles Tutoral</a> for additional examples.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>)
-
-<span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>aqp_df_class</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
+    <pre class="usage"><span class='fu'>L1_profiles</span>(
+  <span class='kw'>x</span>,
+  <span class='kw'>fm</span>,
+  basis = <span class='fl'>1</span>,
+  method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"regex"</span>, <span class='st'>"simple"</span>, <span class='st'>"constant"</span>),
+  maxDepthRule = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"max"</span>, <span class='st'>"min"</span>),
+  maxDepthConstant = <span class='kw'>NULL</span>,
+  strict = <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>a SoilProfileCollection</p></td>
+      <th>x</th>
+      <td><p><code>SoilProfileCollection</code> object</p></td>
     </tr>
     <tr>
-      <th>value</th>
-      <td><p>"data.frame", "data.table" or "tbl_df"</p></td>
+      <th>fm</th>
+      <td><p>formula</p></td>
+    </tr>
+    <tr>
+      <th>basis</th>
+      <td><p>aggregation basis</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>soil depth evaluation method: regular expression, simple, constant. See details.</p></td>
+    </tr>
+    <tr>
+      <th>maxDepthRule</th>
+      <td><p>maximum depth rule: min | max. See details.</p></td>
+    </tr>
+    <tr>
+      <th>maxDepthConstant</th>
+      <td><p>depth when <code>maxDepthRule = 'constant'</code></p></td>
+    </tr>
+    <tr>
+      <th>strict</th>
+      <td><p>passed to <code>slice</code></p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a <code>SoilProfileCollection</code> object</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Cardot, H., Cenac, P. and Zitt, P-A. (2013). Efficient and fast estimation of the geometric median in Hilbert spaces with an averaged stochastic gradient algorithm. Bernoulli, 19, 18-43.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
