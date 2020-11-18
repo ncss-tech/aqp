@@ -47,8 +47,15 @@
 # add principal components for viz
 # document!
 
-#' @title Create Representative Profiles via L1 Median
+#' @title Create Representative Soil Profiles via L1 Estimator
 #' 
+#' @description The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
+#' 
+#' See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutoral} for additional examples.
+#'
+#' @notes This function requires the `Gmedian` package.
+#' 
+#' @references Cardot, H., Cenac, P. and Zitt, P-A. (2013). Efficient and fast estimation of the geometric median in Hilbert spaces with an averaged stochastic gradient algorithm. Bernoulli, 19, 18-43.
 #'
 #' @param x \code{SoilProfileCollection} object
 #' @param fm formula
@@ -58,7 +65,7 @@
 #' @param maxDepthConstant depth when \code{maxDepthRule = 'constant'}
 #' @param strict passed to \code{slice}
 #'
-#' @return
+#' @return a \code{SoilProfileCollection} object
 #' @export
 #'
 L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constant'), maxDepthRule = c('max', 'min'), maxDepthConstant = NULL, strict = FALSE) {

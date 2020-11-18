@@ -2,7 +2,7 @@
 % Please edit documentation in R/L1_profiles.R
 \name{L1_profiles}
 \alias{L1_profiles}
-\title{Create Representative Profiles via L1 Median}
+\title{Create Representative Soil Profiles via L1 Estimator}
 \usage{
 L1_profiles(
   x,
@@ -30,8 +30,13 @@ L1_profiles(
 \item{strict}{passed to \code{slice}}
 }
 \value{
-
+a \code{SoilProfileCollection} object
 }
 \description{
-Create Representative Profiles via L1 Median
+The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
+
+See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutoral} for additional examples.
+}
+\references{
+Cardot, H., Cenac, P. and Zitt, P-A. (2013). Efficient and fast estimation of the geometric median in Hilbert spaces with an averaged stochastic gradient algorithm. Bernoulli, 19, 18-43.
 }

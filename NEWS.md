@@ -1,5 +1,11 @@
-# aqp 1.26 (2020-10-28)
+# aqp 1.26 (2020-11-18)
  * `mutate_profile` uses `data.table::rbindlist(fill=TRUE)` to combine site- and horizon-level transformations
+ * updates to horizon boundary encoding functions (`hzTopographyCodeToOffset`, `hzTopographyCodeToLineType`, `hzDistinctnessCodeToOffset`)
+ * new function `L1_profiles` computes multivariate (L1) medians, compare to marginal medians via `slab`
+ * `plotSPC` updates:
+   + argument named changes: `hz.boundary.lty` is a horizon-level attribute that contains line type codes
+   + `hz.topography.offset` a horizon-level attribute that contains representative offsets that encode horizon boundary topography
+   + `plotSPC` now encodes `hz.topography.offset` using a vertical "bump" (chevron)
 
 # aqp 1.25 (2020-10-15)
  * new lookup table `pms.munsell.lut` for converting Pantone spot color codes to (closest) Munsell chip
