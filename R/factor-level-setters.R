@@ -16,6 +16,7 @@
 #'  
 
 ## TODO: consider various sorting strategies: WMPD, AWC, {PWP,FC,SAT}
+## http://ncss-tech.github.io/AQP/aqp/water-retention-curves.html
 
 SoilTextureLevels <- function(which='codes') {
   
