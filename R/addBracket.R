@@ -1,6 +1,27 @@
-## TODO: still not completely generalized
-# annotate elements from @diagnostic with brackets
-# mostly a helper function for addBracket()
+## TODO:
+# * generalize fully
+# * verbose output for testing
+
+#' @title Annotate Diagnostic Features
+#' @description Annotate diagnostic features within a sketch of soil profiles.
+#' 
+#' @param s \code{SoilProfileCollection} object
+#' @param kind filter applied to \code{feature} column of diagnostic horizons regestered within \code{s}
+#' @param feature column name containing feature kind
+#' @param top column name containing feature top depth
+#' @param bottom column name containing feature top depth
+#' @param ... additional arguments passed to \code{addBracket}
+#'
+#' @details Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
+#' 
+#' @note This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @seealso \code{\link{addBracket,plotSPC}}
+#'
+#' @export
+#'
 addDiagnosticBracket <- function(s, kind, feature='featkind', top='featdept', bottom='featdepb', ...) {
 
   # extract diagnostic horizon information
@@ -30,9 +51,103 @@ addDiagnosticBracket <- function(s, kind, feature='featkind', top='featdept', bo
 ## TODO: add proper documentation
 ## NOTE: this function is vectorized
 # internal function for plotting a bracket (usually defines a diagnostic feature or similar)
-# x: data.frame with lsp$idname, top, bottom, label (optional)
+# x: data.frame with lsp$idname, top, bottom, label (optional), may contain multiple / profile
 # tick.length: bracket tick length
 # offset: left-hand offset from profile center
+
+#' @title Add Depth Brackets
+#' @description Add depth brackets to soil profile sketches.
+#'
+#' @param x \code{data.frame} object containing `idname(x)`, `top`, `bottom`, and optionally `label` columns
+#' @param label.cex scaling factor for label font
+#' @param tick.length length of bracket "tick" mark
+#' @param arrow.length length of arrowhead
+#' @param offset left-hand offset from each profile
+#' @param missing.bottom.depth distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)
+#' @param ... further arguments passed on to \code{segments} or \code{arrows}
+#' 
+#' @details \code{x} may contain multiple records per profile. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
+#' 
+#' @note This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @export
+#' 
+#' @seealso \code{\link{addDiagnosticBracket, plotSPC}}
+#' 
+#' @examples
+#' 
+#' # sample data
+#' data(sp1)
+#' 
+#' # add color vector
+#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+#' 
+#' # promote to SoilProfileCollection
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # plot profiles
+#' par(mar = c(0, 0, 0, 1))
+#' plotSPC(sp1, width = 0.3)
+#' 
+#' # extract min--max depths associated with all A horizons
+#' # result is a single-row data.frame / profile
+#' combinedBracket <- function(i) {
+#'   h <- horizons(i)
+#'   idn <- idname(i)
+#'   this.id <- h[[idn]][1]
+#'   
+#'   idx <- grep('^A', h$name)
+#'   
+#'   res <- data.frame(
+#'     id = this.id,
+#'     top = min(h$top[idx]), 
+#'     bottom = max(h$bottom[idx], na.rm=TRUE)
+#'   )
+#'   names(res)[1] <- idn
+#'   
+#'   return(res)
+#' }
+#' 
+#' # return matching horizon top / bottom depths for A or C horizons
+#' # result is a 0 or more row data.frame / profile
+#' individualBrackets <- function(i) {
+#'   h <- horizons(i)
+#'   idn <- idname(i)
+#'   this.id <- h[[idn]][1]
+#'   
+#'   idx <- grep('^A|^C', h$name)
+#'   
+#'   res <- data.frame(
+#'     id = this.id,
+#'     top = h$top[idx], 
+#'     bottom = h$bottom[idx]
+#'   )
+#'   names(res)[1] <- idn
+#'   
+#'   return(res)
+#' }
+#' 
+#' # combined brackets
+#' b1 <- profileApply(sp1, combinedBracket, frameify = TRUE)
+#' 
+#' # individual brackets
+#' b2 <- profileApply(sp1, individualBrackets, frameify = TRUE)
+#' 
+#' # plot in reverse order
+#' plotSPC(sp1, plot.order = rev(1:length(sp1)))
+#' 
+#' # note that plotting order is derived from the call to `plotSPC(sp1)`
+#' addBracket(b1, col='red')
+#' 
+#' # plot in reverse order
+#' plotSPC(sp1, plot.order = rev(1:length(sp1)))
+#' 
+#' # note that plotting order is derived from the call to `plotSPC(sp1)`
+#' addBracket(b2, col='red')
+#' 
+#' 
 addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=NULL, ...) {
 
   # get plotting details from aqp environment
