@@ -6,6 +6,7 @@
    + argument named changes: `hz.boundary.lty` is a horizon-level attribute that contains line type codes
    + `hz.topography.offset` a horizon-level attribute that contains representative offsets that encode horizon boundary topography
    + `plotSPC` now encodes `hz.topography.offset` using a vertical "bump" (chevron)
+ * `addBracket` can now accept multiple bracket annotations per profile
 
 # aqp 1.25 (2020-10-15)
  * new lookup table `pms.munsell.lut` for converting Pantone spot color codes to (closest) Munsell chip

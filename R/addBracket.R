@@ -39,7 +39,17 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   lsp <- get('last_spc_plot', envir=aqp.env)
   depth.offset <- lsp$y.offset
   sf <- lsp$scaling.factor
-
+  
+  # line ending "2" is usually what we want
+  # however, when using very large line widths and tick.length = 0, the interval will extend
+  # beyond the top/bottom depths
+  if(tick.length == 0) {
+    seg.lend <- 1
+  } else {
+    seg.lend <- 2
+  }
+  
+  
   # test for required columns:
   # lsp$idname
   # top
@@ -62,6 +72,7 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   if(! is.null(x$label))
     do.label <- TRUE
 
+  ## TODO: this must also be done a profile at a time
   # test for all bottom depths missing
   no.bottom <- FALSE
   if(all(is.na(x$bottom)))
@@ -75,50 +86,79 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   # apply scale and offset to missing bottom depth
   missing.bottom.depth <- (missing.bottom.depth * sf) + depth.offset
 
-  # re-order rows of x, according to IDs
-  idx <- match(lsp$pIDs, x[[lsp$idname]])
-  x <- x[idx, ]
-
-  # determine horizon depths in current setting
+  # apply scaling factor and offset
   # depth_prime = (depth * scaling factor) + y.offset
-  top <- (x$top * sf) + depth.offset
-  bottom <- (x$bottom * sf) + depth.offset
-
+  x$top <- (x$top * sf) + depth.offset
+  x$bottom <- (x$bottom * sf) + depth.offset
+  
   ## x-coordinates
   # 2019-07-15: using relative position
   x.base <- lsp$x0
-
-  # normal case: both top and bottom defined
-  if(!missing(top) & !missing(bottom)) {
-    # x-positions
-    x.1 <- x.base + offset
-    x.2 <- x.1 + tick.length
-    # top tick
-    segments(x.1, top, x.2, top, lend=2, ...)
-    # bottom tick
-    segments(x.1, bottom, x.2, bottom, lend=2, ...)
-    # vertical bar
-    segments(x.1, top, x.1, bottom, lend=2, ...)
+  
+  # there may be more than 1 bracket per ID
+  x.list <- split(x, x[[lsp$idname]])
+  
+  # re-order list elements, according to plot order
+  # there may be some profiles without brackets to add
+  # resulting in NA in re-ordering index
+  idx <- match(lsp$pIDs, names(x.list))
+  # re-order in the presence of NA
+  x.list <- x.list[idx]
+  
+  # iterate over list of profile IDs
+  for(i in seq_along(x.list)) {
+    
+    # current set of brackets (single profile)
+    brackets <- x.list[[i]]
+    
+    # skipping profiles with missing brackets
+    if(! is.null(brackets)) {
+      # note: these may contain NA
+      # variables recycled within loop
+      top <- brackets[['top']]
+      bottom <- brackets[['bottom']]
+      label <- brackets[['label']]
+      
+      # missing bottom: replace bottom tick with arrow head
+      if(no.bottom) {
+        
+        # x-positions
+        # x.base is a vector
+        x.1 <- x.base[i] + offset
+        x.2 <- x.1 + tick.length
+        # top tick
+        segments(x.1, top, x.2, top, lend = seg.lend, ...)
+        # vertical bar is now an arrow
+        arrows(x.1, top, x.1, top + missing.bottom.depth, length=arrow.length, lend = seg.lend, ...)
+      } else {
+        # normal usage
+        
+        # x-positions
+        # x.base is a vector
+        x.1 <- x.base[i] + offset
+        x.2 <- x.1 + tick.length
+        # top tick
+        segments(x.1, top, x.2, top, lend = seg.lend, ...)
+        # bottom tick
+        segments(x.1, bottom, x.2, bottom, lend = seg.lend, ...)
+        # vertical bar
+        segments(x.1, top, x.1, bottom, lend = seg.lend, ...)
+      }
+      
+      # optionally plot label
+      if(do.label) {
+        if(no.bottom) {
+          bottom <- rep(missing.bottom.depth, times = length(bottom))
+        }
+        # add labels at mid-points
+        text(x.1 - 0.05, (top + bottom)/2, label, srt=90, cex=label.cex, pos=3)
+      }
+    }
+    
+    
   }
 
-  # missing bottom: replace bottom tick with arrow head
-  if(no.bottom) {
-    # x-positions
-    x.1 <- x.base + offset
-    x.2 <- x.1 + tick.length
-    # top tick
-    segments(x.1, top, x.2, top, lend=2, ...)
-    # vertical bar is now an arrow
-    arrows(x.1, top, x.1, top + missing.bottom.depth, length=arrow.length, lend=2, ...)
-  }
-
-  # optionally plot label
-  if (do.label) {
-    if (no.bottom)
-      bottom <- rep(missing.bottom.depth, times=length(bottom))
-    # add labels
-    text(x.1 - 0.05, (top + bottom)/2, x$label, srt=90, cex=label.cex, pos=3)
-  }
+  
 
 }
 
