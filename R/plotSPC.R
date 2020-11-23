@@ -371,7 +371,9 @@ plotSPC <- function(
 
   # get column names from horizon dataframe
   nm <- names(h)
-
+  
+  ## TODO: there has to be a clear mechanism for suppressing labeling of horizon names
+  
   # if the user has not specified a column containing horizon designations
   #   or, if the specified value is not in the horizon names vector
   #   try to make a guess
@@ -387,112 +389,17 @@ plotSPC <- function(
   ## horizon colors ##
   ####################
   
-  # short-circuit: if all h[[color]] are NA the following logic will not reliably work
-  # this is because sometimes all NA are interpreted as logical vectors
-  if(all(is.na(h[[color]]))) {
-    h[[".color"]] <- NA
-  } else {
-    
-    # there is at least 1 non-NA color to work with 
-    
-    # 1. numeric vector, rescale and apply color ramp
-    if(is.numeric(h[[color]])) {
-      
-      # generate color ramp function
-      cr <- colorRamp(col.palette, bias = col.palette.bias)
-      
-      if(!requireNamespace("scales", quietly = TRUE))
-        stop("package `scales` is required", call.=FALSE)
-      
-      # note that this may contain NAs
-      c.rgb <- cr(scales::rescale(h[[color]]))
-      cc <- which(complete.cases(c.rgb))
-      h$.color <- NA
-      
-      # convert non-NA values into colors
-      h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue=255)
-      
-      # generate range / colors for legend
-      pretty.vals <- pretty(h[[color]], n = n.legend)
-      
-      # truncate to 3 signif vals and convert to character for correct interpretation of floating point values
-      leg.pretty.vals <- as.character(signif(pretty.vals, 3))
-      
-      # put into a list for later
-      color.legend.data <- list(legend=leg.pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
-      
-      # special case: there are < 3 unique values -> convert to factor
-      # previous calculations are ignored
-      low.n.test.vals <- as.character(signif(h[[color]], digits = 3))
-      if(length(unique(na.omit(low.n.test.vals))) < 3) {
-        # replace with character representation with 3 significant digits
-        h[[color]] <- low.n.test.vals
-        message('less than 3 unique values, converting to factor')
-      }
-    }
-    
-    # 2. vector of categorical data
-    if(is.character(h[[color]]) | is.factor(h[[color]])) {
-      
-      # testing if ALL valid colors
-      if( all(.isColorValid(na.omit(h[[color]])))) {
-        # YES: interpret values directly as colors
-        h$.color <- h[[color]]
-      } else {
-        # NO: this is or can be converted into a factor
-        if(!is.factor(h[[color]]))
-          h[[color]] <- factor(h[[color]])
-        
-        # get color mapping levels after dropping missing levels
-        h[[color]] <- droplevels(h[[color]])
-        color.levels <- levels(h[[color]])
-        
-        # make a color mapping function
-        if(!requireNamespace("scales", quietly = TRUE))
-          stop("package `scales` is required", call.=FALSE)
-        
-        color.mapper <- scales::col_factor(
-          palette = colorRampPalette(col.palette, bias = col.palette.bias)(length(color.levels)),
-          domain = color.levels,
-          na.color = default.color,
-          ordered = TRUE
-        )
-        
-        # apply color mapping
-        h$.color <- color.mapper(h[[color]])
-        
-        # generate colors and labels for legend
-        pretty.vals <- color.levels
-        color.legend.data <- list(legend = pretty.vals, col = color.mapper(pretty.vals))
-        
-        # interpret n.legend as max(items) / row
-        n.leg.classes <- length(pretty.vals)
-        
-        # create more room via multiple calls to legend
-        if(n.legend < n.leg.classes) {
-          
-          # make indices to two rows of legends
-          # safely accounts for even / odd n.leg.classes
-          leg.row.indices <- .splitLegend(n.leg.classes)
-          
-          # set flag for later
-          multi.row.legend <- TRUE
-        }
-        
-        
-      }
-    }
-    
-  }
-
+  # results contain:
+  # vector of horizon colors, row-order preserved
+  # legend data if relevant, otherwise NULL
+  hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
+  h[['.color']] <- hz.color.interpretation$colors
   
-  # if the color column doesn't exist, fill with NA
-  if(is.null(h[[color]]))
-    h[[".color"]] <- NA
-
-  # fill missing colors with a reasonable default
-  h$.color <- ifelse(is.na(h$.color), default.color, h$.color)
-
+  
+  ####################
+  ## horizon depths ##
+  ####################
+  
   # get top/bottom column names
   IDcol <- idname(x)
   hzDepthCols <- horizonDepths(x)
@@ -874,14 +781,16 @@ plotSPC <- function(
   if(!missing(alt.label)) {
   	al <- site(x)[[alt.label]]
   	al <- al[plot.order]
-  	text(1:length(x), y.offset+3, al, srt=90, adj=c(1, 0.5), font=2, cex=cex.id * 1.5, col=alt.label.col)
+  	text(x = 1:length(x), y = y.offset + 3, labels = al, srt = 90, adj = c(1, 0.5), font = 2, cex = cex.id * 1.5, col = alt.label.col)
   }
 
 
   ########################################
   ## legend for thematic profile sketch ##
   ########################################
-  if(exists('color.legend.data')) {
+  # extract from interpretation of horizon colors
+  color.legend.data <- hz.color.interpretation$color.legend.data
+  if(! is.null(color.legend.data)) {
     # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
 
