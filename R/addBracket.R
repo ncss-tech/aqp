@@ -18,7 +18,7 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @seealso \code{\link{addBracket,plotSPC}}
+#' @seealso \code{\link{addBracket}, \link{plotSPC}}
 #'
 #' @export
 #'
@@ -74,7 +74,7 @@ addDiagnosticBracket <- function(s, kind, feature='featkind', top='featdept', bo
 #' 
 #' @export
 #' 
-#' @seealso \code{\link{addDiagnosticBracket, plotSPC}}
+#' @seealso \code{\link{addDiagnosticBracket}, \link{plotSPC}}
 #' 
 #' @examples
 #' 
