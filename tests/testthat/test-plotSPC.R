@@ -13,6 +13,10 @@ set.seed(101010)
 p <- lapply(letters[1:10], random_profile, method = 'LPP', SPC = TRUE)
 p <- combine(p)
 
+# make a factor style hz attr
+p$p.factor <- cut(p$p1, quantile(p$p1), include.lowest = TRUE)
+
+
 ## tests
 
 test_that("plotSPC: aqp.env settings", {
@@ -82,7 +86,6 @@ test_that("plotSPC: relative spacing", {
   # 1:length(x) + offsets
   expect_equal(lsp$x0, x.pos)
 })
-
 
 
 
@@ -218,7 +221,9 @@ test_that("horizon color specification interpreted correctly", {
   # reasonable object?
   expect_true(inherits(x, 'list'))
   expect_true(length(x) == 2)
-  
+  expect_true(length(x$color.legend.data) == 4)
+  expect_false(x$color.legend.data$multi.row.legend)
+  expect_null(x$color.legend.data$leg.row.indices)
   
   # another try, no colors specified
   x <- aqp:::.interpretHorizonColor(
@@ -235,7 +240,31 @@ test_that("horizon color specification interpreted correctly", {
   
   # there is no legend
   expect_true(is.null(x$color.legend.data))
+  
+  
+  # factor variable + multi-line legend
+  x <- aqp:::.interpretHorizonColor(
+    h, 
+    color = 'p.factor', 
+    default.color = 'grey', 
+    col.palette = cols,
+    col.palette.bias = 1,
+    n.legend = 2
+  )
+  
+  # multi-line legend details
+  expect_true(x$color.legend.data$multi.row.legend)
+  # row indices are stored in a list
+  expect_true(inherits(x$color.legend.data$leg.row.indices, 'list'))
+  # there should be two rows
+  expect_true(length(x$color.legend.data$leg.row.indices) == 2)
+  # legend item indices are stored by row 
+  expect_equal(x$color.legend.data$leg.row.indices[[1]], c(1,2))
+  expect_equal(x$color.legend.data$leg.row.indices[[2]], c(3,4))
+  
 })
+
+
 
 
 

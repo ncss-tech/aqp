@@ -789,41 +789,53 @@ plotSPC <- function(
   ## legend for thematic profile sketch ##
   ########################################
   # extract from interpretation of horizon colors
-  color.legend.data <- hz.color.interpretation$color.legend.data
-  if(! is.null(color.legend.data)) {
+  cld <- hz.color.interpretation$color.legend.data
+  
+  if(! is.null(cld)) {
     # if no title given, set col.label to name of column containing thematic information
     mtext(side=3, text=col.label, font=2, line=1.6)
 
     # gracefully handle all-NA in thematic variable
-    if(length(color.legend.data$legend) > 0) {
+    if(length(cld$legend) > 0) {
 
       # possibly split legend across multiple rows
-      if(exists('multi.row.legend')) {
+      if(cld$multi.row.legend) {
 
         # compute max space required for legend items
         # better formatting
         # note: must be called AFTER high level plot()
-        leg.text.width <- (max(strwidth(pretty.vals, cex = col.legend.cex)))
+        leg.text.width <- (max(strwidth(cld$legend, cex = col.legend.cex)))
 
         # row 1
-        legend('bottom', inset=c(0, 0.99),
-               legend=color.legend.data$legend[leg.row.indices$row.1],
-               col=color.legend.data$col[leg.row.indices$row.1],
+        legend('bottom', inset = c(0, 0.99),
+               legend = cld$legend[cld$leg.row.indices$row.1],
+               col = cld$col[cld$leg.row.indices$row.1],
                text.width = leg.text.width,
-               bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
+               bty = 'n', pch = 15, horiz = TRUE, xpd = TRUE, cex = col.legend.cex, x.intersp = 1
                )
 
         # row 2
-        legend('bottom', inset=c(0, 0.94),
-               legend=color.legend.data$legend[leg.row.indices$row.2],
-               col=color.legend.data$col[leg.row.indices$row.2],
+        legend('bottom', inset = c(0, 0.94),
+               legend = cld$legend[cld$leg.row.indices$row.2],
+               col = cld$col[cld$leg.row.indices$row.2],
                text.width = leg.text.width,
-               bty='n', pch=15, horiz=TRUE, xpd=TRUE, cex=col.legend.cex, x.intersp=1
+               bty = 'n', pch = 15, horiz = TRUE, xpd = TRUE, cex = col.legend.cex, x.intersp = 1
         )
 
       } else {
         # standard invocation
-        legend('bottom', legend=color.legend.data$legend, col=color.legend.data$col, bty='n', pch=15, horiz=TRUE, xpd=TRUE, inset=c(0, 0.99), cex=col.legend.cex, x.intersp=1)
+        legend(
+          'bottom', 
+          legend = cld$legend, 
+          col = cld$col,
+          bty = 'n',
+          pch = 15,
+          horiz = TRUE,
+          xpd = TRUE,
+          inset = c(0, 0.99),
+          cex = col.legend.cex,
+          x.intersp = 1
+          )
       }
     }
 

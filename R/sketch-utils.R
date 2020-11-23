@@ -1,9 +1,13 @@
 
-
 .interpretHorizonColor <- function(h, color, default.color, col.palette, col.palette.bias, n.legend) {
   
   # this is optionally replaced with real data when using thematic colors
   color.legend.data <- NULL
+  
+  # toggle as needed for more room
+  multi.row.legend <- FALSE
+  # multi-row legend indices
+  leg.row.indices <- NULL
   
   ## TODO: manually setting color=NULL will throw an error
   # think about how to best handle this
@@ -42,9 +46,6 @@
       # truncate to 3 signif vals and convert to character for correct interpretation of floating point values
       leg.pretty.vals <- as.character(signif(pretty.vals, 3))
       
-      # put into a list for later
-      color.legend.data <- list(legend=leg.pretty.vals, col=rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255))
-      
       # special case: there are < 3 unique values -> convert to factor
       # previous calculations are ignored
       low.n.test.vals <- as.character(signif(h[[color]], digits = 3))
@@ -53,6 +54,14 @@
         h[[color]] <- low.n.test.vals
         message('less than 3 unique values, converting to factor')
       }
+      
+      # put into a list for later
+      color.legend.data <- list(
+        legend = leg.pretty.vals, 
+        col = rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255),
+        multi.row.legend = multi.row.legend,
+        leg.row.indices = leg.row.indices
+      )
     }
     
     # 2. vector of categorical data
@@ -87,7 +96,6 @@
         
         # generate colors and labels for legend
         pretty.vals <- color.levels
-        color.legend.data <- list(legend = pretty.vals, col = color.mapper(pretty.vals))
         
         # interpret n.legend as max(items) / row
         n.leg.classes <- length(pretty.vals)
@@ -103,6 +111,13 @@
           multi.row.legend <- TRUE
         }
         
+        # pack into a list for later use
+        color.legend.data <- list(
+          legend = pretty.vals, 
+          col = color.mapper(pretty.vals),
+          multi.row.legend = multi.row.legend,
+          leg.row.indices = leg.row.indices
+        )
         
       }
     }
