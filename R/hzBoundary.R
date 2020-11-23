@@ -1,4 +1,7 @@
 
+## TODO:
+# * introduce a `jitter` argument to account for the possibility of varying geometry / class
+
 
 #' @title Convert Horizon Boundary Distinctness to Vertical Offset
 #' 
