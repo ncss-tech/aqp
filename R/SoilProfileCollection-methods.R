@@ -49,11 +49,11 @@ setMethod("names", signature("SoilProfileCollection"),
           })
 
 # overload min() to give us the min depth within a collection
-#' Get the minimum top depth in a SoilProfileCollection
+#' Get the minimum bottom depth in a SoilProfileCollection
 #'
 #' @name min
 #'
-#' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: top depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
+#' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 #' @param x a SoilProfileCollection
 #' @param v optional: a vector of horizon attribute names to refine calculation
 #' @aliases min,SoilProfileCollection-method
@@ -66,17 +66,17 @@ setMethod(
     h <- x@horizons
 
     # get bottom depth column name
-    hz_top_depths <- horizonDepths(x)[1]
+    hz_bottom_depths <- horizonDepths(x)[2]
 
     # handle empty spc
-    if(length(x@horizons[[hz_top_depths]]) == 0)
+    if(length(x@horizons[[hz_bottom_depths]]) == 0)
       return(NA)
 
     # optionally use a horizon-level property refine calculation
     if (!missing(v)) {
-      target.names <- c(hz_top_depths, idname(x), v)
+      target.names <- c(hz_bottom_depths, idname(x), v)
     } else {
-      target.names <- c(hz_top_depths, idname(x))
+      target.names <- c(hz_bottom_depths, idname(x))
     }
 
     # filter out missing data
@@ -102,8 +102,8 @@ setMethod(
         # cant invoke this for something like min/max probably -- might do better on linux
         # data.table::setkeyv(h, c(idn))
 
-        dep <- h[[hz_top_depths]]
-        d <- dep[h[, .I[hz_top_depths == min(hz_top_depths, na.rm = T)][1],
+        dep <- h[[hz_bottom_depths]]
+        d <- dep[h[, .I[hz_bottom_depths == max(hz_bottom_depths, na.rm = T)][1],
                      by = idn]$V1]
 
         # return from here for data.table
@@ -114,7 +114,7 @@ setMethod(
     # tapply on a data.frame
     # user  system elapsed
     # 4.39    0.00    4.39
-    d <- tapply(h[[hz_top_depths]], h[[idname(x)]], min, na.rm = TRUE)
+    d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
 
     # return the shallowest (of the deepest depths in each profile)
     return(min(d, na.rm = TRUE))
