@@ -36,7 +36,7 @@ Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC
 This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
 }
 \seealso{
-\code{\link{addBracket,plotSPC}}
+\code{\link{addBracket}, \link{plotSPC}}
 }
 \author{
 D.E. Beaudette

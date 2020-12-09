@@ -112,7 +112,7 @@ addBracket(b2, col='red')
 
 }
 \seealso{
-\code{\link{addDiagnosticBracket, plotSPC}}
+\code{\link{addDiagnosticBracket}, \link{plotSPC}}
 }
 \author{
 D.E. Beaudette
