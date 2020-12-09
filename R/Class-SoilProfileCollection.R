@@ -510,28 +510,23 @@ setMethod(".as.data.frame.aqp", signature(x = "ANY"),
 
 
 # basic wrapper function for multi-j index subsetting of data.frames compatible with data.table
-.data.frame.j <- function(dat, col.names, use_class) {
-  dfnames <- names(dat)
 
-  # allow for re-ordering by column name like data.frame[,j]
-  dfnamesub <- dfnames[dfnames %in% col.names]
-  dfnamesub <- dfnamesub[match(col.names, dfnamesub)]
+.data.frame.j <- function(x, col.names, use_class = class(x)[1]) {
 
-  # access columns one by one in desired order, using "ambivalent" [[
-  res <- lapply(dfnamesub, function(new.name) {
-     newcol <- data.frame(dat[[new.name]], stringsAsFactors = FALSE)
-     names(newcol) <- new.name
-     return(newcol)
-  })
-
-  # recombine
-  res <- do.call('cbind', res)
-  if (inherits(res, 'data.frame')) {
-   h <- .as.data.frame.aqp(res, use_class)
-   return(h)
+  # see: https://github.com/ncss-tech/aqp/issues/176
+  .SD <- NULL
+  
+  if (inherits(x, 'data.table')) {
+    res <- x[, .SD, .SDcols = col.names]
   } else {
-    # return data unchanged if not inheriting from data.frame
-    return(dat)
+    res <- x[, col.names, drop = FALSE]
+  }
+  
+  if (inherits(res, 'data.frame')) {
+    h <- .as.data.frame.aqp(res, use_class)
+    return(h)
+  } else {
+    stop(".data.frame.j: result does not inherit from `data.frame`", call. = FALSE)
   }
 }
 
