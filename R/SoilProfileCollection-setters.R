@@ -114,16 +114,28 @@ setReplaceMethod("depths", "data.frame",
   data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
 
   iddata <- data[[nm[1]]]
+
+  if (all(is.na(data[[depthcols[1]]]) |
+          all(is.na(data[[depthcols[2]]]) ))) {
+      warning("Dropping profile IDs: ", paste0(iddata, collapse = ","),
+              "; all top and/or bottom depths missing!", call. = FALSE)
+      return(SoilProfileCollection())
+  }
+
   tdep <- data[[depthcols[1]]]
 
-  usortid <- unique(sort(iddata))
+  usortid <- sort(iddata)
 
   idtdepord <- order(as.character(iddata), tdep)
   ditd <- data[idtdepord,]
-  hsorttdep <- all(ditd[[depthcols[1]]] == tdep)
+  hsorttdep <- !all(ditd[[depthcols[1]]] == tdep)
 
   # re-sort horizon data
-  if (suppressWarnings(any(iddata != usortid) | !hsorttdep)) {
+  t12 <- any(iddata != usortid) | hsorttdep
+
+  if (is.na(t12)) {
+    return(SoilProfileCollection())
+  } else if (t12) {
     ## note: forced character sort on ID -- need to impose some order to check depths
     data <- ditd
   }
