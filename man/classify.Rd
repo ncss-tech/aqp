@@ -46,7 +46,7 @@ test <- expand.grid(
   pH  = c(8.1, 8.2, 8.3, 8.4, 8.5, 8.6),
   ESP = sort(sapply(c(0, 15, 30, 50, 70, 100), function(x) x + c(0, 0.1, -0.1)))
 )
-test$ss      <- with(test, classify(EC = EC, pH = pH, ESP = ESP, system = "salt severity")
+test$ss      <- with(test, classify(EC = EC, pH = pH, ESP = ESP, system = "salt severity"))
 test$ss_code <- as.integer(test$ss)
 test$ss2     <- codify(test$ss_code)
 all(test$ss == test$ss2)
