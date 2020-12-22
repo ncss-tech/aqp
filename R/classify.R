@@ -58,7 +58,7 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
   
   if (system == "salt severity") {
     
-    .codify_salt_severity(x, system = system, droplevels = droplevels)
+    .codify_salt_severity(x, droplevels = droplevels)
     }
   }
 
