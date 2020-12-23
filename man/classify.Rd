@@ -1,14 +1,14 @@
-\name{classify}
-\alias{classify}
+\name{allocate}
+\alias{allocate}
 \alias{codify}
 \title{
-Classification of soil properties
+Allocate to soil properties 
 }
 \description{
-Generic function to classify soil properties using different classification schemes.
+Generic function to allocate soil properties to different classification schemes.
 }
 \usage{
-classify(..., system = "salt severity", droplevels = TRUE)
+allocate(..., system = "salt severity", droplevels = TRUE)
 codify(x, droplevels = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -18,7 +18,7 @@ codify(x, droplevels = TRUE)
   \item{droplevels}{logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.}
 }
 \details{
-This function is intended to classify a combination of soil properties according established USDA and FAO schemes, such as salt severity. Often raster data cannot be stored as a character and thus needs to be stored as an integer. Thus, the codify() function is intended to convert integer values back to a factor. }
+This function is intended to allocate a combination of soil properties according established USDA and FAO classification schemes, such as salt severity. Often raster data cannot be stored as a character and thus needs to be stored as an integer. Thus, the codify() function is intended to convert integer values back to a factor. }
 \value{
 a vector of equal length to the inputs of ...}
 \references{
@@ -46,7 +46,7 @@ test <- expand.grid(
   pH  = c(8.1, 8.2, 8.3, 8.4, 8.5, 8.6),
   ESP = sort(sapply(c(0, 15, 30, 50, 70, 100), function(x) x + c(0, 0.1, -0.1)))
 )
-test$ss      <- with(test, classify(EC = EC, pH = pH, ESP = ESP, system = "salt severity"))
+test$ss      <- with(test, allocate(EC = EC, pH = pH, ESP = ESP, system = "salt severity"))
 test$ss_code <- as.integer(test$ss)
 test$ss2     <- codify(test$ss_code)
 all(test$ss == test$ss2)
