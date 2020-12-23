@@ -1,4 +1,4 @@
-classify <- function(..., system = "salt severity", droplevels = TRUE) {
+allocate <- function(..., system = "salt severity", droplevels = TRUE) {
   
   if (system == "salt severity") {
     .rank_salts(..., droplevels = droplevels)
