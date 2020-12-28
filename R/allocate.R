@@ -1,12 +1,45 @@
-allocate <- function(..., system = "salt severity", droplevels = TRUE) {
+allocate <- function(..., to = NULL, droplevels = TRUE) {
   
-  if (system == "salt severity") {
-    .rank_salts(..., droplevels = droplevels)
+  tos <- c(ss = "Salt Severity", bs = "Black Soil")
+  
+  # test
+  if (is.null(to)) {
+    stop(paste('the "to" argument should equal one of the following:', paste0('"', tos, '"', collapse = ', ')))
   }
+  if (! to %in% tos) {
+    stop(paste('the argument "to" currently supports allocating soil properties to one of the following classification schemes:', paste0('"', tos, '"', collapse = ', ')))
+  }
+  
+  
+  # allocate
+  if (to == "Salt Severity") {
+    a <- .rank_salts(..., system = to, droplevels = droplevels)
+  }
+  
+  if (to == "Black Soil") {
+    a <- .black_soil(...)
+  }
+
+  return(a)  
 }
     
     
 .rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, system = "salt severity", method = "FAO", droplevels = TRUE) {
+  
+  # EC = 1; pH = 3; ESP = 50
+  l <- list(EC = EC, pH = pH, ESP = ESP)
+  
+  # tests
+  # minimum dataset
+  if (any(sapply(l, is.null))) {
+    warning("the minimum dataset of soil properites for allocating to the Salt Severity classes are: EC, pH, ESP")
+  }
+  # length
+  n <- sapply(l, length)
+  if (! all(max(n) == n)) {
+    stop("all arguments must have the same length")
+  }
+  
   
   lev <- c(
     c("nonsaline", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
@@ -84,3 +117,48 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
   return(sc)
 }
   
+
+
+.black_soil <- function(OC = NULL, chroma_moist = NULL, value_moist = NULL, value_dry = NULL, thickness = NULL, CEC = NULL, BS = NULL, tropical = FALSE) {
+  
+  # OC = 1; chroma_moist = 3; value_moist = 3; value_dry = 5; thickness = 25; CEC = 20; BS = 50
+  l <- list(OC = OC, chroma_moist = chroma_moist, value_moist = value_moist, value_dry = value_dry, thickness = thickness, CEC = CEC, BS = BS)
+  
+  # tests
+  # minimum dataset
+  if (any(sapply(l[1:5], is.null))) {
+    warning("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC, chroma_moist, value_moist, value_dry and thickness")
+  }
+  # length
+  n <- sapply(l[1:5], length)
+  if (! all(max(n) == n)) {
+    stop("all arguments must have the same length")
+  }
+  
+  
+  # criteria
+  # 2nd category of Black Soils
+  bs2 <- 
+    (OC <= 20 & (OC >= 1.2 | (tropical == TRUE & OC >= 0.6))) & 
+    chroma_moist <= 3 & 
+    (value_moist <= 3 & value_dry <= 5) & 
+    thickness >= 25
+  
+  # 1st category of Black Soils
+  if (!is.null(l$CEC) & !is.null(l$BS)) {
+    # test length
+    n <- sapply(l, length)
+    if (! all(max(n) == n)) {
+      stop("all arguments must have the same length")
+    }
+    
+    bs1 <- bs2 & CEC >=25 & BS >= 50
+    
+  } else bs1 <- NA[1:seq_along(max(n))]
+  
+  return(data.frame(BS1 = bs1, BS2 = bs2))
+  
+}
+
+
+
