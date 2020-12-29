@@ -59,9 +59,10 @@ test$ss2     <- codify(test$ss_code)
 all(test$ss == test$ss2)
 
 
-# Black Soil Category 1
+# Black Soil Category 1 (BS1)
 test <- expand.grid(
-  OC  = sort(sapply(c(0, 0.6, 1.2, 20, 40), function(x) x + c(0, -0.05, 0.05))),
+  dept = seq(0, 50, 10),
+  OC   = sort(sapply(c(0, 0.6, 1.2, 20, 40), function(x) x + c(0, -0.05, 0.05))),
   chroma_moist  = 2:4,
   value_moist   = 2:4,
   value_dry     = 4:6,
@@ -70,21 +71,26 @@ test <- expand.grid(
   BS            = 49:51,
   tropical      = c(TRUE, FALSE)
 )
+test$pedon_id <- rep(1:21870, each = 6)
+test$depb     <- test$dept + 10
 
-bs1 <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, CEC, BS, to = "Black Soil"))
+bs1 <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, CEC, BS, to = "FAO Black Soil"))
 test2 <- cbind(test, bs1)
-idx <- test2$BS1 == TRUE
-summary(test2[idx, ])
+
+## summarize BS1 by pedon
+test_seg  <- segment(test2, intervals = c(0, 25), hzdepcols = c("dept", "depb"))
+test_prof <- aggregate(BS1 ~ pedon_id, data = test_seg, all)
+
 
 # Black Soil Category 2
-bs2 <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, to = "Black Soil"))
+bs2 <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, to = "Black Soil", horizon = FALSE))
 test2 <- cbind(test, bs2)
 idx <- test2$BS2 == TRUE
 summary(test2[idx, ])
 
 
 # Tropical Black Soil
-tbs <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, CEC, BS, tropical = TRUE, to = "Black Soil"))
+tbs <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, CEC, BS, tropical = TRUE, to = "Black Soil", horizon = FALSE))
 test2 <- cbind(test, tbs)
 idx <- test2$BS2 == TRUE
 summary(test2[idx, ])

@@ -1,30 +1,34 @@
 allocate <- function(..., to = NULL, droplevels = TRUE) {
   
-  tos <- c(ss = "Salt Severity", bs = "Black Soil")
+  tos <- c(ss = "FAO Salt Severity", bs = "FAO Black Soil")
   
   # test
-  if (is.null(to)) {
+  if (all(is.null(to))) {
     stop(paste('the "to" argument should equal one of the following:', paste0('"', tos, '"', collapse = ', ')))
   }
-  if (! to %in% tos) {
-    stop(paste('the argument "to" currently supports allocating soil properties to one of the following classification schemes:', paste0('"', tos, '"', collapse = ', ')))
+  if (length(to) > 1) {
+    stop('the length of the "to" argument should equal 1')
   }
-  
+  if (! to %in% tos) {
+    stop(paste('the argument "to" currently supports allocating soil properties to one of the following classification schemes\\:', paste0('"', tos, '"', collapse = ', ')))
+  }
+    
   
   # allocate
-  if (to == "Salt Severity") {
+  if (to == "FAO Salt Severity") {
     a <- .rank_salts(..., system = to, droplevels = droplevels)
   }
   
-  if (to == "Black Soil") {
-    a <- .black_soil(...)
+  if (to == "FAO Black Soil") {
+    a <- .black_horizon(...)
   }
 
   return(a)  
 }
     
-    
-.rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, system = "salt severity", method = "FAO", droplevels = TRUE) {
+
+# To do add USDA and other salt classes
+.rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, system = "FAO Salt Severity", droplevels = TRUE) {
   
   # EC = 1; pH = 3; ESP = 50
   l <- list(EC = EC, pH = pH, ESP = ESP)
@@ -32,7 +36,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # tests
   # minimum dataset
   if (any(sapply(l, is.null))) {
-    warning("the minimum dataset of soil properites for allocating to the Salt Severity classes are: EC, pH, ESP")
+    warning("the minimum dataset of soil properites for allocating to the Salt Severity classes are: EC (aka Electrial Conductivity), pH, ESP (aka Exchangable Sodium Percentage")
   }
   # length
   n <- sapply(l, length)
@@ -88,9 +92,9 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 
 
 codify <- function(x, system = "salt severity", droplevels = TRUE) {
-  
+
   if (system == "salt severity") {
-    
+
     .codify_salt_severity(x, droplevels = droplevels)
     }
   }
@@ -119,15 +123,15 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
   
 
 
-.black_soil <- function(OC = NULL, chroma_moist = NULL, value_moist = NULL, value_dry = NULL, thickness = NULL, CEC = NULL, BS = NULL, tropical = FALSE) {
+.black_horizon <- function(OC = NULL, chroma_moist = NULL, value_moist = NULL, value_dry = NULL, thickness = NULL, CEC = NULL, BS = NULL, tropical = FALSE, horizon = TRUE) {
   
   # OC = 1; chroma_moist = 3; value_moist = 3; value_dry = 5; thickness = 25; CEC = 20; BS = 50
   l <- list(OC = OC, chroma_moist = chroma_moist, value_moist = value_moist, value_dry = value_dry, thickness = thickness, CEC = CEC, BS = BS)
   
   # tests
   # minimum dataset
-  if (any(sapply(l[1:5], is.null))) {
-    warning("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC, chroma_moist, value_moist, value_dry and thickness")
+  if (any(sapply(l[1:4], is.null))) {
+    stop("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC (aka Organic Carbon), chroma_moist, value_moist, and value_dry") # and thickness
   }
   # length
   n <- sapply(l[1:5], length)
@@ -142,7 +146,7 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
     (OC <= 20 & (OC >= 1.2 | (tropical == TRUE & OC >= 0.6))) & 
     chroma_moist <= 3 & 
     (value_moist <= 3 & value_dry <= 5) & 
-    thickness >= 25
+    (thickness >= 25 | horizon == TRUE) # thickness should only be applied to profiles
   
   # 1st category of Black Soils
   if (!is.null(l$CEC) & !is.null(l$BS)) {
