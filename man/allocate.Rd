@@ -79,7 +79,7 @@ test2 <- cbind(test, bs1)
 
 ## summarize BS1 by pedon
 test_seg  <- segment(test2, intervals = c(0, 25), hzdepcols = c("dept", "depb"))
-test_prof <- aggregate(BS1 ~ pedon_id, data = test_seg, all)
+test_prof <- aggregate(BS1 ~ pedon_id, data = test_seg, FUN = all, na.action = na.pass)
 
 
 # Black Soil Category 2

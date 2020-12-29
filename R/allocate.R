@@ -1,6 +1,6 @@
 allocate <- function(..., to = NULL, droplevels = TRUE) {
   
-  tos <- c(ss = "FAO Salt Severity", bs = "FAO Black Soil")
+  tos <- c(ss = "FAO Salt Severity", bh = "FAO Black Horizon")
   
   # test
   if (all(is.null(to))) {
@@ -19,7 +19,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     a <- .rank_salts(..., system = to, droplevels = droplevels)
   }
   
-  if (to == "FAO Black Soil") {
+  if (to == "FAO Black Horizon") {
     a <- .black_horizon(...)
   }
 
@@ -123,10 +123,10 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
   
 
 
-.black_horizon <- function(OC = NULL, chroma_moist = NULL, value_moist = NULL, value_dry = NULL, thickness = NULL, CEC = NULL, BS = NULL, tropical = FALSE, horizon = TRUE) {
+.black_horizon <- function(OC = NULL, chroma_moist = NULL, value_moist = NULL, value_dry = NULL, CEC = NULL, BS = NULL, tropical = FALSE) { # thickness = NULL, horizon = TRUE 
   
   # OC = 1; chroma_moist = 3; value_moist = 3; value_dry = 5; thickness = 25; CEC = 20; BS = 50
-  l <- list(OC = OC, chroma_moist = chroma_moist, value_moist = value_moist, value_dry = value_dry, thickness = thickness, CEC = CEC, BS = BS)
+  l <- list(OC = OC, chroma_moist = chroma_moist, value_moist = value_moist, value_dry = value_dry, CEC = CEC, BS = BS) # thickness = thickness, 
   
   # tests
   # minimum dataset
@@ -134,7 +134,7 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
     stop("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC (aka Organic Carbon), chroma_moist, value_moist, and value_dry") # and thickness
   }
   # length
-  n <- sapply(l[1:5], length)
+  n <- sapply(l[1:4], length)
   if (! all(max(n) == n)) {
     stop("all arguments must have the same length")
   }
@@ -142,25 +142,27 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
   
   # criteria
   # 2nd category of Black Soils
-  bs2 <- 
+  bh2 <- 
     (OC <= 20 & (OC >= 1.2 | (tropical == TRUE & OC >= 0.6))) & 
     chroma_moist <= 3 & 
-    (value_moist <= 3 & value_dry <= 5) & 
-    (thickness >= 25 | horizon == TRUE) # thickness should only be applied to profiles
+    (value_moist <= 3 & value_dry <= 5) 
+    # (thickness >= 25 | (is.null(thickness) & horizon == TRUE)) # thickness should only be applied to profiles
   
   # 1st category of Black Soils
   if (!is.null(l$CEC) & !is.null(l$BS)) {
     # test length
-    n <- sapply(l, length)
+    n <- sapply(l[5:6], length)
     if (! all(max(n) == n)) {
       stop("all arguments must have the same length")
     }
     
-    bs1 <- bs2 & CEC >=25 & BS >= 50
+    bh1 <- bh2 & CEC >= 25 & BS >= 50
     
-  } else bs1 <- NA[1:seq_along(max(n))]
-  
-  return(data.frame(BS1 = bs1, BS2 = bs2))
+  } else {
+    warning("the minimum dataset of soil properites for allocating to the 1nd category of Black Soils, in addition to the 2nd category, are: CEC (aka Cation Exchange Capacity), BS (aka Base Saturation)")
+    bh1 <- NA[1:seq_along(max(n))]
+  }
+  return(data.frame(BH1 = bh1, BH2 = bh2))
   
 }
 
