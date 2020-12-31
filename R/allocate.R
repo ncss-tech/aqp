@@ -3,7 +3,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   tos <- c(ss = "FAO Salt Severity", bh = "FAO Black Soil")
   
   # test
-  if (all(is.null(to))) {
+  if (is.null(to)) {
     stop(paste('the "to" argument should equal one of the following:', paste0('"', tos, '"', collapse = ', ')))
   }
   if (length(to) > 1) {
@@ -45,7 +45,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   }
   
   
-  lev <- c(
+  fao_lev <- c(
     c("nonsaline", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
     c("none", "slightly sodic", "moderately sodic", "strongly sodic", "very strongly sodic")
     )
@@ -56,7 +56,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
                as.character(
                  cut(EC,
                      breaks = c(-1, 0.75, 2, 4, 8, 15, 1000), 
-                     labels = lev[1:6],
+                     labels = fao_lev[1:6],
                      right  = FALSE
                      )),
                sc
@@ -67,8 +67,8 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
                  cut(ESP,
                      # breaks = c(0, 15, 30, 50, 70, 100),
                      breaks = c(-2, 30, 50, 70, 102),
-                     # labels = lev[7:11],
-                     labels = lev[8:11],
+                     # labels = fao_lev[7:11],
+                     labels = fao_lev[8:11],
                      right  = FALSE
                      )),
                sc
@@ -78,7 +78,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   
   
   # convert to factor
-  sc <- factor(sc, levels = c(lev[1:6], "saline-sodic", lev[8:11]))
+  sc <- factor(sc, levels = c(fao_lev[1:6], "saline-sodic", fao_lev[8:11]))
 
   
   # droplevels
@@ -103,7 +103,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 .codify_salt_severity <- function(x, droplevels = TRUE) {
   
   # set levels
-  lev <- c(
+  fao_lev <- c(
     c("nonsaline", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
     c("none", "slightly sodic", "moderately sodic", "strongly sodic", "very strongly sodic")
   )
@@ -112,7 +112,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   if (!is.integer(x)) stop("x is not an integer")
   if (!all(unique(x) %in% c(1:11, NA))) warning("some x values do not match the lookup table")
 
-  sc <- factor(x, levels = 1:11, labels = c(lev[1:6], "saline-sodic", lev[8:11]))
+  sc <- factor(x, levels = 1:11, labels = c(fao_lev[1:6], "saline-sodic", fao_lev[8:11]))
   
   if (droplevels == TRUE) {
     sc <- droplevels(sc)
@@ -142,9 +142,11 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # check length of arguments
   if (any(sapply(vars, length) > 1)) {
     stop("the length of all arguments must be 1, except for object")
+    # this will drop NULL arguments, which is ok for CEC & BS
   } else vars <- unlist(vars)
   
   # check arguments match df colnames & subset
+  # no vars should be NA, but this will catch them if they are
   idx <- !is.na(vars) 
   if (! all(vars[idx] %in% names(df))) {
     stop("column names in object must match the other character vector input arguments")
@@ -158,7 +160,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # 2nd category of Black Soils
   # minimum dataset
   if (any(sapply(df[vars2][1:7], function(x) all(is.na(x))))) {
-    stop("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC (aka Organic Carbon), chroma_moist, value_moist, and value_dry") # and thickness
+    stop("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC (aka Organic Carbon), m_chroma, m_value, and d_value") # and thickness
   }
   bs2 <- with(df,
               (OC <= 20 & (OC >= 1.2 | (tropical == TRUE & OC >= 0.6))) 
@@ -177,6 +179,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     bs1 <- NA[1:nrow(df)]
   }
   
+  # combine results and subset to 0-25cm
   df_bs  <- cbind(df[vars2[1:3]], BS1 = bs1, BS2 = bs2)
   df_bs  <- segment(df_bs, intervals = c(0, 25), hzdepcols = c("hztop", "hzbot"))
   df_bs  <- df_bs[df_bs$segment_id == "0-25", -6]
@@ -188,8 +191,8 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # filter thickness > 25cm
   df_bs  <- merge(df_bs2, df_bot, by = "pedonid", all.x = TRUE)
   df_bs  <- within(df_bs, {
-    BS1 = ifelse(as.integer(hzbot) == 25L, BS1, 0)
-    BS2 = ifelse(as.integer(hzbot) == 25L, BS2, 0)
+    BS1 = BS1 & as.integer(hzbot) == 25L
+    BS2 = BS2 & as.integer(hzbot) == 25L
     hzbot = NULL
   })
   
