@@ -1,6 +1,5 @@
 \name{allocate}
 \alias{allocate}
-\alias{codify}
 \title{
 Allocate soil properties 
 }
@@ -9,20 +8,17 @@ Generic function to allocate soil properties to different classification schemes
 }
 \usage{
 allocate(..., to = NULL, droplevels = TRUE)
-codify(x, droplevels = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{...}{further arguments, usually a named vector of soil properties (e.g. pH = 1:14)}
-  \item{to}{character specifying the classification scheme}
+  \item{to}{character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see the Details for the required ...)}
   \item{droplevels}{logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.}
 }
 \details{
-This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is often confused with classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a class (Webster and Oliver, 1990). 
-
-Often raster data cannot be stored as a character and thus needs to be stored as an integer. Thus, the codify() function is intended to convert integer values back to a factor.}
+This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Webster and Oliver, 1990). 
 \value{
-a vector or data frame of equal length to the inputs of ...}
+a vector or data frame}
 \references{
 Abrol, I., Yadav, J. & Massoud, F. 1988. \href{http://www.fao.org/3/x5871e/x5871e00.htm}{Salt-affected soils and their management}. No. Bulletin 39. Rome, FAO Soils.
 
@@ -74,26 +70,7 @@ test <- expand.grid(
 test$pedon_id <- rep(1:21870, each = 6)
 test$depb     <- test$dept + 10
 
-bs1 <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, CEC, BS, to = "FAO Black Soil"))
-test2 <- cbind(test, bs1)
-
-## summarize BS1 by pedon
-test_seg  <- segment(test2, intervals = c(0, 25), hzdepcols = c("dept", "depb"))
-test_prof <- aggregate(cbind(BH1, BH2) ~ pedon_id, data = test_seg, FUN = all, na.action = na.pass)
-
-
-# Black Soil Category 2
-bs2 <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, to = "Black Soil", horizon = FALSE))
-test2 <- cbind(test, bs2)
-idx <- test2$BS2 == TRUE
-summary(test2[idx, ])
-
-
-# Tropical Black Soil
-tbs <- with(test, allocate(OC, chroma_moist, value_moist, value_dry, thickness, CEC, BS, tropical = TRUE, to = "Black Soil", horizon = FALSE))
-test2 <- cbind(test, tbs)
-idx <- test2$BS2 == TRUE
-summary(test2[idx, ])
+bs1 <- allocate(test, pedonid = "pedon_id", hztop = "dept", hzbot = "depb", OC = "OC", m_chroma = "chroma_moist", m_value = "value_moist", d_value = "value_dry", CEC = "CEC", BS = "BS", to = "FAO Black Soil")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):

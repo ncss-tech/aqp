@@ -1,6 +1,6 @@
 allocate <- function(..., to = NULL, droplevels = TRUE) {
   
-  tos <- c(ss = "FAO Salt Severity", bh = "FAO Black Horizon")
+  tos <- c(ss = "FAO Salt Severity", bh = "FAO Black Soil")
   
   # test
   if (all(is.null(to))) {
@@ -19,8 +19,8 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     a <- .rank_salts(..., system = to, droplevels = droplevels)
   }
   
-  if (to == "FAO Black Horizon") {
-    a <- .black_horizon(...)
+  if (to == "FAO Black Soil") {
+    a <- .black_soil(...)
   }
 
   return(a)  
@@ -91,7 +91,7 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 
 
 
-codify <- function(x, system = "salt severity", droplevels = TRUE) {
+.codify <- function(x, system = "salt severity", droplevels = TRUE) {
 
   if (system == "salt severity") {
 
@@ -123,47 +123,79 @@ codify <- function(x, system = "salt severity", droplevels = TRUE) {
   
 
 
-.black_horizon <- function(OC = NULL, chroma_moist = NULL, value_moist = NULL, value_dry = NULL, CEC = NULL, BS = NULL, tropical = FALSE) { # thickness = NULL, horizon = TRUE 
+.black_soil <- function(object, pedonid = "peiid", hztop = "hzdept", hzbot = "hzdepb", OC = NULL, m_chroma = "m_chroma", m_value = "m_value", d_value = "d_value", CEC = NULL, BS = NULL, tropical = FALSE) { # thickness = NULL, horizon = TRUE 
   
   # OC = 1; chroma_moist = 3; value_moist = 3; value_dry = 5; thickness = 25; CEC = 20; BS = 50
-  l <- list(OC = OC, chroma_moist = chroma_moist, value_moist = value_moist, value_dry = value_dry, CEC = CEC, BS = BS) # thickness = thickness, 
+  # pedonid = "123"; hztop = 0; hzbot = 25; OC = 1.6; m_chroma = 3; m_value = 3; d_value = 5; CEC = 25; BS = 50; tropical = FALSE
+  # object <- data.frame(pedonid, hztop, hzbot, OC, m_chroma, m_value, d_value, CEC, BS)
+  # pedonid = "pedonid"; hztop = "hztop"; hzbot = "hzbot"; OC = "OC"; m_chroma = "m_chroma"; m_value = "m_value"; d_value = "d_value"; CEC = "CEC"; BS = "BS"
+  # pedonid = "idp"; hztop = "top"; hzbot = "bot"; OC = "oc"; m_chroma = "w_chroma"; m_value = "w_value"; d_value = "d_value"; CEC = "cec"; BS = NULL
   
-  # tests
-  # minimum dataset
-  if (any(sapply(l[1:4], is.null))) {
-    stop("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC (aka Organic Carbon), chroma_moist, value_moist, and value_dry") # and thickness
-  }
-  # length
-  n <- sapply(l[1:4], length)
-  if (! all(max(n) == n)) {
-    stop("all arguments must have the same length")
-  }
+  # test & standardize inputs
+  vars <- list(pedonid = pedonid, hztop = hztop, hzbot = hzbot, OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
   
+  # check object type
+  if (class(object)[1] == "SoilProfileCollection") {
+    df <- horizons(object)
+  } else df <- object
+  
+  # check length of arguments
+  if (any(sapply(vars, length) > 1)) {
+    stop("the length of all arguments must be 1, except for object")
+  } else vars <- unlist(vars)
+  
+  # check arguments match df colnames & subset
+  idx <- !is.na(vars) 
+  if (! all(vars[idx] %in% names(df))) {
+    stop("column names in object must match the other character vector input arguments")
+  } else {
+    df <- df[vars[idx]]
+    vars2 <- names(vars[idx])
+    names(df) <- vars2
+    }
   
   # criteria
   # 2nd category of Black Soils
-  bh2 <- 
-    (OC <= 20 & (OC >= 1.2 | (tropical == TRUE & OC >= 0.6))) & 
-    chroma_moist <= 3 & 
-    (value_moist <= 3 & value_dry <= 5) 
-    # (thickness >= 25 | (is.null(thickness) & horizon == TRUE)) # thickness should only be applied to profiles
+  # minimum dataset
+  if (any(sapply(df[vars2][1:7], function(x) all(is.na(x))))) {
+    stop("the minimum dataset of soil properites for allocating to the 2nd category of Black Soils are: OC (aka Organic Carbon), chroma_moist, value_moist, and value_dry") # and thickness
+  }
+  bs2 <- with(df,
+              (OC <= 20 & (OC >= 1.2 | (tropical == TRUE & OC >= 0.6))) 
+              & m_chroma <= 3 
+              & (m_value <= 3 & d_value <= 5)
+  )
   
   # 1st category of Black Soils
-  if (!is.null(l$CEC) & !is.null(l$BS)) {
-    # test length
-    n <- sapply(l[5:6], length)
-    if (! all(max(n) == n)) {
-      stop("all arguments must have the same length")
-    }
+  # minimum dataset
+  if (!is.null(CEC) & !is.null(BS) & all(c("CEC", "BS") %in% names(df))) {
     
-    bh1 <- bh2 & CEC >= 25 & BS >= 50
+    bs1 <- bs2 & df$CEC >= 25 & df$BS >= 50
     
-  } else {
-    warning("the minimum dataset of soil properites for allocating to the 1nd category of Black Soils, in addition to the 2nd category, are: CEC (aka Cation Exchange Capacity), BS (aka Base Saturation)")
-    bh1 <- NA[1:seq_along(max(n))]
+    } else {
+    message("the minimum dataset of soil properites for allocating to the 1nd category of Black Soils, in addition to the 2nd category, are: CEC (aka Cation Exchange Capacity), BS (aka Base Saturation)")
+    bs1 <- NA[1:nrow(df)]
   }
-  return(data.frame(BH1 = bh1, BH2 = bh2))
   
+  df_bs  <- cbind(df[vars2[1:3]], BS1 = bs1, BS2 = bs2)
+  df_bs  <- segment(df_bs, intervals = c(0, 25), hzdepcols = c("hztop", "hzbot"))
+  df_bs  <- df_bs[df_bs$segment_id == "0-25", -6]
+  
+  # aggregate the horizons
+  df_bs2 <- aggregate(cbind(BS1, BS2) ~ pedonid, data = df_bs, FUN = all, na.action = na.pass)
+  df_bot <- aggregate(hzbot ~ pedonid, data = df_bs, FUN = function(x) max(x, na.rm = TRUE))
+  
+  # filter thickness > 25cm
+  df_bs  <- merge(df_bs2, df_bot, by = "pedonid", all.x = TRUE)
+  df_bs  <- within(df_bs, {
+    BS1 = ifelse(as.integer(hzbot) == 25L, BS1, 0)
+    BS2 = ifelse(as.integer(hzbot) == 25L, BS2, 0)
+    hzbot = NULL
+  })
+  
+  names(df_bs)[1] <- pedonid
+  
+  return(df_bs)
 }
 
 
