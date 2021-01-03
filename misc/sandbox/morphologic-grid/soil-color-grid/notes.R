@@ -22,7 +22,14 @@ library(rgeos)
 # check
 plotRGB(r)
 
-# convert to CIELAB
+# number of samples
+# used to "snap" pixel stacks to a reduced set of colors via PAM(dE00)
+n <- 1000
+
+# number of medoids / clusters ("color-snapping")
+k <- 8
+
+# convert sRGB stack to CIELAB
 r.lab <- r
 r.lab[] <- convert_colour(r[], from = 'rgb', to = 'lab', white_from = 'D65')
 
@@ -30,7 +37,6 @@ r.lab[] <- convert_colour(r[], from = 'rgb', to = 'lab', white_from = 'D65')
 levelplot(r.lab, scales = list(draw = FALSE))
 
 # sample for efficiency
-n <- 1000
 s <- data.frame(
   sampleRegular(r.lab, size = n)
 )
@@ -84,9 +90,6 @@ str(s)
 # notes from: http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html
 d <- compare_colour(s[, c('l', 'a', 'b')], from_space='lab', white_from = 'D65', method='cie2000')
 d <- as.dist(t(d))
-
-# number of medoids / clusters
-k <- 8
 
 # a little slower, but using dE00 as distance metric
 # this is possible when using samples collected from full stack
