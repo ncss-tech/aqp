@@ -266,7 +266,7 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
   
   TT.points(tri.data = ss, geo = TT, col=alpha('darkgreen', alpha[2]), pch = 15, cex = 0.5)
   
-  legend('topright', legend = c('Uniform / Grid', 'Normal / Compositional'), bty = 'n', pch = 15, col = c('darkgreen', 'firebrick'), horiz = TRUE)
+  legend('topright', legend = c('Uniform / Grid', 'Dirichlet'), bty = 'n', pch = 15, col = c('darkgreen', 'firebrick'), horiz = TRUE)
   
   txt <- sprintf("hit rate: %s%%", round(ssc$hit.rate[2] * 100))
   mtext(txt, side = 3, at = 0, line = -4)
