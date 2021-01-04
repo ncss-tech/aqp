@@ -10,6 +10,10 @@ library(MASS)
 library(e1071)
 library(rgeos)
 
+# TODO: parallel eval of L1
+library(pbapply)
+library(furrr)
+
 ## other nice images
 # https://www.flickr.com/photos/soilscience/5105276422/in/album-72157625093942533/
 # https://www.flickr.com/photos/soilscience/5104685533/in/album-72157625093942533/
@@ -56,28 +60,6 @@ str(s)
 # * majority after clustering (fast)
 # * subtractive mixture (very slow)
 # * window L1 median(CIELAB) -> Munsell chip (ideal?)
-
-
-## L1 median over sRGB stack
-# aggregate to larger cell size (possible change in extent)
-# vectorize
-# iterate over vector zones
-# sample overlapping sRGB pixels
-# convert to hex notation
-# colorQuantiles()
-# `L1` component
-# rasterize
-# fix extent
-# stack
-# setup RAT
-# visualize
-
-# # make zones, note that they may extend beyond original extent
-# z <- rasterToPolygons(aggregate(r.lab, fact = 24, fun = mean, expand = TRUE), dissolve = FALSE)
-# plot(r.lab[[1]])
-# plot(z, add=TRUE)
-# e <- extract(r, z[1, ])[[1]]
-# colorQuantiles(rgb(e / 255), p = 0.5)
 
 
 
@@ -194,18 +176,108 @@ levelplot(
 
 
 
+# create an sRGB version of the 9x9 mean aggregation of CIELAB stack
+r.sRGB.agg <- r.lab.agg
+r.sRGB.agg[] <- convert_colour(r.lab.agg[], from = 'lab', to = 'rgb', white_from = 'D65')
+
 
 
 # side by side in base graphics requires some tinkering
-par(mfcol = c(1, 2), mar = c(4, 1, 0, 1))
+par(mfcol = c(1, 3), mar = c(5, 1, 1, 1))
 plotRGB(r, margins = TRUE)
 box()
+mtext('Original', side = 1, line = 1, font = 2)
+
+plotRGB(r.sRGB.agg, margins = TRUE)
+box()
+mtext('9x9 Mean(CIELAB) Filter', side = 1, line = 1, font = 2)
+
 plot(r.clust, col = rat$color, axes = FALSE, legend = FALSE)
+mtext('Closest Munsell Chip', side = 1, line = 1, font = 2)
 # must tinker with `inset` and `ncol`
-legend('bottom', legend = rat$munsell[idx], col = rat$color[idx], pch = 15, pt.cex = 2, bty = 'n', ncol = 4, inset = -0.1, xpd = TRUE, cex = 0.85)
+legend(
+  'bottom', legend = rat$munsell[idx], 
+  col = rat$color[idx], pch = 15, pt.cex = 2, 
+  bty = 'n', ncol = 4, inset = -0.1, xpd = TRUE, cex = 1
+)
 
 
 
+
+## L1 median over sRGB stack
+# aggregate to larger cell size (possible change in extent)
+# vectorize
+# iterate over vector zones
+# sample overlapping sRGB pixels
+# convert to hex notation
+# colorQuantiles()
+# `L1` components
+# snap to `k` Munsell chips
+# rasterize
+# fix extent
+# stack
+# setup RAT
+# visualize
+
+## make zones, note that they may extend beyond original extent
+z <- rasterToPolygons(aggregate(r, fact = 24, fun = mean, expand = TRUE), dissolve = FALSE)
+plot(r[[1]])
+plot(z, add=TRUE)
+
+# ~ 3 minutes
+# parallel eval would make more sense
+# this is actually quite wasteful because colorQuantiles() 
+# is doing a lot of additional work we don't need
+z.L1 <- pblapply(1:nrow(z), function(i) {
+  e <- extract(r, z[i, ])[[1]]
+  # what about other percentiles?
+  cq <- colorQuantiles(rgb(e / 255), p = 0.5)
+  # what could be done with the marginal percentiles?
+  # return only the L1 details
+  return(cq$L1)
+})
+
+# extract L1 stuff
+# row-order is preserved so we can assign back to SPDF
+z$color <- sapply(z.L1, '[[', 'L1_color')
+z$chip <- sapply(z.L1, '[[', 'L1_chip')
+
+
+# note that there are a lot of chips
+# a snapping step, like aggregateSoilColor would be useful
+sort(table(sapply(strsplit(z$chip, '\n'), '[', 1)), decreasing = TRUE)
+
+# this may extend beyond the original raster stack
+plot(z, col = z$color, add = TRUE)
+
+# convert back to raster stack and crop
+
+
+
+# viz
+
+# side by side in base graphics requires some tinkering
+par(mfcol = c(1, 3), mar = c(5, 1, 1, 1))
+plotRGB(r, margins = TRUE)
+box()
+mtext('Original', side = 1, line = 1, font = 2)
+
+
+plot(r.clust, col = rat$color, axes = FALSE, legend = FALSE)
+mtext('9x9 Mean(CIELAB) | PAM | Munsell Chip', side = 1, line = 1, font = 2, cex = 0.8)
+# must tinker with `inset` and `ncol`
+legend(
+  'bottom', legend = rat$munsell[idx], 
+  col = rat$color[idx], pch = 15, pt.cex = 2, 
+  bty = 'n', ncol = 4, inset = -0.1, xpd = TRUE, cex = 1
+)
+
+# set plotting area using raster object
+plotRGB(r.sRGB.agg, margins = TRUE)
+# overplot with polygons
+plot(z, col = z$color, border = NA, add = TRUE)
+box()
+mtext('L1 CIELAB | Closest Munsell Chip', side = 1, line = 1, font = 2, cex = 0.8)
 
 
 
