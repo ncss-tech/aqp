@@ -374,6 +374,17 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     }
   
     names(sp)[1] <- vars[1]
+    
+    
+    if (featkind == "petrocalcic horizon") {
+      sp <- sp[(sp$featdepb - sp$featdept) >= 10, ]
+    }
+    
+    # need to add more logic to capture when < 10cm is cemented 
+    if (featkind == "calcic horizon") {
+      sp <- sp[(sp$featdepb - sp$featdept) >= 15, ]
+    }
+    
   
   } else sp <- NULL 
   
