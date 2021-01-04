@@ -71,6 +71,14 @@ test$pedon_id <- rep(1:21870, each = 6)
 test$depb     <- test$dept + 10
 
 bs1 <- allocate(test, pedonid = "pedon_id", hztop = "dept", hzbot = "depb", OC = "OC", m_chroma = "chroma_moist", m_value = "value_moist", d_value = "value_dry", CEC = "CEC", BS = "BS", to = "FAO Black Soil")
+
+
+# Soil Taxonomy Diagnostic Features
+data(sp1)
+df <- allocate(object = sp1, pedonid = "id", hzname = "name", hzdept = "top", hzdepb = "bot", texture = "texture", to = "ST Diagnostic Features")
+aggregate(featdept ~ id, data = df, summary)
+
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):

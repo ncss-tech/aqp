@@ -30,13 +30,13 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     
     # object = object; pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
     
-    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "fragic soil properties", "reduced matrix")
+    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates") #, "reduced matrix")
     
-    g <- lapply(featkind[1:6], function(x) {
-      # g <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
-      g <- .guess_df(..., featkind = x)
+    a <- lapply(featkind[1:6], function(x) {
+      # a <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
+      a <- .guess_df(..., featkind = x)
     })
-    g <- do.call("rbind", g)
+    a <- do.call("rbind", a)
   }
   
 
@@ -221,78 +221,161 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 
 
 # guess diagnostic features
-.guess_df <- function(object = NULL, pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = NULL) {
+.guess_df <- function(object = NULL, pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", rupresblkcem = "rupresblkcem", featkind = NULL) {
   
-  # pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
+  # pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"; rupreblkcem = "rupreblkcem"
+  # object = sp1; pedonid = "id"; hzname = "name"; hzdept = "top"; hzdepb = "bot"; texture = "texture"
   
   # standardize inputs
-  vars <- list(pedonid = pedonid, hzname = hzname, hzdept = hzdept, hzdepb = hzdepb, texture = texture)
+  vars <- list(pedonid = pedonid, hzname = hzname, hzdept = hzdept, hzdepb = hzdepb, texture = texture, rupresblkcem = rupresblkcem)
   
   # standardize inputs
   if (class(object)[1] == "SoilProfileCollection") {
     df <- horizons(object)
   } else df <- object
   
-  # subset df columns
-  df <- df[unlist(vars)]
-  names(df) <- names(unlist(vars))
-  df$texture <- tolower(df$texture)
+  # check length of arguments
+  if (any(sapply(vars, length) > 1)) {
+    stop("the length of all arguments must be 1, except for object")
+    # this will drop NULL arguments, which is ok for CEC & BS
+  } else vars <- unlist(vars)
+  
+  # check arguments match df colnames & subset
+  # no vars should be NA, but this will catch them if they are
+  if (! all(vars %in% names(df))) {
+    warning("the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information")
+    mis <- vars[! vars %in% names(df)]
+    df[mis] <- NA
+    df <- df[vars]
+    vars2 <- names(vars)
+    names(df) <- vars2
+  } else {
+    df <- df[vars]
+    vars2 <- names(vars)
+    names(df) <- vars2
+  }
+  df$texture      <- tolower(df$texture)
+  df$rupresblkcem <- tolower(df$rupresblkcem)
   
   # match pattern
   
   # lithic contact
   if (featkind == "lithic contact") {
     message(paste("guessing", featkind))
-    idx <- 
-      grepl("R|Dr", df$hzname) |
-      df$texture %in% c("br", "wb", "uwb")
-    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+    idx_hzn <-  grepl("R|Dr", df$hzname) & !grepl("\\/", df$hzname)
+    idx_tex <- !grepl("Cr|CR", df$hzname) & (df$texture %in% c("br", "wb", "uwb") | is.na(df$texture))
+    
+    lev <- c("strongly cemented", "very strongly cemented", "indurated", "strongly", "extremely strongly", "H") 
+    idx_cem <- df$rupresblkcem %in% lev | is.na(df$rupresblkcem)
+    
+    # error
+    idx_err <- idx_hzn  & (!idx_tex | !idx_cem) 
+    if (any(idx_err)) {
+      message(paste("the following pedonid have R horizons that do not meeting the texture or rupture resistance cementation criteria and will be excluded: ", paste0(df$pedonid[idx_err], collapse = ", ")))
+    }
+    
+    df$featkind <- ifelse(idx_hzn & idx_tex & idx_cem, featkind, NA)
   }
+  
+  
   # paralithic contact
   if (featkind == "paralithic contact") {
     message(paste("guessing", featkind))
-    idx  <- 
-      grepl("Cr|CR", df$hzname) &
-      (df$texture %in% c("br", "wb", "uwb") | is.na(df$texture))
-    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+    
+    idx_hzn <-  grepl("Cr|CR", df$hzname)
+    idx_tex <- !grepl("R|Dr", df$hzname) & (df$texture %in% c("br", "wb", "uwb") | is.na(df$texture))
+    
+    lev <- c("extremely weakly cememented", "very weakly cemented", "weakly cemented", "moderately cemented", "weakly", "moderately", "S") 
+    idx_cem <- df$rupresblkcem %in% lev | is.na(df$rupresblkcem)
+    
+    # error
+    idx_err <- idx_hzn  & (!idx_tex | !idx_cem) 
+    if (any(idx_err)) {
+      message(paste("the following pedonid have Cr horizons that do not meeting the texture or rupture resistance cementation criteria and will be excluded: ", paste0(df$pedonid[idx_err], collapse = ", ")))
+    }
+
+    df$featkind <- ifelse(idx_hzn & idx_tex & idx_cem, featkind, NA)
   }
+  
+  
   # densic contact
   if (featkind == "densic contact") {
     message(paste("guessing", featkind))
     idx <- grepl("d$|D$|d[1:9]|D[1:9]", df$hzname)
     df$featkind <- ifelse(idx == TRUE, featkind, NA)
   }
+  
+  
   # petrocalcic horizon
   if (featkind == "petrocalcic horizon") {
     message(paste("guessing", featkind))
-    idx  <- 
-      grepl("kkm|kkqm", df$hzname) &
-      ((grepl("cem", df$texture) & !grepl("-br", df$texture)) | is.na(df$texture))
-    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+    
+    idx_hzn  <- grepl("kkm|kkqm", df$hzname)
+    idx_tex  <- ((grepl("cem", df$texture) & !grepl("-br", df$texture)) | is.na(df$texture))
+    
+    lev <- "noncemented" 
+    idx_cem <- !df$rupresblkcem %in% lev | is.na(df$rupresblkcem)
+    
+    # error
+    idx_err <- idx_hzn  & (!idx_tex | !idx_cem) 
+    if (any(idx_err)) {
+      message(paste("the following pedonid have Bkkm|Bkkqm horizons that do not meeting the texture or rupture resistance cementation criteria and will be excluded: ", paste0(df$pedonid[idx_err], collapse = ", ")))
+    }
+    
+    df$featkind <- ifelse(idx_hzn & idx_tex & idx_cem, featkind, NA)
   }
+  
+  
   # calcic horizon
   if (featkind == "calcic horizon") {
     message(paste("guessing", featkind))
-    idx <- 
-      grepl("kk$|kk[1:9]|kkq$|kkq[1:9]|kkb", df$hzname) & (!grepl("cem-", df$texture) | is.na(df$texture))
-    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+    
+    idx_hzn <-  grepl("kk$|kk[1:9]|kkq$|kkq[1:9]|kkb$|kkb[1:9]", df$hzname)
+    idx_tex <- (!grepl("cem-", df$texture) | is.na(df$texture))
+    
+    lev <- "noncemented" 
+    idx_cem <- df$rupresblkcem %in% lev | is.na(df$rupresblkcem)
+    
+    # error
+    idx_err <- idx_hzn  & (!idx_tex | !idx_cem) 
+    if (any(idx_err)) {
+      message(paste("the following pedonid have Bkk horizons that do not meeting the texture or rupture resistance cementation criteria and will be excluded: ", paste0(df$pedonid[idx_err], collapse = ", ")))
+    }
+    
+    df$featkind <- ifelse(idx_hzn & idx_tex & idx_cem, featkind, NA)
   }
+  
+  
   # secondary carbonates
   if (featkind == "secondary carbonates") {
     message(paste("guessing", featkind))
-    idx <- grepl("k", df$hzname) & !grepl("kk", df$hzname)
-    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+    
+    idx_hzn <- grepl("k", df$hzname) & !grepl("kk", df$hzname)
+    
+    df$featkind <- ifelse(idx_hzn, featkind, NA)
   }
   
-  df_sub <- df[is.na(df$featkind), ]
   
-  # aggregate depths
-  sp <- NULL
-  if (any(!is.na(df$featkind))) {
-    sp <- aggregate(hzdept ~ pedonid + featkind, data = df, FUN = function(x) min(x, na.rm = TRUE))
-    sp$featdepb <- aggregate(hzdepb ~ pedonid + featkind, data = df, FUN = function(x) max(x, na.rm = TRUE))$hzdepb
-    names(sp)[3] <- "featdept"
-  }
+  # subset features
+  idx <- "featkind" %in% names(df)
+  if (idx) {
+    
+    df_sub <- df[!is.na(df$featkind), ]
+    
+    # aggregate depths
+    idx <- !is.na(df_sub$featkind)
+    if (any(idx) & sum(idx) > 1) {
+      sp <- aggregate(hzdept ~ pedonid + featkind, data = df, FUN = function(x) min(x, na.rm = TRUE))
+      sp$featdepb <- aggregate(hzdepb ~ pedonid + featkind, data = df, FUN = function(x) max(x, na.rm = TRUE))$hzdepb
+      names(sp)[3] <- "featdept"
+    } else {
+      sp <- df_sub[c("pedonid", "featkind", "hzdept", "hzdepb")]
+      names(sp)[3:4] <- c("featdept", "featdepb")
+    }
+  
+    names(sp)[1] <- vars[1]
+  
+  } else sp <- NULL 
   
   return(sp)
 }
