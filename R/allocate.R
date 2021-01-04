@@ -1,6 +1,9 @@
 allocate <- function(..., to = NULL, droplevels = TRUE) {
   
-  tos <- c(ss = "FAO Salt Severity", bh = "FAO Black Soil")
+  tos <- c(ss = "FAO Salt Severity", 
+           bh = "FAO Black Soil", 
+           dh = "ST Diagnostic Features"
+           )
   
   # test
   if (is.null(to)) {
@@ -22,6 +25,20 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   if (to == "FAO Black Soil") {
     a <- .black_soil(...)
   }
+  
+  if (to == "ST Diagnostic Features") {
+    
+    # object = object; pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
+    
+    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "fragic soil properties", "reduced matrix")
+    
+    g <- lapply(featkind[1:6], function(x) {
+      # g <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
+      g <- .guess_df(..., featkind = x)
+    })
+    g <- do.call("rbind", g)
+  }
+  
 
   return(a)  
 }
@@ -202,4 +219,81 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 }
 
 
+
+# guess diagnostic features
+.guess_df <- function(object = NULL, pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = NULL) {
+  
+  # pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
+  
+  # standardize inputs
+  vars <- list(pedonid = pedonid, hzname = hzname, hzdept = hzdept, hzdepb = hzdepb, texture = texture)
+  
+  # standardize inputs
+  if (class(object)[1] == "SoilProfileCollection") {
+    df <- horizons(object)
+  } else df <- object
+  
+  # subset df columns
+  df <- df[unlist(vars)]
+  names(df) <- names(unlist(vars))
+  df$texture <- tolower(df$texture)
+  
+  # match pattern
+  
+  # lithic contact
+  if (featkind == "lithic contact") {
+    message(paste("guessing", featkind))
+    idx <- 
+      grepl("R|Dr", df$hzname) |
+      df$texture %in% c("br", "wb", "uwb")
+    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+  }
+  # paralithic contact
+  if (featkind == "paralithic contact") {
+    message(paste("guessing", featkind))
+    idx  <- 
+      grepl("Cr|CR", df$hzname) &
+      (df$texture %in% c("br", "wb", "uwb") | is.na(df$texture))
+    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+  }
+  # densic contact
+  if (featkind == "densic contact") {
+    message(paste("guessing", featkind))
+    idx <- grepl("d$|D$|d[1:9]|D[1:9]", df$hzname)
+    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+  }
+  # petrocalcic horizon
+  if (featkind == "petrocalcic horizon") {
+    message(paste("guessing", featkind))
+    idx  <- 
+      grepl("kkm|kkqm", df$hzname) &
+      ((grepl("cem", df$texture) & !grepl("-br", df$texture)) | is.na(df$texture))
+    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+  }
+  # calcic horizon
+  if (featkind == "calcic horizon") {
+    message(paste("guessing", featkind))
+    idx <- 
+      grepl("kk$|kk[1:9]|kkq$|kkq[1:9]|kkb", df$hzname) & (!grepl("cem-", df$texture) | is.na(df$texture))
+    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+  }
+  # secondary carbonates
+  if (featkind == "secondary carbonates") {
+    message(paste("guessing", featkind))
+    idx <- grepl("k", df$hzname) & !grepl("kk", df$hzname)
+    df$featkind <- ifelse(idx == TRUE, featkind, NA)
+  }
+  
+  df_sub <- df[is.na(df$featkind), ]
+  
+  # aggregate depths
+  sp <- NULL
+  if (any(!is.na(df$featkind))) {
+    sp <- aggregate(hzdept ~ pedonid + featkind, data = df, FUN = function(x) min(x, na.rm = TRUE))
+    sp$featdepb <- aggregate(hzdepb ~ pedonid + featkind, data = df, FUN = function(x) max(x, na.rm = TRUE))$hzdepb
+    names(sp)[3] <- "featdept"
+  }
+  
+  return(sp)
+}
 
