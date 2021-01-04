@@ -30,9 +30,9 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     
     # object = object; pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
     
-    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates") #, "reduced matrix")
+    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "mollic epipedon") #, "reduced matrix")
     
-    a <- lapply(featkind[1:6], function(x) {
+    a <- lapply(featkind, function(x) {
       # a <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
       a <- .guess_df(..., featkind = x)
     })
@@ -221,13 +221,14 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 
 
 # guess diagnostic features
-.guess_df <- function(object = NULL, pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", rupresblkcem = "rupresblkcem", featkind = NULL) {
+.guess_df <- function(object = NULL, pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", rupresblkcem = "rupresblkcem", m_value = "m_value", d_value = "d_value", m_chroma = "m_chroma", BS = "BS", OC = "OC", n_value = "n_value", featkind = NULL) {
   
-  # pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"; rupreblkcem = "rupreblkcem"
+  # pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "mollic epipedon"; rupresblkcem = "rupresblkcem"; m_value = "m_value"; d_value = "d_value"; m_chroma = "m_chroma"; BS = NA; OC = NA; n_value = "n_value"
   # object = sp1; pedonid = "id"; hzname = "name"; hzdept = "top"; hzdepb = "bot"; texture = "texture"
+  # vars <- list(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", rupresblkcem = "rupresblkcem", m_value = "m_value", d_value = "d_value", m_chroma = "m_chroma", OC = "OC", BS = "BS", n_value = "n_value")
   
   # standardize inputs
-  vars <- list(pedonid = pedonid, hzname = hzname, hzdept = hzdept, hzdepb = hzdepb, texture = texture, rupresblkcem = rupresblkcem)
+  vars <- list(pedonid = pedonid, hzname = hzname, hzdept = hzdept, hzdepb = hzdepb, texture = texture, rupresblkcem = rupresblkcem, m_value = m_value, d_value = d_value, m_chroma = m_chroma, OC = OC, BS = BS, n_value = n_value)
   
   # standardize inputs
   if (class(object)[1] == "SoilProfileCollection") {
@@ -244,9 +245,10 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # no vars should be NA, but this will catch them if they are
   if (! all(vars %in% names(df))) {
     warning("the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information")
-    mis <- vars[! vars %in% names(df)]
-    df[mis] <- NA
-    df <- df[vars]
+    idx <- vars %in% names(df)
+    mis <- vars[! idx]
+    df <- df[vars[idx]]
+    df[names(mis)] <- NA
     vars2 <- names(vars)
     names(df) <- vars2
   } else {
@@ -356,6 +358,27 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   }
   
   
+  # mollic epipedon
+   if (featkind == "mollic epipedon") {
+     message(paste("guessing", featkind))
+     
+     idx_hzn <- !grepl("O|Ao|R|W|M|C|\\/", df$hzname)
+     # need to add structure to fetchNASIS
+     idx_col <- 
+       (df$m_value  <= 3 | !is.na(df$m_value))  & 
+       (df$d_value  <= 5 | !is.na(df$d_value))  &
+        df$m_chroma <= 3                        &
+       (!is.na(df$m_value) & !is.na(df$d_value))
+     idx_bs  <- (df$BS >= 50 | is.na(df$BS)) # & (df$ph1to1 > 6 | is.na(df$ph1to1))
+     idx_oc  <- 
+       ((df$OC >= 2.5 | is.na(df$OC)) & (df$m_value %in% 4:5 | is.na(df$m_value))) |
+       ((df$OC >= 0.6 | is.na(df$OC)) & (df$m_value < 4      | is.na(df$m_value)))
+     idx_nv <- (df$n_value < 0.7 | is.na(df$n_value))
+     
+     df$featkind <- ifelse(idx_hzn & idx_col & idx_bs & idx_oc & idx_nv, featkind, NA)
+   }
+  
+  
   # subset features
   idx <- "featkind" %in% names(df)
   if (idx) {
@@ -364,9 +387,9 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
     
     # aggregate depths
     idx <- !is.na(df_sub$featkind)
-    if (any(idx) & sum(idx) > 1) {
-      sp <- aggregate(hzdept ~ pedonid + featkind, data = df, FUN = function(x) min(x, na.rm = TRUE))
-      sp$featdepb <- aggregate(hzdepb ~ pedonid + featkind, data = df, FUN = function(x) max(x, na.rm = TRUE))$hzdepb
+    if (any(idx) & sum(idx, na.rm = TRUE) > 1) {
+      sp <- aggregate(hzdept ~ pedonid + featkind, data = df_sub, FUN = function(x) min(x, na.rm = TRUE))
+      sp$featdepb <- aggregate(hzdepb ~ pedonid + featkind, data = df_sub, FUN = function(x) max(x, na.rm = TRUE))$hzdepb
       names(sp)[3] <- "featdept"
     } else {
       sp <- df_sub[c("pedonid", "featkind", "hzdept", "hzdepb")]
@@ -385,6 +408,11 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
       sp <- sp[(sp$featdepb - sp$featdept) >= 15, ]
     }
     
+    
+    # needs additional criteria to get a variable depth or use Andrew's function
+    if (featkind == "mollic epipedon") {
+      sp <- sp[(sp$featdepb - sp$featdept) >= 18, ]
+    }
   
   } else sp <- NULL 
   
