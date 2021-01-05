@@ -51,51 +51,7 @@
 
 
 
-# return the closest Munsell chip from `munsell` data in aqp package
-# function is vectorized
-getClosestMunsellChip <- function(munsellColor, convertColors=TRUE, ...) {
-  # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
-  munsell <- NULL
 
-  # extract hue, value, chroma from single string
-  cd <- parseMunsell(munsellColor, convertColors = FALSE)
-
-  # extract pieces of hue
-  hue.data <- .parseMunsellHue(cd$hue)
-
-  # note: this is incompatible with LazyData: true
-  # extract pieces from unique Munsell hues
-  load(system.file("data/munsell.rda", package="aqp")[1])
-  all.hue.data <- na.omit(.parseMunsellHue(unique(munsell$hue)))
-
-  # locate closest chip in `munsell` set of hues
-  closest.hue <- vector(mode = 'character', length=nrow(hue.data))
-  for(i in 1:nrow(hue.data)) {
-    # index possible rows based on character part of hue
-    idx <- which(all.hue.data$hue.character == hue.data[i, ]$hue.character)
-    # compute Euclidean distance to all possible numeric parts of hue
-    distances <- abs(hue.data$hue.numeric[i] - all.hue.data$hue.numeric[idx])
-    closest.idx <- which.min(distances)
-    # compile closest hue
-    closest.hue[i] <- paste0(all.hue.data[idx, ][closest.idx, ], collapse = '')
-  }
-
-  # locate closest value and chroma by rounding
-  closest.value <- round(as.numeric(cd$value))
-  closest.chroma <- round(as.numeric(cd$chroma))
-
-  # convert values < 1 -> 1
-  closest.value <- ifelse(closest.value < 1, 1, closest.value)
-  closest.chroma <- ifelse(closest.chroma < 1, 1, closest.chroma)
-
-  # optionally convert closest Munsell chips to sRGB
-  if(convertColors)
-    res <- munsell2rgb(closest.hue, closest.value, closest.chroma, ...)
-  # otherwise return closest chip
-  else
-    res <- paste0(closest.hue, ' ', closest.value, '/', closest.chroma)
-  return(res)
-}
 
 
 
@@ -339,9 +295,9 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 if (!isGeneric("munsell2spc"))
   setGeneric("munsell2spc", function(object, ...) standardGeneric("munsell2spc"))
 
-#' Merge Munsell Hue, Value, Chroma converted to RGB & LAB into a SoilProfileCollection 
+#' @title Merge Munsell Hue, Value, Chroma converted to sRGB & CIELAB into a SoilProfileCollection 
 #' 
-#' Convert Munsell hue, value and chroma into [R, G, B] and [L, A, B] color coordinates using \code{munsell2rgb}. The converted values are stored in the \code{horizons()} slot unless \code{as.spc} is \code{FALSE}, in which case the results are combined with profile and horizon ID columns and returned as the \code{data.frame} subclass used by the SPC.
+#' @description Convert Munsell hue, value and chroma into sRGB (\code{rgb_R, rgb_G, rgb_B}) and CIELLAB (lab_L, lab_A, lab_B) color coordinates using \code{munsell2rgb}. The converted values are stored in the \code{horizons()} slot unless \code{as.spc} is \code{FALSE}, in which case the results are combined with profile and horizon ID columns and returned as the \code{data.frame} subclass used by the SPC.
 #'  
 #' @param object A SoilProfileCollection
 #' @param hue Column name containing numeric hue values. Default: \code{"hue"}
@@ -361,7 +317,7 @@ if (!isGeneric("munsell2spc"))
 #' # inspect input data
 #' horizons(sp3)[,c("hue","value","chroma")]
 #' 
-#' # do color conversions to RGB and LAB, join into horizon data
+#' # do color conversions to sRGB and LAB, join into horizon data
 #' sp3 <- munsell2spc(sp3)
 #' 
 #' # plot rgb "R" coordinate by horizon
@@ -369,6 +325,11 @@ if (!isGeneric("munsell2spc"))
 #' 
 #' # plot lab "A" coordinate by horizon
 #' plot(sp3, color = "lab_A")
+#' 
+#' # note that `lab_A` values do not exactly match the original `A` values
+#' # this is because `lab_A` was computed from the (field determined) Munsell color notation,
+#' # while `A` was directly measured in the lab by colorimeter
+#' plot(sp3$A, sp3$lab_A, xlab = 'Measured', ylab = 'Converted from Field Observed Munsell')
 #' 
 setMethod("munsell2spc", signature(object = "SoilProfileCollection"),
           function(object,
@@ -381,12 +342,12 @@ setMethod("munsell2spc", signature(object = "SoilProfileCollection"),
     stop("arguments hue [character], value [numeric] and chroma [numeric] must specify column names in the horizon data", call. = FALSE)
   
   # makes a data.frame
-  drgb1 <- t(col2rgb(munsell2rgb(h[[hue]], h[[value]], h[[chroma]])))
-  colnames(drgb1) <- paste0("rgb_", c("R","G","B"))
-  drgb2 <- munsell2rgb(h[[hue]], h[[value]], h[[chroma]], returnLAB = TRUE)
-  colnames(drgb2) <- paste0("lab_", colnames(drgb2))
-  drgb <- cbind(drgb1, drgb2)
+  # return sRGB + CIELAB at the same time, note that hex notation of color is not returned
+  drgb <- munsell2rgb(h[[hue]], h[[value]], h[[chroma]], return_triplets = TRUE, returnLAB = TRUE)
+  colnames(drgb)[1:3] <- paste0("rgb_", c("R","G","B"))
+  colnames(drgb)[4:6] <- paste0("lab_", c("L","A","B"))
   
+  # ID management
   idn <- idname(object)
   hidn <- hzidname(object)
   

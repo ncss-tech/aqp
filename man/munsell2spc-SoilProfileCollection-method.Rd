@@ -3,7 +3,7 @@
 \name{munsell2spc,SoilProfileCollection-method}
 \alias{munsell2spc,SoilProfileCollection-method}
 \alias{munsell2spc}
-\title{Merge Munsell Hue, Value, Chroma converted to RGB & LAB into a SoilProfileCollection}
+\title{Merge Munsell Hue, Value, Chroma converted to sRGB & CIELAB into a SoilProfileCollection}
 \usage{
 \S4method{munsell2spc}{SoilProfileCollection}(
   object,
@@ -28,7 +28,7 @@
 A SoilProfileCollection or \code{data.frame}-like object
 }
 \description{
-Convert Munsell hue, value and chroma into [R, G, B] and [L, A, B] color coordinates using \code{munsell2rgb}. The converted values are stored in the \code{horizons()} slot unless \code{as.spc} is \code{FALSE}, in which case the results are combined with profile and horizon ID columns and returned as the \code{data.frame} subclass used by the SPC.
+Convert Munsell hue, value and chroma into sRGB (\code{rgb_R, rgb_G, rgb_B}) and CIELLAB (lab_L, lab_A, lab_B) color coordinates using \code{munsell2rgb}. The converted values are stored in the \code{horizons()} slot unless \code{as.spc} is \code{FALSE}, in which case the results are combined with profile and horizon ID columns and returned as the \code{data.frame} subclass used by the SPC.
 }
 \examples{
 
@@ -38,7 +38,7 @@ depths(sp3) <- id ~ top + bottom
 # inspect input data
 horizons(sp3)[,c("hue","value","chroma")]
 
-# do color conversions to RGB and LAB, join into horizon data
+# do color conversions to sRGB and LAB, join into horizon data
 sp3 <- munsell2spc(sp3)
 
 # plot rgb "R" coordinate by horizon
@@ -46,5 +46,10 @@ plot(sp3, color = "rgb_R")
 
 # plot lab "A" coordinate by horizon
 plot(sp3, color = "lab_A")
+
+# note that `lab_A` values do not exactly match the original `A` values
+# this is because `lab_A` was computed from the (field determined) Munsell color notation,
+# while `A` was directly measured in the lab by colorimeter
+plot(sp3$A, sp3$lab_A, xlab = 'Measured', ylab = 'Converted from Field Observed Munsell')
 
 }

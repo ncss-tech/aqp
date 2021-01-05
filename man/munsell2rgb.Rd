@@ -3,7 +3,7 @@
 \alias{munsell2rgb}
 \alias{rgb2munsell}
 \alias{parseMunsell}
-\alias{getClosestMunsellChip}
+
 \title{
 Convert Munsell Notation to and from sRGB color coordinates
 }
@@ -19,7 +19,6 @@ rgb2munsell(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest=1)
 
 parseMunsell(munsellColor, convertColors=TRUE, ...)
 
-getClosestMunsellChip(munsellColor, convertColors=TRUE, ...)
 }
 
 \arguments{
@@ -46,7 +45,7 @@ Gley soil colors that are missing a chroma will not be correctly interpreted. Co
 
 Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
 
-Non-standard Munsell colors (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
+Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
 
 See examples below.
 }

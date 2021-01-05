@@ -96,12 +96,16 @@ colorContrast <- function(m1, m2) {
   # get CIE LAB representation
   m1.lab <- parseMunsell(m1, convertColors = TRUE, returnLAB=TRUE)
   m2.lab <- parseMunsell(m2, convertColors = TRUE, returnLAB=TRUE)
-
+  
+  
+  ## TODO: there is likely room for improvement here:
+  #         * parallel evaluation when length(m1) > 1000 (?) (simple via furrr)
+  #         * vectorized call to compare_colour() -> reshaping of result
+  
   # delta E00
   #
   # we don't need the full distance matrix,
-  # iterate over rows, much more scaleable
-  # also, avoiding bug (?) https://github.com/thomasp85/farver/issues/18
+  # iterate over rows, likely scaleable 
   d <- list()
   for(i in 1:nrow(m1.lab)){
     d[i] <- farver::compare_colour(m1.lab[i, ], m2.lab[i, ], from_space='lab', method = 'CIE2000', white_from = 'D65')
