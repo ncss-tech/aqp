@@ -50,7 +50,7 @@
 #' contrastChart(m = '10YR 5/6', hues = c('10YR', '2.5Y'), style='CC')
 #'
 
-contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', thresh = NULL, returnData = FALSE) {
+contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = FALSE, thresh = NULL, returnData = FALSE) {
 
   # load Munsell LUT
   # safe for CRAN check
@@ -120,12 +120,16 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', thresh = NUL
 
   }
 
+  # convert chroma into a factor, in this way we can skip chroma 5/7
+  # note that the full levels of chroma have to be set 
+  z$chroma <- factor(z$chroma, levels = chroma.subset)
+  
   # alternative modes
   fm <- switch(style,
-               'hue' = as.formula('value ~ factor(chroma)'),
-               'multiHue' = as.formula('value ~ factor(chroma) | hue'),
-               'CC' = as.formula('value ~ factor(chroma) | cc'),
-               'multiCC' = as.formula('value ~ factor(chroma) | cc + hue')
+               'hue' = as.formula('value ~ chroma'),
+               'multiHue' = as.formula('value ~ chroma | hue'),
+               'CC' = as.formula('value ~ chroma | cc'),
+               'multiCC' = as.formula('value ~ chroma | cc + hue')
   )
 
 
@@ -135,55 +139,75 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', thresh = NUL
 
   # make plot
   pp <- xyplot(fm, data=z,
-               main=sprintf('Color Contrast Chart: %s', m$queryColor),
-               asp=1, xlab='Chroma', ylab='Value',
-               xlim=c(0.75, 6.25), ylim=c(2.75, 8.25),
-               scales=list(alternating=1, tick.number=8, relation='free', y=list(rot=0), x=list(at=chroma.axis.at, labels=chroma.subset.labels)),
-               as.table=TRUE, strip=strip.custom(bg='grey'),
-               subscripts=TRUE,
-               panel=function(xx, yy, subscripts, ...) {
+               main = sprintf('Color Contrast Chart: %s', m$queryColor),
+               asp = 1, xlab='Chroma', ylab='Value',
+               xlim = c(0.75, 6.25), 
+               ylim = c(2.75, 8.25),
+               scales = list(
+                 alternating = 1, tick.number = 8, relation = 'free', y = list(
+                   rot = 0
+                 )
+                 ,
+                 x = list(
+                   at = chroma.axis.at,
+                   labels = chroma.subset.labels
+                 )
+               ),
+               as.table = TRUE, strip = strip.custom(bg='grey'),
+               subscripts = TRUE,
+               panel = function(xx, yy, subscripts, ...) {
+                 
+                 # note: source `xx` and `yy` aren't actually used for anything
+                 #       -> chroma factor levels reset when full levels aren't present
+                 
                  # prep data for this panel
                  d <- z[subscripts, ]
                  d$cc <- as.character(d$cc)
                  d$dE00 <- format(d$dE00, digits = 2)
-
+                 
                  # convert factor levels to numeric
-                 xx <- as.numeric(xx)
-
+                 # xx <- as.integer(xx)
+                 
+                 # extract from z vs. function arguments
+                 xx <- as.integer(z$chroma)
+                 yy <- z$value
+                 
                  # remove query color contrast and dE00
                  idx <- which(d$munsell == m$queryColor)
                  d$cc[idx] <- ''
                  d$dE00[idx] <- ''
-
-                 # # grid system
-                 # panel.abline(h = 3:8, v=1:8, col=grey(0.85), lty=1)
-
+                 
+                 # grid system
+                 if(gridLines) {
+                   panel.abline(h = 3:8, v=1:8, col=grey(0.85), lty=1) 
+                 }
+                 
                  # offsets, may require additional tinkering
                  bd.side <- 0.3
                  bd.bottom <- 0.2
                  bd.top <- 0.4
                  bd.annot <- 0.05
-
+                 
                  # color chips
                  # border encodes query chip
                  chip.border <- rep('black', times=nrow(d))
                  chip.lwd <- rep(1, times=nrow(d))
-
+                 
                  # update border colors and thickness for the query color
                  border.idx <- which(d$hue == m$hue & d$value == m$value & d$chroma == m$chroma)
                  chip.border[border.idx] <- 'red'
                  chip.lwd[border.idx] <- 3
-
+                 
                  panel.rect(
-                   xleft=xx - bd.side,
-                   ybottom=yy - bd.bottom,
-                   xright=xx + bd.side,
-                   ytop=yy + bd.top,
-                   col=d$color,
-                   border=chip.border,
-                   lwd=chip.lwd
+                   xleft = xx - bd.side,
+                   ybottom = yy - bd.bottom,
+                   xright = xx + bd.side,
+                   ytop = yy + bd.top,
+                   col = d$color,
+                   border = chip.border,
+                   lwd = chip.lwd
                  )
-
+                 
                  # optionally annotate contrast class and abbreviate
                  if(ccAbbreviate >= 1) {
                    panel.text(
@@ -194,8 +218,8 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', thresh = NUL
                      font=4
                    )
                  }
-
-
+                 
+                 
                  # annotate dE00
                  panel.text(
                    xx,
