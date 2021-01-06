@@ -1,5 +1,37 @@
 
 
+
+# helper function for printing out value / chroma ranges by hue
+.summarizeMunsellSpectraRanges <- function() {
+  
+  data("munsell.spectra")
+  
+  # set hue position
+  munsell.spectra$hue <- factor(munsell.spectra$hue, levels = huePosition(returnHues = TRUE))
+  
+  # remove non-standard hues (what are they for?)
+  munsell.spectra <- na.omit(munsell.spectra)
+  
+  x <- split(munsell.spectra, munsell.spectra$hue)
+  
+  x <- lapply(x, function(i) {
+    
+    data.frame(
+      hue = i$hue[1],
+      value = sprintf("%s-%s", min(i$value), max(i$value)),
+      chroma = sprintf("%s-%s", min(i$chroma), max(i$chroma)),
+      stringsAsFactors = FALSE
+    )
+    
+  })
+  
+  
+  x <- do.call('rbind', x)
+  
+  knitr::kable(x, row.names = FALSE)
+}
+
+
 ## TODO: is this generic enough to use elsewhere?
 
 # weighted geometric mean

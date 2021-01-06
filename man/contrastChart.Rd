@@ -9,6 +9,7 @@ contrastChart(
   hues,
   ccAbbreviate = 1,
   style = "hue",
+  gridLines = FALSE,
   thresh = NULL,
   returnData = FALSE
 )
@@ -21,6 +22,8 @@ contrastChart(
 \item{ccAbbreviate}{length of abbreviated contrast classes, use 0 to suppress labels}
 
 \item{style}{'hue' or 'CC', see details}
+
+\item{gridLines}{logical, add grid lines to the color contrast chart}
 
 \item{thresh}{threshold (<) applied to pair-wise comparisons and resulting color chips}
 

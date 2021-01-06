@@ -14,6 +14,8 @@
 #' @param ccAbbreviate length of abbreviated contrast classes, use 0 to suppress labels
 #'
 #' @param style 'hue' or 'CC', see details
+#' 
+#' @param gridLines logical, add grid lines to the color contrast chart
 #'
 #' @param thresh threshold (<) applied to pair-wise comparisons and resulting color chips
 #'
