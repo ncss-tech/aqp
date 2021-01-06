@@ -130,8 +130,8 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', thresh = NUL
 
 
   # custom x-axis labeling based on factors vs. integers
-  chroma.axis.at <- sort(c(seq_along(chroma.subset), 4.5, 5.5))
-  chroma.subset.labels <- as.character(sort(c(chroma.subset, 5, 7)))
+  chroma.axis.at <- c(seq_along(chroma.subset), 4.5, 5.5)
+  chroma.subset.labels <- as.character(c(chroma.subset, 5, 7))
 
   # make plot
   pp <- xyplot(fm, data=z,
