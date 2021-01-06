@@ -50,7 +50,7 @@
 #' contrastChart(m = '10YR 5/6', hues = c('10YR', '2.5Y'), style='CC')
 #'
 
-contrastChart <- function(m, hues, ccAbbreviate=1, style='hue', thresh = NULL, returnData = FALSE) {
+contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', thresh = NULL, returnData = FALSE) {
 
   # load Munsell LUT
   # safe for CRAN check
@@ -85,8 +85,9 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue', thresh = NULL, r
     }
   }
 
-  # extract just those hues we are working with, standard value/chroma pairs
-  chroma.subset <- c(1,2,3,4,6,8)
+  # extract just requested hues
+  # along with standard value/chroma pairs found on a typical color book page
+  chroma.subset <- c(1, 2, 3, 4, 6, 8)
   x <- munsell[which(munsell$value %in% 3:8 & munsell$chroma %in% chroma.subset & munsell$hue %in% hues), ]
 
   # convert into hex notation for plotting
@@ -99,12 +100,16 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue', thresh = NULL, r
   x$hue <- factor(x$hue, levels=ll)
 
   # setup query color table
-  m <- data.frame(queryColor=m, parseMunsell(m, convertColors = FALSE), stringsAsFactors = FALSE)
+  m <- data.frame(
+    queryColor = m, 
+    parseMunsell(m, convertColors = FALSE),
+    stringsAsFactors = FALSE
+  )
   m$value <- as.integer(m$value)
   m$chroma <- as.integer(m$chroma)
 
   # compute all pair-wise constrast classes and dE00
-  cc <- colorContrast(x$munsell, rep(m$queryColor, times=nrow(x)))
+  cc <- colorContrast(x$munsell, rep(m$queryColor, times = nrow(x)))
 
   # join for plotting
   z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE, sort=FALSE)
@@ -125,8 +130,8 @@ contrastChart <- function(m, hues, ccAbbreviate=1, style='hue', thresh = NULL, r
 
 
   # custom x-axis labeling based on factors vs. integers
-  chroma.axis.at <- c(seq_along(chroma.subset), 4.5, 5.5)
-  chroma.subset.labels <- as.character(c(chroma.subset, 5, 7))
+  chroma.axis.at <- sort(c(seq_along(chroma.subset), 4.5, 5.5))
+  chroma.subset.labels <- as.character(sort(c(chroma.subset, 5, 7)))
 
   # make plot
   pp <- xyplot(fm, data=z,
