@@ -75,7 +75,7 @@ colorContrast <- function(m1, m2) {
   m1 <- as.character(m1)
   m2 <- as.character(m2)
 
-  # if character vectors, split into data.frame of hue/value/chroma
+  # split into data.frame of hue/value/chroma
   m1.pieces <- parseMunsell(m1, convertColors = FALSE)
   m2.pieces <- parseMunsell(m2, convertColors = FALSE)
 
