@@ -61,43 +61,72 @@
 #' @importFrom farver compare_colour
 #'
 .makeEquivalentMunsellLUT <- function(threshold = 0.001) {
-  data("munsell", package = "aqp")
+  munsell <- NULL
+  load(system.file("data/munsell.rda", package="aqp")[1])
 
-  # this produces an 8467x8467 distance matrix ~575MB;
-  x <- farver::compare_colour(from = munsell[,c('L','A','B')], from_space = 'lab',
-                 to = munsell[,c('L','A','B')], to_space = 'lab',
-                 method = 'cie2000', white_from = 'D65', white_to = 'D65')
+  # this produces an 8467x8467 matrix ~285MB; just want upper triangle no diagonal
+  # # thanks to @dylanbeaudette for pointing out better farver syntax
+  # system.time(x <- farver::compare_colour(munsell[, c('L', 'A', 'B')],
+  #                                         from_space='lab', white_from = 'D65', method='cie2000'))
+  # # # takes about a half minute to run
+  # # # user  system elapsed
+  # # # 31.465   0.364  31.913
+  #
+  # x[lower.tri(x, diag = TRUE)] <- NA # convert 0 to NA to ignore in stats
+  # xdat <- x
 
-  # takes about a minute to run
-  #> user  system elapsed
-  #> 62.778   0.230  63.167
+  # TODO: ... some unholy indexry I cant quite figure out; the stats are right but order is wrong
 
-  # storing the relative order for each chip to all other chips is about half that size ~287MB
-  xord <- apply(x, MARGIN = 1, function(xrow) as.integer(order(xrow)))
-
-  # inspect the distribution of densities
-  # plot(density(x))
+  # this one that takes 2x as long to built the LUT, and is 2x as big in memory
+  system.time(x <- farver::compare_colour(from = munsell[,c('L','A','B')], from_space = 'lab',
+                              to = munsell[,c('L','A','B')], to_space = 'lab',
+                              method = 'cie2000', white_from = 'D65', white_to = 'D65'))
+  xdat <- x
+  x[lower.tri(x, diag = TRUE)] <- NA # remove lower triangle for statistics (only count each pair distance 1x)
 
   # calculate quantiles
-  xqtl <- quantile(x, p = threshold)
-
-  # inspect visual cutoff
-  # abline(v=xqtl[1], lty=2)
+  xqtl <- quantile(x, p = threshold, na.rm = TRUE)[1]
 
   # storing just the chips that fall within the closest e.g. tenth of a percentile: ~1.4MB in memory as list
-  xin1 <- apply(x, 1, function(xrow) as.integer(which(xrow <= xqtl[1])))
+  xin1 <- apply(xdat, 1, function(xrow) as.integer(which(xrow <= xqtl)))
 
-  # alternate methods: slightly more complicated
+  # # ALTERNATIVE THRESHOLDS
+  # ## calculate unique threshold for each row (results in way too many "similar" chips)
+  # rowthresholds <- apply(x, 1, function(xrow) quantile(xrow, p = threshold, na.rm = TRUE)[1])
+  # xin2 <- lapply(1:nrow(x), function(i) as.integer(which(xdat[i,] <= rowthresholds[i])))
+  #
+  # ## mean of row-wise quantiles - slightly higher than the global threshold
+  # rowthreshbar <- mean(apply(x, 1, function(xrow) quantile(xrow, p = threshold, na.rm = TRUE)[1]), na.rm=TRUE)
+  # xin3 <- apply(xdat, 1, function(xrow) as.integer(which(xrow <= rowthreshbar)))
+  #
+  # ## DEBUG plots
+  # # inspect the distribution of dE00 and threshold values
+  # par(mfrow=c(2,1))
+  # plot(density(x, na.rm=TRUE, from=0), xlim=c(0,130),
+  #      main = "Between-whole-chip dE00 -- aqp::munsell pair-wise differences",
+  #      sub = sprintf("Dotted vertical lines denote row-wise quantiles @ prob=%s", threshold))
+  #
+  # # # inspect visual cutoff by method 1 and 3
+  # abline(v = rowthresholds, lty=3, col=rgb(0,0,0,0.1))# rowwise quantile at threshold
+  #
+  # # # row-wise quantiles
+  # plot(density(rowthresholds, na.rm=TRUE, from=0), lty = 3, xlim = c(0,130),
+  #      main = sprintf("Threshold for 'equivalent' whole-chip dE00 @ prob=%s", threshold))
+  # abline(v = xqtl[1], lty=1, lwd=2, col="red")
+  # abline(v = rowthreshbar, lty=3, lwd=2, col="blue")  #
+  # legend("topright", legend = c(sprintf("Density plot of row-wise dE00 quantiles (@ prob=%s)",
+  #                                       threshold),
+  #                               sprintf("Global quantile (dE00=%s @ prob=%s)",
+  #                                       round(xqtl[1], 2), threshold),
+  #                               sprintf("Global mean of row-wise quantile (dE00=%s @ prob=%s)",
+  #                                       round(rowthreshbar,2), threshold)),
+  #        lty = c(3,1,3), lwd = c(1,2,2), col = c("BLACK","RED","BLUE"))
 
-  # calculate unique threshold for each row (results in way too many "similar" chips)
-  # xin2 <- apply(x, 1, function(xrow) as.integer(which(xrow <= quantile(xrow, p = threshold)[1])))
-
-  # mean of row-wise quantiles - slightly higher than the global threshold
-  # rowthreshbar <- mean(apply(x, 1, function(xrow) quantile(xrow, p = threshold)))
-  # xin3 <- apply(x, 1, function(xrow) as.integer(which(xrow <= rowthreshbar)))
-
-  # plot(density(sapply(xin1, length)))
-  # lines(density(sapply(xin3, length)), lty=2)
+  # # number of chips per chip
+  # par(mfrow=c(1,1))
+  # plot(density(sapply(xin1, length), bw=1))
+  # lines(density(sapply(xin2, length), bw=1), lty=2)
+  # lines(density(sapply(xin3, length), bw=1), lty=3)
 
   # create a nice lookup table to add to aqp
   munequivalent <- xin1
@@ -138,9 +167,12 @@
 #' # compare visually a very red color
 #' veryred <- equivalentMunsellChips("10R", 6, 28)[[1]]
 #'
+#' par(mar=c(0,0,1,1))
+#'
 #' pie(rep(1, nrow(veryred)), col = munsell2rgb(veryred$hue,
 #'                                              veryred$value,
-#'                                              veryred$chroma))
+#'                                              veryred$chroma),
+#'                            label = with(veryred, sprintf("%s %s/%s", hue, value, chroma)))
 #'
 #' table(veryred$hue) # 2 hues
 #' table(veryred$value) # 2 values
