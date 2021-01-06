@@ -198,8 +198,6 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 }
 
 # TODO if alpha is greater than maxColorValue, there will be an error
-# convert munsell Hue, Value, Chroma into sRGB
-# user can adjust how rgb() function will return an R-friendly color
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE) {
 	## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
@@ -234,8 +232,9 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   if(length(N.idx) > 0)
     the_chroma[N.idx] <- 0
 
-
-  ## 2016-03-07: "fix" values of 2.5 by rounding to 2
+  
+  ## TODO: interpolate all 1/2 chips : https://github.com/ncss-tech/aqp/issues/178
+  # 2016-03-07: "fix" values of 2.5 by rounding to 2
   the_value <- ifelse(the_value == 2.5, 2, the_value)
 
   ## temporary fix for #44 (https://github.com/ncss-tech/aqp/issues/44)
@@ -253,7 +252,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
   ## TODO: convert to merge() (~ 30% slower than join)
   ## TODO: experiment with on-the-fly DT invocation if available
-  res <- join(d, munsell, type='left', by=c('hue','value','chroma'))
+  res <- join(d, munsell, type = 'left', by = c('hue','value','chroma'))
 
   # reset options:
   options(opt.original)
