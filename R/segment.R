@@ -54,7 +54,8 @@ segment <- function(object = NULL, intervals = NULL, trim = TRUE, hzdepcols = NU
   
   
   # slice spc by intervals
-  dep$df <- lapply(1:nrow(dep), function(x) h[0, ])
+  # dep$df <- lapply(1:nrow(dep), function(x) h[0, ]) # pre-allocate memory
+  dep$df <- list(h[0, ])[rep(1, nrow(dep))] # pre-allocate memory faster
   h <- {
     split(dep, dep$id) ->.;
     lapply(., function(x) {
