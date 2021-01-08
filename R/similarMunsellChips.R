@@ -7,7 +7,7 @@
 #'
 #' "Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.15. 
 #' 
-#' This is a naive (to the subtleties of human color perception, and overall magnitude of contrast between some of the "chips") but computationally consistent approach. Using the lookup list, as opposed to manual contrast via e.g. \code{farver::colour_contrast} may have some benefits for efficiency in certain applications where the exact contrast value is not as important as the concept of having some threshold that is non-zero, but very small.
+#' This is a naive (to the subtleties of human color perception, and overall magnitude of contrast between some of the "chips") but computationally consistent approach. Using the lookup list, as opposed to manual contrast via e.g. \code{farver::compare_colour} may have some benefits for efficiency in certain applications where the exact contrast value is not as important as the concept of having some threshold that is non-zero, but very small.
 #'  
 #' @usage data(munequivalent)
 #'
