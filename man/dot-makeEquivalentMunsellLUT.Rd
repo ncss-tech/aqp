@@ -7,13 +7,13 @@
 .makeEquivalentMunsellLUT(threshold = 0.001)
 }
 \arguments{
-\item{threshold}{Quantile cutoff for "equivalent" colors, default \code{0.001}}
+\item{threshold}{Quantile cutoff (of dE00 color contrast) for "equivalent" colors, default \code{0.001} based on all whole value/chroma "chips" in the \code{munsell} data set.}
 }
 \value{
 A list with equal length to the number of rows (chips) in \code{munsell} data, each containing a numeric vector of row indices that are equivalent (CIE2000 distance less than \code{threshold}).
 }
 \description{
-Makes the look up table based on pair-wise CIE2000 comparison of LAB colors for all whole value/chroma "chips" in the \code{munsell} data set via \code{farver::compare_colour}. Specify a threshold in terms of a probability level of CIE2000 distance (relative to whole dataset).
+Makes the look up table based on pair-wise CIE2000 color contrast (\code{dE00}) of LAB colors with D65 illuminant of LAB colors for all whole value/chroma "chips" in the \code{aqp::munsell} data set via \code{farver::compare_colour}. Specify a threshold in terms of a probability level of CIE2000 distance (relative to whole dataset).
 }
 \examples{
 \dontrun{
@@ -46,5 +46,12 @@ Makes the look up table based on pair-wise CIE2000 comparison of LAB colors for 
 
 }
 \references{
-Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
+Gaurav Sharma, Wencheng Wu, Edul N. Dalal. (2005). The CIEDE2000 Color-Difference Formula: Implementation Notes, Supplementary Test Data, and Mathematical Observations. COLOR research and application. 30(1):21-30. http://www2.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf
+
+ Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
+ 
+Dong, C.E., Webb, J.B., Bottrell, M.C., Saginor, I., Lee, B.D. and Stern, L.A. (2020). Strengths, Limitations, and Recommendations for Instrumental Color Measurement in Forensic Soil Characterization. J Forensic Sci, 65: 438-449. https://doi.org/10.1111/1556-4029.14193
+}
+\seealso{
+\code{\link{equivalentMunsellChips}}
 }

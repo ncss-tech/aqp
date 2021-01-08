@@ -11,11 +11,22 @@ A named list with 8467 elements, each containing a numeric vector of indices cor
 data(munequivalent)
 }
 \description{
-A pre-calculated look up table (made with \code{farver::compare_colour}) based on pair-wise CIE2000 comparison of LAB colors for all whole value/chroma "chips" in the \code{munsell} data set.
+A pre-calculated lookup list (made with \code{farver::compare_colour}) based on pair-wise CIE2000 color contrast (\code{dE00}) of LAB colors with D65 illuminant for all whole value/chroma "chips" in the \code{aqp::munsell} data set.
 
-"Equivalent" chips table are based (fairly arbitrarily) on the 0.1% percentile of CIE2000 distances within the 8467x8467 distance matrix.
+The intention is to identify Munsell chips that may be "functionally equivalent" to some other given whole chip elsewhere in the Munsell color space -- as discretized in the \code{aqp::munsell} lookup table. 
+
+"Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.15. 
+
+This is a naive (to the subtleties of human color perception, and overall magnitude of contrast between some of the "chips") but computationally consistent approach. Using the lookup list, as opposed to manual contrast via e.g. \code{farver::colour_contrast} may have some benefits for efficiency in certain applications where the exact contrast value is not as important as the concept of having some threshold that is non-zero, but very small.
 }
 \references{
-Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
+Gaurav Sharma, Wencheng Wu, Edul N. Dalal. (2005). The CIEDE2000 Color-Difference Formula: Implementation Notes, Supplementary Test Data, and Mathematical Observations. COLOR research and application. 30(1):21-30. http://www2.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf
+
+ Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
+ 
+Dong, C.E., Webb, J.B., Bottrell, M.C., Saginor, I., Lee, B.D. and Stern, L.A. (2020). Strengths, Limitations, and Recommendations for Instrumental Color Measurement in Forensic Soil Characterization. J Forensic Sci, 65: 438-449. https://doi.org/10.1111/1556-4029.14193
+}
+\seealso{
+\code{\link{equivalentMunsellChips}}
 }
 \keyword{datasets}
