@@ -4,7 +4,12 @@
 # helper function for printing out value / chroma ranges by hue
 .summarizeMunsellSpectraRanges <- function() {
   
-  data("munsell.spectra")
+  # make R CMD CHECK happy
+  munsell.spectra <- NULL
+  
+  # note: this is incompatible with LazyData: true
+  # load look-up table from our package
+  load(system.file("data/munsell.spectra.rda", package="aqp")[1])
   
   # set hue position
   munsell.spectra$hue <- factor(munsell.spectra$hue, levels = huePosition(returnHues = TRUE))
@@ -28,7 +33,7 @@
   
   x <- do.call('rbind', x)
   
-  knitr::kable(x, row.names = FALSE)
+  return(x)
 }
 
 
