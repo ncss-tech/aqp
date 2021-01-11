@@ -14,7 +14,7 @@ brierScore(x, classLabels, actual = "actual")
 \item{actual}{name of column containing the observed class, should be character vector not factor}
 }
 \value{
-a single Brier score, representative of data in \data{x}
+a single Brier score, representative of data in \code{x}
 }
 \description{
 Compute a multinominal Brier score from predicted class probabilities and observed class label. Lower values are associated with a more accurate classifier.

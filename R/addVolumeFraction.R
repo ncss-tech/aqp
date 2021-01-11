@@ -46,9 +46,34 @@
 	}
 
 
+#' @title Symbolize Volume Fraction on a Soil Profile Collection Plot
+#' 
+#' @description Symbolize volume fraction on an existing soil profile collection plot.
+#'
+#' @param x a \code{SoilProfileCollection} object
+#' @param colname character vector of length 1, naming the column containing volume fraction data (horizon-level attribute)
+#' @param res integer, resolution of the grid used to symbolize volume fraction
+#' @param cex.min minimum symbol size
+#' @param cex.max maximum symbol size
+#' @param pch integer, plotting character code
+#' @param col symbol color, either a single color or as many colors as there are horizons in `x`
+#' 
+#' @details This function can only be called after plotting a \code{SoilProfileCollection} object. Details associated with a call to \code{plotSPC} are automatically accounted for within this function: e.g. \code{plot.order}, \code{width}, etc..
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @seealso \code{\link{plotSPC}}
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 
+#' 
+
 ## TODO: symbol size must be controlled by `res`
 ## TODO: fails with fractional depths https://github.com/ncss-tech/aqp/issues/8
-# add volume fraction information to an existing SPC plot
+
 addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=1, col='black') {
 
   # color should be either:

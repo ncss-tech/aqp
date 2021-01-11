@@ -83,7 +83,7 @@ confusionIndex <- function(x) {
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @return a single Brier score, representative of data in \data{x}
+#' @return a single Brier score, representative of data in \code{x}
 #' @export
 #'
 #' @examples
