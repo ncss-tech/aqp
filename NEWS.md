@@ -9,6 +9,7 @@
  * `addBracket` can now accept multiple bracket annotations per profile
 
 # aqp 1.25 (2020-10-15)
+ * CRAN release
  * new lookup table `pms.munsell.lut` for converting Pantone spot color codes to (closest) Munsell chip
  * new function `duplicate` will makes copies of profiles within a `SoilProfileCollection`
  * new example data `us.state.soils`: 50 state soils + PR and VI soils
