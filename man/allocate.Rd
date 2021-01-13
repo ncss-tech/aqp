@@ -4,14 +4,46 @@
 \alias{allocate}
 \title{Allocate soil properties within various classification systems.}
 \usage{
-allocate(..., to = NULL, droplevels = TRUE)
+allocate(
+  ...,
+  to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"),
+  droplevels = TRUE
+)
 }
 \arguments{
-\item{...}{arguments, usually a named vector of soil properties (e.g. pH = 1:14)}
+\item{...}{arguments to specific allocation functions, see details and examples}
 
-\item{to}{character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see the Details for the required \code{...})}
+\item{to}{character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see details for the required \code{...})}
 
 \item{droplevels}{logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.}
+
+\item{object}{a \code{data.frame} or \code{SoilProfileCollection}}
+
+\item{pedonid}{pedon ID column name, required when \code{object} is a \code{data.frame}}
+
+\item{hztop}{horizon top depth column name, required when \code{object} is a \code{data.frame}}
+
+\item{hzbot}{horizoni bottom depth column name, required when \code{object} is a \code{data.frame}}
+
+\item{OC}{organic carbon column name, percent}
+
+\item{m_chroma}{moist Munsell chroma column name}
+
+\item{m_value}{moist Munsell value column name}
+
+\item{d_value}{dry Munsell value column name}
+
+\item{CEC}{cation exchange capacity column name, units of cmol(+)/kg soil}
+
+\item{BS}{base saturation column name, percent}
+
+\item{tropical}{logical, data are associated with "tropical soils"}
+
+\item{EC}{electrical conductivity column name, units?}
+
+\item{pH}{pH column name, method / units?}
+
+\item{ESP}{exchangeable sodium percentage column name, percent}
 }
 \value{
 A vector or \code{data.frame} object.
@@ -57,6 +89,51 @@ bs1 <- allocate(test, pedonid = "pedon_id", hztop = "dept", hzbot = "depb",
 )
 
 table(BS1 = bs1$BS1, BS2 = bs1$BS2)
+
+
+# SoilProfileCollection interface
+
+data(sp3)
+depths(sp3) <- id ~ top + bottom
+hzdesgnname(sp3) <- 'name'
+
+# fake base saturation
+horizons(sp3)$bs <- 75
+
+plotSPC(sp3)
+
+allocate(
+  sp3, 
+  to = 'FAO Black Soil', 
+  OC = 'tc', 
+  m_chroma = 'chroma', 
+  m_value = 'value', 
+  d_value = 'value',
+  CEC = 'cec',
+  BS = 'bs'
+)
+
+# make a copy and edit horizon values
+x <- sp3
+x$value <- 2
+x$chroma <- 2
+x$cec <- 26
+x$tc <- 2
+
+x$soil_color <- munsell2rgb(x$hue, x$value, x$chroma)
+
+plotSPC(x)
+
+allocate(
+  x, 
+  to = 'FAO Black Soil', 
+  OC = 'tc', 
+  m_chroma = 'chroma', 
+  m_value = 'value', 
+  d_value = 'value',
+  CEC = 'cec',
+  BS = 'bs'
+)
 
 
 # Soil Taxonomy Diagnostic Features

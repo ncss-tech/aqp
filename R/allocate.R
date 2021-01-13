@@ -2,11 +2,42 @@
 #' 
 #' @description Generic function to allocate soil properties to different classification schemes.
 #'
-#' @param ... arguments, usually a named vector of soil properties (e.g. pH = 1:14)
+#' @param ... arguments to specific allocation functions, see details and examples
 #' 
-#' @param to character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see the Details for the required \code{...})
+#' @param to character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see details for the required \code{...})
 #' 
 #' @param droplevels logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.
+#' 
+#' 
+#' 
+#' @param object a \code{data.frame} or \code{SoilProfileCollection}
+#' 
+#' @param pedonid pedon ID column name, required when \code{object} is a \code{data.frame}
+#' 
+#' @param hztop horizon top depth column name, required when \code{object} is a \code{data.frame}
+#' 
+#' @param hzbot horizoni bottom depth column name, required when \code{object} is a \code{data.frame}
+#' 
+#' @param OC organic carbon column name, percent
+#' 
+#' @param m_chroma moist Munsell chroma column name
+#' 
+#' @param m_value moist Munsell value column name
+#' 
+#' @param d_value dry Munsell value column name
+#' 
+#' @param CEC cation exchange capacity column name, units of cmol(+)/kg soil
+#' 
+#' @param BS base saturation column name, percent
+#' 
+#' @param tropical logical, data are associated with "tropical soils"
+#' 
+#' @param EC electrical conductivity column name, units?
+#' 
+#' @param pH pH column name, method / units?
+#' 
+#' @param ESP exchangeable sodium percentage column name, percent
+#' 
 #' 
 #' @details This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008). 
 #' 
@@ -65,6 +96,51 @@
 #' table(BS1 = bs1$BS1, BS2 = bs1$BS2)
 #' 
 #' 
+#' # SoilProfileCollection interface
+#' 
+#' data(sp3)
+#' depths(sp3) <- id ~ top + bottom
+#' hzdesgnname(sp3) <- 'name'
+#' 
+#' # fake base saturation
+#' horizons(sp3)$bs <- 75
+#' 
+#' plotSPC(sp3)
+#' 
+#' allocate(
+#'   sp3, 
+#'   to = 'FAO Black Soil', 
+#'   OC = 'tc', 
+#'   m_chroma = 'chroma', 
+#'   m_value = 'value', 
+#'   d_value = 'value',
+#'   CEC = 'cec',
+#'   BS = 'bs'
+#' )
+#' 
+#' # make a copy and edit horizon values
+#' x <- sp3
+#' x$value <- 2
+#' x$chroma <- 2
+#' x$cec <- 26
+#' x$tc <- 2
+#' 
+#' x$soil_color <- munsell2rgb(x$hue, x$value, x$chroma)
+#' 
+#' plotSPC(x)
+#' 
+#' allocate(
+#'   x, 
+#'   to = 'FAO Black Soil', 
+#'   OC = 'tc', 
+#'   m_chroma = 'chroma', 
+#'   m_value = 'value', 
+#'   d_value = 'value',
+#'   CEC = 'cec',
+#'   BS = 'bs'
+#' )
+#' 
+#' 
 #' # Soil Taxonomy Diagnostic Features
 #' data(sp1)
 #' df <- allocate(object = sp1, pedonid = "id", hzname = "name", 
@@ -73,48 +149,41 @@
 #' )
 #' aggregate(featdept ~ id, data = df, summary)
 #' 
-allocate <- function(..., to = NULL, droplevels = TRUE) {
+allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"), droplevels = TRUE) {
   
-  tos <- c(ss = "FAO Salt Severity", 
-           bh = "FAO Black Soil", 
-           dh = "ST Diagnostic Features"
-           )
+  # sanity check
+  to <- match.arg(to, several.ok = FALSE)
   
-  # test
-  if (is.null(to)) {
-    stop(paste('the "to" argument should equal one of the following:', paste0('"', tos, '"', collapse = ', ')))
-  }
-  if (length(to) > 1) {
-    stop('the length of the "to" argument should equal 1')
-  }
-  if (! to %in% tos) {
-    stop(paste('the argument "to" currently supports allocating soil properties to one of the following classification schemes\\:', paste0('"', tos, '"', collapse = ', ')))
-  }
-    
+  # select the appropriate system
+  a <- switch(
+    to,
+    "FAO Salt Severity" = {
+      .rank_salts(..., system = to, droplevels = droplevels) 
+    },
+    "FAO Black Soil" = {
+      .black_soil(...)  
+    },
+    "ST Diagnostic Features" = {
+      # object = object
+      # pedonid = "peiid"
+      # hzname = "hzname"
+      # hzdept = "hzdept"
+      # hzdepb = "hzdepb"
+      # texture = "texture"
+      # hz_pat = ""
+      # tex_pat = "br"
+      # featkind = "argillic horizon"
+      
+      featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "mollic epipedon") #, "reduced matrix")
+      
+      a <- lapply(featkind, function(x) {
+        # a <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
+        a <- .guess_df(..., featkind = x)
+      })
+      a <- do.call("rbind", a)
+    }
+  )
   
-  # allocate
-  if (to == "FAO Salt Severity") {
-    a <- .rank_salts(..., system = to, droplevels = droplevels)
-  }
-  
-  if (to == "FAO Black Soil") {
-    a <- .black_soil(...)
-  }
-  
-  if (to == "ST Diagnostic Features") {
-    
-    # object = object; pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
-    
-    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "mollic epipedon") #, "reduced matrix")
-    
-    a <- lapply(featkind, function(x) {
-      # a <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
-      a <- .guess_df(..., featkind = x)
-    })
-    a <- do.call("rbind", a)
-  }
-  
-
   return(a)  
 }
     
@@ -214,6 +283,12 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 }
   
 
+## TODO: useful error message, this isn't helpful:
+# Error in .black_soil(...) : 
+# column names in object must match the other character vector input arguments
+
+## TODO: there is currently no way to document these arguments, critical because each has an expected unit of measure
+
 
 .black_soil <- function(object, pedonid = "peiid", hztop = "hzdept", hzbot = "hzdepb", OC = NULL, m_chroma = "m_chroma", m_value = "m_value", d_value = "d_value", CEC = NULL, BS = NULL, tropical = FALSE) { # thickness = NULL, horizon = TRUE 
   
@@ -223,13 +298,26 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # pedonid = "pedonid"; hztop = "hztop"; hzbot = "hzbot"; OC = "OC"; m_chroma = "m_chroma"; m_value = "m_value"; d_value = "d_value"; CEC = "CEC"; BS = "BS"
   # pedonid = "idp"; hztop = "top"; hzbot = "bot"; OC = "oc"; m_chroma = "w_chroma"; m_value = "w_value"; d_value = "d_value"; CEC = "cec"; BS = NULL
   
-  # test & standardize inputs
-  vars <- list(pedonid = pedonid, hztop = hztop, hzbot = hzbot, OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
-  
   # check object type
-  if (class(object)[1] == "SoilProfileCollection") {
+  # SoilProfileCollection objects have a number of required arguments defined internally
+  if (inherits(object, 'SoilProfileCollection')) {
+    # extract relevant metadata from the SPC
+    pID <- idname(object)
+    hztb <- horizonDepths(object)
+    
+    # horizons as data.frame-like obj
     df <- horizons(object)
-  } else df <- object
+    
+    # setup variables used later, using SPC metadata if possible
+    vars <- list(pedonid = pID, hztop = hztb[1], hzbot = hztb[2], OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
+    
+  } else {
+    # this is likely a data.frame
+    df <- object
+    
+    # setup variables used later, all from provided arguments
+    vars <- list(pedonid = pedonid, hztop = hztop, hzbot = hzbot, OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
+  }
   
   # check length of arguments
   if (any(sapply(vars, length) > 1)) {
