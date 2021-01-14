@@ -39,9 +39,9 @@ allocate(
 
 \item{tropical}{logical, data are associated with "tropical soils"}
 
-\item{EC}{electrical conductivity column name, units?}
+\item{EC}{electrical conductivity column name, dS/m}
 
-\item{pH}{pH column name, method / units?}
+\item{pH}{pH column name, 1:1 H20}
 
 \item{ESP}{exchangeable sodium percentage column name, percent}
 }
