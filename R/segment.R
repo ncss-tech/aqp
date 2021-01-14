@@ -3,17 +3,17 @@
 
 #' @title Segmenting of Soil Horizon Data by Depth Interval
 #' 
-#' @description This function adds depth interval ("segment") labels to soil horizon data associated with \code{SoilProfileCollection} and \code{data.frame} objects.
+#' @description This function adds depth interval ("segment") labels to soil horizon data associated with \code{SoilProfileCollection} and \code{data.frame} objects. Additional horizon records are inserted when a segment label does not overlap with a horizon boundary. See examples.
 #'
 #' @param object either a \code{SoilProfileCollection} or \code{data.frame}
 #' @param intervals a vector of integers over which to slice the horizon data (e.g. \code{c(25, 100)} or \code{25:100})
-#' @param trim logical, specify whether horizon depths should be clipped to the depth intervals (e.g. 15 -> 25)
+#' @param trim logical, when \code{TRUE} horizons in \code{object} are truncated to the min/max specified in \code{intervals}. When \code{FALSE}, those horizons overlapping an interval are marked as such. Care should be taken when specifying more than one depth interval and \code{trim = FALSE}.
 #' @param hzdepcols a character vector of length 2 specifying the names of the horizon depths (e.g. \code{c("hzdept", "hzdepb")}), only necessary if \code{object} is a \code{data.frame}.
 #' 
 #' 
 #' @details This function adds segment labels to soil horizon data according to \code{intgervals} (e.g. c(25, 100) or 25:100). Compared to \code{slice}, \code{slab}, and \code{glom}, \code{segment} performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice} or \code{slab}.
 #'
-#' @return Either a \code{SoilProfileCollection} or \code{data.frame} with the original horizon data segmented by depth intervals. A new column called \code{segment_id} identifying the depth interval is added.
+#' @return Either a \code{SoilProfileCollection} or \code{data.frame} with the original horizon data segmented by depth intervals. There are usually more records in the resulting object, one for each time a segment interval partially overlaps with a horizon. A new column called \code{segment_id} identifying the depth interval is added.
 #' 
 #' @author Stephen Roecker
 #' 
@@ -21,7 +21,56 @@
 #'
 #' @examples
 #' 
-#' library(aqp)
+#' # example data
+#' data(sp1)
+#' 
+#' # upgrade to SPC
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # segment and trim
+#' z <- segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE)
+#' 
+#' # display segment labels
+#' # note that there are new horizon boundaries at segments
+#' par(mar = c(0, 0, 3, 1))
+#' plotSPC(z, color = 'segment_id', width = 0.3)
+#' 
+#' # highlight new horizon records
+#' par(mar = c(0, 0, 2, 1))
+#' plotSPC(z, color = NA, default.color = NA, width = 0.3, lwd = 1)
+#' plotSPC(sp1, color = NA, default.color = NA, 
+#' width = 0.3, lwd = 3, add = TRUE, name = NA, print.id = FALSE)
+#' legend('top', horiz = TRUE, 
+#' legend = c('original', 'segmented'), 
+#' lwd = c(1, 3), cex = 0.85, bty = 'n')
+#' 
+#' \donttest{
+#' # same results as slab()
+#' # 10 random profiles
+#' s <- lapply(1:10, random_profile, n_prop = 1, SPC = TRUE, method = 'random_walk')
+#' s <- combine(s)
+#' 
+#' a.slab <- slab(s, fm = ~ p1, slab.structure = c(0, 10, 20, 30), slab.fun = mean, na.rm = TRUE)
+#' 
+#' z <- segment(s, intervals = c(0, 10, 20, 30), trim = TRUE)
+#' z <- horizons(z)
+#' z$thick <- z$bottom - z$top
+#' 
+#' a.segment <- sapply(split(z, z$segment_id), function(i) {
+#'   weighted.mean(i$p1, i$thick)
+#' })
+#' 
+#' 
+#' res <- data.frame(
+#'   slab = a.slab$value,
+#'   segment = a.segment,
+#'   diff = a.slab$value - a.segment
+#' )
+#'
+#' print(res)
+#' res$diff < 0.001
+#'}
+#' 
 #' 
 #' data(sp5)
 #' 
@@ -137,6 +186,8 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
     h_orig <- data.frame(peid = names(table(horizons(object)[peid])), stringsAsFactors = FALSE)
     h <- merge(h_orig, h, by = "peid", all.x = TRUE, sort = FALSE)
     rm(h_orig)
+    
+    ## TODO: consider adding a flag to indicate "new" horizon records that have been added
     
     # rebuild SPC
     names(h)[names(h) == "peid"] <- peid

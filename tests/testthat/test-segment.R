@@ -115,3 +115,41 @@ test_that("expected outcome with bogus horizon depths", {
   
 })
 
+
+
+
+test_that("same results as weighted mean via slab", {
+
+  # 100 random data
+  s <- lapply(1:100, random_profile, n_prop = 1, SPC = TRUE, method = 'random_walk')
+  s <- combine(s)
+  
+  # weighted mean via slab
+  a.slab <- slab(s, fm = ~ p1, slab.structure = c(0, 10, 20, 30), slab.fun = mean, na.rm = TRUE)
+  
+  # segment
+  z <- segment(s, intervals = c(0, 10, 20, 30), trim = TRUE)
+  
+  # compute horizon thickness weights
+  z <- horizons(z)
+  z$thick <- z$bottom - z$top
+  
+  # weighted mean from segment output
+  a.segment <- sapply(split(z, z$segment_id), function(i) {
+    weighted.mean(i$p1, i$thick)
+  })
+  
+  # inspect as needed
+  res <- data.frame(
+    slab = a.slab$value,
+    segment = a.segment,
+    diff = a.slab$value - a.segment
+  )
+  
+  expect_true(all(res$diff < 0.001))
+  
+})
+
+
+
+
