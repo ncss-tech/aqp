@@ -32,9 +32,9 @@
 #' 
 #' @param tropical logical, data are associated with "tropical soils"
 #' 
-#' @param EC electrical conductivity column name, units?
+#' @param EC electrical conductivity column name, dS/m
 #' 
-#' @param pH pH column name, method / units?
+#' @param pH pH column name, 1:1 H20
 #' 
 #' @param ESP exchangeable sodium percentage column name, percent
 #' 
