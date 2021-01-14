@@ -94,7 +94,7 @@
 
 
 #' @title Tukey's HSD Over Slices
-#' @description Apply Tukey's HSD over 1cm slices.
+#' @description Apply Tukey's HSD over 1-unit depth slices.
 #'
 #' @author D.E. Beaudette and Sharon Perrone
 #'
