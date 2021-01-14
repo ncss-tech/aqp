@@ -64,12 +64,9 @@
 #' 
 #' @seealso \code{\link{plotSPC}}
 #'
-#' @return
 #' @export
-#'
-#' @examples
 #' 
-#' 
+
 
 ## TODO: symbol size must be controlled by `res`
 ## TODO: fails with fractional depths https://github.com/ncss-tech/aqp/issues/8

@@ -29,18 +29,11 @@ addVolumeFraction(
 
 \item{col}{symbol color, either a single color or as many colors as there are horizons in `x`}
 }
-\value{
-
-}
 \description{
 Symbolize volume fraction on an existing soil profile collection plot.
 }
 \details{
 This function can only be called after plotting a \code{SoilProfileCollection} object. Details associated with a call to \code{plotSPC} are automatically accounted for within this function: e.g. \code{plot.order}, \code{width}, etc..
-}
-\examples{
-
-
 }
 \seealso{
 \code{\link{plotSPC}}
