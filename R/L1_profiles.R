@@ -58,11 +58,17 @@
 #' @references Cardot, H., Cenac, P. and Zitt, P-A. (2013). Efficient and fast estimation of the geometric median in Hilbert spaces with an averaged stochastic gradient algorithm. Bernoulli, 19, 18-43.
 #'
 #' @param x \code{SoilProfileCollection} object
-#' @param fm formula
-#' @param basis aggregation basis
-#' @param method soil depth evaluation method: regular expression, simple, constant. See details.
-#' @param maxDepthRule maximum depth rule: min | max. See details.
-#' @param maxDepthConstant depth when \code{maxDepthRule = 'constant'}
+#' 
+#' @param fm formula, for example: "group ~ p1 + p2 + p3", where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables
+#' 
+#' @param basis postive integer, aggregation basis (e.g. 1 for 1-depth-unit intervals). Values other than 1 are not currently supported.
+#' 
+#' @param method soil depth evaluation method: "regex" for regular expression, "simple", or "constant". See details.
+#' 
+#' @param maxDepthRule maximum depth rule: "max" or "min" See details.
+#' 
+#' @param maxDepthConstant positive integer, maximum depth when \code{maxDepthRule = 'constant'}
+#' 
 #' @param strict passed to \code{slice}
 #'
 #' @return a \code{SoilProfileCollection} object
@@ -81,8 +87,8 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constan
   }
   
   # extract components of the formula:
-  g <- all.vars(update(fm, .~0)) # left-hand side
-  vars <- all.vars(update(fm, 0~.)) # right-hand side
+  g <- all.vars(update(fm, . ~ 0)) # left-hand side
+  vars <- all.vars(update(fm, 0 ~ .)) # right-hand side
   
   # sanity check: do the variables specified in fm exist in the correct site / hz slots?
   if(
@@ -99,6 +105,13 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constan
   # multi-argument sanity
   if(method == 'constant' & !is.numeric(maxDepthConstant)) {
     stop('contant max depth must be specified by single numeric value', call. = FALSE)
+  }
+  
+  # ensure that there is a horizon name defined when method = 'regex'
+  if(method == 'regex'){
+    if(hzdesgnname(x) == '') {
+      stop('`x` must have a horizon designation defined to use `method = "regex"`, see `?hzdesgnname`', call. = FALSE)
+    }
   }
   
   # SPC metadata
@@ -155,6 +168,8 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constan
   # simplest case: working with raw slices, use top depth
   if(basis == 1) {
     h$.chunk <- h[[hztb[1]]]
+  } else {
+    stop('sorry, depth basis other than `1` are not currently supported', call. = FALSE)
   }
   
   

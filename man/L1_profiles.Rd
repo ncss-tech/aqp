@@ -17,15 +17,15 @@ L1_profiles(
 \arguments{
 \item{x}{\code{SoilProfileCollection} object}
 
-\item{fm}{formula}
+\item{fm}{formula, for example: "group ~ p1 + p2 + p3", where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables}
 
-\item{basis}{aggregation basis}
+\item{basis}{postive integer, aggregation basis (e.g. 1 for 1-depth-unit intervals). Values other than 1 are not currently supported.}
 
-\item{method}{soil depth evaluation method: regular expression, simple, constant. See details.}
+\item{method}{soil depth evaluation method: "regex" for regular expression, "simple", or "constant". See details.}
 
-\item{maxDepthRule}{maximum depth rule: min | max. See details.}
+\item{maxDepthRule}{maximum depth rule: "max" or "min" See details.}
 
-\item{maxDepthConstant}{depth when \code{maxDepthRule = 'constant'}}
+\item{maxDepthConstant}{positive integer, maximum depth when \code{maxDepthRule = 'constant'}}
 
 \item{strict}{passed to \code{slice}}
 }
