@@ -100,7 +100,7 @@
   * `generalize.hz()` gets a \dots argument for passing additional arguments to `grep()`, e.g. `perl=TRUE`
   * `addVolumeFraction()` can now accept a vector of colors, as many as number of horizons
   * new sample data: `jacobs2000`, pending documentation
-  * `aggregateColor()` faster and more accuracte, using delta-E00 for quantized colors c/o {farver} (see https://github.com/ncss-tech/aqp/issues/98)
+  * `aggregateColor()` faster and more accurate, using delta-E00 for quantized colors c/o {farver} (see https://github.com/ncss-tech/aqp/issues/98)
   * new functions `contrastChart()` and `soilPalette()`
   * aqp 1.18 scheduled for next CRAN release
 
@@ -183,7 +183,7 @@
    * `texture.triangle.low.rv.high()` renamed to `textureTriangleSummary()`. The old name still works, but a message is issued
    * new argument to `textureTriangleSummary()` `texture.names`: for toggling texture class names
    * minor bug fix in `textureTriangleSummary(..., sim=TRUE)`, previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.
-   * new function `tauW()`, addd by D.G. Rossiter: see manual page for references
+   * new function `tauW()`, added by D.G. Rossiter: see manual page for references
 
 # aqp 1.10 (2017-01-05)
    * fixed major bug (https://github.com/ncss-tech/aqp/issues/23) related to editing horizon-level attributes after `rbind`-ing

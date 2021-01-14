@@ -6,7 +6,7 @@
 #' @param name name of the column that contains horizon designations
 #' @param p REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. `Bt`)
 #' @param selection function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.
-#' @param no.contact.depth in the absense of contact matching \code{p}, a depth at which we can assume a standard depth-to-contact
+#' @param no.contact.depth in the absence of contact matching \code{p}, a depth at which we can assume a standard depth-to-contact
 #' @param no.contact.assigned value assigned when no contact is encountered at or below \code{no.contact.depth}
 #' 
 #' @return single value representing the depth to `contact` or \code{no.contact.assigned}
