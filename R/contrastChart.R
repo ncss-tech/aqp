@@ -22,7 +22,7 @@
 #' @param returnData logical, return lattice figure + data used to generate the figure
 #'
 #' @details
-#' A simulated Munsell color book page or pages are used to demonstrate color contrast between all chips and the refnerece color \code{m} (highlighted in red). NCSS color contrast class and CIE delta-E00 values are printed below all other color chips. Munsell color chips for chroma 5 and 7 are ommitted, but axis labels are retained as a reminder of this fact.
+#' A simulated Munsell color book page or pages are used to demonstrate color contrast between all chips and the reference color \code{m} (highlighted in red). NCSS color contrast class and CIE delta-E00 values are printed below all other color chips. Munsell color chips for chroma 5 and 7 are ommitted, but axis labels are retained as a reminder of this fact.
 #'
 #' Setting \code{style='hue'} emphasises the contrast classes and CIE delta-E00 of chips adjacent to \code{m}. Setting \code{style='CC'} emphasises adjacent chips according to respective contrast class via lattice panels.
 #'

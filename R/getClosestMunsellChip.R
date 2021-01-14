@@ -6,7 +6,7 @@
 #' 
 #' @description Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
 #'
-#' @param munsellColor character vector of strings containing Musell notation of color, e.g. '10YR 4/3'
+#' @param munsellColor character vector of strings containing Munsell notation of color, e.g. '10YR 4/3'
 #' @param convertColors logical, should parsed Munsell colors be converted into sRGB values
 #' @param ... further arguments to \code{munsell2rgb}
 #'

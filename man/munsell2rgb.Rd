@@ -32,7 +32,7 @@ parseMunsell(munsellColor, convertColors=TRUE, ...)
   \item{color}{a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of [0,1]}
   \item{colorSpace}{the distance metric (colorspace) to use for finding the closest chip: CIE2000 is the most accurate but requires farver >= 2.0.3, Euclidean distance in (CIE)LAB is a close second, while Euclidean distance in sRGB is not at all accurate and should only be used for demonstration}
   \item{nClosest}{number of closest Munsell colors to return}
-  \item{munsellColor}{character vector of strings containing Musell colors, e.g. '10YR 4/3'}
+  \item{munsellColor}{character vector of strings containing Munsell colors, e.g. '10YR 4/3'}
   \item{convertColors}{logical, should parsed Munsell colors be converted into sRGB values}
   \item{\dots}{further arguments to \code{munsell2rgb}}
 }

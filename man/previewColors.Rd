@@ -30,7 +30,7 @@ previewColors(
 \item{pt.cex}{point scaling factor used by "MDS" method}
 }
 \value{
-When \code{method = "grid" or "manual} a vector of color order is returned.
+When \code{method = "grid" or "manual"} a vector of color order is returned.
 }
 \description{
 Preview colors as a grid arranged according to CIE2000 distances.

@@ -30,7 +30,7 @@
 #' 
 #' 
 #'
-#' @return When \code{method = "grid" or "manual} a vector of color order is returned.
+#' @return When \code{method = "grid" or "manual"} a vector of color order is returned.
 #' @export
 #'
 #' @examples
