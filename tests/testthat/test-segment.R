@@ -89,7 +89,7 @@ test_that("expected outcome with NA horizon depths", {
 test_that("expected outcome with bogus horizon depths", {
   
   # init local copy of sample data
-lavabed national monument  data(sp1)
+  data(sp1)
   
   # copies
   good <- sp1
