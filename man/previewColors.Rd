@@ -11,7 +11,8 @@ previewColors(
   nrow = ceiling(sqrt(length(cols))),
   ncol = nrow,
   border.col = "black",
-  pt.cex = 2
+  pt.cex = 2,
+  pt.pch = 15
 )
 }
 \arguments{
@@ -28,9 +29,11 @@ previewColors(
 \item{border.col}{border color used by "grid" method}
 
 \item{pt.cex}{point scaling factor used by "MDS" method}
+
+\item{pt.pch}{point symbol used by "MDS" method}
 }
 \value{
-When \code{method = "grid" or "manual"} a vector of color order is returned.
+When \code{method = "grid" or "manual"} a vector of color order is returned. When \code{method = "MDS"}, the output from \code{MASS::cmdscale}.
 }
 \description{
 Preview colors as a grid arranged according to CIE2000 distances.

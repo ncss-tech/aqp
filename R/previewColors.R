@@ -19,6 +19,7 @@
 #' @param ncol number of columns used by "grid" method
 #' @param border.col border color used by "grid" method
 #' @param pt.cex point scaling factor used by "MDS" method
+#' @param pt.pch point symbol used by "MDS" method
 #' 
 #' @details Color sorting is based on CIE2000 distances as calculated by \code{farver::compare_colour()}. The "grid" method arranges colors in a rectangular grid with ordering based on divisive hierarchical clustering of the pair-wise distances. Unique colors are used when \code{cols} contains more than 5,000 colors.
 #' 
@@ -30,7 +31,7 @@
 #' 
 #' 
 #'
-#' @return When \code{method = "grid" or "manual"} a vector of color order is returned.
+#' @return When \code{method = "grid" or "manual"} a vector of color order is returned. When \code{method = "MDS"}, the output from \code{MASS::cmdscale}.
 #' @export
 #'
 #' @examples
@@ -44,7 +45,7 @@
 #' previewColors(sp2$soil_color)
 #' previewColors(sp2$soil_color, method = 'MDS', pt.cex = 3)
 #' 
-previewColors <- function(cols, method='grid', col.order=NULL, nrow=ceiling(sqrt(length(cols))), ncol=nrow, border.col='black', pt.cex=2) {
+previewColors <- function(cols, method = 'grid', col.order = NULL, nrow = ceiling(sqrt(length(cols))), ncol = nrow, border.col = 'black', pt.cex = 2, pt.pch = 15) {
 
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver', quietly = TRUE))
@@ -56,7 +57,9 @@ previewColors <- function(cols, method='grid', col.order=NULL, nrow=ceiling(sqrt
   # safety catch: a 5000 x 5000 element distance matrix is about all we really need for a preview
   if(length(cols) > 5000) {
     cols <- unique(cols)
-    warning('using unique colors')
+    pt.cex <- pt.cex[1]
+    pt.pch <- pt.pch
+    warning('using unique colors, and first `pt.cex` / `pt.pch')
   }
 
   # use unique colors when using MDS
@@ -120,8 +123,10 @@ previewColors <- function(cols, method='grid', col.order=NULL, nrow=ceiling(sqrt
     par(mar=c(1,1,3,1))
     plot(mds, type='n', axes=FALSE)
     grid(nx=10, ny=10, col=par('fg'))
-    points(mds, pch=15, col=cols, cex=pt.cex)
+    points(mds, col = cols, cex = pt.cex, pch = pt.pch)
     box()
+    
+    invisible(mds)
   }
 
 }
