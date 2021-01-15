@@ -12,6 +12,7 @@
 
 ## TODO: quantiles should be weighted by thickness, can we do this via slice()?
 ## TODO: finish documentation + links
+## TODO: consider a third output: chip with pair-wise min(dE00) within distance matrix
 
 #' @title Soil Color Range via Quantiles
 #'
