@@ -15,8 +15,8 @@ colorQuantiles(soilColors, p = c(0.05, 0.5, 0.95))
 A List containing the following elements:
 
 \itemize{
-\item{marginal: }{data.frame containing marginal quantiles in CIELAB (D65), closest colors and Munsell chips}
-\item{L1: }{L1 median CIELAB (D65) values, closest color and Munsell chip}
+\item{marginal: }{\code{data.frame} containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00}
+\item{L1: }{L1 median CIELAB (D65) values, closest Munsell chip, and dE00}
 }
 }
 \description{
@@ -26,9 +26,6 @@ Estimate central tendency and spread of soil color using marginal quantiles and 
 Colors are converted from sRGB to CIELAB (D65 illuminant), marginal quantiles of L,A,B coordinates are estimated, and L1 median {L,A,B} is estimates. The closest Munsell chips (via Munsell/CIELAB lookup table provided by \code{munsell}) and R colors are determined by locating chips closest to the marginal quantiles and L1 median.
 
 The results can be conveniently inspected using \code{plotColorQuantiles}.
-}
-\note{
-This is a work in progress.
 }
 \examples{
 

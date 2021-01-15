@@ -4,19 +4,23 @@
 \alias{plotColorQuantiles}
 \title{Visualize Color Quantiles}
 \usage{
-plotColorQuantiles(res, pt.cex = 7, title = "", mar = c(2, 1.5, 1, 1))
+plotColorQuantiles(res, pt.cex = 7, lab.cex = 0.66)
 }
 \arguments{
 \item{res}{list returned by \code{colorQuantiles}}
 
 \item{pt.cex}{scaling factor for color chips}
 
-\item{title}{optional title printed above color quantile figure}
-
-\item{mar}{customized margins, see details}
+\item{lab.cex}{chip label scaling factor}
+}
+\value{
+a \code{lattice} graphics object
 }
 \description{
-This function creates a visualization of the output from \code{colorQuantiles}.
+This function creates a visualization of the output from \code{colorQuantiles} using lattice graphics.
+}
+\details{
+Marginal percentiles and L1 median CIELAB values from \code{colorQuantiles} are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via \code{rgb2Munsell}.
 }
 \author{
 D.E. Beaudette
