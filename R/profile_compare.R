@@ -65,7 +65,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	## --> https://stackoverflow.com/questions/17611734/r-split-preserving-natural-order-of-factors
 	##
 	## unroll each named soil property, for each soil profile
-	## the result is a list matricies with dimensions: depth, num_properties
+	## the result is a list matrices with dimensions: depth, num_properties
 	# this approach requires a named list of soil properties
 	s.unrolled <- dlply(s, "id", .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) {
 

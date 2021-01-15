@@ -11,7 +11,7 @@ if (!isGeneric("harmonize"))
 #' Data are "harmonized" to a common attribute names specified by the names of list elements in \code{x.names}. Profiles are essentially duplicated. In order to satisfy uniqueness constraints of the SoilProfileCollection, the label from the sub-elements of \code{x.names} are used to disambiguate profiles. A new column in the site table is calculated to reflect these groupings and facilitate filtering. See examples below.
 #'
 #' @param x A SoilProfileCollection.
-#' @param x.names a named list of character vectors specifing target names, profile ID suffixes and source attribute names for harmonization
+#' @param x.names a named list of character vectors specifying target names, profile ID suffixes and source attribute names for harmonization
 #' @param keep.cols a character vector of column names to keep unaltered from the horizon data
 #' @param grp.name a character vector with column name to store grouping variable in site table (default: "hgroup")
 #'

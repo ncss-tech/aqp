@@ -4,8 +4,8 @@
 \alias{slice.fast}
 \alias{slice}
 \alias{slice,SoilProfileCollection-method}
-\title{Slicing of SoilProfilecollection Objects}
-\description{Slicing of SoilProfilecollection Objects}
+\title{Slicing of SoilProfileCollection Objects}
+\description{Slicing of SoilProfileCollection Objects}
 
 
 \usage{
@@ -54,12 +54,12 @@ library(aqp)
 d <- lapply(1:20, random_profile)
 d <- do.call('rbind', d)
 
-# init SoilProfilecollection object
+# init SoilProfileCollection object
 depths(d) <- id ~ top + bottom
 head(horizons(d))
 
 # generate single slice at 10 cm
-# output is a SoilProfilecollection object
+# output is a SoilProfileCollection object
 s <- slice(d, 10 ~ name + p1 + p2 + p3)
 
 # generate single slice at 10 cm, output data.frame

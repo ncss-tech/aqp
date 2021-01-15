@@ -67,7 +67,7 @@
 #' 
 #' @author D.E. Beaudette, J. Nemecek, K. Godsey
 #' 
-#' @description This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles (estimated with \code{Hmisc::hdquantile}). Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region. The defualt settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.
+#' @description This function accepts soil texture components (sand, silt, and clay percentages) and plots a soil texture triangle with a "representative value" (point) and low-high region (polygon) defined by quantiles (estimated with \code{Hmisc::hdquantile}). Marginal quantiles of sand, silt, and clay are used to define the boundary of a low-high region. The default settings place the RV symbol at the texture defined by marginal medians of sand, silt, and clay. The default low-high region is defined by the 5th and 95th marginal percentiles of sand, silt, and clay.
 #' 
 #' @param ssc \code{data.frame} with columns: 'SAND', 'SILT', 'CLAY', values are percentages that should add to 100. No NA allowed.
 #' 

@@ -23,7 +23,7 @@ allocate(
 
 \item{hztop}{horizon top depth column name, required when \code{object} is a \code{data.frame}}
 
-\item{hzbot}{horizoni bottom depth column name, required when \code{object} is a \code{data.frame}}
+\item{hzbot}{horizon bottom depth column name, required when \code{object} is a \code{data.frame}}
 
 \item{OC}{organic carbon column name, percent}
 

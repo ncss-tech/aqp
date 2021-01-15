@@ -18,7 +18,7 @@
 #'   \item{code}{Pantone spot color code}
 #'   \item{hex}{hex representation of sRGB colorspace, suitable for on-screen use}
 #'   \item{munsell}{Munsell notation of closest color "chip"}
-#'   \item{dE00}{delta-E 2000 metic describing the (perceptual) distance to the closest Munsell chip}
+#'   \item{dE00}{delta-E 2000 metric describing the (perceptual) distance to the closest Munsell chip}
 #' }
 #' 
 #' @references Data were sourced from:
@@ -27,9 +27,9 @@
 #' \item{uncoated colors: }{\url{https://github.com/ajesma/Pantoner/raw/gh-pages/csv/pantone-uncoated.csv}}
 #' }
 #' 
-#' @details For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subsetting by way of a join (example 3). Reverse lookup (Munsell -> Pantone) will not always result in a matching color, see example 3 below.
+#' @details For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subset by way of a join (example 3). Reverse lookup (Munsell -> Pantone) will not always result in a matching color, see example 3 below.
 #' 
-#' @note The lookup table contains entires for both coated and uncoated colors, these are indentified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.
+#' @note The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.
 #'
 #'
 #' Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.

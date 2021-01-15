@@ -185,7 +185,7 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
 
 
 
-# modifer to fragvoltot
+# modifier to fragvoltot
 texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   # fix for R CMD check
   #  texmod_to_fragvoltot: no visible binding for global variable ‘soiltexture’

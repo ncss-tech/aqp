@@ -6,7 +6,7 @@
 #' @description Annotate diagnostic features within a sketch of soil profiles.
 #' 
 #' @param s \code{SoilProfileCollection} object
-#' @param kind filter applied to \code{feature} column of diagnostic horizons regestered within \code{s}
+#' @param kind filter applied to \code{feature} column of diagnostic horizons registered within \code{s}
 #' @param feature column name containing feature kind
 #' @param top column name containing feature top depth
 #' @param bottom column name containing feature top depth

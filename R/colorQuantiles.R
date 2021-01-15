@@ -174,7 +174,7 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
 #' @title Visualize Color Quantiles
 #' 
-#' @description This function creates a visualization of the ouptut from \code{colorQuantiles}.
+#' @description This function creates a visualization of the output from \code{colorQuantiles}.
 #' 
 #' @param res list returned by \code{colorQuantiles}
 #' @param pt.cex scaling factor for color chips

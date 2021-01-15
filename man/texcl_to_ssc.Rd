@@ -5,7 +5,7 @@
 \alias{texture_to_taxpartsize}
 
 \title{Textural conversions}
-\description{These functions consist of several conversions between sand, silt and clay to texture class and visa versa, textural modifers to rock fragments, and grain size composition to the family particle size class.}
+\description{These functions consist of several conversions between sand, silt and clay to texture class and visa versa, textural modifiers to rock fragments, and grain size composition to the family particle size class.}
 
 \usage{
 texcl_to_ssc(texcl = NULL, clay = NULL, sample = FALSE)
@@ -22,7 +22,7 @@ texture_to_taxpartsize(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL
   \item{clay}{vector of clay percentages}
   \item{fragvoltot}{vector of rock fragment percentages}
   \item{texcl}{vector of texture classes than conform to the USDA code conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)}
-  \item{texmod}{vector of textural modifers that conform to the USDA code convenctions (e.g. gr|GR, grv|GRV)}
+  \item{texmod}{vector of textural modifiers that conform to the USDA code convenctions (e.g. gr|GR, grv|GRV)}
   \item{lieutex}{vector of in lieu of texture terms that conform to the USDA code convenctions (e.g. gr|GR, pg|PG), only used when fragments or artifacts are > 90 percent by volume (default: NULL))}
   \item{as.is}{logical: should character vectors be converted to factors? (default: TRUE)}
   \item{droplevels}{logical: indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.}
@@ -33,7 +33,8 @@ texture_to_taxpartsize(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL
 
 When \code{sample = TRUE}, the results can be used to estimate within-class, marginal distributions of sand, silt, and clay fractions. It is recommended that at least 10 samples be drawn for reasonable estimates.
 
-Unlike the other functions, \code{texture_to_taxpartsize()} is intended to be computed on weighted averages within the family particle size control section. Also recall from the criteria that carbonate clay should be subtracted from clay content and added to silt content. Similarily, if the percent of very fine sand is known it should be substracted from the sand, and added to the silt content.
+Unlike the other functions, \code{texture_to_taxpartsize()} is intended to be computed on weighted averages within the family particle size control section. Also recall from the criteria that carbonate clay should be subtracted from clay content and added to silt content. Similarly, if the percent of very fine sand is known it should be subtracted from the sand, and added to the silt content.
+Unlike the other functions, \code{texture_to_taxpartsize()} is intended to be computed on weighted averages within the family particle size control section. Also recall from the criteria that carbonate clay should be subtracted from clay content and added to silt content. Similarly, if the percent of very fine sand is known it should be subtracted from the sand, and added to the silt content.
 }
 
 \references{

@@ -19,7 +19,7 @@ test_that("basic functionality", {
   e <- estimateSoilDepth(d, name = 'name')
   expect_equal(e, 40)
   
-  # manually specifiy selection function
+  # manually specify selection function
   # min == top of the top-most match
   e <- estimateSoilDepth(d, name = 'name', selection = min)
   expect_equal(e, 40)

@@ -24,7 +24,7 @@ vector of line types with same length as \code{x}
 This function will convert USDA-NCSS horizon boundary topography codes into line types, based on the \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
 }
 \details{
-Visualization of horizon boundary topograpy can be difficult, line type offers an additional visual cue. See \code{hzTopographyCodeToOffset} for an offset-based approach. Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}.
+Visualization of horizon boundary topography can be difficult, line type offers an additional visual cue. See \code{hzTopographyCodeToOffset} for an offset-based approach. Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}.
 }
 \references{
 \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}

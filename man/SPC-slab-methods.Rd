@@ -30,7 +30,7 @@ slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
   
   \item{weights}{Column name containing weights. NOT YET IMPLEMENTED}
 
-	\item{\dots}{further arguments passsed to \code{slab.fun}}
+	\item{\dots}{further arguments passed to \code{slab.fun}}
 
 }
 
@@ -44,7 +44,7 @@ slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...)
 \details{
 Multiple continuous variables OR a single categorical (factor) variable can be aggregated within a call to \code{slab}. Basic error checking is performed to make sure that top and bottom horizon boundaries make sense. User-defined aggregate functions (\code{slab.fun}) should return a named vector of results. A new, named column will appear in the results of \code{slab} for every named element of a vector returned by \code{slab.fun}. See examples below for a simple example of a slab function that computes mean, mean-1SD and mean+1SD. The default slab function wraps \code{stats::quantile} from the Hmisc package, which requires at least 2 observations per chunk. Note that if `group` is a factor it must not contain NAs.
 
-Somtimes \code{slab} is used to conveniently re-arrange data vs. aggregate. This is performed by specifying \code{identity} in \code{slab.fun}. See examples beflow for a demonstration of this functionality.
+Sometimes \code{slab} is used to conveniently re-arrange data vs. aggregate. This is performed by specifying \code{identity} in \code{slab.fun}. See examples beflow for a demonstration of this functionality.
 
 The default \code{slab.fun} was changed 2019-10-30 from a wrapper around \code{Hmisc::hdquantile} to a wrapper around \code{stats::quantile}. See examples below for a simple way to switch to the HD quantile estimator.
 

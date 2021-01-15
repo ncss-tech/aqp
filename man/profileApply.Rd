@@ -29,7 +29,7 @@
 
 \item{column.names}{character, optional character vector to replace frameify-derived column names; should match length of colnames() from FUN result; default: NULL}
 
-\item{...}{additional arguments passsed to FUN}
+\item{...}{additional arguments passed to FUN}
 }
 \value{
 When simplify is TRUE, a vector of length nrow(object) (horizon data) or of length length(object) (site data). When simplify is FALSE, a list is returned. When frameify is TRUE, a data.frame is returned. An attempt is made to identify idname and/or hzidname in the data.frame result, safely ensuring that IDs are preserved to facilitate merging profileApply result downstream.

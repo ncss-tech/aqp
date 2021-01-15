@@ -9,7 +9,7 @@
 
 \title{Numerical Soil Profile Comparison}
 \description{
-Performs a numerical comparison of soil profiles using named properties, based on a weighted, summed, depth-segment-aligned dissimilarity calculation. If \code{s} is a \code{\link{SoilProfileCollection}}, site-level variables (2 or more) can also be used. The site-level and horizon-level dissimilarity matricies are then re-scaled and averaged.
+Performs a numerical comparison of soil profiles using named properties, based on a weighted, summed, depth-segment-aligned dissimilarity calculation. If \code{s} is a \code{\link{SoilProfileCollection}}, site-level variables (2 or more) can also be used. The site-level and horizon-level dissimilarity matrices are then re-scaled and averaged.
 }
 
 \usage{
@@ -55,7 +55,7 @@ This alternative calculation of dissimilarities between soil and non-soil slices
 
 Note that when the \code{add_soil_flag} option is enabled (default), slices are classified as 'soil' down to the maximum depth to which at least one of variables used in the dissimilarity calculation is not NA. This will cause problems when profiles within a collection contain all NAs within the columns used to determine dissimilarity. An approach for identifying and removing these kind of profiles is presented in the examples section below.
 
-A notice is issued if there are any NA values within the matrix used for distance calculations, as thes values are optionally replaced by the max dissimilarity.
+A notice is issued if there are any NA values within the matrix used for distance calculations, as these values are optionally replaced by the max dissimilarity.
 
 Our approach builds on the work of (Moore, 1972) and the previously mentioned depth-slicing algorithm.
 }

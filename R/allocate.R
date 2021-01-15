@@ -16,7 +16,7 @@
 #' 
 #' @param hztop horizon top depth column name, required when \code{object} is a \code{data.frame}
 #' 
-#' @param hzbot horizoni bottom depth column name, required when \code{object} is a \code{data.frame}
+#' @param hzbot horizon bottom depth column name, required when \code{object} is a \code{data.frame}
 #' 
 #' @param OC organic carbon column name, percent
 #' 

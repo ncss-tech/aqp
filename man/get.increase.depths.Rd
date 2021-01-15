@@ -26,7 +26,7 @@ get.increase.depths(p, attr, threshold.fun, vertical.distance)
 }
 }
 \value{
-Returns a numeric vector of depths where the increase retuirement is met. Typically the first is the one of interst to taxonomy.
+Returns a numeric vector of depths where the increase requirement is met. For the argillic, the first is the one of interest.
 
 \code{get.increase.depths} converts to horizon dop depth by using above matrix output to determine depths where increase is met.
 }

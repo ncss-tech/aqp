@@ -11,7 +11,7 @@ if (!isGeneric('depths<-'))
 #' @rdname depths
 setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 	function(object, value) {
-		message('This is already a SoilProfilecollection-class object, doing nothing.')
+		message('This is already a SoilProfileCollection-class object, doing nothing.')
 		object
 	})
 

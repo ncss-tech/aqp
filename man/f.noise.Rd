@@ -13,14 +13,14 @@ f.noise(inits, pure.patterns, sample.pattern, eps.total = 0.05)
 \arguments{
   \item{inits}{vector of initial guesses for mineral fractions, last item is a noise component}
   \item{pure.patterns}{a matrix of XRD patterns of pure samples, resampled to the same twotheta resolution and rescaled according to an external standard}
-  \item{sample.pattern}{the unkown or composite pattern, aligned to the same twotheta axis as the pure patterns and rescaled to an external standard}
+  \item{sample.pattern}{the unknown or composite pattern, aligned to the same twotheta axis as the pure patterns and rescaled to an external standard}
   \item{eps.total}{precision of comparisons; currently not used}
 }
 \details{
 This is similar to the work of Chipera and Bish (2002), using the methods described in (Bish, 1994). If the flexibility of a custom objective function is not required, the linear model framework should be sufficient for pattern fitting. GLS should be used if realistic standard errors are needed.
 }
 
-\value{the sum of absolute differences between the unkown pattern and combination of pure patterns for the current set of mixture proportions}
+\value{the sum of absolute differences between the unknown pattern and combination of pure patterns for the current set of mixture proportions}
 
 \references{
 Chipera, S.J., & Bish, D.L. (2002) FULLPAT:  A full-pattern quantitative 
@@ -118,7 +118,7 @@ legend('topright', legend=c('residuals'), bty='n', cex=1.25)
 # # compare with starting proportions
 # rbind(o$par[1:n.components], w)
 # 
-# # if we had an unkown pattern we were trying to match, compare fitted here
+# # if we had an unknown pattern we were trying to match, compare fitted here
 # # compute R value 0.1 - 0.2 considered good
 # # sum(D^2) / sum(s) 
 # # o$value / sum(rruff.sample$sample)

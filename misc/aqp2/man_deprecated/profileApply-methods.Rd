@@ -19,7 +19,7 @@ profileApply(object, FUN, simplify = TRUE, frameify = FALSE,
   \item{frameify}{logical, should the result be collapsed into a data.frame? default: FALSE; overrides simplify argument; see examples}
   \item{chunk.size}{numeric, size of "chunks" for faster processing of large SoilProfileCollection objects; default: 100}
   \item{column.names}{character, optional character vector to replace frameify-derived column names; should match length of \code{colnames()} from FUN result; default: NULL}
-	\item{\dots}{additional arguments passsed to FUN}
+	\item{\dots}{additional arguments passed to FUN}
 }
 
 \section{Methods}{

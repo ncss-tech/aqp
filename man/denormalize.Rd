@@ -15,7 +15,7 @@ denormalize(object, attr)
 A vector of values of equal length to the number of rows in the horizon table of the input SPC.
 }
 \description{
-Create a (redundant) horizon-level attribute from a site-level attribute. Specify a SoilProfileCollection and a site-level attribute from that SPC (by name) to recieve a vector of length equal to the number of horizons containing the site-level values. This vector is directly usable with the SoilProfileCollection horizon setter.
+Create a (redundant) horizon-level attribute from a site-level attribute. Specify a SoilProfileCollection and a site-level attribute from that SPC (by name) to receive a vector of length equal to the number of horizons containing the site-level values. This vector is directly usable with the SoilProfileCollection horizon setter.
 
 \code{denormalize} is the inverse operation for the formula interface that "normalizes" a horizon level variable to site level:
 

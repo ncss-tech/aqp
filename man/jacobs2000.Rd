@@ -4,7 +4,7 @@
 
 \title{Soil Morphologic Data from Jacobs et al. 2002.}
 
-\description{Select soil morphologic data from "Redoximorphic Features as Indicators of Seasonal Saturation, Lowndes County, Georgia". This is a useful sample dataset for testing the analysis and vizualization of redoximorphic features.}
+\description{Select soil morphologic data from "Redoximorphic Features as Indicators of Seasonal Saturation, Lowndes County, Georgia". This is a useful sample dataset for testing the analysis and visualization of redoximorphic features.}
 
 \usage{data("jacobs2000")}
 

@@ -3,11 +3,11 @@
 \docType{data}
 
 \title{
-Lookup tables for sand, silt, clay, texture class, and textural modifers.
+Lookup tables for sand, silt, clay, texture class, and textural modifiers.
 }
 
 \description{
-A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, the average values per texture class, and average rock fragment values by textural modifer.
+A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, the average values per texture class, and average rock fragment values by textural modifier.
 }
 
 \usage{data("soiltexture")}
@@ -19,7 +19,7 @@ A list that contains a snapshot of the values generated using the logic from the
     \item{\code{sand}}{sand percentage of the fine earth fraction, a integer vector}
     \item{\code{silt}}{silt percentage of the fine earth fraction, a integer vector}
     \item{\code{texcl}}{texture class, a character vector}
-    \item{\code{texmod}}{textural modifers, a character vector}
+    \item{\code{texmod}}{textural modifiers, a character vector}
 }}
 
 \details{

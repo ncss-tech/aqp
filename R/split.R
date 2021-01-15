@@ -14,7 +14,7 @@
 #'
 #' This function splits a SoilProfileCollection into a list of SoilProfileCollection objects using a site-level attribute to define groups or profile ID (idname(x)).
 #'
-#' @param x a SoilProfileCollection objec
+#' @param x a SoilProfileCollection object
 #' @param f a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.
 #' @param drop logical indicating if levels that do not occur should be dropped (if f is a factor or a list).
 #' @param ...	Additional arguments are ignored

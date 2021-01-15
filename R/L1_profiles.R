@@ -51,7 +51,7 @@
 #' 
 #' @description The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
 #' 
-#' See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutoral} for additional examples.
+#' See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutorial} for additional examples.
 #'
 #' @note This function requires the `Gmedian` package.
 #' 
@@ -61,7 +61,7 @@
 #' 
 #' @param fm formula, for example: "group ~ p1 + p2 + p3", where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables
 #' 
-#' @param basis postive integer, aggregation basis (e.g. 1 for 1-depth-unit intervals). Values other than 1 are not currently supported.
+#' @param basis positive integer, aggregation basis (e.g. 1 for 1-depth-unit intervals). Values other than 1 are not currently supported.
 #' 
 #' @param method soil depth evaluation method: "regex" for regular expression, "simple", or "constant". See details.
 #' 

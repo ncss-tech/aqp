@@ -13,7 +13,7 @@
 
 \value{A \code{SoilProfileCollection} class object.}
 
-\details{The \code{s} argument supplies a fully-quoted search critera for matching via site-level attributes. The \code{h} argument supplies a fully-quoted search criteria for matching via horizon-level attributes. All horizons associated with a single horizon-level match (i.e. out of several, only a single horizon matches the search critera) are returned. See examples for usage.}
+\details{The \code{s} argument supplies a fully-quoted search criteria for matching via site-level attributes. The \code{h} argument supplies a fully-quoted search criteria for matching via horizon-level attributes. All horizons associated with a single horizon-level match (i.e. out of several, only a single horizon matches the search critera) are returned. See examples for usage.}
 
 \seealso{ \code{\link{profileApply}, \link{site}, \link{horizons}} }
 

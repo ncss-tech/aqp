@@ -16,7 +16,7 @@ addDiagnosticBracket(
 \arguments{
 \item{s}{\code{SoilProfileCollection} object}
 
-\item{kind}{filter applied to \code{feature} column of diagnostic horizons regestered within \code{s}}
+\item{kind}{filter applied to \code{feature} column of diagnostic horizons registered within \code{s}}
 
 \item{feature}{column name containing feature kind}
 

@@ -16,7 +16,7 @@ plotColorQuantiles(res, pt.cex = 7, title = "", mar = c(2, 1.5, 1, 1))
 \item{mar}{customized margins, see details}
 }
 \description{
-This function creates a visualization of the ouptut from \code{colorQuantiles}.
+This function creates a visualization of the output from \code{colorQuantiles}.
 }
 \author{
 D.E. Beaudette

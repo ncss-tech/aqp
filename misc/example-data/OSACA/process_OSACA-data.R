@@ -35,5 +35,5 @@ sp5@horizons$depth <- NULL
 sp5@horizons$hor <- NULL
 sp5@horizons$soil <- as.character(sp5@horizons$soil)
 
-# save to pacakge
+# save to package
 save(sp5, file='../../data/sp5.rda')

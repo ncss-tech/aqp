@@ -7,7 +7,7 @@
 explainPlotSPC(x, ...)
 }
 \arguments{
-\item{x}{a \code{SoilProfilecollection} object}
+\item{x}{a \code{SoilProfileCollection} object}
 
 \item{\dots}{arguments passed to \code{\link{plotSPC}}}
 }

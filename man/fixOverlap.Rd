@@ -4,7 +4,7 @@
 
 \title{Attempt to fix overlapping sketches when using relative horizontal spacing.}
 
-\description{This is a very simple optimization algorithm for adjusting horizontal sketch positions until affected profiles are farter apart than a given threshold. Rank-ordering and boundary conditions are enforced on the adjustments. Failure to converge within \code{maxIter} results in an integer sequence.}
+\description{This is a very simple optimization algorithm for adjusting horizontal sketch positions until affected profiles are farther apart than a given threshold. Rank-ordering and boundary conditions are enforced on the adjustments. Failure to converge within \code{maxIter} results in an integer sequence.}
 
 \usage{
 fixOverlap(x, thresh = 0.6, adj = 0.2, 
@@ -27,7 +27,7 @@ maxIter = 1000, trace = FALSE)
 
 \author{D.E. Beaudette}
 
-\note{This is a very naeve function and may fail to converge on a reasonable solution. SANN would be a much more robust framework.}
+\note{This is a very naive function and may fail to converge on a reasonable solution. SANN would be a much more robust framework.}
 
 
 \examples{

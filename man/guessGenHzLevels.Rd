@@ -11,7 +11,7 @@ guessGenHzLevels(x, hz = "genhz")
   \item{hz}{name of horizon-level attribute containing generalized horizon labels, see details}
 }
 
-\details{This function is useful when groups of horizons have been generalized via some method other than \code{generalize.hz}. For example, it may be useful to generalize horizons using labels derived from slice depths. The default sorting of these labels will not follow a logicial depth-wise sorting when converted to a factor. \code{guessGenHzLevels} does a good job of "guessing" the proper ordering of these labels based on median horizon depth mid-point.}
+\details{This function is useful when groups of horizons have been generalized via some method other than \code{generalize.hz}. For example, it may be useful to generalize horizons using labels derived from slice depths. The default sorting of these labels will not follow a logical depth-wise sorting when converted to a factor. \code{guessGenHzLevels} does a good job of "guessing" the proper ordering of these labels based on median horizon depth mid-point.}
 
 \value{a list:
   \item{levels}{a vector of levels sorted by median horizon depth mid-point}

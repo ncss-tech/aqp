@@ -2,7 +2,7 @@
 \alias{plotMultipleSPC}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Plot Multiple SoilProfileCollection Objects}
-\description{Combine multiple SoilProfilecollection objects into a single profile sketch, with annotated groups.}
+\description{Combine multiple SoilProfileCollection objects into a single profile sketch, with annotated groups.}
 \usage{
 plotMultipleSPC(spc.list, group.labels, 
 args = rep(list(NA), times=length(spc.list)), 

@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Unroll Genetic Horizons}
 \description{
-Generate a descretized vector of genetic horizons along a user-defined pattern.
+Generate a discretized vector of genetic horizons along a user-defined pattern.
 }
 \usage{unroll(top, bottom, prop, max_depth, bottom_padding_value = NA, strict=FALSE)}
 
@@ -16,7 +16,7 @@ Generate a descretized vector of genetic horizons along a user-defined pattern.
   \item{strict}{should horizons be strictly checked for self-consistency? defaults to FALSE}
 }
 \details{
-This function is used internally by several higher-level components of the \code{aqp} package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function. The \code{max_depth} argument is used to specifiy the maximum depth of profiles within a collection, so that data from any profile shallower than this depth is padded with NA.
+This function is used internally by several higher-level components of the \code{aqp} package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function. The \code{max_depth} argument is used to specify the maximum depth of profiles within a collection, so that data from any profile shallower than this depth is padded with NA.
 }
 
 \value{a vector of "unrolled" property values}

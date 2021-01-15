@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A SoilProfileCollection.}
 
-\item{x.names}{a named list of character vectors specifing target names, profile ID suffixes and source attribute names for harmonization}
+\item{x.names}{a named list of character vectors specifying target names, profile ID suffixes and source attribute names for harmonization}
 
 \item{keep.cols}{a character vector of column names to keep unaltered from the horizon data}
 

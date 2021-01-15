@@ -12,7 +12,7 @@ rebuildSPC(x)
   \item{x}{a \code{SoilProfileCollection} object}
 }
 
-\details{Attempt rebuidling a \code{SoilProfileCollection} object by splitting into components and re-assembling. Likely only used to fix outdated \code{SoilProfileCollection} objects that are missing slots.}
+\details{Attempt rebuilding a \code{SoilProfileCollection} object by splitting into components and re-assembling. Likely only used to fix outdated \code{SoilProfileCollection} objects that are missing slots.}
 
 \value{A valid \code{SoilProfileCollection} object.}
 

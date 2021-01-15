@@ -14,7 +14,7 @@
 	 \item{n}{the number of requested simulations}
 	 \item{iterations}{sampling iterations used to determine each horizon thickness}
 	 \item{hz.sd}{standard deviation used to simulate horizon thickness, can be a vector but must divide evenly into the number of horizons found in \code{x}}
-	 \item{min.thick}{minumum horizon thickness allowed in simulation results}
+	 \item{min.thick}{minimum horizon thickness allowed in simulation results}
 }
 
 \value{

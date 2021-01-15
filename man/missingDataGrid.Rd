@@ -9,7 +9,7 @@ filter.regex = NULL, cols = NULL, ...)
 }
 
 \arguments{
-  \item{s}{a SoilProfilecollection object}
+  \item{s}{a SoilProfileCollection object}
   \item{max_depth}{integer specifying the max depth of analysis}
   \item{vars}{character vector of column names over which to evaluate missing data}
   \item{filter.column}{a character string naming the column to apply the filter REGEX to}

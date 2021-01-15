@@ -6,7 +6,7 @@
 #'
 #' \code{glomApply} works by accepting a function \code{.fun} as argument. This function is used on each profile to process a multi-profile SPC for input to \code{glom} (via \code{profileApply}). For each profile, \code{.fun} returns a 2-length numeric vector of top and bottom boundaries \code{glom} arguments: \code{z1}, \code{z2}.
 #'
-#' \code{glomApply} essentially provides the option to programattically generate profile-specfic glom depths for a large SPC and handles iteration and rebuilding of a subset SPC object. Optional arguments include: \code{truncate} to cut the boundaries to specified \code{[z1, z2]}; \code{invert} to the portion outside \code{[z1, z2]}, \code{modality} to either \code{"all"} horizons or \code{"thickest"} horizon in the \code{glom} interval. \code{...} are various expressions you can run on the individual profiles using NSE, similar to \code{mutate}.
+#' \code{glomApply} provides the option to generate profile-specific glom depths for a large SPC and handles iteration and rebuilding of a subset SPC object. Optional arguments include: \code{truncate} to cut the boundaries to specified \code{[z1, z2]}; \code{invert} to the portion outside \code{[z1, z2]}, \code{modality} to either \code{"all"} horizons or \code{"thickest"} horizon in the \code{glom} interval. \code{...} are various expressions you can run on the individual profiles using NSE, similar to \code{mutate}.
 #'
 #' @param object A SoilProfileCollection
 #'

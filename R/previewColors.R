@@ -20,7 +20,7 @@
 #' @param border.col border color used by "grid" method
 #' @param pt.cex point scaling factor used by "MDS" method
 #' 
-#' @details Color sorting is based on CIE2000 distances as calcuated by \code{farver::compare_colour()}. The "grid" method arranges colors in a rectangular grid with ordering based on divisive heirarchical clustering of the pair-wise distances. Unique colors are used when \code{cols} contains more than 5,000 colors.
+#' @details Color sorting is based on CIE2000 distances as calculated by \code{farver::compare_colour()}. The "grid" method arranges colors in a rectangular grid with ordering based on divisive hierarchical clustering of the pair-wise distances. Unique colors are used when \code{cols} contains more than 5,000 colors.
 #' 
 #' The "MDS" method arranges unique colors via classical multidimensional scaling (principal coordinates) via \code{MASS::cmdscale}.
 #' 

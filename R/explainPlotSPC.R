@@ -6,7 +6,7 @@
 #' @seealso \code{\link{plotSPC}}
 #' @keywords manip
 #' 
-#' @param x a \code{SoilProfilecollection} object
+#' @param x a \code{SoilProfileCollection} object
 #' @param \dots arguments passed to \code{\link{plotSPC}}
 #' 
 #' @return a list of internally-used ordering vectors and graphical offsets / scaling factors

@@ -24,7 +24,7 @@ vector of offsets with same length as \code{x}
 This function will convert USDA-NCSS horizon boundary distinctness codes into vertical (+/-) offsets in cm, based on the \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
 }
 \details{
-The default offests are based on the high-end of ranges presented in "transitional zone thickness criteria" from the Field Book version 3.0 (page 2-6). Offsets are returned as 1/2 of the transitional zone thickness so that horizon boundaries can be adjusted up/down from horizon depths. See \code{\link{plotSPC}}, specifically the \code{hz.distinctness.offset} argument for visualization ideas. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as 0 offsets.
+The default offsets are based on the high-end of ranges presented in "transitional zone thickness criteria" from the Field Book version 3.0 (page 2-6). Offsets are returned as 1/2 of the transitional zone thickness so that horizon boundaries can be adjusted up/down from horizon depths. See \code{\link{plotSPC}}, specifically the \code{hz.distinctness.offset} argument for visualization ideas. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as 0 offsets.
 
 Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}.
 }

@@ -2,7 +2,7 @@
 \Rdversion{1.1}
 \alias{plot_distance_graph}
 \title{Between Individual Distance Plot}
-\description{Plot pair-wisee distances between individuals as line segments.}
+\description{Plot pair-wise distances between individuals as line segments.}
 \usage{
 plot_distance_graph(D, idx = 1:dim(as.matrix((D)))[1])
 }

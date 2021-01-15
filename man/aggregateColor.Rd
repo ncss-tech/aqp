@@ -13,7 +13,7 @@ aggregateColor(x, groups = "genhz", col = "soil_color",
   \item{groups}{the name of a horizon or site attribute used to group horizons, see examples}
   \item{col}{the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")}
   \item{colorSpace}{the name of color space to use for conversion of aggregate colors to Munsell; either CIE2000, LAB, or sRGB. Default = 'CIE2000'}
-  \item{k}{single integer specifiying the number of colors discretized via PAM, see details}
+  \item{k}{single integer specifying the number of colors discretized via PAM, see details}
   \item{profile_wt}{the name of a site-level attribute used to modify weighting, e.g. area}
 }
 

@@ -14,7 +14,7 @@
 #'
 #' @aliases  [,SoilProfileCollection-method
 #'
-#' @description You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, repectively: \code{spc[i, j]}. Subsetting operations are propagated to other slots when they result in removal of sites from a collection.
+#' @description You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j]}. Subset operations are propagated to other slots when they result in removal of sites from a collection.
 #'
 #' \code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
 #'

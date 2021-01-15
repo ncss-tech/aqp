@@ -9,7 +9,7 @@ Compute weighted \enc{naïve}{naive} and \emph{tau} statistics for a cross-class
 }
 
 \description{
-\code{tauW}: Computes: (1) unweighted \enc{naïve}{naive}, (2) weighted \enc{naïve}{naive}, (3) unweighted \emph{tau}, (4) weighted \emph{tau} accuracy statistics
+\code{tauW}: Computes: (1) unweighted naive, (2) weighted naive, (3) unweighted \emph{tau}, (4) weighted \emph{tau} accuracy statistics
 
 \code{summaryTauW}: prints a summary of the results from \emph{tauW}
 

@@ -7,7 +7,7 @@
 \S4method{split}{SoilProfileCollection}(x, f, drop = TRUE, ...)
 }
 \arguments{
-\item{x}{a SoilProfileCollection objec}
+\item{x}{a SoilProfileCollection object}
 
 \item{f}{a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.}
 
