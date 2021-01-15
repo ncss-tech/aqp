@@ -21,7 +21,7 @@
 #'
 #' @description Estimate central tendency and spread of soil color using marginal quantiles and L1 median of CIELAB coordinates.
 #' 
-#' @details Colors are converted from sRGB to CIELAB (D65 illuminant), marginal quantiles of L,A,B coordinates are estimated, and L1 median {L,A,B} is estimates. The closest Munsell chips (via Musell/CIELAB lookup table provided by \code{munsell}) and R colors are determined by locating chips closest to the marginal quantiles and L1 median.
+#' @details Colors are converted from sRGB to CIELAB (D65 illuminant), marginal quantiles of L,A,B coordinates are estimated, and L1 median {L,A,B} is estimates. The closest Munsell chips (via Munsell/CIELAB lookup table provided by \code{munsell}) and R colors are determined by locating chips closest to the marginal quantiles and L1 median.
 #' 
 #' The results can be conveniently inspected using \code{plotColorQuantiles}.
 #'

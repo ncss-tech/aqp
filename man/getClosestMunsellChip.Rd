@@ -7,7 +7,7 @@
 getClosestMunsellChip(munsellColor, convertColors = TRUE, ...)
 }
 \arguments{
-\item{munsellColor}{character vector of strings containing Musell notation of color, e.g. '10YR 4/3'}
+\item{munsellColor}{character vector of strings containing Munsell notation of color, e.g. '10YR 4/3'}
 
 \item{convertColors}{logical, should parsed Munsell colors be converted into sRGB values}
 

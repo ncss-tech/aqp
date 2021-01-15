@@ -1,45 +1,189 @@
-allocate <- function(..., to = NULL, droplevels = TRUE) {
+#' @title Allocate soil properties within various classification systems.
+#' 
+#' @description Generic function to allocate soil properties to different classification schemes.
+#'
+#' @param ... arguments to specific allocation functions, see details and examples
+#' 
+#' @param to character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see details for the required \code{...})
+#' 
+#' @param droplevels logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.
+#' 
+#' 
+#' 
+#' @param object a \code{data.frame} or \code{SoilProfileCollection}
+#' 
+#' @param pedonid pedon ID column name, required when \code{object} is a \code{data.frame}
+#' 
+#' @param hztop horizon top depth column name, required when \code{object} is a \code{data.frame}
+#' 
+#' @param hzbot horizoni bottom depth column name, required when \code{object} is a \code{data.frame}
+#' 
+#' @param OC organic carbon column name, percent
+#' 
+#' @param m_chroma moist Munsell chroma column name
+#' 
+#' @param m_value moist Munsell value column name
+#' 
+#' @param d_value dry Munsell value column name
+#' 
+#' @param CEC cation exchange capacity column name, units of cmol(+)/kg soil
+#' 
+#' @param BS base saturation column name, percent
+#' 
+#' @param tropical logical, data are associated with "tropical soils"
+#' 
+#' @param EC electrical conductivity column name, dS/m
+#' 
+#' @param pH pH column name, 1:1 H20
+#' 
+#' @param ESP exchangeable sodium percentage column name, percent
+#' 
+#' 
+#' @details This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008). 
+#' 
+#' The results returned by allocate(to = "ST Diagnostic Features") currently only return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
+#'
+#' @return A vector or \code{data.frame} object.
+#' 
+#' @references 
+#' Abrol, I., Yadav, J. & Massoud, F. 1988. \href{http://www.fao.org/3/x5871e/x5871e00.htm}{Salt-affected soils and their management}. No. Bulletin 39. Rome, FAO Soils.
+#' 
+#' FAO. 2006. \href{http://www.fao.org/publications/card/en/c/903943c7-f56a-521a-8d32-459e7e0cdae9/}{Guidelines for soil description}. Rome, Food and Agriculture Organization of the United Nations.
+#' 
+#' FAO. 2020. DEFINITION | What is a black soil? [online]. [Cited 28 December 2020]. http://www.fao.org/global-soil-partnership/intergovernmental-technical-panel-soils/gsoc17-implementation/internationalnetworkblacksoils/more-on-black-soils/definition-what-is-a-black-soil/es/
+#'   
+#'   Powell, B., 2008. Classifying soil and land, in: McKenzie, N.J., Grundy, M.J., Webster, R., Ringrose-Voase, A.J. (Eds.), Guidelines for Survey Soil and Land Resources, Australian Soil and Land Survey Handbook Series. CSIRO, Melbourne, p. 572.
+#' 
+#' Richards, L.A. 1954. \href{https://www.ars.usda.gov/ARSUserFiles/20360500/hb60_pdf/hb60complete.pdf}{Diagnosis and Improvement of Saline and Alkali Soils}. U. S. Government Printing Office. 166 pp.
+#' 
+#' Soil Survey Staff, 2014. Keys to Soil Taxonomy, 12th ed. USDA-Natural Resources Conservation Service, Washington, D.C.
+#' 
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' # Salt Severity
+#' test <- expand.grid(
+#'   EC  = sort(sapply(c(0, 0.75, 2, 4, 8, 15, 30), function(x) x + c(0, -0.05, 0.05))),
+#'   pH  = c(8.1, 8.2, 8.3, 8.4, 8.5, 8.6),
+#'   ESP = sort(sapply(c(0, 15, 30, 50, 70, 100), function(x) x + c(0, 0.1, -0.1)))
+#' )
+#' test$ss      <- with(test, allocate(EC = EC, pH = pH, ESP = ESP, to = "FAO Salt Severity"))
+#' table(test$ss)
+#' 
+#' # Black Soil Category 1 (BS1)
+#' test <- expand.grid(
+#'   dept = seq(0, 50, 10),
+#'   OC   = sort(sapply(c(0, 0.6, 1.2, 20, 40), function(x) x + c(0, -0.05, 0.05))),
+#'   chroma_moist  = 2:4,
+#'   value_moist   = 2:4,
+#'   value_dry     = 4:6,
+#'   thickness     = 24:26,
+#'   CEC           = 24:26,
+#'   BS            = 49:51,
+#'   tropical      = c(TRUE, FALSE)
+#' )
+#' test$pedon_id <- rep(1:21870, each = 6)
+#' test$depb     <- test$dept + 10
+#' 
+#' bs1 <- allocate(test, pedonid = "pedon_id", hztop = "dept", hzbot = "depb", 
+#'                 OC = "OC", m_chroma = "chroma_moist", m_value = "value_moist", 
+#'                 d_value = "value_dry", CEC = "CEC", BS = "BS", 
+#'                 to = "FAO Black Soil"
+#' )
+#' 
+#' table(BS1 = bs1$BS1, BS2 = bs1$BS2)
+#' 
+#' 
+#' # SoilProfileCollection interface
+#' 
+#' data(sp3)
+#' depths(sp3) <- id ~ top + bottom
+#' hzdesgnname(sp3) <- 'name'
+#' 
+#' # fake base saturation
+#' horizons(sp3)$bs <- 75
+#' 
+#' plotSPC(sp3)
+#' 
+#' allocate(
+#'   sp3, 
+#'   to = 'FAO Black Soil', 
+#'   OC = 'tc', 
+#'   m_chroma = 'chroma', 
+#'   m_value = 'value', 
+#'   d_value = 'value',
+#'   CEC = 'cec',
+#'   BS = 'bs'
+#' )
+#' 
+#' # make a copy and edit horizon values
+#' x <- sp3
+#' x$value <- 2
+#' x$chroma <- 2
+#' x$cec <- 26
+#' x$tc <- 2
+#' 
+#' x$soil_color <- munsell2rgb(x$hue, x$value, x$chroma)
+#' 
+#' plotSPC(x)
+#' 
+#' allocate(
+#'   x, 
+#'   to = 'FAO Black Soil', 
+#'   OC = 'tc', 
+#'   m_chroma = 'chroma', 
+#'   m_value = 'value', 
+#'   d_value = 'value',
+#'   CEC = 'cec',
+#'   BS = 'bs'
+#' )
+#' 
+#' 
+#' # Soil Taxonomy Diagnostic Features
+#' data(sp1)
+#' df <- allocate(object = sp1, pedonid = "id", hzname = "name", 
+#'                hzdept = "top", hzdepb = "bot", texture = "texture", 
+#'                to = "ST Diagnostic Features"
+#' )
+#' aggregate(featdept ~ id, data = df, summary)
+#' 
+allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"), droplevels = TRUE) {
   
-  tos <- c(ss = "FAO Salt Severity", 
-           bh = "FAO Black Soil", 
-           dh = "ST Diagnostic Features"
-           )
+  # sanity check
+  to <- match.arg(to, several.ok = FALSE)
   
-  # test
-  if (is.null(to)) {
-    stop(paste('the "to" argument should equal one of the following:', paste0('"', tos, '"', collapse = ', ')))
-  }
-  if (length(to) > 1) {
-    stop('the length of the "to" argument should equal 1')
-  }
-  if (! to %in% tos) {
-    stop(paste('the argument "to" currently supports allocating soil properties to one of the following classification schemes\\:', paste0('"', tos, '"', collapse = ', ')))
-  }
-    
+  # select the appropriate system
+  a <- switch(
+    to,
+    "FAO Salt Severity" = {
+      .rank_salts(..., system = to, droplevels = droplevels) 
+    },
+    "FAO Black Soil" = {
+      .black_soil(...)  
+    },
+    "ST Diagnostic Features" = {
+      # object = object
+      # pedonid = "peiid"
+      # hzname = "hzname"
+      # hzdept = "hzdept"
+      # hzdepb = "hzdepb"
+      # texture = "texture"
+      # hz_pat = ""
+      # tex_pat = "br"
+      # featkind = "argillic horizon"
+      
+      featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "mollic epipedon") #, "reduced matrix")
+      
+      a <- lapply(featkind, function(x) {
+        # a <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
+        a <- .guess_df(..., featkind = x)
+      })
+      a <- do.call("rbind", a)
+    }
+  )
   
-  # allocate
-  if (to == "FAO Salt Severity") {
-    a <- .rank_salts(..., system = to, droplevels = droplevels)
-  }
-  
-  if (to == "FAO Black Soil") {
-    a <- .black_soil(...)
-  }
-  
-  if (to == "ST Diagnostic Features") {
-    
-    # object = object; pedonid = "peiid"; hzname = "hzname"; hzdept = "hzdept"; hzdepb = "hzdepb"; texture = "texture"; hz_pat = ""; tex_pat = "br"; featkind = "argillic horizon"
-    
-    featkind <- c("lithic contact", "paralithic contact", "densic contact", "petrocalcic horizon", "calcic horizon", "secondary carbonates", "mollic epipedon") #, "reduced matrix")
-    
-    a <- lapply(featkind, function(x) {
-      # a <- .guess_df(pedonid = "peiid", hzname = "hzname", hzdept = "hzdept", hzdepb = "hzdepb", texture = "texture", featkind = "lithic contact")
-      a <- .guess_df(..., featkind = x)
-    })
-    a <- do.call("rbind", a)
-  }
-  
-
   return(a)  
 }
     
@@ -139,6 +283,12 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
 }
   
 
+## TODO: useful error message, this isn't helpful:
+# Error in .black_soil(...) : 
+# column names in object must match the other character vector input arguments
+
+## TODO: there is currently no way to document these arguments, critical because each has an expected unit of measure
+
 
 .black_soil <- function(object, pedonid = "peiid", hztop = "hzdept", hzbot = "hzdepb", OC = NULL, m_chroma = "m_chroma", m_value = "m_value", d_value = "d_value", CEC = NULL, BS = NULL, tropical = FALSE) { # thickness = NULL, horizon = TRUE 
   
@@ -148,13 +298,26 @@ allocate <- function(..., to = NULL, droplevels = TRUE) {
   # pedonid = "pedonid"; hztop = "hztop"; hzbot = "hzbot"; OC = "OC"; m_chroma = "m_chroma"; m_value = "m_value"; d_value = "d_value"; CEC = "CEC"; BS = "BS"
   # pedonid = "idp"; hztop = "top"; hzbot = "bot"; OC = "oc"; m_chroma = "w_chroma"; m_value = "w_value"; d_value = "d_value"; CEC = "cec"; BS = NULL
   
-  # test & standardize inputs
-  vars <- list(pedonid = pedonid, hztop = hztop, hzbot = hzbot, OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
-  
   # check object type
-  if (class(object)[1] == "SoilProfileCollection") {
+  # SoilProfileCollection objects have a number of required arguments defined internally
+  if (inherits(object, 'SoilProfileCollection')) {
+    # extract relevant metadata from the SPC
+    pID <- idname(object)
+    hztb <- horizonDepths(object)
+    
+    # horizons as data.frame-like obj
     df <- horizons(object)
-  } else df <- object
+    
+    # setup variables used later, using SPC metadata if possible
+    vars <- list(pedonid = pID, hztop = hztb[1], hzbot = hztb[2], OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
+    
+  } else {
+    # this is likely a data.frame
+    df <- object
+    
+    # setup variables used later, all from provided arguments
+    vars <- list(pedonid = pedonid, hztop = hztop, hzbot = hzbot, OC = OC, m_chroma = m_chroma, m_value = m_value, d_value = d_value, CEC = CEC, BS = BS)
+  }
   
   # check length of arguments
   if (any(sapply(vars, length) > 1)) {

@@ -22,7 +22,7 @@ estimateSoilDepth(
 
 \item{selection}{function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.}
 
-\item{no.contact.depth}{in the absense of contact matching \code{p}, a depth at which we can assume a standard depth-to-contact}
+\item{no.contact.depth}{in the absence of contact matching \code{p}, a depth at which we can assume a standard depth-to-contact}
 
 \item{no.contact.assigned}{value assigned when no contact is encountered at or below \code{no.contact.depth}}
 }

@@ -7,7 +7,7 @@ if (!isGeneric("spc2mpspline"))
 
 #' @title Missing-data-safe, SPC-wide wrapper around mpspline2::mpspline "continuous" 1cm output
 #'
-#' @description Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with \code{mpspline2::mpspline}. Currently only works with a single attribute.This function will automatically filter profiles with \code{NA} in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggreegated over the full interval where data was available.
+#' @description Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with \code{mpspline2::mpspline}. Currently only works with a single attribute.This function will automatically filter profiles with \code{NA} in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggregated over the full interval where data was available.
 #'
 #' Data completeness is assessed and the input SPC is filtered and truncated to create a container for the 1cm results from \code{mpspline2::mpspline}.
 #'

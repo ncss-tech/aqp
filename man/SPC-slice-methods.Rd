@@ -16,7 +16,7 @@ slice(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE)
 \arguments{
   \item{object}{a SoilProfileCollection}
   
-  \item{fm}{A formula: either `integer.vector ~ var1 + var2 + var3' where named variables are sliced according to `integer.vector' OR where all variables are sliced accordin to `integer.vector' `integer.vector ~.'.}
+  \item{fm}{A formula: either `integer.vector ~ var1 + var2 + var3' where named variables are sliced according to `integer.vector' OR where all variables are sliced according to `integer.vector' `integer.vector ~.'.}
   
   \item{top.down}{logical, slices are defined from the top-down: \code{0:10} implies 0-11 depth units.}
   

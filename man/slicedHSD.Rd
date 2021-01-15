@@ -15,7 +15,7 @@ For example 0:100 ~ estimated_oc | taxonname}
 \item{conf}{confidence applied in \code{TukeyHSD}}
 }
 \description{
-Apply Tukey's HSD over 1cm slices.
+Apply Tukey's HSD over 1-unit depth slices.
 }
 \author{
 D.E. Beaudette and Sharon Perrone
