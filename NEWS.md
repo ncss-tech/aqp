@@ -1,4 +1,5 @@
 # aqp 1.27 (2021-01-14)
+ * Major overhaul of `plotColorQuantiles()`, now using {lattice} graphics
  * New dataset `munequivalent` and method `equivalentMunsellChips` for "equivalent" Munsell chips lookup list based on all pairwise dE00 contrasts for integer "chips" in `aqp::munsell` data set
  * Argillic critical clay contents `crit.clay.argillic` rounded to whole numbers per NSSH Part 614, subpart B, sections 614.13 and 614.14
 
