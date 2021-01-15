@@ -1,3 +1,7 @@
+# aqp 1.27 (2021-01-14)
+ * New dataset `munequivalent` and method `equivalentMunsellChips` for "equivalent" Munsell chips lookup list based on all pairwise dE00 contrasts for integer "chips" in `aqp::munsell` data set
+ * Argillic critical clay contents `crit.clay.argillic` rounded to whole numbers per NSSH Part 614, subpart B, sections 614.13 and 614.14
+
 # aqp 1.26 (2020-11-18)
  * `mutate_profile` uses `data.table::rbindlist(fill=TRUE)` to combine site- and horizon-level transformations
  * updates to horizon boundary encoding functions (`hzTopographyCodeToOffset`, `hzTopographyCodeToLineType`, `hzDistinctnessCodeToOffset`)
