@@ -256,7 +256,7 @@ crit.clay.argillic <- function(eluvial_clay_content) {
   buf[idx.lt15] <- eluvial_clay_content[idx.lt15] + 3
   buf[idx.gt40] <- eluvial_clay_content[idx.gt40] + 8
   buf[idx.other] <- 1.2*eluvial_clay_content[idx.other]
-  return(buf)
+  return(round(buf))
 }
 
 # returns the top and bottom depth of the argillic horizon as a numeric vector.
