@@ -27,32 +27,32 @@ test_that("parsing Munsell notation", {
   expect_equal(suppressWarnings(parseMunsell('10YR ')), as.character(NA))
   expect_equal(suppressWarnings(parseMunsell('10YR 4/')), as.character(NA))
   expect_equal(suppressWarnings(parseMunsell('G1 6/N')), as.character(NA))
-  
+
   # parsing bogus notation without conversion
   # doesn't replace with NA
   bogus <- parseMunsell('G1 3/X', convertColors = FALSE)
   expect_equal(bogus$hue, 'G1')
   expect_equal(bogus$value, '3')
-  
+
   # neutral colors
   expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
-  
+
   # splitting of text into colums within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))
-  
+
 })
 
 
 # addresses #66 (https://github.com/ncss-tech/aqp/issues/66)
 test_that("Munsell hue parsing", {
-  
+
   # normal operation
   res <- aqp:::.parseMunsellHue('10YR')
   expect_true(inherits(res, 'data.frame'))
   expect_equal(res$hue.numeric, 10L)
   expect_equal(res$hue.character, 'YR')
   expect_equal(nrow(res), 1)
-  
+
   # bogus hue
   res <- aqp:::.parseMunsellHue('G1 ')
   expect_true(inherits(res, 'data.frame'))
@@ -63,7 +63,7 @@ test_that("Munsell hue parsing", {
 
 
 test_that("non-integer value and chroma are rounded", {
-  
+
   # rounding of value, throws warning
   expect_warning(res <- parseMunsell('10YR 3.3/4'), regexp = 'rounded')
   # this will not throw a warning
@@ -73,7 +73,7 @@ test_that("non-integer value and chroma are rounded", {
     suppressWarnings(parseMunsell('10YR 3.3/4')),
     parseMunsell('10YR 3/4')
   )
-  
+
   # rounding of chroma, throws warning
   expect_warning(res <- parseMunsell('10YR 3/4.6'), regexp = 'rounded')
   # this will not throw a warning
@@ -83,32 +83,32 @@ test_that("non-integer value and chroma are rounded", {
     suppressWarnings(parseMunsell('10YR 3/4.6')),
     parseMunsell('10YR 3/5')
   )
-  
+
 })
 
 
 test_that("Munsell <--> sRGB and back again", {
-  
+
   # sRGB in hex notation
   expect_equal(m, '#5E4323FF')
   expect_equal(parseMunsell(x), m)
-  
+
   # sRGB triplets
   expect_equal(m.rgb$r, 0.3679063, tolerance=0.0001)
   expect_equal(m.rgb$g, 0.2644507, tolerance=0.0001)
   expect_equal(m.rgb$b, 0.1364835, tolerance=0.0001)
-  
+
   # neutral colors
   expect_equal(x.neutral$r, 0.2, tolerance=0.01)
   expect_equal(x.neutral$g, 0.2, tolerance=0.01)
   expect_equal(x.neutral$b, 0.2, tolerance=0.01)
-  
+
   # sRGB --> Munsell
   expect_equal(x.back$hue, '10YR')
   expect_equal(x.back$value, 3)
   expect_equal(x.back$chroma, 4)
   expect_equal(x.back$sigma, 0)
-  
+
   expect_equal(x.back.trunc$hue, '10YR')
   expect_equal(x.back.trunc$value, 3)
   expect_equal(x.back.trunc$chroma, 4)
@@ -116,7 +116,7 @@ test_that("Munsell <--> sRGB and back again", {
 
 
 test_that("missing data", {
-  
+
   # data with missing sRGB coordinates
   color <- rbind(
     cbind(NA, NA, NA),
@@ -124,22 +124,22 @@ test_that("missing data", {
     cbind(1, 1, 1),
     cbind(NA, NA, NA)
   )
-  
+
   # conversion should work without error
   res <- rgb2munsell(color)
-  
+
   # same number of rows in / out
   expect_true(nrow(res) == nrow(color))
-  
+
   # row order preserved
   expect_true(is.na(res$hue[1]) & is.na(res$hue[4]))
-  
+
 })
 
 
 
 test_that("closest Munsell chip based on sRGB coordinates", {
-  
+
   # closest chip in aqp LUT
   expect_equal(getClosestMunsellChip('10YR 3.3/5', convertColors = FALSE), '10YR 3/5')
   expect_equal(getClosestMunsellChip('9YR 3.8/3', convertColors = FALSE), '10YR 4/3')
@@ -149,23 +149,23 @@ test_that("closest Munsell chip based on sRGB coordinates", {
 
 # https://github.com/ncss-tech/aqp/issues/69
 test_that("Munsell --> LAB + sRGB coordinates", {
-  
+
   # sRGB
   test.1 <- parseMunsell("10YR 3/5", return_triplets=TRUE)
   expect_equal(names(test.1), c('r', 'g', 'b'))
-  
-  
+
+
   # sRGB and LAB
   test.2 <- parseMunsell("10YR 3/5", return_triplets=TRUE, returnLAB=TRUE)
   expect_equal(names(test.2), c('r', 'g', 'b', 'L', 'A', 'B'))
-  
+
   # LAB
   test.3 <- parseMunsell("10YR 3/5", return_triplets=FALSE, returnLAB=TRUE)
   expect_equal(names(test.3), c('L', 'A', 'B'))
-  
+
   # test the LAB ---> sRGB is close
   test.4 <- grDevices::convertColor(test.3, from = 'Lab', to='sRGB')
-  
+
   # sRGB (r)
   expect_equal(test.1[, 1], test.4[, 1], tolerance=0.1)
   # sRGB (g)
@@ -175,16 +175,16 @@ test_that("Munsell --> LAB + sRGB coordinates", {
 })
 
 test_that("similar colors result in same, closest chip", {
-  
+
   cols <- t(col2rgb(c('#5F5345', '#554636'))) / 255
   res <-  rgb2munsell(cols)
-  
+
   expect_equal(res$hue[1], res$hue[2])
   expect_equal(res$value[1], res$value[2])
   expect_equal(res$chroma[1], res$chroma[2])
 })
 
-test_that("munsell2SPC wrapper method works as expected", {
+test_that("munsell2spc wrapper method works as expected", {
 
   data(sp3)
   depths(sp3) <- id ~ top + bottom
@@ -198,14 +198,26 @@ test_that("munsell2SPC wrapper method works as expected", {
 
   # # plot rgb "R" coordinate by horizon
   # plot(sp3, color = "rgb_R")
-  # 
+  #
   # # plot lab "A" coordinate by horizon
   # plot(sp3, color = "lab_A")
-  
+
   # test returning profile+horizon ID data.frame with results
-  expect_silent( {dftest <- munsell2spc(sp3, as.spc = FALSE)})
+  expect_silent( { dftest <- munsell2spc(sp3, as.spc = FALSE) } )
   expect_true(inherits(dftest, 'data.frame'))
-  
+
   # foo is not a column in horizons()
-  expect_error( {err1 <- munsell2spc(sp3, hue = "foo")} )
+  expect_error( { err1 <- munsell2spc(sp3, hue = "foo") } )
+
+  # chip is not a column in horizons
+  expect_error( { d1 <- horizons(munsell2spc(sp3, .data = "chip")) } )
+
+  # create chip as a combination of hue value/chroma
+  sp3$chip <- with(horizons(sp3), sprintf("%s %s/%s", hue, value, chroma))
+
+  # calculate from: column name, vector, data.frame
+  expect_silent( { d1 <- horizons(munsell2spc(sp3, .data = "chip")) } )
+  expect_silent( { d2 <- horizons(munsell2spc(sp3, .data = sp3$chip)) } )
+  expect_silent( { d3 <- horizons(munsell2spc(sp3, .data = parseMunsell(sp3$chip, convertColors = FALSE))) } )
+  expect_silent( { d4 <- horizons(munsell2spc(sp3, .data = data.frame(foo = sp3$chip))) } )
 })
