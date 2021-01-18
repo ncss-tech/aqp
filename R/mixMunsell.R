@@ -119,7 +119,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
 
   # can't mix a single color, just give it back at 0 distance
   if (length(unique(x)) == 1) {
-    return(data.frame(munsell = x, distance = 0))
+    return(data.frame(munsell = x[1], distance = 0))
   }
 
   # must have as many weights as length of x
