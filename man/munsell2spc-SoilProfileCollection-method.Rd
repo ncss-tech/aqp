@@ -10,6 +10,7 @@
   hue = "hue",
   value = "value",
   chroma = "chroma",
+  .data = NULL,
   as.spc = TRUE
 )
 }
@@ -21,6 +22,8 @@
 \item{value}{Column name containing numeric value values. Default: \code{"value"}}
 
 \item{chroma}{Column name containing numeric chroma values. Default: \code{"chroma"}}
+
+\item{.data}{Optional: a character vector of equal length to number of horizons (containing Munsell notation), or a column name in the horizon data OR a data.frame containing three columns (names specified in \code{hue}, \code{value}, \code{chroma})}
 
 \item{as.spc}{Return a data.frame-like object with ID columns?}
 }
@@ -52,4 +55,7 @@ plot(sp3, color = "lab_A")
 # while `A` was directly measured in the lab by colorimeter
 plot(sp3$A, sp3$lab_A, xlab = 'Measured', ylab = 'Converted from Field Observed Munsell')
 
+}
+\seealso{
+\code{\link{parseMunsell}} \code{\link{rgb2munsell}} \code{\link{munsell2rgb}}
 }

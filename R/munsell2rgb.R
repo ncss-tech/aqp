@@ -50,11 +50,6 @@
 }
 
 
-
-
-
-
-
 ## TODO: this will not correctly parse gley
 ## TODO: re-write with REGEX for extraction from within other text
 ## TODO: return NA for obviously wrong Munsell codes
@@ -90,7 +85,7 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 
   # argument check
   colorSpace <- match.arg(colorSpace)
-  
+
   # vectorize via for-loop
   n <- nrow(color)
   res <- vector(length=n, mode='list')
@@ -116,13 +111,13 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
   # accounting for the possibility of NA
   # result should be an empty record
   not.na.idx <- which(apply(color, 1, function(i) ! any(is.na(i))))
-  
-  
+
+
   # iterate over colors
   for(i in not.na.idx) {
     # convert current color to matrix, this will allow matrix and DF as input
     this.color <- as.matrix(color[i, , drop=FALSE])
-    
+
     # TODO: there isn't any reason to use sRGB other than demonstration
     if(colorSpace == 'sRGB') {
       # euclidean distance (in sRGB space) is our metric for closest-color
@@ -161,20 +156,20 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
       # return the closest n-matches
       idx <- order(sigma)[1:nClosest]
     }
-    
-    
+
+
     # ## TODO: this doesn't actually trap the condition we are attempting to trap!
     # # https://github.com/ncss-tech/aqp/issues/160
     # # with NA as an input, there will be no output
     # if(length(idx) == 0)
     #   res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
-    # 
+    #
     # # otherwise return the closest color
     # else
     #   res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
-    
+
     res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
-    
+
   }
 
   # pad records with NA in the sRGB input
@@ -186,7 +181,7 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
     }
   }
 
-  
+
   # convert to DF
   res <- do.call('rbind', res)
   row.names(res) <- as.character(1:nrow(res))
@@ -232,7 +227,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
   if(length(N.idx) > 0)
     the_chroma[N.idx] <- 0
 
-  
+
   ## TODO: interpolate all 1/2 chips : https://github.com/ncss-tech/aqp/issues/178
   # 2016-03-07: "fix" values of 2.5 by rounding to 2
   the_value <- ifelse(the_value == 2.5, 2, the_value)
@@ -294,70 +289,112 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 if (!isGeneric("munsell2spc"))
   setGeneric("munsell2spc", function(object, ...) standardGeneric("munsell2spc"))
 
-#' @title Merge Munsell Hue, Value, Chroma converted to sRGB & CIELAB into a SoilProfileCollection 
-#' 
+#' @title Merge Munsell Hue, Value, Chroma converted to sRGB & CIELAB into a SoilProfileCollection
+#'
 #' @description Convert Munsell hue, value and chroma into sRGB (\code{rgb_R, rgb_G, rgb_B}) and CIELAB (lab_L, lab_A, lab_B) color coordinates using \code{munsell2rgb}. The converted values are stored in the \code{horizons()} slot unless \code{as.spc} is \code{FALSE}, in which case the results are combined with profile and horizon ID columns and returned as the \code{data.frame} subclass used by the SPC.
-#'  
+#'
 #' @param object A SoilProfileCollection
 #' @param hue Column name containing numeric hue values. Default: \code{"hue"}
 #' @param value Column name containing numeric value values. Default: \code{"value"}
 #' @param chroma Column name containing numeric chroma values. Default: \code{"chroma"}
+#' @param .data Optional: a character vector of equal length to number of horizons (containing Munsell notation), or a column name in the horizon data OR a data.frame containing three columns (names specified in \code{hue}, \code{value}, \code{chroma})
+#'
 #' @param as.spc Return a data.frame-like object with ID columns?
 #'
 #' @return A SoilProfileCollection or \code{data.frame}-like object
 #' @aliases munsell2spc
+#' @seealso \code{\link{parseMunsell}} \code{\link{rgb2munsell}} \code{\link{munsell2rgb}}
 #' @export munsell2spc,SoilProfileCollection-method
 #'
 #' @examples
-#' 
+#'
 #' data(sp3)
 #' depths(sp3) <- id ~ top + bottom
-#' 
+#'
 #' # inspect input data
 #' horizons(sp3)[,c("hue","value","chroma")]
-#' 
+#'
 #' # do color conversions to sRGB and LAB, join into horizon data
 #' sp3 <- munsell2spc(sp3)
-#' 
+#'
 #' # plot rgb "R" coordinate by horizon
 #' plot(sp3, color = "rgb_R")
-#' 
+#'
 #' # plot lab "A" coordinate by horizon
 #' plot(sp3, color = "lab_A")
-#' 
+#'
 #' # note that `lab_A` values do not exactly match the original `A` values
 #' # this is because `lab_A` was computed from the (field determined) Munsell color notation,
 #' # while `A` was directly measured in the lab by colorimeter
 #' plot(sp3$A, sp3$lab_A, xlab = 'Measured', ylab = 'Converted from Field Observed Munsell')
-#' 
+#'
 setMethod("munsell2spc", signature(object = "SoilProfileCollection"),
           function(object,
                    hue = "hue", value = "value", chroma = "chroma",
+                   .data = NULL,
                    as.spc = TRUE) {
-            
-  h <- horizons(object)
-  
-  if (!all(c(hue, value, chroma) %in% horizonNames(object)))
-    stop("arguments hue [character], value [numeric] and chroma [numeric] must specify column names in the horizon data", call. = FALSE)
-  
+
+  # if .data vector/column/data.frame not specified
+  if (is.null(.data)) {
+
+    # need hue, value, chroma as existing columns in horizon data
+    if (!all(c(hue, value, chroma) %in% horizonNames(object))) {
+      stop("arguments `hue` [character], `value` [numeric] and `chroma` [numeric] must specify column names in the horizon data",
+           call. = FALSE)
+    } else {
+      h <- horizons(object)
+    }
+
+  } else {
+    # .data might be a data.frame, containing hue, value, chroma, or a character vector with munsell notation
+    #  (e.g from parseMunsell(..., convertColors=FALSE))
+    if (inherits(.data, 'data.frame')) {
+
+      if (ncol(.data) == 1 && is.character(.data[[1]])) {
+
+        h <- parseMunsell(.data[[1]], convertColors = FALSE)
+
+      } else if (!all(c(hue, value, chroma) %in% colnames(.data))) {
+          stop("arguments `hue` [character], `value` [numeric] and `chroma` [numeric] must specify column names in `.data`",
+              call. = FALSE)
+      } else {
+        h <- .data
+      }
+
+    } else {
+
+      if (length(.data) == 1 && .data %in% horizonNames(object)) {
+        .data <- object[[.data]]
+
+        # otherwise need munsell character columnname, or a vector with equal length to horizons
+      } else if (length(.data) != nrow(object)) {
+        stop("argument `.data` [character or data.frame], must specify either a character vector of equal length to number of horizons , a column name in the horizon data (containing Munsell notation) or a data.frame with three columns (names specified in `hue`, `value`, `chroma`)",
+             call. = FALSE)
+      }
+
+      h <- parseMunsell(.data, convertColors = FALSE)
+    }
+  }
+
   # makes a data.frame
   # return sRGB + CIELAB at the same time, note that hex notation of color is not returned
   drgb <- munsell2rgb(h[[hue]], h[[value]], h[[chroma]], return_triplets = TRUE, returnLAB = TRUE)
   colnames(drgb)[1:3] <- paste0("rgb_", c("R","G","B"))
   colnames(drgb)[4:6] <- paste0("lab_", c("L","A","B"))
-  
+
   # ID management
   idn <- idname(object)
   hidn <- hzidname(object)
-  
+  h <- horizons(object)
+
   # munsell2rgb does not return ID names (not inherently aware of the SPC)
   idcol <- data.frame(h[[idn]], h[[hidn]])
   colnames(idcol) <- c(idn, hidn)
-  
+
   if (as.spc) {
     # horizons<- will ensure merge.data.table triggers if @horizons is data.table
     horizons(object) <- cbind(idcol, drgb)
-    
+
     return(object)
   } else {
     return(.as.data.frame.aqp(cbind(idcol, drgb), aqp_df_class(object)))
