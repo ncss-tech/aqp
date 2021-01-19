@@ -242,8 +242,11 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
     the_chroma <- round(as.numeric(the_chroma))
     warning("'the_chroma' has been rounded to the nearest integer.", call. = FALSE)
   }
-
-  # join new data with look-up table
+  
+  # TODO re-combining the source data into a data.frame is making a new copy / wasting some time
+  
+  ## join new data with look-up table
+  # this is slow when n > 1000
   d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
   ## TODO: convert to merge() (~ 30% slower than join)
   ## TODO: experiment with on-the-fly DT invocation if available
