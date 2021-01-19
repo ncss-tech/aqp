@@ -11,7 +11,7 @@
 
 \item{as.class}{\code{"data.frame"}, \code{"tibble"}, or \code{"data.table"} default: \code{"data.frame"}}
 
-\item{...}{additional arguments to \code{as.tibble} or \code{as.data.table}}
+\item{...}{Additional arguments to coercion function  \code{as.data.frame}, \code{as_tibble} or \code{as.data.table}}
 }
 \value{
 a subclass of \code{data.frame} corresponding to \code{as.class},

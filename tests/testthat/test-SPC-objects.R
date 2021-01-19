@@ -212,40 +212,40 @@ test_that("SPC spatial operations ", {
   # 2020/07/12: warnings expect warning on rgdal 1.5-8+
   # https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html
   # catching all rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-methods
-  expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0')
-
-  # we should get back the same thing we started with
-  if (packageVersion("rgdal") >= "1.5-17")
-    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
-  else if (packageVersion("rgdal") >= "1.5-8")
-    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs'))
-  else
-    expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'))
-
-  # basic coercion
-  if (packageVersion("rgdal") >= "1.5-17")
-    expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
-  else if (packageVersion("rgdal") >= "1.5-8")
-    expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
-  else
-    expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
-
-  # down-grade to {site + sp} = SpatialPointsDataFrame
-  if (packageVersion("rgdal") >= "1.5-17")
-    expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
-  else if (packageVersion("rgdal") >= "1.5-8")
-    expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
-  else
-    expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
-
-  if (packageVersion("rgdal") >= "1.5-17")
-    expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
-  else if (packageVersion("rgdal") >= "1.5-8")
-    expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
-  else
-    expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
-
-  expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
+  # expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0')
+  # 
+  # # we should get back the same thing we started with
+  # if (packageVersion("rgdal") >= "1.5-17")
+  #   expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
+  # else if (packageVersion("rgdal") >= "1.5-8")
+  #   expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs'))
+  # else
+  #   expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'))
+  # 
+  # # basic coercion
+  # if (packageVersion("rgdal") >= "1.5-17")
+  #   expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
+  # else if (packageVersion("rgdal") >= "1.5-8")
+  #   expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
+  # else
+  #   expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
+  # 
+  # # down-grade to {site + sp} = SpatialPointsDataFrame
+  # if (packageVersion("rgdal") >= "1.5-17")
+  #   expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
+  # else if (packageVersion("rgdal") >= "1.5-8")
+  #   expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
+  # else
+  #   expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
+  # 
+  # if (packageVersion("rgdal") >= "1.5-17")
+  #   expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
+  # else if (packageVersion("rgdal") >= "1.5-8")
+  #   expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
+  # else
+  #   expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
+  # 
+  # expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
 
   # Unit-length j-index SPDF downgrading DEPRECATED
 
