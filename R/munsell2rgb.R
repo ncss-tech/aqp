@@ -50,25 +50,52 @@
 }
 
 
+
+
+#' @title Parse Munsell Color Notation
+#' 
+#' @description Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{munsell2rgb}.
+#'
+#' @param munsellColor character vector of Munsell colors (e.g. \code{c('10YR 3/4', '5YR 4/6')})
+#' @param convertColors logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates
+#' @param ... additional arguments to \code{munsell2rgb}
+#'
+#' @return a \code{data.frame} object
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' # just sRGB
+#' parseMunsell("10YR 3/5", return_triplets = TRUE)
+#' 
+#' # sRGB + CIELAB (D65 illuminant)
+#' parseMunsell("10YR 3/5", return_triplets = TRUE, returnLAB = TRUE)
+#' 
+#' # CIELAB only
+#' parseMunsell("10YR 3/5", return_triplets = FALSE, returnLAB = TRUE)
+#' 
+
 ## TODO: this will not correctly parse gley
 ## TODO: re-write with REGEX for extraction from within other text
 ## TODO: return NA for obviously wrong Munsell codes
-#
-# convert a color string '10YR 4/3' to sRGB or R color
+
 parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   # sanity check:
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
     return(rep(NA, times=length(munsellColor)))
-
-  ## TODO: switch to stringr::str_split()
-  ## https://github.com/ncss-tech/aqp/issues/66
+  
+  # split color into pieces, first at hue[space]value/chroma
   pieces <- strsplit(munsellColor, ' ', fixed=TRUE)
+  # then value/chroma into pieces
   pieces.2 <- sapply(pieces, function(i) strsplit(i[2], '/', fixed=TRUE))
-  hue <- sapply(pieces, function(i) i[1])
-  value <- sapply(pieces.2, function(i) i[1])
-  chroma <- sapply(pieces.2, function(i) i[2])
-
-  # parse, don't convert
+  
+  # extract pieces
+  hue <- sapply(pieces, FUN = '[', 1)
+  value <- sapply(pieces.2, FUN = '[', 1)
+  chroma <- sapply(pieces.2, FUN = '[', 2)
+  
+  # parse, without conversion
   if(convertColors == FALSE)
     return(data.frame(hue, value, chroma, stringsAsFactors = FALSE))
 
@@ -81,6 +108,49 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 # color: matrix/data.frame of sRGB values in range of [0,1]
 # colorSpace: color space / distance metric (CIE2000, LAB, sRGB)
 # nClosest: number of closest chips to return
+
+
+#' @title sRGB to Munsell Color Conversion
+#' 
+#' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the \code{munsell} lookup table. 
+#'
+#' @param color a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of \[0,1]
+#' @param colorSpace distance metric (colorspace) to use for finding the closest chip: CIE2000 is the most accurate but requires farver >= 2.0.3, Euclidean distance in CIELAB is a close second, while Euclidean distance in sRGB is not at all accurate and should only be used for demonstration purposes.
+#' 
+#' @param nClosest number of closest Munsell colors to return
+#'
+#' @note This function is fully vectorized and will pad output with NA-records when NA are present in \code{color}.
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @references 
+#' \url{http://ncss-tech.github.io/AQP/}
+#' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
+#' \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
+#' \url{http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#'
+#' @return an (NA-padded) \code{data.frame} containing `hue`, `value`, `chroma`, and distance (dE00 when \code{colorSpace = 'CIE2000'}, Euclidean distance otherwise) to nearest matching color.
+#' 
+#' @export
+#'
+#' @examples 
+#' 
+#' # Munsell notation to sRGB triplets [0-1] 
+#' color <- munsell2rgb(
+#'   the_hue = c('10YR', '2.5YR'), 
+#'   the_value = c(3, 5), 
+#'   the_chroma = c(5, 6), 
+#'   return_triplets = TRUE
+#' )
+#' 
+#' # result is a data.frame
+#' color
+#' 
+#' # sRGB triplets to closest Munsell color 
+#' # dE00 distandce metric
+#' # result is a data.frame
+#' rgb2munsell(color)
+#'
 rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest = 1) {
 
   # argument check
@@ -107,7 +177,6 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
     }
   }
 
-  # https://github.com/ncss-tech/aqp/issues/160
   # accounting for the possibility of NA
   # result should be an empty record
   not.na.idx <- which(apply(color, 1, function(i) ! any(is.na(i))))
@@ -168,7 +237,7 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
     # else
     #   res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
 
-    res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
+    res[[i]] <- data.frame(munsell[idx, 1:3], sigma = sigma[idx])
 
   }
 
@@ -192,8 +261,32 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
   return(res)
 }
 
-# TODO if alpha is greater than maxColorValue, there will be an error
-munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1, return_triplets=FALSE, returnLAB=FALSE) {
+
+
+
+
+
+
+
+#' Title
+#'
+#' @param the_hue 
+#' @param the_value 
+#' @param the_chroma 
+#' @param alpha 
+#' @param maxColorValue 
+#' @param return_triplets 
+#' @param returnLAB 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 
+#' 
+
+
+munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue = 1, return_triplets = FALSE, returnLAB = FALSE) {
 	## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
 
@@ -204,7 +297,8 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 	# check to make sure that each vector is the same length
 	if(length(unique( c(length(the_hue), length(the_value), length(the_chroma)))) != 1)
 		stop('All inputs must be vectors of equal length.')
-
+  
+  ## TODO: depricate this
   ## plyr <= 1.6 : check to make sure hue is a character
   if(is.factor(the_hue)) {
     cat('Notice: converting hue to character\n')
@@ -269,20 +363,28 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha=1, maxColorValue=1
 	# keep track of NA values
 	rgb.na <- which(is.na(res$r))
 
-	# not really an ideal solution, but seems to work
-	# if alpha > maxColorValue -- clamp alpha at maxColorValue
-	if(alpha > maxColorValue)
-		alpha <- maxColorValue
-
+	# truncate alpha at maxColorValue, otherwise error
+	if(alpha > maxColorValue) {
+	  alpha <- maxColorValue
+	}
+		
 	# convert to R color
 	res$soil_color <- NA # init an empy column
 
   # account for missing values if present: we have to do this because rgb() doesn't like NA
-	if(length(rgb.na > 0))
-		res$soil_color[-rgb.na] <- with(res[-rgb.na,], rgb(red=r, green=g, blue=b, alpha=alpha, maxColorValue=maxColorValue) )
-  # no missing values
-	else
-		res$soil_color <- with(res, rgb(red=r, green=g, blue=b, alpha=alpha, maxColorValue=maxColorValue) )
+	if(length(rgb.na > 0)) {
+	  res$soil_color[-rgb.na] <- with(
+	    res[-rgb.na,], 
+	    rgb(red = r, green = g, blue = b, alpha = alpha, maxColorValue = maxColorValue) 
+	  )
+	}	else {
+	  # no missing values
+	  res$soil_color <- with(
+	    res, 
+	    rgb(red = r, green = g, blue = b, alpha = alpha, maxColorValue = maxColorValue) 
+	  )
+	}
+	
 
   # default behavior, vector of colors is returned
 	return(res$soil_color)
