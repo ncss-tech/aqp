@@ -16,34 +16,6 @@ allocate(
 \item{to}{character specifying the classification scheme: FAO Salt Severity, FAO Black Soil (see details for the required \code{...})}
 
 \item{droplevels}{logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.}
-
-\item{object}{a \code{data.frame} or \code{SoilProfileCollection}}
-
-\item{pedonid}{pedon ID column name, required when \code{object} is a \code{data.frame}}
-
-\item{hztop}{horizon top depth column name, required when \code{object} is a \code{data.frame}}
-
-\item{hzbot}{horizon bottom depth column name, required when \code{object} is a \code{data.frame}}
-
-\item{OC}{organic carbon column name, percent}
-
-\item{m_chroma}{moist Munsell chroma column name}
-
-\item{m_value}{moist Munsell value column name}
-
-\item{d_value}{dry Munsell value column name}
-
-\item{CEC}{cation exchange capacity column name, units of cmol(+)/kg soil}
-
-\item{BS}{base saturation column name, percent}
-
-\item{tropical}{logical, data are associated with "tropical soils"}
-
-\item{EC}{electrical conductivity column name, dS/m}
-
-\item{pH}{pH column name, 1:1 H20}
-
-\item{ESP}{exchangeable sodium percentage column name, percent}
 }
 \value{
 A vector or \code{data.frame} object.
@@ -53,8 +25,21 @@ Generic function to allocate soil properties to different classification schemes
 }
 \details{
 This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008). 
+ 
+## Usage Details
 
-The results returned by allocate(to = "ST Diagnostic Features") currently only return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
+Each classification scheme (\code{to} argument) uses a different set of arguments.
+
+- `FAO Salt Severity`
+  + **EC:** electrical conductivity column name, dS/m
+  + **pH:** pH column name, 1:1 H20
+  + **ESP:** exchangeable sodium percentage column name, percent
+  
+- `FAO Black Soils`
+  + **object:** a \code{data.frame} or \code{SoilProfileCollection}
+}
+\note{
+The results returned by \code{allocate(to = "ST Diagnostic Features")} currently return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
 }
 \examples{
 

@@ -9,39 +9,29 @@
 #' @param droplevels logical indicating whether to drop unused levels in factors. This is useful when the results have a large number of unused classes, which can waste space in tables and figures.
 #' 
 #' 
+#' @details
+#' This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008). 
+#'  
+#' ## Usage Details
 #' 
-#' @param object a \code{data.frame} or \code{SoilProfileCollection}
+#' Each classification scheme (\code{to} argument) uses a different set of arguments.
 #' 
-#' @param pedonid pedon ID column name, required when \code{object} is a \code{data.frame}
-#' 
-#' @param hztop horizon top depth column name, required when \code{object} is a \code{data.frame}
-#' 
-#' @param hzbot horizon bottom depth column name, required when \code{object} is a \code{data.frame}
-#' 
-#' @param OC organic carbon column name, percent
-#' 
-#' @param m_chroma moist Munsell chroma column name
-#' 
-#' @param m_value moist Munsell value column name
-#' 
-#' @param d_value dry Munsell value column name
-#' 
-#' @param CEC cation exchange capacity column name, units of cmol(+)/kg soil
-#' 
-#' @param BS base saturation column name, percent
-#' 
-#' @param tropical logical, data are associated with "tropical soils"
-#' 
-#' @param EC electrical conductivity column name, dS/m
-#' 
-#' @param pH pH column name, 1:1 H20
-#' 
-#' @param ESP exchangeable sodium percentage column name, percent
+#' - `FAO Salt Severity`
+#'   + **EC:** electrical conductivity column name, dS/m
+#'   + **pH:** pH column name, 1:1 H20
+#'   + **ESP:** exchangeable sodium percentage column name, percent
+#'   
+#' - `FAO Black Soils`
+#'   + **object:** a \code{data.frame} or \code{SoilProfileCollection}
 #' 
 #' 
-#' @details This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008). 
 #' 
-#' The results returned by allocate(to = "ST Diagnostic Features") currently only return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
+#' 
+#' 
+#' 
+#' @note The results returned by \code{allocate(to = "ST Diagnostic Features")} currently return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
+#' 
+#' 
 #'
 #' @return A vector or \code{data.frame} object.
 #' 
@@ -189,6 +179,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
     
 
 # To do add USDA and other salt classes
+## TODO consider optional object = NULL
 .rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, system = "FAO Salt Severity", droplevels = TRUE) {
   
   # EC = 1; pH = 3; ESP = 50
