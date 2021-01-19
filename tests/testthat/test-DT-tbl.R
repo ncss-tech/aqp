@@ -2,6 +2,9 @@ context("data.table and tbl_df inheritance from data.frame")
 
 
 test_that("basic coercion", {
+  
+  skip_on_cran()
+  
   ###  create empty frames
   empty_df <- data.frame()
 
