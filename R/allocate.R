@@ -18,16 +18,37 @@
 #' 
 #' - `FAO Salt Severity`
 #'   + **EC:** electrical conductivity column name, dS/m
-#'   + **pH:** pH column name, 1:1 H20
+#'   + **pH:** pH column name, saturated paste extract
 #'   + **ESP:** exchangeable sodium percentage column name, percent
 #'   
 #' - `FAO Black Soils`
-#'   + **object:** a \code{data.frame} or \code{SoilProfileCollection}
-#' 
-#' 
-#' 
-#' 
-#' 
+#'   + **object:** a `data.frame` or `SoilProfileCollection`
+#'   + **pedonid:** pedon ID column name, required when \code{object} is a \code{data.frame}
+#'   + **hztop:** horizon top depth column name, required when \code{object} is a \code{data.frame}
+#'   + **hzbot:** horizon bottom depth column name, required when \code{object} is a \code{data.frame}
+#'   + **OC**: organic carbon column name, percent
+#'   + **m_chroma:** moist Munsell chroma column name
+#'   + **m_value:** moist Munsell value column name
+#'   + **d_value:** dry Munsell value column name
+#'   + **CEC:** cation exchange capacity column name (NH4OAc at pH 7), units of cmol(+)/kg soil
+#'   + **BS:** base saturation column name (NH4OAc at pH 7), percent
+#'   + **tropical:** logical, data are associated with "tropical soils"
+#'   
+#' - `ST Diagnostic Features`
+#'   + **object:** a `data.frame` or `SoilProfileCollection`
+#'   + **pedonid:** pedon ID column name, required when \code{object} is a \code{data.frame}
+#'   + **hzname:** horizon name column, required when \code{object} is a \code{data.frame}
+#'   + **hztop:** horizon top depth column name, required when \code{object} is a \code{data.frame}
+#'   + **hzbot:** horizon bottom depth column name, required when \code{object} is a \code{data.frame}
+#'   + **texture:** soil texture class (USDA) column name
+#'   + **rupresblkcem:** rupture resistance column name
+#'   + **m_value:** moist Munsell value column name
+#'   + **m_chroma:** moist Munsell chroma column name
+#'   + **d_value:** dry Munsell value column name
+#'   + **BS:** base saturation column name (method ??), percent
+#'   + **OC**: organic carbon column name, percent
+#'   + **n_value:** ??
+#'   + **featkind:** ??
 #' 
 #' @note The results returned by \code{allocate(to = "ST Diagnostic Features")} currently return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
 #' 
@@ -40,7 +61,7 @@
 #' 
 #' FAO. 2006. \href{http://www.fao.org/publications/card/en/c/903943c7-f56a-521a-8d32-459e7e0cdae9/}{Guidelines for soil description}. Rome, Food and Agriculture Organization of the United Nations.
 #' 
-#' FAO. 2020. DEFINITION | What is a black soil? [online]. [Cited 28 December 2020]. http://www.fao.org/global-soil-partnership/intergovernmental-technical-panel-soils/gsoc17-implementation/internationalnetworkblacksoils/more-on-black-soils/definition-what-is-a-black-soil/es/
+#' FAO. 2020. DEFINITION | What is a black soil? (online). (Cited 28 December 2020). http://www.fao.org/global-soil-partnership/intergovernmental-technical-panel-soils/gsoc17-implementation/internationalnetworkblacksoils/more-on-black-soils/definition-what-is-a-black-soil/es/
 #'   
 #'   Powell, B., 2008. Classifying soil and land, in: McKenzie, N.J., Grundy, M.J., Webster, R., Ringrose-Voase, A.J. (Eds.), Guidelines for Survey Soil and Land Resources, Australian Soil and Land Survey Handbook Series. CSIRO, Melbourne, p. 572.
 #' 

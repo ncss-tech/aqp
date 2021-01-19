@@ -21,8 +21,8 @@ A \code{data.frame} with the following columns:
 \item{dV: }{delta-value, absolute value of difference in Munsell value (m1 vs. m2)}
 \item{dc: }{delta-chroma, absolute value of difference in Munsell chroma (m1 vs. m2)}
 \item{dE00: }{delta-E00, e.g. the \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{CIE delta-E as refined in 2000}}
- \item{cc: }{soil color contrast class, as specified in \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{Soil Survey Technical Note 2}}
- }
+\item{cc: }{soil color contrast class, as specified in \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{Soil Survey Technical Note 2}}
+}
 }
 \description{
 Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric.
@@ -54,9 +54,10 @@ labels = c('helioblue-reddish', 'light cadmium yellow')
 
 }
 \references{
-1. https://en.wikipedia.org/wiki/Color_difference
- 
- 2. \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{Soil Survey Technical Note 2}
+\enumerate{
+\item https://en.wikipedia.org/wiki/Color_difference
+\item \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{Soil Survey Technical Note 2}
+}
 }
 \seealso{
 \code{\link{colorContrastPlot}}, \code{\link{huePosition}}

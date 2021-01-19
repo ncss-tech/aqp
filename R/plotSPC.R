@@ -61,7 +61,7 @@
 #'
 #' @param n.depth.ticks suggested number of ticks in depth scale
 #'
-#' @param shrink logical, reduce character scaling for 'long' horizon by 80\% ?
+#' @param shrink logical, reduce character scaling for 'long' horizon by 80%?
 #'
 #' @param shrink.cutoff character length defining 'long' horizon names
 #'
@@ -846,7 +846,7 @@ plotSPC <- function(
 
 #' generic plot method for \code{SoilProfileCollection} objects
 #' @name plot
-#' @param y [not used]
+#' @param y (not used)
 #' @usage
 #' ## S4 method for signature 'SoilProfileCollection,ANY'
 #' ## note: y argument in generic definition is not currently used

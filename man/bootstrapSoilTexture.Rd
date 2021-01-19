@@ -7,9 +7,9 @@
 bootstrapSoilTexture(ssc, method = c("dirichlet", "normal"), n = 100)
 }
 \arguments{
-\item{ssc}{a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.}
+\item{ssc}{a \code{data.frame} object with 3 columns: \code{sand}, \code{silt}, \code{clay} and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.}
 
-\item{method}{type of simulation: `dirichlet` or `normal`. See details.}
+\item{method}{type of simulation: \code{dirichlet} or \code{normal}. See details.}
 
 \item{n}{number of simulated compositions. See details.}
 }
@@ -17,17 +17,17 @@ bootstrapSoilTexture(ssc, method = c("dirichlet", "normal"), n = 100)
 a \code{list} containing:
 
 \itemize{
- \item{\code{samples}} - {\code{data.frame} of simulated sand, silt, clay values}
- \item{\code{mean}} - {compositional mean}
- \item{\code{var}} - {compositional variance-covariance matrix}
- \item{\code{D.alpha}} - {(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
+\item{\code{samples}} - {\code{data.frame} of simulated sand, silt, clay values}
+\item{\code{mean}} - {compositional mean}
+\item{\code{var}} - {compositional variance-covariance matrix}
+\item{\code{D.alpha}} - {(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
 }
 }
 \description{
-Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.
+Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of \code{alpha} parameters.
 }
 \details{
-Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates. 
+Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates.
 
 Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in \code{ssc} (\code{n >= 30}?) for a reliable fit.
 }

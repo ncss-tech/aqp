@@ -7,7 +7,7 @@
 confusionIndex(x)
 }
 \arguments{
-\item{x}{vector of probabilities [0,1], should not contain NA}
+\item{x}{vector of probabilities (0,1), should not contain NA}
 }
 \value{
 A single numeric value.

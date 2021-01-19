@@ -8,7 +8,7 @@
 \S4method{harmonize}{SoilProfileCollection}(x, x.names, keep.cols = NULL, grp.name = "hgroup")
 }
 \arguments{
-\item{x}{A SoilProfileCollection.}
+\item{x}{A \code{SoilProfileCollection}.}
 
 \item{x.names}{a named list of character vectors specifying target names, profile ID suffixes and source attribute names for harmonization}
 
@@ -17,14 +17,14 @@
 \item{grp.name}{a character vector with column name to store grouping variable in site table (default: "hgroup")}
 }
 \value{
-A [redundant] SoilProfileCollection, with one profile for each set of harmonizations specified by \code{x.names}.
+A (redundant) \code{SoilProfileCollection}, with one profile for each set of harmonizations specified by \code{x.names}.
 }
 \description{
-It is sometimes convenient to be able to "denormalize" to a SoilProfileCollection with fewer attributes but more profiles. This is helpful wherever calculations are made on a profile basis and ranges or repeated measures are depicted with multiple attributes per soil horizon.
+It is sometimes convenient to be able to "denormalize" to a \code{SoilProfileCollection} with fewer attributes but more profiles. This is helpful wherever calculations are made on a profile basis and ranges or repeated measures are depicted with multiple attributes per soil horizon.
 
- \code{harmonize} is most commonly used for creating "comparison" soil profile sketches with \code{plotSPC} -- where the thematic attribute is derived from multiple data sources or summary statistics (such as quantiles of a property for Low-RV-High). However, the method more generally applies wherever one wants to alias between multiple columns containing "similar" data as input to an algorithm.
+\code{harmonize} is most commonly used for creating "comparison" soil profile sketches with \code{plotSPC}--where the thematic attribute is derived from multiple data sources or summary statistics (such as quantiles of a property for Low-RV-High). However, the method more generally applies wherever one wants to alias between multiple columns containing "similar" data as input to an algorithm.
 
-Data are "harmonized" to a common attribute names specified by the names of list elements in \code{x.names}. Profiles are essentially duplicated. In order to satisfy uniqueness constraints of the SoilProfileCollection, the label from the sub-elements of \code{x.names} are used to disambiguate profiles. A new column in the site table is calculated to reflect these groupings and facilitate filtering. See examples below.
+Data are "harmonized" to a common attribute names specified by the names of list elements in \code{x.names}. Profiles are essentially duplicated. In order to satisfy uniqueness constraints of the \code{SoilProfileCollection}, the label from the sub-elements of \code{x.names} are used to disambiguate profiles. A new column in the site table is calculated to reflect these groupings and facilitate filtering. See examples below.
 }
 \details{
 If attributes reflecting the same or similar property within a soil layer have different names (e.g. \code{socQ05}, \code{socQ50}, \code{socQ95}) it is sometimes inconvenient to work with them as multiple attributes within the same profile. These similar attributes may need to be analyzed together, or in sequence by profile, displayed using the same name or using a common scale. It is also useful to be able to alias different data sources that have the same attributes with different names.

@@ -23,7 +23,7 @@ munsell2rgb(
 
 \item{alpha}{numeric, transparency setting used when \code{return_triplets = FALSE} and \code{returnLAB = FALSE}}
 
-\item{maxColorValue}{maximum sRGB color value, typically `1` (see \code{\link{rgb})}}
+\item{maxColorValue}{maximum sRGB color value, typically \code{1} (see \code{\link{rgb})}}
 
 \item{return_triplets}{logical, return sRGB coordinates (range 0-1) instead of standard hex notation of sRGB (e.g. '#8080B')}
 
@@ -38,7 +38,7 @@ Color conversion based on a look-up table of common soil colors.
 \details{
 This function is vectorized without recycling: i.e. the length of each argument must be the same. Both functions will pad output with NA if there are any NA present in the inputs.
 
-Neutral hues are approximated by greyscale shades ranging from 20\% (darker) to 80\% (lighter). No chroma is required for neutral hues.
+Neutral hues are approximated by greyscale shades ranging from 20\\% (darker) to 80\\% (lighter). No chroma is required for neutral hues.
 
 Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.
 Values of "2.5" (common in soil color descriptions) are silently truncated to "2".

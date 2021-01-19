@@ -278,7 +278,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 #'
 #' @param x a SoilProfileCollection
 #' @param i an expression resolving to a single column name in site or horizon table
-#' @param j [not used]
+#' @param j (not used)
 #' @aliases [[,SoilProfileCollection,ANY-method, [[,SoilProfileCollection,ANY,ANY-method
 #' @docType methods
 #' @rdname doublebracket

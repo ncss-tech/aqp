@@ -14,7 +14,7 @@
 \item{...}{Additional arguments to coercion function  \code{as.data.frame}, \code{as_tibble} or \code{as.data.table}}
 }
 \value{
-a subclass of \code{"data.frame"} corresponding to \code{as.class},
+a subclass of \code{data.frame} corresponding to \code{as.class},
 }
 \description{
 Wrapper method for data.frame subclass conversion

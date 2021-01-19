@@ -27,7 +27,7 @@ addVolumeFraction(
 
 \item{pch}{integer, plotting character code}
 
-\item{col}{symbol color, either a single color or as many colors as there are horizons in `x`}
+\item{col}{symbol color, either a single color or as many colors as there are horizons in \code{x}}
 }
 \description{
 Symbolize volume fraction on an existing soil profile collection plot.

@@ -17,7 +17,7 @@ thompson.bell.darkness(
 
 \item{name}{Column name containing horizon designations used to find A horizons (default: first column name containing 'name')}
 
-\item{pattern}{Regular expression to match A horizons (default: "^A" which means horizon designation _starts with_ A)}
+\item{pattern}{Regular expression to match A horizons (default: "^A" which means horizon designation \emph{starts with} A)}
 
 \item{value}{Column name containing horizon color values (default: "m_value")}
 

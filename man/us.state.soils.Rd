@@ -6,9 +6,9 @@
 \title{US State Soils}
 \format{
 \describe{
-  \item{state}{state name}
-  \item{abbreviated}{abbreviated state name}
-  \item{series}{soil series name}
+\item{state}{state name}
+\item{abbreviated}{abbreviated state name}
+\item{series}{soil series name}
 }
 }
 \usage{

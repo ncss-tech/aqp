@@ -8,12 +8,12 @@
 \format{
 A data frame with 89496 rows and 10 variables:
 \describe{
-  \item{munsell}{munsell color}
-  \item{hue}{hue component}
-  \item{value}{value component}
-  \item{chroma}{chroma component}
-  \item{wavelength}{wavelength (nm)}
-  \item{reflectance}{reflectance}
+\item{munsell}{munsell color}
+\item{hue}{hue component}
+\item{value}{value component}
+\item{chroma}{chroma component}
+\item{wavelength}{wavelength (nm)}
+\item{reflectance}{reflectance}
 }
 }
 \usage{

@@ -39,7 +39,7 @@ Setting \code{style='hue'} emphasizes the contrast classes and CIE delta-E00 of 
 
 Two-way panels are used when multiple hues are provided and \code{style='CC'}. The default output can be greatly enhanced via:
 
-  \code{
+\code{
   latticeExtra::useOuterStrips(...,
                                strip = strip.custom(bg=grey(0.85)),
                                strip.left = strip.custom(bg=grey(0.85))

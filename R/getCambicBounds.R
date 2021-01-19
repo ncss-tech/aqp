@@ -16,7 +16,7 @@
 #' @param d_value Column name containing dry value. Default: d_value
 #' @param m_value Column name containing moist value. Default: m_value
 #' @param m_chroma Column name containing moist crhoma. Default: m_chroma
-#' @param sandy.texture.pattern this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"
+#' @param sandy.texture.pattern this is a pattern for matching sandy textural classes: `-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$`
 #' 
 #' @return A \code{data.frame} containing profile, cambic indexes, along with top and bottom depths.
 #'

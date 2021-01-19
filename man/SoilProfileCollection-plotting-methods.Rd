@@ -109,7 +109,7 @@ plot(x, y, ...)
 
 \item{n.depth.ticks}{suggested number of ticks in depth scale}
 
-\item{shrink}{logical, reduce character scaling for 'long' horizon by 80\% ?}
+\item{shrink}{logical, reduce character scaling for 'long' horizon by 80\%?}
 
 \item{shrink.cutoff}{character length defining 'long' horizon names}
 
@@ -149,13 +149,13 @@ plot(x, y, ...)
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 
-\item{y}{[not used]}
+\item{y}{(not used)}
 }
 \description{
 Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} contains many examples and discussion of the large number of arguments to this function.
 }
 \details{
-Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are *suggestions* to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want.
+Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are \emph{suggestions} to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want.
 
 The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
 

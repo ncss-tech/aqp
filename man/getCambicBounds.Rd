@@ -34,7 +34,7 @@ getCambicBounds(
 
 \item{m_chroma}{Column name containing moist crhoma. Default: m_chroma}
 
-\item{sandy.texture.pattern}{this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"}
+\item{sandy.texture.pattern}{this is a pattern for matching sandy textural classes: \verb{-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$}}
 
 \item{...}{Arguments to \code{getArgillicBounds()}}
 }

@@ -18,7 +18,7 @@ estimateSoilDepth(
 
 \item{name}{name of the column that contains horizon designations}
 
-\item{p}{REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. `Bt`)}
+\item{p}{REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. \code{Bt})}
 
 \item{selection}{function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.}
 
@@ -27,7 +27,7 @@ estimateSoilDepth(
 \item{no.contact.assigned}{value assigned when no contact is encountered at or below \code{no.contact.depth}}
 }
 \value{
-single value representing the depth to `contact` or \code{no.contact.assigned}
+single value representing the depth to \code{contact} or \code{no.contact.assigned}
 }
 \description{
 Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}}.
@@ -35,7 +35,7 @@ Estimate the soil depth of a single profile within a SoilProfileCollection objec
 \details{
 The choice of a \code{selection} function usually follows:
 
-\code{min}: the top of the first matching horizon, \code{max}: the top bot the last matching horizon, 
+\code{min}: the top of the first matching horizon, \code{max}: the top bot the last matching horizon,
 or possibly \code{mean}: somewhere in-between.
 }
 \examples{
