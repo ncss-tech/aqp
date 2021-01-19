@@ -201,6 +201,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 
 # To do add USDA and other salt classes
 ## TODO consider optional object = NULL
+## TODO safe handling of NA
 .rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, system = "FAO Salt Severity", droplevels = TRUE) {
   
   # EC = 1; pH = 3; ESP = 50
@@ -223,7 +224,12 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
     c("none", "slightly sodic", "moderately sodic", "strongly sodic", "very strongly sodic")
     )
   
+  
+  ## TODO: why?
   sc <- rep("none", times = length(EC))
+  
+  ## TODO: consider separate saline / sodic classifaction
+  
   # saline soils
   sc <- ifelse(ESP <= 15, # & EC > 4 & pH <= 8.5, 
                as.character(
