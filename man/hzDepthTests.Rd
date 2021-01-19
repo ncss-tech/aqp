@@ -15,7 +15,7 @@ hzDepthTests(top, bottom)
 A named logical vector containing TRUE for each type of horizon logic error found in the given data.
 }
 \description{
-Function used internally by `checkHzDepthLogic()`, `glom()` and various other functions that operate on horizon data from single soil profiles and require a priori depth logic checks. Checks for bottom depths less than top depth / bad top depth order ("depthLogic"), bottom depths equal to top depth ("sameDepth"), overlaps/gaps ("overlapOrGap") and missing depths ("missingDepth"). Use `names(res)[res]` on result `res` of `hzDepthTest()` to to determine type of logic error(s) found -- see examples below.
+Function used internally by \code{checkHzDepthLogic()}, \code{glom()} and various other functions that operate on horizon data from single soil profiles and require a priori depth logic checks. Checks for bottom depths less than top depth / bad top depth order ("depthLogic"), bottom depths equal to top depth ("sameDepth"), overlaps/gaps ("overlapOrGap") and missing depths ("missingDepth"). Use \code{names(res)[res]} on result \code{res} of \code{hzDepthTest()} to to determine type of logic error(s) found -- see examples below.
 }
 \examples{
 

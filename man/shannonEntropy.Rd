@@ -7,7 +7,7 @@
 shannonEntropy(x, b = 2)
 }
 \arguments{
-\item{x}{vector of probabilities [0,1], must sum to 1, should not contain NA}
+\item{x}{vector of probabilities (0,1), must sum to 1, should not contain NA}
 
 \item{b}{logarithm base}
 }
@@ -18,7 +18,7 @@ A single numeric value.
 A very simple implementation of Shannon entropy.
 }
 \details{
-`0`s are automatically removed by \code{na.rm = TRUE}, as \code{(0 * log(0) = Nan)}
+\code{0}s are automatically removed by \code{na.rm = TRUE}, as \code{(0 * log(0) = Nan)}
 }
 \note{
 When \code{b = length(x)} the result is the normalized Shannon entropy of (Kempen et al, 2009).

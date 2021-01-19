@@ -15,7 +15,7 @@ addBracket(
 )
 }
 \arguments{
-\item{x}{\code{data.frame} object containing `idname(x)`, `top`, `bottom`, and optionally `label` columns}
+\item{x}{\code{data.frame} object containing \code{idname(x)}, \code{top}, \code{bottom}, and optionally \code{label} columns}
 
 \item{label.cex}{scaling factor for label font}
 
@@ -36,7 +36,7 @@ Add depth brackets to soil profile sketches.
 \code{x} may contain multiple records per profile. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
 }
 \note{
-This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+This is a \code{low-level} plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
 }
 \examples{
 

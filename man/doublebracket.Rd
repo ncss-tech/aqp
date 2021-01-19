@@ -14,7 +14,7 @@
 
 \item{i}{an expression resolving to a single column name in site or horizon table}
 
-\item{j}{[not used]}
+\item{j}{(not used)}
 }
 \description{
 Get the data from a column accessed by name. Column names other than profile ID are not shared between site and horizons.

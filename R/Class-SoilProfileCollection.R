@@ -429,11 +429,13 @@ setMethod(f = 'show',
 
 
 
-#' Wrapper method for data.frame subclass conversion
+#' @title Wrapper method for data.frame subclass conversion
 #'
-#' @param x ANY. 
+#' @param x ANY.
 #' @param as.class \code{"data.frame"}, \code{"tibble"}, or \code{"data.table"} default: \code{"data.frame"}
-#' @return a subclass of \code{"data.frame"} corresponding to \code{as.class},
+#' @param ... additional arguments to `as.tibble` or `as.data.table`
+#' 
+#' @return a subclass of `data.frame` corresponding to `as.class`,
 #' @importFrom data.table as.data.table
 #' @importFrom tibble as_tibble
 .as.data.frame.aqp <- function(x, as.class = "data.frame", ...) {

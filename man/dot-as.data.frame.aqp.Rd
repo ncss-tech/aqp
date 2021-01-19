@@ -10,9 +10,11 @@
 \item{x}{ANY.}
 
 \item{as.class}{\code{"data.frame"}, \code{"tibble"}, or \code{"data.table"} default: \code{"data.frame"}}
+
+\item{...}{additional arguments to \code{as.tibble} or \code{as.data.table}}
 }
 \value{
-a subclass of \code{"data.frame"} corresponding to \code{as.class},
+a subclass of \code{data.frame} corresponding to \code{as.class},
 }
 \description{
 Wrapper method for data.frame subclass conversion

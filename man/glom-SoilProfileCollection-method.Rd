@@ -37,7 +37,7 @@
 A SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
 }
 \description{
-\code{glom()} returns a "clod" of horizons from a single profile SoilProfileCollection that have depth (range) in common. 
+\code{glom()} returns a "clod" of horizons from a single profile SoilProfileCollection that have depth (range) in common.
 
 All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is specified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
 

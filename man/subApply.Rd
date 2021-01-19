@@ -7,7 +7,7 @@
 \arguments{
 \item{object}{A SoilProfileCollection}
 
-\item{.fun, }{A function that takes a single profile, returns _logical_ of length 1.}
+\item{.fun, }{A function that takes a single profile, returns \emph{logical} of length 1.}
 
 \item{...}{Additional arguments are passed to \code{.fun}}
 }

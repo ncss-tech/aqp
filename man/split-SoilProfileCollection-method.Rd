@@ -22,7 +22,7 @@ A list of SoilProfileCollections or \code{NULL} for empty result.
 This function splits a SoilProfileCollection into a list of SoilProfileCollection objects using a site-level attribute to define groups or profile ID (idname(x)).
 }
 \details{
-As of aqp 1.25, omission of `f` argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to \code{idname(x)}, e.g. a list as long as \code{length(x)}, with a single-profile SoilProfileCollection per list element. Replicate this behavior using \code{f = idname(x)} or \code{f = profile_id(x)}
+As of aqp 1.25, omission of \code{f} argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to \code{idname(x)}, e.g. a list as long as \code{length(x)}, with a single-profile SoilProfileCollection per list element. Replicate this behavior using \code{f = idname(x)} or \code{f = profile_id(x)}
 }
 \examples{
 

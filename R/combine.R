@@ -11,7 +11,7 @@
 # 2020/09/25: yes it is possible [for a list] with the caveat that the y argument _must_ be missing in order to use the base::union generic but dispatch to the aqp method.
 # The problem with this is IDEs like Rstudio that probe the generics to identify missing required arguments will erroneously warn about the aqp-usage of union
 
-#' [DEPRECATED] union
+#' @title (DEPRECATED) union
 #'
 #' @param x a list of SoilProfileCollection objects
 #' @param y Necessary for proper S4 dispatch.

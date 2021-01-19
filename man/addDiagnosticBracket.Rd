@@ -33,7 +33,7 @@ Annotate diagnostic features within a sketch of soil profiles.
 Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
 }
 \note{
-This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+This is a \code{low-level} plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
 }
 \seealso{
 \code{\link{addBracket}, \link{plotSPC}}

@@ -6,10 +6,10 @@
 \title{Pantone Colors / Munsell Lookup Table}
 \format{
 \describe{
-  \item{code}{Pantone spot color code}
-  \item{hex}{hex representation of sRGB colorspace, suitable for on-screen use}
-  \item{munsell}{Munsell notation of closest color "chip"}
-  \item{dE00}{delta-E 2000 metric describing the (perceptual) distance to the closest Munsell chip}
+\item{code}{Pantone spot color code}
+\item{hex}{hex representation of sRGB colorspace, suitable for on-screen use}
+\item{munsell}{Munsell notation of closest color "chip"}
+\item{dE00}{delta-E 2000 metric describing the (perceptual) distance to the closest Munsell chip}
 }
 }
 \usage{
@@ -26,10 +26,9 @@ For now, lookup is performed by manual subset (see examples 1 and 2 below) or im
 \note{
 The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.
 
-
 Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.
- 
-1    2    3    4    5    6    8    9 
+
+1    2    3    4    5    6    8    9
 0.65 0.24 0.08 0.02 0.01 0.00 0.00 0.00
 }
 \examples{

@@ -3,7 +3,7 @@
 #' @title Shannon Entropy
 #' @description A very simple implementation of Shannon entropy.
 #'
-#' @param x vector of probabilities [0,1], must sum to 1, should not contain NA
+#' @param x vector of probabilities (0,1), must sum to 1, should not contain NA
 #' @param b logarithm base
 #' 
 #' @details `0`s are automatically removed by \code{na.rm = TRUE}, as \code{(0 * log(0) = Nan)}
@@ -42,7 +42,7 @@ shannonEntropy <- function(x, b = 2) {
 #' 
 #' @description Calculate the confusion index of Burrough et al., 1997.
 #'
-#' @param x vector of probabilities [0,1], should not contain NA
+#' @param x vector of probabilities (0,1), should not contain NA
 #' 
 #' @author D.E. Beaudette
 #' 

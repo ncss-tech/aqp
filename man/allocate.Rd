@@ -24,19 +24,50 @@ A vector or \code{data.frame} object.
 Generic function to allocate soil properties to different classification schemes.
 }
 \details{
-This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008). 
- 
-## Usage Details
+This function is intended to allocate a set of soil properties to an established soil classification scheme, such as Salt Severity or Black Soil. Allocation is semantically different from classification. While classification is the 'act' of developing a grouping scheme, allocation is the assignment or identification of measurements to a established class (Powell, 2008).
+\subsection{Usage Details}{
 
 Each classification scheme (\code{to} argument) uses a different set of arguments.
-
-- `FAO Salt Severity`
-  + **EC:** electrical conductivity column name, dS/m
-  + **pH:** pH column name, 1:1 H20
-  + **ESP:** exchangeable sodium percentage column name, percent
-  
-- `FAO Black Soils`
-  + **object:** a \code{data.frame} or \code{SoilProfileCollection}
+\itemize{
+\item \verb{FAO Salt Severity}
+\itemize{
+\item \strong{EC:} electrical conductivity column name, dS/m
+\item \strong{pH:} pH column name, saturated paste extract
+\item \strong{ESP:} exchangeable sodium percentage column name, percent
+}
+\item \verb{FAO Black Soils}
+\itemize{
+\item \strong{object:} a \code{data.frame} or \code{SoilProfileCollection}
+\item \strong{pedonid:} pedon ID column name, required when \code{object} is a \code{data.frame}
+\item \strong{hztop:} horizon top depth column name, required when \code{object} is a \code{data.frame}
+\item \strong{hzbot:} horizon bottom depth column name, required when \code{object} is a \code{data.frame}
+\item \strong{OC}: organic carbon column name, percent
+\item \strong{m_chroma:} moist Munsell chroma column name
+\item \strong{m_value:} moist Munsell value column name
+\item \strong{d_value:} dry Munsell value column name
+\item \strong{CEC:} cation exchange capacity column name (NH4OAc at pH 7), units of cmol(+)/kg soil
+\item \strong{BS:} base saturation column name (NH4OAc at pH 7), percent
+\item \strong{tropical:} logical, data are associated with "tropical soils"
+}
+\item \verb{ST Diagnostic Features}
+\itemize{
+\item \strong{object:} a \code{data.frame} or \code{SoilProfileCollection}
+\item \strong{pedonid:} pedon ID column name, required when \code{object} is a \code{data.frame}
+\item \strong{hzname:} horizon name column, required when \code{object} is a \code{data.frame}
+\item \strong{hztop:} horizon top depth column name, required when \code{object} is a \code{data.frame}
+\item \strong{hzbot:} horizon bottom depth column name, required when \code{object} is a \code{data.frame}
+\item \strong{texture:} soil texture class (USDA) column name
+\item \strong{rupresblkcem:} rupture resistance column name
+\item \strong{m_value:} moist Munsell value column name
+\item \strong{m_chroma:} moist Munsell chroma column name
+\item \strong{d_value:} dry Munsell value column name
+\item \strong{BS:} base saturation column name (method ??), percent
+\item \strong{OC}: organic carbon column name, percent
+\item \strong{n_value:} ??
+\item \strong{featkind:} ??
+}
+}
+}
 }
 \note{
 The results returned by \code{allocate(to = "ST Diagnostic Features")} currently return a limited set of diagnostic features that are easily defined. Also, the logic implemented for some features does not include all the criteria defined in the Keys to Soil Taxonomy.
@@ -135,9 +166,9 @@ Abrol, I., Yadav, J. & Massoud, F. 1988. \href{http://www.fao.org/3/x5871e/x5871
 
 FAO. 2006. \href{http://www.fao.org/publications/card/en/c/903943c7-f56a-521a-8d32-459e7e0cdae9/}{Guidelines for soil description}. Rome, Food and Agriculture Organization of the United Nations.
 
-FAO. 2020. DEFINITION | What is a black soil? [online]. [Cited 28 December 2020]. http://www.fao.org/global-soil-partnership/intergovernmental-technical-panel-soils/gsoc17-implementation/internationalnetworkblacksoils/more-on-black-soils/definition-what-is-a-black-soil/es/
-  
-  Powell, B., 2008. Classifying soil and land, in: McKenzie, N.J., Grundy, M.J., Webster, R., Ringrose-Voase, A.J. (Eds.), Guidelines for Survey Soil and Land Resources, Australian Soil and Land Survey Handbook Series. CSIRO, Melbourne, p. 572.
+FAO. 2020. DEFINITION | What is a black soil? (online). (Cited 28 December 2020). http://www.fao.org/global-soil-partnership/intergovernmental-technical-panel-soils/gsoc17-implementation/internationalnetworkblacksoils/more-on-black-soils/definition-what-is-a-black-soil/es/
+
+Powell, B., 2008. Classifying soil and land, in: McKenzie, N.J., Grundy, M.J., Webster, R., Ringrose-Voase, A.J. (Eds.), Guidelines for Survey Soil and Land Resources, Australian Soil and Land Survey Handbook Series. CSIRO, Melbourne, p. 572.
 
 Richards, L.A. 1954. \href{https://www.ars.usda.gov/ARSUserFiles/20360500/hb60_pdf/hb60complete.pdf}{Diagnosis and Improvement of Saline and Alkali Soils}. U. S. Government Printing Office. 166 pp.
 

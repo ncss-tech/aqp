@@ -2,7 +2,7 @@ if (!isGeneric("group_by"))
   setGeneric("group_by", function(object, ...) 
     standardGeneric("group_by"))
 
-#' [EXPERIMENTAL] Store groupings within a profile collection.  
+#' (EXPERIMENTAL) Store groupings within a profile collection.  
 #' @name group_by
 #' @param object SoilProfileCollection. 
 #' @param ... One or more expressions evaluated within the context of \code{object} that resolve to vectors that can be coerced to factor "groups."

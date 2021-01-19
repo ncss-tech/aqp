@@ -2,7 +2,7 @@
 % Please edit documentation in R/combine.R
 \name{union,list,missing-method}
 \alias{union,list,missing-method}
-\title{[DEPRECATED] union}
+\title{(DEPRECATED) union}
 \usage{
 \S4method{union}{list,missing}(x, y)
 }
@@ -15,7 +15,7 @@
 a SoilProfileCollection
 }
 \description{
-[DEPRECATED] union
+(DEPRECATED) union
 }
 \examples{
 
