@@ -268,22 +268,111 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 
 
 
-#' Title
+#' @title Convert Munsell Color Notation to other Color Space Coordinates (sRGB and CIELAB)
+#' 
+#' @description Color conversion based on a look-up table of common soil colors.
 #'
-#' @param the_hue 
-#' @param the_value 
-#' @param the_chroma 
-#' @param alpha 
-#' @param maxColorValue 
-#' @param return_triplets 
-#' @param returnLAB 
-#'
-#' @return
+#' @param the_hue a vector of one or more more hues, upper-case (e.g. '10YR')
+#' 
+#' @param the_value a vector of one or more values (e.g. '4')
+#' 
+#' @param the_chroma a vector of one or more chromas (e.g. '6'), may be NA for neutral hues
+#' 
+#' @param alpha numeric, transparency setting used when \code{return_triplets = FALSE} and \code{returnLAB = FALSE}
+#' 
+#' @param maxColorValue maximum sRGB color value, typically `1` (see \code{\link{rgb})}
+#' 
+#' @param return_triplets logical, return sRGB coordinates (range 0-1) instead of standard hex notation of sRGB (e.g. '#8080B')
+#' 
+#' @param returnLAB logical, return CIELAB coordinates (D65 illuminant)
+#' 
+#' @return A vector of R colors is returned that is the same length as the input data. When \code{return_triplets = TRUE} and/or \code{returnLAB = TRUE}, then a \code{data.frame} (of sample length as input) is returned.
+#' 
+#' 
+#' @details This function is vectorized without recycling: i.e. the length of each argument must be the same. Both functions will pad output with NA if there are any NA present in the inputs.
+#' 
+#' Neutral hues are approximated by greyscale shades ranging from 20\% (darker) to 80\% (lighter). No chroma is required for neutral hues.
+#' 
+#' Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.
+# 
+#' Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
+# 
+#' Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the \code{munsell} sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
+#' 
+#' See examples below.
+#' 
+#' @note Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.
+#' 
+#' @references \url{http://ncss-tech.github.io/AQP/}
+#' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
+#' \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
+#' \url{http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#' 
+#' @author D.E. Beaudette
+#' 
 #' @export
 #'
 #' @examples
 #' 
+#' # neutral heues (N) map to approximate greyscale colors
+#' # chroma may be any number or NA
+#' g <- expand.grid(hue='N', value=2:8, chroma=NA, stringsAsFactors=FALSE)
+#' munsell2rgb(g$hue, g$value, g$chroma)
 #' 
+#' 
+#' # basic example
+#' d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
+#' d$color <- with(d, munsell2rgb(hue, value, chroma))
+#' 
+#' # similar to the 10YR color book page
+#' plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
+#' 
+#' # multiple pages of hue:
+#' hues <- c('2.5YR','5YR','7.5YR','10YR')
+#' d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
+#' # convert Munsell -> sRGB
+#' d$color <- with(d, munsell2rgb(hue, value, chroma))
+#' 
+#' # extract CIELAB coordinates
+#' with(d, munsell2rgb(hue, value, chroma, returnLAB=TRUE))
+#' 
+#' # plot: note that we are setting panel order from red --> yellow
+#' library(lattice)
+#' xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
+#'        main="Common Soil Colors", layout=c(4,1), scales=list(alternating=1),
+#'        strip=strip.custom(bg=grey(0.85)),
+#'        data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
+#'        panel=function(x, y, subscripts, ...)
+#'        {
+#'          panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
+#'        }
+#' )
+#' 
+#' 
+#' # soils example
+#' data(sp1)
+#' 
+#' # convert colors
+#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+#' 
+#' # simple plot, may need to tweak gamma-correction...
+#' image(matrix(1:nrow(sp1)), axes=FALSE, col=sp1$soil_color, main='Soil Colors')
+#' 
+#' # convert into a more useful color space
+#' # you will need the colorspace package for this to work
+#' if(require(colorspace)) {
+#'   # keep RGB triplets from conversion
+#'   sp1.rgb <- with(sp1, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
+#'   
+#'   # convert into LAB color space
+#'   sp1.lab <- as(with(sp1.rgb, sRGB(r,g,b)), 'LAB')
+#'   plot(sp1.lab)
+#' }
+#' 
+#' # convert a non-standard color to closest "chip" in `munsell` look-up table
+#' getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
+#' # convert directly to R color
+#' getClosestMunsellChip('7.9YR 2.7/2.0')
 
 
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue = 1, return_triplets = FALSE, returnLAB = FALSE) {
