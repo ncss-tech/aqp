@@ -4,9 +4,11 @@
 
 ## TODO: conversion from original <-> safe names is clunky
 
+## TODO: convert plyr -> base
+
 # generate a data.frame of ML horizonation
 # using the output from slab() and a vector of horizon names
-get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
+get.ml.hz <- function(x, o.names = attr(x, which = 'original.levels')) {
   
   # trick R CMD check
   H = top = bottom = NULL
@@ -41,7 +43,12 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 	
 	# composite into a data.frame
 	# note: we always start from 0
-	x.ml <- data.frame(hz=x.rle$value, top=c(0, x.hz.bounds[-length(x.hz.bounds)]), bottom=x.hz.bounds, stringsAsFactors=FALSE)
+	x.ml <- data.frame(
+	  hz = x.rle$value, 
+	  top = c(0, x.hz.bounds[-length(x.hz.bounds)]), 
+	  bottom = x.hz.bounds, 
+	  stringsAsFactors=FALSE
+	)
 	
 	# in cases where probability depth-functions cross more than once,
 	# it is necessary to account for overlaps
@@ -66,7 +73,7 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
 	idx <- which(!is.na(x$name))
   x.bs <- ddply(x[idx, ], 'name', brierScore, classLabels=safe.names, actual='name')
   
-  # shannon entropy, (log base 2)bits)
+  # shannon entropy, (log base 2) bits)
   x$H <- apply(x[, safe.names], 1, shannonEntropy, b=2)
   x.H <- ddply(x[idx, ], 'name', plyr::summarize, H=mean(H))
     
@@ -75,10 +82,10 @@ get.ml.hz <- function(x, o.names=attr(x, which='original.levels')) {
   names(x.H) <- c('hz', 'mean.H')
   
   # join brier scores to ML hz table
-  x.ml <- join(x.ml, x.bs, by='hz')
+  x.ml <- merge(x.ml, x.bs, by = 'hz', sort = FALSE)
   
   # join shannon H to ML hz table
-  x.ml <- join(x.ml, x.H, by='hz')
+  x.ml <- merge(x.ml, x.H, by = 'hz', sort = FALSE)
   
   # convert safe names -> original names
   x.ml$hz <- names.LUT$original[match(x.ml$hz, names.LUT$safe)]

@@ -98,8 +98,37 @@ test_that("generalize.hz works as expected", {
 })
 
 test_that("get.ml.hz works as expected", {
+  
+  data(sp3)
+  depths(sp3) <- id ~ top + bottom
+  
+  # crude generalized horizons
+  horizons(sp3) <- rbind(data.frame(hzID = sp3[,1]$hzID,     genhz = "A", stringsAsFactors = FALSE),
+                         data.frame(hzID = sp3[,2:100]$hzID, genhz = "C", stringsAsFactors = FALSE))
+  # slightly realistic
+  sp3$genhz[sp3$clay > 16] <- "Bt"
+  
+  # make sure it runs
   res <- get.ml.hz(slab(sp3, fm = ~ genhz, cpm = 1, slab.structure = 0:max(sp3)))
+  
+  # expected output
   expect_equal(nrow(res), 3)
   expect_equal(res$top, c(0,10,60))
   expect_equal(res$confidence, c(50,49,67))
+  
+  # rough check on Brier scores / Shannon H
+  expect_true(
+    all(
+      round(res$pseudo.brier, 2) == c(0.35, 0.48, 0.21)
+      )
+  )
+  
+  expect_true(
+    all(
+      round(res$mean.H, 2) == c(1.27, 1.01, 0.54)
+    )
+  )
+  
 })
+
+

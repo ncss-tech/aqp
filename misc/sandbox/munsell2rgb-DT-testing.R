@@ -1,12 +1,17 @@
 library(aqp)
+library(data.table)
+library(plyr)
 library(microbenchmark)
 library(daff)
 
 load(system.file("data/munsell.rda", package="aqp")[1])
 
+m.dt <- data.table(munsell)
 
-x <- munsell2rgb(munsell$hue, munsell$value, munsell$chroma, return_triplets = TRUE)
-y <- munsell2rgb2(munsell$hue, munsell$value, munsell$chroma, return_triplets = TRUE)
+
+x <- base::merge(munsell, munsell, by = c('hue','value','chroma'), sort = FALSE, all.x = TRUE)
+y <- plyr::join(munsell, munsell, type = 'left', by = c('hue','value','chroma'))
+z <- merge(m.dt, m.dt, by = c('hue','value','chroma'), sort = FALSE, all.x = TRUE)
 
 all.equal(x, y)
 d <- diff_data(x, y)
@@ -15,8 +20,10 @@ render_diff(d)
 
 
 microbenchmark(
-  join = munsell2rgb(munsell$hue, munsell$value, munsell$chroma),
-  merge = munsell2rgb2(munsell$hue, munsell$value, munsell$chroma)
+  'base::merge' = base::merge(munsell, munsell, by = c('hue','value','chroma'), sort = FALSE, all.x = TRUE),
+  'plyr::join' = plyr::join(munsell, munsell, type = 'left', by = c('hue','value','chroma')),
+  'data.table::merge' = merge(m.dt, m.dt, by = c('hue','value','chroma'), sort = FALSE, all.x = TRUE)
   )
+
 
 
