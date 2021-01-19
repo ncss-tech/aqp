@@ -1,32 +1,3 @@
-#' @title Indices of "equivalent" Munsell chips in \code{munsell} data set
-#'
-#' @description
-#' A pre-calculated lookup list (made with \code{farver::compare_colour}) based on pair-wise CIE2000 color contrast (\code{dE00}) of LAB colors with D65 illuminant for all whole value/chroma "chips" in the \code{aqp::munsell} data set.
-#' 
-#' The intention is to identify Munsell chips that may be "functionally equivalent" to some other given whole chip elsewhere in the Munsell color space -- as discretized in the \code{aqp::munsell} lookup table. 
-#'
-#' "Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.15. 
-#' 
-#' This is a naive (to the subtleties of human color perception, and overall magnitude of contrast between some of the "chips") but computationally consistent approach. Using the lookup list, as opposed to manual contrast via e.g. \code{farver::compare_colour} may have some benefits for efficiency in certain applications where the exact contrast value is not as important as the concept of having some threshold that is non-zero, but very small.
-#'  
-#' @usage data(munequivalent)
-#'
-#' @seealso \code{\link{equivalentMunsellChips}}
-#' 
-#' @references
-#' Gaurav Sharma, Wencheng Wu, Edul N. Dalal. (2005). The CIEDE2000 Color-Difference Formula: Implementation Notes, Supplementary Test Data, and Mathematical Observations. COLOR research and application. 30(1):21-30. http://www2.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf
-#' 
-#'  Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
-#'  
-#' Dong, C.E., Webb, J.B., Bottrell, M.C., Saginor, I., Lee, B.D. and Stern, L.A. (2020). Strengths, Limitations, and Recommendations for Instrumental Color Measurement in Forensic Soil Characterization. J Forensic Sci, 65: 438-449. https://doi.org/10.1111/1556-4029.14193
-#' 
-#' @aliases munequivalent
-#'
-#' @keywords datasets
-#'
-#' @format A named list with 8467 elements, each containing a numeric vector of indices corresponding to the \code{munsell} data set, which has 8467 rows (unique, whole-number chips). Names have the format \code{HUE VALUE/CHROMA}, eg. \code{"7.5YR 4/4"}
-"munequivalent"
-
 #' .makeEquivalentMunsellLUT
 #'
 #' @description Makes the look up table based on pair-wise CIE2000 color contrast (\code{dE00}) of LAB colors with D65 illuminant of LAB colors for all whole value/chroma "chips" in the \code{aqp::munsell} data set via \code{farver::compare_colour}. Specify a threshold in terms of a probability level of CIE2000 distance (relative to whole dataset).
@@ -148,20 +119,20 @@
   # lines(density(sapply(xin3, length), bw=1), lty=3)
 
   # create a nice lookup table to add to aqp
-  munequivalent <- xin1
-  names(munequivalent) <- sprintf("%s %s/%s", munsell$hue, munsell$value, munsell$chroma)
+  equivalent_munsell <- xin1
+  names(equivalent_munsell) <- sprintf("%s %s/%s", munsell$hue, munsell$value, munsell$chroma)
 
   # this is only 90kB written to Rda
-  # save(munequivalent, file="data/equivalent_munsell.rda")
+  # save(equivalent_munsell, file="data/equivalent_munsell.rda")
 
-  return(munequivalent)
+  return(equivalent_munsell)
 }
 
 #' Identify "equivalent" (whole number value/chroma) Munsell chips
 #'
 #' @description 
 #' 
-#' Uses a pre-calculated lookup list (\code{\link{munequivalent}}) based on pair-wise CIE2000 contrast (\code{dE00}) of LAB color with D65 illuminant for all whole value/chroma "chips" in the \code{aqp::munsell} data set. 
+#' Uses a pre-calculated lookup list (\code{\link{equivalent_munsell}}) based on pair-wise CIE2000 contrast (\code{dE00}) of LAB color with D65 illuminant for all whole value/chroma "chips" in the \code{aqp::munsell} data set. 
 #' 
 #' The intention is to identify Munsell chips that may be "functionally equivalent" to some other given whole value/chroma chip elsewhere in the Munsell color space -- as discretized in the \code{aqp::munsell} data table. This basic assumption needs to be validated against your end goal: probably by visual inspection of some or all of the resulting sets. See \code{\link{colorContrast}} and \code{\link{colorContrastPlot}}.
 #'
@@ -173,7 +144,7 @@
 #'
 #' @return A named list; Each list element contains a data.frame with one or more rows of "equivalent" Munsell, RGB and LAB color coordinates from \code{munsell} data set.
 #' 
-#' @seealso \code{\link{colorContrast}} \code{\link{colorContrastPlot}} \code{\link{munequivalent}} 
+#' @seealso \code{\link{colorContrast}} \code{\link{colorContrastPlot}} \code{\link{equivalent_munsell}} 
 #' @references
 #' 
 #' Gaurav Sharma, Wencheng Wu, Edul N. Dalal. (2005). The CIEDE2000 Color-Difference Formula: Implementation Notes, Supplementary Test Data, and Mathematical Observations. COLOR research and application. 30(1):21-30. http://www2.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf
@@ -240,7 +211,7 @@
 #'
 equivalentMunsellChips <- function(hue = NULL, value = NULL, chroma = NULL) {
 
-  munequivalent <- NULL
+  equivalent_munsell <- NULL
   load(system.file("data/equivalent_munsell.rda", package = "aqp")[1])
 
   munsell <- NULL
@@ -255,7 +226,7 @@ equivalentMunsellChips <- function(hue = NULL, value = NULL, chroma = NULL) {
             munsell$value == chipdata$value[x] &
             munsell$chroma == chipdata$chroma[x])
   })
-  res <- lapply(lidx, function(i) munsell[munequivalent[i][[1]],])
+  res <- lapply(lidx, function(i) munsell[equivalent_munsell[i][[1]],])
   names(res) <- sprintf("%s %s/%s", hue, value, chroma)
   rownames(res) <- NULL
   return(res)
