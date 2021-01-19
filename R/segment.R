@@ -180,7 +180,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   
   
   if (test_spc) {
-    h <- h[order(h$peid, h[hzdepcols[1]]), ]
+    h <- h[order(h$peid, h[[hzdepcols[1]]]), ]
     
     # merge to re-add spc with NA
     h_orig <- data.frame(peid = names(table(horizons(object)[peid])), stringsAsFactors = FALSE)
