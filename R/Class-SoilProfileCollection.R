@@ -433,6 +433,7 @@ setMethod(f = 'show',
 #'
 #' @param x ANY. 
 #' @param as.class \code{"data.frame"}, \code{"tibble"}, or \code{"data.table"} default: \code{"data.frame"}
+#' @param ... Additional arguments to coercion function  \code{as.data.frame}, \code{as_tibble} or \code{as.data.table}
 #' @return a subclass of \code{"data.frame"} corresponding to \code{as.class},
 #' @importFrom data.table as.data.table
 #' @importFrom tibble as_tibble
