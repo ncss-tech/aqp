@@ -169,46 +169,96 @@ xyplot(top ~ value | id, data=a, ylab='Depth',
 ##
 ## categorical variable example
 ##
-library(reshape)
+
+data(sp1)
+depths(sp1) <- id ~ top + bottom
 
 # normalize horizon names: result is a factor
-sp1$name <- generalize.hz(sp1$name, 
-new=c('O','A','B','C'), 
-pat=c('O', '^A','^B','C'))
+sp1$name <- generalize.hz(
+  sp1$name, 
+  new = c('O','A','B','C'), 
+  pat = c('O', '^A','^B','C')
+  )
 
 # compute slice-wise probability so that it sums to contributing fraction, from 0-150
 a <- slab(sp1, fm= ~ name, cpm=1, slab.structure=0:150)
 
-# reshape into long format for plotting
-a.long <- melt(a, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
+# convert wide -> long for plotting
+# result is a data.table
+# genhz factor levels are set by order in `measure.vars`
+a.long <- melt(
+  as.data.table(a), 
+  id.vars = c('top','bottom'), 
+  measure.vars = c('O', 'A', 'B', 'C'),
+  )
+
 
 # plot horizon type proportions using panels
-xyplot(top ~ value | variable, data=a.long, subset=value > 0,
-			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), col=1 )
+xyplot(top ~ value | variable, 
+       data = a.long, subset=value > 0,
+       col = 1, lwd = 2, 
+       xlab = 'Class Probability',
+       ylab = 'Depth (cm)',
+       strip = strip.custom(bg = grey(0.85)),
+       scales = list(x = list(alternating = FALSE)),
+       ylim = c(150, -5), type=c('S','g'), 
+       horizontal = TRUE, layout = c(4,1) 
+       )
 
 # again, this time using groups
-xyplot(top ~ value, data=a.long, groups=variable, subset=value > 0,
-			 ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, asp=2)
+xyplot(top ~ value, 
+       data = a.long, 
+       groups = variable, 
+       subset = value > 0,
+       ylim = c(150, -5), 
+       type = c('S','g'), 
+       horizontal = TRUE, 
+       asp = 2,
+       lwd = 2,
+       auto.key = list(
+         lines = TRUE, 
+         points = FALSE, 
+         cex = 0.8, 
+         columns = 1, 
+         space = 'right'
+       )
+)
 
 # adjust probability to size of collection, from 0-150
-a.1 <- slab(sp1, fm= ~ name, cpm=2, slab.structure=0:150)
+a.1 <- slab(sp1, fm= ~ name, cpm = 2, slab.structure = 0:150)
 
-# reshape into long format for plotting
-a.1.long <- melt(a.1, id.vars=c('top','bottom'), measure.vars=c('O','A','B','C'))
+# convert wide -> long for plotting
+# result is a data.table
+# genhz factor levels are set by order in `measure.vars`
+a.1.long <- melt(
+  as.data.table(a.1), 
+  id.vars = c('top','bottom'), 
+  measure.vars = c('O','A','B','C')
+)
 
 # combine aggregation from `cpm` modes 1 and 2
-g <- make.groups(cmp.mode.1=a.long, cmp.mode.2=a.1.long)
+g <- make.groups(cmp.mode.1 = a.long, cmp.mode.2 = a.1.long)
 
 # plot horizon type proportions
-xyplot(top ~ value | variable, groups=which, data=g, subset=value > 0,
-			 ylim=c(240, -5), type=c('S','g'), horizontal=TRUE, layout=c(4,1), 
-			 auto.key=list(lines=TRUE, points=FALSE, columns=2),
-			 par.settings=list(superpose.line=list(col=c(1,2))),
-       scales=list(alternating=3))
+xyplot(top ~ value | variable, 
+       groups = which, 
+       data = g, subset = value > 0,
+       ylim = c(240, -5), 
+       type = c('S','g'), 
+       horizontal = TRUE, 
+       layout = c(4,1), 
+       auto.key = list(lines = TRUE, points = FALSE, columns = 2),
+       par.settings = list(superpose.line = list(col = c(1, 2), lwd = 2)),
+       scales = list(alternating = 3),
+       xlab = 'Class Probability',
+       ylab = 'Depth (cm)',
+       strip = strip.custom(bg = grey(0.85))
+)
 
 
 # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
 (gen.hz.ml <- get.ml.hz(a, c('O','A','B','C')))
+
 
 \dontrun{
 ##
@@ -269,34 +319,38 @@ site(sp3) <- ~ group
 
 # custom 'slab' function, returning mean +/- 1SD
 mean.and.sd <- function(values) {
-	m <- mean(values, na.rm=TRUE)
-	s <- sd(values, na.rm=TRUE)
-	upper <- m + s
-	lower <- m - s
-	res <- c(mean=m, lower=lower, upper=upper)
-	return(res)
-	}
+  m <- mean(values, na.rm=TRUE)
+  s <- sd(values, na.rm=TRUE)
+  upper <- m + s
+  lower <- m - s
+  res <- c(mean=m, lower=lower, upper=upper)
+  return(res)
+}
 
 # aggregate several variables at once, within 'group'
-a <- slab(sp3, fm=group ~ L + A + B, slab.fun=mean.and.sd)
+a <- slab(sp3, fm = group ~ L + A + B, slab.fun = mean.and.sd)
 
 # check the results:
 # note that 'group' is the column containing group labels
-library(lattice)
 xyplot(
-	top ~ mean | variable, data=a, groups=group,
-	lower=a$lower, upper=a$upper, sync.colors=TRUE, alpha=0.5,
-	cf=a$contributing_fraction,
-	ylim=c(125,-5), layout=c(3,1), scales=list(x=list(relation='free')),
-	par.settings=list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2'))),
-	panel=panel.depth_function, 
-	prepanel=prepanel.depth_function,
-	auto.key=list(columns=2, lines=TRUE, points=FALSE)
+  top ~ mean | variable, data=a, groups=group,
+  lower=a$lower, upper=a$upper, 
+  sync.colors=TRUE, alpha=0.5,
+  cf = a$contributing_fraction,
+  xlab = 'Mean Bounded by +/- 1SD',
+  ylab = 'Depth (cm)',
+  ylim=c(125,-5), layout=c(3,1), 
+  scales=list(x=list(relation='free')),
+  par.settings = list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2'))),
+  panel = panel.depth_function, 
+  prepanel = prepanel.depth_function,
+  strip = strip.custom(bg=grey(0.85)),
+  auto.key = list(columns=2, lines=TRUE, points=FALSE)
 )
 
 
 # compare a single profile to the group-level aggregate values
-a.1 <- slab(sp3[1, ], fm=group ~ L + A + B, slab.fun=mean.and.sd)
+a.1 <- slab(sp3[1, ], fm = group ~ L + A + B, slab.fun = mean.and.sd)
 
 # manually update the group column
 a.1$group <- 'profile 1'
@@ -306,40 +360,62 @@ g <- rbind(a, a.1)
 
 # plot with customized line styles
 xyplot(
-	top ~ mean | variable, data=g, groups=group, subscripts=TRUE, 
-	lower=a$lower, upper=a$upper, ylim=c(125,-5),
-	layout=c(3,1), scales=list(x=list(relation='free')),
-	panel=panel.depth_function, 
-	prepanel=prepanel.depth_function,
-	sync.colors=TRUE, alpha=0.25,
-	par.settings=list(superpose.line=list(col=c('orange', 'royalblue', 'black'), 
-  lwd=2, lty=c(1,1,2))),
-	auto.key=list(columns=3, lines=TRUE, points=FALSE)
+  top ~ mean | variable, data=g, groups=group, subscripts=TRUE, 
+  lower=a$lower, upper=a$upper, ylim=c(125,-5),
+  layout=c(3,1), scales=list(x=list(relation='free')),
+  xlab = 'Mean Bounded by +/- 1SD',
+  ylab = 'Depth (cm)',
+  panel=panel.depth_function, 
+  prepanel=prepanel.depth_function,
+  sync.colors = TRUE, alpha = 0.25,
+  par.settings = list(
+    superpose.line = list(
+      col = c('orange', 'royalblue', 'black'), 
+      lwd = 2, lty = c(1,1,2)
+    )
+  ),
+  strip = strip.custom(bg=grey(0.85)),
+  auto.key = list(columns=3, lines=TRUE, points=FALSE)
 )
 
 
 
-## convert mean value for each variable into long format
-library(reshape)
-
-# note that depths are no longer in order 
-a.wide <- cast(a, group + top + bottom ~ variable, value=c('mean'))
 
 ## again, this time for a user-defined slab from 40-60 cm
-a <- slab(sp3, fm=group ~ L + A + B, slab.structure=c(40,60), slab.fun=mean.and.sd)
+a <- slab(sp3, 
+          fm = group ~ L + A + B, 
+          slab.structure = c(40,60), 
+          slab.fun = mean.and.sd
+)
 
 # now we have weighted average properties (within the defined slab)
 # for each variable, and each group
-(a.wide <- cast(a, group + top + bottom ~ variable, value=c('mean')))
+# convert long -> wide
+dcast(
+  as.data.table(a), 
+  formula = group + top + bottom ~ variable, 
+  value.var = 'mean'
+)
 
 ## this time, compute the weighted mean of selected properties, by profile ID
-a <- slab(sp3, fm= id ~ L + A + B, slab.structure=c(40,60), slab.fun=mean.and.sd)
-(a.wide <- cast(a, id + top + bottom ~ variable, value=c('mean')))
+a <- slab(sp3, 
+          fm = id ~ L + A + B, 
+          slab.structure = c(40,60), 
+          slab.fun = mean.and.sd
+)
+
+# convert long -> wide
+dcast(
+  as.data.table(a), 
+  formula = id + top + bottom ~ variable, 
+  value.var = 'mean'
+)
 
 
 ## aggregate the entire collection, using default slab function (hdquantile)
 ## note the missing left-hand side of the formula
 a <- slab(sp3, fm= ~ L + A + B)
+
 
 
 ## weighted-aggregation -- NOT YET IMPLEMENTED --
