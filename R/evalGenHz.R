@@ -75,7 +75,8 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
     )
   )
 
-  # compute group-wise summaries-- note that text is returned
+  # leave as data.table for aggregation
+  # compute group-wise summaries
   m.summary <- m[, list(mean = mean(value, na.rm = TRUE), sd = sd(value, na.rm = TRUE)), by = c((genhz), 'variable')]
   
   # format text
@@ -84,14 +85,6 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
     round(m.summary$mean, 2),
     round(m.summary$sd, 2)
   )
-  
-  # # compute group-wise summaries-- note that text is returned
-  # m.summary <- ddply(m, c(genhz, 'variable'), function(i) {
-  #   stats <- format(paste0(round(mean(i$value, na.rm=TRUE), 2), ' (' ,
-  #                          sd = round(sd(i$value, na.rm=TRUE), 2), ')'),
-  #                   justify = 'right')
-  #   return(data.frame(stats = stats))
-  # })
   
   # using data.table::dcast
   fm <- paste0(genhz, ' ~ variable')
