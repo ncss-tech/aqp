@@ -7,16 +7,21 @@ ssc <- sp4[grep('^Bt', sp4$name), c('sand', 'silt', 'clay')]
 names(ssc) <- toupper(names(ssc))
 
 test_that("textureTriangleSummary() works as expected", {
-  
+
+  skip_if_not_installed(pkg = "Hmisc")
+
+  # requires Tcl/tk, at least on linux
+  skip_if_not_installed(pkg = "soiltexture")
+
   # does it work?
   s <- textureTriangleSummary(ssc)
-  
+
   # result is a matrix
   expect_true(inherits(s, 'matrix'))
-  
+
   # column order preserved
   expect_true(
     all(dimnames(s)[[2]] == c('SAND', 'SILT', 'CLAY'))
   )
-  
+
 })
