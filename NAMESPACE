@@ -78,7 +78,7 @@ importFrom(reshape,
   cast
 )
 
-import(data.table)
+import(data.table, except=c(melt))
 
 importFrom(stringr,
   fixed,
