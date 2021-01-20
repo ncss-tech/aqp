@@ -41,13 +41,26 @@
   # make IDs
   x.medoids$.ids <- paste0('.', 1:k)
   
-  # melt and create new variable names
-  m <- melt(x.medoids, id.var=c(idname(x), '.ids'), measure.vars = c('L', 'A', 'B'))
+  # convert wide -> long and create new variable names
+  # using data.table::melt()
+  m <- melt(
+    as.data.table(x.medoids), 
+    id.var = c(idname(x), '.ids'), 
+    measure.vars = c('L', 'A', 'B')
+  )
+  
+  # leave as data.table for dcast
+  
+  # new ID
   m$variable <- paste0(m$variable, m$.ids)
   
-  # cast to wide format
+  # convert long -> wide format
+  # using data.table::dcast
   fm <- as.formula(paste0(idname(x), ' ~ variable'))
-  res <- cast(m, fm, value = 'value')
+  res <- dcast(m, formula = fm, value.var = 'value')
+  
+  # convert back to data.frame
+  res <- as.data.frame(res)
   
   # don't include the id column
   return(res[, -1])
@@ -83,13 +96,26 @@
   # make depth IDs
   x.slices$depth.id <- paste0('.', p)
   
-  # melt and create new variable names
-  m <- melt(x.slices, id.var=c(idname(x), 'depth.id'), measure.vars = c('L', 'A', 'B'))
+  # convert wide -> long and create new variable names
+  # using data.table::melt()
+  m <- melt(
+    as.data.table(x.slices),
+    id.var = c(idname(x), 'depth.id'), 
+    measure.vars = c('L', 'A', 'B')
+  )
+  
+  # leave as data.table for re-shape
+  
+  # new ID
   m$variable <- paste0(m$variable, m$depth.id)
   
-  # cast to wide format
+  # convert long -> wide format
+  # using data.table::dcast
   fm <- as.formula(paste0(idname(x), ' ~ variable'))
-  res <- cast(m, fm, value = 'value')
+  res <- dcast(m, formula = fm, value.var = 'value')
+  
+  # convert back to data.frame
+  res <- as.data.frame(res)
   
   # don't include the id column
   return(res[, -1])
