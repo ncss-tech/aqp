@@ -110,6 +110,7 @@ Harrell FE, Davis CE (1982): A new distribution-free quantile estimator. Biometr
 ##
 library(lattice)
 library(grid)
+library(data.table)
 
 # load sample data, upgrade to SoilProfileCollection
 data(sp1)
@@ -267,6 +268,7 @@ xyplot(top ~ value | variable,
 
 library(soilDB)
 library(lattice)
+library(data.table)
 
 # sample data
 data('loafercreek', package = 'soilDB')
