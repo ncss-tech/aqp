@@ -273,6 +273,11 @@
 	##       2. aggregate using seg.label + variable in parallel
 	##       3. combine results (a list of data.frames)
 	##
+	## NOPE: use data.table which will automatically scale to multiple threads
+	##
+	
+	
+	
 	# process chunks according to group -> variable -> segment
 	# NA values are not explicitly dropped
 	if(length(extra.args) == 0)
