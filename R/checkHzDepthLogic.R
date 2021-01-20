@@ -44,7 +44,6 @@
 checkHzDepthLogic <- function(x, fast = FALSE) {
   
   stopifnot(inherits(x, 'SoilProfileCollection'))
-  
   h <- data.table::as.data.table(horizons(x))
   hzd <- horizonDepths(x)
   idn <- idname(x)
@@ -54,10 +53,13 @@ checkHzDepthLogic <- function(x, fast = FALSE) {
   
   res <- NULL
   
+  # data.table R CMD check
+  tests <- NULL
+  
   if (!fast) {
     
-    res <- h[, .(tests = list(tests = data.frame(t(hzDepthTests(eval(top), eval(bottom)))))), by = c(eval(hby))][, 
-               .(tests = tests, valid = all(!tests[[1]])), by = c(eval(hby))]
+    res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(eval(top), eval(bottom)))))), by = c(eval(hby))][, 
+               list(tests = tests, valid = all(!tests[[1]])), by = c(eval(hby))]
     
     res <- cbind(res, data.table::rbindlist(res$tests))
     res$tests <- NULL
