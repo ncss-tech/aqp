@@ -358,12 +358,13 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
     orn <- colnames(o.r)
     o.r <- .data.frame.j(o.r, unique(orn[match(orn, orn)]), "data.table")
   } else if (requireNamespace("plyr")) {
+    warning("Combining SoilProfileCollections with `plyr` package is deprecated -- please install the `data.table` package.")
     o.h <- do.call('rbind.fill', o.h) # horizon data
     o.s <- do.call('rbind.fill', o.s) # site data
     o.d <- do.call('rbind.fill', o.d) # diagnostic data, leave as-is
     o.r <- do.call('rbind.fill', o.r) # restriction data, leave as-is
   } else {
-    stop("package `data.table` or `plyr` is required to combine nonconformal data.frames.", call.=FALSE)
+    stop("package `data.table` or `plyr` is required to combine SoilProfileCollections", call.=FALSE)
   }
 
   if (!drop.spatial) {
