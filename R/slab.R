@@ -164,14 +164,18 @@
 	gc()
 
 	# check variable classes
-	if(length(vars) > 1)
-		vars.numeric.test <- sapply(data[, vars], is.numeric)
-	else
-		vars.numeric.test <- is.numeric(data[[vars]])
+	if(length(vars) > 1) {
+	  vars.numeric.test <- sapply(data[, vars], is.numeric)
+	}	else {
+	  vars.numeric.test <- is.numeric(data[[vars]])
+	}
+		
 
 	# sanity check: all numeric, or single character/factor
-	if(any(! vars.numeric.test) & length(vars) > 1)
-		stop('mixed variable types and multiple categorical variables are not currently supported in the same call to slab', call.=FALSE)
+	if(any(! vars.numeric.test) & length(vars) > 1) {
+	  stop('mixed variable types and multiple categorical variables are not currently supported in the same call to slab', call. = FALSE)
+	}
+		
 
 	# check for single categorical variable, and convert to factor
 	if(length(vars) == 1 & inherits(data[, vars], c('character', 'factor'))) {
@@ -183,19 +187,26 @@
 		}
 
 		# check for weights
-		if(!missing(weights))
-			stop('weighted aggregation of categorical variables not yet implemented', call.=FALSE)
+		if(!missing(weights)) {
+		  stop('weighted aggregation of categorical variables not yet implemented', call.=FALSE)
+		}
+			
 
 		# re-set default function, currently no user-supply-able option
 		slab.fun <- .slab.fun.factor.default
 
 		# add extra arguments required by this function
 		# note that we cannot accept additional arguments when processing categorical values
-		extra.args <- list(cpm=cpm)
+		extra.args <- list(cpm = cpm)
 
     # save factor levels for later
     original.levels <- levels(data[[vars]])
-		}
+    
+    # set a flag for post data.table.melt -> factor level setting
+    .factorFlag <- TRUE
+	} else {
+	  .factorFlag <- FALSE
+	}
 
 
 	####
@@ -222,7 +233,7 @@
 	##
 	## TODO: adding weighted-aggregate functionality here
 	## we can't use aggregate() for this
-	##
+	## we can use data.table methods
 
 	# check for weights
 	if(!missing(weights))
@@ -233,8 +244,26 @@
 	seg.label.is.not.NA <- which(!is.na(data$seg.label))
 
 	# convert into long format
-	d.long <- melt(data[seg.label.is.not.NA, ], id.vars=c(object.ID, 'seg.label', g), measure.vars=vars)
+	# d.long.df <- reshape::melt(data[seg.label.is.not.NA, ], id.vars=c(object.ID, 'seg.label', g), measure.vars=vars)
+	
+	# convert wide -> long format
+	# using data.table::melt()
+	# note that this will not preserve factor levels when 'vars' is categorical
+	# must call unique() on `id.vars`
+	d.long <- melt(
+	  as.data.table(data[seg.label.is.not.NA, ]),
+	  id.vars = unique(c(object.ID, 'seg.label', g)),
+	  measure.vars = vars,
+	  )
 
+	# convert back to data.frame
+	d.long <- as.data.frame(d.long)
+	
+  # reset factor levels in d.long[[value]]
+	if(.factorFlag) {
+	  d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
+	}
+	
 	# make a formula for aggregate()
 	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep=''))
 

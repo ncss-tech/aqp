@@ -66,7 +66,7 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
   
   # convert wide -> long form
   # using data.table::melt
-  # suppressing warnings related to mixtures of int / numeric
+  # suppressing warnings related to mixture of int / numeric
   m <- suppressWarnings(
     melt(
       as.data.table(h), 
