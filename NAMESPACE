@@ -73,12 +73,10 @@ importFrom(plyr,
 )
 
 importFrom(reshape,
-  melt,
-  melt.data.frame,
   cast
 )
 
-import(data.table, except=c(melt))
+import(data.table)
 
 importFrom(stringr,
   fixed,

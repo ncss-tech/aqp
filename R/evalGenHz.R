@@ -15,7 +15,10 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
     h[[genhz]] <- factor(h[[genhz]])
 
   # make an index to complete data
-  no.na.idx <- which(complete.cases(h[, vars]))
+  no.na.idx <- which(complete.cases(h[, vars, drop = FALSE]))
+  
+  ## TODO: all of vars should be numeric or convertable to numeric
+  # numeric.test <- sapply(vars, function(i) is.numeric(h[[i]]))
 
   # test for duplicate data
   # unique IDs are based on a concatenation of variables used... digest would be safer
@@ -56,21 +59,47 @@ evalGenHZ <- function(obj, genhz, vars, non.matching.code='not-used', stand=TRUE
   h$mds.2[no.na.idx] <- mds$points[, 2]
   h$sil.width[sil.idx] <- sil[, 3]
   h$neighbor[sil.idx] <- levels(h[[genhz]])[sil[, 2]]
-
-  # melt into long form
-  m <- melt(h, id.vars = genhz, measure.vars = c(vars, 'sil.width'))
+  
+  ## TODO: enforce / check above
+  ## important note: all 'vars' should be numeric
+  
+  
+  # convert wide -> long form
+  # using data.table::melt
+  # suppressing warnings related to mixtures of int / numeric
+  m <- suppressWarnings(
+    melt(
+      as.data.table(h), 
+      id.vars = genhz, 
+      measure.vars = c(vars, 'sil.width')
+    )
+  )
 
   # compute group-wise summaries-- note that text is returned
-  m.summary <- ddply(m, c(genhz, 'variable'), function(i) {
-    stats <- format(paste0(round(mean(i$value, na.rm=TRUE), 2), ' (' ,
-                           sd = round(sd(i$value, na.rm=TRUE), 2), ')'),
-                    justify = 'right')
-    return(data.frame(stats = stats))
-  })
-
+  m.summary <- m[, list(mean = mean(value, na.rm = TRUE), sd = sd(value, na.rm = TRUE)), by = c((genhz), 'variable')]
+  
+  # format text
+  m.summary$stats <- sprintf(
+    "%s (%s)", 
+    round(m.summary$mean, 2),
+    round(m.summary$sd, 2)
+  )
+  
+  # # compute group-wise summaries-- note that text is returned
+  # m.summary <- ddply(m, c(genhz, 'variable'), function(i) {
+  #   stats <- format(paste0(round(mean(i$value, na.rm=TRUE), 2), ' (' ,
+  #                          sd = round(sd(i$value, na.rm=TRUE), 2), ')'),
+  #                   justify = 'right')
+  #   return(data.frame(stats = stats))
+  # })
+  
+  # using data.table::dcast
   fm <- paste0(genhz, ' ~ variable')
-  genhz.stats <- cast(m.summary, fm, value = 'stats')
-
+  genhz.stats <- dcast(data = m.summary, formula = fm, value.var = 'stats')
+  
+  # convert back to data.frame
+  genhz.stats <- as.data.frame(genhz.stats)
+  
   # composite into a list
   res <- list(horizons = h[, c('mds.1', 'mds.2', 'sil.width', 'neighbor')],
               stats = genhz.stats, dist = d)

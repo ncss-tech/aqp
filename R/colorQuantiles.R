@@ -189,8 +189,16 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 #' 
 plotColorQuantiles <- function(res, pt.cex = 7, lab.cex = 0.66) {
   
-  # long format for plotting in panels
-  m.long <- melt(res$marginal, id.var = c('p', 'L_colors', 'A_colors', 'B_colors', 'L_chip', 'A_chip', 'B_chip'))
+  # convert wide -> long format for plotting in panels
+  # using data.table::melt()
+  m.long <- melt(
+    as.data.table(res$marginal), 
+    id.var = c('p', 'L_colors', 'A_colors', 'B_colors', 'L_chip', 'A_chip', 'B_chip')
+    )
+  
+  # convert back to data.frame
+  m.long <- as.data.frame(m.long)
+  
   # fake y-variable for plotting marginal vs. L1
   m.long$y <- 1
   
