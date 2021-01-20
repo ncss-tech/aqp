@@ -22,7 +22,11 @@ get.ml.hz <- function(x, o.names = attr(x, which = 'original.levels')) {
   safe.names <- make.names(o.names)
   
   # LUT for names
-  names.LUT <- data.frame(original=o.names, safe=safe.names, stringsAsFactors = FALSE)
+  names.LUT <- data.frame(
+    original = o.names, 
+    safe = safe.names, 
+    stringsAsFactors = FALSE
+    )
   
 	# get index to max probability, 
 	# but only when there is at least one value > 0 and all are not NA
