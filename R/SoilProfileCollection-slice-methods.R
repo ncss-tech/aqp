@@ -129,7 +129,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     d <- data.frame(temp_id=id.order)
     names(d) <- id
     
-    ## TODO: convert to merge()
+    ## TODO: convert to data.table merge method (but is there a match = 'first' option?)
     m.i <- join(d, m.i.sub, by=id, type='left', match='first')
     
     # add depth range:

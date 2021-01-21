@@ -203,7 +203,9 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
 
   ## optimization: matrixStats::colSums2() much faster
   ## --> syntax slightly different
-
+  
+  ## operations on data.table likely faster
+  
   ## for now, using Euclidean distance
   # D = sqrt(sum( [reference - mixed]^2 ))
 

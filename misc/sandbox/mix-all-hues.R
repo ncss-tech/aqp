@@ -84,7 +84,7 @@ plotColorMixture(c('10YR 8/6', '10YR 2/2'))
 
 mixMunsell(c('10YR 2/4', '10YR 2/4'))
 mixMunsell(c('10YR 2/2', '10YR 2/2'))
-plotColorMixture(c('10YR 2/3', '10YR 2/2'))
+plotColorMixture(c('10YR 6/2', '10YR 2/2'))
 
 
 
