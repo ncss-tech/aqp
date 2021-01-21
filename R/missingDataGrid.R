@@ -1,17 +1,20 @@
 # s: soil profile collection object
 # s.fm: slicing formula, including variables requested for missing data test
 # cols: vector of colors palette
-missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.regex=NULL, cols=NULL, ...) {
+missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.regex = NULL, cols = NULL, ...) {
 
   # default color scheme
-  if(is.null(cols))
+  if(is.null(cols)) {
     cols <- c("#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
               "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F")
+  }
+    
 
   # make color pallete and define number of cuts
   cols.palette <- colorRampPalette(cols)
   ncuts <- 20
 
+  ## TODO: use horizon designation from SPC if possible
   # optionally filter horizon data in original object and replace
   if(!is.null(filter.column) & !is.null(filter.regex)) {
     h <- horizons(s)
@@ -30,9 +33,27 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
 
 
   # compute percent missing data by pedon/variable
-  pct_missing <- ddply(horizons(s), idname(s), .fun=function(i, v=vars) {
-    round(sapply(i[, v], function(j) length(which(is.na(j)))) / nrow(i) * 100)
+  # this is only used as a summary and returned by function
+  
+  ## TODO: abstract this, useful in other contexts
+  pct_missing <- profileApply(s, frameify = TRUE, FUN = function(i, v = vars) {
+    h <- horizons(i)
+    
+    frac.missing <- sapply(
+      h[, v, drop = FALSE], function(j) {
+        length(which(is.na(j)))
+      }) / nrow(h)
+    
+    res <- data.frame(
+      .id = profile_id(i)[1],
+      t(round(frac.missing * 100)),
+      stringsAsFactors = FALSE
+    )
+    
+    names(res)[1] <- idname(i)
+    return(res)
   })
+  
 
 
   # slice according to rules
@@ -73,10 +94,8 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
     }
   })
 
-  # print level plot
-  print(lp)
-
-  # return missing data percentages by pedon
-  return(pct_missing)
+  
+  # return figure missing data percentages by pedon
+  return(list(fig = lp, summary = pct_missing))
 
 }
