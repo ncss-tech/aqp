@@ -477,18 +477,22 @@ plotSPC <- function(
 		  	else # user-defined column is missing
 			  	this_profile_density <- NULL
 	  	}
+	  } else {
+	    # no user-defined density column
+	    this_profile_density <- NULL
 	  }
-	  else # no user-defined density column
-	  	this_profile_density <- NULL
+	  	
 
     # extract / generate horizon name
     m <- match(name, cn)
-    if(! is.na(m))
+    if(! is.na(m)) {
       this_profile_names <- this_profile_data[[m]]
+    } else {
       # otherwise use an empty string
-    else
       this_profile_names <- ''
-
+    }
+      
+      
 
     ########################################
 	  ## generate baseline horizon geometry ##
@@ -561,8 +565,25 @@ plotSPC <- function(
 	    xx <- c(x.ll, x.lc, x.lr, x.ur, x.uc, x.ul)
 	    
 	    # make polygons based on 1st, 2nd to j-1, last horizon
-	    if(j == 1){
-	      # first horizon
+	    # this doesn't work when there is only a single horizon: 
+	    # * https://github.com/ncss-tech/aqp/issues/189 [sing-horizon glitch fixed below]
+	    
+	    if(j == 1 & nh == 1){
+	      # first horizon of a single-horizon profile
+	      y.ll <- pmin(y0[j] + hdo[j], y0[j]) # cannot exceed y.ll of next horizon
+	      y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
+	      y.ur <- y1[j] # use upper-right verbatim
+	      y.ul <- y1[j] # use upper-left verbatim
+	      # mid-points for horizon topography
+	      y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
+	      y.uc <- y1[j] # use upper-center verbatim
+	      
+	      # assemble y-coords and plot first horizon polygon, without borders
+	      yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+	      polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+	      
+	    } else if(j == 1 & nh > 1){
+	      # first horizon, of several
 	      y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
 	      y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
 	      y.ur <- y1[j] # use upper-right verbatim
