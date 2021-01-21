@@ -21,3 +21,44 @@ test_that("denormalize result is 1:1 with horizons", {
 
   sp1$hz.sitevar <- sp1.hz.sitevar
 })
+
+test_that("round trip normalize/denormalize", {
+  library(aqp)
+  
+  data(sp3)
+  depths(sp3) <- id ~ top + bottom
+  
+  # create site var -- unique at site level
+  site(sp3)$foo <- profile_id(sp3)
+  
+  # denormalize site var to horizon var (leaves foo in site)
+  expect_error({sp3$foo <- denormalize(sp3, "foo")})
+  
+  # need to create a new variable for hz-denorm var
+  sp3$foo2 <- denormalize(sp3, "foo")
+  
+  # inspect
+  plot(sp3, color="foo2")
+  
+  # normalize to site (removes foo2 in horizon)
+  site(sp3) <- ~ foo2
+  
+  # expected TRUE
+  expect_true(all(sp3$foo == sp3$foo2))
+  expect_true(all(sp3$foo2 == profile_id(sp3)))
+  
+  # commence the breakin'
+  
+  # make another `foo3`
+  sp3$foo3 <- denormalize(sp3, "foo")
+  
+  # not appropriate for normalization (1:1 with horizon, not site)
+  sp3$foo4 <- 1:nrow(sp3)
+  
+  # do that SPC dirty...
+  # TODO: fix these
+  expect_silent(site(sp3) <- ~ foo3 + foo4)
+  
+  expect_true(spc_in_sync(sp3)$valid)
+  
+})
