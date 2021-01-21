@@ -51,7 +51,7 @@
 #' p <- sp1[3]
 #' 
 #' # assume boundary sd is 1/12 midpoint of horizon depth
-#'   (i.e. general relationship: SD increases (less well known) with depth)
+#' # (i.e. general relationship: SD increases (less well known) with depth)
 #' sp1 <- mutate(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
 #' quantile(sp1$bound_sd)
 #' p <- sp1[1]
