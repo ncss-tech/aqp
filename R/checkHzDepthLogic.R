@@ -1,51 +1,118 @@
-
-## related issues:
-# ## https://github.com/ncss-tech/aqp/issues/65
-
-## general-purpose hz depth logic check
-# assumes that data are sorted ID, top ASC
-# x: SoilProfileCollection object to check
-checkHzDepthLogic <- function(x) {
+#' Check a SoilProfileCollection object for errors in horizon depths.
+#' 
+#' @description This function inspects a SoilProfileCollection object, looking for four common errors in horizon depths: 
+#' 
+#'   1. bottom depth shallower than top depth
+#'   2. equal top and bottom depth
+#'   3. missing top or bottom depth (e.g. `NA`)
+#'   4. gap or overlap between adjacent horizons
+#'   
+#' @param x SoilProfileCollection object to check
+#' 
+#' @param fast If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: `FALSE`
+#'
+#' @return A `data.frame` containing profile IDs, validity boolean (`valid`) and test results if `fast = FALSE`.
+#' 
+#' The `data.frame` will have as many rows as profiles in `x` (`length(x)`).
+#' 
+#'  - `id` : Profile IDs, named according to `idname(x)`
+#'  - `valid` : boolean, profile passes all of the following tests
+#'    - `depthLogic` : boolean, errors related to depth logic
+#'    - `sameDepth` : boolean, errors related to same top/bottom depths
+#'    - `missingDepth` : boolean, NA in top / bottom depths
+#'    - `overlapOrGap` : boolean, gaps or overlap in adjacent horizons
+#' 
+#' @export
+#' @author D.E. Beaudette, A.G. Brown
+#' @examples
+#' 
+#' ## sample data
+#' 
+#' data(sp3)
+#' depths(sp3) <- id ~ top + bottom
+#' 
+#' # these data should be clean
+#' res <- checkHzDepthLogic(sp3)
+#' 
+#' head(res)
+#' 
+#' # less memory if only concerned about net validity
+#' res <- checkHzDepthLogic(sp3, fast = TRUE)
+#' 
+#' head(res)
+#' 
+checkHzDepthLogic <- function(x, fast = FALSE) {
   
-  # used inside / outside of scope of .check()
-  htb <- horizonDepths(x)
+  stopifnot(inherits(x, 'SoilProfileCollection'))
+  h <- data.table::as.data.table(horizons(x))
+  hzd <- horizonDepths(x)
   idn <- idname(x)
+  hby <- substitute(idn)
+  top <- substitute(hzd[1])
+  bottom <- substitute(hzd[2])
   
-  .check <- function(i) {
-    # extract pieces
-    h <- horizons(i)
+  res <- NULL
+  
+  # data.table R CMD check
+  tests <- NULL
+  
+  if (!fast) {
     
-    # convenience vars
-    ID.i <- h[[idn]][1]
-    .top <- h[[htb[1]]]
-    .bottom <- h[[htb[2]]]
+    res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(eval(top), eval(bottom)))))), by = c(eval(hby))][, 
+               list(tests = tests, valid = all(!tests[[1]])), by = c(eval(hby))]
     
-    # hzTests takes two numeric vectors and returns named logical
-    test <- hzDepthTests(.top, .bottom)
+    res <- cbind(res, data.table::rbindlist(res$tests))
+    res$tests <- NULL
     
-    # pack into DF, 1 row per profile 
-    res <- data.frame(
-      .id=ID.i,
-      depthLogic=test[1], 
-      sameDepth=test[2], 
-      missingDepth=test[3],
-      overlapOrGap=test[4],
-      stringsAsFactors = FALSE
-    )
+  } else {
     
-    # re-name .id -> idname(x)
-    names(res)[1] <- idn
+    res <- h[, all(!hzDepthTests(eval(top), eval(bottom))), by = c(eval(hby))]
+    colnames(res) <- c(idname(x), "valid")
     
-    return(res)
   }
   
-  # iterate over profiles, result is safely packed into a DF ready for splicing into @site
-  res <- profileApply(x, .check, simplify = FALSE, frameify = TRUE)
+  return(as.data.frame(res))
   
-  # add 'valid' flag for simple filtering
-  res[['valid']] <- !apply(res[, -1], 1, any)
-  
-  return(res)
+  # 
+  # # used inside / outside of scope of .check()
+  # htb <- horizonDepths(x)
+  # idn <- idname(x)
+  # 
+  # .check <- function(i) {
+  #   # extract pieces
+  #   h <- horizons(i)
+  #   
+  #   # convenience vars
+  #   ID.i <- h[[idn]][1]
+  #   .top <- h[[htb[1]]]
+  #   .bottom <- h[[htb[2]]]
+  #   
+  #   # hzTests takes two numeric vectors and returns named logical
+  #   test <- hzDepthTests(.top, .bottom)
+  #   
+  #   # pack into DF, 1 row per profile 
+  #   res <- data.frame(
+  #     .id=ID.i,
+  #     depthLogic=test[1], 
+  #     sameDepth=test[2], 
+  #     missingDepth=test[3],
+  #     overlapOrGap=test[4],
+  #     stringsAsFactors = FALSE
+  #   )
+  #   
+  #   # re-name .id -> idname(x)
+  #   names(res)[1] <- idn
+  #   
+  #   return(res)
+  # }
+  # 
+  # # iterate over profiles, result is safely packed into a DF ready for splicing into @site
+  # res <- profileApply(x, .check, simplify = FALSE, frameify = TRUE)
+  # 
+  # # add 'valid' flag for simple filtering
+  # res[['valid']] <- !apply(res[, -1], 1, any)
+  # 
+  # return(res)
 }
 
 #' @title Tests of horizon depth logic
