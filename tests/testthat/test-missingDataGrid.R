@@ -24,11 +24,13 @@ depths(s) <- id ~ top + bottom
 
 test_that("works as expected", {
   
+  v <- c('p1', 'p2', 'p3', 'p4', 'p5')
+  
   # run it
   m <- missingDataGrid(
     s, 
     max_depth = 100, 
-    vars = c('p1', 'p2', 'p3', 'p4', 'p5'), 
+    vars = v, 
     main='Missing Data Fraction'
   )
   
@@ -40,7 +42,7 @@ test_that("works as expected", {
   expect_true(inherits(m$summary, 'data.frame'))
   
   expect_true(nrow(m$summary) == length(s))
-  expect_true(ncol(m$summary) == length(vars) + 1)
+  expect_true(ncol(m$summary) == length(v) + 1)
   
   # select missing data proportions
   # verified
