@@ -565,8 +565,11 @@ plotSPC <- function(
 	    xx <- c(x.ll, x.lc, x.lr, x.ur, x.uc, x.ul)
 	    
 	    # make polygons based on 1st, 2nd to j-1, last horizon
-	    # this doesn't work when there is only a single horizon: 
-	    # * https://github.com/ncss-tech/aqp/issues/189 [sing-horizon glitch fixed below]
+	    
+	    # yikes! https://github.com/ncss-tech/aqp/issues/189
+	    # this doesn't work when: 
+	    # *  there is only a single horizon [now fixed below]
+	    # *  there is a "gap" between adjacent horizons (overlapOrGap = TRUE)
 	    
 	    if(j == 1 & nh == 1){
 	      # first horizon of a single-horizon profile
