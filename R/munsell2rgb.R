@@ -95,7 +95,7 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   value <- sapply(pieces.2, FUN = '[', 1)
   chroma <- sapply(pieces.2, FUN = '[', 2)
   
-  # parse, without conversion
+  # parse, without conversion to numeric / munsell
   if(convertColors == FALSE)
     return(data.frame(hue, value, chroma, stringsAsFactors = FALSE))
 
@@ -426,15 +426,29 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
     warning("'the_chroma' has been rounded to the nearest integer.", call. = FALSE)
   }
   
-  # TODO re-combining the source data into a data.frame is making a new copy / wasting some time
   
   ## join new data with look-up table
-  # this is slow when n > 1000
-  d <- data.frame(hue=the_hue, value=the_value, chroma=the_chroma, stringsAsFactors=FALSE)
-  ## TODO: convert to merge() (~ 30% slower than join)
-  ## TODO: experiment with on-the-fly DT invocation if available
-  res <- join(d, munsell, type = 'left', by = c('hue','value','chroma'))
-
+  # note that value / chroma must be same data type as in `munsell` (numeric)
+  d <- data.frame(
+    hue = the_hue, 
+    value = as.numeric(the_value), 
+    chroma = as.numeric(the_chroma), 
+    stringsAsFactors=FALSE
+  )
+  
+  ## benchmarks:
+  # plyr::join 2x faster than base::merge
+  # data.table::merge (with conversion to/from) 5x faster than base::merge
+  
+  ## TODO: maybe more efficient with keys
+  # round-trip through data.table is still faster
+  d <- as.data.table(d)
+  munsell <- as.data.table(munsell)
+  # join
+  res <- merge(d, munsell, by = c('hue','value','chroma'), all.x = TRUE, sort = FALSE)
+  # back to data.frame
+  res <- as.data.frame(res)
+  
   # reset options:
   options(opt.original)
 

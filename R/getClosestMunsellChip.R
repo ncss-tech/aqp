@@ -58,10 +58,12 @@ getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
   closest.chroma <- ifelse(closest.chroma < 1, 1, closest.chroma)
   
   # optionally convert closest Munsell chips to sRGB
-  if(convertColors)
+  if(convertColors) {
     res <- munsell2rgb(closest.hue, closest.value, closest.chroma, ...)
-  # otherwise return closest chip
-  else
+  } else {
+    # otherwise return closest chip
     res <- paste0(closest.hue, ' ', closest.value, '/', closest.chroma)
+  }
+    
   return(res)
 }
