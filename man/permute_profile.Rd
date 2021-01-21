@@ -33,6 +33,9 @@ permute_profile(
 A SoilProfileCollection with n permutations of p.
 }
 \description{
+"Perturbs" the \strong{boundary between horizons} using a standard deviation thickness. The thickness standard deviation corresponds roughly to the concept of "horizon boundary distinctness." This is arguably "easier" to parameterize from something like a single profile description where boundary distinctness classes (based on vertical distance of transition) are recorded for each horizon.
+}
+\details{
 This method is most "believable" when used to \emph{gently} permute the data, on the order of moving boundaries a few centimeters in either direction. The nice thing about it is it can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example).
 
 If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95\% of the "volume" of the boundary.
@@ -63,6 +66,9 @@ sp1$bound_sd[is.na(sp1$bound_sd)] <- 0
 
 quantile(sp1$bound_sd, na.rm = TRUE)
 p <- sp1[3]
+}
+\seealso{
+\code{\link[=random_profile]{random_profile()}} \code{\link[=sim]{sim()}} \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
 }
 \author{
 Andrew G. Brown
