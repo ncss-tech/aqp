@@ -9,14 +9,14 @@ depths(sp1) <- id ~ top + bottom
 sp1$sitevar <- round(runif(length(sp1)))
 
 test_that("denormalize result is 1:1 with horizons", {
-# use denormalize() to create a mirror of sitevar in the horizon table
-# name the attribute something different (e.g. `hz.sitevar`) to prevent collision with the site attribute
-# the attributes can have the same name but you will then need site() or horizons() to access explicitly
+  # use denormalize() to create a mirror of sitevar in the horizon table
+  # name the attribute something different (e.g. `hz.sitevar`) to prevent collision with the site attribute
+  # the attributes can have the same name but you will then need site() or horizons() to access explicitly
   sp1.hz.sitevar <- denormalize(sp1, 'sitevar')
 
   expect_error(sp1.hz.sitevar <- denormalize(sp1, 'foo'))
 
-# compare number of horizons to number of values in denormalize result
+  # compare number of horizons to number of values in denormalize result
   expect_equal(nrow(sp1), length(sp1.hz.sitevar)) # check that the output is 1:1 with horizon
 
   sp1$hz.sitevar <- sp1.hz.sitevar
@@ -56,9 +56,12 @@ test_that("round trip normalize/denormalize", {
   sp3$foo4 <- 1:nrow(sp3)
   
   # do that SPC dirty...
-  # TODO: fix these
-  expect_silent(site(sp3) <- ~ foo3 + foo4)
+  expect_warning(site(sp3) <- ~ foo3 + foo4)
   
+  # still valid
   expect_true(spc_in_sync(sp3)$valid)
   
+  # didn't do anything
+  expect_equal(length(sp3$foo3), nrow(sp3))
+  expect_equal(length(sp3$foo4), nrow(sp3))
 })
