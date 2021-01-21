@@ -75,7 +75,12 @@ x <- x[order(x$value, x$chroma), ]
 x <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
 
 
-g <- mixtureGrid(x)
+## TODO: profile a single call to mixMunsell -> notice that most of the time is spent outside of distance calc 
+
+
+# Euclidean distance via sweep / colSums: 85 seconds 
+# Gower distance via gower package: 25 seconds
+system.time(g <- mixtureGrid(x))
 plotMixtureGrid(g)
 
 
