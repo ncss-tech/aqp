@@ -76,6 +76,7 @@
 # * 80% of time is spent on sweep() and colSums()
 # * see matrixStats package for a compiled version: colSums2()
 # * https://github.com/HenrikBengtsson/matrixStats
+# * use gower package, compiled code, new dependency -> 20x faster
 
 
 #'
@@ -116,6 +117,10 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
 
   ## TODO
   # sanity checks
+  
+  # sanity check, need this for gower_topn
+  if(!requireNamespace('gower'))
+    stop('package `gower` is required', call.=FALSE)
 
   # can't mix a single color, just give it back at 0 distance
   if (length(unique(x)) == 1) {
@@ -206,25 +211,45 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   
   ## operations on data.table likely faster
   
-  ## for now, using Euclidean distance
-  # D = sqrt(sum( [reference - mixed]^2 ))
+  # Gower distance: looks good, 10-20x faster due to compiled code
+  # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
+  # would make sense to reshape reference data
 
-  # subtract the mixture spectra, element-wise, from reference library
-  # note we are removing the wavelength (1st) column
-  m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
+  # top n matches
+  z <- t(munsell.spectra.wide[, -1])
 
-  # finish the distance calculation
-  m.dist <- sqrt(colSums(m.diff^2))
+  d <- gower::gower_topn(
+    data.frame(rbind(mixed)),
+    data.frame(z),
+    n = n
+  )
 
-  # get the spectra of the closest n munsell chip(s) via sorting ASC
-  m.match <- sort(m.dist)[1:n]
-
-  # compile into data.frame
   res <- data.frame(
-    munsell = names(m.match),
-    distance = m.match,
+    munsell = dimnames(z)[[1]][d$index],
+    distance = d$distance[, 1],
     stringsAsFactors = FALSE
   )
+  
+  
+  # ## slower but no deps, using Euclidean distance
+  # # D = sqrt(sum( [reference - mixed]^2 ))
+  # 
+  # # subtract the mixture spectra, element-wise, from reference library
+  # # note we are removing the wavelength (1st) column
+  # m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
+  # 
+  # # finish the distance calculation
+  # m.dist <- sqrt(colSums(m.diff^2))
+  # 
+  # # get the spectra of the closest n munsell chip(s) via sorting ASC
+  # m.match <- sort(m.dist)[1:n]
+  # 
+  # # compile into data.frame
+  # res <- data.frame(
+  #   munsell = names(m.match),
+  #   distance = m.match,
+  #   stringsAsFactors = FALSE
+  # )
 
   # clean-up row names
   row.names(res) <- NULL

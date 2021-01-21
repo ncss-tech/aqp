@@ -35,5 +35,16 @@ test_that("mixMunsell works as expected", {
 
 })
 
+test_that("multiple matches", {
+  m <- mixMunsell(c('10YR 6/2', '10YR 2/2'), n = 3)
+  
+  # verified results
+  expect_true(nrow(m) == 3)
+  # first match
+  expect_true(m$munsell[1] == '10Y 4/3')
+  expect_true(m$munsell[2] == '5Y 4/2')
+})
+
+
 
 

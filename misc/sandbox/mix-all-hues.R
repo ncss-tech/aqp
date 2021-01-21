@@ -84,10 +84,13 @@ plotColorMixture(c('10YR 8/6', '10YR 2/2'))
 
 mixMunsell(c('10YR 2/4', '10YR 2/4'))
 mixMunsell(c('10YR 2/2', '10YR 2/2'))
+mixMunsell(c('10YR 6/2', '10YR 2/2'))
+
+
 plotColorMixture(c('10YR 6/2', '10YR 2/2'))
+plotColorMixture(c('5B 6/6', '10Y 8/4'))
 
-
-
+plotColorMixture(c('5B 5/10', '5Y 8/8'))
 
 # iterate over all hues @ 6/8
 # result is a character matrix of Munsell chips
