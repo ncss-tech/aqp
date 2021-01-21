@@ -196,7 +196,8 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
     # select the i-th wavelength (row)
     # down-grade to a vector
     vals <- unlist(s[i, ])
-
+    
+    ## TODO: this wastes a lot of time when weights are obvious, move outside of loop
     # aggregate weights by "chip" -- in case length(x) != length(unique(x))
     wagg <- aggregate(w, by = list(chip = x), FUN = sum)
 
@@ -214,10 +215,12 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   # Gower distance: looks good, 10-20x faster due to compiled code
   # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
   # would make sense to reshape reference data
-
-  # top n matches
+  
+  ## TODO: time wasted here
+  # reshape reference spectra: wavelength to columns
   z <- t(munsell.spectra.wide[, -1])
 
+  # top n matches
   d <- gower::gower_topn(
     data.frame(rbind(mixed)),
     data.frame(z),
