@@ -47,7 +47,8 @@ Of course, boundaries are not symmetrical and this is at best an approximation f
 Future implementations may use boundary topography as a second hierarchical level (e.g. trig-based random functions), but think that distinctness captures the "uncertainty" about horizon separation at a specific "point" on the ground (or line in the profile quite well, and the extra variation may be hard to interpret, in general.
 }
 \examples{
-# # example with sp1 (using boundary distinctness)
+
+# example with sp1 (using boundary distinctness)
 data("sp1")
 depths(sp1) <- id ~ top + bottom
 
@@ -66,6 +67,13 @@ sp1$bound_sd[is.na(sp1$bound_sd)] <- 0
 
 quantile(sp1$bound_sd, na.rm = TRUE)
 p <- sp1[3]
+
+# assume boundary sd is 1/12 midpoint of horizon depth
+  (i.e. general relationship: SD increases (less well known) with depth)
+sp1 <- mutate(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
+quantile(sp1$bound_sd)
+p <- sp1[1]
+
 }
 \seealso{
 \code{\link[=random_profile]{random_profile()}} \code{\link[=sim]{sim()}} \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
