@@ -41,7 +41,7 @@ test_that("expected error conditions", {
   expect_error(aggregateColor(x, groups='genhz', col='soil_color', k=NA))
 })
 
-
+## TODO: add a couple more of these
 test_that("manual calculation using CIE2000 and LAB, single profile", {
 
   x <- sp1[1, ]
@@ -69,3 +69,29 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
     expect_equal(test2, '10YR 3/2')
   }
 })
+
+
+test_that("manual calculation using CIE2000 and LAB, single profile", {
+  
+  data(sp3)
+  depths(sp3) <- id ~ top + bottom
+  
+  # single profile
+  x <- sp3[4, ]
+  # group all horizons together
+  site(x)$group <- 'A'
+  
+  # do the work
+  a <- aggregateColor(x, groups = 'group', col = 'soil_color', colorSpace = 'CIE2000')
+  
+  # manually verified
+  expect_true(a$aggregate.data$munsell.hue == '5YR')
+  expect_true(a$aggregate.data$munsell.value == '5')
+  expect_true(a$aggregate.data$munsell.chroma == '5')
+  
+  # TODO: verify weights
+  
+})
+
+
+
