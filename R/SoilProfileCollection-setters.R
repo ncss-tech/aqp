@@ -339,9 +339,6 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   # the horizon data !
   idx <- idx[-match(idname(object), names_attr)]
 
-  # this will break when multiple horizons in the same pedon have different site data!
-  # this seems to work fine in all cases, as we keep the ID column
-  # and it ensures that the result is in the same order as the IDs
   .SD <- NULL
   
   dth <- as.data.table(horizons(object))

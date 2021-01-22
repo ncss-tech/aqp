@@ -23,7 +23,6 @@ test_that("denormalize result is 1:1 with horizons", {
 })
 
 test_that("round trip normalize/denormalize", {
-  library(aqp)
   
   data(sp3)
   depths(sp3) <- id ~ top + bottom
@@ -64,4 +63,15 @@ test_that("round trip normalize/denormalize", {
   # didn't do anything
   expect_equal(length(sp3$foo3), nrow(sp3))
   expect_equal(length(sp3$foo4), nrow(sp3))
+  
+  # try something less diverse and insidious
+  
+  # 10 unique levels, equal length to number of horizons
+  set.seed(100) 
+  superbad <- round(runif(nrow(sp3), 0, length(sp3)))
+  
+  # expect_equal(length(unique(superbad)), 10)
+  
+  horizons(sp3)$notgood <- superbad
+  expect_warning(site(sp3) <- ~ foo3 + notgood)
 })
