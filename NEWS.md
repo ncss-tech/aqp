@@ -1,9 +1,9 @@
-# aqp 1.27 (2021-01-20)
+# aqp 1.27 (2021-01-22)
  * `mixMunsell` now relies on suggested package {gower} for 10-20x speed bump
  * {aqp} no longer imports from {reshape} (less one dependency), all transformations from wide<->long are done via {data.table}
  * methods from {data.table} are now imported by {aqp} (new dependency)
  * Major overhaul of `plotColorQuantiles()`, now using {lattice} graphics
- * New dataset `munequivalent` and method `equivalentMunsellChips` for "equivalent" Munsell chips lookup list based on all pairwise dE00 contrasts for integer "chips" in `aqp::munsell` data set
+ * New dataset `equivalent_munsell` and method `equivalentMunsellChips` for "equivalent" Munsell chips lookup list based on all pairwise dE00 contrasts for integer "chips" in {aqp} `munsell` data set
  * Argillic critical clay contents `crit.clay.argillic` rounded to whole numbers per NSSH Part 614, subpart B, sections 614.13 and 614.14
 
 # aqp 1.26 (2020-11-18)
