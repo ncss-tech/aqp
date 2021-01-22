@@ -344,7 +344,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   dth <- as.data.table(horizons(object))
   idn <- dth[[idname(object)]]
   
-  new_site_data <- .as.data.frame.aqp(dth[, unique(.SD), .SDcols = names_attr, by = list(idn)], aqp_df_class(object))
+  new_site_data <- .as.data.frame.aqp(unique(dth[, .SD, .SDcols = names_attr]), aqp_df_class(object))
   
   if (nrow(new_site_data) != length(object)) {
     warning("One or more horizon columns cannot be normalized to site. Leaving site data unchanged.", call. = FALSE)
