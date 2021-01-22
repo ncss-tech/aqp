@@ -335,22 +335,26 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   names_attr <- names(mf)
   idx <- match(names_attr, horizonNames(object))
 
-  # remove the index to the ID columnm, as we do not want to remove this from
+  # remove the index to the ID column, as we do not want to remove this from
   # the horizon data !
   idx <- idx[-match(idname(object), names_attr)]
 
   # this will break when multiple horizons in the same pedon have different site data!
   # this seems to work fine in all cases, as we keep the ID column
   # and it ensures that the result is in the same order as the IDs
-  new_site_data <- ddply(mf, idname(object),
-      .fun=function(x) {
-	      unique(x[, names_attr, drop = FALSE])
-      }
-  )
-
+  .SD <- NULL
+  
+  dth <- as.data.table(horizons(object))
+  
+  new_site_data <- .as.data.frame.aqp(unique(dth[, .SD, .SDcols = names_attr]), aqp_df_class(object))
+  
+  if (nrow(new_site_data) != length(object)) {
+    warning("One or more horizon columns cannot be normalized to site. Leaving site data unchanged.", call. = FALSE)
+    return(object)
+  }
+  
   # if site data is already present, we don't overwrite/erase it
-  site_data <- merge(object@site, new_site_data, by = idname(object),
-                     all.x = TRUE, sort = FALSE)
+  site_data <- merge(object@site, new_site_data, by = idname(object), all.x = TRUE, sort = FALSE)
 
   # remove the named site data from horizon_data
   h <- object@horizons
