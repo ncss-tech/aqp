@@ -49,6 +49,14 @@ plotSPC(osds, width = 0.3, hz.distinctness.offset = 'hd', hz.topography.offset =
 legend('bottomleft', horiz = TRUE, legend = c('Smooth', 'Wavy', 'Irregular', 'Broken'), lty = 1:4, inset = 0.05, bty = 'n', cex = 0.85)
 
 
+# single horizon test: 
+# https://github.com/ncss-tech/aqp/issues/189
+par(mar = c(0, 0, 0, 1), bg = 'black', fg = 'white')
+plotSPC(osds[, 1], width = 0.3, hz.distinctness.offset = 'hd', hz.topography.offset = 'hzto', cex.id = 0.66, cex.names = 0.66, name = 'name', hz.boundary.lty = 'hzto.lty') 
+
+
+
+
 # keep a single OSD for the demo
 x <- filter(osds, id == 'LEON')
 

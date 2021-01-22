@@ -32,7 +32,7 @@
   ## TODO: 
   ##   use distance matrix via delta-E00 as implemented in farver::compare_colour()
   ##   see recent changes in aggregateSoilColor() for dE00 example
-  # use PAM to cluster, note pamonce=5 used for optimization
+  # use PAM to cluster, note `pamonce=5`` used for optimization
   cl <- pam(x.slices[, -1], k = k, stand = FALSE, pamonce = 5)
   
   # get data
@@ -62,13 +62,13 @@
   # convert back to data.frame
   res <- as.data.frame(res)
   
-  # don't include the id column
-  return(res[, -1])
+  # result is a data.frame with profile ID
+  return(res)
 }
 
 
 # compute LAB coordinates at select percentiles of depth
-.pigments.depths <- function(x, p=c(0.1, 0.5, 0.9)) {
+.pigments.depths <- function(x, p = c(0.1, 0.5, 0.9)) {
   
   # extract just horizons that have color data
   h <- horizons(x)
@@ -117,8 +117,8 @@
   # convert back to data.frame
   res <- as.data.frame(res)
   
-  # don't include the id column
-  return(res[, -1])
+  # result is a data.frame with profile ID
+  return(res)
 }
 
 
@@ -132,6 +132,7 @@
 # x: single profile
 # requires L, pos.A, neg.A, pos.B, neg.B in @horizon
 .pigments.proportions <- function(x, useProportions, pigmentNames) {
+  
   h <- horizons(x)
   dc <- horizonDepths(x)
   hz.thick <- h[[dc[2]]] - h[[dc[1]]]
@@ -145,17 +146,87 @@
   
   ## NOTE: this removes the effect of soil depth
   # convert to proportions
-  if(useProportions)
+  if(useProportions) {
     pigment <- pigment / sum(pigment, na.rm = TRUE)
+  }
   
-  return(pigment)
+  # results as a data.frame for simpler rbinding  
+  res <- data.frame(
+    .id = profile_id(x)[1],
+    t(pigment),
+    stringsAsFactors = FALSE
+  )
+  
+  # reset ID
+  names(res)[1] <- idname(x)
+  
+  return(res)
 }
 
 ## TODO: 
-#   move method-specific arguments to ...
-#   allow for specification of colors via: hex, sRGB, LAB
+#   * move method-specific arguments to ...
+#   * allow for specification of colors via: hex, sRGB, LAB
+#   * data.table optimization
+#   * better documentation!
 
-soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', pam.k=3, RescaleLightnessBy=1, useProportions=TRUE, pigmentNames=c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
+#' @title Soil Profile Color Signatures
+#' @description Generate a color signature for each soil profile in a collection.
+#'
+#' @param spc a `SoilProfileCollection` object
+#' @param r horizon level attribute containing soil color (sRGB) red values
+#' @param g horizon level attribute containing soil color (sRGB) green values
+#' @param b horizon level attribute containing soil color (sRGB) blue values
+#' @param method algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`
+#' @param pam.k number of classes to request from `cluster::pam()`
+#' @param RescaleLightnessBy rescaling factor for CIE LAB L-coordinate
+#' @param useProportions use proportions or quantities, see details
+#' @param pigmentNames names for resulting pigment proportions or quantities
+#'
+#'
+#' @details See the [related tutorial](http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html).
+#' 
+#' @return
+#' 
+#' For the `colorBucket` method, a `data.frame` object containing:
+#' 
+#'  * id column: set according to `idname(spc)`
+#'  * `.white.pigment`: proportion or quantity of CIE LAB L-values
+#'  * `.red.pigment`: proportion or quantity of CIE LAB positive A-values
+#'  * `.green.pigment`: proportion or quantity of CIE LAB negative A-values
+#'  * `.yellow.pigment`: proportion or quantity of CIE LAB positive B-values
+#'  * `.blue.pigment`: proportion or quantity of CIE LAB negative B-values
+#' 
+#' Column names can be adjusted with the `pigmentNames` argument.
+#' 
+#' For the `depthSlices` method ...
+#' 
+#' For the `pam` method ...
+#' 
+#' @references https://en.wikipedia.org/wiki/Lab_color_space
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @seealso \code{\link{munsell2rgb}}
+#' 
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' # trivial example, not very interesting
+#' data(sp1)
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # convert Munsell -> sRGB triplets
+#' rgb.data <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
+#' sp1$r <- rgb.data$r
+#' sp1$g <- rgb.data$g
+#' sp1$b <- rgb.data$b
+#' 
+#' # extract color signature
+#' pig <- soilColorSignature(sp1)
+#' 
+soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = 'colorBucket', pam.k = 3, RescaleLightnessBy = 1, useProportions = TRUE, pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
   
   # warn about methods
   if(! method  %in% c('colorBucket', 'depthSlices', 'pam'))
@@ -164,6 +235,7 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', p
   # extract horizons
   h <- horizons(spc)
   
+  ## TODO: consider using farver to do the work, or LAB in `spc`
   # create LAB colors
   # note: source colors are sRGB
   # note: convertColor() expects a matrix
@@ -191,9 +263,15 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', p
     spc$pos.B <- pos.B
     spc$neg.B <- neg.B
     
-    col.data <- profileApply(spc, .pigments.proportions, useProportions=useProportions, pigmentNames=pigmentNames, simplify = FALSE)
-    col.data <- ldply(col.data)
-    names(col.data)[1] <- idname(spc)
+    # result is a list
+    col.data <- profileApply(
+      spc, 
+      FUN = .pigments.proportions, 
+      useProportions = useProportions, 
+      pigmentNames = pigmentNames, 
+      simplify = FALSE
+    )
+    
   }
   
   # use horizons at depths proportional to percentiles: 0.1, 0.5, 0.9
@@ -202,23 +280,37 @@ soilColorSignature <- function(spc, r='r', g='g', b='b', method='colorBucket', p
     spc$A <- lab.colors[, 2]
     spc$B <- lab.colors[, 3]
     
-    # this is slow
-    col.data <- profileApply(spc, .pigments.depths, simplify = FALSE)
-    col.data <- ldply(col.data)
-    names(col.data)[1] <- idname(spc)
+    ## TODO: optimize
+    # result is a list of data.frames
+    col.data <- profileApply(
+      spc, 
+      FUN = .pigments.depths, 
+      simplify = FALSE
+    )
+    
   }
   
+  # PAM
   if(method == 'pam') {
     spc$L <- lab.colors[, 1]
     spc$A <- lab.colors[, 2]
     spc$B <- lab.colors[, 3]
     
-    # this is slow
-    col.data <- profileApply(spc, .pigments.pam, k=pam.k, simplify = FALSE)
-    col.data <- ldply(col.data)
-    names(col.data)[1] <- idname(spc)
+    ## TODO: optimize
+    # result is a list
+    col.data <- profileApply(
+      spc, 
+      FUN = .pigments.pam, 
+      k = pam.k, 
+      simplify = FALSE
+    )
+    
   }
   
+  # back to data.frame
+  col.data <- do.call('rbind', col.data)
+  # reset rownames
+  row.names(col.data) <- NULL
   
   return(col.data)
 }

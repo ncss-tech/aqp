@@ -1,12 +1,12 @@
 
 #' @title Probabalistic Estimation of Soil Depth within Groups
 #' 
-#' @description Estimate the most-likely depth to contact within a collection of soil profiles.
+#' @description Estimate the most-likely depth to contact within a collection of soil profiles. Consider `getSoilDepthClass` followed by group-wise percentile estimation as a faster alternative.
 #'
 #' @param x a \code{SoilProfileCollection} object
 #' @param groups the name of a site-level attribute that defines groups of profiles within a collection
 #' @param crit.prob probability cuttoff used to determine where the most likely depth to contact will be, e.g. 0.9 translates to 90% of profiles are shallower than this depth
-#' @param name horizon-level attribute where horizon designation is stored
+#' @param name horizon-level attribute where horizon designation is stored, defaults to `hzdesgnname(x)`
 #' @param p a REGEX pattern that matches non-soil genetic horizons
 #' @param ... additional arguments to \code{slab}
 #' 
@@ -26,9 +26,12 @@
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #' 
-#' aggregateSoilDepth(sp1, 'group', crit.prob = 0.9, name='name')
-
-aggregateSoilDepth <- function(x, groups, crit.prob=0.9, name='hzname', p='Cr|R|Cd', ...) {
+#' # set horizon designation in SPC
+#' hzdesgnname(sp1) <- 'name'
+#' 
+#' aggregateSoilDepth(sp1, 'group', crit.prob = 0.9)
+#'
+aggregateSoilDepth <- function(x, groups, crit.prob = 0.9, name = hzdesgnname(x), p = 'Cr|R|Cd', ...) {
   
   # sanity checks:
   # * does the group label variable exist in @site?
@@ -40,15 +43,16 @@ aggregateSoilDepth <- function(x, groups, crit.prob=0.9, name='hzname', p='Cr|R|
     stop('`name` must specify a horizon-level attribute, containing the horizon designation')
   
   # mark soil vs. non-soil horizons
-  x$soil.flag <- rep('soil', times=nrow(x))
+  x$soil.flag <- rep('soil', times = nrow(x))
   x$soil.flag[grep(p, horizons(x)[[name]])] <- 'not-soil'
   
   # convert to factor
-  x$soil.flag <- factor(x$soil.flag, levels=c('soil', 'not-soil'))
+  x$soil.flag <- factor(x$soil.flag, levels = c('soil', 'not-soil'))
   
+  ## TODO: this is the slowest step
   # compute slice-wise probabilities that sum to contributing fraction
   fm <- as.formula(paste0(groups, ' ~ soil.flag'))
-  a.ml.soil <- slab(x, fm, cpm=2, ...)
+  a.ml.soil <- slab(x, fm, cpm = 2, ...)
   
   ## note: this is important when aggregating over several depth classes
   # compute adjusted soil flag probability: cf * Pr(soil)
@@ -58,15 +62,27 @@ aggregateSoilDepth <- function(x, groups, crit.prob=0.9, name='hzname', p='Cr|R|
   crit.prob <- 1 - crit.prob
   
   # extract depth at specific probability of contact
-  depth.prob <- ddply(a.ml.soil, groups, .fun=function(i) {
-    max(i$top[which(i$adj.soil.flag >= crit.prob)])
+  ss <- split(a.ml.soil, a.ml.soil[[groups]])
+  depth.prob <- lapply(ss, function(i) {
+    
+    soil.top <- 0
+    soil.bottom <- max(i$top[which(i$adj.soil.flag >= crit.prob)])
+    
+    res <- data.frame(
+      .id = i[[groups]][1],
+      soil.top,
+      soil.bottom,
+      stringsAsFactors = FALSE
+    )
+    
+    names(res)[1] <- groups
+    return(res)
   })
   
-  # add soil top boundary and fix names
-  names(depth.prob)[2] <- 'soil.bottom'
-  depth.prob$soil.top <- 0
+  # flatten list -> data.frame, reset rownames
+  depth.prob <- do.call('rbind', depth.prob)
+  row.names(depth.prob) <- NULL
   
-  # re-order and return
-  return(depth.prob[, c(groups, 'soil.top', 'soil.bottom')])
+  return(depth.prob)
 }
 

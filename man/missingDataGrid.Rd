@@ -25,10 +25,10 @@ filter.regex = NULL, cols = NULL, ...)
 
 \seealso{\code{\link{slice}}}
 \examples{
-## visualizing missing data
 # 10 random profiles
-require(plyr)
-s <- ldply(1:10, random_profile)
+set.seed(10101)
+s <- lapply(as.character(1:10), random_profile)
+s <- do.call('rbind', s)
 
 # randomly sprinkle some missing data
 s[sample(nrow(s), 5), 'p1'] <- NA
@@ -43,8 +43,13 @@ s[which(s$id == '1'), 'p4'] <- NA
 depths(s) <- id ~ top + bottom
 
 # plot missing data via slicing + levelplot
-missingDataGrid(s, max_depth=100, vars=c('p1', 'p2', 'p3', 'p4', 'p5'), 
-main='Missing Data Fraction')
+missingDataGrid(
+  s, 
+  max_depth = 100, 
+  vars = c('p1', 'p2', 'p3', 'p4', 'p5'), 
+  main='Missing Data Fraction'
+)
+
 }
 
 \keyword{hplots}
