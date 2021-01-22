@@ -206,13 +206,6 @@
 #' Rank-ordering and boundary conditions are enforced on the adjustments.
 #' Failure to converge within \code{maxIter} results in an integer sequence.
 #'
-#'
-#' @param x vector of relative horizontal positions, one for each profile
-#' @return a vector of the same length as \code{x}, preserving rank-ordering
-#' and boundary conditions.
-#' @note This is a very naive function and may fail to converge on a reasonable
-#' solution. SANN would be a much more robust framework.
-#' @author D.E. Beaudette
 #' @keywords manip
 #' @examples
 #'
@@ -317,11 +310,13 @@ explainPlotSPC <- function(x, ...) {
 
 #' Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 #'
-#' @param x vector of horizontal positions
-#' @param thresh threshold
-#'
+#' @param x vector of relative horizontal positions, one for each profile
+#' @return - `findOverlap` a vector of the same length as `x`, preserving rank-ordering and boundary conditions.
+#' @note This is a very naive function and may fail to converge on a reasonable
+#' solution. SANN would be a much more robust framework.
+#' 
 #' @rdname explainPlotSPC
-#' @return A numeric vector
+#' 
 #' @export
 #'
 findOverlap <- function(x, thresh) {
@@ -371,7 +366,6 @@ findOverlap <- function(x, thresh) {
 #' returning integer sequence
 #' @param trace print diagnostics
 #' @rdname explainPlotSPC
-#' @return A numeric vector
 #' @export
 #'
 fixOverlap <- function(x, thresh=0.6, adj=0.2, min.x=0.8, max.x=length(x)+0.2, maxIter=1000, trace=FALSE) {

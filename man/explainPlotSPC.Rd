@@ -49,12 +49,9 @@ positions until affected profiles are farther apart than a given threshold.
 Rank-ordering and boundary conditions are enforced on the adjustments.
 Failure to converge within \code{maxIter} results in an integer sequence.
 
-a vector of the same length as \code{x}, preserving rank-ordering
-and boundary conditions.
-
-A numeric vector
-
-A numeric vector
+\itemize{
+\item \code{findOverlap} a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions.
+}
 }
 \description{
 Create a visual explanation for the many arguments to \code{plotSPC}. Call this function instead of \code{plotSPC}, all objects after \code{x} are passed on to \code{plotSPC}. Nearly all of the figures in the \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} are created with this function.
@@ -109,8 +106,6 @@ explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos, thres=1, adj = 0.2
 \code{\link{plotSPC}}
 }
 \author{
-D.E. Beaudette
-
 D.E. Beaudette
 }
 \keyword{manip}
