@@ -95,21 +95,18 @@ added to silt content. Similarly, if the percent of very fine sand is known
 it should be subtracted from the sand, and added to the silt content.
 }
 \examples{
-
 \donttest{
-
 # example of ssc_to_texcl()
 tex <- expand.grid(sand = 0:100, clay = 0:100)
 tex <- subset(tex, (sand + clay) < 101)
 tex$texcl <- ssc_to_texcl(sand = tex$sand, clay = tex$clay)
 head(tex)
 
-
 # example of texcl_to_ssc(texcl)
 texcl <- c("cos", "s", "fs", "vfs", "lcos", "ls",
-"lfs", "lvfs", "cosl", "sl", "fsl", "vfsl", "l",
-"sil", "si", "scl", "cl", "sicl", "sc", "sic", "c"
-)
+          "lfs", "lvfs", "cosl", "sl", "fsl", "vfsl", "l",
+          "sil", "si", "scl", "cl", "sicl", "sc", "sic", "c"
+          )
 test <- texcl_to_ssc(texcl)
 head(test <- cbind(texcl, test), 10)
 
