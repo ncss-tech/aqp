@@ -342,7 +342,6 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   .SD <- NULL
   
   dth <- as.data.table(horizons(object))
-  idn <- dth[[idname(object)]]
   
   new_site_data <- .as.data.frame.aqp(unique(dth[, .SD, .SDcols = names_attr]), aqp_df_class(object))
   
