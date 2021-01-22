@@ -1,5 +1,30 @@
 # repair an SPC by breaking into pieces and re-assembling
 # likely only used to fix outdated SPC objects that are missing slots
+
+#' Rebuild a SoilProfileCollection object
+#'
+#' Rebuild a SoilProfileCollection object
+#'
+#' Attempt rebuilding a \code{SoilProfileCollection} object by splitting into
+#' components and re-assembling. Likely only used to fix outdated
+#' \code{SoilProfileCollection} objects that are missing slots.
+#'
+#' @param x a \code{SoilProfileCollection} object
+#' @return A valid \code{SoilProfileCollection} object.
+#' @author D.E. Beaudette
+#' @seealso \code{\link{checkSPC}}
+#' Rebuild a SoilProfileCollection object
+#'
+#' Rebuild a SoilProfileCollection object
+#'
+#' Attempt rebuilding a \code{SoilProfileCollection} object by splitting into
+#' components and re-assembling. Likely only used to fix outdated
+#' \code{SoilProfileCollection} objects that are missing slots.
+#'
+#' @param x a \code{SoilProfileCollection} object
+#' @return A valid \code{SoilProfileCollection} object.
+#' @author D.E. Beaudette, A.G. Brown
+#' @seealso \code{\link{checkSPC}}
 rebuildSPC <- function(x) {
 
   # break into pieces as list
