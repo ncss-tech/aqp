@@ -1,5 +1,3 @@
-
-
 #' Textural conversions
 #'
 #' These functions consist of several conversions between sand, silt and clay
@@ -54,10 +52,12 @@
 #' @param sample logical: should ssc be random sampled from the lookup table?
 #' (default: FALSE)
 #'
-#' @return A vector with the results.
+#' @return - `texcl_to_ssc`: A `data.frame` containing columns `"sand"`,`"silt"`, `"clay"`
 #'
 #' @author Stephen Roecker
+#' 
 #' @references Matthew R. Levi, Modified Centroid for Estimating Sand, Silt, and Clay from Soil Texture Class, Soil Science Society of America Journal, 2017, 81(3):578-588, ISSN 1435-0661, \doi{10.2136/sssaj2016.09.0301}.
+#' 
 #' @rdname texture
 #' @keywords manip
 #' @examples
@@ -249,7 +249,7 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
 #' Convert sand, silt and clay to texture class
 #'
 #' @rdname texture
-#' @return A character vector containing texture class
+#' @return  - `ssc_to_texcl`: A `character` vector containing texture class
 #' @export
 #'
 ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = TRUE) {
@@ -319,7 +319,7 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
 #' code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 #' are > 90 percent by volume (default: NULL))
 #' @rdname texture
-#' @return
+#' @return  - `texmod_to_fragvoltot`: A `numeric` vector containing total fragment volume
 #' @export
 texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   # fix for R CMD check
@@ -334,9 +334,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 
 
   # standardize inputs
-  df <- data.frame(texmod = tolower(texmod),
-                   stringsAsFactors = FALSE
-                   )
+  df <- data.frame(texmod = tolower(texmod), stringsAsFactors = FALSE)
   df$rn = row.names(df)
 
 
@@ -397,7 +395,8 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #'
 #' @param fragvoltot vector of rock fragment percentages
 #'
-#' @return A character vector vector
+#' @return - `texture_to_taxpartsize`: a character vector containing `"taxpartsize"` classes
+#' 
 #' @rdname texture
 #'
 #' @export

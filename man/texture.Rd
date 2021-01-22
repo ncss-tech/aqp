@@ -48,13 +48,21 @@ are > 90 percent by volume (default: NULL))}
 \item{fragvoltot}{vector of rock fragment percentages}
 }
 \value{
-A vector with the results.
+\itemize{
+\item \code{texcl_to_ssc}: A \code{data.frame} containing columns \code{"sand"},\code{"silt"}, \code{"clay"}
+}
 
-A character vector containing texture class
+\itemize{
+\item \code{ssc_to_texcl}: A \code{character} vector containing texture class
+}
 
+\itemize{
+\item \code{texmod_to_fragvoltot}: A \code{numeric} vector containing total fragment volume
+}
 
-
-A character vector vector
+\itemize{
+\item \code{texture_to_taxpartsize}: a character vector containing \code{"taxpartsize"} classes
+}
 }
 \description{
 These functions consist of several conversions between sand, silt and clay
