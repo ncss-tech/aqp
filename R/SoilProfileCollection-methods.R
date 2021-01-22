@@ -286,26 +286,26 @@ setMethod(f = 'unique',
   # down-grade to un-named vector of indices
   return(as.vector(u.profiles))
 })
-          
+
 #' @title Subset a SoilProfileCollection with logical expressions
-#' 
+#'
 #' @description \code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
-#' 
+#'
 #' @param x A SoilProfileCollection
 
 #' @param ... Comma-separated set of R expressions that evaluate as TRUE or FALSE. Length for individual expressions matches number of sites OR number of horizons, in \code{object}.
-#' 
+#'
 #' @param greedy Use "greedy" matching for combination of site and horizon level matches? \code{greedy = TRUE} is the union, whereas \code{greedy = FALSE} (default) is the intersection (of site and horizon matches).
-#' 
-#' 
+#'
+#'
 #' @aliases subset
-#' 
+#'
 #' @details In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series. If you need to use the base method after loading aqp, you can use \code{stats::filter} to be explicit about which function you want. We mirror the dplyr package in over-loading the \code{filter} method with a generic that allows for arbitrary number of vectors (\code{...}) to be included in the "filter," which means you may also need to use \code{aqp::filter} or \code{dplyr::filter} as appropriate depending on the order you load packages or your conflict resolution option settings.
-#' 
+#'
 #' @seealso \code{\link{filter}}
-#' 
+#'
 #' @return A SoilProfileCollection.
-#' 
+#'
 #' @author Andrew G. Brown.
 #'
 setMethod("subset", signature(x = "SoilProfileCollection"),
@@ -393,7 +393,7 @@ if (!isGeneric("filter"))
 #' @param .preserve Relevant when the .data input is grouped. Not (yet) implemented for \code{SoilProfileCollection} objects.
 #' @aliases filter
 #' @rdname subset-SoilProfileCollection-method
-setMethod("filter", signature(.data = "SoilProfileCollection"), 
+setMethod("filter", signature(.data = "SoilProfileCollection"),
           function(.data, ..., .preserve = FALSE) {
             # this provides for possible alternate handling of filter() in future
             #  as discussed, the base R verb for this op is subset
@@ -489,11 +489,50 @@ if (!isGeneric("subsetProfiles"))
   setGeneric("subsetProfiles", function(object, s, h, ...)
     standardGeneric("subsetProfiles"))
 
+#' DEPRECATED use subset
+#'
+#' This function is used to subset \code{SoilProfileCollection} objects using
+#' either site-level or horizon-level attributes, or both.
+#'
+#' The \code{s} argument supplies a fully-quoted search criteria for matching
+#' via site or horizon-level attributes. The \code{h} argument supplies a fully-quoted
+#' search criteria for matching via horizon-level attributes. All horizons
+#' associated with a single horizon-level match (i.e. out of several, only a
+#' single horizon matches the search critera) are returned. See examples for
+#' usage.
+#' @name subsetProfiles
+#' @aliases subsetProfiles,SoilProfileCollection-method
+#' @param object object
+#' @param s fully-quoted search criteria for matching
+#' via site-level attributes
+#' @param h fully-quoted search criteria for matching
+#' via horizon-level attributes
+#' @param ... not used
+#'
+#' @return A \code{SoilProfileCollection} class object.
+#' @examples
+#'
+#' # more interesting sample data
+#' data(sp2)
+#' depths(sp2) <- id ~ top + bottom
+#' site(sp2) <- ~ surface
+#'
+#' # subset by integer index, note that this does not re-order the profiles
+#' plot(sp2[1:5, ])
+#'
+#' # generate an integer index via pattern-matching
+#' idx <- grep('modesto', sp2$surface, ignore.case=TRUE)
+#' plot(sp2[idx, ])
+#'
+#' # generate in index via profileApply:
+#' # subset those profiles where: min(ph) < 5.6
+#' idx <- which(profileApply(sp2, function(i) min(i$field_ph, na.rm=TRUE) < 5.6))
+#' plot(sp2[idx, ])
+#'
 setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
-          function(object, s, h, ...) { 
-            
+          function(object, s, h, ...) {
             .Deprecated("subset")
-            
+
             # sanity checks
             if (missing(s) & missing(h))
               stop('must provide either, site or horizon level subsetting criteria',
@@ -529,6 +568,6 @@ setMethod("subsetProfiles", signature(object = "SoilProfileCollection"),
             idx <- match(matching.IDs, object.ids)
 
             # subset SoilProfileCollection
-            return(object[idx,])
+            return(object[idx, ])
           })
 

@@ -48,7 +48,7 @@ aggregateSoilDepth(sp1, 'group', crit.prob = 0.9)
 
 }
 \seealso{
-\code{\link{estimateSoilDepth},\link{slab}}
+\code{\link[=estimateSoilDepth]{estimateSoilDepth()}} \code{\link[=slab]{slab()}}
 }
 \author{
 D.E. Beaudette

@@ -1,6 +1,257 @@
 
 
-# convert sand, silt and clay to texture class
+#' Textural conversions
+#'
+#' These functions consist of several conversions between sand, silt and clay
+#' to texture class and visa versa, textural modifiers to rock fragments, and
+#' grain size composition to the family particle size class.
+#'
+#' These functions are intended to estimate missing values or check existing
+#' values. The \code{ssc_to_texcl()} function uses the same logic as the
+#' particle size estimator calculation in NASIS to classify sand and clay into
+#' texture class. The results are stored in \code{soiltexture} and used by
+#' \code{texcl_to_ssc()} as a lookup table to convert texture class to sand,
+#' silt and clay. The function \code{texcl_to_ssc()} replicates the
+#' functionality described by Levi (2017).
+#'
+#' When \code{sample = TRUE}, the results can be used to estimate within-class,
+#' marginal distributions of sand, silt, and clay fractions. It is recommended
+#' that at least 10 samples be drawn for reasonable estimates.
+#'
+#' Unlike the other functions, \code{texture_to_taxpartsize()} is intended to
+#' be computed on weighted averages within the family particle size control
+#' section. Also recall from the criteria that carbonate clay should be
+#' subtracted from clay content and added to silt content. Similarly, if the
+#' percent of very fine sand is known it should be subtracted from the sand,
+#' and added to the silt content. Unlike the other functions,
+#' \code{texture_to_taxpartsize()} is intended to be computed on weighted
+#' averages within the family particle size control section. Also recall from
+#' the criteria that carbonate clay should be subtracted from clay content and
+#' added to silt content. Similarly, if the percent of very fine sand is known
+#' it should be subtracted from the sand, and added to the silt content.
+
+#' @param texcl vector of texture classes than conform to the USDA code
+#' conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)
+#'
+#' @param clay vector of clay percentages#'
+#' @param sand vector of sand percentages
+#'
+#' @param fragvoltot vector of rock fragment percentages
+#' @param texmod vector of textural modifiers that conform to the USDA code
+#' convenctions (e.g. gr|GR, grv|GRV)
+#'
+#' @param lieutex vector of in lieu of texture terms that conform to the USDA
+#' code convenctions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
+#' are > 90 percent by volume (default: NULL))
+#'
+#' @param as.is logical: should character vectors be converted to factors?
+#' (default: TRUE)
+#'
+#' @param droplevels logical: indicating whether to drop unused levels in
+#' factors. This is useful when the results have a large number of unused
+#' classes, which can waste space in tables and figures.
+
+#' @param sample logical: should ssc be random sampled from the lookup table?
+#' (default: FALSE)
+#'
+#' @return A vector with the results.
+#'
+#' @author Stephen Roecker
+#' @references Matthew R. Levi, Modified Centroid for Estimating Sand, Silt, and Clay from Soil Texture Class, Soil Science Society of America Journal, 2017, 81(3):578-588, ISSN 1435-0661, \doi{10.2136/sssaj2016.09.0301}.
+#' @rdname texture
+#' @keywords manip
+#' @examples
+#'
+#' \donttest{
+#'
+#' # example of ssc_to_texcl()
+#' tex <- expand.grid(sand = 0:100, clay = 0:100)
+#' tex <- subset(tex, (sand + clay) < 101)
+#' tex$texcl <- ssc_to_texcl(sand = tex$sand, clay = tex$clay)
+#' head(tex)
+#'
+#'
+#' # example of texcl_to_ssc(texcl)
+#' texcl <- c("cos", "s", "fs", "vfs", "lcos", "ls",
+#' "lfs", "lvfs", "cosl", "sl", "fsl", "vfsl", "l",
+#' "sil", "si", "scl", "cl", "sicl", "sc", "sic", "c"
+#' )
+#' test <- texcl_to_ssc(texcl)
+#' head(test <- cbind(texcl, test), 10)
+#'
+#'
+#' # example of texcl_to_ssc(texcl, clay)
+#' data(soiltexture)
+#' st <- soiltexture$values
+#' idx <- sample(1:length(st$texcl), 10)
+#' st <- st[idx, ]
+#' ssc <- texcl_to_ssc(texcl = st$texcl)
+#' head(cbind(texcl = st$texcl, clay = ssc$clay))
+#'
+#'
+#' # example of texmod_to_fragvoltol()
+#' frags <- c("gr", "grv", "grx", "pgr", "pgrv", "pgrx")
+#' head(texmod_to_fragvoltot(frags))
+#'
+#'
+#' # example of texture_to_taxpartsize()
+#' tex <- data.frame(texcl = c("c", "cl", "l", "ls", "s"),
+#'                   clay  = c(55, 33, 18, 6, 3),
+#'                   sand  = c(20, 33, 42, 82, 93),
+#'                   fragvoltot = c(35, 15, 34, 60, 91))
+#' tex$fpsc <- texture_to_taxpartsize(texcl = tex$texcl,
+#'                                    clay = tex$clay,
+#'                                    sand = tex$sand,
+#'                                    fragvoltot = tex$fragvoltot)
+#' head(tex)
+#'
+#'
+#' # example of texture_to_taxpartsize() with carbonate clay and very fine sand
+#' carbclay <- rnorm(5, 2, 3)
+#' vfs <- rnorm(5, 10, 3)
+#' st$fpsc <- texture_to_taxpartsize(texcl = tex$texcl,
+#'                                   clay = tex$clay - carbclay,
+#'                                   sand = tex$sand - vfs,
+#'                                   fragvoltot = tex$fragvoltot)
+#' head(tex)
+#'
+#'
+#' # example of sample = TRUE
+#' texcl <- rep(c("cl", "sil", "sl"), 10)
+#' ssc1 <- cbind(texcl, texcl_to_ssc(texcl = texcl, sample = FALSE))
+#' ssc2 <- cbind(texcl, texcl_to_ssc(texcl = texcl, sample = TRUE))
+#' ssc1$sample <- FALSE
+#' ssc2$sample <- TRUE
+#' ssc  <- rbind(ssc1, ssc2)
+#' aggregate(clay ~ sample + texcl, data = ssc, summary)
+#' }
+texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
+  # fix for R CMD check
+  #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
+  soiltexture <- NULL
+
+  # clay is not NULL
+  clay_not_null <- all(!is.null(clay))
+  clay_is_null  <- !clay_not_null
+
+  # standardize the inputs
+  df <- data.frame(texcl = tolower(as.character(texcl)),
+                   stringsAsFactors = FALSE
+                   )
+  if (clay_not_null) {
+    df$clay <- as.integer(round(clay))
+  }
+  df$rn <- row.names(df)
+
+
+  load(system.file("data/soiltexture.rda", package="aqp")[1])
+
+
+  # check for texcl that don't match
+  idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
+  if (any(idx)) {
+    warning("not all the user supplied texcl values match the lookup table")
+  }
+
+
+  # check clay values within texcl
+  if (clay_not_null) {
+    clay_not_na <- !is.na(df$clay)
+
+    idx <- paste(df$texcl[clay_not_na], df$clay[clay_not_na]) %in% paste(soiltexture$values$texcl, soiltexture$values$clay)
+
+    if (any(!idx)) {
+      warning("not all the user supplied clay values fall within the texcl")
+    }
+  }
+
+
+  # check clay ranges 0-100
+  idx <- clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)
+  if (idx) {
+    warning("some clay records < 0 or > 100%")
+  }
+
+
+  # convert fine sand classes to their generic counterparts
+  df <- within(df, {
+    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
+    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
+    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
+  })
+
+
+  # if clay is present
+  if (clay_not_null & sample == FALSE) {
+
+    st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
+    st$silt <- 100 - st$clay - st$sand
+
+    # some clay present (compute clay weighted averages)
+    idx <- is.na(df$clay)
+     if (any(idx)) {
+       df_na <- merge(df[idx, c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)[c("texcl", "clay", "rn")]
+       df[idx, ] <- df_na
+     }
+
+    df <- merge(df[c("texcl", "clay", "rn")], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
+  } else {
+    # clay missing (use average)
+    df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
+  }
+
+
+  # randomly sample ssc from texcl lookup table
+  if (sample == TRUE) {
+
+    if (clay_is_null) df$clay <- NA
+
+    split(df, df$texcl, drop = TRUE) ->.;
+    lapply(., function(x) {
+
+      st    <- soiltexture$values
+
+      # clay present
+      x$idx <- is.na(x$clay)
+      x1 <- x[x$idx == FALSE, ]
+      x2 <- x[x$idx == TRUE,  ]
+
+      if (clay_not_null) {
+        temp1 <- st[st$texcl == x1$texcl[1] &
+                    st$clay %in% unique(x1$clay),
+                    ]
+        temp1 <- temp1[sample(1:nrow(temp1), size = nrow(x1), replace = TRUE), ]
+        temp1 <- cbind(x1[x1$idx == FALSE, c("rn", "texcl")], temp1[c("clay", "sand")])
+      } else temp1 <- NULL
+
+      # clay missing
+      temp2 <- st[st$texcl == x2$texcl[1], ]
+      temp2 <- temp2[sample(1:nrow(temp2), size = nrow(x2), replace = TRUE), ]
+      temp2 <- cbind(x2[x2$idx == TRUE, c("rn", "texcl")], temp2[c("clay", "sand")])
+
+      return(rbind(temp1, temp2))
+    }) ->.;
+    do.call("rbind", .) -> df
+    df$silt <- 100 - df$clay - df$sand
+    row.names(df) <- NULL
+  }
+
+
+  # standardize outputs
+  vars <- c("sand", "silt", "clay")
+  df <- df[(order(as.integer(df$rn))), vars]
+  df$rn    <- NULL
+  df$texcl <- NULL
+
+  return(df)
+}
+
+#' Convert sand, silt and clay to texture class
+#'
+#' @rdname texture
+#' @return A character vector containing texture class
+#' @export
+#'
 ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = TRUE) {
   # fix for R CMD check:
   #  ssc_to_texcl: no visible binding for global variable ‘silt’
@@ -17,12 +268,12 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
   df <- data.frame(sand = as.integer(round(sand)),
                    clay = as.integer(round(clay)),
                    stringsAsFactors = FALSE
-                   )
+  )
   df$silt <- 100 - df$clay - df$sand
-  
+
 
   ## TODO: this needs some more work: sum will always be 100, but silt-by-difference may be illogical
-  
+
   # # check sand, silt and clay sum to 100
   # idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
   # if (any(idx) & any(complete.cases(df[c("sand", "clay")]))) {
@@ -59,133 +310,17 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
   return(df$texcl)
 }
 
-
-
-# impute sand, silt, and clay with texcl averages
-texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
-  # fix for R CMD check
-  #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
-  soiltexture <- NULL
-
-  # clay is not NULL
-  clay_not_null <- all(!is.null(clay))
-  clay_is_null  <- !clay_not_null
-
-  # standardize the inputs
-  df <- data.frame(texcl = tolower(as.character(texcl)),
-                   stringsAsFactors = FALSE
-                   )
-  if (clay_not_null) {
-    df$clay <- as.integer(round(clay))
-  }
-  df$rn <- row.names(df)
-
-
-  load(system.file("data/soiltexture.rda", package="aqp")[1])
-
-
-  # check for texcl that don't match
-  idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
-  if (any(idx)) {
-    warning("not all the user supplied texcl values match the lookup table")
-  }
-  
-  
-  # check clay values within texcl
-  if (clay_not_null) {
-    clay_not_na <- !is.na(df$clay)
-    
-    idx <- paste(df$texcl[clay_not_na], df$clay[clay_not_na]) %in% paste(soiltexture$values$texcl, soiltexture$values$clay)
-    
-    if (any(!idx)) {
-      warning("not all the user supplied clay values fall within the texcl")
-    }
-  }
-  
-
-  # check clay ranges 0-100
-  idx <- clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)
-  if (idx) {
-    warning("some clay records < 0 or > 100%")
-  }
-  
-  
-  # convert fine sand classes to their generic counterparts
-  df <- within(df, {
-    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
-    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
-    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
-  })
-  
-
-  # if clay is present
-  if (clay_not_null & sample == FALSE) {
-
-    st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
-    st$silt <- 100 - st$clay - st$sand
-
-    # some clay present (compute clay weighted averages)
-    idx <- is.na(df$clay)
-     if (any(idx)) {
-       df_na <- merge(df[idx, c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)[c("texcl", "clay", "rn")]
-       df[idx, ] <- df_na
-     }
-
-    df <- merge(df[c("texcl", "clay", "rn")], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
-  } else {
-    # clay missing (use average)
-    df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
-  }
-  
-  
-  # randomly sample ssc from texcl lookup table 
-  if (sample == TRUE) {
-    
-    if (clay_is_null) df$clay <- NA
-    
-    split(df, df$texcl, drop = TRUE) ->.;
-    lapply(., function(x) {
-      
-      st    <- soiltexture$values
-      
-      # clay present
-      x$idx <- is.na(x$clay)
-      x1 <- x[x$idx == FALSE, ]
-      x2 <- x[x$idx == TRUE,  ]
-      
-      if (clay_not_null) {
-        temp1 <- st[st$texcl == x1$texcl[1] &
-                    st$clay %in% unique(x1$clay), 
-                    ]
-        temp1 <- temp1[sample(1:nrow(temp1), size = nrow(x1), replace = TRUE), ]
-        temp1 <- cbind(x1[x1$idx == FALSE, c("rn", "texcl")], temp1[c("clay", "sand")])
-      } else temp1 <- NULL
-      
-      # clay missing
-      temp2 <- st[st$texcl == x2$texcl[1], ]
-      temp2 <- temp2[sample(1:nrow(temp2), size = nrow(x2), replace = TRUE), ]
-      temp2 <- cbind(x2[x2$idx == TRUE, c("rn", "texcl")], temp2[c("clay", "sand")])
-      
-      return(rbind(temp1, temp2))
-    }) ->.;
-    do.call("rbind", .) -> df
-    df$silt <- 100 - df$clay - df$sand
-    row.names(df) <- NULL
-  }
-  
-  
-  # standardize outputs
-  vars <- c("sand", "silt", "clay")
-  df <- df[(order(as.integer(df$rn))), vars]
-  df$rn    <- NULL
-  df$texcl <- NULL
-
-  return(df)
-}
-
-
-
-# modifier to fragvoltot
+#' Convert from fragment modifier to estimated total volume
+#'
+#' @param texmod vector of textural modifiers that conform to the USDA code
+#' conventions (e.g. gr|GR, grv|GRV)
+#'
+#' @param lieutex vector of in lieu of texture terms that conform to the USDA
+#' code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
+#' are > 90 percent by volume (default: NULL))
+#' @rdname texture
+#' @return
+#' @export
 texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   # fix for R CMD check
   #  texmod_to_fragvoltot: no visible binding for global variable ‘soiltexture’
@@ -252,9 +387,21 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   return(df)
 }
 
-
-
-# convert sand, silt and clay to the family particle size class
+#' Convert sand, silt and clay to the family particle size class
+#'
+#' @param texcl vector of texture classes than conform to the USDA code
+#' conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)
+#'
+#' @param clay vector of clay percentages#'
+#' @param sand vector of sand percentages
+#'
+#' @param fragvoltot vector of rock fragment percentages
+#'
+#' @return A character vector vector
+#' @rdname texture
+#'
+#' @export
+#'
 texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL) {
 
   # check lengths

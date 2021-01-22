@@ -81,7 +81,7 @@ plotSPC(sp6, color = 'hex')
 
 
 ## 4. multiple Pantone colors matching a single Munsell color
-# 
+#
 colors <- pms.munsell.lut[pms.munsell.lut$munsell == '5YR 5/5', ]
 colors <- colors[order(colors$dE00), ]
 

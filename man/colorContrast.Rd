@@ -48,7 +48,7 @@ colorContrast('10YR 3/3', '7.5YR 3/3')
 
 # highly contrasting colors
 # http://colour.granjow.net/fabercastell-polychromos.html
-colorContrastPlot('10B 4/13', '10YR 10/15', 
+colorContrastPlot('10B 4/13', '10YR 10/15',
 labels = c('helioblue-reddish', 'light cadmium yellow')
 )
 
