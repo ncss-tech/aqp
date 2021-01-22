@@ -339,14 +339,12 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   # the horizon data !
   idx <- idx[-match(idname(object), names_attr)]
 
-  # this will break when multiple horizons in the same pedon have different site data!
-  # this seems to work fine in all cases, as we keep the ID column
-  # and it ensures that the result is in the same order as the IDs
   .SD <- NULL
   
   dth <- as.data.table(horizons(object))
+  idn <- dth[[idname(object)]]
   
-  new_site_data <- .as.data.frame.aqp(unique(dth[, .SD, .SDcols = names_attr]), aqp_df_class(object))
+  new_site_data <- .as.data.frame.aqp(dth[, unique(.SD), .SDcols = names_attr, by = list(idn)], aqp_df_class(object))
   
   if (nrow(new_site_data) != length(object)) {
     warning("One or more horizon columns cannot be normalized to site. Leaving site data unchanged.", call. = FALSE)
