@@ -200,7 +200,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   
   # return
   if(test_spc){
-    return(object)
+    return(suppressMessages(rebuildSPC(object))) # TODO: this is protection from missing-data/ID offset
   } else {
     return(h)
   }
