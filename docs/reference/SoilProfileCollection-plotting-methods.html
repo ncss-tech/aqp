@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,57 +120,57 @@
     <p>Generate a diagram of soil profile sketches from a <code>SoilProfileCollection</code> object. The <a href='https://ncss-tech.github.io/AQP/aqp/aqp-intro.html'>Introduction to SoilProfileCollection Objects tutorial</a> contains many examples and discussion of the large number of arguments to this function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotSPC</span>(
-  <span class='kw'>x</span>,
-  color = <span class='st'>"soil_color"</span>,
-  width = <span class='fl'>0.2</span>,
-  name = <span class='kw'>NULL</span>,
-  name.style = <span class='st'>"right-center"</span>,
-  label = <span class='fu'><a href='idname.html'>idname</a></span>(<span class='kw'>x</span>),
-  hz.depths = <span class='fl'>FALSE</span>,
-  alt.label = <span class='kw'>NULL</span>,
-  alt.label.col = <span class='st'>"black"</span>,
-  cex.names = <span class='fl'>0.5</span>,
-  cex.depth.axis = <span class='kw'>cex.names</span>,
-  cex.id = <span class='kw'>cex.names</span> <span class='op'>+</span> (<span class='fl'>0.2</span> <span class='op'>*</span> <span class='kw'>cex.names</span>),
-  font.id = <span class='fl'>2</span>,
-  print.id = <span class='fl'>TRUE</span>,
-  id.style = <span class='st'>"auto"</span>,
-  plot.order = <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>x</span>),
-  relative.pos = <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>x</span>),
-  add = <span class='fl'>FALSE</span>,
-  scaling.factor = <span class='fl'>1</span>,
-  y.offset = <span class='fl'>0</span>,
-  x.idx.offset = <span class='fl'>0</span>,
-  n = <span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>x</span>),
-  max.depth = <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/is.finite.html'>is.infinite</a></span>(<span class='fu'><a href='max.html'>max</a></span>(<span class='kw'>x</span>)), <span class='fl'>200</span>, <span class='fu'><a href='max.html'>max</a></span>(<span class='kw'>x</span>)),
-  n.depth.ticks = <span class='fl'>5</span>,
-  shrink = <span class='fl'>FALSE</span>,
-  shrink.cutoff = <span class='fl'>3</span>,
-  abbr = <span class='fl'>FALSE</span>,
-  abbr.cutoff = <span class='fl'>5</span>,
-  divide.hz = <span class='fl'>TRUE</span>,
-  hz.distinctness.offset = <span class='kw'>NULL</span>,
-  hz.topography.offset = <span class='kw'>NULL</span>,
-  hz.boundary.lty = <span class='kw'>NULL</span>,
-  axis.line.offset = <span class='op'>-</span><span class='fl'>2.5</span>,
-  plot.depth.axis = <span class='fl'>TRUE</span>,
-  density = <span class='kw'>NULL</span>,
-  col.label = <span class='kw'>color</span>,
-  col.palette = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#5E4FA2"</span>, <span class='st'>"#3288BD"</span>, <span class='st'>"#66C2A5"</span>, <span class='st'>"#ABDDA4"</span>, <span class='st'>"#E6F598"</span>, <span class='st'>"#FEE08B"</span>,
-    <span class='st'>"#FDAE61"</span>, <span class='st'>"#F46D43"</span>, <span class='st'>"#D53E4F"</span>, <span class='st'>"#9E0142"</span>),
-  col.palette.bias = <span class='fl'>1</span>,
-  col.legend.cex = <span class='fl'>1</span>,
-  n.legend = <span class='fl'>8</span>,
-  lwd = <span class='fl'>1</span>,
-  lty = <span class='fl'>1</span>,
-  default.color = <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.95</span>),
-  <span class='kw'>...</span>
-)
+    <pre class="usage"><span class='fu'>plotSPC</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  color <span class='op'>=</span> <span class='st'>"soil_color"</span>,
+  width <span class='op'>=</span> <span class='fl'>0.2</span>,
+  name <span class='op'>=</span> <span class='cn'>NULL</span>,
+  name.style <span class='op'>=</span> <span class='st'>"right-center"</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='idname.html'>idname</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  hz.depths <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  alt.label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  alt.label.col <span class='op'>=</span> <span class='st'>"black"</span>,
+  cex.names <span class='op'>=</span> <span class='fl'>0.5</span>,
+  cex.depth.axis <span class='op'>=</span> <span class='va'>cex.names</span>,
+  cex.id <span class='op'>=</span> <span class='va'>cex.names</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>0.2</span> <span class='op'>*</span> <span class='va'>cex.names</span><span class='op'>)</span>,
+  font.id <span class='op'>=</span> <span class='fl'>2</span>,
+  print.id <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  id.style <span class='op'>=</span> <span class='st'>"auto"</span>,
+  plot.order <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  relative.pos <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  add <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  scaling.factor <span class='op'>=</span> <span class='fl'>1</span>,
+  y.offset <span class='op'>=</span> <span class='fl'>0</span>,
+  x.idx.offset <span class='op'>=</span> <span class='fl'>0</span>,
+  n <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  max.depth <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/is.finite.html'>is.infinite</a></span><span class='op'>(</span><span class='fu'><a href='max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>200</span>, <span class='fu'><a href='max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>,
+  n.depth.ticks <span class='op'>=</span> <span class='fl'>5</span>,
+  shrink <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  shrink.cutoff <span class='op'>=</span> <span class='fl'>3</span>,
+  abbr <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  abbr.cutoff <span class='op'>=</span> <span class='fl'>5</span>,
+  divide.hz <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  hz.distinctness.offset <span class='op'>=</span> <span class='cn'>NULL</span>,
+  hz.topography.offset <span class='op'>=</span> <span class='cn'>NULL</span>,
+  hz.boundary.lty <span class='op'>=</span> <span class='cn'>NULL</span>,
+  axis.line.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2.5</span>,
+  plot.depth.axis <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  density <span class='op'>=</span> <span class='cn'>NULL</span>,
+  col.label <span class='op'>=</span> <span class='va'>color</span>,
+  col.palette <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#5E4FA2"</span>, <span class='st'>"#3288BD"</span>, <span class='st'>"#66C2A5"</span>, <span class='st'>"#ABDDA4"</span>, <span class='st'>"#E6F598"</span>, <span class='st'>"#FEE08B"</span>,
+    <span class='st'>"#FDAE61"</span>, <span class='st'>"#F46D43"</span>, <span class='st'>"#D53E4F"</span>, <span class='st'>"#9E0142"</span><span class='op'>)</span>,
+  col.palette.bias <span class='op'>=</span> <span class='fl'>1</span>,
+  col.legend.cex <span class='op'>=</span> <span class='fl'>1</span>,
+  n.legend <span class='op'>=</span> <span class='fl'>8</span>,
+  lwd <span class='op'>=</span> <span class='fl'>1</span>,
+  lty <span class='op'>=</span> <span class='fl'>1</span>,
+  default.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.95</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'>## S4 method for signature 'SoilProfileCollection,ANY'</span>
 <span class='co'>## note: y argument in generic definition is not currently used</span>
-<span class='fu'>plot</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -273,7 +273,7 @@
     </tr>
     <tr>
       <th>shrink</th>
-      <td><p>logical, reduce character scaling for 'long' horizon by 80% ?</p></td>
+      <td><p>logical, reduce character scaling for 'long' horizon by 80%?</p></td>
     </tr>
     <tr>
       <th>shrink.cutoff</th>
@@ -353,19 +353,19 @@
     </tr>
     <tr>
       <th>y</th>
-      <td><p>[not used]</p></td>
+      <td><p>(not used)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Depth limits (<code>max.depth</code>) and number of depth ticks (<code>n.depth.ticks</code>) are *suggestions* to the <code><a href='https://rdrr.io/r/base/pretty.html'>pretty</a></code> function. You may have to tinker with both parameters to get what you want.</p>
+    <p>Depth limits (<code>max.depth</code>) and number of depth ticks (<code>n.depth.ticks</code>) are <em>suggestions</em> to the <code><a href='https://rdrr.io/r/base/pretty.html'>pretty</a></code> function. You may have to tinker with both parameters to get what you want.</p>
 <p>The 'side' <code>id.style</code> is useful when plotting a large collection of profiles, and/or, when profile IDs are long.</p>
 <p>If the column containing horizon designations is not specified (the <code>name</code> argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations.</p>
 <p>The <code>color</code> argument can either name a column containing R-compatible colors, possibly created via <code><a href='munsell2rgb.html'>munsell2rgb</a></code>, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.</p>
 <p>Adjustments to the legend can be specified via <code>col.label</code> (legend title), <code>col.palette</code> (palette of colors, automatically expanded), <code>col.legend.cex</code> (legend scaling), and <code>n.legend</code> (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, <code>plotSPC</code> will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.</p>
 <p>Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via <code>relative.pos</code> argument. This should be a vector of positions within {1,n} that are used for horizontal placement. Default values are <code>1:length(x)</code>. Care must be taken when both <code>plot.order</code> and <code>relative.pos</code> are used simultaneously: <code>relative.pos</code> specifies horizontal placement after sorting. <code>addDiagnosticBracket</code> and <code>addVolumeFraction</code> use the <code>relative.pos</code> values for subsequent annotation.</p>
-<p>Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with <code><a href='fixOverlap.html'>fixOverlap(pos)</a></code>, where <code>pos</code> is the original vector of relative positions.</p>
+<p>Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with <code><a href='findOverlap.html'>fixOverlap(pos)</a></code>, where <code>pos</code> is the original vector of relative positions.</p>
 <p>The <code>x.idx.offset</code> argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different <code>SoilProfileCollection</code> objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -376,7 +376,7 @@
 Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='fixOverlap.html'>fixOverlap</a>, <a href='explainPlotSPC.html'>explainPlotSPC</a>, <a href='SoilProfileCollection.html'>SoilProfileCollection-class</a>, <a href='https://rdrr.io/r/base/pretty.html'>pretty</a>, <a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a>, <a href='addBracket.html'>addBracket</a>, <a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
+    <div class='dont-index'><p><code><a href='findOverlap.html'>fixOverlap</a>, <a href='explainPlotSPC.html'>explainPlotSPC</a>, <a href='SoilProfileCollection.html'>SoilProfileCollection-class</a>, <a href='https://rdrr.io/r/base/pretty.html'>pretty</a>, <a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a>, <a href='addBracket.html'>addBracket</a>, <a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>
@@ -384,73 +384,73 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
 <span class='co'># usually best to adjust margins</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># add color vector</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># plot profiles</span>
-<span class='fu'>plot</span>(<span class='kw'>sp1</span>, id.style=<span class='st'>'side'</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp1</span>, id.style<span class='op'>=</span><span class='st'>'side'</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># title, note line argument:</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='st'>'Sample Data 1'</span>, line=<span class='fl'>1</span>, cex.main=<span class='fl'>0.75</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span><span class='op'>(</span><span class='st'>'Sample Data 1'</span>, line<span class='op'>=</span><span class='fl'>1</span>, cex.main<span class='op'>=</span><span class='fl'>0.75</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># plot profiles without horizon-line divisions</span>
-<span class='fu'>plot</span>(<span class='kw'>sp1</span>, divide.hz=<span class='fl'>FALSE</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp1</span>, divide.hz<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># add dashed lines illustrating horizon boundary distinctness</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hzD</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>bound_distinct</span>)
-<span class='fu'>plot</span>(<span class='kw'>sp1</span>, hz.distinctness.offset=<span class='st'>'hzD'</span>)
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>hzD</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_distinct</span><span class='op'>)</span>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp1</span>, hz.distinctness.offset<span class='op'>=</span><span class='st'>'hzD'</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># plot horizon color according to some property</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'>plot</span>(<span class='kw'>sp4</span>, color=<span class='st'>'clay'</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp4</span>, color<span class='op'>=</span><span class='st'>'clay'</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-4.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># another example</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>surface</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>surface</span>
 
 <span class='co'># label with site-level attribute: `surface`</span>
-<span class='fu'>plot</span>(<span class='kw'>sp2</span>, label=<span class='st'>'surface'</span>, plot.order=<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>surface</span>))
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp2</span>, label<span class='op'>=</span><span class='st'>'surface'</span>, plot.order<span class='op'>=</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>$</span><span class='va'>surface</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-5.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># example using a categorical attribute</span>
-<span class='fu'>plot</span>(<span class='kw'>sp2</span>, color = <span class='st'>"plasticity"</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp2</span>, color <span class='op'>=</span> <span class='st'>"plasticity"</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-6.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># plot two SPC objects in the same figure</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># plot the first SPC object and</span>
 <span class='co'># allocate space for the second SPC object</span>
-<span class='fu'>plot</span>(<span class='kw'>sp1</span>, n=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>) <span class='op'>+</span> <span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp2</span>))
-</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='input'><span class='co'># plot the second SPC, starting from the first empty space</span>
-<span class='fu'>plot</span>(<span class='kw'>sp2</span>, x.idx.offset=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>), add=<span class='fl'>TRUE</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp1</span>, n<span class='op'>=</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='input'><span class='co'># plot the second SPC, starting from the first empty space</span>
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp2</span>, x.idx.offset<span class='op'>=</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>, add<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-7.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'>##</span>
 <span class='co'>## demonstrate adaptive legend</span>
 <span class='co'>##</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># make some fake categorical data</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp3</span>)<span class='op'>$</span><span class='kw'>fake.data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>letters</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>15</span>], size = <span class='fu'><a href='nrow.html'>nrow</a></span>(<span class='kw'>sp3</span>), replace=<span class='fl'>TRUE</span>)
+<span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>$</span><span class='va'>fake.data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>15</span><span class='op'>]</span>, size <span class='op'>=</span> <span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>, replace<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># better margins</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># note that there are enough colors for 15 classes (vs. previous limit of 10)</span>
 <span class='co'># note that the legend is split into 2 rows when length(classes) &gt; n.legend argument</span>
-<span class='fu'>plot</span>(<span class='kw'>sp3</span>, color=<span class='st'>'fake.data'</span>, name=<span class='st'>'fake.data'</span>, cex.names=<span class='fl'>0.8</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp3</span>, color<span class='op'>=</span><span class='st'>'fake.data'</span>, name<span class='op'>=</span><span class='st'>'fake.data'</span>, cex.names<span class='op'>=</span><span class='fl'>0.8</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-8.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># make enough room in a single legend row</span>
-<span class='fu'>plot</span>(<span class='kw'>sp3</span>, color=<span class='st'>'fake.data'</span>, name=<span class='st'>'fake.data'</span>, cex.names=<span class='fl'>0.8</span>, n.legend=<span class='fl'>15</span>)
+<span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp3</span>, color<span class='op'>=</span><span class='st'>'fake.data'</span>, name<span class='op'>=</span><span class='st'>'fake.data'</span>, cex.names<span class='op'>=</span><span class='fl'>0.8</span>, n.legend<span class='op'>=</span><span class='fl'>15</span><span class='op'>)</span>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-9.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

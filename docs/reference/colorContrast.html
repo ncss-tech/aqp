@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>colorContrast</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>)</pre>
+    <pre class="usage"><span class='fu'>colorContrast</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,8 +156,12 @@
     <p>delta-E00 is computed by the <a href='https://CRAN.R-project.org/package=farver'>farver package</a>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>1. https://en.wikipedia.org/wiki/Color_difference</p> 
-<p>2. <a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569'>Soil Survey Technical Note 2</a></p>
+    
+<ol>
+<li><p>https://en.wikipedia.org/wiki/Color_difference</p></li>
+<li><p><a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569'>Soil Survey Technical Note 2</a></p></li>
+</ol>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='colorContrastPlot.html'>colorContrastPlot</a></code>, <code><a href='huePosition.html'>huePosition</a></code></p></div>
@@ -168,27 +172,27 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># two sets of colors to compare</span>
-<span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'10YR 6/3'</span>, <span class='st'>'7.5YR 3/3'</span>, <span class='st'>'10YR 2/2'</span>, <span class='st'>'7.5YR 3/4'</span>)
-<span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span>)
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 6/3'</span>, <span class='st'>'7.5YR 3/3'</span>, <span class='st'>'10YR 2/2'</span>, <span class='st'>'7.5YR 3/4'</span><span class='op'>)</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span><span class='op'>)</span>
 
 <span class='co'># contrast metrics</span>
-<span class='fu'>colorContrast</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>)
+<span class='fu'>colorContrast</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          m1        m2 dH dV dC      dE00        cc
 #&gt; 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent
 #&gt; 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint
 #&gt; 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint
 #&gt; 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.054654  Distinct</div><div class='input'>
 <span class='co'># adjacent chips</span>
-<span class='fu'>colorContrast</span>(<span class='st'>'10YR 3/3'</span>, <span class='st'>'10YR 3/4'</span>)
+<span class='fu'>colorContrast</span><span class='op'>(</span><span class='st'>'10YR 3/3'</span>, <span class='st'>'10YR 3/4'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         m1       m2 dH dV dC     dE00    cc
-#&gt; 1 10YR 3/3 10YR 3/4  0  0  1 3.142401 Faint</div><div class='input'><span class='fu'>colorContrast</span>(<span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 3/3'</span>)
+#&gt; 1 10YR 3/3 10YR 3/4  0  0  1 3.142401 Faint</div><div class='input'><span class='fu'>colorContrast</span><span class='op'>(</span><span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 3/3'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         m1        m2 dH dV dC     dE00    cc
 #&gt; 1 10YR 3/3 7.5YR 3/3  1  0  0 3.341738 Faint</div><div class='input'>
 <span class='co'># highly contrasting colors</span>
 <span class='co'># http://colour.granjow.net/fabercastell-polychromos.html</span>
-<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(<span class='st'>'10B 4/13'</span>, <span class='st'>'10YR 10/15'</span>, 
-labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'helioblue-reddish'</span>, <span class='st'>'light cadmium yellow'</span>)
-)
+<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span><span class='op'>(</span><span class='st'>'10B 4/13'</span>, <span class='st'>'10YR 10/15'</span>,
+labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'helioblue-reddish'</span>, <span class='st'>'light cadmium yellow'</span><span class='op'>)</span>
+<span class='op'>)</span>
 </div><div class='img'><img src='colorContrast-1.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>

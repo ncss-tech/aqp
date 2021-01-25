@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Bootstrap Soil Texture Data — bootstrapSoilTexture" />
-<meta property="og:description" content="Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters." />
+<meta property="og:description" content="Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of alpha parameters." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -117,21 +117,21 @@
     </div>
 
     <div class="ref-description">
-    <p>Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of `alpha` parameters.</p>
+    <p>Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of <code>alpha</code> parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bootstrapSoilTexture</span>(<span class='kw'>ssc</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"dirichlet"</span>, <span class='st'>"normal"</span>), n = <span class='fl'>100</span>)</pre>
+    <pre class="usage"><span class='fu'>bootstrapSoilTexture</span><span class='op'>(</span><span class='va'>ssc</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dirichlet"</span>, <span class='st'>"normal"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ssc</th>
-      <td><p>a <code>data.frame</code> object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.</p></td>
+      <td><p>a <code>data.frame</code> object with 3 columns: <code>sand</code>, <code>silt</code>, <code>clay</code> and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>type of simulation: `dirichlet` or `normal`. See details.</p></td>
+      <td><p>type of simulation: <code>dirichlet</code> or <code>normal</code>. See details.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -153,6 +153,7 @@
 
     <p>Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates.</p>
 <p>Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in <code>ssc</code> (<code>n &gt;= 30</code>?) for a reliable fit.</p>
+<p>Additional examples will be added to <a href='http://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html'>this tutorial</a>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This is a work in progress.</p>
@@ -167,61 +168,61 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># \donttest{</span>
-<span class='co'>if</span>(
-<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"compositions"</span>) <span class='op'>&amp;</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"soiltexture"</span>)
-) {
+<span class='kw'>if</span><span class='op'>(</span>
+<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"compositions"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"soiltexture"</span><span class='op'>)</span>
+<span class='op'>)</span> <span class='op'>{</span>
   
   <span class='co'># sample data, data.frame</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>'sp4'</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'sp4'</span><span class='op'>)</span>
   
   <span class='co'># filter just Bt horizon data</span>
-  <span class='kw'>ssc</span> <span class='op'>&lt;-</span> <span class='kw'>sp4</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>'^Bt'</span>, <span class='kw'>sp4</span><span class='op'>$</span><span class='kw'>name</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span>)]
-  <span class='fu'><a href='names.html'>names</a></span>(<span class='kw'>ssc</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>toupper</a></span>(<span class='fu'><a href='names.html'>names</a></span>(<span class='kw'>ssc</span>))
+  <span class='va'>ssc</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>'^Bt'</span>, <span class='va'>sp4</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span><span class='op'>]</span>
+  <span class='fu'><a href='names.html'>names</a></span><span class='op'>(</span><span class='va'>ssc</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>toupper</a></span><span class='op'>(</span><span class='fu'><a href='names.html'>names</a></span><span class='op'>(</span><span class='va'>ssc</span><span class='op'>)</span><span class='op'>)</span>
   
   <span class='co'># simulate 100 samples</span>
-  <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>bootstrapSoilTexture</span>(<span class='kw'>ssc</span>, n = <span class='fl'>100</span>)
-  <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='kw'>s</span><span class='op'>$</span><span class='kw'>samples</span>
+  <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>bootstrapSoilTexture</span><span class='op'>(</span><span class='va'>ssc</span>, n <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+  <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='va'>s</span><span class='op'>$</span><span class='va'>samples</span>
   
   <span class='co'># empty soil texture triangle</span>
-  <span class='kw'>TT</span> <span class='op'>&lt;-</span> <span class='kw'>soiltexture</span>::<span class='fu'><a href='https://rdrr.io/pkg/soiltexture/man/TT.plot.html'>TT.plot</a></span>(
-    class.sys= <span class='st'>"USDA-NCSS.TT"</span>,
-    main= <span class='st'>""</span>,
-    tri.sum.tst=<span class='fl'>FALSE</span>,
-    cex.lab=<span class='fl'>0.75</span>,
-    cex.axis=<span class='fl'>0.75</span>,
-    frame.bg.col=<span class='st'>'white'</span>,
-    class.lab.col=<span class='st'>'black'</span>,
-    lwd.axis=<span class='fl'>1.5</span>,
-    arrows.show=<span class='fl'>TRUE</span>,
-    new.mar = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>)
-  )
+  <span class='va'>TT</span> <span class='op'>&lt;-</span> <span class='fu'>soiltexture</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/soiltexture/man/TT.plot.html'>TT.plot</a></span><span class='op'>(</span>
+    class.sys<span class='op'>=</span> <span class='st'>"USDA-NCSS.TT"</span>,
+    main<span class='op'>=</span> <span class='st'>""</span>,
+    tri.sum.tst<span class='op'>=</span><span class='cn'>FALSE</span>,
+    cex.lab<span class='op'>=</span><span class='fl'>0.75</span>,
+    cex.axis<span class='op'>=</span><span class='fl'>0.75</span>,
+    frame.bg.col<span class='op'>=</span><span class='st'>'white'</span>,
+    class.lab.col<span class='op'>=</span><span class='st'>'black'</span>,
+    lwd.axis<span class='op'>=</span><span class='fl'>1.5</span>,
+    arrows.show<span class='op'>=</span><span class='cn'>TRUE</span>,
+    new.mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
+  <span class='op'>)</span>
   
   <span class='co'># add original data points</span>
-  <span class='kw'>soiltexture</span>::<span class='fu'><a href='https://rdrr.io/pkg/soiltexture/man/TT.points.html'>TT.points</a></span>(
-    tri.data = <span class='kw'>s</span>, geo = <span class='kw'>TT</span>, col=<span class='st'>'firebrick'</span>, 
-    pch = <span class='fl'>3</span>, cex = <span class='fl'>0.5</span>, lwd = <span class='fl'>1</span>, 
-    tri.sum.tst = <span class='fl'>FALSE</span>
-  )
+  <span class='fu'>soiltexture</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/soiltexture/man/TT.points.html'>TT.points</a></span><span class='op'>(</span>
+    tri.data <span class='op'>=</span> <span class='va'>s</span>, geo <span class='op'>=</span> <span class='va'>TT</span>, col<span class='op'>=</span><span class='st'>'firebrick'</span>, 
+    pch <span class='op'>=</span> <span class='fl'>3</span>, cex <span class='op'>=</span> <span class='fl'>0.5</span>, lwd <span class='op'>=</span> <span class='fl'>1</span>, 
+    tri.sum.tst <span class='op'>=</span> <span class='cn'>FALSE</span>
+  <span class='op'>)</span>
   
   <span class='co'># add simulated points</span>
-  <span class='kw'>soiltexture</span>::<span class='fu'><a href='https://rdrr.io/pkg/soiltexture/man/TT.points.html'>TT.points</a></span>(
-    tri.data = <span class='kw'>ssc</span>, geo = <span class='kw'>TT</span>, bg=<span class='st'>'royalblue'</span>, 
-    pch = <span class='fl'>22</span>, cex = <span class='fl'>1</span>, lwd = <span class='fl'>1</span>, 
-    tri.sum.tst = <span class='fl'>FALSE</span>
-  )
+  <span class='fu'>soiltexture</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/soiltexture/man/TT.points.html'>TT.points</a></span><span class='op'>(</span>
+    tri.data <span class='op'>=</span> <span class='va'>ssc</span>, geo <span class='op'>=</span> <span class='va'>TT</span>, bg<span class='op'>=</span><span class='st'>'royalblue'</span>, 
+    pch <span class='op'>=</span> <span class='fl'>22</span>, cex <span class='op'>=</span> <span class='fl'>1</span>, lwd <span class='op'>=</span> <span class='fl'>1</span>, 
+    tri.sum.tst <span class='op'>=</span> <span class='cn'>FALSE</span>
+  <span class='op'>)</span>
   
   <span class='co'># simple legend</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>'top'</span>, 
-         legend = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Source'</span>, <span class='st'>'Simulated'</span>), 
-         pch = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>22</span>, <span class='fl'>3</span>), 
-         col = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'black'</span>, <span class='st'>'firebrick'</span>), 
-         pt.bg = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'royalblue'</span>, <span class='fl'>NA</span>), 
-         horiz = <span class='fl'>TRUE</span>, bty = <span class='st'>'n'</span>
-  )
+  <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span><span class='st'>'top'</span>, 
+         legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Source'</span>, <span class='st'>'Simulated'</span><span class='op'>)</span>, 
+         pch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>22</span>, <span class='fl'>3</span><span class='op'>)</span>, 
+         col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'black'</span>, <span class='st'>'firebrick'</span><span class='op'>)</span>, 
+         pt.bg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'royalblue'</span>, <span class='cn'>NA</span><span class='op'>)</span>, 
+         horiz <span class='op'>=</span> <span class='cn'>TRUE</span>, bty <span class='op'>=</span> <span class='st'>'n'</span>
+  <span class='op'>)</span>
   
   
-}
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required namespace: compositions</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: soiltexture</span></div><div class='img'><img src='bootstrapSoilTexture-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># }</span>
 

@@ -73,7 +73,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,29 +122,28 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 <p>Possible uses include rough estimation of soil colors in the field, by means of color swatches based on the Pantone system. This type of color matching is most appropriate in an educational setting where official soil color books may be too expensive.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pms.munsell.lut</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pms.munsell.lut</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     
 <dl>
-  <dt>code</dt><dd><p>Pantone spot color code</p></dd>
-  <dt>hex</dt><dd><p>hex representation of sRGB colorspace, suitable for on-screen use</p></dd>
-  <dt>munsell</dt><dd><p>Munsell notation of closest color "chip"</p></dd>
-  <dt>dE00</dt><dd><p>delta-E 2000 metic describing the (perceptual) distance to the closest Munsell chip</p></dd>
+<dt>code</dt><dd><p>Pantone spot color code</p></dd>
+<dt>hex</dt><dd><p>hex representation of sRGB colorspace, suitable for on-screen use</p></dd>
+<dt>munsell</dt><dd><p>Munsell notation of closest color "chip"</p></dd>
+<dt>dE00</dt><dd><p>delta-E 2000 metric describing the (perceptual) distance to the closest Munsell chip</p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subsetting by way of a join (example 3). Reverse lookup (Munsell -&gt; Pantone) will not always result in a matching color, see example 3 below.</p>
+    <p>For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subset by way of a join (example 3). Reverse lookup (Munsell -&gt; Pantone) will not always result in a matching color, see example 3 below.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The lookup table contains entires for both coated and uncoated colors, these are indentified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.</p>
-
-<p>Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.</p> 
-<p>1    2    3    4    5    6    8    9 
+    <p>The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.</p>
+<p>Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.</p>
+<p>1    2    3    4    5    6    8    9
 0.65 0.24 0.08 0.02 0.01 0.00 0.00 0.00</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -157,60 +156,60 @@ Possible uses include rough estimation of soil colors in the field, by means of 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># load LUT</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pms.munsell.lut</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pms.munsell.lut</span><span class='op'>)</span>
 
 <span class='co'>## 1. Pantone -&gt; Munsell</span>
 
 <span class='co'># colors to match</span>
-<span class='kw'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 4/6'</span>)
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 4/6'</span><span class='op'>)</span>
 
 <span class='co'># index / subset match</span>
-<span class='kw'>idx</span> <span class='op'>&lt;-</span> <span class='kw'>pms.munsell.lut</span><span class='op'>$</span><span class='kw'>munsell</span> <span class='op'>%in%</span> <span class='kw'>colors</span>
-<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='kw'>pms.munsell.lut</span>[<span class='kw'>idx</span>, ]
+<span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>munsell</span> <span class='op'>%in%</span> <span class='va'>colors</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>[</span><span class='va'>idx</span>, <span class='op'>]</span>
 
 <span class='co'># simple display</span>
-<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(m1 = <span class='kw'>m</span><span class='op'>$</span><span class='kw'>munsell</span>[<span class='fl'>1</span>], m2 = <span class='kw'>m</span><span class='op'>$</span><span class='kw'>munsell</span>[<span class='fl'>2</span>], labels = <span class='kw'>m</span><span class='op'>$</span><span class='kw'>code</span>)
+<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span><span class='op'>(</span>m1 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, m2 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, labels <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'>## 2. Munsell -&gt; Pantone</span>
-<span class='kw'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'723-c'</span>, <span class='st'>'451-c'</span>)
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'723-c'</span>, <span class='st'>'451-c'</span><span class='op'>)</span>
 
 <span class='co'># index / subset match</span>
-<span class='kw'>idx</span> <span class='op'>&lt;-</span> <span class='kw'>pms.munsell.lut</span><span class='op'>$</span><span class='kw'>code</span> <span class='op'>%in%</span> <span class='kw'>colors</span>
-<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='kw'>pms.munsell.lut</span>[<span class='kw'>idx</span>, ]
+<span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>code</span> <span class='op'>%in%</span> <span class='va'>colors</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>[</span><span class='va'>idx</span>, <span class='op'>]</span>
 
 <span class='co'># simple display</span>
-<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span>(m1 = <span class='kw'>m</span><span class='op'>$</span><span class='kw'>munsell</span>[<span class='fl'>1</span>], m2 = <span class='kw'>m</span><span class='op'>$</span><span class='kw'>munsell</span>[<span class='fl'>2</span>], labels = <span class='kw'>m</span><span class='op'>$</span><span class='kw'>code</span>)
+<span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span><span class='op'>(</span>m1 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, m2 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, labels <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'>## 3. integration with SPC</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pms.munsell.lut</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp6</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp6</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pms.munsell.lut</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># get the closest Munsell chip from color meter data</span>
-<span class='kw'>sp6</span><span class='op'>$</span><span class='kw'>munsell</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>getClosestMunsellChip</a></span>(<span class='kw'>sp6</span><span class='op'>$</span><span class='kw'>color</span>, convertColors = <span class='fl'>FALSE</span>)
+<span class='va'>sp6</span><span class='op'>$</span><span class='va'>munsell</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getClosestMunsellChip.html'>getClosestMunsellChip</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>$</span><span class='va'>color</span>, convertColors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># prepare an intermediate data.frame for performing join to LUT</span>
-<span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp6</span>)[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='hzidname<-.html'>hzidname</a></span>(<span class='kw'>sp6</span>), <span class='st'>'munsell'</span>)]
+<span class='va'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='hzidname<-.html'>hzidname</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span>, <span class='st'>'munsell'</span><span class='op'>)</span><span class='op'>]</span>
 
 <span class='co'># left join</span>
 <span class='co'># not all Munsell colors have a paired Pantone color</span>
-<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/merge.html'>merge</a></span>(<span class='kw'>h</span>, <span class='kw'>pms.munsell.lut</span>, by = <span class='st'>'munsell'</span>, all.x = <span class='fl'>TRUE</span>, sort = <span class='fl'>FALSE</span>)
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>pms.munsell.lut</span>, by <span class='op'>=</span> <span class='st'>'munsell'</span>, all.x <span class='op'>=</span> <span class='cn'>TRUE</span>, sort <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># splice into original SPC</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp6</span>) <span class='op'>&lt;-</span> <span class='kw'>m</span>
+<span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>m</span>
 
 <span class='co'># graphical check</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>sp6</span>, color = <span class='st'>'hex'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp6</span>, color <span class='op'>=</span> <span class='st'>'hex'</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-3.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'>## 4. multiple Pantone colors matching a single Munsell color</span>
-<span class='co'># </span>
-<span class='kw'>colors</span> <span class='op'>&lt;-</span> <span class='kw'>pms.munsell.lut</span>[<span class='kw'>pms.munsell.lut</span><span class='op'>$</span><span class='kw'>munsell</span> <span class='op'>==</span> <span class='st'>'5YR 5/5'</span>, ]
-<span class='kw'>colors</span> <span class='op'>&lt;-</span> <span class='kw'>colors</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>colors</span><span class='op'>$</span><span class='kw'>dE00</span>), ]
+<span class='co'>#</span>
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>[</span><span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>munsell</span> <span class='op'>==</span> <span class='st'>'5YR 5/5'</span>, <span class='op'>]</span>
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='va'>colors</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span><span class='op'>(</span><span class='va'>colors</span><span class='op'>$</span><span class='va'>dE00</span><span class='op'>)</span>, <span class='op'>]</span>
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>0</span>), fg = <span class='st'>'white'</span>, bg = <span class='st'>'black'</span>)
-<span class='fu'><a href='soilPalette.html'>soilPalette</a></span>(<span class='kw'>colors</span><span class='op'>$</span><span class='kw'>hex</span>, lab = <span class='kw'>colors</span><span class='op'>$</span><span class='kw'>code</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='st'>'Pantone Colors Roughly Matching 5YR 5/5'</span>, col.main = <span class='st'>'white'</span>, line = <span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>0</span><span class='op'>)</span>, fg <span class='op'>=</span> <span class='st'>'white'</span>, bg <span class='op'>=</span> <span class='st'>'black'</span><span class='op'>)</span>
+<span class='fu'><a href='soilPalette.html'>soilPalette</a></span><span class='op'>(</span><span class='va'>colors</span><span class='op'>$</span><span class='va'>hex</span>, lab <span class='op'>=</span> <span class='va'>colors</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span><span class='op'>(</span><span class='st'>'Pantone Colors Roughly Matching 5YR 5/5'</span>, col.main <span class='op'>=</span> <span class='st'>'white'</span>, line <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-4.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>

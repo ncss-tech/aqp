@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Between Individual Distance Plot — plot_distance_graph" />
-<meta property="og:description" content="Plot pair-wisee distances between individuals as line segments." />
+<meta property="og:description" content="Plot pair-wise distances between individuals as line segments." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,15 +112,15 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Between Individual Distance Plot</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/plot_distance_graph.R'><code>R/plot_distance_graph.R</code></a></small>
     <div class="hidden name"><code>plot_distance_graph.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot pair-wisee distances between individuals as line segments.</p>
+    <p>Plot pair-wise distances between individuals as line segments.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_distance_graph</span>(<span class='kw'>D</span>, idx = <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>((<span class='kw'>D</span>)))[<span class='fl'>1</span>])</pre>
+    <pre class="usage"><span class='fu'>plot_distance_graph</span><span class='op'>(</span><span class='va'>D</span>, idx <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,32 +135,35 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>By default all individuals are plotting on the same axis. When there are more than about 10 individuals, the plot can become quite messy. See examples below for ideas.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>No value is returned.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>By default all individuals are plotting on the same axis. When there are
+more than about 10 individuals, the plot can become quite messy. See
+examples below for ideas.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>http://casoilresource.lawr.ucdavis.edu/</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='sp2.html'>sp2</a></code>, <code><a href='pc.html'>profile_compare</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Dylan E Beaudette</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='sp2.html'>sp2</a></code>, <code><a href='profile_compare-methods.html'>profile_compare</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 
-<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profile_compare-methods.html'>profile_compare</a></span>(<span class='kw'>sp2</span>, vars=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>,<span class='st'>'value'</span>), 
-max_d=<span class='fl'>100</span>, k=<span class='fl'>0.01</span>, sample_interval=<span class='fl'>5</span>)
+<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pc.html'>profile_compare</a></span><span class='op'>(</span><span class='va'>sp2</span>, vars<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'prop'</span>,<span class='st'>'field_ph'</span>,<span class='st'>'hue'</span>,<span class='st'>'value'</span><span class='op'>)</span>,
+max_d<span class='op'>=</span><span class='fl'>100</span>, k<span class='op'>=</span><span class='fl'>0.01</span>, sample_interval<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Computing dissimilarity matrices from 18 profiles</span></div><div class='output co'>#&gt; <span class='message'> [0.07 Mb]</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfcol=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>,<span class='fl'>4.5</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'>plot_distance_graph</span>(<span class='kw'>d</span>, idx=<span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>)
-<span class='fu'>plot_distance_graph</span>(<span class='kw'>d</span>, idx=<span class='fl'>7</span><span class='op'>:</span><span class='fl'>12</span>)
-<span class='fu'>plot_distance_graph</span>(<span class='kw'>d</span>, idx=<span class='fl'>12</span><span class='op'>:</span><span class='fl'>18</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfcol<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>, mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.5</span>,<span class='fl'>4.5</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>plot_distance_graph</span><span class='op'>(</span><span class='va'>d</span>, idx<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>)</span>
+<span class='fu'>plot_distance_graph</span><span class='op'>(</span><span class='va'>d</span>, idx<span class='op'>=</span><span class='fl'>7</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>)</span>
+<span class='fu'>plot_distance_graph</span><span class='op'>(</span><span class='va'>d</span>, idx<span class='op'>=</span><span class='fl'>12</span><span class='op'>:</span><span class='fl'>18</span><span class='op'>)</span>
 </div><div class='img'><img src='plot_distance_graph-1.png' alt='' width='768' height='475' /></div><div class='input'>
 
 </div></pre>

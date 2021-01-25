@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Estimate upper and lower boundary of argillic diagnostic subsurface horizon — getArgillicBounds" />
-<meta property="og:description" content="getArgillicBounds estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object ('p').
+<meta property="og:description" content="getArgillicBounds estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object (p).
 The upper boundary is where the clay increase threshold is met. The function uses crit.clay.argillic as the threshold function for determining whether a clay increase occurs and get.increase.matrix to determine whether the increase is met, whether vertical distance of increase is sufficiently small, and in which horizon." />
 
 
@@ -73,7 +73,7 @@ The upper boundary is where the clay increase threshold is met. The function use
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ The upper boundary is where the clay increase threshold is met. The function use
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@ The upper boundary is where the clay increase threshold is met. The function use
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,21 +118,21 @@ The upper boundary is where the clay increase threshold is met. The function use
     </div>
 
     <div class="ref-description">
-    <p><code>getArgillicBounds</code> estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object ('p').</p>
+    <p><code>getArgillicBounds</code> estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object (<code>p</code>).</p>
 <p>The upper boundary is where the clay increase threshold is met. The function uses <code>crit.clay.argillic</code> as the threshold function for determining whether a clay increase occurs and <code>get.increase.matrix</code> to determine whether the increase is met, whether vertical distance of increase is sufficiently small, and in which horizon.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getArgillicBounds</span>(
-  <span class='kw'>p</span>,
-  hzdesgn = <span class='st'>"hzname"</span>,
-  clay.attr = <span class='st'>"clay"</span>,
-  texcl.attr = <span class='st'>"texcl"</span>,
-  require_t = <span class='fl'>TRUE</span>,
-  bottom.pattern = <span class='st'>"Cr|R|Cd"</span>,
-  lower.grad.pattern = <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
-  sandy.texture.pattern = <span class='st'>"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
-  verbose = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>getArgillicBounds</span><span class='op'>(</span>
+  <span class='va'>p</span>,
+  hzdesgn <span class='op'>=</span> <span class='st'>"hzname"</span>,
+  clay.attr <span class='op'>=</span> <span class='st'>"clay"</span>,
+  texcl.attr <span class='op'>=</span> <span class='st'>"texcl"</span>,
+  require_t <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  bottom.pattern <span class='op'>=</span> <span class='st'>"Cr|R|Cd"</span>,
+  lower.grad.pattern <span class='op'>=</span> <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
+  sandy.texture.pattern <span class='op'>=</span> <span class='st'>"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,7 +167,7 @@ The upper boundary is where the clay increase threshold is met. The function use
     </tr>
     <tr>
       <th>sandy.texture.pattern</th>
-      <td><p>this is a pattern for matching sandy textural classes: "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</p></td>
+      <td><p>this is a pattern for matching sandy textural classes: <code>-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$</code></p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -182,22 +182,22 @@ The upper boundary is where the clay increase threshold is met. The function use
 
     <p>The lower boundary is first approximated as the depth to a lithic/paralithic/densic contact, or some other horizon matchable by a custom regular expression pattern. Subsequently, that boundary is extended upwards to the end of "evidence of illuviation."</p>
 <p>The depth to contact is estimated using 'bottom.pattern' "Cr|R|Cd" by default. It matches anything containing Cr, R or Cd.</p>
-<p>The lower gradational horizon regular expression ‘lower.grad.pattern' default is <code>^[2-9]*B*CB*[^rtd]*[1-9]*$</code>. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.</p>
+<p>The lower gradational horizon regular expression ‘lower.grad.pattern' default is <code>^[2-9]*B*CB*[^rtd]*[1-9]*$}</code>. It matches anything that starts with a lithologic discontinuity (or none) and a C master horizon designation. May contain B as second horizon designation in transitional horizon. May not contain 'r' or 't' subscript.</p>
 <p>The minimum thickness of the argillic horizon is dependent on whether all subhorizons are "sandy" or not. The <code>sandy.texture.pattern</code> default <code>-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$</code> captures USDA textural class fine earth fractions that meet "sandy" particle size class criteria.</p>
-<p>There also is an option ‘require_t' to omit the requirement for evidence of eluviation in form of ’t' subscript in 'hzdesgn'. Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set 'lower.grad.pattern' to something that will not match any horizons in your data.</p>
+<p>There also is an option ‘require_t' to omit the requirement for evidence of eluviation in form of 't' subscript in 'hzdesgn'. Even if "t" subscript is not required for positive identification, the presence of lower gradational C horizons lacking 't' will still be used to modify the lower boundary upward from a detected contact, if needed. If this behavior is not desired, just set 'lower.grad.pattern' to something that will not match any horizons in your data.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
-<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
-<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='kw'>p</span>, hzdesgn=<span class='st'>'name'</span>, clay.attr = <span class='kw'>attr</span>, texcl.attr=<span class='st'>"texture"</span>)
-<span class='kw'>foo</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
+<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>getArgillicBounds</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn<span class='op'>=</span><span class='st'>'name'</span>, clay.attr <span class='op'>=</span> <span class='va'>attr</span>, texcl.attr<span class='op'>=</span><span class='st'>"texture"</span><span class='op'>)</span>
+<span class='va'>foo</span>
 </div><div class='output co'>#&gt; ubound lbound 
 #&gt;     49     89 </div><div class='input'>
 </div></pre>

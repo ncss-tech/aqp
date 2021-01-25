@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge Munsell Hue, Value, Chroma converted to RGB &amp; LAB into a SoilProfileCollection — munsell2spc,SoilProfileCollection-method • aqp</title>
+<title>Merge Munsell Hue, Value, Chroma converted to sRGB &amp; CIELAB into a SoilProfileCollection — munsell2spc,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Merge Munsell Hue, Value, Chroma converted to RGB &amp; LAB into a SoilProfileCollection — munsell2spc,SoilProfileCollection-method" />
-<meta property="og:description" content="Convert Munsell hue, value and chroma into [R, G, B] and [L, A, B] color coordinates using munsell2rgb. The converted values are stored in the horizons() slot unless as.spc is FALSE, in which case the results are combined with profile and horizon ID columns and returned as the data.frame subclass used by the SPC." />
+<meta property="og:title" content="Merge Munsell Hue, Value, Chroma converted to sRGB &amp; CIELAB into a SoilProfileCollection — munsell2spc,SoilProfileCollection-method" />
+<meta property="og:description" content="Convert Munsell hue, value and chroma into sRGB (rgb_R, rgb_G, rgb_B) and CIELAB (lab_L, lab_A, lab_B) color coordinates using munsell2rgb. The converted values are stored in the horizons() slot unless as.spc is FALSE, in which case the results are combined with profile and horizon ID columns and returned as the data.frame subclass used by the SPC." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,23 +111,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge Munsell Hue, Value, Chroma converted to RGB &amp; LAB into a SoilProfileCollection</h1>
+    <h1>Merge Munsell Hue, Value, Chroma converted to sRGB &amp; CIELAB into a SoilProfileCollection</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/munsell2rgb.R'><code>R/munsell2rgb.R</code></a></small>
     <div class="hidden name"><code>munsell2spc-SoilProfileCollection-method.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert Munsell hue, value and chroma into [R, G, B] and [L, A, B] color coordinates using <code>munsell2rgb</code>. The converted values are stored in the <code><a href='horizons.html'>horizons()</a></code> slot unless <code>as.spc</code> is <code>FALSE</code>, in which case the results are combined with profile and horizon ID columns and returned as the <code>data.frame</code> subclass used by the SPC.</p>
+    <p>Convert Munsell hue, value and chroma into sRGB (<code>rgb_R, rgb_G, rgb_B</code>) and CIELAB (lab_L, lab_A, lab_B) color coordinates using <code>munsell2rgb</code>. The converted values are stored in the <code><a href='horizons.html'>horizons()</a></code> slot unless <code>as.spc</code> is <code>FALSE</code>, in which case the results are combined with profile and horizon ID columns and returned as the <code>data.frame</code> subclass used by the SPC.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>munsell2spc</span>(
-  <span class='kw'>object</span>,
-  hue = <span class='st'>"hue"</span>,
-  value = <span class='st'>"value"</span>,
-  chroma = <span class='st'>"chroma"</span>,
-  as.spc = <span class='fl'>TRUE</span>
-)</pre>
+<span class='fu'>munsell2spc</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  hue <span class='op'>=</span> <span class='st'>"hue"</span>,
+  value <span class='op'>=</span> <span class='st'>"value"</span>,
+  chroma <span class='op'>=</span> <span class='st'>"chroma"</span>,
+  .data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  as.spc <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,6 +150,10 @@
       <td><p>Column name containing numeric chroma values. Default: <code>"chroma"</code></p></td>
     </tr>
     <tr>
+      <th>.data</th>
+      <td><p>Optional: a character vector of equal length to number of horizons (containing Munsell notation), or a column name in the horizon data OR a data.frame containing three columns (names specified in <code>hue</code>, <code>value</code>, <code>chroma</code>)</p></td>
+    </tr>
+    <tr>
       <th>as.spc</th>
       <td><p>Return a data.frame-like object with ID columns?</p></td>
     </tr>
@@ -157,14 +162,17 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A SoilProfileCollection or <code>data.frame</code>-like object</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='parseMunsell.html'>parseMunsell</a></code> <code><a href='rgb2munsell.html'>rgb2munsell</a></code> <code><a href='munsell2rgb.html'>munsell2rgb</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># inspect input data</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>sp3</span>)[,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hue"</span>,<span class='st'>"value"</span>,<span class='st'>"chroma"</span>)]
+<span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"hue"</span>,<span class='st'>"value"</span>,<span class='st'>"chroma"</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;      hue value chroma
 #&gt; 1   10YR     5      3
 #&gt; 2   10YR     6      4
@@ -212,15 +220,20 @@
 #&gt; 44  10YR     6      2
 #&gt; 45  10YR     6      3
 #&gt; 46  2.5Y     7      2</div><div class='input'>
-<span class='co'># do color conversions to RGB and LAB, join into horizon data</span>
-<span class='kw'>sp3</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2spc</span>(<span class='kw'>sp3</span>)
+<span class='co'># do color conversions to sRGB and LAB, join into horizon data</span>
+<span class='va'>sp3</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2spc</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
 
 <span class='co'># plot rgb "R" coordinate by horizon</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp3</span>, color = <span class='st'>"rgb_R"</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"rgb_R"</span><span class='op'>)</span>
 </div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># plot lab "A" coordinate by horizon</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp3</span>, color = <span class='st'>"lab_A"</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"lab_A"</span><span class='op'>)</span>
 </div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-2.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='co'># note that `lab_A` values do not exactly match the original `A` values</span>
+<span class='co'># this is because `lab_A` was computed from the (field determined) Munsell color notation,</span>
+<span class='co'># while `A` was directly measured in the lab by colorimeter</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>A</span>, <span class='va'>sp3</span><span class='op'>$</span><span class='va'>lab_A</span>, xlab <span class='op'>=</span> <span class='st'>'Measured'</span>, ylab <span class='op'>=</span> <span class='st'>'Converted from Field Observed Munsell'</span><span class='op'>)</span>
+</div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-3.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lookup tables for sand, silt, clay, texture class, and textural modifers. — soiltexture • aqp</title>
+<title>Lookup tables for sand, silt, clay, texture class, and textural modifiers. — soiltexture • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,13 @@
 
 
 
-<meta property="og:title" content="Lookup tables for sand, silt, clay, texture class, and textural modifers. — soiltexture" />
-<meta property="og:description" content="A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, the average values per texture class, and average rock fragment values by textural modifer." />
+<meta property="og:title" content="Lookup tables for sand, silt, clay, texture class, and textural modifiers. — soiltexture" />
+<meta property="og:description" content="A list that contains a snapshot of the values generated using the logic from
+the particle size estimator calculation in NASIS, the average values per
+texture class, and average rock fragment values by textural modifier.
+A list that contains a snapshot of the values generated using the logic from
+the particle size estimator calculation in NASIS, the average values per
+texture class, and average rock fragment values by textural modifier." />
 
 
 
@@ -72,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +85,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +99,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,31 +116,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Lookup tables for sand, silt, clay, texture class, and textural modifers.</h1>
-    
+    <h1>Lookup tables for sand, silt, clay, texture class, and textural modifiers.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/soiltexture.R'><code>R/soiltexture.R</code></a></small>
     <div class="hidden name"><code>soiltexture.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, the average values per texture class, and average rock fragment values by textural modifer.</p>
+    <p>A list that contains a snapshot of the values generated using the logic from
+the particle size estimator calculation in NASIS, the average values per
+texture class, and average rock fragment values by textural modifier.</p>
+<p>A list that contains a snapshot of the values generated using the logic from
+the particle size estimator calculation in NASIS, the average values per
+texture class, and average rock fragment values by textural modifier.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"soiltexture"</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A list with 3 data frames. The first named values which contains values for sand, silt and clay by texture class. The second with average values for sand, silt and clay per texture class. The third has fragvoltot low, rv and high values for texmod.</p><dl>
-    <dt><code>clay</code></dt><dd><p>clay percentage of the fine earth fraction, a integer vector</p></dd>
-    <dt><code>sand</code></dt><dd><p>sand percentage of the fine earth fraction, a integer vector</p></dd>
-    <dt><code>silt</code></dt><dd><p>silt percentage of the fine earth fraction, a integer vector</p></dd>
-    <dt><code>texcl</code></dt><dd><p>texture class, a character vector</p></dd>
-    <dt><code>texmod</code></dt><dd><p>textural modifers, a character vector</p></dd>
-
+    <p>A list with 3 data frames. The first named values which contains
+values for sand, silt and clay by texture class. The second with average
+values for sand, silt and clay per texture class. The third has fragvoltot
+low, rv and high values for texmod.</p><dl>
+<dt>list("clay")</dt><dd><p>clay
+percentage of the fine earth fraction, a integer vector</p></dd>
+<dt>list("sand")</dt><dd><p>sand percentage of the fine earth fraction, a integer
+vector</p></dd> <dt>list("silt")</dt><dd><p>silt percentage of the fine earth fraction, a
+integer vector</p></dd> <dt>list("texcl")</dt><dd><p>texture class, a character vector</p></dd>
+<dt>list("texmod")</dt><dd><p>textural modifiers, a character vector</p></dd> 
 </dl>
+
+<p>A list with 3 data frames. The first named values which contains
+values for sand, silt and clay by texture class. The second with average
+values for sand, silt and clay per texture class. The third has fragvoltot
+low, rv and high values for texmod.</p><dl>
+<dt>list("clay")</dt><dd><p>clay
+percentage of the fine earth fraction, a integer vector</p></dd>
+<dt>list("sand")</dt><dd><p>sand percentage of the fine earth fraction, a integer
+vector</p></dd> <dt>list("silt")</dt><dd><p>silt percentage of the fine earth fraction, a
+integer vector</p></dd> <dt>list("texcl")</dt><dd><p>texture class, a character vector</p></dd>
+<dt>list("texmod")</dt><dd><p>textural modifiers, a character vector</p></dd> 
+</dl>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A list that contains a snapshot of the values generated using the logic from the particle size estimator calculation in NASIS, and the average values per texture class.</p>
+    <p>A list that contains a snapshot of the values generated using the logic from
+the particle size estimator calculation in NASIS, and the average values per
+texture class.</p>
+<p>A list that contains a snapshot of the values generated using the logic from
+the particle size estimator calculation in NASIS, and the average values per
+texture class.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

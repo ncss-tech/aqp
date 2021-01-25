@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Return upper boundary of argillic horizon — argillic.clay.increase.depth" />
-<meta property="og:description" content="Returns the top depth of the argillic horizon as a numeric vector.
-Uses crit.clay.argillic to determine threshold clay increase, and get.increase.matrix to determine where increase is met within a vertical distance of 30 cm." />
+<meta property="og:description" content="Returns the top depth of the argillic horizon as a numeric vector." />
 
 
 
@@ -73,7 +72,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -81,7 +80,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +94,7 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -113,16 +112,15 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Return upper boundary of argillic horizon</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/getArgillicBounds.R'><code>R/getArgillicBounds.R</code></a></small>
     <div class="hidden name"><code>argillic.clay.increase.depth.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Returns the top depth of the argillic horizon as a numeric vector.</p>
-<p>Uses <code>crit.clay.argillic</code> to determine threshold clay increase, and <code>get.increase.matrix</code> to determine where increase is met within a vertical distance of 30 cm.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>argillic.clay.increase.depth</span>(<span class='kw'>p</span>, clay.attr = <span class='st'>"clay"</span>)</pre>
+    <pre class="usage"><span class='fu'>argillic.clay.increase.depth</span><span class='op'>(</span><span class='va'>p</span>, clay.attr <span class='op'>=</span> <span class='st'>"clay"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,30 +131,40 @@ Uses crit.clay.argillic to determine threshold clay increase, and get.increase.m
     </tr>
     <tr>
       <th>clay.attr</th>
-      <td><p>OPTIONAL: horizon attribute name referring to clay content. default: `clay`</p></td>
+      <td><p>OPTIONAL: horizon attribute name referring to clay content.
+default: <code>clay</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector containing top depth of argillic horizon, if present, or NA.</p>
+    <p>A numeric vector containing top depth of argillic horizon, if
+present, or NA.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Uses <code>crit.clay.argillic</code> to determine threshold clay increase, and
+<code>get.increase.matrix</code> to determine where increase is met within a
+vertical distance of 30 cm.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code>getArgillicBounds</code>, <code>get.increase.matrix</code>,
+<code>crit.clay.argillic</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew Gene Brown</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code>getArgillicBounds</code>, <code>get.increase.matrix</code>, <code>crit.clay.argillic</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
-<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>argillic.clay.increase.depth</span>(<span class='kw'>p</span>, clay.attr = <span class='kw'>attr</span>)
-<span class='kw'>foo</span>
-</div><div class='output co'>#&gt; [1] 49</div></pre>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
+<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>argillic.clay.increase.depth</span><span class='op'>(</span><span class='va'>p</span>, clay.attr <span class='op'>=</span> <span class='va'>attr</span><span class='op'>)</span>
+<span class='va'>foo</span>
+</div><div class='output co'>#&gt; [1] 49</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -16,7 +16,7 @@
 #' Demos: \code{demo(aqp)}
 #'
 #'
-#' [Project homepage](http://ncss-tech.github.io/AQP)
+#' [Project homepage](http://ncss-tech.github.io/AQP/)
 #'
 #'
 #' @name aqp-package

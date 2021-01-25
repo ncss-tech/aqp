@@ -73,7 +73,7 @@ Get column name containing unique horizon ID" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ Get column name containing unique horizon ID" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@ Get column name containing unique horizon ID" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,19 +138,19 @@ Get column name containing unique horizon ID" />
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
 
 <span class='co'># promote to SPC</span>
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># create new horizon ID</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hzIDrev</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hzID</span>)
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>hzIDrev</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>hzID</span><span class='op'>)</span>
 
 <span class='co'># set horizon designation column</span>
-<span class='fu'>hzidname</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='st'>"hzIDrev"</span>
+<span class='fu'>hzidname</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"hzIDrev"</span>
 
 <span class='co'># get horizon designation column</span>
-<span class='fu'>hzidname</span>(<span class='kw'>sp1</span>)
+<span class='fu'>hzidname</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "hzIDrev"</div><div class='input'>
 </div></pre>
   </div>

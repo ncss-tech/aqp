@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Soil Profile Color Signatures</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/soilColorSignature.R'><code>R/soilColorSignature.R</code></a></small>
     <div class="hidden name"><code>soilColorSignature.Rd</code></div>
     </div>
 
@@ -120,10 +120,18 @@
     <p>Generate a color signature for each soil profile in a collection.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>soilColorSignature</span>(<span class='kw'>spc</span>, r = <span class='st'>"r"</span>, g = <span class='st'>"g"</span>, b = <span class='st'>"b"</span>, 
-method=<span class='st'>'colorBucket'</span>, pam.k=<span class='fl'>3</span>, RescaleLightnessBy = <span class='fl'>1</span>, useProportions=<span class='fl'>TRUE</span>,
-pigmentNames=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'.white.pigment'</span>, <span class='st'>'.red.pigment'</span>, <span class='st'>'.green.pigment'</span>, 
-<span class='st'>'.yellow.pigment'</span>, <span class='st'>'.blue.pigment'</span>))</pre>
+    <pre class="usage"><span class='fu'>soilColorSignature</span><span class='op'>(</span>
+  <span class='va'>spc</span>,
+  r <span class='op'>=</span> <span class='st'>"r"</span>,
+  g <span class='op'>=</span> <span class='st'>"g"</span>,
+  b <span class='op'>=</span> <span class='st'>"b"</span>,
+  method <span class='op'>=</span> <span class='st'>"colorBucket"</span>,
+  pam.k <span class='op'>=</span> <span class='fl'>3</span>,
+  RescaleLightnessBy <span class='op'>=</span> <span class='fl'>1</span>,
+  useProportions <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  pigmentNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".white.pigment"</span>, <span class='st'>".red.pigment"</span>, <span class='st'>".green.pigment"</span>,
+    <span class='st'>".yellow.pigment"</span>, <span class='st'>".blue.pigment"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,7 +154,7 @@ pigmentNames=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></spa
     </tr>
     <tr>
       <th>method</th>
-      <td><p>algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`</p></td>
+      <td><p>algorithm used to compute color signature, <code>colorBucket</code>, <code>depthSlices</code>, or <code>pam</code></p></td>
     </tr>
     <tr>
       <th>pam.k</th>
@@ -166,47 +174,48 @@ pigmentNames=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></spa
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><a href='http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html'>http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html</a></p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>For the `colorBucket` method, a <code>data.frame</code> object containing:</p><dl>
-  <dt>id column</dt><dd><p>set according to <code><a href='idname.html'>idname(spc)</a></code></p></dd>
-  <dt>.white.pigment</dt><dd><p>proportion or quantity of CIE LAB L-values</p></dd>
-  <dt>.red.pigment</dt><dd><p>proportion or quantity of CIE LAB positive A-values</p></dd>
-  <dt>.green.pigment</dt><dd><p>proportion or quantity of CIE LAB negative A-values</p></dd>
-  <dt>.yellow.pigment</dt><dd><p>proportion or quantity of CIE LAB positive B-values</p></dd>
-  <dt>.blue.pigment</dt><dd><p>proportion or quantity of CIE LAB negative B-values</p></dd>
-
-</dl>
+    <p>For the <code>colorBucket</code> method, a <code>data.frame</code> object containing:</p><ul>
+<li><p>id column: set according to <code><a href='idname.html'>idname(spc)</a></code></p></li>
+<li><p><code>.white.pigment</code>: proportion or quantity of CIE LAB L-values</p></li>
+<li><p><code>.red.pigment</code>: proportion or quantity of CIE LAB positive A-values</p></li>
+<li><p><code>.green.pigment</code>: proportion or quantity of CIE LAB negative A-values</p></li>
+<li><p><code>.yellow.pigment</code>: proportion or quantity of CIE LAB positive B-values</p></li>
+<li><p><code>.blue.pigment</code>: proportion or quantity of CIE LAB negative B-values</p></li>
+</ul>
 
 <p>Column names can be adjusted with the <code>pigmentNames</code> argument.</p>
-<p>For the `depthSlices` method ...</p>
-<p>For the `pam` method ...</p>
+<p>For the <code>depthSlices</code> method ...</p>
+<p>For the <code>pam</code> method ...</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>See the <a href='http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html'>related tutorial</a>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>https://en.wikipedia.org/wiki/Lab_color_space</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='munsell2rgb.html'>munsell2rgb</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># trivial example, not very interesting</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># trivial example, not very interesting</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># convert Munsell -&gt; sRGB triplets</span>
-<span class='kw'>rgb.data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hue</span>, <span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>value</span>, <span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>chroma</span>, return_triplets = <span class='fl'>TRUE</span>)
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>r</span> <span class='op'>&lt;-</span> <span class='kw'>rgb.data</span><span class='op'>$</span><span class='kw'>r</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>g</span> <span class='op'>&lt;-</span> <span class='kw'>rgb.data</span><span class='op'>$</span><span class='kw'>g</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>b</span> <span class='op'>&lt;-</span> <span class='kw'>rgb.data</span><span class='op'>$</span><span class='kw'>b</span>
+<span class='va'>rgb.data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>hue</span>, <span class='va'>sp1</span><span class='op'>$</span><span class='va'>value</span>, <span class='va'>sp1</span><span class='op'>$</span><span class='va'>chroma</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>r</span> <span class='op'>&lt;-</span> <span class='va'>rgb.data</span><span class='op'>$</span><span class='va'>r</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='va'>rgb.data</span><span class='op'>$</span><span class='va'>g</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='va'>rgb.data</span><span class='op'>$</span><span class='va'>b</span>
 
 <span class='co'># extract color signature</span>
-<span class='kw'>pig</span> <span class='op'>&lt;-</span> <span class='fu'>soilColorSignature</span>(<span class='kw'>sp1</span>)
+<span class='va'>pig</span> <span class='op'>&lt;-</span> <span class='fu'>soilColorSignature</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

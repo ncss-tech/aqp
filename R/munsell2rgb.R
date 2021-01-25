@@ -127,7 +127,7 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 #' \url{http://ncss-tech.github.io/AQP/}
 #' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
 #' \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
-#' \url{http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
 #'
 #' @return an (NA-padded) \code{data.frame} containing `hue`, `value`, `chroma`, and distance (dE00 when \code{colorSpace = 'CIE2000'}, Euclidean distance otherwise) to nearest matching color.
 #' 
@@ -306,7 +306,7 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' @references \url{http://ncss-tech.github.io/AQP/}
 #' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
 #' \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
-#' \url{http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
 #' 
 #' @author D.E. Beaudette
 #' 

@@ -40,7 +40,9 @@
 
 
 <meta property="og:title" content="Soil Morphologic, Geochemical, and Mineralogy Data from Rowley et al. 2019. — rowley2019" />
-<meta property="og:description" content="Data from Table 1 and Supplementary Tables 1 and 2 from &quot;A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland&quot;." />
+<meta property="og:description" content="Data from Table 1 and Supplementary Tables 1 and 2 from &quot;A cascading
+influence of calcium carbonate on the biogeochemistry and pedogenic
+trajectories of subalpine soils, Switzerland&quot;." />
 
 
 
@@ -72,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +82,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +96,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,98 +114,82 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Soil Morphologic, Geochemical, and Mineralogy Data from Rowley et al. 2019.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/data-documentation.R'><code>R/data-documentation.R</code></a></small>
     <div class="hidden name"><code>rowley2019.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Data from Table 1 and Supplementary Tables 1 and 2 from "A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland".</p>
+    <p>Data from Table 1 and Supplementary Tables 1 and 2 from "A cascading
+influence of calcium carbonate on the biogeochemistry and pedogenic
+trajectories of subalpine soils, Switzerland".</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"rowley2019"</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>rowley2019</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A <code>SoilProfileCollection</code> object:</p>
 <p>site-level attributes</p><dl>
-    <dt>id</dt><dd><p>profile ID</p></dd>
-    <dt>group</dt><dd><p>profile group</p></dd>
-  
+<dt>id</dt><dd><p>profile ID</p></dd> <dt>group</dt><dd><p>profile
+group</p></dd> 
 </dl>
 
 <p>horizon-level attributes</p><dl>
 <dt>sample_id</dt><dd><p>sample ID</p></dd>
-<dt>name</dt><dd><p>horizon name</p></dd>
-<dt>pH</dt><dd><p>pH</p></dd>
-<dt>Al_exch</dt><dd><p>cmol(+) / kg, exchangeable Al</p></dd>
-<dt>Ca_exch</dt><dd><p>cmol(+) / kg, exchangeable Ca</p></dd>
-<dt>CEC_sum</dt><dd><p>cmol(+) / kg, cation exchange capacity calculated as the sum of exchangeable cations, not including H+</p></dd>
-<dt>Ca_exch_saturation</dt><dd><p>percent</p></dd>
-<dt>Al_exch_saturation</dt><dd><p>percent</p></dd>
-<dt>TON</dt><dd><p>percent, total nitrogen</p></dd>
-<dt>SOC</dt><dd><p>percent, soil organic carbon</p></dd>
-<dt>C_to_N</dt><dd><p>carbon to nitrogen ratio</p></dd>
-<dt>Alo</dt><dd><p>g/kg, oxalate-extractable Al</p></dd>
-<dt>Feo</dt><dd><p>g/kg, oxalate-extractable Fe</p></dd>
-<dt>Ald</dt><dd><p>g/kg, dithionite-extractable Al</p></dd>
-<dt>Fed</dt><dd><p>g/kg, dithionite-extractable Fe</p></dd>
-<dt>Feo_Fed</dt><dd><p>Fe_o to Fe_d ratio</p></dd>
-<dt>id</dt><dd><p>profile ID</p></dd>
-<dt>top</dt><dd><p>horizon top (cm)</p></dd>
-<dt>bottom</dt><dd><p>horizon bottom (cm)</p></dd>
-<dt>Al</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Ca</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Cr</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Fe</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>K</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Mg</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Mn</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Na</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Ni</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>P</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Si</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
-<dt>Ti</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
+<dt>name</dt><dd><p>horizon name</p></dd> <dt>pH</dt><dd><p>pH</p></dd> <dt>Al_exch</dt><dd><p>cmol(+) / kg,
+exchangeable Al</p></dd> <dt>Ca_exch</dt><dd><p>cmol(+) / kg, exchangeable Ca</p></dd>
+<dt>CEC_sum</dt><dd><p>cmol(+) / kg, cation exchange capacity calculated as the sum
+of exchangeable cations, not including H+</p></dd>
+<dt>Ca_exch_saturation</dt><dd><p>percent</p></dd> <dt>Al_exch_saturation</dt><dd><p>percent</p></dd>
+<dt>TON</dt><dd><p>percent, total nitrogen</p></dd> <dt>SOC</dt><dd><p>percent, soil organic carbon</p></dd>
+<dt>C_to_N</dt><dd><p>carbon to nitrogen ratio</p></dd> <dt>Alo</dt><dd><p>g/kg, oxalate-extractable
+Al</p></dd> <dt>Feo</dt><dd><p>g/kg, oxalate-extractable Fe</p></dd> <dt>Ald</dt><dd><p>g/kg,
+dithionite-extractable Al</p></dd> <dt>Fed</dt><dd><p>g/kg, dithionite-extractable Fe</p></dd>
+<dt>Feo_Fed</dt><dd><p>Fe_o to Fe_d ratio</p></dd> <dt>id</dt><dd><p>profile ID</p></dd> <dt>top</dt><dd><p>horizon
+top (cm)</p></dd> <dt>bottom</dt><dd><p>horizon bottom (cm)</p></dd> <dt>Al</dt><dd><p>g/kg by x-ray
+fluorescence</p></dd> <dt>Ca</dt><dd><p>g/kg by x-ray fluorescence</p></dd> <dt>Cr</dt><dd><p>g/kg by x-ray
+fluorescence</p></dd> <dt>Fe</dt><dd><p>g/kg by x-ray fluorescence</p></dd> <dt>K</dt><dd><p>g/kg by x-ray
+fluorescence</p></dd> <dt>Mg</dt><dd><p>g/kg by x-ray fluorescence</p></dd> <dt>Mn</dt><dd><p>g/kg by x-ray
+fluorescence</p></dd> <dt>Na</dt><dd><p>g/kg by x-ray fluorescence</p></dd> <dt>Ni</dt><dd><p>g/kg by x-ray
+fluorescence</p></dd> <dt>P</dt><dd><p>g/kg by x-ray fluorescence</p></dd> <dt>Si</dt><dd><p>g/kg by x-ray
+fluorescence</p></dd> <dt>Ti</dt><dd><p>g/kg by x-ray fluorescence</p></dd>
 <dt>Phyllosilicates</dt><dd><p>percent by x-ray diffraction spectra</p></dd>
 <dt>Quartz</dt><dd><p>percent by x-ray diffraction spectra</p></dd>
 <dt>K_Feldspar</dt><dd><p>percent by x-ray diffraction spectra</p></dd>
 <dt>Na_Plagioclase</dt><dd><p>percent by x-ray diffraction spectra</p></dd>
 <dt>Goethite</dt><dd><p>percent by x-ray diffraction spectra</p></dd>
 <dt>Unidentified</dt><dd><p>percent by x-ray diffraction spectra</p></dd>
-<dt>CCE_Total</dt><dd><p>percent</p></dd>
-<dt>CCE_Reactive</dt><dd><p>percent</p></dd>
-<dt>Reactive_carbonate</dt><dd><p>percent</p></dd>
-<dt>Sand</dt><dd><p>percent &lt;2um</p></dd>
-<dt>Silt</dt><dd><p>percent 2-50um</p></dd>
-<dt>Clay</dt><dd><p>percent 50-2000um</p></dd>
+<dt>CCE_Total</dt><dd><p>percent</p></dd> <dt>CCE_Reactive</dt><dd><p>percent</p></dd>
+<dt>Reactive_carbonate</dt><dd><p>percent</p></dd> <dt>Sand</dt><dd><p>percent &lt;2um</p></dd>
+<dt>Silt</dt><dd><p>percent 2-50um</p></dd> <dt>Clay</dt><dd><p>percent 50-2000um</p></dd>
 
 <dt>CaH2O</dt><dd><p>Milliq ex: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
 <dt>Ca2MKCl</dt><dd><p>2M KCl: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
-<dt>CaNa2EDTA</dt><dd><p>0.05 M Na2EDTA: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
-<dt>CaCuCl2</dt><dd><p>0.5 M CuCl2: grams of Ca per kilogram of dry soil (g kg-1)</p></dd>
+<dt>CaNa2EDTA</dt><dd><p>0.05 M Na2EDTA: grams of Ca per kilogram of dry soil (g
+kg-1)</p></dd> <dt>CaCuCl2</dt><dd><p>0.5 M CuCl2: grams of Ca per kilogram of dry soil (g
+kg-1)</p></dd>
 
-<dt>hzID</dt><dd><p>horizon ID</p></dd>
-  
+<dt>hzID</dt><dd><p>horizon ID</p></dd> 
 </dl>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Mike C. Rowley, Stephanie Grand, Thierry Adatte, Eric P. Verrecchia,
-<a href='https://www.sciencedirect.com/science/article/pii/S0016706119318683'>A cascading influence of calcium carbonate on the biogeochemistry and pedogenic trajectories of subalpine soils, Switzerland</a>,
-Geoderma,
-2019,
-114065,
-ISSN 0016-7061,
-https://doi.org/10.1016/j.geoderma.2019.114065.</p>
+    <p>Mike C. Rowley, Stephanie Grand, Thierry Adatte, Eric P.
+Verrecchia, Cascading influence of calcium carbonate on the biogeochemistry and
+pedogenic trajectories of subalpine soils), Switzerland, Geoderma, 2019,
+114065, ISSN 0016-7061, doi: <a href='https://doi.org/10.1016/j.geoderma.2019.114065'>10.1016/j.geoderma.2019.114065</a>
+.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
+    <pre class="examples"><div class='input'>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
 
 <span class='co'># load data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>'rowley2019'</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'rowley2019'</span><span class='op'>)</span>
 
 <span class='co'># check first 5 rows and 10 columns of horizon data</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span>(<span class='kw'>rowley2019</span>)[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>]
+<span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>rowley2019</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;   sample_id name  pH Al_exch Ca_exch CEC_sum Ca_exch_saturation
 #&gt; 1      B1.1  Ah1 6.3       0    23.2    23.7               97.6
 #&gt; 2      B1.2  Ah2 6.4       0    23.0    23.4               98.4
@@ -217,7 +203,7 @@ https://doi.org/10.1016/j.geoderma.2019.114065.</p>
 #&gt; 4                  0 0.5 4.3
 #&gt; 5                  0 0.4 3.4</div><div class='input'>
 <span class='co'># check site data</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>rowley2019</span>)
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>rowley2019</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   id          group
 #&gt; 1 B1 CaCO3-bearing 
 #&gt; 2 B2 CaCO3-bearing 
@@ -226,36 +212,37 @@ https://doi.org/10.1016/j.geoderma.2019.114065.</p>
 #&gt; 5 F2     CaCO3-free
 #&gt; 6 F3     CaCO3-free</div><div class='input'>
 <span class='co'># graphical summary</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>rowley2019</span>, color=<span class='st'>'Feo_Fed'</span>, name=<span class='st'>'name'</span>, cex.names=<span class='fl'>0.85</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>rowley2019</span>, color<span class='op'>=</span><span class='st'>'Feo_Fed'</span>, name<span class='op'>=</span><span class='st'>'name'</span>, cex.names<span class='op'>=</span><span class='fl'>0.85</span><span class='op'>)</span>
 </div><div class='img'><img src='rowley2019-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>rowley2019</span>, color=<span class='st'>'Ca_exch'</span>, name=<span class='st'>'name'</span>, cex.names=<span class='fl'>0.85</span>)
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>rowley2019</span>, color<span class='op'>=</span><span class='st'>'Ca_exch'</span>, name<span class='op'>=</span><span class='st'>'name'</span>, cex.names<span class='op'>=</span><span class='fl'>0.85</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># grouped plot</span>
-<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span>(<span class='kw'>rowley2019</span>, groups = <span class='st'>'group'</span>, color=<span class='st'>'Ca_exch'</span>, 
-name=<span class='st'>'name'</span>, cex.names=<span class='fl'>0.85</span>, group.name.offset = <span class='op'>-</span><span class='fl'>10</span>)
+<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span><span class='va'>rowley2019</span>, groups <span class='op'>=</span> <span class='st'>'group'</span>, color<span class='op'>=</span><span class='st'>'Ca_exch'</span>,
+name<span class='op'>=</span><span class='st'>'name'</span>, cex.names<span class='op'>=</span><span class='fl'>0.85</span>, group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>
 </div><div class='img'><img src='rowley2019-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># aggregate over 1cm slices, for select properties</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>rowley2019</span>, <span class='kw'>group</span> <span class='op'>~</span> <span class='kw'>Reactive_carbonate</span> <span class='op'>+</span> <span class='kw'>Ca_exch</span> <span class='op'>+</span> <span class='kw'>pH</span> <span class='op'>+</span> <span class='kw'>K_Feldspar</span> <span class='op'>+</span> <span class='kw'>Na_Plagioclase</span> <span class='op'>+</span> <span class='kw'>Al</span>)
-
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span><span class='op'>(</span><span class='va'>rowley2019</span>, <span class='va'>group</span> <span class='op'>~</span> <span class='va'>Reactive_carbonate</span> <span class='op'>+</span> <span class='va'>Ca_exch</span> <span class='op'>+</span> <span class='va'>pH</span> <span class='op'>+</span> <span class='va'>K_Feldspar</span> <span class='op'>+</span> <span class='va'>Na_Plagioclase</span> <span class='op'>+</span> <span class='va'>Al</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: 'measure.vars' [Reactive_carbonate, Ca_exch, pH, K_Feldspar, ...] are not all of the same type. By order of hierarchy, the molten data value column will be of type 'double'. All measure variables not of type 'double' will be coerced too. Check DETAILS in ?melt.data.table for more on coercion.</span></div><div class='input'>
 <span class='co'># plot styling</span>
-<span class='kw'>tps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(superpose.line=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(lwd=<span class='fl'>2</span>, col=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'royalblue'</span>, <span class='st'>'firebrick'</span>)))
+<span class='va'>tps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'royalblue'</span>, <span class='st'>'firebrick'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># make the figure</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span> <span class='op'>|</span> <span class='kw'>variable</span>, data=<span class='kw'>a</span>, ylab=<span class='st'>'Depth'</span>, groups=<span class='kw'>group</span>,
-       main=<span class='st'>''</span>, as.table=<span class='fl'>TRUE</span>,
-       xlab=<span class='st'>'median bounded by 25th and 75th percentiles'</span>,
-       lower=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q25</span>, upper=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q75</span>, ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>55</span>,<span class='op'>-</span><span class='fl'>5</span>),
-       panel=<span class='kw'>panel.depth_function</span>,
-       prepanel=<span class='kw'>prepanel.depth_function</span>,
-       cf=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>contributing_fraction</span>,
-       alpha=<span class='fl'>0.33</span>, sync.colors=<span class='fl'>TRUE</span>,
-       scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(x=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(relation=<span class='st'>'free'</span>, alternating=<span class='fl'>1</span>)),
-       par.settings=<span class='kw'>tps</span>,
-       auto.key=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(columns=<span class='fl'>2</span>, lines=<span class='fl'>TRUE</span>, points=<span class='fl'>FALSE</span>),
-       strip=<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span>(bg=<span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>0.9</span>))
-)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>a</span>, ylab<span class='op'>=</span><span class='st'>'Depth'</span>, groups<span class='op'>=</span><span class='va'>group</span>,
+       main<span class='op'>=</span><span class='st'>''</span>, as.table<span class='op'>=</span><span class='cn'>TRUE</span>,
+       xlab<span class='op'>=</span><span class='st'>'median bounded by 25th and 75th percentiles'</span>,
+       lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>, ylim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>55</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,
+       panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,
+       prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
+       cf<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,
+       alpha<span class='op'>=</span><span class='fl'>0.33</span>, sync.colors<span class='op'>=</span><span class='cn'>TRUE</span>,
+       scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span>, alternating<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>,
+       par.settings<span class='op'>=</span><span class='va'>tps</span>,
+       auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>,
+       strip<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
 </div><div class='img'><img src='rowley2019-3.png' alt='' width='768' height='475' /></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

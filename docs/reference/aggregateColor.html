@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Summarize Soil Colors</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/aggregateColor.R'><code>R/aggregateColor.R</code></a></small>
     <div class="hidden name"><code>aggregateColor.Rd</code></div>
     </div>
 
@@ -120,8 +120,14 @@
     <p>Summarize soil color data, weighted by occurrence and horizon thickness.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>aggregateColor</span>(<span class='kw'>x</span>, groups = <span class='st'>"genhz"</span>, col = <span class='st'>"soil_color"</span>, 
-               colorSpace = <span class='st'>'CIE2000'</span>, k=<span class='kw'>NULL</span>, profile_wt=<span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>aggregateColor</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  groups <span class='op'>=</span> <span class='st'>"genhz"</span>,
+  col <span class='op'>=</span> <span class='st'>"soil_color"</span>,
+  colorSpace <span class='op'>=</span> <span class='st'>"CIE2000"</span>,
+  k <span class='op'>=</span> <span class='cn'>NULL</span>,
+  profile_wt <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,11 +146,11 @@
     </tr>
     <tr>
       <th>colorSpace</th>
-      <td><p>the name of color space to use for conversion of aggregate colors to Munsell; either CIE2000, LAB, or sRGB. Default = 'CIE2000'</p></td>
+      <td><p>the name of color space or color distance metric to use for conversion of aggregate colors to Munsell; either CIE2000 (color distance metric), LAB, or sRGB. Default = 'CIE2000'</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>single integer specifiying the number of colors discretized via PAM, see details</p></td>
+      <td><p>single integer specifying the number of colors discretized via PAM (cluster package), see details</p></td>
     </tr>
     <tr>
       <th>profile_wt</th>
@@ -155,82 +161,82 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the following components:</p>
-<p></p>
-<dt>scaled.data</dt><dd><p>a list of colors and associated weights, one item for each generalized horizon label with at least one color specified in the source data</p></dd>
-  <dt>aggregate.data</dt><dd><p>a data.frame of weighted-mean colors, one row for each generalized horizon label with at least one color specified in the source data</p></dd>
-
+<dt>scaled.data</dt><dd><p>a <code>list</code> of colors and associated weights, one item for each generalized horizon label with at least one color specified in the source data</p></dd>
+<dt>aggregate.data</dt><dd><p>a <code>data.frame</code> of weighted-mean colors, one row for each generalized horizon label with at least one color specified in the source data</p></dd>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Weights are computed by:
-w_i = sqrt(sum(thickness_i)) * n_i
-where w_i is the weight associated with color i, thickness_i is the total thickness of all horizons associated with the color i, and n_i is the number of horizons associated with color i. Weights are computed within groups specified by <code>groups</code>.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
+<code>w_i = sqrt(sum(thickness_i)) * n_i</code>
+where <code>w_i</code> is the weight associated with color <code>i</code>, <code>thickness_i</code> is the total thickness of all horizons associated with the color <code>i</code>, and <code>n_i</code> is the number of horizons associated with color <code>i</code>. Weights are computed within groups specified by <code>groups</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='generalize.hz.html'>generalize.hz</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># load some example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package=<span class='st'>'aqp'</span>)
+    <pre class="examples"><div class='input'>
+<span class='co'># load some example data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package<span class='op'>=</span><span class='st'>'aqp'</span><span class='op'>)</span>
 
 <span class='co'># upgrade to SoilProfileCollection and convert Munsell colors</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>))
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
 <span class='co'># generalize horizon names</span>
-<span class='kw'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span>)
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span>)
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>name</span>, <span class='kw'>n</span>, <span class='kw'>p</span>)
+<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>, <span class='va'>n</span>, <span class='va'>p</span><span class='op'>)</span>
 
 <span class='co'># aggregate colors over horizon-level attribute: 'genhz'</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='kw'>sp1</span>, groups = <span class='st'>'genhz'</span>, col = <span class='st'>'soil_color'</span>)
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span><span class='op'>(</span><span class='va'>sp1</span>, groups <span class='op'>=</span> <span class='st'>'genhz'</span>, col <span class='op'>=</span> <span class='st'>'soil_color'</span><span class='op'>)</span>
 
 <span class='co'># aggregate colors over site-level attribute: 'group'</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='kw'>sp1</span>, groups = <span class='st'>'group'</span>, col = <span class='st'>'soil_color'</span>)
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span><span class='op'>(</span><span class='va'>sp1</span>, groups <span class='op'>=</span> <span class='st'>'group'</span>, col <span class='op'>=</span> <span class='st'>'soil_color'</span><span class='op'>)</span>
 
 <span class='co'># aggregate colors over site-level attribute: 'group'</span>
 <span class='co'># discretize colors to 4 per group</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='kw'>sp1</span>, groups = <span class='st'>'group'</span>, col = <span class='st'>'soil_color'</span>, k = <span class='fl'>4</span>)
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span><span class='op'>(</span><span class='va'>sp1</span>, groups <span class='op'>=</span> <span class='st'>'group'</span>, col <span class='op'>=</span> <span class='st'>'soil_color'</span>, k <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
 
 <span class='co'># aggregate colors over depth-slices</span>
-<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>sp1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>) <span class='op'>~</span> <span class='kw'>soil_color</span>)
-<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>top</span>, <span class='st'>' cm'</span>)
-<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>slice</span>, levels=<span class='fu'><a href='guessGenHzLevels.html'>guessGenHzLevels</a></span>(<span class='kw'>s</span>, <span class='st'>'slice'</span>)<span class='op'>$</span><span class='kw'>levels</span>)
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='kw'>s</span>, groups = <span class='st'>'slice'</span>, col = <span class='st'>'soil_color'</span>)
+<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>soil_color</span><span class='op'>)</span>
+<span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>top</span>, <span class='st'>' cm'</span><span class='op'>)</span>
+<span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span>, levels<span class='op'>=</span><span class='fu'><a href='guessGenHzLevels.html'>guessGenHzLevels</a></span><span class='op'>(</span><span class='va'>s</span>, <span class='st'>'slice'</span><span class='op'>)</span><span class='op'>$</span><span class='va'>levels</span><span class='op'>)</span>
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span><span class='op'>(</span><span class='va'>s</span>, groups <span class='op'>=</span> <span class='st'>'slice'</span>, col <span class='op'>=</span> <span class='st'>'soil_color'</span><span class='op'>)</span>
 
-<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># optionally plot with helper function</span>
-<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>sharpshootR</a></span>))
-  <span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html'>aggregateColorPlot</a></span>(<span class='kw'>a</span>)
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># optionally plot with helper function</span>
+  <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>sharpshootR</a></span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html'>aggregateColorPlot</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'># a more interesting example</span>
-<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>loafercreek</span>, package = <span class='st'>'soilDB'</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>loafercreek</span>, package <span class='op'>=</span> <span class='st'>'soilDB'</span><span class='op'>)</span>
+  
+  <span class='co'># generalize horizon names using REGEX rules</span>
+  <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Oi'</span>, <span class='st'>'A'</span>, <span class='st'>'BA'</span>,<span class='st'>'Bt1'</span>,<span class='st'>'Bt2'</span>,<span class='st'>'Bt3'</span>,<span class='st'>'Cr'</span>,<span class='st'>'R'</span><span class='op'>)</span>
+  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A$|Ad|Ap|AB'</span>,<span class='st'>'BA$|Bw'</span>, 
+         <span class='st'>'Bt1$|^B$'</span>,<span class='st'>'^Bt$|^Bt2$'</span>,<span class='st'>'^Bt3|^Bt4|CBt$|BCt$|2Bt|2CB$|^C$'</span>,<span class='st'>'Cr'</span>,<span class='st'>'R'</span><span class='op'>)</span>
+  <span class='va'>loafercreek</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span><span class='va'>loafercreek</span><span class='op'>$</span><span class='va'>hzname</span>, <span class='va'>n</span>, <span class='va'>p</span><span class='op'>)</span>
+  
+  <span class='co'># remove non-matching generalized horizon names</span>
+  <span class='va'>loafercreek</span><span class='op'>$</span><span class='va'>genhz</span><span class='op'>[</span><span class='va'>loafercreek</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>==</span> <span class='st'>'not-used'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
+  <span class='va'>loafercreek</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>loafercreek</span><span class='op'>$</span><span class='va'>genhz</span><span class='op'>)</span>
+  
+  <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span><span class='op'>(</span><span class='va'>loafercreek</span>, <span class='st'>'genhz'</span><span class='op'>)</span>
+  
+  <span class='co'># plot results with helper function</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html'>aggregateColorPlot</a></span><span class='op'>(</span><span class='va'>a</span>, print.n.hz <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  
+  <span class='co'># inspect aggregate data</span>
+  <span class='va'>a</span><span class='op'>$</span><span class='va'>aggregate.data</span>
+<span class='op'>}</span>
 
-<span class='co'># generalize horizon names using REGEX rules</span>
-<span class='kw'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Oi'</span>, <span class='st'>'A'</span>, <span class='st'>'BA'</span>,<span class='st'>'Bt1'</span>,<span class='st'>'Bt2'</span>,<span class='st'>'Bt3'</span>,<span class='st'>'Cr'</span>,<span class='st'>'R'</span>)
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'O'</span>, <span class='st'>'^A$|Ad|Ap|AB'</span>,<span class='st'>'BA$|Bw'</span>, 
-<span class='st'>'Bt1$|^B$'</span>,<span class='st'>'^Bt$|^Bt2$'</span>,<span class='st'>'^Bt3|^Bt4|CBt$|BCt$|2Bt|2CB$|^C$'</span>,<span class='st'>'Cr'</span>,<span class='st'>'R'</span>)
-<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span>(<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>hzname</span>, <span class='kw'>n</span>, <span class='kw'>p</span>)
-
-<span class='co'># remove non-matching generalized horizon names</span>
-<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>genhz</span>[<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>genhz</span> <span class='op'>==</span> <span class='st'>'not-used'</span>] <span class='op'>&lt;-</span> <span class='fl'>NA</span>
-<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>loafercreek</span><span class='op'>$</span><span class='kw'>genhz</span>)
-
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateColor</span>(<span class='kw'>loafercreek</span>, <span class='st'>'genhz'</span>)
-
-<span class='co'># plot results with helper function</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html'>aggregateColorPlot</a></span>(<span class='kw'>a</span>, print.n.hz = <span class='fl'>TRUE</span>)
-
-<span class='co'># inspect aggregate data</span>
-<span class='kw'>a</span><span class='op'>$</span><span class='kw'>aggregate.data</span>
-}
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

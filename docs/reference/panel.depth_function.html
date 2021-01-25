@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Lattice Panel Function for Soil Profiles — panel.depth_function" />
-<meta property="og:description" content="Panel function for plotting grouped soil property data, along with upper and lower estimates of uncertainty." />
+<meta property="og:description" content="Panel function for plotting grouped soil property data, along with upper and
+lower estimates of uncertainty." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +95,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,17 +113,29 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Lattice Panel Function for Soil Profiles</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/panel.depth_function.R'><code>R/panel.depth_function.R</code></a></small>
     <div class="hidden name"><code>panel.depth_function.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Panel function for plotting grouped soil property data, along with upper and lower estimates of uncertainty.</p>
+    <p>Panel function for plotting grouped soil property data, along with upper and
+lower estimates of uncertainty.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>panel.depth_function</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>id</span>, upper = <span class='fl'>NA</span>, lower = <span class='fl'>NA</span>, 
-subscripts = <span class='kw'>NULL</span>, groups = <span class='kw'>NULL</span>, sync.colors=<span class='fl'>FALSE</span>, cf=<span class='fl'>NA</span>, 
-cf.col=<span class='fl'>NA</span>, cf.interval=<span class='fl'>20</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>panel.depth_function</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>y</span>,
+  <span class='va'>id</span>,
+  upper <span class='op'>=</span> <span class='cn'>NA</span>,
+  lower <span class='op'>=</span> <span class='cn'>NA</span>,
+  subscripts <span class='op'>=</span> <span class='cn'>NULL</span>,
+  groups <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sync.colors <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  cf <span class='op'>=</span> <span class='cn'>NA</span>,
+  cf.col <span class='op'>=</span> <span class='cn'>NA</span>,
+  cf.interval <span class='op'>=</span> <span class='fl'>20</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,7 +150,8 @@ cf.col=<span class='fl'>NA</span>, cf.interval=<span class='fl'>20</span>, <span
     </tr>
     <tr>
       <th>id</th>
-      <td><p>vector of id labels, same length as x and y--only required when plotting segments (see Details section)</p></td>
+      <td><p>vector of id labels, same length as x and y--only required when
+plotting segments (see Details section)</p></td>
     </tr>
     <tr>
       <th>upper</th>
@@ -157,63 +171,89 @@ cf.col=<span class='fl'>NA</span>, cf.interval=<span class='fl'>20</span>, <span
     </tr>
     <tr>
       <th>sync.colors</th>
-      <td><p>optionally sync the fill color within the region bounded by (lower--upper) with the line colors</p></td>
+      <td><p>optionally sync the fill color within the region bounded
+by (lower--upper) with the line colors</p></td>
     </tr>
     <tr>
       <th>cf</th>
-      <td><p>optionally annotate contributing fraction data at regular depth intervals see <code><a href='slab-methods.html'>slab</a></code></p></td>
+      <td><p>optionally annotate contributing fraction data at regular depth
+intervals see <code><a href='slab-methods.html'>slab</a></code></p></td>
     </tr>
     <tr>
       <th>cf.col</th>
-      <td><p>optionall color for contributing fraction values, typically used to override the line color</p></td>
+      <td><p>optional color for contributing fraction values, typically
+used to override the line color</p></td>
     </tr>
     <tr>
       <th>cf.interval</th>
-      <td><p>number of depth units to space printed contributing fraction values</p></td>
+      <td><p>number of depth units to space printed contributing
+fraction values</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments to lower-level lattice plotting functions, see below</p></td>
+      <td><p>further arguments to lower-level lattice plotting functions,
+see below</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function can be used to replace <code>panel.superpose</code> when plotting depth function data. When requested, contributing fraction data are printed using colors the same color as corresponding depth function lines unless a single color value is given via <code>cf.col</code>.</p>
+    <p>This function can be used to replace <code>panel.superpose</code> when plotting
+depth function data. When requested, contributing fraction data are printed
+using colors the same color as corresponding depth function lines unless a
+single color value is given via <code>cf.col</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>http://casoilresource.lawr.ucdavis.edu/</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Dylan E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='sp1.html'>sp1</a></code>, <code><a href='slice-methods.html'>slice</a></code>, <code><a href='slab-methods.html'>slab</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Dylan E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+    <pre class="examples"><div class='input'>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
 
 <span class='co'># 1. plotting mechanism for step-functions derived from soil profile data</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>top</span>,<span class='kw'>bottom</span>) <span class='op'>~</span> <span class='kw'>prop</span>, data=<span class='kw'>sp1</span>,id=<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>id</span>,
-panel=<span class='kw'>panel.depth_function</span>, ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>250</span>,<span class='op'>-</span><span class='fl'>10</span>), 
-scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.number=<span class='fl'>10</span>)), xlab=<span class='st'>'Property'</span>, 
-ylab=<span class='st'>'Depth (cm)'</span>, main=<span class='st'>'panel.depth_function() demo'</span>
-)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>prop</span>,
+  data <span class='op'>=</span> <span class='va'>sp1</span>,
+  id <span class='op'>=</span> <span class='va'>sp1</span><span class='op'>$</span><span class='va'>id</span>,
+  panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+  ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>,
+  scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+  xlab <span class='op'>=</span> <span class='st'>'Property'</span>,
+  ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+  main <span class='op'>=</span> <span class='st'>'panel.depth_function() demo'</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>plotting segments...</span></div><div class='img'><img src='panel.depth_function-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># 1.1 include groups argument to leverage lattice styling framework</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>group</span>, labels=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Group 1'</span>, <span class='st'>'Group2'</span>))
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>group</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Group 1'</span>, <span class='st'>'Group2'</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>top</span>,<span class='kw'>bottom</span>) <span class='op'>~</span> <span class='kw'>prop</span>, groups=<span class='kw'>group</span>, data=<span class='kw'>sp1</span>, id=<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>id</span>,
-panel=<span class='kw'>panel.depth_function</span>, ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>250</span>,<span class='op'>-</span><span class='fl'>10</span>), 
-scales=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.number=<span class='fl'>10</span>)), xlab=<span class='st'>'Property'</span>, 
-ylab=<span class='st'>'Depth (cm)'</span>, main=<span class='st'>'panel.depth_function() demo'</span>,
-auto.key=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(columns=<span class='fl'>2</span>, points=<span class='fl'>FALSE</span>, lines=<span class='fl'>TRUE</span>),
-par.settings=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(superpose.line=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(col=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Orange'</span>,<span class='st'>'RoyalBlue'</span>)))
-)
-</div><div class='output co'>#&gt; <span class='message'>plotting segments...</span></div><div class='img'><img src='panel.depth_function-2.png' alt='' width='768' height='475' /></div><div class='input'>
-
-</div></pre>
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>prop</span>,
+  groups <span class='op'>=</span> <span class='va'>group</span>,
+  data <span class='op'>=</span> <span class='va'>sp1</span>,
+  id <span class='op'>=</span> <span class='va'>sp1</span><span class='op'>$</span><span class='va'>id</span>,
+  panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+  ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>,
+  scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+  xlab <span class='op'>=</span> <span class='st'>'Property'</span>,
+  ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+  main <span class='op'>=</span> <span class='st'>'panel.depth_function() demo'</span>,
+  auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    columns <span class='op'>=</span> <span class='fl'>2</span>,
+    points <span class='op'>=</span> <span class='cn'>FALSE</span>,
+    lines <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>,
+  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
+    <span class='st'>'Orange'</span>, <span class='st'>'RoyalBlue'</span>
+  <span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>plotting segments...</span></div><div class='img'><img src='panel.depth_function-2.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Unroll Genetic Horizons — unroll" />
-<meta property="og:description" content="Generate a descretized vector of genetic horizons along a user-defined pattern." />
+<meta property="og:description" content="Generate a discretized vector of genetic horizons along a user-defined
+pattern." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +95,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,15 +113,16 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Unroll Genetic Horizons</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/unroll.R'><code>R/unroll.R</code></a></small>
     <div class="hidden name"><code>unroll.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generate a descretized vector of genetic horizons along a user-defined pattern.</p>
+    <p>Generate a discretized vector of genetic horizons along a user-defined
+pattern.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>unroll</span>(<span class='kw'>top</span>, <span class='kw'>bottom</span>, <span class='kw'>prop</span>, <span class='kw'>max_depth</span>, bottom_padding_value = <span class='fl'>NA</span>, strict=<span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>unroll</span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span>, <span class='va'>prop</span>, <span class='va'>max_depth</span>, bottom_padding_value <span class='op'>=</span> <span class='cn'>NA</span>, strict <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,16 +149,23 @@
     </tr>
     <tr>
       <th>strict</th>
-      <td><p>should horizons be strictly checked for self-consistency? defaults to FALSE</p></td>
+      <td><p>should horizons be strictly checked for self-consistency?
+defaults to FALSE</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function is used internally by several higher-level components of the <code>aqp</code> package. Basic error checking is performed to make sure that bottom and top horizon boundaries make sense. Note that the horizons should be sorted according to depth before using this function. The <code>max_depth</code> argument is used to specifiy the maximum depth of profiles within a collection, so that data from any profile shallower than this depth is padded with NA.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a vector of "unrolled" property values</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function is used internally by several higher-level components of the
+<code>aqp</code> package. Basic error checking is performed to make sure that
+bottom and top horizon boundaries make sense. Note that the horizons should
+be sorted according to depth before using this function. The
+<code>max_depth</code> argument is used to specify the maximum depth of profiles
+within a collection, so that data from any profile shallower than this depth
+is padded with NA.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>http://casoilresource.lawr.ucdavis.edu/</p>
@@ -165,15 +174,17 @@
     <p>Dylan E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
 
 <span class='co'># subset a single soil profile:</span>
-<span class='kw'>sp1.1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>sp1</span>, subset=<span class='kw'>id</span> <span class='op'>==</span> <span class='st'>'P001'</span>)
+<span class='va'>sp1.1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>sp1</span>, subset<span class='op'>=</span><span class='va'>id</span> <span class='op'>==</span> <span class='st'>'P001'</span><span class='op'>)</span>
 
 <span class='co'># demonstrate how this function works</span>
-<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp1.1</span>, <span class='fu'>unroll</span>(<span class='kw'>top</span>, <span class='kw'>bottom</span>, <span class='kw'>prop</span>, max_depth=<span class='fl'>50</span>))
-<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>x</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>x</span>), ylim=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>90</span>,<span class='fl'>0</span>), type=<span class='st'>'b'</span>, cex=<span class='fl'>0.5</span>)  
-</div><div class='img'><img src='unroll-1.png' alt='' width='768' height='475' /></div></pre>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp1.1</span>, <span class='fu'>unroll</span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span>, <span class='va'>prop</span>, max_depth<span class='op'>=</span><span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, ylim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>90</span>,<span class='fl'>0</span><span class='op'>)</span>, type<span class='op'>=</span><span class='st'>'b'</span>, cex<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
+</div><div class='img'><img src='unroll-1.png' alt='' width='768' height='475' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Evaluate Missing Data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/evalMissingData.R'><code>R/evalMissingData.R</code></a></small>
     <div class="hidden name"><code>evalMissingData.Rd</code></div>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Evaluate missing data in a SoilProfileCollection object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>evalMissingData</span>(<span class='kw'>x</span>, <span class='kw'>vars</span>, name = <span class='st'>"hzname"</span>, p = <span class='st'>"Cr|R|Cd"</span>, method=<span class='st'>'relative'</span>)</pre>
+    <pre class="usage"><span class='fu'>evalMissingData</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>vars</span>, name <span class='op'>=</span> <span class='st'>"hzname"</span>, p <span class='op'>=</span> <span class='st'>"Cr|R|Cd"</span>, method <span class='op'>=</span> <span class='st'>"relative"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,7 +135,8 @@
     </tr>
     <tr>
       <th>name</th>
-      <td><p>the name of a horizon-level attribute where horizon designations are stored</p></td>
+      <td><p>the name of a horizon-level attribute where horizon designations
+are stored</p></td>
     </tr>
     <tr>
       <th>p</th>
@@ -147,43 +148,52 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Data completeness is evaluated by profile, based on the thickness of horizons with complete horizon-level attribute values (specified in <code>vars</code>) divided by the total thickness. The default REGEX pattern, <code>p</code>, should catch most non-soil horizons which are excluded from the evaluation.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector values ranging from 0 to 1 (<code>method='relative'</code>) or 0 to maximum depth in specified depth units (<code>method='absolute'</code>), representing the quantity of non-NA data (as specified in <code>vars</code>) for each profile.</p>
+    <p>A vector values ranging from 0 to 1 (<code>method='relative'</code>) or 0
+to maximum depth in specified depth units (<code>method='absolute'</code>),
+representing the quantity of non-NA data (as specified in <code>vars</code>) for
+each profile.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Data completeness is evaluated by profile, based on the thickness of
+horizons with complete horizon-level attribute values (specified in
+<code>vars</code>) divided by the total thickness. The default REGEX pattern,
+<code>p</code>, should catch most non-soil horizons which are excluded from the
+evaluation.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+    <pre class="examples"><div class='input'>
+<span class='co'># example data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 
 <span class='co'># init SPC object</span>
-<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># compute data completeness</span>
-<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>data.complete</span> <span class='op'>&lt;-</span> <span class='fu'>evalMissingData</span>(<span class='kw'>sp2</span>, vars = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'r'</span>, <span class='st'>'g'</span>, <span class='st'>'b'</span>), name = <span class='st'>'name'</span>)
-<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>data.complete.abs</span> <span class='op'>&lt;-</span> <span class='fu'>evalMissingData</span>(<span class='kw'>sp2</span>, vars = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'r'</span>, <span class='st'>'g'</span>, <span class='st'>'b'</span>), 
-                                         name = <span class='st'>'name'</span>, method = <span class='st'>'absolute'</span>)
+<span class='va'>sp2</span><span class='op'>$</span><span class='va'>data.complete</span> <span class='op'>&lt;-</span> <span class='fu'>evalMissingData</span><span class='op'>(</span><span class='va'>sp2</span>, vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'r'</span>, <span class='st'>'g'</span>, <span class='st'>'b'</span><span class='op'>)</span>, name <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
+<span class='va'>sp2</span><span class='op'>$</span><span class='va'>data.complete.abs</span> <span class='op'>&lt;-</span> <span class='fu'>evalMissingData</span><span class='op'>(</span><span class='va'>sp2</span>, vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'r'</span>, <span class='st'>'g'</span>, <span class='st'>'b'</span><span class='op'>)</span>,
+                                         name <span class='op'>=</span> <span class='st'>'name'</span>, method <span class='op'>=</span> <span class='st'>'absolute'</span><span class='op'>)</span>
 
 <span class='co'># rank</span>
-<span class='kw'>new.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>data.complete</span>)
+<span class='va'>new.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>$</span><span class='va'>data.complete</span><span class='op'>)</span>
 
 <span class='co'># plot along data completeness ranking</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp2</span>, plot.order=<span class='kw'>new.order</span>, name=<span class='st'>'name'</span>)
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp2</span>, plot.order<span class='op'>=</span><span class='va'>new.order</span>, name<span class='op'>=</span><span class='st'>'name'</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># add relative completeness axis</span>
 <span class='co'># note re-ordering of axis labels</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(side=<span class='fl'>1</span>, at=<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp2</span>), labels = <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>data.complete</span>[<span class='kw'>new.order</span>], <span class='fl'>2</span>),
-     line=<span class='op'>-</span><span class='fl'>1.5</span>, cex.axis=<span class='fl'>0.75</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span>side<span class='op'>=</span><span class='fl'>1</span>, at<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>$</span><span class='va'>data.complete</span><span class='op'>[</span><span class='va'>new.order</span><span class='op'>]</span>, <span class='fl'>2</span><span class='op'>)</span>,
+     line<span class='op'>=</span><span class='op'>-</span><span class='fl'>1.5</span>, cex.axis<span class='op'>=</span><span class='fl'>0.75</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># add absolute completeness (cm)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(side=<span class='fl'>1</span>, at=<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp2</span>), labels = <span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>data.complete.abs</span>[<span class='kw'>new.order</span>],
-     line=<span class='fl'>1</span>, cex.axis=<span class='fl'>0.75</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span>side<span class='op'>=</span><span class='fl'>1</span>, at<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='va'>sp2</span><span class='op'>$</span><span class='va'>data.complete.abs</span><span class='op'>[</span><span class='va'>new.order</span><span class='op'>]</span>,
+     line<span class='op'>=</span><span class='fl'>1</span>, cex.axis<span class='op'>=</span><span class='fl'>0.75</span><span class='op'>)</span>
 </div><div class='img'><img src='evalMissingData-1.png' alt='' width='768' height='475' /></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

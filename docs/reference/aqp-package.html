@@ -40,11 +40,18 @@
 
 
 <meta property="og:title" content="Algorithms for Quantitative Pedology — aqp-package" />
-<meta property="og:description" content="The aqp (Algorithms for Quantitative Pedology) package for R was developed to address some of the difficulties associated with processing soils information, specifically related to visualization, aggregation, and classification of soil profile data. This package is based on a mix of S3/S4 functions and classes, and most functions use basic dataframes as input, where rows represent soil horizons and columns define properties of those horizons. Common to most functions are the requirements that horizon boundaries are defined as depth from 0, and that profiles are uniquely defined by an id column. The aqp package defines an S4 class, &quot;SoilProfileCollection&quot;, for storage of profile-level metadata, as well as summary, print, and plotting methods that have been customized for common tasks related to soils data.
-Demos:
-demo(aqp)
-demo(slope_effect_hz_thickness)
-Project homepage." />
+<meta property="og:description" content="The aqp (Algorithms for Quantitative Pedology) package for R was developed
+to address some of the difficulties associated with processing soils
+information, specifically related to visualization, aggregation, and
+classification of soil profile data. This package is based on a mix of S3/S4
+functions and classes, and most functions use basic dataframes as input,
+where rows represent soil horizons and columns define properties of those
+horizons. Common to most functions are the requirements that horizon
+boundaries are defined as depth from 0, and that profiles are uniquely
+defined by an id column. The aqp package defines an S4 class,
+&quot;SoilProfileCollection&quot;, for storage of profile-level metadata, as well as
+summary, print, and plotting methods that have been customized for common
+tasks related to soils data." />
 
 
 
@@ -76,7 +83,7 @@ Project homepage." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -84,7 +91,7 @@ Project homepage." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +105,7 @@ Project homepage." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,26 +123,41 @@ Project homepage." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Algorithms for Quantitative Pedology</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/aqp-package.R'><code>R/aqp-package.R</code></a></small>
     <div class="hidden name"><code>aqp-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The aqp (Algorithms for Quantitative Pedology) package for R was developed to address some of the difficulties associated with processing soils information, specifically related to visualization, aggregation, and classification of soil profile data. This package is based on a mix of S3/S4 functions and classes, and most functions use basic dataframes as input, where rows represent soil horizons and columns define properties of those horizons. Common to most functions are the requirements that horizon boundaries are defined as depth from 0, and that profiles are uniquely defined by an id column. The aqp package defines an S4 class, "SoilProfileCollection", for storage of profile-level metadata, as well as summary, print, and plotting methods that have been customized for common tasks related to soils data.</p>
-<p>Demos:
-<code><a href='https://rdrr.io/r/utils/demo.html'>demo(aqp)</a></code></p>
-<p><code><a href='https://rdrr.io/r/utils/demo.html'>demo(slope_effect_hz_thickness)</a></code></p>
-<p><a href='http://ncss-tech.github.io/AQP/'>Project homepage</a>.</p>
+    <p>The aqp (Algorithms for Quantitative Pedology) package for R was developed
+to address some of the difficulties associated with processing soils
+information, specifically related to visualization, aggregation, and
+classification of soil profile data. This package is based on a mix of S3/S4
+functions and classes, and most functions use basic dataframes as input,
+where rows represent soil horizons and columns define properties of those
+horizons. Common to most functions are the requirements that horizon
+boundaries are defined as depth from 0, and that profiles are uniquely
+defined by an id column. The aqp package defines an S4 class,
+"SoilProfileCollection", for storage of profile-level metadata, as well as
+summary, print, and plotting methods that have been customized for common
+tasks related to soils data.</p>
     </div>
 
+    <pre class="usage"><span class='va'>aqp.env</span></pre>
 
 
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>Dylan E. Beaudette &lt;debeaudette@ucdavis.edu&gt; and Pierre Roudier</p>
+    <p>An object of class <code>environment</code> of length 0.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Demos: <code><a href='https://rdrr.io/r/utils/demo.html'>demo(aqp)</a></code></p>
+<p><a href='http://ncss-tech.github.io/AQP'>Project homepage</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='ca630.html'>ca630</a>, <code><a href='sp1.html'>sp1</a>, <a href='sp2.html'>sp2</a>, <a href='sp3.html'>sp3</a>, <a href='sp4.html'>sp4</a>, <a href='sp5.html'>sp5</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Dylan E. Beaudette <a href='mailto:debeaudette@ucdavis.edu'>debeaudette@ucdavis.edu</a>, Pierre Roudier, Andrew G. Brown</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,11 +40,7 @@
 
 
 <meta property="og:title" content="Permute soil horizon depths using boundary distinctness — permute_profile" />
-<meta property="og:description" content="This method is most &quot;believable&quot; when used to _gently_ permute the data, on the order of moving boundaries a few centimeters in either direction. The nice thing about it is it can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a &quot;standard deviation&quot; (see example).
-If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two &quot;standard deviations&quot; above or below that RV depth represent 95
-So, a standard deviation of 1-2cm would yield a &quot;boundary thickness&quot; in the 3-5cm range (&quot;clear&quot; distinctness class).
-Of course, boundaries are not symmetrical and this is at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence within horizons. Also, boundary topography is non-uniform. There are definitely ways to implement other distributions, but invokes more detailed assumptions about field data that are generally only semi-quantitative or are not available.
-Future implementations may use boundary topography as a second hierarchical level (e.g. trig-based random functions), but think that distinctness captures the &quot;uncertainty&quot; about horizon separation at a specific &quot;point&quot; on the ground (or line in the profile quite well, and the extra variation may be hard to interpret, in general." />
+<meta property="og:description" content="&quot;Perturbs&quot; the boundary between horizons using a standard deviation thickness. The thickness standard deviation corresponds roughly to the concept of &quot;horizon boundary distinctness.&quot; This is arguably &quot;easier&quot; to parameterize from something like a single profile description where boundary distinctness classes (based on vertical distance of transition) are recorded for each horizon." />
 
 
 
@@ -76,7 +72,7 @@ Future implementations may use boundary topography as a second hierarchical leve
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -84,7 +80,7 @@ Future implementations may use boundary topography as a second hierarchical leve
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +94,7 @@ Future implementations may use boundary topography as a second hierarchical leve
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,22 +117,18 @@ Future implementations may use boundary topography as a second hierarchical leve
     </div>
 
     <div class="ref-description">
-    <p>This method is most "believable" when used to _gently_ permute the data, on the order of moving boundaries a few centimeters in either direction. The nice thing about it is it can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example).</p>
-<p>If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95<!-- % of the "volume" of the boundary. --></p>
-<p>So, a standard deviation of 1-2cm would yield a "boundary thickness" in the 3-5cm range ("clear" distinctness class).</p>
-<p>Of course, boundaries are not symmetrical and this is at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence within horizons. Also, boundary topography is non-uniform. There are definitely ways to implement other distributions, but invokes more detailed assumptions about field data that are generally only semi-quantitative or are not available.</p>
-<p>Future implementations may use boundary topography as a second hierarchical level (e.g. trig-based random functions), but think that distinctness captures the "uncertainty" about horizon separation at a specific "point" on the ground (or line in the profile quite well, and the extra variation may be hard to interpret, in general.</p>
+    <p>"Perturbs" the <strong>boundary between horizons</strong> using a standard deviation thickness. The thickness standard deviation corresponds roughly to the concept of "horizon boundary distinctness." This is arguably "easier" to parameterize from something like a single profile description where boundary distinctness classes (based on vertical distance of transition) are recorded for each horizon.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>permute_profile</span>(
-  <span class='kw'>p</span>,
-  n = <span class='fl'>100</span>,
-  id = <span class='kw'>NULL</span>,
-  <span class='kw'>boundary.attr</span>,
-  min.thickness = <span class='fl'>1</span>,
-  soildepth = <span class='kw'>NULL</span>,
-  new.idname = <span class='st'>"pID"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>permute_profile</span><span class='op'>(</span>
+  <span class='va'>p</span>,
+  n <span class='op'>=</span> <span class='fl'>100</span>,
+  id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>boundary.attr</span>,
+  min.thickness <span class='op'>=</span> <span class='fl'>1</span>,
+  soildepth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  new.idname <span class='op'>=</span> <span class='st'>"pID"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,31 +166,50 @@ Future implementations may use boundary topography as a second hierarchical leve
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A SoilProfileCollection with n permutations of p.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This method is most "believable" when used to <em>gently</em> permute the data, on the order of moving boundaries a few centimeters in either direction. The nice thing about it is it can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example).</p>
+<p>If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95% of the "volume" of the boundary.</p>
+<p>So, a standard deviation of 1-2cm would yield a "boundary thickness" in the 3-5cm range ("clear" distinctness class).</p>
+<p>Of course, boundaries are not symmetrical and this is at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence within horizons. Also, boundary topography is non-uniform. There are definitely ways to implement other distributions, but invokes more detailed assumptions about field data that are generally only semi-quantitative or are not available.</p>
+<p>Future implementations may use boundary topography as a second hierarchical level (e.g. trig-based random functions), but think that distinctness captures the "uncertainty" about horizon separation at a specific "point" on the ground (or line in the profile quite well, and the extra variation may be hard to interpret, in general.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='random_profile.html'>random_profile()</a></code> <code><a href='sim.html'>sim()</a></code> <code><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset()</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># # example with sp1 (using boundary distinctness)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sp1"</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># example with sp1 (using boundary distinctness)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"sp1"</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># specify "standard deviation" for boundary thickness</span>
 <span class='co'>#   consider a normal curve centered at boundary RV depth</span>
 <span class='co'># lookup table: ~maximum thickness of boundary distinctness classes, divided by 3</span>
-<span class='kw'>bound.lut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'V'</span>=<span class='fl'>0.5</span>,<span class='st'>'A'</span>=<span class='fl'>2</span>,<span class='st'>'C'</span>=<span class='fl'>5</span>,<span class='st'>'G'</span>=<span class='fl'>15</span>,<span class='st'>'D'</span>=<span class='fl'>45</span>) <span class='op'>/</span> <span class='fl'>3</span>
+<span class='va'>bound.lut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'V'</span><span class='op'>=</span><span class='fl'>0.5</span>,<span class='st'>'A'</span><span class='op'>=</span><span class='fl'>2</span>,<span class='st'>'C'</span><span class='op'>=</span><span class='fl'>5</span>,<span class='st'>'G'</span><span class='op'>=</span><span class='fl'>15</span>,<span class='st'>'D'</span><span class='op'>=</span><span class='fl'>45</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>
 
 <span class='co'>## V          A          C          G          D</span>
 <span class='co'>## 0.1666667  0.6666667  1.6666667  5.0000000 15.0000000</span>
 
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>bound_sd</span> <span class='op'>&lt;-</span> <span class='kw'>bound.lut</span>[<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>bound_distinct</span>]
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_sd</span> <span class='op'>&lt;-</span> <span class='va'>bound.lut</span><span class='op'>[</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_distinct</span><span class='op'>]</span>
 
 <span class='co'># hold any NA boundary distinctness constant</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>bound_sd</span>[<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>bound_sd</span>)] <span class='op'>&lt;-</span> <span class='fl'>0</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_sd</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_sd</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
 
-<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>bound_sd</span>, na.rm = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_sd</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        0%       25%       50%       75%      100% 
-#&gt; 0.0000000 0.0000000 0.6666667 0.6666667 1.6666667 </div><div class='input'><span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>3</span>]
+#&gt; 0.0000000 0.0000000 0.6666667 0.6666667 1.6666667 </div><div class='input'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span>
+
+<span class='co'># assume boundary sd is 1/12 midpoint of horizon depth</span>
+<span class='co'># (i.e. general relationship: SD increases (less well known) with depth)</span>
+<span class='va'>sp1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>sp1</span>, midpt <span class='op'>=</span> <span class='op'>(</span><span class='va'>bottom</span> <span class='op'>-</span> <span class='va'>top</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>2</span> <span class='op'>+</span> <span class='va'>top</span>, bound_sd <span class='op'>=</span> <span class='va'>midpt</span> <span class='op'>/</span> <span class='fl'>12</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>bound_sd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;          0%         25%         50%         75%        100% 
+#&gt;  0.08333333  0.92708333  3.75000000  9.25000000 19.41666667 </div><div class='input'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

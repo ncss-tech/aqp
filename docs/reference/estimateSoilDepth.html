@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,14 +120,14 @@
     <p>Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by <code><a href='profileApply.html'>profileApply</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>estimateSoilDepth</span>(
-  <span class='kw'>f</span>,
-  name = <span class='st'>"hzname"</span>,
-  p = <span class='st'>"Cr|R|Cd"</span>,
-  selection = <span class='kw'>min</span>,
-  no.contact.depth = <span class='kw'>NULL</span>,
-  no.contact.assigned = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>estimateSoilDepth</span><span class='op'>(</span>
+  <span class='va'>f</span>,
+  name <span class='op'>=</span> <span class='st'>"hzname"</span>,
+  p <span class='op'>=</span> <span class='st'>"Cr|R|Cd"</span>,
+  selection <span class='op'>=</span> <span class='va'>min</span>,
+  no.contact.depth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  no.contact.assigned <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,7 +142,7 @@
     </tr>
     <tr>
       <th>p</th>
-      <td><p>REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. `Bt`)</p></td>
+      <td><p>REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. <code>Bt</code>)</p></td>
     </tr>
     <tr>
       <th>selection</th>
@@ -150,7 +150,7 @@
     </tr>
     <tr>
       <th>no.contact.depth</th>
-      <td><p>in the absense of contact matching <code>p</code>, a depth at which we can assume a standard depth-to-contact</p></td>
+      <td><p>in the absence of contact matching <code>p</code>, a depth at which we can assume a standard depth-to-contact</p></td>
     </tr>
     <tr>
       <th>no.contact.assigned</th>
@@ -160,11 +160,11 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>single value representing the depth to `contact` or <code>no.contact.assigned</code></p>
+    <p>single value representing the depth to <code>contact</code> or <code>no.contact.assigned</code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The choice of a <code>selection</code> function usually follows:</p>
-<p><code>min</code>: the top of the first matching horizon, <code>max</code>: the top bot the last matching horizon, 
+<p><code>min</code>: the top of the first matching horizon, <code>max</code>: the top bot the last matching horizon,
 or possibly <code>mean</code>: somewhere in-between.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -180,86 +180,86 @@ or possibly <code>mean</code>: somewhere in-between.</p>
 <span class='co'>## "contacts": 2 Cd horizons over an R</span>
 
 <span class='co'># init hypothetical profile</span>
-<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  id = <span class='st'>'1'</span>,
-  top = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
-  bottom = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span>, <span class='fl'>80</span>),
-  name = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'A'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'Bt2'</span>, <span class='st'>'BC'</span>, <span class='st'>'Cd1'</span>, <span class='st'>'Cd2'</span>, <span class='st'>'R'</span>),
-  stringsAsFactors = <span class='fl'>FALSE</span>
-)
+<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  id <span class='op'>=</span> <span class='st'>'1'</span>,
+  top <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
+  bottom <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span>, <span class='fl'>80</span><span class='op'>)</span>,
+  name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'Bt2'</span>, <span class='st'>'BC'</span>, <span class='st'>'Cd1'</span>, <span class='st'>'Cd2'</span>, <span class='st'>'R'</span><span class='op'>)</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
 <span class='co'># upgrade to SPC</span>
-<span class='fu'>depths</span>(<span class='kw'>d</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># visual check</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>d</span>, hz.depths = <span class='fl'>TRUE</span>, name.style = <span class='st'>'center-center'</span>, cex.names = <span class='fl'>1</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, hz.depths <span class='op'>=</span> <span class='cn'>TRUE</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, cex.names <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='estimateSoilDepth-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># top of the first Cd</span>
-<span class='fu'>estimateSoilDepth</span>(<span class='kw'>d</span>, name = <span class='st'>'name'</span>)
+<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 40</div><div class='input'>
 <span class='co'># top of the first Cd</span>
-<span class='fu'>estimateSoilDepth</span>(<span class='kw'>d</span>, name = <span class='st'>'name'</span>, selection = <span class='kw'>min</span>)
+<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>min</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 40</div><div class='input'>
 <span class='co'># top of the R</span>
-<span class='fu'>estimateSoilDepth</span>(<span class='kw'>d</span>, name = <span class='st'>'name'</span>, selection = <span class='kw'>max</span>)
+<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>max</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 60</div><div class='input'>
 <span class='co'># top of the second Cd</span>
-<span class='fu'>estimateSoilDepth</span>(<span class='kw'>d</span>, name = <span class='st'>'name'</span>, selection = <span class='kw'>max</span>, p = <span class='st'>'Cd'</span>)
+<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>max</span>, p <span class='op'>=</span> <span class='st'>'Cd'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 50</div><div class='input'>
 
 <span class='co'>## another example</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># apply to each profile in a collection, and save as site-level attribute</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>depth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='kw'>sp1</span>, <span class='kw'>estimateSoilDepth</span>, name=<span class='st'>'name'</span>)
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>depth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='va'>estimateSoilDepth</span>, name<span class='op'>=</span><span class='st'>'name'</span><span class='op'>)</span>
 
 <span class='co'># this function can be used to "find" depth to any feature </span>
 <span class='co'># that can be defined via REGEX pattern matching on the horizon name</span>
 <span class='co'># for example, locate the depth to the top "Bt" horizon</span>
 <span class='co'># returning NA when there is no match</span>
-<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>top_Bt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span>(
-  <span class='kw'>sp1</span>, <span class='kw'>estimateSoilDepth</span>, 
-  name=<span class='st'>'name'</span>, 
-  p=<span class='st'>'Bt'</span>, 
-  no.contact.depth=<span class='fl'>0</span>, 
-  no.contact.assigned=<span class='fl'>NA</span>
-)
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>top_Bt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span>
+  <span class='va'>sp1</span>, <span class='va'>estimateSoilDepth</span>, 
+  name<span class='op'>=</span><span class='st'>'name'</span>, 
+  p<span class='op'>=</span><span class='st'>'Bt'</span>, 
+  no.contact.depth<span class='op'>=</span><span class='fl'>0</span>, 
+  no.contact.assigned<span class='op'>=</span><span class='cn'>NA</span>
+<span class='op'>)</span>
 
 <span class='co'># reduced margins</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># adjust default y-offset and depth scaling for following examples</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>sp1</span>, y.offset=<span class='fl'>10</span>, scaling.factor=<span class='fl'>0.5</span>)
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp1</span>, y.offset<span class='op'>=</span><span class='fl'>10</span>, scaling.factor<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># get plotting parameters for profile widths and depth scaling factors</span>
-<span class='kw'>lsp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"last_spc_plot"</span>, envir = <span class='kw'>aqp.env</span>)
+<span class='va'>lsp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span><span class='op'>(</span><span class='st'>"last_spc_plot"</span>, envir <span class='op'>=</span> <span class='va'>aqp.env</span><span class='op'>)</span>
 
 <span class='co'># positions on x-axis, same for both depth and top "Bt" horizon</span>
-<span class='kw'>x.positions</span> <span class='op'>&lt;-</span> (<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>sp1</span>)) <span class='op'>-</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>width</span>
+<span class='va'>x.positions</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>width</span>
 
 <span class='co'># annotate contact with unicode right-arrow</span>
 <span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span>
-<span class='kw'>y.positions</span> <span class='op'>&lt;-</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>y.offset</span> <span class='op'>+</span> (<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>depth</span> <span class='op'>*</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>scaling.factor</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span>(<span class='kw'>x.positions</span>, <span class='kw'>y.positions</span>, <span class='st'>'\u2192'</span>, col=<span class='st'>'red'</span>, adj=<span class='fl'>1</span>, cex=<span class='fl'>1.25</span>, lwd=<span class='fl'>2</span>)
+<span class='va'>y.positions</span> <span class='op'>&lt;-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>y.offset</span> <span class='op'>+</span> <span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>depth</span> <span class='op'>*</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>scaling.factor</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='va'>x.positions</span>, <span class='va'>y.positions</span>, <span class='st'>'\u2192'</span>, col<span class='op'>=</span><span class='st'>'red'</span>, adj<span class='op'>=</span><span class='fl'>1</span>, cex<span class='op'>=</span><span class='fl'>1.25</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># annotate top "Bt" depth with unicode right-arrow</span>
 <span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span>
-<span class='kw'>y.positions</span> <span class='op'>&lt;-</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>y.offset</span> <span class='op'>+</span> (<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>top_Bt</span> <span class='op'>*</span> <span class='kw'>lsp</span><span class='op'>$</span><span class='kw'>scaling.factor</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span>(<span class='kw'>x.positions</span>, <span class='kw'>y.positions</span>, <span class='st'>'\u2192'</span>, col=<span class='st'>'blue'</span>, adj=<span class='fl'>1</span>, cex=<span class='fl'>1.25</span>, lwd=<span class='fl'>2</span>)
+<span class='va'>y.positions</span> <span class='op'>&lt;-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>y.offset</span> <span class='op'>+</span> <span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>top_Bt</span> <span class='op'>*</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>scaling.factor</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='va'>x.positions</span>, <span class='va'>y.positions</span>, <span class='st'>'\u2192'</span>, col<span class='op'>=</span><span class='st'>'blue'</span>, adj<span class='op'>=</span><span class='fl'>1</span>, cex<span class='op'>=</span><span class='fl'>1.25</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
 </div><div class='img'><img src='estimateSoilDepth-2.png' alt='' width='768' height='475' /></div><div class='input'>
 
-<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># sample data</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>gopheridge</span>, package=<span class='st'>'soilDB'</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, package<span class='op'>=</span><span class='st'>'soilDB'</span><span class='op'>)</span>
   
   <span class='co'># run on a single profile</span>
-  <span class='fu'>estimateSoilDepth</span>(<span class='kw'>gopheridge</span>[<span class='fl'>1</span>, ])
+  <span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>gopheridge</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span><span class='op'>)</span>
   
   <span class='co'># apply to an entire collection</span>
-  <span class='fu'><a href='profileApply.html'>profileApply</a></span>(<span class='kw'>gopheridge</span>, <span class='kw'>estimateSoilDepth</span>)
-}
+  <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, <span class='va'>estimateSoilDepth</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

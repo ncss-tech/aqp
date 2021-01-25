@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Shannon Entropy</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/accuracy_uncertainty.R'><code>R/accuracy_uncertainty.R</code></a></small>
     <div class="hidden name"><code>shannonEntropy.Rd</code></div>
     </div>
 
@@ -120,14 +120,14 @@
     <p>A very simple implementation of Shannon entropy.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>shannonEntropy</span>(<span class='kw'>x</span>, b = <span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>shannonEntropy</span><span class='op'>(</span><span class='va'>x</span>, b <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>vector of probabilities [0,1], must sum to 1, should not contain NA</p></td>
+      <td><p>vector of probabilities (0,1), must sum to 1, should not contain NA</p></td>
     </tr>
     <tr>
       <th>b</th>
@@ -135,26 +135,30 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>0s are automatically removed by na.rm=TRUE, as (0 * log(0) = Nan)</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>The result is the normalized Shannon entropy when b = length(x) (Kempen et al, 2009).</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A single numeric value.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>0</code>s are automatically removed by <code>na.rm = TRUE</code>, as <code>(0 * log(0) = Nan)</code></p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>When <code>b = length(x)</code> the result is the normalized Shannon entropy of (Kempen et al, 2009).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Kempen, Bas, Dick J. Brus, Gerard B.M. Heuvelink, and Jetse J. Stoorvogel. 2009. "Updating the 1:50,000 Dutch Soil Map Using Legacy Soil Data: A Multinominal Logistic Regression Approach." Geoderma 151: 311-26. doi:10.1016/j.geoderma.2009.04.023</p>
 <p>Shannon, Claude E. (July-October 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01338.x</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># a very simple example</span>
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.05</span>, <span class='fl'>0.05</span>)
+    <pre class="examples"><div class='input'>
+<span class='co'># a very simple example</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.05</span>, <span class='fl'>0.05</span><span class='op'>)</span>
 
-<span class='fu'>shannonEntropy</span>(<span class='kw'>p</span>)
-</div><div class='output co'>#&gt; [1] 1.960964</div></pre>
+<span class='fu'>shannonEntropy</span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.960964</div><div class='input'>
+
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

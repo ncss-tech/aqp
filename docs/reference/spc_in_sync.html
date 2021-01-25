@@ -42,8 +42,8 @@
 <meta property="og:title" content="Quickly assess relative state of site and horizon slots — spc_in_sync" />
 <meta property="og:description" content="Determine &quot;state&quot; of SoilProfileCollection before or after major modifications of site or horizon slot contents.
 Two logical checks are performed on the site and horizon tables, and a third element valid returns TRUE when both checks are TRUE.
-Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons [for now]
-Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles" />
+Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons (for now)
+Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same relative ordering, but horizons still may be out of order within profiles" />
 
 
 
@@ -75,7 +75,7 @@ Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _re
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _re
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +97,7 @@ Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _re
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,11 +122,11 @@ Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _re
     <div class="ref-description">
     <p>Determine "state" of SoilProfileCollection before or after major modifications of site or horizon slot contents.</p>
 <p>Two logical checks are performed on the site and horizon tables, and a third element <code>valid</code> returns <code>TRUE</code> when both checks are <code>TRUE</code>.</p>
-<p>Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons [for now]</p>
-<p>Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same _relative_ ordering, but horizons still may be out of order within profiles</p>
+<p>Check 1: Same number of sites in site as number of sites in horizons. No intermingling of IDs, no orphan horizons, no sites without horizons (for now)</p>
+<p>Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same <em>relative</em> ordering, but horizons still may be out of order within profiles</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spc_in_sync</span>(<span class='kw'>object</span>)</pre>
+    <pre class="usage"><span class='fu'>spc_in_sync</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

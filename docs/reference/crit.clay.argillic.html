@@ -40,8 +40,10 @@
 
 
 <meta property="og:title" content="Determines threshold (minimum) clay content for argillic upper bound — crit.clay.argillic" />
-<meta property="og:description" content="Given a vector or matrix of &quot;eluvial&quot; horizon clay contents (%), crit.clay.argillic() returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase.
-Uses the standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %. Based on the clay increase criteria in the definition of the argillic horizon from 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014)." />
+<meta property="og:description" content="Given a vector or matrix of &quot;eluvial&quot; horizon clay contents (\
+crit.clay.argillic() returns a vector or matrix of minimum clay
+contents (thresholds) that must be met for an argillic horizon clay
+increase." />
 
 
 
@@ -73,7 +75,7 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -81,7 +83,7 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +97,7 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -113,48 +115,66 @@ Uses the standard equations for clay contents less than 15 %, between 15 and 40 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Determines threshold (minimum) clay content for argillic upper bound</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/getArgillicBounds.R'><code>R/getArgillicBounds.R</code></a></small>
     <div class="hidden name"><code>crit.clay.argillic.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given a vector or matrix of "eluvial" horizon clay contents (%), <code>crit.clay.argillic()</code> returns a vector or matrix of minimum clay contents (thresholds) that must be met for an argillic horizon clay increase.</p>
-<p>Uses the standard equations for clay contents less than 15 %, between 15 and 40 %, and greater than 40 %. Based on the clay increase criteria in the definition of the argillic horizon from 12th Edition Keys to Soil Taxonomy (Soil Survey Staff, 2014).</p>
+    <p>Given a vector or matrix of "eluvial" horizon clay contents (\<!-- %), -->
+<code>crit.clay.argillic()</code> returns a vector or matrix of minimum clay
+contents (thresholds) that must be met for an argillic horizon clay
+increase.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crit.clay.argillic</span>(<span class='kw'>eluvial_clay_content</span>)</pre>
+    <pre class="usage"><span class='fu'>crit.clay.argillic</span><span class='op'>(</span><span class='va'>eluvial_clay_content</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>eluvial_clay_content</th>
-      <td><p>A numeric vector or matrix containing clay contents of potential "eluvial" horizons. May contain <code>NA</code>.</p></td>
+      <td><p>A numeric vector or matrix containing clay
+contents of potential "eluvial" horizons. May contain <code>NA</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector or matrix (input-dependent) containing minimum "illuvial" horizon clay contents (thresholds) to be met for argillic horizon clay increase.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <p>A vector or matrix (input-dependent) containing minimum "illuvial"
+horizon clay contents (thresholds) to be met for argillic horizon clay
+increase.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed. USDA-Natural Resources Conservation Service, Washington, DC.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Andrew Gene Brown</p>
+    <p>Uses the standard equations for clay contents less than 15 \<!-- %, between 15 -->
+and 40 \<!-- %, and greater than 40 \\%. Based on the clay increase criteria in -->
+the definition of the argillic horizon from 12th Edition Keys to Soil
+Taxonomy (Soil Survey Staff, 2014).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function is intended for identifying clay content threshold required for an argillic horizon. These thresholds may not apply depending on the specifics of your soil. E.g. if the upper part of argillic has been plowed (has Ap immediately over upper boundary) the clay increase requirement can be waived (Soil Survey Staff, 2014).</p>
+    <p>This function is intended for identifying clay content threshold
+required for an argillic horizon. These thresholds may not apply depending
+on the specifics of your soil. E.g. if the upper part of argillic has been
+plowed (has Ap immediately over upper boundary) the clay increase
+requirement can be waived (Soil Survey Staff, 2014).</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.
+USDA-Natural Resources Conservation Service, Washington, DC.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='getArgillicBounds.html'>getArgillicBounds</a></code>, <code><a href='get.increase.matrix.html'>get.increase.matrix</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew Gene Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># crit.clay.argillic uses different equations for clay content</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># crit.clay.argillic uses different equations for clay content</span>
 <span class='co'># less than 15 %, between 15 and 40 %, and &gt;40 %</span>
 
-<span class='fu'>crit.clay.argillic</span>(eluvial_clay_content=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>20</span>, <span class='fl'>45</span>))
-</div><div class='output co'>#&gt; [1]  8 24 53</div></pre>
+<span class='fu'>crit.clay.argillic</span><span class='op'>(</span>eluvial_clay_content<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>20</span>, <span class='fl'>45</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  8 24 53</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

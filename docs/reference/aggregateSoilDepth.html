@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Probabalistic Estimation of Soil Depth — aggregateSoilDepth • aqp</title>
+<title>Probabalistic Estimation of Soil Depth within Groups — aggregateSoilDepth • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Probabalistic Estimation of Soil Depth — aggregateSoilDepth" />
-<meta property="og:description" content="Estimate the most-likely depth to contact within a collection of soil profiles." />
+<meta property="og:title" content="Probabalistic Estimation of Soil Depth within Groups — aggregateSoilDepth" />
+<meta property="og:description" content="Estimate the most-likely depth to contact within a collection of soil profiles. Consider getSoilDepthClass followed by group-wise percentile estimation as a faster alternative." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,16 +111,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Probabalistic Estimation of Soil Depth</h1>
-    
+    <h1>Probabalistic Estimation of Soil Depth within Groups</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/aggregateSoilDepth.R'><code>R/aggregateSoilDepth.R</code></a></small>
     <div class="hidden name"><code>aggregateSoilDepth.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimate the most-likely depth to contact within a collection of soil profiles.</p>
+    <p>Estimate the most-likely depth to contact within a collection of soil profiles. Consider <code>getSoilDepthClass</code> followed by group-wise percentile estimation as a faster alternative.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>aggregateSoilDepth</span>(<span class='kw'>x</span>, <span class='kw'>groups</span>, crit.prob = <span class='fl'>0.9</span>, name = <span class='st'>"hzname"</span>, p = <span class='st'>"Cr|R|Cd"</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>aggregateSoilDepth</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>groups</span>,
+  crit.prob <span class='op'>=</span> <span class='fl'>0.9</span>,
+  name <span class='op'>=</span> <span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  p <span class='op'>=</span> <span class='st'>"Cr|R|Cd"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,7 +146,7 @@
     </tr>
     <tr>
       <th>name</th>
-      <td><p>horizon-level attribute where horizon designation is stored</p></td>
+      <td><p>horizon-level attribute where horizon designation is stored, defaults to <code><a href='hzdesgnname.html'>hzdesgnname(x)</a></code></p></td>
     </tr>
     <tr>
       <th>p</th>
@@ -151,28 +158,33 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function computes a probability-based estimate of soil depth by group. If no grouping variable exists, a dummy value can be used to compute a single estimate. The <code>crit.prob</code> argument sets the critical probability (e.g. 0.9) at which soil depth within a group of profiles is determined. For example, a <code>crit.prob</code> of 0.95 might result in an estimated soil depth (e.g. 120cm) where 95% of the profiles (by group) had depths that were less than or equal to 120cm.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>data.frame</code> is returned, with as many rows as there are unique group labels, as specified in <code>groups</code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function computes a probability-based estimate of soil depth by group. If no grouping variable exists, a dummy value can be used to compute a single estimate. The <code>crit.prob</code> argument sets the critical probability (e.g. 0.9) at which soil depth within a group of profiles is determined. For example, a <code>crit.prob</code> of 0.95 might result in an estimated soil depth (e.g. 120cm) where 95% of the profiles (by group) had depths that were less than or equal to 120cm.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='estimateSoilDepth.html'>estimateSoilDepth()</a></code> <code><a href='slab-methods.html'>slab()</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='estimateSoilDepth.html'>estimateSoilDepth</a>,<a href='slab-methods.html'>slab</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
-<span class='fu'>aggregateSoilDepth</span>(<span class='kw'>sp1</span>, <span class='st'>'group'</span>, crit.prob = <span class='fl'>0.9</span>, name=<span class='st'>'name'</span>)
+<span class='co'># set horizon designation in SPC</span>
+<span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>'name'</span>
+
+<span class='fu'>aggregateSoilDepth</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='st'>'group'</span>, crit.prob <span class='op'>=</span> <span class='fl'>0.9</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   group soil.top soil.bottom
 #&gt; 1     1        0         232
-#&gt; 2     2        0          67</div></pre>
+#&gt; 2     2        0          67</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

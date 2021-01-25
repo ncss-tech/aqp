@@ -1499,6 +1499,7 @@ NULL
 #'
 #'
 "rowley2019"
+
 #' Soil Morphologic Data from Jacobs et al. 2002.
 #'
 #' Select soil morphologic data from "Redoximorphic Features as Indicators of
@@ -1509,15 +1510,16 @@ NULL
 #'
 #' @name jacobs2000
 #' @docType data
+#' 
 #' @format A \code{SoilProfileCollection} object.
+#' 
 #' @references Jacobs, P. M., L. T. West, and J. N. Shaw. 2002. Redoximorphic
 #' Features as Indicators of Seasonal Saturation, Lowndes County, Georgia. Soil
 #' Sci. Soc. Am. J. 66:315-323. doi:10.2136/sssaj2002.3150
 #' @usage data(jacobs2000)
-#' @source
-#' \href{https://acsess.onlinelibrary.wiley.com/doi/full/10.2136/sssaj2002.3150Redoximorphic}{
-#' Features as Indicators of Seasonal Saturation, Lowndes County, Georgia}
+#' 
 #' @keywords datasets
+#' 
 #' @examples
 #'
 #' # load
@@ -1562,6 +1564,7 @@ NULL
 #'
 #'
 "jacobs2000"
+
 #' Average Hydraulic Parameters from the ROSETTA Model by USDA Soil Texture
 #' Class
 #'
@@ -1655,6 +1658,7 @@ NULL
 #'
 #'
 "ROSETTA.centroids"
+
 #' Sample XRD Patterns
 #'
 #' Several sample XRD patterns from the RRUFF project site.
@@ -1934,7 +1938,7 @@ NULL
 #' @usage data(munsell.spectra)
 #'
 #' @references
-#' Centore, Paul. Colour Tools for Painters. \url{http://www.munsellcolourscienceforpainters.com/}.
+#' Centore, Paul. Colour Tools for Painters. \url{https://www.munsellcolourscienceforpainters.com/}.
 #'
 #' @aliases munsell.spectra.wide
 #'

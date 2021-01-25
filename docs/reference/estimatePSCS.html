@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition) — estimatePSCS • aqp</title>
+<title>Estimate boundaries of the particle size control section (U.S Soil Taxonomy;
+12th edition) — estimatePSCS • aqp</title>
 
 
 <!-- jquery -->
@@ -39,11 +40,11 @@
 
 
 
-<meta property="og:title" content="Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition) — estimatePSCS" />
-<meta property="og:description" content="Estimates the upper and lower boundary of the particle size control section by applying a programmatic version of the particle size control section key from the Keys to Soil Taxonomy (12th edition).
-Requires information to identify argillic horizons (clay contents, horizon designations) with getArgillicBounds() as well as the presence of plow layers and surface organic soil material. Any getArgillicBounds() arguments may be passed to estimatePSCS.
-Requires information on taxonomic order (to handle andisols).
-WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for." />
+<meta property="og:title" content="Estimate boundaries of the particle size control section (U.S Soil Taxonomy;
+12th edition) — estimatePSCS" />
+<meta property="og:description" content="Estimates the upper and lower boundary of the particle size control section
+by applying a programmatic version of the particle size control section key
+from the Keys to Soil Taxonomy (12th edition)." />
 
 
 
@@ -75,7 +76,7 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -83,7 +84,7 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +98,7 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,24 +115,27 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate boundaries of the particle size control section (U.S Soil Taxonomy; 12th edition)</h1>
-    
+    <h1>Estimate boundaries of the particle size control section (U.S Soil Taxonomy;
+12th edition)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/estimatePSCS.R'><code>R/estimatePSCS.R</code></a></small>
     <div class="hidden name"><code>estimatePSCS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimates the upper and lower boundary of the particle size control section by applying a programmatic version of the particle size control section key from the Keys to Soil Taxonomy (12th edition).</p>
-<p>Requires information to identify argillic horizons (clay contents, horizon designations) with <code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> as well as the presence of plow layers and surface organic soil material. Any <code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> arguments may be passed to <code>estimatePSCS</code>.</p>
-<p>Requires information on taxonomic order (to handle andisols).</p>
-<p>WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with strongly contrasting PSCs may not be classified correctly. The author would welcome a dataset to develop this functionality for.</p>
+    <p>Estimates the upper and lower boundary of the particle size control section
+by applying a programmatic version of the particle size control section key
+from the Keys to Soil Taxonomy (12th edition).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>estimatePSCS</span>(<span class='kw'>p</span>, 
-             hzdesgn = <span class='st'>"hzname"</span>, 
-             clay.attr = <span class='st'>"clay"</span>, 
-             texcl.attr = <span class='st'>"texcl"</span>, 
-             tax_order_field = <span class='st'>"tax_order"</span>,
-             bottom.pattern = <span class='st'>"Cr|R|Cd"</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>estimatePSCS</span><span class='op'>(</span>
+  <span class='va'>p</span>,
+  hzdesgn <span class='op'>=</span> <span class='st'>"hzname"</span>,
+  clay.attr <span class='op'>=</span> <span class='st'>"clay"</span>,
+  texcl.attr <span class='op'>=</span> <span class='st'>"texcl"</span>,
+  tax_order_field <span class='op'>=</span> <span class='st'>"tax_order"</span>,
+  bottom.pattern <span class='op'>=</span> <span class='st'>"Cr|R|Cd"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,24 +145,32 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
       <td><p>A single-profile SoilProfileCollection object</p></td>
     </tr>
     <tr>
+      <th>hzdesgn</th>
+      <td><p>Name of the horizon attribute containing the horizon
+designation. Default 'hzname'</p></td>
+    </tr>
+    <tr>
       <th>clay.attr</th>
-      <td><p>Name of the horizon attribute containing clay contents. Default 'clay'</p></td>
+      <td><p>Name of the horizon attribute containing clay contents.
+Default 'clay'</p></td>
     </tr>
     <tr>
       <th>texcl.attr</th>
-      <td><p>Name of the horizon attribute containing textural class (used for finding sandy textures). Default 'texcl'</p></td>
-    </tr>
-    <tr>
-      <th>hzdesgn</th>
-      <td><p>Name of the horizon attribute containing the horizon designation. Default 'hzname'</p></td>
+      <td><p>Name of the horizon attribute containing textural class
+(used for finding sandy textures). Default 'texcl'</p></td>
     </tr>
     <tr>
       <th>tax_order_field</th>
-      <td><p>Name of the site attribute containing taxonomic order; for handling PSCS rules for Andisols in lieu of lab data. May be NA or column missing altogether, in which case Andisol PSC possibility is ignored.</p></td>
+      <td><p>Name of the site attribute containing taxonomic
+order; for handling PSCS rules for Andisols in lieu of lab data. May be NA
+or column missing altogether, in which case Andisol PSC possibility is
+ignored.</p></td>
     </tr>
     <tr>
       <th>bottom.pattern</th>
-      <td><p>Regular expression pattern to match a root-restrictive contact. Default matches Cr, R or Cd. This argument is passed to both estimateSoilDepth and getArgillicBounds.</p></td>
+      <td><p>Regular expression pattern to match a root-restrictive
+contact. Default matches Cr, R or Cd. This argument is passed to both
+estimateSoilDepth and getArgillicBounds.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -168,27 +180,42 @@ WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with stron
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector containing the top and bottom depth of the particle size control section. First value is top, second value is bottom.</p>
+    <p>A numeric vector containing the top and bottom depth of the particle
+size control section. First value is top, second value is bottom.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Requires information to identify argillic horizons (clay contents, horizon
+designations) with <code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> as well as the presence of
+plow layers and surface organic soil material. Any
+<code><a href='getArgillicBounds.html'>getArgillicBounds()</a></code> arguments may be passed to <code>estimatePSCS</code>.</p>
+<p>Requires information on taxonomic order (to handle andisols).</p>
+<p>WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with
+strongly contrasting PSCs may not be classified correctly. The author would
+welcome a dataset to develop this functionality for.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed. USDA-Natural Resources Conservation Service, Washington, DC.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Andrew Gene Brown</p>
+    <p>Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.
+USDA-Natural Resources Conservation Service, Washington, DC.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code>getArgillicBounds</code>, <code>getSurfaceHorizonDepth</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew Gene Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
-<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>estimatePSCS</span>(<span class='kw'>p</span>, hzdesgn=<span class='st'>'name'</span>, clay.attr = <span class='kw'>attr</span>, texcl.attr=<span class='st'>"texture"</span>)
-<span class='kw'>foo</span>
-</div><div class='output co'>#&gt; [1] 49 89</div></pre>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
+<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>estimatePSCS</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn<span class='op'>=</span><span class='st'>'name'</span>, clay.attr <span class='op'>=</span> <span class='va'>attr</span>, texcl.attr<span class='op'>=</span><span class='st'>"texture"</span><span class='op'>)</span>
+<span class='va'>foo</span>
+</div><div class='output co'>#&gt; [1] 49 89</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

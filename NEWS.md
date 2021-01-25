@@ -1,5 +1,5 @@
 # aqp 1.27 (2021-01-22)
- * `mixMunsell` now relies on suggested package {gower} for 10-20x speed bump
+ * `mixMunsell` now relies on suggested package {gower} for 5-10x speed bump
  * {aqp} no longer imports from {reshape} (less one dependency), all transformations from wide<->long are done via {data.table}
  * methods from {data.table} are now imported by {aqp} (new dependency)
  * Major overhaul of `plotColorQuantiles()`, now using {lattice} graphics

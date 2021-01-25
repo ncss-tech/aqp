@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Generalize Horizon Names — generalize.hz" />
-<meta property="og:description" content="Generalize a vector of horizon names, based on new classes, and REGEX patterns." />
+<meta property="og:description" content="Generalize a vector of horizon names, based on new classes, and REGEX
+patterns." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +95,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,15 +113,16 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generalize Horizon Names</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/generalize.hz.R'><code>R/generalize.hz.R</code></a></small>
     <div class="hidden name"><code>generalize.hz.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generalize a vector of horizon names, based on new classes, and REGEX patterns.</p>
+    <p>Generalize a vector of horizon names, based on new classes, and REGEX
+patterns.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>generalize.hz</span>(<span class='kw'>x</span>, <span class='kw'>new</span>, <span class='kw'>pat</span>, <span class='kw'>non.matching.code</span>, <span class='kw'>hzdepm</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>generalize.hz</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>new</span>, <span class='va'>pat</span>, non.matching.code <span class='op'>=</span> <span class='st'>"not-used"</span>, hzdepm <span class='op'>=</span> <span class='cn'>NA</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,15 +141,18 @@
     </tr>
     <tr>
       <th>non.matching.code</th>
-      <td><p>text used to describe any horizon not matching any item in <code>pat</code></p></td>
+      <td><p>text used to describe any horizon not matching any
+item in <code>pat</code></p></td>
     </tr>
     <tr>
       <th>hzdepm</th>
-      <td><p>a numeric vector of horizon mid-points, must not contain NA, same length as <code>x</code></p></td>
+      <td><p>a numeric vector of horizon mid-points, must not contain NA,
+same length as <code>x</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional arguments passed to <code><a href='https://rdrr.io/r/base/grep.html'>grep()</a></code> such as <code>perl=TRUE</code> for advanced REGEX</p></td>
+      <td><p>additional arguments passed to <code><a href='https://rdrr.io/r/base/grep.html'>grep()</a></code> such as
+<code>perl=TRUE</code> for advanced REGEX</p></td>
     </tr>
     </table>
 
@@ -159,7 +164,44 @@
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+
+<span class='co'># check original distribution of hz designations</span>
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>
+
+<span class='co'># generalize</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'>generalize.hz</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>,
+                           new<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span>,<span class='st'>'R'</span><span class='op'>)</span>,
+                           pat<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span>,<span class='st'>'R'</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># see how we did / what we missed</span>
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span>, <span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>
+
+
+<span class='co'>## a more advanced example, requries perl=TRUE</span>
+<span class='co'># example data</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'AC'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'^AC'</span>, <span class='st'>'C'</span>, <span class='st'>'BC'</span>, <span class='st'>'CB'</span><span class='op'>)</span>
+
+<span class='co'># new labels</span>
+<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'^AC'</span>, <span class='st'>'C'</span><span class='op'>)</span>
+<span class='co'># patterns:</span>
+<span class='co'># "A anywhere in the name"</span>
+<span class='co'># "literal '^A' anywhere in the name"</span>
+<span class='co'># "C anywhere in name, but without preceding A"</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'^A'</span>, <span class='st'>'(?&lt;!A)C'</span><span class='op'>)</span>
+
+<span class='co'># note additional argument</span>
+<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>generalize.hz</span><span class='op'>(</span><span class='va'>x</span>, new <span class='op'>=</span> <span class='va'>n</span>, pat<span class='op'>=</span><span class='va'>p</span>, perl<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># double-check: OK</span>
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>res</span>, <span class='va'>x</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

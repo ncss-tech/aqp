@@ -40,7 +40,13 @@
 
 
 <meta property="og:title" content="Check a SoilProfileCollection object for errors in horizon depths. — checkHzDepthLogic" />
-<meta property="og:description" content="This function inspects a SoilProfileCollection object, looking for 4 common errors in horizon depths: 1) bottom depths shallower than top depths, 2) equal top and bottom depths, 3) missing top or bottom depths (e.g. NA), and, 4) gaps or overlap between adjacent horizons." />
+<meta property="og:description" content="This function inspects a SoilProfileCollection object, looking for four common errors in horizon depths:
+bottom depth shallower than top depth
+equal top and bottom depth
+missing top or bottom depth (e.g. NA)
+gap or overlap between adjacent horizons
+
+" />
 
 
 
@@ -72,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +86,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +100,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,72 +117,82 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check a <code>SoilProfileCollection</code> object for errors in horizon depths.</h1>
-    
+    <h1>Check a SoilProfileCollection object for errors in horizon depths.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/checkHzDepthLogic.R'><code>R/checkHzDepthLogic.R</code></a></small>
     <div class="hidden name"><code>checkHzDepthLogic.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function inspects a <code>SoilProfileCollection</code> object, looking for 4 common errors in horizon depths: 1) bottom depths shallower than top depths, 2) equal top and bottom depths, 3) missing top or bottom depths (e.g. NA), and, 4) gaps or overlap between adjacent horizons.</p>
+    <p>This function inspects a SoilProfileCollection object, looking for four common errors in horizon depths:</p><ol>
+<li><p>bottom depth shallower than top depth</p></li>
+<li><p>equal top and bottom depth</p></li>
+<li><p>missing top or bottom depth (e.g. <code>NA</code>)</p></li>
+<li><p>gap or overlap between adjacent horizons</p></li>
+</ol>
+
     </div>
 
-    <pre class="usage"><span class='fu'>checkHzDepthLogic</span>(<span class='kw'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>checkHzDepthLogic</span><span class='op'>(</span><span class='va'>x</span>, fast <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a <code>SoilProfileCollection</code> object</p></td>
+      <td><p>SoilProfileCollection object to check</p></td>
+    </tr>
+    <tr>
+      <th>fast</th>
+      <td><p>If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: <code>FALSE</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function replaces <code>test_hz_logic</code>, now marked as deprecated.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code> with as many rows as profiles in <code>x</code>.</p><dl>
-		<dt>id</dt><dd><p>Profile IDs, named according to <code><a href='idname.html'>idname(x)</a></code></p></dd>
-
-		<dt>depthLogic</dt><dd><p>boolean, errors related to depth logic</p></dd>
-
-		<dt>sameDepth</dt><dd><p>boolean, errors related to same top/bottom depths</p></dd>
-    
-    <dt>missingDepth</dt><dd><p>boolean, NA in top / bottom depths</p></dd>
-    
-    <dt>overlapOrGap</dt><dd><p>boolean, gaps or overlap in adjacent horizons</p></dd>
-    
-    <dt>valid</dt><dd><p>boolean, profile passes all tests</p></dd>
-		
-</dl>
+    <p>A <code>data.frame</code> containing profile IDs, validity boolean (<code>valid</code>) and test results if <code>fast = FALSE</code>.</p>
+<p>The <code>data.frame</code> will have as many rows as profiles in <code>x</code> (<code><a href='length.html'>length(x)</a></code>).</p><ul>
+<li><p><code>id</code> : Profile IDs, named according to <code><a href='idname.html'>idname(x)</a></code></p></li>
+<li><p><code>valid</code> : boolean, profile passes all of the following tests</p><ul>
+<li><p><code>depthLogic</code> : boolean, errors related to depth logic</p></li>
+<li><p><code>sameDepth</code> : boolean, errors related to same top/bottom depths</p></li>
+<li><p><code>missingDepth</code> : boolean, NA in top / bottom depths</p></li>
+<li><p><code>overlapOrGap</code> : boolean, gaps or overlap in adjacent horizons</p></li>
+</ul></li>
+</ul>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>D.E. Beaudette</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>There is currently no simple way to fix errors identified by this function. Stay tuned for a <code>fixHzDepthErrors()</code>.</p>
+    <p>D.E. Beaudette, A.G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
- 
+
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+
 <span class='co'># these data should be clean</span>
-(<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span>(<span class='kw'>sp3</span>))
-</div><div class='output co'>#&gt;    id depthLogic sameDepth missingDepth overlapOrGap valid
-#&gt; 1   1      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 2  10      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 3   2      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 4   3      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 5   4      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 6   5      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 7   6      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 8   7      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 9   8      FALSE     FALSE        FALSE        FALSE  TRUE
-#&gt; 10  9      FALSE     FALSE        FALSE        FALSE  TRUE</div><div class='input'>
+<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   id valid depthLogic sameDepth missingDepth overlapOrGap
+#&gt; 1  1  TRUE      FALSE     FALSE        FALSE        FALSE
+#&gt; 2 10  TRUE      FALSE     FALSE        FALSE        FALSE
+#&gt; 3  2  TRUE      FALSE     FALSE        FALSE        FALSE
+#&gt; 4  3  TRUE      FALSE     FALSE        FALSE        FALSE
+#&gt; 5  4  TRUE      FALSE     FALSE        FALSE        FALSE
+#&gt; 6  5  TRUE      FALSE     FALSE        FALSE        FALSE</div><div class='input'>
+<span class='co'># less memory if only concerned about net validity</span>
+<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span><span class='op'>(</span><span class='va'>sp3</span>, fast <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   id valid
+#&gt; 1  1  TRUE
+#&gt; 2 10  TRUE
+#&gt; 3  2  TRUE
+#&gt; 4  3  TRUE
+#&gt; 5  4  TRUE
+#&gt; 6  5  TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

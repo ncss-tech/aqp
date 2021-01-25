@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Plot Multiple SoilProfileCollection Objects — plotMultipleSPC" />
-<meta property="og:description" content="Combine multiple SoilProfilecollection objects into a single profile sketch, with annotated groups." />
+<meta property="og:description" content="Combine multiple SoilProfileCollection objects into a single profile sketch,
+with annotated groups." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +95,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,18 +113,23 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot Multiple SoilProfileCollection Objects</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/plotMultipleSPC.R'><code>R/plotMultipleSPC.R</code></a></small>
     <div class="hidden name"><code>plotMultipleSPC.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Combine multiple SoilProfilecollection objects into a single profile sketch, with annotated groups.</p>
+    <p>Combine multiple SoilProfileCollection objects into a single profile sketch,
+with annotated groups.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotMultipleSPC</span>(<span class='kw'>spc.list</span>, <span class='kw'>group.labels</span>, 
-args = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fl'>NA</span>), times=<span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>spc.list</span>)), 
-arrow.offset = <span class='fl'>2</span>, bracket.base.depth = <span class='fl'>95</span>,
-<span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>plotMultipleSPC</span><span class='op'>(</span>
+  <span class='va'>spc.list</span>,
+  <span class='va'>group.labels</span>,
+  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NA</span><span class='op'>)</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>spc.list</span><span class='op'>)</span><span class='op'>)</span>,
+  arrow.offset <span class='op'>=</span> <span class='fl'>2</span>,
+  bracket.base.depth <span class='op'>=</span> <span class='fl'>95</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,15 +140,18 @@ arrow.offset = <span class='fl'>2</span>, bracket.base.depth = <span class='fl'>
     </tr>
     <tr>
       <th>group.labels</th>
-      <td><p>a vector of group labels, one for each <code>SoilProfileCollection</code> object</p></td>
+      <td><p>a vector of group labels, one for each
+<code>SoilProfileCollection</code> object</p></td>
     </tr>
     <tr>
       <th>args</th>
-      <td><p>a list of arguments passed to <code>plotSPC</code>, one for each <code>SoilProfileCollection</code> object</p></td>
+      <td><p>a list of arguments passed to <code>plotSPC</code>, one for each
+<code>SoilProfileCollection</code> object</p></td>
     </tr>
     <tr>
       <th>arrow.offset</th>
-      <td><p>vertical offset in depth from base of start / end profiles and group bracket arrows</p></td>
+      <td><p>vertical offset in depth from base of start / end
+profiles and group bracket arrows</p></td>
     </tr>
     <tr>
       <th>bracket.base.depth</th>
@@ -154,42 +163,45 @@ arrow.offset = <span class='fl'>2</span>, bracket.base.depth = <span class='fl'>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette and Ben Marshall</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>See examples below for usage.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Multiple color legends for thematic profile sketches are not currently supported, use with caution.</p>
+    <p>Multiple color legends for thematic profile sketches are not currently
+supported, use with caution.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette and Ben Marshall</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># load sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
+    <pre class="examples"><div class='input'>
+<span class='co'># load sample data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
 
 <span class='co'># convert soil colors</span>
-<span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>h</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span> ; <span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span> ; <span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>v</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span>
-<span class='kw'>sp3.rgb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp3</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(<span class='kw'>hue</span>, <span class='kw'>value</span>, <span class='kw'>chroma</span>, return_triplets=<span class='fl'>TRUE</span>))
-<span class='kw'>sp3</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span>)] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='kw'>sp3.rgb</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/rgb2hsv.html'>rgb2hsv</a></span>(<span class='kw'>r</span>, <span class='kw'>g</span>, <span class='kw'>b</span>, maxColorValue=<span class='fl'>1</span>)))
+<span class='va'>sp3</span><span class='op'>$</span><span class='va'>h</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span> ; <span class='va'>sp3</span><span class='op'>$</span><span class='va'>s</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span> ; <span class='va'>sp3</span><span class='op'>$</span><span class='va'>v</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
+<span class='va'>sp3.rgb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp3</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span>, return_triplets<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>sp3</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp3.rgb</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/rgb2hsv.html'>rgb2hsv</a></span><span class='op'>(</span><span class='va'>r</span>, <span class='va'>g</span>, <span class='va'>b</span>, maxColorValue<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># promote to SoilProfileCollection</span>
-<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># combine into a list</span>
-<span class='kw'>spc.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>sp3</span>, <span class='kw'>sp4</span>)
+<span class='va'>spc.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sp3</span>, <span class='va'>sp4</span><span class='op'>)</span>
 
 <span class='co'># plot multiple SPC objects, with list of named arguments for each call to plotSPC</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span>))
-<span class='fu'>plotMultipleSPC</span>(<span class='kw'>spc.list</span>, group.labels=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Collection 1'</span>, <span class='st'>'Collection 2'</span>), 
-args=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(name=<span class='st'>'name'</span>, id.style=<span class='st'>'top'</span>), 
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(name=<span class='st'>'name'</span>, id.style=<span class='st'>'side'</span>)), bracket.base.depth=<span class='fl'>120</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to min; returning Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='img'><img src='plotMultipleSPC-1.png' alt='' width='768' height='475' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>plotMultipleSPC</span><span class='op'>(</span><span class='va'>spc.list</span>, group.labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Collection 1'</span>, <span class='st'>'Collection 2'</span><span class='op'>)</span>,
+args<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'top'</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'side'</span><span class='op'>)</span><span class='op'>)</span>, bracket.base.depth<span class='op'>=</span><span class='fl'>120</span><span class='op'>)</span>
+</div><div class='img'><img src='plotMultipleSPC-1.png' alt='' width='768' height='475' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

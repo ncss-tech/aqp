@@ -40,8 +40,9 @@
 
 
 <meta property="og:title" content="Return the horizon top depths from a call to get.increase.matrix() — get.increase.depths" />
-<meta property="og:description" content="get.increase.depths performs the conversion of the square matrix output of get.increase.matrix back to horizon top depth for where criteria were met.
-Note that the `threshold.fun` result is allowed to contain NA, but that will result in no output for affected cells." />
+<meta property="og:description" content="get.increase.depths performs the conversion of the square matrix
+output of get.increase.matrix back to horizon top depth for where
+criteria were met." />
 
 
 
@@ -73,7 +74,7 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -81,7 +82,7 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +96,7 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -113,16 +114,17 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Return the horizon top depths from a call to get.increase.matrix()</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/get.increase.matrix.R'><code>R/get.increase.matrix.R</code></a></small>
     <div class="hidden name"><code>get.increase.depths.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>get.increase.depths</code> performs the conversion of the square matrix output of <code>get.increase.matrix</code> back to horizon top depth for where criteria were met.</p>
-<p>Note that the `threshold.fun` result is allowed to contain NA, but that will result in no output for affected cells.</p>
+    <p><code>get.increase.depths</code> performs the conversion of the square matrix
+output of <code>get.increase.matrix</code> back to horizon top depth for where
+criteria were met.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get.increase.depths</span>(<span class='kw'>p</span>, <span class='kw'>attr</span>, <span class='kw'>threshold.fun</span>, <span class='kw'>vertical.distance</span>)</pre>
+    <pre class="usage"><span class='fu'>get.increase.depths</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>attr</span>, <span class='va'>threshold.fun</span>, <span class='va'>vertical.distance</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,36 +139,46 @@ Note that the `threshold.fun` result is allowed to contain NA, but that will res
     </tr>
     <tr>
       <th>threshold.fun</th>
-      <td><p>a function that returns the threshold (as a function of attr); may return a constant single value</p></td>
+      <td><p>a function that returns the threshold (as a function of
+attr); may return a constant single value</p></td>
     </tr>
     <tr>
       <th>vertical.distance</th>
-      <td><p>the vertical distance (determined from difference SPC top depth variable) within which increase must be met</p></td>
+      <td><p>the vertical distance (determined from difference
+SPC top depth variable) within which increase must be met</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a numeric vector of depths where the increase retuirement is met. Typically the first is the one of interst to taxonomy.</p>
-<p><code>get.increase.depths</code> converts to horizon dop depth by using above matrix output to determine depths where increase is met.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <p>Returns a numeric vector of depths where the increase requirement is
+met. For the argillic, the first is the one of interest.</p>
+<p><code>get.increase.depths</code> converts to horizon dop depth by using above
+matrix output to determine depths where increase is met.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Andrew Gene Brown</p>
+    <p>Note that the <code>threshold.fun</code> result is allowed to contain NA, but that will
+result in no output for affected cells.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code>getArgillicBounds</code>, <code>crit.clay.argillic</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew Gene Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
-<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.depths</span>(<span class='kw'>p</span>, threshold.fun = <span class='kw'>crit.clay.argillic</span>, 
-                           attr = <span class='kw'>attr</span>, vertical.distance = <span class='fl'>30</span>)
-<span class='kw'>foo</span>
-</div><div class='output co'>#&gt; [1] 49 57</div></pre>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
+<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.depths</span><span class='op'>(</span><span class='va'>p</span>, threshold.fun <span class='op'>=</span> <span class='va'>crit.clay.argillic</span>,
+                           attr <span class='op'>=</span> <span class='va'>attr</span>, vertical.distance <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
+<span class='va'>foo</span>
+</div><div class='output co'>#&gt; [1] 49 57</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

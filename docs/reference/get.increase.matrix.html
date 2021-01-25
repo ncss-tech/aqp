@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>compute pair-wise distances to determine where an attribute increases within a vertical distance specified — get.increase.matrix • aqp</title>
+<title>compute pair-wise distances to determine where an attribute increases within
+a vertical distance specified — get.increase.matrix • aqp</title>
 
 
 <!-- jquery -->
@@ -39,11 +40,14 @@
 
 
 
-<meta property="og:title" content="compute pair-wise distances to determine where an attribute increases within a vertical distance specified — get.increase.matrix" />
-<meta property="og:description" content="Uses matrix outer product to determine all pair-wise differences in `attr` for the horizons of `p`. Supplies `attr` to `threshold.fun` to determine the minimum value criterion to return TRUE in output matrix for an &quot;increase&quot;. Also, computes all pair-wise distances in depth dimension to determine whether the vertical distance criteria have been met simultaneously with `attr` increase. 
-This function assumes that the `threshold.fun` supplied by the user returns either a constant or a vector of equal length to its input.
-Note that the `threshold.fun` result is allowed to contain NA, but that will result in no output for affected cells.
-get.increase.depths performs the conversion of the square matrix output of get.increase.matrix back to horizon top depth for where criteria were met." />
+<meta property="og:title" content="compute pair-wise distances to determine where an attribute increases within
+a vertical distance specified — get.increase.matrix" />
+<meta property="og:description" content="Uses matrix outer product to determine all pair-wise differences in attr
+for the horizons of p. Supplies attr to threshold.fun to determine the
+minimum value criterion to return TRUE in output matrix for an &quot;increase&quot;.
+Also, computes all pair-wise distances in depth dimension to determine
+whether the vertical distance criteria have been met simultaneously with
+attr increase." />
 
 
 
@@ -75,7 +79,7 @@ get.increase.depths performs the conversion of the square matrix output of get.i
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
       </span>
     </div>
 
@@ -83,7 +87,7 @@ get.increase.depths performs the conversion of the square matrix output of get.i
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +101,7 @@ get.increase.depths performs the conversion of the square matrix output of get.i
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,19 +118,22 @@ get.increase.depths performs the conversion of the square matrix output of get.i
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>compute pair-wise distances to determine where an attribute increases within a vertical distance specified</h1>
-    
+    <h1>compute pair-wise distances to determine where an attribute increases within
+a vertical distance specified</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/get.increase.matrix.R'><code>R/get.increase.matrix.R</code></a></small>
     <div class="hidden name"><code>get.increase.matrix.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Uses matrix outer product to determine all pair-wise differences in `attr` for the horizons of `p`. Supplies `attr` to `threshold.fun` to determine the minimum value criterion to return TRUE in output matrix for an "increase". Also, computes all pair-wise distances in depth dimension to determine whether the vertical distance criteria have been met simultaneously with `attr` increase.</p> 
-<p>This function assumes that the `threshold.fun` supplied by the user returns either a constant or a vector of equal length to its input.</p>
-<p>Note that the `threshold.fun` result is allowed to contain NA, but that will result in no output for affected cells.</p>
-<p><code>get.increase.depths</code> performs the conversion of the square matrix output of <code>get.increase.matrix</code> back to horizon top depth for where criteria were met.</p>
+    <p>Uses matrix outer product to determine all pair-wise differences in <code>attr</code>
+for the horizons of <code>p</code>. Supplies <code>attr</code> to <code>threshold.fun</code> to determine the
+minimum value criterion to return TRUE in output matrix for an "increase".
+Also, computes all pair-wise distances in depth dimension to determine
+whether the vertical distance criteria have been met simultaneously with
+<code>attr</code> increase.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get.increase.matrix</span>(<span class='kw'>p</span>, <span class='kw'>attr</span>, <span class='kw'>threshold.fun</span>, <span class='kw'>vertical.distance</span>)</pre>
+    <pre class="usage"><span class='fu'>get.increase.matrix</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>attr</span>, <span class='va'>threshold.fun</span>, <span class='va'>vertical.distance</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,42 +148,57 @@ get.increase.depths performs the conversion of the square matrix output of get.i
     </tr>
     <tr>
       <th>threshold.fun</th>
-      <td><p>a function that returns the threshold (as a function of attr); may return a constant single value</p></td>
+      <td><p>a function that returns the threshold (as a function of
+attr); may return a constant single value</p></td>
     </tr>
     <tr>
       <th>vertical.distance</th>
-      <td><p>the vertical distance (determined from difference SPC top depth variable) within which increase must be met</p></td>
+      <td><p>the vertical distance (determined from difference
+SPC top depth variable) within which increase must be met</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a square logical matrix reflecting where the increase criteria were met.</p>
-<p><code>get.increase.depths</code> converts to horizon dop depth by using above matrix output to determine depths where increase is met.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <p>Returns a square logical matrix reflecting where the increase
+criteria were met.</p>
+<p><code>get.increase.depths</code> converts to horizon dop depth by using above
+matrix output to determine depths where increase is met.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Andrew Gene Brown</p>
+    <p>This function assumes that the <code>threshold.fun</code> supplied by the user returns
+either a constant or a vector of equal length to its input.</p>
+<p>Note that the <code>threshold.fun</code> result is allowed to contain NA, but that will
+result in no output for affected cells.</p>
+<p><code>get.increase.depths</code> performs the conversion of the square matrix
+output of <code>get.increase.matrix</code> back to horizon top depth for where
+criteria were met.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code>getArgillicBounds</code>, <code>crit.clay.argillic</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Andrew Gene Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
 
-<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
-<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents </span>
-<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.matrix</span>(<span class='kw'>p</span>, threshold.fun = <span class='kw'>crit.clay.argillic</span>,
-                           attr = <span class='kw'>attr</span>, vertical.distance = <span class='fl'>30</span>)
-<span class='kw'>foo</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
+<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.matrix</span><span class='op'>(</span><span class='va'>p</span>, threshold.fun <span class='op'>=</span> <span class='va'>crit.clay.argillic</span>,
+                           attr <span class='op'>=</span> <span class='va'>attr</span>, vertical.distance <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
+<span class='va'>foo</span>
 </div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
 #&gt; [1,] FALSE FALSE FALSE FALSE FALSE FALSE
 #&gt; [2,] FALSE FALSE FALSE  TRUE FALSE FALSE
 #&gt; [3,] FALSE FALSE FALSE  TRUE  TRUE FALSE
 #&gt; [4,] FALSE FALSE FALSE FALSE  TRUE FALSE
 #&gt; [5,] FALSE FALSE FALSE FALSE FALSE FALSE
-#&gt; [6,] FALSE FALSE FALSE FALSE FALSE FALSE</div></pre>
+#&gt; [6,] FALSE FALSE FALSE FALSE FALSE FALSE</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
