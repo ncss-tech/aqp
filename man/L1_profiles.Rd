@@ -38,7 +38,7 @@ The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geome
 See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutorial} for additional examples.
 }
 \details{
-The \code{method}, \code{maxDepthRule}, and \code{maxDepthConstant} arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
+See \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{this related tutorial} for additional examples. The \code{method}, \code{maxDepthRule}, and \code{maxDepthConstant} arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
 \itemize{
 \item \code{method = 'regex'} uses pattern matching on horizon designations (note that \code{hzdesgnname} metadata must be set with \code{hzdesgnname(x) <- 'columnname'})
 \item \code{method = 'simple'} uses \code{min} or \code{max} as applied to \code{x}, no accounting for non-soil horizons (e.g. Cr or R)

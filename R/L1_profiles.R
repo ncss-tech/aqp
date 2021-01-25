@@ -71,7 +71,7 @@
 #' 
 #' @param strict passed to \code{slice}
 #' 
-#' @details The `method`, `maxDepthRule`, and `maxDepthConstant` arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
+#' @details See [this related tutorial](https://ncss-tech.github.io/AQP/aqp/L1-profiles.html) for additional examples. The `method`, `maxDepthRule`, and `maxDepthConstant` arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
 #'   
 #'   * `method = 'regex'` uses pattern matching on horizon designations (note that `hzdesgnname` metadata must be set with `hzdesgnname(x) <- 'columnname'`)
 #'   
