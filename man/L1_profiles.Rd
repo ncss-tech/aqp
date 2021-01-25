@@ -17,7 +17,7 @@ L1_profiles(
 \arguments{
 \item{x}{\code{SoilProfileCollection} object}
 
-\item{fm}{formula, for example: "group ~ p1 + p2 + p3", where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables}
+\item{fm}{formula, for example: \code{group ~ p1 + p2 + p3}, where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables}
 
 \item{basis}{positive integer, aggregation basis (e.g. 1 for 1-depth-unit intervals). Values other than 1 are not currently supported.}
 
@@ -36,6 +36,16 @@ a \code{SoilProfileCollection} object
 The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
 
 See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutorial} for additional examples.
+}
+\details{
+The \code{method}, \code{maxDepthRule}, and \code{maxDepthConstant} arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
+\itemize{
+\item \code{method = 'regex'} uses pattern matching on horizon designations (note that \code{hzdesgnname} metadata must be set with \code{hzdesgnname(x) <- 'columnname'})
+\item \code{method = 'simple'} uses \code{min} or \code{max} as applied to \code{x}, no accounting for non-soil horizons (e.g. Cr or R)
+\item \code{method = 'constant'} uses a fixed depth value supplied by \code{maxDepthConstant}
+}
+
+The \code{maxDepthRule} argument sets depth calculation constraint, applied to soil depths computed according to \code{method} (\code{min} or \code{max}).
 }
 \note{
 This function requires the \code{Gmedian} package.

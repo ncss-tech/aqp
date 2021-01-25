@@ -233,7 +233,7 @@ harden.melanization <- function(value, value_ref) {
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector reflecting horizon color development.
 #' @author Andrew G. Brown.
-#' @references Buntley, G.J. and Westin, F.C. (1965), A Comparative Study of Developmental Color in a Chestnut‐Chernozem‐Brunizem Soil Climosequence. Soil Science Society of America Journal, 29: 579-582. doi:10.2136/sssaj1965.03615995002900050029x
+#' @references Buntley, G.J. and Westin, F.C. (1965), A Comparative Study of Developmental Color in a Chestnut-Chernozem-Brunizem Soil Climosequence. Soil Science Society of America Journal, 29: 579-582. doi:10.2136/sssaj1965.03615995002900050029x
 #' @rdname buntley.westin.index
 #' @export buntley.westin.index
 buntley.westin.index <- function(hue, chroma) {

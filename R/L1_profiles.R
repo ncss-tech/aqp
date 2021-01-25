@@ -59,7 +59,7 @@
 #'
 #' @param x \code{SoilProfileCollection} object
 #' 
-#' @param fm formula, for example: "group ~ p1 + p2 + p3", where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables
+#' @param fm formula, for example: `group ~ p1 + p2 + p3`, where "group" is a site-level grouping variable, and "p1", "p2", and "p3" are horizon level variables
 #' 
 #' @param basis positive integer, aggregation basis (e.g. 1 for 1-depth-unit intervals). Values other than 1 are not currently supported.
 #' 
@@ -70,7 +70,17 @@
 #' @param maxDepthConstant positive integer, maximum depth when \code{maxDepthRule = 'constant'}
 #' 
 #' @param strict passed to \code{slice}
+#' 
+#' @details The `method`, `maxDepthRule`, and `maxDepthConstant` arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
+#'   
+#'   * `method = 'regex'` uses pattern matching on horizon designations (note that `hzdesgnname` metadata must be set with `hzdesgnname(x) <- 'columnname'`)
+#'   
+#'    * `method = 'simple'` uses `min` or `max` as applied to `x`, no accounting for non-soil horizons (e.g. Cr or R)
+#'    
+#'    * `method = 'constant'` uses a fixed depth value supplied by `maxDepthConstant`
 #'
+#' The `maxDepthRule` argument sets depth calculation constraint, applied to soil depths computed according to `method` (`min` or `max`).
+#' 
 #' @return a \code{SoilProfileCollection} object
 #' @export
 #'

@@ -26,37 +26,39 @@
 #' @examples
 #'
 #' \dontrun{
+#' 
 #' data(sp1)
-#'
+#' 
 #' # check original distribution of hz designations
 #' table(sp1$name)
-#'
+#' 
 #' # generalize
 #' sp1$genhz <- generalize.hz(sp1$name,
-#' new=c('O','A','B','C','R'),
-#' pat=c('O', '^A','^B','C','R'))
-#'
+#'                            new=c('O','A','B','C','R'),
+#'                            pat=c('O', '^A','^B','C','R'))
+#' 
 #' # see how we did / what we missed
 #' table(sp1$genhz, sp1$name)
-#'
-#'
+#' 
+#' 
 #' ## a more advanced example, requries perl=TRUE
 #' # example data
 #' x <- c('A', 'AC', 'Bt1', '^AC', 'C', 'BC', 'CB')
-#'
+#' 
 #' # new labels
 #' n <- c('A', '^AC', 'C')
 #' # patterns:
 #' # "A anywhere in the name"
 #' # "literal '^A' anywhere in the name"
 #' # "C anywhere in name, but without preceding A"
-#' p <- c('A', '\^A', '(?<!A)C')
-#'
+#' p <- c('A', '^A', '(?<!A)C')
+#' 
 #' # note additional argument
 #' res <- generalize.hz(x, new = n, pat=p, perl=TRUE)
-#'
+#' 
 #' # double-check: OK
 #' table(res, x)
+#' 
 #' }
 #'
 generalize.hz <- function(x, new, pat, non.matching.code='not-used', hzdepm = NA, ...) {
