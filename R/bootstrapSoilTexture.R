@@ -26,6 +26,8 @@
 #' 
 #' Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in \code{ssc} (\code{n >= 30}?) for a reliable fit.
 #' 
+#' Additional examples will be added to [this tutorial](http://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html).
+#' 
 #' @note This is a work in progress.
 #' 
 #' 

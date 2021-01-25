@@ -30,6 +30,8 @@ Simulate realistic sand/silt/clay values (a composition) using multivariate Norm
 Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates.
 
 Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in \code{ssc} (\code{n >= 30}?) for a reliable fit.
+
+Additional examples will be added to \href{http://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html}{this tutorial}.
 }
 \note{
 This is a work in progress.
