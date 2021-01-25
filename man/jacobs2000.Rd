@@ -7,10 +7,6 @@
 \format{
 A \code{SoilProfileCollection} object.
 }
-\source{
-\href{https://acsess.onlinelibrary.wiley.com/doi/full/10.2136/sssaj2002.3150Redoximorphic}{
-Features as Indicators of Seasonal Saturation, Lowndes County, Georgia}
-}
 \usage{
 data(jacobs2000)
 }

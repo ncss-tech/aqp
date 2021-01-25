@@ -45,7 +45,7 @@ rgb2munsell(color)
 \url{http://ncss-tech.github.io/AQP/}
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
 \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
-\url{http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+\url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
 }
 \author{
 D.E. Beaudette

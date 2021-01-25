@@ -29,6 +29,6 @@ The original database contains the following description:
 This file contains spectral reflectance measurements of X-Rite's 2007 Munsell Book of Color (Glossy Finish).  The measurements were made in 2012 with a ColorMunki spectrophotometer.  The first column is the Munsell name.  The remaining columns give reflectance values for 380 nm to 730 nm, in steps of 10 nm.  The reflectance is a value between 0 (indicating that no light at that wavelength is reflected) and 1 (indicating that all the light at that wavelength is reflected).  Occasionally an entry is slightly greater than 1.  The likely cause is random variability, and those entries can be adjusted to 1 with negligible loss. In all, 1485 colour samples were measured.  Researchers are invited to analyze the data in this file.
 }
 \references{
-Centore, Paul. Colour Tools for Painters. \url{http://www.munsellcolourscienceforpainters.com/}.
+Centore, Paul. Colour Tools for Painters. \url{https://www.munsellcolourscienceforpainters.com/}.
 }
 \keyword{datasets}

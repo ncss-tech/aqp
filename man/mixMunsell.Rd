@@ -31,7 +31,7 @@ This functions is slower than \code{soilDB::estimateColorMixture()} (weighted av
 
 \item{related discussion on Stack Overflow: }{\url{https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630}}
 
-\item{spectral library source: }{\url{http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}}
+\item{spectral library source: }{\url{https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}}
 
 }
 }

@@ -29,7 +29,7 @@ tasks related to soils data.
 \details{
 Demos: \code{demo(aqp)}
 
-\href{http://ncss-tech.github.io/AQP}{Project homepage}
+\href{http://ncss-tech.github.io/AQP/}{Project homepage}
 }
 \seealso{
 \link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}, \link{sp5}}
