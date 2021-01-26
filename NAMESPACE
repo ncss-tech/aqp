@@ -16,6 +16,7 @@ importFrom("utils", "head", "object.size", 'packageVersion')
 
 importFrom(methods,
   setClass,
+  setOldClass,
   representation,
   prototype,
   new,

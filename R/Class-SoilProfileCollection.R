@@ -55,18 +55,6 @@ setClass(
   }
 )
 
-# 2020-07-10: allows for data.table @Suggests without importing
-# https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-.datatable.aware <-  TRUE
-
-# 2020-05-30: make data.table, tbl_df and data.frame slots "co-exist"
-# see: https://stackoverflow.com/questions/35642191/tbl-df-with-s4-object-slots
-if(requireNamespace("data.table", quietly = TRUE))
-  setOldClass(c("data.table", "data.frame"))
-
-if(requireNamespace("tibble", quietly = TRUE))
-  setOldClass(c("tbl_df", "tbl", "data.frame"))
-
 # 2019-03-15: creating an empty SpatialPoints object requires more effort
 # c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
 # old: new('SpatialPoints')
@@ -434,22 +422,22 @@ setMethod(f = 'show',
 #' @param x ANY.
 #' @param as.class `"data.frame"`, `"tibble"`, or `"data.table"` default: `"data.frame"`
 #' @param ... Additional arguments to coercion function  `as.data.frame`, `as_tibble` or `as.data.table`
-#' 
+#'
 #' @return a subclass of `data.frame` corresponding to `as.class`,
-#' 
+#'
 #' @importFrom data.table as.data.table
 #' @importFrom tibble as_tibble
-#' 
+#'
 .as.data.frame.aqp <- function(x, as.class = "data.frame", ...) {
   # 2020-05-30: sub-classes of data.frame have more than one class
   # debug
   #            if (as.class == 'data.frame')
   #              stop("foo")
-  
+
   # NULL x -- probably from unusual use cases
   if (class(x)[1] == "NULL")
     stop(sprintf("input object is NULL, expected '%s'", as.class))
-  
+
   # don't invoke coercion methods if not needed
   if (!inherits(x, 'data.frame')) {
     stop(sprintf(
@@ -458,13 +446,13 @@ setMethod(f = 'show',
     ),
     call. = TRUE)
   }
-  
+
   # note: we handle the possibly NULL/0-length as.class
   #       by letting it fall through default switch EXPR
   #       a warning is generated for non-data.frames
   cond <- class(x)[1] == as.class
   test <- all(length(cond) > 0 & cond)
-  
+
   # this happens if a SPC has had its metadata entry wiped out or old SPC object in Rda file
   if (is.null(test) | is.na(test)) {
     as.class <- "data.frame"
@@ -474,10 +462,10 @@ setMethod(f = 'show',
   } else if (test) {
     # rm rownames in slots
     rownames(x) <- NULL
-    
+
     return(x)
   }
-  
+
   switch(as.class,
          'data.table' = {
            #print(as.class)
@@ -505,13 +493,13 @@ setMethod(f = 'show',
                call. = FALSE
              )
            }
-           
+
            # return data.frame no matter what
            res <- as.data.frame(x, ...)
-           
+
            # rm rownames in slots
            rownames(res) <- NULL
-           
+
            return(res)
          })
 }
@@ -523,13 +511,13 @@ setMethod(f = 'show',
 
   # see: https://github.com/ncss-tech/aqp/issues/176
   .SD <- NULL
-  
+
   if (inherits(x, 'data.table')) {
     res <- x[, .SD, .SDcols = col.names]
   } else {
     res <- x[, col.names, drop = FALSE]
   }
-  
+
   if (inherits(res, 'data.frame')) {
     h <- .as.data.frame.aqp(res, use_class)
     return(h)
