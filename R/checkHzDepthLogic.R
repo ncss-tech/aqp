@@ -161,7 +161,6 @@ hzDepthTests <- function(top, bottom = NULL) {
   top <- as.numeric(top)
   bottom <- as.numeric(bottom)
   
-  stopifnot(length(top) == length(bottom))
   stopifnot(is.numeric(top) && is.numeric(bottom))
   
   n <- length(top)
