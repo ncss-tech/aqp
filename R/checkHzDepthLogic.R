@@ -45,11 +45,10 @@ checkHzDepthLogic <- function(x, fast = FALSE) {
   
   stopifnot(inherits(x, 'SoilProfileCollection'))
   h <- data.table::as.data.table(horizons(x))
+  
   hzd <- horizonDepths(x)
   idn <- idname(x)
   hby <- substitute(idn)
-  top <- substitute(hzd[1])
-  bottom <- substitute(hzd[2])
   
   res <- NULL
   
@@ -58,7 +57,7 @@ checkHzDepthLogic <- function(x, fast = FALSE) {
   
   if (!fast) {
     
-    res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(eval(top), eval(bottom)))))), by = c(eval(hby))][, 
+    res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(.SD))))), .SDcols = hzd, by = c(eval(hby))][, 
                list(tests = tests, valid = all(!tests[[1]])), by = c(eval(hby))]
     
     res <- cbind(res, data.table::rbindlist(res$tests))
@@ -66,7 +65,7 @@ checkHzDepthLogic <- function(x, fast = FALSE) {
     
   } else {
     
-    res <- h[, all(!hzDepthTests(eval(top), eval(bottom))), by = c(eval(hby))]
+    res <- h[, all(!hzDepthTests(.SD)), .SDcols = hzd, by = c(eval(hby))]
     colnames(res) <- c(idname(x), "valid")
     
   }
@@ -119,7 +118,7 @@ checkHzDepthLogic <- function(x, fast = FALSE) {
 #' 
 #' @description Function used internally by `checkHzDepthLogic()`, `glom()` and various other functions that operate on horizon data from single soil profiles and require a priori depth logic checks. Checks for bottom depths less than top depth / bad top depth order ("depthLogic"), bottom depths equal to top depth ("sameDepth"), overlaps/gaps ("overlapOrGap") and missing depths ("missingDepth"). Use `names(res)[res]` on result `res` of `hzDepthTest()` to to determine type of logic error(s) found -- see examples below. 
 #' 
-#' @param top A numeric vector containing horizon top depths.
+#' @param top A numeric vector containing horizon top depths. Or a `data.frame` with two columns (first containing top depths, second containing bottom)
 #' @param bottom A numeric vector containing horizon bottom depths.
 #' 
 #' @return A named logical vector containing TRUE for each type of horizon logic error found in the given data. 
@@ -152,7 +151,19 @@ checkHzDepthLogic <- function(x, fast = FALSE) {
 #' 
 #' @rdname hzDepthTests
 #' @export hzDepthTests
-hzDepthTests <- function(top, bottom) {
+hzDepthTests <- function(top, bottom = NULL) {
+  
+  if(inherits(top, 'data.frame') && ncol(top) >= 2) {
+    bottom <- top[[2]]
+    top <- top[[1]]
+  } 
+  
+  top <- as.numeric(top)
+  bottom <- as.numeric(bottom)
+  
+  stopifnot(length(top) == length(bottom))
+  stopifnot(is.numeric(top) && is.numeric(bottom))
+  
   n <- length(top)
   
   # sanity checks, since this will be exported provide a little checking

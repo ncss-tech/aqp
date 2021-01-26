@@ -4,10 +4,10 @@
 \alias{hzDepthTests}
 \title{Tests of horizon depth logic}
 \usage{
-hzDepthTests(top, bottom)
+hzDepthTests(top, bottom = NULL)
 }
 \arguments{
-\item{top}{A numeric vector containing horizon top depths.}
+\item{top}{A numeric vector containing horizon top depths. Or a \code{data.frame} with two columns (first containing top depths, second containing bottom)}
 
 \item{bottom}{A numeric vector containing horizon bottom depths.}
 }
