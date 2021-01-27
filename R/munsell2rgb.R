@@ -105,19 +105,16 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
 }
 
 
-# color: matrix/data.frame of sRGB values in range of [0,1]
-# colorSpace: color space / distance metric (CIE2000, LAB, sRGB)
-# nClosest: number of closest chips to return
-
 
 #' @title sRGB to Munsell Color Conversion
 #' 
 #' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the \code{munsell} lookup table. 
 #'
-#' @param color a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of \[0,1]
+#' @param color a `data.frame` or `matrix` object containing sRGB coordinates in the range of (0,1)
+#' 
 #' @param colorSpace distance metric (colorspace) to use for finding the closest chip: CIE2000 is the most accurate but requires farver >= 2.0.3, Euclidean distance in CIELAB is a close second, while Euclidean distance in sRGB is not at all accurate and should only be used for demonstration purposes.
 #' 
-#' @param nClosest number of closest Munsell colors to return
+#' @param nClosest number of closest Munsell colors to return (valid range is 1-20)
 #'
 #' @note This function is fully vectorized and will pad output with NA-records when NA are present in \code{color}.
 #' 
@@ -156,9 +153,23 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
   # argument check
   colorSpace <- match.arg(colorSpace)
 
+  # reasonable constraints on n-closest chips
+  if(nClosest < 1) {
+    message('setting `nClosest to 1`')
+    nClosest <- 1
+  }
+  
+  if(nClosest > 20) {
+    message('setting `nClosest to 20`')
+    nClosest <- 20
+  }
+  
+  
+  ## TODO: detect sRGB values in the range of 0-255 and re-scale accordingly
+  
   # vectorize via for-loop
   n <- nrow(color)
-  res <- vector(length=n, mode='list')
+  res <- vector(length = n, mode='list')
 
   # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
   munsell <- NULL
