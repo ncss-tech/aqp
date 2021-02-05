@@ -7,11 +7,11 @@
 rgb2munsell(color, colorSpace = c("CIE2000", "LAB", "sRGB"), nClosest = 1)
 }
 \arguments{
-\item{color}{a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of [0,1]}
+\item{color}{a \code{data.frame} or \code{matrix} object containing sRGB coordinates in the range of (0,1)}
 
 \item{colorSpace}{distance metric (colorspace) to use for finding the closest chip: CIE2000 is the most accurate but requires farver >= 2.0.3, Euclidean distance in CIELAB is a close second, while Euclidean distance in sRGB is not at all accurate and should only be used for demonstration purposes.}
 
-\item{nClosest}{number of closest Munsell colors to return}
+\item{nClosest}{number of closest Munsell colors to return (valid range is 1-20)}
 }
 \value{
 an (NA-padded) \code{data.frame} containing \code{hue}, \code{value}, \code{chroma}, and distance (dE00 when \code{colorSpace = 'CIE2000'}, Euclidean distance otherwise) to nearest matching color.

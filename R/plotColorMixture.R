@@ -5,25 +5,36 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @param x vector of colors in Munsell notation
+#' @param x vector of colors in Munsell notation, should not contain duplicates
 #' 
 #' @param w vector of proportions, can sum to any number
+#' 
+#' @param n number of closest mixture candidates (see [`mixMunsell`]), results can be hard to interpret 
 #' 
 #' @param swatch.cex scaling factor for color swatch
 #' 
 #' @param label.cex scaling factor for swatch labels
 #' 
-#' @return lattice graphics object
+#' @param showMixedSpec show weighted geometric mean (mixed) spectra as dotted line
 #' 
-plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatch.cex = 6, label.cex = 0.85) {
+#' @return `lattice` graphics object
+#' 
+plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE) {
   
-  # TODO sanity checks
+  # TODO plot will be incorrect if duplicate Munsell chips are specified
   
   # mix colors
-  m <- suppressMessages(mixMunsell(x = x, w = w))
+  mx <- suppressMessages(mixMunsell(x = x, w = w, n = n, keepMixedSpec = showMixedSpec))
+  
+  # make local copy of the mixed colors when asking for the mixed spectra too
+  if(showMixedSpec) {
+    m <- mx$mixed
+  } else {
+    m <- mx
+  }
   
   # sanity check: it could be that reference spectra aren't available for requested colors
-  if(is.na(m$munsell)) {
+  if(all(is.na(m$munsell))) {
     stop('reference spectra not available', call. = FALSE)
   }
   
@@ -43,10 +54,11 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
     z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
     
     # assign an ID for plotting
-    if( i < length(colors)) {
+    if( i <= length(x)) {
       z$ID <- sprintf('color %s', i)
     } else {
-      z$ID <- 'mixture'
+      # reset counter to mix color ranks
+      z$ID <- sprintf('mix #%s', i - length(x))
     }
     
     return(z)
@@ -54,6 +66,7 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
   
   s <- do.call('rbind', s)
 
+  ## TODO: enforce this beyond alpha-sorting
   # set ID factor levels
   # sorting is automatic because "color X" always comes before "mixture"
   s$ID <- factor(s$ID)
@@ -63,17 +76,36 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
   
   # plotting style, colors sorted by mixing logic
   cols <- parseMunsell(colors)
-  col.lty <- c(rep(1, times = length(x)), 4)
-  tps <- list(superpose.line = list(col = cols, lwd = 5, lty = col.lty))
+  
+  # line style
+  #  1: colors-to-mix
+  #  4: mixture results (n)
+  col.lty <- c(
+    rep(1, times = length(x)), 
+    rep(4, times = nrow(m))
+  )
+  
+  # compile line styles
+  tps <- list(
+    superpose.line = list(
+      col = cols, 
+      lwd = 5, 
+      lty = col.lty
+    ))
   
   # labels for figure
+  #  all colors
   munsell.labels <- colors
-  wt.labels <- round((w / sum(w)) * 100)
-  lab.text <- sprintf('%s\n%s%%', munsell.labels, c(wt.labels, 100))
+  # weights
+  wt.labels <- sprintf('%s%%', round((w / sum(w)) * 100))
+  # ranked matches
+  match.rank <- sprintf("#%s", seq(from = 1, to = nrow(m)))
+  # combined labels
+  lab.text <- sprintf('%s\n%s', munsell.labels, c(wt.labels, match.rank))
   
   # final figure
   pp <- xyplot(
-    reflectance ~ wavelength, groups=ID, data=s, 
+    reflectance ~ wavelength, groups = ID, data = s, 
     type = c('l', 'g'),
     ylab = 'Reflectance',
     xlab = 'Wavelength (nm)',
@@ -121,6 +153,10 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), swatc
           )
           
         )
+      }
+      
+      if(showMixedSpec){
+        panel.lines(x = unique(s$wavelength), y = mx$spec, lty = 3, col = 'black')
       }
       
       

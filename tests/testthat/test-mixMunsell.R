@@ -46,5 +46,20 @@ test_that("multiple matches", {
 })
 
 
+test_that("mixed spectra option", {
+  mx <- mixMunsell(c('10YR 6/2', '10YR 2/2'), n = 3, keepMixedSpec = TRUE)
+  
+  # results are a list vs. data.frame
+  expect_true(inherits(mx, 'list'))
+  
+  # mixture candidates are here
+  m <- mx$mixed
+  
+  # verified results
+  expect_true(nrow(m) == 3)
+  # first match
+  expect_true(m$munsell[1] == '10Y 4/3')
+  expect_true(m$munsell[2] == '5Y 4/2')
+})
 
 

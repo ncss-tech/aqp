@@ -7,21 +7,27 @@
 plotColorMixture(
   x,
   w = rep(1, times = length(x))/length(x),
+  n = 1,
   swatch.cex = 6,
-  label.cex = 0.85
+  label.cex = 0.85,
+  showMixedSpec = FALSE
 )
 }
 \arguments{
-\item{x}{vector of colors in Munsell notation}
+\item{x}{vector of colors in Munsell notation, should not contain duplicates}
 
 \item{w}{vector of proportions, can sum to any number}
+
+\item{n}{number of closest mixture candidates (see \code{\link{mixMunsell}}), results can be hard to interpret}
 
 \item{swatch.cex}{scaling factor for color swatch}
 
 \item{label.cex}{scaling factor for swatch labels}
+
+\item{showMixedSpec}{show weighted geometric mean (mixed) spectra as dotted line}
 }
 \value{
-lattice graphics object
+\code{lattice} graphics object
 }
 \description{
 Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.

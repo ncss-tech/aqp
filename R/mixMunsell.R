@@ -90,6 +90,8 @@
 #'
 #' @param n number of closest matching color chips
 #'
+#' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list`
+#'
 #' @author D.E. Beaudette
 #'
 #' @references
@@ -109,14 +111,16 @@
 #'
 #' @note This functions is slower than \code{soilDB::estimateColorMixture()} (weighted average of colors in CIELAB coordinates) but more accurate.
 #'
-#' @return a \code{data.frame} with the closest matching Munsell color(s)
+#' @return A `data.frame` with the closest matching Munsell color(s), unless `keepMixedSpec = TRUE` then a `list`.
 #'
 #' @seealso \code{\link{munsell.spectra}}
 #'
-mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
+mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, keepMixedSpec = FALSE) {
 
   ## TODO
   # sanity checks
+  
+  ## TODO how can we interpret returned distance? what values are too great to be of value?
   
   # sanity check, need this for gower_topn
   if(!requireNamespace('gower'))
@@ -212,7 +216,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
   
   ## operations on data.table likely faster
   
-  # Gower distance: looks good, 10-20x faster due to compiled code
+  # Gower distance: looks good, ~5x faster due to compiled code
   # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
   # would make sense to reshape reference data
   
@@ -256,8 +260,18 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1) {
 
   # clean-up row names
   row.names(res) <- NULL
-
-  return(res)
+  
+  # optionally return weighted geometric mean (mixed) spectra
+  if(keepMixedSpec) {
+    return(
+      list(
+        mixed = res,
+        spec = mixed
+      )
+    )
+  } else {
+    return(res)
+  }
 
 }
 

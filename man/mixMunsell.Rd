@@ -4,7 +4,12 @@
 \alias{mixMunsell}
 \title{Mix Munsell Colors via Spectral Library}
 \usage{
-mixMunsell(x, w = rep(1, times = length(x))/length(x), n = 1)
+mixMunsell(
+  x,
+  w = rep(1, times = length(x))/length(x),
+  n = 1,
+  keepMixedSpec = FALSE
+)
 }
 \arguments{
 \item{x}{vector of colors in Munsell notation}
@@ -12,9 +17,11 @@ mixMunsell(x, w = rep(1, times = length(x))/length(x), n = 1)
 \item{w}{vector of proportions, can sum to any number}
 
 \item{n}{number of closest matching color chips}
+
+\item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list}}
 }
 \value{
-a \code{data.frame} with the closest matching Munsell color(s)
+A \code{data.frame} with the closest matching Munsell color(s), unless \code{keepMixedSpec = TRUE} then a \code{list}.
 }
 \description{
 Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
