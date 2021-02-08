@@ -10,7 +10,8 @@ plotColorMixture(
   n = 1,
   swatch.cex = 6,
   label.cex = 0.85,
-  showMixedSpec = FALSE
+  showMixedSpec = FALSE,
+  overlapFix = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ plotColorMixture(
 \item{label.cex}{scaling factor for swatch labels}
 
 \item{showMixedSpec}{show weighted geometric mean (mixed) spectra as dotted line}
+
+\item{overlapFix}{attempt to "fix" overlapping chip labels via \code{\link{fixOverlap}}}
 }
 \value{
 \code{lattice} graphics object

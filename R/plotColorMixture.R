@@ -17,11 +17,17 @@
 #' 
 #' @param showMixedSpec show weighted geometric mean (mixed) spectra as dotted line
 #' 
+#' @param overlapFix attempt to "fix" overlapping chip labels via [`fixOverlap`]
+#' 
 #' @return `lattice` graphics object
 #' 
-plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE) {
+plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
   
   # TODO plot will be incorrect if duplicate Munsell chips are specified
+  
+  # TODO: feedback on spectral distance is required
+  
+  # TODO: ideas on styling legend (size, placement, etc.)
   
   # mix colors
   mx <- suppressMessages(mixMunsell(x = x, w = w, n = n, keepMixedSpec = showMixedSpec))
@@ -121,11 +127,45 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
       # split spectra by groups
       d <- split(y, groups)
       
+      # get last y-coordinate by group
+      last.y.coords <- sapply(d, function(i) {
+        i[length(i)]
+      })
+      
+      # attempt to fix overlap
+      if(overlapFix) {
+        # this is about right (units are reflectance)
+        ov.thresh <- 0.04
+        
+        # attempt to find overlap using the above threshold
+        ov <- findOverlap(last.y.coords, thresh = ov.thresh)
+        
+        # if present, iteratively find suitable alternatives
+        # search is bounded to the min/max of all spectra
+        # consider set.seed() for consistent output
+        if(length(ov) > 0) {
+          last.y.coords <- fixOverlap(
+            last.y.coords, 
+            thresh = ov.thresh, 
+            adj = 0.02, 
+            min.x = min(y, na.rm = TRUE), 
+            max.x = max(y, na.rm = TRUE), trace = TRUE
+          )
+          
+          message('fixing overlap')
+        }
+      }
+      
+      
+      
       # iterate over groups and put munsell chip next to last data point
       for(i in seq_along(d)) {
         # last spectral value
         yy <- d[[i]]
-        last.y <- yy[length(yy)]
+        
+        # last y-value in this group
+        last.y <- last.y.coords[i]
+        
         # current color
         this.col <- tps$superpose.line$col[i]
         # current label
