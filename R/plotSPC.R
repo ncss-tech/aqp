@@ -674,9 +674,6 @@ plotSPC <- function(
 	  # }
 	  # 
 	  
-
-	  ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)
-
 	  ##################################
 	  ## horizon designations (names) ##
 	  ##################################
@@ -734,7 +731,28 @@ plotSPC <- function(
 	  )
 
 
+	  ########################################
+	  
+	  ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)
+	  # print(hzname.y0)
+	  # 
+	  ## eval reasonable limit
+	  # determine cex.names influence
+	  # tr <- abs(strheight('W')) * 1.5 * (cex.names * 1)
+	  # 
+	  # print(tr)
+	  # print(findOverlap(hzname.y0, thresh = tr))
+	  # print(fixOverlap(hzname.y0, thresh = tr))
+	  # 
+	  ## this requires way more evaluation
+	  ## may require element-level bounds
+	  ## requires min(deviation-from-original)
+	  ## adj should be based on tr
+	  #
+	  # hzname.y0 <- fixOverlap(hzname.y0, thresh = tr, adj = 1)
 
+	  ########################################
+	  
 	  # optionally shrink the size of names if they are longer than a given thresh
 	  if(shrink) {
 		  names.to.shrink <- which(nchar(this_profile_names) > shrink.cutoff)
