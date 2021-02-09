@@ -7,8 +7,8 @@
 fixOverlap(
   x,
   thresh = 0.6,
-  adj = thresh/2,
-  min.x = 0.8,
+  adj = thresh * 2/3,
+  min.x = min(x) - 0.2,
   max.x = max(x) + 0.2,
   coolingRate = 0.95,
   maxIter = 1000,
@@ -18,31 +18,38 @@ fixOverlap(
 \arguments{
 \item{x}{vector of horizontal positions}
 
-\item{thresh}{horizontal threshold defining "overlap", typically < 1, ideal values likely in (0.3, 0.8)}
+\item{thresh}{horizontal threshold defining "overlap" or distance between elements of \code{x}. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).}
 
-\item{adj}{adjustments are tested within \code{runif(min = adj * -1, max = adj)}}
+\item{adj}{specifies the size of perturbations within \code{runif(min = adj * -1, max = adj)}. Larger values will sometimes reduce the number of iterations required to solve particularly difficult overlap conditions. See \code{coolingRate} argument when \code{adj} is large}
 
-\item{min.x}{left-side boundary condition}
+\item{min.x}{left-side boundary condition, consider expanding if a solution cannot be found within \code{maxIter}.}
 
-\item{max.x}{right-side boundary condition}
+\item{max.x}{right-side boundary condition, consider expanding if a solution cannot be found within \code{maxIter}.}
 
-\item{coolingRate}{rate at which \code{adj} is decreased after a successful iteration}
+\item{coolingRate}{rate at which \code{adj} is decreased after a successful iteration (fewer overlapping elements in \code{x})}
 
 \item{maxIter}{maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence}
 
-\item{trace}{print diagnostics, result is a \code{list}}
+\item{trace}{print diagnostics, result is a \code{list} vs \code{vector}}
 }
 \value{
 When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with the number of overlapping elements at each iteration.
 }
 \description{
-This function attempts to iteratively adjust a sequence until values are no longer within a given threshold, until \code{maxIter} is reached.
+This function attempts to iteratively adjust a sequence until values are no longer within a given threshold of each other, or until \code{maxIter} is reached. Rank order and boundary conditions are preserved.
 }
 \examples{
 
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
-fixOverlap(x, thresh = 0.2, max.x = 10, trace = TRUE)
+# easy
+fixOverlap(x, thresh = 0.2, trace = TRUE)
+
+# harder
+fixOverlap(x, thresh = 0.6, trace = TRUE)
+
+# much harder
+fixOverlap(x, thresh = 0.9, trace = TRUE)
 
 }
 \author{
