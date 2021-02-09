@@ -7,9 +7,6 @@
 #' 
 #' @return Unique indices of affected (overlapping) elements in `x`
 #' 
-#' @note This is a very naive function and may fail to converge on a reasonable
-#' solution. SANN would be a much more robust framework.
-#' 
 #' @export
 #'
 #' @examples 
@@ -19,7 +16,9 @@
 #' findOverlap(x, thresh = 0.5)
 #'
 
-## TODO: consider weighted overlap information, for more granular minimization
+## TODO: consider weighted overlap information, for more granular minimization:
+# this would be a new function overlapMetrics()
+
 findOverlap <- function(x, thresh) {
   # all pair-wise distance
   d <- dist(x)
@@ -36,6 +35,40 @@ findOverlap <- function(x, thresh) {
 }
 
 
+
+# possible energy / cost function
+# these are all length-1 vectors
+# n0: starting number of overlaps 
+# n1: resulting overlaps after adjustment i
+# Te: temperature (decreases over time)
+# k: cooling constant
+.P <- function(n0, n1, Te, k = 1) {
+  if(n1 < n0) {
+    return(1)
+  } else {
+    # delta-E: n1 - n0
+    return(exp(-(n1 - n0) / Te * k))
+  }
+}
+
+# safe vectorization
+.P <- Vectorize(.P)
+
+
+## background:
+# https://en.wikipedia.org/wiki/Simulated_annealing
+# https://www.r-bloggers.com/2014/09/the-traveling-salesman-with-simulated-annealing-r-and-shiny/
+# http://umsl.edu/~adhikarib/cs4130-fall2017/slides/11%20-%20The%20Simulated%20Annealing%20Algorithm.pdf
+#
+
+## Ideas:
+# * there is probably a LP solution to this in ~ 5 lines of code...
+# * dual-energy / cost function: number of overlaps + distance from original config
+# * adjusting `thresh` with time
+# * keep track of states, so that the "best" state becomes the restart point (EVAL)
+# * exponential cost function 
+# * refactor around T0 -> cooling rate + maxIter 
+# * re-name `coolingRate`, this is no longer appropriate
 
 #' @title Fix Overlap within a Sequence
 #' 
@@ -55,6 +88,8 @@ findOverlap <- function(x, thresh) {
 #' 
 #' @param maxIter maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence
 #' 
+#' @param restartRate optimization is restarted when an iteration results in `length(findOverlap(x.i, thresh)) > restartRate`
+#' 
 #' @param trace print diagnostics, result is a `list` vs `vector`
 #' 
 #' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with the number of overlapping elements at each iteration.
@@ -67,15 +102,15 @@ findOverlap <- function(x, thresh) {
 #' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 #' 
 #' # easy
-#' fixOverlap(x, thresh = 0.2, trace = TRUE)
+#' z <- fixOverlap(x, thresh = 0.2, trace = TRUE)
 #'
 #' # harder
-#' fixOverlap(x, thresh = 0.6, trace = TRUE)
+#' z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
 #' 
 #' # much harder
-#' fixOverlap(x, thresh = 0.9, trace = TRUE)
+#' z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
 #'
-fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, coolingRate = 0.95, maxIter = 1000, trace = FALSE) {
+fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, coolingRate = 0.95, restartRate = 2.5, maxIter = 1000, trace = FALSE) {
   
   # initial configuration
   ov <- findOverlap(x, thresh)
@@ -83,15 +118,28 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
   
   # save original for testing rank order
   x.orig <- x
+  # original cost
+  n.orig <- n
+  # original adjustment value
+  adj.orig <- adj
   
   # counter to prevent run-away while-loop
   i <- 1
   
-  # keep track of number of overlaps
+  ## trace details
+  # number of overlaps "cost"
   stats <- rep(NA, times = maxIter)
   
-  # original adjustment value
-  adj.orig <- adj
+  # algorithm adjustment steps:
+  # R: restart
+  # B: boundary violation
+  # O: ordering (rank) violation
+  # C: cooling
+  # H: heating
+  log <- rep(NA, times = maxIter)
+  
+  # states
+  states <- matrix(data = NA, nrow = maxIter, ncol = length(x))
   
   # short-circuit: only proceed if there is overlap
   if(n <  1) {
@@ -107,9 +155,15 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
       s <- seq(from = min(x.orig), to = max(x.orig), length.out = length(x.orig))
       
       if(trace) {
+        
+        log <- factor(as.vector(na.omit(log)), levels = c('R', 'B', 'O', 'C', 'H'))
+        stats <- as.vector(na.omit(stats))
+        
         return(list(
           x = s,
-          stats = as.vector(na.omit(stats))
+          stats = stats,
+          log = log,
+          converged = FALSE
         ))
       }
       return(s)
@@ -123,19 +177,35 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     x.test[ov] <- x.test[ov] + perturb
     
     
-    ## TODO: this may make the algorithm worse off
-    ## consider some cutoff like n + 2
-    # 
-    # # if the results are worse, then skip and try again
-    # if(length(findOverlap(x.test, thresh)) > n + 1) {
-    #   stats[i] <- n
-    #   i <- i + 1
-    #   next
-    # }
+    ## TODO: fully evaluate re-starts, consider resetting iteration counter
+    ## TODO: `n` should be re-calculated around here
+    
+    ## `restartRate` empirically determined:
+    # too low: algorithm fails to converge on difficult problems
+    # too high: restarts don't happen
+    if(length(findOverlap(x.test, thresh)) > (restartRate * n.orig)) {
+      
+      # restart at original configuration
+      # x <- x.orig
+      
+      # restart at last-best state
+      x <- states[which.min(stats), ]
+      
+      # restart at original adjustment rate
+      adj <- adj.orig
+      
+      # keep track and move on
+      log[i] <- 'R'
+      stats[i] <- n
+      
+      i <- i + 1
+      next
+    }
     
     # enforce boundary conditions
     if(any(x.test < min.x) | any(x.test > max.x)) {
       # print('boundary condition')
+      log[i] <- 'B'
       stats[i] <- n
       i <- i + 1
       next
@@ -144,6 +214,7 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     # enforce rank ordering
     if(any(rank(x.orig) != rank(x.test))) {
       # print('rank violation')
+      log[i] <- 'O'
       stats[i] <- n
       i <- i + 1
       next
@@ -152,6 +223,9 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     
     # apply perturbation to working copy
     x <- x.test
+    
+    # save state
+    states[i, ] <- x
     
     # save previous number of overlaps
     n.old <- n
@@ -164,31 +238,48 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     stats[i] <- n
     
     ## not sure if this helps
-    # simulated annealing cooling parameter
     # reduce adj if there are fewer overlaps
     if(n < n.old) {
       # print('cooling!')
+      log[i] <- 'C'
       adj <- adj * coolingRate
     }
     
     # re-heating: always helps in difficult problems
     if (n > n.old) {
       # print('heating!')
+      log[i] <- 'H'
       adj <- adj.orig
     }
+    
+    ## TODO: eval SANN framework
+    # print(.P(n0 = n.old, n1 = n, Te = maxIter - i, k = 10))
     
     # increment iteration counter
     i <- i + 1
   }
   
   
+  # done with iterations
+  
   message(sprintf("%s iterations", i))
   
   # full output
   if(trace) {
+    
+    log <- factor(as.vector(na.omit(log)), levels = c('R', 'B', 'O', 'C', 'H'))
+    stats <- as.vector(na.omit(stats))
+    
+    ## finish: ensure row-ordering of states
+    states <- na.omit(states)
+    attr(states, "na.action") <- NULL
+    
     return(list(
       x = x,
-      stats = as.vector(na.omit(stats))
+      stats = stats,
+      log = log,
+      converged = TRUE,
+      states = states
     ))
   }
   

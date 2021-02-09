@@ -17,10 +17,6 @@ Unique indices of affected (overlapping) elements in \code{x}
 \description{
 Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 }
-\note{
-This is a very naive function and may fail to converge on a reasonable
-solution. SANN would be a much more robust framework.
-}
 \examples{
 
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)

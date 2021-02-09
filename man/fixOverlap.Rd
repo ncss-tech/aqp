@@ -11,6 +11,7 @@ fixOverlap(
   min.x = min(x) - 0.2,
   max.x = max(x) + 0.2,
   coolingRate = 0.95,
+  restartRate = 2.5,
   maxIter = 1000,
   trace = FALSE
 )
@@ -28,6 +29,8 @@ fixOverlap(
 
 \item{coolingRate}{rate at which \code{adj} is decreased after a successful iteration (fewer overlapping elements in \code{x})}
 
+\item{restartRate}{optimization is restarted when an iteration results in \code{length(findOverlap(x.i, thresh)) > restartRate}}
+
 \item{maxIter}{maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence}
 
 \item{trace}{print diagnostics, result is a \code{list} vs \code{vector}}
@@ -43,13 +46,13 @@ This function attempts to iteratively adjust a sequence until values are no long
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 # easy
-fixOverlap(x, thresh = 0.2, trace = TRUE)
+z <- fixOverlap(x, thresh = 0.2, trace = TRUE)
 
 # harder
-fixOverlap(x, thresh = 0.6, trace = TRUE)
+z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
 
 # much harder
-fixOverlap(x, thresh = 0.9, trace = TRUE)
+z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
 
 }
 \author{
