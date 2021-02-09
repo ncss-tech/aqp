@@ -35,37 +35,30 @@ findOverlap <- function(x, thresh) {
   return(col.idx)
 }
 
-## 2019-07-16 | DEB
-## fix overlap via random perturbation of affected elements
-## this function is actually quite stupid as it can converge on bogus results
-## scaled adjustments based on deviation from threshold distances would be better
-## or, SANN style adjustments
-##
-## ideas:
-## * SANN -> smaller adjustments through time
-## * perturbations should not increase overlap
-## * debugging output
-##
 
 
-#' @title Fix overlap via random perturbation of affected elements
-#' @description This function is actually quite stupid as it can converge on bogus results scaled adjustments based on deviation from threshold distances would be better or, SANN style adjustments
+
+#' @title Fix Overlap within a Sequence
+#' 
+#' @description This function attempts to iteratively adjust a sequence until values are no longer within a given threshold of each other, or until `maxIter` is reached. Rank order and boundary conditions are preserved.
 #' 
 #' @param x vector of horizontal positions
 #' 
-#' @param thresh horizontal threshold defining "overlap", must be < 1, ideal values likely in (0.3, 0.8)
+#' @param thresh horizontal threshold defining "overlap" or distance between elements of `x`. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).
 #' 
-#' @param adj adjustments are tested within `runif(min = adj * -1, max = adj)`
+#' @param adj specifies the size of perturbations within `runif(min = adj * -1, max = adj)`. Larger values will sometimes reduce the number of iterations required to solve particularly difficult overlap conditions. See `coolingRate` argument when `adj` is large
 #' 
-#' @param min.x left-side boundary condition
+#' @param min.x left-side boundary condition, consider expanding if a solution cannot be found within `maxIter`.
 #' 
-#' @param max.x right-side boundary condition
+#' @param max.x right-side boundary condition, consider expanding if a solution cannot be found within `maxIter`.
 #' 
-#' @param maxIter maximum number of iterations to attempt before giving up and returning integer sequence
+#' @param coolingRate rate at which `adj` is decreased after a successful iteration (fewer overlapping elements in `x`)
 #' 
-#' @param trace print diagnostics
+#' @param maxIter maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence
 #' 
-#' @return - `findOverlap` a vector of the same length as `x`, preserving rank-ordering and boundary conditions.
+#' @param trace print diagnostics, result is a `list` vs `vector`
+#' 
+#' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with the number of overlapping elements at each iteration.
 #' 
 #' @author D.E. Beaudette
 #' @export
@@ -74,77 +67,130 @@ findOverlap <- function(x, thresh) {
 #' 
 #' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 #' 
-#' fixOverlap(x, thresh = 0.2, max.x = 10, trace = TRUE)
+#' # easy
+#' fixOverlap(x, thresh = 0.2, trace = TRUE)
 #'
-fixOverlap <- function(x, thresh=0.6, adj=0.2, min.x=0.8, max.x=length(x)+0.2, maxIter=1000, trace=FALSE) {
+#' # harder
+#' fixOverlap(x, thresh = 0.6, trace = TRUE)
+#' 
+#' # much harder
+#' fixOverlap(x, thresh = 0.9, trace = TRUE)
+#'
+fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, coolingRate = 0.95, maxIter = 1000, trace = FALSE) {
   
   # initial configuration
   ov <- findOverlap(x, thresh)
+  n <- length(ov)
   
-  # save original
+  # save original for testing rank order
   x.orig <- x
   
   # counter to prevent run-away while-loop
   i <- 1
   
+  # keep track of number of overlaps
+  stats <- rep(NA, times = maxIter)
+  
+  # original adjustment value
+  adj.orig <- adj
+  
   # short-circuit: only proceed if there is overlap
-  if(length(ov) > 0) {
+  if(n <  1) {
+    return(x)
+  }
     
-    # iterate...
-    while(length(ov) > 0) {
+  # iterate...
+  while(n > 0) {
+    
+    # fail-safe
+    if(i > maxIter) {
+      message('maximum number of iterations reached, using regular sequence')
+      s <- seq(from = min(x.orig), to = max(x.orig), length.out = length(x.orig))
       
-      # fail-safe
-      if(i > maxIter) {
-        message('maximum number of iterations reached, using integer sequence')
-        return(1:length(x))
+      if(trace) {
+        return(list(
+          x = s,
+          stats = as.vector(na.omit(stats))
+        ))
       }
-      
-      # generate random perturbations to affected indices
-      perturb <- runif(n = length(ov), min = adj * -1, max = adj)
-      
-      # attempt perturbation
-      x.test <- x
-      x.test[ov] <- x.test[ov] + perturb
-      
-      # enforce boundary conditions
-      if(any(x.test < min.x) | any(x.test > max.x)) {
-        # print('boundary condition')
-        i <- i + 1
-        next
-      }
-      
-      # enforce rank ordering
-      if(any(rank(x.orig) != rank(x.test))) {
-        # print('rank violation')
-        i <- i + 1
-        next
-      }
-      
-      ## this may be too strict: 85% -> 75% success rate if enabled
-      # # perturbations should not increase number of affected positions
-      # # check to be sure
-      # len <- length(findOverlap(x.test, thresh))
-      # # stats[[i]] <- len
-      # if(len > length(ov)) {
-      #   # print('wrong turn')
-      #   i <- i + 1
-      #   next
-      # }
-      
-      ## alternative idea: perturbations should minimize overlap
-      ## how to quantify?
-      
-      # apply perturbation to working copy
-      x <- x.test
-      
-      # eval overlap and try again
-      ov <- findOverlap(x, thresh)
-      i <- i + 1
+      return(s)
     }
+    
+    # generate random perturbations to affected indices
+    perturb <- runif(n = length(ov), min = adj * -1, max = adj)
+    
+    # attempt perturbation
+    x.test <- x
+    x.test[ov] <- x.test[ov] + perturb
+    
+    
+    ## TODO: this may make the algorithm worse off
+    ## consider some cutoff like n + 2
+    # 
+    # # if the results are worse, then skip and try again
+    # if(length(findOverlap(x.test, thresh)) > n + 1) {
+    #   stats[i] <- n
+    #   i <- i + 1
+    #   next
+    # }
+    
+    # enforce boundary conditions
+    if(any(x.test < min.x) | any(x.test > max.x)) {
+      # print('boundary condition')
+      stats[i] <- n
+      i <- i + 1
+      next
+    }
+    
+    # enforce rank ordering
+    if(any(rank(x.orig) != rank(x.test))) {
+      # print('rank violation')
+      stats[i] <- n
+      i <- i + 1
+      next
+    }
+    
+    
+    # apply perturbation to working copy
+    x <- x.test
+    
+    # save previous number of overlaps
+    n.old <- n
+    
+    # eval overlap and try again
+    ov <- findOverlap(x, thresh)
+    
+    # keep track of OF
+    n <- length(ov)
+    stats[i] <- n
+    
+    ## not sure if this helps
+    # simulated annealing cooling parameter
+    # reduce adj if there are fewer overlaps
+    if(n < n.old) {
+      # print('cooling!')
+      adj <- adj * coolingRate
+    }
+    
+    # re-heating: always helps in difficult problems
+    if (n > n.old) {
+      # print('heating!')
+      adj <- adj.orig
+    }
+    
+    # increment iteration counter
+    i <- i + 1
   }
   
+  
+  message(sprintf("%s iterations", i))
+  
+  # full output
   if(trace) {
-    message(sprintf("%s iterations", i))
+    return(list(
+      x = x,
+      stats = as.vector(na.omit(stats))
+    ))
   }
   
   

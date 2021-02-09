@@ -134,8 +134,10 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
       
       # attempt to fix overlap
       if(overlapFix) {
+        
         # this is about right (units are reflectance)
-        ov.thresh <- 0.04
+        # adjust according to ratio of swatch size to default size (6)
+        ov.thresh <- 0.04 * (swatch.cex / 6)
         
         # attempt to find overlap using the above threshold
         ov <- findOverlap(last.y.coords, thresh = ov.thresh)
@@ -144,15 +146,21 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
         # search is bounded to the min/max of all spectra
         # consider set.seed() for consistent output
         if(length(ov) > 0) {
+          message('fixing overlap')
+          
+          # set boundary conditions for overlap adjustment
+          # max(min of the last y coords or min y of all spectra)
+          adj.min.x <- pmax(min(last.y.coords) - 0.08, min(y))
+          # min(max of last y coords or max y of all spectra)
+          adj.max.x <- pmin(max(last.y.coords) + 0.08, max(y))
+          
           last.y.coords <- fixOverlap(
             last.y.coords, 
             thresh = ov.thresh, 
-            adj = 0.02, 
-            min.x = min(y, na.rm = TRUE), 
-            max.x = max(y, na.rm = TRUE), trace = TRUE
+            adj = 0.04,
+            min.x = adj.min.x,
+            max.x = adj.max.x
           )
-          
-          message('fixing overlap')
         }
       }
       

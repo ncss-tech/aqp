@@ -2,14 +2,15 @@
 % Please edit documentation in R/findOverlap-fixOverlap.R
 \name{fixOverlap}
 \alias{fixOverlap}
-\title{Fix overlap via random perturbation of affected elements}
+\title{Fix Overlap within a Sequence}
 \usage{
 fixOverlap(
   x,
   thresh = 0.6,
-  adj = 0.2,
+  adj = thresh/2,
   min.x = 0.8,
-  max.x = length(x) + 0.2,
+  max.x = max(x) + 0.2,
+  coolingRate = 0.95,
   maxIter = 1000,
   trace = FALSE
 )
@@ -17,7 +18,7 @@ fixOverlap(
 \arguments{
 \item{x}{vector of horizontal positions}
 
-\item{thresh}{horizontal threshold defining "overlap", must be < 1, ideal values likely in (0.3, 0.8)}
+\item{thresh}{horizontal threshold defining "overlap", typically < 1, ideal values likely in (0.3, 0.8)}
 
 \item{adj}{adjustments are tested within \code{runif(min = adj * -1, max = adj)}}
 
@@ -25,17 +26,17 @@ fixOverlap(
 
 \item{max.x}{right-side boundary condition}
 
-\item{maxIter}{maximum number of iterations to attempt before giving up and returning integer sequence}
+\item{coolingRate}{rate at which \code{adj} is decreased after a successful iteration}
 
-\item{trace}{print diagnostics}
+\item{maxIter}{maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence}
+
+\item{trace}{print diagnostics, result is a \code{list}}
 }
 \value{
-\itemize{
-\item \code{findOverlap} a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions.
-}
+When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with the number of overlapping elements at each iteration.
 }
 \description{
-This function is actually quite stupid as it can converge on bogus results scaled adjustments based on deviation from threshold distances would be better or, SANN style adjustments
+This function attempts to iteratively adjust a sequence until values are no longer within a given threshold, until \code{maxIter} is reached.
 }
 \examples{
 
