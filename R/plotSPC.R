@@ -674,7 +674,8 @@ plotSPC <- function(
 	  # }
 	  # 
 	  
-	  
+
+	  ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)
 
 	  ##################################
 	  ## horizon designations (names) ##
