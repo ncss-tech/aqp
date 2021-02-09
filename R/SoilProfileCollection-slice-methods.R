@@ -61,31 +61,42 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
 #'
 #'
 #' @name slice-methods
+#' 
 #' @aliases get.slice slice.fast slice slice,SoilProfileCollection-method
+#' 
 #' @docType methods
+#' 
 #' @param object a SoilProfileCollection
-#' @param fm A formula: either `integer.vector ~ var1 + var2 + var3' where
-#' named variables are sliced according to `integer.vector' OR where all
-#' variables are sliced according to `integer.vector' `integer.vector ~.'.
-#' @param top.down logical, slices are defined from the top-down: \code{0:10}
-#' implies 0-11 depth units.
-#' @param just.the.data Logical, return just the sliced data or a new
-#' SoilProfileCollection object.
-#' @param strict Logical, should the horizonation be strictly checked for
-#' self-consistency?
-#' @return Either a new SoilProfileCollection with data sliced according to
-#' \code{fm}, or a \code{data.frame}.
+#' 
+#' @param fm A formula: either `integer.vector ~ var1 + var2 + var3` where
+#' named variables are sliced according to `integer.vector` OR where all
+#' variables are sliced according to `integer.vector`: `integer.vector ~ .`.
+#' 
+#' @param top.down logical, slices are defined from the top-down: `0:10` implies 0-11 depth units.
+#' 
+#' @param just.the.data Logical, return just the sliced data or a new `SoilProfileCollection` object.
+#' 
+#' @param strict Logical, should the horizonation be strictly checked for self-consistency?
+#' 
+#' @return Either a new `SoilProfileCollection` with data sliced according to `fm`, or a `data.frame`.
+#' 
 #' @note \code{slab()} and \code{slice()} are much faster and require less
 #' memory if input data are either numeric or character.
+#' 
 #' @section Details: By default, slices are defined from the top-down:
 #' \code{0:10} implies 0-11 depth units.
+#' 
 #' @author D.E. Beaudette
+#' 
 #' @seealso \code{\link{slab}}
+#' 
 #' @references D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for
 #' quantitative pedology: A toolkit for soil scientists, Computers &
 #' Geosciences, Volume 52, March 2013, Pages 258-268,
 #' 10.1016/j.cageo.2012.10.020.
+#' 
 #' @keywords methods manip
+#' 
 #' @examples
 #'
 #' library(aqp)
@@ -150,7 +161,9 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
 #'   stop('there is a bug in slice() !!!')
 #' }
 #'
-#'
+
+
+
 slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE){
 
   ## important: change the default behavior of data.frame and melt

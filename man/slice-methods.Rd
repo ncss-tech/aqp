@@ -14,21 +14,18 @@ slice.fast(object, fm, top.down = TRUE, just.the.data = FALSE, strict = TRUE)
 \arguments{
 \item{object}{a SoilProfileCollection}
 
-\item{fm}{A formula: either \verb{integer.vector ~ var1 + var2 + var3' where named variables are sliced according to }integer.vector' OR where all
-variables are sliced according to \verb{integer.vector' }integer.vector ~.'.}
+\item{fm}{A formula: either \code{integer.vector ~ var1 + var2 + var3} where
+named variables are sliced according to \code{integer.vector} OR where all
+variables are sliced according to \code{integer.vector}: \code{integer.vector ~ .}.}
 
-\item{top.down}{logical, slices are defined from the top-down: \code{0:10}
-implies 0-11 depth units.}
+\item{top.down}{logical, slices are defined from the top-down: \code{0:10} implies 0-11 depth units.}
 
-\item{just.the.data}{Logical, return just the sliced data or a new
-SoilProfileCollection object.}
+\item{just.the.data}{Logical, return just the sliced data or a new \code{SoilProfileCollection} object.}
 
-\item{strict}{Logical, should the horizonation be strictly checked for
-self-consistency?}
+\item{strict}{Logical, should the horizonation be strictly checked for self-consistency?}
 }
 \value{
-Either a new SoilProfileCollection with data sliced according to
-\code{fm}, or a \code{data.frame}.
+Either a new \code{SoilProfileCollection} with data sliced according to \code{fm}, or a \code{data.frame}.
 }
 \description{
 Slicing of SoilProfileCollection Objects
@@ -105,7 +102,6 @@ hz.slice.mean <- mean(s$prop, na.rm=TRUE)
 if(!all.equal(hz.slice.mean, hz.wt.mean))
   stop('there is a bug in slice() !!!')
 }
-
 
 }
 \references{
