@@ -37,7 +37,6 @@ findOverlap <- function(x, thresh) {
 
 
 
-
 #' @title Fix Overlap within a Sequence
 #' 
 #' @description This function attempts to iteratively adjust a sequence until values are no longer within a given threshold of each other, or until `maxIter` is reached. Rank order and boundary conditions are preserved.
