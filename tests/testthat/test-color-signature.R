@@ -63,7 +63,7 @@ test_that("expected order from OSDs, depthSlices", {
   skip_on_cran()
   
   library(soilDB)
-  library(cluster)
+  suppressWarnings(library(cluster, quietly = TRUE))
   
   s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford', 'cecil', 'sycamore', 'KLAMATH', 'MOGLIA', 'vleck', 'drummer', 'CANEYHEAD', 'musick', 'sierra', 'HAYNER', 'zook', 'argonaut', 'PALAU')
   
