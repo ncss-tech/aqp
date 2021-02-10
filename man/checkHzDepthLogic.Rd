@@ -4,10 +4,14 @@
 \alias{checkHzDepthLogic}
 \title{Check a SoilProfileCollection object for errors in horizon depths.}
 \usage{
-checkHzDepthLogic(x, fast = FALSE)
+checkHzDepthLogic(x, hzdepths = NULL, idname = NULL, fast = FALSE)
 }
 \arguments{
-\item{x}{SoilProfileCollection object to check}
+\item{x}{\code{SoilProfileCollection} or \code{data.frame} object to check}
+
+\item{hzdepths}{SoilProfileCollection uses \code{horizonDepths(x)} Default: \code{NULL}; if \code{x} is a data.frame, character vector of column names of top and bottom depths}
+
+\item{idname}{SoilProfileCollection uses \code{idname(x)} Default: \code{NULL}; if \code{x} is a data.frame, character vector with column name of unique profile ID;}
 
 \item{fast}{If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: \code{FALSE}}
 }

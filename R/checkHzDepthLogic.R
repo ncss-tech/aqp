@@ -7,9 +7,11 @@
 #'   3. missing top or bottom depth (e.g. `NA`)
 #'   4. gap or overlap between adjacent horizons
 #'   
-#' @param x SoilProfileCollection object to check
-#' 
+#' @param x `SoilProfileCollection` or `data.frame` object to check
+#' @param hzdepths SoilProfileCollection uses `horizonDepths(x)` Default: `NULL`; if `x` is a data.frame, character vector of column names of top and bottom depths
+#' @param idname SoilProfileCollection uses `idname(x)` Default: `NULL`; if `x` is a data.frame, character vector with column name of unique profile ID; 
 #' @param fast If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: `FALSE`
+
 #'
 #' @return A `data.frame` containing profile IDs, validity boolean (`valid`) and test results if `fast = FALSE`.
 #' 
@@ -41,13 +43,34 @@
 #' 
 #' head(res)
 #' 
-checkHzDepthLogic <- function(x, fast = FALSE) {
+checkHzDepthLogic <- function(x, 
+                              hzdepths = NULL, 
+                              idname = NULL, 
+                              fast = FALSE) {
   
-  stopifnot(inherits(x, 'SoilProfileCollection'))
-  h <- data.table::as.data.table(horizons(x))
+  stopifnot(inherits(x, 'SoilProfileCollection') |
+              inherits(x, 'data.frame'))
+
+  if (inherits(x, 'SoilProfileCollection')) {
+    h <- data.table::as.data.table(horizons(x))
+    hzd <- horizonDepths(x)
+    idn <- idname(x)
+  } else {
+    h <- data.table::as.data.table(x)  
+    
+    # must have horizon top and bottom depth column
+    stopifnot(length(hzdepths) == 2 & 
+                is.character(hzdepths) & 
+                all(hzdepths %in% colnames(h)))
+    hzd <- hzdepths
+    
+    # must have id name column
+    stopifnot(length(idname) == 1 & 
+                is.character(idname) & 
+                all(idname %in% colnames(h)))
+    idn <- idname
+  }
   
-  hzd <- horizonDepths(x)
-  idn <- idname(x)
   hby <- substitute(idn)
   
   res <- NULL
