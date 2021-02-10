@@ -23,9 +23,10 @@ bad.d.phorizon <- subset(d.phorizon, peiidref %in% bad.peiids)
 bad.r.idx <- which(with(bad.d.phorizon, grepl("R|Cr", hzname) & is.na(hzdepb)))
 bad.d.phorizon$hzdepb[bad.r.idx] <- bad.d.phorizon$hzdept[bad.r.idx] + 1
 
-# add 1cm to O horizons that have equal hzdept and hzdepb
-bad.thk.idx <- which(with(bad.d.phorizon, grepl("O", hzname) & (hzdept == hzdepb)))
-bad.d.phorizon$hzdepb[bad.thk.idx] <- bad.d.phorizon$hzdept[bad.thk.idx] + 1
+# add 1cm to O horizons that have equal hzdept and hzdepb 
+#  (note: this "creates" old style horizon by adding 1cm to TOP depth)
+bad.thk.idx <- which(with(bad.d.phorizon, grepl("O", hzname) & hzdept == hzdepb))
+bad.d.phorizon[bad.thk.idx, 'hzdept'] <- bad.d.phorizon$hzdept[bad.thk.idx] + 1
 
 # remove any rows with both depths NA
 
@@ -41,14 +42,16 @@ bad.peiids2 <- subset(checkHzDepthLogic(bad.d.phorizon, c("hzdept", "hzdepb"), "
 good.d.phorizon <- subset(d.phorizon, !(peiidref %in% bad.peiids2))
 
 # bad set -- we will try to fix O horizons
-bad.d.phorizon <- subset(d.phorizon, peiidref %in% bad.peiids2)
+bad.d.phorizon <- subset(bad.d.phorizon, peiidref %in% bad.peiids2)
 
 # these we can try to fix (remove all NA rows)
 bad.d.phorizon <- subset(bad.d.phorizon, !is.na(hzdept) & !is.na(hzdepb))
 
 # look for the specific logic error 
 #  (O horizon with bottom depth shallower than top depth)
-bad.o.idx <- which(with(bad.d.phorizon, (grepl("O", hzname) | (is.na(hzname) & seqnum == 1)) & hzdepb < hzdept))
+bad.o.idx <- which(with(bad.d.phorizon, (grepl("O", hzname) | 
+                                           (is.na(hzname) & seqnum == 1)) & 
+                          hzdepb < hzdept))
 bad.o.peiids <- bad.d.phorizon[bad.o.idx, 'peiidref']
 
 # make negative
@@ -94,7 +97,7 @@ subset(d.phorizon, peiidref %in% finalres$peiidref[finalres$depthLogic])
 # no pedon IDs are missing 
 d.phorizon$peiidref[!d.phorizon$peiidref %in% finalres$peiidref]
 
-# 178 still have some sort of logic error (it seems)
+# 177 still have some sort of logic error (it seems)
 sum(!finalres$valid)
 
-subset(final, peiidref == 103)
+subset(final, peiidref == 157)
