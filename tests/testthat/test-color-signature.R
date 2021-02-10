@@ -56,7 +56,8 @@ test_that("depthSlices", {
 
 
 
-
+## TODO: create / use local data to check ordering
+# using OSDs right now for a diverse range of colors
 test_that("expected order from OSDs, depthSlices", {
   
   # only run this locally
