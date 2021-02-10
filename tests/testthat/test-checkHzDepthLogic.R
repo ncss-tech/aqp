@@ -34,6 +34,16 @@ test_that("checkHzDepthLogic() works as expected", {
   expect_true(all( ! res$missingDepth))
   expect_true(all( ! res$overlapOrGap))
   expect_true(all(res$valid))
+  
+  # works on a horizons()-like data.frame
+  h <- horizons(sp3)
+  h$foo <- h$id
+  h$id <- NULL
+  h$hzdept <- h$top
+  h$top <- NULL
+  h$hzdepb <- h$bottom
+  h$bottom <- NULL
+  expect_true(all(checkHzDepthLogic(h, c("hzdept","hzdepb"), "foo", fast = TRUE)$valid))
 })
 
 

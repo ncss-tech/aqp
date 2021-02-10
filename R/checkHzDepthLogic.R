@@ -89,7 +89,7 @@ checkHzDepthLogic <- function(x,
   } else {
     
     res <- h[, all(!hzDepthTests(.SD)), .SDcols = hzd, by = c(eval(hby))]
-    colnames(res) <- c(idname(x), "valid")
+    colnames(res) <- c(idn, "valid")
     
   }
   
