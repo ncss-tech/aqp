@@ -33,7 +33,17 @@ bad.d.phorizon$hzdepb[bad.thk.idx] <- bad.d.phorizon$hzdept[bad.thk.idx] + 1
 bad.d.phorizon_toinspect <- subset(bad.d.phorizon, is.na(hzdept) & is.na(hzdepb))
 which(!is.na(bad.d.phorizon_toinspect$texture))
 
-# these we can try to fix
+
+bad.peiids2 <- subset(checkHzDepthLogic(bad.d.phorizon, c("hzdept", "hzdepb"), "peiidref"), 
+                      depthLogic)[['peiidref']]
+
+# "good" set -- leave them alone for now (still may have other errors)
+good.d.phorizon <- subset(d.phorizon, !(peiidref %in% bad.peiids2))
+
+# bad set -- we will try to fix O horizons
+bad.d.phorizon <- subset(d.phorizon, peiidref %in% bad.peiids2)
+
+# these we can try to fix (remove all NA rows)
 bad.d.phorizon <- subset(bad.d.phorizon, !is.na(hzdept) & !is.na(hzdepb))
 
 # look for the specific logic error 
@@ -56,8 +66,8 @@ bad.d.phorizon$thk[is.na(bad.d.phorizon$thk)] <- 0
 bad.d.phorizon_after <- data.table::as.data.table(bad.d.phorizon)
 
 # cumulative sums of thickness to make new top/bottom depths
-bad.d.phorizon_after <- bad.d.phorizon_after[, list(hzdept = c(0, cumsum(thk[1:(.N - 1)])),
-                                                    hzdepb = cumsum(thk)), 
+bad.d.phorizon_after <- bad.d.phorizon_after[, list(hzdept = c(min(abs(hzdept)), cumsum(thk[1:(.N - 1)])),
+                                                    hzdepb = min(abs(hzdept)) + cumsum(thk)), 
                                              by = peiidref]
 
 # res <- daff::diff_data(bad.d.phorizon[,c("peiidref","hzdept","hzdepb")], 
@@ -79,8 +89,12 @@ finalres <- checkHzDepthLogic(final, c("hzdept", "hzdepb"), "peiidref")
 # all results pass depthLogic check
 sum(finalres$depthLogic)
 
+subset(d.phorizon, peiidref %in% finalres$peiidref[finalres$depthLogic])
+
 # no pedon IDs are missing 
 d.phorizon$peiidref[!d.phorizon$peiidref %in% finalres$peiidref]
 
-# 174 still have some sort of logic error (it seems)
+# 178 still have some sort of logic error (it seems)
 sum(!finalres$valid)
+
+subset(final, peiidref == 103)
