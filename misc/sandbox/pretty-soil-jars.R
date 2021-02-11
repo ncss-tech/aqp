@@ -34,4 +34,6 @@ par(mar = c(0, 0, 0, 0))
 soilPalette(m$color, lab = m$label)
 
 par(mar = c(0, 0, 0, 0), bg = 'grey', fg = 'black')
-previewColors(m$color, method = 'MDS', pt.cex = 6)
+mds <- previewColors(m$color, method = 'MDS', pt.cex = 6)
+text(mds, labels = 1:nrow(m), col = invertLabelColor(m$color), font = 2)
+points(0, 0, pch = 22, bg = 'royalblue', cex = 4)
