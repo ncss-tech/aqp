@@ -1,18 +1,19 @@
 library(aqp)
 
 
-
+## reasonable tests
 
 
 
 s <- lapply(1:20, random_profile, SPC = TRUE)
 s <- combine(s)
 getLastHorizonID(s)
+plotSPC(s, name = hzidname(s))
 
 s <- lapply(sample(letters, size = 26), random_profile, SPC = TRUE)
 s <- combine(s)
 getLastHorizonID(s)
-
+plotSPC(s, name = hzidname(s))
 
 
 
@@ -27,13 +28,13 @@ plotSPC(sp4, width = 0.3)
 # copy to break
 x <- sp4
 
-## valid (deepest) horizons to repair:
+## legal (deepest) horizons to repair:
 # introduce NA
 x$bottom[4] <- NA
 # top == bottom
 x$bottom[6] <- x$top[6]
 
-## invalid horizons to repair
+## not legal horizons to repair
 x$bottom[12] <- NA
 
 # marked as invalid
@@ -53,6 +54,7 @@ plotSPC(
   width = 0.3,
   plot.depth.axis = FALSE
 )
+
 
 plotSPC(
   z, 
