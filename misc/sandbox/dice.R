@@ -1,12 +1,13 @@
 
 library(aqp)
 library(data.table)
-library(profvis)
 
+## indexes vs. keys
+# See the vignette("datatable-secondary-indices-and-auto-indexing") for more details.
 
 # ~ 10 seconds for 10k profiles
 # much faster to generate as DF, then promote to SPC at the end
-d <- lapply(1:100000, random_profile, n=c(6, 7, 8), n_prop=5, method='LPP', SPC=FALSE)
+d <- lapply(1:10000, random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 
 # much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
@@ -15,7 +16,10 @@ d$id <- as.character(d$id)
 depths(d) <- id ~ top + bottom
 
 # fake group
-d$group <- factor(sample(letters[1:10], size=length(d), replace=TRUE))
+site(d)$group <- factor(sample(letters[1:10], size = length(d), replace =TRUE))
+
+plotSPC(d[1:10, ], color = 'p1')
+
 
 ## DT full outer join ideas
 # https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
@@ -27,9 +31,17 @@ d$group <- factor(sample(letters[1:10], size=length(d), replace=TRUE))
 
 # simpler, faster version of slice via data.table / FULL JOIN
 # less robust to errors than current slice()
-dice <- function(x) {
+# slices entire profiles
+# returns all columns
+
+#' @param x a `SoilProfileCollection` object
+#' @param dropInvalid drop profiles with horizon errors
+#' @param just.the.data return only the horizon data, for backwards compatibility
+#' 
+dice <- function(x, dropInvalid = TRUE, just.the.data = FALSE) {
   
   ## TODO:
+  # * consider setindex() vs. setkey() <-- this sorts the data
   # * formula interface
   # * .pctMissing eval
   # * return as DF vs. SPC
@@ -39,6 +51,26 @@ dice <- function(x) {
   # * ERROR on bottom < top
   # * cannot use A/E type horizons (https://github.com/ncss-tech/aqp/issues/88)
   
+  # sanity check: profiles must pass all hz depth logic
+  hz.tests <- checkHzDepthLogic(x, fast = TRUE)
+  
+  if(any(!hz.tests$valid)) {
+    
+    if(dropInvalid) {
+      message('dropping profiles with invalid horizon logic')
+      idx <- which(hz.tests$valid)
+      x <- x[idx, ]
+      
+      # test for empty SPC
+      if(length(idx) < 1) {
+        stop('there are no valid profiles in this collection', call. = FALSE)
+      }
+      
+    } else {
+      stop('invalid horizon depth logic detected', call. = FALSE)  
+    }
+  }
+  
   ## extract pieces
   h <- horizons(x)
   idn <- idname(x)
@@ -47,29 +79,43 @@ dice <- function(x) {
   
   ## `h` could be a data.table object
   h <- as.data.table(h)
-  setkeyv(h, hzidn)
+  
+  ## TODO: are keys worth the extra sorting / re-sorting?
+  # init keys, sorts the data on hzID (alpha-sort)
+  # setkeyv(h, hzidn)
+  # consider and index, seems to have no effect
+  # setindexv(h, hzidn)
   
   ## mapply() call takes 1/2 of total time
   ## consider custom function
-  # expand 1 unit slices
-  tops <- mapply(FUN = seq, from=h[[htb[1]]], to=h[[htb[2]]] - 1, by = 1, SIMPLIFY=FALSE)
+  # expand 1 unit slices to max depth of each profile
+  # NA in hz depths or 0-thickness horizons are not allowed
+  tops <- mapply(FUN = seq, from = h[[htb[1]]], to = h[[htb[2]]] - 1, by = 1, SIMPLIFY = FALSE)
   tops <- unlist(tops)
   bottoms <- tops + 1
   
   # expand slice IDs (horizon IDs)
-  sliceIDs <- rep(h[[hzidn]], times=h[[htb[2]]] - h[[htb[1]]])
+  sliceIDs <- rep(h[[hzidn]], times = h[[htb[2]]] - h[[htb[1]]])
   
-  ## TODO: this will eventually be a data.table object
-  # assemble for JOIN
-  s <- data.frame(sliceID=sliceIDs, .sliceTop=tops, .sliceBottom=bottoms, stringsAsFactors = FALSE)
+  # assemble slice LUT for JOIN
+  s <- data.table(
+    sliceID = sliceIDs, 
+    .sliceTop = tops, 
+    .sliceBottom = bottoms
+  )
+  
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
-  # init / index data.table
-  s <- as.data.table(s)
-  setkeyv(s, hzidn)
+  
+  ## TODO: are keys worth the extra sorting / re-sorting?
+  # note: sorts data
+  # setkeyv(s, hzidn)
+  # consider and index, seems to have no effect
+  # setindexv(s, hzidn)
   
   # FULL JOIN via fast data.table compiled code
-  res <- merge.data.table(h, s, by=hzidn, all=TRUE, sort=FALSE)
+  # using keys (index)
+  res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
   ## TODO: update to := syntax, but how does it work with with variables?
   # https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reference-semantics.html
@@ -88,10 +134,14 @@ dice <- function(x) {
   res[['.sliceTop']] <- NULL
   res[['.sliceBottom']] <- NULL
   
-  # pack back into SPC by replacement of @horizons
-  # otherwise the setter will attempt to join the data on hzidname
+  # only returning horizons as a data.frame
+  if(just.the.data) {
+    return(as.data.frame(res))
+  }
+  
+  # re-pack horizon data
   res <- as.data.frame(res)
-  slot(x, 'horizons') <- res
+  replaceHorizons(x) <- res
   
   # switch horizon ID to slice ID
   hzidname(x) <- 'sliceID'
@@ -102,18 +152,35 @@ dice <- function(x) {
 
 z <- dice(d[1:2, ])
 
-par(mar=c(0,1,3,1))
+par(mar = c(0,1,3,1))
 # supress hz names
 # strange legend, due to character representation of integers
-plotSPC(z, color='hzID', name=NA, divide.hz = TRUE)
+plotSPC(z[2, ], color = 'hzID', name = NA, divide.hz = FALSE)
+
+
+
+## introduce horizonation errors
+
+z <- d[1:10, ]
+z$bottom[2] <- NA
+z$top[20] <- z$bottom[20]
+
+z$bottom[32] <- 15
+z$bottom[5]
+z$top[6] <- 95
+
+zz <- dice(z)
+
+plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
+
 
 ## current slice()
-# 10k profiles: 22 seconds 
+# 10k profiles: 15 seconds (home MacOS)
 # 100k profiles: 266 seconds
 system.time(s <- slice(d, 0:100 ~ .))
 
 ## 1x mapply, merge.data.table
-# 10k profiles: 4 seconds
+# 10k profiles: 3 seconds (home MacOS)
 # 100k profiles: 42 seconds
 system.time(s <- dice(d))
 
@@ -127,19 +194,6 @@ pp.slice <- profvis(s <- slice(d, 0:100 ~ .))
 pp.dice <- profvis(s <- dice(d))
 
 
-## introduce horizonation errors
-
-z <- d[1:10, ]
-z$bottom[2] <- NA
-z$top[20] <- z$bottom[20]
-
-z$bottom[32] <- 15
-z$bottom[5]
-z$top[6] <- 95
-
-checkHzDepthLogic(z)
-
-dice(z)
 
 
 
