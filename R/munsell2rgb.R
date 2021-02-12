@@ -444,7 +444,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
     hue = the_hue, 
     value = as.numeric(the_value), 
     chroma = as.numeric(the_chroma), 
-    stringsAsFactors=FALSE
+    stringsAsFactors = FALSE
   )
   
   ## benchmarks:
