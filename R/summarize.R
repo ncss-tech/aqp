@@ -1,7 +1,6 @@
 #' @title Perform summaries on groups (from \code{group_by}) and create new site or horizon level attributes
-#' @name summarize
 #'
-#' @aliases summarize,SoilProfileCollection-method
+#' @aliases summarizeSPC,SoilProfileCollection-method
 #'
 #' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
 #'
@@ -11,17 +10,9 @@
 #' @return A data.frame with one row per level in the grouping variable, and one column for each summary
 #'
 #' @author Andrew G. Brown
+#' @export
 #'
-#' @rdname summarize
-#' @export summarize
-#'
-if (!isGeneric("summarize"))
-  setGeneric("summarize", function(object, ...)
-    standardGeneric("summarize"))
-
-setMethod("summarize", signature(object = "SoilProfileCollection"),
-          function(object, ...) {
-  if(requireNamespace("rlang", quietly = TRUE)) {
+summarizeSPC <-  function(object, ...) {
     # TODO: safe setter and accessor methods for grouping variable
     group.by.col <- object@metadata$aqp_group_by
 
@@ -31,10 +22,14 @@ setMethod("summarize", signature(object = "SoilProfileCollection"),
     groups <- levels(factor(as.character(object[[group.by.col]])))
 
     # capture expression(s) at function
-    x <- rlang::enquos(..., .named = TRUE)
+    .dots <- substitute(list(...))
+    .dots <- .dots[2:length(.dots)]
+    .names <- names(.dots)
 
-    dfout <- .as.data.frame.aqp(data.frame(matrix(nrow = 0, ncol = length(names(x)))), aqp_df_class(object))
-    colnames(dfout) <- names(x)
+    if (is.null(.names))
+      .names <- as.character(.dots)
+
+    dfout <- .as.data.frame.aqp(data.frame(matrix(nrow = 0, ncol = length(.names))), aqp_df_class(object))
 
     # TODO: generalize split for n site or horizon level attributes
 
@@ -51,12 +46,10 @@ setMethod("summarize", signature(object = "SoilProfileCollection"),
       #       also, could use diagnostics and or restrictions -- future compositeSPC will include these
 
       # apply expressions to each group, frameify results
-       data <- compositeSPC(obj)
-
-       for(n in names(x)) {
-          output <- rlang::eval_tidy(x[[n]], data)
-          names(output) <- n
-
+       .data <- compositeSPC(obj)
+       for(i in 1:length(.dots)) {
+          output <- .data_dots(.data, eval(.dots[[i]]))[[1]]
+          names(output) <- .names[i-1]
           if(length(output) > 1) {
             stop("summary value '%s' has length greater than one", call.=FALSE)
           } else if(length(output) == 0) {
@@ -74,12 +67,13 @@ setMethod("summarize", signature(object = "SoilProfileCollection"),
     # recombine results for each group into a single data.frame
     summaries <- do.call('rbind', res)
     final <- data.frame(groups, summaries)
-    colnames(final) <- c(group.by.col, names(x))
+    colnames(final) <- c(group.by.col, .names)
 
     # return result in same class as SPC slots
     return(.as.data.frame.aqp(final, aqp_df_class(object)))
-  } else {
-    stop("package 'rlang' is required for summarize", .call=FALSE)
-  }
-})
+}
 
+summarize <- function(object, ...) {
+  .Deprecated("summarizeSPC")
+  summarizeSPC(object, ...)
+}

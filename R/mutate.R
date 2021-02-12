@@ -13,22 +13,23 @@ if (!isGeneric("mutate"))
   setGeneric("mutate", function(object, ...) standardGeneric("mutate"))
 
 setMethod("mutate", signature(object = "SoilProfileCollection"), function(object, ...) {
-  if (requireNamespace("rlang", quietly = TRUE)) {
 
     # capture expression(s) at function
-    x <- rlang::enquos(..., .named = TRUE)
+    .dots <- substitute(list(...))
+    .dots <- .dots[2:length(.dots)]
+    .names <- names(.dots)
+
+    if (is.null(.names))
+      .names <- as.character(.dots)
 
     # create composite object to facilitate eval_tidy
-    data <- compositeSPC(object)
+    .data <- compositeSPC(object)
 
-    for(n in names(x)) {
-      foo <- rlang::eval_tidy(x[[n]], data)
-      object[[n]] <- foo
-      data[[n]] <- foo
+    for(n in 1:length(.dots)) {
+      foo <- .data_dots(.data, eval(.dots[[n]]))[[1]]
+      object[[.names[n]]] <- foo
+      .data[[.names[n]]] <- foo
     }
 
     return(object)
-  } else {
-    stop("package 'rlang' is required for mutate", .call=FALSE)
-  }
 })

@@ -14,42 +14,37 @@ if (!isGeneric("mutate_profile"))
 
 setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
           function(object, ...) {
-  if(requireNamespace("rlang", quietly = TRUE)) {
 
     # capture expression(s) at function
-    x <- rlang::enquos(..., .named = TRUE)
+    .dots <- substitute(list(...))
+    .dots <- .dots[2:length(.dots)]
+    .names <- names(.dots)
 
-    # TODO: group_by would operate above profile?
-    #       is it safe to assume operations, in general, would
-    #       be on the profile basis, and then aggregated by group?
-
-    # TODO: evaluate expressions individually, to handle dependence?
-    # currently, iterates through profiles evaluating each expression on each profile
-    # need to iterate over expressions, then through profiles for each expression
-    # then, mutate_profile(spc, c = b + a, d = c) would not error with 'c' not found
+    if (is.null(.names))
+      .names <- as.character(.dots)
 
     # iterate over expressions left to right
-    for (n in names(x)) {
+    for (i in 1:length(.dots)) {
       horizon_level <- FALSE
       # decide whether we are adding/modifying a site or horizon level variable so
       #  that degenerate cases do not create identical columns in site and horizon table
-      res_eval <- rlang::eval_tidy(x[[n]], compositeSPC(object[1,]))
+      res_eval <- .data_dots(compositeSPC(object[1,]), eval(.dots[[i]]))[[1]]
       if (length(res_eval) == nrow(object[1,]))
          horizon_level <- TRUE
-         
+
       # then iterate over profiles within expression, frameify results
       res <- profileApply(object, function(o) {
 
         # create composite object to facilitate eval_tidy
-        data <- compositeSPC(o)
-        res_eval <- rlang::eval_tidy(x[[n]], data)
+        .data <- compositeSPC(o)
+        res_eval <- .data_dots(.data, eval(.dots[[i]]))[[1]]
 
         if (horizon_level) {
-          horizons(o)[[n]] <- res_eval
+          horizons(o)[[.names[i]]] <- res_eval
         } else {
-          site(o)[[n]] <- res_eval
+          site(o)[[.names[i]]] <- res_eval
         }
-        
+
         return(list(st = site(o), hz = horizons(o)))
       }, simplify = FALSE)
 
@@ -57,12 +52,12 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
       if (requireNamespace("data.table")) {
         if (!horizon_level)
          .site <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$st })), aqp_df_class(object))
-        else 
+        else
          .hz <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$hz })), aqp_df_class(object))
       } else {
         if (!horizon_level)
          .site <- do.call('rbind', lapply(res, function(r) { r$st }))
-        else 
+        else
          .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
       }
 
@@ -76,7 +71,4 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
     }
 
     return(object)
-  } else {
-    stop("package 'rlang' is required for mutate_profile", .call=FALSE)
-  }
 })

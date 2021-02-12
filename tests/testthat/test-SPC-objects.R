@@ -153,22 +153,23 @@ test_that("SPC subsetting ", {
 test_that("SPC subsetting with tidy verbs ", {
 
   # filter works as expected
-  expect_equal(length(filter(sp1, structure_type == "PL")), 1)
+  expect_equal(length(subset(sp1, structure_type == "PL")), 1)
 
   # ensure multiple expressions yields same result as single expression
-  l1 <- filter(sp1, !is.na(texture), prop > mean(prop, na.rm=TRUE))
-  l2 <- filter(sp1, !is.na(texture) & prop > mean(prop, na.rm=TRUE))
+  l1 <- subset(sp1, !is.na(texture), prop > mean(prop, na.rm=TRUE))
+  l2 <- subset(sp1, !is.na(texture) & prop > mean(prop, na.rm=TRUE))
   expect_equivalent(length(l1), length(l2))
 
   # mixing of site and horizon level expressions is the intersection
-  l1 <- filter(sp1, group == 2, prop > mean(prop, na.rm=TRUE))
+  l1 <- subset(sp1, group == 2, prop > mean(prop, na.rm=TRUE))
   expect_equivalent(length(l1), 4)
 
   # grepSPC works as expected
   expect_equal(length(grepSPC(sp1, texture, "SCL")), 1)
 
   # subApply works as expected
-  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))})
+  expect_equal(length(subApply(sp1, function(p) TRUE)), length(sp1))
+})
 
 test_that("SPC graceful failure of spatial operations when data are missing", {
 
@@ -190,7 +191,7 @@ test_that("SPC graceful failure of spatial operations when data are missing", {
 test_that("SPC spatial operations ", {
 
   skip_if_not_installed("rgdal")
-  
+
   # init / extract coordinates
   coordinates(sp1) <- ~ x + y
   co <- coordinates(sp1)
@@ -213,7 +214,7 @@ test_that("SPC spatial operations ", {
   # https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html
   # catching all rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-methods
   # expect_silent(proj4string(sp1) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0')
-  # 
+  #
   # # we should get back the same thing we started with
   # if (packageVersion("rgdal") >= "1.5-17")
   #   expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs'))
@@ -221,7 +222,7 @@ test_that("SPC spatial operations ", {
   #   expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs'))
   # else
   #   expect_silent(expect_equal(proj4string(sp1), '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'))
-  # 
+  #
   # # basic coercion
   # if (packageVersion("rgdal") >= "1.5-17")
   #   expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
@@ -229,7 +230,7 @@ test_that("SPC spatial operations ", {
   #   expect_warning(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
   # else
   #   expect_silent(expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints')))
-  # 
+  #
   # # down-grade to {site + sp} = SpatialPointsDataFrame
   # if (packageVersion("rgdal") >= "1.5-17")
   #   expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
@@ -237,14 +238,14 @@ test_that("SPC spatial operations ", {
   #   expect_warning(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
   # else
   #   expect_silent(expect_message(as(sp1, 'SpatialPointsDataFrame'), 'only site data are extracted'))
-  # 
+  #
   # if (packageVersion("rgdal") >= "1.5-17")
   #   expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
   # else if (packageVersion("rgdal") >= "1.5-8")
   #   expect_warning(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
   # else
   #   expect_silent(sp1.spdf <- suppressMessages(as(sp1, 'SpatialPointsDataFrame')))
-  # 
+  #
   # expect_true(inherits(sp1.spdf, 'SpatialPointsDataFrame'))
 
   # Unit-length j-index SPDF downgrading DEPRECATED
@@ -649,7 +650,7 @@ test_that("basic integrity checks", {
   expect_true(all(spc[[hzidname(spc)]] == c(20:40,1:19)))
 
   # subset the broken SPC to get the 4th profile
-  spc4 <- filter(spc, id == "4")
+  spc4 <- subset(spc, id == "4")
 
   # the target order reflects a reasonable result for the single profile SPC
   expect_true(all(metadata(spc4)$target.order == 1:10))
