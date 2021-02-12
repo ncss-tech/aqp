@@ -20,6 +20,9 @@ test_that("works as expected", {
   expect_true(res[2] == "11")
   expect_true(res[3] == "17")
   
+  # ID ordering
+  expect_true(all(profile_id(s) == names(res)))
+  
   
   # IDs naturally sort in alpha-order
   s <- lapply(sample(letters, size = 26), random_profile, SPC = TRUE)
@@ -30,5 +33,6 @@ test_that("works as expected", {
   expect_true(inherits(res, 'character'))
   expect_true(length(res) == length(s))
   
+  expect_true(all(profile_id(s) == names(res)))
   
 })

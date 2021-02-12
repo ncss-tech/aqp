@@ -1,8 +1,3 @@
-
-
-# TODO: there may be something implemented already, will check
-#       for now, the following is general / fast enough
-# 
 # 
 #' @title Get IDs of Deepest Horizons by Profile
 #' 
@@ -12,27 +7,22 @@
 #' 
 getLastHorizonID <- function(x) {
   
+  # satisfy R CMD check
+  .SD <- NULL
+  .N <- NULL
+  
   hztb <- horizonDepths(x)
   hzidn <- hzidname(x)
   idn <- idname(x)
   
-  # basic idea: iterate over profiles, but only within horizon data
-  # return deepest horizon IDs
-  h <- horizons(x)
-  h <- split(h, h[[idn]])
+  # iterate over profile horizon subset data.frame; return deepest horizon IDs
+  # data.table upgrade c/o AGB
+  h <- data.table::as.data.table(horizons(x))
   
-  # this is the safe set of horizons which can be repaired
-  res <- sapply(h, function(i) {
-    bottom.idx <- which.max(i[[hztb[1]]])
-    res <- i[[hzidn]][bottom.idx]
-    return(res)
-  })
+  h.sub <- h[, .SD[.N,], by = list(h[[idn]])]
+  res <- h.sub[[hzidn]]
   
-  ## TODO: this should never happen, including until tests are complete
-  # just in case, ensure that profile order has not been compromised
-  if(! all(profile_id(x) == names(res))) {
-    stop('results out of order, how did this happen?', call. = FALSE)
-  }
+  names(res) <- h.sub[[idn]]
   
   # a named vector, in the same order as profile_id(x)
   return(res)
