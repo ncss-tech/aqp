@@ -29,22 +29,21 @@ plotSPC(d[1:10, ], color = 'p1')
 # https://github.com/ncss-tech/aqp/issues/115
 
 
-# simpler, faster version of slice via data.table / FULL JOIN
+# simpler, faster version of slice via `data.table` / FULL JOIN
 # less robust to errors than current slice()
 # slices entire profiles
-# returns all columns
+# returns all depths / columns
 
 #' @param x a `SoilProfileCollection` object
 #' @param dropInvalid drop profiles with horizon errors
-#' @param just.the.data return only the horizon data, for backwards compatibility
+#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
 #' 
-dice <- function(x, dropInvalid = TRUE, just.the.data = FALSE) {
+dice <- function(x, dropInvalid = TRUE, SPC = TRUE) {
   
   ## TODO:
   # * consider setindex() vs. setkey() <-- this sorts the data
-  # * formula interface
-  # * .pctMissing eval
-  # * return as DF vs. SPC
+  # * formula interface (nope)
+  # * .pctMissing eval (write a new function)
   # * strictness of hz logic eval
   # * ERRORS on NA depths
   # * ERROR on top == bottom
@@ -106,6 +105,10 @@ dice <- function(x, dropInvalid = TRUE, just.the.data = FALSE) {
   
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
+  
+  ## MAYBE
+  # perform subsetting of depths / variables using `fm` if provided
+  # s[.sliceTop %in% depthvec]
   
   ## TODO: are keys worth the extra sorting / re-sorting?
   # note: sorts data
@@ -190,7 +193,7 @@ system.time(s <- dice(d))
 # get.slice() wastes a lot of time
 pp.slice <- profvis(s <- slice(d, 0:100 ~ .))
 
-# most time spent: setkey + mapply + setkey
+# most time spent: checHzDepthLogic + mapply
 pp.dice <- profvis(s <- dice(d))
 
 
