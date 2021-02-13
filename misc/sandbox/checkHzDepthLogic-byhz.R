@@ -138,3 +138,17 @@ checkHzDepthLogic(glom(jacobs2000[1,], 50, 100, truncate = TRUE, invert = TRUE),
 #> 5 92-1 130    153    5  TRUE      FALSE     FALSE        FALSE        FALSE
 #> 6 92-1 153    156    6  TRUE      FALSE     FALSE        FALSE        FALSE
 #> 7 92-1 156    213    7  TRUE      FALSE     FALSE        FALSE        FALSE
+
+j <- jacobs2000[1,]
+horizons(j)$top[1] <- j$bottom[1]
+horizons(j)$bottom[1] <- 0
+
+checkHzDepthLogic(j, byhz=TRUE)
+#>     id top bottom hzID valid depthLogic sameDepth missingDepth overlapOrGap
+#> 1 92-1  18      0    1 FALSE       TRUE     FALSE        FALSE        FALSE
+#> 2 92-1  18     43    2  TRUE      FALSE     FALSE        FALSE        FALSE
+#> 3 92-1  43     79    3  TRUE      FALSE     FALSE        FALSE        FALSE
+#> 4 92-1  79    130    4  TRUE      FALSE     FALSE        FALSE        FALSE
+#> 5 92-1 130    153    5  TRUE      FALSE     FALSE        FALSE        FALSE
+#> 6 92-1 153    156    6  TRUE      FALSE     FALSE        FALSE        FALSE
+#> 7 92-1 156    213    7  TRUE      FALSE     FALSE        FALSE        FALSE
