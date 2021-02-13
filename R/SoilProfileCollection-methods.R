@@ -311,11 +311,11 @@ setMethod(f = 'unique',
 setMethod("subset", signature(x = "SoilProfileCollection"),
           function(x, ..., greedy = FALSE) {
             object <- x
-            if (requireNamespace("rlang", quietly = TRUE)) {
 
             # capture expression(s) at function
               .dots <- substitute(list(...))
               .dots <- .dots[2:length(.dots)]
+
 
               # create composite object to facilitate eval
               .data <- compositeSPC(object)
@@ -323,7 +323,9 @@ setMethod("subset", signature(x = "SoilProfileCollection"),
               # loop through list of quosures and evaluate
               res <- vector('list', length(.dots))
               for (i in 1:length(.dots)) {
-                res[[i]] <- .data_dots(.data, eval(.dots[[i]], .data, parent.frame(2)))[[1]]
+
+                # why does n=2 work?!
+                res[[i]] <- eval(.dots[[i]], .data, parent.frame(n = 2))
 
                 # print(ls(envir=globalenv()))
                 # print(res[[i]])
@@ -384,9 +386,6 @@ setMethod("subset", signature(x = "SoilProfileCollection"),
 
               # return SPC, subsetted using site level index
               return(object[na.omit(idx),])
-            } else {
-               stop("package 'rlang' is required for filter", .call=FALSE)
-            }
           })
 
 if (!isGeneric("filter"))
