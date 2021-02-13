@@ -2,10 +2,13 @@
 % Please edit documentation in R/mutate.R
 \name{mutate}
 \alias{mutate}
-\alias{mutate,SoilProfileCollection-method}
+\alias{mutate,SoilProfileCollection-method,}
+\alias{transform,SoilProfileCollection-method}
 \title{Transform a SPC with expressions based on site or horizon level attributes}
 \arguments{
 \item{object}{A SoilProfileCollection}
+
+\item{`_data`}{A SoilProfileCollection}
 
 \item{...}{Comma-separated set of R expressions e.g. \code{thickness = hzdepb - hzdept, hzdepm = hzdept + round(thk / 2)}}
 }
