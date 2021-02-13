@@ -1,6 +1,6 @@
 #' @title Transform a SPC with expressions based on site or horizon level attributes
 #' @name mutate
-#' @aliases mutate,SoilProfileCollection-method, transform,SoilProfileCollection-method
+#' @aliases mutate,SoilProfileCollection-method transform,SoilProfileCollection-method mutate
 #' @description \code{mutate()} is a function used for transforming SoilProfileCollections. It allows the user to specify an arbitrary number of expressions that resolve to the (re-)calculation of one or more site or horizon level attributes. For instance: \code{mutate(spc, thickness = hzdepb - hzdept)}. The expressions may depend on one another, and are evaluated from left to right.
 #' @param object A SoilProfileCollection
 #' @param `_data` A SoilProfileCollection

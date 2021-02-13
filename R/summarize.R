@@ -1,6 +1,6 @@
 #' @title Perform summaries on groups (from \code{group_by}) and create new site or horizon level attributes
 #'
-#' @aliases summarizeSPC,SoilProfileCollection-method
+#' @aliases summarizeSPC,SoilProfileCollection-method, summarize
 #'
 #' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
 #'

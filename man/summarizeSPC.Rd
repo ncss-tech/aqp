@@ -2,7 +2,8 @@
 % Please edit documentation in R/summarize.R
 \name{summarizeSPC}
 \alias{summarizeSPC}
-\alias{summarizeSPC,SoilProfileCollection-method}
+\alias{summarizeSPC,SoilProfileCollection-method,}
+\alias{summarize}
 \title{Perform summaries on groups (from \code{group_by}) and create new site or horizon level attributes}
 \usage{
 summarizeSPC(object, ...)

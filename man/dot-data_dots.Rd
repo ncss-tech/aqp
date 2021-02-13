@@ -4,7 +4,7 @@
 \alias{.data_dots}
 \title{Make a data.frame from non-standard expressions evaluated in a data environment}
 \usage{
-.data_dots(.data, ..., caller = NULL)
+.data_dots(.data, ...)
 }
 \arguments{
 \item{.data}{A list, or object coercible to one, describing the data}
@@ -18,11 +18,8 @@ A \code{list} where names are expression "names" from \code{...} and values are 
 Make a data.frame from non-standard expressions evaluated in a data environment
 }
 \examples{
-
-.data_dots(data.frame(a = 1:10, b = 2:11), cc = a + b, d = cc * 2)
-
-data("jacobs2000", package="aqp")
-
-.data_dots(compositeSPC(jacobs2000), clayprop = clay / 100)
+# .data_dots(data.frame(a = 1:10, b = 2:11), cc = a + b, d = cc * 2)
+# data("jacobs2000", package="aqp")
+# .data_dots(compositeSPC(jacobs2000), clayprop = clay / 100)
 
 }

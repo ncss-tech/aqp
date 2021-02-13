@@ -2,6 +2,7 @@
 % Please edit documentation in R/group_by.R
 \name{groupSPC}
 \alias{groupSPC}
+\alias{group_by}
 \title{(EXPERIMENTAL) Store groupings within a profile collection.}
 \usage{
 groupSPC(object, ...)

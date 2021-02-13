@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutate.R
 \name{mutate}
 \alias{mutate}
-\alias{mutate,SoilProfileCollection-method,}
+\alias{mutate,SoilProfileCollection-method}
 \alias{transform,SoilProfileCollection-method}
 \title{Transform a SPC with expressions based on site or horizon level attributes}
 \arguments{

@@ -7,14 +7,13 @@
 #' @return A `list` where names are expression "names" from `...` and values are the result of evaluating expressions in context of `.data`
 #'
 #' @examples
+#' # .data_dots(data.frame(a = 1:10, b = 2:11), cc = a + b, d = cc * 2)
+#
+#' # data("jacobs2000", package="aqp")
+#
+#' # .data_dots(compositeSPC(jacobs2000), clayprop = clay / 100)
 #'
-#' .data_dots(data.frame(a = 1:10, b = 2:11), cc = a + b, d = cc * 2)
-#'
-#' data("jacobs2000", package="aqp")
-#'
-#' .data_dots(compositeSPC(jacobs2000), clayprop = clay / 100)
-#'
-.data_dots <- function(.data, ..., caller = NULL) {
+.data_dots <- function(.data, ...) {
   .dots <- substitute(list(...))
   .dots <- .dots[2:length(.dots)]
   .names <- names(.dots)
