@@ -11,7 +11,7 @@
 #' @param hzdepths SoilProfileCollection uses `horizonDepths(x)` Default: `NULL`; if `x` is a data.frame, character vector of column names of top and bottom depths
 #' @param idname SoilProfileCollection uses `idname(x)` Default: `NULL`; if `x` is a data.frame, character vector with column name of unique profile ID;
 #' @param fast If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: `FALSE`
-
+#' @param byhz Apply logic tests to profiles or individual horizons?
 #'
 #' @return A `data.frame` containing profile IDs, validity boolean (`valid`) and test results if `fast = FALSE`.
 #'
@@ -25,7 +25,7 @@
 #'    - `overlapOrGap` : boolean, gaps or overlap in adjacent horizons
 #'
 #' @export
-#' @author D.E. Beaudette, A.G. Brown
+#' @author D.E. Beaudette, A.G. Brown, S.M. Roecker
 #' @examples
 #'
 #' ## sample data
