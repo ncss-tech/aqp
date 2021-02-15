@@ -114,6 +114,25 @@ spc_j_base_2 <- function(x, i, j) {
   return(list(i.idx, j.idx))
 }
 
+spc_j_base_3 <- function(x, i, j) {
+  h <- horizons(x)
+  idn <- idname(x)
+
+  # slightly more competitive version of base
+  j.res <- aggregate(
+    seq_len(nrow(h)),
+    by = list(h[[idn]]),
+    FUN = function(hh) {
+      (1:length(hh) %in% j)
+    }
+  )$x
+
+  i.idx <- which(vapply(j.res, any, FUN.VALUE = logical(1)))
+  j.idx <-  which(unlist(j.res))
+
+  return(list(i.idx, j.idx))
+}
+
 library(aqp)
 
 data(sp4)
@@ -122,6 +141,7 @@ depths(sp4) <- id ~ top + bottom
 # base outperforms old DT with 10 profiles, but new solution slightly better
 microbenchmark::microbenchmark(spc_j_base(sp4, 1:10, 2:3),
                                spc_j_base_2(sp4, 1:10, 2:3),
+                               spc_j_base_3(sp4, 1:10, 2:3),
                                spc_j_DT(sp4, 1:10, 2:3),
                                spc_j_DT_2(sp4, 1:10, 2:3))
 
@@ -131,6 +151,7 @@ depths(sp4_DT) <- id ~ top + bottom
 
 bench::mark(spc_j_base(sp4_DT, 1:10, 2:3),
             spc_j_base_2(sp4_DT, 1:10, 2:3),
+            spc_j_base_3(sp4_DT, 1:10, 2:3),
             spc_j_DT(sp4_DT, 1:10, 2:3),
             spc_j_DT_2(sp4_DT, 1:10, 2:3))
 
@@ -141,6 +162,7 @@ depths(thousand) <- id ~ top + bottom
 
 bench::mark(spc_j_base(thousand, 1:10, 2:3),
             spc_j_base_2(thousand, 1:10, 2:3),
+            spc_j_base_3(thousand, 1:10, 2:3),
             spc_j_DT(thousand, 1:10, 2:3),
             spc_j_DT_2(thousand, 1:10, 2:3))
 
@@ -150,17 +172,19 @@ depths(tenthousand) <- id ~ top + bottom
 
 bench::mark(spc_j_base(tenthousand, 1:10, 2:3),
             spc_j_base_2(tenthousand, 1:10, 2:3),
+            spc_j_base_3(tenthousand, 1:10, 2:3),
             spc_j_DT(tenthousand, 1:10, 2:3),
             spc_j_DT_2(tenthousand, 1:10, 2:3))
 
 # hundred thousand profiles, we see a similar benefit from DT -- 2 to 3 times faster
-hundredthousand <- as.data.frame(data.table::rbindlist(lapply(1:100000, random_profile)))
-depths(hundredthousand) <- id ~ top + bottom
-
-bench::mark(spc_j_base(hundredthousand, 1:10, 2:3),
-            spc_j_base_2(hundredthousand, 1:10, 2:3),
-            spc_j_DT(hundredthousand, 1:10, 2:3),
-            spc_j_DT_2(hundredthousand, 1:10, 2:3))
+# hundredthousand <- as.data.frame(data.table::rbindlist(lapply(1:100000, random_profile)))
+# depths(hundredthousand) <- id ~ top + bottom
+#
+# bench::mark(spc_j_base(hundredthousand, 1:10, 2:3),
+#             spc_j_base_2(hundredthousand, 1:10, 2:3),
+#             spc_j_base_3(hundredthousand, 1:10, 2:3),
+#             spc_j_DT(hundredthousand, 1:10, 2:3),
+#             spc_j_DT_2(hundredthousand, 1:10, 2:3))
 
 # # million profiles, we see a benefit from DT
 # million <- as.data.frame(data.table::rbindlist(lapply(1:1000000, random_profile)))
