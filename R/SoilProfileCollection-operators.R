@@ -124,7 +124,9 @@ setMethod("[", signature(x = "SoilProfileCollection",
             if (!missing(j)) {
 
               # faster replacement of j subsetting of horizon data
-              if (aqp_df_class(x) == "data.table") {
+              # if (aqp_df_class(x) == "data.table") {
+
+                h <- as.data.table(h)
 
                 # local vars to make R CMD check happy
                 .N <- NULL
@@ -132,7 +134,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
                 V1 <- NULL
 
                 # data.table can do this much more efficiently
-                if (requireNamespace("data.table", quietly = TRUE)) {
+                # if (requireNamespace("data.table", quietly = TRUE)) {
                   idn <- idname(x)
 
                   # by list @horizons idname (essentially iterating over profiles)
@@ -154,25 +156,24 @@ setMethod("[", signature(x = "SoilProfileCollection",
                     pids <- h[, .I[any(1:.N %in% j)][1], by = bylist]
                     i.idx <- pids[, .I[!is.na(V1)]]
                   }
-                }
-
-              } else {
-                # retain a base R way of doing things (plenty fast with SPCs up to ~100k or so)
-                j.res <- as.list(aggregate(
-                  h[[hzidname(x)]],
-                  by = list(h[[idname(x)]]),
-                  FUN = function(hh) {
-                    list(1:length(hh) %in% j)
-                  },
-                  drop = FALSE
-                )$x)
-
-                ##  https://github.com/ncss-tech/aqp/issues/89
-                # fix #89, where i with no matching j e.g. @site data returned
-                i.idx <- which(as.logical(lapply(j.res, function(jr) { any(jr) })))
-
-                j.idx <-  which(do.call('c', j.res))
-              }
+                # }
+              # } else {
+              #   # retain a base R way of doing things (plenty fast with SPCs up to ~100k or so)
+              #   j.res <- as.list(aggregate(
+              #     h[[hzidname(x)]],
+              #     by = list(h[[idname(x)]]),
+              #     FUN = function(hh) {
+              #       list(1:length(hh) %in% j)
+              #     },
+              #     drop = FALSE
+              #   )$x)
+              #
+              #   ##  https://github.com/ncss-tech/aqp/issues/89
+              #   # fix #89, where i with no matching j e.g. @site data returned
+              #   i.idx <- which(as.logical(lapply(j.res, function(jr) { any(jr) })))
+              #
+              #   j.idx <-  which(do.call('c', j.res))
+              # }
 
               # find any index out of bounds and ignore them
               # j.idx.bad <- which(abs(j.idx) > nrow(h))
