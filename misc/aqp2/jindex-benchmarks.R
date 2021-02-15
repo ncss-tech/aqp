@@ -158,6 +158,7 @@ hundredthousand <- as.data.frame(data.table::rbindlist(lapply(1:100000, random_p
 depths(hundredthousand) <- id ~ top + bottom
 
 bench::mark(spc_j_base(hundredthousand, 1:10, 2:3),
+            spc_j_base_2(hundredthousand, 1:10, 2:3),
             spc_j_DT(hundredthousand, 1:10, 2:3),
             spc_j_DT_2(hundredthousand, 1:10, 2:3))
 
