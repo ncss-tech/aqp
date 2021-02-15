@@ -152,10 +152,10 @@ setMethod("[", signature(x = "SoilProfileCollection",
                   if (length(j.idx) == 0) {
                     i.idx <- numeric(0)
                   } else {
-                    # determine which profile IDs KEEP
-                    pids <- h[, .I[any(1:.N %in% j)][1], by = bylist]
-                    i.idx <- pids[, .I[!is.na(V1)]]
+                    # determine which profiles to  KEEP
+                    i.idx <- which(profile_id(x) %in% unique(h[j.idx,][[idn]]))
                   }
+
                 # }
               # } else {
               #   # retain a base R way of doing things (plenty fast with SPCs up to ~100k or so)
