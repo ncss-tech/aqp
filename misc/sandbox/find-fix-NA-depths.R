@@ -63,3 +63,32 @@ plotSPC(
   plot.depth.axis = FALSE
 )
 
+# extra bad case -- where two top depths are NA cannot know which is the "bottom most"
+data(sp4)
+x2 <- sp4
+x2$top[3:4] <- NA
+x2$bottom[3:4] <- x2$bottom[4:3]
+
+# we get a warning on build -- top depths with NA are extra bad news
+depths(x2) <- id ~ top + bottom
+
+# this is actually technically possible, tho unlikely as bottom depth is ignored by SPC sort
+
+# invalid depth logic in profile 1 (colusa)
+checkHzDepthLogic(x2)
+
+# plotSPC 
+#  NB: shows the horizons even though they have no top depth
+plotSPC(x2)
+
+# inspect
+horizons(x2[1,])
+
+# do the repair
+z2 <- repairMissingHzDepths(x2)
+plot(z2)
+
+# result is unaltered -- is this what we expect? / can we _do_ anything w/ NA top depths?
+# in the absence of top depth, order cannot be guaranteed
+# the most common sources of NA top depths will also have bottom be NA -- e.g. empty NASIS record
+horizons(z2[1,])
