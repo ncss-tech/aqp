@@ -1,11 +1,33 @@
 ##
 ##
 
-#' Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size
+## TODO: consider various sorting strategies: WMPD, AWC, {PWP,FC,SAT}
+## http://ncss-tech.github.io/AQP/aqp/water-retention-curves.html
+
+## TODO: move ranking system definitions into internal function or environment
+## TODO: ensure that creating ranking code is easily repeatable
+
+# .USDA_soil_texture_ranking_systems <- function(sys) {
+#   
+#   # 1. Field Book (what is the original authority?)
+#   
+#   # 2. ranked AWC
+#   
+#   # 3. clustered (SAT, FC, PWP) / sorted (AWC)
+#   
+# }
+
+
+#' @title Ranking Systems for USDS Soil Texture Classes
+#' 
+#' @description Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size
 #'
 #' @references \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
+#' 
 #' @param which 'codes' (texture codes) or 'names' (texture class names)
+#' 
 #' @return an ordered factor
+#' 
 #' @examples
 #' 
 #' # class codes
@@ -14,11 +36,7 @@
 #' # class names
 #' SoilTextureLevels(which = 'names')
 #'  
-
-## TODO: consider various sorting strategies: WMPD, AWC, {PWP,FC,SAT}
-## http://ncss-tech.github.io/AQP/aqp/water-retention-curves.html
-
-SoilTextureLevels <- function(which='codes') {
+SoilTextureLevels <- function(which = 'codes') {
   
   # sanity check
   if(! which %in% c('codes', 'names')) {
