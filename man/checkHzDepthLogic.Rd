@@ -4,7 +4,13 @@
 \alias{checkHzDepthLogic}
 \title{Check a SoilProfileCollection object for errors in horizon depths.}
 \usage{
-checkHzDepthLogic(x, hzdepths = NULL, idname = NULL, fast = FALSE)
+checkHzDepthLogic(
+  x,
+  hzdepths = NULL,
+  idname = NULL,
+  fast = FALSE,
+  byhz = FALSE
+)
 }
 \arguments{
 \item{x}{\code{SoilProfileCollection} or \code{data.frame} object to check}
@@ -14,6 +20,8 @@ checkHzDepthLogic(x, hzdepths = NULL, idname = NULL, fast = FALSE)
 \item{idname}{SoilProfileCollection uses \code{idname(x)} Default: \code{NULL}; if \code{x} is a data.frame, character vector with column name of unique profile ID;}
 
 \item{fast}{If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: \code{FALSE}}
+
+\item{byhz}{Apply logic tests to profiles or individual horizons?}
 }
 \value{
 A \code{data.frame} containing profile IDs, validity boolean (\code{valid}) and test results if \code{fast = FALSE}.
@@ -58,5 +66,5 @@ head(res)
 
 }
 \author{
-D.E. Beaudette, A.G. Brown
+D.E. Beaudette, A.G. Brown, S.M. Roecker
 }
