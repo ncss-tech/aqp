@@ -1,7 +1,7 @@
 
 
 ## fairly generic, will be required by (at least):"
-# * dice()
+# * dice() [x]
 # * profile_compare()
 # * slab()
 # * spc2mpspline()
@@ -9,12 +9,20 @@
 ## TODO do we need all arguments to checkHzDepthLogic()?
 # if using `...` then we need to explicitly "grab" byhz for later
 
+#' @title Subset `SoilProfileCollection` Objects or Horizons via `checkHzDepthLogic`
+#' 
+#' 
 #' @param x a `SoilProfileCollection` object
 #' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)
 .HzDepthLogicSubset <- function(x, byhz = FALSE) {
   
   # additional arguments?
   hz.tests <- checkHzDepthLogic(x, fast = TRUE, byhz = byhz)
+  
+  # short-circuit: no invalid records, stop here
+  if(all(hz.tests$valid)) {
+    return(x)
+  }
   
   # invalid data filtering modes:
   if(byhz) {
@@ -74,87 +82,32 @@
 # slices entire profiles
 # returns all depths / columns
 
-#' @param x a `SoilProfileCollection` object
-#' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)
-#' @param dropInvalid drop horizons (`byhz = TRUE`) or profiles (`byhz = FALSE`) with depth logic errors
-#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
+## TODO: suggest / offer repairMissingHzDepths() before running
+## TODO: gap-filling after removing invalid horizons (https://github.com/ncss-tech/aqp/issues/205)
+
+
+#' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
-.dice <- function(x, byhz = TRUE, dropInvalid = TRUE, SPC = TRUE) {
+#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function replaces `slice`.
+#'
+#'
+#' @param x a `SoilProfileCollection` object
+#' 
+#' @param fm optional `formula` describing top depths and horizon level attributes to include: `integer.vector ~ var1 + var2 + var3` or `integer.vector ~ .` to include all horizon level attributes. When `NULL` profiles are "diced" to depth and results will include all horizon level attributes.
+#' 
+#' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
+#' 
+#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
+#'
+#' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`
+#' 
+#' @author D.E. Beaudette, A.G. Brown 
+#' 
+.dice <- function(x, fm = NULL, byhz = TRUE, SPC = TRUE) {
   
-  ## TODO:
-  # * consider setindex() vs. setkey() <-- this sorts the data
-  # * formula interface (nope)
-  # * .pctMissing eval (write a new function)
-  # * strictness of hz logic eval
-  # * ERRORS on NA depths
-  # * ERROR on top == bottom
-  # * ERROR on bottom < top
-  # * cannot use A/E type horizons (https://github.com/ncss-tech/aqp/issues/88)
-  
-  
-  ## TODO: the following should be abstracted into the new function above ~ .HzDepthLogicSubset() for now
-  # sanity check: profiles must pass all hz depth logic
-  hz.tests <- checkHzDepthLogic(x, fast = TRUE, byhz = byhz)
-  
-  # depth logic errors
-  if(any(!hz.tests$valid)) {
-    
-    # optionally drop invalid horizons / profiles
-    if(dropInvalid) {
-      
-      # invalid data filtering modes:
-      if(byhz) {
-        # profile-level
-        message("dropping horizons with invalid depth logic, see `metadata(x)$dice.removed.horizons`")
-        
-        # locate horizons to keep
-        idx <- which(hz.tests$valid)
-        
-        # test for empty SPC
-        if(length(idx) < 1) {
-          stop('there are no valid profiles in this collection', call. = FALSE)
-        }
-        
-        # keep track of invalid horizon IDs in @metadata
-        bad.ids <- hz.tests[[hzidname(x)]][-idx]
-        metadata(x)$dice.removed.horizons <- bad.ids
-        
-        # perform drop
-        # this will trigger an error if SPC is corrupted (site w/o horizons)
-        res <- try(
-          replaceHorizons(x) <- horizons(x)[idx, ], 
-          silent = TRUE
-        )
-        
-        if(inherits(res, 'try-error')) {
-          stop('removing horizons with invalid depth logic would corrupt `x`, use `byhz = FALSE`', call. = FALSE)
-        }
-        
-      } else {
-        # profile-level
-        message("dropping profiles with invalid depth logic, see `metadata(x)$dice.removed.profiles`")
-        
-        # locate profiles to keep
-        idx <- which(hz.tests$valid)
-        
-        # test for empty SPC
-        if(length(idx) < 1) {
-          stop('there are no valid profiles in this collection', call. = FALSE)
-        }
-        
-        # keep track of invalid profile IDs in @metadata
-        bad.ids <- hz.tests[[idname(x)]][-idx]
-        metadata(x)$dice.removed.profiles <- bad.ids
-        
-        # perform drop
-        x <- x[idx, ]
-      }
-      
-    } else {
-      # cannot work with invalid hz logic
-      stop('invalid horizon depth logic detected', call. = FALSE)  
-    }
-  }
+  # find / flag / remove invalid profiles or horizons
+  # this will generate an error if there are no valid profiles remaining
+  x <- .HzDepthLogicSubset(x, byhz = byhz)
   
   ## extract pieces
   h <- horizons(x)
@@ -171,6 +124,7 @@
   # consider and index, seems to have no effect
   # setindexv(h, hzidn)
   
+  ## TODO: this will have to be made more intelligent in the presence of overlap
   ## mapply() call takes 1/2 of total time
   ## consider custom function
   # expand 1 unit slices to max depth of each profile

@@ -12,7 +12,6 @@ d <- lapply(as.character(1:1000), random_profile, n = c(6, 7, 8), n_prop = 5, me
 # much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
 
-d$id <- as.character(d$id)
 depths(d) <- id ~ top + bottom
 
 # fake group
@@ -30,18 +29,17 @@ plotSPC(d[1:10, ], color = 'p1')
 
 
 
-
+# quick check
 z <- aqp:::.dice(d[1:2, ])
 
 par(mar = c(0,1,3,1))
 # suppress hz names
 # strange legend, due to character representation of integers
-plotSPC(z[2, ], color = 'hzID', name = NA, divide.hz = FALSE)
+plotSPC(z, color = 'hzID', name = NA, divide.hz = FALSE)
 
 
 
 ## introduce horizonation errors
-
 z <- d[1:10, ]
 z$bottom[2] <- NA
 z$top[20] <- z$bottom[20]
@@ -51,7 +49,7 @@ z$bottom[5]
 z$top[6] <- 95
 
 # dropping IDs
-zz <- aqp:::.dice(z, byhz = FALSE, dropInvalid = TRUE)
+zz <- aqp:::.dice(z, byhz = FALSE)
 
 # ok
 metadata(zz)$dice.removed.profiles
@@ -59,8 +57,8 @@ setdiff(profile_id(z), profile_id(zz))
 
 plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
 
-# dropping horizons (a good idea?)
-zz <- aqp:::.dice(z, byhz = TRUE, dropInvalid = TRUE)
+# dropping horizons, leaving gaps
+zz <- aqp:::.dice(z, byhz = TRUE)
 
 # ok
 metadata(zz)$dice.removed.horizons
