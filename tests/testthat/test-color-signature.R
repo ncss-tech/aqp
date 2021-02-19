@@ -63,13 +63,13 @@ test_that("expected order from OSDs, depthSlices", {
   # only run this locally
   skip_on_cran()
   
-  library(soilDB)
+  suppressWarnings(library(soilDB, quietly = TRUE))
   suppressWarnings(library(cluster, quietly = TRUE))
   
   s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford', 'cecil', 'sycamore', 'KLAMATH', 'MOGLIA', 'vleck', 'drummer', 'CANEYHEAD', 'musick', 'sierra', 'HAYNER', 'zook', 'argonaut', 'PALAU')
   
   # get these soil series
-  s <- fetchOSD(s.list)
+  s <- soilDB::fetchOSD(s.list)
   
   ## TODO: this will be simplified soon
   # manually convert Munsell -> sRGB

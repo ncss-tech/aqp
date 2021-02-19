@@ -19,9 +19,6 @@ a \code{SoilProfileCollection} object
 \description{
 A simple function to duplicate the contents of a \code{SoilProfileCollection} object. Old profile IDs are saved as a site-level attribute (\code{oldID}) and new IDs are generated using a numeric serial number.
 }
-\note{
-Duplication is also possible with \code{permute_profile} and \code{sim} by simulation from 0-variance distributions. This is a simpler, likely faster, alternative when duplication vs. simulation is required.
-}
 \examples{
 
 # sample data
