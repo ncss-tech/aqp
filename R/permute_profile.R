@@ -126,10 +126,15 @@ perturb <- function(p,
     perturb_var <- hz[[depthz[2]]]
   }
   
-  # do not vary layers below `soildepth` (if not NULL) can be arbitrary depth
+  # do not vary layers below `max.depth` (if not NULL) can be arbitrary depth
   if (!is.null(max.depth)) {
     if (!is.na(max.depth) & max.depth >= mindepth) {
-      bounds[perturb_var > max.depth] <- 0
+      if (by_thickness) {
+        ldx <- (cumsum(perturb_var) + mindepth) > max.depth
+      } else {
+        ldx <- perturb_var > max.depth
+      }
+      bounds[ldx] <- 0
     }
   }
 
@@ -176,7 +181,7 @@ perturb <- function(p,
   res <- round(res)
   
   if (by_thickness) {
-    res <- apply(res, 2, cumsum)
+    res <- apply(res, 2, function(x) (cumsum(x) + mindepth))
   }
   
   # find layers less than min thickness
