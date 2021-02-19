@@ -1,30 +1,32 @@
 #' Perturb soil horizon depths using boundary distinctness
+#' 
 #' @aliases permute_profile
+#' 
 #' @param p A single-profile SoilProfileCollection
-#' @param n Number of permutations to generate (default: 100)
-#' @param id Over-rides \code{n}: a vector of (unique) profile IDs equal in length to number of permutations (\code{n}) to generate.
+#' @param n Number of new profiles to generate (default: 100)
+#' @param id a vector of profile IDs with length equal to (\code{n}). Overrides use of \code{seq_len(n)} as default profile ID values.
+#' 
 #' @param boundary.attr Horizon attribute containing numeric "standard deviations" reflecting boundary transition distinctness
+#' 
 #' @param thickness.attr Horizon attribute containing numeric "standard deviations" reflecting horizon thickness variation 
-#' @param max.depth Depth below which horizon depths are not permuted (default: NULL)
-#' @param min.thickness Minimum thickness of permuted horizons (default: 1)
-#' @param new.idname New column name to contain unique profile ID (default: pID)
+#' 
+#' @param max.depth Depth below which horizon depths are not perturbed (default: `NULL`)
+#' @param min.thickness Minimum thickness of permuted horizons (default: `1`)
+#' @param new.idname New column name to contain unique profile ID (default: `pID`)
 #' 
 #' @description "Perturbs" the **boundary between horizons** or the **thickness of horizons** using a standard deviation specified as a horizon-level attribute. This is selected byspecifing one of either `boundary.attr` or `thickness.attr`, respectively.
 #' 
-#' The boundary standard deviation corresponds roughly to the concept of "horizon boundary distinctness." 
+#' The boundary standard deviation corresponds roughly to the concept of "horizon boundary distinctness." This is arguably "easier" to parameterize from something like a single profile description or "Form 232" where _horizon boundary distinctness_ classes (based on vertical distance of transition) are recorded for each layer. 
 #' 
-#' This is arguably "easier" to parameterize from something like a single profile description where boundary distinctness classes (based on vertical distance of transition) are recorded for each horizon. 
-#' 
-#' The thickness standard deviation corresponds roughly to the "variation in horizon thickness" so it may be determined from several similar profiles that have a particular layer "in common."
+#' In contrast, the _horizon thickness_ standard deviation corresponds roughly to the "variation in horizon thickness" so it may be determined from several similar profiles that have a particular layer "in common."
 #' 
 #' @details
-#' This method can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example). Or it can be parameterized using standard deviation in thickness of layers.
-#'
-#' If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95% of the "volume" of the boundary.
-#'
-#' So, a standard deviation of 1-2cm would yield a "boundary thickness" in the 3-5cm range ("clear" distinctness class).
-#'
-#' Boundaries and properties within a horizon thickness are not symmetrical so Gaussian distributions are at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence _within_ horizons. 
+#' 
+#' If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95% of the "volume" of the horizon or boundary.
+#' 
+#' This method can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example). A handy function for this is [hzDistinctnessCodeToOffset()]. 
+#' 
+#' Alternately, `perturb` can be parameterized using standard deviation in thickness of layers.
 #'
 #' @return A SoilProfileCollection with n permutations of p.
 #' 
@@ -122,7 +124,7 @@ perturb <- function(p,
     # aqp::sim() traditionally perturbs horizon thickness
     perturb_var <- hz[[depthz[2]]] - hz[[depthz[1]]]
   } else {
-    # permute bottom depths instead of thickness for boundaries
+    # perturb bottom depths instead of thickness for boundaries
     perturb_var <- hz[[depthz[2]]]
   }
   
@@ -137,7 +139,7 @@ perturb <- function(p,
       bounds[ldx] <- 0
     }
   }
-
+  
   # for each horizon bottom depth (boundary) calculate a gaussian offset
   #  from the representative value recorded in the pedon descripton
   res <- do.call('rbind', lapply(1:nrow(p), function(i) {
@@ -158,7 +160,8 @@ perturb <- function(p,
     #  - enforcing some sort of sorting?
     #  - additional random processes: waves for wavy/irregular
     #  - allowing irregular boundaries to eclipse/omit thin layers?
-    #  - presence/absence of broken horizons; could this be a separate random process? would it require that volume or other % area field populated?
+    #  - presence/absence of broken horizons; could this be a separate random process?
+    #    would it require that volume or other % area field populated?
 
     idx <- 1
     counter <- 0
@@ -180,14 +183,19 @@ perturb <- function(p,
   # aqp only supports integer depths
   res <- round(res)
   
-  if (by_thickness) {
-    res <- apply(res, 2, function(x) (cumsum(x) + mindepth))
+  # handle minimum thickness 
+  if (!by_thickness) {
+    res <- apply(res, 2, function(x) diff(c(mindepth, x)))
   }
   
-  # find layers less than min thickness
-  t1 <- apply(res, 2, function(x) diff(c(mindepth, x)))
-  idx <- t1 < min.thickness
-  res[idx] <- res[idx] + (min.thickness - t1[idx] + 1e-5)
+  res <- apply(res, 2, function(x) {
+    idx <- x < min.thickness
+    if (any(idx)) {
+      x[idx] <- min.thickness
+    }
+    return(cumsum(x) + mindepth)
+  })
+  
   res <- round(res)
 
   # allocate a list for n-profile result
