@@ -38,11 +38,13 @@ s <- sp3[3,]
 # reset horizon names
 s$name <- paste('H', seq_along(s$name), sep = '')
 
-# simulate 25 new profiles, using 's' and function defaults
-sim.1 <- perturb(s, n = 25)
+# simulate 25 new profiles
+horizons(s)$hz.sd <- 2 # constant standard deviation
+sim.1 <- perturb(s, n = 25, thickness.attr = "hz.sd")
 
-# simulate 25 new profiles using 's' and variable SD for each horizon
-sim.2 <- perturb(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10, 3))
+# simulate 25 new profiles using different SD for each horizon
+horizons(s)$hz.sd <- c(1, 2, 5, 5, 5, 10, 3)
+sim.2 <- perturb(s, n = 25, thickness.attr = "hz.sd")
 
 # plot
 par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
@@ -66,7 +68,7 @@ mtext(
 # aggregate horizonation of simulated data
 # note: set class_prob_mode=2 as profiles were not defined to a constant depth
 sim.2$name <- factor(sim.2$name)
-a <- slab(sim.2, ~ name, class_prob_mode = 2)
+a <- slab(sim.2, ~ name)
 
 # convert to long format for plotting simplicity
 library(data.table)
@@ -100,7 +102,7 @@ xyplot(
 )
 }
 \seealso{
-\code{\link{random_profile}}  \code{\link{permute_profile}}
+\code{\link{random_profile}}  \code{\link{perturb}}
 }
 \author{
 D. E. Beaudette

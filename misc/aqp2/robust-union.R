@@ -13,31 +13,31 @@ d <- fetchKSSL("holland")
 # do a sim
 f <- perturb(c[1,], n = 6)
 
-# do some permute_profile
+# do some perturbation of profiles
 horizons(x)$bdy <- 0
 horizons(a)$bdy <- 0
 horizons(b)$bdy <- 0
 
-s <- permute_profile(x, n = 6, boundary.attr = 'bdy')
+s <- perturb(x, n = 6, boundary.attr = 'bdy')
 profile_id(s) <- 7:12
-u <- permute_profile(a, n = 6, boundary.attr = 'bdy', new.idname = "uID")
+u <- perturb(a, n = 6, boundary.attr = 'bdy', new.idname = "uID")
 profile_id(u) <- 13:18
-v <- permute_profile(b, n = 6, boundary.attr = 'bdy', new.idname = "vID")
+v <- perturb(b, n = 6, boundary.attr = 'bdy', new.idname = "vID")
 profile_id(v) <- 19:24
 
 # Warning message:
 # template profile ID 'idname' exists as a non-unique value in SPC element #X, trying 'alternate'
 
-z <- aqp::union(list(y, c, x, a, u, b, f, d, s, v)) # 7, 8
-z <- aqp::union(list(b, y, u, c, v, d, x, s, a))    # 3
-z <- aqp::union(list(x, d, a, f, u, c, s, b, y, v)) # 5
-z <- aqp::union(list(s, d, a, f, b, y, x, u, c, v)) # 2, 4
+z <- aqp::combine(list(y, c, x, a, u, b, f, d, s, v)) # 7, 8
+z <- aqp::combine(list(b, y, u, c, v, d, x, s, a))    # 3
+z <- aqp::combine(list(x, d, a, f, u, c, s, b, y, v)) # 5
+z <- aqp::combine(list(s, d, a, f, b, y, x, u, c, v)) # 2, 4
 
 # ok, now, break it ...
 c(idname(s),idname(u),idname(v))
 
 # works without warning normally...
-z <- aqp::union(list(s, d, f))
+z <- aqp::combine(list(s, d, f))
 
 # create site attrs so no way to resolve the existing siteNames / new name conflict
 site(s)$pedon_key <- LETTERS[1]
@@ -48,7 +48,7 @@ site(f)$pID <- LETTERS[3]
 site(f)$pedon_key <- letters[3]
 
 # this should error after exhausting all options for names, despite unique ID values being available
-z <- aqp::union(list(s, d, f))
+z <- aqp::combine(list(s, d, f))
 
 # Error: unable to identify a safe existing profile ID name to use for result
 # In addition: Warning messages:

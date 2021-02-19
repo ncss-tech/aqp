@@ -2,6 +2,7 @@
 % Please edit documentation in R/permute_profile.R
 \name{perturb}
 \alias{perturb}
+\alias{permute_profile}
 \title{Perturb soil horizon depths using boundary distinctness}
 \usage{
 perturb(
@@ -80,11 +81,11 @@ p <- sp1[3]
 sp1 <- mutate(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
 quantile(sp1$bound_sd)
 
-permute_profile(p, boundary.attr="bound_sd")
+perturb(p, boundary.attr="bound_sd")
 
 }
 \seealso{
-\code{\link[=random_profile]{random_profile()}} \code{\link[=perturb]{perturb()}} \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
+\code{\link[=random_profile]{random_profile()}} \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
 }
 \author{
 Andrew G. Brown

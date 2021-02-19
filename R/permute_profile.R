@@ -1,5 +1,5 @@
 #' Perturb soil horizon depths using boundary distinctness
-#'
+#' @aliases permute_profile
 #' @param p A single-profile SoilProfileCollection
 #' @param n Number of permutations to generate (default: 100)
 #' @param id Over-rides \code{n}: a vector of (unique) profile IDs equal in length to number of permutations (\code{n}) to generate.
@@ -28,9 +28,9 @@
 #'
 #' @return A SoilProfileCollection with n permutations of p.
 #' 
-#' @seealso [random_profile()] [perturb()] [hzDistinctnessCodeToOffset()]
+#' @seealso [random_profile()] [hzDistinctnessCodeToOffset()]
 #' 
-#' @export permute_profile
+#' @export
 #' @author Andrew G. Brown
 #'
 #' @examples
@@ -60,7 +60,7 @@
 #' sp1 <- mutate(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
 #' quantile(sp1$bound_sd)
 #' 
-#' permute_profile(p, boundary.attr="bound_sd")
+#' perturb(p, boundary.attr="bound_sd")
 #' 
 perturb <- function(p,
                     n = 100,
@@ -213,7 +213,7 @@ perturb <- function(p,
   # fast "pbindlist" with no checks since we know the origin
 
   # horizon
-  o.h <- data.table::rbindlist(profiles)
+  o.h <- as.data.frame(data.table::rbindlist(profiles))
   # need to remove duped ID from horizon table! only allowed for current ID
   o.h[[idname(p)]] <- NULL
   names(o.h)[which(names(o.h) == 'pID')] <- new.idname
@@ -273,17 +273,17 @@ permute_profile <- function(p,
                             new.idname = 'pID') {
   .Deprecated("perturb")
   
-  perturb(p, n, id, 
+  perturb(p, n = n, id = id, 
           boundary.attr = boundary.attr, 
-          min.thickness, 
+          min.thickness = min.thickness, 
           max.depth = soildepth, 
-          new.idname)
+          new.idname = new.idname)
 }
 
 ## compare permute_profile and sim, using same estimated SD
 
 # calculate permuations of bottom depths using boundary deviations
-#system.time(res <- permute_profile(p, n=1000, boundary_attr = "bound_sd",
+#system.time(res <- perturb(p, n=1000, boundary_attr = "bound_sd",
 #                                    min.thickness = 1))
 #
 # # calculate permuations of horizon thickness using horizon thickness deviation

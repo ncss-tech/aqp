@@ -12,8 +12,6 @@
 #' 
 #' @return a \code{SoilProfileCollection} object
 #' 
-#' @note Duplication is also possible with \code{permute_profile} and \code{sim} by simulation from 0-variance distributions. This is a simpler, likely faster, alternative when duplication vs. simulation is required.
-#' 
 #' @keywords manip
 #' 
 #' @examples 
