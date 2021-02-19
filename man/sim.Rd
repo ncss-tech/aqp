@@ -22,10 +22,6 @@ A SoilProfileCollection object with \code{n} simulated profiles, each containing
 }
 \description{
 Simulate a collection of soil profiles based on the horizonation of a single soil profile.
-
-The function is most useful when supplied with a meaningful standard deviation in thickness for each horizon -- which generally implies an aggregation of \strong{several} profiles (say, using some generalized horizon pattern).
-
-This contrasts with a similar approach in \code{\link[=permute_profile]{permute_profile()}} -- which "perturbs" the \strong{boundary between horizons} using a standard deviation of "horizon transition zone" thickness. This thickness standard deviation corresponds roughly to the concept of "horizon boundary distinctness."
 }
 \details{
 This function generates a collection of simulated soil profiles based on the horizon thickness data associated with a single "template" profile. Simulation is based on sampling from a family of gaussian distribution with means defined by the "template" profile and standard deviation defined by the user.
@@ -43,10 +39,10 @@ s <- sp3[3,]
 s$name <- paste('H', seq_along(s$name), sep = '')
 
 # simulate 25 new profiles, using 's' and function defaults
-sim.1 <- sim(s, n = 25)
+sim.1 <- perturb(s, n = 25)
 
 # simulate 25 new profiles using 's' and variable SD for each horizon
-sim.2 <- sim(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10, 3))
+sim.2 <- perturb(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10, 3))
 
 # plot
 par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
@@ -74,10 +70,9 @@ a <- slab(sim.2, ~ name, class_prob_mode = 2)
 
 # convert to long format for plotting simplicity
 library(data.table)
-a.long <-
-  melt(a,
-       id.vars = c('top', 'bottom'),
-       measure.vars = levels(sim.2$name))
+a.long <- melt(as.data.table(a),
+               id.vars = c('top', 'bottom'),
+                measure.vars = levels(sim.2$name))
 
 # plot horizon probabilities derived from simulated data
 # dashed lines are the original horizon boundaries

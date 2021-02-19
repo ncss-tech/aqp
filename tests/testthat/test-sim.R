@@ -13,14 +13,15 @@ s$name <- paste('H', seq_along(s$name), sep = '')
 
 ## tests
 
-test_that("sim() works as expected", {
+test_that("perturb() (by thickness) works as expected", {
 
   # simulate 25 new profiles
-  expect_message({sim.1 <- sim(s, n = 25)},
-                 "converting profile IDs from integer to character")
+  expect_warning({sim.1 <- sim(s, n = 25)}) 
+  #deprecated version creates sd column for perturb using hz.sd=2
 
-  expect_message({sim.2 <- sim(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10, 3))},
-   "converting profile IDs from integer to character")
+  # manually create hz.sd for perturb()
+  s$hz.sd = c(1, 2, 5, 5, 5, 10, 3)
+  expect_silent({sim.2 <- perturb(s, n = 25, thickness.attr="hz.sd")})
 
   # result is an SPC
   expect_true(inherits(sim.1, 'SoilProfileCollection'))
@@ -35,15 +36,15 @@ test_that("sim() works as expected", {
 test_that("expected errors", {
 
   # only 1 seed can be used
-  expect_error(sim(sp3[1:2, ], n = 25))
+  expect_error(perturb(sp3[1:2, ], n = 25))
 
   # sd must recycle evenly over number of original horizons
-  # NOTE: now following numeric id order for numeric id
-  expect_error(sim(s, n = 25, hz.sd = 1:4))
 
+  # NOTE: test removed; this recycling is now handled by horizons()<-
+  # in the deprecated version of sim()
 })
 
-test_that("permute_profile() works as expected", {
+test_that("perturb (by boundaries) works as expected", {
   # simulate 25 new profiles with a sd boundary thickness of 0.5 - 2.5cm
   s$bdy <- round(runif(nrow(s), 1, 5)) / 2
   diagnostic_hz(s) <- data.frame(id = profile_id(s),
@@ -52,7 +53,7 @@ test_that("permute_profile() works as expected", {
   restrictions(s) <- data.frame(id = profile_id(s),
                                  restrkind = "bar",
                                  restrdept = 0, restrdepb = 10)
-  perp <- permute_profile(s, n = 25, boundary.attr = "bdy")
+  perp <- perturb(s, n = 25, boundary.attr = "bdy")
 
   # result is an SPC
   expect_true(inherits(perp, 'SoilProfileCollection'))
@@ -60,7 +61,7 @@ test_that("permute_profile() works as expected", {
   # expected lengths
   expect_true(length(perp) == 25)
 
-  perp2 <- permute_profile(s, id = 26:50, boundary.attr = "bdy", new.idname = "foo")
+  perp2 <- perturb(s, id = 26:50, boundary.attr = "bdy", new.idname = "foo")
 
   # result is an SPC
   expect_true(inherits(perp2, 'SoilProfileCollection'))

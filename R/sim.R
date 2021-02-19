@@ -2,11 +2,6 @@
 #' Simulate Soil Profiles
 #' 
 #' @description Simulate a collection of soil profiles based on the horizonation of a single soil profile. 
-#' 
-#' The function is most useful when supplied with a meaningful standard deviation in thickness for each horizon -- which generally implies an aggregation of **several** profiles (say, using some generalized horizon pattern).
-#' 
-#' This contrasts with a similar approach in [permute_profile()] -- which "perturbs" the **boundary between horizons** using a standard deviation of "horizon transition zone" thickness. This thickness standard deviation corresponds roughly to the concept of "horizon boundary distinctness."
-#'
 #' @param x a SoilProfileCollection object containing a single profile from which to draw simulated data
 #' @param n the number of requested simulations
 #' @param iterations sampling iterations used to determine each horizon thickness
@@ -36,10 +31,10 @@
 #' s$name <- paste('H', seq_along(s$name), sep = '')
 #' 
 #' # simulate 25 new profiles, using 's' and function defaults
-#' sim.1 <- sim(s, n = 25)
+#' sim.1 <- perturb(s, n = 25)
 #' 
 #' # simulate 25 new profiles using 's' and variable SD for each horizon
-#' sim.2 <- sim(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10, 3))
+#' sim.2 <- perturb(s, n = 25, hz.sd = c(1, 2, 5, 5, 5, 10, 3))
 #' 
 #' # plot
 #' par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
@@ -67,10 +62,9 @@
 #' 
 #' # convert to long format for plotting simplicity
 #' library(data.table)
-#' a.long <-
-#'   melt(a,
-#'        id.vars = c('top', 'bottom'),
-#'        measure.vars = levels(sim.2$name))
+#' a.long <- melt(as.data.table(a),
+#'                id.vars = c('top', 'bottom'),
+#'                 measure.vars = levels(sim.2$name))
 #' 
 #' # plot horizon probabilities derived from simulated data
 #' # dashed lines are the original horizon boundaries
@@ -96,71 +90,87 @@
 #'     panel.abline(h = s$top, lty = 2, lwd = 2)
 #'   }
 #' )
-sim <- function(x, n=1, iterations=25, hz.sd=2, min.thick=2) {	
-	
-  hd <- horizonDepths(x)
-	h <- horizons(x)
-	thick <- h[[hd[2]]] - h[[hd[1]]]
-	
-	# remove original depth columns
-	h[[hd[1]]] <- NULL
-	h[[hd[2]]] <- NULL
-	
-	# remove horizon ID so as not to create conflicts later on
-	h[[hzidname(x)]] <- NULL
-	
-	# keep track of old id
-	old.id.name <- idname(x)
-	
-	# sanity checks
-	if(length(x) > 1)
-		stop('this function can only simulate data from a SoilProfileCollection containing a single profile')
-	
-	if(length(thick) %% length(hz.sd) != 0)
-		stop('the length of hz.sd must divide evenly into the number of horizons', call.=FALSE)
-	
-	# define function to wrap rnorm for use with outer
-	rnorm.vect <- function(mean, sd, n) {
-		rnorm(n=n, mean=mean, sd=sd)
-	}
-	rnorm.vect <- Vectorize(rnorm.vect, vectorize.args=c('mean', 'sd'))
-	
-	# allocate storage for simulated horizon depths
-	l <- list()
-	
-	# generate n-simulated horizon depths
-	for(i in 1:n) {
-		# simulate
-		s <- mapply(rnorm.vect, thick, hz.sd, n=iterations)
-		
-		# sample a single value per horizon, and use as the representative value
-		s <- round(apply(s, 2, sample, size=1))
-		
-		# convert thickness values that are below min.thick -> min.thick
-		s <- pmax(s, min.thick)
-		
-		# convert thickness -> depths
-		s <- cumsum(s)
-		# use a ID column name that isn't likely to conflict with existing column names
-		d <- data.frame(.new_id=i, top=c(0, s[-length(s)]), bottom=s)
-		
-		# combine with original horizon data, and save to list element
-		l[[i]] <- cbind(d, h)
-	}
-	
-	# convert list -> data.frame
-	x.s <- do.call(rbind, l)
-	
-	# upgrade to SoilProfileCollection
-	depths(x.s) <- .new_id ~ top + bottom
-	
-  # copy over depth units
-	depth_units(x.s) <- depth_units(x)
-	
-	# move old ID into @site
-	fm <- as.formula(paste0('~ ', old.id.name))
-	site(x.s) <- fm
-	
-	# done
-	return(x.s)
+sim <- function(x,
+                n = 1,
+                iterations = 25,
+                hz.sd = 2,
+                min.thick = 2) {	
+  
+  .Deprecated("perturb")
+  
+  horizons(x)$.perturb_internalHzSD <- hz.sd
+
+  res <- perturb(x, 
+                 n = n, 
+                 thickness.attr = ".perturb_internalHzSD",
+                 min.thickness = min.thick,
+                 max.depth = NULL)
+  
+  res$.perturb_internalHzSD <- NULL
+  return(res)
+#   hd <- horizonDepths(x)
+# 	h <- horizons(x)
+# 	thick <- h[[hd[2]]] - h[[hd[1]]]
+# 	
+# 	# remove original depth columns
+# 	h[[hd[1]]] <- NULL
+# 	h[[hd[2]]] <- NULL
+# 	
+# 	# remove horizon ID so as not to create conflicts later on
+# 	h[[hzidname(x)]] <- NULL
+# 	
+# 	# keep track of old id
+# 	old.id.name <- idname(x)
+# 	
+# 	# sanity checks
+# 	if(length(x) > 1)
+# 		stop('this function can only simulate data from a SoilProfileCollection containing a single profile')
+# 	
+# 	if(length(thick) %% length(hz.sd) != 0)
+# 		stop('the length of hz.sd must divide evenly into the number of horizons', call.=FALSE)
+# 	
+# 	# define function to wrap rnorm for use with outer
+# 	rnorm.vect <- function(mean, sd, n) {
+# 		rnorm(n=n, mean=mean, sd=sd)
+# 	}
+# 	rnorm.vect <- Vectorize(rnorm.vect, vectorize.args=c('mean', 'sd'))
+# 	
+# 	# allocate storage for simulated horizon depths
+# 	l <- list()
+# 	
+# 	# generate n-simulated horizon depths
+# 	for(i in 1:n) {
+# 		# simulate
+# 		s <- mapply(rnorm.vect, thick, hz.sd, n=iterations)
+# 		
+# 		# sample a single value per horizon, and use as the representative value
+# 		s <- round(apply(s, 2, sample, size=1))
+# 		
+# 		# convert thickness values that are below min.thick -> min.thick
+# 		s <- pmax(s, min.thick)
+# 		
+# 		# convert thickness -> depths
+# 		s <- cumsum(s)
+# 		# use a ID column name that isn't likely to conflict with existing column names
+# 		d <- data.frame(.new_id=i, top=c(0, s[-length(s)]), bottom=s)
+# 		
+# 		# combine with original horizon data, and save to list element
+# 		l[[i]] <- cbind(d, h)
+# 	}
+# 	
+# 	# convert list -> data.frame
+# 	x.s <- do.call(rbind, l)
+# 	
+# 	# upgrade to SoilProfileCollection
+# 	depths(x.s) <- .new_id ~ top + bottom
+# 	
+#   # copy over depth units
+# 	depth_units(x.s) <- depth_units(x)
+# 	
+# 	# move old ID into @site
+# 	fm <- as.formula(paste0('~ ', old.id.name))
+# 	site(x.s) <- fm
+# 	
+# 	# done
+# 	return(x.s)
 }

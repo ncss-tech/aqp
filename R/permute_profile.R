@@ -1,29 +1,34 @@
-#' Permute soil horizon depths using boundary distinctness
+#' Perturb soil horizon depths using boundary distinctness
 #'
 #' @param p A single-profile SoilProfileCollection
 #' @param n Number of permutations to generate (default: 100)
 #' @param id Over-rides \code{n}: a vector of (unique) profile IDs equal in length to number of permutations (\code{n}) to generate.
 #' @param boundary.attr Horizon attribute containing numeric "standard deviations" reflecting boundary transition distinctness
+#' @param thickness.attr Horizon attribute containing numeric "standard deviations" reflecting horizon thickness variation 
+#' @param max.depth Depth below which horizon depths are not permuted (default: NULL)
 #' @param min.thickness Minimum thickness of permuted horizons (default: 1)
-#' @param soildepth Depth below which horizon depths are not permuted (default: NULL)
 #' @param new.idname New column name to contain unique profile ID (default: pID)
 #' 
-#' @description "Perturbs" the **boundary between horizons** using a standard deviation thickness. The thickness standard deviation corresponds roughly to the concept of "horizon boundary distinctness." This is arguably "easier" to parameterize from something like a single profile description where boundary distinctness classes (based on vertical distance of transition) are recorded for each horizon. 
+#' @description "Perturbs" the **boundary between horizons** or the **thickness of horizons** using a standard deviation specified as a horizon-level attribute. This is selected byspecifing one of either `boundary.attr` or `thickness.attr`, respectively.
+#' 
+#' The boundary standard deviation corresponds roughly to the concept of "horizon boundary distinctness." 
+#' 
+#' This is arguably "easier" to parameterize from something like a single profile description where boundary distinctness classes (based on vertical distance of transition) are recorded for each horizon. 
+#' 
+#' The thickness standard deviation corresponds roughly to the "variation in horizon thickness" so it may be determined from several similar profiles that have a particular layer "in common."
 #' 
 #' @details
-#'This method is most "believable" when used to _gently_ permute the data, on the order of moving boundaries a few centimeters in either direction. The nice thing about it is it can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example).
+#' This method can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example). Or it can be parameterized using standard deviation in thickness of layers.
 #'
 #' If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95% of the "volume" of the boundary.
 #'
 #' So, a standard deviation of 1-2cm would yield a "boundary thickness" in the 3-5cm range ("clear" distinctness class).
 #'
-#' Of course, boundaries are not symmetrical and this is at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence within horizons. Also, boundary topography is non-uniform. There are definitely ways to implement other distributions, but invokes more detailed assumptions about field data that are generally only semi-quantitative or are not available.
-#'
-#' Future implementations may use boundary topography as a second hierarchical level (e.g. trig-based random functions), but think that distinctness captures the "uncertainty" about horizon separation at a specific "point" on the ground (or line in the profile quite well, and the extra variation may be hard to interpret, in general.
+#' Boundaries and properties within a horizon thickness are not symmetrical so Gaussian distributions are at best an approximation for properties like organic matter, nutrients or salts that can have strong depth-dependence _within_ horizons. 
 #'
 #' @return A SoilProfileCollection with n permutations of p.
 #' 
-#' @seealso [random_profile()] [sim()] [hzDistinctnessCodeToOffset()]
+#' @seealso [random_profile()] [perturb()] [hzDistinctnessCodeToOffset()]
 #' 
 #' @export permute_profile
 #' @author Andrew G. Brown
@@ -54,12 +59,31 @@
 #' # (i.e. general relationship: SD increases (less well known) with depth)
 #' sp1 <- mutate(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
 #' quantile(sp1$bound_sd)
-#' p <- sp1[1]
 #' 
-permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
-                            min.thickness = 1,
-                            soildepth = NULL, new.idname = 'pID') {
+#' permute_profile(p, boundary.attr="bound_sd")
+#' 
+perturb <- function(p,
+                    n = 100,
+                    id = NULL,
+                    thickness.attr = NULL,
+                    boundary.attr = NULL,
+                    min.thickness = 1,
+                    max.depth = NULL,
+                    new.idname = 'pID') {
+  
   custom.ids <- FALSE
+  
+  if (!is.null(thickness.attr) && !is.null(boundary.attr) |
+      is.null(thickness.attr) && is.null(boundary.attr)) {
+    stop("must provide one column name: thickness `thickness.attr` OR boundary `boundary.attr` containing horizon-level standard deviations", call. = FALSE)
+  }
+  
+  by_thickness <- FALSE
+  
+  if (!is.null(thickness.attr)) {
+    by_thickness <- TRUE
+  }
+  
   if (!missing(id)) {
     custom.ids <- TRUE
     n <- length(unique(id))
@@ -67,17 +91,23 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
     if (n != length(id))
       stop("custom profile ID vector `id` contains non-unique values", call. = FALSE)
 
-    if (!missing(n))
+    if (!missing(n) & !is.null(n))
       message("if profile ID vector `id` is specified, `n` argument is ignored")
   }
 
   hz <- horizons(p)
-  bounds <- hz[[boundary.attr]]
+  
+  if(by_thickness) {
+    bounds <- hz[[thickness.attr]]
+  } else {
+    bounds <- hz[[boundary.attr]]
+  }
+  
   depthz <- horizonDepths(p)
   mindepth <- min(hz[[depthz[1]]])
 
   if(!is.numeric(bounds) | !length(bounds) == nrow(p)) {
-    stop("`boundary_attr` must be refer to a numeric horizon attribute in `p` representing standard deviation of horizon boundary thickness")
+    stop("variance attribute must be refer to a numeric column in `p` containing standard deviations of horizon (or boundary) thickness")
   }
 
   if(length(p) != 1 | !inherits(p, 'SoilProfileCollection')) {
@@ -88,27 +118,31 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
     stop("one or more horizon depth logic tests failed for object `p`")
   }
 
-  # re-write of aqp::sim() for boundaries. permute bottom depths instead of thickness
-  # it is hard to conceive of horizon boundaries in an individual pedon in terms of
-  # standard deviations of total horizon thickness... though they are clearly related
-  bottomdepths <- hz[[depthz[2]]]
-
+  if (by_thickness) {
+    # aqp::sim() traditionally perturbs horizon thickness
+    perturb_var <- hz[[depthz[2]]] - hz[[depthz[1]]]
+  } else {
+    # permute bottom depths instead of thickness for boundaries
+    perturb_var <- hz[[depthz[2]]]
+  }
+  
   # do not vary layers below `soildepth` (if not NULL) can be arbitrary depth
-  if(!is.null(soildepth)) {
-    if(!is.na(soildepth) & soildepth >= mindepth) {
-      bounds[bottomdepths > soildepth] <- 0
+  if (!is.null(max.depth)) {
+    if (!is.na(max.depth) & max.depth >= mindepth) {
+      bounds[perturb_var > max.depth] <- 0
     }
   }
 
   # for each horizon bottom depth (boundary) calculate a gaussian offset
   #  from the representative value recorded in the pedon descripton
   res <- do.call('rbind', lapply(1:nrow(p), function(i) {
-    new <- rnorm(n, bottomdepths[i], bounds[i])
+    new <- rnorm(n, perturb_var[i], bounds[i])
 
     # this is a bit non-kosher, but rather than sorting to fix random depths
     # that may be out of order, replace them iteratively until there are none
+    
     # it is possible to specify SDs so large the loop below will not converge,
-    # so a break is triggered at 1000 iterations.
+    # so a hard break is triggered at 1000 iterations.
 
     # in practice, qc warnings for improbably large SD would be useful
     # say, if the SD is greater than 1/3 the hz thickness, you are likely to
@@ -128,9 +162,9 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
       if(counter > 1000) {
         break
       }
-      idx <- which(new <= bottomdepths[pmax(1, i - 1)] |
-            new >= bottomdepths[pmin(i + 1, length(bottomdepths))])
-      new[idx] <- rnorm(length(idx), bottomdepths[i], bounds[i])
+      idx <- which(new <= perturb_var[pmax(1, i - 1)] |
+            new >= perturb_var[pmin(i + 1, length(perturb_var))])
+      new[idx] <- rnorm(length(idx), perturb_var[i], bounds[i])
       counter <- counter + 1
     }
 
@@ -140,7 +174,11 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
 
   # aqp only supports integer depths
   res <- round(res)
-
+  
+  if (by_thickness) {
+    res <- apply(res, 2, cumsum)
+  }
+  
   # find layers less than min thickness
   t1 <- apply(res, 2, function(x) diff(c(mindepth, x)))
   idx <- t1 < min.thickness
@@ -175,7 +213,7 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
   # fast "pbindlist" with no checks since we know the origin
 
   # horizon
-  o.h <- do.call('rbind', profiles)
+  o.h <- data.table::rbindlist(profiles)
   # need to remove duped ID from horizon table! only allowed for current ID
   o.h[[idname(p)]] <- NULL
   names(o.h)[which(names(o.h) == 'pID')] <- new.idname
@@ -188,19 +226,17 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
   d <- diagnostic_hz(p)
   o.d <- data.frame()
   if (length(d) != 0) {
-    o.d <- do.call('rbind', lapply(pID, function(i) {
-      data.frame(pID = i, d, row.names = NULL)
-    }))
+    o.d <- cbind(data.frame(pID = pID), 
+                 d[rep(1:nrow(d), length(pID))])
   }
   names(o.d)[which(names(o.d) == 'pID')] <- new.idname
 
   # restriction
   re <- restrictions(p)
   o.r <- data.frame()
-  if (length(re) > 0) {
-    o.r <- do.call('rbind', lapply(pID, function(i) {
-      data.frame(pID = i, re, row.names = NULL)
-    }))
+  if (nrow(re) > 0) {
+    o.r <- cbind(data.frame(pID = pID), 
+                 re[rep(1:nrow(re), length(pID))])
   }
   names(o.r)[which(names(o.r) == 'pID')] <- new.idname
 
@@ -228,6 +264,22 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
   return(res)
 }
 
+permute_profile <- function(p,
+                            n = 100,
+                            id = NULL,
+                            boundary.attr = NULL,
+                            min.thickness = 1,
+                            soildepth = NULL,
+                            new.idname = 'pID') {
+  .Deprecated("perturb")
+  
+  perturb(p, n, id, 
+          boundary.attr = boundary.attr, 
+          min.thickness, 
+          max.depth = soildepth, 
+          new.idname)
+}
+
 ## compare permute_profile and sim, using same estimated SD
 
 # calculate permuations of bottom depths using boundary deviations
@@ -235,7 +287,7 @@ permute_profile <- function(p, n = 100, id = NULL, boundary.attr,
 #                                    min.thickness = 1))
 #
 # # calculate permuations of horizon thickness using horizon thickness deviation
-# system.time(res2 <- sim(p, n=1000, hz.sd = p$bound_sd, min.thick = 1))
+# system.time(res2 <- perturb(p, n=1000, hz.sd = p$bound_sd, min.thick = 1))
 #
 # # superficially similar output
 # plot(res[1:10,])

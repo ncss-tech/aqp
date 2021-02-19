@@ -11,7 +11,7 @@ c <- fetchKSSL("sierra")
 d <- fetchKSSL("holland")
 
 # do a sim
-f <- sim(c[1,], n = 6)
+f <- perturb(c[1,], n = 6)
 
 # do some permute_profile
 horizons(x)$bdy <- 0
