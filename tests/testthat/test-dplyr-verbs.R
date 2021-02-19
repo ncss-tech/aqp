@@ -8,7 +8,7 @@ sp3$group[3:6] <- "B"
 test_that("mutate & mutate_profile", {
 
   # mutate
-  res <- mutate(sp3, thickness = bottom - top)
+  res <- transform(sp3, thickness = bottom - top)
   expect_equal(mean(res$thickness), 18.5652174)
   # plot(res, color="thickness")
 

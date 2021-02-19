@@ -62,18 +62,18 @@ explainPlotSPC(foo[1:10,1], color = "p3")
 #  - calculate whether 2) random var p1 is greater than zero
 #  - calculate combined group 1+2 membership (all false, one true, all true)
 system.time({
-  foo <- mutate(foo,
+  foo <- transform(foo,
                 thickness = bottom - top,
                 group1 = thickness > 15,
                 group2 = p1 > 0,
                 group = group1 + group2) %>%
-         group_by(group)
+         groupSPC(group)
 })
 # user  system elapsed
 # 0.09    0.00    0.09
 
 # basic group_by-mediated summaries
-system.time(print(summarize(foo, mean(thickness))))
+system.time(print(summarizeSPC(foo, mean(thickness))))
 
 # converting group to a factor
 # group mean(thickness)
@@ -92,8 +92,8 @@ system.time(print(summarize(foo, mean(thickness))))
 # binary split methods based on a grouping var
 # performance approx equal; proportional to number of records in group / number of groups
 # split is generally as fast or faster and good for ngrp > 2; gives list output
-microbenchmark::microbenchmark( { foo1 <- filter(foo, group > 0) },
-                                { foo2 <- filter(foo, group == 0) },
+microbenchmark::microbenchmark( { foo1 <- subset(foo, group > 0) },
+                                { foo2 <- subset(foo, group == 0) },
                                 { foo3 <- aqp::split(foo, "group") },
                                 { foo4 <- aqp::split(foo, "group1") },
                                 times = 1)
