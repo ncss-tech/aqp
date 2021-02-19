@@ -1,5 +1,5 @@
 
-library(aqp)
+# library(aqp)
 library(data.table)
 
 ## indexes vs. keys
@@ -7,7 +7,7 @@ library(data.table)
 
 # ~ 10 seconds for 10k profiles
 # much faster to generate as DF, then promote to SPC at the end
-d <- lapply(1:10000, random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
+d <- lapply(as.character(1:1000), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 
 # much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
@@ -29,134 +29,12 @@ plotSPC(d[1:10, ], color = 'p1')
 # https://github.com/ncss-tech/aqp/issues/115
 
 
-# simpler, faster version of slice via `data.table` / FULL JOIN
-# less robust to errors than current slice()
-# slices entire profiles
-# returns all depths / columns
-
-#' @param x a `SoilProfileCollection` object
-#' @param dropInvalid drop profiles with horizon errors
-#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
-#' 
-dice <- function(x, dropInvalid = TRUE, SPC = TRUE) {
-  
-  ## TODO:
-  # * consider setindex() vs. setkey() <-- this sorts the data
-  # * formula interface (nope)
-  # * .pctMissing eval (write a new function)
-  # * strictness of hz logic eval
-  # * ERRORS on NA depths
-  # * ERROR on top == bottom
-  # * ERROR on bottom < top
-  # * cannot use A/E type horizons (https://github.com/ncss-tech/aqp/issues/88)
-  
-  # sanity check: profiles must pass all hz depth logic
-  hz.tests <- checkHzDepthLogic(x, fast = TRUE)
-  
-  if(any(!hz.tests$valid)) {
-    
-    if(dropInvalid) {
-      message('dropping profiles with invalid horizon logic')
-      idx <- which(hz.tests$valid)
-      x <- x[idx, ]
-      
-      # test for empty SPC
-      if(length(idx) < 1) {
-        stop('there are no valid profiles in this collection', call. = FALSE)
-      }
-      
-    } else {
-      stop('invalid horizon depth logic detected', call. = FALSE)  
-    }
-  }
-  
-  ## extract pieces
-  h <- horizons(x)
-  idn <- idname(x)
-  hzidn <- hzidname(x)
-  htb <- horizonDepths(x)
-  
-  ## `h` could be a data.table object
-  h <- as.data.table(h)
-  
-  ## TODO: are keys worth the extra sorting / re-sorting?
-  # init keys, sorts the data on hzID (alpha-sort)
-  # setkeyv(h, hzidn)
-  # consider and index, seems to have no effect
-  # setindexv(h, hzidn)
-  
-  ## mapply() call takes 1/2 of total time
-  ## consider custom function
-  # expand 1 unit slices to max depth of each profile
-  # NA in hz depths or 0-thickness horizons are not allowed
-  tops <- mapply(FUN = seq, from = h[[htb[1]]], to = h[[htb[2]]] - 1, by = 1, SIMPLIFY = FALSE)
-  tops <- unlist(tops)
-  bottoms <- tops + 1
-  
-  # expand slice IDs (horizon IDs)
-  sliceIDs <- rep(h[[hzidn]], times = h[[htb[2]]] - h[[htb[1]]])
-  
-  # assemble slice LUT for JOIN
-  s <- data.table(
-    sliceID = sliceIDs, 
-    .sliceTop = tops, 
-    .sliceBottom = bottoms
-  )
-  
-  # re-name for simpler JOIN
-  names(s)[1] <- hzidn
-  
-  ## MAYBE
-  # perform subsetting of depths / variables using `fm` if provided
-  # s[.sliceTop %in% depthvec]
-  
-  ## TODO: are keys worth the extra sorting / re-sorting?
-  # note: sorts data
-  # setkeyv(s, hzidn)
-  # consider and index, seems to have no effect
-  # setindexv(s, hzidn)
-  
-  # FULL JOIN via fast data.table compiled code
-  # using keys (index)
-  res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
-  
-  ## TODO: update to := syntax, but how does it work with with variables?
-  # https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reference-semantics.html
-  # init unique horizon IDs
-  res[['sliceID']] <- 1:nrow(res)
-  
-  # copy old depths
-  res[['.oldTop']] <- res[[htb[1]]]
-  res[['.oldBottom']] <- res[[htb[2]]]
-  
-  # replace old depths with sliced depths
-  res[[htb[1]]] <- res[['.sliceTop']]
-  res[[htb[2]]] <- res[['.sliceBottom']]
-  
-  # cleanup
-  res[['.sliceTop']] <- NULL
-  res[['.sliceBottom']] <- NULL
-  
-  # only returning horizons as a data.frame
-  if(just.the.data) {
-    return(as.data.frame(res))
-  }
-  
-  # re-pack horizon data
-  res <- as.data.frame(res)
-  replaceHorizons(x) <- res
-  
-  # switch horizon ID to slice ID
-  hzidname(x) <- 'sliceID'
-  
-  return(x)
-}
 
 
-z <- dice(d[1:2, ])
+z <- aqp:::.dice(d[1:2, ])
 
 par(mar = c(0,1,3,1))
-# supress hz names
+# suppress hz names
 # strange legend, due to character representation of integers
 plotSPC(z[2, ], color = 'hzID', name = NA, divide.hz = FALSE)
 
@@ -172,10 +50,33 @@ z$bottom[32] <- 15
 z$bottom[5]
 z$top[6] <- 95
 
-zz <- dice(z)
+# dropping IDs
+zz <- aqp:::.dice(z, byhz = FALSE, dropInvalid = TRUE)
+
+# ok
+metadata(zz)$dice.removed.profiles
+setdiff(profile_id(z), profile_id(zz))
 
 plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
 
+# dropping horizons (a good idea?)
+zz <- aqp:::.dice(z, byhz = TRUE, dropInvalid = TRUE)
+
+# ok
+metadata(zz)$dice.removed.horizons
+setdiff(profile_id(z), profile_id(zz))
+
+plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
+
+
+
+
+
+
+
+
+
+## TODO: evaluate memory footprint
 
 ## current slice()
 # 10k profiles: 15 seconds (home MacOS)
@@ -185,7 +86,7 @@ system.time(s <- slice(d, 0:100 ~ .))
 ## 1x mapply, merge.data.table
 # 10k profiles: 3 seconds (home MacOS)
 # 100k profiles: 42 seconds
-system.time(s <- dice(d))
+system.time(s <- aqp:::.dice(d))
 
 
 ## profile
@@ -194,7 +95,7 @@ system.time(s <- dice(d))
 pp.slice <- profvis(s <- slice(d, 0:100 ~ .))
 
 # most time spent: checHzDepthLogic + mapply
-pp.dice <- profvis(s <- dice(d))
+pp.dice <- profvis(s <- aqp:::.dice(d))
 
 
 
