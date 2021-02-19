@@ -6,36 +6,111 @@
 #' @param n Number of new profiles to generate (default: 100)
 #' @param id a vector of profile IDs with length equal to (\code{n}). Overrides use of \code{seq_len(n)} as default profile ID values.
 #' 
-#' @param boundary.attr Horizon attribute containing numeric "standard deviations" reflecting boundary transition distinctness
+#' @param boundary.attr Horizon variance attribute containing numeric "standard deviations" reflecting boundary transition distinctness
 #' 
-#' @param thickness.attr Horizon attribute containing numeric "standard deviations" reflecting horizon thickness variation 
+#' @param thickness.attr Horizon variance attribute containing numeric "standard deviations" reflecting horizon thickness  
 #' 
 #' @param max.depth Depth below which horizon depths are not perturbed (default: `NULL`)
 #' @param min.thickness Minimum thickness of permuted horizons (default: `1`)
 #' @param new.idname New column name to contain unique profile ID (default: `pID`)
 #' 
-#' @description "Perturbs" the **boundary between horizons** or the **thickness of horizons** using a standard deviation specified as a horizon-level attribute. This is selected byspecifing one of either `boundary.attr` or `thickness.attr`, respectively.
+#' @description "Perturbs" the **boundary between horizons** or the **thickness of horizons** using a standard deviation specified as a horizon-level attribute. This is selected using either `boundary.attr` or `thickness.attr` to specify the column name.
 #' 
-#' The boundary standard deviation corresponds roughly to the concept of "horizon boundary distinctness." This is arguably "easier" to parameterize from something like a single profile description or "Form 232" where _horizon boundary distinctness_ classes (based on vertical distance of transition) are recorded for each layer. 
-#' 
-#' In contrast, the _horizon thickness_ standard deviation corresponds roughly to the "variation in horizon thickness" so it may be determined from several similar profiles that have a particular layer "in common."
+#' The boundary standard deviation corresponds roughly to the concept of "horizon boundary distinctness." In contrast, the _horizon thickness_ standard deviation corresponds roughly to the "variation in horizon thickness" so it may be determined from several similar profiles that have a particular layer "in common." 
 #' 
 #' @details
 #' 
-#' If you imagine a normal curve with its mean centered on the vertical (depth axis) at a RV horizon depth. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that RV depth represent 95% of the "volume" of the horizon or boundary.
+#' Imagine a Normal curve with mean centered on the vertical (depth axis) at a representative value (RV) horizon bottom depth or thickness. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that "central" mean value represent 95% of the "typical volume" of that horizon or boundary.
 #' 
-#' This method can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons, given a set of assumptions to convert classes to a "standard deviation" (see example). A handy function for this is [hzDistinctnessCodeToOffset()]. 
+#' `perturb` can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is [hzDistinctnessCodeToOffset()]. The `boundary.attr` is arguably easier to parameterize from a single profile description or "Form 232" where _horizon boundary distinctness_ classes (based on vertical distance of transition) are conventionally recorded for each layer.
 #' 
-#' Alternately, `perturb` can be parameterized using standard deviation in thickness of layers.
+#' Alternately, `perturb` can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.
 #'
-#' @return A SoilProfileCollection with n permutations of p.
+#' @return a SoilProfileCollection with `n` realizations of `p`
 #' 
 #' @seealso [random_profile()] [hzDistinctnessCodeToOffset()]
 #' 
 #' @export
-#' @author Andrew G. Brown
+#' @author D.E. Beaudette, A.G. Brown
 #'
 #' @examples
+#' 
+#' ### THICKNESS
+#' 
+#' # load sample data and convert into SoilProfileCollection
+#' data(sp3)
+#' depths(sp3) <- id ~ top + bottom
+#' 
+#' # select a profile to use as the basis for simulation
+#' s <- sp3[3,]
+#' 
+#' # reset horizon names
+#' s$name <- paste('H', seq_along(s$name), sep = '')
+#' 
+#' # simulate 25 new profiles
+#' horizons(s)$hz.sd <- 2 # constant standard deviation
+#' sim.1 <- perturb(s, n = 25, thickness.attr = "hz.sd")
+#' 
+#' # simulate 25 new profiles using different SD for each horizon
+#' horizons(s)$hz.sd <- c(1, 2, 5, 5, 5, 10, 3)
+#' sim.2 <- perturb(s, n = 25, thickness.attr = "hz.sd")
+#' 
+#' # plot
+#' par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
+#' plot(sim.1)
+#' mtext(
+#'   'SD = 2',
+#'   side = 2,
+#'   line = -1.5,
+#'   font = 2,
+#'   cex = 0.75
+#' )
+#' plot(sim.2)
+#' mtext(
+#'   'SD = c(1, 2, 5, 5, 5, 10, 3)',
+#'   side = 2,
+#'   line = -1.5,
+#'   font = 2,
+#'   cex = 0.75
+#' )
+#' 
+#' # aggregate horizonation of simulated data
+#' # note: set class_prob_mode=2 as profiles were not defined to a constant depth
+#' sim.2$name <- factor(sim.2$name)
+#' a <- slab(sim.2, ~ name, class_prob_mode=2)
+#' 
+#' # convert to long format for plotting simplicity
+#' library(data.table)
+#' a.long <- melt(as.data.table(a),
+#'                id.vars = c('top', 'bottom'),
+#'                 measure.vars = levels(sim.2$name))
+#' 
+#' # plot horizon probabilities derived from simulated data
+#' # dashed lines are the original horizon boundaries
+#' library(lattice)
+#' 
+#' xyplot(
+#'   top ~ value,
+#'   groups = variable,
+#'   data = a.long,
+#'   subset = value > 0,
+#'   ylim = c(100,-5),
+#'   type = c('l', 'g'),
+#'   asp = 1.5,
+#'   ylab = 'Depth (cm)',
+#'   xlab = 'Probability',
+#'   auto.key = list(
+#'     columns = 4,
+#'     lines = TRUE,
+#'     points = FALSE
+#'   ),
+#'   panel = function(...) {
+#'     panel.xyplot(...)
+#'     panel.abline(h = s$top, lty = 2, lwd = 2)
+#'   }
+#' )
+#' 
+#' ### BOUNDARIES
 #' 
 #' # example with sp1 (using boundary distinctness)
 #' data("sp1")
@@ -62,7 +137,7 @@
 #' sp1 <- mutate(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
 #' quantile(sp1$bound_sd)
 #' 
-#' perturb(p, boundary.attr="bound_sd")
+#' perturb(p, boundary.attr = "bound_sd")
 #' 
 perturb <- function(p,
                     n = 100,
