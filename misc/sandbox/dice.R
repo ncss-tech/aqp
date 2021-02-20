@@ -7,7 +7,7 @@ library(data.table)
 
 # ~ 10 seconds for 10k profiles
 # much faster to generate as DF, then promote to SPC at the end
-d <- lapply(as.character(1:1000), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
+d <- lapply(as.character(1:10000), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 
 # much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
@@ -68,9 +68,27 @@ plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
 
 
 
+## formula interface
 
+# select hz attr
+zz <- aqp:::.dice(z, fm = 1:100 ~ p1 + p2, byhz = TRUE)
+horizonNames(zz)
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
+# all hz attr
+zz <- aqp:::.dice(z, fm = 1:100 ~ ., byhz = TRUE)
+horizonNames(zz)
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
+# single slice
+zz <- aqp:::.dice(z, fm = 50 ~ ., byhz = TRUE)
+horizonNames(zz)
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+
+# no LHS: all depths
+zz <- aqp:::.dice(z, fm =  ~ p1, byhz = TRUE)
+horizonNames(zz)
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 
 
@@ -85,6 +103,22 @@ system.time(s <- slice(d, 0:100 ~ .))
 # 10k profiles: 3 seconds (home MacOS)
 # 100k profiles: 42 seconds
 system.time(s <- aqp:::.dice(d))
+
+
+bench::mark(
+  slice = slice(d, fm = 0:100 ~ .),
+  dice_fm = aqp:::.dice(d, fm = 0:100 ~ .), 
+  dice = aqp:::.dice(d), 
+  iterations = 1,
+  check = FALSE
+)
+
+
+
+## compare output dice vs. slice
+
+
+## develop tests
 
 
 ## profile

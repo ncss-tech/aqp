@@ -1,5 +1,16 @@
 
 
+## re-implementation of "percent missing" calculation, should work on any horion set (slice / glom / ?)
+
+# h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
+
+#' @param h `data.frame` of horizon data
+.pctMissing <- function(h, vars) {
+  
+}
+
+
+
 ## fairly generic, will be required by (at least):"
 # * dice() [x]
 # * profile_compare()
@@ -114,8 +125,79 @@
   idn <- idname(x)
   hzidn <- hzidname(x)
   htb <- horizonDepths(x)
+  hznames <- names(h)
   
-  ## `h` could be a data.table object
+  # IDs + top/bottom
+  ids.top.bottom.idx <- match(c(idn, hzidn, htb), hznames)
+  
+  # interpret optional formula
+  if(!is.null(fm)) {
+    # something supplied
+    # reasonable?
+    if(! inherits(fm, "formula")) {
+      stop('must provide a valid formula', call. = FALSE)
+    }
+    
+    
+    # extract components of the formula:
+    formula <- str_c(deparse(fm, 500), collapse = "")
+    elements <- str_split(formula, fixed("~"))[[1]]
+    formula <- lapply(str_split(elements, "[+*]"), str_trim)
+
+    # test for a multi-part formula A ~ B ~ C ?
+    if (length(formula) > 2) {
+      stop("please provide a valid formula", call. = FALSE)
+    }
+      
+    # LHS ~ RHS
+    # LHS: "", single integer, vector of integers slices
+    z <- as.numeric(eval(parse(text = formula[[1]])))
+    # RHS: variable names
+    vars <- formula[[2]] 
+    
+    # check for bogus left/right side problems with the formula
+    if(any(z < 0) | any(is.na(z))) {
+      stop('z-slice must be >= 0', call. = FALSE)
+    }
+      
+    # check for integer / numeric slices
+    if(! inherits(z,  c('numeric','integer'))) {
+      stop('z-slice must be either numeric or integer', call. = FALSE)
+    }
+      
+    # if z-index is missing set to NULL for later on
+    if(length(z) == 0) {
+      z <- NULL
+    }
+    
+    # check for '.' --> all variables, minus ID/depths
+    if(any(vars == '.')) {
+      # all variables except profile ID, horizon ID, top, bottom
+      vars <- hznames[-ids.top.bottom.idx]
+    }
+
+
+    # check for column names that don't exist
+    if(! any(vars %in% names(h))) {
+      stop('names in formula do not match any horizon attributes', call. = FALSE)
+    }
+      
+    
+  } else {
+    # no formula
+    # slice to-depth
+    # all variables except profile ID, horizon ID, top, bottom
+    vars <- hznames[-ids.top.bottom.idx]
+    z <- NULL
+  }
+  
+  
+ 
+  # select variables
+  h <-  aqp:::.data.frame.j(h, c(hznames[ids.top.bottom.idx], vars))
+  
+  ## TODO: could be DF, DT, or tibble
+  # covnert to DT
   h <- as.data.table(h)
   
   ## TODO: are keys worth the extra sorting / re-sorting?
@@ -147,7 +229,6 @@
     times = h[[htb[2]]] - h[[htb[1]]]
   )
   
-  # convert to v
   
   # assemble slice LUT for JOIN
   s <- data.table(
@@ -159,9 +240,6 @@
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
   
-  ## MAYBE
-  # perform subsetting of depths / variables using `fm` if provided
-  # s[.sliceTop %in% depthvec]
   
   ## TODO: are keys worth the extra sorting / re-sorting?
   # note: sorts data
@@ -189,6 +267,15 @@
   # cleanup
   res[['.sliceTop']] <- NULL
   res[['.sliceBottom']] <- NULL
+  
+  
+  ## TODO: move z-index subset"up" to original sequence creation to save a lot of time
+  if(!is.null(z)) {
+    res <- res[which(res[[htb[1]]] %in% z), ]
+  }
+  
+  ## TODO:
+  ## pctMissing calculation
   
   # only returning horizons as a data.frame
   if(!SPC) {
