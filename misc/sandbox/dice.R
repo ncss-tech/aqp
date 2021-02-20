@@ -1,6 +1,14 @@
 
-# library(aqp)
+library(aqp)
 library(data.table)
+
+## dang, this won't work
+library(soilDB)
+
+x <- fetchOSD('tatum')
+dice(x, strict = FALSE)
+
+
 
 ## indexes vs. keys
 # See the vignette("datatable-secondary-indices-and-auto-indexing") for more details.
@@ -30,12 +38,14 @@ plotSPC(d[1:10, ], color = 'p1')
 
 
 # quick check
-z <- aqp:::.dice(d[1:2, ])
+z <- dice(d[1:2, ])
 
 par(mar = c(0,1,3,1))
 # suppress hz names
 # strange legend, due to character representation of integers
 plotSPC(z, color = 'hzID', name = NA, divide.hz = FALSE)
+
+z$.pctMissing
 
 
 
@@ -48,67 +58,65 @@ z$bottom[32] <- 15
 z$bottom[5]
 z$top[6] <- 95
 
+z$p1[23] <- NA
+
 # dropping IDs
-zz <- aqp:::.dice(z, byhz = FALSE)
+zz <- dice(z, byhz = FALSE)
 
 # ok
 metadata(zz)$dice.removed.profiles
 setdiff(profile_id(z), profile_id(zz))
+zz$.pctMissing
 
 plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+plotSPC(zz, color = '.pctMissing', name = NA, divide.hz = FALSE)
 
 # dropping horizons, leaving gaps
-zz <- aqp:::.dice(z, byhz = TRUE)
+zz <- dice(z, byhz = TRUE)
 
 # ok
 metadata(zz)$dice.removed.horizons
 setdiff(profile_id(z), profile_id(zz))
 
 plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
-
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 
 ## formula interface
 
 # select hz attr
-zz <- aqp:::.dice(z, fm = 1:100 ~ p1 + p2, byhz = TRUE)
+zz <- dice(z, fm = 1:100 ~ p1 + p2, byhz = TRUE)
 horizonNames(zz)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 # all hz attr
-zz <- aqp:::.dice(z, fm = 1:100 ~ ., byhz = TRUE)
+zz <- dice(z, fm = 1:100 ~ ., byhz = TRUE)
 horizonNames(zz)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 # single slice
-zz <- aqp:::.dice(z, fm = 50 ~ ., byhz = TRUE)
+zz <- dice(z, fm = 50 ~ ., byhz = TRUE)
 horizonNames(zz)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 # no LHS: all depths
-zz <- aqp:::.dice(z, fm =  ~ p1, byhz = TRUE)
+zz <- dice(z, fm =  ~ p1, byhz = TRUE)
 horizonNames(zz)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 
 
-## TODO: evaluate memory footprint
 
-## current slice()
-# 10k profiles: 15 seconds (home MacOS)
-# 100k profiles: 266 seconds
-system.time(s <- slice(d, 0:100 ~ .))
-
-## 1x mapply, merge.data.table
-# 10k profiles: 3 seconds (home MacOS)
-# 100k profiles: 42 seconds
-system.time(s <- aqp:::.dice(d))
-
-
+## timing / memory use
 bench::mark(
-  slice = slice(d, fm = 0:100 ~ .),
-  dice_fm = aqp:::.dice(d, fm = 0:100 ~ .), 
-  dice = aqp:::.dice(d), 
+  slice_strict = slice(d, fm = 0:100 ~ ., strict = TRUE),
+  slice = slice(d, fm = 0:100 ~ ., strict = FALSE),
+  dice = dice(d, byhz = FALSE), 
+  dice_byhz = dice(d, byhz = TRUE), 
+  dice_fm = dice(d, fm = 0:100 ~ .),
+  dice_no_chk = dice(d, strict = FALSE), 
+  dice_no_chk_pctmissing = dice(d, strict = FALSE, pctMissing = TRUE), 
   iterations = 1,
   check = FALSE
 )
@@ -121,13 +129,16 @@ bench::mark(
 ## develop tests
 
 
+## key vs. index vs. none
+
+
 ## profile
 
 # get.slice() wastes a lot of time
 pp.slice <- profvis(s <- slice(d, 0:100 ~ .))
 
 # most time spent: checHzDepthLogic + mapply
-pp.dice <- profvis(s <- aqp:::.dice(d))
+pp.dice <- profvis::profvis(s <- dice(d))
 
 
 

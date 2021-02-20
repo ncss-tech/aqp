@@ -7,6 +7,24 @@
 #' @param h `data.frame` of horizon data
 .pctMissing <- function(h, vars) {
   
+  m <- as.matrix(
+    aqp:::.data.frame.j(
+      h, 
+      col.names = vars
+    )
+  )
+  
+  # if there is only 1 variable, don't try to compute this value
+  # if all data are missing NA is returned
+  res <- apply(
+    m, 
+    MARGIN = 1, 
+    FUN = function(i, n = length(vars)) {
+      length(which(is.na(i))) / n
+    }
+  )
+  
+  return(res)
 }
 
 
@@ -20,12 +38,17 @@
 ## TODO do we need all arguments to checkHzDepthLogic()?
 # if using `...` then we need to explicitly "grab" byhz for later
 
+#'
 #' @title Subset `SoilProfileCollection` Objects or Horizons via `checkHzDepthLogic`
-#' 
 #' 
 #' @param x a `SoilProfileCollection` object
 #' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)
-.HzDepthLogicSubset <- function(x, byhz = FALSE) {
+#' 
+#' @return a `data.frame` object
+#' 
+#' @export
+#' 
+HzDepthLogicSubset <- function(x, byhz = FALSE) {
   
   # additional arguments?
   hz.tests <- checkHzDepthLogic(x, fast = TRUE, byhz = byhz)
@@ -106,19 +129,30 @@
 #' 
 #' @param fm optional `formula` describing top depths and horizon level attributes to include: `integer.vector ~ var1 + var2 + var3` or `integer.vector ~ .` to include all horizon level attributes. When `NULL` profiles are "diced" to depth and results will include all horizon level attributes.
 #' 
+#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
+#' 
+#' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
+#' 
+#' @param strict perform horizon depth logic checking / flagging / removal
+#' 
 #' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
 #' 
-#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
+#' 
 #'
 #' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`
 #' 
 #' @author D.E. Beaudette, A.G. Brown 
 #' 
-.dice <- function(x, fm = NULL, byhz = TRUE, SPC = TRUE) {
+#' @export
+#' 
+dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, byhz = FALSE) {
   
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
-  x <- .HzDepthLogicSubset(x, byhz = byhz)
+  if(strict) {
+    x <- HzDepthLogicSubset(x, byhz = byhz)  
+  }
+  
   
   ## extract pieces
   h <- horizons(x)
@@ -140,20 +174,20 @@
     
     
     # extract components of the formula:
-    formula <- str_c(deparse(fm, 500), collapse = "")
-    elements <- str_split(formula, fixed("~"))[[1]]
-    formula <- lapply(str_split(elements, "[+*]"), str_trim)
+    fm <- str_c(deparse(fm, 500), collapse = "")
+    elements <- str_split(fm, fixed("~"))[[1]]
+    fm <- lapply(str_split(elements, "[+*]"), str_trim)
 
     # test for a multi-part formula A ~ B ~ C ?
-    if (length(formula) > 2) {
+    if (length(fm) > 2) {
       stop("please provide a valid formula", call. = FALSE)
     }
       
     # LHS ~ RHS
     # LHS: "", single integer, vector of integers slices
-    z <- as.numeric(eval(parse(text = formula[[1]])))
+    z <- as.numeric(eval(parse(text = fm[[1]])))
     # RHS: variable names
-    vars <- formula[[2]] 
+    vars <- fm[[2]] 
     
     # check for bogus left/right side problems with the formula
     if(any(z < 0) | any(is.na(z))) {
@@ -192,22 +226,25 @@
   }
   
   
- 
-  # select variables
-  h <-  aqp:::.data.frame.j(h, c(hznames[ids.top.bottom.idx], vars))
+  # safely select variables
+  h <-  aqp:::.data.frame.j(
+    h, 
+    col.names = c(hznames[ids.top.bottom.idx], vars)
+  )
   
-  ## TODO: could be DF, DT, or tibble
-  # covnert to DT
-  h <- as.data.table(h)
+  # convert to DT
+  if(! inherits(h, 'data.table')) {
+    h <- as.data.table(h)
+  }
   
   ## TODO: are keys worth the extra sorting / re-sorting?
   # init keys, sorts the data on hzID (alpha-sort)
   # setkeyv(h, hzidn)
-  # consider and index, seems to have no effect
+  # consider an index, seems to have no effect
   # setindexv(h, hzidn)
   
   ## TODO: this will have to be made more intelligent in the presence of overlap
-  ## mapply() call takes 1/2 of total time
+  ## mapply() call takes 1/4 of total time
   ## consider custom function
   # expand 1 unit slices to max depth of each profile
   # NA in hz depths or 0-thickness horizons are not allowed
@@ -244,7 +281,7 @@
   ## TODO: are keys worth the extra sorting / re-sorting?
   # note: sorts data
   # setkeyv(s, hzidn)
-  # consider and index, seems to have no effect
+  # consider an index, seems to have no effect
   # setindexv(s, hzidn)
   
   # FULL JOIN via fast data.table compiled code
@@ -274,14 +311,18 @@
     res <- res[which(res[[htb[1]]] %in% z), ]
   }
   
-  ## TODO:
-  ## pctMissing calculation
+  ## TODO: this is rather slow: 8x longer to finish
+  # slice-wise "percent missing" calculation
+  if(pctMissing) {
+    res[['.pctMissing']] <- .pctMissing(res, vars)
+  }
   
   # only returning horizons as a data.frame
   if(!SPC) {
     return(as.data.frame(res))
   }
   
+  ## TODO: conditionally
   # re-pack horizon data
   res <- as.data.frame(res)
   replaceHorizons(x) <- res
