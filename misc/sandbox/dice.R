@@ -2,12 +2,24 @@
 library(aqp)
 library(data.table)
 
-## dang, this won't work
-library(soilDB)
+## try problematic OSD
+x <- soilDB::fetchOSD('tatum')
 
-x <- fetchOSD('tatum')
-dice(x, strict = FALSE)
+# works, O horizon lost
+s <- slice(x, fm = 0:100 ~ .)
+par(mar = c(0, 0, 0, 0))
+plotSPC(s)
 
+# nope
+d <- dice(x, fm = 0:100 ~ ., strict = FALSE)
+
+# works
+d <- dice(x, fm = 0:100 ~ ., strict = TRUE, byhz = TRUE)
+plotSPC(d)
+
+# works
+d <- dice(x, strict = TRUE, byhz = TRUE)
+plotSPC(d)
 
 
 ## indexes vs. keys
