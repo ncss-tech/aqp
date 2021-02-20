@@ -303,7 +303,17 @@ plotSPC <- function(
     if(! is.numeric(x[[hz.boundary.lty]]))
       stop('`hz.boundary.lty` must be numeric', call. = FALSE)
   }
-
+  
+  
+  ###################
+  ## SPC cleanup ? ##
+  ###################
+  
+  # tempting, but I don't like the auto-magical nature of this
+  # easy to miss important horizon logic errors
+  # creates the possibility for new errors based on unexpected results
+  # x <- repairMissingHzDepths(x)
+  
 
   ###################
   ## fudge factors ##
@@ -541,6 +551,7 @@ plotSPC <- function(
 	  }
 	  
 	  
+	  
 	  # empty list for storing y-coordinates
 	  coords.list <- vector(mode = 'list', length = nh)
 	  
@@ -601,7 +612,7 @@ plotSPC <- function(
 	      
 	    } else if(j < nh) {
 	      # next horizons, except bottom-most horizon
-	      y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
+	      y.ll <- pmin(y0[j] + hdo[j], y0[j+1], na.rm = TRUE) # cannot exceed y.ll of next horizon
 	      y.lr <- pmax(y0[j] - hdo[j], y0[j-1]) # cannot exceed y.lr of previous horizon
 	      y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
 	      y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed y.ul of previous horizon
@@ -625,6 +636,10 @@ plotSPC <- function(
 	      y.lc <- y0[j] # truncate to lower depth of last horizon
 	      y.uc <- pmax(y1[j] - hto[j-1], y1[j-1]) # cannot exceed top of previous horizon
 	      
+	      # https://github.com/ncss-tech/aqp/issues/189
+	      # NA lower horizon depths ll, lc, lr to all be NA
+	      # this will break divide.hz functionality
+	      
 	      # assemble y-coords and plot last horizon polygon, without borders
 	      yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
 	      polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
@@ -635,6 +650,7 @@ plotSPC <- function(
 	    coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
 	  }
 	  
+	  
 	  ## note: have to do this after the polygons, otherwise the lines are over-plotted
 	  # optionally divide horizons with line segment
 	  if(divide.hz) {
@@ -643,7 +659,9 @@ plotSPC <- function(
 	    # coordinate logic: ll, lc, lr, ur, uc, ul
 	    # line style included
 	    lapply(coords.list, function(seg) {
+	      # lower left -> lower center
 	      segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd=lwd, lty=seg$lty, lend=1)
+	      # lower center -> lower right
 	      segments(x0 = seg$xx[2], y0 = seg$yy[2], x1 = seg$xx[3], y1 = seg$yy[3], lwd=lwd, lty=seg$lty, lend=1)
 	    })
 	  }
@@ -652,7 +670,17 @@ plotSPC <- function(
 	  # note: when manually specifying n > length(SPC)
 	  # x0,x1,y0,y1 are NA
 	  # using `na.rm = TRUE` in the following calls to min() or max() will generate warnings
-	  rect(xleft = x0 - width, ybottom = min(y1), xright = x0 + width, ytop = max(y0), lwd = lwd, lty = lty, lend = 2)
+	  suppressWarnings(
+	    rect(
+	      xleft = x0 - width, 
+	      ybottom = min(y1, na.rm = TRUE), 
+	      xright = x0 + width, 
+	      ytop = max(y0, na.rm = TRUE), 
+	      lwd = lwd, 
+	      lty = lty, 
+	      lend = 2
+	    )
+	  )
 	  
 	  
 	  

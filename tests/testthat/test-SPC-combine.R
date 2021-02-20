@@ -108,7 +108,8 @@ test_that("non-conformal combination tests", {
   spike.idx <- 6
 
   horizons(sp4)$bdy <- 4
-  p <- permute_profile(sp4[p.idx, ], n = 10, boundary.attr = 'bdy', min.thickness = 2)
+  p <- perturb(sp4[p.idx, ], n = 10, 
+               boundary.attr = 'bdy', min.thickness = 2)
 
   site(p)$id <- NULL
 

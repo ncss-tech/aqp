@@ -49,7 +49,7 @@ par(mfrow=c(1,2),mar=c(0,0,2,1))
 plot(input.spc, max.depth=200, color="matrix_color", plot.depth.axis=FALSE)
 plot(output.spc, max.depth=200, color="matrix_color", name=NA)
 
-# # segment should assign new profile IDs automatically -- like slice, permute_profile, etc
+# # segment should assign new profile IDs automatically
 # # the correct IDs are something like thisthis:
 output.spc2 <- output.spc
 
