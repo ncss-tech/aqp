@@ -153,6 +153,8 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
     x <- HzDepthLogicSubset(x, byhz = byhz)  
   }
   
+  # keep track of original object size
+  o.size <- object.size(x)
   
   ## extract pieces
   h <- horizons(x)
@@ -338,6 +340,12 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
   
   # switch horizon ID to slice ID
   hzidname(x) <- 'sliceID'
+  
+  # final size
+  f.size <- object.size(x)
+  
+  # object bloat factor
+  message(sprintf("OBF: %s", round(f.size / o.size, 1)))
   
   return(x)
 }

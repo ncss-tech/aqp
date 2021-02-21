@@ -125,10 +125,6 @@ plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 
 
-
-
-
-
 ## timing / memory use
 bench::mark(
   slice_strict = slice(d, fm = 0:100 ~ ., strict = TRUE),
@@ -159,7 +155,7 @@ profile_id(d) <- sprintf("%s-dice", profile_id(d))
 z <- combine(s, d)
 
 par(mar = c(0, 0, 0, 0))
-plotSPC(z, color = 'Ca')
+plotSPC(z[1:6, ], color = 'Ca')
 
 # ok
 z <- diff_data(
