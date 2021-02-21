@@ -12,6 +12,7 @@ sp4[, , .LAST]
 sp4[, , .HZID]
 sp4[, , .LAST, .HZID]
 sp4[, , .FIRST, .HZID] # this just sets j <- 1
+sp4[, 1, , .HZID]
 sp4[, 1000, .FIRST, .HZID] # this sets j <- 1; ignores j input if given
 sp4[, 1000, .LAST, .HZID] # this ignores j input if given
 
@@ -31,7 +32,7 @@ getLastHorizonID_v1 <- function(x) {
   return(res)
 }
 
-# ~4x more efficient using j-index shortcut
+# ~3x more efficient using j-index shortcut
 getLastHorizonID_v2 <- function(x) {
   res <-  hzID(x)[x[, , .LAST, .HZID]]
   names(res) <- profile_id(x)
@@ -41,7 +42,7 @@ getLastHorizonID_v2 <- function(x) {
 bench::mark(getLastHorizonID_v1(sp4),
             getLastHorizonID_v2(sp4))
 
-# bigger <- data.table::rbindlist(lapply(1:100000, random_profile))
+# bigger <- data.table::rbindlist(lapply(1:1000, random_profile))
 # depths(bigger) <- id ~ top + bottom
 # bench::mark(x <- getLastHorizonID_v1(bigger),
 #             x <- getLastHorizonID_v2(bigger))

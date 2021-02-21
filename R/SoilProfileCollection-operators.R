@@ -90,10 +90,6 @@ setMethod("[", signature(x = "SoilProfileCollection",
                            # not special symbols like .LAST
                            if (!missing(j) & !ksubflag) {
 
-                             # handle special symbols in j index
-                             # currently supported:
-                             #  - .LAST: last horizon index per profile
-
                              # AGB added logical handling to horizon index
                              if (is.logical(j)) {
                                j <- (1:length(x))[j]
@@ -124,15 +120,15 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                            # keep only the requested horizon data (filtered by profile ID)
                            h <- .as.data.frame.aqp(h, aqp_df_class(x))
+                           pidx <- h[[idname(x)]] %in% p.ids
+                           h <- h[pidx,]
 
-                           #
                            if (ksubflag && ".HZID" %in% ksub) {
 
-                             h <- h # do nothing, short circuit
+                             j.idx.allowed <- seq_len(nrow(x@horizons))[pidx]
 
                            } else {
-
-                             h <- h[h[[idname(x)]] %in% p.ids,]
+                             j.idx.allowed <- seq_len(nrow(h))
 
                              # keep only the requested site data, (filtered by profile ID)
                              s.i <- which(s.all[[idname(x)]] %in% p.ids)
@@ -175,24 +171,29 @@ setMethod("[", signature(x = "SoilProfileCollection",
                              .I <- NULL
                              V1 <- NULL
 
-                             # data.table can do this much more efficiently
-                             # if (requireNamespace("data.table", quietly = TRUE)) {
                              idn <- idname(x)
 
                              # by list @horizons idname (essentially iterating over profiles)
                              bylist <- list(h[[idn]])
                              names(bylist) <- idn
 
+                             # handle special symbols in j index
+                             # currently supported:
+                             #  - .LAST: last horizon index per profile
+                             #  - .HZID: return horizon slot row index (short circuit)
+                             #  - .FIRST: first horizon index per profile
+                             # the above can be combined. .LAST takes precedent over .FIRST.
+
                              # determine j indices to KEEP
+
+                             # default is an index to each horizon
+                             j.idx <- j.idx.allowed
+
                              if (ksubflag && ".LAST" %in% ksub) {
                                # trigger special last horizon case
                                j.idx <- h[, .I[.N], by = bylist]$V1
                              } else {
-                               if (missing(j)) {
-                                 # default is an index to each horizon
-                                 # note: i-subset happens here
-                                 j.idx <- seq_len(nrow(h))[h[[idname(x)]] %in% p.ids]
-                               } else {
+                               if (!missing(j)) {
                                  # get row indices of horizon data corresponding to j within profiles
                                  j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
                                }
@@ -200,7 +201,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                              # short circuit for horizon-slot indices
                              if (ksubflag && ".HZID" %in% ksub) {
-                               return(j.idx)
+                               return(j.idx.allowed[j.idx])
                              }
 
                              # determine which site indices to keep
