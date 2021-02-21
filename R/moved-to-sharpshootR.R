@@ -1,5 +1,5 @@
 .callinsharpshootR <- function(fname, ...) {
-  if (!requireNamespace("sharpshootR", warn.conflicts = FALSE, quietly = TRUE))
+  if (!requireNamespace("sharpshootR", quietly = TRUE))
     stop("this function has moved! please install the `sharpshootR` package")
   get(fname, envir = as.environment("package:sharpshootR"))
 }
