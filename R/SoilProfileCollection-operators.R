@@ -39,20 +39,24 @@ setMethod("[", signature(x = "SoilProfileCollection",
                            ksubflag <- FALSE
 
                            # 2nd value is first user-supplied expression
-                           ksub <- as.character(substitute(list(...)))[2]
+                           kargs <- substitute(list(...))
+                           ksub <- as.character(kargs)[2:length(kargs)]
 
-                           # handle special .LAST horizon keyword in "k" index
-                           if (!is.na(ksub) & ksub == ".LAST") {
-                             if (missing(j))
-                               j <- 9999 # dummy value to trigger j indexing
-                             ksubflag <- TRUE  # only support .LAST for now
+                           # handle special keywords in "k" index
+                           for(k in ksub) {
+                             if (!is.na(k)) {
+                               switch(k,
+                                      ".FIRST" = {
+                                        j <- 1
+                                      },
+                                      ".LAST" = {
+                                        ksubflag <- TRUE
+                                      },
+                                      ".HZID" = {
+                                        ksubflag <- TRUE
+                                      })
+                             }
                            }
-
-                           # check for missing i and j
-                           # if (missing(i) & missing(j) | is.na(ksub)) {
-                           #   stop('must provide either a profile index, horizon/slice index or a special expression such as .LAST',
-                           #        call. = FALSE)
-                           # }
 
                            # convert to integer
                            if (!missing(i)) {
@@ -119,36 +123,47 @@ setMethod("[", signature(x = "SoilProfileCollection",
                            p.ids <- s.all[[idname(x)]][unique(i)]
 
                            # keep only the requested horizon data (filtered by profile ID)
-                           h <- .as.data.frame.aqp(h, aqp_df_class(x))[h[[idname(x)]] %in% p.ids,]
+                           h <- .as.data.frame.aqp(h, aqp_df_class(x))
 
-                           # keep only the requested site data, (filtered by profile ID)
-                           s.i <- which(s.all[[idname(x)]] %in% p.ids)
+                           #
+                           if (ksubflag && ".HZID" %in% ksub) {
 
-                           # need to use drop=FALSE when @site contains only a single column
-                           s <- s.all[s.i, , drop = FALSE]
+                             h <- h # do nothing, short circuit
 
-                           # subset spatial data, but only if valid
-                           if (validSpatialData(x)) {
-                             sp <- x@sp[i]
                            } else {
-                             # copy empty SpatialPoints object
-                             sp <- x@sp
-                           }
 
-                           # subset diagnostic data
-                           d <- diagnostic_hz(x)
-                           if (length(d) > 0) {
-                             d <- d[which(d[[idname(x)]] %in% p.ids),]
-                           }
+                             h <- h[h[[idname(x)]] %in% p.ids,]
 
-                           # subset restriction data
-                           r <- restrictions(x)
-                           if (length(r) > 0) {
-                             r <- r[which(r[[idname(x)]] %in% p.ids),]
+                             # keep only the requested site data, (filtered by profile ID)
+                             s.i <- which(s.all[[idname(x)]] %in% p.ids)
+
+                             # need to use drop=FALSE when @site contains only a single column
+                             s <- s.all[s.i, , drop = FALSE]
+
+                             # subset spatial data, but only if valid
+                             if (validSpatialData(x)) {
+                               sp <- x@sp[i]
+                             } else {
+                               # copy empty SpatialPoints object
+                               sp <- x@sp
+                             }
+
+                             # subset diagnostic data
+                             d <- diagnostic_hz(x)
+                             if (length(d) > 0) {
+                               d <- d[which(d[[idname(x)]] %in% p.ids),]
+                             }
+
+                             # subset restriction data
+                             r <- restrictions(x)
+                             if (length(r) > 0) {
+                               r <- r[which(r[[idname(x)]] %in% p.ids),]
+                             }
+
                            }
 
                            # subset horizons/slices based on j --> only when j is given
-                           if (!missing(j)) {
+                           if (!missing(j) | ksubflag) {
 
                              # faster replacement of j subsetting of horizon data
                              # if (aqp_df_class(x) == "data.table") {
@@ -168,16 +183,24 @@ setMethod("[", signature(x = "SoilProfileCollection",
                              bylist <- list(h[[idn]])
                              names(bylist) <- idn
 
-                             # figured out the data.table way to do this
-                             #  not using := or . anymore
-
                              # determine j indices to KEEP
-                             if (ksubflag) {
+                             if (ksubflag && ".LAST" %in% ksub) {
                                # trigger special last horizon case
                                j.idx <- h[, .I[.N], by = bylist]$V1
                              } else {
-                               # get row indices of horizon data corresponding to j within profiles
-                               j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
+                               if (missing(j)) {
+                                 # default is an index to each horizon
+                                 # note: i-subset happens here
+                                 j.idx <- seq_len(nrow(h))[h[[idname(x)]] %in% p.ids]
+                               } else {
+                                 # get row indices of horizon data corresponding to j within profiles
+                                 j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
+                               }
+                             }
+
+                             # short circuit for horizon-slot indices
+                             if (ksubflag && ".HZID" %in% ksub) {
+                               return(j.idx)
                              }
 
                              # determine which site indices to keep
