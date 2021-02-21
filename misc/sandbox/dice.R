@@ -1,5 +1,5 @@
 
-library(aqp)
+# library(aqp)
 library(data.table)
 
 ## try problematic OSD
@@ -50,7 +50,7 @@ plotSPC(d[1:10, ], color = 'p1')
 
 
 # quick check
-z <- dice(d[1:2, ])
+z <- dice(d[1:2, ], pctMissing = TRUE)
 
 par(mar = c(0,1,3,1))
 # suppress hz names
@@ -118,6 +118,15 @@ horizonNames(zz)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 
+# pctMissing
+zz <- dice(z, pctMissing = TRUE, byhz = TRUE)
+horizonNames(zz)
+plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+
+
+
+
+
 
 
 ## timing / memory use
@@ -136,6 +145,41 @@ bench::mark(
 
 
 ## compare output dice vs. slice
+library(daff)
+
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+
+d <- dice(sp4, fm = 0:50 ~ .)
+s <- slice(sp4, fm = 0:50 ~ .)
+
+
+# combine results
+profile_id(d) <- sprintf("%s-dice", profile_id(d))
+z <- combine(s, d)
+
+par(mar = c(0, 0, 0, 0))
+plotSPC(z, color = 'Ca')
+
+# ok
+z <- diff_data(
+  site(s),
+  site(d)
+)
+
+render_diff(z)
+
+
+z <- diff_data(
+  horizons(s),
+  horizons(d)
+)
+
+render_diff(z)
+
+all.equal(s, d)
+
+
 
 
 ## develop tests

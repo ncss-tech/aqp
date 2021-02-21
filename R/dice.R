@@ -1,5 +1,5 @@
 
-
+## very slow, and will be retired in favor of a native DT solution
 ## re-implementation of "percent missing" calculation, should work on any horion set (slice / glom / ?)
 
 # h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
@@ -311,10 +311,19 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
     res <- res[which(res[[htb[1]]] %in% z), ]
   }
   
-  ## TODO: this is rather slow: 8x longer to finish
   # slice-wise "percent missing" calculation
   if(pctMissing) {
-    res[['.pctMissing']] <- .pctMissing(res, vars)
+    
+    # this is quite slow: DT -> DF -> matrix -> apply (8x longer)
+    # res[['.pctMissing']] <- .pctMissing(res, vars)
+    
+    # native DT approach
+    ## TODO: throws warning
+    # count number of NA in vars, by row 
+    res[, .pctMissing := rowSums(is.na(res[, .SD, .SDcols = vars]))]
+    
+    # convert NA count to percentage
+    res[, .pctMissing := .pctMissing / length(vars)]
   }
   
   # only returning horizons as a data.frame
