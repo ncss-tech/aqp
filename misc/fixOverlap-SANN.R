@@ -35,26 +35,27 @@ table(z$log)
 
 dev.off()
 
-## TODO: consider using a better function name
-aqp:::.P(n0 = 3, n1 = 10, Te = 100 / (1 + 1), k = 1)
+# safe vectorization
+P <- Vectorize(aqp:::.P)
 
+P(n0 = 3, n1 = 10, Te = 100 / (1 + 1), k = 1)
 
 n0 <- 3
 n1 <- 4
 i <- 1:1000
 T0 <- 500
 Te <- T0 / (i + 1)
-plot(Te, aqp:::.P(n0, n1, Te, k = 1), type = 'l', xlim = c(250, 0), las = 1)
+plot(i, P(n0, n1, Te, k = 1), type = 'l', las = 1)
 
 g <- expand.grid(n0 = 5, n1 = 5:10, Te = Te)
 
-g$P <- aqp:::.P(n0 = g$n0, n1 = g$n1, Te = g$Te, k = 1)
+g$P <- P(n0 = g$n0, n1 = g$n1, Te = g$Te, k = 10)
 
 hist(g$P, breaks = 30, las = 1)
 
-levelplot(P ~ Te * n1, data = g, col.regions = viridis, contour = TRUE, xlim = c(105, -5))
+levelplot(P ~ Te * n1, data = g, col.regions = viridis, contour = TRUE, xlim = c(250, -5))
 
-xyplot(P ~ Te, groups = factor(n1), data = g, type = 'l', as.table = TRUE, auto.key = list(lines = TRUE, points = FALSE, space = 'right'), par.settings = tactile::tactile.theme(), xlim = c(105, -5))
+xyplot(P ~ Te, groups = factor(n1), data = g, type = 'l', as.table = TRUE, auto.key = list(lines = TRUE, points = FALSE, space = 'right'), par.settings = tactile::tactile.theme(), xlim = c(250, -5))
 
 
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)

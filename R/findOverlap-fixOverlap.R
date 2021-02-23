@@ -86,9 +86,9 @@ overlapMetrics <- function(x, thresh) {
 
 
 
-
-
-# possible energy / cost function
+## TODO: document this as part of fixOverlap()
+## system energy ~ probability ~ metropolis step
+# energy / cost function
 # these are all length-1 vectors
 # n0: starting cost 
 # n1: resulting cost adjustment i
@@ -103,9 +103,6 @@ overlapMetrics <- function(x, thresh) {
   }
 }
 
-## this is only used for testing purposes, not in fixOverlap
-# safe vectorization
-.P <- Vectorize(.P)
 
 
 ## background:
