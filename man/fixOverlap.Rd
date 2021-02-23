@@ -10,10 +10,11 @@ fixOverlap(
   adj = thresh * 2/3,
   min.x = min(x) - 0.2,
   max.x = max(x) + 0.2,
-  coolingRate = 0.95,
-  restartRate = 2.5,
   maxIter = 1000,
-  trace = FALSE
+  trace = FALSE,
+  tiny = 1e-04,
+  T0 = 500,
+  k = 1
 )
 }
 \arguments{
@@ -27,13 +28,15 @@ fixOverlap(
 
 \item{max.x}{right-side boundary condition, consider expanding if a solution cannot be found within \code{maxIter}.}
 
-\item{coolingRate}{rate at which \code{adj} is decreased after a successful iteration (fewer overlapping elements in \code{x})}
-
-\item{restartRate}{optimization is restarted when an iteration results in \code{length(findOverlap(x.i, thresh)) > restartRate}}
-
 \item{maxIter}{maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence}
 
 \item{trace}{print diagnostics, result is a \code{list} vs \code{vector}}
+
+\item{tiny}{the smallest allowable overlap}
+
+\item{T0}{starting temperature}
+
+\item{k}{cooling constant}
 }
 \value{
 When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with the number of overlapping elements at each iteration.
@@ -53,6 +56,7 @@ z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
 
 # much harder
 z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
+
 
 }
 \author{
