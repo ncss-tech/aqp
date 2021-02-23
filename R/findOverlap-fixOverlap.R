@@ -3,9 +3,9 @@
 #' @description Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 #'
 #' @param x vector of relative horizontal positions, one for each profile
-#' @param thresh threshold defining "overlap", typically < 1, ideal values likely in (0.3, 0.8)
+#' @param thresh threshold defining "overlap", typically < 1
 #' 
-#' @return Unique indices of affected (overlapping) elements in `x`
+#' @return unique index to affected (overlapping) elements in `x`
 #' 
 #' @export
 #'
@@ -31,18 +31,29 @@ findOverlap <- function(x, thresh) {
 }
 
 
+
+## TODO: this will replace findOverlap()
+
 #' @title Find and Quantify Overlap within a 1D Sequence
 #' 
 #' @description Desc.
 #' 
 #' @param x vector of relative horizontal positions, one for each profile
-#' @param thresh threshold defining "overlap", typically < 1, ideal values likely in (0.3, 0.8)
+#' @param thresh threshold defining "overlap", typically < 1
 #' 
 #'  @return a `list`:
-#'   * `idx`: index to overlapping elements in `x`
+#'   * `idx`: unique index to overlapping elements in `x`
 #'   * `ov`: total overlap (see details)
 #'   
-#'  
+#' 
+#' @export
+#'
+#' @examples 
+#' 
+#' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+#' 
+#' overlapMetrics(x, thresh = 0.5)
+#' 
 overlapMetrics <- function(x, thresh) {
   
   # all pair-wise distance
@@ -92,6 +103,7 @@ overlapMetrics <- function(x, thresh) {
   }
 }
 
+## this is only used for testing purposes, not in fixOverlap
 # safe vectorization
 .P <- Vectorize(.P)
 
@@ -104,10 +116,11 @@ overlapMetrics <- function(x, thresh) {
 
 ## Ideas:
 # * there is probably a LP solution to this in ~ 5 lines of code...
+# * secondary objective function: as close as possible to original configuration
 
 #' @title Fix Overlap within a Sequence via Simulated Annealing
 #' 
-#' @description This function attempts to iteratively adjust a sequence until values are no longer within a given threshold of each other, or until `maxIter` is reached. Rank order and boundary conditions are preserved.
+#' @description This function makes small adjustments to elements of `x` until overlap defined by `thresh` is removed, or until `maxIter` is reached. Rank order and boundary conditions (defined by `min.x` and `max.x`) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters `T0` and `k` can be used to tune the algorithm for specific applications.
 #' 
 #' @param x vector of horizontal positions
 #' 
@@ -148,6 +161,41 @@ overlapMetrics <- function(x, thresh) {
 #' z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
 #'
 #'
+#' # interpret `trace` output
+#' 
+#' # relatively challenging
+#' x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
+#' 
+#' # fix overlap, return debugging information
+#' set.seed(10101)
+#' z <- fixOverlap(x, thresh = 0.8, trace = TRUE)
+#' 
+#' # setup plot device
+#' par(mar = c(4, 4, 1, 1))
+#' layout(matrix(c(1,2)), widths = 1, heights = c(1,2))
+#' 
+#' # total overlap (objective function) progress
+#' plot(
+#'   seq_along(z$stats), z$stats, 
+#'   type = 'h', las = 1,
+#'   xlab = 'Iteration', ylab = 'Total Overlap',
+#'   cex.axis = 0.8
+#' )
+#' 
+#' # adjustments at each iteration
+#' matplot(
+#'   z$states, type = 'l', 
+#'   lty = 1, las = 1, 
+#'   xlab = 'Iteration', ylab = 'x-position'
+#' )
+#' 
+#' # trace log
+#' # B: boundary condition violation
+#' # O: rank (order) violation
+#' # +: accepted perturbation
+#' # -: rejected perturbation
+#' table(z$log)
+#' 
 fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 1) {
   
   

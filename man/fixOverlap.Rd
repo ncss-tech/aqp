@@ -2,7 +2,7 @@
 % Please edit documentation in R/findOverlap-fixOverlap.R
 \name{fixOverlap}
 \alias{fixOverlap}
-\title{Fix Overlap within a Sequence}
+\title{Fix Overlap within a Sequence via Simulated Annealing}
 \usage{
 fixOverlap(
   x,
@@ -42,7 +42,7 @@ fixOverlap(
 When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with the number of overlapping elements at each iteration.
 }
 \description{
-This function attempts to iteratively adjust a sequence until values are no longer within a given threshold of each other, or until \code{maxIter} is reached. Rank order and boundary conditions are preserved.
+This function makes small adjustments to elements of \code{x} until overlap defined by \code{thresh} is removed, or until \code{maxIter} is reached. Rank order and boundary conditions (defined by \code{min.x} and \code{max.x}) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters \code{T0} and \code{k} can be used to tune the algorithm for specific applications.
 }
 \examples{
 
@@ -57,6 +57,41 @@ z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
 # much harder
 z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
 
+
+# interpret `trace` output
+
+# relatively challenging
+x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
+
+# fix overlap, return debugging information
+set.seed(10101)
+z <- fixOverlap(x, thresh = 0.8, trace = TRUE)
+
+# setup plot device
+par(mar = c(4, 4, 1, 1))
+layout(matrix(c(1,2)), widths = 1, heights = c(1,2))
+
+# total overlap (objective function) progress
+plot(
+  seq_along(z$stats), z$stats, 
+  type = 'h', las = 1,
+  xlab = 'Iteration', ylab = 'Total Overlap',
+  cex.axis = 0.8
+)
+
+# adjustments at each iteration
+matplot(
+  z$states, type = 'l', 
+  lty = 1, las = 1, 
+  xlab = 'Iteration', ylab = 'x-position'
+)
+
+# trace log
+# B: boundary condition violation
+# O: rank (order) violation
+# +: accepted perturbation
+# -: rejected perturbation
+table(z$log)
 
 }
 \author{

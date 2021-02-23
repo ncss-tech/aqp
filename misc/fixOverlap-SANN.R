@@ -6,13 +6,30 @@ library(viridis)
 # relatively challenging
 x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
 
+# fix overlap, return debugging information
+set.seed(10101)
 z <- fixOverlap(x, thresh = 0.8, trace = TRUE)
 
+# setup plot device
 par(mar = c(4, 4, 1, 1))
 layout(matrix(c(1,2)), widths = 1, heights = c(1,2))
-plot(seq_along(z$stats), z$stats, type = 'h', las = 1)
-matplot(z$states, type = 'l', lty = 1, las = 1, xlab = 'Iteration', ylab = 'x-position')
 
+# total overlap (objective function) progress
+plot(
+  seq_along(z$stats), z$stats, 
+  type = 'h', las = 1,
+  xlab = 'Iteration', ylab = 'Total Overlap',
+  cex.axis = 0.8
+  )
+
+# adjustments at each iteration
+matplot(
+  z$states, type = 'l', 
+  lty = 1, las = 1, 
+  xlab = 'Iteration', ylab = 'x-position'
+  )
+
+# trace log
 table(z$log)
 
 

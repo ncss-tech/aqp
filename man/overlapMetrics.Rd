@@ -9,14 +9,21 @@ overlapMetrics(x, thresh)
 \arguments{
 \item{x}{vector of relative horizontal positions, one for each profile}
 
-\item{thresh}{threshold defining "overlap", typically < 1, ideal values likely in (0.3, 0.8)
+\item{thresh}{threshold defining "overlap", typically < 1
 
 @return a \code{list}:
 \itemize{
-\item \code{idx}: index to overlapping elements in \code{x}
+\item \code{idx}: unique index to overlapping elements in \code{x}
 \item \code{ov}: total overlap (see details)
 }}
 }
 \description{
 Desc.
+}
+\examples{
+
+x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+
+overlapMetrics(x, thresh = 0.5)
+
 }

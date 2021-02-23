@@ -9,10 +9,10 @@ findOverlap(x, thresh)
 \arguments{
 \item{x}{vector of relative horizontal positions, one for each profile}
 
-\item{thresh}{threshold defining "overlap", typically < 1, ideal values likely in (0.3, 0.8)}
+\item{thresh}{threshold defining "overlap", typically < 1}
 }
 \value{
-Unique indices of affected (overlapping) elements in \code{x}
+unique index to affected (overlapping) elements in \code{x}
 }
 \description{
 Establish which elements within a vector of horizontal positions overlap beyond a given threshold
