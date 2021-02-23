@@ -114,6 +114,7 @@ overlapMetrics <- function(x, thresh) {
 ## Ideas:
 # * there is probably a LP solution to this in ~ 5 lines of code...
 # * secondary objective function: as close as possible to original configuration
+# * cleanup variable names: stats -> overlap, log -> x.log, etc.
 
 #' @title Fix Overlap within a Sequence via Simulated Annealing
 #' 

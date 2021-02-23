@@ -4,28 +4,27 @@
 
 # h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
 
-#' @param h `data.frame` of horizon data
-.pctMissing <- function(h, vars) {
-  
-  m <- as.matrix(
-    aqp:::.data.frame.j(
-      h, 
-      col.names = vars
-    )
-  )
-  
-  # if there is only 1 variable, don't try to compute this value
-  # if all data are missing NA is returned
-  res <- apply(
-    m, 
-    MARGIN = 1, 
-    FUN = function(i, n = length(vars)) {
-      length(which(is.na(i))) / n
-    }
-  )
-  
-  return(res)
-}
+#' .pctMissing <- function(h, vars) {
+#'   
+#'   m <- as.matrix(
+#'     aqp:::.data.frame.j(
+#'       h, 
+#'       col.names = vars
+#'     )
+#'   )
+#'   
+#'   # if there is only 1 variable, don't try to compute this value
+#'   # if all data are missing NA is returned
+#'   res <- apply(
+#'     m, 
+#'     MARGIN = 1, 
+#'     FUN = function(i, n = length(vars)) {
+#'       length(which(is.na(i))) / n
+#'     }
+#'   )
+#'   
+#'   return(res)
+#' }
 
 
 
@@ -147,6 +146,9 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
 #' 
 dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, byhz = FALSE) {
   
+  # sacrifice to R CMD check spirits
+  .pctMissing <- NULL
+  
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
   if(strict) {
@@ -229,7 +231,7 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
   
   
   # safely select variables
-  h <-  aqp:::.data.frame.j(
+  h <- .data.frame.j(
     h, 
     col.names = c(hznames[ids.top.bottom.idx], vars)
   )
