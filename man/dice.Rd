@@ -4,7 +4,15 @@
 \alias{dice}
 \title{Efficient Slicing of \code{SoilProfileCollection} Objects}
 \usage{
-dice(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, byhz = FALSE)
+dice(
+  x,
+  fm = NULL,
+  SPC = TRUE,
+  pctMissing = FALSE,
+  padNA = FALSE,
+  strict = TRUE,
+  byhz = FALSE
+)
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}
@@ -14,6 +22,8 @@ dice(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, byhz = FALSE)
 \item{SPC}{return the diced \code{SoilPrfolileCollection}, if \code{FALSE} a \code{data.frame} of horizon-level attributes}
 
 \item{pctMissing}{compute "percent missing data" by slice (when \code{TRUE} expect 6-8x longer run time)}
+
+\item{padNA}{pad slices beyond the depth of a profile with "empty" slices containing only IDs and top/bottom depths, only relevant when \code{fm} is specified with a left hand side.}
 
 \item{strict}{perform horizon depth logic checking / flagging / removal}
 

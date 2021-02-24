@@ -37,7 +37,7 @@ depths(d) <- id ~ top + bottom
 # fake group
 site(d)$group <- factor(sample(letters[1:10], size = length(d), replace =TRUE))
 
-plotSPC(d[1:10, ], color = 'p1')
+plotSPC(d[1:10, ], color = 'p1', show.legend = FALSE)
 
 
 ## DT full outer join ideas
@@ -73,14 +73,15 @@ z$top[6] <- 95
 z$p1[23] <- NA
 
 # dropping IDs
-zz <- dice(z, byhz = FALSE)
+zz <- dice(z, byhz = FALSE, pctMissing = TRUE)
 
 # ok
 metadata(zz)$dice.removed.profiles
 setdiff(profile_id(z), profile_id(zz))
 zz$.pctMissing
 
-plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
+plotSPC(zz, color = 'name', name = NA, divide.hz = FALSE, show.legend = FALSE)
+plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE, show.legend = FALSE)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 plotSPC(zz, color = '.pctMissing', name = NA, divide.hz = FALSE)
 
@@ -91,11 +92,12 @@ zz <- dice(z, byhz = TRUE)
 metadata(zz)$dice.removed.horizons
 setdiff(profile_id(z), profile_id(zz))
 
-plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE)
+plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE, show.legend = FALSE)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 
 
 ## formula interface
+## TODO: this will error when asking for slices that only occur in NA gaps
 
 # select hz attr
 zz <- dice(z, fm = 1:100 ~ p1 + p2, byhz = TRUE)
@@ -132,6 +134,7 @@ bench::mark(
   dice = dice(d, byhz = FALSE), 
   dice_byhz = dice(d, byhz = TRUE), 
   dice_fm = dice(d, fm = 0:100 ~ .),
+  dice_fm_padNA = dice(d, fm = 0:100 ~ ., padNA = TRUE),
   dice_no_chk = dice(d, strict = FALSE), 
   dice_no_chk_pctmissing = dice(d, strict = FALSE, pctMissing = TRUE), 
   iterations = 1,
@@ -141,41 +144,50 @@ bench::mark(
 
 
 ## compare output dice vs. slice
-library(daff)
 
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 
-d <- dice(sp4, fm = 0:50 ~ .)
+# enabling NA padding via growEmptyHz()
+d <- dice(sp4, fm = 0:50 ~ ., padNA = TRUE)
 s <- slice(sp4, fm = 0:50 ~ .)
 
+# slice() always gave one extra slice... dang it
+max(d)
+max(s)
 
 # combine results
 profile_id(d) <- sprintf("%s-dice", profile_id(d))
 z <- combine(s, d)
 
 par(mar = c(0, 0, 0, 0))
-plotSPC(z[1:6, ], color = 'Ca')
+plotSPC(z, color = 'name', name = NA, width = 0.3, show.legend = FALSE)
+plotSPC(z, color = 'Ca', name = NA, width = 0.3, show.legend = FALSE)
 
-# ok
-z <- diff_data(
-  site(s),
-  site(d)
-)
+## error when asking for slices entirely within gaps
 
-render_diff(z)
+data(sp4)
+depths(sp4) <- id ~ top + bottom
 
+sp4$top[1:2] <- NA
 
-z <- diff_data(
-  horizons(s),
-  horizons(d)
-)
+## this throws an error
+d <- dice(sp4, fm = 5 ~ ., byhz = TRUE)
 
-render_diff(z)
+## this works, but a profile is dropped
+d <- dice(sp4, fm = 5 ~ ., byhz = FALSE)
 
-all.equal(s, d)
+## this breaks at mapply step
+d <- dice(sp4, fm = 5 ~ ., strict = FALSE)
 
+# old slice, NA returned
+s <- slice(sp4, fm = 5 ~ .)
 
+profile_id(d) <- sprintf("%s-dice", profile_id(d))
+z <- combine(s, d)
+
+par(mar = c(0, 0, 0, 0))
+plotSPC(z[1:8, ], color = 'Ca')
 
 
 ## develop tests
