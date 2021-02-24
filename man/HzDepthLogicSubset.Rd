@@ -12,7 +12,7 @@ HzDepthLogicSubset(x, byhz = FALSE)
 \item{byhz}{logical, evaluate horizon depth logic at the horizon level (profile level if \code{FALSE})}
 }
 \value{
-a \code{data.frame} object
+a \code{SoilProfileCollection} object
 }
 \description{
 Subset \code{SoilProfileCollection} Objects or Horizons via \code{checkHzDepthLogic}

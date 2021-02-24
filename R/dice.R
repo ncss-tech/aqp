@@ -1,32 +1,4 @@
 
-## very slow, and will be retired in favor of a native DT solution
-## re-implementation of "percent missing" calculation, should work on any horion set (slice / glom / ?)
-
-# h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
-
-#' .pctMissing <- function(h, vars) {
-#'   
-#'   m <- as.matrix(
-#'     aqp:::.data.frame.j(
-#'       h, 
-#'       col.names = vars
-#'     )
-#'   )
-#'   
-#'   # if there is only 1 variable, don't try to compute this value
-#'   # if all data are missing NA is returned
-#'   res <- apply(
-#'     m, 
-#'     MARGIN = 1, 
-#'     FUN = function(i, n = length(vars)) {
-#'       length(which(is.na(i))) / n
-#'     }
-#'   )
-#'   
-#'   return(res)
-#' }
-
-
 
 ## fairly generic, will be required by (at least):"
 # * dice() [x]
@@ -43,7 +15,7 @@
 #' @param x a `SoilProfileCollection` object
 #' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)
 #' 
-#' @return a `data.frame` object
+#' @return a `SoilProfileCollection` object
 #' 
 #' @export
 #' 
