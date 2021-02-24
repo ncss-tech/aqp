@@ -14,255 +14,317 @@
 #'
 #' @aliases  [,SoilProfileCollection-method
 #'
-#' @description You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j]}. Subset operations are propagated to other slots when they result in removal of sites from a collection.
+#' @description You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j, ...]}. Subset operations are propagated to other slots (such as diagnostics or spatial) when they result in removal of sites from a collection.
 #'
-#' \code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
+#'  - \code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
 #'
-#' \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
+#'  - \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection.
 #'
+#'  - `...` is an area to specify an expression that is evaluated in the subset. Currently supported
+#'
+#'    - `.LAST` (last horizon in each profile): return the last horizon from each profile. This uses `i` but ignores the regular `j` index.
+#'    - `.FIRST` (first horizon in each profile): return the last horizon from each profile. This uses `i` but ignores the regular `j` index.
+#'    - `.HZID` (horizon index not `SoilProfileCollection` result): return the horizon indices corresponding to `i`+`j`+`...` ("k") constraints
 #'
 #' @param x a SoilProfileCollection
 #' @param i a numeric or logical value denoting profile indices to select in a subset
-#' @param j a numeric or logical value denoting profile indices to select in a subset
+#' @param j a numeric or logical value denoting horizon indices to select in a subset
+#' @param ... non-standard expressions to evaluate in a subset
+#' 
+#' @param drop not used
 #' @rdname singlebracket
+#  SPC extract: "[" '[' single bracket SPC object extract method
 setMethod("[", signature(x = "SoilProfileCollection",
                          i = "ANY",
-                         j = "ANY"),
-          function(x, i, j) {
-            # check for missing i and j
-            if (missing(i) & missing(j)) {
-              stop('must provide either a profile index or horizon/slice index, or both',
-                   call. = FALSE)
-            }
+                         j = "ANY"),  function(x, i, j, ...) {
 
-            # convert to integer
-            if (!missing(i)) {
-              if (any(is.na(i))) {
-                stop('NA not permitted in profile index', call. = FALSE)
-              }
+                           # capture k right away
+                           ksubflag <- FALSE
 
-              # convert logical to integer
-              # (thanks Jos? Padarian for the suggestion!)
-              if (is.logical(i)) {
-                i <- (1:length(x))[i]
-              }
+                           # 2nd value is first user-supplied expression
+                           kargs <- substitute(list(...))
+                           ksub <- as.character(kargs)[2:length(kargs)]
 
-              can.cast <- is.numeric(i)
-              if (can.cast) {
-                if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5)) {
-                  i <- as.integer(i)
-                } else {
-                  stop("Numeric site index does not contain whole numbers.")
-                }
-              } else {
-                stop("Failed to coerce site index to integer.")
-              }
-            } else {
-              # if no index is provided, the user wants all profiles
-              i <- 1:length(x)
-            }
+                           # handle special keywords in "k" index
+                           for(k in ksub) {
+                             if (!is.na(k)) {
+                               switch(k,
+                                      ".FIRST" = {
+                                        j <- 1
+                                      },
+                                      ".LAST" = {
+                                        ksubflag <- TRUE
+                                      },
+                                      ".HZID" = {
+                                        ksubflag <- TRUE
+                                      })
+                             }
+                           }
 
-            if (!missing(j)) {
-              # AGB added logical handling to horizon index
-              if (is.logical(j)) {
-                j <- (1:length(x))[j]
-              }
+                           # convert to integer
+                           if (!missing(i)) {
+                             if (any(is.na(i))) {
+                               stop('NA not permitted in profile index', call. = FALSE)
+                             }
 
-              can.cast <- is.numeric(j)
-              if (can.cast) {
-                if (all(abs(j - round(j)) < .Machine$double.eps ^ 0.5)) {
-                  j <- as.integer(j)
-                } else {
-                  stop("Numeric horizon/slice index does not contain whole numbers.")
-                }
-              } else {
-                stop("Failed to coerce horizon/slice index to integer.")
-              }
+                             # convert logical to integer
+                             # (thanks Jos? Padarian for the suggestion!)
+                             if (is.logical(i)) {
+                               i <- (1:length(x))[i]
+                             }
 
-              if (any(is.na(j))) {
-                stop('NA not permitted in horizon/slice index', call. = FALSE)
-              }
-            }
+                             can.cast <- is.numeric(i)
+                             if (can.cast) {
+                               if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5)) {
+                                 i <- as.integer(i)
+                               } else {
+                                 stop("Numeric site index does not contain whole numbers.")
+                               }
+                             } else {
+                               stop("Failed to coerce site index to integer.")
+                             }
+                           } else {
+                             # if no index is provided, the user wants all profiles
+                             i <- 1:length(x)
+                           }
 
-            # extract all site and horizon data
-            h <- x@horizons
-            s.all <- x@site
 
-            # extract requested profile IDs
-            p.ids <- s.all[[idname(x)]][unique(i)]
+                           # this block does processing for logical or numeric j
+                           # not special symbols like .LAST
+                           if (!missing(j) & !ksubflag) {
 
-            # keep only the requested horizon data (filtered by profile ID)
-            h <- .as.data.frame.aqp(h, aqp_df_class(x))[h[[idname(x)]] %in% p.ids,]
+                             # AGB added logical handling to horizon index
+                             if (is.logical(j)) {
+                               j <- (1:length(x))[j]
+                             }
 
-            # keep only the requested site data, (filtered by profile ID)
-            s.i <- which(s.all[[idname(x)]] %in% p.ids)
+                             can.cast <- is.numeric(j)
+                             if (can.cast) {
+                               if (all(abs(j - round(j)) < .Machine$double.eps ^ 0.5)) {
+                                 j <- as.integer(j)
+                               } else {
+                                 stop("Numeric horizon/slice index does not contain whole numbers.")
+                               }
+                             } else {
+                               stop("Failed to coerce horizon/slice index to integer.")
+                             }
 
-            # need to use drop=FALSE when @site contains only a single column
-            s <- s.all[s.i, , drop = FALSE]
+                             if (any(is.na(j))) {
+                               stop('NA not permitted in horizon/slice index', call. = FALSE)
+                             }
+                           }
 
-            # subset spatial data, but only if valid
-            if (validSpatialData(x)) {
-              sp <- x@sp[i]
-            } else {
-              # copy empty SpatialPoints object
-              sp <- x@sp
-            }
+                           # extract all site and horizon data
+                           h <- x@horizons
+                           s.all <- x@site
 
-            # subset diagnostic data
-            d <- diagnostic_hz(x)
-            if (length(d) > 0) {
-              d <- d[which(d[[idname(x)]] %in% p.ids),]
-            }
+                           # extract requested profile IDs
+                           p.ids <- s.all[[idname(x)]][unique(i)]
 
-            # subset restriction data
-            r <- restrictions(x)
-            if (length(r) > 0) {
-              r <- r[which(r[[idname(x)]] %in% p.ids),]
-            }
+                           # keep only the requested horizon data (filtered by profile ID)
+                           h <- .as.data.frame.aqp(h, aqp_df_class(x))
+                           pidx <- h[[idname(x)]] %in% p.ids
+                           h <- h[pidx,]
 
-            # subset horizons/slices based on j --> only when j is given
-            if (!missing(j)) {
+                           if (ksubflag && ".HZID" %in% ksub) {
 
-              # faster replacement of j subsetting of horizon data
-              if (aqp_df_class(x) == "data.table") {
+                             j.idx.allowed <- seq_len(nrow(x@horizons))[pidx]
 
-                # local vars to make R CMD check happy
-                .N <- NULL
-                .I <- NULL
-                V1 <- NULL
+                           } else {
+                             j.idx.allowed <- seq_len(nrow(h))
 
-                # data.table can do this much more efficiently
-                if (requireNamespace("data.table", quietly = TRUE)) {
-                  idn <- idname(x)
+                             # keep only the requested site data, (filtered by profile ID)
+                             s.i <- which(s.all[[idname(x)]] %in% p.ids)
 
-                  # by list @horizons idname (essentially iterating over profiles)
-                  bylist <- list(h[[idn]])
-                  names(bylist) <- idn
+                             # need to use drop=FALSE when @site contains only a single column
+                             s <- s.all[s.i, , drop = FALSE]
 
-                  # figured out the data.table way to do this
-                  #  not using := or . anymore
+                             # subset spatial data, but only if valid
+                             if (validSpatialData(x)) {
+                               sp <- x@sp[i]
+                             } else {
+                               # copy empty SpatialPoints object
+                               sp <- x@sp
+                             }
 
-                  # determine j indices to KEEP
-                  j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
+                             # subset diagnostic data
+                             d <- diagnostic_hz(x)
+                             if (length(d) > 0) {
+                               d <- d[which(d[[idname(x)]] %in% p.ids),]
+                             }
 
-                  # determine which site indices to keep
-                  # in case all horizons are removed, remove sites too
-                  if (length(j.idx) == 0) {
-                    i.idx <- numeric(0)
-                  } else {
-                    # determine which profile IDs KEEP
-                    pids <- h[, .I[any(1:.N %in% j)][1], by = bylist]
-                    i.idx <- pids[, .I[!is.na(V1)]]
-                  }
-                }
+                             # subset restriction data
+                             r <- restrictions(x)
+                             if (length(r) > 0) {
+                               r <- r[which(r[[idname(x)]] %in% p.ids),]
+                             }
 
-              } else {
-                # retain a base R way of doing things (plenty fast with SPCs up to ~100k or so)
-                j.res <- as.list(aggregate(
-                  h[[hzidname(x)]],
-                  by = list(h[[idname(x)]]),
-                  FUN = function(hh) {
-                    list(1:length(hh) %in% j)
-                  },
-                  drop = FALSE
-                )$x)
+                           }
 
-                ##  https://github.com/ncss-tech/aqp/issues/89
-                # fix #89, where i with no matching j e.g. @site data returned
-                i.idx <- which(as.logical(lapply(j.res, function(jr) { any(jr) })))
+                           # subset horizons/slices based on j --> only when j is given
+                           if (!missing(j) | ksubflag) {
 
-                j.idx <-  which(do.call('c', j.res))
-              }
+                             # faster replacement of j subsetting of horizon data
+                             # if (aqp_df_class(x) == "data.table") {
 
-              # find any index out of bounds and ignore them
-              # j.idx.bad <- which(abs(j.idx) > nrow(h))
-              # i.idx.bad <- which(abs(i.idx) > nrow(s))
-              #
-              # if (length(i.idx))
-              #   i.idx <- i.idx[-i.idx.bad]
-              #
-              # if (length(j.idx))
-              #   j.idx <- j.idx[-j.idx.bad]
+                             h <- data.table::as.data.table(h)
 
-              # do horizon subset with j index
-              h <- h[j.idx, ]
+                             # local vars to make R CMD check happy
+                             .N <- NULL
+                             .I <- NULL
+                             V1 <- NULL
 
-              # if profiles have been removed based on the j-index constraints
-              if (length(i.idx) > 0) {
-                # remove sites that have no matching j
-                s <- s[i.idx, , drop = FALSE]
-                h.ids <- s[[idname(x)]]
+                             idn <- idname(x)
 
-                # remove also: diagnostics
-                d.idx <- which(d[[idname(x)]] %in% h.ids)
-                if (length(d.idx) > 0) {
-                  d <- d[-d.idx, , drop = FALSE]
-                }
+                             # by list @horizons idname (essentially iterating over profiles)
+                             bylist <- list(h[[idn]])
+                             names(bylist) <- idn
 
-                # restrictions
-                r.idx <- which(r[[idname(x)]] %in% h.ids)
-                if (length(r.idx) > 0) {
-                  r <- r[-r.idx, , drop = FALSE]
-                }
+                             # handle special symbols in j index
+                             # currently supported:
+                             #  - .LAST: last horizon index per profile
+                             #  - .HZID: return horizon slot row index (short circuit)
+                             #  - .FIRST: first horizon index per profile
+                             # the above can be combined. .LAST takes precedent over .FIRST.
 
-                # spatial
-                if (validSpatialData(x)) {
-                  sp <- sp[i.idx,]
-                }
-              }
-            }
+                             # determine j indices to KEEP
 
-            rownames(h) <- NULL
+                             # default is an index to each horizon
+                             j.idx <- j.idx.allowed
 
-            # rebuild SPC object from slots
-            res <- SoilProfileCollection(
-              idcol = idname(x),
-              hzidcol = hzidname(x),
-              depthcols = horizonDepths(x),
-              metadata = aqp::metadata(x),
-              horizons = .as.data.frame.aqp(h, aqp_df_class(x)),
-              site = .as.data.frame.aqp(s, aqp_df_class(x)),
-              sp = sp,
-              diagnostic = .as.data.frame.aqp(d, aqp_df_class(x)),
-              restrictions = .as.data.frame.aqp(r, aqp_df_class(x))
-            )
+                             if (ksubflag && ".LAST" %in% ksub) {
+                               # trigger special last horizon case
+                               j.idx <- h[, .I[.N], by = bylist]$V1
+                             } else {
+                               if (!missing(j)) {
+                                 # get row indices of horizon data corresponding to j within profiles
+                                 j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
+                               }
+                             }
 
-            # fill in any missing data.frame class or group var
-            o.df.class <- aqp::metadata(x)$aqp_df_class
-            if(length(o.df.class) == 0) {
-              o.df.class <- "data.frame"
-            }
+                             # short circuit for horizon-slot indices
+                             if (ksubflag && ".HZID" %in% ksub) {
+                               return(j.idx.allowed[j.idx])
+                             }
 
-            o.group.by <- aqp::metadata(x)$aqp_group_by
-            if(length(o.group.by) == 0) {
-              o.group.by <- ""
-            }
+                             # determine which site indices to keep
+                             # in case all horizons are removed, remove sites too
+                             if (length(j.idx) == 0) {
+                               i.idx <- numeric(0)
+                             } else {
+                               # determine which profiles to  KEEP
+                               i.idx <- which(profile_id(x) %in% unique(h[j.idx,][[idn]]))
+                             }
 
-            metadata(res)$aqp_df_class <- o.df.class
-            metadata(res)$aqp_group_by <- o.group.by
+                             # }
+                             # } else {
+                             #   # retain a base R way of doing things (plenty fast with SPCs up to ~100k or so)
+                             #   j.res <- as.list(aggregate(
+                             #     h[[hzidname(x)]],
+                             #     by = list(h[[idname(x)]]),
+                             #     FUN = function(hh) {
+                             #       list(1:length(hh) %in% j)
+                             #     },
+                             #     drop = FALSE
+                             #   )$x)
+                             #
+                             #   ##  https://github.com/ncss-tech/aqp/issues/89
+                             #   # fix #89, where i with no matching j e.g. @site data returned
+                             #   i.idx <- which(as.logical(lapply(j.res, function(jr) { any(jr) })))
+                             #
+                             #   j.idx <-  which(do.call('c', j.res))
+                             # }
 
-            # preserve slots that may have been customized relative to defaults
-            #  in prototype or resulting from construction of SPC
-            suppressMessages(hzidname(res) <- hzidname(x))
-            suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
-            suppressMessages(hztexclname(res) <- hztexclname(x))
+                             # find any index out of bounds and ignore them
+                             # j.idx.bad <- which(abs(j.idx) > nrow(h))
+                             # i.idx.bad <- which(abs(i.idx) > nrow(s))
+                             #
+                             # if (length(i.idx))
+                             #   i.idx <- i.idx[-i.idx.bad]
+                             #
+                             # if (length(j.idx))
+                             #   j.idx <- j.idx[-j.idx.bad]
 
-            # there should be as many records in @site as there are profile IDs
-            pid.res <- profile_id(res)
-            site.res <- site(res)[[idname(res)]]
+                             # do horizon subset with j index
+                             h <- h[j.idx, ]
 
-            if (length(pid.res) != length(site.res)) {
-              message("Some profiles have been removed from the collection.")
-            }
+                             # if profiles have been removed based on the j-index constraints
+                             if (length(i.idx) > 0) {
+                               # remove sites that have no matching j
+                               i.idx <- unique(c(s.i, i.idx))
+                               s <- s.all[i.idx, , drop = FALSE]
+                               h.ids <- s[[idname(x)]]
 
-            # the order of profile_ids should be the same as in @site
-            if (!all(pid.res == site.res)) {
-              warning("profile ID order does not match order in @site",
-                      call. = FALSE)
-            }
+                               # remove also: diagnostics
+                               d.idx <- which(d[[idname(x)]] %in% h.ids)
+                               if (length(d.idx) > 0) {
+                                 d <- d[-d.idx, , drop = FALSE]
+                               }
 
-            return(res)
-          })
+                               # restrictions
+                               r.idx <- which(r[[idname(x)]] %in% h.ids)
+                               if (length(r.idx) > 0) {
+                                 r <- r[-r.idx, , drop = FALSE]
+                               }
+
+                               # spatial
+                               if (validSpatialData(x)) {
+                                 sp <- sp[i.idx,]
+                               }
+                             }
+                           }
+
+                           rownames(h) <- NULL
+
+                           # rebuild SPC object from slots
+                           res <- SoilProfileCollection(
+                             idcol = idname(x),
+                             hzidcol = hzidname(x),
+                             depthcols = horizonDepths(x),
+                             metadata = aqp::metadata(x),
+                             horizons = .as.data.frame.aqp(h, aqp_df_class(x)),
+                             site = .as.data.frame.aqp(s, aqp_df_class(x)),
+                             sp = sp,
+                             diagnostic = .as.data.frame.aqp(d, aqp_df_class(x)),
+                             restrictions = .as.data.frame.aqp(r, aqp_df_class(x))
+                           )
+
+                           # fill in any missing data.frame class or group var
+                           o.df.class <- aqp::metadata(x)$aqp_df_class
+                           if(length(o.df.class) == 0) {
+                             o.df.class <- "data.frame"
+                           }
+
+                           o.group.by <- aqp::metadata(x)$aqp_group_by
+                           if(length(o.group.by) == 0) {
+                             o.group.by <- ""
+                           }
+
+                           metadata(res)$aqp_df_class <- o.df.class
+                           metadata(res)$aqp_group_by <- o.group.by
+
+                           # preserve slots that may have been customized relative to defaults
+                           #  in prototype or resulting from construction of SPC
+                           suppressMessages(hzidname(res) <- hzidname(x))
+                           suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
+                           suppressMessages(hztexclname(res) <- hztexclname(x))
+
+                           # there should be as many records in @site as there are profile IDs
+                           pid.res <- profile_id(res)
+                           site.res <- site(res)[[idname(res)]]
+
+                           if (length(pid.res) != length(site.res)) {
+                             message("Some profiles have been removed from the collection.")
+                           }
+
+                           # the order of profile_ids should be the same as in @site
+                           if (!all(pid.res == site.res)) {
+                             warning("profile ID order does not match order in @site",
+                                     call. = FALSE)
+                           }
+
+                           return(res)
+                         })
 
 ####
 #### double bracket SoilProfileCollection methods
