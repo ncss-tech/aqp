@@ -2,192 +2,61 @@
 ## document data here
 ## don't forget: @usage data(XXX)
 
+#' Soil Profile Data Example 1
+#'
+#' Soil profile data from Pinnacles National Monument, CA.
+#'
+#'
+#' @name sp1
+#' @docType data
+#' @format A data frame with 60 observations on the following 21 variables.
+#' \describe{ \item{group}{a numeric vector} \item{id}{a
+#' character vector} \item{top}{a numeric vector}
+#' \item{bottom}{a numeric vector} \item{bound_distinct}{a
+#' character vector} \item{bound_topography}{a character vector}
+#' \item{name}{a character vector} \item{texture}{a character
+#' vector} \item{prop}{a numeric vector}
+#' \item{structure_grade}{a character vector}
+#' \item{structure_size}{a character vector}
+#' \item{structure_type}{a character vector}
+#' \item{stickiness}{a character vector} \item{plasticity}{a
+#' character vector} \item{field_ph}{a numeric vector}
+#' \item{hue}{a character vector} \item{value}{a numeric
+#' vector} \item{chroma}{a numeric vector} }
+#' @references http://casoilresource.lawr.ucdavis.edu/
+#' @keywords datasets
+#' @examples
+#'
+#' data(sp1)
+#' # convert colors from Munsell to hex-encoded RGB
+#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+#'
+#' # promote to SoilProfileCollection
+#' depths(sp1) <- id ~ top + bottom
+#' site(sp1) <- ~ group
+#'
+#' # re-sample each profile into 1 cm (thick) depth slices
+#' # for the variables 'prop', 'name', 'soil_color'
+#' # result is a SoilProfileCollection object
+#' s <- slice(sp1, 0:25 ~ prop + name + soil_color)
+#'
+#' # plot, note slices
+#' plot(s)
+#'
+#'
+#' # aggregate all profiles along 1 cm depth slices,
+#' # using data from column 'prop'
+#' s1 <- slab(sp1, fm= ~ prop)
+#'
+#' # check median & IQR
+#' library(lattice)
+#' xyplot(top ~ p.q50 + p.q25 + p.q75,
+#' data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2),
+#' panel=panel.superpose, ylim=c(110,-5), asp=2)
+#'
+#'
+NULL
 
-#' Soil Profile Data Example 1
-#'
-#' Soil profile data from Pinnacles National Monument, CA.
-#'
-#'
-#' @name sp1
-#' @docType data
-#' @format A data frame with 60 observations on the following 21 variables.
-#' \describe{ \item{group}{a numeric vector} \item{id}{a
-#' character vector} \item{top}{a numeric vector}
-#' \item{bottom}{a numeric vector} \item{bound_distinct}{a
-#' character vector} \item{bound_topography}{a character vector}
-#' \item{name}{a character vector} \item{texture}{a character
-#' vector} \item{prop}{a numeric vector}
-#' \item{structure_grade}{a character vector}
-#' \item{structure_size}{a character vector}
-#' \item{structure_type}{a character vector}
-#' \item{stickiness}{a character vector} \item{plasticity}{a
-#' character vector} \item{field_ph}{a numeric vector}
-#' \item{hue}{a character vector} \item{value}{a numeric
-#' vector} \item{chroma}{a numeric vector} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
-#' @keywords datasets
-#' @examples
-#'
-#' data(sp1)
-#' # convert colors from Munsell to hex-encoded RGB
-#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
-#'
-#' # promote to SoilProfileCollection
-#' depths(sp1) <- id ~ top + bottom
-#' site(sp1) <- ~ group
-#'
-#' # re-sample each profile into 1 cm (thick) depth slices
-#' # for the variables 'prop', 'name', 'soil_color'
-#' # result is a SoilProfileCollection object
-#' s <- slice(sp1, 0:25 ~ prop + name + soil_color)
-#'
-#' # plot, note slices
-#' plot(s)
-#'
-#'
-#' # aggregate all profiles along 1 cm depth slices,
-#' # using data from column 'prop'
-#' s1 <- slab(sp1, fm= ~ prop)
-#'
-#' # check median & IQR
-#' library(lattice)
-#' xyplot(top ~ p.q50 + p.q25 + p.q75,
-#' data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2),
-#' panel=panel.superpose, ylim=c(110,-5), asp=2)
-#'
-#'
-NULL
-#' Soil Profile Data Example 1
-#'
-#' Soil profile data from Pinnacles National Monument, CA.
-#'
-#'
-#' @name sp1
-#' @docType data
-#' @format A data frame with 60 observations on the following 21 variables.
-#' \describe{ \item{group}{a numeric vector} \item{id}{a
-#' character vector} \item{top}{a numeric vector}
-#' \item{bottom}{a numeric vector} \item{bound_distinct}{a
-#' character vector} \item{bound_topography}{a character vector}
-#' \item{name}{a character vector} \item{texture}{a character
-#' vector} \item{prop}{a numeric vector}
-#' \item{structure_grade}{a character vector}
-#' \item{structure_size}{a character vector}
-#' \item{structure_type}{a character vector}
-#' \item{stickiness}{a character vector} \item{plasticity}{a
-#' character vector} \item{field_ph}{a numeric vector}
-#' \item{hue}{a character vector} \item{value}{a numeric
-#' vector} \item{chroma}{a numeric vector} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
-#' @keywords datasets
-#' @examples
-#'
-#' data(sp1)
-#' # convert colors from Munsell to hex-encoded RGB
-#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
-#'
-#' # promote to SoilProfileCollection
-#' depths(sp1) <- id ~ top + bottom
-#' site(sp1) <- ~ group
-#'
-#' # re-sample each profile into 1 cm (thick) depth slices
-#' # for the variables 'prop', 'name', 'soil_color'
-#' # result is a SoilProfileCollection object
-#' s <- slice(sp1, 0:25 ~ prop + name + soil_color)
-#'
-#' # plot, note slices
-#' plot(s)
-#'
-#'
-#' # aggregate all profiles along 1 cm depth slices,
-#' # using data from column 'prop'
-#' s1 <- slab(sp1, fm= ~ prop)
-#'
-#' # check median & IQR
-#' library(lattice)
-#' xyplot(top ~ p.q50 + p.q25 + p.q75,
-#' data=s1, type='S', horizontal=TRUE, col=1, lty=c(1,2,2),
-#' panel=panel.superpose, ylim=c(110,-5), asp=2)
-#'
-#'
-NULL
-#' Honcut Creek Soil Profile Data
-#'
-#' A collection of 18 soil profiles, consisting of select soil morphologic
-#' attributes, associated with a stratigraphic study conducted near Honcut
-#' Creek, California.
-#'
-#'
-#' @name sp2
-#' @docType data
-#' @format A data frame with 154 observations on the following 21 variables.
-#' \describe{ \item{id}{profile id} \item{surface}{dated
-#' surface} \item{top}{horizon top in cm} \item{bottom}{horizon
-#' bottom in cm} \item{bound_distinct}{horizon lower boundary
-#' distinctness class} \item{bound_topography}{horizon lower boundary
-#' topography class} \item{name}{horizon name}
-#' \item{texture}{USDA soil texture class}
-#' \item{prop}{field-estimated clay content}
-#' \item{structure_grade}{soil structure grade}
-#' \item{structure_size}{soil structure size}
-#' \item{structure_type}{soil structure type}
-#' \item{stickiness}{stickiness} \item{plasticity}{plasticity}
-#' \item{field_ph}{field-measured pH} \item{hue}{Munsell hue}
-#' \item{value}{Munsell value} \item{chroma}{Munsell chroma}
-#' \item{r}{RGB red component} \item{g}{RGB green component}
-#' \item{b}{RGB blue component} \item{soil_color}{R-friendly
-#' encoding of soil color} }
-#' @author Dylan E. Beaudette
-#' @references http://casoilresource.lawr.ucdavis.edu/
-#' @source Busacca, Alan J.; Singer, Michael J.; Verosub, Kenneth L. 1989. Late
-#' Cenozoic stratigraphy of the Feather and Yuba rivers area, California, with
-#' a section on soil development in mixed alluvium at Honcut Creek. USGS
-#' Bulletin 1590-G.
-#' @keywords datasets
-#' @examples
-#'
-#' data(sp2)
-#'
-#' # convert into SoilProfileCollection object
-#' depths(sp2) <- id ~ top + bottom
-#'
-#' # transfer site-level data
-#' site(sp2) <- ~ surface
-#'
-#' # generate a new plotting order, based on the dated surface each soil was described on
-#' p.order <- order(sp2$surface)
-#'
-#' # plot
-#' par(mar=c(1,0,3,0))
-#' plot(sp2, plot.order=p.order)
-#'
-#' # setup multi-figure output
-#' par(mfrow=c(2,1), mar=c(0,0,1,0))
-#'
-#' # truncate plot to 200 cm depth
-#' plot(sp2, plot.order=p.order, max.depth=200)
-#' abline(h=200, lty=2, lwd=2)
-#'
-#' # compute numerical distances between profiles
-#' # based on select horizon-level properties, to a depth of 200 cm
-#' d <- profile_compare(sp2, vars=c('prop','field_ph','hue'),
-#' max_d=200, k=0, sample_interval=5, rescale.result=TRUE)
-#'
-#' # plot dendrogram with ape package:
-#' if(require(ape) & require(cluster)) {
-#' h <- diana(d)
-#' p <- as.phylo(as.hclust(h))
-#' plot(p, cex=0.75, label.offset=0.01, font=1, direct='down', srt=90, adj=0.5, y.lim=c(-0.125, 0.5))
-#'
-#' # add in the dated surface type via color
-#' tiplabels(col=as.numeric(sp2$surface), pch=15)
-#'
-#' # based on distance matrix values, YMMV
-#' legend('topleft', legend=levels(sp2$surface), col=1:6, pch=15, bty='n', bg='white', cex=0.75)
-#' }
-#'
-#'
-NULL
 #' Honcut Creek Soil Profile Data
 #'
 #' A collection of 18 soil profiles, consisting of select soil morphologic
@@ -400,141 +269,7 @@ NULL
 #' }
 #'
 NULL
-#' Soil Profile Data Example 3
-#'
-#' Soil samples from 10 soil profiles, taken from the Sierra Foothill Region of
-#' California.
-#'
-#' These data were collected to support research funded by the Kearney
-#' Foundation of Soil Science.
-#'
-#' @name sp3
-#' @docType data
-#' @format A data frame with 46 observations on the following 15 variables.
-#' \describe{ \item{id}{soil id} \item{top}{horizon upper
-#' boundary (cm)} \item{bottom}{horizon lower boundary (cm)}
-#' \item{clay}{clay content} \item{cec}{CEC by amonium acetate
-#' at pH 7} \item{ph}{pH in 1:1 water-soil mixture}
-#' \item{tc}{total carbon percent} \item{hue}{Munsell hue
-#' (dry)} \item{value}{Munsell value (dry)}
-#' \item{chroma}{Munsell chroma (dry)} \item{mid}{horizon
-#' midpoint (cm)} \item{ln_tc}{natural log of total carbon percent}
-#' \item{L}{color: l-coordinate, CIE-LAB colorspace (dry)}
-#' \item{A}{color: a-coordinate, CIE-LAB colorspace (dry)}
-#' \item{B}{color: b-coordinate, CIE-LAB colorspace (dry)}
-#' \item{name}{horizon name} \item{soil_color}{horizon color} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
-#' @keywords datasets
-#' @examples
-#'
-#' ## this example investigates the concept of a "median profile"
-#'
-#' # required packages
-#' if (require(ape) & require(cluster)) {
-#'   data(sp3)
-#'
-#'   # generate a RGB version of soil colors
-#'   # and convert to HSV for aggregation
-#'   sp3$h <- NA
-#'   sp3$s <- NA
-#'   sp3$v <- NA
-#'   sp3.rgb <- with(sp3, munsell2rgb(hue, value, chroma, return_triplets = TRUE))
-#'
-#'   sp3[, c('h', 's', 'v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue = 1)))
-#'
-#'   # promote to SoilProfileCollection
-#'   depths(sp3) <- id ~ top + bottom
-#'
-#'   # aggregate across entire collection
-#'   a <- slab(sp3, fm = ~ clay + cec + ph + h + s + v, slab.structure = 10)
-#'
-#'   # check
-#'   str(a)
-#'
-#'   # convert back to wide format
-#'   library(data.table)
-#'
-#'   a.wide.q25 <- dcast(a, top + bottom ~ variable, value.var = c('p.q25'))
-#'   a.wide.q50 <- dcast(a, top + bottom ~ variable, value.var = c('p.q50'))
-#'   a.wide.q75 <- dcast(a, top + bottom ~ variable, value.var = c('p.q75'))
-#'
-#'   # add a new id for the 25th, 50th, and 75th percentile pedons
-#'   a.wide.q25$id <- 'Q25'
-#'   a.wide.q50$id <- 'Q50'
-#'   a.wide.q75$id <- 'Q75'
-#'
-#'   # combine original data with "mean profile"
-#'   vars <- c('top', 'bottom', 'id', 'clay', 'cec', 'ph', 'h', 's', 'v')
-#'   # make data.frame version of sp3
-#'   sp3.df <- as(sp3, 'data.frame')
-#'   sp3.grouped <- rbind(sp3.df[, vars], a.wide.q25[, vars], a.wide.q50[, vars], a.wide.q75[, vars])
-#'
-#'   # re-constitute the soil color from HSV triplets
-#'   # convert HSV back to standard R colors
-#'   sp3.grouped$soil_color <- with(sp3.grouped, hsv(h, s, v))
-#'
-#'   # give each horizon a name
-#'   sp3.grouped$name <- paste(
-#'     round(sp3.grouped$clay),
-#'     '/' ,
-#'     round(sp3.grouped$cec),
-#'     '/',
-#'     round(sp3.grouped$ph, 1)
-#'   )
-#'
-#'   ## perform comparison, and convert to phylo class object
-#'   ## D is rescaled to [0,]
-#'   d <- profile_compare(
-#'                         sp3.grouped,
-#'                         vars = c('clay', 'cec', 'ph'),
-#'                         max_d = 100,
-#'                         k = 0.01,
-#'                         replace_na = TRUE,
-#'                         add_soil_flag = TRUE,
-#'                         rescale.result = TRUE
-#'                       )
-#'
-#'   h <- agnes(d, method = 'ward')
-#'   p <- ladderize(as.phylo(as.hclust(h)))
-#'
-#'   # look at distance plot-- just the median profile
-#'   plot_distance_graph(d, 12)
-#'
-#'   # similarity relative to median profile (profile #12)
-#'   round(1 - (as.matrix(d)[12,] / max(as.matrix(d)[12,])), 2)
-#'
-#'   ## make dendrogram + soil profiles
-#'   # first promote to SoilProfileCollection
-#'   depths(sp3.grouped) <- id ~ top + bottom
-#'
-#'   # setup plot: note that D has a scale of [0,1]
-#'   par(mar = c(1, 1, 1, 1))
-#'
-#'   # get the last plot geometry
-#'   lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
-#'
-#'   # the original labels, and new (indexed) order of pedons in dendrogram
-#'   d.labels <- attr(d, 'Labels')
-#'
-#'   new_order <- sapply(1:lastPP$Ntip,
-#'                       function(i)
-#'                         which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
-#'
-#'   # plot the profiles, in the ordering defined by the dendrogram
-#'   # with a couple fudge factors to make them fit
-#'   plot(
-#'     sp3.grouped,
-#'     color = "soil_color",
-#'     plot.order = new_order,
-#'     scaling.factor = 0.01,
-#'     width = 0.1,
-#'     cex.names = 0.5,
-#'     y.offset = max(lastPP$yy) + 0.1,
-#'     add = TRUE
-#'   )
-#' }
-#'
-NULL
+
 #' Soil Chemical Data from Serpentinitic Soils of California
 #'
 #' Soil Chemical Data from Serpentinitic Soils of California
@@ -666,137 +401,7 @@ NULL
 #' as(sp4, 'data.frame')
 #'
 NULL
-#' Soil Chemical Data from Serpentinitic Soils of California
-#'
-#' Soil Chemical Data from Serpentinitic Soils of California
-#'
-#' Selected soil physical and chemical data from (McGahan et al., 2009).
-#'
-#' @name sp4
-#' @docType data
-#' @format A data frame with 30 observations on the following 13 variables.
-#' \describe{ \item{id}{site name} \item{name}{horizon
-#' designation} \item{top}{horizon top boundary in cm}
-#' \item{bottom}{horizon bottom boundary in cm}
-#' \item{K}{exchangeable K in c mol/kg} \item{Mg}{exchangeable
-#' Mg in cmol/kg} \item{Ca}{exchangeable Ca in cmol/kg}
-#' \item{CEC_7}{cation exchange capacity (NH4OAc at pH 7)}
-#' \item{ex_Ca_to_Mg}{extractable Ca:Mg ratio} \item{sand}{sand
-#' content by weight percentage} \item{silt}{silt content by weight
-#' percentage} \item{clay}{clay content by weight percentage}
-#' \item{CF}{>2mm fraction by volume percentage} }
-#' @references McGahan, D.G., Southard, R.J, Claassen, V.P. 2009.
-#' Plant-Available Calcium Varies Widely in Soils on Serpentinite Landscapes.
-#' Soil Sci. Soc. Am. J. 73: 2087-2095.
-#' @source https://www.soils.org/publications/sssaj/articles/73/6/2087
-#' @keywords datasets
-#' @examples
-#'
-#' # load sample data set, a simple data.frame object with horizon-level data from 10 profiles
-#' library(aqp)
-#' data(sp4)
-#' str(sp4)
-#' sp4$idbak <- sp4$id
-#' #sp4 <- sp4[order(match(sp4$id, aqp:::.coalesce.idx(sort(sp4$id))), sp4$top),]
-#'
-#'
-#' # upgrade to SoilProfileCollection
-#' # 'id' is the name of the column containing the profile ID
-#' # 'top' is the name of the column containing horizon upper boundaries
-#' # 'bottom' is the name of the column containing horizon lower boundaries
-#' depths(sp4) <- id ~ top + bottom
-#'
-#' # check it out
-#' class(sp4) # class name
-#' str(sp4) # internal structure
-#'
-#' # check integrity of site:horizon linkage
-#' spc_in_sync(sp4)
-#'
-#' # check horizon depth logic
-#' checkHzDepthLogic(sp4)
-#'
-#' # inspect object properties
-#' idname(sp4) # self-explanitory
-#' horizonDepths(sp4) # self-explanitory
-#'
-#' # you can change these:
-#' depth_units(sp4) # defaults to 'cm'
-#' metadata(sp4) # not much to start with
-#'
-#' # alter the depth unit metadata
-#' depth_units(sp4) <- 'inches' # units are really 'cm'
-#'
-#' # more generic interface for adjusting metadata
-#'
-#' # add attributes to metadata list
-#' metadata(sp4)$describer <- 'DGM'
-#' metadata(sp4)$date <- as.Date('2009-01-01')
-#' metadata(sp4)$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P.
-#' 2009. Plant-Available Calcium Varies Widely in Soils
-#' on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'
-#'
-#' depth_units(sp4) <- 'cm' # fix depth units, back to 'cm'
-#'
-#' # further inspection with common function overloads
-#' length(sp4) # number of profiles in the collection
-#' nrow(sp4) # number of horizons in the collection
-#' names(sp4) # column names
-#' min(sp4) # shallowest profile depth in collection
-#' max(sp4) # deepest profile depth in collection
-#'
-#' # extraction of soil profile components
-#' profile_id(sp4) # vector of profile IDs
-#' horizons(sp4) # horizon data
-#'
-#' # extraction of specific horizon attributes
-#' sp4$clay # vector of clay content
-#'
-#' # subsetting SoilProfileCollection objects
-#' sp4[1, ] # first profile in the collection
-#' sp4[, 1] # first horizon from each profile
-#'
-#' # basic plot method, highly customizable: see manual page ?plotSPC
-#' plot(sp4)
-#' # inspect plotting area, very simple to overlay graphical elements
-#' abline(v=1:length(sp4), lty=3, col='blue')
-#' # profiles are centered at integers, from 1 to length(obj)
-#' axis(1, line=-1.5, at=1:10, cex.axis=0.75, font=4, col='blue', lwd=2)
-#' # y-axis is based on profile depths
-#' axis(2, line=-1, at=pretty(1:max(sp4)), cex.axis=0.75, font=4, las=1, col='blue', lwd=2)
-#'
-#'
-#' # symbolize soil properties via color
-#' par(mar=c(0,0,4,0))
-#' plot(sp4, color='clay')
-#' plot(sp4, color='CF')
-#'
-#' # apply a function to each profile, returning a single value per profile,
-#' # in the same order as profile_id(sp4)
-#' soil.depths <- profileApply(sp4, max) # recall that max() gives the depth of a soil profile
-#'
-#' # check that the order is correct
-#' all.equal(names(soil.depths), profile_id(sp4))
-#'
-#' # a vector of values that is the same length as the number of profiles
-#' # can be stored into site-level data
-#' sp4$depth <- soil.depths
-#' # check: looks good
-#' max(sp4[1, ]) == sp4$depth[1]
-#'
-#' # extract site-level data
-#' site(sp4) # as a data.frame
-#' sp4$depth # specific columns as a vector
-#'
-#' # use site-level data to alter plotting order
-#' new.order <- order(sp4$depth) # the result is an index of rank
-#' par(mar=c(0,0,0,0))
-#' plot(sp4, plot.order=new.order)
-#'
-#' # deconstruct SoilProfileCollection into a data.frame, with horizon+site data
-#' as(sp4, 'data.frame')
-#'
-NULL
+
 #' Sample Soil Database #5
 #'
 #' 296 Soil Profiles from the La Rochelle region of France (F. Carre and
@@ -940,197 +545,7 @@ NULL
 #'
 #'
 NULL
-#' Sample Soil Database #5
-#'
-#' 296 Soil Profiles from the La Rochelle region of France (F. Carre and
-#' Girard, 2002)
-#'
-#' These data are c/o F. Carre (Florence.CARRE@ineris.fr).
-#'
-#' @name sp5
-#' @docType data
-#' @format \preformatted{ Formal class 'SoilProfileCollection' [package "aqp"]
-#' with 6 slots ..@ idcol : chr "soil" ..@ depthcols: chr [1:2] "top" "bottom"
-#' ..@ metadata :'data.frame': 1 obs. of 1 variable: .. ..$ depth_units: chr
-#' "cm" ..@ horizons :'data.frame': 1539 obs. of 17 variables: .. ..$ soil :
-#' soil ID .. ..$ sand : sand .. ..$ silt : silt .. ..$ clay : clay .. ..$ R25
-#' : RGB r-coordinate .. ..$ G25 : RGB g-coordinate .. ..$ B25 : RGB
-#' b-coordinate .. ..$ pH : pH .. ..$ EC : EC .. ..$ CaCO3 : CaC03 content ..
-#' ..$ C : C content .. ..$ Ca : Ca .. ..$ Mg : Mg .. ..$ Na : Na .. ..$ top :
-#' horizon top boundary (cm) .. ..$ bottom : horizon bottom boundary (cm) ..
-#' ..$ soil_color: soil color in r-friendly format ..@ site :'data.frame': 296
-#' obs. of 1 variable: .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100"
-#' "soil101" ...  ..@ sp :Formal class 'SpatialPoints' [package "sp"] with 3
-#' slots .. .. ..@ coords : num [1, 1] 0 .. .. ..@ bbox : logi [1, 1] NA .. ..
-#' ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slots .. .. .. ..
-#' ..@ projargs: chr NA }
-#' @references F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types
-#' based on regression kriging of taxonomic distances with landform and land
-#' cover attributes. Geoderma. 110: 241--263.
-#' @source 296 Soil Profiles from the La Rochelle region of France (F. Carre
-#' and Girard, 2002). These data can be found on the OSACA project page
-#' (\url{http://eusoils.jrc.ec.europa.eu/projects/OSACA/}).
-#' @keywords datasets
-#' @examples
-#'
-#' library(scales)
-#' data(sp5)
-#' par(mar=c(1,1,1,1))
-#' # plot a random sampling of profiles
-#' s <- sample(1:length(sp5), size=25)
-#' plot(sp5[s, ], divide.hz=FALSE)
-#'
-#' # plot the first 100 profiles, as 4 rows of 25, hard-coding the max depth
-#' layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
-#' plot(sp5[1:25, ], max.depth=300)
-#' plot(sp5[26:50, ], max.depth=300)
-#' plot(sp5[51:75, ], max.depth=300)
-#' plot(sp5[76:100, ], max.depth=300)
-#'
-#'
-#' # 4x1 matrix of plotting areas
-#' layout(matrix(c(1,2,3,4), ncol=1), height=c(0.25,0.25,0.25,0.25))
-#'
-#' # plot profiles, with points added to the mid-points of randomly selected horizons
-#' sub <- sp5[1:25, ]
-#' plot(sub, max.depth=300) ; mtext('Set 1', 2, line=-0.5, font=2)
-#' y.p <- profileApply(sub, function(x) {
-#'   s <- sample(1:nrow(x), 1)
-#'   h <- horizons(x); with(h[s,], (top+bottom)/2)
-#'   })
-#' points(1:25, y.p, bg='white', pch=21)
-#'
-#' # plot profiles, with arrows pointing to profile bottoms
-#' sub <- sp5[26:50, ]
-#' plot(sub, max.depth=300); mtext('Set 2', 2, line=-0.5, font=2)
-#' y.a <- profileApply(sub, function(x) max(x))
-#' arrows(1:25, y.a-50, 1:25, y.a, len=0.1, col='white')
-#'
-#' # plot profiles, with points connected by lines: ideally reflecting some kind of measured data
-#' sub <- sp5[51:75, ]
-#' plot(sub, max.depth=300); mtext('Set 3', 2, line=-0.5, font=2)
-#' y.p <- 20*(sin(1:25) + 2*cos(1:25) + 5)
-#' points(1:25, y.p, bg='white', pch=21)
-#' lines(1:25, y.p, lty=2)
-#'
-#' # plot profiles, with polygons connecting horizons with max clay content (+/-) 10 cm
-#' sub <- sp5[76:100, ]
-#' y.clay.max <- profileApply(sub, function(x) {
-#'   i <- which.max(x$clay)
-#'   h <- horizons(x)
-#'   with(h[i, ], (top+bottom)/2)
-#'   } )
-#'
-#' plot(sub, max.depth=300); mtext('Set 4', 2, line=-0.5, font=2)
-#' polygon(c(1:25, 25:1), c(y.clay.max-10, rev(y.clay.max+10)),
-#' border='black', col=rgb(0,0,0.8, alpha=0.25))
-#' points(1:25, y.clay.max, pch=21, bg='white')
-#'
-#' # close plot
-#' dev.off()
-#'
-#'
-#' # plotting parameters
-#' yo <- 100 # y-offset
-#' sf <- 0.65 # scaling factor
-#' # plot profile sketches
-#' par(mar=c(0,0,0,0))
-#' plot(sp5[1:25, ], max.depth=300, y.offset=yo, scaling.factor=sf)
-#' # optionally add describe plotting area above profiles with lines
-#' # abline(h=c(0,90,100, (300*sf)+yo), lty=2)
-#' # simulate an environmental variable associated with profiles (elevation, etc.)
-#' r <- vector(mode='numeric', length=25)
-#' r[1] <- -50 ; for(i in 2:25) {r[i] <- r[i-1] + rnorm(mean=-1, sd=25, n=1)}
-#' # rescale
-#' r <- rescale(r, to=c(80, 0))
-#' # illustrate gradient with points/lines/arrows
-#' lines(1:25, r)
-#' points(1:25, r, pch=16)
-#' arrows(1:25, r, 1:25, 95, len=0.1)
-#' # add scale for simulated gradient
-#' axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
-#' # depict a secondary environmental gradient with polygons (water table depth, etc.)
-#' polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)),
-#' border='black', col=rgb(0,0,0.8, alpha=0.25))
-#'
-#'
-#' ##
-#' # sample 25 profiles from the collection
-#' s <- sp5[sample(1:length(sp5), size=25), ]
-#' # compute pair-wise dissimilarity
-#' d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0,
-#' replace_na=TRUE, add_soil_flag=TRUE, max_d=300)
-#' # keep only the dissimilarity between profile 1 and all others
-#' d.1 <- as.matrix(d)[1, ]
-#' # rescale dissimilarities
-#' d.1 <- rescale(d.1, to=c(80, 0))
-#' # sort in ascending order
-#' d.1.order <- rev(order(d.1))
-#' # plotting parameters
-#' yo <- 100 # y-offset
-#' sf <- 0.65 # scaling factor
-#' # plot sketches
-#' par(mar=c(0,0,0,0))
-#' plot(s, max.depth=300, y.offset=yo, scaling.factor=sf, plot.order=d.1.order)
-#' # add dissimilarity values with lines/points
-#' lines(1:25, d.1[d.1.order])
-#' points(1:25, d.1[d.1.order], pch=16)
-#' # link dissimilarity values with profile sketches via arrows
-#' arrows(1:25, d.1[d.1.order], 1:25, 95, len=0.1)
-#' # add an axis for the dissimilarity scale
-#' axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
-#'
-#'
-#'
-NULL
-#' Soil Physical and Chemical Data from Manganiferous Soils
-#'
-#' Soil Physical and Chemical Data from Manganiferous Soils (Bourgault and
-#' Rabenhorst, 2011)
-#'
-#' Selected soil physical and chemical data from (Bourgault and Rabenhorst,
-#' 2011).
-#'
-#' @name sp6
-#' @docType data
-#' @format A data frame with 30 observations on the following 13 variables.
-#' \describe{ \item{id}{pedon name} \item{name}{horizon
-#' designation} \item{top}{horizon top boundary in cm}
-#' \item{bottom}{horizon bottom boundary in cm}
-#' \item{color}{moist soil color in Munsell notation}
-#' \item{texture}{USDA soil texture class} \item{sand}{sand
-#' content by weight percentage} \item{silt}{silt content by weight
-#' percentage} \item{clay}{clay content by weight percentage}
-#' \item{Fe}{DCB-extracted Fe in g/kg (see citation)}
-#' \item{Mn}{DCB-extracted Mn in g/kg (see citation)}
-#' \item{C}{total organic carbon as g/kg} \item{pH}{measured in
-#' 1:1 H20 slurry} \item{Db}{bulk density (g/cc), clod method} }
-#' @references Rebecca R. Bourgault, Martin C. Rabenhorst. 2011.  Genesis and
-#' characterization of manganiferous soils in the Eastern Piedmont, USA.
-#' Geoderma. 165:84-94.
-#' @source http://www.sciencedirect.com/science/article/pii/S0016706111001972
-#' @keywords datasets
-#' @examples
-#'
-#'   # setup environment
-#'   library(aqp)
-#'   data(sp6)
-#'
-#'   # init SPC
-#'   depths(sp6) <- id ~ top + bottom
-#'   # convert non-standard Munsell colors
-#'   sp6$soil_color <- getClosestMunsellChip(sp6$color)
-#'
-#'   # profile sketches
-#'   par(mar=c(0,0,3,0))
-#'   plot(sp6, color='soil_color')
-#'   plot(sp6, color='Mn')
-#'   plot(sp6, color='Fe')
-#'   plot(sp6, color='pH')
-#'   plot(sp6, color='texture')
-#'
-#'
-NULL
+
 #' Soil Physical and Chemical Data from Manganiferous Soils
 #'
 #' Soil Physical and Chemical Data from Manganiferous Soils (Bourgault and

@@ -17,36 +17,15 @@ percentage} \item{clay}{clay content by weight percentage}
 \item{Mn}{DCB-extracted Mn in g/kg (see citation)}
 \item{C}{total organic carbon as g/kg} \item{pH}{measured in
 1:1 H20 slurry} \item{Db}{bulk density (g/cc), clod method} }
-
-A data frame with 30 observations on the following 13 variables.
-\describe{ \item{id}{pedon name} \item{name}{horizon
-designation} \item{top}{horizon top boundary in cm}
-\item{bottom}{horizon bottom boundary in cm}
-\item{color}{moist soil color in Munsell notation}
-\item{texture}{USDA soil texture class} \item{sand}{sand
-content by weight percentage} \item{silt}{silt content by weight
-percentage} \item{clay}{clay content by weight percentage}
-\item{Fe}{DCB-extracted Fe in g/kg (see citation)}
-\item{Mn}{DCB-extracted Mn in g/kg (see citation)}
-\item{C}{total organic carbon as g/kg} \item{pH}{measured in
-1:1 H20 slurry} \item{Db}{bulk density (g/cc), clod method} }
 }
 \source{
-http://www.sciencedirect.com/science/article/pii/S0016706111001972
-
 http://www.sciencedirect.com/science/article/pii/S0016706111001972
 }
 \description{
 Soil Physical and Chemical Data from Manganiferous Soils (Bourgault and
 Rabenhorst, 2011)
-
-Soil Physical and Chemical Data from Manganiferous Soils (Bourgault and
-Rabenhorst, 2011)
 }
 \details{
-Selected soil physical and chemical data from (Bourgault and Rabenhorst,
-2011).
-
 Selected soil physical and chemical data from (Bourgault and Rabenhorst,
 2011).
 }
@@ -70,31 +49,8 @@ Selected soil physical and chemical data from (Bourgault and Rabenhorst,
   plot(sp6, color='texture')
 
 
-
-  # setup environment
-  library(aqp)
-  data(sp6)
-
-  # init SPC
-  depths(sp6) <- id ~ top + bottom
-  # convert non-standard Munsell colors
-  sp6$soil_color <- getClosestMunsellChip(sp6$color)
-
-  # profile sketches
-  par(mar=c(0,0,3,0))
-  plot(sp6, color='soil_color')
-  plot(sp6, color='Mn')
-  plot(sp6, color='Fe')
-  plot(sp6, color='pH')
-  plot(sp6, color='texture')
-
-
 }
 \references{
-Rebecca R. Bourgault, Martin C. Rabenhorst. 2011.  Genesis and
-characterization of manganiferous soils in the Eastern Piedmont, USA.
-Geoderma. 165:84-94.
-
 Rebecca R. Bourgault, Martin C. Rabenhorst. 2011.  Genesis and
 characterization of manganiferous soils in the Eastern Piedmont, USA.
 Geoderma. 165:84-94.
