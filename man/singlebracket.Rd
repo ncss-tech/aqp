@@ -13,18 +13,20 @@
 
 \item{j}{a numeric or logical value denoting horizon indices to select in a subset}
 
-\item{...}{non-standard expressions to evaluate in a subset; currently supported: \code{.LAST} (last horizon in each profile)}
+\item{...}{non-standard expressions to evaluate in a subset}
 
 \item{drop}{not used}
 }
 \description{
-You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j]}. Subset operations are propagated to other slots when they result in removal of sites from a collection.
+You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j, ...]}. Subset operations are propagated to other slots (such as diagnostics or spatial) when they result in removal of sites from a collection.
 \itemize{
 \item \code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
 \item \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection.
 \item \code{...} is an area to specify an expression that is evaluated in the subset. Currently supported
 \itemize{
-\item \code{.LAST}: return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
+\item \code{.LAST} (last horizon in each profile): return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
+\item \code{.FIRST} (first horizon in each profile): return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
+\item \code{.HZID} (horizon index not \code{SoilProfileCollection} result): return the horizon indices corresponding to \code{i}+\code{j}+\code{...} ("k") constraints
 }
 }
 }
