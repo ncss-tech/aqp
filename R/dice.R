@@ -132,6 +132,8 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
 #' 
 #' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
 #' 
+#' @param padNA pad slices beyond the depth of a profile with "empty" slices containing only IDs and top/bottom depths, only relevant when `fm` is specified with a left hand side.
+#' 
 #' @param strict perform horizon depth logic checking / flagging / removal
 #' 
 #' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
@@ -144,7 +146,7 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
 #' 
 #' @export
 #' 
-dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, byhz = FALSE) {
+dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, padNA = FALSE, strict = TRUE, byhz = FALSE) {
   
   # sacrifice to R CMD check spirits
   .pctMissing <- NULL
@@ -159,11 +161,10 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
   o.size <- object.size(x)
   
   ## extract pieces
-  h <- horizons(x)
   idn <- idname(x)
   hzidn <- hzidname(x)
   htb <- horizonDepths(x)
-  hznames <- names(h)
+  hznames <- horizonNames(x)
   
   # IDs + top/bottom
   ids.top.bottom.idx <- match(c(idn, hzidn, htb), hznames)
@@ -206,6 +207,13 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
     # if z-index is missing set to NULL for later on
     if(length(z) == 0) {
       z <- NULL
+    } else {
+      # z index is specified
+      # optionally pad slices deeper than each profile with empty horizons
+      if(padNA) {
+        ## TODO: this function is not yet optimized
+        x <- suppressMessages(growEmptyHz(x, z = max(z)))
+      }
     }
     
     # check for '.' --> all variables, minus ID/depths
@@ -214,9 +222,8 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
       vars <- hznames[-ids.top.bottom.idx]
     }
 
-
     # check for column names that don't exist
-    if(! any(vars %in% names(h))) {
+    if(! any(vars %in% hznames)) {
       stop('names in formula do not match any horizon attributes', call. = FALSE)
     }
       
@@ -229,6 +236,9 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, strict = TRUE, by
     z <- NULL
   }
   
+  
+  # time to work with horizons 
+  h <- horizons(x)
   
   # safely select variables
   h <- .data.frame.j(
