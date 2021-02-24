@@ -51,6 +51,10 @@ growEmptyHz <- function(x, z) {
   # there is a large cost to profileApply, best for complex split-apply-combine
   # max.d <- profileApply(x, max)
   
+  # fix for no visible binding for global variables
+  .LAST <- NULL
+  .HZID <- NULL
+  
   # get a vector of profile bottom depths
   # FAST c/o AGB and new .LAST and .HZID shortcuts
   max.d <- x[[htb[2]]][x[,,.LAST,.HZID]]
