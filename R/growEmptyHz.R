@@ -44,21 +44,36 @@ growEmptyHz <- function(x, z) {
     stop('z must be an integer and > 0', call. = FALSE)
   }
   
+  
   # short-circuit: if all profiles are deeper than z, do nothing
-  max.d <- profileApply(x, max)
+  
+  # old-way of profile max depth
+  # there is a large cost to profileApply, best for complex split-apply-combine
+  # max.d <- profileApply(x, max)
+  
+  # get a vector of profile bottom depths
+  # FAST c/o AGB and new .LAST and .HZID shortcuts
+  max.d <- x[[htb[2]]][x[,,.LAST,.HZID]]
+  
   if(all(max.d > z)) {
     message(sprintf('all profiles are deeper than %s, doing nothing', z))
     return(x)
   }
   
-  # horizons
+
+  # get horizons
   h <- horizons(x)
   
-  ## TODO: new SPC k-index and .LAST will make this cleaner and probably faster
+  ## this is effective and simple to understand, but does not scale well
+  # # get bottom-most horizons
+  # b <- profileApply(x, simplify = FALSE, frameify = TRUE, FUN = function(i) {
+  #   horizons(i)[nrow(i), ]
+  # })
+  
   # get bottom-most horizons
-  b <- profileApply(x, simplify = FALSE, frameify = TRUE, FUN = function(i) {
-    horizons(i)[nrow(i), ]
-  })
+  # ~ 50% faster than above
+  # c/o AGB
+  b <- horizons(x[, , .LAST])
   
   # just those profiles with bottom-most depth > z
   idx <- which(b[[htb[2]]] < z)
