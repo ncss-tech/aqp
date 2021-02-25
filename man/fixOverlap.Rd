@@ -44,6 +44,15 @@ When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving r
 \description{
 This function makes small adjustments to elements of \code{x} until overlap defined by \code{thresh} is removed, or until \code{maxIter} is reached. Rank order and boundary conditions (defined by \code{min.x} and \code{max.x}) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters \code{T0} and \code{k} can be used to tune the algorithm for specific applications.
 }
+\details{
+Ideas for solving difficult overlap scenarios:
+\itemize{
+\item widen the boundary conditions by adjusting \code{min.x} and \code{max.x} beyond the original scale of \code{x}
+\item reduce the allowable overlap threshold \code{thresh}
+\item reduce the magnitude of perturbations (\code{adj}) and increase \code{maxIter}
+\item increase \code{k}
+}
+}
 \examples{
 
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)

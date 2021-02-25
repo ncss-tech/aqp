@@ -2,7 +2,7 @@ library(aqp)
 library(lattice)
 library(viridis)
 
-tracePlot <- function(x, z) {
+tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # setup plot device
   par(mar = c(4, 4, 1, 1), bg = 'black', fg = 'white')
   layout(matrix(c(1,2,3)), widths = 1, heights = c(1,1,2))
@@ -19,8 +19,8 @@ tracePlot <- function(x, z) {
     col = cols[as.numeric(z$log)]
   )
   
-  axis(side = 2, cex.axis = 0.8, col.axis = 'white', las = 1, line = -2)
-  mtext('Overlap', side = 2, line = 2, cex = 0.8)
+  axis(side = 2, cex.axis = cex.axis.labels, col.axis = 'white', las = 1, line = -2)
+  mtext('Overlap', side = 2, line = 2, cex = cex.axis.labels, font = 2)
   
   # deviation from original configuration
   plot(
@@ -31,8 +31,8 @@ tracePlot <- function(x, z) {
     col = cols[as.numeric(z$log)]
   )
   
-  axis(side = 2, cex.axis = 0.8, col.axis = 'white', las = 1, line = -2)
-  mtext('Deviation', side = 2, line = 2, cex = 0.8)
+  axis(side = 2, cex.axis = cex.axis.labels, col.axis = 'white', las = 1, line = -2)
+  mtext('Deviation', side = 2, line = 2, cex = cex.axis.labels, font = 2)
   
   
   # adjustments at each iteration
@@ -44,12 +44,12 @@ tracePlot <- function(x, z) {
     col = 2:6
   )
   
-  axis(side = 2, cex.axis = 0.8, col.axis = 'white', las = 1, at = x, labels = seq_along(z$x))
-  axis(side = 4, cex.axis = 0.8, col.axis = 'white', las = 1, at = z$x, labels = seq_along(z$x), line = -2)
-  mtext('Position', side = 2, line = 2.5, cex = 0.8)
+  axis(side = 2, cex.axis = cex.axis.labels, col.axis = 'white', las = 1, at = x, labels = seq_along(z$x))
+  axis(side = 4, cex.axis = cex.axis.labels, col.axis = 'white', las = 1, at = z$x, labels = seq_along(z$x), line = -2)
+  mtext('Position', side = 2, line = 2.5, cex = cex.axis.labels, font = 2)
   
   axis(side = 1, cex.axis = 1, col.axis = 'white', line = 0)
-  mtext('Iteration', side = 1, line = 2.5, cex = 0.8)
+  mtext('Iteration', side = 1, line = 2.5, cex = cex.axis.labels, font = 2)
   
 }
 
@@ -72,6 +72,20 @@ table(z$log)
 dev.off()
 
 plot(z$stats, z$ssd)
+
+
+
+# nearly impossible
+x <- runif(10, min = 2.5, max = 3.5)
+# widen boundary conditions
+z <- fixOverlap(x, thresh = 0.2, trace = TRUE, min.x = 0, max.x = 10, maxIter = 2000, adj = 0.05)
+
+tracePlot(x, z)
+table(z$log)
+
+dev.off()
+
+
 
 
 

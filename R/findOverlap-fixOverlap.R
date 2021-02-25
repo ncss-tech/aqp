@@ -128,6 +128,14 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' @description This function makes small adjustments to elements of `x` until overlap defined by `thresh` is removed, or until `maxIter` is reached. Rank order and boundary conditions (defined by `min.x` and `max.x`) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters `T0` and `k` can be used to tune the algorithm for specific applications.
 #' 
+#' @details Ideas for solving difficult overlap scenarios:
+#'   * widen the boundary conditions by adjusting `min.x` and `max.x` beyond the original scale of `x`
+#'   * reduce the allowable overlap threshold `thresh`
+#'   
+#'   * reduce the magnitude of perturbations (`adj`) and increase `maxIter`
+#'   
+#'   * increase `k`
+#' 
 #' @param x vector of horizontal positions
 #' 
 #' @param thresh horizontal threshold defining "overlap" or distance between elements of `x`. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).
