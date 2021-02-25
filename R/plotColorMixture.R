@@ -135,6 +135,9 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
       # attempt to fix overlap
       if(overlapFix) {
         
+        ## TODO: this should be computed from screen space
+        #        or adjustable by argument
+        
         # this is about right (units are reflectance)
         # adjust according to ratio of swatch size to default size (6)
         ov.thresh <- 0.04 * (swatch.cex / 6)
@@ -157,7 +160,7 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
           last.y.coords <- fixOverlap(
             last.y.coords, 
             thresh = ov.thresh, 
-            adj = 0.04,
+            adj = ov.thresh * 1/3,
             min.x = adj.min.x,
             max.x = adj.max.x
           )
