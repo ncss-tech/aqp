@@ -43,7 +43,7 @@ findOverlap <- function(x, thresh) {
 #' 
 #'  @return a `list`:
 #'   * `idx`: unique index to overlapping elements in `x`
-#'   * `ov`: total overlap (see details)
+#'   * `ov`: normalized overlap (see details)
 #'   
 #' 
 #' @export
@@ -53,8 +53,11 @@ findOverlap <- function(x, thresh) {
 #' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 #' 
 #' overlapMetrics(x, thresh = 0.5)
-#' 
 overlapMetrics <- function(x, thresh) {
+  
+  
+  ## TODO: 
+  # convert to diff(x) vs. dist(x)
   
   # all pair-wise distance
   d <- dist(x)
@@ -73,6 +76,11 @@ overlapMetrics <- function(x, thresh) {
   # overlap = (thresh - distance[i,j]) when d < thresh, otherwise overlap = 0
   # using full matrix, elements are mirrored over diagonal so divide by 2
   ov <- sum(thresh - m[idx]) / 2
+  
+  # normalize overlap by dividing by total possible overlap
+  # all elements overlapping results in values > 1
+  # ov_norm = ov / thresh * length(x)
+  ov <- ov / (thresh * length(x))
   
   res <- list(
     idx = col.idx,
@@ -140,7 +148,7 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' @param k cooling constant
 #' 
-#' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with the number of overlapping elements at each iteration.
+#' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with information about objective functions and decisions made during iteration.
 #' 
 #' @author D.E. Beaudette
 #' @export
@@ -170,16 +178,23 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' # setup plot device
 #' par(mar = c(4, 4, 1, 1))
-#' layout(matrix(c(1,2)), widths = 1, heights = c(1,2))
+#' layout(matrix(c(1,2,3)), widths = 1, heights = c(1,1,2))
 #' 
-#' # total overlap (objective function) progress
+#' # objective function = overlap + SSD
 #' plot(
 #'   seq_along(z$stats), z$stats, 
 #'   type = 'h', las = 1,
-#'   xlab = 'Iteration', ylab = 'Total Overlap',
+#'   xlab = 'Iteration', ylab = 'Overlap',
 #'   cex.axis = 0.8
 #' )
 #' 
+#' # SSD: deviation from original configuration 
+#' plot(
+#'   seq_along(z$ssd), z$ssd, 
+#'   type = 'h', las = 1,
+#'   xlab = 'Iteration', ylab = 'Deviation',
+#'   cex.axis = 0.8
+#' )
 #' # adjustments at each iteration
 #' matplot(
 #'   z$states, type = 'l', 
@@ -194,7 +209,7 @@ overlapMetrics <- function(x, thresh) {
 #' # -: rejected perturbation
 #' table(z$log)
 #' 
-fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 1) {
+fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 10) {
   
   
   # sanity check: cannot have perfect overlap (duplicates) in the initial configuration
@@ -205,10 +220,25 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
       message('duplicates in `x`, applying jitter')
     }
   }
-
+  
+  
+  ## An idea for another time
+  # # normalization of SSD
+  # ssd.i <- sum((dist(x) - dist(z$x))^2)
+  # ssd.max <- sum((dist(x) - dist(seq(from = 1, to = length(x), by = 1)))^2)
+  # 
+  # 1 - (ssd.i / ssd.max)
+  
+  
+  # worst-possible SSD due to regular sequence
+  ssd.max <- sum((dist(x) - dist(seq(from = 1, to = length(x), by = 1)))^2)
     
   # initial configuration
   m <- overlapMetrics(x, thresh)
+  
+  # initial cost
+  # at this point SSD = 0
+  cost <- m$ov
   
   # save original for testing rank order
   x.orig <- x
@@ -222,6 +252,10 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
   ## trace details
   # overlap cost (total overlap)
   stats <- rep(NA, times = maxIter)
+  
+  # deviation from original configuration
+  # sum of squared differences between dist(x.orig), dist(x.new)
+  ssd <- rep(NA, times = maxIter)
   
   # algorithm adjustment steps:
   # B: boundary violation
@@ -250,6 +284,7 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
         
         log <- factor(as.vector(na.omit(log)), levels = c('B', 'O', '+', '-'))
         stats <- as.vector(na.omit(stats))
+        ssd <- as.vector(na.omit(ssd))
         
         states <- na.omit(states)
         attr(states, "na.action") <- NULL
@@ -257,6 +292,7 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
         return(list(
           x = s,
           stats = stats,
+          ssd = ssd,
           log = log,
           converged = FALSE,
           states = states
@@ -275,11 +311,20 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     # re-evaluate metrics
     m.test <- overlapMetrics(x.test, thresh)
     
+    # SSD
+    ssd.test <- sum((dist(x) - dist(x.test))^2)
+    # normalize
+    ssd.test <- ssd.test / ssd.max
+    
+    # combined cost: overlap + SSD
+    cost.test <- m.test$ov + ssd.test
+    
     # enforce boundary conditions
     if(any(x.test < min.x) | any(x.test > max.x)) {
       # print('boundary condition')
       log[i] <- 'B'
       stats[i] <- m.test$ov
+      ssd[i] <- ssd.test
       states[i, ] <- x.test
       i <- i + 1
       next
@@ -290,31 +335,28 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
       # print('rank violation')
       log[i] <- 'O'
       stats[i] <- m.test$ov
+      ssd[i] <- ssd.test
       states[i, ] <- x.test
       i <- i + 1
       next
     }
     
     
-    ## TOOO: consider using T = T0 / (i + 1)
-    # T0 is the initial temperature
-    # i is the iteration counter
-    # Te is the current temperature
-    
-    # copmute current temperature
-    Temp <- T0 / (i + 1)
+    # compute current temperature
+    # differs from literature where i starts from 0
+    Temp <- T0 / i
     
     # acceptance probability
     # n0 = previous cost
     # n1 = current cost
     # Te = current temperature
     # k = cooling constant
-    p <- .P(n0 = m$ov, n1 = m.test$ov, Te = Temp, k = k)
+    p <- .P(n0 = cost, n1 = cost.test, Te = Temp, k = k)
     
     # accept a more costly proposition if randomly selected
     p.acc <- p > runif(n = 1, min = 0, max = 1)
     
-    if( (m.test$ov < m$ov) | p.acc) {
+    if( (cost.test < cost) | p.acc) {
       # keep new state
       log[i] <- '+'
       
@@ -327,8 +369,14 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
       # keep track of overlap cost
       stats[i] <- m.test$ov
       
+      # SSD
+      ssd[i] <- ssd.test
+      
       # re-evaluate overlap for while() loop
       m <- overlapMetrics(x, thresh)
+      
+      # re-compute total cost
+      cost <- m$ov + ssd.test
       
       # increment iteration counter
       i <- i + 1
@@ -341,6 +389,9 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
       
       # keep track of overlap cost
       stats[i] <- m.test$ov
+      
+      # SSD
+      ssd[i] <- ssd.test
       
       i <- i + 1
       next
@@ -358,6 +409,7 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     
     log <- factor(as.vector(na.omit(log)), levels = c('B', 'O', '+', '-'))
     stats <- as.vector(na.omit(stats))
+    ssd <- as.vector(na.omit(ssd))
     
     states <- na.omit(states)
     attr(states, "na.action") <- NULL
@@ -365,6 +417,7 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     return(list(
       x = x,
       stats = stats,
+      ssd = ssd,
       log = log,
       converged = TRUE,
       states = states

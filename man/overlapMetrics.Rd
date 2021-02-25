@@ -14,7 +14,7 @@ overlapMetrics(x, thresh)
 @return a \code{list}:
 \itemize{
 \item \code{idx}: unique index to overlapping elements in \code{x}
-\item \code{ov}: total overlap (see details)
+\item \code{ov}: normalized overlap (see details)
 }}
 }
 \description{
@@ -25,5 +25,4 @@ Desc.
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 overlapMetrics(x, thresh = 0.5)
-
 }

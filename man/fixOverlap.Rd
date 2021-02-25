@@ -14,7 +14,7 @@ fixOverlap(
   trace = FALSE,
   tiny = 1e-04,
   T0 = 500,
-  k = 1
+  k = 10
 )
 }
 \arguments{
@@ -39,7 +39,7 @@ fixOverlap(
 \item{k}{cooling constant}
 }
 \value{
-When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with the number of overlapping elements at each iteration.
+When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with information about objective functions and decisions made during iteration.
 }
 \description{
 This function makes small adjustments to elements of \code{x} until overlap defined by \code{thresh} is removed, or until \code{maxIter} is reached. Rank order and boundary conditions (defined by \code{min.x} and \code{max.x}) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters \code{T0} and \code{k} can be used to tune the algorithm for specific applications.
@@ -69,16 +69,23 @@ z <- fixOverlap(x, thresh = 0.8, trace = TRUE)
 
 # setup plot device
 par(mar = c(4, 4, 1, 1))
-layout(matrix(c(1,2)), widths = 1, heights = c(1,2))
+layout(matrix(c(1,2,3)), widths = 1, heights = c(1,1,2))
 
-# total overlap (objective function) progress
+# objective function = overlap + SSD
 plot(
   seq_along(z$stats), z$stats, 
   type = 'h', las = 1,
-  xlab = 'Iteration', ylab = 'Total Overlap',
+  xlab = 'Iteration', ylab = 'Overlap',
   cex.axis = 0.8
 )
 
+# SSD: deviation from original configuration 
+plot(
+  seq_along(z$ssd), z$ssd, 
+  type = 'h', las = 1,
+  xlab = 'Iteration', ylab = 'Deviation',
+  cex.axis = 0.8
+)
 # adjustments at each iteration
 matplot(
   z$states, type = 'l', 

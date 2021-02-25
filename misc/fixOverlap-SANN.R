@@ -2,38 +2,111 @@ library(aqp)
 library(lattice)
 library(viridis)
 
+tracePlot <- function(x, z) {
+  # setup plot device
+  par(mar = c(4, 4, 1, 1), bg = 'black', fg = 'white')
+  layout(matrix(c(1,2,3)), widths = 1, heights = c(1,1,2))
+  
+  # B, O, +, -
+  cols <- c(grey(0.5), grey(0.85), 'royalblue', 'firebrick')
+  
+  # total overlap (objective function) progress
+  plot(
+    seq_along(z$stats), z$stats, 
+    type = 'h', las = 1,
+    xlab = 'Iteration', ylab = 'Total Overlap',
+    axes = FALSE,
+    col = cols[as.numeric(z$log)]
+  )
+  
+  axis(side = 2, cex.axis = 0.8, col.axis = 'white', las = 1, line = -2)
+  mtext('Overlap', side = 2, line = 2, cex = 0.8)
+  
+  # deviation from original configuration
+  plot(
+    seq_along(z$stats), z$ssd, 
+    type = 'h', las = 1,
+    xlab = 'Iteration', ylab = 'Deviation',
+    axes = FALSE,
+    col = cols[as.numeric(z$log)]
+  )
+  
+  axis(side = 2, cex.axis = 0.8, col.axis = 'white', las = 1, line = -2)
+  mtext('Deviation', side = 2, line = 2, cex = 0.8)
+  
+  
+  # adjustments at each iteration
+  matplot(
+    z$states, type = 'l', 
+    lty = 1, las = 1, 
+    xlab = 'Iteration', ylab = 'x-position',
+    axes = FALSE,
+    col = 2:6
+  )
+  
+  axis(side = 2, cex.axis = 0.8, col.axis = 'white', las = 1, at = x, labels = seq_along(z$x))
+  axis(side = 4, cex.axis = 0.8, col.axis = 'white', las = 1, at = z$x, labels = seq_along(z$x), line = -2)
+  mtext('Position', side = 2, line = 2.5, cex = 0.8)
+  
+  axis(side = 1, cex.axis = 1, col.axis = 'white', line = 0)
+  mtext('Iteration', side = 1, line = 2.5, cex = 0.8)
+  
+}
+
+
+
 
 # relatively challenging
 x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
 
+overlapMetrics(x, thresh = 0.6)
+
 # fix overlap, return debugging information
-set.seed(10101)
-z <- fixOverlap(x, thresh = 0.8, trace = TRUE)
+# set.seed(10101)
+z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
 
-# setup plot device
-par(mar = c(4, 4, 1, 1))
-layout(matrix(c(1,2)), widths = 1, heights = c(1,2))
-
-# total overlap (objective function) progress
-plot(
-  seq_along(z$stats), z$stats, 
-  type = 'h', las = 1,
-  xlab = 'Iteration', ylab = 'Total Overlap',
-  cex.axis = 0.8
-  )
-
-# adjustments at each iteration
-matplot(
-  z$states, type = 'l', 
-  lty = 1, las = 1, 
-  xlab = 'Iteration', ylab = 'x-position'
-  )
-
+tracePlot(x, z)
 # trace log
 table(z$log)
 
-
 dev.off()
+
+plot(z$stats, z$ssd)
+
+
+
+##
+
+# evalute over many replications
+# pct of iterations accepted
+res <- replicate(10, expr = fixOverlap(x, thresh = 0.6, trace = TRUE)$log)
+
+##
+
+
+
+
+
+
+
+x <- c(1, 1.1, 3.4, 3.5, 4.1, 5, 6, 7.8, 8, 9, 10, 12)
+
+d <- lapply(letters[1:length(x)], random_profile, SPC = TRUE)
+d <- combine(d)
+
+par(mar = c(6, 0, 0, 0))
+plotSPC(d, relative.pos = x, plot.depth.axis = FALSE, name.style = 'center-center', hz.depths = TRUE)
+axis(side = 1, at = x, labels = x)
+
+x.fixed <- fixOverlap(x, thresh = 0.6, trace = TRUE, k = 1)
+
+plotSPC(d, relative.pos = x.fixed$x, plot.depth.axis = FALSE, name.style = 'center-center', hz.depths = TRUE)
+axis(side = 1, at = x, labels = profile_id(d))
+axis(side = 1, at = x.fixed$x, labels = profile_id(d), line = 3)
+
+
+
+### 
 
 # safe vectorization
 P <- Vectorize(aqp:::.P)
@@ -44,18 +117,20 @@ n0 <- 3
 n1 <- 4
 i <- 1:1000
 T0 <- 500
-Te <- T0 / (i + 1)
+Te <- T0 / i
+
 plot(i, P(n0, n1, Te, k = 1), type = 'l', las = 1)
+plot(i, Te, type = 'l', las = 1)
 
-g <- expand.grid(n0 = 5, n1 = 5:10, Te = Te)
+g <- expand.grid(n0 = 5, n1 = seq(5, 6, by = 0.2), Te = Te)
 
-g$P <- P(n0 = g$n0, n1 = g$n1, Te = g$Te, k = 10)
+g$P <- P(n0 = g$n0, n1 = g$n1, Te = g$Te, k = 1)
 
 hist(g$P, breaks = 30, las = 1)
 
-levelplot(P ~ Te * n1, data = g, col.regions = viridis, contour = TRUE, xlim = c(250, -5))
+levelplot(P ~ Te * n1, data = g, col.regions = viridis, contour = TRUE, xlim = c(500, -5))
 
-xyplot(P ~ Te, groups = factor(n1), data = g, type = 'l', as.table = TRUE, auto.key = list(lines = TRUE, points = FALSE, space = 'right'), par.settings = tactile::tactile.theme(), xlim = c(250, -5))
+xyplot(P ~ Te, groups = factor(n1), data = g, type = 'l', as.table = TRUE, auto.key = list(lines = TRUE, points = FALSE, space = 'right'), par.settings = tactile::tactile.theme(), xlim = c(500, -5))
 
 
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
@@ -92,6 +167,7 @@ overlapMetrics(x, thresh = 1)
 
 z <- fixOverlap(x, thresh = 1, trace = TRUE)
 plot(seq_along(z$stats), z$stats, type = 'h', las = 1)
+plot(seq_along(z$stats), z$ssd, type = 'h', las = 1)
 matplot(z$states, type = 'l', lty = 1, las = 1, xlab = 'Iteration', ylab = 'x-position')
 table(z$log)
 
@@ -160,17 +236,17 @@ boxplot(z, horizontal = TRUE, las = 1, cex.axis = 0.85, xlab = 'Number of Iterat
 # * simpler problems benefit from faster cooling
 
 f1 <- function(i) {
-  o <- fixOverlap(x, thresh = 0.5, k = 1, trace = TRUE)
+  o <- fixOverlap(x, thresh = 0.6, k = 1, trace = TRUE)
   return(length(o$stats))
 }
 
 f2 <- function(i) { 
-  o <- fixOverlap(x, thresh = 0.5, k = 5, trace = TRUE)
+  o <- fixOverlap(x, thresh = 0.6, k = 5, trace = TRUE)
   return(length(o$stats))
 }
 
 f3 <- function(i) { 
-  o <- fixOverlap(x, thresh = 0.5, k = 10, trace = TRUE)
+  o <- fixOverlap(x, thresh = 0.6, k = 10, trace = TRUE)
   return(length(o$stats))
 }
 
