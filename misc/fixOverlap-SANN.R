@@ -2,6 +2,35 @@ library(aqp)
 library(lattice)
 library(viridis)
 
+
+## explore correlation between dist(initial configuration) and dist(proposed configuration)
+x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
+z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
+
+# better metrics?
+z$cor <- sapply(seq_along(z$stats), FUN = function(i) {
+  1 - cor(dist(x), dist(z$states[i, ]), method = 'spearman')
+})
+
+z$mantel <- sapply(seq_along(z$stats), FUN = function(i) {
+  ape::mantel.test(as.matrix(dist(x)), as.matrix(dist(z$states[i, ])))$z.stat
+})
+
+
+
+# hmm.
+plot(seq_along(z$stats), z$cor, type = 'l', las = 1)
+
+# hmm
+plot(seq_along(z$stats), z$mantel, type = 'l', las = 1)
+
+# plot(dist(x), dist(z$states[1, ]))
+
+
+
+
+
+
 tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # setup plot device
   par(mar = c(4, 4, 1, 1), bg = 'black', fg = 'white')

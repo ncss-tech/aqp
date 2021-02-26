@@ -229,18 +229,15 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     }
   }
   
+  ## TODO: consider a cost related to the preservation of "character", relative clustering
+  # initial value = 0
+  # deviation <- 1 - cor(dist(x), dist(x.test), method = 'spearman')
   
-  ## An idea for another time
-  # # normalization of SSD
-  # ssd.i <- sum((dist(x) - dist(z$x))^2)
-  # ssd.max <- sum((dist(x) - dist(seq(from = 1, to = length(x), by = 1)))^2)
-  # 
-  # 1 - (ssd.i / ssd.max)
-  
-  
+  ## TODO: this may not actually be a good "cost" metric
+  # SSD: sum squared differences between two configurations (via distance matrix)
   # worst-possible SSD due to regular sequence
   ssd.max <- sum((dist(x) - dist(seq(from = 1, to = length(x), by = 1)))^2)
-    
+  
   # initial configuration
   m <- overlapMetrics(x, thresh)
   
@@ -318,6 +315,9 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
     
     # re-evaluate metrics
     m.test <- overlapMetrics(x.test, thresh)
+    
+    ## TODO: consider correlation vs. SSD
+    # deviation <- 1 - cor(dist(x), dist(x.test), method = 'spearman')
     
     # SSD
     ssd.test <- sum((dist(x) - dist(x.test))^2)
