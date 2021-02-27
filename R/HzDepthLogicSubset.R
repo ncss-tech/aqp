@@ -30,7 +30,7 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
   # invalid data filtering modes:
   if(byhz) {
     # profile-level
-    message("dropping horizons with invalid depth logic, see `metadata(x)$dice.removed.horizons`")
+    message("dropping horizons with invalid depth logic, see `metadata(x)$removed.horizons`")
     
     # locate horizons to keep
     idx <- which(hz.tests$valid)
@@ -42,7 +42,7 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
     
     # keep track of invalid horizon IDs in @metadata
     bad.ids <- hz.tests[[hzidname(x)]][-idx]
-    metadata(x)$dice.removed.horizons <- bad.ids
+    metadata(x)$removed.horizons <- bad.ids
     
     # perform drop
     # this will trigger an error if SPC is corrupted (site w/o horizons)
@@ -57,7 +57,7 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
     
   } else {
     # profile-level
-    message("dropping profiles with invalid depth logic, see `metadata(x)$dice.removed.profiles`")
+    message("dropping profiles with invalid depth logic, see `metadata(x)$removed.profiles`")
     
     # locate profiles to keep
     idx <- which(hz.tests$valid)
@@ -69,7 +69,7 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
     
     # keep track of invalid profile IDs in @metadata
     bad.ids <- hz.tests[[idname(x)]][-idx]
-    metadata(x)$dice.removed.profiles <- bad.ids
+    metadata(x)$removed.profiles <- bad.ids
     
     # perform drop
     x <- x[idx, ]

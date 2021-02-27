@@ -76,7 +76,7 @@ z$p1[23] <- NA
 zz <- dice(z, byhz = FALSE, pctMissing = TRUE)
 
 # ok
-metadata(zz)$dice.removed.profiles
+metadata(zz)$removed.profiles
 setdiff(profile_id(z), profile_id(zz))
 zz$.pctMissing
 
@@ -89,7 +89,7 @@ plotSPC(zz, color = '.pctMissing', name = NA, divide.hz = FALSE)
 zz <- dice(z, byhz = TRUE)
 
 # ok
-metadata(zz)$dice.removed.horizons
+metadata(zz)$removed.horizons
 setdiff(profile_id(z), profile_id(zz))
 
 plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE, show.legend = FALSE)
