@@ -63,6 +63,7 @@ fillHzGaps <- function(x, flag = FALSE) {
   # bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
   
   # TODO: short-circuit / optimization
+  #  https://github.com/ncss-tech/aqp/issues/205
   #  use findGaps() to work on affected subset of profiles ONLY
   #  likely a data.table approach
   
