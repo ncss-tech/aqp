@@ -37,7 +37,7 @@
 #' # BUG: plotSPC can't use logical data for color
 #' z$.filledGap <- as.factor(z$.filledGap)
 #' plotSPC(z, width = 0.3, color = '.filledGap', show.legend = FALSE)
-
+#' 
 #' 
 fillHzGaps <- function(x, flag = FALSE) {
   
