@@ -2,6 +2,10 @@
 #' @title Find and Fill Horizon Gaps
 #' 
 #' @description This function attempt to find "gaps" in the horizon records of a `SoilProfileCollection` object and fill with place holder horizons. 
+#' 
+#' Gaps are defined as: 
+#'  * within each profile, for horizons `i` to `n_hz`:
+#'  * `bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)`
 #'
 #' @param x `SoilProfileCollection` object
 #' @param flag logical, flag empty horizons that have been added
@@ -58,9 +62,10 @@ fillHzGaps <- function(x, flag = FALSE) {
   
   # TODO: short-circuit / optimization
   #  use findGaps() to work on affected subset of profiles ONLY
+  #  likely a data.table approach
   
-  # TODO:
-  # faster version with data.table
+  
+  # TODO: faster version with data.table
   
   # slow / simple version with split
   hs <- split(h, h[[idn]])
@@ -98,6 +103,7 @@ fillHzGaps <- function(x, flag = FALSE) {
       res <- rbindlist(list(i, hz.template), fill = TRUE)
       
       # TODO: back to original class
+      # via aqp_df_class(x)
       res <- as.data.frame(res)
       
       return(res)

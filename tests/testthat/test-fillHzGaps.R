@@ -16,19 +16,21 @@ x <- HzDepthLogicSubset(sp4, byhz = TRUE)
 # par(mar = c(0, 0, 0, 1))
 # plotSPC(x, width = 0.3, default.color = 'royalblue')
 
+# basic functionality
 test_that("fillHzGaps", {
   
   # CRAN safe
   
+  # fill / flag
   z <- fillHzGaps(x, flag = TRUE)
   
+  # result is always this
   expect_true(inherits(z, 'SoilProfileCollection'))
   
-  ## TODO: more tests
+  # flag column present
+  expect_true('.filledGap' %in% horizonNames(z))
   
-  # # BUG: plotSPC can't use logical data for color
-  # z$.filledGap <- as.factor(z$.filledGap)
-  # plotSPC(z, width = 0.3, color = '.filledGap', show.legend = FALSE)
-  # 
-
+  # correct gaps have been filled
+  expect_true(all(which(z[['.filledGap']]) == idx))
+  
 })

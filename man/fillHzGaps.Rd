@@ -16,6 +16,12 @@ fillHzGaps(x, flag = FALSE)
 }
 \description{
 This function attempt to find "gaps" in the horizon records of a \code{SoilProfileCollection} object and fill with place holder horizons.
+
+Gaps are defined as:
+\itemize{
+\item within each profile, for horizons \code{i} to \code{n_hz}:
+\item \verb{bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)}
+}
 }
 \examples{
 
