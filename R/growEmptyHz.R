@@ -1,3 +1,6 @@
+
+## TODO: add "direction" argument for selecting, top / bottom / both
+
 #' @title Grow a `SoilProfileCollection` with Empty Horizons
 #' 
 #' @description This function appends a single "empty" horizon to each profile that is shallower than `z`. Horizon IDs are reset and the horizons are re-sorted according to profile ID and horizon top depth. This will fail if horizon top depths are `NA`. Adding empty horizons to profiles is one way to ensure that data (even NA) will be returned from each profile when sliced at depths exceeding some profiles in the collection.
