@@ -1,4 +1,6 @@
 
+
+
 #' @title Find and Fill Horizon Gaps
 #' 
 #' @description This function attempt to find "gaps" in the horizon records of a `SoilProfileCollection` object and fill with place holder horizons. 
