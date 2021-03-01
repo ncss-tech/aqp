@@ -7,7 +7,9 @@
 #' 
 #' @param x a `SoilProfilecollection` object
 #' 
-#' @param z new bottom depth, after growing with empty horizons
+#' @param z new top or bottom depth (see `direction`), after growing with empty horizons
+#' 
+#' @param direction empty horizons are "grown" *down* to `z` or *up* to `z`
 #' 
 #' @return a `SoilProfilecollection` object
 #' 
@@ -30,17 +32,28 @@
 #' plotSPC(d, color = 'sliceID', show.legend = FALSE)
 #' plotSPC(d, color = 'Ca', show.legend = FALSE)
 #' 
-growEmptyHz <- function(x, z) {
+growEmptyHz <- function(x, z, direction = c('down', 'up')) {
+  
+  # fix for no visible binding for global variables
+  .LAST <- NULL
+  .HZID <- NULL
   
   # IDs, depths
   hzidn <- hzidname(x)
   idn <- idname(x)
   htb <- horizonDepths(x)
+  hznames <- horizonNames(x)
+  
+  # IDs + top/bottom
+  ids.top.bottom.idx <- match(c(idn, hzidn, htb), hznames)
   
   # sanity check: x cannot include NA horizon top depths
   if(any(is.na(x[[htb[1]]]))){
     stop('NA horizon top depths are not allowed', call. = FALSE)
   }
+  
+  # direction arg
+  direction <- match.arg(direction)
   
   # z must be an integer > 0
   if(!inherits(z, 'numeric') | z < 1) {
@@ -48,15 +61,8 @@ growEmptyHz <- function(x, z) {
   }
   
   
+  
   # short-circuit: if all profiles are deeper than z, do nothing
-  
-  # old-way of profile max depth
-  # there is a large cost to profileApply, best for complex split-apply-combine
-  # max.d <- profileApply(x, max)
-  
-  # fix for no visible binding for global variables
-  .LAST <- NULL
-  .HZID <- NULL
   
   # get a vector of profile bottom depths
   # FAST c/o AGB and new .LAST and .HZID shortcuts
@@ -71,16 +77,12 @@ growEmptyHz <- function(x, z) {
   # get horizons
   h <- horizons(x)
   
-  ## this is effective and simple to understand, but does not scale well
-  # # get bottom-most horizons
-  # b <- profileApply(x, simplify = FALSE, frameify = TRUE, FUN = function(i) {
-  #   horizons(i)[nrow(i), ]
-  # })
-  
   # get bottom-most horizons
-  # ~ 50% faster than above
-  # c/o AGB
+  # ~ 50% faster than profileApply c/o AGB
   b <- horizons(x[, , .LAST])
+  
+  # keep only relevant columns: profile ID, horizon ID, top, bottom
+  b <- b[, ids.top.bottom.idx]
   
   # just those profiles with bottom-most depth > z
   idx <- which(b[[htb[2]]] < z)
@@ -97,26 +99,32 @@ growEmptyHz <- function(x, z) {
   # bottom becomes z
   b[[htb[[2]]]] <- z
   
+  # zap empty horizon IDs
+  b[[hzidn]] <- NA
   
-  ## TODO: likely faster to rbindlist() source + emtpy: as in fillHzGaps
-  ##       rbindlist(list(i, hz.template), fill = TRUE)
+  # combine original horizons + empty horizons, padding missing columns with NA
+  nh <- rbindlist(list(h, b), fill = TRUE)
   
-  # set all hz vars (except IDs) to NA
-  nm <- names(b)
-  idx <- which(!nm %in% c(idn, hzidn, htb))
-  vars <- nm[idx]
+  # TODO: back to original class
+  # via aqp_df_class(x)
+  nh <- as.data.frame(nh)
   
-  for(i in vars){
-    b[[i]] <- NA
+  # reset hzIDs of empty horizons
+  idx <- which(is.na(nh[[hzidn]]))
+  if(length(idx) > 0) {
+    
+    # new sequence for affected hz
+    m <- max(as.numeric(nh[[hzidn]]), na.rm = TRUE)
+    s <- seq(
+      from = m + 1,
+      to = m + length(idx),
+      by = 1
+    )
+    
+    # insert new horizon IDs  
+    nh[[hzidn]][idx] <- as.character(s)
   }
   
-  # combine original horizons + fake horizons
-  nh <- rbind(h, b)
-  
-  ## TODO: add new horizon IDs and leave old ones alone, as in fillHzGaps
-  # reset hzIDs
-  nh[[hzidn]] <- NA
-  nh[[hzidn]] <- 1:nrow(nh)
   
   ## TODO: faster with data.table when using very large collections
   # re-order

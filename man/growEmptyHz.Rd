@@ -4,12 +4,14 @@
 \alias{growEmptyHz}
 \title{Grow a \code{SoilProfileCollection} with Empty Horizons}
 \usage{
-growEmptyHz(x, z)
+growEmptyHz(x, z, direction = c("down", "up"))
 }
 \arguments{
 \item{x}{a \code{SoilProfilecollection} object}
 
-\item{z}{new bottom depth, after growing with empty horizons}
+\item{z}{new top or bottom depth (see \code{direction}), after growing with empty horizons}
+
+\item{direction}{empty horizons are "grown" \emph{down} to \code{z} or \emph{up} to \code{z}}
 }
 \value{
 a \code{SoilProfilecollection} object
