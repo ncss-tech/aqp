@@ -9,7 +9,7 @@
 
 ## TODO: suggest / offer repairMissingHzDepths() before running
 ## TODO: gap-filling after removing invalid horizons (https://github.com/ncss-tech/aqp/issues/205)
-
+## TODO: finish NA-padding with growEmptyHz(... , direction = 'both')
 
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
@@ -104,7 +104,8 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, padNA = FALSE, st
       # optionally pad slices deeper than each profile with empty horizons
       if(padNA) {
         ## TODO: this function is not yet optimized
-        x <- suppressMessages(growEmptyHz(x, z = max(z)))
+        ## TODO: implement direction = 'both' for a single-pass
+        x <- suppressMessages(growEmptyHz(x, z = max(z), direction = 'down'))
       }
     }
     
