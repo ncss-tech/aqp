@@ -33,4 +33,6 @@ test_that("fillHzGaps", {
   # correct gaps have been filled
   expect_true(all(which(z[['.filledGap']]) == idx))
   
+  # calculated hzIDs are in ascending order
+  expect_equal(hzID(z), as.character(1:nrow(z)))
 })

@@ -32,121 +32,63 @@
 #' 
 #' # gaps and now problematic profiles
 #' par(mar = c(0, 0, 0, 1))
-#' plotSPC(x, width = 0.3, default.color = 'royalblue')
+#' plotSPC(x, width = 0.3, default.color = 'royalblue', name = 'hzID')
 #' 
 #' z <- fillHzGaps(x, flag = TRUE)
 #' 
 #' # BUG: plotSPC can't use logical data for color
 #' z$.filledGap <- as.factor(z$.filledGap)
-#' plotSPC(z, width = 0.3, color = '.filledGap', show.legend = FALSE)
+#' plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #' 
 #' 
 fillHzGaps <- function(x, flag = FALSE) {
-  
-  # assumes profile ID / top depth sorting !
-  
-  ## extract pieces
   idn <- idname(x)
   hzidn <- hzidname(x)
+  
   htb <- horizonDepths(x)
+  
   hznames <- horizonNames(x)
+  hcnames <- c(idn, hzidn, htb)
   
-  # IDs + top/bottom
-  ids.top.bottom.idx <- match(c(idn, hzidn, htb), hznames)
-  
-  # only using hz data
   h <- horizons(x)
   
-  # find gaps
-  # gap: 
-  # within a profile
-  # bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
+  lead.idx <- 2:nrow(h)
+  lag.idx <- 1:(nrow(h) - 1)
   
-  # TODO: short-circuit / optimization
-  #  https://github.com/ncss-tech/aqp/issues/205
-  #  use findGaps() to work on affected subset of profiles ONLY
-  #  likely a data.table approach
+  # identify bad horizons
+  bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
+                   & h[[idn]][lag.idx] == h[[idn]][lead.idx])
   
+  # create template data.frame
+  hz.template <- h[bad.idx, ]
   
-  # TODO: faster version with data.table
+  # replace non-ID/depth column values with NA
+  hz.template[, hznames[!hznames %in% hcnames]] <- NA
   
-  # slow / simple version with split
-  hs <- split(h, h[[idn]])
+  # fill gaps
+  hz.template[[htb[1]]] <- h[[htb[2]]][bad.idx]     # replace top with (overlying) bottom
+  hz.template[[htb[2]]] <- h[[htb[1]]][bad.idx + 1] # replace bottom with (underlying) top
   
-  h.filled <- lapply(hs, function(i) {
-    # number of horizons
-    n <- nrow(i)
-    
-    # comparison index
-    s <- 1:(n-1)
-    
-    # local copies for simpler expressions
-    .top <- i[[htb[1]]]
-    .bottom <- i[[htb[2]]]
-    
-    # find gaps
-    # affected horizons are c(idx, idx + 1)
-    idx <- which(.bottom[s] != .top[s + 1])
-    
-    # only if there are gaps
-    if(length(idx) > 0) {
-      gap.top <- .bottom[idx]
-      gap.bottom <- .top[idx + 1]
-      
-      # copy 1st horizon for gap-filling empty hz
-      hz.template <- i[1, ids.top.bottom.idx]
-      # edit depths
-      hz.template[[htb[1]]] <- gap.top
-      hz.template[[htb[2]]] <- gap.bottom
-      
-      # zap horizon ID
-      hz.template[[hzidn]] <- NA
-      
-      # combine with original horizons, padding NA
-      res <- rbindlist(list(i, hz.template), fill = TRUE)
-      
-      # TODO: back to original class
-      # via aqp_df_class(x)
-      res <- as.data.frame(res)
-      
-      return(res)
-    } else {
-      # do nothing
-      return(i)
-    }
-    
-  })
+  # flag if needed
+  if (flag) {
+    h[['.filledGap']] <- FALSE
+    hz.template[['.filledGap']] <- TRUE
+  }  
   
-  # back to DF
-  h.filled <- do.call('rbind', h.filled)
+  # combine original data with filled data
+  res <- rbind(h, hz.template)
   
-  # re-sort
-  o <- order(h.filled[[idn]], h.filled[[htb[1]]])
-  h.filled <- h.filled[o, ]
+  # ID + top depth sort
+  res <- res[order(res[[idn]], res[[htb[1]]]),]
   
-  # fill missing hzID
-  idx <- which(is.na(h.filled[[hzidn]]))
-  if(length(idx) > 0) {
-    # new sequence for affected hz
-    m <- max(as.numeric(h[[hzidn]]), na.rm = TRUE)
-    s <- seq(
-      from = m + 1,
-      to = m + length(idx),
-      by = 1
-    )
-    
-    # optionally flag filled gaps
-    if(flag) {
-      h.filled[['.filledGap']] <- FALSE
-      h.filled[['.filledGap']][idx] <- TRUE
-    }
-    
-    # insert new horizon IDs  
-    h.filled[[hzidn]][idx] <- as.character(s)
-  }
+  # re-calculate unique hzID (note: AFTER reorder)
+  res$hzID <- as.character(1:nrow(res))
   
-  # re-pack horizons
-  replaceHorizons(x) <- h.filled
+  # replace horizons (use df class in object x)
+  replaceHorizons(x) <- aqp:::.as.data.frame.aqp(res, aqp_df_class(x))
+  
+  # use the autocalculated hzID (in case user had e.g. phiid, chiid set)
+  hzidname(x) <- "hzID"
   
   return(x)
 }
