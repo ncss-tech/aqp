@@ -48,4 +48,5 @@ z <- fillHzGaps(x, flag = TRUE)
 z$.filledGap <- as.factor(z$.filledGap)
 plotSPC(z, width = 0.3, color = '.filledGap', show.legend = FALSE)
 
+
 }
