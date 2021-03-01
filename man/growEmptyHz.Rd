@@ -9,7 +9,7 @@ growEmptyHz(x, z, direction = c("down", "up"))
 \arguments{
 \item{x}{a \code{SoilProfilecollection} object}
 
-\item{z}{new top or bottom depth (see \code{direction}), after growing with empty horizons}
+\item{z}{new top or bottom anchor (see \code{direction}), after growing with empty horizons}
 
 \item{direction}{empty horizons are "grown" \emph{down} to \code{z} or \emph{up} to \code{z}}
 }
@@ -17,23 +17,31 @@ growEmptyHz(x, z, direction = c("down", "up"))
 a \code{SoilProfilecollection} object
 }
 \description{
-This function appends a single "empty" horizon to each profile that is shallower than \code{z}. Horizon IDs are reset and the horizons are re-sorted according to profile ID and horizon top depth. This will fail if horizon top depths are \code{NA}. Adding empty horizons to profiles is one way to ensure that data (even NA) will be returned from each profile when sliced at depths exceeding some profiles in the collection.
+This function appends a single "empty" horizon to each profile that is shallower than (\code{direction = 'down'}) or starts below (\code{direction = 'up'}) \code{z}. This will fail if horizon top depths are \code{NA}. Adding empty horizons to profiles is one way to ensure that data (even NA) will be returned from each profile when sliced at depths above / below some profiles in the collection.
 }
 \examples{
 
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 
-par(mar = c(0, 0, 0, 0))
+# remove 1st horizons from profiles 1:4
+idx <- sp4[,, .FIRST, .HZID]
+replaceHorizons(sp4) <- horizons(sp4)[-idx[1:4], ]
 
+
+par(mar = c(0, 0, 0, 0))
 plotSPC(sp4)
 
-g <- growEmptyHz(sp4, 50)
-plotSPC(g, color = 'hzID', show.legend = FALSE)
+# grow-down
+g <- growEmptyHz(sp4, z = 50)
 plotSPC(g, color = 'Ca', show.legend = FALSE)
 
-d <- dice(g, fm = 0:50 ~ .)
-plotSPC(d, color = 'sliceID', show.legend = FALSE)
+# grow-up
+g2 <- growEmptyHz(g, z = 0, direction = 'up')
+plotSPC(g2, color = 'Ca', show.legend = FALSE)
+
+# demonstrate with dicing/slicing
+d <- dice(g2, fm = 0:50 ~ .)
 plotSPC(d, color = 'Ca', show.legend = FALSE)
 
 }

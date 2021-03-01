@@ -1,4 +1,50 @@
 
+
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+
+x <- sp4
+
+g <- growEmptyHz(x, z = 75, direction = 'down')
+
+par(mar = c(0, 0, 0, 0))
+plotSPC(g, color = 'Ca', show.legend = FALSE)
+
+## remove 1st horizon
+y <- sp4
+idx <- y[,, .FIRST, .HZID]
+replaceHorizons(y) <- horizons(y)[-idx[1:4], ]
+
+# ok
+plotSPC(y, color = 'Ca', show.legend = FALSE)
+
+# grow down: ok
+g <- growEmptyHz(y, z = 75, direction = 'down')
+plotSPC(g, color = 'Ca', show.legend = FALSE)
+
+# grow up
+g2 <- growEmptyHz(g, z = 0, direction = 'up')
+plotSPC(g2, color = 'Ca', show.legend = FALSE)
+
+
+
+d <- dice(g2, fm = 0:75 ~ ., byhz = TRUE)
+s <- slice(g2, fm = 0:75 ~ .)
+
+profile_id(d) <- sprintf("%s-dice", profile_id(d))
+z <- combine(s, d)
+
+par(mar = c(0, 0, 0, 0))
+plotSPC(z, color = 'Ca', name = NA)
+
+
+
+
+
+
+
+
+
 library(bench)
 library(data.table)
 
