@@ -5,24 +5,21 @@
 # * spc2mpspline()
 
 
-## TODO: think about the bigger picture: should these functions do "one" thing, and leave filter + filling to a higher level function? maybe.
 
 #'
 #' @title Subset `SoilProfileCollection` Objects or Horizons via `checkHzDepthLogic`
 #' 
-#' @description This function removes profiles or horizons from a `SoilProfileCollection` that are flagged as having invalid horizon depth logic by [`checkHzDepthLogic`].
+#' @description This function removes profiles or horizons from a `SoilProfileCollection` that are flagged as having invalid horizon depth logic by [`checkHzDepthLogic`]. Invalid profiles may be created when setting `byhz = TRUE`; use caution as some functions may not work properly in the presence of gaps. Consider using [`fillHzGaps`] to fill these gaps.
 #' 
 #' @param x a `SoilProfileCollection` object
 #' 
 #' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)
 #' 
-#' @param fillGaps logical, replace gaps created by the removal of invalid horizons with "empty" horizons containing all NA, and new horizon IDs using `fillHzGaps`.
-#' 
 #' @return a `SoilProfileCollection` object
 #' 
 #' @export
 #' 
-HzDepthLogicSubset <- function(x, byhz = FALSE, fillGaps = FALSE) {
+HzDepthLogicSubset <- function(x, byhz = FALSE) {
   
   # additional arguments?
   hz.tests <- checkHzDepthLogic(x, fast = TRUE, byhz = byhz)
@@ -60,10 +57,6 @@ HzDepthLogicSubset <- function(x, byhz = FALSE, fillGaps = FALSE) {
       stop('removing horizons with invalid depth logic would corrupt `x`, use `byhz = FALSE`', call. = FALSE)
     }
     
-    # optionally fill any gaps that were created
-    if(fillGaps) {
-      x <- fillHzGaps(x)
-    }
     
   } else {
     # profile-level
