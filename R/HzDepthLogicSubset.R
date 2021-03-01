@@ -5,6 +5,8 @@
 # * spc2mpspline()
 
 
+## TODO: think about the bigger picture: should these functions do "one" thing, and leave filter + filling to a higher level function? maybe.
+
 #'
 #' @title Subset `SoilProfileCollection` Objects or Horizons via `checkHzDepthLogic`
 #' 

@@ -97,6 +97,10 @@ growEmptyHz <- function(x, z) {
   # bottom becomes z
   b[[htb[[2]]]] <- z
   
+  
+  ## TODO: likely faster to rbindlist() source + emtpy: as in fillHzGaps
+  ##       rbindlist(list(i, hz.template), fill = TRUE)
+  
   # set all hz vars (except IDs) to NA
   nm <- names(b)
   idx <- which(!nm %in% c(idn, hzidn, htb))
@@ -109,6 +113,7 @@ growEmptyHz <- function(x, z) {
   # combine original horizons + fake horizons
   nh <- rbind(h, b)
   
+  ## TODO: add new horizon IDs and leave old ones alone, as in fillHzGaps
   # reset hzIDs
   nh[[hzidn]] <- NA
   nh[[hzidn]] <- 1:nrow(nh)
