@@ -124,7 +124,7 @@ fillHzGaps <- function(x, flag = FALSE) {
   o <- order(h.filled[[idn]], h.filled[[htb[1]]])
   h.filled <- h.filled[o, ]
   
-  # fill minssing hzID
+  # fill missing hzID
   idx <- which(is.na(h.filled[[hzidn]]))
   if(length(idx) > 0) {
     # new sequence for affected hz
