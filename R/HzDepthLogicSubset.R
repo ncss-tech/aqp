@@ -4,20 +4,23 @@
 # * slab()
 # * spc2mpspline()
 
-## TODO do we need all arguments to checkHzDepthLogic()?
-# if using `...` then we need to explicitly "grab" byhz for later
 
 #'
 #' @title Subset `SoilProfileCollection` Objects or Horizons via `checkHzDepthLogic`
 #' 
+#' @description This function removes profiles or horizons from a `SoilProfileCollection` that are flagged as having invalid horizon depth logic by [`checkHzDepthLogic`].
+#' 
 #' @param x a `SoilProfileCollection` object
+#' 
 #' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)
+#' 
+#' @param fillGaps logical, replace gaps created by the removal of invalid horizons with "empty" horizons containing all NA, and new horizon IDs using `fillHzGaps`.
 #' 
 #' @return a `SoilProfileCollection` object
 #' 
 #' @export
 #' 
-HzDepthLogicSubset <- function(x, byhz = FALSE) {
+HzDepthLogicSubset <- function(x, byhz = FALSE, fillGaps = FALSE) {
   
   # additional arguments?
   hz.tests <- checkHzDepthLogic(x, fast = TRUE, byhz = byhz)
@@ -53,6 +56,11 @@ HzDepthLogicSubset <- function(x, byhz = FALSE) {
     
     if(inherits(res, 'try-error')) {
       stop('removing horizons with invalid depth logic would corrupt `x`, use `byhz = FALSE`', call. = FALSE)
+    }
+    
+    # optionally fill any gaps that were created
+    if(fillGaps) {
+      x <- fillHzGaps(x)
     }
     
   } else {

@@ -4,16 +4,18 @@
 \alias{HzDepthLogicSubset}
 \title{Subset \code{SoilProfileCollection} Objects or Horizons via \code{checkHzDepthLogic}}
 \usage{
-HzDepthLogicSubset(x, byhz = FALSE)
+HzDepthLogicSubset(x, byhz = FALSE, fillGaps = FALSE)
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}
 
 \item{byhz}{logical, evaluate horizon depth logic at the horizon level (profile level if \code{FALSE})}
+
+\item{fillGaps}{logical, replace gaps created by the removal of invalid horizons with "empty" horizons containing all NA, and new horizon IDs using \code{fillHzGaps}.}
 }
 \value{
 a \code{SoilProfileCollection} object
 }
 \description{
-Subset \code{SoilProfileCollection} Objects or Horizons via \code{checkHzDepthLogic}
+This function removes profiles or horizons from a \code{SoilProfileCollection} that are flagged as having invalid horizon depth logic by \code{\link{checkHzDepthLogic}}.
 }
