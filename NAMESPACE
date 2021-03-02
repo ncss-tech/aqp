@@ -74,7 +74,6 @@ importFrom(plyr,
 )
 
 import(data.table)
-import(tibble)
 
 importFrom(stringr,
   fixed,
