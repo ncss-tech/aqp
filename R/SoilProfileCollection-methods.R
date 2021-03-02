@@ -79,9 +79,7 @@ setMethod(
     
     # filter out missing data, accounting for optional `v`
     h <- x@horizons
-    h <- .data.frame.j(h, target.names, aqp_df_class(x))
-    x@horizons <- h[complete.cases(h),]
-    hzdesgnname(x) <- ""
+    x@horizons <- h[complete.cases(.data.frame.j(h, target.names, aqp_df_class(x))),]
     
     # return the shallowest (of the deepest depths in each profile)
     .LAST <- NULL
@@ -120,9 +118,7 @@ setMethod(
     
     # filter out missing data, accounting for optional `v`
     h <- x@horizons
-    h <- .data.frame.j(h, target.names, aqp_df_class(x))
-    x@horizons <- h[complete.cases(h),]
-    hzdesgnname(x) <- ""
+    x@horizons <- h[complete.cases(.data.frame.j(h, target.names, aqp_df_class(x))),]
     
     # return the deepest (of the deepest depths in each profile)
     .LAST <- NULL
