@@ -1,6 +1,3 @@
-
-
-
 #' @title Find and Fill Horizon Gaps
 #'
 #' @description This function attempt to find "gaps" in the horizon records of a `SoilProfileCollection` object and fill with place holder horizons.
@@ -10,8 +7,8 @@
 #'  * `bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)`
 #'
 #' @param x `SoilProfileCollection` object
-#' @param flag logical, flag empty horizons that have been added
-#'
+#' @param flag logical, flag empty horizons that have been added. default: `FALSE`
+#' @param surface logical, fill from shallowest top depth to 0 cm? default: `TRUE`
 #' @return `SoilProfileCollection` object
 #' @export
 #'
@@ -41,7 +38,7 @@
 #' plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #'
 #'
-fillHzGaps <- function(x, flag = FALSE) {
+fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
   idn <- idname(x)
   hzidn <- hzidname(x)
 
@@ -54,6 +51,23 @@ fillHzGaps <- function(x, flag = FALSE) {
 
   lead.idx <- 2:nrow(h)
   lag.idx <- 1:(nrow(h) - 1)
+
+  # fill from shallowest top depth to 0 cm
+  surface.template <- h[0,]
+  if (surface) {
+    h <- data.table::as.data.table(h)
+    .FIRST <- NULL
+    .HZID <-  NULL
+    .I <- NULL
+    .SD <- NULL
+    surface.template <- horizons(x[h[x[,,.FIRST,.HZID], .I[.SD[[1]] > 0], .SDcols = htb[1]], 1])
+    if (nrow(surface.template) > 0) {
+      surface.template[, hznames[!hznames %in% hcnames]] <- NA
+
+      surface.template[[htb[2]]] <- surface.template[[htb[1]]] # replace bottom with (underlying) top
+      surface.template[[htb[1]]] <- 0                          # replace top with zero
+    }
+  }
 
   # identify bad horizons
   bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
@@ -87,7 +101,7 @@ fillHzGaps <- function(x, flag = FALSE) {
   }
 
   # combine original data with filled data
-  res <- rbind(h, hz.template)
+  res <- rbind(surface.template, h, hz.template)
 
   # ID + top depth sort
   res <- res[order(res[[idn]], res[[htb[1]]]),]

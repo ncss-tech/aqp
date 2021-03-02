@@ -180,26 +180,105 @@ fillHzGaps_3 <- function(x, flag = FALSE) {
   return(x)
 }
 
+fillHzGaps_4 <- function(x, flag = FALSE, surface = TRUE) {
+  idn <- idname(x)
+  hzidn <- hzidname(x)
+
+  htb <- horizonDepths(x)
+
+  hznames <- horizonNames(x)
+  hcnames <- c(idn, htb)
+
+  h <- horizons(x)
+
+  lead.idx <- 2:nrow(h)
+  lag.idx <- 1:(nrow(h) - 1)
+
+  .SD <- NULL
+  .N <- NULL
+  .I <- NULL
+  h <- data.table::as.data.table(horizons(x))
+
+  bad.idx <- h[, .I[.SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
+                      .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
+               .SDcols = hcnames]
+
+  surface.template <- h[0,]
+  if (surface) {
+    .FIRST <- NULL
+    .HZID <-  NULL
+    surface.template <- h[h[x[,, .FIRST, .HZID], .I[.SD[[1]] > 0], .SDcols = htb[1]],]
+    if (nrow(surface.template) > 0) {
+      surface.template[, hznames[!hznames %in% hcnames]] <- NA
+
+      surface.template[[htb[2]]] <- surface.template[[htb[1]]] # replace bottom with (underlying) top
+      surface.template[[htb[1]]] <- 0                          # replace top with zero
+    }
+  }
+
+  # identify bad horizons
+  bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
+                   & h[[idn]][lag.idx] == h[[idn]][lead.idx])
+
+  # data.table 3x faster than above with 10k profiles
+  # .SD <- NULL
+  # .N <- NULL
+  # h <- data.table::as.data.table(horizons(x))
+  #
+  # bad.idx <- which(h[, .SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
+  #                      .SD[1:(.N - 1), 1] == .SD[2:.N, 1],
+  #                    .SDcols = hcnames])
+
+  # create template data.frame
+  hz.template <- h[bad.idx, ]
+
+  if (nrow(hz.template > 0)) {
+    # replace non-ID/depth column values with NA
+    hz.template[, hznames[!hznames %in% hcnames]] <- NA
+
+    # fill gaps
+    hz.template[[htb[1]]] <- h[[htb[2]]][bad.idx]     # replace top with (overlying) bottom
+    hz.template[[htb[2]]] <- h[[htb[1]]][bad.idx + 1] # replace bottom with (underlying) top
+  }
+
+  # flag if needed
+  if (flag) {
+    if (nrow(h) > 0) h[['.filledGap']] <- FALSE
+    if (nrow(hz.template) > 0) hz.template[['.filledGap']] <- TRUE
+  }
+
+  # combine original data with filled data
+  res <- rbind(surface.template, h, hz.template)
+
+  # ID + top depth sort
+  res <- res[order(res[[idn]], res[[htb[1]]]),]
+
+  # re-calculate unique hzID (note: AFTER reorder)
+  res$hzID <- as.character(1:nrow(res))
+
+  # replace horizons (use df class in object x)
+  replaceHorizons(x) <- aqp:::.as.data.frame.aqp(res, aqp_df_class(x))
+
+  # use the autocalculated hzID (in case user had e.g. phiid, chiid set)
+  hzidname(x) <- "hzID"
+
+  return(x)
+}
+
 
 # create sample dataset
 spc <- as.data.frame(data.table::rbindlist(lapply(1:10000, random_profile)))
 
-# data(sp4)
-# spc <- sp4
-# idx <- c(6:7) # pathologically bad case for sp4
+data(sp4)
+spc <- sp4
+idx <- c(6:7) # pathologically bad case for sp4
 depths(spc) <- id ~ top + bottom
 
 # introduce gaps
-set.seed(12)
-idx <- sample(1:nrow(spc), floor(0.01*nrow(spc)))
-spc$top[idx] <- NA
+spc@horizons <- horizons(spc)[-idx, ]
 
 # check
-horizons(spc)[idx, ]
-
-# remove problematic horizons
-x <- HzDepthLogicSubset(spc, byhz = TRUE)
-#> dropping horizons with invalid depth logic, see `metadata(x)$removed.horizons`
+horizons(spc)
 
 # benchmark filling gaps
 bench::mark(horizons(fillHzGaps(x, flag = FALSE)),
@@ -214,3 +293,9 @@ bench::mark(horizons(fillHzGaps(x, flag = FALSE)),
 #> 2 horizons(fillHzGaps_2(x, flag = TRUE)) 120.73ms 133.68ms     7.53         NA
 #> 3 horizons(fillHzGaps_3(x, flag = TRUE))  35.31ms  41.04ms    19.7          NA
 #> # … with 1 more variable: `gc/sec` <dbl>
+
+
+daff::diff_data(horizons(fillHzGaps(x, flag = FALSE)),
+                horizons(fillHzGaps_4(x, flag = FALSE)))
+
+View(horizons(fillHzGaps_4(x, flag = FALSE)))
