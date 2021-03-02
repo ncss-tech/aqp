@@ -8,8 +8,8 @@
 #'
 #' @param x `SoilProfileCollection` object
 #' @param flag logical, flag empty horizons that have been added. default: `FALSE`
-#' @param to_top numeric, fill from shallowest top depth to X cm? default: `NULL`
-#' @param to_bottom numeric, fill from deepest bottom depth to X cm? default: `NULL`
+#' @param to_top numeric, fill from shallowest top depth in each profile to specified depth? default: `0` 
+#' @param to_bottom numeric, fill from deepest bottom depth in each profile to specified depth? default: `aqp::max(x)` 
 #' @return `SoilProfileCollection` object
 #' @export
 #'
@@ -42,13 +42,13 @@
 #' z2 <- fillHzGaps(x, flag = TRUE, to_top = 0)
 #' z2$.filledGap <- as.factor(z2$.filledGap)
 #' plotSPC(z2, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
-#'  
+#' 
 #' # fill bottom to max(SPC)
 #' z3 <- fillHzGaps(x, flag = TRUE, to_top = 0, to_bottom = max(x))
 #' z3$.filledGap <- as.factor(z3$.filledGap)
 #' plotSPC(z3, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #'
-fillHzGaps <- function(x, flag = FALSE, to_top = NULL, to_bottom = NULL) {
+fillHzGaps <- function(x, flag = FALSE, to_top = 0, to_bottom = max(x)) {
   idn <- idname(x)
   hzidn <- hzidname(x)
 
@@ -56,10 +56,7 @@ fillHzGaps <- function(x, flag = FALSE, to_top = NULL, to_bottom = NULL) {
 
   hznames <- horizonNames(x)
   hcnames <- c(idn, htb)
-  # data.table 3x faster than above with 10k profiles
-  .SD <- NULL
-  .N <- NULL
-  .I <- NULL
+  
   h <- data.table::as.data.table(horizons(x))
 
   lead.idx <- 2:nrow(h)
@@ -69,9 +66,10 @@ fillHzGaps <- function(x, flag = FALSE, to_top = NULL, to_bottom = NULL) {
   bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
                    & h[[idn]][lag.idx] == h[[idn]][lead.idx])
   
-#   bad.idx <- h[, .I[.SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
-#                     .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
-#                      .SDcols = hcnames]
+  # TODO: data.table more performant than above for large SPC?
+  #   bad.idx <- h[, .I[.SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
+  #                     .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
+  #                      .SDcols = hcnames]
 
   # create template data.frame
   hz.template <- h[bad.idx, ]
@@ -87,11 +85,8 @@ fillHzGaps <- function(x, flag = FALSE, to_top = NULL, to_bottom = NULL) {
 
   # fill from shallowest top depth to X cm
   surface.template <- hz.template[0,]
-  if (!missing(to_top) && is.logical(to_top) && to_top == TRUE) {
-    to_top <- 0 # default
-  }
   
-  if (!missing(to_top) && !is.null(to_top) && is.numeric(to_top)) {
+  if (!is.null(to_top) && is.numeric(to_top)) {
     .FIRST <- NULL
     .HZID <-  NULL
     surface.template <- h[x[,, .FIRST, .HZID],]
@@ -106,11 +101,8 @@ fillHzGaps <- function(x, flag = FALSE, to_top = NULL, to_bottom = NULL) {
   
   # fill from deepest bottom depth to X cm
   bottom.template <- hz.template[0,]
-  if (!missing(to_bottom) && is.logical(to_bottom) && to_bottom == TRUE) {
-    to_bottom <- max(x) # default
-  }
   
-  if (!missing(to_bottom) && !is.null(to_bottom) && is.numeric(to_bottom)) {
+  if (!is.null(to_bottom) && is.numeric(to_bottom)) {
     .LAST <- NULL
     .HZID <-  NULL
     bottom.template <- h[x[,, .LAST, .HZID],]
