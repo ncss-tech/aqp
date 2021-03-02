@@ -96,7 +96,7 @@ fillHzGaps <- function(x, flag = FALSE) {
   res$hzID <- as.character(1:nrow(res))
 
   # replace horizons (use df class in object x)
-  replaceHorizons(x) <- aqp:::.as.data.frame.aqp(res, aqp_df_class(x))
+  replaceHorizons(x) <- .as.data.frame.aqp(res, aqp_df_class(x))
 
   # use the autocalculated hzID (in case user had e.g. phiid, chiid set)
   hzidname(x) <- "hzID"

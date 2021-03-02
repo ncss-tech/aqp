@@ -79,7 +79,7 @@ fillHzGaps_2 <- function(x, flag = FALSE) {
   htb <- horizonDepths(x)
 
   hznames <- horizonNames(x)
-  hcnames <- c(idn, hzidn, htb)
+  hcnames <- c(idn, htb)
 
   h <- horizons(x)
 
@@ -137,11 +137,15 @@ fillHzGaps_3 <- function(x, flag = FALSE) {
 
   .SD <- NULL
   .N <- NULL
+  .I <- NULL
   h <- data.table::as.data.table(horizons(x))
 
-  bad.idx <- which(h[, .SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
-                       .SD[1:(.N - 1), 1] == .SD[2:.N, 1],
-                     .SDcols = hcnames])
+  bad.idx <- h[, .I[.SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
+                    .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
+               .SDcols = hcnames]
+
+  # create template data.frame
+  hz.template <- h[bad.idx, ]
 
   if (nrow(hz.template > 0)) {
     # replace non-ID/depth column values with NA
@@ -186,7 +190,7 @@ spc <- as.data.frame(data.table::rbindlist(lapply(1:10000, random_profile)))
 depths(spc) <- id ~ top + bottom
 
 # introduce gaps
-set.seed(123)
+set.seed(12)
 idx <- sample(1:nrow(spc), floor(0.01*nrow(spc)))
 spc$top[idx] <- NA
 
