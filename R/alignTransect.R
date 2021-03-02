@@ -36,9 +36,8 @@
 #' g <- subset(sierraTransect, transect == 'Granite')
 #' a <- subset(sierraTransect, transect == 'Andesite')
 #' 
-#' g.p <- alignTransect(g$elev, 1, length(g))
-#' a.p <- alignTransect(a$elev, 1, length(a))
-#' 
+#' g.p <- alignTransect(g$elev, x.min = 1, x.max = length(g), fix = FALSE)
+#' a.p <- alignTransect(a$elev, x.min = 1, x.max = length(a), fix = FALSE)
 #' 
 #' op <- par(mar=c(2,0,0,2), mfrow=c(2,1))
 #' 

@@ -9,7 +9,7 @@ dice(
   fm = NULL,
   SPC = TRUE,
   pctMissing = FALSE,
-  fill = !is.null(fm),
+  fill = FALSE,
   strict = TRUE,
   byhz = FALSE
 )
