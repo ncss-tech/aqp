@@ -4,12 +4,16 @@
 \alias{fillHzGaps}
 \title{Find and Fill Horizon Gaps}
 \usage{
-fillHzGaps(x, flag = FALSE)
+fillHzGaps(x, flag = FALSE, to_top = 0, to_bottom = max(x))
 }
 \arguments{
 \item{x}{\code{SoilProfileCollection} object}
 
-\item{flag}{logical, flag empty horizons that have been added}
+\item{flag}{logical, flag empty horizons that have been added. default: \code{FALSE}}
+
+\item{to_top}{numeric, fill from shallowest top depth in each profile to specified depth? default: \code{0}}
+
+\item{to_bottom}{numeric, fill from deepest bottom depth in each profile to specified depth? default: \code{aqp::max(x)}}
 }
 \value{
 \code{SoilProfileCollection} object
@@ -28,25 +32,34 @@ Gaps are defined as:
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 
-# introduce gaps
-idx <- c(2, 8, 12)
+# introduce depth logic errors
+idx <- c(2, 6:7, 8, 12)
 sp4$top[idx] <- NA
 
 # check
 horizons(sp4)[idx, ]
 
-# remove problematic horizons
+# create gaps by removing logic errors
 x <- HzDepthLogicSubset(sp4, byhz = TRUE)
 
-# gaps and now problematic profiles
+# inspect
 par(mar = c(0, 0, 0, 1))
-plotSPC(x, width = 0.3, default.color = 'royalblue')
+plotSPC(x, width = 0.3, default.color = 'royalblue', name = 'hzID')
 
 z <- fillHzGaps(x, flag = TRUE)
 
 # BUG: plotSPC can't use logical data for color
 z$.filledGap <- as.factor(z$.filledGap)
-plotSPC(z, width = 0.3, color = '.filledGap', show.legend = FALSE)
+plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 
+# fill top to 0 cm
+z2 <- fillHzGaps(x, flag = TRUE, to_top = 0)
+z2$.filledGap <- as.factor(z2$.filledGap)
+plotSPC(z2, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
+
+# fill bottom to max(SPC)
+z3 <- fillHzGaps(x, flag = TRUE, to_top = 0, to_bottom = max(x))
+z3$.filledGap <- as.factor(z3$.filledGap)
+plotSPC(z3, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 
 }
