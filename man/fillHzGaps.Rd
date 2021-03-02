@@ -4,12 +4,14 @@
 \alias{fillHzGaps}
 \title{Find and Fill Horizon Gaps}
 \usage{
-fillHzGaps(x, flag = FALSE)
+fillHzGaps(x, flag = FALSE, surface = TRUE)
 }
 \arguments{
 \item{x}{\code{SoilProfileCollection} object}
 
-\item{flag}{logical, flag empty horizons that have been added}
+\item{flag}{logical, flag empty horizons that have been added. default: \code{FALSE}}
+
+\item{surface}{logical, fill from shallowest top depth to 0 cm? default: \code{TRUE}}
 }
 \value{
 \code{SoilProfileCollection} object
@@ -40,13 +42,13 @@ x <- HzDepthLogicSubset(sp4, byhz = TRUE)
 
 # gaps and now problematic profiles
 par(mar = c(0, 0, 0, 1))
-plotSPC(x, width = 0.3, default.color = 'royalblue')
+plotSPC(x, width = 0.3, default.color = 'royalblue', name = 'hzID')
 
 z <- fillHzGaps(x, flag = TRUE)
 
 # BUG: plotSPC can't use logical data for color
 z$.filledGap <- as.factor(z$.filledGap)
-plotSPC(z, width = 0.3, color = '.filledGap', show.legend = FALSE)
+plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 
 
 }

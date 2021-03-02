@@ -52,23 +52,6 @@ fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
   lead.idx <- 2:nrow(h)
   lag.idx <- 1:(nrow(h) - 1)
 
-  # fill from shallowest top depth to 0 cm
-  surface.template <- h[0,]
-  if (surface) {
-    h <- data.table::as.data.table(h)
-    .FIRST <- NULL
-    .HZID <-  NULL
-    .I <- NULL
-    .SD <- NULL
-    surface.template <- horizons(x[h[x[,,.FIRST,.HZID], .I[.SD[[1]] > 0], .SDcols = htb[1]], 1])
-    if (nrow(surface.template) > 0) {
-      surface.template[, hznames[!hznames %in% hcnames]] <- NA
-
-      surface.template[[htb[2]]] <- surface.template[[htb[1]]] # replace bottom with (underlying) top
-      surface.template[[htb[1]]] <- 0                          # replace top with zero
-    }
-  }
-
   # identify bad horizons
   bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
                    & h[[idn]][lag.idx] == h[[idn]][lead.idx])
@@ -94,14 +77,36 @@ fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
     hz.template[[htb[2]]] <- h[[htb[1]]][bad.idx + 1] # replace bottom with (underlying) top
   }
 
+  # fill from shallowest top depth to 0 cm
+  surface.template <- hz.template[0,]
+  if (surface) {
+    h <- data.table::as.data.table(h)
+    .FIRST <- NULL
+    .HZID <-  NULL
+    .I <- NULL
+    .SD <- NULL
+    surface.template <- h[h[x[,, .FIRST, .HZID], .I[.SD[[1]] > 0], .SDcols = htb[1]],]
+    if (nrow(surface.template) > 0) {
+      surface.template[, hznames[!hznames %in% hcnames]] <- NA
+
+      surface.template[[htb[2]]] <- surface.template[[htb[1]]] # replace bottom with (underlying) top
+      surface.template[[htb[1]]] <- 0                          # replace top with zero
+    }
+  }
+
   # flag if needed
   if (flag) {
     if (nrow(h) > 0) h[['.filledGap']] <- FALSE
+    if (nrow(surface.template) > 0) surface.template[['.filledGap']] <- TRUE
     if (nrow(hz.template) > 0) hz.template[['.filledGap']] <- TRUE
   }
 
   # combine original data with filled data
-  res <- rbind(surface.template, h, hz.template)
+  res <- rbind(h, hz.template)
+
+  if (nrow(surface.template) > 0) {
+    res <- rbind(res, surface.template)
+  }
 
   # ID + top depth sort
   res <- res[order(res[[idn]], res[[htb[1]]]),]
