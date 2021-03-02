@@ -1,16 +1,22 @@
 #' @title Find and Fill Horizon Gaps
 #'
-#' @description This function attempt to find "gaps" in the horizon records of a `SoilProfileCollection` object and fill with place holder horizons.
+#' @description This function attempts to find "gaps" in the horizon records of a `SoilProfileCollection` object and fill with placeholder horizons (profile ID, horizon ID, to/bottom depths, all else `NA`). Missing horizon records between the top of each profile and `to_top`, or the bottom of each profile and `to_bottom` are treated as gaps when those arguments are not `NULL`. You can use this function to prepare a potentially messy `SoilProfileCollection` for subsequent analyses that are sensitive to horizon sequence inconsistencies or require a conformal "rectangle" of data spanning known depths.
 #'
 #' Gaps are defined as:
 #'  * within each profile, for horizons `i` to `n_hz`:
 #'  * `bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)`
 #'
 #' @param x `SoilProfileCollection` object
-#' @param flag logical, flag empty horizons that have been added. default: `FALSE`
+#' 
+#' @param flag logical, flag empty horizons that have been added. default: `TRUE`
+#' 
 #' @param to_top numeric, fill from shallowest top depth in each profile to specified depth? default: `0` 
 #' @param to_bottom numeric, fill from deepest bottom depth in each profile to specified depth? default: `aqp::max(x)` 
+#' 
 #' @return `SoilProfileCollection` object
+#' 
+#' @author A.G. Brown and D.E. Beaudette
+#' 
 #' @export
 #'
 #' @examples
@@ -34,21 +40,33 @@
 #'
 #' z <- fillHzGaps(x, flag = TRUE)
 #'
-#' # BUG: plotSPC can't use logical data for color
-#' z$.filledGap <- as.factor(z$.filledGap)
 #' plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #' 
 #' # fill top to 0 cm
 #' z2 <- fillHzGaps(x, flag = TRUE, to_top = 0)
-#' z2$.filledGap <- as.factor(z2$.filledGap)
 #' plotSPC(z2, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #' 
 #' # fill bottom to max(SPC)
 #' z3 <- fillHzGaps(x, flag = TRUE, to_top = 0, to_bottom = max(x))
-#' z3$.filledGap <- as.factor(z3$.filledGap)
 #' plotSPC(z3, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #'
-fillHzGaps <- function(x, flag = FALSE, to_top = 0, to_bottom = max(x)) {
+#' ## another example
+#' data(sp4)
+#' depths(sp4) <- id ~ top + bottom
+#' 
+#' # remove 1st horizons from profiles 1:4
+#' idx <- sp4[,, .FIRST, .HZID]
+#' replaceHorizons(sp4) <- horizons(sp4)[-idx[1:4], ]
+#' 
+#' # prepare for dice()
+#' z <- fillHzGaps(sp4, to_top = 0, to_bottom = 50, flag = TRUE) 
+#' 
+#' # empty-horizon padding is in place for formula interface to dice()
+#' d <- dice(z, fm = 0:50 ~ .)
+#' plotSPC(d, color = 'Ca', show.legend = FALSE)
+#' plotSPC(d, color = '.filledGap', show.legend = FALSE)
+#' 
+fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   idn <- idname(x)
   hzidn <- hzidname(x)
 
