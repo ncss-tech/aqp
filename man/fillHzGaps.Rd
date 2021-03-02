@@ -4,14 +4,16 @@
 \alias{fillHzGaps}
 \title{Find and Fill Horizon Gaps}
 \usage{
-fillHzGaps(x, flag = FALSE, surface = TRUE)
+fillHzGaps(x, flag = FALSE, to_top = NULL, to_bottom = NULL)
 }
 \arguments{
 \item{x}{\code{SoilProfileCollection} object}
 
 \item{flag}{logical, flag empty horizons that have been added. default: \code{FALSE}}
 
-\item{surface}{logical, fill from shallowest top depth to 0 cm? default: \code{TRUE}}
+\item{to_top}{numeric, fill from shallowest top depth to X cm? default: \code{NULL}}
+
+\item{to_bottom}{numeric, fill from deepest bottom depth to X cm? default: \code{NULL}}
 }
 \value{
 \code{SoilProfileCollection} object

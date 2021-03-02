@@ -8,7 +8,8 @@
 #'
 #' @param x `SoilProfileCollection` object
 #' @param flag logical, flag empty horizons that have been added. default: `FALSE`
-#' @param surface logical, fill from shallowest top depth to 0 cm? default: `TRUE`
+#' @param to_top numeric, fill from shallowest top depth to X cm? default: `NULL`
+#' @param to_bottom numeric, fill from deepest bottom depth to X cm? default: `NULL`
 #' @return `SoilProfileCollection` object
 #' @export
 #'
@@ -17,17 +18,17 @@
 #' data(sp4)
 #' depths(sp4) <- id ~ top + bottom
 #'
-#' # introduce gaps
-#' idx <- c(2, 8, 12)
+#' # introduce depth logic errors
+#' idx <- c(2, 6:7, 8, 12)
 #' sp4$top[idx] <- NA
 #'
 #' # check
 #' horizons(sp4)[idx, ]
 #'
-#' # remove problematic horizons
+#' # create gaps by removing logic errors
 #' x <- HzDepthLogicSubset(sp4, byhz = TRUE)
 #'
-#' # gaps and now problematic profiles
+#' # inspect
 #' par(mar = c(0, 0, 0, 1))
 #' plotSPC(x, width = 0.3, default.color = 'royalblue', name = 'hzID')
 #'
@@ -36,9 +37,18 @@
 #' # BUG: plotSPC can't use logical data for color
 #' z$.filledGap <- as.factor(z$.filledGap)
 #' plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
+#' 
+#' # fill top to 0 cm
+#' z2 <- fillHzGaps(x, flag = TRUE, to_top = 0)
+#' z2$.filledGap <- as.factor(z2$.filledGap)
+#' plotSPC(z2, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
+#'  
+#' # fill bottom to max(SPC)
+#' z3 <- fillHzGaps(x, flag = TRUE, to_top = 0, to_bottom = max(x))
+#' z3$.filledGap <- as.factor(z3$.filledGap)
+#' plotSPC(z3, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
 #'
-#'
-fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
+fillHzGaps <- function(x, flag = FALSE, to_top = NULL, to_bottom = NULL) {
   idn <- idname(x)
   hzidn <- hzidname(x)
 
@@ -46,8 +56,11 @@ fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
 
   hznames <- horizonNames(x)
   hcnames <- c(idn, htb)
-
-  h <- horizons(x)
+  # data.table 3x faster than above with 10k profiles
+  .SD <- NULL
+  .N <- NULL
+  .I <- NULL
+  h <- data.table::as.data.table(horizons(x))
 
   lead.idx <- 2:nrow(h)
   lag.idx <- 1:(nrow(h) - 1)
@@ -55,15 +68,10 @@ fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
   # identify bad horizons
   bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
                    & h[[idn]][lag.idx] == h[[idn]][lead.idx])
-
-  # data.table 3x faster than above with 10k profiles
-  # .SD <- NULL
-  # .N <- NULL
-  # h <- data.table::as.data.table(horizons(x))
-  #
-  # bad.idx <- which(h[, .SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
-  #                      .SD[1:(.N - 1), 1] == .SD[2:.N, 1],
-  #                    .SDcols = hcnames])
+  
+#   bad.idx <- h[, .I[.SD[1:(.N - 1), 3] != .SD[2:.N, 2] &
+#                     .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
+#                      .SDcols = hcnames]
 
   # create template data.frame
   hz.template <- h[bad.idx, ]
@@ -77,27 +85,49 @@ fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
     hz.template[[htb[2]]] <- h[[htb[1]]][bad.idx + 1] # replace bottom with (underlying) top
   }
 
-  # fill from shallowest top depth to 0 cm
+  # fill from shallowest top depth to X cm
   surface.template <- hz.template[0,]
-  if (surface) {
-    h <- data.table::as.data.table(h)
+  if (!missing(to_top) && is.logical(to_top) && to_top == TRUE) {
+    to_top <- 0 # default
+  }
+  
+  if (!missing(to_top) && !is.null(to_top) && is.numeric(to_top)) {
     .FIRST <- NULL
     .HZID <-  NULL
-    .I <- NULL
-    .SD <- NULL
-    surface.template <- h[h[x[,, .FIRST, .HZID], .I[.SD[[1]] > 0], .SDcols = htb[1]],]
+    surface.template <- h[x[,, .FIRST, .HZID],]
+    surface.template <- surface.template[which(surface.template[[htb[1]]] > to_top)]
     if (nrow(surface.template) > 0) {
       surface.template[, hznames[!hznames %in% hcnames]] <- NA
 
       surface.template[[htb[2]]] <- surface.template[[htb[1]]] # replace bottom with (underlying) top
-      surface.template[[htb[1]]] <- 0                          # replace top with zero
+      surface.template[[htb[1]]] <- to_top                     # replace top with zero
     }
   }
-
+  
+  # fill from deepest bottom depth to X cm
+  bottom.template <- hz.template[0,]
+  if (!missing(to_bottom) && is.logical(to_bottom) && to_bottom == TRUE) {
+    to_bottom <- max(x) # default
+  }
+  
+  if (!missing(to_bottom) && !is.null(to_bottom) && is.numeric(to_bottom)) {
+    .LAST <- NULL
+    .HZID <-  NULL
+    bottom.template <- h[x[,, .LAST, .HZID],]
+    bottom.template <- bottom.template[which(bottom.template[[htb[2]]] < to_bottom)]
+    if (nrow(bottom.template) > 0) {
+      bottom.template[, hznames[!hznames %in% hcnames]] <- NA
+      
+      bottom.template[[htb[1]]] <- bottom.template[[htb[2]]] # replace top with (overlying) bottom
+      bottom.template[[htb[2]]] <- to_bottom                 # replace bottom with to_bottom
+    }
+  }
+  
   # flag if needed
   if (flag) {
     if (nrow(h) > 0) h[['.filledGap']] <- FALSE
     if (nrow(surface.template) > 0) surface.template[['.filledGap']] <- TRUE
+    if (nrow(bottom.template) > 0) bottom.template[['.filledGap']] <- TRUE
     if (nrow(hz.template) > 0) hz.template[['.filledGap']] <- TRUE
   }
 
@@ -107,7 +137,11 @@ fillHzGaps <- function(x, flag = FALSE, surface = TRUE) {
   if (nrow(surface.template) > 0) {
     res <- rbind(res, surface.template)
   }
-
+  
+  if (nrow(bottom.template) > 0) {
+    res <- rbind(res, bottom.template)
+  }
+  
   # ID + top depth sort
   res <- res[order(res[[idn]], res[[htb[1]]]),]
 
