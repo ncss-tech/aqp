@@ -652,8 +652,8 @@ NULL
 #'
 #'
 #' # split transects
-#' g <- filter(sierraTransect, transect == 'Granite')
-#' a <- filter(sierraTransect, transect == 'Andesite')
+#' g <- subset(sierraTransect, transect == 'Granite')
+#' a <- subset(sierraTransect, transect == 'Andesite')
 #'
 #' g.order <- order(g$elev)
 #' a.order <- order(a$elev)
