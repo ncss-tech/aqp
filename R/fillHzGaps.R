@@ -118,14 +118,17 @@ fillHzGaps <- function(x, flag = FALSE, to_top = 0, to_bottom = max(x)) {
   # flag if needed
   if (flag) {
     if (nrow(h) > 0) h[['.filledGap']] <- FALSE
+    if (nrow(hz.template) > 0) hz.template[['.filledGap']] <- TRUE
     if (nrow(surface.template) > 0) surface.template[['.filledGap']] <- TRUE
     if (nrow(bottom.template) > 0) bottom.template[['.filledGap']] <- TRUE
-    if (nrow(hz.template) > 0) hz.template[['.filledGap']] <- TRUE
   }
 
   # combine original data with filled data
-  res <- rbind(h, hz.template)
-
+  res <- h
+  if (nrow(hz.template) > 0) {
+    res <- rbind(res, hz.template)
+  }
+  
   if (nrow(surface.template) > 0) {
     res <- rbind(res, surface.template)
   }
