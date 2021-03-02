@@ -1,3 +1,12 @@
+# aqp 1.28 (2021-03-02)
+ * optimization of SoilProfileCollection `j`-index extraction using {data.table}
+ * introduction of `.LAST`, `.FIRST` and `.HZID` SoilProfileCollection "k-keywords"
+ * `perturb()` is the new generalized replacement for `sim()` and `permute_profile()`
+* `checkHzDepthLogic()` now has a `byhz` argument for checking logic by _horizon_ rather than profile
+ * `fillHzGaps` now has `to_top` and `to_bottom` arguments for fillling above shallowest top / deepest bottom by profile
+ * improvements to `findOverlap()` and `fixOverlap()` objective function 
+ * `plotSPC()` automatically converts a `logical` `color=` argument to `factor`
+ 
 # aqp 1.27 (2021-01-22)
  * `fillHzGaps`: new function for fixing horizon depth topological errors and padding top/bottom of profiles with placeholder (empty) horizons
  * `mixMunsell` now relies on suggested package {gower} for 5-10x speed bump
