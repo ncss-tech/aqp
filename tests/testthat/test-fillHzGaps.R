@@ -4,21 +4,22 @@ context("fillHzGaps")
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 
-# introduce logic errors
-idx <- c(2, 6:7, 8, 12)
-sp4$top[idx] <- NA
-
-# remove logic errors / create gaps
-x <- HzDepthLogicSubset(sp4, byhz = TRUE)
-
-# # gaps and now problematic profiles
-# par(mar = c(0, 0, 0, 1))
-# plotSPC(x, width = 0.3, default.color = 'royalblue')
 
 # basic functionality
 test_that("fillHzGaps", {
   
   # CRAN safe
+  
+  # introduce logic errors
+  idx <- c(2, 6:7, 8, 12)
+  sp4$top[idx] <- NA
+  
+  # remove logic errors / create gaps
+  x <- HzDepthLogicSubset(sp4, byhz = TRUE)
+  
+  # # gaps and now problematic profiles
+  # par(mar = c(0, 0, 0, 1))
+  # plotSPC(x, width = 0.3, default.color = 'royalblue')
   
   # fill / noflag
   z <- fillHzGaps(x, flag = FALSE)
@@ -57,9 +58,6 @@ test_that("fillHzGaps", {
 
 
 test_that("multiple simultaneous arguments", {
-  
-  data(sp4)
-  depths(sp4) <- id ~ top + bottom
   
   # remove 1st horizon for profiles 1:4
   y <- sp4
