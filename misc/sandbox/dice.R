@@ -1,4 +1,75 @@
 
+## latest tinkering / testing based on updates to fillHzGaps
+
+## TODO: fully integrate new fillHzGaps
+##   * always fill / pad?
+##   * additional arguments for gaps vs top / bottom?
+##   * backwards compatibility with slice
+
+
+set.seed(1010)
+d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
+d <- do.call('rbind', d)
+depths(d) <- id ~ top + bottom
+
+# introduce horizonation errors
+d$bottom[2] <- NA
+d$top[20] <- d$bottom[20]
+d$bottom[32] <- 15
+d$top[6] <- 95
+d$p1[23] <- NA
+
+# verify illogical horizons are gone
+x <- HzDepthLogicSubset(d, byhz = TRUE)
+plotSPC(fillHzGaps(x, to_bottom = NULL), color = '.filledGap')
+# ok
+all(checkHzDepthLogic(x, fast = TRUE, byhz = TRUE)$valid)
+
+
+# ?!
+# what is causing filling to happen in 3?
+s <- dice(d, byhz = FALSE, fill = FALSE)
+plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+abline(h = max(d), lwd = 2, lty = 1)
+
+# OK
+# auto-filling of gaps introduced (byhz = TRUE) but no where else
+s <- dice(d, byhz = TRUE, fill = FALSE)
+plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+abline(h = max(d), lwd = 2, lty = 1)
+
+# OK
+# auto-filling of gaps introduced (byhz = TRUE) and to-depth of SPC
+s <- dice(d, byhz = TRUE, fill = TRUE)
+plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+abline(h = max(d), lwd = 2, lty = 1)
+
+# OK
+# # auto-filling of gaps introduced (byhz = TRUE) but no where else
+s <- dice(d, byhz = TRUE, fill = TRUE, fm = ~ .)
+plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+abline(h = max(d), lwd = 2, lty = 1)
+
+# OK
+# auto-filling of gaps introduced (byhz = TRUE) but no where else
+# note top = 5, bottom = 6
+s <- dice(d, byhz = TRUE, fill = TRUE, fm = 5 ~ .)
+plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+abline(h = 5, lwd = 2, lty = 1)
+
+# ?!
+# bottom depth not correct in 10 / 3 / 6 
+# auto-filling of gaps introduced (byhz = TRUE) and to max(z)
+s <- dice(d, byhz = TRUE, fill = TRUE, fm = 0:132 ~ .)
+plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+abline(h = 132, lwd = 2, lty = 1)
+
+
+
+
+### finish updating these
+
+
 # library(aqp)
 library(data.table)
 
@@ -27,11 +98,11 @@ plotSPC(d)
 
 # ~ 10 seconds for 10k profiles
 # much faster to generate as DF, then promote to SPC at the end
+set.seed(1010)
 d <- lapply(as.character(1:10000), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 
 # much faster: rbind + init SPC after making individual profiles
 d <- do.call('rbind', d)
-
 depths(d) <- id ~ top + bottom
 
 # fake group
@@ -53,26 +124,21 @@ plotSPC(d[1:10, ], color = 'p1', show.legend = FALSE)
 z <- dice(d[1:2, ], pctMissing = TRUE)
 
 par(mar = c(0,1,3,1))
-# suppress hz names
-# strange legend, due to character representation of integers
-plotSPC(z, color = 'hzID', name = NA, divide.hz = FALSE)
-
+plotSPC(z, color = 'hzID', name = NA, divide.hz = FALSE, show.legend = FALSE)
 z$.pctMissing
 
 
+## hmm... sometimes this breaks, strange edge cases
 
 ## introduce horizonation errors
 z <- d[1:10, ]
 z$bottom[2] <- NA
 z$top[20] <- z$bottom[20]
-
 z$bottom[32] <- 15
-z$bottom[5]
 z$top[6] <- 95
-
 z$p1[23] <- NA
 
-# dropping IDs
+# dropping entire profiles, OK
 zz <- dice(z, byhz = FALSE, pctMissing = TRUE)
 
 # ok
@@ -80,10 +146,12 @@ metadata(zz)$removed.profiles
 setdiff(profile_id(z), profile_id(zz))
 zz$.pctMissing
 
+# ok
 plotSPC(zz, color = 'name', name = NA, divide.hz = FALSE, show.legend = FALSE)
 plotSPC(zz, color = 'hzID', name = NA, divide.hz = FALSE, show.legend = FALSE)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 plotSPC(zz, color = '.pctMissing', name = NA, divide.hz = FALSE)
+
 
 # dropping horizons, leaving gaps
 zz <- dice(z, byhz = TRUE)
@@ -134,7 +202,7 @@ bench::mark(
   dice = dice(d, byhz = FALSE), 
   dice_byhz = dice(d, byhz = TRUE), 
   dice_fm = dice(d, fm = 0:100 ~ .),
-  dice_fm_padNA = dice(d, fm = 0:100 ~ ., padNA = TRUE),
+  dice_fm_nofill = dice(d, fm = 0:100 ~ ., fill = FALSE),
   dice_no_chk = dice(d, strict = FALSE), 
   dice_no_chk_pctmissing = dice(d, strict = FALSE, pctMissing = TRUE), 
   iterations = 1,
@@ -148,8 +216,8 @@ bench::mark(
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 
-# enabling NA padding via growEmptyHz()
-d <- dice(sp4, fm = 0:50 ~ ., padNA = TRUE)
+# gap-filling and extension to limits specified in fm are automatically applied (fill = TRUE)
+d <- dice(sp4, fm = 0:50 ~ .)
 s <- slice(sp4, fm = 0:50 ~ .)
 
 # slice() always gave one extra slice... dang it
