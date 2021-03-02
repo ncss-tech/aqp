@@ -402,6 +402,12 @@ plotSPC <- function(
   ## horizon colors ##
   ####################
   
+  # .interpretHorizonColors() expects numeric | categorical data
+  # convert logical to factor
+  if(is.logical(h[[color]])) {
+    h[[color]] <- factor(h[[color]])
+  }
+  
   # results contain:
   # vector of horizon colors, row-order preserved
   # legend data if relevant, otherwise NULL
