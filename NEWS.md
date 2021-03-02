@@ -4,7 +4,10 @@
  * `perturb()` is the new generalized replacement for `sim()` and `permute_profile()`
 * `checkHzDepthLogic()` now has a `byhz` argument for checking logic by _horizon_ rather than profile
  * `fillHzGaps` now has `to_top` and `to_bottom` arguments for fillling above shallowest top / deepest bottom by profile
- * improvements to `findOverlap()` and `fixOverlap()` objective function 
+ * `fixOverlap()` more flexible and will usually settle on a solution in fewer iterations:
+    - `overlapMetrics()` instead of `findOverlap()` for part of objective function
+    - cooling schedule is now fully adjustable via `T0` and `k` arguments
+ * `alignTransect` helper function for computing relative positions and ordering vector supplied to `plotSPC`
  * `plotSPC()` automatically converts a `logical` `color=` argument to `factor`
  
 # aqp 1.27 (2021-01-22)
