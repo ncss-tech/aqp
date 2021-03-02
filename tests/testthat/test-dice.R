@@ -90,7 +90,7 @@ test_that("percent missing calculation", {
 test_that("padding with NA, backwards-compat with slice", {
   
   
-  s <- dice(sp4, fm = 0:80 ~ ., padNA = TRUE)
+  s <- dice(sp4, fm = 0:80 ~ ., fill = TRUE)
   
   # all profiles should be the same "depth", including empty (NA) horizons
   expect_true(all(profileApply(s, max) == 80))

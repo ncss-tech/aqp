@@ -8,8 +8,6 @@
 # returns all depths / columns
 
 ## TODO: suggest / offer repairMissingHzDepths() before running
-## TODO: gap-filling after removing invalid horizons (https://github.com/ncss-tech/aqp/issues/205)
-## TODO: finish NA-padding with growEmptyHz(... , direction = 'both')
 
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
@@ -24,7 +22,7 @@
 #' 
 #' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
 #' 
-#' @param padNA pad slices beyond the depth of a profile with "empty" slices containing only IDs and top/bottom depths, only relevant when `fm` is specified with a left hand side.
+#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
 #' 
 #' @param strict perform horizon depth logic checking / flagging / removal
 #' 
@@ -38,7 +36,7 @@
 #' 
 #' @export
 #' 
-dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, padNA = FALSE, strict = TRUE, byhz = FALSE) {
+dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = !is.null(fm), strict = TRUE, byhz = FALSE) {
   
   # sacrifice to R CMD check spirits
   .pctMissing <- NULL
@@ -100,13 +98,10 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, padNA = FALSE, st
     if(length(z) == 0) {
       z <- NULL
     } else {
+      
       # z index is specified
-      # optionally pad slices deeper than each profile with empty horizons
-      if(padNA) {
-        ## TODO: this function is not yet optimized
-        ## TODO: implement direction = 'both' for a single-pass
-        x <- suppressMessages(growEmptyHz(x, z = max(z), direction = 'down'))
-      }
+      # must fill from min(z) --- [gaps] --- max(z)
+      x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z))
     }
     
     # check for '.' --> all variables, minus ID/depths
@@ -123,7 +118,13 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, padNA = FALSE, st
     
   } else {
     # no formula
-    # slice to-depth
+    # slice to-depth of collection
+    
+    # optionally fill all gaps between min(x) --- [gaps] --- max(x)
+    if(fill) {
+      x <- fillHzGaps(x, flag = TRUE, to_top = min(x), to_bottom = max(x))
+    }
+    
     # all variables except profile ID, horizon ID, top, bottom
     vars <- hznames[-ids.top.bottom.idx]
     z <- NULL
