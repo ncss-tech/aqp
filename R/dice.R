@@ -9,6 +9,12 @@
 
 ## TODO: suggest / offer repairMissingHzDepths() before running
 
+## TODO: fully integrate new fillHzGaps
+##   * always fill / pad?
+##   * additional arguments for gaps vs top / bottom?
+##   * backwards compatibility with slice
+
+
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
 #' @description Cut ("dice") soil horizons into 1-unit thick slices. This function replaces `slice`.
@@ -36,7 +42,7 @@
 #' 
 #' @export
 #' 
-dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = !is.null(fm), strict = TRUE, byhz = FALSE) {
+dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, strict = TRUE, byhz = FALSE) {
   
   # sacrifice to R CMD check spirits
   .pctMissing <- NULL
@@ -44,7 +50,14 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = !is.null(f
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
   if(strict) {
-    x <- HzDepthLogicSubset(x, byhz = byhz)  
+    x <- HzDepthLogicSubset(x, byhz = byhz)
+    
+    ## TODO: this could invoke 2x calls to fillHzGaps
+    # removed horizons will trigger an automatic gap-filling
+    if(!is.null(metadata(x)$removed.horizons)) {
+      message('filling gaps left by HzDepthLogicSubset')
+      x <- fillHzGaps(x, flag = TRUE, to_top = NULL, to_bottom = NULL)
+    }
   }
   
   # keep track of original object size
@@ -98,7 +111,6 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = !is.null(f
     if(length(z) == 0) {
       z <- NULL
     } else {
-      
       # z index is specified
       # must fill from min(z) --- [gaps] --- max(z)
       x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z))
