@@ -20,6 +20,9 @@ test_that("fillHzGaps", {
   
   # CRAN safe
   
+  # fill / noflag
+  z <- fillHzGaps(x, flag = FALSE)
+  
   # fill / flag
   z <- fillHzGaps(x, flag = TRUE)
   
@@ -50,4 +53,32 @@ test_that("fillHzGaps", {
   z4 <- fillHzGaps(x, flag = TRUE, to_top = NULL, to_bottom = NULL)
   expect_equal(which(z4[['.filledGap']]), c(2L, 9L))
 
+})
+
+
+test_that("multiple simultaneous arguments", {
+  
+  data(sp4)
+  depths(sp4) <- id ~ top + bottom
+  
+  # remove 1st horizon for profiles 1:4
+  y <- sp4
+  idx <- y[,, .FIRST, .HZID]
+  replaceHorizons(y) <- horizons(y)[-idx[1:4], ]
+  
+  # fill gaps AND NA-pad to top/bottom anchors
+  z <- fillHzGaps(y, to_top = 0, to_bottom = 75, flag = TRUE)
+  
+  # result is always this
+  expect_true(inherits(z, 'SoilProfileCollection'))
+  
+  # flag column present
+  expect_true('.filledGap' %in% horizonNames(z))
+  
+  # test padding "up to" 0
+  expect_true(min(z$top) == 0)
+  
+  # test padding "down to" 75
+  expect_true(max(z) == 75)
+  
 })
