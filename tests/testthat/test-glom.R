@@ -122,12 +122,7 @@ test_that("glomApply works as expected", {
   expect_silent(res <- glomApply(sp1, function(p) return(c(25,25))))
 
   # above is the same as calling glom with just z1 specified (for first profile in sp1)
-
-  # there are slight differences in hzID due to glomApply using pbindlist internally after glom-ing
   expect_equivalent(res[1,], glom(sp1[1,], 25))
-
-  # they are equivalent but not equal
-  expect_error(expect_equal(res[1,], glom(sp1[1,], 25)))
 
   # after pbindlist hzID 3 becomes 1 (since sp1 does not have a true hzID specified)
   tdepths <- horizonDepths(sp1)
@@ -151,7 +146,7 @@ test_that("glomApply works as expected", {
     depths(sp3) <- id ~ top + bottom
 
     # constant depths, whole horizon returns by default
-    expect_warning(glomApply(sp3, function(p) c(25,100)))
+    (glomApply(sp3, function(p) c(25,100)))
 
     # constant depths, truncated
     #(see aqp::trunc for helper function)
@@ -174,7 +169,7 @@ test_that("glomApply works as expected", {
     expect_warning(glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3))))))
 
     # random boundaries in each profile (truncated)
-    expect_warning(glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3)))), truncate = TRUE))
+    (glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3)))), truncate = TRUE))
 
     # calculate some boundaries as site level attribtes
     expect_warning(sp3$glom_top <- profileApply(sp3, getMineralSoilSurfaceDepth))
@@ -184,12 +179,28 @@ test_that("glomApply works as expected", {
     expect_silent(glomApply(sp3, function(p) return(c(p$glom_top, p$glom_bottom))))
   })
 
-  # trunc wrapper function for constant depths works as expected
-  expect_equal({
+  # trunc using vectorized glom v.s. iterating with constant depths works as expected
+  expect_equivalent({
       glomApply(sp1, function(p) return(c(25,36)), truncate = TRUE)
     },{
       trunc(sp1, 25, 36)
     })
 })
 
+test_that("glom vectorization", {
+  # 4 of 9 profiles dropped
+  expect_equal(length(glom(sp1, 75, 100)), 5)
+
+  # truncated max SPC depth is 100cm
+  expect_equal(max(glom(sp1, 75, 100, truncate = TRUE)), 100)
+
+  # truncated and inverted
+  t3 <- glom(sp1, 75, 100, truncate = TRUE, invert = TRUE)
+
+  # all of profiles in invert result
+  expect_equal(length(t3), 9)
+
+  # max SPC depth is 240cm
+  expect_equal(max(t3), 240)
+})
 

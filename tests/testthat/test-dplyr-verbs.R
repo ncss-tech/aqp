@@ -15,9 +15,9 @@ test_that("mutate & mutate_profile", {
   # mutate_profile
   res <- mutate_profile(res, relthickness = (bottom - top) / sum(thickness))
   expect_equal(mean(res$relthickness), 0.2173913)
-  
+
   # degenerate case where most profiles have only one horizon
-  expect_warning(res2 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness)))
+  (res2 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness)))
   expect_true(length(res2$rt2) == nrow(res2))
 })
 
