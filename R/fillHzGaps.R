@@ -92,7 +92,7 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   # create template data.frame
   hz.template <- h[bad.idx, ]
 
-  if (nrow(hz.template > 0)) {
+  if (nrow(hz.template) > 0) {
     # replace non-ID/depth column values with NA
     hz.template[, hznames[!hznames %in% hcnames]] <- NA
 
