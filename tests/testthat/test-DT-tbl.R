@@ -2,9 +2,9 @@ context("data.table and tbl_df inheritance from data.frame")
 
 
 test_that("basic coercion", {
-  
+
   skip_on_cran()
-  
+
   ###  create empty frames
   empty_df <- data.frame()
 
@@ -242,10 +242,10 @@ res <- lapply(dfclasses, function(use_class) {
     expect_equal(horizons(test)[[idname(test)]], as.character(cc(lapply(1:4, rep, 10))))
 
     expect_equal(horizons(test)[[horizonDepths(test)[2]]], cc(rep(1:10, 4)))
-    
+
     # deliberately mess up order without adding anything
     expect_silent(horizons(test) <- horizons(test)[c(1:10,20:30,11:19,31:40),])
-    
+
     # horizons<- fixes the order
     expect_true(spc_in_sync(test)$valid)
 
@@ -396,25 +396,24 @@ res <- lapply(dfclasses, function(use_class) {
     test_that(sprintf("SPC subsetting with tidy verbs (%s)", use_class), {
 
       # filter works as expected
-      expect_equal(length(filter(sp1df, structure_type == "PL")), 1)
+      expect_equal(length(subset(sp1df, structure_type == "PL")), 1)
 
       # ensure multiple expressions yields same result as single expression
-      l1 <-  filter(sp1df, !is.na(texture),
+      l1 <-  subset(sp1df, !is.na(texture),
                     prop > mean(prop, na.rm = TRUE))
-      l2 <-  filter(sp1df, !is.na(texture) &
+      l2 <-  subset(sp1df, !is.na(texture) &
                     prop > mean(prop, na.rm = TRUE))
       expect_equivalent(length(l1), length(l2))
 
       # mixing of site and horizon level expressions is the intersection
-      l1 <- filter(sp1df, group == 2, prop > mean(prop, na.rm = TRUE))
+      l1 <- subset(sp1df, group == 2, prop > mean(prop, na.rm = TRUE))
       expect_equivalent(length(l1), 4)
 
       # grepSPC works as expected
       expect_equal(length(grepSPC(sp1df, texture, "SCL")), 1)
 
       # subApply works as expected
-      expect_equal(length(subApply(sp1df, function(p)
-        TRUE)), length(sp1df))
+      expect_equal(length(subApply(sp1df, function(p)  TRUE)), length(sp1df))
     })
 
     if (use_class == "data.table") {

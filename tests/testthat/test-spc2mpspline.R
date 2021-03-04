@@ -10,7 +10,7 @@ test_that("spc2mpspline works as expected", {
   expect_equal(attr(res1, "removed"), "P001")
 
   # P001 removed because of bad hz logic
-  sp1filt <- filter(sp1, checkHzDepthLogic(sp1)$valid)
+  sp1filt <- subset(sp1, checkHzDepthLogic(sp1)$valid)
   res2 <- spc2mpspline(sp1filt, "prop")
   expect_equal(length(res2), length(sp1filt)) # due to 89-89cm R layer
 

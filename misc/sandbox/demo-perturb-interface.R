@@ -34,7 +34,7 @@ jacobs2000[1, ] %>%
 jacobs2000[1, ] %>% 
   perturb(n = 5, boundary.attr = "bdy_sd", max.depth = 50) %>% 
   combine(jacobs2000[1,]) %>% 
-  mutate(thk = bottom - top) %>% 
+  transform(thk = bottom - top) %>% 
   plot(color = "clay", name = "thk", max.depth = 200, axis.line.offset = -1)
 abline(h = 50, lty = 2)
 
@@ -43,7 +43,7 @@ abline(h = 50, lty = 2)
 jacobs2000[1, ] %>% 
   perturb(n = 5, thickness.attr = "thk_sd", max.depth = 50) %>% 
   combine(jacobs2000[1,]) %>% 
-  mutate(thk = bottom - top) %>% 
+  transform(thk = bottom - top) %>% 
   plot(color = "clay", name = "thk", max.depth = 200, axis.line.offset = -1)
 abline(h = 50, lty = 2)
 

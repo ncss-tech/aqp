@@ -49,7 +49,7 @@ length(p3)
 
 # split on surface (age) site-level var
 p4 <- split(sp2, f = "surface")
-names(p4) 
+names(p4)
 length(p4) # 5 unique "surfaces", 5 SPCs in result list
 
 }

@@ -925,16 +925,16 @@ NULL
 #'
 #' @name jacobs2000
 #' @docType data
-#' 
+#'
 #' @format A \code{SoilProfileCollection} object.
-#' 
+#'
 #' @references Jacobs, P. M., L. T. West, and J. N. Shaw. 2002. Redoximorphic
 #' Features as Indicators of Seasonal Saturation, Lowndes County, Georgia. Soil
 #' Sci. Soc. Am. J. 66:315-323. doi:10.2136/sssaj2002.3150
 #' @usage data(jacobs2000)
-#' 
+#'
 #' @keywords datasets
-#' 
+#'
 #' @examples
 #'
 #' # load

@@ -39,7 +39,7 @@ depths(sp1) <- id ~ top + bottom
 
 res <- spc2mpspline(sp1, "prop")
 
-plotSPC(res[1:5,], color = "spline_prop", divide.hz = FALSE)
+plotSPC(res[1:5,], color = "prop_spline", divide.hz = FALSE)
 
 }
 \author{

@@ -37,7 +37,7 @@ if (!isGeneric("harmonize"))
 #' plot(h1, color = "foo")
 #'
 #' # filter with calculated "harmonized group" to get just RV profiles
-#' plot(filter(h1, hgroup == "q50"), color="foo")
+#' plot(subset(h1, hgroup == "q50"), color="foo")
 #'
 #' ### single source, two properties at once; with common labels: "method1" "method2"
 #'

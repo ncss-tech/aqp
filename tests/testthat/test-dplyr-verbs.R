@@ -8,7 +8,7 @@ sp3$group[3:6] <- "B"
 test_that("mutate & mutate_profile", {
 
   # mutate
-  res <- mutate(sp3, thickness = bottom - top)
+  res <- transform(sp3, thickness = bottom - top)
   expect_equal(mean(res$thickness), 18.5652174)
   # plot(res, color="thickness")
 
@@ -23,17 +23,13 @@ test_that("mutate & mutate_profile", {
 
 test_that("group_by & summarize", {
 
-  sp3 <- group_by(sp3, group)
+  sp3 <- groupSPC(sp3, group)
   expect_equal(metadata(sp3)$aqp_group_by, "group")
 
   # mean for A and B group horizon data
-  summa <- summarize(sp3, round(mean(clay)))
+  summa <- summarizeSPC(sp3, round(mean(clay)), round(sd(clay)))
   expect_equal(summa, structure(list(group = c("A", "B"),
-                                     `round(mean(clay))` = c(11, 29)),
+                                     `round(mean(clay))` = c(11,29),
+                                     `round(sd(clay))` = c(5, 12)),
                                 class = "data.frame", row.names = c(NA, -2L)))
 })
-
-#
-# test_that("", {
-#
-# })

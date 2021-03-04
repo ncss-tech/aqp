@@ -45,7 +45,7 @@ h1 <- harmonize(spc, x.names = list(foo = c(q05 = "p1", q50 = "p2", q95 = "p3"))
 plot(h1, color = "foo")
 
 # filter with calculated "harmonized group" to get just RV profiles
-plot(filter(h1, hgroup == "q50"), color="foo")
+plot(subset(h1, hgroup == "q50"), color="foo")
 
 ### single source, two properties at once; with common labels: "method1" "method2"
 
