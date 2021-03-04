@@ -109,6 +109,6 @@ glomApply <- function(object, .fun = NULL, truncate = FALSE, invert = FALSE,
 
 setMethod(f = 'trunc', signature(x = 'SoilProfileCollection'),
           function(x, z1, z2) {
-            return(glomApply(x, function(p) c(z1, z2), truncate = TRUE))
+            return(glom(x, z1, z2, invert = FALSE, truncate = TRUE))
           })
 
