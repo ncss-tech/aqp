@@ -51,7 +51,7 @@ test_that("plotSPC: figure settings", {
   # check adjustments
   expect_equal(lsp$scaling.factor, 0.5)
   expect_equal(lsp$width, 0.8)
-  expect_equal(lsp$y.offset, 8)
+  expect_equal(lsp$y.offset, rep(8, times = length(sp1)))
   expect_equal(lsp$n, 15)
   expect_equal(lsp$max.depth, 100)
 })

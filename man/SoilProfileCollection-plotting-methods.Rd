@@ -28,7 +28,7 @@ plotSPC(
   relative.pos = 1:length(x),
   add = FALSE,
   scaling.factor = 1,
-  y.offset = 0,
+  y.offset = rep(0, times = length(x)),
   x.idx.offset = 0,
   n = length(x),
   max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
@@ -100,7 +100,7 @@ plot(x, y, ...)
 
 \item{scaling.factor}{vertical scaling of profile depths, useful for adding profiles to an existing figure}
 
-\item{y.offset}{vertical offset for top of profiles, useful for adding profiles to an existing figure}
+\item{y.offset}{numeric vector of vertical offset for top of profiles in depth units of \code{x}, can either be a single numeric value or vector of length = \code{length(x)}}
 
 \item{x.idx.offset}{integer specifying horizontal offset from 0 (left-hand edge)}
 

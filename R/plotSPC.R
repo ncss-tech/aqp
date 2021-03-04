@@ -51,7 +51,7 @@
 #'
 #' @param scaling.factor vertical scaling of profile depths, useful for adding profiles to an existing figure
 #'
-#' @param y.offset vertical offset for top of profiles, useful for adding profiles to an existing figure
+#' @param y.offset numeric vector of vertical offset for top of profiles in depth units of `x`, can either be a single numeric value or vector of length = `length(x)`
 #'
 #' @param x.idx.offset integer specifying horizontal offset from 0 (left-hand edge)
 #'
@@ -225,7 +225,7 @@ plotSPC <- function(
   relative.pos=1:length(x),
   add=FALSE,
   scaling.factor=1,
-  y.offset=0,
+  y.offset = rep(0, times = length(x)),
   x.idx.offset=0,
   n=length(x),
   max.depth=ifelse(is.infinite(max(x)), 200, max(x)),
@@ -307,6 +307,16 @@ plotSPC <- function(
       stop('`hz.boundary.lty` must be numeric', call. = FALSE)
   }
   
+  # length of y.offset must length(x) or 1
+  if(length(y.offset) == 1) {
+    y.offset <- rep(y.offset, times = length(x))
+  }
+  
+  if(length(y.offset) != length(x)) {
+    warning('length of `y.offset` must be `length(x)` or 1, using `0`', call. = FALSE)
+    y.offset <- rep(0, times = length(x))
+  }
+  
   
   ###################
   ## SPC cleanup ? ##
@@ -382,7 +392,7 @@ plotSPC <- function(
   # get horizons
   h <- horizons(x)
 
-  # get column names from horizon dataframe
+  # get column names from horizon data
   nm <- names(h)
   
   ## TODO: there has to be a clear mechanism for suppressing labeling of horizon names
@@ -450,9 +460,19 @@ plotSPC <- function(
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
-	  plot(0, 0, type='n', xlim=c(width * x_left_space_mult, n+(extra_x_space)),
-	       ylim=c(max(depth_axis_intervals), -extra_y_space),
-	       axes=FALSE, xlab='', ylab='')
+    
+    ## TODO: this seems to extend too far... review
+    # y-limits also include y.offset range
+    ylim.range <- c(
+      max(depth_axis_intervals) + max(y.offset), 
+      -extra_y_space
+    )
+    
+	  plot(x = 0, y = 0, type='n', 
+	       xlim = c(width * x_left_space_mult, n+(extra_x_space)),
+	       ylim = ylim.range,
+	       axes=FALSE, xlab='', ylab=''
+	  )
   }
 
 
@@ -523,8 +543,8 @@ plotSPC <- function(
     x0 <- x.idx.offset + relative.pos[i]
 
 	  # get vectors of horizon boundaries, and scale
-	  y0 <- (this_profile_data[[bcol]] * scaling.factor) + y.offset
-	  y1 <- (this_profile_data[[tcol]] * scaling.factor) + y.offset
+	  y0 <- (this_profile_data[[bcol]] * scaling.factor) + y.offset[i]
+	  y1 <- (this_profile_data[[tcol]] * scaling.factor) + y.offset[i]
 
 
 	  
@@ -824,6 +844,9 @@ plotSPC <- function(
 	  #################
 	  ## profile IDs ##
 	  #################
+	  
+	  # profile is placed relative to the y-offset vector
+	  
 	  if(print.id) {
 			# optionally abbreviate
 			if(abbr)
@@ -835,19 +858,26 @@ plotSPC <- function(
 
 			# add the text: according to style
 			if(id.style == 'top')
-				text(x0, y.offset, id.text, pos=3, font=font.id, cex=cex.id)
+				text(x0, y.offset[i], id.text, pos=3, font=font.id, cex=cex.id)
 
 			if(id.style == 'side')
-				text(x0 - (width+0.025), y.offset, id.text, adj=c(1, -width), font=font.id, cex=cex.id, srt=90)
+				text(x0 - (width+0.025), y.offset[i], id.text, adj=c(1, -width), font=font.id, cex=cex.id, srt=90)
 			}
-	  }
+	  
+	  } # end looping over profiles
 
 
   ################
   ## depth axis ##
   ################
+  
+  # suppress legend when there are multiple y.offsets
+  if(length(unique(y.offset)) > 1) {
+    plot.depth.axis <- FALSE 
+  }
+  
   if(plot.depth.axis) {
-    depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset
+    depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset[1]
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
 
     axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))

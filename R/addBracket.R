@@ -136,22 +136,24 @@ addDiagnosticBracket <- function(s, kind, feature='featkind', top='featdept', bo
 #' b2 <- profileApply(sp1, individualBrackets, frameify = TRUE)
 #' 
 #' # plot in reverse order
-#' plotSPC(sp1, plot.order = rev(1:length(sp1)))
+#' plotSPC(sp1, plot.order = rev(1:length(sp1)), width = 0.25)
 #' 
 #' # note that plotting order is derived from the call to `plotSPC(sp1)`
-#' addBracket(b1, col='red')
+#' addBracket(b1, col='red', offset = -0.35)
 #' 
 #' # plot in reverse order
-#' plotSPC(sp1, plot.order = rev(1:length(sp1)))
+#' plotSPC(sp1, plot.order = rev(1:length(sp1)), width = 0.25)
 #' 
 #' # note that plotting order is derived from the call to `plotSPC(sp1)`
-#' addBracket(b2, col='red')
+#' addBracket(b2, col='red', offset = -0.35)
 #' 
 #' 
 addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, offset=-0.3, missing.bottom.depth=NULL, ...) {
 
   # get plotting details from aqp environment
-  lsp <- get('last_spc_plot', envir=aqp.env)
+  lsp <- get('last_spc_plot', envir = aqp.env)
+  
+  # y.offset is a vector length(x)
   depth.offset <- lsp$y.offset
   sf <- lsp$scaling.factor
   
@@ -199,12 +201,15 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   }
 
   # apply scale and offset to missing bottom depth
+  # depth.offset is a vector length(x)
   missing.bottom.depth <- (missing.bottom.depth * sf) + depth.offset
 
   # apply scaling factor and offset
   # depth_prime = (depth * scaling factor) + y.offset
-  x$top <- (x$top * sf) + depth.offset
-  x$bottom <- (x$bottom * sf) + depth.offset
+  # in case x is a subset of the last plotSPC call, must index
+  idx <- match(x[[lsp$idname]], lsp$pIDs)
+  x$top <- (x$top * sf) + depth.offset[idx]
+  x$bottom <- (x$bottom * sf) + depth.offset[idx]
   
   ## x-coordinates
   # 2019-07-15: using relative position
@@ -213,6 +218,7 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
   # there may be more than 1 bracket per ID
   x.list <- split(x, x[[lsp$idname]])
   
+  ## TODO: match logic seems backwards
   # re-order list elements, according to plot order
   # there may be some profiles without brackets to add
   # resulting in NA in re-ordering index
@@ -244,7 +250,7 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
         # top tick
         segments(x.1, top, x.2, top, lend = seg.lend, ...)
         # vertical bar is now an arrow
-        arrows(x.1, top, x.1, top + missing.bottom.depth, length=arrow.length, lend = seg.lend, ...)
+        arrows(x.1, top, x.1, top + missing.bottom.depth[i], length=arrow.length, lend = seg.lend, ...)
       } else {
         # normal usage
         
@@ -263,7 +269,7 @@ addBracket <- function(x, label.cex=0.75, tick.length=0.05, arrow.length=0.05, o
       # optionally plot label
       if(do.label) {
         if(no.bottom) {
-          bottom <- rep(missing.bottom.depth, times = length(bottom))
+          bottom <- rep(missing.bottom.depth[i], times = length(bottom))
         }
         # add labels at mid-points
         text(x.1 - 0.05, (top + bottom)/2, label, srt=90, cex=label.cex, pos=3)

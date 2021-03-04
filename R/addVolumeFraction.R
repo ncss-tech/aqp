@@ -100,6 +100,7 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 	lsp <- get('last_spc_plot', envir=aqp.env)
 	w <- lsp$width
 	plot.order <- lsp$plot.order
+	# y.offset is a vector of length(x)
 	depth.offset <- lsp$y.offset
 	sf <- lsp$scaling.factor
 	x0 <- lsp$x0
@@ -144,22 +145,19 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 			# just those with data
 			if(nrow(v) > 0) {
 
-			  if(!requireNamespace("scales", quietly = TRUE))
-			    stop("package `scales` is required", call.=FALSE)
-
 			  # get the current color from vector of colors
 			  # typically the same color repeated, but could be as many colors as hz
 			  v$color <- col[h.i]
 
         # jitter and rescale x-coordinates
-				v$x <- scales::rescale(jitter(v$x), to=c(x.left, x.right))
+				v$x <- .rescaleRange(jitter(v$x), x0 = x.left, x1 = x.right)
 
 				# determine horizon depths in current setting
-				# depth_prime = (depth * scaling factor) + y.offset
-				y.top <- (this.hz[[hd[1]]] * sf) + depth.offset
-				y.bottom <- (this.hz[[hd[2]]] * sf) + depth.offset
+				# depth_prime = (depth * scaling factor) + y.offset[i]
+				y.top <- (this.hz[[hd[1]]] * sf) + depth.offset[p.i]
+				y.bottom <- (this.hz[[hd[2]]] * sf) + depth.offset[p.i]
 				# rescale y-coordinates
-				v$y <- scales::rescale(jitter(v$y), to=c(y.top, y.bottom))
+				v$y <- .rescaleRange(jitter(v$y), x0 = y.top, x1 = y.bottom)
 
 				# generate random symbol size
 				p.cex <- runif(nrow(v), min=cex.min, max=cex.max)
@@ -168,7 +166,8 @@ addVolumeFraction <- function(x, colname, res=10, cex.min=0.1, cex.max=0.5, pch=
 				# note that color comes from `v`
 				points(v$x, v$y, cex=p.cex, col=v$color, pch=pch)
 			}
-		}
+		} # end looping over profiles
+		
 	}
 }
 

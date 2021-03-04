@@ -67,8 +67,8 @@ explainPlotSPC <- function(x, ...) {
   max.depths <- max.depths[lsp$plot.order]
   
   # apply y-offset and scaling factor
+  # y-offset is a vector
   scaled.max.depths <- lsp$y.offset + (lsp$scaling.factor * max.depths)
-  scaled.depth.axis <- lsp$y.offset + (lsp$scaling.factor * pretty(1:max(x)))
   
   # suitable location for y-space annotation
   y.space.x <- 2.5
@@ -91,7 +91,7 @@ explainPlotSPC <- function(x, ...) {
   mtext('canvas x-coordinate', side=1, line=2.25, font=4, col='darkgreen')
   
   # y-axis is based on profile depths
-  axis(2, line=0.25, at=scaled.depth.axis, cex.axis=0.75, font=4, las=1, col='blue', col.axis='blue', lwd=2)
+  axis(2, line=0.25, cex.axis=0.75, font=4, las=1, col='blue', col.axis='blue', lwd=2)
   mtext('canvas y-coordinate', side=2, line=2.25, font=4, col='blue')
   
   # show extra y-space

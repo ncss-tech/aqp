@@ -33,6 +33,7 @@
         stop("package `scales` is required", call.=FALSE)
 
       # note that this may contain NAs
+      ## TODO: replace with aqp native .rescaleRange
       c.rgb <- cr(scales::rescale(h[[color]]))
       cc <- which(complete.cases(c.rgb))
       h$.color <- NA
@@ -58,6 +59,7 @@
       # put into a list for later
       color.legend.data <- list(
         legend = leg.pretty.vals,
+        ## TODO: replace with aqp native .rescaleRange
         col = rgb(cr(scales::rescale(pretty.vals)), maxColorValue=255),
         multi.row.legend = multi.row.legend,
         leg.row.indices = leg.row.indices
@@ -84,6 +86,7 @@
         if(!requireNamespace("scales", quietly = TRUE))
           stop("package `scales` is required", call.=FALSE)
 
+        ## TODO: replace with native function
         color.mapper <- scales::col_factor(
           palette = colorRampPalette(col.palette, bias = col.palette.bias)(length(color.levels)),
           domain = color.levels,
