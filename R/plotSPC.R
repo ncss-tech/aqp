@@ -83,6 +83,8 @@
 #'
 #' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is NULL, no shading)
 #'
+#' @param show.legend logical, show legend? (default is TRUE)
+#'
 #' @param col.label thematic legend title
 #'
 #' @param col.palette color palette used for thematic sketches (default is \code{rev(brewer.pal(10, 'Spectral'))})
@@ -227,27 +229,28 @@ plotSPC <- function(
   x.idx.offset=0,
   n=length(x),
   max.depth=ifelse(is.infinite(max(x)), 200, max(x)),
-  n.depth.ticks=5,
-  shrink=FALSE,
-  shrink.cutoff=3,
-  abbr=FALSE,
-  abbr.cutoff=5,
-  divide.hz=TRUE,
-  hz.distinctness.offset=NULL,
-  hz.topography.offset=NULL,
-  hz.boundary.lty=NULL,
-  axis.line.offset=-2.5,
-  plot.depth.axis=TRUE,
-  density=NULL,
-  col.label=color,
+  n.depth.ticks = 5,
+  shrink = FALSE,
+  shrink.cutoff = 3,
+  abbr = FALSE,
+  abbr.cutoff = 5,
+  divide.hz = TRUE,
+  hz.distinctness.offset = NULL,
+  hz.topography.offset = NULL,
+  hz.boundary.lty = NULL,
+  axis.line.offset = -2.5,
+  plot.depth.axis = TRUE,
+  density = NULL,
+  show.legend = TRUE,
+  col.label = color,
   col.palette = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598",
                   "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"),
-  col.palette.bias=1,
-  col.legend.cex=1,
-  n.legend=8,
-  lwd=1,
-  lty=1,
-  default.color=grey(0.95),
+  col.palette.bias = 1,
+  col.legend.cex = 1,
+  n.legend = 8,
+  lwd = 1,
+  lty = 1,
+  default.color = grey(0.95),
   ...
 ) {
 
@@ -398,6 +401,12 @@ plotSPC <- function(
   ####################
   ## horizon colors ##
   ####################
+  
+  # .interpretHorizonColors() expects numeric | categorical data
+  # convert logical to factor
+  if(is.logical(h[[color]])) {
+    h[[color]] <- factor(h[[color]])
+  }
   
   # results contain:
   # vector of horizon colors, row-order preserved
@@ -859,58 +868,64 @@ plotSPC <- function(
   ########################################
   ## legend for thematic profile sketch ##
   ########################################
-  # extract from interpretation of horizon colors
-  cld <- hz.color.interpretation$color.legend.data
   
-  if(! is.null(cld)) {
-    # if no title given, set col.label to name of column containing thematic information
-    mtext(side=3, text=col.label, font=2, line=1.6)
-
-    # gracefully handle all-NA in thematic variable
-    if(length(cld$legend) > 0) {
-
-      # possibly split legend across multiple rows
-      if(cld$multi.row.legend) {
-
-        # compute max space required for legend items
-        # better formatting
-        # note: must be called AFTER high level plot()
-        leg.text.width <- (max(strwidth(cld$legend, cex = col.legend.cex)))
-
-        # row 1
-        legend('bottom', inset = c(0, 0.99),
-               legend = cld$legend[cld$leg.row.indices$row.1],
-               col = cld$col[cld$leg.row.indices$row.1],
-               text.width = leg.text.width,
-               bty = 'n', pch = 15, horiz = TRUE, xpd = TRUE, cex = col.legend.cex, x.intersp = 1
-               )
-
-        # row 2
-        legend('bottom', inset = c(0, 0.94),
-               legend = cld$legend[cld$leg.row.indices$row.2],
-               col = cld$col[cld$leg.row.indices$row.2],
-               text.width = leg.text.width,
-               bty = 'n', pch = 15, horiz = TRUE, xpd = TRUE, cex = col.legend.cex, x.intersp = 1
-        )
-
-      } else {
-        # standard invocation
-        legend(
-          'bottom', 
-          legend = cld$legend, 
-          col = cld$col,
-          bty = 'n',
-          pch = 15,
-          horiz = TRUE,
-          xpd = TRUE,
-          inset = c(0, 0.99),
-          cex = col.legend.cex,
-          x.intersp = 1
+  # optionally show legend
+  if(show.legend) {
+    # extract from interpretation of horizon colors
+    cld <- hz.color.interpretation$color.legend.data
+    
+    if(! is.null(cld)) {
+      # if no title given, set col.label to name of column containing thematic information
+      mtext(side=3, text=col.label, font=2, line=1.6)
+      
+      # gracefully handle all-NA in thematic variable
+      if(length(cld$legend) > 0) {
+        
+        # possibly split legend across multiple rows
+        if(cld$multi.row.legend) {
+          
+          # compute max space required for legend items
+          # better formatting
+          # note: must be called AFTER high level plot()
+          leg.text.width <- (max(strwidth(cld$legend, cex = col.legend.cex)))
+          
+          # row 1
+          legend('bottom', inset = c(0, 0.99),
+                 legend = cld$legend[cld$leg.row.indices$row.1],
+                 col = cld$col[cld$leg.row.indices$row.1],
+                 text.width = leg.text.width,
+                 bty = 'n', pch = 15, horiz = TRUE, xpd = TRUE, cex = col.legend.cex, x.intersp = 1
           )
+          
+          # row 2
+          legend('bottom', inset = c(0, 0.94),
+                 legend = cld$legend[cld$leg.row.indices$row.2],
+                 col = cld$col[cld$leg.row.indices$row.2],
+                 text.width = leg.text.width,
+                 bty = 'n', pch = 15, horiz = TRUE, xpd = TRUE, cex = col.legend.cex, x.intersp = 1
+          )
+          
+        } else {
+          # standard invocation
+          legend(
+            'bottom', 
+            legend = cld$legend, 
+            col = cld$col,
+            bty = 'n',
+            pch = 15,
+            horiz = TRUE,
+            xpd = TRUE,
+            inset = c(0, 0.99),
+            cex = col.legend.cex,
+            x.intersp = 1
+          )
+        }
       }
+      
     }
-
   }
+  
+  
 
 
   }

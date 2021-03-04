@@ -44,6 +44,7 @@ plotSPC(
   axis.line.offset = -2.5,
   plot.depth.axis = TRUE,
   density = NULL,
+  show.legend = TRUE,
   col.label = color,
   col.palette = c("#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598", "#FEE08B",
     "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"),
@@ -130,6 +131,8 @@ plot(x, y, ...)
 \item{plot.depth.axis}{logical, plot depth axis? (default is TRUE)}
 
 \item{density}{fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is NULL, no shading)}
+
+\item{show.legend}{logical, show legend? (default is TRUE)}
 
 \item{col.label}{thematic legend title}
 

@@ -1,4 +1,6 @@
 
+## TODO: relationship to .pctMissing (1-unit slice eval)
+
 ## missing data fraction computed on a thickness basis
 ## this is meant to be run on a single profile at a time
 # x: single SPC

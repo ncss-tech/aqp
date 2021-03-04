@@ -63,61 +63,27 @@ setMethod(
   f = 'min',
   signature(x = "SoilProfileCollection"),
   definition = function(x, v = NULL) {
-    h <- x@horizons
 
-    # get bottom depth column name
-    hz_bottom_depths <- horizonDepths(x)[2]
-
-    # handle empty spc
-    if(length(x@horizons[[hz_bottom_depths]]) == 0)
-      return(NA)
-
+    htb <- horizonDepths(x)
+    target.names <- c(idname(x), hzidname(x), htb)
+    
     # optionally use a horizon-level property refine calculation
-    if (!missing(v)) {
-      target.names <- c(hz_bottom_depths, idname(x), v)
-    } else {
-      target.names <- c(hz_bottom_depths, idname(x))
+    if (!missing(v) && !is.null(v) && v %in% horizonNames(x)) {
+      target.names <- c(target.names,  v)
     }
-
-    # filter out missing data
-    h <- .data.frame.j(h, target.names, aqp_df_class(x))
-    h <- h[complete.cases(h),]
-
-    # compute max depth within each profile
-    if (aqp_df_class(x) == "data.table" &
-        requireNamespace("data.table") ) {
-
-      # base R faster for big data with no existing key
-      # but if the key is already set, then this is ~2x faster with 1M profiles (sorted numeric IDs)
-      if (idname(x) %in% data.table::key(h)) {
-        idn <- idname(x)
-        .I <- NULL
-        # # with no key
-        # user  system elapsed
-        # 7.26    5.52   16.83
-        # # with pre-set key
-        # user  system elapsed
-        # 2.07    0.00    2.08
-
-        # cant invoke this for something like min/max probably -- might do better on linux
-        # data.table::setkeyv(h, c(idn))
-
-        dep <- h[[hz_bottom_depths]]
-        d <- dep[h[, .I[hz_bottom_depths == max(hz_bottom_depths, na.rm = T)][1],
-                     by = idn]$V1]
-
-        # return from here for data.table
-        return(min(d, na.rm = TRUE))
-      }
+    
+    # handle empty spc
+    if(length(x@horizons[[htb[2]]]) == 0) {
+      return(NA)
     }
-
-    # tapply on a data.frame
-    # user  system elapsed
-    # 4.39    0.00    4.39
-    d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
-
+    
+    # filter out missing data, accounting for optional `v`
+    h <- x@horizons
+    x@horizons <- h[complete.cases(.data.frame.j(h, target.names, aqp_df_class(x))),]
+    
     # return the shallowest (of the deepest depths in each profile)
-    return(min(d, na.rm = TRUE))
+    .LAST <- NULL
+    return(min(x[,, .LAST][[htb[2]]], na.rm = TRUE))
   }
 )
 
@@ -137,60 +103,26 @@ setMethod(
   f = 'max',
   signature(x = "SoilProfileCollection"),
   definition = function(x, v = NULL) {
-    # get bottom depth column name
-    h <- x@horizons
-    hz_bottom_depths <- horizonDepths(x)[2]
-
-    # handle empty spc
-    if(length(h[[hz_bottom_depths]]) == 0)
-      return(NA)
-
+    htb <- horizonDepths(x)
+    target.names <- c(idname(x), hzidname(x), htb)
+    
     # optionally use a horizon-level property refine calculation
-    if (!missing(v)) {
-      target.names <- c(hz_bottom_depths, idname(x), v)
-    } else {
-      target.names <- c(hz_bottom_depths, idname(x))
+    if (!missing(v) && !is.null(v) && v %in% horizonNames(x)) {
+      target.names <- c(target.names,  v)
     }
-
-    # filter out missing data
-    h <- .data.frame.j(h, target.names, aqp_df_class(x))
-    h <- h[complete.cases(h),]
-
-    # compute max depth within each profile
-    if (aqp_df_class(x) == "data.table" &
-        requireNamespace("data.table") ) {
-      .I <- NULL
-      # base R faster for big data with no existing key
-      # but if the key is already set, then this is ~2x faster with 1M profiles (sorted numeric IDs)
-      if (idname(x) %in% data.table::key(h)) {
-        idn <- idname(x)
-        # # with no key
-        # user  system elapsed
-        # 7.26    5.52   16.83
-        # # with pre-set key
-        # user  system elapsed
-        # 2.07    0.00    2.08
-
-        # cant invoke this for something like min/max probably -- might do better on linux
-        # data.table::setkeyv(h, c(idn))
-
-        dep <- h[[hz_bottom_depths]]
-        d <- dep[h[, .I[hz_bottom_depths == max(hz_bottom_depths, na.rm = T)][1],
-                   by = idn]$V1]
-
-        # return from here for data.table
-        return(max(d, na.rm = TRUE))
-      }
-
+    
+    # handle empty spc
+    if(length(x@horizons[[htb[2]]]) == 0) {
+      return(NA)
     }
-
-    # tapply on a data.frame
-    # user  system elapsed
-    # 4.39    0.00    4.39
-    d <- tapply(h[[hz_bottom_depths]], h[[idname(x)]], max, na.rm = TRUE)
-
-    # return the deepest depth (of the deepest depths in each profile)
-    return(max(d, na.rm = TRUE))
+    
+    # filter out missing data, accounting for optional `v`
+    h <- x@horizons
+    x@horizons <- h[complete.cases(.data.frame.j(h, target.names, aqp_df_class(x))),]
+    
+    # return the deepest (of the deepest depths in each profile)
+    .LAST <- NULL
+    return(max(x[,, .LAST][[htb[2]]], na.rm = TRUE))
   }
 )
 

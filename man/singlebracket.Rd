@@ -4,19 +4,29 @@
 \alias{[,SoilProfileCollection-method}
 \title{Matrix/data.frame-like access to profiles and horizons in a SoilProfileCollection}
 \usage{
-\S4method{[}{SoilProfileCollection}(x, i, j)
+\S4method{[}{SoilProfileCollection}(x, i, j, ..., drop = TRUE)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
 
 \item{i}{a numeric or logical value denoting profile indices to select in a subset}
 
-\item{j}{a numeric or logical value denoting profile indices to select in a subset}
+\item{j}{a numeric or logical value denoting horizon indices to select in a subset}
+
+\item{...}{non-standard expressions to evaluate in a subset}
+
+\item{drop}{not used}
 }
 \description{
-You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j]}. Subset operations are propagated to other slots when they result in removal of sites from a collection.
-
-\code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
-
-\code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection. So, for instance, if \code{spc} contained 100 profiles, \code{spc[,2]} would return 100 profiles, but just the second horizon from each of the profiles ... assuming each profile had at least two horizons! The single horizon profiles would be dropped from the collection.
+You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j, ...]}. Subset operations are propagated to other slots (such as diagnostics or spatial) when they result in removal of sites from a collection.
+\itemize{
+\item \code{i} refers to the profile position within the collection. By default the order is based on the C SORT order of the variable that you specified as your unique profile ID at time of object construction. Note that if your ID variable was numeric, then it has been sorted as a character.
+\item \code{j} refers to the horizon or "slice" index. This index is most useful when either a) working with \code{slice}'d SoilProfileCollection or b) working with single-profile collections. \code{j} returns the layer in the specified index positions for all profiles in a collection.
+\item \code{...} is an area to specify an expression that is evaluated in the subset. Currently supported
+\itemize{
+\item \code{.LAST} (last horizon in each profile): return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
+\item \code{.FIRST} (first horizon in each profile): return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
+\item \code{.HZID} (horizon index not \code{SoilProfileCollection} result): return the horizon indices corresponding to \code{i}+\code{j}+\code{...} ("k") constraints
+}
+}
 }
