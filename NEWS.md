@@ -1,14 +1,29 @@
+# aqp 1.29 (2021-03-04)
+ * SoilProfileCollection methods that conflict with {dplyr} have been deprecated:
+    - `filter`, `mutate`, `group_by`, `summarize`
+       
+    * New overloaded {base} names:
+       - {base}-like syntax: "filter" -> `subset`, "mutate" -> `transform`
+       
+    * New unique {aqp}/SoilProfileCollection aliases:
+       - `*SPC` syntax: `filterSPC`, `mutateSPC`, `groupSPC`, `summarizeSPC`
+       
+ * Methods that used {rlang} for non-standard evaluation now use {base}
+
 # aqp 1.28 (2021-03-02)
- * optimization of SoilProfileCollection `j`-index extraction using {data.table}
+ * optimization of SoilProfileCollection `[,j]`-index extraction using {data.table}
  * introduction of `.LAST`, `.FIRST` and `.HZID` SoilProfileCollection "k-keywords"
  * `perturb()` is the new generalized replacement for `sim()` and `permute_profile()`
-* `checkHzDepthLogic()` now has a `byhz` argument for checking logic by _horizon_ rather than profile
- * `fillHzGaps` now has `to_top` and `to_bottom` arguments for fillling above shallowest top / deepest bottom by profile
+ * `checkHzDepthLogic()` now has a `byhz` argument for checking logic by _horizon_ rather than profile
+ * `fillHzGaps` now has `to_top` and `to_bottom` arguments for filling above shallowest top / deepest bottom by profile
  * `fixOverlap()` more flexible and will usually settle on a solution in fewer iterations:
     - `overlapMetrics()` instead of `findOverlap()` for part of objective function
     - cooling schedule is now fully adjustable via `T0` and `k` arguments
  * `alignTransect` helper function for computing relative positions and ordering vector supplied to `plotSPC`
  * `plotSPC()` automatically converts a `logical` `color=` argument to `factor`
+ * `glom()` is now vectorized over profiles
+ * `estimateAWC` introduced for testing lookup table estimation of available water capacity (AWC) of fine-earth fraction
+ * `correctAWC` introduced for testing corrections of AWC estimates for rock fragment and salts
  
 # aqp 1.27 (2021-01-22)
  * `fillHzGaps`: new function for fixing horizon depth topological errors and padding top/bottom of profiles with placeholder (empty) horizons
