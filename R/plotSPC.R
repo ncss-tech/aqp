@@ -2,7 +2,7 @@
 
 
 
-# TODO: behavior not defined for horizons with an indefinate lower boundary
+# TODO: behavior not defined for horizons with an indefinite lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
 #' Create Soil Profile Sketches
@@ -204,6 +204,68 @@
 #'
 #' # make enough room in a single legend row
 #' plot(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
+#' 
+#' 
+#' ##
+#' ## demonstrate y.offset argument
+#' ## must be of length 1 or length(x)
+#' ##
+#' 
+#' # example data and local copy
+#' data("jacobs2000")
+#' x <- jacobs2000
+#' 
+#' # y-axis offsets, simulating a elevation along a hillslope sequence
+#' # same units as horizon depths in `x`
+#' y.offset <- c(-5, -10, 22, 65, 35, 15, 12)
+#' 
+#' par(mar = c(0, 0, 2, 2))
+#' 
+#' # y-offset at 0
+#' plotSPC(x, color = 'matrix_color', cex.names = 0.66)
+#' 
+#' # constant adjustment to y-offset
+#' plotSPC(x, color = 'matrix_color', cex.names = 0.66, y.offset = 50)
+#' 
+#' # attempt using invalid y.offset
+#' # warning issued and default value of '0' used
+#' # plotSPC(x, color = 'matrix_color', cex.names = 0.66, y.offset = 1:2)
+#' 
+#' # variable y-offset
+#' par(mar = c(0, 0, 2, 0))
+#' plotSPC(
+#'   x, 
+#'   y.offset = y.offset, 
+#'   color = 'matrix_color', 
+#'   cex.names = 0.66, 
+#'   hz.depths = TRUE, 
+#'   name.style = 'center-center'
+#' )
+#' 
+#' 
+#' 
+#' # random y-axis offsets
+#' yoff <- runif(n = length(x), min = 1, max = 100)
+#' # random gradient of x-positions
+#' xoff <- runif(n = length(x), min = 1, max = length(x))
+#' 
+#' # align / adjust relative x positions
+#' set.seed(111)
+#' pos <- alignTransect(xoff, x.min = 1, x.max = length(x))
+#' 
+#' par(mar = c(0.5, 0.5, 0.5, 0.5))
+#' plotSPC(x, 
+#'         plot.order = pos$order, 
+#'         relative.pos = pos$relative.pos, 
+#'         y.offset = y.offset, 
+#'         color = 'matrix_color', 
+#'         cex.names = 0.66, 
+#'         hz.depths = TRUE, 
+#'         name.style = 'center-center'
+#' )
+#' 
+#' box()
+
 
 plotSPC <- function(
   x,

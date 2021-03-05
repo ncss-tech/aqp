@@ -345,9 +345,15 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	options(warn=-1)
 
 	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) {
-
+    
+	  
+	  ## 2021-03-03
+	  ## this approach breaks when using a single variable for the distance calc
+	  ## sp is a 1-row matrix which returns an empty distance matrix
+	  ## solution: don't attempt to fix here, re-write the entire thing
+	  
 	  ## this could be a source of slowness, esp. the t()
-	  ## TODO: new implementatoin will require drop=FALSE
+	  ## TODO: new implementation will require drop=FALSE
 	  ps <- sapply(su, function(dz, z_i=depth_slice_seq[i]) { dz[z_i,] })
 	  sp <- t(ps)
 

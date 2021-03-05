@@ -9,6 +9,8 @@
        - `*SPC` syntax: `filterSPC`, `mutateSPC`, `groupSPC`, `summarizeSPC`
        
  * Methods that used {rlang} for non-standard evaluation now use {base}
+ * `plotSPC()` gains vectorized `y.offset` support
+ * new function `alignTransect` for simplifying relative positioning of profile sketches
 
 # aqp 1.28 (2021-03-02)
  * optimization of SoilProfileCollection `[,j]`-index extraction using {data.table}
@@ -20,7 +22,7 @@
     - `overlapMetrics()` instead of `findOverlap()` for part of objective function
     - cooling schedule is now fully adjustable via `T0` and `k` arguments
  * `alignTransect` helper function for computing relative positions and ordering vector supplied to `plotSPC`
- * `plotSPC()` automatically converts a `logical` `color=` argument to `factor`
+ * `plotSPC()` automatically converts `logical` data supplied to `color` argument into `factor`
  * `glom()` is now vectorized over profiles
  * `estimateAWC` introduced for testing lookup table estimation of available water capacity (AWC) of fine-earth fraction
  * `correctAWC` introduced for testing corrections of AWC estimates for rock fragment and salts

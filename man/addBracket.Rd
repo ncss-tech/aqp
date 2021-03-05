@@ -98,16 +98,16 @@ b1 <- profileApply(sp1, combinedBracket, frameify = TRUE)
 b2 <- profileApply(sp1, individualBrackets, frameify = TRUE)
 
 # plot in reverse order
-plotSPC(sp1, plot.order = rev(1:length(sp1)))
+plotSPC(sp1, plot.order = rev(1:length(sp1)), width = 0.25)
 
 # note that plotting order is derived from the call to `plotSPC(sp1)`
-addBracket(b1, col='red')
+addBracket(b1, col='red', offset = -0.35)
 
 # plot in reverse order
-plotSPC(sp1, plot.order = rev(1:length(sp1)))
+plotSPC(sp1, plot.order = rev(1:length(sp1)), width = 0.25)
 
 # note that plotting order is derived from the call to `plotSPC(sp1)`
-addBracket(b2, col='red')
+addBracket(b2, col='red', offset = -0.35)
 
 
 }
