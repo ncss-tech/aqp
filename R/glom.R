@@ -136,6 +136,11 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
 
 # helper functions for creating new horizon and paired SPC data
 .thickestHzID <- function(p, newhz = horizons(p)) {
+  
+  # appease R CMD check
+  .thk <- NULL
+  id <- NULL
+  
   htb <- horizonDepths(p)
   # make a data.table with id and thickness (.thk)
   res <- data.table::data.table(id = newhz[[idname(p)]], .thk = newhz[[htb[2]]] - newhz[[htb[1]]])
