@@ -140,7 +140,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
   chroma.subset.labels <- as.character(c(chroma.subset, 5, 7))
 
   # make plot
-  pp <- xyplot(fm, data=z,
+  pp <- xyplot(fm, data = z,
                main = sprintf('Color Contrast Chart: %s', m$queryColor),
                asp = 1, xlab='Chroma', ylab='Value',
                xlim = c(0.75, 6.25), 
@@ -167,12 +167,9 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
                  d$cc <- as.character(d$cc)
                  d$dE00 <- format(d$dE00, digits = 2)
                  
-                 # convert factor levels to numeric
-                 # xx <- as.integer(xx)
-                 
-                 # extract from z vs. function arguments
-                 xx <- as.integer(z$chroma)
-                 yy <- z$value
+                 # extract from d vs. function arguments
+                 xx <- as.integer(d$chroma)
+                 yy <- d$value
                  
                  # remove query color contrast and dE00
                  idx <- which(d$munsell == m$queryColor)
