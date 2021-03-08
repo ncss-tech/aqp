@@ -153,6 +153,16 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #'   bracket.base.depth = 120, label.cex = 1
 #' )
 #' 
+#' # specify a different max.depth
+#' plotMultipleSPC(
+#'   spc.list, 
+#'   group.labels = c('Collection 1', 'Collection 2'),
+#'   args = arg.list, 
+#'   bracket.base.depth = 120, label.cex = 1,
+#'   max.depth = 250
+#' )
+#' 
+#' 
 #' 
 #' ##
 #' ## Merged Legend Example
@@ -187,14 +197,6 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #'   merged.legend = 'clay', merged.legend.title = 'Clay (%)'
 #' )
 #' 
-#' # specify a different max.depth
-#' plotMultipleSPC(
-#'   spc.list, 
-#'   group.labels = c('Collection 1', 'Collection 2'),
-#'   args = arg.list, 
-#'   bracket.base.depth = 120, label.cex = 1,
-#'   max.depth = 250
-#' )
 #' 
 #' ##
 #' ## Complex Merged Legend Example
@@ -218,12 +220,12 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #' # combine into a list
 #' spc.list <- list(sp3, sp4, jacobs2000)
 #' 
-#' # argument list
+#' # try some variations on the default arguments
 #' # `clay` is missing in the first SPC, safe to specify another column for colors
 #' arg.list <- list(
-#'   list(color = 'soil_color', name='name', id.style='top'),
-#'   list(name='name', id.style='side'),
-#'   list(name='name', id.style='side')
+#'   list(color = 'soil_color', id.style='top', name = NA, width = 0.3, hz.depths = TRUE),
+#'   list(name='name', id.style='side', name.style = 'center-center'),
+#'   list(name='name', id.style='side', name.style = 'left-center', hz.depths = TRUE)
 #' )
 #' 
 #' par(mar=c(1,1,3,3))
@@ -232,9 +234,10 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #'   group.labels = c('sp3', 'sp4', 'jacobs2000'),
 #'   label.offset = 3,
 #'   args = arg.list, 
-#'   merged.legend = 'clay', merged.legend.title = 'Clay (%)'
+#'   merged.legend = 'clay', merged.legend.title = 'Clay (%)',
+#'   axis.line.offset = 0
 #' )
-#' 
+
 
 plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times = length(spc.list)), merged.legend = NULL, merged.colors = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598", "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"), merged.legend.title = merged.legend, arrow.offset = 2, bracket.base.depth = 95, label.offset = 2, label.cex = 0.75, ...) {
 

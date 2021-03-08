@@ -92,6 +92,16 @@ plotMultipleSPC(
   bracket.base.depth = 120, label.cex = 1
 )
 
+# specify a different max.depth
+plotMultipleSPC(
+  spc.list, 
+  group.labels = c('Collection 1', 'Collection 2'),
+  args = arg.list, 
+  bracket.base.depth = 120, label.cex = 1,
+  max.depth = 250
+)
+
+
 
 ##
 ## Merged Legend Example
@@ -126,14 +136,6 @@ plotMultipleSPC(
   merged.legend = 'clay', merged.legend.title = 'Clay (\%)'
 )
 
-# specify a different max.depth
-plotMultipleSPC(
-  spc.list, 
-  group.labels = c('Collection 1', 'Collection 2'),
-  args = arg.list, 
-  bracket.base.depth = 120, label.cex = 1,
-  max.depth = 250
-)
 
 ##
 ## Complex Merged Legend Example
@@ -157,12 +159,12 @@ sp3$clay <- NULL
 # combine into a list
 spc.list <- list(sp3, sp4, jacobs2000)
 
-# argument list
+# try some variations on the default arguments
 # `clay` is missing in the first SPC, safe to specify another column for colors
 arg.list <- list(
-  list(color = 'soil_color', name='name', id.style='top'),
-  list(name='name', id.style='side'),
-  list(name='name', id.style='side')
+  list(color = 'soil_color', id.style='top', name = NA, width = 0.3, hz.depths = TRUE),
+  list(name='name', id.style='side', name.style = 'center-center'),
+  list(name='name', id.style='side', name.style = 'left-center', hz.depths = TRUE)
 )
 
 par(mar=c(1,1,3,3))
@@ -171,9 +173,9 @@ plotMultipleSPC(
   group.labels = c('sp3', 'sp4', 'jacobs2000'),
   label.offset = 3,
   args = arg.list, 
-  merged.legend = 'clay', merged.legend.title = 'Clay (\%)'
+  merged.legend = 'clay', merged.legend.title = 'Clay (\%)',
+  axis.line.offset = 0
 )
-
 }
 \seealso{
 \code{\link{profileGroupLabels}}
