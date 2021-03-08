@@ -646,6 +646,7 @@ plotSPC <- function(
 	  # empty list for storing y-coordinates
 	  coords.list <- vector(mode = 'list', length = nh)
 	  
+	  # iterate over horizons
 	  for(j in 1:nh) {
 	    
 	    ## rectangle for reference
@@ -739,7 +740,8 @@ plotSPC <- function(
 	    
 	    # save current iteration of coordinates and line type
 	    coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
-	  }
+	    
+	  } # end looping over horizons
 	  
 	  
 	  ## note: have to do this after the polygons, otherwise the lines are over-plotted
@@ -889,16 +891,20 @@ plotSPC <- function(
 
 
 	  ##################################
-	  ## horizon top depth annotation ##
+	  ## horizon depth annotation     ##
 	  ##################################
 	  if(hz.depths) {
 	    ## TODO: consider use of unicode arrow markers
 	    # hzd.txt <- sprintf('\u25c4%s', this_profile_data[, tcol])
 	    # text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0, font = 1)
 
-	    # just labels
-	    hzd.txt <- this_profile_data[, tcol]
+	    # all horizon top depths
+	    hzd.txt <- this_profile_data[[tcol]]
 	    text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
+	    
+	    # last horizon bottom depth
+	    hzd.txt <- this_profile_data[[bcol]][nh]
+	    text(x = x0 + width, y = y0[nh], labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
 	  }
 
 
