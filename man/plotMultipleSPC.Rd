@@ -2,14 +2,20 @@
 % Please edit documentation in R/plotMultipleSPC.R
 \name{plotMultipleSPC}
 \alias{plotMultipleSPC}
-\title{Plot Multiple SoilProfileCollection Objects}
+\title{Plot Multiple \code{SoilProfileCollection} Objects}
 \usage{
 plotMultipleSPC(
   spc.list,
   group.labels,
   args = rep(list(NA), times = length(spc.list)),
+  merged.legend = NULL,
+  merged.colors = c("#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598", "#FEE08B",
+    "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"),
+  merged.legend.title = merged.legend,
   arrow.offset = 2,
   bracket.base.depth = 95,
+  label.offset = 2,
+  label.cex = 0.75,
   ...
 )
 }
@@ -22,34 +28,46 @@ plotMultipleSPC(
 \item{args}{a list of arguments passed to \code{plotSPC}, one for each
 \code{SoilProfileCollection} object}
 
+\item{merged.legend}{name of a horizon level attribute from which to create thematic sketches and merged legend}
+
+\item{merged.colors}{vector of colors used to create thematic sketches from a shared horizon level attribute}
+
+\item{merged.legend.title}{legend title}
+
 \item{arrow.offset}{vertical offset in depth from base of start / end
 profiles and group bracket arrows}
 
 \item{bracket.base.depth}{baseline depth used for group brackets}
 
+\item{label.offset}{vertical offset of group labels from baseline}
+
+\item{label.cex}{label size}
+
 \item{\dots}{additional arguments to the first call to \code{plotSPC}}
 }
 \description{
-Combine multiple SoilProfileCollection objects into a single profile sketch,
-with annotated groups.
+Plot Multiple \code{SoilProfileCollection} Objects
 }
 \details{
+Combine multiple \code{SoilProfileCollection} objects into a single profile sketch,
+with annotated groups.
+
 See examples below for usage.
 }
 \note{
-Multiple color legends for thematic profile sketches are not currently
-supported, use with caution.
+For thematic sketches, use the \code{merged.legend} argument instead of \code{color} argument to \code{plotSPC}
 }
 \examples{
+
+##
+## Simple Example
+##
+
+# using default arguments to plotSPC()
 
 # load sample data
 data(sp3)
 data(sp4)
-
-# convert soil colors
-sp3$h <- NA ; sp3$s <- NA ; sp3$v <- NA
-sp3.rgb <- with(sp3, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
-sp3[, c('h','s','v')] <- t(with(sp3.rgb, rgb2hsv(r, g, b, maxColorValue=1)))
 
 # promote to SoilProfileCollection
 depths(sp3) <- id ~ top + bottom
@@ -58,11 +76,103 @@ depths(sp4) <- id ~ top + bottom
 # combine into a list
 spc.list <- list(sp3, sp4)
 
-# plot multiple SPC objects, with list of named arguments for each call to plotSPC
+# argument list
+arg.list <- list(
+  list(name='name', id.style='top'),
+  list(name='name', id.style='side')
+)
+
+# plot multiple SPC objects, 
+# with list of named arguments for each call to plotSPC
 par(mar=c(1,1,3,3))
-plotMultipleSPC(spc.list, group.labels=c('Collection 1', 'Collection 2'),
-args=list(list(name='name', id.style='top'),
-list(name='name', id.style='side')), bracket.base.depth=120)
+plotMultipleSPC(
+  spc.list, 
+  group.labels = c('Collection 1', 'Collection 2'),
+  args = arg.list, 
+  bracket.base.depth = 120, label.cex = 1
+)
+
+
+##
+## Merged Legend Example
+##
+
+# merged legend based on hz attribute 'clay'
+
+# reset sample data
+data(sp3)
+data(sp4)
+
+# promote to SoilProfileCollection
+depths(sp3) <- id ~ top + bottom
+depths(sp4) <- id ~ top + bottom
+
+# combine into a list
+spc.list <- list(sp3, sp4)
+
+# argument list
+arg.list <- list(
+  list(name='name', id.style='top'),
+  list(name='name', id.style='side')
+)
+
+
+par(mar=c(1,1,3,3))
+plotMultipleSPC(
+  spc.list, 
+  group.labels = c('Collection 1', 'Collection 2'),
+  args = arg.list, 
+  label.cex = 1, 
+  merged.legend = 'clay', merged.legend.title = 'Clay (\%)'
+)
+
+# specify a different max.depth
+plotMultipleSPC(
+  spc.list, 
+  group.labels = c('Collection 1', 'Collection 2'),
+  args = arg.list, 
+  bracket.base.depth = 120, label.cex = 1,
+  max.depth = 250
+)
+
+##
+## Complex Merged Legend Example
+##
+
+# create a merged legend from "clay" in sp4 and jacobs2000
+# use "soil_color" from sp3
+
+# reset sample data
+data(sp3)
+data(sp4)
+data(jacobs2000)
+
+# promote to SoilProfileCollection
+depths(sp3) <- id ~ top + bottom
+depths(sp4) <- id ~ top + bottom
+
+# remove 'clay' column from sp3
+sp3$clay <- NULL
+
+# combine into a list
+spc.list <- list(sp3, sp4, jacobs2000)
+
+# argument list
+# `clay` is missing in the first SPC, safe to specify another column for colors
+arg.list <- list(
+  list(color = 'soil_color', name='name', id.style='top'),
+  list(name='name', id.style='side'),
+  list(name='name', id.style='side')
+)
+
+par(mar=c(1,1,3,3))
+plotMultipleSPC(
+  spc.list, 
+  group.labels = c('sp3', 'sp4', 'jacobs2000'),
+  label.offset = 3,
+  args = arg.list, 
+  merged.legend = 'clay', merged.legend.title = 'Clay (\%)'
+)
 
 }
 \seealso{

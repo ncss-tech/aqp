@@ -32,8 +32,7 @@ examples)}
 }
 \description{
 Labels groups of soil profiles within soil profile sketches.
-}
-\details{
+
 See examples below for ideas.
 }
 \note{

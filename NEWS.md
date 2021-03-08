@@ -11,6 +11,7 @@
  * Methods that used {rlang} for non-standard evaluation now use {base}
  * `plotSPC()` gains vectorized `y.offset` support
  * new function `alignTransect` for simplifying relative positioning of profile sketches
+ * `plotMultipleSPC()` gains ability to automatically merge thematic legends
 
 # aqp 1.28 (2021-03-02)
  * optimization of SoilProfileCollection `[,j]`-index extraction using {data.table}
