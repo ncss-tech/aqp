@@ -1,4 +1,6 @@
 
+## generalize and make into an exported function
+
 .interpretHorizonColor <- function(h, color, default.color, col.palette, col.palette.bias, n.legend) {
 
   # this is optionally replaced with real data when using thematic colors

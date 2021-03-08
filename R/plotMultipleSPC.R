@@ -77,6 +77,7 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 ## TODO: no mechanism for merged legends
 ## TODO: this doesn't take into account non-default figure geometry
 
+## TODO: can we integrate .interpretHorizonColor() vs. overly-simplistic .mapColor()?
 
 #' @title Plot Multiple `SoilProfileCollection` Objects
 #'
@@ -285,7 +286,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
     # color ramp function
     cr <- colorRamp(merged.colors)
     
-    ## TODO: abstract for use in plotSPC
+    ## TODO: .interpretHorizonColor() is much more intelligent, consider using it
     
     # NA-padded value -> color mapping for full range of some horizon attribute
     .mapColor <- function(x, r, col.ramp) {
