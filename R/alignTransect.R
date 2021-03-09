@@ -2,7 +2,7 @@
 ## TODO: think about how to better integrate this into aqp and other packages
 ## TODO: dump scales import
 
-# cheap alternative to scales::rescale(..., to = c(x0, x1))
+# cheap alternative to {scales} rescale(..., to = c(x0, x1)), defaults to interval of {0,1}
 .rescaleRange <- function(x, x0, x1) {
   res <- (x1 - x0) * ( (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))) + x0
   return(res)

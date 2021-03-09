@@ -555,8 +555,8 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 		message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
 		d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
 		
-		## TODO: replace with aqp native .rescaleRange
-		d.site <- scales::rescale(d.site)
+		# re-scale to [0,1]
+		d.site <- .rescaleRange(d.site, x0 = 0, x1 = 1)
 
 		# reset default behavior of hz-level D
 		rescale.result=TRUE
@@ -593,8 +593,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 	if(inherits(d.site, 'dist')) {
 		res <- 	(res + d.site) / 2
 		# re-scale to [0,1]
-		## TODO: replace with aqp native .rescaleRange
-		res <- scales::rescale(res)
+		res <- .rescaleRange(res, x0 = 0, x1 = 1)
 	}
 
 	## fail-safe check on ordering of input profile IDs vs. labels
