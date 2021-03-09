@@ -37,7 +37,7 @@
       
       # re-scale to [0,1]
       # may contain NAs
-      c.rgb <- cr(.rescaleRange(h[[color]]), x0 = 0, x1 = 1)
+      c.rgb <- cr(.rescaleRange(h[[color]], x0 = 0, x1 = 1))
       cc <- which(complete.cases(c.rgb))
       h$.color <- NA
 
