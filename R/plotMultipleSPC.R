@@ -238,8 +238,6 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #'   merged.legend = 'clay', merged.legend.title = 'Clay (%)',
 #'   axis.line.offset = 0
 #' )
-
-
 plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times = length(spc.list)), merged.legend = NULL, merged.colors = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598", "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"), merged.legend.title = merged.legend, arrow.offset = 2, bracket.base.depth = 95, label.offset = 2, label.cex = 0.75, ...) {
 
   # compute group stats
@@ -363,11 +361,10 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
   # setup plot with first SPC in list
   do.call(
     what = plotSPC, 
-    args = c(
+    args = c(list(
       x = spc.list[[1]], 
-      n = n.pedons, 
-      na.omit(arg.list[[1]]),
-      ...)
+      n = n.pedons), 
+      c(na.omit(arg.list[[1]]), ...))
     )
 
   # iterate over remaining SPC objs
@@ -378,7 +375,13 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
       suppressMessages(
         do.call(
           what = plotSPC, 
-          args = c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args)
+          args = c(list(
+            x = this.obj,
+            x.idx.offset = group.ends[i - 1],
+            add = TRUE,
+            plot.depth.axis = FALSE
+            ), c(this.args)
+          )
         )
       )
     }
