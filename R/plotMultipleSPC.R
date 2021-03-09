@@ -73,6 +73,8 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
   text(x=label.centers, y=y0 + label.offset, labels=labels, cex=label.cex)
 }
 
+
+## TODO: simple tests
 ## TODO: figure out intelligent recycling of arguments
 ## TODO: no mechanism for merged legends
 ## TODO: this doesn't take into account non-default figure geometry
@@ -257,7 +259,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
   # unique set of arguments specified in args and ...
   unique.args <- unique(
     c(
-      names(unlist(arg.list)),
+      names(unlist(args)),
       names(list(...))
     )
   )
@@ -272,7 +274,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
     max.depth + (max.depth / 5)
     
     # insert into first set of arguments to plotSPC
-    arg.list[[1]]$max.depth <- max.depth
+    args[[1]]$max.depth <- max.depth
   }
   
   
@@ -313,7 +315,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
       
       # current SPC
       spc_i <- spc.list[[i]]
-      arg_i <- arg.list[[i]]
+      arg_i <- args[[i]]
       
       # map colors if column is present
       if(!is.null(spc_i[[merged.legend]])) {
@@ -330,7 +332,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
         
         # modify in place
         spc.list[[i]] <- spc_i
-        arg.list[[i]] <- arg_i
+        args[[i]] <- arg_i
         
       } else {
         # do nothing
@@ -366,7 +368,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
     args = c(
       x = spc.list[[1]], 
       n = n.pedons, 
-      na.omit(arg.list[[1]]),
+      na.omit(args[[1]]),
       ...)
     )
 
@@ -374,7 +376,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
   if(n.groups > 1) {
     for(i in 2:n.groups) {
       this.obj <- spc.list[[i]]
-      this.args <- na.omit(arg.list[[i]])
+      this.args <- na.omit(args[[i]])
       suppressMessages(
         do.call(
           what = plotSPC, 
