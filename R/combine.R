@@ -49,10 +49,12 @@ if (!isGeneric("combine"))
 #' spc1 <- random_profile(1, SPC = TRUE)
 #' spc2 <- random_profile(2, SPC = TRUE)
 #' 
-#' spc <- combine(spc1, spc2)
+#' spc <- c(spc1, bar=spc2, baz="foo")
 #' 
 setMethod("c", signature(x = "SoilProfileCollection"), function(x, ...)  {
-  objects <- list(x, ...)
+  objects <- list(x = x, ...)
+  if (!all(sapply(objects, inherits, 'SoilProfileCollection')))
+    return(unlist(objects, recursive = FALSE))
   names(objects) <- NULL
   pbindlist(objects)
 })

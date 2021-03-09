@@ -30,6 +30,6 @@ Combine SoilProfileCollection objects or lists of SoilProfileCollection objects.
 spc1 <- random_profile(1, SPC = TRUE)
 spc2 <- random_profile(2, SPC = TRUE)
 
-spc <- combine(spc1, spc2)
+spc <- c(spc1, bar=spc2, baz="foo")
 
 }
