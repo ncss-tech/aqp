@@ -73,6 +73,8 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
   text(x=label.centers, y=y0 + label.offset, labels=labels, cex=label.cex)
 }
 
+
+## TODO: simple tests
 ## TODO: figure out intelligent recycling of arguments
 ## TODO: no mechanism for merged legends
 ## TODO: this doesn't take into account non-default figure geometry
