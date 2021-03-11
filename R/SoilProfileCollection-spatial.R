@@ -67,18 +67,30 @@ setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
 setReplaceMethod("coordinates", "SoilProfileCollection",
   function(object, value) {
 
-  # basic sanity check... needs work
-  if(! inherits(value, "formula"))
-    stop('invalid formula', call.=FALSE)
+  # basic sanity check
+  if(!inherits(value, "formula"))
+    stop('invalid formula: ', value, call. = FALSE)
 
-  # extract coordinates as matrix
-  mf <- data.matrix(model.frame(value, site(object), na.action=na.pass))
-
+  # extract coordinates as matrix from site 
+  mf <- try(data.matrix(model.frame(value, site(object), na.action = na.pass)), silent = TRUE)
+  if (inherits(mf, 'try-error')) {
+    # for horizons, calculate unique
+    mf <- try(unique(data.matrix(model.frame(value, horizons(object), na.action = na.pass))), silent = TRUE)
+    # if error, assume it is a variable name 
+    if (inherits(mf, 'try-error'))
+      stop("unable to find specified coordinates: ", as.character(value), call. = FALSE)
+  }
+  
+  # make sure that "normalization" worked
+  if (nrow(mf) != length(object)) {
+    stop("coordinates in horizon data are not unique within site: ", as.character(value), call. = FALSE)
+  }
+  
   # test for missing coordinates
   mf.missing <- apply(mf, 2, is.na)
 
   if(any(mf.missing))
-	  stop('cannot initialize a SpatialPoints object with missing coordinates', call.=FALSE)
+	  stop('cannot promote to spatial SoilProfileCollection with missing coordinates', call.=FALSE)
 
   # assign to sp slot
   # note that this will clobber any existing spatial data
@@ -88,10 +100,12 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   # note that mf is a matrix, so we need to access the colnames differently
   coord_names <- dimnames(mf)[[2]]
   sn <- siteNames(object)
+  hn <- horizonNames(object)
 
-  # @site minus coordinates "promoted" to @sp
+  # @site and @horizons minus coordinates "promoted" to @sp
   object@site <- .data.frame.j(object@site, sn[!sn %in% coord_names], aqp_df_class(object))
-
+  object@horizons <- .data.frame.j(object@horizons, hn[!hn %in% coord_names], aqp_df_class(object))
+  
   # done
   return(object)
   }

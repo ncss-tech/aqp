@@ -408,9 +408,9 @@ setMethod(f = 'show',
             if (nrow(coordinates(object)) == n.profiles) {
               cat('\nSpatial Data:\n')
               show(object@sp@bbox)
-              show(proj4string(object))
+              cat("CRS: ", proj4string(object))
             } else {
-              cat('\nSpatial Data: [EMPTY]\n')
+              cat('\nSpatial Data:\n[EMPTY]\n')
             }
 
           })
