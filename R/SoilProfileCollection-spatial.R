@@ -68,8 +68,8 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   function(object, value) {
 
   # basic sanity check
-  if(!inherits(value, "formula"))
-    stop('invalid formula: ', value, call. = FALSE)
+  if (!inherits(value, "formula"))
+    stop('invalid formula: ', quote(value), call. = FALSE)
   
   fterms <- attr(terms(value),"term.labels")
   
@@ -84,7 +84,7 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   
   # make sure that "normalization" worked
   if (nrow(mf) != length(object)) {
-    stop("coordinates in horizon data are not unique within site: ", as.character(value), call. = FALSE)
+    stop("coordinates in horizon data are not unique within site: ", quote(value), call. = FALSE)
   }
   
   # test for missing coordinates

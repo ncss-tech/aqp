@@ -148,6 +148,9 @@ res <- lapply(dfclasses, function(use_class) {
     # promote to spatial works from horizons
     coordinates(test) <- ~ newx + newy
     
+    # only formulas are allowed for input value
+    expect_error(coordinates(test) <- "foo")
+    
     # siteprop removed from horizons
     # newx should be removed after promotion
     if (use_class == "tbl_df") {
