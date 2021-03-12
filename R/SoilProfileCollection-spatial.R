@@ -70,15 +70,16 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   # basic sanity check
   if(!inherits(value, "formula"))
     stop('invalid formula: ', value, call. = FALSE)
-
-  # extract coordinates as matrix from site 
-  mf <- try(data.matrix(model.frame(value, site(object), na.action = na.pass)), silent = TRUE)
-  if (inherits(mf, 'try-error')) {
-    # for horizons, calculate unique
-    mf <- try(unique(data.matrix(model.frame(value, horizons(object), na.action = na.pass))), silent = TRUE)
-    # if error, assume it is a variable name 
-    if (inherits(mf, 'try-error'))
-      stop("unable to find specified coordinates: ", as.character(value), call. = FALSE)
+  
+  fterms <- attr(terms(value),"term.labels")
+  
+  if (all(fterms %in% siteNames(object))) {
+    mf <- data.matrix(model.frame(value, site(object), na.action = na.pass))
+  } else if (all(fterms %in% horizonNames(object))) {
+    mf <- unique(data.matrix(model.frame(value, horizons(object), na.action = na.pass)))
+  } else {
+    stop("formula terms not found in site or horizon table: ", 
+         paste0(fterms[!fterms %in% names(object)], collapse=","))
   }
   
   # make sure that "normalization" worked
@@ -102,9 +103,13 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
   sn <- siteNames(object)
   hn <- horizonNames(object)
 
-  # @site and @horizons minus coordinates "promoted" to @sp
+  # @site minus coordinates "promoted" to @sp
   object@site <- .data.frame.j(object@site, sn[!sn %in% coord_names], aqp_df_class(object))
-  object@horizons <- .data.frame.j(object@horizons, hn[!hn %in% coord_names], aqp_df_class(object))
+  
+  # remove from horizons if they came from there
+  if (all(fterms %in% horizonNames(object))) {
+    object@horizons <- .data.frame.j(object@horizons, hn[!hn %in% coord_names], aqp_df_class(object))
+  }
   
   # done
   return(object)
