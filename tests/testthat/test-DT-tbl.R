@@ -138,7 +138,29 @@ res <- lapply(dfclasses, function(use_class) {
 
     # "normalize" (horizon -> site) a site-level attribute
     site(test) <- ~ siteprop
-
+    
+    # new random XY data
+    test$y <- rnorm(length(test))
+    test$x <- rnorm(length(test))
+    test$newx <- denormalize(test, "x")
+    test$newy <- denormalize(test, "y")
+    
+    # promote to spatial works from horizons
+    coordinates(test) <- ~ newx + newy
+    
+    # only formulas are allowed for input value
+    expect_error(coordinates(test) <- "foo")
+    
+    # siteprop removed from horizons
+    # newx should be removed after promotion
+    if (use_class == "tbl_df") {
+      expect_warning(expect_null(horizons(test)$siteprop))
+      expect_warning(expect_null(horizons(test)$newx))
+    } else {
+      expect_null(horizons(test)$siteprop)
+      expect_null(horizons(test)$newx)
+    }
+    
     # check that ids are in order
     expect_equal(profile_id(test), site(test)$id)
 
