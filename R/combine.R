@@ -11,63 +11,65 @@
 # 2020/09/25: yes it is possible [for a list] with the caveat that the y argument _must_ be missing in order to use the base::union generic but dispatch to the aqp method.
 # The problem with this is IDEs like Rstudio that probe the generics to identify missing required arguments will erroneously warn about the aqp-usage of union
 
-#' @title (DEPRECATED) union
-#'
-#' @param x a list of SoilProfileCollection objects
-#' @param y Necessary for proper S4 dispatch.
-#'
-#' @return a SoilProfileCollection
-#' @export union
-#' @seealso \link{pbindlist}
-#'
-#' @examples
-#'
-#' # deprecated, see aqp::combine and aqp::pbindlist
-#'
-setMethod("union", signature(x = "list", y = "missing"), function(x, y)  {
-  .Deprecated("combine")
-  pbindlist(x)
-})
+# @title (DEPRECATED) union
+#
+# @param x a list of SoilProfileCollection objects
+# @param y Necessary for proper S4 dispatch.
+#
+# @return a SoilProfileCollection
+# @export union
+# @seealso \link{pbindlist}
+#
+# @examples
+#
+# # deprecated, see aqp::combine and aqp::pbindlist
+#
+# setMethod("union", signature(x = "list", y = "missing"), function(x, y)  {
+#   .Deprecated("combine")
+#   pbindlist(x)
+# })
 
 if (!isGeneric("combine"))
   setGeneric("combine", function(...)
     standardGeneric("combine"))
 
-#' Combine SoilProfileCollection objects
+#' @title Combine SoilProfileCollection objects
 #' 
-#' Combine SoilProfileCollection objects or lists of SoilProfileCollection objects. This method provides \code{...} expansion for the \code{pbindlist} method. 
-#'
-#' @param ... SoilProfileCollection objects or lists of SoilProfileCollection objects to combine
+#' @description Combine SoilProfileCollection objects or lists of SoilProfileCollection objects. This method provides \code{...} expansion for the \code{pbindlist} method. 
+#' @param x A SoilProfileCollection
+#' @param ... SoilProfileCollection objects 
 #'
 #' @return A SoilProfileCollection
 #' 
 #' @export
-#' @aliases combine
+#' @aliases combine c
+#' @rdname combine-SoilProfileCollection-method
 #' @examples
 #' 
 #' spc1 <- random_profile(1, SPC = TRUE)
 #' spc2 <- random_profile(2, SPC = TRUE)
 #' 
-#' spc <- combine(spc1, spc2)
+#' spc <- c(spc1, bar=spc2, baz="foo")
 #' 
+setMethod("c", signature(x = "SoilProfileCollection"), function(x, ...)  {
+  objects <- list(x = x, ...)
+  if (!all(sapply(objects, inherits, 'SoilProfileCollection')))
+    return(unlist(objects, recursive = FALSE))
+  names(objects) <- NULL
+  pbindlist(objects)
+})
+
+#' @export
+#' @rdname combine-SoilProfileCollection-method
 setMethod("combine", signature(... = "SoilProfileCollection"), function(...)  {
-    objects <- list(...)
-    # handle single-list input
-    if (length(objects) == 1)
-      if (is.list(objects[[1]]))
-        objects <- objects[[1]]
-    names(objects) <- NULL
-    res <- pbindlist(objects)
-    return(res)
+  pbindlist(list(...))
 })
 
 #' @export
 #' @rdname combine-SoilProfileCollection-method
 setMethod("combine", signature(... = "list"), function(...)  {
-  lists <- list(...)
-  objects <- do.call('c', lists)
-  res <- pbindlist(objects)
-  return(res)
+  # TODO: should I not be defining this? :X
+  pbindlist(do.call('c', list(...)))
 })
 
 # TODO: when dplyr::combine() is gone, also define aqp::combine(LIST)?
@@ -275,8 +277,20 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
         i <- 1
       }
     }
-    if (tries >= n.spc)
-      stop("result has conflicts in profile ID name, set alternate name with `new.idname` argument", call. = FALSE)
+    
+    if (tries >= n.spc) {
+      oldIDs <- sapply(spc.list, function(x) x$idcol)
+      # add a dot before the name
+      new.pID <- paste0(".", spc.list[[1]]$idcol)
+      # if that exists
+      if (new.pID %in% oldIDs) {
+        # add a number after the name
+        new.pIDs <- paste0(new.pID, 1:100)
+        # first that does not occur in existing IDs
+        new.pID <- new.pIDs[!new.pIDs %in% oldIDs][1]
+      } 
+      message("using ", new.pID, " as unique profile ID name")
+    }
   }
 
   # make sure first element template has "correct" pID name and reasonable values

@@ -1,18 +1,20 @@
-# aqp 1.29 (2021-03-04)
- * SoilProfileCollection methods that conflict with {dplyr} have been deprecated:
-    - `filter`, `mutate`, `group_by`, `summarize`
-       
+# aqp 1.29 (2021-03-16)
+ * Several `SoilProfileCollection` methods that conflict with {dplyr} 1.0+ have been deprecated:
+    * `filter`, `mutate`, `group_by`, `summarize`
     * New overloaded {base} names:
-       - {base}-like syntax: "filter" -> `subset`, "mutate" -> `transform`
-       
+       - {base}-like syntax: "filter" -> `subset`, "mutate" -> `transform`, "combine" -> `c`
     * New unique {aqp}/SoilProfileCollection aliases:
        - `*SPC` syntax: `filterSPC`, `mutateSPC`, `groupSPC`, `summarizeSPC`
-       
+    * Be aware `dplyr::combine` (deprecated in {dplyr} 0.7) still conflicts 
+ * `aqp::union()`, previously deprecated, has been removed from namespace
+    * Use `c()` or `combine()` for `SoilProfileCollection` input
+    * Use`combine()` or `pbindlist()` for `list` input
  * Methods that used {rlang} for non-standard evaluation now use {base}
  * `plotSPC()` gains vectorized `y.offset` support
- * new function `alignTransect` for simplifying relative positioning of profile sketches
+ * new function `alignTransect()` for simplifying relative positioning of profile sketches
  * `plotMultipleSPC()` gains ability to automatically merge thematic legends
-
+ * `coordinates<-` will check formula terms (_unique_ coordinates) in the `@horizons` slot, if needed.
+ 
 # aqp 1.28 (2021-03-02)
  * optimization of SoilProfileCollection `[,j]`-index extraction using {data.table}
  * introduction of `.LAST`, `.FIRST` and `.HZID` SoilProfileCollection "k-keywords"
