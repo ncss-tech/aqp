@@ -55,12 +55,13 @@ see below}
 \description{
 Panel function for plotting grouped soil property data, along with upper and
 lower estimates of uncertainty.
-}
-\details{
+
 This function can be used to replace \code{panel.superpose} when plotting
 depth function data. When requested, contributing fraction data are printed
 using colors the same color as corresponding depth function lines unless a
 single color value is given via \code{cf.col}.
+
+This function is not able to apply transformations (typically \code{log = 10}) applied in the \code{scales} argument to \code{xyplot} to  upper/lower bounds. These will have to be manually appplied. See examples.
 }
 \examples{
 
@@ -104,13 +105,10 @@ xyplot(
   )))
 )
 }
-\references{
-http://casoilresource.lawr.ucdavis.edu/
-}
 \seealso{
 \code{\link{sp1}}, \code{\link{slice}}, \code{\link{slab}}
 }
 \author{
-Dylan E. Beaudette
+D.E. Beaudette
 }
 \keyword{hplot}
