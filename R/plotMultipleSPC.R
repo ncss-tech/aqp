@@ -286,14 +286,18 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
   # optionally create a merged set of thematic colors and legend
   if(! is.null(merged.legend)) {
     # color ramp function
-    cr <- colorRamp(merged.colors)
+    cr <- colorRamp(merged.colors, space = 'Lab', interpolate = 'spline')
     
     ## TODO: .interpretHorizonColor() is much more intelligent, consider using it
     
     # NA-padded value -> color mapping for full range of some horizon attribute
     .mapColor <- function(x, r, col.ramp) {
-      # rescale to {0,1}
-      c.rgb <- cr(.rescaleRange(x, x0 = 0, x1 = 1))
+      # rescale from full range {r} -> {0,1}
+      
+      # dang it, have to use scales::rescale for this
+      # how can we adapt aqp:::.rescaleRange?
+      c.rgb <- cr(scales::rescale(x, from = r, to = c(0,1)))
+      
       cc <- which(complete.cases(c.rgb))
       cols <- rep(NA, times = nrow(c.rgb))
       cols[cc] <- rgb(c.rgb[cc, ], maxColorValue=255)
