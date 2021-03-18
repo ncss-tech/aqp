@@ -10,7 +10,7 @@
 
 #' @title Preview Colors
 #' 
-#' @description Preview colors as a grid arranged according to CIE2000 distances.
+#' @description Preview colors arranged according to CIE2000 distances or manual specification.
 #'
 #' @param cols vector of R colors
 #' @param method either "grid", "MDS", or "manual", see details
@@ -45,7 +45,19 @@
 #' previewColors(sp2$soil_color)
 #' previewColors(sp2$soil_color, method = 'MDS', pt.cex = 3)
 #' 
-previewColors <- function(cols, method = 'grid', col.order = NULL, nrow = ceiling(sqrt(length(cols))), ncol = nrow, border.col = 'black', pt.cex = 2, pt.pch = 15) {
+#' # create colors using HCL space
+#' cols.hcl <- hcl(h = 0:360, c = 100, l = 50)
+#' 
+#' # grid, colors sorted by dE00
+#' previewColors(cols.hcl)
+#' 
+#' # manual specification
+#' previewColors(cols.hcl, method = 'manual', col.order = 1:361)
+#' 
+#' # MDS
+#' previewColors(cols.hcl, method = 'MDS', pt.cex = 1)
+#' 
+previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), col.order = NULL, nrow = ceiling(sqrt(length(cols))), ncol = nrow, border.col = 'black', pt.cex = 2, pt.pch = 15) {
 
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver', quietly = TRUE))
@@ -53,6 +65,9 @@ previewColors <- function(cols, method = 'grid', col.order = NULL, nrow = ceilin
 
   # remove NA
   cols <- na.omit(cols)
+  
+  # expected method argument
+  method <- match.arg(method)
 
   # safety catch: a 5000 x 5000 element distance matrix is about all we really need for a preview
   if(length(cols) > 5000) {

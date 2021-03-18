@@ -6,7 +6,7 @@
 \usage{
 previewColors(
   cols,
-  method = "grid",
+  method = c("grid", "MDS", "manual"),
   col.order = NULL,
   nrow = ceiling(sqrt(length(cols))),
   ncol = nrow,
@@ -36,7 +36,7 @@ previewColors(
 When \code{method = "grid" or "manual"} a vector of color order is returned. When \code{method = "MDS"}, the output from \code{MASS::cmdscale}.
 }
 \description{
-Preview colors as a grid arranged according to CIE2000 distances.
+Preview colors arranged according to CIE2000 distances or manual specification.
 }
 \details{
 Color sorting is based on CIE2000 distances as calculated by \code{farver::compare_colour()}. The "grid" method arranges colors in a rectangular grid with ordering based on divisive hierarchical clustering of the pair-wise distances. Unique colors are used when \code{cols} contains more than 5,000 colors.
@@ -55,6 +55,18 @@ depths(sp2) <- id ~ top + bottom
 
 previewColors(sp2$soil_color)
 previewColors(sp2$soil_color, method = 'MDS', pt.cex = 3)
+
+# create colors using HCL space
+cols.hcl <- hcl(h = 0:360, c = 100, l = 50)
+
+# grid, colors sorted by dE00
+previewColors(cols.hcl)
+
+# manual specification
+previewColors(cols.hcl, method = 'manual', col.order = 1:361)
+
+# MDS
+previewColors(cols.hcl, method = 'MDS', pt.cex = 1)
 
 }
 \author{
