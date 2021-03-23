@@ -23,6 +23,7 @@
   res <- data.frame(
     munsell = sprintf('%s %s/%s', m$hue, m$value, m$chroma),
     distance = m$sigma,
+    mixingMethod = 'estimate',
     stringsAsFactors = FALSE
   )
    
@@ -250,6 +251,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
         res <- data.frame(
           munsell = NA,
           distance = NA,
+          mixingMethod = NA,
           stringsAsFactors = FALSE
         )
       }
@@ -302,6 +304,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
     res <- data.frame(
       munsell = dimnames(z)[[1]][d$index],
       distance = d$distance[, 1],
+      mixingMethod = 'spectra',
       stringsAsFactors = FALSE
     )
     

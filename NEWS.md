@@ -14,6 +14,7 @@
  * new function `alignTransect()` for simplifying relative positioning of profile sketches
  * `plotMultipleSPC()` gains ability to automatically merge thematic legends
  * `coordinates<-` will check formula terms (_unique_ coordinates) in the `@horizons` slot, if needed.
+ * `mixMunsell` gains argument for performing mixture estimation via wt. mean of CIELAB coordinates
  
 # aqp 1.28 (2021-03-02)
  * optimization of SoilProfileCollection `[,j]`-index extraction using {data.table}
