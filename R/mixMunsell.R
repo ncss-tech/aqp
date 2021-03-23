@@ -181,7 +181,12 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, keep
   # sanity check: if there aren't sufficient reference spectra then return NA
   # must be at least the same number of spectra (columns) as unique colors specified
   if(ncol(s) < length(unique(x))){
-    message('reference spectra not available')
+    missing.chips <- setdiff(x, munsell.names)
+    msg <- sprintf(
+      'reference spectra not available: %s',
+      paste(missing.chips, collapse = ', ')
+    )
+    message(msg)
     res <- data.frame(
       munsell = NA,
       distance = NA,
