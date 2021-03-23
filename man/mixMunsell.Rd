@@ -7,6 +7,7 @@
 mixMunsell(
   x,
   w = rep(1, times = length(x))/length(x),
+  mixingMethod = c("spectra", "estimate", "adaptive"),
   n = 1,
   keepMixedSpec = FALSE
 )
@@ -16,15 +17,22 @@ mixMunsell(
 
 \item{w}{vector of proportions, can sum to any number}
 
-\item{n}{number of closest matching color chips}
+\item{mixingMethod}{approach used to simulate a mixture:
+\itemize{
+\item \code{spectra}: simulate a subtractive mixture of pigments, limited to available reference spectra
+\item \code{estimate}: closest Munsell chip to a weighted mean of CIELAB coordinates
+\item \code{adaptive}: use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
+}}
 
-\item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list}}
+\item{n}{number of closest matching color chips (\code{mixingMethod = spectra} only)}
+
+\item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list} (\code{mixingMethod = spectra} only)}
 }
 \value{
 A \code{data.frame} with the closest matching Munsell color(s), unless \code{keepMixedSpec = TRUE} then a \code{list}.
 }
 \description{
-Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
+Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
 }
 \details{
 Pending

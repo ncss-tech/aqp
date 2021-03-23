@@ -62,4 +62,31 @@ test_that("mixed spectra option", {
   expect_true(m$munsell[2] == '5Y 4/2')
 })
 
+test_that("mxing methods", {
+  
+  ## all reference spectra available
+  
+  # spectra
+  mx <- mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'spectra')
+  expect_true(mx$munsell[1] == '10Y 4/3')
+  
+  # wt. mean CIELAB, results are slightly different
+  mx <- mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'estimate')
+  expect_true(mx$munsell[1] == '10YR 4/2')
+  
+  # adaptive, should get spectral mixture
+  mx <- mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'adaptive')
+  expect_true(mx$munsell[1] == '10Y 4/3')
+
+  ## some reference spectra missing
+  
+  # message and NA
+  expect_message(mx <- mixMunsell(c('10YR 6/2', '10YR 1/1'), mixingMethod = 'spectra'))
+  expect_true(is.na(mx$munsell[1]))
+  
+  # fall-back to wt.mean CIELAB
+  expect_message(mx <- mixMunsell(c('10YR 6/2', '10YR 1/1'), mixingMethod = 'adaptive'))
+  expect_true(mx$munsell[1] == '2.5Y 3/2')
+  
+})
 

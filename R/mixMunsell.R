@@ -1,4 +1,34 @@
 
+## this will replace soilDB::estimateColorMixture() as an alternative / fallback 
+## method for mixMunsell() when reference spectra are missing
+
+.estimateColorMixture <- function(chips, w) {
+ 
+  # convert to CIELAB
+  .lab <- parseMunsell(chips, returnLAB = TRUE)
+  
+  # weighted mean
+  .L <- weighted.mean(.lab[['L']], w = w, na.rm = TRUE)
+  .A <- weighted.mean(.lab[['A']], w = w, na.rm = TRUE)
+  .B <- weighted.mean(.lab[['B']], w = w, na.rm = TRUE)
+  
+  # LAB -> sRGB
+  mixed.color <- data.frame(convertColor(cbind(.L, .A, .B), from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65'))
+  names(mixed.color) <- c('r', 'g', 'b')
+  
+  # back to Munsell
+  m <- rgb2munsell(mixed.color[, c('r', 'g', 'b')])
+  
+  # pack into expected structure
+  res <- data.frame(
+    munsell = sprintf('%s %s/%s', m$hue, m$value, m$chroma),
+    distance = m$sigma,
+    stringsAsFactors = FALSE
+  )
+   
+  return(res)
+}
+
 
 
 # helper function for printing out value / chroma ranges by hue
@@ -72,7 +102,7 @@
 # * interpolation of odd chroma
 # * reshaping for rapid look-up
 
-# optimizations:
+# optimization:
 # * 80% of time is spent on sweep() and colSums()
 # * see matrixStats package for a compiled version: colSums2()
 # * https://github.com/HenrikBengtsson/matrixStats
@@ -82,15 +112,20 @@
 #'
 #' @title Mix Munsell Colors via Spectral Library
 #'
-#' @description Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
+#' @description Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
 #'
 #' @param x vector of colors in Munsell notation
 #'
 #' @param w vector of proportions, can sum to any number
+#' 
+#' @param mixingMethod approach used to simulate a mixture: 
+#'    * `spectra`: simulate a subtractive mixture of pigments, limited to available reference spectra
+#'    * `estimate`: closest Munsell chip to a weighted mean of CIELAB coordinates
+#'    * `adaptive`: use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
 #'
-#' @param n number of closest matching color chips
+#' @param n number of closest matching color chips (`mixingMethod = spectra` only)
 #'
-#' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list`
+#' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list` (`mixingMethod = spectra` only)
 #'
 #' @author D.E. Beaudette
 #'
@@ -109,20 +144,29 @@
 #' @details
 #' Pending
 #'
-#' @note This functions is slower than \code{soilDB::estimateColorMixture()} (weighted average of colors in CIELAB coordinates) but more accurate.
-#'
 #' @return A `data.frame` with the closest matching Munsell color(s), unless `keepMixedSpec = TRUE` then a `list`.
 #'
 #' @seealso \code{\link{munsell.spectra}}
 #'
-mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, keepMixedSpec = FALSE) {
+mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('spectra', 'estimate', 'adaptive'), n = 1, keepMixedSpec = FALSE) {
 
+  # satisfy R CMD check
+  munsell.spectra.wide <- NULL
+  
   ## TODO
-  # sanity checks
+  # * more sanity checks
+  # * how can we interpret returned distance? what values are too great to be of value?
+  # * keep track of mixing method (distances are not compatible)
   
-  ## TODO how can we interpret returned distance? what values are too great to be of value?
+  # enforce mixing method
+  mixingMethod <- match.arg(mixingMethod)
   
-  # sanity check, need this for gower_topn
+  # mixed spectra and multiple matches only possible when using mixingMethod == 'spectra'
+  if(mixingMethod != 'spectra' & (n > 1 | keepMixedSpec)) {
+    stop('`n` and `keepMixedSpec` options are only valid for `mixingMethod="spectra"`', call. = FALSE)
+  }
+  
+  # sanity check, need this for gower::gower_topn()
   if(!requireNamespace('gower'))
     stop('package `gower` is required', call.=FALSE)
 
@@ -165,118 +209,141 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, keep
     stop('input must be valid Munsell notation, neutral hues and missing not supported')
   }
 
-  # satisfy R CMD check
-  munsell.spectra.wide <- NULL
-
-  # wide version for fast searches
-  load(system.file("data/munsell.spectra.wide.rda", package="aqp")[1])
-
-  # subset reference spectra for colors
-  # note that search results are not in the same order as x
-  # result are columns of spectra
-  munsell.names <- names(munsell.spectra.wide)
-  idx <- which(munsell.names %in% x)
-  s <- munsell.spectra.wide[, idx, drop = FALSE]
-
-  # sanity check: if there aren't sufficient reference spectra then return NA
-  # must be at least the same number of spectra (columns) as unique colors specified
-  if(ncol(s) < length(unique(x))){
-    missing.chips <- setdiff(x, munsell.names)
-    msg <- sprintf(
-      'reference spectra not available: %s',
-      paste(missing.chips, collapse = ', ')
+  
+  # main branch: mixing method
+  if(mixingMethod == 'estimate') {
+    
+    # simple estimation by weighted mean LAB
+    res <- .estimateColorMixture(chips = x, w = w)
+    return(res)
+    
+  } else {
+    # spectral mixing if possible
+    
+    # wide version for fast searches
+    load(system.file("data/munsell.spectra.wide.rda", package="aqp")[1])
+    
+    # subset reference spectra for colors
+    # note that search results are not in the same order as x
+    # result are columns of spectra
+    munsell.names <- names(munsell.spectra.wide)
+    idx <- which(munsell.names %in% x)
+    s <- munsell.spectra.wide[, idx, drop = FALSE]
+    
+    # sanity check: if there aren't sufficient reference spectra then return NA
+    # must be at least the same number of spectra (columns) as unique colors specified
+    if(ncol(s) < length(unique(x))){
+      # helpful message
+      missing.chips <- setdiff(x, munsell.names)
+      msg <- sprintf(
+        'reference spectra not available: %s',
+        paste(missing.chips, collapse = ', ')
+      )
+      message(msg)
+      
+      # fall-back to wt. mean LAB
+      if(mixingMethod == 'adaptive') {
+        # assumes cleaned data
+        res <- .estimateColorMixture(chips = x, w = w)
+      } else {
+        # otherwise return an empty result
+        res <- data.frame(
+          munsell = NA,
+          distance = NA,
+          stringsAsFactors = FALSE
+        )
+      }
+      
+      # done
+      return(res)
+    }
+    
+    # empty vector for mixture
+    mixed <- vector(mode = 'numeric', length = nrow(s))
+    
+    # iterate over wavelength (columns in first spectra)
+    for(i in seq_along(mixed)) {
+      
+      # prepare values:
+      # select the i-th wavelength (row)
+      # down-grade to a vector
+      vals <- unlist(s[i, ])
+      
+      ## TODO: this wastes a lot of time when weights are obvious, move outside of loop
+      # aggregate weights by "chip" -- in case length(x) != length(unique(x))
+      wagg <- aggregate(w, by = list(chip = x), FUN = sum)
+      
+      # mix via weighted geometric mean
+      mixed[i] <- .wgm(v = vals, w = wagg$x[match(names(s), wagg$chip)])
+    }
+    
+    ## TODO: what is the "best" distance metric when comparing 1 spectra to the entire library?
+    
+    ## optimization: matrixStats::colSums2() much faster
+    ## --> syntax slightly different
+    
+    ## operations on data.table likely faster
+    
+    # Gower distance: looks good, ~5x faster due to compiled code
+    # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
+    # would make sense to reshape reference data
+    
+    ## TODO: time wasted here
+    # reshape reference spectra: wavelength to columns
+    z <- t(munsell.spectra.wide[, -1])
+    
+    # top n matches
+    d <- gower::gower_topn(
+      data.frame(rbind(mixed)),
+      data.frame(z),
+      n = n
     )
-    message(msg)
+    
     res <- data.frame(
-      munsell = NA,
-      distance = NA,
+      munsell = dimnames(z)[[1]][d$index],
+      distance = d$distance[, 1],
       stringsAsFactors = FALSE
     )
-    return(res)
-  }
-
-  # empty vector for mixture
-  mixed <- vector(mode = 'numeric', length = nrow(s))
-
-  # iterate over wavelength (columns in first spectra)
-  for(i in seq_along(mixed)) {
-
-    # prepare values:
-    # select the i-th wavelength (row)
-    # down-grade to a vector
-    vals <- unlist(s[i, ])
     
-    ## TODO: this wastes a lot of time when weights are obvious, move outside of loop
-    # aggregate weights by "chip" -- in case length(x) != length(unique(x))
-    wagg <- aggregate(w, by = list(chip = x), FUN = sum)
-
-    # mix via weighted geometric mean
-    mixed[i] <- .wgm(v = vals, w = wagg$x[match(names(s), wagg$chip)])
-  }
-
-  ## TODO: what is the "best" distance metric when comparing 1 spectra to the entire library?
-
-  ## optimization: matrixStats::colSums2() much faster
-  ## --> syntax slightly different
-  
-  ## operations on data.table likely faster
-  
-  # Gower distance: looks good, ~5x faster due to compiled code
-  # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
-  # would make sense to reshape reference data
-  
-  ## TODO: time wasted here
-  # reshape reference spectra: wavelength to columns
-  z <- t(munsell.spectra.wide[, -1])
-
-  # top n matches
-  d <- gower::gower_topn(
-    data.frame(rbind(mixed)),
-    data.frame(z),
-    n = n
-  )
-
-  res <- data.frame(
-    munsell = dimnames(z)[[1]][d$index],
-    distance = d$distance[, 1],
-    stringsAsFactors = FALSE
-  )
-  
-  
-  # ## slower but no deps, using Euclidean distance
-  # # D = sqrt(sum( [reference - mixed]^2 ))
-  # 
-  # # subtract the mixture spectra, element-wise, from reference library
-  # # note we are removing the wavelength (1st) column
-  # m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
-  # 
-  # # finish the distance calculation
-  # m.dist <- sqrt(colSums(m.diff^2))
-  # 
-  # # get the spectra of the closest n munsell chip(s) via sorting ASC
-  # m.match <- sort(m.dist)[1:n]
-  # 
-  # # compile into data.frame
-  # res <- data.frame(
-  #   munsell = names(m.match),
-  #   distance = m.match,
-  #   stringsAsFactors = FALSE
-  # )
-
-  # clean-up row names
-  row.names(res) <- NULL
-  
-  # optionally return weighted geometric mean (mixed) spectra
-  if(keepMixedSpec) {
-    return(
-      list(
-        mixed = res,
-        spec = mixed
+    
+    # ## slower but no deps, using Euclidean distance
+    # # D = sqrt(sum( [reference - mixed]^2 ))
+    # 
+    # # subtract the mixture spectra, element-wise, from reference library
+    # # note we are removing the wavelength (1st) column
+    # m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
+    # 
+    # # finish the distance calculation
+    # m.dist <- sqrt(colSums(m.diff^2))
+    # 
+    # # get the spectra of the closest n munsell chip(s) via sorting ASC
+    # m.match <- sort(m.dist)[1:n]
+    # 
+    # # compile into data.frame
+    # res <- data.frame(
+    #   munsell = names(m.match),
+    #   distance = m.match,
+    #   stringsAsFactors = FALSE
+    # )
+    
+    # clean-up row names
+    row.names(res) <- NULL
+    
+    # optionally return weighted geometric mean (mixed) spectra
+    if(keepMixedSpec) {
+      return(
+        list(
+          mixed = res,
+          spec = mixed
+        )
       )
-    )
-  } else {
-    return(res)
+    } else {
+      return(res)
+    }
   }
+  
+  
+  
 
 }
 
