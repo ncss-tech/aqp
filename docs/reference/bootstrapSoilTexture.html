@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Simulate realistic sand/silt/clay values (a composition) using multivariate Normal distribution or Dirichlet distribution. Simulations from the multivariate Normal distribution are based on the compositional mean and variance-covariance matrix. Simulations from the Dirichlet distribution are based on maximum likelihood estimation of <code>alpha</code> parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bootstrapSoilTexture</span><span class='op'>(</span><span class='va'>ssc</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dirichlet"</span>, <span class='st'>"normal"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>bootstrapSoilTexture</span><span class='op'>(</span><span class='va'>ssc</span>, method <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"dirichlet"</span>, <span class='st'>"normal"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,7 +177,7 @@
   <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'sp4'</span><span class='op'>)</span>
   
   <span class='co'># filter just Bt horizon data</span>
-  <span class='va'>ssc</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>'^Bt'</span>, <span class='va'>sp4</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span><span class='op'>]</span>
+  <span class='va'>ssc</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>'^Bt'</span>, <span class='va'>sp4</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span><span class='op'>]</span>
   <span class='fu'><a href='names.html'>names</a></span><span class='op'>(</span><span class='va'>ssc</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>toupper</a></span><span class='op'>(</span><span class='fu'><a href='names.html'>names</a></span><span class='op'>(</span><span class='va'>ssc</span><span class='op'>)</span><span class='op'>)</span>
   
   <span class='co'># simulate 100 samples</span>
@@ -195,7 +195,7 @@
     class.lab.col<span class='op'>=</span><span class='st'>'black'</span>,
     lwd.axis<span class='op'>=</span><span class='fl'>1.5</span>,
     arrows.show<span class='op'>=</span><span class='cn'>TRUE</span>,
-    new.mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
+    new.mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
   <span class='op'>)</span>
   
   <span class='co'># add original data points</span>
@@ -214,10 +214,10 @@
   
   <span class='co'># simple legend</span>
   <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span><span class='st'>'top'</span>, 
-         legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Source'</span>, <span class='st'>'Simulated'</span><span class='op'>)</span>, 
-         pch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>22</span>, <span class='fl'>3</span><span class='op'>)</span>, 
-         col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'black'</span>, <span class='st'>'firebrick'</span><span class='op'>)</span>, 
-         pt.bg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'royalblue'</span>, <span class='cn'>NA</span><span class='op'>)</span>, 
+         legend <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'Source'</span>, <span class='st'>'Simulated'</span><span class='op'>)</span>, 
+         pch <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>22</span>, <span class='fl'>3</span><span class='op'>)</span>, 
+         col <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'black'</span>, <span class='st'>'firebrick'</span><span class='op'>)</span>, 
+         pt.bg <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'royalblue'</span>, <span class='cn'>NA</span><span class='op'>)</span>, 
          horiz <span class='op'>=</span> <span class='cn'>TRUE</span>, bty <span class='op'>=</span> <span class='st'>'n'</span>
   <span class='op'>)</span>
   

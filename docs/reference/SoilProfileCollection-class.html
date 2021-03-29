@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@
     <pre class="usage"><span class='fu'>SoilProfileCollection</span><span class='op'>(</span>
   idcol <span class='op'>=</span> <span class='st'>"id"</span>,
   hzidcol <span class='op'>=</span> <span class='st'>"hzID"</span>,
-  depthcols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"top"</span>, <span class='st'>"bottom"</span><span class='op'>)</span>,
+  depthcols <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"top"</span>, <span class='st'>"bottom"</span><span class='op'>)</span>,
   metadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>aqp_df_class <span class='op'>=</span> <span class='st'>"data.frame"</span>, aqp_group_by <span class='op'>=</span> <span class='st'>""</span>, aqp_hzdesgn <span class='op'>=</span> <span class='st'>""</span>,
     aqp_hztexcl <span class='op'>=</span> <span class='st'>""</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
   horizons <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, hzID <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, top <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
@@ -321,7 +321,7 @@
 
 
 <span class='co'># edit horizon depths</span>
-<span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'t'</span>, <span class='st'>'b'</span><span class='op'>)</span>
+<span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'t'</span>, <span class='st'>'b'</span><span class='op'>)</span>
 <span class='fu'><a href='horizonDepths<-.html'>horizonDepths</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "t" "b"</div><div class='input'>
 <span class='co'># edit profile IDs</span>

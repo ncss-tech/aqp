@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Plot Multiple SoilProfileCollection Objects — plotMultipleSPC" />
-<meta property="og:description" content="Combine multiple SoilProfileCollection objects into a single profile sketch,
-with annotated groups." />
+<meta property="og:description" content="Plot Multiple SoilProfileCollection Objects" />
 
 
 
@@ -73,7 +72,7 @@ with annotated groups." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -112,22 +111,27 @@ with annotated groups." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot Multiple SoilProfileCollection Objects</h1>
+    <h1>Plot Multiple <code>SoilProfileCollection</code> Objects</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/plotMultipleSPC.R'><code>R/plotMultipleSPC.R</code></a></small>
     <div class="hidden name"><code>plotMultipleSPC.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Combine multiple SoilProfileCollection objects into a single profile sketch,
-with annotated groups.</p>
+    <p>Plot Multiple <code>SoilProfileCollection</code> Objects</p>
     </div>
 
     <pre class="usage"><span class='fu'>plotMultipleSPC</span><span class='op'>(</span>
   <span class='va'>spc.list</span>,
   <span class='va'>group.labels</span>,
   args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NA</span><span class='op'>)</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>spc.list</span><span class='op'>)</span><span class='op'>)</span>,
+  merged.legend <span class='op'>=</span> <span class='cn'>NULL</span>,
+  merged.colors <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"#5E4FA2"</span>, <span class='st'>"#3288BD"</span>, <span class='st'>"#66C2A5"</span>, <span class='st'>"#ABDDA4"</span>, <span class='st'>"#E6F598"</span>, <span class='st'>"#FEE08B"</span>,
+    <span class='st'>"#FDAE61"</span>, <span class='st'>"#F46D43"</span>, <span class='st'>"#D53E4F"</span>, <span class='st'>"#9E0142"</span><span class='op'>)</span>,
+  merged.legend.title <span class='op'>=</span> <span class='va'>merged.legend</span>,
   arrow.offset <span class='op'>=</span> <span class='fl'>2</span>,
   bracket.base.depth <span class='op'>=</span> <span class='fl'>95</span>,
+  label.offset <span class='op'>=</span> <span class='fl'>2</span>,
+  label.cex <span class='op'>=</span> <span class='fl'>0.75</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -149,6 +153,18 @@ with annotated groups.</p>
 <code>SoilProfileCollection</code> object</p></td>
     </tr>
     <tr>
+      <th>merged.legend</th>
+      <td><p>name of a horizon level attribute from which to create thematic sketches and merged legend</p></td>
+    </tr>
+    <tr>
+      <th>merged.colors</th>
+      <td><p>vector of colors used to create thematic sketches from a shared horizon level attribute</p></td>
+    </tr>
+    <tr>
+      <th>merged.legend.title</th>
+      <td><p>legend title</p></td>
+    </tr>
+    <tr>
       <th>arrow.offset</th>
       <td><p>vertical offset in depth from base of start / end
 profiles and group bracket arrows</p></td>
@@ -158,6 +174,14 @@ profiles and group bracket arrows</p></td>
       <td><p>baseline depth used for group brackets</p></td>
     </tr>
     <tr>
+      <th>label.offset</th>
+      <td><p>vertical offset of group labels from baseline</p></td>
+    </tr>
+    <tr>
+      <th>label.cex</th>
+      <td><p>label size</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>additional arguments to the first call to <code>plotSPC</code></p></td>
     </tr>
@@ -165,11 +189,12 @@ profiles and group bracket arrows</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See examples below for usage.</p>
+    <p>Combine multiple <code>SoilProfileCollection</code> objects into a single profile sketch,
+with annotated groups.</p>
+<p>See examples below for usage.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Multiple color legends for thematic profile sketches are not currently
-supported, use with caution.</p>
+    <p>For thematic sketches, use the <code>merged.legend</code> argument instead of <code>color</code> argument to <code>plotSPC</code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='profileGroupLabels.html'>profileGroupLabels</a></code></p></div>
@@ -179,14 +204,15 @@ supported, use with caution.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='co'>##</span>
+<span class='co'>## Simple Example</span>
+<span class='co'>##</span>
+
+<span class='co'># using default arguments to plotSPC()</span>
+
 <span class='co'># load sample data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
-
-<span class='co'># convert soil colors</span>
-<span class='va'>sp3</span><span class='op'>$</span><span class='va'>h</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span> ; <span class='va'>sp3</span><span class='op'>$</span><span class='va'>s</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span> ; <span class='va'>sp3</span><span class='op'>$</span><span class='va'>v</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-<span class='va'>sp3.rgb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp3</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span>, return_triplets<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>sp3</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'h'</span>,<span class='st'>'s'</span>,<span class='st'>'v'</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sp3.rgb</span>, <span class='fu'><a href='https://rdrr.io/r/grDevices/rgb2hsv.html'>rgb2hsv</a></span><span class='op'>(</span><span class='va'>r</span>, <span class='va'>g</span>, <span class='va'>b</span>, maxColorValue<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># promote to SoilProfileCollection</span>
 <span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
@@ -195,13 +221,107 @@ supported, use with caution.</p>
 <span class='co'># combine into a list</span>
 <span class='va'>spc.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sp3</span>, <span class='va'>sp4</span><span class='op'>)</span>
 
-<span class='co'># plot multiple SPC objects, with list of named arguments for each call to plotSPC</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>plotMultipleSPC</span><span class='op'>(</span><span class='va'>spc.list</span>, group.labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Collection 1'</span>, <span class='st'>'Collection 2'</span><span class='op'>)</span>,
-args<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'top'</span><span class='op'>)</span>,
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'side'</span><span class='op'>)</span><span class='op'>)</span>, bracket.base.depth<span class='op'>=</span><span class='fl'>120</span><span class='op'>)</span>
+<span class='co'># argument list</span>
+<span class='va'>arg.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'top'</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'side'</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'># plot multiple SPC objects, </span>
+<span class='co'># with list of named arguments for each call to plotSPC</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>plotMultipleSPC</span><span class='op'>(</span>
+  <span class='va'>spc.list</span>, 
+  group.labels <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'Collection 1'</span>, <span class='st'>'Collection 2'</span><span class='op'>)</span>,
+  args <span class='op'>=</span> <span class='va'>arg.list</span>, 
+  bracket.base.depth <span class='op'>=</span> <span class='fl'>120</span>, label.cex <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span>
 </div><div class='img'><img src='plotMultipleSPC-1.png' alt='' width='768' height='475' /></div><div class='input'>
-</div></pre>
+<span class='co'># specify a different max.depth</span>
+<span class='fu'>plotMultipleSPC</span><span class='op'>(</span>
+  <span class='va'>spc.list</span>, 
+  group.labels <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'Collection 1'</span>, <span class='st'>'Collection 2'</span><span class='op'>)</span>,
+  args <span class='op'>=</span> <span class='va'>arg.list</span>, 
+  bracket.base.depth <span class='op'>=</span> <span class='fl'>120</span>, label.cex <span class='op'>=</span> <span class='fl'>1</span>,
+  max.depth <span class='op'>=</span> <span class='fl'>250</span>
+<span class='op'>)</span>
+</div><div class='img'><img src='plotMultipleSPC-2.png' alt='' width='768' height='475' /></div><div class='input'>
+
+
+<span class='co'>##</span>
+<span class='co'>## Merged Legend Example</span>
+<span class='co'>##</span>
+
+<span class='co'># merged legend based on hz attribute 'clay'</span>
+
+<span class='co'># reset sample data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
+
+<span class='co'># promote to SoilProfileCollection</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'>
+<span class='co'># combine into a list</span>
+<span class='va'>spc.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sp3</span>, <span class='va'>sp4</span><span class='op'>)</span>
+
+<span class='co'># argument list</span>
+<span class='va'>arg.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'top'</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'side'</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>plotMultipleSPC</span><span class='op'>(</span>
+  <span class='va'>spc.list</span>, 
+  group.labels <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'Collection 1'</span>, <span class='st'>'Collection 2'</span><span class='op'>)</span>,
+  args <span class='op'>=</span> <span class='va'>arg.list</span>, 
+  label.cex <span class='op'>=</span> <span class='fl'>1</span>, 
+  merged.legend <span class='op'>=</span> <span class='st'>'clay'</span>, merged.legend.title <span class='op'>=</span> <span class='st'>'Clay (%)'</span>
+<span class='op'>)</span>
+</div><div class='img'><img src='plotMultipleSPC-3.png' alt='' width='768' height='475' /></div><div class='input'>
+
+<span class='co'>##</span>
+<span class='co'>## Complex Merged Legend Example</span>
+<span class='co'>##</span>
+
+<span class='co'># create a merged legend from "clay" in sp4 and jacobs2000</span>
+<span class='co'># use "soil_color" from sp3</span>
+
+<span class='co'># reset sample data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>jacobs2000</span><span class='op'>)</span>
+
+<span class='co'># promote to SoilProfileCollection</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'>
+<span class='co'># remove 'clay' column from sp3</span>
+<span class='va'>sp3</span><span class='op'>$</span><span class='va'>clay</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span>
+
+<span class='co'># combine into a list</span>
+<span class='va'>spc.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sp3</span>, <span class='va'>sp4</span>, <span class='va'>jacobs2000</span><span class='op'>)</span>
+
+<span class='co'># try some variations on the default arguments</span>
+<span class='co'># `clay` is missing in the first SPC, safe to specify another column for colors</span>
+<span class='va'>arg.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>'soil_color'</span>, id.style<span class='op'>=</span><span class='st'>'top'</span>, name <span class='op'>=</span> <span class='cn'>NA</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, hz.depths <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'side'</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'name'</span>, id.style<span class='op'>=</span><span class='st'>'side'</span>, name.style <span class='op'>=</span> <span class='st'>'left-center'</span>, hz.depths <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>plotMultipleSPC</span><span class='op'>(</span>
+  <span class='va'>spc.list</span>, 
+  group.labels <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'sp3'</span>, <span class='st'>'sp4'</span>, <span class='st'>'jacobs2000'</span><span class='op'>)</span>,
+  label.offset <span class='op'>=</span> <span class='fl'>3</span>,
+  args <span class='op'>=</span> <span class='va'>arg.list</span>, 
+  merged.legend <span class='op'>=</span> <span class='st'>'clay'</span>, merged.legend.title <span class='op'>=</span> <span class='st'>'Clay (%)'</span>,
+  axis.line.offset <span class='op'>=</span> <span class='fl'>0</span>
+<span class='op'>)</span>
+</div><div class='img'><img src='plotMultipleSPC-4.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

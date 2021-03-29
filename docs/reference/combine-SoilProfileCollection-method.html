@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Combine SoilProfileCollection objects — combine,SoilProfileCollection-method • aqp</title>
+<title>Combine SoilProfileCollection objects — c,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Combine SoilProfileCollection objects — combine,SoilProfileCollection-method" />
+<meta property="og:title" content="Combine SoilProfileCollection objects — c,SoilProfileCollection-method" />
 <meta property="og:description" content="Combine SoilProfileCollection objects or lists of SoilProfileCollection objects. This method provides ... expansion for the pbindlist method." />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -121,6 +121,9 @@
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>c</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for SoilProfileCollection</span>
 <span class='fu'>combine</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for list</span>
@@ -130,8 +133,12 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>x</th>
+      <td><p>A SoilProfileCollection</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>SoilProfileCollection objects or lists of SoilProfileCollection objects to combine</p></td>
+      <td><p>SoilProfileCollection objects</p></td>
     </tr>
     </table>
 
@@ -144,7 +151,7 @@
 <span class='va'>spc1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='fl'>1</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>spc2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='fl'>2</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>combine</span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span><span class='op'>)</span>
+<span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>c</span><span class='op'>(</span><span class='va'>spc1</span>, bar<span class='op'>=</span><span class='va'>spc2</span>, baz<span class='op'>=</span><span class='st'>"foo"</span><span class='op'>)</span>
 
 </div></pre>
   </div>

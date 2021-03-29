@@ -41,7 +41,12 @@
 
 <meta property="og:title" content="Lattice Panel Function for Soil Profiles — panel.depth_function" />
 <meta property="og:description" content="Panel function for plotting grouped soil property data, along with upper and
-lower estimates of uncertainty." />
+lower estimates of uncertainty.
+This function can be used to replace panel.superpose when plotting
+depth function data. When requested, contributing fraction data are printed
+using colors the same color as corresponding depth function lines unless a
+single color value is given via cf.col.
+This function is not able to apply transformations (typically log = 10) applied in the scales argument to xyplot to  upper/lower bounds. These will have to be manually applied. See examples." />
 
 
 
@@ -73,7 +78,7 @@ lower estimates of uncertainty." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -120,6 +125,11 @@ lower estimates of uncertainty." />
     <div class="ref-description">
     <p>Panel function for plotting grouped soil property data, along with upper and
 lower estimates of uncertainty.</p>
+<p>This function can be used to replace <code>panel.superpose</code> when plotting
+depth function data. When requested, contributing fraction data are printed
+using colors the same color as corresponding depth function lines unless a
+single color value is given via <code>cf.col</code>.</p>
+<p>This function is not able to apply transformations (typically <code>log = 10</code>) applied in the <code>scales</code> argument to <code>xyplot</code> to  upper/lower bounds. These will have to be manually applied. See examples.</p>
     </div>
 
     <pre class="usage"><span class='fu'>panel.depth_function</span><span class='op'>(</span>
@@ -196,21 +206,12 @@ see below</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function can be used to replace <code>panel.superpose</code> when plotting
-depth function data. When requested, contributing fraction data are printed
-using colors the same color as corresponding depth function lines unless a
-single color value is given via <code>cf.col</code>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>http://casoilresource.lawr.ucdavis.edu/</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='sp1.html'>sp1</a></code>, <code><a href='slice-methods.html'>slice</a></code>, <code><a href='slab-methods.html'>slab</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Dylan E. Beaudette</p>
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -223,15 +224,15 @@ single color value is given via <code>cf.col</code>.</p>
   data <span class='op'>=</span> <span class='va'>sp1</span>,
   id <span class='op'>=</span> <span class='va'>sp1</span><span class='op'>$</span><span class='va'>id</span>,
   panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
-  ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>,
+  ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>,
   scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
   xlab <span class='op'>=</span> <span class='st'>'Property'</span>,
   ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
   main <span class='op'>=</span> <span class='st'>'panel.depth_function() demo'</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>plotting segments...</span></div><div class='img'><img src='panel.depth_function-1.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='img'><img src='panel.depth_function-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># 1.1 include groups argument to leverage lattice styling framework</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>group</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Group 1'</span>, <span class='st'>'Group2'</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>sp1</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>group</span>, labels <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'Group 1'</span>, <span class='st'>'Group2'</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
   <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>prop</span>,
@@ -239,7 +240,7 @@ single color value is given via <code>cf.col</code>.</p>
   data <span class='op'>=</span> <span class='va'>sp1</span>,
   id <span class='op'>=</span> <span class='va'>sp1</span><span class='op'>$</span><span class='va'>id</span>,
   panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
-  ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>,
+  ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>10</span><span class='op'>)</span>,
   scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
   xlab <span class='op'>=</span> <span class='st'>'Property'</span>,
   ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
@@ -249,11 +250,137 @@ single color value is given via <code>cf.col</code>.</p>
     points <span class='op'>=</span> <span class='cn'>FALSE</span>,
     lines <span class='op'>=</span> <span class='cn'>TRUE</span>
   <span class='op'>)</span>,
-  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
+  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span>
     <span class='st'>'Orange'</span>, <span class='st'>'RoyalBlue'</span>
   <span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>plotting segments...</span></div><div class='img'><img src='panel.depth_function-2.png' alt='' width='768' height='475' /></div></pre>
+</div><div class='img'><img src='panel.depth_function-2.png' alt='' width='768' height='475' /></div><div class='input'>
+
+<span class='co'># more complex examples, using step functions with grouped data</span>
+<span class='co'># better looking figures with less customization via tactile package</span>
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>'tactile'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://Rdatatable.gitlab.io/data.table'>data.table</a></span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jolars/tactile'>tactile</a></span><span class='op'>)</span>
+  
+  <span class='co'># example data</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span>
+  
+  <span class='co'># a single profile</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>sp6</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='op'>]</span>
+  
+  <span class='co'># wide -&gt; long format</span>
+  <span class='va'>x.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, 
+    id.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'id'</span>, <span class='st'>'top'</span>, <span class='st'>'bottom'</span><span class='op'>)</span>, 
+    measure.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  
+  <span class='co'># (optional) convert back to data.frame</span>
+  <span class='va'>x.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>x.long</span><span class='op'>)</span>
+  
+  <span class='co'># three variables sharing a common axis</span>
+  <span class='co'># factor levels set by melt()</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>id</span>,
+    groups <span class='op'>=</span> <span class='va'>variable</span>,
+    data <span class='op'>=</span> <span class='va'>x.long</span>,
+    id <span class='op'>=</span> <span class='va'>x.long</span><span class='op'>$</span><span class='va'>id</span>,
+    ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>60</span><span class='op'>)</span>,
+    scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+    par.settings <span class='op'>=</span> <span class='fu'>tactile</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+    xlab <span class='op'>=</span> <span class='st'>'Sand, Silt, Clay (%)'</span>,
+    ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+    panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+    auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns <span class='op'>=</span> <span class='fl'>3</span>, lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+    asp <span class='op'>=</span> <span class='fl'>1.5</span>
+  <span class='op'>)</span>
+  
+  
+  <span class='co'># all profiles</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>sp6</span>
+  
+  <span class='co'># wide -&gt; long format</span>
+  <span class='va'>x.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, 
+    id.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'id'</span>, <span class='st'>'top'</span>, <span class='st'>'bottom'</span><span class='op'>)</span>, 
+    measure.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  
+  <span class='co'># (optional) convert back to data.frame</span>
+  <span class='va'>x.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>x.long</span><span class='op'>)</span>
+  
+  <span class='co'># three variables sharing a common axis</span>
+  <span class='co'># factor levels set by melt()</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>id</span>,
+    groups <span class='op'>=</span> <span class='va'>variable</span>,
+    data <span class='op'>=</span> <span class='va'>x.long</span>,
+    id <span class='op'>=</span> <span class='va'>x.long</span><span class='op'>$</span><span class='va'>id</span>,
+    ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span><span class='op'>)</span>,
+    scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+    par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+    xlab <span class='op'>=</span> <span class='st'>'Sand, Silt, Clay (%)'</span>,
+    ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+    panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+    auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns <span class='op'>=</span> <span class='fl'>3</span>, lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+    as.table <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>
+  
+  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>value</span>,
+    groups <span class='op'>=</span> <span class='va'>variable</span>,
+    data <span class='op'>=</span> <span class='va'>x.long</span>,
+    id <span class='op'>=</span> <span class='va'>x.long</span><span class='op'>$</span><span class='va'>id</span>,
+    ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span><span class='op'>)</span>,
+    scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+    par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+    xlab <span class='op'>=</span> <span class='st'>'Sand, Silt, Clay (%)'</span>,
+    ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+    panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+    auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns <span class='op'>=</span> <span class='fl'>3</span>, lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+    as.table <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>
+  
+  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>variable</span>,
+    groups <span class='op'>=</span> <span class='va'>variable</span>,
+    data <span class='op'>=</span> <span class='va'>x.long</span>,
+    id <span class='op'>=</span> <span class='va'>x.long</span><span class='op'>$</span><span class='va'>id</span>,
+    ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span><span class='op'>)</span>,
+    scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+    par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+    xlab <span class='op'>=</span> <span class='st'>'Sand, Silt, Clay (%)'</span>,
+    ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+    panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+    auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns <span class='op'>=</span> <span class='fl'>3</span>, lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+    as.table <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>
+  
+  
+  <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>top</span>, <span class='va'>bottom</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>variable</span>,
+    data <span class='op'>=</span> <span class='va'>x.long</span>,
+    id <span class='op'>=</span> <span class='va'>x.long</span><span class='op'>$</span><span class='va'>id</span>,
+    ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span><span class='op'>)</span>,
+    scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+    par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+    xlab <span class='op'>=</span> <span class='st'>'Sand, Silt, Clay (%)'</span>,
+    ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
+    panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
+    auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns <span class='op'>=</span> <span class='fl'>3</span>, lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+    as.table <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>
+  
+  
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: tactile</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'data.table' was built under R version 4.0.3</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'tactile' was built under R version 4.0.3</span></div><div class='img'><img src='panel.depth_function-3.png' alt='' width='768' height='475' /></div><div class='input'>
+
+
+
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -131,30 +131,27 @@
     </tr>
     <tr>
       <th>fm</th>
-      <td><p>A formula: either <code>integer.vector ~ var1 + var2 + var3' where named variables are sliced according to </code>integer.vector' OR where all
-variables are sliced according to <code>integer.vector' </code>integer.vector ~.'.</p></td>
+      <td><p>A formula: either <code>integer.vector ~ var1 + var2 + var3</code> where
+named variables are sliced according to <code>integer.vector</code> OR where all
+variables are sliced according to <code>integer.vector</code>: <code>integer.vector ~ .</code>.</p></td>
     </tr>
     <tr>
       <th>top.down</th>
-      <td><p>logical, slices are defined from the top-down: <code>0:10</code>
-implies 0-11 depth units.</p></td>
+      <td><p>logical, slices are defined from the top-down: <code>0:10</code> implies 0-11 depth units.</p></td>
     </tr>
     <tr>
       <th>just.the.data</th>
-      <td><p>Logical, return just the sliced data or a new
-SoilProfileCollection object.</p></td>
+      <td><p>Logical, return just the sliced data or a new <code>SoilProfileCollection</code> object.</p></td>
     </tr>
     <tr>
       <th>strict</th>
-      <td><p>Logical, should the horizonation be strictly checked for
-self-consistency?</p></td>
+      <td><p>Logical, should the horizonation be strictly checked for self-consistency?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Either a new SoilProfileCollection with data sliced according to
-<code>fm</code>, or a <code>data.frame</code>.</p>
+    <p>Either a new <code>SoilProfileCollection</code> with data sliced according to <code>fm</code>, or a <code>data.frame</code>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p><code><a href='slab-methods.html'>slab()</a></code> and <code>slice()</code> are much faster and require less
@@ -187,13 +184,13 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class='co'># init SoilProfileCollection object</span>
 <span class='fu'>depths</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   id top bottom name        p1        p2        p3          p4          p5 hzID
-#&gt; 1  1   0      6   H1  5.629373 12.725937  7.923944  5.75387321   0.1065046    1
-#&gt; 2  1   6     11   H2  7.220837 12.024949 14.827588  0.17769131   2.6993438    2
-#&gt; 3  1  11     34   H3 15.708741  2.860410  2.256845 16.71631504  -2.4082373    3
-#&gt; 4  1  34     46   H4  9.810957  6.815880 -6.268752 -0.02712232 -23.6366067    4
-#&gt; 5  1  46     52   H5 14.860020  1.073686 -2.253455  5.54742383 -26.6002069    5
-#&gt; 6 10   0     22   H1  7.150138 -7.290898  6.914133  9.14856043   0.5612011    6</div><div class='input'>
+</div><div class='output co'>#&gt;   id top bottom name         p1        p2          p3        p4        p5 hzID
+#&gt; 1  1   0      5   H1   2.100996 -13.12545  -1.4499223  14.73655  9.704684    1
+#&gt; 2  1   5     20   H2  -3.177135 -26.57304 -15.4318239  22.31482  7.598634    2
+#&gt; 3  1  20     29   H3 -14.860366 -15.64381   3.3042816  18.37121 -5.135484    3
+#&gt; 4  1  29     49   H4 -19.614619 -27.48689  -3.8042606  24.02491 -1.480708    4
+#&gt; 5 10   0     10   H1   7.412569 -11.67323   2.7563337   4.13928  2.836398    5
+#&gt; 6 10  10     26   H2  -3.332715 -32.90438   0.5579136 -15.36095  1.011233    6</div><div class='input'>
 <span class='co'># generate single slice at 10 cm</span>
 <span class='co'># output is a SoilProfileCollection object</span>
 <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='va'>name</span> <span class='op'>+</span> <span class='va'>p1</span> <span class='op'>+</span> <span class='va'>p2</span> <span class='op'>+</span> <span class='va'>p3</span><span class='op'>)</span>
@@ -205,7 +202,7 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class='co'># note that slices are specified by default as "top-down"</span>
 <span class='co'># e.g. the lower depth will always by top + 1</span>
 <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>25</span> <span class='op'>~</span> <span class='va'>name</span> <span class='op'>+</span> <span class='va'>p1</span> <span class='op'>+</span> <span class='va'>p2</span> <span class='op'>+</span> <span class='va'>p3</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
 </div><div class='img'><img src='slice-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># generate slices from 0 - 11 cm, for all variables</span>
@@ -216,13 +213,13 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 #&gt; Depth range: 11 - 11 cm
 #&gt; 
 #&gt; ----- Horizons (6 / 220 rows  |  10 / 12 columns) -----
-#&gt;  id sliceID top bottom name       p1       p2       p3       p4        p5
-#&gt;   1       1   0      1   H1 5.629373 12.72594 7.923944 5.753873 0.1065046
-#&gt;   1       2   1      2   H1 5.629373 12.72594 7.923944 5.753873 0.1065046
-#&gt;   1       3   2      3   H1 5.629373 12.72594 7.923944 5.753873 0.1065046
-#&gt;   1       4   3      4   H1 5.629373 12.72594 7.923944 5.753873 0.1065046
-#&gt;   1       5   4      5   H1 5.629373 12.72594 7.923944 5.753873 0.1065046
-#&gt;   1       6   5      6   H1 5.629373 12.72594 7.923944 5.753873 0.1065046
+#&gt;  id sliceID top bottom name        p1        p2         p3       p4       p5
+#&gt;   1       1   0      1   H1  2.100996 -13.12545  -1.449922 14.73655 9.704684
+#&gt;   1       2   1      2   H1  2.100996 -13.12545  -1.449922 14.73655 9.704684
+#&gt;   1       3   2      3   H1  2.100996 -13.12545  -1.449922 14.73655 9.704684
+#&gt;   1       4   3      4   H1  2.100996 -13.12545  -1.449922 14.73655 9.704684
+#&gt;   1       5   4      5   H1  2.100996 -13.12545  -1.449922 14.73655 9.704684
+#&gt;   1       6   5      6   H2 -3.177135 -26.57304 -15.431824 22.31482 7.598634
 #&gt; [... more horizons ...]
 #&gt; 
 #&gt; ----- Sites (6 / 20 rows  |  1 / 1 columns) -----
@@ -235,54 +232,55 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 #&gt;  14
 #&gt; [... more sites ...]
 #&gt; 
-#&gt; Spatial Data: [EMPTY]</div><div class='input'>
+#&gt; Spatial Data:
+#&gt; [EMPTY]</div><div class='input'>
 <span class='co'># note that pct missing is computed for each slice,</span>
 <span class='co'># if all vars are missing, then NA is returned</span>
 <span class='va'>d</span><span class='op'>$</span><span class='va'>p1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='va'>.</span>, just.the.data<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    id top bottom name          p1         p2         p3          p4         p5
-#&gt; 1   1  10     11   H2          NA  12.024949  14.827588   0.1776913  2.6993438
-#&gt; 2  10  10     11   H1          NA  -7.290898   6.914133   9.1485604  0.5612011
-#&gt; 3  11  10     11   H1   3.1288905   3.187857  -6.158536  -7.3721946  3.4965829
-#&gt; 4  12  10     11   H1 -13.5561967  -0.358956   6.373837  15.2662943 23.3826096
-#&gt; 5  13  10     11   H2   7.9706051   1.674618 -16.895158  -3.1738626 -8.9884788
-#&gt; 6  14  10     11   H1   0.5452651  12.385171  -1.684404 -32.6356639 -9.3093250
-#&gt; 7  15  10     11   H1   5.9384731  -1.561354   8.118415  -5.0657547 -4.3324788
-#&gt; 8  16  10     11   H1   3.5969727  -8.535018  10.206791  18.4065745  1.3596243
-#&gt; 9  17  10     11   H2   7.9518297 -30.125110  15.490520   1.4588438  9.9556763
-#&gt; 10 18  10     11   H1  -3.2938091   5.633372   6.849295  -1.6781070  5.0838269
-#&gt; 11 19  10     11   H1  -3.0395866  10.961671  -5.315024   3.9770225 -0.1867243
-#&gt; 12  2  10     11   H1  -6.0112482  14.961477  -3.318784  -7.2699855 -4.2380509
-#&gt; 13 20  10     11   H1 -10.7831156   1.224849  -4.383035  14.5859370  1.5236623
-#&gt; 14  3  10     11   H1   2.9089063   3.257962   4.479610  -5.5403029 18.3481375
-#&gt; 15  4  10     11   H2   3.4593406  -5.898197   4.884756  -3.3159016  5.4192352
-#&gt; 16  5  10     11   H1  -9.4559610  -1.254835   2.421108   9.3882270  1.2017204
-#&gt; 17  6  10     11   H2  -1.2584535   5.647855  -6.931790  16.6943464 -6.5205556
-#&gt; 18  7  10     11   H1   3.7120871   3.108104   3.193624 -10.2863672 -3.1065608
-#&gt; 19  8  10     11   H2   0.3010862  -4.187652  17.216316   5.8866556  1.1282815
-#&gt; 20  9  10     11   H2  -9.9873802   6.896171   6.454655 -14.0042028  6.8447401
-#&gt;    hzID .pctMissing
-#&gt; 1     2   0.1428571
-#&gt; 2     6   0.1428571
-#&gt; 3    11   0.0000000
-#&gt; 4    17   0.0000000
-#&gt; 5    24   0.0000000
-#&gt; 6    29   0.0000000
-#&gt; 7    34   0.0000000
-#&gt; 8    37   0.0000000
-#&gt; 9    44   0.0000000
-#&gt; 10   49   0.0000000
-#&gt; 11   52   0.0000000
-#&gt; 12   58   0.0000000
-#&gt; 13   64   0.0000000
-#&gt; 14   69   0.0000000
-#&gt; 15   76   0.0000000
-#&gt; 16   78   0.0000000
-#&gt; 17   84   0.0000000
-#&gt; 18   87   0.0000000
-#&gt; 19   93   0.0000000
-#&gt; 20   98   0.0000000</div><div class='input'>
+</div><div class='output co'>#&gt;    id top bottom name          p1          p2          p3          p4
+#&gt; 1   1  10     11   H2          NA -26.5730401 -15.4318239  22.3148208
+#&gt; 2  10  10     11   H2          NA -32.9043796   0.5579136 -15.3609482
+#&gt; 3  11  10     11   H1          NA  13.4312901   8.9434846   5.6959738
+#&gt; 4  12  10     11   H2   3.1303445  14.3018688  13.8738252 -17.6461848
+#&gt; 5  13  10     11   H1 -10.7732131  -5.9517933  -6.7695956  -2.2558461
+#&gt; 6  14  10     11   H1   7.6988491  -2.0528115   7.7356950   9.4723767
+#&gt; 7  15  10     11   H1  -5.7053875  -2.4528737  -6.7234883   8.6500686
+#&gt; 8  16  10     11   H1   6.0021480  -4.9469456 -24.7386769   0.5043324
+#&gt; 9  17  10     11   H1 -10.2594042   0.6204660   8.2462092  -0.3943083
+#&gt; 10 18  10     11   H1  17.1081030   5.1367586   1.0330448  -1.8981911
+#&gt; 11 19  10     11   H1   6.8729434   5.2903982  -7.7648175  -5.8686618
+#&gt; 12  2  10     11   H2   7.8935174  -9.0119619 -20.2758117 -10.7755124
+#&gt; 13 20  10     11   H1  -9.5093924   5.4518111   7.1748011   0.8772367
+#&gt; 14  3  10     11   H1  -1.1782362   4.4720993  -5.5530375   5.4612908
+#&gt; 15  4  10     11   H1  -5.2845302   9.0065435  -7.0843331  -4.7107011
+#&gt; 16  5  10     11   H1  10.3067833   7.7714537   1.9384619  -6.6499812
+#&gt; 17  6  10     11   H1  -0.6011421  -0.4401013  -2.0303461 -11.0944203
+#&gt; 18  7  10     11   H1  -3.2740890   7.0050948   9.4140052  -1.1462967
+#&gt; 19  8  10     11   H1  -4.1027949   8.7529697  -0.6454372   3.3465849
+#&gt; 20  9  10     11   H1   6.1111746 -16.8413789  13.9624546   4.3099537
+#&gt;             p5 hzID .pctMissing
+#&gt; 1    7.5986336    2   0.1428571
+#&gt; 2    1.0112327    6   0.1428571
+#&gt; 3   -0.1085589   10   0.1428571
+#&gt; 4   -3.8290374   17   0.0000000
+#&gt; 5   -4.8027485   21   0.0000000
+#&gt; 6    7.9691753   25   0.0000000
+#&gt; 7    8.2572477   31   0.0000000
+#&gt; 8    4.7915518   36   0.0000000
+#&gt; 9   -8.5813620   40   0.0000000
+#&gt; 10  -7.0035910   44   0.0000000
+#&gt; 11  -2.2531044   47   0.0000000
+#&gt; 12  13.0345417   51   0.0000000
+#&gt; 13  -9.4139205   54   0.0000000
+#&gt; 14  -6.8468822   60   0.0000000
+#&gt; 15 -13.1101548   65   0.0000000
+#&gt; 16  -9.2038278   70   0.0000000
+#&gt; 17 -16.5744497   74   0.0000000
+#&gt; 18   4.7379402   80   0.0000000
+#&gt; 19  -4.1472835   86   0.0000000
+#&gt; 20  -9.1912859   89   0.0000000</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'>##</span>
 <span class='co'>## check sliced data</span>
@@ -310,7 +308,6 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/all.equal.data.table.html'>all.equal</a></span><span class='op'>(</span><span class='va'>hz.slice.mean</span>, <span class='va'>hz.wt.mean</span><span class='op'>)</span><span class='op'>)</span>
   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>'there is a bug in slice() !!!'</span><span class='op'>)</span>
 <span class='op'>}</span>
-
 
 </div></pre>
   </div>

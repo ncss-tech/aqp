@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -155,14 +155,14 @@
 <span class='co'>### TRUNCATE all profiles in sp3 to [0,25]</span>
 
 <span class='co'># set up plot parameters</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># full profiles</span>
 <span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
 
 <span class='co'># trunc'd profiles</span>
 <span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='fu'>trunc</span><span class='op'>(</span><span class='va'>sp3</span>, <span class='fl'>0</span>, <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Upper boundary `z1` (0) shallower than top depth (6) of shallowest horizon in subset. (id: 10)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Missing data in glom interval (actual/target: 24/25 cm (id: 10)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: glom boundary `z1` (0) shallower than top depth (6) of shallowest horizon. (id: 10)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Upper boundary `z1` (0) shallower than top depth (2) of shallowest horizon in subset. (id: 6)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Upper boundary `z1` (0) shallower than top depth (3) of shallowest horizon in subset. (id: 7)</span></div><div class='img'><img src='trunc-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div></pre>
+</div><div class='img'><img src='trunc-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

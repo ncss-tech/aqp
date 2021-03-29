@@ -78,7 +78,7 @@ gap or overlap between adjacent horizons
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -132,18 +132,36 @@ gap or overlap between adjacent horizons
 
     </div>
 
-    <pre class="usage"><span class='fu'>checkHzDepthLogic</span><span class='op'>(</span><span class='va'>x</span>, fast <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>checkHzDepthLogic</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  hzdepths <span class='op'>=</span> <span class='cn'>NULL</span>,
+  idname <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fast <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  byhz <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>SoilProfileCollection object to check</p></td>
+      <td><p><code>SoilProfileCollection</code> or <code>data.frame</code> object to check</p></td>
+    </tr>
+    <tr>
+      <th>hzdepths</th>
+      <td><p>SoilProfileCollection uses <code><a href='horizonDepths<-.html'>horizonDepths(x)</a></code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector of column names of top and bottom depths</p></td>
+    </tr>
+    <tr>
+      <th>idname</th>
+      <td><p>SoilProfileCollection uses <code><a href='idname.html'>idname(x)</a></code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector with column name of unique profile ID;</p></td>
     </tr>
     <tr>
       <th>fast</th>
       <td><p>If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>byhz</th>
+      <td><p>Apply logic tests to profiles or individual horizons?</p></td>
     </tr>
     </table>
 
@@ -162,7 +180,7 @@ gap or overlap between adjacent horizons
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>D.E. Beaudette, A.G. Brown</p>
+    <p>D.E. Beaudette, A.G. Brown, S.M. Roecker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

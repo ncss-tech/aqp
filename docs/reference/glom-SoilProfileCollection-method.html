@@ -40,11 +40,10 @@
 
 
 <meta property="og:title" content="Subset soil horizon data using a depth or depth interval — glom,SoilProfileCollection-method" />
-<meta property="og:description" content="glom() returns a &quot;clod&quot; of horizons from a single profile SoilProfileCollection that have depth (range) in common.
+<meta property="og:description" content="glom() returns a &quot;clod&quot; of horizons from a SoilProfileCollection from a depth interval.
 All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the truncate argument is specified. Horizon intersection is based on unique ID hzidname(spc) and attribute of interest.
 If intersection at the specified boundaries ['z1', 'z2'] results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
-If inverting results with invert, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from ids = TRUE different from what you expect, as they will be based on a profile with an &quot;extra&quot; horizon.
-If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using evalMissingData or similar approach. While these warnings can make for messy standard output, it is felt by the author that users need to consciously &quot;choose&quot; to ignore (e.g. via suppressWarnings) this output. Most commonly these warning occurs when calling glom on a SPC that is impractical to inspect via glomApply, so it may be the only warning of a potential problem in a downstream analysis." />
+If inverting results with invert, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from ids = TRUE different from what you expect, as they will be based on a profile with an &quot;extra&quot; horizon." />
 
 
 
@@ -76,7 +75,7 @@ If the upper or lower bound is less than or greater than the shallowest top dept
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -121,18 +120,17 @@ If the upper or lower bound is less than or greater than the shallowest top dept
     </div>
 
     <div class="ref-description">
-    <p><code>glom()</code> returns a "clod" of horizons from a single profile SoilProfileCollection that have depth (range) in common.</p>
+    <p><code>glom()</code> returns a "clod" of horizons from a SoilProfileCollection from a depth interval.</p>
 <p>All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the <code>truncate</code> argument is specified. Horizon intersection is based on unique ID <code><a href='hzidname<-.html'>hzidname(spc)</a></code> and attribute of interest.</p>
 <p>If intersection at the specified boundaries <code>['z1', 'z2']</code> results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.</p>
 <p>If inverting results with <code>invert</code>, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from <code>ids = TRUE</code> different from what you expect, as they will be based on a profile with an "extra" horizon.</p>
-<p>If the upper or lower bound is less than or greater than the shallowest top depth or deepest bottom depth, respectively, a warning is issued, but the horizons within the interval are returned as usual. Users can handle the possibility of incomplete results using <code>evalMissingData</code> or similar approach. While these warnings can make for messy standard output, it is felt by the author that users need to consciously "choose" to ignore (e.g. via <code>suppressWarnings</code>) this output. Most commonly these warning occurs when calling <code>glom</code> on a SPC that is impractical to inspect via <code>glomApply</code>, so it may be the only warning of a potential problem in a downstream analysis.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
 <span class='fu'>glom</span><span class='op'>(</span>
   <span class='va'>p</span>,
   <span class='va'>z1</span>,
-  z2 <span class='op'>=</span> <span class='cn'>NA</span>,
+  z2 <span class='op'>=</span> <span class='cn'>NULL</span>,
   ids <span class='op'>=</span> <span class='cn'>FALSE</span>,
   df <span class='op'>=</span> <span class='cn'>FALSE</span>,
   truncate <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -145,35 +143,35 @@ If the upper or lower bound is less than or greater than the shallowest top dept
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>p</th>
-      <td><p>A single-profile SoilProfileCollection; usually <code>glom</code> is called via <code><a href='profileApply.html'>profileApply()</a></code> e.g. via convenience method <code>glomApply</code></p></td>
+      <td><p>A SoilProfileCollection</p></td>
     </tr>
     <tr>
       <th>z1</th>
-      <td><p>Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersect interval.</p></td>
+      <td><p>Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersection interval.</p></td>
     </tr>
     <tr>
       <th>z2</th>
-      <td><p>OPTIONAL: Bottom depth - bottom depth of intersection interval</p></td>
+      <td><p>optional: bottom depth of intersection interval</p></td>
     </tr>
     <tr>
       <th>ids</th>
-      <td><p>Return just horizon IDs in interval? default: FALSE</p></td>
+      <td><p>Return only horizon IDs? default: <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>df</th>
-      <td><p>Return a data.frame, by intersection with <code><a href='horizons.html'>horizons(p)</a></code>? default: FALSE</p></td>
+      <td><p>Return a data.frame, by intersection with <code><a href='horizons.html'>horizons(p)</a></code>? default: <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>truncate</th>
-      <td><p>Truncate horizon top and bottom depths to <code>z1</code> and <code>z2</code>? default: FALSE</p></td>
+      <td><p>Truncate horizon top and bottom depths to <code>z1</code> and <code>z2</code>? default: <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>invert</th>
-      <td><p>Get the horizons/depth ranges of the profile outside the interval z1/z2? default: FALSE</p></td>
+      <td><p>Get the horizons ranges outside the interval z1/z2? default: <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>modality</th>
-      <td><p>Return all data (default: <code>"all"</code>) or first, thickest (<code>modality = "thickest"</code>) horizon in interval. This can be a way of flattening a many:1 relationship over a depth interval applied to a set of profiles.)</p></td>
+      <td><p>Return all horizons (default: <code>"all"</code>) or first, <em>thickest</em> (<code>modality = "thickest"</code>) horizon in interval.</p></td>
     </tr>
     </table>
 
@@ -198,7 +196,7 @@ If the upper or lower bound is less than or greater than the shallowest top dept
 <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
 
 <span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>p</span>, <span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Lower boundary `z2` (100) is deeper than bottom depth of deepest horizon (89) in subset. (id: P001)</span></div><div class='input'>
+
 <span class='co'># there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1</span>
 <span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>foo</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 4</div></pre>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Attempt to fix overlapping sketches when using relative horizontal spacing. — fixOverlap • aqp</title>
+<title>Fix Overlap within a Sequence via Simulated Annealing — fixOverlap • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Attempt to fix overlapping sketches when using relative horizontal spacing. — fixOverlap" />
-<meta property="og:description" content="This is a very simple optimization algorithm for adjusting horizontal sketch positions until affected profiles are farter apart than a given threshold. Rank-ordering and boundary conditions are enforced on the adjustments. Failure to converge within maxIter results in an integer sequence." />
+<meta property="og:title" content="Fix Overlap within a Sequence via Simulated Annealing — fixOverlap" />
+<meta property="og:description" content="This function makes small adjustments to elements of x until overlap defined by thresh is removed, or until maxIter is reached. Rank order and boundary conditions (defined by min.x and max.x) are preserved. The underlying algorithm is based on simulated annealing. The &quot;cooling schedule&quot; parameters T0 and k can be used to tune the algorithm for specific applications." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.26</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/aqp/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,98 +111,148 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Attempt to fix overlapping sketches when using relative horizontal spacing.</h1>
-    
+    <h1>Fix Overlap within a Sequence via Simulated Annealing</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/findOverlap-fixOverlap.R'><code>R/findOverlap-fixOverlap.R</code></a></small>
     <div class="hidden name"><code>fixOverlap.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a very simple optimization algorithm for adjusting horizontal sketch positions until affected profiles are farter apart than a given threshold. Rank-ordering and boundary conditions are enforced on the adjustments. Failure to converge within <code>maxIter</code> results in an integer sequence.</p>
+    <p>This function makes small adjustments to elements of <code>x</code> until overlap defined by <code>thresh</code> is removed, or until <code>maxIter</code> is reached. Rank order and boundary conditions (defined by <code>min.x</code> and <code>max.x</code>) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters <code>T0</code> and <code>k</code> can be used to tune the algorithm for specific applications.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fixOverlap</span>(<span class='kw'>x</span>, thresh = <span class='fl'>0.6</span>, adj = <span class='fl'>0.2</span>, 
-min.x = <span class='fl'>0.8</span>, max.x = <span class='fu'><a href='length.html'>length</a></span>(<span class='kw'>x</span>) <span class='op'>+</span> <span class='fl'>0.2</span>, 
-maxIter = <span class='fl'>1000</span>, trace = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>fixOverlap</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  thresh <span class='op'>=</span> <span class='fl'>0.6</span>,
+  adj <span class='op'>=</span> <span class='va'>thresh</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span>,
+  min.x <span class='op'>=</span> <span class='fu'><a href='min.html'>min</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>0.2</span>,
+  max.x <span class='op'>=</span> <span class='fu'><a href='max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.2</span>,
+  maxIter <span class='op'>=</span> <span class='fl'>1000</span>,
+  trace <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  tiny <span class='op'>=</span> <span class='fl'>1e-04</span>,
+  T0 <span class='op'>=</span> <span class='fl'>500</span>,
+  k <span class='op'>=</span> <span class='fl'>10</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>vector of relative horizontal positions, one for each profile</p></td>
+      <td><p>vector of horizontal positions</p></td>
     </tr>
     <tr>
       <th>thresh</th>
-      <td><p>horizontal threshold defining "overlap", must be &lt; 1, ideal values likely in [0.3, 0.8]</p></td>
+      <td><p>horizontal threshold defining "overlap" or distance between elements of <code>x</code>. For adjusting soil profile sketches values are typically &lt; 1 and likely in (0.3, 0.8).</p></td>
     </tr>
     <tr>
       <th>adj</th>
-      <td><p>adjustments are tested within <code><a href='https://rdrr.io/r/stats/Uniform.html'>runif(min=adj * -1, max=adj)</a></code></p></td>
+      <td><p>specifies the size of perturbations within <code><a href='https://rdrr.io/r/stats/Uniform.html'>runif(min = adj * -1, max = adj)</a></code>. Larger values will sometimes reduce the number of iterations required to solve particularly difficult overlap conditions. See <code>coolingRate</code> argument when <code>adj</code> is large</p></td>
     </tr>
     <tr>
       <th>min.x</th>
-      <td><p>left-side boundary condition</p></td>
+      <td><p>left-side boundary condition, consider expanding if a solution cannot be found within <code>maxIter</code>.</p></td>
     </tr>
     <tr>
       <th>max.x</th>
-      <td><p>right-side boundary condition</p></td>
+      <td><p>right-side boundary condition, consider expanding if a solution cannot be found within <code>maxIter</code>.</p></td>
     </tr>
     <tr>
       <th>maxIter</th>
-      <td><p>maximum number of iterations to attempt before giving up and returning integer sequence</p></td>
+      <td><p>maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence</p></td>
     </tr>
     <tr>
       <th>trace</th>
-      <td><p>print diagnostics</p></td>
+      <td><p>print diagnostics, result is a <code>list</code> vs <code>vector</code></p></td>
+    </tr>
+    <tr>
+      <th>tiny</th>
+      <td><p>the smallest allowable overlap</p></td>
+    </tr>
+    <tr>
+      <th>T0</th>
+      <td><p>starting temperature</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>cooling constant</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a vector of the same length as <code>x</code>, preserving rank-ordering and boundary conditions.</p>
+    <p>When <code>trace = FALSE</code>, a vector of the same length as <code>x</code>, preserving rank-ordering and boundary conditions. When <code>trace = TRUE</code> a list containing the new sequence along with information about objective functions and decisions made during iteration.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Ideas for solving difficult overlap scenarios:</p><ul>
+<li><p>widen the boundary conditions by adjusting <code>min.x</code> and <code>max.x</code> beyond the original scale of <code>x</code></p></li>
+<li><p>reduce the allowable overlap threshold <code>thresh</code></p></li>
+<li><p>reduce the magnitude of perturbations (<code>adj</code>) and increase <code>maxIter</code></p></li>
+<li><p>increase <code>k</code></p></li>
+</ul>
+
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>This is a very naeve function and may fail to converge on a reasonable solution. SANN would be a much more robust framework.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+    <pre class="examples"><div class='input'>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3.4</span>, <span class='fl'>3.5</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>10</span><span class='op'>)</span>
 
-<span class='co'># proposed vector of relative positions, overlap likely</span>
-<span class='kw'>pos</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1.1</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5.2</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>9</span>, <span class='fl'>10</span>)
+<span class='co'># easy</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.2</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>9 iterations</span></div><div class='input'>
+<span class='co'># harder</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.6</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>21 iterations</span></div><div class='input'>
+<span class='co'># much harder</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.9</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>440 iterations</span></div><div class='input'>
 
-<span class='co'># try it</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='kw'>pos</span>)
+<span class='co'># interpret `trace` output</span>
+
+<span class='co'># relatively challenging</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>6</span>, <span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span>, <span class='fl'>13</span>, <span class='fl'>13</span>, <span class='fl'>15</span>, <span class='fl'>15.5</span><span class='op'>)</span>
+
+<span class='co'># fix overlap, return debugging information</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10101</span><span class='op'>)</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.8</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>duplicates in `x`, applying jitter</span></div><div class='output co'>#&gt; <span class='message'>237 iterations</span></div><div class='input'>
+<span class='co'># setup plot device</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>, widths <span class='op'>=</span> <span class='fl'>1</span>, heights <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># objective function = overlap + SSD</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>$</span><span class='va'>stats</span><span class='op'>)</span>, <span class='va'>z</span><span class='op'>$</span><span class='va'>stats</span>, 
+  type <span class='op'>=</span> <span class='st'>'h'</span>, las <span class='op'>=</span> <span class='fl'>1</span>,
+  xlab <span class='op'>=</span> <span class='st'>'Iteration'</span>, ylab <span class='op'>=</span> <span class='st'>'Overlap'</span>,
+  cex.axis <span class='op'>=</span> <span class='fl'>0.8</span>
+<span class='op'>)</span>
+
+<span class='co'># SSD: deviation from original configuration </span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>$</span><span class='va'>ssd</span><span class='op'>)</span>, <span class='va'>z</span><span class='op'>$</span><span class='va'>ssd</span>, 
+  type <span class='op'>=</span> <span class='st'>'h'</span>, las <span class='op'>=</span> <span class='fl'>1</span>,
+  xlab <span class='op'>=</span> <span class='st'>'Iteration'</span>, ylab <span class='op'>=</span> <span class='st'>'Deviation'</span>,
+  cex.axis <span class='op'>=</span> <span class='fl'>0.8</span>
+<span class='op'>)</span>
+<span class='co'># adjustments at each iteration</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/matplot.html'>matplot</a></span><span class='op'>(</span>
+  <span class='va'>z</span><span class='op'>$</span><span class='va'>states</span>, type <span class='op'>=</span> <span class='st'>'l'</span>, 
+  lty <span class='op'>=</span> <span class='fl'>1</span>, las <span class='op'>=</span> <span class='fl'>1</span>, 
+  xlab <span class='op'>=</span> <span class='st'>'Iteration'</span>, ylab <span class='op'>=</span> <span class='st'>'x-position'</span>
+<span class='op'>)</span>
 </div><div class='img'><img src='fixOverlap-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># attempt to fix using an integer sequence, short-circut will prevent adjustments</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>1 iterations</span></div><div class='img'><img src='fixOverlap-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># attempt to adjust using defaults</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>24 iterations</span></div><div class='img'><img src='fixOverlap-3.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># attempt to adjust and tinker with defaults</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>15 iterations</span></div><div class='img'><img src='fixOverlap-4.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># repeatable adjustments</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>10101</span>)
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thresh = <span class='fl'>0.7</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>16 iterations</span></div><div class='img'><img src='fixOverlap-5.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># more complex adjustments required</span>
-<span class='kw'>pos</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3.3</span>, <span class='fl'>5</span>, <span class='fl'>5.1</span>, <span class='fl'>5.5</span>, <span class='fl'>8</span>, <span class='fl'>9</span>, <span class='fl'>9.1</span>)
-
-<span class='co'># tinker</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='kw'>pos</span>)
-</div><div class='img'><img src='fixOverlap-6.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>35 iterations</span></div><div class='img'><img src='fixOverlap-7.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thresh = <span class='fl'>0.7</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>371 iterations</span></div><div class='img'><img src='fixOverlap-8.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thres=<span class='fl'>0.7</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>496 iterations</span></div><div class='img'><img src='fixOverlap-9.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># no solution possible given these constraints</span>
-<span class='fu'><a href='explainPlotSPC.html'>explainPlotSPC</a></span>(<span class='kw'>sp4</span>, name=<span class='st'>'name'</span>, relative.pos=<span class='fu'>fixOverlap</span>(<span class='kw'>pos</span>, thres=<span class='fl'>1</span>, adj = <span class='fl'>0.2</span>, trace=<span class='fl'>TRUE</span>))
-</div><div class='output co'>#&gt; <span class='message'>maximum number of iterations reached, using integer sequence</span></div><div class='img'><img src='fixOverlap-10.png' alt='' width='768' height='475' /></div></pre>
+<span class='co'># trace log</span>
+<span class='co'># B: boundary condition violation</span>
+<span class='co'># O: rank (order) violation</span>
+<span class='co'># +: accepted perturbation</span>
+<span class='co'># -: rejected perturbation</span>
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>$</span><span class='va'>log</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt;   B   O   +   - 
+#&gt;  41 114  78   3 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@
 
     <pre class="usage"><span class='fu'>textureTriangleSummary</span><span class='op'>(</span>
   <span class='va'>ssc</span>,
-  p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
+  p <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.5</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
   delta <span class='op'>=</span> <span class='fl'>1</span>,
   rv.col <span class='op'>=</span> <span class='st'>"red"</span>,
   range.border <span class='op'>=</span> <span class='st'>"black"</span>,
@@ -217,7 +217,7 @@
   <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'sp4'</span><span class='op'>)</span>
   
   <span class='co'># subset rows / columns</span>
-  <span class='va'>ssc</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>'^Bt'</span>, <span class='va'>sp4</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span><span class='op'>]</span>
+  <span class='va'>ssc</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>'^Bt'</span>, <span class='va'>sp4</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'sand'</span>, <span class='st'>'silt'</span>, <span class='st'>'clay'</span><span class='op'>)</span><span class='op'>]</span>
   <span class='fu'><a href='names.html'>names</a></span><span class='op'>(</span><span class='va'>ssc</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>toupper</a></span><span class='op'>(</span><span class='fu'><a href='names.html'>names</a></span><span class='op'>(</span><span class='va'>ssc</span><span class='op'>)</span><span class='op'>)</span>
   
   <span class='co'># make figure, marginal percentiles are silently returned</span>

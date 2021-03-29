@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -166,6 +166,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="alignTransect.html">alignTransect()</a></code> </p>
+        </td>
+        <td><p>Calculate Relative Positions from Transect Data</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="allocate.html">allocate()</a></code> </p>
         </td>
         <td><p>Allocate soil properties within various classification systems.</p></td>
@@ -256,7 +262,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="combine-SoilProfileCollection-method.html">combine(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="combine-SoilProfileCollection-method.html">combine(<i>&lt;list&gt;</i>)</a></code> </p>
+          <p><code><a href="combine-SoilProfileCollection-method.html">c(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="combine-SoilProfileCollection-method.html">combine(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="combine-SoilProfileCollection-method.html">combine(<i>&lt;list&gt;</i>)</a></code> </p>
         </td>
         <td><p>Combine SoilProfileCollection objects</p></td>
       </tr><tr>
@@ -289,6 +295,12 @@
           <p><code><a href="coordinates.html">coordinates(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="coordinates.html">`coordinates&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get coordinates from spatial slot</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="correctAWC.html">correctAWC()</a></code> </p>
+        </td>
+        <td><p>Apply rock fragment or salt correction to available water content</p></td>
       </tr><tr>
         
         <td>
@@ -340,6 +352,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="dice.html">dice()</a></code> </p>
+        </td>
+        <td><p>Efficient Slicing of <code>SoilProfileCollection</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="dollarsign-set.html">`$&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Set data in column of horizon or site data in a SoilProfileCollection</p></td>
@@ -355,6 +373,12 @@
           <p><code><a href="dot-as.data.frame.aqp.html">.as.data.frame.aqp()</a></code> </p>
         </td>
         <td><p>Wrapper method for data.frame subclass conversion</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-data_dots.html">.data_dots()</a></code> </p>
+        </td>
+        <td><p>Make a data.frame from non-standard expressions evaluated in a data environment</p></td>
       </tr><tr>
         
         <td>
@@ -406,6 +430,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="estimateAWC.html">estimateAWC()</a></code> </p>
+        </td>
+        <td><p>Estimate available water capacity for fine-earth fraction</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="estimatePSCS.html">estimatePSCS()</a></code> </p>
         </td>
         <td><p>Estimate boundaries of the particle size control section (U.S Soil Taxonomy;
@@ -443,9 +473,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="find-fix-overlap.html">findOverlap()</a></code> <code><a href="find-fix-overlap.html">fixOverlap()</a></code> </p>
+          <p><code><a href="fillHzGaps.html">fillHzGaps()</a></code> </p>
         </td>
-        <td><p>Establish which elements within a vector of horizontal positions overlap beyond a given threshold</p></td>
+        <td><p>Find and Fill Horizon Gaps</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="findOverlap.html">findOverlap()</a></code> </p>
+        </td>
+        <td><p>Find Overlap within a Sequence</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fixOverlap.html">fixOverlap()</a></code> </p>
+        </td>
+        <td><p>Fix Overlap within a Sequence via Simulated Annealing</p></td>
       </tr><tr>
         
         <td>
@@ -492,6 +534,12 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="getLastHorizonID.html">getLastHorizonID()</a></code> </p>
+        </td>
+        <td><p>Get IDs of Deepest Horizons by Profile</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="getSoilDepthClass.html">getSoilDepthClass()</a></code> </p>
         </td>
         <td><p>Generate Soil Depth Class Matrix</p></td>
@@ -528,7 +576,7 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="group_by.html">group_by(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="groupSPC.html">groupSPC()</a></code> </p>
         </td>
         <td><p>(EXPERIMENTAL) Store groupings within a profile collection.</p></td>
       </tr><tr>
@@ -615,6 +663,12 @@ a vertical distance specified</p></td>
           <p><code><a href="hurst.redness.html">hurst.redness()</a></code> </p>
         </td>
         <td><p>Hurst (1977) Redness Index</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="HzDepthLogicSubset.html">HzDepthLogicSubset()</a></code> </p>
+        </td>
+        <td><p>Subset <code>SoilProfileCollection</code> Objects or Horizons via <code>checkHzDepthLogic</code></p></td>
       </tr><tr>
         
         <td>
@@ -792,12 +846,6 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="mutate.html">mutate</a></code> </p>
-        </td>
-        <td><p>Transform a SPC with expressions based on site or horizon level attributes</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="mutate_profile.html">mutate_profile</a></code> </p>
         </td>
         <td><p>Transform a SPC (by profile) with a set of expressions</p></td>
@@ -813,6 +861,12 @@ a vertical distance specified</p></td>
           <p><code><a href="nrow.html">nrow</a></code> </p>
         </td>
         <td><p>Get the number of horizons in a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="overlapMetrics.html">overlapMetrics()</a></code> </p>
+        </td>
+        <td><p>Find and Quantify Overlap within a 1D Sequence</p></td>
       </tr><tr>
         
         <td>
@@ -840,9 +894,9 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="permute_profile.html">permute_profile()</a></code> </p>
+          <p><code><a href="perturb.html">perturb()</a></code> </p>
         </td>
-        <td><p>Permute soil horizon depths using boundary distinctness</p></td>
+        <td><p>Perturb soil horizon depths using boundary distinctness</p></td>
       </tr><tr>
         
         <td>
@@ -860,7 +914,7 @@ a vertical distance specified</p></td>
         <td>
           <p><code><a href="plotMultipleSPC.html">plotMultipleSPC()</a></code> </p>
         </td>
-        <td><p>Plot Multiple SoilProfileCollection Objects</p></td>
+        <td><p>Plot Multiple <code>SoilProfileCollection</code> Objects</p></td>
       </tr><tr>
         
         <td>
@@ -927,6 +981,12 @@ a vertical distance specified</p></td>
           <p><code><a href="reorderHorizons.html">reorderHorizons(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Re-order corrupted horizon data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repairMissingHzDepths.html">repairMissingHzDepths()</a></code> </p>
+        </td>
+        <td><p>Repair Problematic Lower Horizon Depths</p></td>
       </tr><tr>
         
         <td>
@@ -1006,7 +1066,7 @@ Mountains, CA, USA.</p></td>
         <td>
           <p><code><a href="sim.html">sim()</a></code> </p>
         </td>
-        <td><p>Simulate Soil Profiles</p></td>
+        <td><p>DEPRECATED Simulate Soil Profiles</p></td>
       </tr><tr>
         
         <td>
@@ -1078,7 +1138,7 @@ Mountains, CA, USA.</p></td>
         <td>
           <p><code><a href="SoilTextureLevels.html">SoilTextureLevels()</a></code> </p>
         </td>
-        <td><p>Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size</p></td>
+        <td><p>Ranking Systems for USDS Soil Texture Classes</p></td>
       </tr><tr>
         
         <td>
@@ -1166,7 +1226,7 @@ Mountains, CA, USA.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="summarize.html">summarize</a></code> </p>
+          <p><code><a href="summarizeSPC.html">summarizeSPC()</a></code> </p>
         </td>
         <td><p>Perform summaries on groups (from <code>group_by</code>) and create new site or horizon level attributes</p></td>
       </tr><tr>
@@ -1196,15 +1256,15 @@ Mountains, CA, USA.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="trunc-SoilProfileCollection-method.html">trunc(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="transform.html">transform(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Truncate a SoilProfileCollection to specified top and bottom depth</p></td>
+        <td><p>Transform a SPC with expressions based on site or horizon level attributes</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="union-list-missing-method.html">union(<i>&lt;list&gt;</i>,<i>&lt;missing&gt;</i>)</a></code> </p>
+          <p><code><a href="trunc-SoilProfileCollection-method.html">trunc(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>(DEPRECATED) union</p></td>
+        <td><p>Truncate a SoilProfileCollection to specified top and bottom depth</p></td>
       </tr><tr>
         
         <td>

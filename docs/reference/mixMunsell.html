@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Mix Munsell Colors via Spectral Library — mixMunsell" />
-<meta property="og:description" content="Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate." />
+<meta property="og:description" content="Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -117,10 +117,16 @@
     </div>
 
     <div class="ref-description">
-    <p>Simulate subtractive mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.</p>
+    <p>Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>x</span>, w <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mixMunsell</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  w <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  mixingMethod <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"spectra"</span>, <span class='st'>"estimate"</span>, <span class='st'>"adaptive"</span><span class='op'>)</span>,
+  n <span class='op'>=</span> <span class='fl'>1</span>,
+  keepMixedSpec <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,20 +140,29 @@
       <td><p>vector of proportions, can sum to any number</p></td>
     </tr>
     <tr>
+      <th>mixingMethod</th>
+      <td><p>approach used to simulate a mixture:</p><ul>
+<li><p><code>spectra</code>: simulate a subtractive mixture of pigments, limited to available reference spectra</p></li>
+<li><p><code>estimate</code>: closest Munsell chip to a weighted mean of CIELAB coordinates</p></li>
+<li><p><code>adaptive</code>: use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates</p></li>
+</ul></td>
+    </tr>
+    <tr>
       <th>n</th>
-      <td><p>number of closest matching color chips</p></td>
+      <td><p>number of closest matching color chips (<code>mixingMethod = spectra</code> only)</p></td>
+    </tr>
+    <tr>
+      <th>keepMixedSpec</th>
+      <td><p>keep weighted geometric mean spectra, final result is a <code>list</code> (<code>mixingMethod = spectra</code> only)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>data.frame</code> with the closest matching Munsell color(s)</p>
+    <p>A <code>data.frame</code> with the closest matching Munsell color(s), unless <code>keepMixedSpec = TRUE</code> then a <code>list</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Pending</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>This functions is slower than <code><a href='https://rdrr.io/pkg/soilDB/man/estimateColorMixture.html'>soilDB::estimateColorMixture()</a></code> (weighted average of colors in CIELAB coordinates) but more accurate.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     

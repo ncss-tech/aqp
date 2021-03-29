@@ -73,7 +73,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -161,7 +161,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 <span class='co'>## 1. Pantone -&gt; Munsell</span>
 
 <span class='co'># colors to match</span>
-<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 4/6'</span><span class='op'>)</span>
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 4/6'</span><span class='op'>)</span>
 
 <span class='co'># index / subset match</span>
 <span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>munsell</span> <span class='op'>%in%</span> <span class='va'>colors</span>
@@ -171,7 +171,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 <span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span><span class='op'>(</span>m1 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, m2 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, labels <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'>## 2. Munsell -&gt; Pantone</span>
-<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'723-c'</span>, <span class='st'>'451-c'</span><span class='op'>)</span>
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'723-c'</span>, <span class='st'>'451-c'</span><span class='op'>)</span>
 
 <span class='co'># index / subset match</span>
 <span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>code</span> <span class='op'>%in%</span> <span class='va'>colors</span>
@@ -188,26 +188,26 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 <span class='va'>sp6</span><span class='op'>$</span><span class='va'>munsell</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getClosestMunsellChip.html'>getClosestMunsellChip</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>$</span><span class='va'>color</span>, convertColors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># prepare an intermediate data.frame for performing join to LUT</span>
-<span class='va'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='hzidname<-.html'>hzidname</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span>, <span class='st'>'munsell'</span><span class='op'>)</span><span class='op'>]</span>
+<span class='va'>h</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='hzidname<-.html'>hzidname</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span>, <span class='st'>'munsell'</span><span class='op'>)</span><span class='op'>]</span>
 
 <span class='co'># left join</span>
 <span class='co'># not all Munsell colors have a paired Pantone color</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>pms.munsell.lut</span>, by <span class='op'>=</span> <span class='st'>'munsell'</span>, all.x <span class='op'>=</span> <span class='cn'>TRUE</span>, sort <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>pms.munsell.lut</span>, by <span class='op'>=</span> <span class='st'>'munsell'</span>, all.x <span class='op'>=</span> <span class='cn'>TRUE</span>, sort <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># splice into original SPC</span>
 <span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp6</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>m</span>
 
 <span class='co'># graphical check</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp6</span>, color <span class='op'>=</span> <span class='st'>'hex'</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-3.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'>## 4. multiple Pantone colors matching a single Munsell color</span>
 <span class='co'>#</span>
 <span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>[</span><span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>munsell</span> <span class='op'>==</span> <span class='st'>'5YR 5/5'</span>, <span class='op'>]</span>
-<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='va'>colors</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span><span class='op'>(</span><span class='va'>colors</span><span class='op'>$</span><span class='va'>dE00</span><span class='op'>)</span>, <span class='op'>]</span>
+<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='va'>colors</span><span class='op'>[</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>colors</span><span class='op'>$</span><span class='va'>dE00</span><span class='op'>)</span>, <span class='op'>]</span>
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>0</span><span class='op'>)</span>, fg <span class='op'>=</span> <span class='st'>'white'</span>, bg <span class='op'>=</span> <span class='st'>'black'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>0</span><span class='op'>)</span>, fg <span class='op'>=</span> <span class='st'>'white'</span>, bg <span class='op'>=</span> <span class='st'>'black'</span><span class='op'>)</span>
 <span class='fu'><a href='soilPalette.html'>soilPalette</a></span><span class='op'>(</span><span class='va'>colors</span><span class='op'>$</span><span class='va'>hex</span>, lab <span class='op'>=</span> <span class='va'>colors</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>
 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span><span class='op'>(</span><span class='st'>'Pantone Colors Roughly Matching 5YR 5/5'</span>, col.main <span class='op'>=</span> <span class='st'>'white'</span>, line <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-4.png' alt='' width='768' height='475' /></div><div class='input'>

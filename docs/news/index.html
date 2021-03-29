@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -114,11 +114,95 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="aqp-127-2021-01-22" class="section level1">
-<h1 class="page-header" data-toc-text="1.27">
-<a href="#aqp-127-2021-01-22" class="anchor"></a>aqp 1.27 (2021-01-22)<small> Unreleased </small>
+    <div id="aqp-129-2021-03-16" class="section level1">
+<h1 class="page-header" data-toc-text="1.29">
+<a href="#aqp-129-2021-03-16" class="anchor"></a>aqp 1.29 (2021-03-16)<small> Unreleased </small>
 </h1>
 <ul>
+<li>Several <code>SoilProfileCollection</code> methods that conflict with {dplyr} 1.0+ have been deprecated:
+<ul>
+<li>
+<code>filter</code>, <code>mutate</code>, <code>group_by</code>, <code>summarize</code>
+</li>
+<li>New overloaded {base} names:
+<ul>
+<li>{base}-like syntax: “filter” -&gt; <code>subset</code>, “mutate” -&gt; <code>transform</code>, “combine” -&gt; <code>c</code>
+</li>
+</ul>
+</li>
+<li>New unique {aqp}/SoilProfileCollection aliases:
+<ul>
+<li>
+<code>*SPC</code> syntax: <code>filterSPC</code>, <code>mutateSPC</code>, <code>groupSPC</code>, <code>summarizeSPC</code>
+</li>
+</ul>
+</li>
+<li>Be aware <code><a href="https://dplyr.tidyverse.org/reference/combine.html">dplyr::combine</a></code> (deprecated in {dplyr} 0.7) still conflicts</li>
+</ul>
+</li>
+<li>
+<code><a href="https://Rdatatable.gitlab.io/data.table/reference/setops.html">aqp::union()</a></code>, previously deprecated, has been removed from namespace
+<ul>
+<li>Use <code><a href="../reference/c,SoilProfileCollection-method.html">c()</a></code> or <code><a href="../reference/c,SoilProfileCollection-method.html">combine()</a></code> for <code>SoilProfileCollection</code> input</li>
+<li>Use<code><a href="../reference/c,SoilProfileCollection-method.html">combine()</a></code> or <code><a href="../reference/pbindlist.html">pbindlist()</a></code> for <code>list</code> input</li>
+</ul>
+</li>
+<li>Methods that used {rlang} for non-standard evaluation now use {base}</li>
+<li>
+<code><a href="../reference/plotSPC.html">plotSPC()</a></code> gains vectorized <code>y.offset</code> support</li>
+<li>new function <code><a href="../reference/alignTransect.html">alignTransect()</a></code> for simplifying relative positioning of profile sketches</li>
+<li>
+<code><a href="../reference/plotMultipleSPC.html">plotMultipleSPC()</a></code> gains ability to automatically merge thematic legends</li>
+<li>
+<code>coordinates&lt;-</code> will check formula terms (<em>unique</em> coordinates) in the <code>@horizons</code> slot, if needed.</li>
+<li>
+<code>mixMunsell</code> gains argument for performing mixture estimation via wt. mean of CIELAB coordinates</li>
+<li>minor bug-fix in <code>panel.depth_function</code> when plotting grouped step-functions</li>
+</ul>
+</div>
+    <div id="aqp-128-2021-03-02" class="section level1">
+<h1 class="page-header" data-toc-text="1.28">
+<a href="#aqp-128-2021-03-02" class="anchor"></a>aqp 1.28 (2021-03-02)<small> Unreleased </small>
+</h1>
+<ul>
+<li>optimization of SoilProfileCollection <code>[,j]</code>-index extraction using {data.table}</li>
+<li>introduction of <code>.LAST</code>, <code>.FIRST</code> and <code>.HZID</code> SoilProfileCollection “k-keywords”</li>
+<li>
+<code><a href="../reference/perturb.html">perturb()</a></code> is the new generalized replacement for <code><a href="../reference/sim.html">sim()</a></code> and <code><a href="../reference/perturb.html">permute_profile()</a></code>
+</li>
+<li>
+<code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code> now has a <code>byhz</code> argument for checking logic by <em>horizon</em> rather than profile</li>
+<li>
+<code>fillHzGaps</code> now has <code>to_top</code> and <code>to_bottom</code> arguments for filling above shallowest top / deepest bottom by profile</li>
+<li>
+<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> more flexible and will usually settle on a solution in fewer iterations:
+<ul>
+<li>
+<code><a href="../reference/overlapMetrics.html">overlapMetrics()</a></code> instead of <code><a href="../reference/findOverlap.html">findOverlap()</a></code> for part of objective function</li>
+<li>cooling schedule is now fully adjustable via <code>T0</code> and <code>k</code> arguments</li>
+</ul>
+</li>
+<li>
+<code>alignTransect</code> helper function for computing relative positions and ordering vector supplied to <code>plotSPC</code>
+</li>
+<li>
+<code><a href="../reference/plotSPC.html">plotSPC()</a></code> automatically converts <code>logical</code> data supplied to <code>color</code> argument into <code>factor</code>
+</li>
+<li>
+<code><a href="../reference/glom,SoilProfileCollection-method.html">glom()</a></code> is now vectorized over profiles</li>
+<li>
+<code>estimateAWC</code> introduced for testing lookup table estimation of available water capacity (AWC) of fine-earth fraction</li>
+<li>
+<code>correctAWC</code> introduced for testing corrections of AWC estimates for rock fragment and salts</li>
+</ul>
+</div>
+    <div id="aqp-127-2021-01-22" class="section level1">
+<h1 class="page-header" data-toc-text="1.27">
+<a href="#aqp-127-2021-01-22" class="anchor"></a>aqp 1.27 (2021-01-22)<small> 2021-01-26 </small>
+</h1>
+<ul>
+<li>
+<code>fillHzGaps</code>: new function for fixing horizon depth topological errors and padding top/bottom of profiles with placeholder (empty) horizons</li>
 <li>
 <code>mixMunsell</code> now relies on suggested package {gower} for 5-10x speed bump</li>
 <li>{aqp} no longer imports from {reshape} (less one dependency), all transformations from wide&lt;-&gt;long are done via {data.table}</li>
@@ -358,7 +442,7 @@
 <ul>
 <li>
 <code><a href="../reference/plotSPC.html">plotSPC()</a></code> gains a new argument for relative positioning: relative.pos</li>
-<li>relative positioning helper function: <code><a href="../reference/findOverlap.html">fixOverlap()</a></code>, see manual page for examples</li>
+<li>relative positioning helper function: <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>, see manual page for examples</li>
 <li>
 <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code>, <code><a href="../reference/addDiagnosticBracket.html">addDiagnosticBracket()</a></code>, and <code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> updated accordingly</li>
 </ul>

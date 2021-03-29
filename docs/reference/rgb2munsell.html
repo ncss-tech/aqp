@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -120,14 +120,14 @@
     <p>Convert sRGB color coordinates to the closest <code>n</code> Munsell chips in the <code>munsell</code> lookup table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rgb2munsell</span><span class='op'>(</span><span class='va'>color</span>, colorSpace <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CIE2000"</span>, <span class='st'>"LAB"</span>, <span class='st'>"sRGB"</span><span class='op'>)</span>, nClosest <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rgb2munsell</span><span class='op'>(</span><span class='va'>color</span>, colorSpace <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"CIE2000"</span>, <span class='st'>"LAB"</span>, <span class='st'>"sRGB"</span><span class='op'>)</span>, nClosest <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>color</th>
-      <td><p>a <code>data.frame</code> or <code>matrix</code> object containing sRGB coordinates in the range of [0,1]</p></td>
+      <td><p>a <code>data.frame</code> or <code>matrix</code> object containing sRGB coordinates in the range of (0,1)</p></td>
     </tr>
     <tr>
       <th>colorSpace</th>
@@ -135,7 +135,7 @@
     </tr>
     <tr>
       <th>nClosest</th>
-      <td><p>number of closest Munsell colors to return</p></td>
+      <td><p>number of closest Munsell colors to return (valid range is 1-20)</p></td>
     </tr>
     </table>
 
@@ -159,9 +159,9 @@
     <pre class="examples"><div class='input'>
 <span class='co'># Munsell notation to sRGB triplets [0-1] </span>
 <span class='va'>color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span>
-  the_hue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'2.5YR'</span><span class='op'>)</span>, 
-  the_value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span>, 
-  the_chroma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>6</span><span class='op'>)</span>, 
+  the_hue <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'2.5YR'</span><span class='op'>)</span>, 
+  the_value <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span>, 
+  the_chroma <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>6</span><span class='op'>)</span>, 
   return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
 

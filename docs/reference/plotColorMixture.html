@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -123,8 +123,11 @@
     <pre class="usage"><span class='fu'>plotColorMixture</span><span class='op'>(</span>
   <span class='va'>x</span>,
   w <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  n <span class='op'>=</span> <span class='fl'>1</span>,
   swatch.cex <span class='op'>=</span> <span class='fl'>6</span>,
-  label.cex <span class='op'>=</span> <span class='fl'>0.85</span>
+  label.cex <span class='op'>=</span> <span class='fl'>0.85</span>,
+  showMixedSpec <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  overlapFix <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -132,11 +135,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>vector of colors in Munsell notation</p></td>
+      <td><p>vector of colors in Munsell notation, should not contain duplicates</p></td>
     </tr>
     <tr>
       <th>w</th>
       <td><p>vector of proportions, can sum to any number</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>number of closest mixture candidates (see <code><a href='mixMunsell.html'>mixMunsell</a></code>), results can be hard to interpret</p></td>
     </tr>
     <tr>
       <th>swatch.cex</th>
@@ -146,11 +153,19 @@
       <th>label.cex</th>
       <td><p>scaling factor for swatch labels</p></td>
     </tr>
+    <tr>
+      <th>showMixedSpec</th>
+      <td><p>show weighted geometric mean (mixed) spectra as dotted line</p></td>
+    </tr>
+    <tr>
+      <th>overlapFix</th>
+      <td><p>attempt to "fix" overlapping chip labels via <code><a href='fixOverlap.html'>fixOverlap</a></code></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>lattice graphics object</p>
+    <p><code>lattice</code> graphics object</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>

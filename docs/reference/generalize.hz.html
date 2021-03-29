@@ -73,7 +73,7 @@ patterns." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -174,8 +174,8 @@ same length as <code>x</code></p></td>
 
 <span class='co'># generalize</span>
 <span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'>generalize.hz</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>,
-                           new<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span>,<span class='st'>'R'</span><span class='op'>)</span>,
-                           pat<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span>,<span class='st'>'R'</span><span class='op'>)</span><span class='op'>)</span>
+                           new<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span>,<span class='st'>'R'</span><span class='op'>)</span>,
+                           pat<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span>,<span class='st'>'R'</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># see how we did / what we missed</span>
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span>, <span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span>
@@ -183,15 +183,15 @@ same length as <code>x</code></p></td>
 
 <span class='co'>## a more advanced example, requries perl=TRUE</span>
 <span class='co'># example data</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'AC'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'^AC'</span>, <span class='st'>'C'</span>, <span class='st'>'BC'</span>, <span class='st'>'CB'</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'AC'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'^AC'</span>, <span class='st'>'C'</span>, <span class='st'>'BC'</span>, <span class='st'>'CB'</span><span class='op'>)</span>
 
 <span class='co'># new labels</span>
-<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'^AC'</span>, <span class='st'>'C'</span><span class='op'>)</span>
+<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'^AC'</span>, <span class='st'>'C'</span><span class='op'>)</span>
 <span class='co'># patterns:</span>
 <span class='co'># "A anywhere in the name"</span>
 <span class='co'># "literal '^A' anywhere in the name"</span>
 <span class='co'># "C anywhere in name, but without preceding A"</span>
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'^A'</span>, <span class='st'>'(?&lt;!A)C'</span><span class='op'>)</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'^A'</span>, <span class='st'>'(?&lt;!A)C'</span><span class='op'>)</span>
 
 <span class='co'># note additional argument</span>
 <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>generalize.hz</span><span class='op'>(</span><span class='va'>x</span>, new <span class='op'>=</span> <span class='va'>n</span>, pat<span class='op'>=</span><span class='va'>p</span>, perl<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>

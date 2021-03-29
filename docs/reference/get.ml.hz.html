@@ -74,7 +74,7 @@ boundaries." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -174,8 +174,8 @@ confusion within each ML.</p></dd>
 
 <span class='co'># normalize horizon names: result is a factor</span>
 <span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>,
-  new<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span>,
-  pat<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span><span class='op'>)</span><span class='op'>)</span>
+  new<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span>,
+  pat<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span>
 <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span><span class='op'>(</span><span class='va'>sp1</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>name</span>, cpm<span class='op'>=</span><span class='fl'>1</span>, slab.structure<span class='op'>=</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>)</span>

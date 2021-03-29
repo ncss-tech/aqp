@@ -73,7 +73,7 @@ probability matrices." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
       </span>
     </div>
 
@@ -195,7 +195,7 @@ TP</dt><dd><p><a href='http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'>## plot TP matrix with functions from sharpshootR package</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>sharpshootR</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfcol<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfcol<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html'>plotSoilRelationGraph</a></span><span class='op'>(</span><span class='va'>tp</span>, graph.mode <span class='op'>=</span> <span class='st'>'directed'</span>, edge.arrow.size<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 
@@ -207,7 +207,7 @@ TP</dt><dd><p><a href='http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>genhzTableToAdjMat</span><span class='op'>(</span><span class='va'>tab</span><span class='op'>)</span>
 
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfcol<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfcol<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html'>plotSoilRelationGraph</a></span><span class='op'>(</span><span class='va'>m</span>, graph.mode <span class='op'>=</span> <span class='st'>'directed'</span>, edge.arrow.size<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 
 
