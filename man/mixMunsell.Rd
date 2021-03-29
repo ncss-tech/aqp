@@ -37,9 +37,6 @@ Simulate mixing of colors in Munsell notation, similar to the way in which mixtu
 \details{
 Pending
 }
-\note{
-This functions is slower than \code{soilDB::estimateColorMixture()} (weighted average of colors in CIELAB coordinates) but more accurate.
-}
 \references{
 \itemize{
 \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
