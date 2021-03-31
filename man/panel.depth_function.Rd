@@ -138,7 +138,7 @@ if(requireNamespace('tactile')) {
     id = x.long$id,
     ylim = c(200, -5), xlim = c(10, 60),
     scales = list(alternating = 1, y = list(tick.number = 10)),
-    par.settings = tactile::tactile.theme(superpose.line = list(lwd = 2)),
+    par.settings = tactile.theme(superpose.line = list(lwd = 2)),
     xlab = 'Sand, Silt, Clay (\%)',
     ylab = 'Depth (cm)',
     panel = panel.depth_function,
