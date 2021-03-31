@@ -1,4 +1,4 @@
-# aqp 1.29 (2021-03-16)
+# aqp 1.29 (2021-03-31)
  * Several `SoilProfileCollection` methods that conflict with {dplyr} 1.0+ have been deprecated:
     * `filter`, `mutate`, `group_by`, `summarize`
     * New overloaded {base} names:
@@ -10,7 +10,7 @@
     * Use `c()` or `combine()` for `SoilProfileCollection` input
     * Use`combine()` or `pbindlist()` for `list` input
  * Methods that used {rlang} for non-standard evaluation now use {base}
- * `plotSPC()` gains vectorized `y.offset` support
+ * `plotSPC()` gains vectorized `y.offset` support (demonstrated in: http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html)
  * new function `alignTransect()` for simplifying relative positioning of profile sketches
  * `plotMultipleSPC()` gains ability to automatically merge thematic legends
  * `coordinates<-` will check formula terms (_unique_ coordinates) in the `@horizons` slot, if needed.
