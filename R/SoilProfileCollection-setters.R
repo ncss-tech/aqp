@@ -87,6 +87,25 @@ setReplaceMethod("depths", "data.frame",
   return(depth)
 }
 
+.prototypeSPC <- function(idn, hzd) {
+  
+  nuhz <- data.frame(id = character(0), 
+                     hzID = character(0), 
+                     top = numeric(0),
+                     bottom = numeric(0), 
+                     stringsAsFactors = FALSE)
+  colnames(nuhz) <- c(idn, "hzID", hzd)
+  
+  nust <- data.frame(id = character(0), 
+                     stringsAsFactors = FALSE)
+  colnames(nust) <- idn
+  
+  return(SoilProfileCollection(idcol = idn, 
+                               depthcols = hzd,
+                               horizons = nuhz,
+                               site = nust))
+}
+
 ##
 ## initialize SP/SPC objects from a model.frame
 ##
@@ -119,7 +138,7 @@ setReplaceMethod("depths", "data.frame",
           all(is.na(data[[depthcols[2]]]) ))) {
       warning("Dropping profile IDs: ", paste0(iddata, collapse = ","),
               "; all top and/or bottom depths missing!", call. = FALSE)
-      return(SoilProfileCollection())
+      return(.prototypeSPC(nm[1], depthcols))
   }
 
   tdep <- data[[depthcols[1]]]
@@ -134,7 +153,7 @@ setReplaceMethod("depths", "data.frame",
   t12 <- any(iddata != usortid) | hsorttdep
 
   if (is.na(t12)) {
-    return(SoilProfileCollection())
+    return(.prototypeSPC(nm[1], depthcols))
   } else if (t12) {
     ## note: forced character sort on ID -- need to impose some order to check depths
     data <- ditd
