@@ -43,7 +43,7 @@ Region of California.
 }
 \details{
 These data were extracted from the NSSL database. \code{ca630} is a list composed
-of site and lab data, each stored as dataframes. These data are modeled by a
+of site and lab data, each stored as \code{data.frame} objects. These data are modeled by a
 1:many (site:lab) relation, with the \code{pedon_id} acting as the primary key in
 the \code{site} table and as the foreign key in the \code{lab} table.
 }
@@ -54,10 +54,9 @@ with caution
 \examples{
 
 \dontrun{
-library(plyr)
+library(tactile)
 library(lattice)
 library(Hmisc)
-library(maps)
 library(sp)
 
 # check the data out:
@@ -91,20 +90,22 @@ proj4string(ca) <- '+proj=longlat +datum=NAD83'
 # check the result
 print(ca)
 
-# map the data (several ways to do this, here is a simple way)
-map(database='county', region='california')
-points(coordinates(ca), col='red', cex=0.5)
-
 # aggregate \%BS 7 for all profiles into 1 cm slices
 a <- slab(ca, fm= ~ bs_7)
 
 # plot median & IQR by 1 cm slice
 xyplot(
-top ~ p.q50, data=a, lower=a$p.q25, upper=a$p.q75,
-ylim=c(160,-5), alpha=0.5, scales=list(alternating=1, y=list(tick.num=7)),
-panel=panel.depth_function, prepanel=prepanel.depth_function,
+top ~ p.q50, 
+data = a, 
+lower=a$p.q25, 
+upper=a$p.q75,
+alpha=0.5,
+ylim=c(160,-5), 
+scales = list(alternating = 1, y = list(tick.num = 7)),
+panel = panel.depth_function, 
+prepanel = prepanel.depth_function,
 ylab='Depth (cm)', xlab='Base Saturation at pH 7',
-par.settings=list(superpose.line=list(col='black', lwd=2))
+par.settings = tactile.theme(superpose.line = list(col = 'black', lwd = 2))
 )
 
 # aggregate \%BS at pH 8.2 for all profiles by MLRA, along 1 cm slices
@@ -116,23 +117,30 @@ a <- subset(a, subset=mlra \%in\% c('18', '22'))
 
 # plot median & IQR by 1 cm slice, using different colors for each MLRA
 xyplot(
-top ~ p.q50, groups=mlra , data=a, lower=a$p.q25, upper=a$p.q75,
-ylim=c(160,-5), alpha=0.5, scales=list(y=list(tick.num=7, alternating=3), x=list(alternating=1)),
-panel=panel.depth_function, prepanel=prepanel.depth_function,
-ylab='Depth (cm)', xlab='Base Saturation at pH 8.2',
-par.settings=list(superpose.line=list(col=c('black','blue'), lty=c(1,2), lwd=2)),
-auto.key=list(columns=2, title='MLRA', points=FALSE, lines=TRUE)
+top ~ p.q50, 
+groups = factor(mlra), 
+data = a,
+lower=a$p.q25, 
+upper=a$p.q75,
+alpha=0.25,
+sync.colors = TRUE,
+ylim=c(160,-5), 
+scales = list(alternating = 1, y = list(tick.num = 7)),
+panel = panel.depth_function, 
+prepanel = prepanel.depth_function,
+ylab='Depth (cm)', xlab='Base Saturation at pH 7',
+par.settings = tactile.theme(superpose.line = list(lwd = 2)),
+auto.key = list(lines = TRUE, points = FALSE, columns = 2)
 )
 
 
-# safely compute hz-thickness weighted mean CEC (pH 7)
-# using data.frame objects
-head(lab.agg.cec_7 <- ddply(ca630$lab, .(pedon_key),
-.fun=summarise, CEC_7=wtd.mean(bs_7, weights=hzn_bot-hzn_top)))
-
 # extract a SPDF with horizon data along a slice at 25 cm
 s.25 <- slice(ca, fm=25 ~ bs_7 + CEC7 + ex_acid)
-spplot(s.25, zcol=c('bs_7','CEC7','ex_acid'))
+spplot(
+s.25, zcol=c('bs_7','CEC7','ex_acid'), 
+par.settings = tactile.theme,
+layout = c(3,1)
+)
 
 # note that the ordering is preserved:
 all.equal(s.25$pedon_key, profile_id(ca))
@@ -147,7 +155,8 @@ ca.2 <- ca[, 2]
 ca.1.to.10 <- ca[1:10, ]
 
 # basic plot method: profile plot
-plot(ca.1.to.10, name='hzn_desgn')
+par(mar = c(0, 0, 3, 1))
+plotSPC(ca.1.to.10, name='hzn_desgn', color = 'CEC7')
 }
 
 }

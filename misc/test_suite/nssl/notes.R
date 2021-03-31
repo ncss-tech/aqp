@@ -1,5 +1,4 @@
 library(aqp)
-library(maptools)
 library(rgdal)
 library(rgeos)
 
