@@ -897,7 +897,9 @@ plotSPC <- function(
 	    ## TODO: consider use of unicode arrow markers
 	    # hzd.txt <- sprintf('\u25c4%s', this_profile_data[, tcol])
 	    # text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0, font = 1)
-
+      
+	    ## TODO: consider top-align for first horizon depth and bottom-align for last
+	    
 	    # all horizon top depths
 	    hzd.txt <- this_profile_data[[tcol]]
 	    text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
