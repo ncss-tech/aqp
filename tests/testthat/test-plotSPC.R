@@ -71,6 +71,18 @@ test_that("plotSPC: re-ordering of profiles", {
   expect_equal(new.order, lsp$plot.order)
 })
 
+# output is purely graphical, testing to make sure no errors / warnings are generated
+test_that("plotSPC: shrinking horizon names", {
+  
+  # make sure these work
+  plotSPC(sp1, name.style = 'center-center', shrink.thin = NULL, shrink = TRUE, cex.names = 0.8)
+  plotSPC(sp1, name.style = 'center-center', shrink.thin = 5, shrink = TRUE, cex.names = 0.8)
+  # test
+  lsp <- explainPlotSPC(sp1, name.style = 'center-center', shrink.thin = 15, shrink = TRUE, cex.names = 0.8)
+  expect_true(is.list(lsp))
+})
+
+
 
 test_that("plotSPC: relative spacing", {
 

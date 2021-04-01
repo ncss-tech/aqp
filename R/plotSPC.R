@@ -55,19 +55,21 @@
 #'
 #' @param x.idx.offset integer specifying horizontal offset from 0 (left-hand edge)
 #'
-#' @param n integer describing amount of space along x-axis to allocate, defaults to \code{length(x)}
+#' @param n integer describing amount of space along x-axis to allocate, defaults to `length(x)`
 #'
 #' @param max.depth suggested lower depth boundary of plot
 #'
 #' @param n.depth.ticks suggested number of ticks in depth scale
 #'
-#' @param shrink logical, reduce character scaling for 'long' horizon by 80%?
+#' @param shrink logical, reduce character scaling for 'long' horizon by 80%
 #'
 #' @param shrink.cutoff character length defining 'long' horizon names
+#' 
+#' @param shrink.thin integer, horizon thickness threshold for shrinking horizon names by 80%, only activated when `shrink = TRUE` (`NULL` = no shrinkage)
 #'
-#' @param abbr logical, abbreviate \code{label}?
+#' @param abbr logical, abbreviate `label`
 #'
-#' @param abbr.cutoff suggested minimum length for abbreviated \code{label}
+#' @param abbr.cutoff suggested minimum length for abbreviated `label`
 #'
 #' @param divide.hz logical, divide horizons with line segment? (TRUE), see details
 #'
@@ -186,6 +188,30 @@
 #'
 #'
 #' ##
+#' ## demonstrate horizon designation shrinkage
+#' ##
+#' 
+#' data("jacobs2000")
+#' 
+#' # shrink "long" horizon names
+#' plotSPC(
+#'   jacobs2000, 
+#'   name.style = 'center-center', 
+#'   shrink = TRUE, 
+#'   cex.names = 0.8
+#' )
+#' 
+#' # shrink horizon names in "thin" horizons
+#' plotSPC(
+#'   jacobs2000, 
+#'   name.style = 'center-center', 
+#'   shrink = TRUE, 
+#'   shrink.thin = 15,
+#'   cex.names = 0.8,
+#' )
+#' 
+#'
+#' ##
 #' ## demonstrate adaptive legend
 #' ##
 #'
@@ -294,6 +320,7 @@ plotSPC <- function(
   n.depth.ticks = 5,
   shrink = FALSE,
   shrink.cutoff = 3,
+  shrink.thin = NULL,
   abbr = FALSE,
   abbr.cutoff = 5,
   divide.hz = TRUE,
@@ -876,17 +903,44 @@ plotSPC <- function(
 	  
 	  # optionally shrink the size of names if they are longer than a given thresh
 	  if(shrink) {
-		  names.to.shrink <- which(nchar(this_profile_names) > shrink.cutoff)
-		  cex.names.shrunk <- rep(cex.names, length(this_profile_data[, tcol]))
-		  cex.names.shrunk[names.to.shrink] <- cex.names.shrunk[names.to.shrink] * 0.8
-
-		  text(hzname.x0, hzname.y0, labels = this_profile_names, cex=cex.names.shrunk, adj=hzname.adj, col=hzname.col)
+	    
+	    # identify affected horizon names
+		  names.wide <- which(nchar(this_profile_names) > shrink.cutoff)
+		  cex.names.shrunk <- rep(cex.names, length(this_profile_data[[tcol]]))
+		  cex.names.shrunk[names.wide] <- cex.names.shrunk[names.wide] * 0.8
+		  
+		  # optionally shrink based on horizon thickness threshold
+		  if(!is.null(shrink.thin)) {
+		    
+		    # identify affected horizon names
+		    names.thin <- which((y0 - y1) < shrink.thin)
+		    # only apply shrinkage to those not already shrunk above
+		    names.thin <- names.thin[which(! names.thin %in% names.wide)]
+		    # apply shrinkage
+		    cex.names.shrunk[names.thin] <- cex.names.shrunk[names.thin] * 0.8
+		  }
+		  
+		  # add horizon names
+		  text(
+		    x = hzname.x0, 
+		    y = hzname.y0, 
+		    labels = this_profile_names, 
+		    cex = cex.names.shrunk, 
+		    adj = hzname.adj, 
+		    col = hzname.col
+		  )
+		  
 		  } else {
 	    # standard printing of names, all at the same size
-	    text(hzname.x0, hzname.y0, labels = this_profile_names, cex=cex.names, adj=hzname.adj, col=hzname.col)
-
-	    ## old approach: label rigth-center, left justified, 0.1 charwidth offset
-	    # text(x0 + width, hzname.y0, this_profile_names, offset=0.1, cex=cex.names, pos=4)
+	    text(
+	      x = hzname.x0, 
+	      y = hzname.y0, 
+	      labels = this_profile_names, 
+	      cex = cex.names, 
+	      adj = hzname.adj, 
+	      col = hzname.col
+	    )
+		    
 		  }
 
 

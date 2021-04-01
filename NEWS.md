@@ -11,6 +11,7 @@
     * Use`combine()` or `pbindlist()` for `list` input
  * Methods that used {rlang} for non-standard evaluation now use {base}
  * `plotSPC()` gains vectorized `y.offset` support (demonstrated in: http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html)
+ * `plotSPC()` gains argument `shrink.thin` for shrinking horizon designation labels when horizons are thin
  * new function `alignTransect()` for simplifying relative positioning of profile sketches
  * `plotMultipleSPC()` gains ability to automatically merge thematic legends
  * `coordinates<-` will check formula terms (_unique_ coordinates) in the `@horizons` slot, if needed.

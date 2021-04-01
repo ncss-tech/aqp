@@ -35,6 +35,7 @@ plotSPC(
   n.depth.ticks = 5,
   shrink = FALSE,
   shrink.cutoff = 3,
+  shrink.thin = NULL,
   abbr = FALSE,
   abbr.cutoff = 5,
   divide.hz = TRUE,
@@ -110,11 +111,13 @@ plot(x, y, ...)
 
 \item{n.depth.ticks}{suggested number of ticks in depth scale}
 
-\item{shrink}{logical, reduce character scaling for 'long' horizon by 80\%?}
+\item{shrink}{logical, reduce character scaling for 'long' horizon by 80\%}
 
 \item{shrink.cutoff}{character length defining 'long' horizon names}
 
-\item{abbr}{logical, abbreviate \code{label}?}
+\item{shrink.thin}{integer, horizon thickness threshold for shrinking horizon names by 80\%, only activated when \code{shrink = TRUE} (\code{NULL} = no shrinkage)}
+
+\item{abbr}{logical, abbreviate \code{label}}
 
 \item{abbr.cutoff}{suggested minimum length for abbreviated \code{label}}
 
@@ -226,6 +229,30 @@ par(mar=c(1,1,1,1))
 plot(sp1, n=length(sp1) + length(sp2))
 # plot the second SPC, starting from the first empty space
 plot(sp2, x.idx.offset=length(sp1), add=TRUE)
+
+
+##
+## demonstrate horizon designation shrinkage
+##
+
+data("jacobs2000")
+
+# shrink "long" horizon names
+plotSPC(
+  jacobs2000, 
+  name.style = 'center-center', 
+  shrink = TRUE, 
+  cex.names = 0.8
+)
+
+# shrink horizon names in "thin" horizons
+plotSPC(
+  jacobs2000, 
+  name.style = 'center-center', 
+  shrink = TRUE, 
+  shrink.thin = 15,
+  cex.names = 0.8,
+)
 
 
 ##
