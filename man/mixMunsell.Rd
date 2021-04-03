@@ -9,7 +9,8 @@ mixMunsell(
   w = rep(1, times = length(x))/length(x),
   mixingMethod = c("spectra", "estimate", "adaptive"),
   n = 1,
-  keepMixedSpec = FALSE
+  keepMixedSpec = FALSE,
+  distThreshold = 0.025
 )
 }
 \arguments{
@@ -27,15 +28,48 @@ mixMunsell(
 \item{n}{number of closest matching color chips (\code{mixingMethod = spectra} only)}
 
 \item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list} (\code{mixingMethod = spectra} only)}
+
+\item{distThreshold}{spectral distance used to compute \code{scaledDistance}, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips.}
 }
 \value{
-A \code{data.frame} with the closest matching Munsell color(s), unless \code{keepMixedSpec = TRUE} then a \code{list}.
+A \code{data.frame} with the closest matching Munsell color(s):
+\itemize{
+\item \code{munsell}: Munsell notation of the n-closest spectra
+\item \code{distance}: spectral (Gower) distance to the n-closest spectra
+\item \code{scaledDistance}: spectral distance scaled by \code{distThreshold}
+\item \code{mixingMethod}: method used for each mixture
+}
+
+When \code{keepMixedSpec = TRUE} then a \code{list}:
+\itemize{
+\item \code{mixed}: a \code{data.drame} containing the same elements as above
+\item \code{spec}: spectra for the 1st closest match
+}
 }
 \description{
 Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
 }
 \details{
-Pending
+An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.
+
+Thankfully, \href{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}{Scott Burns has outlined the entire process}, and Paul Centore has provided a Munsell color chip \href{http://www.munsellcolourscienceforpainters.com/}{reflectance spectra library}. The estimation of a subtractive mixture of soil colors can proceed as follows:
+\enumerate{
+\item look up the associated spectra for each color
+\item computed the weighted (area proportion) geometric mean of the spectra
+\item search for the closest matching spectra in the reference library
+\item suggest that Munsell chip as the best candidate for the simulated mixture
+}
+
+Key assumptions include:
+\itemize{
+\item similar particle size distribution
+\item similar mineralogy (i.e. pigmentation qualities)
+\item similar water content.
+}
+
+For the purposes of estimating (for example) a "mixed soil color within the top 18cm of soil" these assumptions are usually valid. Again, these are estimates that are ultimately "snapped" to the nearest chip and not do not need to approach the accuracy of paint-matching systems.
+
+A message is printed when \code{scaledDistance} is larger than 1.
 }
 \references{
 \itemize{
