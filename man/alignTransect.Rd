@@ -9,11 +9,11 @@ alignTransect(x, x.min, x.max, fix = TRUE, ...)
 \arguments{
 \item{x}{numeric vector, describing values along a transect: distance, elevation, climatic variables, etc.. Typically sourced from the site level attributes of a \code{SoilProfileCollection} object. Order is not important.}
 
-\item{x.min}{numeric, lower boundary to reltative position scale}
+\item{x.min}{numeric, lower boundary to relative position scale}
 
-\item{x.max}{numeric, upper boundary to reltative position scale}
+\item{x.max}{numeric, upper boundary to relative position scale}
 
-\item{fix}{logical, attempt fxing overlapping positions with \code{fixOverlap}}
+\item{fix}{logical, attempt fixing overlapping positions with \code{fixOverlap}}
 
 \item{...}{additional arguments to \code{fixOverlap}}
 }

@@ -17,7 +17,7 @@ pbindlist(l, new.idname = NULL, verbose = TRUE)
 a SoilProfileCollection object
 }
 \description{
-See \code{combine(...)} for a connotative short-hand method that does not require that SoilProfileCollections be in a list. Profiles will be sorted based on character sorting of profile ID.
+See \code{combine(...)} for a connotative short-hand method that does not require that \code{SoilProfileCollection} be in a list. Profiles will be sorted based on character sorting of profile ID.
 }
 \details{
 Input data must share a common depth unit, and if spatial data are present, a common CRS and coordinate names. In the case of non-conformal @idname and/or @depthcols, the first SoilProfileCollection is used as a template. If one or more subsequent list elements has non-unique values in a site level attribute of that name, the ID name from the second list element is attempted, and so on. Non-conforming spatial data are dropped from the final result (returns default empty \code{SpatialPoints}).

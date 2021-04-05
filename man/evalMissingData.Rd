@@ -9,7 +9,7 @@ evalMissingData(x, vars, name = "hzname", p = "Cr|R|Cd", method = "relative")
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}
 
-\item{vars}{a chatacter vector naming horizon-level attributes in \code{x}}
+\item{vars}{a character vector naming horizon-level attributes in \code{x}}
 
 \item{name}{the name of a horizon-level attribute where horizon designations
 are stored}

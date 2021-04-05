@@ -17,9 +17,9 @@
 #'
 #' @param x numeric vector, describing values along a transect: distance, elevation, climatic variables, etc.. Typically sourced from the site level attributes of a `SoilProfileCollection` object. Order is not important.
 #' 
-#' @param x.min numeric, lower boundary to reltative position scale
-#' @param x.max numeric, upper boundary to reltative position scale
-#' @param fix logical, attempt fxing overlapping positions with `fixOverlap`
+#' @param x.min numeric, lower boundary to relative position scale
+#' @param x.max numeric, upper boundary to relative position scale
+#' @param fix logical, attempt fixing overlapping positions with `fixOverlap`
 #' @param ... additional arguments to `fixOverlap`
 #'
 #' @return `list` containing:

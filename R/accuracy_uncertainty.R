@@ -68,7 +68,7 @@ confusionIndex <- function(x) {
 
 # multinominal Brier score
 # x: data.frame, rows are predictions/observations, columns contain classes
-# classLabels: vector of class labels, corrosponding to column names in x.i
+# classLabels: vector of class labels, corresponding to column names in x.i
 # actual: name of column containing the observed class
 
 #' @title Multinominal Brier Score

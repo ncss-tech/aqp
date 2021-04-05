@@ -32,7 +32,7 @@ getCambicBounds(
 
 \item{m_value}{Column name containing moist value. Default: m_value}
 
-\item{m_chroma}{Column name containing moist crhoma. Default: m_chroma}
+\item{m_chroma}{Column name containing moist chroma Default: m_chroma}
 
 \item{sandy.texture.pattern}{this is a pattern for matching sandy textural classes: \verb{-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$}}
 

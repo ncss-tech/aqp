@@ -35,9 +35,9 @@ if (!isGeneric("combine"))
 
 #' @title Combine SoilProfileCollection objects
 #' 
-#' @description Combine SoilProfileCollection objects or lists of SoilProfileCollection objects. This method provides \code{...} expansion for the \code{pbindlist} method. 
-#' @param x A SoilProfileCollection
-#' @param ... SoilProfileCollection objects 
+#' @description Combine `SoilProfileCollection` objects or lists of `SoilProfileCollection` objects. This method provides `...` expansion for the `pbindlist` method. 
+#' @param x A `SoilProfileCollection`
+#' @param ... `SoilProfileCollection` objects 
 #'
 #' @return A SoilProfileCollection
 #' 
@@ -46,9 +46,21 @@ if (!isGeneric("combine"))
 #' @rdname combine-SoilProfileCollection-method
 #' @examples
 #' 
+#' # example data
 #' spc1 <- random_profile(1, SPC = TRUE)
 #' spc2 <- random_profile(2, SPC = TRUE)
+#' spc3 <- random_profile('A', SPC = TRUE)
 #' 
+#' # combine into a single SPC, ... interface
+#' spc <- combine(spc1, spc2, spc3)
+#' 
+#' # combine into a single SPC, list interface
+#' spc <- combine(list(spc1, spc2, spc3))
+#'
+#' # input are combined into a single SPC
+#' spc <- c(spc1, spc2, spc3)
+#'
+#' # result is a list when a mixture of objects are provided
 #' spc <- c(spc1, bar=spc2, baz="foo")
 #' 
 setMethod("c", signature(x = "SoilProfileCollection"), function(x, ...)  {
@@ -74,9 +86,9 @@ setMethod("combine", signature(... = "list"), function(...)  {
 
 # TODO: when dplyr::combine() is gone, also define aqp::combine(LIST)?
 
-#' Combine a list of SoilProfileCollection objects
+#' @title Combine a list of SoilProfileCollection objects
 #'
-#' See \code{combine(...)} for a connotative short-hand method that does not require that SoilProfileCollections be in a list. Profiles will be sorted based on character sorting of profile ID.
+#' @description  See \code{combine(...)} for a connotative short-hand method that does not require that `SoilProfileCollection` be in a list. Profiles will be sorted based on character sorting of profile ID.
 #'
 #' @param l a list of SoilProfileCollection objects
 #' @param new.idname Optional: a character referring to a new column name to put unique profile IDs in; default: \code{NULL} to attempt with existing idname in first element
@@ -270,7 +282,7 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
         # update the template to ith IDcol
         new.pID <- spc.list[[i]]$idcol
 
-        # increment counter (present, but nonunique)
+        # increment counter (present, but non-unique)
         tries <- tries + 1
 
         # reset loop (check everything again)

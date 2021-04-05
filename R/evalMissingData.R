@@ -60,7 +60,7 @@
 #' evaluation.
 #'
 #' @param x a \code{SoilProfileCollection} object
-#' @param vars a chatacter vector naming horizon-level attributes in \code{x}
+#' @param vars a character vector naming horizon-level attributes in \code{x}
 #' @param name the name of a horizon-level attribute where horizon designations
 #' are stored
 #' @param p REGEX pattern used to match non-soil horizons

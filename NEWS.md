@@ -1,4 +1,4 @@
-# aqp 1.29 (2021-03-31)
+# aqp 1.29 (2021-04-05)
  * Several `SoilProfileCollection` methods that conflict with {dplyr} 1.0+ have been deprecated:
     * `filter`, `mutate`, `group_by`, `summarize`
     * New overloaded {base} names:
@@ -15,7 +15,9 @@
  * new function `alignTransect()` for simplifying relative positioning of profile sketches
  * `plotMultipleSPC()` gains ability to automatically merge thematic legends
  * `coordinates<-` will check formula terms (_unique_ coordinates) in the `@horizons` slot, if needed.
- * `mixMunsell` gains argument for performing mixture estimation via wt. mean of CIELAB coordinates
+ * `mixMunsell`:
+    - gains argument for performing mixture estimation via wt. mean of CIELAB coordinates
+    - suggestions on interpreting spectral distances, message printed when greater than reasonable threshold
  * minor bug-fix in `panel.depth_function` when plotting grouped step-functions
  
 # aqp 1.28 (2021-03-02)
@@ -498,7 +500,7 @@
 
 # aqp 0.99-9.1 (2011-12-27)
    * pedonPC, NASIS, and SDA functions moved *out* of aqp, and *into* new package: soilDB
-      + removed assocated, suggested packages from aqp
+      + removed associated, suggested packages from aqp
       + soilDB will be on CRAN shortly
    * new argument to plot(SoilProfileCollection, ..., divide.hz=TRUE|FALSE) that can optionally suppress plotting of dividing lines between horizons (suggested by Ludwig Hilger)
    * new function profileApply() for applying functions by profile
@@ -549,7 +551,7 @@
 
 # aqp 0.99-8.2 (2011-09-21)
    * added S4 class/methods for `SoilProfileCollection`
-      + this supercedes the (now removed) S3 `SoilProfileList` classes
+      + this supersedes the (now removed) S3 `SoilProfileList` classes
       + basic accessors/setters are in place, subject to change
    * profile_plot() now uses the `SoilProfileCollection` class
       + *initSoilProfileList() is no longer supported; see depths() for similar functionality*
@@ -578,7 +580,7 @@
       + `mapunit_geom_by_ll_bbox()` : get map unit geometry by bounding box
       + `MUKEYS_by_ll_bbox()` : get map unit keys by bounding box
       + `SDA_query()` : retrieve soil tabular data via query written in SQL
-   * additional customizations added to `plotSPC`
+   * additional customization added to `plotSPC`
    * two new sample data sets + examples
 
 # aqp 0.99-1 (2011-01-26)

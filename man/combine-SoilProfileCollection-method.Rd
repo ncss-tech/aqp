@@ -15,21 +15,33 @@
 \S4method{combine}{list}(...)
 }
 \arguments{
-\item{x}{A SoilProfileCollection}
+\item{x}{A \code{SoilProfileCollection}}
 
-\item{...}{SoilProfileCollection objects}
+\item{...}{\code{SoilProfileCollection} objects}
 }
 \value{
 A SoilProfileCollection
 }
 \description{
-Combine SoilProfileCollection objects or lists of SoilProfileCollection objects. This method provides \code{...} expansion for the \code{pbindlist} method.
+Combine \code{SoilProfileCollection} objects or lists of \code{SoilProfileCollection} objects. This method provides \code{...} expansion for the \code{pbindlist} method.
 }
 \examples{
 
+# example data
 spc1 <- random_profile(1, SPC = TRUE)
 spc2 <- random_profile(2, SPC = TRUE)
+spc3 <- random_profile('A', SPC = TRUE)
 
+# combine into a single SPC, ... interface
+spc <- combine(spc1, spc2, spc3)
+
+# combine into a single SPC, list interface
+spc <- combine(list(spc1, spc2, spc3))
+
+# input are combined into a single SPC
+spc <- c(spc1, spc2, spc3)
+
+# result is a list when a mixture of objects are provided
 spc <- c(spc1, bar=spc2, baz="foo")
 
 }
