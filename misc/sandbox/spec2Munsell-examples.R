@@ -40,6 +40,19 @@ colorContrastPlot(m1 = '5Y 6/3', m2 = '7.5YR 6/4')
 
 
 
+cols <- c('10YR 6/2', '5YR 5/6')
+wts <- c(2,1)
+
+mx1 <- mixMunsell(cols, w = wts, mixingMethod = 'reference')
+mx2 <- mixMunsell(cols, w = wts, mixingMethod = 'exact')
+
+soilPalette(parseMunsell(c(cols, mx1$munsell)), lab = c(cols, mx1$munsell))
+soilPalette(parseMunsell(c(cols, mx2$munsell)), lab = c(cols, mx2$munsell))
+
+plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE)
+plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE, mixingMethod = 'exact')
+
+
 
 
 # ~ 5 minutes

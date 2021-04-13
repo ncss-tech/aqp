@@ -49,7 +49,7 @@
 #' soilPalette(cols, m)
 #' 
 
-soilPalette <- function(colors, lab, lab.cex=0.75, dynamic.labels=TRUE, x.inset = 0.01, y.inset = 0.01, ...) {
+soilPalette <- function(colors, lab = colors, lab.cex=0.75, dynamic.labels=TRUE, x.inset = 0.01, y.inset = 0.01, ...) {
   # basic plot
   colorspace::swatchplot(colors, ...)
   
