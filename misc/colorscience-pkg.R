@@ -36,14 +36,17 @@ plot(sx, x, type = 'b', ylim = c(0, 1), las = 1)
 
 lines(sy, y)
 
+# expected XYZ
+convert_colour(parseMunsell('5BG 6/8', return_triplets = TRUE), from = 'rgb', to = 'xyz', white_from = 'D65', white_to = 'D65')
+
 
 ## attemp spectra -> tristimulus -> munsell conversion
 # almost works
-test.XYZ <- spectra2XYZ(spectraIn = cbind(sy, y))
+test.XYZ <- spectra2XYZ(spectraIn = cbind(sy, y), illuminantIn = illuminantD65, ciexyzIn = ciexyz31, wlIn = c(380, 730))
 
 # test.XYZ <- spectra2XYZ(spectraIn = cbind(sx, x))
 
-test.sRGB <- convert_colour(rbind(test.XYZ), from = 'xyz', to = 'rgb', white_from = 'D65', white_to = 'D65')
+test.sRGB <- convertColor(rbind(test.XYZ), from = 'XYZ', to = 'sRGB')
 
 rgb2munsell(test.sRGB)
 

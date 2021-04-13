@@ -110,6 +110,10 @@
 # * see matrixStats package for a compiled version: colSums2()
 # * https://github.com/HenrikBengtsson/matrixStats
 
+## TODO: use spec2Munsell vs. spectral library for more efficient / accurate (?) results!
+
+
+
 
 #'
 #' @title Mix Munsell Colors via Spectral Library
