@@ -20,6 +20,10 @@ plotColorMixture(c('10YR 6/2', '5YR 5/6'), w = c(2,1), swatch.cex = 5, showMixed
 res <- mixMunsell(c('10YR 6/2', '5YR 5/6'), w = c(2,1), keepMixedSpec = TRUE)
 spec2Munsell(res$spec)
 
+colorContrastPlot(m1 = '5Y 6/3', m2 = '7.5YR 6/4')
+
+
+
 # # interpolate reflectance spectra to 1nm
 # R <- data.frame(
 #   wlmn = 380:730, 
