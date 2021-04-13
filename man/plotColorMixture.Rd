@@ -7,6 +7,7 @@
 plotColorMixture(
   x,
   w = rep(1, times = length(x))/length(x),
+  mixingMethod = c("reference", "exact"),
   n = 1,
   swatch.cex = 6,
   label.cex = 0.85,
@@ -18,6 +19,12 @@ plotColorMixture(
 \item{x}{vector of colors in Munsell notation, should not contain duplicates}
 
 \item{w}{vector of weights, can sum to any number}
+
+\item{mixingMethod}{approach used to simulate a mixture:
+\itemize{
+\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra
+\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+}}
 
 \item{n}{number of closest mixture candidates (see \code{\link{mixMunsell}}), results can be hard to interpret}
 

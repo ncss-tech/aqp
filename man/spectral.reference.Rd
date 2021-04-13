@@ -14,7 +14,7 @@ data(spectral.reference)
 D65 standard illuminant and CIE1931 color matching functions
 }
 \references{
-Wyszecki, G., & Stiles, W. S., 1982 Color Science: concepts and methods, quantitative data and formulae (2nd ed.). New York: Wiley.
+Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 
 "Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
 }

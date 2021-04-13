@@ -80,7 +80,7 @@ x <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
 
 # Euclidean distance via sweep / colSums: 85 seconds 
 # Gower distance via gower package: 25 seconds (mixingMethod = 'reference')
-# (mixingMethod = 'exact')
+# 28 secpmds (mixingMethod = 'exact')
 system.time(g <- mixtureGrid(x))
 plotMixtureGrid(g)
 
@@ -97,7 +97,11 @@ mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'exact')
 plotColorMixture(c('10YR 6/2', '10YR 2/2'))
 plotColorMixture(c('5B 6/6', '10Y 8/4'))
 
-plotColorMixture(c('5B 5/10', '5Y 8/8'))
+plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'reference')
+
+# not quite right...
+plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'exact')
+
 
 # iterate over all hues @ 6/8
 # result is a character matrix of Munsell chips

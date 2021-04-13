@@ -6,7 +6,7 @@
 \usage{
 soilPalette(
   colors,
-  lab,
+  lab = colors,
   lab.cex = 0.75,
   dynamic.labels = TRUE,
   x.inset = 0.01,
