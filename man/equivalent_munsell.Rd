@@ -3,7 +3,7 @@
 \docType{data}
 \name{equivalent_munsell}
 \alias{equivalent_munsell}
-\title{Indices of "equivalent" Munsell chips in \code{munsell} data set}
+\title{Indices of "equivalent" Munsell chips in the \code{munsell} data set}
 \format{
 A named list with 8467 elements, each containing a numeric vector of indices corresponding to the \code{munsell} data set, which has 8467 rows (unique, whole-number chips). Names have the format \code{HUE VALUE/CHROMA}, eg. \code{"7.5YR 4/4"}
 }
@@ -11,11 +11,11 @@ A named list with 8467 elements, each containing a numeric vector of indices cor
 data(equivalent_munsell)
 }
 \description{
-A pre-calculated lookup list (made with \code{farver::compare_colour}) based on pair-wise CIE2000 color contrast (\code{dE00}) of LAB colors with D65 illuminant for all whole value/chroma "chips" in the \code{aqp::munsell} data set.
+A pre-calculated lookup list (made with \code{farver::compare_colour}) based on pair-wise color contrast (\code{CIE2000} or \code{dE00}) evaluated over all "chips" in the \code{aqp::munsell} data set.
 
 The intention is to identify Munsell chips that may be "functionally equivalent" to some other given whole chip elsewhere in the Munsell color space -- as discretized in the \code{aqp::munsell} lookup table.
 
-"Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.15.
+"Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of \code{dE00} (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} threshold of approximately 2.15.
 
 This is a naive (to the subtleties of human color perception, and overall magnitude of contrast between some of the "chips") but computationally consistent approach. Using the lookup list, as opposed to manual contrast via e.g. \code{farver::compare_colour} may have some benefits for efficiency in certain applications where the exact contrast value is not as important as the concept of having some threshold that is non-zero, but very small.
 }

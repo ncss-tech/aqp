@@ -1222,8 +1222,6 @@ NULL
 #'   \item{series}{soil series name}
 #' }
 #'
-#'
-#'
 "us.state.soils"
 
 #' Munsell to sRGB Lookup Table for Common Soil Colors
@@ -1380,14 +1378,14 @@ NULL
 #' }
 "munsell.spectra"
 
-#' @title Indices of "equivalent" Munsell chips in \code{munsell} data set
+#' @title Indices of "equivalent" Munsell chips in the `munsell` data set
 #'
 #' @description
-#' A pre-calculated lookup list (made with \code{farver::compare_colour}) based on pair-wise CIE2000 color contrast (\code{dE00}) of LAB colors with D65 illuminant for all whole value/chroma "chips" in the \code{aqp::munsell} data set.
+#' A pre-calculated lookup list (made with `farver::compare_colour`) based on pair-wise color contrast (`CIE2000` or `dE00`) evaluated over all "chips" in the `aqp::munsell` data set.
 #'
 #' The intention is to identify Munsell chips that may be "functionally equivalent" to some other given whole chip elsewhere in the Munsell color space -- as discretized in the \code{aqp::munsell} lookup table.
 #'
-#' "Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.15.
+#' "Equivalent" chips are based (fairly arbitrarily) on the 0.001 probability level of `dE00` (default Type 7 `quantile`) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a `dE00` threshold of approximately 2.15.
 #'
 #' This is a naive (to the subtleties of human color perception, and overall magnitude of contrast between some of the "chips") but computationally consistent approach. Using the lookup list, as opposed to manual contrast via e.g. \code{farver::compare_colour} may have some benefits for efficiency in certain applications where the exact contrast value is not as important as the concept of having some threshold that is non-zero, but very small.
 #'
@@ -1411,3 +1409,20 @@ NULL
 #' @examples
 #' data(equivalent_munsell)
 "equivalent_munsell"
+
+
+
+#'
+#' @title D65 standard illuminant and CIE1931 color matching functions
+#' @keywords datasets
+#' @usage data(spectral.reference)
+#' 
+#' @references 
+#' 
+#' Wyszecki, G., & Stiles, W. S., 1982 Color Science: concepts and methods, quantitative data and formulae (2nd ed.). New York: Wiley.
+#' 
+#' "Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
+#' 
+#'
+"spectral.reference"
+

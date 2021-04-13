@@ -2,26 +2,13 @@
 
 # https://rip94550.wordpress.com/2012/05/21/color-from-spectrum-to-xyz-and-beyond/
 
-# https://cran.r-project.org/web/packages/colorscience/index.html
-
-# library(colorscience)
-# 
-# D65 <- illuminantD65[illuminantD65$wlnm >= 380 & illuminantD65$wlnm <= 730, ]
-# CIE1931 <- ciexyz31[ciexyz31$wlnm >= 380 & ciexyz31$wlnm <= 730, ]
-# 
-# names(D65) <- c('w', 'x')
-# names(CIE1931)[1] <- 'w'
-# 
-# save(D65, file = 'data/D65.rda')
-# save(CIE1931, file = 'data/CIE1931.rda')
-# 
 
 
 ## TODO: allow for more flexibility in spectra min/max/res wavelength
 
 #' @title Convert reflectance spectra to closest Munsell chip
 #' 
-#' @note D65 illuminant spectra and CIE1931 color matching functions subset from data provided by the {colorscience} package.
+#' @note D65 illuminant spectra and CIE1931 color matching functions derived from CIE reference data.
 #' 
 #' @param x reflectance spectra, (380nm to 730nm, 10nm resolution)
 #' @param ... further arguments to `rgb2Munsell`
@@ -32,36 +19,36 @@
 #' @references 
 #' Wyszecki, G., & Stiles, W. S., 1982 Color Science: concepts and methods, quantitative data and formulae (2nd ed.). New York: Wiley.
 #' 
-#' Jose Gama and Glenn Davis (2019). colorscience: Color Science Methods and Data. R package version 1.0.8. 
-#' https://CRAN.R-project.org/package=colorscience
+#' "Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
 #' 
 spec2Munsell <- function(x, ...) {
   
-  # D65 illuminant (1nm resolution)
-  load(system.file("data/D65.rda", package="aqp")[1])
-  # CIE 1931 standard observer color matching functions (xbar, ybar, zbar)
-  load(system.file("data/CIE1931.rda", package="aqp")[1])
+  # D65 and CIE1931 reference data at 5nm
+  spectral.reference <- NULL
+  load(system.file("data/spectral.reference.rda", package="aqp")[1])
+  
   
   # this is the range of wavelengths we have to work with
   # in the Munsell spectra libraries 
   #   * munsell.spectra
   #   * munsell.spectra.wide
-  w <- seq(from = 380, to = 730, by = 10)
+  w.10 <- seq(from = 380, to = 730, by = 10)
   
   # spline interpolator
-  f <- splinefun(w, x)
+  f <- splinefun(w.10, x)
   
-  # interpolat to 1nm res
+  # interpolate to 5nm res
+  w.5 <- seq(from = 380, to = 730, by = 5)
   R <- data.frame(
-    w = 380:730, 
-    x = f(380:730)
+    w = w.5, 
+    x = f(w.5)
   )
   
   # reflectance spectra * illuminant
-  S <- R$x * D65$x
+  S <- R$x * spectral.reference$D65
   
   # A-matrix: these are the color-matching functions
-  A <- CIE1931[, -1]
+  A <- spectral.reference[, c('xbar', 'ybar', 'zbar')]
   
   # apply A-matrix to spectra
   XYZ <- t(A) %*% S
@@ -69,7 +56,7 @@ spec2Munsell <- function(x, ...) {
   XYZ <- t(XYZ)[1, ]
   
   # apply A-matrix to illuminant
-  k <- t(A) %*% D65$x
+  k <- t(A) %*% spectral.reference$D65
   # convert to vector
   k <- t(k)[1, ]
   
