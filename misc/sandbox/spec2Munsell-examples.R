@@ -49,6 +49,8 @@ mx2 <- mixMunsell(cols, w = wts, mixingMethod = 'exact')
 soilPalette(parseMunsell(c(cols, mx1$munsell)), lab = c(cols, mx1$munsell))
 soilPalette(parseMunsell(c(cols, mx2$munsell)), lab = c(cols, mx2$munsell))
 
+colorContrastPlot(m1 = mx1$munsell, m2 = mx2$munsell, labels = c('reference', 'exact'))
+
 plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE)
 plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE, mixingMethod = 'exact')
 
