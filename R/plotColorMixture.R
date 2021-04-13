@@ -9,6 +9,11 @@
 #' 
 #' @param w vector of weights, can sum to any number
 #' 
+#' @param mixingMethod approach used to simulate a mixture: 
+#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra
+#'    
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+#' 
 #' @param n number of closest mixture candidates (see [`mixMunsell`]), results can be hard to interpret 
 #' 
 #' @param swatch.cex scaling factor for color swatch
@@ -21,7 +26,7 @@
 #' 
 #' @return `lattice` graphics object
 #' 
-plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
+plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact'), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
   
   # TODO plot will be incorrect if duplicate Munsell chips are specified
   
@@ -29,9 +34,27 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
   
   # TODO: ideas on styling legend (size, placement, etc.)
   
+  # TODO: plot not correct for mixingMethod = 'exact'
+  
+  
+  # mixture method sanity checks
+  mixingMethod <- match.arg(mixingMethod)
+  
+  # can't use n > 1 with mixingMethod = 'exact'
+  if(mixingMethod == 'exact') {
+    
+    if(n > 1 ) {
+      stop('cannot request multiple matches with `mixingMethod = "exact"`', call. = FALSE)
+    }
+   
+    # must retain mixed spectra
+    showMixedSpec <- TRUE
+     
+  }
+  
   # mix colors
   mx <- suppressMessages(
-    mixMunsell(x = x, w = w, n = n, keepMixedSpec = showMixedSpec)
+    mixMunsell(x = x, w = w, n = n, mixingMethod = mixingMethod, keepMixedSpec = showMixedSpec)
     )
   
   # make local copy of the mixed colors when asking for the mixed spectra too
