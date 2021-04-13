@@ -18,11 +18,10 @@ output from \code{rgb2Munsell}
 Convert reflectance spectra to closest Munsell chip
 }
 \note{
-D65 illuminant spectra and CIE1931 color matching functions subset from data provided by the {colorscience} package.
+D65 illuminant spectra and CIE1931 color matching functions derived from CIE reference data.
 }
 \references{
-Wyszecki, G., & Stiles, W. S., 1982 Color Science: concepts and methods, quantitative data and formulae (2nd ed.). New York: Wiley.
+Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 
-Jose Gama and Glenn Davis (2019). colorscience: Color Science Methods and Data. R package version 1.0.8.
-https://CRAN.R-project.org/package=colorscience
+"Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
 }

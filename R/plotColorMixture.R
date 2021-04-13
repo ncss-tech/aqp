@@ -7,7 +7,7 @@
 #' 
 #' @param x vector of colors in Munsell notation, should not contain duplicates
 #' 
-#' @param w vector of proportions, can sum to any number
+#' @param w vector of weights, can sum to any number
 #' 
 #' @param n number of closest mixture candidates (see [`mixMunsell`]), results can be hard to interpret 
 #' 
@@ -30,7 +30,9 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
   # TODO: ideas on styling legend (size, placement, etc.)
   
   # mix colors
-  mx <- suppressMessages(mixMunsell(x = x, w = w, n = n, keepMixedSpec = showMixedSpec))
+  mx <- suppressMessages(
+    mixMunsell(x = x, w = w, n = n, keepMixedSpec = showMixedSpec)
+    )
   
   # make local copy of the mixed colors when asking for the mixed spectra too
   if(showMixedSpec) {

@@ -7,7 +7,7 @@
 mixMunsell(
   x,
   w = rep(1, times = length(x))/length(x),
-  mixingMethod = c("spectra", "estimate", "adaptive"),
+  mixingMethod = c("reference", "exact", "estimate", "adaptive", "spectra"),
   n = 1,
   keepMixedSpec = FALSE,
   distThreshold = 0.025
@@ -20,9 +20,10 @@ mixMunsell(
 
 \item{mixingMethod}{approach used to simulate a mixture:
 \itemize{
-\item \code{spectra}: simulate a subtractive mixture of pigments, limited to available reference spectra
-\item \code{estimate}: closest Munsell chip to a weighted mean of CIELAB coordinates
-\item \code{adaptive}: use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
+\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra
+\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+\item \code{estimate} : closest Munsell chip to a weighted mean of CIELAB coordinates
+\item \code{adaptive} : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
 }}
 
 \item{n}{number of closest matching color chips (\code{mixingMethod = spectra} only)}
@@ -42,7 +43,7 @@ A \code{data.frame} with the closest matching Munsell color(s):
 
 When \code{keepMixedSpec = TRUE} then a \code{list}:
 \itemize{
-\item \code{mixed}: a \code{data.drame} containing the same elements as above
+\item \code{mixed}: a \code{data.frame} containing the same elements as above
 \item \code{spec}: spectra for the 1st closest match
 }
 }
@@ -72,6 +73,8 @@ For the purposes of estimating (for example) a "mixed soil color within the top 
 A message is printed when \code{scaledDistance} is larger than 1.
 }
 \references{
+Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
+
 \itemize{
 \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
 

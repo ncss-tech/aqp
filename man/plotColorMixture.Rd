@@ -17,7 +17,7 @@ plotColorMixture(
 \arguments{
 \item{x}{vector of colors in Munsell notation, should not contain duplicates}
 
-\item{w}{vector of proportions, can sum to any number}
+\item{w}{vector of weights, can sum to any number}
 
 \item{n}{number of closest mixture candidates (see \code{\link{mixMunsell}}), results can be hard to interpret}
 
