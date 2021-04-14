@@ -106,11 +106,6 @@
 # * interpolation of odd chroma
 # * reshaping for rapid look-up
 
-# optimization:
-# * 80% of time is spent on sweep() and colSums()
-# * see matrixStats package for a compiled version: colSums2()
-# * https://github.com/HenrikBengtsson/matrixStats
-
 
 #'
 #' @title Mix Munsell Colors via Spectral Library
@@ -122,9 +117,9 @@
 #' @param w vector of proportions, can sum to any number
 #' 
 #' @param mixingMethod approach used to simulate a mixture: 
-#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra
+#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra from [`munsell.spectra.wide`]
 #'    
-#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see details)
 #'    
 #'    * `estimate` : closest Munsell chip to a weighted mean of CIELAB coordinates
 #'    
@@ -134,7 +129,7 @@
 #'
 #' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list` (`mixingMethod = spectra` only)
 #' 
-#' @param distThreshold spectral distance used to compute `scaledDistance`, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips.
+#' @param distThreshold spectral distance used to compute `scaledDistance`, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  `mixingMethod = 'reference'`.
 #'
 #' @author D.E. Beaudette
 #'
@@ -157,10 +152,12 @@
 #' 
 #' Thankfully, [Scott Burns has outlined the entire process](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf), and Paul Centore has provided a Munsell color chip [reflectance spectra library](https://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:
 #'   
-#' 1. look up the associated spectra for each color
-#' 2. computed the weighted (area proportion) geometric mean of the spectra
-#' 3. search for the closest matching spectra in the reference library
-#' 4. suggest that Munsell chip as the best candidate for the simulated mixture
+#' 1. look up the associated spectra for each color in `x`
+#' 2. compute the weighted (`w` argument) geometric mean of the spectra
+#' 3. convert the spectral mixture to the closest Munsell color via:
+#'   * search for the closest `n` matching spectra in the reference library (`mixtureMethod = 'reference'`)
+#'   * direct conversion of spectra to closest Munsell color via [`spec2Munsell`] ( (`mixtureMethod = 'exact'`))
+#' 4. suggest resulting Munsell chip(s) as the best candidate for a simulated mixture
 #' 
 #' Key assumptions include:
 #'   

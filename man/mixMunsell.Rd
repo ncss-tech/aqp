@@ -20,8 +20,8 @@ mixMunsell(
 
 \item{mixingMethod}{approach used to simulate a mixture:
 \itemize{
-\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra
-\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra from \code{\link{munsell.spectra.wide}}
+\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see details)
 \item \code{estimate} : closest Munsell chip to a weighted mean of CIELAB coordinates
 \item \code{adaptive} : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
 }}
@@ -30,7 +30,7 @@ mixMunsell(
 
 \item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list} (\code{mixingMethod = spectra} only)}
 
-\item{distThreshold}{spectral distance used to compute \code{scaledDistance}, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips.}
+\item{distThreshold}{spectral distance used to compute \code{scaledDistance}, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  \code{mixingMethod = 'reference'}.}
 }
 \value{
 A \code{data.frame} with the closest matching Munsell color(s):
@@ -55,10 +55,16 @@ An accurate simulation of pigment mixtures ("subtractive" color mixtures) is inc
 
 Thankfully, \href{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}{Scott Burns has outlined the entire process}, and Paul Centore has provided a Munsell color chip \href{https://www.munsellcolourscienceforpainters.com}{reflectance spectra library}. The estimation of a subtractive mixture of soil colors can proceed as follows:
 \enumerate{
-\item look up the associated spectra for each color
-\item computed the weighted (area proportion) geometric mean of the spectra
-\item search for the closest matching spectra in the reference library
-\item suggest that Munsell chip as the best candidate for the simulated mixture
+\item look up the associated spectra for each color in \code{x}
+\item compute the weighted (\code{w} argument) geometric mean of the spectra
+\item convert the spectral mixture to the closest Munsell color via:
+}
+\itemize{
+\item search for the closest \code{n} matching spectra in the reference library (\code{mixtureMethod = 'reference'})
+\item direct conversion of spectra to closest Munsell color via \code{\link{spec2Munsell}} ( (\code{mixtureMethod = 'exact'}))
+}
+\enumerate{
+\item suggest resulting Munsell chip(s) as the best candidate for a simulated mixture
 }
 
 Key assumptions include:
