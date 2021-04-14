@@ -7,7 +7,12 @@
 #' 
 #' @param x vector of colors in Munsell notation, should not contain duplicates
 #' 
-#' @param w vector of proportions, can sum to any number
+#' @param w vector of weights, can sum to any number
+#' 
+#' @param mixingMethod approach used to simulate a mixture: 
+#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra
+#'    
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
 #' 
 #' @param n number of closest mixture candidates (see [`mixMunsell`]), results can be hard to interpret 
 #' 
@@ -21,7 +26,26 @@
 #' 
 #' @return `lattice` graphics object
 #' 
-plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
+#' @examples 
+#' 
+#' plotColorMixture(
+#' x = c('5B 5/10', '5Y 8/8'), 
+#' w = c(1,1), 
+#' swatch.cex = 4, 
+#' label.cex = 0.65, 
+#' showMixedSpec = TRUE, 
+#' mixingMethod = 'reference'
+#' )
+#' 
+#' plotColorMixture(
+#'   x = c('5B 5/10', '5Y 8/8'), 
+#'   w = c(1,1), 
+#'   swatch.cex = 4, 
+#'   label.cex = 0.65, 
+#'   mixingMethod = 'exact'
+#' )
+#' 
+plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact'), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
   
   # TODO plot will be incorrect if duplicate Munsell chips are specified
   
@@ -29,8 +53,24 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
   
   # TODO: ideas on styling legend (size, placement, etc.)
   
+  # mixture method sanity checks
+  mixingMethod <- match.arg(mixingMethod)
+  
+  # can't use n > 1 with mixingMethod = 'exact'
+  if(mixingMethod == 'exact') {
+    
+    if(n > 1 ) {
+      stop('cannot request multiple matches with `mixingMethod = "exact"`', call. = FALSE)
+    }
+   
+    # must retain mixed spectra
+    showMixedSpec <- TRUE
+  }
+  
   # mix colors
-  mx <- suppressMessages(mixMunsell(x = x, w = w, n = n, keepMixedSpec = showMixedSpec))
+  mx <- suppressMessages(
+    mixMunsell(x = x, w = w, n = n, mixingMethod = mixingMethod, keepMixedSpec = showMixedSpec)
+    )
   
   # make local copy of the mixed colors when asking for the mixed spectra too
   if(showMixedSpec) {
@@ -57,7 +97,23 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
   # select spectra from reference library and assign an ID
   s <- lapply(seq_along(colors), function(i) {
     # select current color + spectra
-    z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
+    if(mixingMethod == 'reference') {
+      # all colors selected from library
+      z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
+      
+    } else {
+      # exact mixing, last color is mixed spectrum
+      z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
+      
+      # last color is the mixture, 
+      # replace reference spectra / munsell chip with actual mixture
+      if(i == length(colors)) {
+        z$reflectance <- mx$spec
+        z$munsell <- mx$mixed$munsell
+      }
+      
+    }
+    
     
     # assign an ID for plotting
     if( i <= length(x)) {
@@ -71,6 +127,7 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
   })
   
   s <- do.call('rbind', s)
+  row.names(s) <- NULL
 
   ## TODO: enforce this beyond alpha-sorting
   # set ID factor levels
@@ -206,7 +263,8 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), n = 1
         )
       }
       
-      if(showMixedSpec){
+      # the mixed spectra is only shown as a dotted line when mixingMethod = 'reference'
+      if(showMixedSpec & mixingMethod != 'exact'){
         panel.lines(x = unique(s$wavelength), y = mx$spec, lty = 3, col = 'black')
       }
       

@@ -25,6 +25,7 @@
     munsell = sprintf('%s %s/%s', m$hue, m$value, m$chroma),
     distance = m$sigma,
     scaledDistance = NA,
+    distanceMetric = 'dE00',
     mixingMethod = 'estimate',
     stringsAsFactors = FALSE
   )
@@ -121,9 +122,13 @@
 #' @param w vector of proportions, can sum to any number
 #' 
 #' @param mixingMethod approach used to simulate a mixture: 
-#'    * `spectra`: simulate a subtractive mixture of pigments, limited to available reference spectra
-#'    * `estimate`: closest Munsell chip to a weighted mean of CIELAB coordinates
-#'    * `adaptive`: use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
+#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra
+#'    
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+#'    
+#'    * `estimate` : closest Munsell chip to a weighted mean of CIELAB coordinates
+#'    
+#'    * `adaptive` : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
 #'
 #' @param n number of closest matching color chips (`mixingMethod = spectra` only)
 #'
@@ -134,6 +139,8 @@
 #' @author D.E. Beaudette
 #'
 #' @references
+#'
+#' Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 #'
 #' \itemize{
 #'    \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
@@ -174,29 +181,35 @@
 #' 
 #' When `keepMixedSpec = TRUE` then a `list`:
 #' 
-#'  * `mixed`: a `data.drame` containing the same elements as above
+#'  * `mixed`: a `data.frame` containing the same elements as above
 #'  * `spec`: spectra for the 1st closest match
 #' 
 #' 
 #'
 #' @seealso \code{\link{munsell.spectra}}
 #'
-mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('spectra', 'estimate', 'adaptive'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025) {
+mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact', 'estimate', 'adaptive', 'spectra'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025) {
 
   # satisfy R CMD check
   munsell.spectra.wide <- NULL
   
-  ## TODO
-  # * more sanity checks
-  # * how can we interpret returned distance? what values are too great to be of value?
-  # * keep track of mixing method (distances are not compatible)
-  
   # enforce mixing method
   mixingMethod <- match.arg(mixingMethod)
   
-  # mixed spectra and multiple matches only possible when using mixingMethod == 'spectra'
-  if(mixingMethod != 'spectra' & (n > 1 | keepMixedSpec)) {
-    stop('`n` and `keepMixedSpec` options are only valid for `mixingMethod="spectra"`', call. = FALSE)
+  # backwards compatibility: "spectra" will be deprecated in the future
+  if(mixingMethod == 'spectra') {
+    message('please use `mixingMethod = "reference"`')
+    mixingMethod <- 'reference'
+  }
+  
+  # multiple matches only possible when using mixingMethod == 'reference'
+  if((n > 1) & mixingMethod != 'reference') {
+    stop('`n` is only valid for `mixingMethod = "reference"`', call. = FALSE)
+  }
+  
+  # mixed spectra and multiple matches only possible when using mixingMethod == 'reference'
+  if(keepMixedSpec & ! mixingMethod %in% c('reference', 'exact')) {
+    stop('`keepMixedSpec` is only valid for mixingMethod = "reference" or "exact"', call. = FALSE)
   }
   
   # sanity check, need this for gower::gower_topn()
@@ -205,7 +218,17 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
 
   # can't mix a single color, just give it back at 0 distance
   if (length(unique(x)) == 1) {
-    return(data.frame(munsell = x[1], distance = 0))
+    
+    res <- data.frame(
+      munsell =  x[1],
+      distance = 0,
+      scaledDistance = NA,
+      distanceMetric = NA,
+      mixingMethod = NA,
+      stringsAsFactors = FALSE
+    )
+      
+    return(res)
   }
 
   # must have as many weights as length of x
@@ -220,9 +243,10 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
 
     # a recycled weight is same as function default
     w <- rep(1, times = length(x)) / length(x)
-
   }
 
+  ## TODO: move 0-weight / NA handling up in the logic
+  
   # more informative error for colors missing
   if (any(w[is.na(x)] > 0)) {
     stop('cannot mix missing (NA) colors with weight greater than zero')
@@ -243,11 +267,15 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
   }
 
   
-  # main branch: mixing method
+  ## main branch: mixing method
+  
+  # estimate via wtd.mean CIELAB
   if(mixingMethod == 'estimate') {
     
-    # simple estimation by weighted mean LAB
+    # simple estimation by weighted mean CIELAB
     res <- .estimateColorMixture(chips = x, w = w)
+    
+    # stop here
     return(res)
     
   } else {
@@ -279,11 +307,13 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
         # assumes cleaned data
         res <- .estimateColorMixture(chips = x, w = w)
       } else {
+        
         # otherwise return an empty result
         res <- data.frame(
           munsell = NA,
           distance = NA,
           scaledDistance = NA,
+          distanceMetric = NA,
           mixingMethod = NA,
           stringsAsFactors = FALSE
         )
@@ -292,6 +322,8 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # done
       return(res)
     }
+    
+    ## proceeding to simulate spectral mixture
     
     # empty vector for mixture
     mixed <- vector(mode = 'numeric', length = nrow(s))
@@ -304,7 +336,9 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # down-grade to a vector
       vals <- unlist(s[i, ])
       
-      ## TODO: this wastes a lot of time when weights are obvious, move outside of loop
+      ## TODO: this wastes some time when weights are obvious, move outside of loop
+      ##       -> convert to tapply, order doesn't matter as long as names are preserved
+      
       # aggregate weights by "chip" -- in case length(x) != length(unique(x))
       wagg <- aggregate(w, by = list(chip = x), FUN = sum)
       
@@ -312,62 +346,63 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       mixed[i] <- .wgm(v = vals, w = wagg$x[match(names(s), wagg$chip)])
     }
     
-    ## TODO: what is the "best" distance metric when comparing 1 spectra to the entire library?
-    
-    ## optimization: matrixStats::colSums2() much faster
-    ## --> syntax slightly different
-    
-    ## operations on data.table likely faster
-    
-    # Gower distance: looks good, ~5x faster due to compiled code
-    # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
-    # would make sense to reshape reference data
-    
-    ## TODO: time wasted here
-    # reshape reference spectra: wavelength to columns
-    z <- t(munsell.spectra.wide[, -1])
-    
-    # top n matches
-    d <- gower::gower_topn(
-      data.frame(rbind(mixed)),
-      data.frame(z),
-      n = n
-    )
-    
-    res <- data.frame(
-      munsell = dimnames(z)[[1]][d$index],
-      distance = d$distance[, 1],
-      scaledDistance = d$distance[, 1] / distThreshold,
-      mixingMethod = 'spectra',
-      stringsAsFactors = FALSE
-    )
-    
-    
-    # ## slower but no deps, using Euclidean distance
-    # # D = sqrt(sum( [reference - mixed]^2 ))
-    # 
-    # # subtract the mixture spectra, element-wise, from reference library
-    # # note we are removing the wavelength (1st) column
-    # m.diff <- sweep(munsell.spectra.wide[, -1], MARGIN = 1, STATS = mixed, FUN = '-')
-    # 
-    # # finish the distance calculation
-    # m.dist <- sqrt(colSums(m.diff^2))
-    # 
-    # # get the spectra of the closest n munsell chip(s) via sorting ASC
-    # m.match <- sort(m.dist)[1:n]
-    # 
-    # # compile into data.frame
-    # res <- data.frame(
-    #   munsell = names(m.match),
-    #   distance = m.match,
-    #   stringsAsFactors = FALSE
-    # )
-    
-    # report possibly problematic mixtures
-    if(any(res$scaledDistance > 1)) {
-      message('closest match has a spectral distance that is large, results may be unreliable')
+    ## "exact" matching
+    if(mixingMethod %in% c('exact', 'adaptive')) {
+      
+      ## 
+      # S = R * D65
+      # XYZ = AT %*% CIE1931
+      # XYZ -> sRGB -> Munsell
+      mx <- spec2Munsell(mixed)
+      
+      res <- data.frame(
+        munsell = sprintf("%s %s/%s", mx$hue, mx$value, mx$chroma),
+        distance = mx$sigma,
+        scaledDistance = NA,
+        distanceMetric = 'dE00',
+        mixingMethod = 'exact',
+        stringsAsFactors = FALSE
+      )
+      
+      # final-cleanup and return is performed outside of if/else
+      
+    } else {
+      ## reference "spectra" method
+      
+      ## operations on data.table likely faster
+      
+      # Gower distance: looks good, ~5x faster due to compiled code
+      # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
+      # would make sense to reshape reference data
+      
+      ## TODO: time wasted here
+      # reshape reference spectra: wavelength to columns
+      z <- t(munsell.spectra.wide[, -1])
+      
+      # top n matches
+      d <- gower::gower_topn(
+        data.frame(rbind(mixed)),
+        data.frame(z),
+        n = n
+      )
+      
+      res <- data.frame(
+        munsell = dimnames(z)[[1]][d$index],
+        distance = d$distance[, 1],
+        scaledDistance = d$distance[, 1] / distThreshold,
+        distanceMetric = 'Gower',
+        mixingMethod = 'reference',
+        stringsAsFactors = FALSE
+      )
+      
+      # report possibly problematic mixtures
+      if(any(res$scaledDistance > 1)) {
+        message('closest match has a spectral distance that is large, results may be unreliable')
+      }
+      
     }
     
+    ## all done with "exact", "spectra", and "adaptive"
     # clean-up row names
     row.names(res) <- NULL
     
@@ -380,8 +415,11 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
         )
       )
     } else {
+      # not returning the mixed spectra
       return(res)
     }
+    
+    
   }
   
   

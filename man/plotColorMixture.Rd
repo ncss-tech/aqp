@@ -7,6 +7,7 @@
 plotColorMixture(
   x,
   w = rep(1, times = length(x))/length(x),
+  mixingMethod = c("reference", "exact"),
   n = 1,
   swatch.cex = 6,
   label.cex = 0.85,
@@ -17,7 +18,13 @@ plotColorMixture(
 \arguments{
 \item{x}{vector of colors in Munsell notation, should not contain duplicates}
 
-\item{w}{vector of proportions, can sum to any number}
+\item{w}{vector of weights, can sum to any number}
+
+\item{mixingMethod}{approach used to simulate a mixture:
+\itemize{
+\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra
+\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+}}
 
 \item{n}{number of closest mixture candidates (see \code{\link{mixMunsell}}), results can be hard to interpret}
 
@@ -34,6 +41,26 @@ plotColorMixture(
 }
 \description{
 Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
+}
+\examples{
+
+plotColorMixture(
+x = c('5B 5/10', '5Y 8/8'), 
+w = c(1,1), 
+swatch.cex = 4, 
+label.cex = 0.65, 
+showMixedSpec = TRUE, 
+mixingMethod = 'reference'
+)
+
+plotColorMixture(
+  x = c('5B 5/10', '5Y 8/8'), 
+  w = c(1,1), 
+  swatch.cex = 4, 
+  label.cex = 0.65, 
+  mixingMethod = 'exact'
+)
+
 }
 \author{
 D.E. Beaudette

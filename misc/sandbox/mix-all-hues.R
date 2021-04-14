@@ -2,7 +2,7 @@ library(aqp)
 library(stringr)
 
 mixIt <- function(x, y) {
-  mix <- try(mixMunsell(c(x,y))$munsell)
+  mix <- try(mixMunsell(c(x,y), mixingMethod = 'exact')$munsell)
   if(inherits(mix, 'try-error')) {
     return(NA)
   } else {
@@ -79,7 +79,8 @@ x <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
 
 
 # Euclidean distance via sweep / colSums: 85 seconds 
-# Gower distance via gower package: 25 seconds
+# Gower distance via gower package: 25 seconds (mixingMethod = 'reference')
+# 28 secpmds (mixingMethod = 'exact')
 system.time(g <- mixtureGrid(x))
 plotMixtureGrid(g)
 
@@ -90,21 +91,26 @@ plotColorMixture(c('10YR 8/6', '10YR 2/2'))
 mixMunsell(c('10YR 2/4', '10YR 2/4'))
 mixMunsell(c('10YR 2/2', '10YR 2/2'))
 mixMunsell(c('10YR 6/2', '10YR 2/2'))
+mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'exact')
 
 
 plotColorMixture(c('10YR 6/2', '10YR 2/2'))
 plotColorMixture(c('5B 6/6', '10Y 8/4'))
 
-plotColorMixture(c('5B 5/10', '5Y 8/8'))
+plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'reference')
+
+# not quite right...
+plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'exact')
+
 
 # iterate over all hues @ 6/8
 # result is a character matrix of Munsell chips
 x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
 g <- mixtureGrid(x)
 
-png(filename = 'spilled-paint.png', width = 1500, height = 1515, res = 120, type = 'cairo', antialias = 'subpixel')
+png(filename = 'spilled-paint2.png', width = 1500, height = 1515, res = 120, type = 'cairo', antialias = 'subpixel')
 
-plotMixtureGrid(g, fig.title = 'Clown Barf')
+plotMixtureGrid(g, fig.title = 'Clown Barf (Exact)')
 
 dev.off()
 
