@@ -21,10 +21,10 @@ A simple lookup table to convert \href{https://en.wikipedia.org/wiki/Pantone}{Pa
 Possible uses include rough estimation of soil colors in the field, by means of color swatches based on the Pantone system. This type of color matching is most appropriate in an educational setting where official soil color books may be too expensive.
 }
 \details{
-For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subset by way of a join (example 3). Reverse lookup (Munsell -> Pantone) will not always result in a matching color, see example 3 below.
+Conversion from PMS to Munsell is performed by \code{\link{PMS2Munsell}} or manual subset of the lookup table (see examples 1 and 2 below) or implicit subset by way of a join (example 3). Conversion from Munsell to PMS will not always result in a matching color, see example 3 below.
 }
 \note{
-The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.
+The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, PMS code '100-c' is associated with '10Y 9/9'.
 
 Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.
 
@@ -36,7 +36,7 @@ Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.
 # load LUT
 data(pms.munsell.lut)
 
-## 1. Pantone -> Munsell
+## 1. Munsell -> Pantone
 
 # colors to match
 colors <- c('10YR 3/3', '7.5YR 4/6')
@@ -48,12 +48,11 @@ m <- pms.munsell.lut[idx, ]
 # simple display
 colorContrastPlot(m1 = m$munsell[1], m2 = m$munsell[2], labels = m$code)
 
-## 2. Munsell -> Pantone
-colors <- c('723-c', '451-c')
+## 2. Pantone -> Munsell
+codes <- c('723-c', '451-c')
 
 # index / subset match
-idx <- pms.munsell.lut$code \%in\% colors
-m <- pms.munsell.lut[idx, ]
+m <- PMS2Munsell(codes)
 
 # simple display
 colorContrastPlot(m1 = m$munsell[1], m2 = m$munsell[2], labels = m$code)
