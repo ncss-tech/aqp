@@ -26,6 +26,25 @@
 #' 
 #' @return `lattice` graphics object
 #' 
+#' @examples 
+#' 
+#' plotColorMixture(
+#' x = c('5B 5/10', '5Y 8/8'), 
+#' w = c(1,1), 
+#' swatch.cex = 4, 
+#' label.cex = 0.65, 
+#' showMixedSpec = TRUE, 
+#' mixingMethod = 'reference'
+#' )
+#' 
+#' plotColorMixture(
+#'   x = c('5B 5/10', '5Y 8/8'), 
+#'   w = c(1,1), 
+#'   swatch.cex = 4, 
+#'   label.cex = 0.65, 
+#'   mixingMethod = 'exact'
+#' )
+#' 
 plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact'), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
   
   # TODO plot will be incorrect if duplicate Munsell chips are specified
@@ -33,9 +52,6 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   # TODO: feedback on spectral distance is required
   
   # TODO: ideas on styling legend (size, placement, etc.)
-  
-  # TODO: plot not correct for mixingMethod = 'exact'
-  
   
   # mixture method sanity checks
   mixingMethod <- match.arg(mixingMethod)
@@ -49,7 +65,6 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
    
     # must retain mixed spectra
     showMixedSpec <- TRUE
-     
   }
   
   # mix colors
@@ -82,7 +97,23 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   # select spectra from reference library and assign an ID
   s <- lapply(seq_along(colors), function(i) {
     # select current color + spectra
-    z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
+    if(mixingMethod == 'reference') {
+      # all colors selected from library
+      z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
+      
+    } else {
+      # exact mixing, last color is mixed spectrum
+      z <- munsell.spectra[which(munsell.spectra$munsell == colors[i]), ]
+      
+      # last color is the mixture, 
+      # replace reference spectra / munsell chip with actual mixture
+      if(i == length(colors)) {
+        z$reflectance <- mx$spec
+        z$munsell <- mx$mixed$munsell
+      }
+      
+    }
+    
     
     # assign an ID for plotting
     if( i <= length(x)) {
@@ -96,6 +127,7 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   })
   
   s <- do.call('rbind', s)
+  row.names(s) <- NULL
 
   ## TODO: enforce this beyond alpha-sorting
   # set ID factor levels
@@ -231,7 +263,8 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
         )
       }
       
-      if(showMixedSpec){
+      # the mixed spectra is only shown as a dotted line when mixingMethod = 'reference'
+      if(showMixedSpec & mixingMethod != 'exact'){
         panel.lines(x = unique(s$wavelength), y = mx$spec, lty = 3, col = 'black')
       }
       
