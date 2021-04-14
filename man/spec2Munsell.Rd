@@ -22,6 +22,46 @@ Convert reflectance spectra to closest Munsell chip
 \note{
 D65 illuminant spectra and CIE1931 color matching functions derived from CIE reference data.
 }
+\examples{
+
+# Munsell reference spectra
+data("munsell.spectra.wide")
+
+# convert to closest Munsell chip
+# sRGB -> Munsell conversion via rgb2Munsell()
+spec2Munsell(munsell.spectra.wide[, '10YR 3/3'])
+
+# attempt several
+cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4', '5G 4/4', '2.5Y 8/2', '10YR 3/3')
+
+# most are exact or very close
+z <- do.call(
+  'rbind',
+  lapply(cols, function(i) {
+    spec2Munsell(munsell.spectra.wide[, i])  
+  })
+)
+
+# format Munsell notation from pieces
+z$m <- sprintf("\%s \%s/\%s", z$hue, z$value, z$chroma)
+
+# compare
+colorContrastPlot(
+  m1 = cols, 
+  m2 = z$m, 
+  labels = c('original', 'spectral\ninterpretation')
+)
+
+
+# mix colors, return spectra, convert to color
+cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
+res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
+
+# note that they are slightly different
+res$mixed
+spec2Munsell(res$spec)
+
+}
 \references{
 Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 

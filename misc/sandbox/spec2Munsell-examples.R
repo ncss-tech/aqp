@@ -1,13 +1,16 @@
 library(aqp)
 
+# Munsell reference spectra
 data("munsell.spectra.wide")
 
-
+# convert to closest Munsell chip
+# sRGB -> Munsell conversion via rgb2Munsell()
 spec2Munsell(munsell.spectra.wide[, '10YR 3/3'])
 
+# attempt several
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4', '5G 4/4', '2.5Y 8/2', '10YR 3/3')
 
-# not all colors are returned exactly
+# most are exact or very close
 z <- do.call(
   'rbind',
   lapply(cols, function(i) {
@@ -15,9 +18,23 @@ z <- do.call(
   })
 )
 
+# format Munsell notation from pieces
 z$m <- sprintf("%s %s/%s", z$hue, z$value, z$chroma)
 
-colorContrastPlot(m1 = cols, m2 = z$m, labels = c('original', 'spectral\ninterpretation'))
+# compare
+colorContrastPlot(
+  m1 = cols, 
+  m2 = z$m, 
+  labels = c('original', 'spectral\ninterpretation')
+)
+
+# mix colors, return spectra, convert to color
+cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
+res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
+
+# note that they are slightly different
+res$mixed
+spec2Munsell(res$spec)
 
 
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
@@ -26,8 +43,8 @@ plotColorMixture(cols, swatch.cex = 5, showMixedSpec = TRUE)
 res <- mixMunsell(cols, keepMixedSpec = TRUE)
 spec2Munsell(res$spec)
 
+cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
 mixMunsell(cols, mixingMethod = 'estimate')
-mixMunsell(cols, mixingMethod = 'spectra')
 mixMunsell(cols, mixingMethod = 'reference')
 mixMunsell(cols, mixingMethod = 'exact')
 
@@ -58,31 +75,58 @@ plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE, mixingMeth
 
 
 # ~ 5 minutes
-# # do all the colors
-# nm <- dimnames(munsell.spectra.wide)[[2]]
-# z <- lapply(2:ncol(munsell.spectra.wide), function(i) {
-#   
-#   res <- spec2Munsell(munsell.spectra.wide[, i])
-#   res$label <- nm[i]
-#   
-#   return(res)
-# }
-# )
-# 
-# z <- do.call('rbind', z)
-# 
-# z$pred <- sprintf("%s %s/%s", z$hue, z$value, z$chroma)
-# 
-# table(z$label == z$pred)
-# idx <- which(z$label != z$pred)
-# 
-# 
-# colorContrastPlot(m1 = z$label[idx[1:10]], m2 = z$pred[idx[1:10]], labels = c('original', 'spectral\ninterpretation'))
-# 
-# 
-# 
-# head(z[idx, ], 20)
-# tail(z[idx, ], 20)
-# 
-# 
-# hist(z$sigma[idx])
+# do all the colors
+nm <- dimnames(munsell.spectra.wide)[[2]]
+z <- lapply(2:ncol(munsell.spectra.wide), function(i) {
+
+  res <- spec2Munsell(munsell.spectra.wide[, i])
+  res$label <- nm[i]
+
+  return(res)
+}
+)
+
+z <- do.call('rbind', z)
+
+z$pred <- sprintf("%s %s/%s", z$hue, z$value, z$chroma)
+
+# ~ 20% aren't exact matches
+prop.table(table(z$label == z$pred))
+
+# non-matching
+idx <- which(z$label != z$pred)
+
+idx.sub <- sample(idx, size = 10)
+
+colorContrastPlot(m1 = z$label[idx.sub], m2 = z$pred[idx.sub], labels = c('original', 'spectral\ninterpretation'))
+
+
+
+head(z[idx, ], 20)
+tail(z[idx, ], 20)
+
+
+library(lattice)
+library(tactile)
+
+g <- make.groups(
+  'matching' = z[-idx, ],
+  'not matching' = z[idx, ]
+)
+
+# dE00 is reported by rgb2Munsell()
+bwplot(
+  which ~ sigma,
+  data = g,
+  notch = TRUE,
+  varwidth = TRUE,
+  par.settings = tactile.theme(),
+  xlab = expression(Delta*E['00']),
+  main = 'Spectral Interpretation\nMunsell Reference Spectra'
+)
+
+
+
+
+
+

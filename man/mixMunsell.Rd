@@ -72,6 +72,16 @@ For the purposes of estimating (for example) a "mixed soil color within the top 
 
 A message is printed when \code{scaledDistance} is larger than 1.
 }
+\examples{
+
+# try a couple different methods
+cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
+mixMunsell(cols, mixingMethod = 'reference')
+mixMunsell(cols, mixingMethod = 'exact')
+mixMunsell(cols, mixingMethod = 'estimate')
+
+
+}
 \references{
 Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 
