@@ -15,8 +15,10 @@
  * new function `alignTransect()` for simplifying relative positioning of profile sketches
  * `plotMultipleSPC()` gains ability to automatically merge thematic legends
  * `coordinates<-` will check formula terms (_unique_ coordinates) in the `@horizons` slot, if needed.
+ * new function `spec2Munsell()` for converting reflectance spectra into sRGB coordinates or closest Munsell chip
  * `mixMunsell`:
-    - gains argument for performing mixture estimation via wt. mean of CIELAB coordinates
+    - new `mixingMethod` argument for selecting several mixing strategies
+    - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spect2Munsell()`)
     - suggestions on interpreting spectral distances, message printed when greater than reasonable threshold
  * minor bug-fix in `panel.depth_function` when plotting grouped step-functions
  
