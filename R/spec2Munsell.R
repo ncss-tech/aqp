@@ -11,6 +11,7 @@
 #' @note D65 illuminant spectra and CIE1931 color matching functions derived from CIE reference data.
 #' 
 #' @param x reflectance spectra, (380nm to 730nm, 10nm resolution)
+#' @param convert logical, convert sRGB coordinates to closest Munsell chip (see `?munsell`)
 #' @param ... further arguments to `rgb2Munsell`
 #'
 #' @return output from `rgb2Munsell`
@@ -21,7 +22,7 @@
 #' 
 #' "Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
 #' 
-spec2Munsell <- function(x, ...) {
+spec2Munsell <- function(x, convert = TRUE, ...) {
   
   # D65 and CIE1931 reference data at 5nm
   spectral.reference <- NULL
@@ -73,8 +74,15 @@ spec2Munsell <- function(x, ...) {
   )
   
   # convert sRGB to closest Munsell chip
-  m <- rgb2munsell(col.srgb, ...)
+  if(convert) {
+    m <- rgb2munsell(col.srgb, ...)
+    return(m)
+  } else {
+    # return sRGB coordinates
+    return(col.srgb)
+  }
   
-  return(m)
+  
+  
 }
 

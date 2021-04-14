@@ -4,10 +4,12 @@
 \alias{spec2Munsell}
 \title{Convert reflectance spectra to closest Munsell chip}
 \usage{
-spec2Munsell(x, ...)
+spec2Munsell(x, convert = TRUE, ...)
 }
 \arguments{
 \item{x}{reflectance spectra, (380nm to 730nm, 10nm resolution)}
+
+\item{convert}{logical, convert sRGB coordinates to closest Munsell chip (see \code{?munsell})}
 
 \item{...}{further arguments to \code{rgb2Munsell}}
 }
