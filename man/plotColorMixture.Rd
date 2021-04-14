@@ -42,6 +42,26 @@ plotColorMixture(
 \description{
 Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
 }
+\examples{
+
+plotColorMixture(
+x = c('5B 5/10', '5Y 8/8'), 
+w = c(1,1), 
+swatch.cex = 4, 
+label.cex = 0.65, 
+showMixedSpec = TRUE, 
+mixingMethod = 'reference'
+)
+
+plotColorMixture(
+  x = c('5B 5/10', '5Y 8/8'), 
+  w = c(1,1), 
+  swatch.cex = 4, 
+  label.cex = 0.65, 
+  mixingMethod = 'exact'
+)
+
+}
 \author{
 D.E. Beaudette
 }
