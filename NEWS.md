@@ -1,4 +1,9 @@
+# aqp 1.30 (2021-04-14)
+ * `mixMunsell`:
+    - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spec2Munsell()`)
+
 # aqp 1.29 (2021-04-05)
+ * CRAN release
  * Several `SoilProfileCollection` methods that conflict with {dplyr} 1.0+ have been deprecated:
     * `filter`, `mutate`, `group_by`, `summarize`
     * New overloaded {base} names:
@@ -18,7 +23,6 @@
  * new function `spec2Munsell()` for converting reflectance spectra into sRGB coordinates or closest Munsell chip
  * `mixMunsell`:
     - new `mixingMethod` argument for selecting several mixing strategies
-    - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spect2Munsell()`)
     - suggestions on interpreting spectral distances, message printed when greater than reasonable threshold
  * minor bug-fix in `panel.depth_function` when plotting grouped step-functions
  
