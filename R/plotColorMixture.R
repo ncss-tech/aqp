@@ -94,6 +94,10 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   # vector of colors to mix and result
   colors <- c(x, m$munsell)
   
+  ## TODO: this will fail if a color is not in the spectral library
+  #        -> possibly when mixingMethod = 'exact'
+  #        solution: provide a template data.frame
+  
   # select spectra from reference library and assign an ID
   s <- lapply(seq_along(colors), function(i) {
     # select current color + spectra
