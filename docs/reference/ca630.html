@@ -73,7 +73,7 @@ Region of California." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -160,7 +160,7 @@ bottom (cm)</p></dd> <dt>hzn_desgn</dt><dd><p>horizon name</p></dd>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These data were extracted from the NSSL database. <code>ca630</code> is a list composed
-of site and lab data, each stored as dataframes. These data are modeled by a
+of site and lab data, each stored as <code>data.frame</code> objects. These data are modeled by a
 1:many (site:lab) relation, with the <code>pedon_id</code> acting as the primary key in
 the <code>site</code> table and as the foreign key in the <code>lab</code> table.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
@@ -171,10 +171,9 @@ with caution</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://had.co.nz/plyr'>plyr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jolars/tactile'>tactile</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://hbiostat.org/R/Hmisc/'>Hmisc</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>maps</span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span>
 
 <span class='co'># check the data out:</span>
@@ -208,20 +207,22 @@ with caution</p>
 <span class='co'># check the result</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span>
 
-<span class='co'># map the data (several ways to do this, here is a simple way)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span><span class='op'>(</span>database<span class='op'>=</span><span class='st'>'county'</span>, region<span class='op'>=</span><span class='st'>'california'</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span><span class='op'>(</span><span class='fu'><a href='coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span>, col<span class='op'>=</span><span class='st'>'red'</span>, cex<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
-
 <span class='co'># aggregate %BS 7 for all profiles into 1 cm slices</span>
 <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span><span class='op'>(</span><span class='va'>ca</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>bs_7</span><span class='op'>)</span>
 
 <span class='co'># plot median &amp; IQR by 1 cm slice</span>
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
-<span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span>, data<span class='op'>=</span><span class='va'>a</span>, lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>,
-ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, alpha<span class='op'>=</span><span class='fl'>0.5</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating<span class='op'>=</span><span class='fl'>1</span>, y<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.num<span class='op'>=</span><span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>,
-panel<span class='op'>=</span><span class='va'>panel.depth_function</span>, prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
+<span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span>, 
+data <span class='op'>=</span> <span class='va'>a</span>, 
+lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, 
+upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>,
+alpha<span class='op'>=</span><span class='fl'>0.5</span>,
+ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, 
+scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.num <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>,
+panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>, 
+prepanel <span class='op'>=</span> <span class='va'>prepanel.depth_function</span>,
 ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>, xlab<span class='op'>=</span><span class='st'>'Base Saturation at pH 7'</span>,
-par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col<span class='op'>=</span><span class='st'>'black'</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='st'>'black'</span>, lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='co'># aggregate %BS at pH 8.2 for all profiles by MLRA, along 1 cm slices</span>
@@ -233,23 +234,30 @@ par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r
 
 <span class='co'># plot median &amp; IQR by 1 cm slice, using different colors for each MLRA</span>
 <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
-<span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span>, groups<span class='op'>=</span><span class='va'>mlra</span> , data<span class='op'>=</span><span class='va'>a</span>, lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>,
-ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, alpha<span class='op'>=</span><span class='fl'>0.5</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.num<span class='op'>=</span><span class='fl'>7</span>, alternating<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span>, x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>,
-panel<span class='op'>=</span><span class='va'>panel.depth_function</span>, prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
-ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>, xlab<span class='op'>=</span><span class='st'>'Base Saturation at pH 8.2'</span>,
-par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'black'</span>,<span class='st'>'blue'</span><span class='op'>)</span>, lty<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
-auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, title<span class='op'>=</span><span class='st'>'MLRA'</span>, points<span class='op'>=</span><span class='cn'>FALSE</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span>, 
+groups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mlra</span><span class='op'>)</span>, 
+data <span class='op'>=</span> <span class='va'>a</span>,
+lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, 
+upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>,
+alpha<span class='op'>=</span><span class='fl'>0.25</span>,
+sync.colors <span class='op'>=</span> <span class='cn'>TRUE</span>,
+ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, 
+scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.num <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>,
+panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>, 
+prepanel <span class='op'>=</span> <span class='va'>prepanel.depth_function</span>,
+ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>, xlab<span class='op'>=</span><span class='st'>'Base Saturation at pH 7'</span>,
+par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span>, columns <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 
-<span class='co'># safely compute hz-thickness weighted mean CEC (pH 7)</span>
-<span class='co'># using data.frame objects</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>lab.agg.cec_7</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/ddply.html'>ddply</a></span><span class='op'>(</span><span class='va'>ca630</span><span class='op'>$</span><span class='va'>lab</span>, <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/quoted.html'>.</a></span><span class='op'>(</span><span class='va'>pedon_key</span><span class='op'>)</span>,
-.fun<span class='op'>=</span><span class='va'>summarise</span>, CEC_7<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/wtd.stats.html'>wtd.mean</a></span><span class='op'>(</span><span class='va'>bs_7</span>, weights<span class='op'>=</span><span class='va'>hzn_bot</span><span class='op'>-</span><span class='va'>hzn_top</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
 <span class='co'># extract a SPDF with horizon data along a slice at 25 cm</span>
 <span class='va'>s.25</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>ca</span>, fm<span class='op'>=</span><span class='fl'>25</span> <span class='op'>~</span> <span class='va'>bs_7</span> <span class='op'>+</span> <span class='va'>CEC7</span> <span class='op'>+</span> <span class='va'>ex_acid</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span><span class='op'>(</span><span class='va'>s.25</span>, zcol<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span><span class='op'>(</span>
+<span class='va'>s.25</span>, zcol<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span><span class='op'>)</span>, 
+par.settings <span class='op'>=</span> <span class='va'>tactile.theme</span>,
+layout <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># note that the ordering is preserved:</span>
 <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='va'>s.25</span><span class='op'>$</span><span class='va'>pedon_key</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span><span class='op'>)</span>
@@ -264,7 +272,8 @@ auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/bas
 <span class='va'>ca.1.to.10</span> <span class='op'>&lt;-</span> <span class='va'>ca</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='op'>]</span>
 
 <span class='co'># basic plot method: profile plot</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>ca.1.to.10</span>, name<span class='op'>=</span><span class='st'>'hzn_desgn'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>ca.1.to.10</span>, name<span class='op'>=</span><span class='st'>'hzn_desgn'</span>, color <span class='op'>=</span> <span class='st'>'CEC7'</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 </div></pre>

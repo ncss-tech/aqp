@@ -73,7 +73,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -138,10 +138,10 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For now, lookup is performed by manual subset (see examples 1 and 2 below) or implicit subset by way of a join (example 3). Reverse lookup (Munsell -&gt; Pantone) will not always result in a matching color, see example 3 below.</p>
+    <p>Conversion from PMS to Munsell is performed by <code><a href='PMS2Munsell.html'>PMS2Munsell</a></code> or manual subset of the lookup table (see examples 1 and 2 below) or implicit subset by way of a join (example 3). Conversion from Munsell to PMS will not always result in a matching color, see example 3 below.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, Pantone code '100-c' is associated with '10Y 9/9'.</p>
+    <p>The lookup table contains entries for both coated and un-coated colors, these are identified by a '-c' or '-u' suffix. For example, PMS code '100-c' is associated with '10Y 9/9'.</p>
 <p>Several Munsell chips are matched by multiple Pantone spot colors, e.g. 5YR 5/5.</p>
 <p>1    2    3    4    5    6    8    9
 0.65 0.24 0.08 0.02 0.01 0.00 0.00 0.00</p>
@@ -158,7 +158,7 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 <span class='co'># load LUT</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pms.munsell.lut</span><span class='op'>)</span>
 
-<span class='co'>## 1. Pantone -&gt; Munsell</span>
+<span class='co'>## 1. Munsell -&gt; Pantone</span>
 
 <span class='co'># colors to match</span>
 <span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 3/3'</span>, <span class='st'>'7.5YR 4/6'</span><span class='op'>)</span>
@@ -170,12 +170,11 @@ Possible uses include rough estimation of soil colors in the field, by means of 
 <span class='co'># simple display</span>
 <span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span><span class='op'>(</span>m1 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, m2 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, labels <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>
 </div><div class='img'><img src='pms.munsell.lut-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'>## 2. Munsell -&gt; Pantone</span>
-<span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'723-c'</span>, <span class='st'>'451-c'</span><span class='op'>)</span>
+<span class='co'>## 2. Pantone -&gt; Munsell</span>
+<span class='va'>codes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'723-c'</span>, <span class='st'>'451-c'</span><span class='op'>)</span>
 
 <span class='co'># index / subset match</span>
-<span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>$</span><span class='va'>code</span> <span class='op'>%in%</span> <span class='va'>colors</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='va'>pms.munsell.lut</span><span class='op'>[</span><span class='va'>idx</span>, <span class='op'>]</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='PMS2Munsell.html'>PMS2Munsell</a></span><span class='op'>(</span><span class='va'>codes</span><span class='op'>)</span>
 
 <span class='co'># simple display</span>
 <span class='fu'><a href='colorContrastPlot.html'>colorContrastPlot</a></span><span class='op'>(</span>m1 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, m2 <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>munsell</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, labels <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>code</span><span class='op'>)</span>

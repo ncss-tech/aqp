@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -147,6 +147,7 @@
   n.depth.ticks <span class='op'>=</span> <span class='fl'>5</span>,
   shrink <span class='op'>=</span> <span class='cn'>FALSE</span>,
   shrink.cutoff <span class='op'>=</span> <span class='fl'>3</span>,
+  shrink.thin <span class='op'>=</span> <span class='cn'>NULL</span>,
   abbr <span class='op'>=</span> <span class='cn'>FALSE</span>,
   abbr.cutoff <span class='op'>=</span> <span class='fl'>5</span>,
   divide.hz <span class='op'>=</span> <span class='cn'>TRUE</span>,
@@ -274,15 +275,19 @@
     </tr>
     <tr>
       <th>shrink</th>
-      <td><p>logical, reduce character scaling for 'long' horizon by 80%?</p></td>
+      <td><p>logical, reduce character scaling for 'long' horizon by 80%</p></td>
     </tr>
     <tr>
       <th>shrink.cutoff</th>
       <td><p>character length defining 'long' horizon names</p></td>
     </tr>
     <tr>
+      <th>shrink.thin</th>
+      <td><p>integer, horizon thickness threshold for shrinking horizon names by 80%, only activated when <code>shrink = TRUE</code> (<code>NULL</code> = no shrinkage)</p></td>
+    </tr>
+    <tr>
       <th>abbr</th>
-      <td><p>logical, abbreviate <code>label</code>?</p></td>
+      <td><p>logical, abbreviate <code>label</code></p></td>
     </tr>
     <tr>
       <th>abbr.cutoff</th>
@@ -438,6 +443,30 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 </div><div class='img'><img src='SoilProfileCollection-plotting-methods-7.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'>##</span>
+<span class='co'>## demonstrate horizon designation shrinkage</span>
+<span class='co'>##</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"jacobs2000"</span><span class='op'>)</span>
+
+<span class='co'># shrink "long" horizon names</span>
+<span class='fu'>plotSPC</span><span class='op'>(</span>
+  <span class='va'>jacobs2000</span>, 
+  name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, 
+  shrink <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+  cex.names <span class='op'>=</span> <span class='fl'>0.8</span>
+<span class='op'>)</span>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-8.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='co'># shrink horizon names in "thin" horizons</span>
+<span class='fu'>plotSPC</span><span class='op'>(</span>
+  <span class='va'>jacobs2000</span>, 
+  name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, 
+  shrink <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+  shrink.thin <span class='op'>=</span> <span class='fl'>15</span>,
+  cex.names <span class='op'>=</span> <span class='fl'>0.8</span>,
+<span class='op'>)</span>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-9.png' alt='' width='768' height='475' /></div><div class='input'>
+
+<span class='co'>##</span>
 <span class='co'>## demonstrate adaptive legend</span>
 <span class='co'>##</span>
 
@@ -453,10 +482,10 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class='co'># note that there are enough colors for 15 classes (vs. previous limit of 10)</span>
 <span class='co'># note that the legend is split into 2 rows when length(classes) &gt; n.legend argument</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp3</span>, color<span class='op'>=</span><span class='st'>'fake.data'</span>, name<span class='op'>=</span><span class='st'>'fake.data'</span>, cex.names<span class='op'>=</span><span class='fl'>0.8</span><span class='op'>)</span>
-</div><div class='img'><img src='SoilProfileCollection-plotting-methods-8.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-10.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># make enough room in a single legend row</span>
 <span class='fu'>plot</span><span class='op'>(</span><span class='va'>sp3</span>, color<span class='op'>=</span><span class='st'>'fake.data'</span>, name<span class='op'>=</span><span class='st'>'fake.data'</span>, cex.names<span class='op'>=</span><span class='fl'>0.8</span>, n.legend<span class='op'>=</span><span class='fl'>15</span><span class='op'>)</span>
-</div><div class='img'><img src='SoilProfileCollection-plotting-methods-9.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-11.png' alt='' width='768' height='475' /></div><div class='input'>
 
 <span class='co'>##</span>
 <span class='co'>## demonstrate y.offset argument</span>
@@ -475,10 +504,10 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 
 <span class='co'># y-offset at 0</span>
 <span class='fu'>plotSPC</span><span class='op'>(</span><span class='va'>x</span>, color <span class='op'>=</span> <span class='st'>'matrix_color'</span>, cex.names <span class='op'>=</span> <span class='fl'>0.66</span><span class='op'>)</span>
-</div><div class='img'><img src='SoilProfileCollection-plotting-methods-10.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-12.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># constant adjustment to y-offset</span>
 <span class='fu'>plotSPC</span><span class='op'>(</span><span class='va'>x</span>, color <span class='op'>=</span> <span class='st'>'matrix_color'</span>, cex.names <span class='op'>=</span> <span class='fl'>0.66</span>, y.offset <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-</div><div class='img'><img src='SoilProfileCollection-plotting-methods-11.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-13.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># attempt using invalid y.offset</span>
 <span class='co'># warning issued and default value of '0' used</span>
 <span class='co'># plotSPC(x, color = 'matrix_color', cex.names = 0.66, y.offset = 1:2)</span>
@@ -493,7 +522,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
   hz.depths <span class='op'>=</span> <span class='cn'>TRUE</span>, 
   name.style <span class='op'>=</span> <span class='st'>'center-center'</span>
 <span class='op'>)</span>
-</div><div class='img'><img src='SoilProfileCollection-plotting-methods-12.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-14.png' alt='' width='768' height='475' /></div><div class='input'>
 
 
 <span class='co'># random y-axis offsets</span>
@@ -517,7 +546,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class='op'>)</span>
 </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/graphics/box.html'>box</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='img'><img src='SoilProfileCollection-plotting-methods-13.png' alt='' width='768' height='475' /></div></pre>
+</div><div class='img'><img src='SoilProfileCollection-plotting-methods-15.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

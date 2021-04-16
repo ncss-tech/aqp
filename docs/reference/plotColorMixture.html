@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -123,6 +123,7 @@
     <pre class="usage"><span class='fu'>plotColorMixture</span><span class='op'>(</span>
   <span class='va'>x</span>,
   w <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  mixingMethod <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"reference"</span>, <span class='st'>"exact"</span><span class='op'>)</span>,
   n <span class='op'>=</span> <span class='fl'>1</span>,
   swatch.cex <span class='op'>=</span> <span class='fl'>6</span>,
   label.cex <span class='op'>=</span> <span class='fl'>0.85</span>,
@@ -139,7 +140,14 @@
     </tr>
     <tr>
       <th>w</th>
-      <td><p>vector of proportions, can sum to any number</p></td>
+      <td><p>vector of weights, can sum to any number</p></td>
+    </tr>
+    <tr>
+      <th>mixingMethod</th>
+      <td><p>approach used to simulate a mixture:</p><ul>
+<li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra</p></li>
+<li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>n</th>
@@ -170,6 +178,26 @@
 
     <p>D.E. Beaudette</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'>plotColorMixture</span><span class='op'>(</span>
+x <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5B 5/10'</span>, <span class='st'>'5Y 8/8'</span><span class='op'>)</span>, 
+w <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, 
+swatch.cex <span class='op'>=</span> <span class='fl'>4</span>, 
+label.cex <span class='op'>=</span> <span class='fl'>0.65</span>, 
+showMixedSpec <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+mixingMethod <span class='op'>=</span> <span class='st'>'reference'</span>
+<span class='op'>)</span>
+</div><div class='img'><img src='plotColorMixture-1.png' alt='' width='768' height='475' /></div><div class='input'>
+<span class='fu'>plotColorMixture</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5B 5/10'</span>, <span class='st'>'5Y 8/8'</span><span class='op'>)</span>, 
+  w <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, 
+  swatch.cex <span class='op'>=</span> <span class='fl'>4</span>, 
+  label.cex <span class='op'>=</span> <span class='fl'>0.65</span>, 
+  mixingMethod <span class='op'>=</span> <span class='st'>'exact'</span>
+<span class='op'>)</span>
+</div><div class='img'><img src='plotColorMixture-2.png' alt='' width='768' height='475' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

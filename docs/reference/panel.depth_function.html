@@ -78,7 +78,7 @@ This function is not able to apply transformations (typically log = 10) applied 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -260,7 +260,7 @@ see below</p></td>
 <span class='co'># better looking figures with less customization via tactile package</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>'tactile'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://Rdatatable.gitlab.io/data.table'>data.table</a></span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span>
   <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
   <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jolars/tactile'>tactile</a></span><span class='op'>)</span>
   
@@ -289,7 +289,7 @@ see below</p></td>
     id <span class='op'>=</span> <span class='va'>x.long</span><span class='op'>$</span><span class='va'>id</span>,
     ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>60</span><span class='op'>)</span>,
     scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.number <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
-    par.settings <span class='op'>=</span> <span class='fu'>tactile</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+    par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
     xlab <span class='op'>=</span> <span class='st'>'Sand, Silt, Clay (%)'</span>,
     ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
     panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
@@ -375,7 +375,7 @@ see below</p></td>
   
   
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: tactile</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'data.table' was built under R version 4.0.3</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'tactile' was built under R version 4.0.3</span></div><div class='img'><img src='panel.depth_function-3.png' alt='' width='768' height='475' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: tactile</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'data.table' was built under R version 4.0.5</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'tactile' was built under R version 4.0.3</span></div><div class='img'><img src='panel.depth_function-3.png' alt='' width='768' height='475' /></div><div class='input'>
 
 
 

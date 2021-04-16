@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -123,9 +123,10 @@
     <pre class="usage"><span class='fu'>mixMunsell</span><span class='op'>(</span>
   <span class='va'>x</span>,
   w <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-  mixingMethod <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"spectra"</span>, <span class='st'>"estimate"</span>, <span class='st'>"adaptive"</span><span class='op'>)</span>,
+  mixingMethod <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"reference"</span>, <span class='st'>"exact"</span>, <span class='st'>"estimate"</span>, <span class='st'>"adaptive"</span>, <span class='st'>"spectra"</span><span class='op'>)</span>,
   n <span class='op'>=</span> <span class='fl'>1</span>,
-  keepMixedSpec <span class='op'>=</span> <span class='cn'>FALSE</span>
+  keepMixedSpec <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  distThreshold <span class='op'>=</span> <span class='fl'>0.025</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -142,9 +143,10 @@
     <tr>
       <th>mixingMethod</th>
       <td><p>approach used to simulate a mixture:</p><ul>
-<li><p><code>spectra</code>: simulate a subtractive mixture of pigments, limited to available reference spectra</p></li>
-<li><p><code>estimate</code>: closest Munsell chip to a weighted mean of CIELAB coordinates</p></li>
-<li><p><code>adaptive</code>: use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates</p></li>
+<li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra from <code><a href='munsell.spectra.html'>munsell.spectra.wide</a></code></p></li>
+<li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see details)</p></li>
+<li><p><code>estimate</code> : closest Munsell chip to a weighted mean of CIELAB coordinates</p></li>
+<li><p><code>adaptive</code> : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -155,17 +157,53 @@
       <th>keepMixedSpec</th>
       <td><p>keep weighted geometric mean spectra, final result is a <code>list</code> (<code>mixingMethod = spectra</code> only)</p></td>
     </tr>
+    <tr>
+      <th>distThreshold</th>
+      <td><p>spectral distance used to compute <code>scaledDistance</code>, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  <code>mixingMethod = 'reference'</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code> with the closest matching Munsell color(s), unless <code>keepMixedSpec = TRUE</code> then a <code>list</code>.</p>
+    <p>A <code>data.frame</code> with the closest matching Munsell color(s):</p><ul>
+<li><p><code>munsell</code>: Munsell notation of the n-closest spectra</p></li>
+<li><p><code>distance</code>: spectral (Gower) distance to the n-closest spectra</p></li>
+<li><p><code>scaledDistance</code>: spectral distance scaled by <code>distThreshold</code></p></li>
+<li><p><code>mixingMethod</code>: method used for each mixture</p></li>
+</ul>
+
+<p>When <code>keepMixedSpec = TRUE</code> then a <code>list</code>:</p><ul>
+<li><p><code>mixed</code>: a <code>data.frame</code> containing the same elements as above</p></li>
+<li><p><code>spec</code>: spectra for the 1st closest match</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Pending</p>
+    <p>An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.</p>
+<p>Thankfully, <a href='https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf'>Scott Burns has outlined the entire process</a>, and Paul Centore has provided a Munsell color chip <a href='https://www.munsellcolourscienceforpainters.com'>reflectance spectra library</a>. The estimation of a subtractive mixture of soil colors can proceed as follows:</p><ol>
+<li><p>look up the associated spectra for each color in <code>x</code></p></li>
+<li><p>compute the weighted (<code>w</code> argument) geometric mean of the spectra</p></li>
+<li><p>convert the spectral mixture to the closest Munsell color via:</p></li>
+</ol>
+<ul>
+<li><p>search for the closest <code>n</code> matching spectra in the reference library (<code>mixtureMethod = 'reference'</code>)</p></li>
+<li><p>direct conversion of spectra to closest Munsell color via <code><a href='spec2Munsell.html'>spec2Munsell</a></code> ( (<code>mixtureMethod = 'exact'</code>))</p></li>
+</ul>
+<ol>
+<li><p>suggest resulting Munsell chip(s) as the best candidate for a simulated mixture</p></li>
+</ol>
+
+<p>Key assumptions include:</p><ul>
+<li><p>similar particle size distribution</p></li>
+<li><p>similar mineralogy (i.e. pigmentation qualities)</p></li>
+<li><p>similar water content.</p></li>
+</ul>
+
+<p>For the purposes of estimating (for example) a "mixed soil color within the top 18cm of soil" these assumptions are usually valid. Again, these are estimates that are ultimately "snapped" to the nearest chip and not do not need to approach the accuracy of paint-matching systems.</p>
+<p>A message is printed when <code>scaledDistance</code> is larger than 1.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    
+    <p>Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.</p>
 <ul>
 <li><p>inspiration / calculations based on the work of Scott Burns: <a href='https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf'>https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf</a></p></li>
 <li><p>related discussion on Stack Overflow: <a href='https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630'>https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630</a></p></li>
@@ -179,6 +217,19 @@
 
     <p>D.E. Beaudette</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># try a couple different methods</span>
+<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 6/2'</span>, <span class='st'>'5YR 5/6'</span>, <span class='st'>'10B 4/4'</span><span class='op'>)</span>
+<span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>cols</span>, mixingMethod <span class='op'>=</span> <span class='st'>'reference'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   munsell   distance scaledDistance distanceMetric mixingMethod
+#&gt; 1  5Y 5/1 0.01311294      0.5245176          Gower    reference</div><div class='input'><span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>cols</span>, mixingMethod <span class='op'>=</span> <span class='st'>'exact'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    munsell distance scaledDistance distanceMetric mixingMethod
+#&gt; 1 10YR 5/1 1.802268             NA           dE00        exact</div><div class='input'><span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>cols</span>, mixingMethod <span class='op'>=</span> <span class='st'>'estimate'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     munsell distance scaledDistance distanceMetric mixingMethod
+#&gt; 1 7.5YR 5/2 1.256139             NA           dE00     estimate</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

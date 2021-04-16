@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
       </span>
     </div>
 
@@ -114,11 +114,26 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="aqp-129-2021-03-16" class="section level1">
-<h1 class="page-header" data-toc-text="1.29">
-<a href="#aqp-129-2021-03-16" class="anchor"></a>aqp 1.29 (2021-03-16)<small> Unreleased </small>
+    <div id="aqp-130-2021-04-14" class="section level1">
+<h1 class="page-header" data-toc-text="1.30">
+<a href="#aqp-130-2021-04-14" class="anchor"></a>aqp 1.30 (2021-04-14)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<code>mixMunsell</code>:
+<ul>
+<li>new method <code>exact</code> for direct conversion of mixture spectra to sRGB or closest Munsell chip (via <code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code>)</li>
+</ul>
+</li>
+<li>new convenience function <code><a href="../reference/PMS2Munsell.html">PMS2Munsell()</a></code> for converting PMS codes -&gt; closest Munsell chip (<a href="https://github.com/ncss-tech/aqp/issues/124" class="uri">https://github.com/ncss-tech/aqp/issues/124</a>)</li>
+</ul>
+</div>
+    <div id="aqp-129-2021-04-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.29">
+<a href="#aqp-129-2021-04-05" class="anchor"></a>aqp 1.29 (2021-04-05)<small> 2021-04-07 </small>
+</h1>
+<ul>
+<li>CRAN release</li>
 <li>Several <code>SoilProfileCollection</code> methods that conflict with {dplyr} 1.0+ have been deprecated:
 <ul>
 <li>
@@ -149,14 +164,22 @@
 </li>
 <li>Methods that used {rlang} for non-standard evaluation now use {base}</li>
 <li>
-<code><a href="../reference/plotSPC.html">plotSPC()</a></code> gains vectorized <code>y.offset</code> support</li>
+<code><a href="../reference/plotSPC.html">plotSPC()</a></code> gains vectorized <code>y.offset</code> support (demonstrated in: <a href="http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html" class="uri">http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html</a>)</li>
+<li>
+<code><a href="../reference/plotSPC.html">plotSPC()</a></code> gains argument <code>shrink.thin</code> for shrinking horizon designation labels when horizons are thin</li>
 <li>new function <code><a href="../reference/alignTransect.html">alignTransect()</a></code> for simplifying relative positioning of profile sketches</li>
 <li>
 <code><a href="../reference/plotMultipleSPC.html">plotMultipleSPC()</a></code> gains ability to automatically merge thematic legends</li>
 <li>
 <code>coordinates&lt;-</code> will check formula terms (<em>unique</em> coordinates) in the <code>@horizons</code> slot, if needed.</li>
+<li>new function <code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code> for converting reflectance spectra into sRGB coordinates or closest Munsell chip</li>
 <li>
-<code>mixMunsell</code> gains argument for performing mixture estimation via wt. mean of CIELAB coordinates</li>
+<code>mixMunsell</code>:
+<ul>
+<li>new <code>mixingMethod</code> argument for selecting several mixing strategies</li>
+<li>suggestions on interpreting spectral distances, message printed when greater than reasonable threshold</li>
+</ul>
+</li>
 <li>minor bug-fix in <code>panel.depth_function</code> when plotting grouped step-functions</li>
 </ul>
 </div>
@@ -1215,7 +1238,7 @@
 <ul>
 <li>pedonPC, NASIS, and SDA functions moved <em>out</em> of aqp, and <em>into</em> new package: soilDB
 <ul>
-<li>removed assocated, suggested packages from aqp</li>
+<li>removed associated, suggested packages from aqp</li>
 <li>soilDB will be on CRAN shortly</li>
 </ul>
 </li>
@@ -1312,7 +1335,7 @@
 <ul>
 <li>added S4 class/methods for <code>SoilProfileCollection</code>
 <ul>
-<li>this supercedes the (now removed) S3 <code>SoilProfileList</code> classes</li>
+<li>this supersedes the (now removed) S3 <code>SoilProfileList</code> classes</li>
 <li>basic accessors/setters are in place, subject to change</li>
 </ul>
 </li>
@@ -1373,7 +1396,7 @@
 <code><a href="https://rdrr.io/pkg/soilDB/man/SDA_query.html">SDA_query()</a></code> : retrieve soil tabular data via query written in SQL</li>
 </ul>
 </li>
-<li>additional customizations added to <code>plotSPC</code>
+<li>additional customization added to <code>plotSPC</code>
 </li>
 <li>two new sample data sets + examples</li>
 </ul>
