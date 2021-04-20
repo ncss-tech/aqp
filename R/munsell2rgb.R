@@ -63,7 +63,7 @@
 #'
 #' @return a \code{data.frame} object
 #' 
-#' @importFrom stringr str_extract_all str_length
+#' @importFrom stringr str_extract_all str_length str_trim
 #' @export
 #'
 #' @examples
@@ -96,30 +96,26 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
     function(mn) {
       # split color into pieces, first at hue[space]value/chroma
       
-      # Get number of hue letters
-      letters <- unlist(str_extract_all(mn, "[A-Z]+"))
-      n_letters <- str_length(letters)
+      # If the very first character of the munsell string is not numeric 
+      # we throw an error
+      if(is.na(as.numeric(substr(mn, 1, 1)))) stop("Error in the Munsell string")
       
-      # Use a different split depending on the number of hue letters
-      if(n_letters == 1) {
-        hue_split <- unlist(strsplit(mn, "(?<=[A-Z]{1})", perl = TRUE))
-      } else if (n_letters == 2) {
-        hue_split <- unlist(strsplit(mn, "(?<=[A-Z]{2})", perl = TRUE))
-      } else {
-        stop("Wrong hue string in the Munsell string.", call. = FALSE)
-      }
+      # Extract hue number
+      hue_number <- str_trim(sub("[A-Z].*", "", mn), side = "both")
+      remaining <- substr(mn, str_length(hue_number) + 1, str_length(mn))
+      hue_letter <- str_trim(sub("[0-9].*", "", remaining), side = "both") 
+      remaining <- substr(remaining, str_length(hue_letter) + 1, str_length(remaining))
       
       if (is.na(delim)) {
-        value_chroma <- unlist(strsplit(hue_split[2], "[:,'/_]"))
+        value_chroma <- unlist(strsplit(remaining, "[:,'/_]"))
       } else {
-        value_chroma <- unlist(strsplit(hue_split[2], delim))
+        value_chroma <- unlist(strsplit(remaining, delim))
       }
       
-      
-      # extract pieces
-      hue <- hue_split[1]
-      value <- value_chroma[1]
-      chroma <- value_chroma[2]
+      # extract pieces, making sure no white space is left
+      hue <- paste0(hue_number, hue_letter)
+      value <- str_trim(value_chroma[1], side = "both")
+      chroma <- str_trim(value_chroma[2], side = "both")
       
       data.frame(hue = hue, value = value, chroma = chroma, stringsAsFactors = FALSE)
     }
