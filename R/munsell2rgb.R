@@ -54,14 +54,14 @@
 
 #' @title Parse Munsell Color Notation
 #' 
-#' @description Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{munsell2rgb}.
+#' @description Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by [`munsell2rgb`].
 #'
-#' @param munsellColor character vector of Munsell colors (e.g. \code{c('10YR 3/4', '5YR 4/6')})
+#' @param munsellColor character vector of Munsell colors (e.g. `c('10YR 3/4', '5YR 4/6')`)
 #' @param convertColors logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates
-#' @param delim optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", amd "/" are supported.
-#' @param ... additional arguments to \code{munsell2rgb}
+#' @param delim optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.
+#' @param ... additional arguments to [`munsell2rgb`]
 #'
-#' @return a \code{data.frame} object
+#' @return a `data.frame` object
 #' 
 #' @importFrom stringr str_extract_all str_length str_trim
 #' @export
@@ -81,10 +81,31 @@
 #' 
 #' 
 #' 
-parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
-  # sanity check:
-  if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
-    return(rep(NA, times=length(munsellColor)))
+parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
+  
+  # empty result set for convertColors = FALSE
+  empty <- data.frame(
+    hue = NA_character_, 
+    value = NA_real_, 
+    chroma = NA_real_, 
+    stringsAsFactors = FALSE
+  )
+  
+  # sanity check: all NA
+  if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == '')) {
+    # return empty data.frame for each entry
+    if(convertColors) {
+      res <- empty[rep(1, times = length(munsellColor)), ]
+      row.names(res) <- NULL
+      return(res)
+      
+    } else {
+      # return NA for each entry
+      res <- rep(NA, times = length(munsellColor))
+      return()
+    }
+  }
+    
   
   # ensure colours are all upper case
   munsellColor <- toupper(munsellColor)
@@ -93,14 +114,23 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
   res <- lapply(
     munsellColor,
     function(mn) {
+      
+      # NA handling: return empty DF template
+      if(is.na(mn)) {
+        return(empty)
+      }
+      
+      ## TODO: parse hues directly from regex pattern of possible values
+      ##       ---> see parseOSD for those patterns
+      
       # split color into pieces, first at hue[space]value/chroma
       
       # If the very first character of the Munsell string is not numeric 
-      # we throw an error
+      # return empty DF template
       if(is.na(suppressWarnings(as.numeric(substr(mn, 1, 1))))) {
         # If that letter is not N we stop
         if ( substr(mn, 1, 1) != "N") {
-          return(data.frame( hue = as.character(NA), value = as.character(NA), chroma = as.character(NA), stringsAsFactors = FALSE))
+          return(empty)
          }
       }
       
@@ -121,17 +151,30 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
       hue <- paste0(hue_number, hue_letter)
       value <- str_trim(value_chroma[1], side = "both")
       
-      if (length(value_chroma) == 2) chroma <- str_trim(value_chroma[2], side = "both")
-      else chroma <- ""
+      if (length(value_chroma) == 2) {
+        chroma <- str_trim(value_chroma[2], side = "both")
+      } else {
+        chroma <- ""
+      }
       
-      data.frame(hue = hue, value = value, chroma = chroma, stringsAsFactors = FALSE)
+      d <- data.frame(
+        hue = hue, 
+        value = value, 
+        chroma = chroma, 
+        stringsAsFactors = FALSE
+      )
+      
+      return(d)
     }
   )
   
   res <- do.call(rbind, res)
+  row.names(res) <- NULL
   
   # parse, without conversion to numeric / munsell
-  if(convertColors == FALSE) return(res)
+  if(convertColors == FALSE) {
+    return(res)
+  }
 
   # otherwise convert
   res <- munsell2rgb(res$hue, res$value, res$chroma, ...)
