@@ -106,9 +106,15 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #'   # and derive the parent material from the 150-200cm interval
 #'   p150_200 <- glom(p, 150, 200, truncate = TRUE)
 #'   p150_200$thickness <- p150_200$bottom - p150_200$top
-#'   # mix colors
+#'   
+#'   # subset colors and thickness
 #'   clrs <- na.omit(horizons(p150_200)[,c('matrix_color_munsell','thickness')])
-#'   mixMunsell(clrs$matrix_color_munsell, w = clrs$thickness)$munsell
+#'   
+#'   # simulate a subtractive mixture using thickness as weight
+#'   mixMunsell(
+#'   clrs$matrix_color_munsell, 
+#'   w = clrs$thickness, 
+#'   mixingMethod = 'exact')$munsell
 #' })
 #'
 #' # segment profile into 1cm slices (for proper depth weighting)
@@ -140,7 +146,7 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' abline(h = c(0,100,150,200), lty = 2)
 #'
 #' # Add [estimated] parent material color swatches
-#' lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
+#' trash <- sapply(seq_along(jacobs2000$c_horizon_color), function(i) {
 #'   rect(i - 0.15, 250, i + 0.15, 225,
 #'        col = parseMunsell(jacobs2000$c_horizon_color[jacobs2000$rubiforder[i]]))
 #' })

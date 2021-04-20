@@ -13,33 +13,48 @@ x.back <- rgb2munsell(color = m.rgb, colorSpace = 'LAB', nClosest = 1)
 # using truncated sRGB values
 x.back.trunc <- rgb2munsell(data.frame(r=0.36, g=0.26, b=0.13))
 
-# neutral colors map to shades of grey
+# neutral colors map to shades of gray
 x.neutral <- parseMunsell('N 2/', return_triplets=TRUE)
 
 ## tests
 
-test_that("parsing Munsell notation", {
+test_that("parseMunsell()", {
 
   # parsing bogus notation generates NA
   # will also generate a warning from munsell2rgb()
-  expect_equal(suppressWarnings(parseMunsell('10YZ 4/5')), as.character(NA))
-  expect_equal(suppressWarnings(parseMunsell('10YR /5')), as.character(NA))
-  expect_equal(suppressWarnings(parseMunsell('10YR ')), as.character(NA))
-  expect_equal(suppressWarnings(parseMunsell('10YR 4/')), as.character(NA))
-  expect_equal(suppressWarnings(parseMunsell('G1 6/N')), as.character(NA))
+  expect_equal(suppressWarnings(parseMunsell('10YZ 4/5')), NA_character_)
+  expect_equal(suppressWarnings(parseMunsell('10YR /5')), NA_character_)
+  expect_equal(suppressWarnings(parseMunsell('10YR ')), NA_character_)
+  expect_equal(suppressWarnings(parseMunsell('10YR 4/')), NA_character_)
+  expect_equal(suppressWarnings(parseMunsell('G1 6/N')), NA_character_)
 
   # parsing bogus notation without conversion
-  # doesn't replace with NA
   bogus <- parseMunsell('G1 3/X', convertColors = FALSE)
-  expect_equal(bogus$hue, 'G1')
-  expect_equal(bogus$value, '3')
+  expect_equal(bogus$hue, NA_character_)
+  expect_equal(bogus$value, NA_real_)
+  expect_equal(bogus$chroma, NA_real_)
 
+  # test NA
+  some.NA <- parseMunsell(c(NA, '10YR 3/3'))
+  expect_true(inherits(some.NA, 'character'))
+  expect_true(length(some.NA) == 2)
+  
+  some.NA <- parseMunsell(c(NA, '10YR 3/3'), convertColors = FALSE)
+  expect_true(inherits(some.NA, 'data.frame'))
+  expect_true(nrow(some.NA) == 2)
+  
   # neutral colors
   expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
 
-  # splitting of text into colums within data.frame
+  # splitting of text into columns within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))
 
+  # Test not using spaces
+  expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR3/4')))
+  
+  # Test different delimiters
+  expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR 3_4', delim = "_")))
+  expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR 3_4')))
 })
 
 

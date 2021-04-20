@@ -4,20 +4,22 @@
 \alias{parseMunsell}
 \title{Parse Munsell Color Notation}
 \usage{
-parseMunsell(munsellColor, convertColors = TRUE, ...)
+parseMunsell(munsellColor, convertColors = TRUE, delim = NA, ...)
 }
 \arguments{
 \item{munsellColor}{character vector of Munsell colors (e.g. \code{c('10YR 3/4', '5YR 4/6')})}
 
 \item{convertColors}{logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates}
 
-\item{...}{additional arguments to \code{munsell2rgb}}
+\item{delim}{optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.}
+
+\item{...}{additional arguments to \code{\link{munsell2rgb}}}
 }
 \value{
 a \code{data.frame} object
 }
 \description{
-Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{munsell2rgb}.
+Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{\link{munsell2rgb}}.
 }
 \examples{
 
@@ -30,4 +32,9 @@ parseMunsell("10YR 3/5", return_triplets = TRUE, returnLAB = TRUE)
 # CIELAB only
 parseMunsell("10YR 3/5", return_triplets = FALSE, returnLAB = TRUE)
 
+
+
+}
+\author{
+P. Roudier and D.E. Beaudette
 }
