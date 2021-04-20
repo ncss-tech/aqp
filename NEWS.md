@@ -1,4 +1,5 @@
 # aqp 1.30 (2021-04-14)
+ * `parseMunsell()` now more robust, c/o P. Roudier
  * `mixMunsell`:
     - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spec2Munsell()`)
  * new convenience function `PMS2Munsell()` for converting PMS codes -> closest Munsell chip (https://github.com/ncss-tech/aqp/issues/124)
