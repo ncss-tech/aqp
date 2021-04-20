@@ -13,13 +13,13 @@ parseMunsell(munsellColor, convertColors = TRUE, delim = NA, ...)
 
 \item{delim}{optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.}
 
-\item{...}{additional arguments to \code{munsell2rgb}}
+\item{...}{additional arguments to \code{\link{munsell2rgb}}}
 }
 \value{
 a \code{data.frame} object
 }
 \description{
-Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{munsell2rgb}.
+Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{\link{munsell2rgb}}.
 }
 \examples{
 
