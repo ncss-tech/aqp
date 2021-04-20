@@ -66,6 +66,8 @@
 #' @importFrom stringr str_extract_all str_length str_trim
 #' @export
 #'
+#' @author P. Roudier and D.E. Beaudette
+#'
 #' @examples
 #' 
 #' # just sRGB
@@ -77,11 +79,8 @@
 #' # CIELAB only
 #' parseMunsell("10YR 3/5", return_triplets = FALSE, returnLAB = TRUE)
 #' 
-
-## TODO: this will not correctly parse gley
-## TODO: re-write with REGEX for extraction from within other text
-## TODO: return NA for obviously wrong Munsell codes
-
+#' 
+#' 
 parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
   # sanity check:
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
@@ -434,10 +433,22 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
 	if(length(unique( c(length(the_hue), length(the_value), length(the_chroma)))) != 1)
 		stop('All inputs must be vectors of equal length.')
   
-  # hue should be character
+  # in case of factors, why would anyone do this?
+  if(is.factor(the_hue)) {
+    the_hue <- as.character(the_hue)
+  }
+  if(is.factor(the_value)) {
+    the_value <- as.character(the_value)
+  }
+  if(is.factor(the_chroma)) {
+    the_chroma <- as.character(the_chroma)
+  }
+  
+  # expected data types
+  # hue: character
   the_hue <- as.character(the_hue)
   
-  # value and chroma should be numeric
+  # value and chroma: numeric
   the_value <- as.numeric(the_value)
   the_chroma <- as.numeric(the_chroma)
   
@@ -462,11 +473,11 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   ## temporary fix for #44 (https://github.com/ncss-tech/aqp/issues/44)
   # round non integer value and chroma
   if ( !isTRUE(all.equal(as.character(the_value), as.character(as.integer(the_value)) )) ) {
-    the_value <- round(as.numeric(the_value))
+    the_value <- round(the_value)
     warning("'the_value' has been rounded to the nearest integer.", call. = FALSE)
   }
   if ( !isTRUE(all.equal(as.character(the_chroma), as.character(as.integer(the_chroma)) )) ) {
-    the_chroma <- round(as.numeric(the_chroma))
+    the_chroma <- round(the_chroma)
     warning("'the_chroma' has been rounded to the nearest integer.", call. = FALSE)
   }
   
@@ -475,8 +486,8 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   # note that value / chroma must be same data type as in `munsell` (numeric)
   d <- data.frame(
     hue = the_hue, 
-    value = as.numeric(the_value), 
-    chroma = as.numeric(the_chroma), 
+    value = the_value, 
+    chroma = the_chroma, 
     stringsAsFactors = FALSE
   )
   

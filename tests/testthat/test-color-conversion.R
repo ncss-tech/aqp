@@ -13,12 +13,12 @@ x.back <- rgb2munsell(color = m.rgb, colorSpace = 'LAB', nClosest = 1)
 # using truncated sRGB values
 x.back.trunc <- rgb2munsell(data.frame(r=0.36, g=0.26, b=0.13))
 
-# neutral colors map to shades of grey
+# neutral colors map to shades of gray
 x.neutral <- parseMunsell('N 2/', return_triplets=TRUE)
 
 ## tests
 
-test_that("parsing Munsell notation", {
+test_that("parseMunsell()", {
 
   # parsing bogus notation generates NA
   # will also generate a warning from munsell2rgb()

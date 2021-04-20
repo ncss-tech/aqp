@@ -32,4 +32,9 @@ parseMunsell("10YR 3/5", return_triplets = TRUE, returnLAB = TRUE)
 # CIELAB only
 parseMunsell("10YR 3/5", return_triplets = FALSE, returnLAB = TRUE)
 
+
+
+}
+\author{
+P. Roudier and D.E. Beaudette
 }
