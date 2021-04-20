@@ -434,20 +434,17 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
 	if(length(unique( c(length(the_hue), length(the_value), length(the_chroma)))) != 1)
 		stop('All inputs must be vectors of equal length.')
   
-  ## TODO: depricate this
-  ## plyr <= 1.6 : check to make sure hue is a character
-  if(is.factor(the_hue)) {
-    cat('Notice: converting hue to character\n')
-    the_hue <- as.character(the_hue)
-  }
-
-
-  # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
-  munsell <- NULL
-
+  # hue should be character
+  the_hue <- as.character(the_hue)
+  
+  # value and chroma should be numeric
+  the_value <- as.numeric(the_value)
+  the_chroma <- as.numeric(the_chroma)
+  
   # note: this is incompatible with LazyData: true
   # load look-up table from our package
   # This should be moreover more foolproof than data(munsell) c/o PR
+  munsell <- NULL
   load(system.file("data/munsell.rda", package="aqp")[1])
 
   ## 2016-03-07: "fix" neutral hues

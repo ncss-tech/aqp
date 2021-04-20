@@ -36,7 +36,7 @@ test_that("parsing Munsell notation", {
   # neutral colors
   expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
 
-  # splitting of text into colums within data.frame
+  # splitting of text into columns within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))
 
   # Test not using spaces
