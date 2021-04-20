@@ -58,6 +58,7 @@
 #'
 #' @param munsellColor character vector of Munsell colors (e.g. \code{c('10YR 3/4', '5YR 4/6')})
 #' @param convertColors logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates
+#' @param delim optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", amd "/" are supported.
 #' @param ... additional arguments to \code{munsell2rgb}
 #'
 #' @return a \code{data.frame} object
@@ -81,7 +82,7 @@
 ## TODO: re-write with REGEX for extraction from within other text
 ## TODO: return NA for obviously wrong Munsell codes
 
-parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
+parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
   # sanity check:
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
     return(rep(NA, times=length(munsellColor)))
@@ -108,7 +109,12 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
         stop("Wrong hue string in the Munsell string.", call. = FALSE)
       }
       
-      value_chroma <- unlist(strsplit(hue_split[2], "[:,'/]"))
+      if (is.na(delim)) {
+        value_chroma <- unlist(strsplit(hue_split[2], "[:,'/_]"))
+      } else {
+        value_chroma <- unlist(strsplit(hue_split[2], delim))
+      }
+      
       
       # extract pieces
       hue <- hue_split[1]
