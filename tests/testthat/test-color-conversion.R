@@ -52,7 +52,7 @@ test_that("parseMunsell()", {
   # Test not using spaces
   expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR3/4')))
   
-  # Test different delimeters
+  # Test different delimiters
   expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR 3_4', delim = "_")))
   expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR 3_4')))
 })
