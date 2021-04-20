@@ -96,15 +96,21 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
     function(mn) {
       # split color into pieces, first at hue[space]value/chroma
       
-      # If the very first character of the munsell string is not numeric 
+      # If the very first character of the Munsell string is not numeric 
       # we throw an error
-      if(is.na(as.numeric(substr(mn, 1, 1)))) stop("Error in the Munsell string")
+      if(is.na(suppressWarnings(as.numeric(substr(mn, 1, 1))))) {
+        # If that letter is not N we stop
+        if ( substr(mn, 1, 1) != "N") {
+          return(data.frame( hue = as.character(NA), value = as.character(NA), chroma = as.character(NA)))
+         }
+      }
       
       # Extract hue number
       hue_number <- str_trim(sub("[A-Z].*", "", mn), side = "both")
       remaining <- substr(mn, str_length(hue_number) + 1, str_length(mn))
       hue_letter <- str_trim(sub("[0-9].*", "", remaining), side = "both") 
       remaining <- substr(remaining, str_length(hue_letter) + 1, str_length(remaining))
+      remaining <- str_trim(remaining, side = "both")
       
       if (is.na(delim)) {
         value_chroma <- unlist(strsplit(remaining, "[:,'/_]"))
@@ -115,7 +121,9 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
       # extract pieces, making sure no white space is left
       hue <- paste0(hue_number, hue_letter)
       value <- str_trim(value_chroma[1], side = "both")
-      chroma <- str_trim(value_chroma[2], side = "both")
+      
+      if (length(value_chroma) == 1) chroma <- str_trim(value_chroma[2], side = "both")
+      else chroma <- ""
       
       data.frame(hue = hue, value = value, chroma = chroma, stringsAsFactors = FALSE)
     }
