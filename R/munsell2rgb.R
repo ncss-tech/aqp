@@ -101,7 +101,7 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
       if(is.na(suppressWarnings(as.numeric(substr(mn, 1, 1))))) {
         # If that letter is not N we stop
         if ( substr(mn, 1, 1) != "N") {
-          return(data.frame( hue = as.character(NA), value = as.character(NA), chroma = as.character(NA)))
+          return(data.frame( hue = as.character(NA), value = as.character(NA), chroma = as.character(NA), stringsAsFactors = FALSE))
          }
       }
       
@@ -122,7 +122,7 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
       hue <- paste0(hue_number, hue_letter)
       value <- str_trim(value_chroma[1], side = "both")
       
-      if (length(value_chroma) == 1) chroma <- str_trim(value_chroma[2], side = "both")
+      if (length(value_chroma) == 2) chroma <- str_trim(value_chroma[2], side = "both")
       else chroma <- ""
       
       data.frame(hue = hue, value = value, chroma = chroma, stringsAsFactors = FALSE)

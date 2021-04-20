@@ -29,10 +29,9 @@ test_that("parsing Munsell notation", {
   expect_equal(suppressWarnings(parseMunsell('G1 6/N')), as.character(NA))
 
   # parsing bogus notation without conversion
-  # doesn't replace with NA
   bogus <- parseMunsell('G1 3/X', convertColors = FALSE)
-  expect_equal(bogus$hue, 'G1')
-  expect_equal(bogus$value, '3')
+  expect_equal(bogus$hue, as.character(NA))
+  expect_equal(bogus$value, as.character(NA))
 
   # neutral colors
   expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
