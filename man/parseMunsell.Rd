@@ -4,12 +4,14 @@
 \alias{parseMunsell}
 \title{Parse Munsell Color Notation}
 \usage{
-parseMunsell(munsellColor, convertColors = TRUE, ...)
+parseMunsell(munsellColor, convertColors = TRUE, delim = NA, ...)
 }
 \arguments{
 \item{munsellColor}{character vector of Munsell colors (e.g. \code{c('10YR 3/4', '5YR 4/6')})}
 
 \item{convertColors}{logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates}
+
+\item{delim}{optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", amd "/" are supported.}
 
 \item{...}{additional arguments to \code{munsell2rgb}}
 }

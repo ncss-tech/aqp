@@ -40,6 +40,12 @@ test_that("parsing Munsell notation", {
   # splitting of text into colums within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))
 
+  # Test not using spaces
+  expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR3/4')))
+  
+  # Test different delimeters
+  expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR 3_4', delim = "_")))
+  expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR 3_4')))
 })
 
 

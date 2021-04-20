@@ -132,6 +132,7 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, delim = NA, ...) {
 
   # otherwise convert
   res <- munsell2rgb(res$hue, res$value, res$chroma, ...)
+  
   return(res)
 }
 

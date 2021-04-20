@@ -80,7 +80,9 @@ importFrom(stringr,
   fixed,
   str_c,
   str_split,
-  str_trim
+  str_trim,
+  str_extract_all,
+  str_length
 )
 
 importFrom(sp,
