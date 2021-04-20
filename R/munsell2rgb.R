@@ -62,6 +62,7 @@
 #'
 #' @return a \code{data.frame} object
 #' 
+#' @importFrom stringr str_extract_all str_length
 #' @export
 #'
 #' @examples
@@ -85,22 +86,46 @@ parseMunsell <- function(munsellColor, convertColors=TRUE, ...) {
   if(all(is.na(munsellColor)) | all(is.null(munsellColor)) | all(munsellColor == ''))
     return(rep(NA, times=length(munsellColor)))
   
-  # split color into pieces, first at hue[space]value/chroma
-  pieces <- strsplit(munsellColor, ' ', fixed=TRUE)
-  # then value/chroma into pieces
-  pieces.2 <- sapply(pieces, function(i) strsplit(i[2], '/', fixed=TRUE))
+  # ensure colours are all upper case
+  munsellColor <- toupper(munsellColor)
   
-  # extract pieces
-  hue <- sapply(pieces, FUN = '[', 1)
-  value <- sapply(pieces.2, FUN = '[', 1)
-  chroma <- sapply(pieces.2, FUN = '[', 2)
+  # For each munsellColor value
+  res <- lapply(
+    munsellColor,
+    function(mn) {
+      # split color into pieces, first at hue[space]value/chroma
+      
+      # Get number of hue letters
+      letters <- unlist(str_extract_all(mn, "[A-Z]+"))
+      n_letters <- str_length(letters)
+      
+      # Use a different split depending on the number of hue letters
+      if(n_letters == 1) {
+        hue_split <- unlist(strsplit(mn, "(?<=[A-Z]{1})", perl = TRUE))
+      } else if (n_letters == 2) {
+        hue_split <- unlist(strsplit(mn, "(?<=[A-Z]{2})", perl = TRUE))
+      } else {
+        stop("Wrong hue string in the Munsell string.", call. = FALSE)
+      }
+      
+      value_chroma <- unlist(strsplit(hue_split[2], "[:,'/]"))
+      
+      # extract pieces
+      hue <- hue_split[1]
+      value <- value_chroma[1]
+      chroma <- value_chroma[2]
+      
+      data.frame(hue = hue, value = value, chroma = chroma, stringsAsFactors = FALSE)
+    }
+  )
+  
+  res <- do.call(rbind, res)
   
   # parse, without conversion to numeric / munsell
-  if(convertColors == FALSE)
-    return(data.frame(hue, value, chroma, stringsAsFactors = FALSE))
+  if(convertColors == FALSE) return(res)
 
   # otherwise convert
-  res <- munsell2rgb(hue, value, chroma, ...)
+  res <- munsell2rgb(res$hue, res$value, res$chroma, ...)
   return(res)
 }
 
