@@ -18,7 +18,7 @@ b <- microbenchmark(
 )
 
 # input for the back transform test
-# note quite the same thing
+# not quite the same thing
 sRGB <- munsell2rgb(munsell$hue, munsell$value, munsell$chroma, return_triplets = TRUE)
 xyY <- MunsellTosRGB(colors)$xyY
 
@@ -82,6 +82,7 @@ for(i in 1:nrow(aqp.sRGB)) {
 }
 
 # very close!
+# mean dE00 ~ 0.52
 summary(d)
 
 contrastChart('10YR 3/3', hues = '10YR')
