@@ -7,8 +7,9 @@ data("munsell.spectra.wide")
 test_that("spec2Munsell works as expected", {
   
   # try a color, result should be identical chip
+  # depends on SO and illuminant
   chip <- '10YR 3/3'
-  m <- spec2Munsell(munsell.spectra.wide[, chip])  
+  m <- spec2Munsell(munsell.spectra.wide[, chip], SO = 'CIE1931', illuminant = 'D65')  
   
   # object structure / contents
   expect_true(inherits(m, 'data.frame'))
@@ -34,7 +35,7 @@ test_that("spec2Munsell works as expected", {
 
 test_that("supporting data match range of Munsell spectra", {
   
-  # D65 + CIE1931
+  # standard illuminants + observers
   data("spectral.reference")
   
   expect_true(

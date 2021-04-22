@@ -7,7 +7,7 @@
 spec2Munsell(
   x,
   convert = TRUE,
-  SO = c("CIE1964", "CIE1931"),
+  SO = c("CIE1931", "CIE1964"),
   illuminant = c("D65", "F2"),
   ...
 )

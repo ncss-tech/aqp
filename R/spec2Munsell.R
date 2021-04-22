@@ -70,7 +70,7 @@
 #' res$mixed
 #' spec2Munsell(res$spec)
 #' 
-spec2Munsell <- function(x, convert = TRUE, SO = c('CIE1964', 'CIE1931'), illuminant = c('D65', 'F2'), ...) {
+spec2Munsell <- function(x, convert = TRUE, SO = c('CIE1931', 'CIE1964'), illuminant = c('D65', 'F2'), ...) {
   
   # D65 and CIE1931 reference data at 5nm
   spectral.reference <- NULL

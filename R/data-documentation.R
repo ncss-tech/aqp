@@ -1443,7 +1443,8 @@ NULL
 #'   las = 1,
 #'   xlab = 'Wavelength (nm)',
 #'   ylab = 'Weight | Intensity',
-#'   main = "CIE1931 (2\u00B0) and CIE1964 (10\u00B0) Standard Observers\nD65 and F2 Illuminant Power Spectrum (rescaled / offset for clarity)",
+#'   main = "CIE1931 (2\u00B0) and CIE1964 (10\u00B0) Standard Observers
+#'   D65 and F2 Illuminant Power Spectrum (rescaled / offset for clarity)",
 #'   cex.main = 0.9
 #' )
 #' 
