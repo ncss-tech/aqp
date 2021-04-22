@@ -28,6 +28,32 @@ colorContrastPlot(
   labels = c('original', 'spectral\ninterpretation')
 )
 
+# do it again with different SO
+z <- do.call(
+  'rbind',
+  lapply(cols, function(i) {
+    spec2Munsell(munsell.spectra.wide[, i], SO = 'CIE1964')  
+  })
+)
+
+# format Munsell notation from pieces
+z$m <- sprintf("%s %s/%s", z$hue, z$value, z$chroma)
+
+# compare
+colorContrastPlot(
+  m1 = cols, 
+  m2 = z$m, 
+  labels = c('original', 'spectral\ninterpretation')
+)
+
+
+# try different illuminants
+spec2Munsell(munsell.spectra.wide[, '10YR 3/3'], illuminant = 'D65')  
+spec2Munsell(munsell.spectra.wide[, '10YR 3/3'], illuminant = 'F2')  
+
+
+
+
 # mix colors, return spectra, convert to color
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
 res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
@@ -79,7 +105,7 @@ plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE, mixingMeth
 nm <- dimnames(munsell.spectra.wide)[[2]]
 z <- lapply(2:ncol(munsell.spectra.wide), function(i) {
 
-  res <- spec2Munsell(munsell.spectra.wide[, i])
+  res <- spec2Munsell(munsell.spectra.wide[, i], SO = 'CIE1964')
   res$label <- nm[i]
 
   return(res)
@@ -90,7 +116,8 @@ z <- do.call('rbind', z)
 
 z$pred <- sprintf("%s %s/%s", z$hue, z$value, z$chroma)
 
-# ~ 20% aren't exact matches
+# CIE1931 SO: ~ 20% not exact matches
+# CIE1964 SO: ~ 80% not exact matches
 prop.table(table(z$label == z$pred))
 
 # non-matching
