@@ -16,8 +16,13 @@ idx <- grep('^light brown$', cb$Name)
 
 cb[idx, ]
 
-cq <- colorQuantiles(parseMunsell(colors[idx]))
+col <- parseMunsell(colors[idx])
+
+cq <- colorQuantiles(col)
 plotColorQuantiles(cq)
+
+soilPalette(colors = col, lab = colors[idx])
+title('"light brown"', col.main = 'white', font.main = 4)
 
 
 
@@ -29,6 +34,7 @@ idx <- which(traditionalColorNames$traditional_name == 'pale yellow')
 col <- parseMunsell(traditionalColorNames$munsell[idx])
 
 soilPalette(colors = col, lab = traditionalColorNames$munsell[idx])
+title('"pale yellow"', col.main = 'white', font.main = 4)
 
 cq <- colorQuantiles(col)
 plotColorQuantiles(cq)
