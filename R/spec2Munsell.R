@@ -8,10 +8,17 @@
 
 #' @title Convert reflectance spectra to closest Munsell chip
 #' 
-#' @note D65 illuminant spectra and CIE1931 color matching functions derived from CIE reference data.
 #' 
 #' @param x reflectance spectra, (380nm to 730nm, 10nm resolution)
+#' 
 #' @param convert logical, convert sRGB coordinates to closest Munsell chip (see `?munsell`)
+#' 
+#' @param SO CIE standard observer: these are the color matching functions defined by CIE and used to represent "average" human color perception. CIE1931 is the 2 degree standard observer more useful for describing color perception over very small areas or at distance. CIE1964 is the 10 degree standard observer, used for most industrial color matching applications.
+#' 
+#' @param illuminant CIE standard illuminants: 
+#'    * D65 represents average daylight
+#'    * F2 represents typical fluorescent lighting
+#' 
 #' @param ... further arguments to `rgb2Munsell`
 #'
 #' @return output from `rgb2Munsell`
@@ -20,7 +27,9 @@
 #' @references 
 #' Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 #' 
-#' "Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
+#' CIE Colorimetry – Part 1: CIE standard colorimetric observers. CIES014-1/E:2006 – ISO 11664-1:2007(E)
+#' 
+#' CIE. (n.d.). CIE 15:2004 Tables Data. Retrieved from https://law.resource.org/pub/us/cfr/ibr/003/cie.15.2004.tables.xls
 #' 
 #' @examples 
 #' 
@@ -61,12 +70,17 @@
 #' res$mixed
 #' spec2Munsell(res$spec)
 #' 
-spec2Munsell <- function(x, convert = TRUE, ...) {
+spec2Munsell <- function(x, convert = TRUE, SO = c('CIE1964', 'CIE1931'), illuminant = c('D65', 'F2'), ...) {
   
   # D65 and CIE1931 reference data at 5nm
   spectral.reference <- NULL
   load(system.file("data/spectral.reference.rda", package="aqp")[1])
   
+  # select standard observer
+  SO <- match.arg(SO)
+  
+  # select illuminant
+  illuminant <- match.arg(illuminant)
   
   # this is the range of wavelengths we have to work with
   # in the Munsell spectra libraries 
@@ -85,10 +99,17 @@ spec2Munsell <- function(x, convert = TRUE, ...) {
   )
   
   # reflectance spectra * illuminant
-  S <- R$x * spectral.reference$D65
+  S <- R$x * spectral.reference[[illuminant]]
   
-  # A-matrix: these are the color-matching functions
-  A <- spectral.reference[, c('xbar', 'ybar', 'zbar')]
+  
+  # select the appropriate standard observer
+  SO.vars <- switch(SO,
+    'CIE1931' = c('xbar_2', 'ybar_2', 'zbar_2'),
+    'CIE1964' = c('xbar_10', 'ybar_10', 'zbar_10')
+  )
+  
+  # A-matrix: these are the color-matching functions of the standard observer
+  A <- spectral.reference[, SO.vars]
   
   # apply A-matrix to spectra
   XYZ <- t(A) %*% S
@@ -96,7 +117,7 @@ spec2Munsell <- function(x, convert = TRUE, ...) {
   XYZ <- t(XYZ)[1, ]
   
   # apply A-matrix to illuminant
-  k <- t(A) %*% spectral.reference$D65
+  k <- t(A) %*% spectral.reference[[illuminant]]
   # convert to vector
   k <- t(k)[1, ]
   

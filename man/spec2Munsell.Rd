@@ -4,12 +4,26 @@
 \alias{spec2Munsell}
 \title{Convert reflectance spectra to closest Munsell chip}
 \usage{
-spec2Munsell(x, convert = TRUE, ...)
+spec2Munsell(
+  x,
+  convert = TRUE,
+  SO = c("CIE1964", "CIE1931"),
+  illuminant = c("D65", "F2"),
+  ...
+)
 }
 \arguments{
 \item{x}{reflectance spectra, (380nm to 730nm, 10nm resolution)}
 
 \item{convert}{logical, convert sRGB coordinates to closest Munsell chip (see \code{?munsell})}
+
+\item{SO}{CIE standard observer: these are the color matching functions defined by CIE and used to represent "average" human color perception. CIE1931 is the 2 degree standard observer more useful for describing color perception over very small areas or at distance. CIE1964 is the 10 degree standard observer, used for most industrial color matching applications.}
+
+\item{illuminant}{CIE standard illuminants:
+\itemize{
+\item D65 represents average daylight
+\item F2 represents typical fluorescent lighting
+}}
 
 \item{...}{further arguments to \code{rgb2Munsell}}
 }
@@ -18,9 +32,6 @@ output from \code{rgb2Munsell}
 }
 \description{
 Convert reflectance spectra to closest Munsell chip
-}
-\note{
-D65 illuminant spectra and CIE1931 color matching functions derived from CIE reference data.
 }
 \examples{
 
@@ -65,5 +76,7 @@ spec2Munsell(res$spec)
 \references{
 Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 
-"Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls
+CIE Colorimetry – Part 1: CIE standard colorimetric observers. CIES014-1/E:2006 – ISO 11664-1:2007(E)
+
+CIE. (n.d.). CIE 15:2004 Tables Data. Retrieved from https://law.resource.org/pub/us/cfr/ibr/003/cie.15.2004.tables.xls
 }

@@ -10,7 +10,8 @@ mixMunsell(
   mixingMethod = c("reference", "exact", "estimate", "adaptive", "spectra"),
   n = 1,
   keepMixedSpec = FALSE,
-  distThreshold = 0.025
+  distThreshold = 0.025,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ mixMunsell(
 \item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list} (\code{mixingMethod = spectra} only)}
 
 \item{distThreshold}{spectral distance used to compute \code{scaledDistance}, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  \code{mixingMethod = 'reference'}.}
+
+\item{...}{additional arguments to \code{\link{spec2Munsell}}}
 }
 \value{
 A \code{data.frame} with the closest matching Munsell color(s):

@@ -130,12 +130,16 @@
 #' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list` (`mixingMethod = spectra` only)
 #' 
 #' @param distThreshold spectral distance used to compute `scaledDistance`, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  `mixingMethod = 'reference'`.
+#' 
+#' @param ... additional arguments to [`spec2Munsell`]
 #'
 #' @author D.E. Beaudette
 #'
 #' @references
 #'
 #' Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
+#' 
+#' 
 #'
 #' \itemize{
 #'    \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
@@ -194,7 +198,7 @@
 #' mixMunsell(cols, mixingMethod = 'estimate')
 #' 
 #' 
-mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact', 'estimate', 'adaptive', 'spectra'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025) {
+mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact', 'estimate', 'adaptive', 'spectra'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025, ...) {
 
   # satisfy R CMD check
   munsell.spectra.wide <- NULL
@@ -356,10 +360,10 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
     if(mixingMethod %in% c('exact', 'adaptive')) {
       
       ## 
-      # S = R * D65
-      # XYZ = AT %*% CIE1931
+      # S = R * illuminant (D65 is the default)
+      # XYZ = AT %*% standard observer (CIE1964 is the default)
       # XYZ -> sRGB -> Munsell
-      mx <- spec2Munsell(mixed)
+      mx <- spec2Munsell(mixed, ...)
       
       res <- data.frame(
         munsell = sprintf("%s %s/%s", mx$hue, mx$value, mx$chroma),
