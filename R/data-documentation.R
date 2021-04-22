@@ -1486,3 +1486,20 @@ NULL
 #'
 "spectral.reference"
 
+
+
+#'
+#' @title Traditional Soil Color Names
+#' 
+#' @description Traditional soil color names associated with select Munsell colors.
+#' 
+#' @references 
+#' 
+#' Sourced from the "colorconverter" NASIS property script.
+#'
+#' @keywords datasets
+#' @usage data(traditionalColorNames)
+#' 
+"traditionalColorNames"
+
+
