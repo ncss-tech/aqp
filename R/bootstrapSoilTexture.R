@@ -36,6 +36,11 @@
 #' Aitchison, J. (1986) The Statistical Analysis of Compositional Data Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). 416p.
 #' 
 #' Aitchison, J, C. Barcel'o-Vidal, J.J. Egozcue, V. Pawlowsky-Glahn (2002) A concise guide to the algebraic geometric structure of the simplex, the sample space for compositional data analysis, Terra Nostra, Schriften der Alfred Wegener-Stiftung, 03/2003
+#' 
+#' Malone Brendan, Searle Ross (2021) Updating the Australian digital soil texture mapping (Part 1*): re-calibration of field soil texture class centroids and description of a field soil texture conversion algorithm. Soil Research. https://www.publish.csiro.au/SR/SR20283
+#' 
+#' 
+#' Malone Brendan, Searle Ross (2021) Updating the Australian digital soil texture mapping (Part 2*): spatial modelling of merged field and lab measurements. Soil Research. https://doi.org/10.1071/SR20284
 #'
 #' @examples
 #' 
