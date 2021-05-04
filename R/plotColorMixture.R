@@ -3,6 +3,8 @@
 #' 
 #' @description Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
 #' 
+#' @details If present, `names` attribute of `x` is used for the figure legend.
+#' 
 #' @author D.E. Beaudette
 #' 
 #' @param x vector of colors in Munsell notation, should not contain duplicates
@@ -12,25 +14,32 @@
 #' @param mixingMethod approach used to simulate a mixture: 
 #'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra
 #'    
-#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see [`mixMunsell`])
 #' 
-#' @param n number of closest mixture candidates (see [`mixMunsell`]), results can be hard to interpret 
+#' @param n number of closest mixture candidates when `mixingMethod = 'reference'` (see [`mixMunsell`]), results can be hard to interpret when `n > 2`
 #' 
 #' @param swatch.cex scaling factor for color swatch
 #' 
 #' @param label.cex scaling factor for swatch labels
 #' 
-#' @param showMixedSpec show weighted geometric mean (mixed) spectra as dotted line
+#' @param showMixedSpec show weighted geometric mean (mixed) spectra as dotted line (only when `mixingMethod = 'reference'`)
 #' 
 #' @param overlapFix attempt to "fix" overlapping chip labels via [`fixOverlap`]
 #' 
-#' @return `lattice` graphics object
+#' @return a `lattice` graphics object
 #' 
 #' @examples 
 #' 
+#' # color chips
+#' chips <- c('5B 5/10', '5Y 8/8')
+#' names(chips) <- chips
+#' 
+#' # weights
+#' wt <- c(1, 1)
+#' 
 #' plotColorMixture(
-#' x = c('5B 5/10', '5Y 8/8'), 
-#' w = c(1,1), 
+#' x = chips, 
+#' w = wt, 
 #' swatch.cex = 4, 
 #' label.cex = 0.65, 
 #' showMixedSpec = TRUE, 
@@ -38,8 +47,8 @@
 #' )
 #' 
 #' plotColorMixture(
-#'   x = c('5B 5/10', '5Y 8/8'), 
-#'   w = c(1,1), 
+#'   x = chips, 
+#'   w = wt, 
 #'   swatch.cex = 4, 
 #'   label.cex = 0.65, 
 #'   mixingMethod = 'exact'
@@ -99,6 +108,16 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   #        solution: provide a template data.frame
   
   # select spectra from reference library and assign an ID
+  # IDs should use names(x) if !NULL
+  # otherwise generate an ID
+  nm <- names(x)
+  if(is.null(nm)) {
+    IDs <- sprintf('color %s', 1:length(x))
+  } else {
+    IDs <- nm
+  }
+  
+  # iteration over colors to-mix + mixture(s)
   s <- lapply(seq_along(colors), function(i) {
     # select current color + spectra
     if(mixingMethod == 'reference') {
@@ -121,7 +140,8 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
     
     # assign an ID for plotting
     if( i <= length(x)) {
-      z$ID <- sprintf('color %s', i)
+      # current ID
+      z$ID <- IDs[i]
     } else {
       # reset counter to mix color ranks
       z$ID <- sprintf('mix #%s', i - length(x))

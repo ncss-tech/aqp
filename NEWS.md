@@ -1,4 +1,5 @@
-# aqp 1.30 (2021-04-14)
+# aqp 1.30 (2021-05-04)
+ * `plotColorMixture()` will respect "names" attribute of colors-to-mix
  * `parseMunsell()` now more robust, c/o P. Roudier
  * `mixMunsell`:
     - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spec2Munsell()`)

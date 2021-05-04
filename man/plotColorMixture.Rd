@@ -23,30 +23,40 @@ plotColorMixture(
 \item{mixingMethod}{approach used to simulate a mixture:
 \itemize{
 \item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra
-\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions
+\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see \code{\link{mixMunsell}})
 }}
 
-\item{n}{number of closest mixture candidates (see \code{\link{mixMunsell}}), results can be hard to interpret}
+\item{n}{number of closest mixture candidates when \code{mixingMethod = 'reference'} (see \code{\link{mixMunsell}}), results can be hard to interpret when \code{n > 2}}
 
 \item{swatch.cex}{scaling factor for color swatch}
 
 \item{label.cex}{scaling factor for swatch labels}
 
-\item{showMixedSpec}{show weighted geometric mean (mixed) spectra as dotted line}
+\item{showMixedSpec}{show weighted geometric mean (mixed) spectra as dotted line (only when \code{mixingMethod = 'reference'})}
 
 \item{overlapFix}{attempt to "fix" overlapping chip labels via \code{\link{fixOverlap}}}
 }
 \value{
-\code{lattice} graphics object
+a \code{lattice} graphics object
 }
 \description{
 Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
 }
+\details{
+If present, \code{names} attribute of \code{x} is used for the figure legend.
+}
 \examples{
 
+# color chips
+chips <- c('5B 5/10', '5Y 8/8')
+names(chips) <- chips
+
+# weights
+wt <- c(1, 1)
+
 plotColorMixture(
-x = c('5B 5/10', '5Y 8/8'), 
-w = c(1,1), 
+x = chips, 
+w = wt, 
 swatch.cex = 4, 
 label.cex = 0.65, 
 showMixedSpec = TRUE, 
@@ -54,8 +64,8 @@ mixingMethod = 'reference'
 )
 
 plotColorMixture(
-  x = c('5B 5/10', '5Y 8/8'), 
-  w = c(1,1), 
+  x = chips, 
+  w = wt, 
   swatch.cex = 4, 
   label.cex = 0.65, 
   mixingMethod = 'exact'
