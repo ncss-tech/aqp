@@ -7,6 +7,8 @@
 previewColors(
   cols,
   method = c("grid", "MDS", "manual"),
+  labels = NULL,
+  labels.cex = 1,
   col.order = NULL,
   nrow = ceiling(sqrt(length(cols))),
   ncol = nrow,
@@ -19,6 +21,10 @@ previewColors(
 \item{cols}{vector of R colors}
 
 \item{method}{either "grid", "MDS", or "manual", see details}
+
+\item{labels}{optional vector of labels, disabled when \code{length(cols) > 5000}}
+
+\item{labels.cex}{scaling factor for labels}
 
 \item{col.order}{integer vector used to order colors}
 

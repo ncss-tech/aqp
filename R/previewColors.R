@@ -14,6 +14,8 @@
 #'
 #' @param cols vector of R colors
 #' @param method either "grid", "MDS", or "manual", see details
+#' @param labels optional vector of labels, disabled when `length(cols) > 5000`
+#' @param labels.cex scaling factor for labels
 #' @param col.order integer vector used to order colors
 #' @param nrow number of rows used by "grid" method
 #' @param ncol number of columns used by "grid" method
@@ -57,7 +59,7 @@
 #' # MDS
 #' previewColors(cols.hcl, method = 'MDS', pt.cex = 1)
 #' 
-previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), col.order = NULL, nrow = ceiling(sqrt(length(cols))), ncol = nrow, border.col = 'black', pt.cex = 2, pt.pch = 15) {
+previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), labels = NULL, labels.cex = 1, col.order = NULL, nrow = ceiling(sqrt(length(cols))), ncol = nrow, border.col = 'black', pt.cex = 2, pt.pch = 15) {
 
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver', quietly = TRUE))
@@ -73,8 +75,9 @@ previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), col.order =
   if(length(cols) > 5000) {
     cols <- unique(cols)
     pt.cex <- pt.cex[1]
-    pt.pch <- pt.pch
-    warning('using unique colors, and first `pt.cex` / `pt.pch')
+    pt.pch <- pt.pch[1]
+    labels <- NULL
+    warning('using unique colors, suppressing labels, and first `pt.cex` / `pt.pch')
   }
 
   # use unique colors when using MDS
@@ -92,15 +95,22 @@ previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), col.order =
     # re-order colors and convert into a matrix
     m <- matrix(NA, nrow=nrow, ncol=ncol)
     m[1:length(cols)] <- cols[col.order]
-
+    
     par(mar=c(1,0,3,0))
-    plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', xlim=c(0.5, ncol+0.5), ylim=c(0.5, nrow+0.5))
+    plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', xlim=c(0.5, ncol+0.5), ylim=c(nrow+0.5, 0.5))
     rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m, border = border.col, lwd=0.5)
-
+    
+    # add labels
+    if(!is.null(labels)) {
+      m.l <- m
+      m.l[1:length(cols)] <- labels[col.order]
+      text(x = col(m.l), y = row(m.l), labels = m.l, col = invertLabelColor(m), cex = labels.cex)
+    }
+    
     invisible(col.order)
   }
 
-  # hex represntation -> sRGB
+  # hex representation -> sRGB
   cols.srgb <- t(col2rgb(cols)) / 255
   # sRGB -> CIE LAB
   cols.lab <- grDevices::convertColor(cols.srgb, from = 'sRGB', to = 'Lab', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
@@ -120,9 +130,16 @@ previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), col.order =
     m[1:length(cols)] <- cols[col.order]
 
     par(mar=c(1,0,3,0))
-    plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', xlim=c(0.5, ncol+0.5), ylim=c(0.5, nrow+0.5))
+    plot(1, 1, type='n', axes=FALSE, xlab='', ylab='', xlim=c(0.5, ncol+0.5), ylim=c(nrow+0.5, 0.5))
     rect(xleft = col(m) - 0.5, ybottom = row(m) -0.5, xright = col(m) + 0.5, ytop = row(m) + 0.5, col = m, border = border.col, lwd=0.5)
 
+    # add labels
+    if(!is.null(labels)) {
+      m.l <- m
+      m.l[1:length(cols)] <- labels[col.order]
+      text(x = col(m.l), y = row(m.l), labels = m.l, col = invertLabelColor(m), cex = labels.cex)
+    }
+    
     invisible(col.order)
   }
 
@@ -140,6 +157,11 @@ previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), col.order =
     grid(nx=10, ny=10, col=par('fg'))
     points(mds, col = cols, cex = pt.cex, pch = pt.pch)
     box()
+    
+    # add labels
+    if(!is.null(labels)) {
+      text(x = mds[, 1], y =  mds[, 2], labels = labels, col = par('fg'), cex = labels.cex, pos = 1)
+    }
     
     invisible(mds)
   }
