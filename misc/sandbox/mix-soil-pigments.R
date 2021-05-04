@@ -1,5 +1,5 @@
 
-# get from CRAN first, then instal latest from GH
+# get from CRAN first, then install latest from GH
 # install.packages(c('aqp', 'sharpshootR'))
 # remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
 # remotes::install_github("ncss-tech/sharpshootR", dependencies=FALSE, upgrade=FALSE, build=FALSE)
@@ -17,8 +17,18 @@ humus <- soil_minerals$color[soil_minerals$mineral == 'humus']
 chips <- c(quartz, hematite, humus)
 w <- c(10, 1, 5)
 
-names(chips) <- sprintf("%s parts\n%s", w, c('quartz', 'hematite', 'humus'))
+plural <- ifelse(w > 1, 's', '')
+names(chips) <- sprintf(
+  fmt = "%s part%s\n%s", 
+  w, 
+  plural, 
+  c('quartz', 'hematite', 'humus')
+)
   
 plotColorMixture(chips, w = w, mixingMethod = 'exact')
 
 colorMixtureVenn(chips, w = w, mixingMethod = 'exact', names = TRUE)
+
+
+## consider converting other mineral reflectance spectra into "colors"
+# https://www.usgs.gov/labs/spec-lab/capabilities/spectral-library
