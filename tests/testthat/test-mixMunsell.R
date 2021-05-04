@@ -97,3 +97,19 @@ test_that("mxing methods", {
   
 })
 
+test_that("additional arguments via ...", {
+  
+  # NO conversion to closest Munsell chip via rgb2munsell()
+  m <- mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'exact', convert = FALSE)
+  
+  # verified results
+  expect_true(nrow(m) == 1)
+  
+  # additional columns
+  expect_true(
+    all(c('r', 'g', 'b') %in% names(m))
+  )
+  
+})
+
+

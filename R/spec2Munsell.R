@@ -19,9 +19,9 @@
 #'    * D65 represents average daylight
 #'    * F2 represents typical fluorescent lighting
 #' 
-#' @param ... further arguments to `rgb2Munsell`
+#' @param ... further arguments to [`rgb2munsell`]
 #'
-#' @return output from `rgb2Munsell`
+#' @return output from [`rgb2munsell`]
 #' @export
 #'
 #' @references 

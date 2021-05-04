@@ -25,10 +25,10 @@ spec2Munsell(
 \item F2 represents typical fluorescent lighting
 }}
 
-\item{...}{further arguments to \code{rgb2Munsell}}
+\item{...}{further arguments to \code{\link{rgb2munsell}}}
 }
 \value{
-output from \code{rgb2Munsell}
+output from \code{\link{rgb2munsell}}
 }
 \description{
 Convert reflectance spectra to closest Munsell chip

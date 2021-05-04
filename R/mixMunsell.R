@@ -365,14 +365,36 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # XYZ -> sRGB -> Munsell
       mx <- spec2Munsell(mixed, ...)
       
-      res <- data.frame(
-        munsell = sprintf("%s %s/%s", mx$hue, mx$value, mx$chroma),
-        distance = mx$sigma,
-        scaledDistance = NA,
-        distanceMetric = 'dE00',
-        mixingMethod = 'exact',
-        stringsAsFactors = FALSE
-      )
+      # NOTE: ... are passed to rgb2munsell()
+      #       convert = TRUE: mx is a data.frame
+      #       convert = FALSE: mx is a matrix
+      
+      if(inherits(mx, 'matrix')) {
+        # mx is a matrix
+        dimnames(mx)[[2]] <- c('r', 'g', 'b')
+        
+        # include sRGB coordinates, this is different than what is typically returned by this function
+        res <- data.frame(
+          mx,
+          munsell = NA,
+          distance = NA,
+          scaledDistance = NA,
+          distanceMetric = NA,
+          mixingMethod = 'exact',
+          stringsAsFactors = FALSE
+        )
+        
+      } else {
+        # mx is a data.frame 
+        res <- data.frame(
+          munsell = sprintf("%s %s/%s", mx$hue, mx$value, mx$chroma),
+          distance = mx$sigma,
+          scaledDistance = NA,
+          distanceMetric = 'dE00',
+          mixingMethod = 'exact',
+          stringsAsFactors = FALSE
+        ) 
+      }
       
       # final-cleanup and return is performed outside of if/else
       
@@ -384,6 +406,8 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # Gower distance: looks good, ~5x faster due to compiled code
       # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
       # would make sense to reshape reference data
+      
+      # NOTE: arguments to rgb2munsell() are silently ignored
       
       ## TODO: time wasted here
       # reshape reference spectra: wavelength to columns
