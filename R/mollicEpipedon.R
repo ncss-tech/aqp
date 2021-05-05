@@ -42,12 +42,20 @@ mollic.thickness.requirement <- function(p, texcl.attr = guessHzTexClName(p),
   if(length(p) > 1) {
     stop("`p` must be a single-profile SoilProfileCollection")
   }
+  
+  if (nrow(p) == 0) {
+    return(NA)
+  }
 
   # determine boundaries
   # For purposes of identification of minimum thickness of mollic for field descriptions
   #   technically it is not applying the true taxonomic rules b/c it is based on hz desgn
   mss <- getMineralSoilSurfaceDepth(p)
 
+  if (is.na(mss)) {
+    return(NA)
+  }
+  
   soil_depth <- minDepthOf(p, "Cr|R|Cd|m",
                          no.contact.depth = 200,
                          no.contact.assigned = NA)
