@@ -58,7 +58,7 @@ p <- sp1[1]
 foo <- glom(p, 25, 100)
 
 # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
-nrow(foo)
+nrow(foo) 
 }
 \seealso{
 \code{\link{glomApply}} \code{\link{trunc}}

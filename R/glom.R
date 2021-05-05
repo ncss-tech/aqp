@@ -44,7 +44,7 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' foo <- glom(p, 25, 100)
 #'
 #' # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
-#' nrow(foo)
+#' nrow(foo) 
 setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
           function(p, z1, z2 = NULL,
                  ids = FALSE, df = FALSE,
@@ -87,10 +87,21 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     p2 <- glom(p, z2, max(p[[depthn[2]]]), truncate = TRUE)
 
     # combine horizon data
-    if(inherits(p1, 'SoilProfileCollection'))
-      p <- p1
-      if(inherits(p2, 'SoilProfileCollection'))
-        h <- rbind(horizons(p1), horizons(p2))
+    if(inherits(p1, 'SoilProfileCollection') && 
+       inherits(p2, 'SoilProfileCollection')) {
+      
+      if(nrow(p1) > 0) {
+        p <- p1
+        if(inherits(p2, 'SoilProfileCollection') && nrow(p2) > 0) {
+          h <- rbind(horizons(p1), horizons(p2))
+        } else {
+          h <- horizons(p1)
+        }
+      }
+      
+    } else {
+      h <- horizons(p2)
+    }
 
     if (modality == "thickest") {
       first.thickest.idx <- .thickestHzID(p, h)
@@ -98,21 +109,25 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     }
 
     # enforce ID+top depth order after combining upper and lower SPCs
-    h <- h[order(h[[idname(p)]], h[[depthn[1]]]), ]
-
+    h <- h[order(h[[idname(p)]], h[[depthn[1]]]), ]          
+    
     # replace horizon IDs because we split horizons possibly
     h$hzID <- as.character(1:nrow(h))
-
+    
     # force autocalculated ID
     hzidname(p) <- "hzID"
   }
-
+  
   # update slots for new h
   p <- .updateSite(p, h)
 
-  # replace @horizons with h
-  replaceHorizons(p) <- h
-
+  if (nrow(h) > 0) {
+    # replace @horizons with h
+    replaceHorizons(p) <- h
+  } else {
+    p <- p[0,]
+  }
+  
   # short circuit to get hzIDs of result
   if (ids) {
     if (invert)
@@ -150,13 +165,10 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
 
 .updateSite <- function(p, newhz = horizons(p)) {
   # profile_id relies on p@horizons. we are testing new horizons data.frame
-  keep <- .coalesce.idx(newhz[[idname(p)]])
-
-  # verification non-corrupted
-  # stopifnot(length(keep) == length(unique(horizons(p)[[idname(p)]])))
-
+  keep <- unique(newhz[[idname(p)]])
+  
   # keep only relevant site and other slots using SPC[i, ]
-  p <- p[match(keep, site(p)[[idname(p)]]), ]
+  p <- p[which(site(p)[[idname(p)]] %in% keep), ]
   return(p)
 }
 
