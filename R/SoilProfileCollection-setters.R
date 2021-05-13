@@ -313,11 +313,14 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 
       ## an appropriate ID must exist in 'value' AND @site for this to work
       # LEFT JOIN
-      suppressMessages(site.new <- merge(s, value, all.x = TRUE, sort = FALSE))
+      suppressMessages({site.new <- merge(s, value, all.x = TRUE, sort = FALSE)})
 
       new.id.order <- site.new[[idname(object)]]
-      if(any(new.id.order != ids.coalesce)) {
+      if(length(new.id.order) != length(ids.coalesce) ||
+         any(new.id.order != ids.coalesce)) {
         # message("join condition resulted in sorting of sites, re-applying original order")
+        if (any(is.na(ids.coalesce)))
+          message("profile IDs derived from horizon data contain NA!")
         site.new <- site.new[match(ids.coalesce, new.id.order),]
       }
 
