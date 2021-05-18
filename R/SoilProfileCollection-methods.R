@@ -395,17 +395,6 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ...) {
   x
 })
 
-# library(aqp)
-# library(soilDB)
-#   
-# data("loafercreek")
-# 
-# # A horizons with top depth greater than 10cm
-# res <- subsetHz(loafercreek, grepl("A", hzname), hzdept > 10)
-# 
-# plot(res)
-
-
 # functions tailored for use with magrittr %>% operator / tidyr
 
 #' @title Subset SPC with pattern-matching for text-based attributes
