@@ -351,7 +351,7 @@ if (!isGeneric("subsetHz"))
 #'
 #' @return a SoilProfileCollection with a subset of horizons, possibly with some sites removed
 #' @export
-#'
+#' @aliases subsetHz
 #' @examples
 #' 
 #' data(sp3)
