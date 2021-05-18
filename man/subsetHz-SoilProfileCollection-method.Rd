@@ -2,6 +2,7 @@
 % Please edit documentation in R/SoilProfileCollection-methods.R
 \name{subsetHz,SoilProfileCollection-method}
 \alias{subsetHz,SoilProfileCollection-method}
+\alias{subsetHz}
 \title{Subset the horizons in a SoilProfileCollection using logical criteria}
 \usage{
 \S4method{subsetHz}{SoilProfileCollection}(x, ...)
