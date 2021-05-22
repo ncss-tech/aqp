@@ -52,29 +52,66 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
                  modality = "all") {
 
   depthn <- horizonDepths(p)
+  
+  # recycle z1 to size of SPC if length is 1
+  if (length(z1) == 1) {
+    z1 <- rep(z1, length(p))
+  
+  # error if z1 does not match number of profiles
+  } else if (length(z1) != length(p)) {
+    stop("`z1` should have length 1 or length equal to number of profiles in `p`", call. = FALSE)
+  }
+  
+  if (is.null(z2)) {
+    z2 <- z1
+  } else if (length(z2) == 1) {
+    z2 <- rep(z2, length(p))
+  }
+  
+  if (length(z2) != length(z1)) {
+    stop("`z2`, if specified, should have same length as `z1`", call. = FALSE)
+  }
 
   if (!invert) {
-    idx <- .multiglom(p, z1, z2, modality)
+    idx <- .multiglomDT(p, z1 = z1, z2 = z2, modality = modality)
   } else {
-    idx <- c(.multiglom(p, min(p[[depthn[1]]], na.rm = TRUE), z1, modality = "all"),
-             .multiglom(p, z2, max(p[[depthn[2]]], na.rm = TRUE), modality = "all"))
+    idx <- c(.multiglomDT(p, min(p[[depthn[1]]], na.rm = TRUE), z1, modality = "all"),
+             .multiglomDT(p, z2, max(p[[depthn[2]]], na.rm = TRUE), modality = "all"))
   }
 
   h <- horizons(p)[which(hzID(p) %in% idx), ]
-
+  id <- idname(p)
+  
   # truncate ragged edges
   if (!invert & truncate & !is.null(z2)) {
-    .top <- h[[depthn[1]]]
-    .bottom <- h[[depthn[2]]]
+    
+    pdepths <- data.table::data.table(id = as.character(h[[id]]),
+                                      tdep = h[[depthn[1]]],
+                                      bdep = h[[depthn[2]]])
+    
+    glomdepths <- data.table::data.table(id = profile_id(p),
+                                         z1 = z1,
+                                         z2 = z2)
+    
+    # join and remove horizons that are not part of interval
+    newhz <- pdepths[glomdepths, on = "id"]
+    newhz <- newhz[complete.cases(newhz),]
+    
+    # truncate upper bounds to z1
+    z1tidx <- newhz[,.I[tdep < z1]]
+    z1bidx <- newhz[,.I[bdep < z1]]
+    newhz[z1tidx, 'tdep'] <- newhz[z1tidx, 'z1']
+    newhz[z1bidx, 'bdep'] <- newhz[z1bidx, 'z1']
+    
+    # truncate lower bounds to z2
+    z2tidx <- newhz[,.I[tdep > z2]]
+    z2bidx <- newhz[,.I[bdep > z2]]
+    newhz[z2tidx, 'tdep'] <- newhz[z2tidx, 'z2']
+    newhz[z2bidx, 'bdep'] <- newhz[z2bidx, 'z2']
 
-    .top[.top < z1] <- z1
-    .bottom[.bottom < z1] <- z1
-
-    .top[.top > z2] <- z2
-    .bottom[.bottom > z2] <- z2
-
-    h[[depthn[1]]] <- .top
-    h[[depthn[2]]] <- .bottom
+    # replace original values with truncated 
+    h[[depthn[1]]] <- newhz$tdep
+    h[[depthn[2]]] <- newhz$bdep
 
   # or "invert" and truncate
   } else if (invert & truncate & !is.null(z2)) {
@@ -233,6 +270,56 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     return(idval)
   }
 
+  # # list result.
+  return(list(
+    hzid = hzid,
+    hz.idx = idx,
+    value = idval
+  ))
+}
+
+.multiglomDT <- function (p, z1, z2 = NULL, modality = "all", as.list = FALSE) {
+  
+  # access SPC slots to get important info about p
+  hz <- data.table::as.data.table(horizons(p))
+  dz <- horizonDepths(p)
+  id <- idname(p)
+  pid <- profile_id(p)
+  hzid <- hzidname(p)
+  
+  # get top and bottom horizon depth vectors
+  tdep <- hz[[dz[1]]]
+  bdep <- hz[[dz[2]]]
+  
+  pdepths <- data.table::data.table(id = as.character(hz[[id]]),
+                                    tdep = tdep,
+                                    bdep = bdep)
+  
+  glomdepths <- data.table::data.table(id = profile_id(p),
+                                       z1 = z1,
+                                       z2 = z2)
+  
+  if (is.null(z2))
+    z1 <- z2
+  
+  idx <- pdepths[glomdepths, on = "id"][,.I[((tdep >= z1) | 
+                                              (bdep > z1)) & 
+                                              ((bdep < z2) |
+                                              (bdep == z2) | 
+                                              (tdep < z2))]]
+  if (modality == "thickest") {
+    # get index of thickest horizon by profile
+    idx <- .thickestHzID(p, hz[idx, ])
+  }
+  
+  # get the ID values out of horizon table
+  idval <- hz[idx, ][[hzidname(p)]]
+  
+  # just the horizon IDs
+  if (!as.list) {
+    return(idval)
+  }
+  
   # # list result.
   return(list(
     hzid = hzid,

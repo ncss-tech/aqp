@@ -29,7 +29,7 @@ test_that("advanced pattern matching, requires perl", {
 
   # the last pattern requires perl-compatible REGEX
   # error without perl=TRUE
-  expect_error(generalize.hz(x, new = n, pat=p, non.matching.code = 'not-used'))
+  expect_error(suppressWarnings(generalize.hz(x, new = n, pat=p, non.matching.code = 'not-used')))
 
   # this should work
   res <- generalize.hz(x, new = n, pat=p, non.matching.code = 'not-used', perl=TRUE)

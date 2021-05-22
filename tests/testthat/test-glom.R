@@ -131,14 +131,12 @@ test_that("glomApply works as expected", {
   # every profile returns one horizon (all profiles at least 25cm deep)
   expect_true(all(profileApply(res, nrow) == 1))
 
-  # glom returns empty results for some of these profiles at 200cm
-  #  glom will produce a NULL, and pbindlist will drop that profile
-  expect_warning(res2 <- glomApply(sp1, function(p) return(c(200,200))))
+  # 7 profiles have 200 as an invalid upper bound
+  ## note that P006 and P008 end EXACTLY at 200 and are NOT included
+  # plot(sp1)
+  # abline(h = 200)
+  expect_silent(res2 <- glomApply(sp1, function(p) return(c(200,200))))
 
-    ## 7 profiles have 200 as an invalid upper bound
-    ## note that P006 and P008 end EXACTLY at 200 and are NOT included
-    # plot(sp1)
-    # abline(h = 200)
   expect_equal(names(profileApply(res2, nrow)), c("P007", "P009"))
 
   test_that("realistic glomApply scenarios", {
@@ -146,14 +144,14 @@ test_that("glomApply works as expected", {
     depths(sp3) <- id ~ top + bottom
 
     # constant depths, whole horizon returns by default
-    (glomApply(sp3, function(p) c(25,100)))
+    expect_silent(glomApply(sp3, function(p) c(25,100)))
 
     # constant depths, truncated
     #(see aqp::trunc for helper function)
     expect_silent(glomApply(sp3, function(p) c(25,30), truncate = TRUE))
 
     # constant depths, inverted
-    expect_warning(glomApply(sp3, function(p) c(25,100), invert = TRUE))
+    expect_silent(glomApply(sp3, function(p) c(25,100), invert = TRUE))
 
     # constant depths, inverted + truncated (same as above)
     expect_silent(res <- glomApply(sp3, function(p) c(25,30), invert = TRUE, truncate = TRUE))
@@ -166,10 +164,10 @@ test_that("glomApply works as expected", {
 
     # random boundaries in each profile the specific warnings are a product of pseudorandom numbers
     set.seed(100)
-    expect_warning(glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3))))))
+    expect_silent(glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3))))))
 
     # random boundaries in each profile (truncated)
-    (glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3)))), truncate = TRUE))
+    expect_silent(glomApply(sp3, function(p) round(sort(runif(2, 0, max(sp3)))), truncate = TRUE))
 
     # calculate some boundaries as site level attribtes
     expect_warning(sp3$glom_top <- profileApply(sp3, getMineralSoilSurfaceDepth))
@@ -202,5 +200,18 @@ test_that("glom vectorization", {
 
   # max SPC depth is 240cm
   expect_equal(max(t3), 240)
+  
+  z1 <- c(rep(c(0,55), 5))[1:9]
+  z2 <- c(rep(c(10,60), 5))[1:9]
+  
+  # profile specific glom boundaries (alternating [0,10] [55,60])
+  t4 <- glom(sp1, z1, z2)
+  expect_equal(t4$bottom, c(2L, 14L, 59L, 2L, 13L, 62L, 5L,
+                            30L, 63L, 4L, 16L, 68L, 3L, 14L))  
+ 
+  # truncate = TRUE using same boundaries 
+  t5 <- glom(sp1, z1, z2, truncate = TRUE)
+  expect_equal(t5$bottom, c(2L, 10L, 59L, 2L, 10L, 60L, 5L, 
+                            10L, 60L, 4L, 10L, 60L, 3L, 10L))  
 })
 
