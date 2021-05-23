@@ -15,7 +15,7 @@
 #' @param no.contact.assigned Depth to assign when a contact did not occur.
 #' @param simplify logical. Return single profile results as vector (default: `TRUE`) or `data.frame` (`FALSE`)
 #' @param na.rm logical. Remove `NA`? (default: `TRUE`)
-#' @return A numeric vector containing specified depth(s) of horizons matching a pattern. If `length(p) > 1` then a _data.frame_ containing profile ID, top or bottom depths and pattern.
+#' @return A numeric vector containing specified depth(s) of horizons matching a pattern. If `length(p) > 1` then a _data.frame_ containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
 #'
 #' @author Andrew G. Brown
 #'
@@ -86,6 +86,7 @@ depthOf <- function(p,
   }
   
   id <- idname(p)
+  hid <- hzidname(p)
   hznames <- horizonNames(p)
 
   # if the user has not specified a column containing horizon designations
@@ -121,9 +122,13 @@ depthOf <- function(p,
       return(res)
     }
     
-    dfres <- data.frame(idn = hz.match[[id]], depth = res, pattern = pattern, 
+    dfres <- data.frame(idn = hz.match[[id]], 
+                        hidn = hz.match[[hid]],
+                        depth = res, 
+                        hzname = hz.match[[hzdesgn]],
+                        pattern = pattern, 
                         stringsAsFactors = FALSE)
-    colnames(dfres) <- c(id, depthcol, "pattern")
+    colnames(dfres) <- c(id, hid, depthcol, hzdesgn, "pattern")
     return(dfres)
   }
 
@@ -153,7 +158,7 @@ depthOf <- function(p,
     idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == FUN(.SD[[depthcol]], na.rm = na.rm)],
                                           by = list(res[[id]]), .SDcols = depthcol]$V1
 
-    res2 <- res[idx, c(idname(p), depthcol, "pattern")]
+    res2 <- res[idx, c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
     
   } else {
     res2 <- suppressWarnings(FUN(res, na.rm = na.rm))

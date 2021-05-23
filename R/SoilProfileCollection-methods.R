@@ -326,9 +326,8 @@ setMethod("filter", signature(.data = "SoilProfileCollection"),
             aqp::subset(x = .data, ...)
           })
 
-if (!isGeneric("subsetHz"))
-  setGeneric("subsetHz", function(x, ...)
-    standardGeneric("subsetHz"))
+setGeneric("subsetHz", function(x, ...)
+  standardGeneric("subsetHz"))
 
 #' Subset the horizons in a SoilProfileCollection using logical criteria
 #'
