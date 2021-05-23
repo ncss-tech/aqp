@@ -4,13 +4,18 @@
 \name{profile_id<-}
 \alias{profile_id<-}
 \alias{profile_id<-,SoilProfileCollection-method}
-\alias{profile_id}
 \alias{profile_id,SoilProfileCollection-method}
+\alias{profile_id}
 \title{Set profile IDs}
-\arguments{
-\item{value}{a unique vector of equal length to number of profiles \code{length(object)}}
+\usage{
+profile_id(object) <- value
 
+\S4method{profile_id}{SoilProfileCollection}(object)
+}
+\arguments{
 \item{object}{a SoilProfileCollection}
+
+\item{value}{a unique vector of equal length to number of profiles \code{length(object)}}
 }
 \description{
 Set vector containing profile IDs

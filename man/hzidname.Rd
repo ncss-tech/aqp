@@ -4,13 +4,18 @@
 \name{hzidname<-}
 \alias{hzidname<-}
 \alias{hzidname<-,SoilProfileCollection-method}
-\alias{hzidname}
 \alias{hzidname,SoilProfileCollection-method}
+\alias{hzidname}
 \title{Set horizon ID column name}
-\arguments{
-\item{value}{character, column name containing unique horizon ID values}
+\usage{
+hzidname(object) <- value
 
+\S4method{hzidname}{SoilProfileCollection}(object)
+}
+\arguments{
 \item{object}{a SoilProfileCollection}
+
+\item{value}{character, column name containing unique horizon ID values}
 }
 \description{
 Set unique horizon ID column name

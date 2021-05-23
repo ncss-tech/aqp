@@ -3,7 +3,7 @@
 ##
 ## depths<- setter method - to create AQP objects: sorts based on ID and top depth
 ##
-if (!isGeneric('depths<-'))
+# if (!isGeneric('depths<-'))
   setGeneric('depths<-', function(object, value) standardGeneric('depths<-'))
 
 
@@ -255,7 +255,7 @@ setReplaceMethod("depths", "data.frame",
 #' # inspect site table: holocene & lower riverbank have values
 #' site(sp2)
 #'
-if (!isGeneric('site<-'))
+# if (!isGeneric('site<-'))
   setGeneric('site<-', function(object, value)
     standardGeneric('site<-'))
 
@@ -424,7 +424,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 #' # inspect result (a clean slate)
 #' horizons(p)
 #'
-if (!isGeneric('replaceHorizons<-'))
+# if (!isGeneric('replaceHorizons<-'))
   setGeneric('replaceHorizons<-', function(object, value)
     standardGeneric('replaceHorizons<-'))
 
@@ -502,7 +502,7 @@ setReplaceMethod("replaceHorizons",
 #' #  with top depth equal to zero
 #' horizons(sp2)
 #'
-if (!isGeneric('horizons<-'))
+# if (!isGeneric('horizons<-'))
   setGeneric('horizons<-', function(object, value)
     standardGeneric('horizons<-'))
 
@@ -626,7 +626,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
 #' #  with top depth equal to zero
 #' diagnostic_hz(sp2)
 #'
-if (!isGeneric('diagnostic_hz<-'))
+# if (!isGeneric('diagnostic_hz<-'))
   setGeneric('diagnostic_hz<-', function(object, value)
     standardGeneric('diagnostic_hz<-'))
 
@@ -711,7 +711,7 @@ setReplaceMethod("diagnostic_hz",
 #' #  with top depth equal to zero
 #' restrictions(sp2)
 #'
-if (!isGeneric('restrictions<-'))
+# if (!isGeneric('restrictions<-'))
   setGeneric('restrictions<-', function(object, value)
     standardGeneric('restrictions<-'))
 

@@ -4,6 +4,9 @@
 \alias{mutate_profile}
 \alias{mutate_profile,SoilProfileCollection-method}
 \title{Transform a SPC (by profile) with a set of expressions}
+\usage{
+mutate_profile(object, ...)
+}
 \arguments{
 \item{object}{A SoilProfileCollection}
 

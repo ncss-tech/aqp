@@ -1,6 +1,6 @@
 # profileApply
 
-if (!isGeneric("profileApply"))
+# if (!isGeneric("profileApply"))
  	setGeneric("profileApply", function(object, FUN,
  	                                    simplify = TRUE,
  	                                    frameify = FALSE,

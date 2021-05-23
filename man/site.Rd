@@ -2,9 +2,9 @@
 % Please edit documentation in R/Class-SoilProfileCollection.R,
 %   R/SoilProfileCollection-setters.R
 \docType{methods}
-\name{site}
-\alias{site}
+\name{site,SoilProfileCollection-method}
 \alias{site,SoilProfileCollection-method}
+\alias{site}
 \alias{site<-}
 \alias{site<-,SoilProfileCollection-method}
 \title{Retrieve site data from SoilProfileCollection}

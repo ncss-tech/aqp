@@ -4,13 +4,18 @@
 \name{siteNames<-}
 \alias{siteNames<-}
 \alias{siteNames<-,SoilProfileCollection-method}
-\alias{siteNames}
 \alias{siteNames,SoilProfileCollection-method}
+\alias{siteNames}
 \title{Set site column names}
-\arguments{
-\item{value}{a unique vector of equal length to number of columns in site: \code{length(siteNames(object))}}
+\usage{
+siteNames(object) <- value
 
+\S4method{siteNames}{SoilProfileCollection}(object)
+}
+\arguments{
 \item{object}{a SoilProfileCollection}
+
+\item{value}{a unique vector of equal length to number of columns in site: \code{length(siteNames(object))}}
 }
 \description{
 Set site column names

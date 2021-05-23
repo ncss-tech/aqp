@@ -2,9 +2,9 @@
 % Please edit documentation in R/Class-SoilProfileCollection.R,
 %   R/SoilProfileCollection-spatial.R
 \docType{methods}
-\name{coordinates}
-\alias{coordinates}
+\name{coordinates,SoilProfileCollection-method}
 \alias{coordinates,SoilProfileCollection-method}
+\alias{coordinates}
 \alias{coordinates<-,SoilProfileCollection-method}
 \title{Get coordinates from spatial slot}
 \usage{

@@ -592,7 +592,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
 }
 
 
-if (!isGeneric("munsell2spc"))
+# if (!isGeneric("munsell2spc"))
   setGeneric("munsell2spc", function(object, ...) standardGeneric("munsell2spc"))
 
 #' @title Merge Munsell Hue, Value, Chroma converted to sRGB & CIELAB into a SoilProfileCollection

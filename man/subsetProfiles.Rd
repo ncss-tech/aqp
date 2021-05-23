@@ -30,7 +30,7 @@ The \code{s} argument supplies a fully-quoted search criteria for matching
 via site or horizon-level attributes. The \code{h} argument supplies a fully-quoted
 search criteria for matching via horizon-level attributes. All horizons
 associated with a single horizon-level match (i.e. out of several, only a
-single horizon matches the search critera) are returned. See examples for
+single horizon matches the search criteria) are returned. See examples for
 usage.
 }
 \examples{

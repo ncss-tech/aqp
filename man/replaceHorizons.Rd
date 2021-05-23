@@ -5,6 +5,9 @@
 \alias{replaceHorizons<-}
 \alias{replaceHorizons<-,SoilProfileCollection-method}
 \title{Replace data in the horizon slot}
+\usage{
+replaceHorizons(object) <- value
+}
 \arguments{
 \item{object}{A SoilProfileCollection}
 
