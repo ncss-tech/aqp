@@ -71,6 +71,9 @@ depthOf <- function(p,
   if (!inherits(p, 'SoilProfileCollection'))
     stop("`p` must be a SoilProfileCollection")
   
+  if (length(pattern) != 1)
+    stop("`pattern` must be unit length character vector containing a regular expression")
+    
   # pass through FUN argument if specified
   if (!is.null(FUN)) {
     return(.funDepthOf(
@@ -121,15 +124,15 @@ depthOf <- function(p,
     if (length(p) == 1 && simplify) {
       return(res)
     }
-    
-    dfres <- data.frame(idn = hz.match[[id]], 
-                        hidn = hz.match[[hid]],
-                        depth = res, 
-                        hzname = hz.match[[hzdesgn]],
-                        pattern = pattern, 
-                        stringsAsFactors = FALSE)
-    colnames(dfres) <- c(id, hid, depthcol, hzdesgn, "pattern")
-    return(dfres)
+    subsite <- data.frame(idn = profile_id(p), stringsAsFactors = FALSE) 
+    dfres <- data.table::data.table(idn = hz.match[[id]], 
+                                    hidn = hz.match[[hid]],
+                                    depth = res, 
+                                    hzname = hz.match[[hzdesgn]],
+                                    stringsAsFactors = FALSE)[subsite, on="idn"]
+    colnames(dfres) <- c(id, hid, depthcol, hzdesgn)
+    dfres$pattern <- pattern
+    return(as.data.frame(dfres))
   }
 
   # otherwise:
@@ -154,10 +157,13 @@ depthOf <- function(p,
  
   if (inherits(res, 'data.frame')) {
   # otherwise, return the FUN value)) {
-
-    idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == FUN(.SD[[depthcol]], na.rm = na.rm)],
-                                          by = list(res[[id]]), .SDcols = depthcol]$V1
-
+    
+    # handle warnings about e.g. no non-missing arguments to FUN
+    suppressWarnings({
+      idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == FUN(.SD[[depthcol]], na.rm = na.rm)],
+                                            by = list(res[[id]]), .SDcols = depthcol]$V1
+    })
+    
     res2 <- res[idx, c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
     
   } else {
