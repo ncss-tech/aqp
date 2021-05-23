@@ -15,7 +15,7 @@
 #' @param no.contact.assigned Depth to assign when a contact did not occur.
 #' @param simplify logical. Return single profile results as vector (default: `TRUE`) or `data.frame` (`FALSE`)
 #' @param na.rm logical. Remove `NA`? (default: `TRUE`)
-#' @return A numeric vector containing specified depth(s) of horizons matching a pattern.
+#' @return A numeric vector containing specified depth(s) of horizons matching a pattern. If `length(p) > 1` then a _data.frame_ containing profile ID, top or bottom depths and pattern.
 #'
 #' @author Andrew G. Brown
 #'

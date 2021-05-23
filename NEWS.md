@@ -1,9 +1,11 @@
-# aqp 1.30 (2021-05-04)
+# aqp 1.30 (2021-05-23)
  * `plotColorMixture()` will respect "names" attribute of colors-to-mix
  * `parseMunsell()` now more robust, c/o P. Roudier
  * `mixMunsell`:
     - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spec2Munsell()`)
  * new convenience function `PMS2Munsell()` for converting PMS codes -> closest Munsell chip (https://github.com/ncss-tech/aqp/issues/124)
+ * `glom()` `z1` and `z2` arguments vectorized
+ * `depthOf()` can now be applied to multiple profiles. If `length(p) > 1` then result is a _data.frame_ containing profile ID, top or bottom depths and pattern.
 
 # aqp 1.29 (2021-04-05)
  * CRAN release

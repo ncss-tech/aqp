@@ -38,7 +38,7 @@ depthOf(
 \item{simplify}{logical. Return single profile results as vector (default: \code{TRUE}) or \code{data.frame} (\code{FALSE})}
 }
 \value{
-A numeric vector containing specified depth(s) of horizons matching a pattern.
+A numeric vector containing specified depth(s) of horizons matching a pattern. If \code{length(p) > 1} then a \emph{data.frame} containing profile ID, top or bottom depths and pattern.
 }
 \description{
 The \code{depthOf} family of functions calculate depth of occurrence of a horizon designation pattern. They are used primarily in the place of complex qualitative or quantitative data that would confirm taxonomic criteria.
