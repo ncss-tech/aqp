@@ -41,7 +41,7 @@ Generate a levelplot of missing data from a SoilProfileCollection object.
 }
 \details{
 This function evaluates a \verb{missing data fraction} based on slice-wise
-evaulation of named variables in a \code{SoilProfileCollection} object.
+evaluation of named variables in a \code{SoilProfileCollection} object.
 }
 \note{
 A lattice graphic is printed to the active output device.

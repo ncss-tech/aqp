@@ -7,7 +7,7 @@
 #' Generate a levelplot of missing data from a SoilProfileCollection object.
 #'
 #' This function evaluates a `missing data fraction` based on slice-wise
-#' evaulation of named variables in a \code{SoilProfileCollection} object.
+#' evaluation of named variables in a \code{SoilProfileCollection} object.
 #'
 #' @param s a SoilProfileCollection object
 #' @param max_depth integer specifying the max depth of analysis

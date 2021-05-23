@@ -5,7 +5,7 @@
 \alias{equivalent_munsell}
 \title{Indices of "equivalent" Munsell chips in the \code{munsell} data set}
 \format{
-A named list with 8467 elements, each containing a numeric vector of indices corresponding to the \code{munsell} data set, which has 8467 rows (unique, whole-number chips). Names have the format \code{HUE VALUE/CHROMA}, eg. \code{"7.5YR 4/4"}
+A named list with 8467 elements, each containing a numeric vector of indices corresponding to the \code{munsell} data set, which has 8467 rows (unique, whole-number chips). Names have the format \code{HUE VALUE/CHROMA}, e.g. \code{"7.5YR 4/4"}
 }
 \usage{
 data(equivalent_munsell)
