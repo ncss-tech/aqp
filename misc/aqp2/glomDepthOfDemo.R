@@ -17,7 +17,7 @@ loafercreek |>
 
 # some new ideas for more functional forms of aqp SPC methods
 .data_dots <- aqp:::.data_dots
-.sliceSPC <- \(x,i) `[`(x,.data_dots(.data, eval(substitute(i)))[[1]])
+.sliceSPC <- \(x,i) `[`(x,.data_dots(compositeSPC(x), eval(substitute(i)))[[1]])
 
 .grepBounds <- function(p, pattern) {
   hzd <- horizonDepths(p)
@@ -45,13 +45,13 @@ loafercreek |>
 }
 
 loafercreek |> 
-  subset(grepl("t", hzname)) |>
+  # subset(grepl("t", hzname)) |>
   .grepBounds("t") |> 
   .niceglom(z1, z2) |> 
   .sliceSPC(1:10) |> 
   plot()
 
-# trying pipebind (=>) 
+# trying pipebind (=>)
 Sys.setenv("_R_USE_PIPEBIND_" = "true")
 loafercreek |>
   subset(grepl("t", hzname)) |>
