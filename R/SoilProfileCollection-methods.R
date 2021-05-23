@@ -326,8 +326,62 @@ setMethod("filter", signature(.data = "SoilProfileCollection"),
             aqp::subset(x = .data, ...)
           })
 
+if (!isGeneric("subsetHz"))
+  setGeneric("subsetHz", function(x, ...)
+    standardGeneric("subsetHz"))
+
+#' Subset the horizons in a SoilProfileCollection using logical criteria
+#'
+#' @param x a SoilProfileCollection
+#' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
+#'
+#' @return a SoilProfileCollection with a subset of horizons, possibly with some sites removed
+#' @export
+#' @aliases subsetHz
+#' @examples
+#' 
+#' data(sp3)
+#' 
+#' depths(sp3) <- id ~ top + bottom
+#' 
+#' # show just horizons with 10YR hues
+#' plot(subsetHz(sp3, hue == '10YR'))
+#' 
+setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ...) {
+  # capture expression(s) at function
+  .dots <- substitute(list(...))
+  .dots <- .dots[2:length(.dots)]
+  
+  # create composite object to facilitate eval
+  .data <- horizons(x)
+  
+  # loop through list of expressions and evaluate
+  res <- vector('list', length(.dots))
+  for (i in 1:length(.dots)) {
+    res[[i]] <- eval(.dots[[i]], .data, parent.frame(n = 2))
+  }
+  
+  subcrit <- Reduce('&', res)
+  
+  if (!is.logical(subcrit)) {
+    badxpr <- paste0("'",paste0(.dots[sapply(.dots, function(x) !is.logical(x))],
+                                collapse=",'"),"'")
+    message(sprintf("%s is not logical; returning `x` unchanged", badxpr))
+    return(x)
+  }
+  
+  newhz <- .data[which(subcrit),]
+  
+  # subset SPC first to remove sites and other slots
+  x <- x[which(profile_id(x) %in% newhz[[idname(x)]]),]
+  
+  # then replace horizons with horizon subset 
+  #   (avoid profile IDs in site are missing from replacement horizons!)
+  replaceHorizons(x) <- newhz
+  x
+})
+
 # functions tailored for use with magrittr %>% operator / tidyr
-# formerly thisisnotapipe.R
 
 #' @title Subset SPC with pattern-matching for text-based attributes
 #' @name grepSPC
