@@ -1,4 +1,4 @@
-if (!isGeneric("harmonize"))
+# if (!isGeneric("harmonize"))
   setGeneric("harmonize", function(x, x.names, keep.cols = NULL, grp.name = "hgroup")
     standardGeneric("harmonize"))
 

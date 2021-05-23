@@ -3,7 +3,6 @@
 \docType{methods}
 \name{spc_in_sync}
 \alias{spc_in_sync}
-\alias{spc_in_sync,SoilProfileCollection-method}
 \title{Quickly assess relative state of site and horizon slots}
 \usage{
 spc_in_sync(object)

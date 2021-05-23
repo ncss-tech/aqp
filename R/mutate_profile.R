@@ -9,7 +9,7 @@
 #'
 #' @rdname mutate_profile
 #' @export mutate_profile
-if (!isGeneric("mutate_profile"))
+# if (!isGeneric("mutate_profile"))
   setGeneric("mutate_profile", function(object, ...) standardGeneric("mutate_profile"))
 
 setMethod("mutate_profile", signature(object = "SoilProfileCollection"),

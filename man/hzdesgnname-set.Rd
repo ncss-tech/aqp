@@ -5,6 +5,9 @@
 \alias{hzdesgnname<-}
 \alias{hzdesgnname<-,SoilProfileCollection-method}
 \title{Set horizon designation column name}
+\usage{
+hzdesgnname(object) <- value
+}
 \arguments{
 \item{object}{a SoilProfileCollection}
 

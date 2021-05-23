@@ -1,4 +1,4 @@
-if (!isGeneric("spc2mpspline"))
+# if (!isGeneric("spc2mpspline"))
   setGeneric("spc2mpspline", function(object,
                                       var_name = NULL,
                                       pattern = "R|Cr|Cd|qm",

@@ -613,7 +613,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 
 ## NOTE: don't mess with this!
 # setup generic function
-if (!isGeneric("profile_compare"))
+# if (!isGeneric("profile_compare"))
   setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
 
 # temp interface to SPC class objects

@@ -2,12 +2,17 @@
 % Please edit documentation in R/Class-SoilProfileCollection.R,
 %   R/SoilProfileCollection-setters.R
 \docType{methods}
-\name{horizons}
-\alias{horizons}
+\name{horizons,SoilProfileCollection-method}
 \alias{horizons,SoilProfileCollection-method}
+\alias{horizons}
 \alias{horizons<-}
 \alias{horizons<-,SoilProfileCollection-method}
 \title{Retrieve horizon data from SoilProfileCollection}
+\usage{
+\S4method{horizons}{SoilProfileCollection}(object)
+
+horizons(object) <- value
+}
 \arguments{
 \item{object}{A SoilProfileCollection}
 

@@ -5,6 +5,9 @@
 \alias{hztexclname<-}
 \alias{hztexclname<-,SoilProfileCollection-method}
 \title{Set horizon texture class column name}
+\usage{
+hztexclname(object) <- value
+}
 \arguments{
 \item{object}{a SoilProfileCollection}
 

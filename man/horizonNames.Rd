@@ -4,13 +4,18 @@
 \name{horizonNames<-}
 \alias{horizonNames<-}
 \alias{horizonNames<-,SoilProfileCollection-method}
-\alias{horizonNames}
 \alias{horizonNames,SoilProfileCollection-method}
+\alias{horizonNames}
 \title{Set horizon column names}
-\arguments{
-\item{value}{a unique vector of equal length to number of columns in horizons \code{length(horizonNames(object))}}
+\usage{
+horizonNames(object) <- value
 
+\S4method{horizonNames}{SoilProfileCollection}(object)
+}
+\arguments{
 \item{object}{a SoilProfileCollection}
+
+\item{value}{a unique vector of equal length to number of columns in horizons \code{length(horizonNames(object))}}
 }
 \description{
 Set horizon column names

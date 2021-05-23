@@ -29,7 +29,7 @@
 #   pbindlist(x)
 # })
 
-if (!isGeneric("combine"))
+# if (!isGeneric("combine"))
   setGeneric("combine", function(...)
     standardGeneric("combine"))
 
