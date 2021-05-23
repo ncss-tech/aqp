@@ -138,7 +138,7 @@
   * `SoilProfileCollection` object gains new slot: `@restrictions`, fix old objects with `rebuildSPC()`
 
 # aqp 1.18.3 (2019-12-19)
-  * `evalMissingData()` gets new argument for relative vs. absolute evalulation of missing data
+  * `evalMissingData()` gets new argument for relative vs. absolute evaluation of missing data
   * `horizonColorIndices()`, `harden.rubification()`, `harden.melanization()`, `thompson.bell.darkness()` and associated functions in soilColorIndices.R
   * fix for https://github.com/ncss-tech/aqp/issues/44
   * fix for https://github.com/ncss-tech/aqp/issues/66
@@ -501,7 +501,7 @@
 
 # aqp 0.99-9.4 (2012-01-09)
    * `site(SCP) <- d` now tries to merge data from SPC@site with 'd' via left join
-      + this means that all new SPC objects will have a single column of @site data, containin profile IDs
+      + this means that all new SPC objects will have a single column of @site data, containing profile IDs
    * plot-SoilProfileCollection now tries to guess the best orientation of IDs
       + override with id.style='top' or id.style='side'
    * slice-SoilProfileCollection now accepts '.' to define all columns should be returned at requested slices

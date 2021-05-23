@@ -76,10 +76,10 @@ confusionIndex <- function(x) {
 #' @description Compute a multinominal Brier score from predicted class probabilities and observed class label. Lower values are associated with a more accurate classifier.
 #'
 #' @param x \code{data.frame} of class probabilities (numeric) and observed class label (character), see examples
-#' @param classLabels vector of predicted class labels (probabilities), corrosponding to column names in \code{x}
+#' @param classLabels vector of predicted class labels (probabilities), corresponding to column names in \code{x}
 #' @param actual name of column containing the observed class, should be character vector not factor
 #' 
-#' @references Brier, GLenn W. 1950. "Verification of Forecasts Expressed in Terms of Probability." Monthly Weather Review 78 (1): 1-3. doi:10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2.
+#' @references Brier, Glenn W. 1950. "Verification of Forecasts Expressed in Terms of Probability." Monthly Weather Review 78 (1): 1-3. doi:10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2.
 #' 
 #' @author D.E. Beaudette
 #' 
