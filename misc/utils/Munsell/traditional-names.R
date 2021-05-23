@@ -5,11 +5,12 @@
 ## 
 ## Sample data object prepared and documented by D.E. Beaudette
 ## 2021-04-22
-##
+## 
 
 # copy -> paste -> edit -> CSV
-traditionalColorNames <- read.csv('traditional-names-from-NASIS.csv')
-save(traditionalColorNames, file = '../../../data/traditionalColorNames.rda')
+traditionalColorNames <- read.csv('misc/utils/Munsell/traditional-names-from-NASIS.csv')
+traditionalColorNames$traditional_name <- trimws(traditionalColorNames$traditional_name)
+save(traditionalColorNames, file = 'data/traditionalColorNames.rda')
 
 # another, possibly better approach
 # using Color Block via 'munsellinterpol' package
