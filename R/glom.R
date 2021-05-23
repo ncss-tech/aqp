@@ -98,14 +98,14 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     newhz <- newhz[complete.cases(newhz),]
     
     # truncate upper bounds to z1
-    z1tidx <- newhz[,.I[tdep < z1]]
-    z1bidx <- newhz[,.I[bdep < z1]]
+    z1tidx <- newhz[,.I[newhz$tdep < z1]]
+    z1bidx <- newhz[,.I[newhz$bdep < z1]]
     newhz[z1tidx, 'tdep'] <- newhz[z1tidx, 'z1']
     newhz[z1bidx, 'bdep'] <- newhz[z1bidx, 'z1']
     
     # truncate lower bounds to z2
-    z2tidx <- newhz[,.I[tdep > z2]]
-    z2bidx <- newhz[,.I[bdep > z2]]
+    z2tidx <- newhz[,.I[newhz$tdep > z2]]
+    z2bidx <- newhz[,.I[newhz$bdep > z2]]
     newhz[z2tidx, 'tdep'] <- newhz[z2tidx, 'z2']
     newhz[z2bidx, 'bdep'] <- newhz[z2bidx, 'z2']
 

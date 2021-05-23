@@ -9,16 +9,21 @@
 depthOf(
   p,
   pattern,
+  FUN = NULL,
   top = TRUE,
   hzdesgn = guessHzDesgnName(p),
   no.contact.depth = NULL,
-  no.contact.assigned = NA
+  no.contact.assigned = NA,
+  na.rm = TRUE,
+  simplify = TRUE
 )
 }
 \arguments{
 \item{p}{A single-profile SoilProfileCollection.}
 
 \item{pattern}{A regular expression to match in the horizon designation column. See:\code{hzdesgn}}
+
+\item{FUN}{a function that returns a single value, and takes argument \code{na.rm}}
 
 \item{top}{Should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: \code{TRUE}.}
 
@@ -27,6 +32,10 @@ depthOf(
 \item{no.contact.depth}{Depth to assume that contact did not occur.}
 
 \item{no.contact.assigned}{Depth to assign when a contact did not occur.}
+
+\item{na.rm}{logical. Remove \code{NA}? (default: \code{TRUE})}
+
+\item{simplify}{logical. Return single profile results as vector (default: \code{TRUE}) or \code{data.frame} (\code{FALSE})}
 }
 \value{
 A numeric vector containing specified depth(s) of horizons matching a pattern.

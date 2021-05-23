@@ -8,11 +8,13 @@
 #'
 #' @param p A single-profile SoilProfileCollection.
 #' @param pattern A regular expression to match in the horizon designation column. See:\code{hzdesgn}
+#' @param FUN a function that returns a single value, and takes argument `na.rm`
 #' @param top Should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: \code{TRUE}.
 #' @param hzdesgn Column name containing horizon designations. Default: \code{guessHzDesgnName(p)}
 #' @param no.contact.depth Depth to assume that contact did not occur.
 #' @param no.contact.assigned Depth to assign when a contact did not occur.
-#'
+#' @param simplify logical. Return single profile results as vector (default: `TRUE`) or `data.frame` (`FALSE`)
+#' @param na.rm logical. Remove `NA`? (default: `TRUE`)
 #' @return A numeric vector containing specified depth(s) of horizons matching a pattern.
 #'
 #' @author Andrew G. Brown
@@ -56,12 +58,34 @@
 #' # assign infinity (Inf) if B horizon does not start within 10cm
 #' minDepthOf(spc, "B", no.contact.depth = 10, no.contact.assigned = Inf)
 #'
-depthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
-                     no.contact.depth = NULL, no.contact.assigned = NA) {
-
-  if (!inherits(p, 'SoilProfileCollection') | length(p) != 1)
-    stop("`p` must be a SoilProfileCollection containing one profile")
-
+depthOf <- function(p, 
+                    pattern, 
+                    FUN = NULL,
+                    top = TRUE, 
+                    hzdesgn = guessHzDesgnName(p),
+                    no.contact.depth = NULL, 
+                    no.contact.assigned = NA,
+                    na.rm = TRUE,
+                    simplify = TRUE) {
+  
+  if (!inherits(p, 'SoilProfileCollection'))
+    stop("`p` must be a SoilProfileCollection")
+  
+  # pass through FUN argument if specified
+  if (!is.null(FUN)) {
+    return(.funDepthOf(
+      p = p,
+      pattern = pattern,
+      FUN = FUN,
+      top = top,
+      hzdesgn = hzdesgn,
+      no.contact.depth = no.contact.depth,
+      no.contact.assigned = no.contact.assigned,
+      na.rm = na.rm
+    ))
+  }
+  
+  id <- idname(p)
   hznames <- horizonNames(p)
 
   # if the user has not specified a column containing horizon designations
@@ -81,57 +105,108 @@ depthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
   }
 
   # get top or bottom depth, based on `top` argument
-  res <- hz.match[[horizonDepths(p)[ifelse(top, 1, 2)]]]
+  depthcol <- horizonDepths(p)[ifelse(top, 1, 2)]
+  res <- hz.match[[depthcol]]
 
   # remove results greater than the cutoff depth: `no.contact.depth`
-  if(any(res > no.contact.depth)) {
+  if (any(res > no.contact.depth)) {
     res <- res[-which(res > no.contact.depth)]
   }
 
   # if there are non-NA results, return all of them
-  if(length(res) > 0 & any(!is.na(res))) {
-    return(res)
+  if (length(res) > 0 & any(!is.na(res))) {
+    
+    # default simplify and SPC length is 1
+    if (length(p) == 1 && simplify) {
+      return(res)
+    }
+    
+    dfres <- data.frame(idn = hz.match[[id]], depth = res, pattern = pattern, 
+                        stringsAsFactors = FALSE)
+    colnames(dfres) <- c(id, depthcol, "pattern")
+    return(dfres)
   }
 
   # otherwise:
   return(no.contact.assigned)
 }
 
-# maxDepthOf is a wrapper around depthOf to return a single, maximum value
-maxDepthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
-                       no.contact.depth = NULL,
-                       no.contact.assigned = NA, na.rm = TRUE) {
+.funDepthOf <- function(p,
+                        pattern,
+                        FUN,
+                        top = TRUE,
+                        hzdesgn = guessHzDesgnName(p),
+                        no.contact.depth = NULL,
+                        no.contact.assigned = NA,
+                        na.rm = TRUE) {
+    
+  
+  id <- idname(p)
+  depthcol <- horizonDepths(p)[ifelse(top, 1, 2)]
+  
+  # depthOf returns all top or bottom depths of horizons matching `hzdesgn`
+  res <- depthOf(p, pattern, FUN = NULL, top, hzdesgn, no.contact.depth, no.contact.assigned)
+ 
+  if (inherits(res, 'data.frame')) {
+  # otherwise, return the FUN value)) {
 
-  # depthOf returns all top or bottom depths of horizons matthing `hzdesgn`
-  res <- depthOf(p, pattern, top, hzdesgn, no.contact.depth, no.contact.assigned)
+    idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == FUN(.SD[[depthcol]], na.rm = na.rm)],
+                                          by = list(res[[id]]), .SDcols = depthcol]$V1
 
-  # otherwise, return the maximum value from result
-  res2 <- suppressWarnings(max(res, na.rm = na.rm))
-
-  # if not found, depth is infinite
-  if(is.infinite(res2)) {
-    return(no.contact.assigned)
+    res2 <- res[idx, c(idname(p), depthcol, "pattern")]
+    
+  } else {
+    res2 <- suppressWarnings(FUN(res, na.rm = na.rm))
+    
+    # if not found, depth is infinite
+    if(is.infinite(res2)) {
+      return(no.contact.assigned)
+    }
   }
-
+  
   return(res2)
 }
+  
+# maxDepthOf is a wrapper around depthOf to return a single, maximum value
+maxDepthOf <- function(p,
+                       pattern,
+                       top = TRUE,
+                       hzdesgn = guessHzDesgnName(p),
+                       no.contact.depth = NULL,
+                       no.contact.assigned = NA,
+                       na.rm = TRUE) {
+    .funDepthOf(
+      p = p,
+      pattern = pattern,
+      FUN = max,
+      top = top,
+      hzdesgn = hzdesgn,
+      no.contact.depth = no.contact.depth,
+      no.contact.assigned = no.contact.assigned,
+      na.rm = na.rm
+    )
+    
+  }
 
 # minDepthOf is a wrapper around depthOf to return a single, minimum value
-minDepthOf <- function(p, pattern, top = TRUE, hzdesgn = guessHzDesgnName(p),
+minDepthOf <- function(p,
+                       pattern,
+                       top = TRUE,
+                       hzdesgn = guessHzDesgnName(p),
                        no.contact.depth = NULL,
-                       no.contact.assigned = NA, na.rm = TRUE) {
-
-  # depthOf returns all top or bottom depths of horizons matthing `hzdesgn`
-  res <- depthOf(p, pattern, top, hzdesgn, no.contact.depth, no.contact.assigned)
-
-  # otherwise, return the minimum value from result
-  res2 <- suppressWarnings(min(res, na.rm = na.rm))
-
-  # if not found, depth is infinite
-  if(is.infinite(res2)) {
-    return(no.contact.assigned)
+                       no.contact.assigned = NA,
+                       na.rm = TRUE) {
+    .funDepthOf(
+      p = p,
+      pattern = pattern,
+      FUN = min,
+      top = top,
+      hzdesgn = hzdesgn,
+      no.contact.depth = no.contact.depth,
+      no.contact.assigned = no.contact.assigned,
+      na.rm = na.rm
+    )
+    
   }
 
-  return(res2)
-}
 
