@@ -14,8 +14,12 @@ rowley2019 <- rebuildSPC(rowley2019)
 save(rowley2019, file = 'data/rowley2019.rda')
 
 data("sp5", package="aqp")
+
+# replace en dash with hyphen (ascii)
+# metadata(sp5)$citation <- gsub("\u2013","-",metadata(sp5)$citation)
+
 hzdesgnname(sp5) <- ""
-hztexclname(jacobs2000) <- ""
+hztexclname(sp5) <- ""
 sp5 <- rebuildSPC(sp5)
 save(sp5, file = 'data/sp5.rda')
 
