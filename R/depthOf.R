@@ -64,7 +64,7 @@ depthOf <- function(p,
                     top = TRUE, 
                     hzdesgn = guessHzDesgnName(p),
                     no.contact.depth = NULL, 
-                    no.contact.assigned = NA,
+                    no.contact.assigned = NA_real_,
                     na.rm = TRUE,
                     simplify = TRUE) {
   
@@ -102,19 +102,34 @@ depthOf <- function(p,
 
   # get horizons matching designation pattern
   hz.match <- horizons(p)[grepl(pattern, p[[hzdesgn]]),]
-
-  # if no horizons match, return `no.contact.assigned`
-  if (nrow(hz.match) == 0) {
-    return(no.contact.assigned)
-  }
-
+  
+  subsite <- data.frame(idn = profile_id(p), stringsAsFactors = FALSE) 
+  
   # get top or bottom depth, based on `top` argument
   depthcol <- horizonDepths(p)[ifelse(top, 1, 2)]
   res <- hz.match[[depthcol]]
-
+  
   # remove results greater than the cutoff depth: `no.contact.depth`
   if (any(res > no.contact.depth)) {
-    res <- res[-which(res > no.contact.depth)]
+    hz.match <- hz.match[-which(res > no.contact.depth),]
+  }
+  
+  # if no horizons match, return `no.contact.assigned`
+  if (nrow(hz.match) == 0) {    
+    if (length(p) == 1 && simplify) {
+      return(no.contact.assigned)
+    }
+    
+    # if no horizons in any profile match, make a conformal result
+    emptyres <- data.frame(
+      idn = as.character(subsite[["idn"]]),
+      hidn = NA,
+      depth = no.contact.assigned,
+      hzname = NA
+    )
+    colnames(emptyres) <- c(id, hid, depthcol, hzdesgn)
+    emptyres$pattern <- pattern
+    return(emptyres)
   }
 
   # if there are non-NA results, return all of them
@@ -125,11 +140,19 @@ depthOf <- function(p,
       return(res)
     }
     
-    subsite <- data.frame(idn = profile_id(p), stringsAsFactors = FALSE) 
     dfres <- data.table::data.table(idn = as.character(hz.match[[id]]), 
                                     hidn = hz.match[[hid]],
                                     depth = res, 
                                     hzname = hz.match[[hzdesgn]])[subsite, on = "idn"]
+    
+    # filter out horizons that are > no.contact.depth, keep NA
+    if (!is.null(no.contact.depth)) {
+      dfres <- dfres[which(dfres$depth <= no.contact.depth | is.na(dfres$depth)),]
+    }
+    
+    # replace NA with no.contact.assigned
+    dfres$depth[is.na(dfres$depth)] <- no.contact.assigned
+    
     colnames(dfres) <- c(id, hid, depthcol, hzdesgn)
     dfres$pattern <- pattern
     

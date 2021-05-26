@@ -89,7 +89,7 @@ test_that("depth to feature using REGEX on hzname: [Bt]", {
 
 
 test_that("depthOf - simple match", {
-  expect_equal(depthOf(d[1,], "Cr|R|Cd"), NA)
+  expect_equal(depthOf(d[1,], "Cr|R|Cd"), NA_real_)
   expect_equal(depthOf(d[2,], "Cr|R|Cd"), 55)
   expect_equal(minDepthOf(d[2,], "Cr|R|Cd"), 55)
   expect_equal(maxDepthOf(d[2,], "Cr|R|Cd"), 55)
@@ -106,8 +106,8 @@ test_that("depthOf - multiple match", {
 })
 
 test_that("depthOf - no match", {
-  expect_equal(depthOf(d[1,], "X"), NA)
-  expect_equal(depthOf(d[2,], "Cr|R|Cd", no.contact.depth = 50), NA)
+  expect_equal(depthOf(d[1,], "X"), NA_real_)
+  expect_equal(depthOf(d[2,], "Cr|R|Cd", no.contact.depth = 50), NA_real_)
 
   d2 <- d
   d2$name <- NULL

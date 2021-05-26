@@ -13,7 +13,7 @@ depthOf(
   top = TRUE,
   hzdesgn = guessHzDesgnName(p),
   no.contact.depth = NULL,
-  no.contact.assigned = NA,
+  no.contact.assigned = NA_real_,
   na.rm = TRUE,
   simplify = TRUE
 )
