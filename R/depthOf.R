@@ -118,20 +118,21 @@ depthOf <- function(p,
   }
 
   # if there are non-NA results, return all of them
-  if (length(res) > 0 & any(!is.na(res))) {
+  if (length(res) > 0 && any(!is.na(res))) {
     
-    # default simplify and SPC length is 1
+    # backwards compatible: simplify=TRUE and SPC length is 1
     if (length(p) == 1 && simplify) {
       return(res)
     }
+    
     subsite <- data.frame(idn = profile_id(p), stringsAsFactors = FALSE) 
-    dfres <- data.table::data.table(idn = hz.match[[id]], 
+    dfres <- data.table::data.table(idn = as.character(hz.match[[id]]), 
                                     hidn = hz.match[[hid]],
                                     depth = res, 
-                                    hzname = hz.match[[hzdesgn]],
-                                    stringsAsFactors = FALSE)[subsite, on="idn"]
+                                    hzname = hz.match[[hzdesgn]])[subsite, on = "idn"]
     colnames(dfres) <- c(id, hid, depthcol, hzdesgn)
     dfres$pattern <- pattern
+    
     return(as.data.frame(dfres))
   }
 
