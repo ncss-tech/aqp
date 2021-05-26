@@ -2,14 +2,16 @@
 % Please edit documentation in R/getSurfaceHorizonDepth.R
 \name{getSurfaceHorizonDepth}
 \alias{getSurfaceHorizonDepth}
-\alias{getSurfaceHorizon}
 \alias{getMineralSoilSurfaceDepth}
 \alias{getPlowLayerDepth}
 \title{Determine thickness of horizons (continuous from surface) matching a pattern}
 \usage{
-getMineralSoilSurfaceDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "O")
-
-getPlowLayerDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]*")
+getSurfaceHorizonDepth(
+  p,
+  pattern,
+  hzdesgn = guessHzDesgnName(p),
+  simplify = TRUE
+)
 }
 \arguments{
 \item{p}{A single-profile SoilProfileCollection object.}
@@ -17,6 +19,8 @@ getPlowLayerDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]*")
 \item{pattern}{Regular expression pattern to match for all horizons to be considered part of the "surface".}
 
 \item{hzdesgn}{Column name containing horizon designation. Default: \code{guessHzDesgnName(p)}.}
+
+\item{simplify}{logical. Return single profile results as vector (default: \code{TRUE}) or \code{data.frame} (\code{FALSE})}
 }
 \value{
 Returns a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface (depth = 0).

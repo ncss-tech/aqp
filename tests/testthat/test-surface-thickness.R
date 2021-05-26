@@ -21,9 +21,14 @@ test_that("getSurfaceHorizonDepth", {
   expect_equal(t4, 0)
   
   # contiguous and non-contiguous matches below a non-match are ignored (n=1)
-  p$mollic_color <- c("d","l","d","l","d","d")
-  t6 <- getSurfaceHorizonDepth(p, pattern="d", hzdesgn="mollic_color")
+  p$mollic_color <- c("d", "l", "d", "l", "d", "d")
+  t6 <- getSurfaceHorizonDepth(p, pattern = "d", hzdesgn = "mollic_color")
   expect_equal(t6, horizons(p)[1, 'bottom'])
+})
+
+test_that("getSurfaceHorizonDepth in multiple profiles", {
+  expect_equal(as.numeric(profileApply(sp1, getSurfaceHorizonDepth, pattern = "A")),
+               getSurfaceHorizonDepth(sp1, pattern = "A")$bottom)
 })
 
 test_that("getPlowLayerDepth()", {
@@ -43,3 +48,4 @@ test_that("getMineralSoilSurfaceDepth()", {
   rez2 <- getMineralSoilSurfaceDepth(q, hzdesgn='name')
   expect_equivalent(rez2, 5)
 })
+
