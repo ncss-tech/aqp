@@ -81,5 +81,11 @@ xyplot(value ~ v10, groups = .id, data = a, type = c('l', 'g'), par.settings = t
 # original data
 xyplot(value ~ v, groups = .id, data = m, type = c('l', 'g'), par.settings = tps, scales = list(x = list(tick.number = 20)), xlab = 'Wavelength (nm)', ylab = 'Reflectance')
 
+# annotate with visible portion of the spectrum
+xyplot(value ~ v, groups = .id, data = m, type = 'l', par.settings = tps, scales = list(x = list(tick.number = 20)), xlab = 'Wavelength (nm)', ylab = 'Reflectance', panel = function(...) {
+  panel.grid(-1, -1)
+  panel.abline(v = c(380, 730), lty = 2)
+  panel.xyplot(...)
+})
 
 
