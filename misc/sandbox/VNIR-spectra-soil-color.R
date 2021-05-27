@@ -1,7 +1,13 @@
 library(aqp)
+library(soilDB)
 library(reshape2)
 library(lattice)
 library(tactile)
+
+
+x <- fetchRaCA('cecil', get.vnir = TRUE)
+x <- as.data.frame(x$spectra[1:25, ])
+
 
 # # "wide" format, no IDs
 # x <- read.csv('E:/temp/lab_spectra_csv.csv')
@@ -140,7 +146,6 @@ xyplot(
     panel.xyplot(...)
   })
 
-
 # annotate with visible portion of the spectrum + colors
 xyplot(
   value ~ v, 
@@ -151,17 +156,20 @@ xyplot(
   scales = list(x = list(tick.number = 20), y = list(tick.number = 10)), 
   xlab = 'Wavelength (nm)', 
   ylab = 'Reflectance', 
-  panel = function(...) {
+  panel = function(x, y, ...) {
     panel.grid(-1, -1)
     panel.abline(v = c(380, 730), lty = 2)
-    panel.xyplot(...)
-    panel.segments(x0 = 380, x1 = 435, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'violet')
-    panel.segments(x0 = 435, x1 = 500, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'blue')
-    panel.segments(x0 = 500, x1 = 520, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'cyan')
-    panel.segments(x0 = 520, x1 = 565, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'green')
-    panel.segments(x0 = 565, x1 = 590, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'yellow')
-    panel.segments(x0 = 590, x1 = 625, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'orange')
-    panel.segments(x0 = 625, x1 = 730, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'red')
+    panel.xyplot(x = x, y = y, ...)
+    
+    ## TODO: use grid / gridExtra to position 
+    my <- max(y)
+    panel.segments(x0 = 380, x1 = 435, y0 = my, y1 = my, lwd = 2, col = 'violet')
+    panel.segments(x0 = 435, x1 = 500, y0 = my, y1 = my, lwd = 2, col = 'blue')
+    panel.segments(x0 = 500, x1 = 520, y0 = my, y1 = my, lwd = 2, col = 'cyan')
+    panel.segments(x0 = 520, x1 = 565, y0 = my, y1 = my, lwd = 2, col = 'green')
+    panel.segments(x0 = 565, x1 = 590, y0 = my, y1 = my, lwd = 2, col = 'yellow')
+    panel.segments(x0 = 590, x1 = 625, y0 = my, y1 = my, lwd = 2, col = 'orange')
+    panel.segments(x0 = 625, x1 = 730, y0 = my, y1 = my, lwd = 2, col = 'red')
     
   })
 
