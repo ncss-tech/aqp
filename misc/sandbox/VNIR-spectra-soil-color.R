@@ -5,8 +5,8 @@ library(lattice)
 library(tactile)
 
 
-x <- fetchRaCA('cecil', get.vnir = TRUE)
-x <- as.data.frame(x$spectra[1:25, ])
+x <- fetchRaCA('auburn', get.vnir = TRUE)
+x <- as.data.frame(x$spectra[1:pmin(25, nrow(x$spectra)), ])
 
 
 # # "wide" format, no IDs
@@ -16,7 +16,7 @@ x <- as.data.frame(x$spectra[1:25, ])
 # saveRDS(x[1:8, ], file = 'misc/sandbox/VNIR-example-spectra.rds')
 
 # example data, same format as Jay's shiny app
-x <- readRDS(file = 'misc/sandbox/VNIR-example-spectra.rds')
+# x <- readRDS(file = 'misc/sandbox/VNIR-example-spectra.rds')
 
 # add a temporary ID
 x$.id <- 1:nrow(x)
@@ -161,15 +161,16 @@ xyplot(
     panel.abline(v = c(380, 730), lty = 2)
     panel.xyplot(x = x, y = y, ...)
     
-    ## TODO: use grid / gridExtra to position 
-    my <- max(y)
-    panel.segments(x0 = 380, x1 = 435, y0 = my, y1 = my, lwd = 2, col = 'violet')
-    panel.segments(x0 = 435, x1 = 500, y0 = my, y1 = my, lwd = 2, col = 'blue')
-    panel.segments(x0 = 500, x1 = 520, y0 = my, y1 = my, lwd = 2, col = 'cyan')
-    panel.segments(x0 = 520, x1 = 565, y0 = my, y1 = my, lwd = 2, col = 'green')
-    panel.segments(x0 = 565, x1 = 590, y0 = my, y1 = my, lwd = 2, col = 'yellow')
-    panel.segments(x0 = 590, x1 = 625, y0 = my, y1 = my, lwd = 2, col = 'orange')
-    panel.segments(x0 = 625, x1 = 730, y0 = my, y1 = my, lwd = 2, col = 'red')
+    # position via panel geometry
+    yb <- current.panel.limits()$ylim[1]
+    yt <- yb + 0.01
+    panel.rect(xleft = 380, xright = 435, ybottom = yb, ytop = yt, border = 'violet', col = 'violet')
+    panel.rect(xleft = 435, xright = 500, ybottom = yb, ytop = yt, border = 'blue', col = 'blue')
+    panel.rect(xleft = 500, xright = 520, ybottom = yb, ytop = yt, border = 'cyan', col = 'cyan')
+    panel.rect(xleft = 520, xright = 565, ybottom = yb, ytop = yt, border = 'green', col = 'green')
+    panel.rect(xleft = 565, xright = 590, ybottom = yb, ytop = yt, border = 'yellow', col = 'yellow')
+    panel.rect(xleft = 590, xright = 625, ybottom = yb, ytop = yt, border = 'orange', col = 'orange')
+    panel.rect(xleft = 625, xright = 730, ybottom = yb, ytop = yt, border = 'red', col = 'red')
     
   })
 
