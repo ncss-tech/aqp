@@ -46,27 +46,51 @@ a$.id <- factor(a$.id)
 # check: ok
 head(a)
 
-# iterate over IDs and estimate a soil color
-# using the visible part of the spectra
+# ## if you want / need the Munsell notation, the following is useful ##
+# 
+# # iterate over IDs and estimate a soil color
+# # using the visible part of the spectra
+# z <- split(a, a$.id)
+# 
+# z <- lapply(z, function(i) {
+#   # assumes 380--730nm at 10nm resolution
+#   res <- spec2Munsell(i$value, convert = TRUE)
+#    # copy over ID
+#   res$.id <- i$.id[1]
+#   return(res)
+# })
+# 
+# z <- do.call('rbind', z)
+# 
+# # convert color to sRGB
+# z$col <- munsell2rgb(z$hue, z$value, z$chroma)
+# # nice label
+# z$m <- sprintf('%s %s/%s', z$hue, z$value, z$chroma)
+# 
+# # color preview
+# previewColors(z$col, labels = z$m)
+
+
+## otherwise, just return the colors 2-3x faster
+
 z <- split(a, a$.id)
 
+# TODO: may need some error handling of NA colors
 z <- lapply(z, function(i) {
   # assumes 380--730nm at 10nm resolution
-  res <- spec2Munsell(i$value, convert = TRUE)
-   # copy over ID
-  res$.id <- i$.id[1]
+  sRGB <- spec2Munsell(i$value, convert = FALSE)
+  # pack into df
+  res <- data.frame(
+    .id = i$.id[1],
+    col = rgb(sRGB)
+  )
+  #
   return(res)
 })
 
 z <- do.call('rbind', z)
 
-# convert color to sRGB
-z$col <- munsell2rgb(z$hue, z$value, z$chroma)
-# nice label
-z$m <- sprintf('%s %s/%s', z$hue, z$value, z$chroma)
-
-# color preview
-previewColors(z$col, labels = z$m)
+###
 
 ## big assumption: colors are in the same order as levels of .id
 
@@ -82,10 +106,27 @@ xyplot(value ~ v10, groups = .id, data = a, type = c('l', 'g'), par.settings = t
 xyplot(value ~ v, groups = .id, data = m, type = c('l', 'g'), par.settings = tps, scales = list(x = list(tick.number = 20)), xlab = 'Wavelength (nm)', ylab = 'Reflectance')
 
 # annotate with visible portion of the spectrum
-xyplot(value ~ v, groups = .id, data = m, type = 'l', par.settings = tps, scales = list(x = list(tick.number = 20)), xlab = 'Wavelength (nm)', ylab = 'Reflectance', panel = function(...) {
+xyplot(value ~ v, groups = .id, data = m, type = 'l', par.settings = tps, scales = list(x = list(tick.number = 20), y = list(tick.number = 10)), xlab = 'Wavelength (nm)', ylab = 'Reflectance', panel = function(...) {
   panel.grid(-1, -1)
   panel.abline(v = c(380, 730), lty = 2)
   panel.xyplot(...)
 })
+
+
+# annotate with visible portion of the spectrum
+xyplot(value ~ v, groups = .id, data = m, type = 'l', par.settings = tps, scales = list(x = list(tick.number = 20), y = list(tick.number = 10)), xlab = 'Wavelength (nm)', ylab = 'Reflectance', panel = function(...) {
+  panel.grid(-1, -1)
+  panel.abline(v = c(380, 730), lty = 2)
+  panel.xyplot(...)
+  panel.segments(x0 = 380, x1 = 450, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'violet')
+  panel.segments(x0 = 450, x1 = 495, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'blue')
+  panel.segments(x0 = 495, x1 = 570, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'green')
+  panel.segments(x0 = 570, x1 = 590, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'yellow')
+  panel.segments(x0 = 590, x1 = 620, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'orange')
+  panel.segments(x0 = 620, x1 = 730, y0 = 0.02, y1 = 0.02, lwd = 2, col = 'red')
+  
+})
+
+
 
 
