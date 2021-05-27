@@ -5,7 +5,7 @@ library(lattice)
 library(tactile)
 
 
-x <- fetchRaCA('auburn', get.vnir = TRUE)
+x <- fetchRaCA('redding', get.vnir = TRUE)
 x <- as.data.frame(x$spectra[1:pmin(25, nrow(x$spectra)), ])
 
 
@@ -36,6 +36,12 @@ head(m)
 
 # subset to visible part of the spectrum that spec2Munsell can use
 m.sub <- m[which(m$v >= 380 & m$v <= 730), ]
+
+# ## nah, just "greyish-yellow"
+# # or, compress the entire thing into visible range
+# m.sub <-  m
+# m.sub$v <- scales::rescale(m.sub$v, to = c(380, 730))
+# 
 
 # "round" 1nm -> 10nm resolution
 m.sub$v10 <- round(m.sub$v, -1)
