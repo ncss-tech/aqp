@@ -2,10 +2,17 @@ library(aqp)
 library(sharpshootR)
 library(Ternary)
 
+# https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
+
 x <- c('2.5R 6/10', '2.5B 6/10', '2.5G 6/10')
 cols <- parseMunsell(x)
 
 # colorMixtureVenn(x, mixingMethod = 'exact')
+
+
+# test 0-weights
+mixMunsell(x, w = c(100, 0, 0), mixingMethod = 'exact')
+
 
 g <- expand.grid(sand = seq(0, 100, by = 10), clay = seq(0, 100, by = 10))
 g$silt <- pmax(100 - (g$sand + g$clay), 0)
