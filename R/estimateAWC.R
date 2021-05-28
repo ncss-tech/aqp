@@ -19,36 +19,30 @@ estimateAWC <- function(texcl, omcl, precision = 2,
                         FUN = mean, ...) {
 
   #awc_lut, loaded from region2 textureclass-awc lookup table
-  awc_lut <- structure(list(texcl = structure(c(4L, 8L, 16L, 6L, 24L, 11L, 13L, 12L, 14L, 5L, 22L, 7L, 
-                                                25L, 10L, 21L, 20L, 18L, 3L, 19L, 17L, 1L, 2L, 9L, 15L, 23L), 
-         .Label = c("C", "C_heavy", "CL", "COS", "COSL", "FS", "FSL", "GR", "HPM", "L", "LCOS", "LFS", "LS", 
-                    "LVFS", "MPM", "S", "SC", "SCL", "SIC", "SICL", "SIL", "SL", "SPM", "VFS", "VFSL"), class = "factor"), 
+  awc_lut <- data.frame(texcl = c(4L, 8L, 16L, 6L, 24L, 11L, 13L, 12L, 14L, 5L, 22L, 7L, 25L, 10L, 21L, 20L, 18L, 3L, 19L, 17L, 1L, 2L, 9L, 15L, 23L), 
+                        texcl_label =c("COS", "GR", "S", "FS", "VFS", "LCOS", "LS", "LFS", "LVFS", 
+                                       "COSL", "SL", "FSL", "VFSL", "L", "SIL", "SICL", "SCL", "CL", 
+                                       "SIC", "SC", "C", "C_heavy", "HPM", "MPM", "SPM"), 
          loOM_l = c(0.02, 0.02, 0.05, 0.05, 0.05, 0.05, 0.06, 0.08, 0.09, 0.09, 0.1,  0.13, 0.14, 0.17, 0.15, 0.17, 0.14, 0.17, 0.14, 0.14, 0.14, 0.12, NA, NA, NA), 
          loOM_h = c(0.04, 0.04, 0.08, 0.08, 0.08, 0.07, 0.08, 0.11, 0.11, 0.12, 0.13, 0.15, 0.17, 0.18, 0.2,  0.21, 0.18, 0.21, 0.17, 0.16, 0.16, 0.15, NA, NA, NA), 
          mdOM_l = c(0.03, 0.03, 0.06, 0.06, 0.06, 0.06, 0.07, 0.09, 0.1,  0.1,  0.12, 0.15, 0.16, 0.17, 0.2,  0.18, 0.16, 0.15, 0.11, 0.15, 0.15, 0.13, NA, NA, NA), 
          mdOM_h = c(0.05, 0.05, 0.08, 0.08, 0.08, 0.07, 0.09, 0.12, 0.12, 0.13, 0.14, 0.17, 0.19, 0.19, 0.22, 0.2,  0.18, 0.19, 0.13, 0.17, 0.17, 0.16, NA, NA, NA), 
          hiOM_l = c(0.04, 0.04, 0.07, 0.07, 0.07, 0.07, 0.08, 0.1,  0.11, 0.11, 0.13, 0.16, 0.18, 0.2,  0.22, 0.21, 0.18, 0.17, 0.12, 0.13, 0.13, 0.15, 0.35, 0.45, 0.55), 
-         hiOM_h = c(0.06, 0.06, 0.09, 0.09, 0.09, 0.08, 0.1,  0.13, 0.13, 0.14, 0.15, 0.18, 0.2,  0.22, 0.24, 0.23, 0.2,  0.19, 0.14, 0.15, 0.15, 0.18, 0.45, 0.55, 0.65)),
-         class = "data.frame", row.names = c(NA, -25L))
+         hiOM_h = c(0.06, 0.06, 0.09, 0.09, 0.09, 0.08, 0.1,  0.13, 0.13, 0.14, 0.15, 0.18, 0.2,  0.22, 0.24, 0.23, 0.2,  0.19, 0.14, 0.15, 0.15, 0.18, 0.45, 0.55, 0.65), stringsAsFactors = FALSE)
   
   if (length(texcl) != length(omcl))
     stop("Error: Mismatch in length of input vectors `texcl` and `omcl`")
   
-  split.lut <- split(awc_lut, f = awc_lut$texcl)
   out <- rep(NA, length(texcl))
+  idx <- match(toupper(texcl), toupper(awc_lut$texcl_label))
   
-  for (i in 1:length(texcl)) {
-    res <- lapply(split.lut, function(x) {
-      if (grepl(pattern = sprintf("^%s$", texcl[i]), 
-                x$texcl, ignore.case = TRUE)) {
-        idx.lo <- 2*omcl[i]
-        idx.hi <- idx.lo + 1
-        if (!is.na(idx.hi) & !is.na(idx.lo)) {
-          return(x[,idx.lo:idx.hi])
-        } else return(NA)
-      }
-    })
-    out[i] <- FUN(unlist(res), ...)
+  for (i in seq_along(idx)) {
+    x <- awc_lut[idx[i],]
+    idx.lo <- 2*omcl[i] + 1
+    idx.hi <- idx.lo + 1 
+    if (!is.na(idx.hi) & !is.na(idx.lo)) {
+      out[i] <- FUN(as.numeric(x[,idx.lo:idx.hi]))
+    } else out[i] <- NA
   }
   return(round(out, precision))
 }

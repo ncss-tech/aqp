@@ -1,4 +1,4 @@
-if (!isGeneric("spc2mpspline"))
+# if (!isGeneric("spc2mpspline"))
   setGeneric("spc2mpspline", function(object,
                                       var_name = NULL,
                                       pattern = "R|Cr|Cd|qm",
@@ -19,7 +19,7 @@ if (!isGeneric("spc2mpspline"))
 #'
 #' @author Andrew G. Brown
 #'
-#' @return A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in colums prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in attr(result, 'removed').
+#' @return A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in attr(result, 'removed').
 #'
 #' @export spc2mpspline,SoilProfileCollection-method
 #' @aliases spc2mpspline

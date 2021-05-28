@@ -5,7 +5,7 @@
 #'
 #' @param x a \code{SoilProfileCollection} object
 #' @param groups the name of a site-level attribute that defines groups of profiles within a collection
-#' @param crit.prob probability cuttoff used to determine where the most likely depth to contact will be, e.g. 0.9 translates to 90% of profiles are shallower than this depth
+#' @param crit.prob probability cutoff used to determine where the most likely depth to contact will be, e.g. 0.9 translates to 90% of profiles are shallower than this depth
 #' @param name horizon-level attribute where horizon designation is stored, defaults to `hzdesgnname(x)`
 #' @param p a REGEX pattern that matches non-soil genetic horizons
 #' @param ... additional arguments to \code{slab}

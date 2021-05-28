@@ -18,7 +18,7 @@ aggregateSoilDepth(
 
 \item{groups}{the name of a site-level attribute that defines groups of profiles within a collection}
 
-\item{crit.prob}{probability cuttoff used to determine where the most likely depth to contact will be, e.g. 0.9 translates to 90\% of profiles are shallower than this depth}
+\item{crit.prob}{probability cutoff used to determine where the most likely depth to contact will be, e.g. 0.9 translates to 90\% of profiles are shallower than this depth}
 
 \item{name}{horizon-level attribute where horizon designation is stored, defaults to \code{hzdesgnname(x)}}
 

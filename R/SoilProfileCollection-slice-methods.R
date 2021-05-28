@@ -333,7 +333,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
 
 ## slice:
-if (!isGeneric("slice"))
+# if (!isGeneric("slice"))
   setGeneric("slice", function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE) standardGeneric("slice"))
 
 

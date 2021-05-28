@@ -1228,7 +1228,7 @@ NULL
 #' A lookup table of interpolated Munsell color chips for common soil colors.
 #'
 #' See \code{munsell2rgb} for conversion examples. Note that this table does
-#' not currently have entires for values of 2.5--common in most soil color
+#' not currently have entries for values of 2.5--common in most soil color
 #' books. These chips should be added in the next major release of aqp. Values
 #' are referenced to the D65 standard illuminant.
 #'
@@ -1403,7 +1403,7 @@ NULL
 #'
 #' @keywords datasets
 #'
-#' @format A named list with 8467 elements, each containing a numeric vector of indices corresponding to the \code{munsell} data set, which has 8467 rows (unique, whole-number chips). Names have the format \code{HUE VALUE/CHROMA}, eg. \code{"7.5YR 4/4"}
+#' @format A named list with 8467 elements, each containing a numeric vector of indices corresponding to the \code{munsell} data set, which has 8467 rows (unique, whole-number chips). Names have the format \code{HUE VALUE/CHROMA}, e.g. \code{"7.5YR 4/4"}
 #'
 #' @examples
 #' data(equivalent_munsell)

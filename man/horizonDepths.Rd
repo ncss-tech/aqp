@@ -4,13 +4,18 @@
 \name{horizonDepths<-}
 \alias{horizonDepths<-}
 \alias{horizonDepths<-,SoilProfileCollection-method}
-\alias{horizonDepths}
 \alias{horizonDepths,SoilProfileCollection-method}
+\alias{horizonDepths}
 \title{Set horizon depth column names}
-\arguments{
-\item{value}{a character vector of length two with names of columns containing numeric top and bottom depths}
+\usage{
+horizonDepths(object) <- value
 
+\S4method{horizonDepths}{SoilProfileCollection}(object)
+}
+\arguments{
 \item{object}{a SoilProfileCollection}
+
+\item{value}{a character vector of length two with names of columns containing numeric top and bottom depths}
 }
 \description{
 Set column name containing horizon ID

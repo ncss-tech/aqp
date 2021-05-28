@@ -12,7 +12,6 @@
 #' 
 #' @param object A SoilProfileCollection 
 #' @return data.frame
-#' @aliases spc_in_sync,SoilProfileCollection-method
 #' @docType methods
 #' @author Andrew G. Brown
 #'
@@ -91,10 +90,11 @@ spc_in_sync <- function(object) {
   lut <- x
   if(inherits(x, 'character'))
     lut <- as.integer(factor(x, ordered = TRUE))
-  x[which(diff(c(0,lut)) != 0)]
+  dif <- diff(c(0, lut))
+  x[which(dif != 0 | is.na(dif))]
 }
 
-if (!isGeneric('reorderHorizons'))
+# if (!isGeneric('reorderHorizons'))
   setGeneric('reorderHorizons', 
              function(object, target.order = NULL)
     standardGeneric('reorderHorizons'))

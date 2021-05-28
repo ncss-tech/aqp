@@ -5,6 +5,9 @@
 \alias{diagnostic_hz<-}
 \alias{diagnostic_hz<-,SoilProfileCollection-method}
 \title{Add data to the diagnostic slot}
+\usage{
+diagnostic_hz(object) <- value
+}
 \arguments{
 \item{object}{A SoilProfileCollection}
 

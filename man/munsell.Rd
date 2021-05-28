@@ -25,7 +25,7 @@ A lookup table of interpolated Munsell color chips for common soil colors.
 }
 \details{
 See \code{munsell2rgb} for conversion examples. Note that this table does
-not currently have entires for values of 2.5--common in most soil color
+not currently have entries for values of 2.5--common in most soil color
 books. These chips should be added in the next major release of aqp. Values
 are referenced to the D65 standard illuminant.
 }

@@ -4,6 +4,9 @@
 \alias{grepSPC}
 \alias{grepSPC,SoilProfileCollection-method}
 \title{Subset SPC with pattern-matching for text-based attributes}
+\usage{
+grepSPC(object, attr, pattern, ...)
+}
 \arguments{
 \item{object}{A SoilProfileCollection}
 

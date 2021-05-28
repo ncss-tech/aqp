@@ -1,19 +1,15 @@
-
-
-#' Get names of columns in site table
-#'
-#' @name validSpatialData
-#'
-#' @description Are the contents of @sp valid: n x 2 matrix? If not, then contents of @sp in the SoilProfileCollection are an empty SpatialPoints object.
-#' @param object a SoilProfileCollection
-#' @aliases validSpatialData,SoilProfileCollection-method
-#' @docType methods
-#' @rdname validSpatialData
-#'
-if (!isGeneric("validSpatialData"))
+# if (!isGeneric("validSpatialData"))
   setGeneric("validSpatialData", function(object, ...)
     standardGeneric("validSpatialData"))
 
+#' Get names of columns in site table
+#'
+#' @description Are the contents of @sp valid: n x 2 matrix? If not, then contents of @sp in the SoilProfileCollection are an empty SpatialPoints object.
+#' @param object a SoilProfileCollection
+#' @aliases validSpatialData
+#' @docType methods
+#' @rdname validSpatialData
+#'
 setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
           function(object) {
             # n x 2 ---> valid / initialized coordinates
@@ -34,11 +30,9 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
 
 #' Get names of columns in site and horizons table
 #'
-#' @name names
-#'
 #' @description Get names of columns in site and horizons table of a SoilProfileCollection.
 #' @param x a SoilProfileCollection
-#' @aliases names,SoilProfileCollection-method
+#' @aliases names
 #' @docType methods
 #' @rdname names
 #'
@@ -51,12 +45,10 @@ setMethod("names", signature("SoilProfileCollection"),
 # overload min() to give us the min depth within a collection
 #' Get the minimum bottom depth in a SoilProfileCollection
 #'
-#' @name min
-#'
 #' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 #' @param x a SoilProfileCollection
 #' @param v optional: a vector of horizon attribute names to refine calculation
-#' @aliases min,SoilProfileCollection-method
+#' @aliases min
 #' @docType methods
 #' @rdname min
 setMethod(
@@ -91,13 +83,11 @@ setMethod(
 # overload max() to give us the max depth within a collection
 #' Get the maximum bottom depth in a SoilProfileCollection
 #'
-#' @name max
-#'
 #' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 #'
 #' @param x a SoilProfileCollection
 #' @param v optional: horizon-level column name to refine calculation
-#' @aliases max,SoilProfileCollection-method
+#' @aliases max
 #' @docType methods
 #' @rdname max
 setMethod(
@@ -131,11 +121,9 @@ setMethod(
 # overload length() to give us the number of profiles in the collection
 #' Get the number of profiles in a SoilProfileCollection
 #'
-#' @name length
-#'
 #' @description Get the number of profiles in a SoilProfileCollection
 #' @param x a SoilProfileCollection
-#' @aliases length,SoilProfileCollection-method
+#' @aliases length
 #' @docType methods
 #' @rdname length
 setMethod(
@@ -150,19 +138,19 @@ setMethod(
 )
 
 # overload nrow() to give us the number of horizons in the collection
+
+# do not need to define a generic at all if we use the base prototype
+# if (!isGeneric('nrow'))
+#   setGeneric('nrow', function(x)
+#     standardGeneric('nrow'))
+  
 #' Get the number of horizons in a SoilProfileCollection
 #'
-#' @name nrow
-#'
 #' @description Get the number of horizons in a SoilProfileCollection
-#' @param object a SoilProfileCollection
-#' @aliases nrow,SoilProfileCollection-method
+#' @param x a SoilProfileCollection
 #' @docType methods
 #' @rdname nrow
-if (!isGeneric('nrow'))
-  setGeneric('nrow', function(x)
-    standardGeneric('nrow'))
-
+#'
 setMethod(
   f = 'nrow',
   signature(x = "SoilProfileCollection"),
@@ -170,15 +158,13 @@ setMethod(
     nrow(x@horizons)
   }
 )
-#' Get the indexes of unique profiles in a SoilProfileCollection
-#'
-#' @name unique
+#' Get the indices of unique profiles in a SoilProfileCollection
 #'
 #' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
 #'
 #' @param x a SoilProfileCollection
 #' @param vars Variables to consider in uniqueness.
-#' @aliases unique,SoilProfileCollection-method
+#' @aliases unique
 #' @docType methods
 #' @rdname unique
 #' @examples
@@ -322,7 +308,7 @@ setMethod("subset", signature(x = "SoilProfileCollection"),
               return(object[na.omit(idx),])
           })
 
-if (!isGeneric("filter"))
+# if (!isGeneric("filter"))
   setGeneric("filter", function(.data, ..., .preserve = FALSE)
     standardGeneric("filter"))
 
@@ -340,8 +326,62 @@ setMethod("filter", signature(.data = "SoilProfileCollection"),
             aqp::subset(x = .data, ...)
           })
 
+if (!isGeneric("subsetHz"))
+  setGeneric("subsetHz", function(x, ...)
+    standardGeneric("subsetHz"))
+
+#' Subset the horizons in a SoilProfileCollection using logical criteria
+#'
+#' @param x a SoilProfileCollection
+#' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
+#'
+#' @return a SoilProfileCollection with a subset of horizons, possibly with some sites removed
+#' @export
+#' @aliases subsetHz
+#' @examples
+#' 
+#' data(sp3)
+#' 
+#' depths(sp3) <- id ~ top + bottom
+#' 
+#' # show just horizons with 10YR hues
+#' plot(subsetHz(sp3, hue == '10YR'))
+#' 
+setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ...) {
+  # capture expression(s) at function
+  .dots <- substitute(list(...))
+  .dots <- .dots[2:length(.dots)]
+  
+  # create composite object to facilitate eval
+  .data <- horizons(x)
+  
+  # loop through list of expressions and evaluate
+  res <- vector('list', length(.dots))
+  for (i in 1:length(.dots)) {
+    res[[i]] <- eval(.dots[[i]], .data, parent.frame(n = 2))
+  }
+  
+  subcrit <- Reduce('&', res)
+  
+  if (!is.logical(subcrit)) {
+    badxpr <- paste0("'",paste0(.dots[sapply(.dots, function(x) !is.logical(x))],
+                                collapse=",'"),"'")
+    message(sprintf("%s is not logical; returning `x` unchanged", badxpr))
+    return(x)
+  }
+  
+  newhz <- .data[which(subcrit),]
+  
+  # subset SPC first to remove sites and other slots
+  x <- x[which(profile_id(x) %in% newhz[[idname(x)]]),]
+  
+  # then replace horizons with horizon subset 
+  #   (avoid profile IDs in site are missing from replacement horizons!)
+  replaceHorizons(x) <- newhz
+  x
+})
+
 # functions tailored for use with magrittr %>% operator / tidyr
-# formerly thisisnotapipe.R
 
 #' @title Subset SPC with pattern-matching for text-based attributes
 #' @name grepSPC
@@ -357,7 +397,7 @@ setMethod("filter", signature(.data = "SoilProfileCollection"),
 #' @rdname grepSPC
 #' @export grepSPC
 
-if (!isGeneric("grepSPC"))
+# if (!isGeneric("grepSPC"))
   setGeneric("grepSPC", function(object, attr, pattern, ...)
     standardGeneric("grepSPC"))
 
@@ -396,7 +436,7 @@ setMethod("grepSPC", signature(object = "SoilProfileCollection"),
 #' @rdname subApply
 #' @export subApply
 
-if (!isGeneric("subApply"))
+# if (!isGeneric("subApply"))
   setGeneric("subApply", function(object, .fun, ...)
     standardGeneric("subApply"))
 
@@ -416,7 +456,7 @@ setMethod("subApply", signature(object = "SoilProfileCollection"),
 ## s: site-level subsetting criteria (properly quoted)
 ## h: horizon-level subsetting criteria (properly quoted)
 ## result: SoilProfileCollection with all profiles that match _either_ criteria- i.e. greedy matching
-if (!isGeneric("subsetProfiles"))
+# if (!isGeneric("subsetProfiles"))
   setGeneric("subsetProfiles", function(object, s, h, ...)
     standardGeneric("subsetProfiles"))
 
@@ -429,7 +469,7 @@ if (!isGeneric("subsetProfiles"))
 #' via site or horizon-level attributes. The \code{h} argument supplies a fully-quoted
 #' search criteria for matching via horizon-level attributes. All horizons
 #' associated with a single horizon-level match (i.e. out of several, only a
-#' single horizon matches the search critera) are returned. See examples for
+#' single horizon matches the search criteria) are returned. See examples for
 #' usage.
 #' @name subsetProfiles
 #' @aliases subsetProfiles,SoilProfileCollection-method
