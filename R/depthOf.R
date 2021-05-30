@@ -84,7 +84,8 @@ depthOf <- function(p,
       hzdesgn = hzdesgn,
       no.contact.depth = no.contact.depth,
       no.contact.assigned = no.contact.assigned,
-      na.rm = na.rm
+      na.rm = na.rm,
+      simplify = simplify
     ))
   }
   
@@ -170,23 +171,29 @@ depthOf <- function(p,
                         hzdesgn = guessHzDesgnName(p),
                         no.contact.depth = NULL,
                         no.contact.assigned = NA,
-                        na.rm = TRUE) {
+                        na.rm = TRUE,
+                        simplify = TRUE) {
     
   
   id <- idname(p)
   depthcol <- horizonDepths(p)[ifelse(top, 1, 2)]
   
   # depthOf returns all top or bottom depths of horizons matching `hzdesgn`
-  res <- depthOf(p, pattern, FUN = NULL, top, hzdesgn, no.contact.depth, no.contact.assigned)
+  res <- depthOf(p = p,
+                 pattern = pattern,
+                 FUN = NULL,
+                 top = top,
+                 hzdesgn = hzdesgn,
+                 no.contact.depth = no.contact.depth,
+                 no.contact.assigned = no.contact.assigned,
+                 simplify = simplify)
  
   if (inherits(res, 'data.frame')) {
   # otherwise, return the FUN value)) {
     
     # handle warnings about e.g. no non-missing arguments to FUN
-    suppressWarnings({
-      idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == FUN(.SD[[depthcol]], na.rm = na.rm)],
-                                            by = list(res[[id]]), .SDcols = depthcol]$V1
-    })
+    idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == suppressWarnings(FUN(.SD[[depthcol]], na.rm = na.rm))],
+                                          by = list(res[[id]]), .SDcols = depthcol]$V1
     
     res2 <- res[idx, c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
     
@@ -194,7 +201,7 @@ depthOf <- function(p,
     res2 <- suppressWarnings(FUN(res, na.rm = na.rm))
     
     # if not found, depth is infinite
-    if(is.infinite(res2)) {
+    if (length(p) == 1 && (!is.finite(res2) | is.na(res2))) {
       return(no.contact.assigned)
     }
   }
