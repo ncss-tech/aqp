@@ -6,30 +6,28 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 
 #' Subset soil horizon data using a depth or depth interval
 #'
-#' @param p A SoilProfileCollection
-#' @param z1 Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersection interval.
-#' @param z2 optional: bottom depth of intersection interval
-#' @param ids Return only horizon IDs? default: `FALSE`
-#' @param df Return a data.frame, by intersection with \code{horizons(p)}? default: `FALSE`
-#' @param truncate Truncate horizon top and bottom depths to \code{z1} and \code{z2}? default: `FALSE`
-#' @param invert Get the horizons ranges outside the interval z1/z2? default: `FALSE`
-#' @param modality Return all horizons (default: \code{"all"}) or first, _thickest_ (\code{modality = "thickest"}) horizon in interval.
+#' @param p a SoilProfileCollection
+#' @param z1 numeric. (required) top depth to intersect horizon. Either length `1` or length equal to `length(p)`
+#' @param z2 optional: numeric bottom depth of intersection interval. Either length `1`, length equal to `length(p)` or `NULL`. Default: `NULL` is "point" intersection 
+#' @param ids return only horizon IDs? default: `FALSE`
+#' @param df return a data.frame, by intersection with `horizons(p)`? default: `FALSE`
+#' @param truncate truncate horizon top and bottom depths to `z1` and \code{z2}? default: `FALSE`
+#' @param invert get horizons _outside_ the interval `[z1,z2]`? default: `FALSE`
+#' @param modality default: `"all"` return all horizons; or `modality = "thickest"`) to return the _thickest_ horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.
 #'
-#' @description \code{glom()} returns a "clod" of horizons from a SoilProfileCollection from a depth interval.
+#' @description Make a "clod" of horizons from a SoilProfileCollection given a point or a depth interval to intersect. The interval `[z1,z2]` may be profile-specific (equal in length to `p`), or may be recycled over all profiles (if boundaries are length 1). For "point" intersection, `z2` may be left as the default value `NULL`. 
 #'
-#' All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is specified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
+#' @details "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
+#' 
+#' The full depth range of horizons included within the interval are returned (a "ragged" SoilProfileCollection) unless the `truncate` argument is set as `TRUE`. Horizon intersection is based on unique ID \code{hzidname(spc)} and depth range of interest. Profiles that lack data in the range of interest will be dropped from the resulting SoilProfileCollection. 
 #'
-#' If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
-#'
-#' If inverting results with \code{invert}, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from \code{ids = TRUE} different from what you expect, as they will be based on a profile with an "extra" horizon.
-#'
-#' @details The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
+#' If inverting results with `invert`, it is possible that thick horizons (whose boundaries span wider than the specified interval) will be split into _two_ horizons, where previously they were one. This may make the results from `ids = TRUE` different from what you expect, as they will be based on a profile with an "extra" horizon and re-calculated unique horizon ID (`hzidname(spc)`) `"hzID"`.
 #'
 #' @seealso \code{\link{glomApply}} \code{\link{trunc}}
 #'
 #' @author Andrew G. Brown
 #'
-#' @return A SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
+#' @return a SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
 #'
 #' @export glom
 #' @aliases glom
@@ -39,19 +37,51 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #'
-#' p <- sp1[1]
+#' p <- glom(sp1, 25, 150)
 #'
-#' foo <- glom(p, 25, 100)
+#' # 28 horizons
+#' nrow(p) 
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p, color = "prop", max.depth = 200)
+#' abline(h = c(25, 100), lty = 2)
+#' 
+#' ## glom(..., truncate = TRUE)
+#' 
+#' p2 <- glom(sp1, 25, 150, truncate = TRUE)
 #'
-#' # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
-#' nrow(foo) 
+#' # 28 horizons
+#' nrow(p2) 
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p2, color = "prop", max.depth = 200)
+#' abline(h = c(25, 100), lty = 2)
+#' 
+#' ## glom(..., truncate = TRUE, invert = TRUE)
+#' 
+#' p3 <- glom(sp1, 25, 150, truncate = TRUE, invert = TRUE)
+#'
+#' # 45 horizons
+#' nrow(p3) 
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p3, color = "prop", max.depth = 200)
+#' abline(h = c(25, 100), lty = 2)
+#' 
 setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
-          function(p, z1, z2 = NULL,
-                 ids = FALSE, df = FALSE,
-                 truncate = FALSE, invert = FALSE,
-                 modality = "all") {
+          function(p,
+                   z1,
+                   z2 = NULL,
+                   ids = FALSE,
+                   df = FALSE,
+                   truncate = FALSE,
+                   invert = FALSE,
+                   modality = "all") {
 
-  depthn <- horizonDepths(p)
+  depthn <- horizonDepths(p) 
   
   # recycle z1 to size of SPC if length is 1
   if (length(z1) == 1) {

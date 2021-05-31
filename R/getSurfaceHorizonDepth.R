@@ -1,16 +1,16 @@
 #' Determine thickness of horizons (continuous from surface) matching a pattern
 #'
-#' @description This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0).
+#' @description Find the thickness of horizon designations, or any other character patterns, that are continuous from the soil surface (depth = 0 or shallowest depth in profile).
 #'
-#' The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given \code{pattern = "A"}.
+#' @details The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given \code{pattern = "^A[1-9]*$"}.
 #'
-#' getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; and, it is used by getMineralSoilSurfaceDepth to find the thickness of O horizons in lieu of lab data.
+#' `getSurfaceHorizonDepth` is used by `getPlowLayerDepth` for matching Ap horizons; and, it is used by `getMineralSoilSurfaceDepth` to find the thickness of O horizons in lieu of lab data.
 #'
-#' @param p A single-profile SoilProfileCollection object.
-#' @param pattern Regular expression pattern to match for all horizons to be considered part of the "surface".
-#' @param hzdesgn Column name containing horizon designation. Default: \code{guessHzDesgnName(p)}.
+#' @param p a SoilProfileCollection
+#' @param pattern a regular expression pattern to match for all horizons to be considered part of the "surface".
+#' @param hzdesgn column name containing horizon designation. Default: \code{guessHzDesgnName(p)}.
 #' @param simplify logical. Return single profile results as vector (default: `TRUE`) or `data.frame` (`FALSE`)
-#' @return Returns a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface (depth = 0).
+#' @return a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface. If `length(p) > 1` then a _data.frame_ containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
 #'
 #' @author Andrew G. Brown
 #'

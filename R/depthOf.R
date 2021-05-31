@@ -1,21 +1,19 @@
 #' Get top or bottom depths of horizons matching a regular expression pattern
 #'
-#' @description The \code{depthOf} family of functions calculate depth of occurrence of a horizon designation pattern. They are used primarily in the place of complex qualitative or quantitative data that would confirm taxonomic criteria.
-#'
-#' Generally, these functions are used to implement assumptions about relationships between diagnostic properties, features and materials and horizon designations commonly used in the field. Particular assumptions may not apply in all localities and/or data sources. Great care should be taken when inspecting results.
+#' @description The \code{depthOf} family of functions calculate depth of occurrence of a horizon designation pattern, or any other value that can be coerced to character and matched with a regular expression.
 #'
 #' If you need all depths of occurrence for a particular pattern, \code{depthOf} is what you are looking for. \code{minDepthOf} and \code{maxDepthOf} are wrappers around \code{depthOf} that return the minimum and maximum depth. They are all set up to handle missing values and missing "contacts" with the target pattern.
 #'
-#' @param p A single-profile SoilProfileCollection.
-#' @param pattern A regular expression to match in the horizon designation column. See:\code{hzdesgn}
+#' @param p a SoilProfileCollection
+#' @param pattern a regular expression to match in the horizon designation column. See:\code{hzdesgn}
 #' @param FUN a function that returns a single value, and takes argument `na.rm`
-#' @param top Should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: \code{TRUE}.
-#' @param hzdesgn Column name containing horizon designations. Default: \code{guessHzDesgnName(p)}
-#' @param no.contact.depth Depth to assume that contact did not occur.
-#' @param no.contact.assigned Depth to assign when a contact did not occur.
+#' @param top should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: \code{TRUE}.
+#' @param hzdesgn column name containing horizon designations. Default: \code{guessHzDesgnName(p)}
+#' @param no.contact.depth depth to assume that contact did not occur.
+#' @param no.contact.assigned depth to assign when a contact did not occur.
 #' @param simplify logical. Return single profile results as vector (default: `TRUE`) or `data.frame` (`FALSE`)
 #' @param na.rm logical. Remove `NA`? (default: `TRUE`)
-#' @return A numeric vector containing specified depth(s) of horizons matching a pattern. If `length(p) > 1` then a _data.frame_ containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
+#' @return a numeric vector containing specified depth(s) of horizons matching a pattern. If `length(p) > 1` then a _data.frame_ containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
 #'
 #' @author Andrew G. Brown
 #'
