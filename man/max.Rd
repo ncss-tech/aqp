@@ -6,12 +6,14 @@
 \alias{max}
 \title{Get the maximum bottom depth in a SoilProfileCollection}
 \usage{
-\S4method{max}{SoilProfileCollection}(x, v = NULL)
+\S4method{max}{SoilProfileCollection}(x, v = NULL, na.rm = TRUE)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
 
 \item{v}{optional: horizon-level column name to refine calculation}
+
+\item{na.rm}{remove \code{NA}? default: \code{TRUE}}
 }
 \description{
 Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.

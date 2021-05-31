@@ -6,12 +6,14 @@
 \alias{min}
 \title{Get the minimum bottom depth in a SoilProfileCollection}
 \usage{
-\S4method{min}{SoilProfileCollection}(x, v = NULL)
+\S4method{min}{SoilProfileCollection}(x, v = NULL, na.rm = TRUE)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
 
 \item{v}{optional: a vector of horizon attribute names to refine calculation}
+
+\item{na.rm}{remove \code{NA}? default: \code{TRUE}}
 }
 \description{
 Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.

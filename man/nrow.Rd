@@ -3,6 +3,7 @@
 \docType{methods}
 \name{nrow,SoilProfileCollection-method}
 \alias{nrow,SoilProfileCollection-method}
+\alias{nrow}
 \title{Get the number of horizons in a SoilProfileCollection}
 \usage{
 \S4method{nrow}{SoilProfileCollection}(x)

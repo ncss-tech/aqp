@@ -44,17 +44,17 @@ setMethod("names", signature("SoilProfileCollection"),
 
 # overload min() to give us the min depth within a collection
 #' Get the minimum bottom depth in a SoilProfileCollection
-#'
 #' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
 #' @param x a SoilProfileCollection
 #' @param v optional: a vector of horizon attribute names to refine calculation
+#' @param na.rm remove `NA`? default: `TRUE`
 #' @aliases min
 #' @docType methods
 #' @rdname min
 setMethod(
-  f = 'min',
+  f = "min",
   signature(x = "SoilProfileCollection"),
-  definition = function(x, v = NULL) {
+  definition = function(x, v = NULL, na.rm = TRUE) {
 
     htb <- horizonDepths(x)
     target.names <- c(idname(x), hzidname(x), htb)
@@ -77,24 +77,23 @@ setMethod(
     # return the shallowest (of the deepest depths in each profile)
     .LAST <- NULL
     .HZID <- NULL
-    return(min(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = TRUE))
+    return(min(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = na.rm))
   }
 )
 
 # overload max() to give us the max depth within a collection
 #' Get the maximum bottom depth in a SoilProfileCollection
-#'
 #' @description Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
-#'
 #' @param x a SoilProfileCollection
 #' @param v optional: horizon-level column name to refine calculation
+#' @param na.rm remove `NA`? default: `TRUE`
 #' @aliases max
 #' @docType methods
 #' @rdname max
 setMethod(
-  f = 'max',
+  f = "max",
   signature(x = "SoilProfileCollection"),
-  definition = function(x, v = NULL) {
+  definition = function(x, v = NULL, na.rm = TRUE) {
     htb <- horizonDepths(x)
     target.names <- c(idname(x), hzidname(x), htb)
     
@@ -113,23 +112,23 @@ setMethod(
     idx <- which(complete.cases(.data.frame.j(h, target.names, aqp_df_class(x))))
     x@horizons <- h[idx,]
     
+    
     # return the deepest (of the deepest depths in each profile)
     .LAST <- NULL
     .HZID <- NULL
-    return(max(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = TRUE))
+    return(max(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = na.rm))
   }
 )
 
 # overload length() to give us the number of profiles in the collection
 #' Get the number of profiles in a SoilProfileCollection
-#'
 #' @description Get the number of profiles in a SoilProfileCollection
 #' @param x a SoilProfileCollection
 #' @aliases length
 #' @docType methods
 #' @rdname length
 setMethod(
-  f = 'length',
+  f = "length",
   signature(x = "SoilProfileCollection"),
   definition = function(x) {
     # faster replacement for profile_id()
@@ -147,23 +146,20 @@ setMethod(
 #     standardGeneric('nrow'))
   
 #' Get the number of horizons in a SoilProfileCollection
-#'
+#' @aliases nrow
 #' @description Get the number of horizons in a SoilProfileCollection
 #' @param x a SoilProfileCollection
 #' @docType methods
 #' @rdname nrow
-#'
 setMethod(
-  f = 'nrow',
+  f = "nrow",
   signature(x = "SoilProfileCollection"),
   definition = function(x) {
     nrow(x@horizons)
   }
 )
 #' Get the indices of unique profiles in a SoilProfileCollection
-#'
 #' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
-#'
 #' @param x a SoilProfileCollection
 #' @param vars Variables to consider in uniqueness.
 #' @aliases unique
@@ -209,7 +205,6 @@ setMethod(f = 'unique',
 })
 
 #' @title Subset a SoilProfileCollection with logical expressions
-#'
 #' @description \code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
 #'
 #' @param x A SoilProfileCollection
