@@ -7,8 +7,8 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' Subset soil horizon data using a depth or depth interval
 #'
 #' @param p a SoilProfileCollection
-#' @param z1 numeric. (required) top depth to intersect horizon. Either length `1` or length equal to `length(p)`
-#' @param z2 optional: numeric bottom depth of intersection interval. Either length `1`, length equal to `length(p)` or `NULL`. Default: `NULL` is "point" intersection 
+#' @param z1 numeric vector of top depth to intersect horizon (required). Can be an expression involving `siteNames(p)` or quoted column name. Should evaluate to numeric length `1` or length equal to `length(p)`
+#' @param z2 numeric vector bottom depth of intersection interval (optional). Can also be an expression involving `siteNames(p)` or quoted column name. Should evaluate to numeric length `1`, length equal to `length(p)` or `NULL`. Default: `NULL` is "point" intersection 
 #' @param ids return only horizon IDs? default: `FALSE`
 #' @param df return a data.frame, by intersection with `horizons(p)`? default: `FALSE`
 #' @param truncate truncate horizon top and bottom depths to `z1` and \code{z2}? default: `FALSE`
@@ -71,6 +71,19 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' plot(p3, color = "prop", max.depth = 200)
 #' abline(h = c(25, 100), lty = 2)
 #' 
+#' ## profile-specific interval, using expressions evaluated within sp1@site
+#' 
+#' # calculate some new site-level variables containing target interval
+#' sp1$glom_top <- (1:9) * 10
+#' sp1$glom_bottom <- 10 + sp1$glom_top
+#' 
+#' # glom evaluates non-standard expressions using siteNames(sp1) column names
+#' p4 <- glom(sp1, glom_top / 2, glom_bottom * 1.2, truncate = TRUE)
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p4, color = "prop", max.depth = 200)
+#' 
 setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
           function(p,
                    z1,
@@ -80,7 +93,33 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
                    truncate = FALSE,
                    invert = FALSE,
                    modality = "all") {
-
+            
+  # handle unquoted symbols from @site column names (or expressions using them)
+  zz <- eval(substitute(list(z1, z2)),
+             envir = site(p), 
+             enclos = parent.frame())
+  
+  z1 <- zz[[1]]
+  z2 <- zz[[2]]
+  
+  # handle _quoted_ character column names from @site for z1/z2
+  if (is.character(z1) && length(z1) == 1) {
+    if (z1 %in% siteNames(p)) {
+      sitez1 <- p[[z1]]
+      if (!is.numeric(sitez1))
+        stop("If `z1` is a column name, must refer to a numeric column in `siteNames(p)`")
+      z1 <- sitez1
+    }
+  }
+  if (is.character(z2) && length(z2) == 1) {
+    if (z2 %in% siteNames(p)) {
+      sitez2 <- p[[z2]]
+      if (!is.numeric(sitez2))
+        stop("If `z2` is a column name, must refer to a numeric column in `siteNames(p)`")
+      z2 <- sitez2
+    }
+  }
+  
   depthn <- horizonDepths(p) 
   
   # recycle z1 to size of SPC if length is 1
@@ -101,7 +140,15 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
   if (length(z2) != length(z1)) {
     stop("`z2`, if specified, should have same length as `z1`", call. = FALSE)
   }
-
+  
+  # handle bad z logic
+  bad.ldx <- z2 < z1
+  if (sum(bad.ldx) > 0) {
+    warning("`z2` smaller than `z1`; setting top and bottom to `NA`")
+    z1[bad.ldx] <- NA
+    z2[bad.ldx] <- NA
+  }
+  
   if (!invert) {
     idx <- .multiglomDT(p, z1 = z1, z2 = z2, modality = modality)
   } else {

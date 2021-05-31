@@ -19,9 +19,9 @@
 \arguments{
 \item{p}{a SoilProfileCollection}
 
-\item{z1}{numeric. (required) top depth to intersect horizon. Either length \code{1} or length equal to \code{length(p)}}
+\item{z1}{numeric vector of top depth to intersect horizon (required). Can be an expression involving \code{siteNames(p)} or quoted column name. Should evaluate to numeric length \code{1} or length equal to \code{length(p)}}
 
-\item{z2}{optional: numeric bottom depth of intersection interval. Either length \code{1}, length equal to \code{length(p)} or \code{NULL}. Default: \code{NULL} is "point" intersection}
+\item{z2}{numeric vector bottom depth of intersection interval (optional). Can also be an expression involving \code{siteNames(p)} or quoted column name. Should evaluate to numeric length \code{1}, length equal to \code{length(p)} or \code{NULL}. Default: \code{NULL} is "point" intersection}
 
 \item{ids}{return only horizon IDs? default: \code{FALSE}}
 
@@ -84,6 +84,19 @@ nrow(p3)
 par(mar = c(1,1,3,1))
 plot(p3, color = "prop", max.depth = 200)
 abline(h = c(25, 100), lty = 2)
+
+## profile-specific interval, using expressions evaluated within sp1@site
+
+# calculate some new site-level variables containing target interval
+sp1$glom_top <- (1:9) * 10
+sp1$glom_bottom <- 10 + sp1$glom_top
+
+# glom evaluates non-standard expressions using siteNames(sp1) column names
+p4 <- glom(sp1, glom_top / 2, glom_bottom * 1.2, truncate = TRUE)
+
+# inspect graphically
+par(mar = c(1,1,3,1))
+plot(p4, color = "prop", max.depth = 200)
 
 }
 \seealso{
