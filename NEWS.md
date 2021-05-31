@@ -1,11 +1,13 @@
-# aqp 1.30 (2021-05-23)
+# aqp 1.30 (2021-05-30)
  * `plotColorMixture()` will respect "names" attribute of colors-to-mix
  * `parseMunsell()` now more robust, c/o P. Roudier
  * `mixMunsell`:
     - new method `exact` for direct conversion of mixture spectra to sRGB or closest Munsell chip (via `spec2Munsell()`)
  * new convenience function `PMS2Munsell()` for converting PMS codes -> closest Munsell chip (https://github.com/ncss-tech/aqp/issues/124)
  * `glom()` `z1` and `z2` arguments vectorized to allow for profile-specific intervals
- * `depthOf()` can now be applied to multiple profiles. If `length(p) > 1` then result is a _data.frame_ containing profile ID, top or bottom depths and pattern
+   *  `z1` and `z2` support non-standard evaluation based on column names in `siteNames(p)`, and also can take character vector (length 1) with column names in `siteNames(p)`
+ * `depthOf()`, `minDepthOf()`, `maxDepthOf()`, `getSurfaceHorizonDepth()`, `getMineralSoilSurfaceDepth()`, `getPlowLayerDepth()` can now be applied to multiple profiles.
+   *  If the input _SoilProfileCollection_ has more than one profile then result is a _data.frame_ containing profile ID, top or bottom depths, horizon designation and pattern
 
 # aqp 1.29 (2021-04-05)
  * CRAN release
