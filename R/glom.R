@@ -142,11 +142,11 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
   }
   
   # handle bad z logic
-  bad.ldx <- z2 < z1
-  if (sum(bad.ldx) > 0) {
+  bad.idx <- which(z2 < z1)
+  if (length(bad.idx) > 0) {
     warning("`z2` smaller than `z1`; setting top and bottom to `NA`")
-    z1[bad.ldx] <- NA
-    z2[bad.ldx] <- NA
+    z1[bad.idx] <- NA
+    z2[bad.idx] <- NA
   }
   
   if (!invert) {

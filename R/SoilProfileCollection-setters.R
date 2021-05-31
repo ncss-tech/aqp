@@ -109,7 +109,7 @@ setReplaceMethod("depths", "data.frame",
 ##
 ## initialize SP/SPC objects from a model.frame
 ##
-.initSPCfromMF <- function(data, mf, use_class){
+.initSPCfromMF <- function(data, mf, use_class) {
   # get column names containing id, top, bottom
   nm <- names(mf)
 
@@ -125,42 +125,30 @@ setReplaceMethod("depths", "data.frame",
     data[[nm[1]]] <- as.character(data[[nm[1]]])
   }
 
-  # depths
+  # depth column names
   depthcols <- c(nm[2], nm[3])
 
   # enforce numeric depths and provide QC warnings as needed
   data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
   data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
 
-  iddata <- data[[nm[1]]]
+  # get column containing IDs
+  data_id <- data[[nm[1]]]
 
-  if (all(is.na(data[[depthcols[1]]]) |
-          all(is.na(data[[depthcols[2]]]) ))) {
-      warning("Dropping profile IDs: ", paste0(iddata, collapse = ","),
-              "; all top and/or bottom depths missing!", call. = FALSE)
+  # check for all depths NA or 0-length
+  if (all(is.na(data[[depthcols[1]]])) || all(is.na(data[[depthcols[2]]]))) {
+      warning("all top and/or bottom depths missing from input data", call. = FALSE)
+      # return a empty (0-length) SPC prototype using id and depthcols
       return(.prototypeSPC(nm[1], depthcols))
   }
 
   tdep <- data[[depthcols[1]]]
 
-  usortid <- sort(iddata)
-
-  idtdepord <- order(as.character(iddata), tdep)
-  ditd <- data[idtdepord,]
-  hsorttdep <- !all(ditd[[depthcols[1]]] == tdep)
-
-  # re-sort horizon data
-  t12 <- any(iddata != usortid) | hsorttdep
-
-  if (is.na(t12)) {
-    return(.prototypeSPC(nm[1], depthcols))
-  } else if (t12) {
-    ## note: forced character sort on ID -- need to impose some order to check depths
-    data <- ditd
-  }
+  # calculate ID-top depth order, re-order input data
+  id_tdep_order <- order(as.character(data_id), tdep)
+  data <- data[id_tdep_order,]
 
   # create a site table with just IDs
-  # d'OH need to do this AFTER re-sorting!!!
   nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]),
                                           stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
@@ -305,15 +293,11 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
       # existing site data (may be absent == 0-row data.frame)
       s <- object@site
 
-      if(any(s[[idname(object)]] != ids.coalesce)) {
-        warning("site and horizon data are out of sync!")
-      }
-
-      # join to existing data: by default it will only be idname(object)
+      # join to existing data: by default it will only be on idname(object)
 
       ## an appropriate ID must exist in 'value' AND @site for this to work
       # LEFT JOIN
-      suppressMessages({site.new <- merge(s, value, all.x = TRUE, sort = FALSE)})
+     site.new <- merge(s, value, all.x = TRUE, sort = FALSE)
 
       new.id.order <- site.new[[idname(object)]]
       if(length(new.id.order) != length(ids.coalesce) ||
