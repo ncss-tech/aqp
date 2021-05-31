@@ -2,31 +2,36 @@
 % Please edit documentation in R/getSurfaceHorizonDepth.R
 \name{getSurfaceHorizonDepth}
 \alias{getSurfaceHorizonDepth}
-\alias{getSurfaceHorizon}
 \alias{getMineralSoilSurfaceDepth}
 \alias{getPlowLayerDepth}
 \title{Determine thickness of horizons (continuous from surface) matching a pattern}
 \usage{
-getMineralSoilSurfaceDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "O")
-
-getPlowLayerDepth(p, hzdesgn = guessHzDesgnName(p), pattern = "^Ap[^b]*")
+getSurfaceHorizonDepth(
+  p,
+  pattern,
+  hzdesgn = guessHzDesgnName(p),
+  simplify = TRUE
+)
 }
 \arguments{
-\item{p}{A single-profile SoilProfileCollection object.}
+\item{p}{a SoilProfileCollection}
 
-\item{pattern}{Regular expression pattern to match for all horizons to be considered part of the "surface".}
+\item{pattern}{a regular expression pattern to match for all horizons to be considered part of the "surface".}
 
-\item{hzdesgn}{Column name containing horizon designation. Default: \code{guessHzDesgnName(p)}.}
+\item{hzdesgn}{column name containing horizon designation. Default: \code{guessHzDesgnName(p)}.}
+
+\item{simplify}{logical. Return single profile results as vector (default: \code{TRUE}) or \code{data.frame} (\code{FALSE})}
 }
 \value{
-Returns a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface (depth = 0).
+a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface. If \code{length(p) > 1} then a \emph{data.frame} containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
 }
 \description{
-This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0).
+Find the thickness of horizon designations, or any other character patterns, that are continuous from the soil surface (depth = 0 or shallowest depth in profile).
+}
+\details{
+The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given \code{pattern = "^A[1-9]*$"}.
 
-The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given \code{pattern = "A"}.
-
-getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; and, it is used by getMineralSoilSurfaceDepth to find the thickness of O horizons in lieu of lab data.
+\code{getSurfaceHorizonDepth} is used by \code{getPlowLayerDepth} for matching Ap horizons; and, it is used by \code{getMineralSoilSurfaceDepth} to find the thickness of O horizons in lieu of lab data.
 }
 \examples{
 library(aqp)

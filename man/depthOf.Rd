@@ -9,32 +9,39 @@
 depthOf(
   p,
   pattern,
+  FUN = NULL,
   top = TRUE,
   hzdesgn = guessHzDesgnName(p),
   no.contact.depth = NULL,
-  no.contact.assigned = NA
+  no.contact.assigned = NA_real_,
+  na.rm = TRUE,
+  simplify = TRUE
 )
 }
 \arguments{
-\item{p}{A single-profile SoilProfileCollection.}
+\item{p}{a SoilProfileCollection}
 
-\item{pattern}{A regular expression to match in the horizon designation column. See:\code{hzdesgn}}
+\item{pattern}{a regular expression to match in the horizon designation column. See:\code{hzdesgn}}
 
-\item{top}{Should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: \code{TRUE}.}
+\item{FUN}{a function that returns a single value, and takes argument \code{na.rm}}
 
-\item{hzdesgn}{Column name containing horizon designations. Default: \code{guessHzDesgnName(p)}}
+\item{top}{should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: \code{TRUE}.}
 
-\item{no.contact.depth}{Depth to assume that contact did not occur.}
+\item{hzdesgn}{column name containing horizon designations. Default: \code{guessHzDesgnName(p)}}
 
-\item{no.contact.assigned}{Depth to assign when a contact did not occur.}
+\item{no.contact.depth}{depth to assume that contact did not occur.}
+
+\item{no.contact.assigned}{depth to assign when a contact did not occur.}
+
+\item{na.rm}{logical. Remove \code{NA}? (default: \code{TRUE})}
+
+\item{simplify}{logical. Return single profile results as vector (default: \code{TRUE}) or \code{data.frame} (\code{FALSE})}
 }
 \value{
-A numeric vector containing specified depth(s) of horizons matching a pattern.
+a numeric vector containing specified depth(s) of horizons matching a pattern. If \code{length(p) > 1} then a \emph{data.frame} containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
 }
 \description{
-The \code{depthOf} family of functions calculate depth of occurrence of a horizon designation pattern. They are used primarily in the place of complex qualitative or quantitative data that would confirm taxonomic criteria.
-
-Generally, these functions are used to implement assumptions about relationships between diagnostic properties, features and materials and horizon designations commonly used in the field. Particular assumptions may not apply in all localities and/or data sources. Great care should be taken when inspecting results.
+The \code{depthOf} family of functions calculate depth of occurrence of a horizon designation pattern, or any other value that can be coerced to character and matched with a regular expression.
 
 If you need all depths of occurrence for a particular pattern, \code{depthOf} is what you are looking for. \code{minDepthOf} and \code{maxDepthOf} are wrappers around \code{depthOf} that return the minimum and maximum depth. They are all set up to handle missing values and missing "contacts" with the target pattern.
 }

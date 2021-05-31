@@ -6,30 +6,28 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 
 #' Subset soil horizon data using a depth or depth interval
 #'
-#' @param p A SoilProfileCollection
-#' @param z1 Top depth (required) - depth to intersect horizon; if 'z2' specified, top depth of intersection interval.
-#' @param z2 optional: bottom depth of intersection interval
-#' @param ids Return only horizon IDs? default: `FALSE`
-#' @param df Return a data.frame, by intersection with \code{horizons(p)}? default: `FALSE`
-#' @param truncate Truncate horizon top and bottom depths to \code{z1} and \code{z2}? default: `FALSE`
-#' @param invert Get the horizons ranges outside the interval z1/z2? default: `FALSE`
-#' @param modality Return all horizons (default: \code{"all"}) or first, _thickest_ (\code{modality = "thickest"}) horizon in interval.
+#' @param p a SoilProfileCollection
+#' @param z1 numeric vector of top depth to intersect horizon (required). Can be an expression involving `siteNames(p)` or quoted column name. Should evaluate to numeric length `1` or length equal to `length(p)`
+#' @param z2 numeric vector bottom depth of intersection interval (optional). Can also be an expression involving `siteNames(p)` or quoted column name. Should evaluate to numeric length `1`, length equal to `length(p)` or `NULL`. Default: `NULL` is "point" intersection 
+#' @param ids return only horizon IDs? default: `FALSE`
+#' @param df return a data.frame, by intersection with `horizons(p)`? default: `FALSE`
+#' @param truncate truncate horizon top and bottom depths to `z1` and \code{z2}? default: `FALSE`
+#' @param invert get horizons _outside_ the interval `[z1,z2]`? default: `FALSE`
+#' @param modality default: `"all"` return all horizons; or `modality = "thickest"`) to return the _thickest_ horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.
 #'
-#' @description \code{glom()} returns a "clod" of horizons from a SoilProfileCollection from a depth interval.
+#' @description Make a "clod" of horizons from a SoilProfileCollection given a point or a depth interval to intersect. The interval `[z1,z2]` may be profile-specific (equal in length to `p`), or may be recycled over all profiles (if boundaries are length 1). For "point" intersection, `z2` may be left as the default value `NULL`. 
 #'
-#' All horizons included within the specified interval are returned in their entirety (not just the portion within the interval), unless the \code{truncate} argument is specified. Horizon intersection is based on unique ID \code{hzidname(spc)} and attribute of interest.
+#' @details "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
+#' 
+#' The full depth range of horizons included within the interval are returned (a "ragged" SoilProfileCollection) unless the `truncate` argument is set as `TRUE`. Horizon intersection is based on unique ID \code{hzidname(spc)} and depth range of interest. Profiles that lack data in the range of interest will be dropped from the resulting SoilProfileCollection. 
 #'
-#' If intersection at the specified boundaries \code{['z1', 'z2']} results in no horizon data, 'NULL' is returned with a warning containing the offending pedon ID.
-#'
-#' If inverting results with \code{invert}, it is possible that thick horizons (that span more than the entire glom interval) will be split into two horizons. This may make the results from \code{ids = TRUE} different from what you expect, as they will be based on a profile with an "extra" horizon.
-#'
-#' @details The verb/function that creates a clod is "glom". "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
+#' If inverting results with `invert`, it is possible that thick horizons (whose boundaries span wider than the specified interval) will be split into _two_ horizons, where previously they were one. This may make the results from `ids = TRUE` different from what you expect, as they will be based on a profile with an "extra" horizon and re-calculated unique horizon ID (`hzidname(spc)`) `"hzID"`.
 #'
 #' @seealso \code{\link{glomApply}} \code{\link{trunc}}
 #'
 #' @author Andrew G. Brown
 #'
-#' @return A SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
+#' @return a SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
 #'
 #' @export glom
 #' @aliases glom
@@ -39,42 +37,158 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #'
-#' p <- sp1[1]
+#' p <- glom(sp1, 25, 150)
 #'
-#' foo <- glom(p, 25, 100)
+#' # 28 horizons
+#' nrow(p) 
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p, color = "prop", max.depth = 200)
+#' abline(h = c(25, 100), lty = 2)
+#' 
+#' ## glom(..., truncate = TRUE)
+#' 
+#' p2 <- glom(sp1, 25, 150, truncate = TRUE)
 #'
-#' # there are 4 horizons in the clod glommed from depths 25 to 100 on profile 1 in sp1
-#' nrow(foo) 
+#' # 28 horizons
+#' nrow(p2) 
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p2, color = "prop", max.depth = 200)
+#' abline(h = c(25, 100), lty = 2)
+#' 
+#' ## glom(..., truncate = TRUE, invert = TRUE)
+#' 
+#' p3 <- glom(sp1, 25, 150, truncate = TRUE, invert = TRUE)
+#'
+#' # 45 horizons
+#' nrow(p3) 
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p3, color = "prop", max.depth = 200)
+#' abline(h = c(25, 100), lty = 2)
+#' 
+#' ## profile-specific interval, using expressions evaluated within sp1@site
+#' 
+#' # calculate some new site-level variables containing target interval
+#' sp1$glom_top <- (1:9) * 10
+#' sp1$glom_bottom <- 10 + sp1$glom_top
+#' 
+#' # glom evaluates non-standard expressions using siteNames(sp1) column names
+#' p4 <- glom(sp1, glom_top / 2, glom_bottom * 1.2, truncate = TRUE)
+#' 
+#' # inspect graphically
+#' par(mar = c(1,1,3,1))
+#' plot(p4, color = "prop", max.depth = 200)
+#' 
 setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
-          function(p, z1, z2 = NULL,
-                 ids = FALSE, df = FALSE,
-                 truncate = FALSE, invert = FALSE,
-                 modality = "all") {
-
-  depthn <- horizonDepths(p)
-
+          function(p,
+                   z1,
+                   z2 = NULL,
+                   ids = FALSE,
+                   df = FALSE,
+                   truncate = FALSE,
+                   invert = FALSE,
+                   modality = "all") {
+            
+  # handle unquoted symbols from @site column names (or expressions using them)
+  zz <- eval(substitute(list(z1, z2)),
+             envir = site(p), 
+             enclos = parent.frame())
+  
+  z1 <- zz[[1]]
+  z2 <- zz[[2]]
+  
+  # handle _quoted_ character column names from @site for z1/z2
+  if (is.character(z1) && length(z1) == 1) {
+    if (z1 %in% siteNames(p)) {
+      sitez1 <- p[[z1]]
+      if (!is.numeric(sitez1))
+        stop("If `z1` is a column name, must refer to a numeric column in `siteNames(p)`")
+      z1 <- sitez1
+    }
+  }
+  if (is.character(z2) && length(z2) == 1) {
+    if (z2 %in% siteNames(p)) {
+      sitez2 <- p[[z2]]
+      if (!is.numeric(sitez2))
+        stop("If `z2` is a column name, must refer to a numeric column in `siteNames(p)`")
+      z2 <- sitez2
+    }
+  }
+  
+  depthn <- horizonDepths(p) 
+  
+  # recycle z1 to size of SPC if length is 1
+  if (length(z1) == 1) {
+    z1 <- rep(z1, length(p))
+  
+  # error if z1 does not match number of profiles
+  } else if (length(z1) != length(p)) {
+    stop("`z1` should have length 1 or length equal to number of profiles in `p`", call. = FALSE)
+  }
+  
+  if (is.null(z2)) {
+    z2 <- z1
+  } else if (length(z2) == 1) {
+    z2 <- rep(z2, length(p))
+  }
+  
+  if (length(z2) != length(z1)) {
+    stop("`z2`, if specified, should have same length as `z1`", call. = FALSE)
+  }
+  
+  # handle bad z logic
+  bad.ldx <- z2 < z1
+  if (sum(bad.ldx) > 0) {
+    warning("`z2` smaller than `z1`; setting top and bottom to `NA`")
+    z1[bad.ldx] <- NA
+    z2[bad.ldx] <- NA
+  }
+  
   if (!invert) {
-    idx <- .multiglom(p, z1, z2, modality)
+    idx <- .multiglomDT(p, z1 = z1, z2 = z2, modality = modality)
   } else {
-    idx <- c(.multiglom(p, min(p[[depthn[1]]], na.rm = TRUE), z1, modality = "all"),
-             .multiglom(p, z2, max(p[[depthn[2]]], na.rm = TRUE), modality = "all"))
+    idx <- c(.multiglomDT(p, min(p[[depthn[1]]], na.rm = TRUE), z1, modality = "all"),
+             .multiglomDT(p, z2, max(p[[depthn[2]]], na.rm = TRUE), modality = "all"))
   }
 
   h <- horizons(p)[which(hzID(p) %in% idx), ]
-
+  id <- idname(p)
+  
   # truncate ragged edges
   if (!invert & truncate & !is.null(z2)) {
-    .top <- h[[depthn[1]]]
-    .bottom <- h[[depthn[2]]]
+    
+    pdepths <- data.table::data.table(id = as.character(h[[id]]),
+                                      tdep = h[[depthn[1]]],
+                                      bdep = h[[depthn[2]]])
+    
+    glomdepths <- data.table::data.table(id = profile_id(p),
+                                         z1 = z1,
+                                         z2 = z2)
+    
+    # join and remove horizons that are not part of interval
+    newhz <- pdepths[glomdepths, on = "id"]
+    newhz <- newhz[complete.cases(newhz),]
+    
+    # truncate upper bounds to z1
+    z1tidx <- newhz[,.I[newhz$tdep < z1]]
+    z1bidx <- newhz[,.I[newhz$bdep < z1]]
+    newhz[z1tidx, 'tdep'] <- newhz[z1tidx, 'z1']
+    newhz[z1bidx, 'bdep'] <- newhz[z1bidx, 'z1']
+    
+    # truncate lower bounds to z2
+    z2tidx <- newhz[,.I[newhz$tdep > z2]]
+    z2bidx <- newhz[,.I[newhz$bdep > z2]]
+    newhz[z2tidx, 'tdep'] <- newhz[z2tidx, 'z2']
+    newhz[z2bidx, 'bdep'] <- newhz[z2bidx, 'z2']
 
-    .top[.top < z1] <- z1
-    .bottom[.bottom < z1] <- z1
-
-    .top[.top > z2] <- z2
-    .bottom[.bottom > z2] <- z2
-
-    h[[depthn[1]]] <- .top
-    h[[depthn[2]]] <- .bottom
+    # replace original values with truncated 
+    h[[depthn[1]]] <- newhz$tdep
+    h[[depthn[2]]] <- newhz$bdep
 
   # or "invert" and truncate
   } else if (invert & truncate & !is.null(z2)) {
@@ -233,6 +347,56 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     return(idval)
   }
 
+  # # list result.
+  return(list(
+    hzid = hzid,
+    hz.idx = idx,
+    value = idval
+  ))
+}
+
+.multiglomDT <- function (p, z1, z2 = NULL, modality = "all", as.list = FALSE) {
+  
+  # access SPC slots to get important info about p
+  hz <- data.table::as.data.table(horizons(p))
+  dz <- horizonDepths(p)
+  id <- idname(p)
+  pid <- profile_id(p)
+  hzid <- hzidname(p)
+  
+  # get top and bottom horizon depth vectors
+  tdep <- hz[[dz[1]]]
+  bdep <- hz[[dz[2]]]
+  
+  pdepths <- data.table::data.table(id = as.character(hz[[id]]),
+                                    tdep = tdep,
+                                    bdep = bdep)
+  
+  glomdepths <- data.table::data.table(id = profile_id(p),
+                                       z1 = z1,
+                                       z2 = z2)
+  
+  if (is.null(z2))
+    z1 <- z2
+  
+  idx <- pdepths[glomdepths, on = "id"][,.I[((tdep >= z1) | 
+                                              (bdep > z1)) & 
+                                              ((bdep < z2) |
+                                              (bdep == z2) | 
+                                              (tdep < z2))]]
+  if (modality == "thickest") {
+    # get index of thickest horizon by profile
+    idx <- .thickestHzID(p, hz[idx, ])
+  }
+  
+  # get the ID values out of horizon table
+  idval <- hz[idx, ][[hzidname(p)]]
+  
+  # just the horizon IDs
+  if (!as.list) {
+    return(idval)
+  }
+  
   # # list result.
   return(list(
     hzid = hzid,
