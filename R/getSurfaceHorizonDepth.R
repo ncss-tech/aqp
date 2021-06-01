@@ -140,8 +140,13 @@ getSurfaceHorizonDepth <- function(p, pattern, hzdesgn = guessHzDesgnName(p), si
   # not found
   lnotfound <- shallowest.depth > out[[depthz[2]]]
   if (any(lnotfound)) {
-    warning("found %s profiles where pattern did not match and shallowest depth is greater than 0",
-            sum(lnotfound), call. = FALSE)
+    warning(
+      sprintf(
+        "found %s profiles where pattern did not match and shallowest depth is greater than 0",
+        sum(lnotfound)
+      ),
+      call. = FALSE
+    )
   }
   
   if(length(p) == 1 && simplify) {
