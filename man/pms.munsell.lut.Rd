@@ -56,30 +56,7 @@ m <- PMS2Munsell(codes)
 
 # simple display
 colorContrastPlot(m1 = m$munsell[1], m2 = m$munsell[2], labels = m$code)
-## 3. integration with SPC
-data(pms.munsell.lut)
-data(sp6)
-depths(sp6) <- id ~ top + bottom
-
-# get the closest Munsell chip from color meter data
-sp6$munsell <- getClosestMunsellChip(sp6$color, convertColors = FALSE)
-
-# prepare an intermediate data.frame for performing join to LUT
-h <- horizons(sp6)[, c(hzidname(sp6), 'munsell')]
-
-# left join
-# not all Munsell colors have a paired Pantone color
-m <- merge(h, pms.munsell.lut, by = 'munsell', all.x = TRUE, sort = FALSE)
-
-# splice into original SPC
-horizons(sp6) <- m
-
-# graphical check
-par(mar = c(0, 0, 2, 1))
-plotSPC(sp6, color = 'hex')
-
-
-## 4. multiple Pantone colors matching a single Munsell color
+## 3. multiple Pantone colors matching a single Munsell color
 #
 colors <- pms.munsell.lut[pms.munsell.lut$munsell == '5YR 5/5', ]
 colors <- colors[order(colors$dE00), ]
@@ -87,6 +64,28 @@ colors <- colors[order(colors$dE00), ]
 par(mar = c(0, 0, 2, 0), fg = 'white', bg = 'black')
 soilPalette(colors$hex, lab = colors$code)
 title('Pantone Colors Roughly Matching 5YR 5/5', col.main = 'white', line = 0)
+
+## 4. integration with SPC
+data(pms.munsell.lut)
+data(sp6)
+depths(sp6) <- id ~ top + bottom
+
+# get the closest Munsell chip from color meter data
+sp6$munsell <- getClosestMunsellChip(sp6$color, convertColors = FALSE)
+
+# prepare a subset of the PMS lookup table where we take the first match to a Munsell chip
+#  this ensures the relationship between munsell chip and Pantone color is 1:1
+pms.munsell.first <- do.call('rbind', lapply(split(pms.munsell.lut, 
+                                                   pms.munsell.lut$munsell), 
+                                             function(x) x[1, ]))
+
+# LEFT JOIN PMS table to existing horizons in SPC (on 'munsell' column)
+horizons(sp6) <- pms.munsell.first
+
+# graphical check
+par(mar = c(0, 0, 2, 1))
+plotSPC(sp6, color = 'hex')
+
 
 }
 \references{

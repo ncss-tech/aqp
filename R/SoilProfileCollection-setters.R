@@ -546,12 +546,16 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
                                         value,
                                         #by = c(idname(object), hzidname(object)),
                                         all.x = TRUE, sort = FALSE))
-
-  new.horizon.order <- match(names(original.horizon.order),
-                             horizon.new[[hzidname(object)]])
+  
+  # TODO: data.table merge() would fix the need for re-sorting, but would check data types
+  #       which might cause some backwards compatibility problems (requiring type conversion)
+  #       this is a problem because the join is completely open ended -- not just based on ID
+  
   chnew <- .coalesce.idx(horizon.new[[idname(object)]])
   if (length(chnew) != length(original.site.order) |
      suppressWarnings(any(original.site.order != chnew))) {
+    new.horizon.order <- order(horizon.new[[idname(object)]], 
+                               horizon.new[[horizonDepths(object)[1]]])
     # message("join condition resulted in sorting of horizons, re-applying original order")
     horizon.new <- horizon.new[new.horizon.order,]
   }
