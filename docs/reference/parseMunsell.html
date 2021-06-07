@@ -117,10 +117,10 @@
     </div>
 
     <div class="ref-description">
-    <p>Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by <code>munsell2rgb</code>.</p>
+    <p>Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by <code><a href='munsell2rgb.html'>munsell2rgb</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parseMunsell</span><span class='op'>(</span><span class='va'>munsellColor</span>, convertColors <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>parseMunsell</span>(<span class='kw'>munsellColor</span>, convertColors = <span class='fl'>TRUE</span>, delim = <span class='fl'>NA</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,29 +134,38 @@
       <td><p>logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates</p></td>
     </tr>
     <tr>
+      <th>delim</th>
+      <td><p>optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>additional arguments to <code>munsell2rgb</code></p></td>
+      <td><p>additional arguments to <code><a href='munsell2rgb.html'>munsell2rgb</a></code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <code>data.frame</code> object</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>P. Roudier and D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># just sRGB</span>
-<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt;           r         g          b
 #&gt; 1 0.3817539 0.2599868 0.09323485</div><div class='input'>
 <span class='co'># sRGB + CIELAB (D65 illuminant)</span>
-<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets = <span class='fl'>TRUE</span>, returnLAB = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt;           r         g          b        L        A        B
 #&gt; 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</div><div class='input'>
 <span class='co'># CIELAB only</span>
-<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>FALSE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets = <span class='fl'>FALSE</span>, returnLAB = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt;          L        A        B
 #&gt; 1 30.81482 9.000702 30.27227</div><div class='input'>
+
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

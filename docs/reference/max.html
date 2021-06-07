@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the maximum bottom depth in a SoilProfileCollection — max • aqp</title>
+<title>Get the maximum bottom depth in a SoilProfileCollection — max,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Get the maximum bottom depth in a SoilProfileCollection — max" />
+<meta property="og:title" content="Get the maximum bottom depth in a SoilProfileCollection — max,SoilProfileCollection-method" />
 <meta property="og:description" content="Get the deepest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using complete.cases." />
 
 
@@ -121,7 +121,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>max</span><span class='op'>(</span><span class='va'>x</span>, v <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+<span class='fu'>max</span>(<span class='kw'>x</span>, v = <span class='kw'>NULL</span>, na.rm = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +133,10 @@
     <tr>
       <th>v</th>
       <td><p>optional: horizon-level column name to refine calculation</p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>remove <code>NA</code>? default: <code>TRUE</code></p></td>
     </tr>
     </table>
 

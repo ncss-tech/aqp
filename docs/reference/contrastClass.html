@@ -126,7 +126,7 @@ Soil Survey Manual. This function is typically called from
 information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>contrastClass</span><span class='op'>(</span><span class='va'>v1</span>, <span class='va'>c1</span>, <span class='va'>v2</span>, <span class='va'>c2</span>, <span class='va'>dH</span>, <span class='va'>dV</span>, <span class='va'>dC</span>, verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>contrastClass</span>(<span class='kw'>v1</span>, <span class='kw'>c1</span>, <span class='kw'>v2</span>, <span class='kw'>c2</span>, <span class='kw'>dH</span>, <span class='kw'>dV</span>, <span class='kw'>dC</span>, verbose = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,12 +191,12 @@ length.</p>
     <pre class="examples"><div class='input'>
 <span class='co'>## standard use, result is an ordered factor</span>
 <span class='co'># 10YR 6/3 vs 5YR 3/4</span>
-<span class='fu'>contrastClass</span><span class='op'>(</span>v1<span class='op'>=</span><span class='fl'>6</span>, c1<span class='op'>=</span><span class='fl'>3</span>, v2<span class='op'>=</span><span class='fl'>3</span>, c2<span class='op'>=</span><span class='fl'>4</span>, dH<span class='op'>=</span><span class='fl'>2</span>, dV<span class='op'>=</span><span class='fl'>3</span>, dC<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'>contrastClass</span>(v1=<span class='fl'>6</span>, c1=<span class='fl'>3</span>, v2=<span class='fl'>3</span>, c2=<span class='fl'>4</span>, dH=<span class='fl'>2</span>, dV=<span class='fl'>3</span>, dC=<span class='fl'>1</span>)
 </div><div class='output co'>#&gt; [1] Prominent
 #&gt; Levels: Faint &lt; Distinct &lt; Prominent</div><div class='input'>
 <span class='co'>## verbose output, useful for testing rules/cases</span>
 <span class='co'># 10YR 6/3 vs 5YR 3/4</span>
-<span class='fu'>contrastClass</span><span class='op'>(</span>v1<span class='op'>=</span><span class='fl'>6</span>, c1<span class='op'>=</span><span class='fl'>3</span>, v2<span class='op'>=</span><span class='fl'>3</span>, c2<span class='op'>=</span><span class='fl'>4</span>, dH<span class='op'>=</span><span class='fl'>2</span>, dV<span class='op'>=</span><span class='fl'>3</span>, dC<span class='op'>=</span><span class='fl'>1</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>contrastClass</span>(v1=<span class='fl'>6</span>, c1=<span class='fl'>3</span>, v2=<span class='fl'>3</span>, c2=<span class='fl'>4</span>, dH=<span class='fl'>2</span>, dV=<span class='fl'>3</span>, dC=<span class='fl'>1</span>, verbose = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt; $faint
 #&gt;   v1 c1 v2 c2 dH dV dC f.case1 f.case2 f.case3 low.value.chroma       res
 #&gt; 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE            FALSE Prominent

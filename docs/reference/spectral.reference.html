@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>D65 standard illuminant and CIE1931 color matching functions — spectral.reference • aqp</title>
+<title>Standard Illuminants and Observers — spectral.reference • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="D65 standard illuminant and CIE1931 color matching functions — spectral.reference" />
-<meta property="og:description" content="D65 standard illuminant and CIE1931 color matching functions" />
+<meta property="og:title" content="Standard Illuminants and Observers — spectral.reference" />
+<meta property="og:description" content="D65 and F2 standard illuminant spectral power distributions, CIE1931 Standard Observer (2 degree), and CIE1964 Supplemental Standard Observer (10 degree)" />
 
 
 
@@ -111,26 +111,83 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>D65 standard illuminant and CIE1931 color matching functions</h1>
+    <h1>Standard Illuminants and Observers</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/data-documentation.R'><code>R/data-documentation.R</code></a></small>
     <div class="hidden name"><code>spectral.reference.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>D65 standard illuminant and CIE1931 color matching functions</p>
+    <p>D65 and F2 standard illuminant spectral power distributions, CIE1931 Standard Observer (2 degree), and CIE1964 Supplemental Standard Observer (10 degree)</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>spectral.reference</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>spectral.reference</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An object of class <code>data.frame</code> with 71 rows and 5 columns.</p>
+    <p>An object of class <code>data.frame</code> with 71 rows and 9 columns.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.</p>
-<p>"Selected colorimetric tables in Excel" http://files.cie.co.at/204.xls</p>
+<p>CIE Colorimetry – Part 1: CIE standard colorimetric observers. CIES014-1/E:2006 – ISO 11664-1:2007(E)</p>
+<p>CIE. (n.d.). CIE 15:2004 Tables Data. Retrieved from https://law.resource.org/pub/us/cfr/ibr/003/cie.15.2004.tables.xls</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"spectral.reference"</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/graphics/matplot.html'>matplot</a></span>(
+  x = <span class='kw'>spectral.reference</span>[, <span class='fl'>1</span>],
+  y = <span class='kw'>spectral.reference</span>[, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'xbar_2'</span>, <span class='st'>'ybar_2'</span>, <span class='st'>'zbar_2'</span>)],
+  ylim = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>),
+  type = <span class='st'>'l'</span>,
+  lwd = <span class='fl'>2</span>, 
+  lty = <span class='fl'>1</span>,
+  las = <span class='fl'>1</span>,
+  xlab = <span class='st'>'Wavelength (nm)'</span>,
+  ylab = <span class='st'>'Weight | Intensity'</span>,
+  main = <span class='st'>"CIE1931 (2\u00B0) and CIE1964 (10\u00B0) Standard Observers
+  D65 and F2 Illuminant Power Spectrum (rescaled / offset for clarity)"</span>,
+  cex.main = <span class='fl'>0.9</span>
+)
+</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/matplot.html'>matlines</a></span>(
+  x = <span class='kw'>spectral.reference</span>[, <span class='fl'>1</span>],
+  y = <span class='kw'>spectral.reference</span>[, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'xbar_10'</span>, <span class='st'>'ybar_10'</span>, <span class='st'>'zbar_10'</span>)],
+  type = <span class='st'>'l'</span>,
+  lwd = <span class='fl'>2</span>, 
+  lty = <span class='fl'>2</span>,
+  las = <span class='fl'>1</span>,
+  xlab = <span class='st'>'Wavelength (nm)'</span>,
+  ylab = <span class='st'>'Weight | Intensity'</span>,
+  main = <span class='st'>'CIE1931 Standard Observer Weights\nD65 Standard Illuminant'</span>
+)
+</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(
+  x = <span class='kw'>spectral.reference</span><span class='op'>$</span><span class='kw'>w</span>,
+  y = (<span class='kw'>spectral.reference</span><span class='op'>$</span><span class='kw'>D65</span> <span class='op'>/</span> <span class='fl'>100</span>) <span class='op'>+</span> <span class='fl'>0.33</span>,
+  lty = <span class='fl'>1</span>,
+  col = <span class='st'>'royalblue'</span>
+)
+</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(
+  x = <span class='kw'>spectral.reference</span><span class='op'>$</span><span class='kw'>w</span>,
+  y = (<span class='kw'>spectral.reference</span><span class='op'>$</span><span class='kw'>F2</span> <span class='op'>/</span> <span class='fl'>25</span>) <span class='op'>+</span> <span class='fl'>0.4</span>,
+  lty = <span class='fl'>1</span>,
+  col = <span class='st'>'violet'</span>
+)
+</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(
+  <span class='st'>'topright'</span>,
+  legend = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'X_2'</span>, <span class='st'>'Y_2'</span>, <span class='st'>'Z_2'</span>, <span class='st'>'X_10'</span>, <span class='st'>'Y_10'</span>, <span class='st'>'Z_10'</span>, <span class='st'>'D65'</span>, <span class='st'>'F2'</span>),
+  col = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='st'>'royalblue'</span>, <span class='st'>'violet'</span>),
+  lwd = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>1</span>),
+  lty = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>1</span>),
+  bty = <span class='st'>'n'</span>,
+  cex = <span class='fl'>0.85</span>
+)
+</div><div class='img'><img src='spectral.reference-1.png' alt='' width='768' height='475' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

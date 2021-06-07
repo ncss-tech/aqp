@@ -120,7 +120,7 @@
     <p>This function adds depth interval ("segment") labels to soil horizon data associated with <code>SoilProfileCollection</code> and <code>data.frame</code> objects. Additional horizon records are inserted when a segment label does not overlap with a horizon boundary. See examples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>segment</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>intervals</span>, trim <span class='op'>=</span> <span class='cn'>TRUE</span>, hzdepcols <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>segment</span>(<span class='kw'>object</span>, <span class='kw'>intervals</span>, trim = <span class='fl'>TRUE</span>, hzdepcols = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,64 +156,64 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># upgrade to SPC</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># segment and trim</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span><span class='op'>(</span><span class='va'>sp1</span>, intervals <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span><span class='op'>)</span>, trim <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span>(<span class='kw'>sp1</span>, intervals = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>), trim = <span class='fl'>TRUE</span>)
 
 <span class='co'># display segment labels</span>
 <span class='co'># note that there are new horizon boundaries at segments</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z</span>, color <span class='op'>=</span> <span class='st'>'segment_id'</span>, width <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>1</span>))
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>z</span>, color = <span class='st'>'segment_id'</span>, width = <span class='fl'>0.3</span>)
 </div><div class='img'><img src='segment-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># highlight new horizon records</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z</span>, color <span class='op'>=</span> <span class='cn'>NA</span>, default.color <span class='op'>=</span> <span class='cn'>NA</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, lwd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp1</span>, color <span class='op'>=</span> <span class='cn'>NA</span>, default.color <span class='op'>=</span> <span class='cn'>NA</span>, 
-width <span class='op'>=</span> <span class='fl'>0.3</span>, lwd <span class='op'>=</span> <span class='fl'>3</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span>, name <span class='op'>=</span> <span class='cn'>NA</span>, print.id <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span><span class='st'>'top'</span>, horiz <span class='op'>=</span> <span class='cn'>TRUE</span>, 
-legend <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'original'</span>, <span class='st'>'segmented'</span><span class='op'>)</span>, 
-lwd <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>, cex <span class='op'>=</span> <span class='fl'>0.85</span>, bty <span class='op'>=</span> <span class='st'>'n'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>z</span>, color = <span class='fl'>NA</span>, default.color = <span class='fl'>NA</span>, width = <span class='fl'>0.3</span>, lwd = <span class='fl'>1</span>)
+</div><div class='input'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>sp1</span>, color = <span class='fl'>NA</span>, default.color = <span class='fl'>NA</span>, 
+width = <span class='fl'>0.3</span>, lwd = <span class='fl'>3</span>, add = <span class='fl'>TRUE</span>, name = <span class='fl'>NA</span>, print.id = <span class='fl'>FALSE</span>)
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>'top'</span>, horiz = <span class='fl'>TRUE</span>, 
+legend = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'original'</span>, <span class='st'>'segmented'</span>), 
+lwd = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>), cex = <span class='fl'>0.85</span>, bty = <span class='st'>'n'</span>)
 </div><div class='img'><img src='segment-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># \donttest{</span>
 <span class='co'># same results as slab()</span>
 <span class='co'># 10 random profiles</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='va'>random_profile</span>, n_prop <span class='op'>=</span> <span class='fl'>1</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span>, method <span class='op'>=</span> <span class='st'>'random_walk'</span><span class='op'>)</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>combine</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>random_profile</span>, n_prop = <span class='fl'>1</span>, SPC = <span class='fl'>TRUE</span>, method = <span class='st'>'random_walk'</span>)
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>combine</a></span>(<span class='kw'>s</span>)
 
-<span class='va'>a.slab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span><span class='op'>(</span><span class='va'>s</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>p1</span>, slab.structure <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span><span class='op'>)</span>, slab.fun <span class='op'>=</span> <span class='va'>mean</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>a.slab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>s</span>, fm = <span class='op'>~</span> <span class='kw'>p1</span>, slab.structure = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>), slab.fun = <span class='kw'>mean</span>, na.rm = <span class='fl'>TRUE</span>)
 
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span><span class='op'>(</span><span class='va'>s</span>, intervals <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span><span class='op'>)</span>, trim <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span>
-<span class='va'>z</span><span class='op'>$</span><span class='va'>thick</span> <span class='op'>&lt;-</span> <span class='va'>z</span><span class='op'>$</span><span class='va'>bottom</span> <span class='op'>-</span> <span class='va'>z</span><span class='op'>$</span><span class='va'>top</span>
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span>(<span class='kw'>s</span>, intervals = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>), trim = <span class='fl'>TRUE</span>)
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span>(<span class='kw'>z</span>)
+<span class='kw'>z</span><span class='op'>$</span><span class='kw'>thick</span> <span class='op'>&lt;-</span> <span class='kw'>z</span><span class='op'>$</span><span class='kw'>bottom</span> <span class='op'>-</span> <span class='kw'>z</span><span class='op'>$</span><span class='kw'>top</span>
 
-<span class='va'>a.segment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>z</span><span class='op'>$</span><span class='va'>segment_id</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>i</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/weighted.mean.html'>weighted.mean</a></span><span class='op'>(</span><span class='va'>i</span><span class='op'>$</span><span class='va'>p1</span>, <span class='va'>i</span><span class='op'>$</span><span class='va'>thick</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
+<span class='kw'>a.segment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span>(<span class='kw'>z</span>, <span class='kw'>z</span><span class='op'>$</span><span class='kw'>segment_id</span>), <span class='fu'>function</span>(<span class='kw'>i</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/stats/weighted.mean.html'>weighted.mean</a></span>(<span class='kw'>i</span><span class='op'>$</span><span class='kw'>p1</span>, <span class='kw'>i</span><span class='op'>$</span><span class='kw'>thick</span>)
+})
 
 
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-  slab <span class='op'>=</span> <span class='va'>a.slab</span><span class='op'>$</span><span class='va'>value</span>,
-  segment <span class='op'>=</span> <span class='va'>a.segment</span>,
-  diff <span class='op'>=</span> <span class='va'>a.slab</span><span class='op'>$</span><span class='va'>value</span> <span class='op'>-</span> <span class='va'>a.segment</span>
-<span class='op'>)</span>
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  slab = <span class='kw'>a.slab</span><span class='op'>$</span><span class='kw'>value</span>,
+  segment = <span class='kw'>a.segment</span>,
+  diff = <span class='kw'>a.slab</span><span class='op'>$</span><span class='kw'>value</span> <span class='op'>-</span> <span class='kw'>a.segment</span>
+)
 
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>res</span>)
 </div><div class='output co'>#&gt;            slab   segment         diff
 #&gt; 0-10  0.6658229 0.6658229 1.110223e-16
 #&gt; 10-20 0.5567329 0.5567329 0.000000e+00
-#&gt; 20-30 0.7133932 0.7133932 0.000000e+00</div><div class='input'><span class='va'>res</span><span class='op'>$</span><span class='va'>diff</span> <span class='op'>&lt;</span> <span class='fl'>0.001</span>
+#&gt; 20-30 0.7133932 0.7133932 0.000000e+00</div><div class='input'><span class='kw'>res</span><span class='op'>$</span><span class='kw'>diff</span> <span class='op'>&lt;</span> <span class='fl'>0.001</span>
 </div><div class='output co'>#&gt; [1] TRUE TRUE TRUE</div><div class='input'><span class='co'># }</span>
 
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># segment by upper 25-cm</span>
-<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span><span class='op'>(</span><span class='va'>sp5</span>, intervals <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>test1</span><span class='op'>)</span>
+<span class='kw'>test1</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span>(<span class='kw'>sp5</span>, intervals = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>100</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>test1</span>)
 </div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1254 horizons
 #&gt; profile ID: soil  |  horizon ID: hzID 
 #&gt; Depth range: 70 - 100 cm
@@ -239,12 +239,12 @@ lwd <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-
 #&gt; [... more sites ...]
 #&gt; 
 #&gt; Spatial Data:
-#&gt; [EMPTY]</div><div class='input'><span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>test1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1254</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span><span class='op'>(</span><span class='va'>test1</span><span class='op'>)</span>, units <span class='op'>=</span> <span class='st'>"Mb"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 0.3 Mb</div><div class='input'>
+#&gt; [EMPTY]</div><div class='input'><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span>(<span class='kw'>test1</span>)
+</div><div class='output co'>#&gt; [1] 1254</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span>(<span class='kw'>test1</span>), units = <span class='st'>"Mb"</span>)
+</div><div class='output co'>#&gt; 0.2 Mb</div><div class='input'>
 <span class='co'># segment by 1-cm increments</span>
-<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span><span class='op'>(</span><span class='va'>sp5</span>, intervals <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>test2</span><span class='op'>)</span>
+<span class='kw'>test2</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span>(<span class='kw'>sp5</span>, intervals = <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>test2</span>)
 </div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 29523 horizons
 #&gt; profile ID: soil  |  horizon ID: hzID 
 #&gt; Depth range: 70 - 100 cm
@@ -270,26 +270,26 @@ lwd <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-
 #&gt; [... more sites ...]
 #&gt; 
 #&gt; Spatial Data:
-#&gt; [EMPTY]</div><div class='input'><span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>test2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 29523</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span><span class='op'>(</span><span class='va'>test2</span><span class='op'>)</span>, units <span class='op'>=</span> <span class='st'>"Mb"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 5.8 Mb</div><div class='input'>
+#&gt; [EMPTY]</div><div class='input'><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span>(<span class='kw'>test2</span>)
+</div><div class='output co'>#&gt; [1] 29523</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span>(<span class='kw'>test2</span>), units = <span class='st'>"Mb"</span>)
+</div><div class='output co'>#&gt; 4.9 Mb</div><div class='input'>
 
 <span class='co'># segment and aggregate</span>
-<span class='va'>test3</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span><span class='op'>(</span><span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>, 
-                 intervals <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>15</span>, <span class='fl'>30</span>, <span class='fl'>60</span>, <span class='fl'>100</span>, <span class='fl'>200</span><span class='op'>)</span>, 
-                 hzdepcols <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"top"</span>, <span class='st'>"bottom"</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>test3</span><span class='op'>$</span><span class='va'>hzthk</span> <span class='op'>&lt;-</span> <span class='va'>test3</span><span class='op'>$</span><span class='va'>bottom</span> <span class='op'>-</span> <span class='va'>test3</span><span class='op'>$</span><span class='va'>top</span>
-<span class='va'>test3_agg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/by.html'>by</a></span><span class='op'>(</span><span class='va'>test3</span>, <span class='va'>test3</span><span class='op'>$</span><span class='va'>segment_id</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-    hzID <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>hzID</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
-    segment_id <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>segment_id</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
-    average <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/weighted.mean.html'>weighted.mean</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>clay</span>, w <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>hzthk</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-<span class='va'>test3_agg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='st'>"rbind"</span>, <span class='va'>test3_agg</span><span class='op'>)</span>
+<span class='kw'>test3</span> <span class='op'>&lt;-</span> <span class='fu'>segment</span>(<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span>(<span class='kw'>sp5</span>), 
+                 intervals = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>15</span>, <span class='fl'>30</span>, <span class='fl'>60</span>, <span class='fl'>100</span>, <span class='fl'>200</span>), 
+                 hzdepcols = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"top"</span>, <span class='st'>"bottom"</span>)
+)
+<span class='kw'>test3</span><span class='op'>$</span><span class='kw'>hzthk</span> <span class='op'>&lt;-</span> <span class='kw'>test3</span><span class='op'>$</span><span class='kw'>bottom</span> <span class='op'>-</span> <span class='kw'>test3</span><span class='op'>$</span><span class='kw'>top</span>
+<span class='kw'>test3_agg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/by.html'>by</a></span>(<span class='kw'>test3</span>, <span class='kw'>test3</span><span class='op'>$</span><span class='kw'>segment_id</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+    hzID = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>hzID</span>[<span class='fl'>1</span>],
+    segment_id = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>segment_id</span>[<span class='fl'>1</span>],
+    average = <span class='fu'><a href='https://rdrr.io/r/stats/weighted.mean.html'>weighted.mean</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>clay</span>, w = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>hzthk</span>)
+  )
+})
+<span class='kw'>test3_agg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>"rbind"</span>, <span class='kw'>test3_agg</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>test3_agg</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>test3_agg</span>)
 </div><div class='output co'>#&gt;         hzID segment_id  average
 #&gt; 0-5        1        0-5 40.31517
 #&gt; 100-200    5    100-200 48.13381

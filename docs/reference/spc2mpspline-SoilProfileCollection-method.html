@@ -123,13 +123,13 @@ Data completeness is assessed and the input SPC is filtered and truncated to cre
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>spc2mpspline</span><span class='op'>(</span>
-  <span class='va'>object</span>,
-  var_name <span class='op'>=</span> <span class='cn'>NULL</span>,
-  pattern <span class='op'>=</span> <span class='st'>"R|Cr|Cd|qm"</span>,
-  hzdesgn <span class='op'>=</span> <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='fu'>spc2mpspline</span>(
+  <span class='kw'>object</span>,
+  var_name = <span class='kw'>NULL</span>,
+  pattern = <span class='st'>"R|Cr|Cd|qm"</span>,
+  hzdesgn = <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span>(<span class='kw'>object</span>),
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,19 +158,19 @@ Data completeness is assessed and the input SPC is filtered and truncated to cre
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in colums prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in attr(result, 'removed').</p>
+    <p>A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in attr(result, 'removed').</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>spc2mpspline</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='st'>"prop"</span><span class='op'>)</span>
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>spc2mpspline</span>(<span class='kw'>sp1</span>, <span class='st'>"prop"</span>)
 </div><div class='output co'>#&gt; <span class='message'>Loading required namespace: mpspline2</span></div><div class='input'>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,<span class='op'>]</span>, color <span class='op'>=</span> <span class='st'>"prop_spline"</span>, divide.hz <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>res</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,], color = <span class='st'>"prop_spline"</span>, divide.hz = <span class='fl'>FALSE</span>)
 </div><div class='output co'>#&gt; <span class='message'>unable to guess column containing horizon designations</span></div><div class='img'><img src='spc2mpspline-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>

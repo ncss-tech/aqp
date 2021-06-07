@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get horizon IDs — hzID • aqp</title>
+<title>Set horizon IDs — hzID&lt;-,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Get horizon IDs — hzID" />
-<meta property="og:description" content="Get vector containing horizon IDs" />
+<meta property="og:title" content="Set horizon IDs — hzID&lt;-,SoilProfileCollection-method" />
+<meta property="og:description" content="Set vector containing horizon IDs
+Get vector containing horizon IDs" />
 
 
 
@@ -111,15 +112,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get horizon IDs</h1>
+    <h1>Set horizon IDs</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/Class-SoilProfileCollection.R'><code>R/Class-SoilProfileCollection.R</code></a></small>
     <div class="hidden name"><code>hzID.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get vector containing horizon IDs</p>
+    <p>Set vector containing horizon IDs</p>
+<p>Get vector containing horizon IDs</p>
     </div>
 
+    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>hzID</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span>
+
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>hzID</span>(<span class='kw'>object</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -127,6 +134,10 @@
     <tr>
       <th>object</th>
       <td><p>a SoilProfileCollection</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>a unique vector of equal length to number of horizons <code><a href='nrow,SoilProfileCollection-method.html'>nrow(object)</a></code></p></td>
     </tr>
     </table>
 

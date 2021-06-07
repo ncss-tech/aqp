@@ -120,18 +120,18 @@
     <p>This function makes small adjustments to elements of <code>x</code> until overlap defined by <code>thresh</code> is removed, or until <code>maxIter</code> is reached. Rank order and boundary conditions (defined by <code>min.x</code> and <code>max.x</code>) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters <code>T0</code> and <code>k</code> can be used to tune the algorithm for specific applications.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fixOverlap</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  thresh <span class='op'>=</span> <span class='fl'>0.6</span>,
-  adj <span class='op'>=</span> <span class='va'>thresh</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span>,
-  min.x <span class='op'>=</span> <span class='fu'><a href='min.html'>min</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>0.2</span>,
-  max.x <span class='op'>=</span> <span class='fu'><a href='max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.2</span>,
-  maxIter <span class='op'>=</span> <span class='fl'>1000</span>,
-  trace <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  tiny <span class='op'>=</span> <span class='fl'>1e-04</span>,
-  T0 <span class='op'>=</span> <span class='fl'>500</span>,
-  k <span class='op'>=</span> <span class='fl'>10</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fixOverlap</span>(
+  <span class='kw'>x</span>,
+  thresh = <span class='fl'>0.6</span>,
+  adj = <span class='kw'>thresh</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span>,
+  min.x = <span class='fu'><a href='min,SoilProfileCollection-method.html'>min</a></span>(<span class='kw'>x</span>) <span class='op'>-</span> <span class='fl'>0.2</span>,
+  max.x = <span class='fu'><a href='max,SoilProfileCollection-method.html'>max</a></span>(<span class='kw'>x</span>) <span class='op'>+</span> <span class='fl'>0.2</span>,
+  maxIter = <span class='fl'>1000</span>,
+  trace = <span class='fl'>FALSE</span>,
+  tiny = <span class='fl'>1e-04</span>,
+  T0 = <span class='fl'>500</span>,
+  k = <span class='fl'>10</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,59 +196,59 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3.4</span>, <span class='fl'>3.5</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>10</span><span class='op'>)</span>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3.4</span>, <span class='fl'>3.5</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>10</span>)
 
 <span class='co'># easy</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.2</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span>(<span class='kw'>x</span>, thresh = <span class='fl'>0.2</span>, trace = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt; <span class='message'>9 iterations</span></div><div class='input'>
 <span class='co'># harder</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.6</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span>(<span class='kw'>x</span>, thresh = <span class='fl'>0.6</span>, trace = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt; <span class='message'>21 iterations</span></div><div class='input'>
 <span class='co'># much harder</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.9</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span>(<span class='kw'>x</span>, thresh = <span class='fl'>0.9</span>, trace = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt; <span class='message'>440 iterations</span></div><div class='input'>
 
 <span class='co'># interpret `trace` output</span>
 
 <span class='co'># relatively challenging</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>6</span>, <span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span>, <span class='fl'>13</span>, <span class='fl'>13</span>, <span class='fl'>15</span>, <span class='fl'>15.5</span><span class='op'>)</span>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>3.4</span>, <span class='fl'>6</span>, <span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span>, <span class='fl'>13</span>, <span class='fl'>13</span>, <span class='fl'>15</span>, <span class='fl'>15.5</span>)
 
 <span class='co'># fix overlap, return debugging information</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10101</span><span class='op'>)</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span><span class='op'>(</span><span class='va'>x</span>, thresh <span class='op'>=</span> <span class='fl'>0.8</span>, trace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>10101</span>)
+<span class='kw'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fixOverlap</span>(<span class='kw'>x</span>, thresh = <span class='fl'>0.8</span>, trace = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt; <span class='message'>duplicates in `x`, applying jitter</span></div><div class='output co'>#&gt; <span class='message'>237 iterations</span></div><div class='input'>
 <span class='co'># setup plot device</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>, widths <span class='op'>=</span> <span class='fl'>1</span>, heights <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)), widths = <span class='fl'>1</span>, heights = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>))
 
 <span class='co'># objective function = overlap + SSD</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>$</span><span class='va'>stats</span><span class='op'>)</span>, <span class='va'>z</span><span class='op'>$</span><span class='va'>stats</span>, 
-  type <span class='op'>=</span> <span class='st'>'h'</span>, las <span class='op'>=</span> <span class='fl'>1</span>,
-  xlab <span class='op'>=</span> <span class='st'>'Iteration'</span>, ylab <span class='op'>=</span> <span class='st'>'Overlap'</span>,
-  cex.axis <span class='op'>=</span> <span class='fl'>0.8</span>
-<span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='kw'>z</span><span class='op'>$</span><span class='kw'>stats</span>), <span class='kw'>z</span><span class='op'>$</span><span class='kw'>stats</span>, 
+  type = <span class='st'>'h'</span>, las = <span class='fl'>1</span>,
+  xlab = <span class='st'>'Iteration'</span>, ylab = <span class='st'>'Overlap'</span>,
+  cex.axis = <span class='fl'>0.8</span>
+)
 
 <span class='co'># SSD: deviation from original configuration </span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>$</span><span class='va'>ssd</span><span class='op'>)</span>, <span class='va'>z</span><span class='op'>$</span><span class='va'>ssd</span>, 
-  type <span class='op'>=</span> <span class='st'>'h'</span>, las <span class='op'>=</span> <span class='fl'>1</span>,
-  xlab <span class='op'>=</span> <span class='st'>'Iteration'</span>, ylab <span class='op'>=</span> <span class='st'>'Deviation'</span>,
-  cex.axis <span class='op'>=</span> <span class='fl'>0.8</span>
-<span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='kw'>z</span><span class='op'>$</span><span class='kw'>ssd</span>), <span class='kw'>z</span><span class='op'>$</span><span class='kw'>ssd</span>, 
+  type = <span class='st'>'h'</span>, las = <span class='fl'>1</span>,
+  xlab = <span class='st'>'Iteration'</span>, ylab = <span class='st'>'Deviation'</span>,
+  cex.axis = <span class='fl'>0.8</span>
+)
 <span class='co'># adjustments at each iteration</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/matplot.html'>matplot</a></span><span class='op'>(</span>
-  <span class='va'>z</span><span class='op'>$</span><span class='va'>states</span>, type <span class='op'>=</span> <span class='st'>'l'</span>, 
-  lty <span class='op'>=</span> <span class='fl'>1</span>, las <span class='op'>=</span> <span class='fl'>1</span>, 
-  xlab <span class='op'>=</span> <span class='st'>'Iteration'</span>, ylab <span class='op'>=</span> <span class='st'>'x-position'</span>
-<span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/matplot.html'>matplot</a></span>(
+  <span class='kw'>z</span><span class='op'>$</span><span class='kw'>states</span>, type = <span class='st'>'l'</span>, 
+  lty = <span class='fl'>1</span>, las = <span class='fl'>1</span>, 
+  xlab = <span class='st'>'Iteration'</span>, ylab = <span class='st'>'x-position'</span>
+)
 </div><div class='img'><img src='fixOverlap-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># trace log</span>
 <span class='co'># B: boundary condition violation</span>
 <span class='co'># O: rank (order) violation</span>
 <span class='co'># +: accepted perturbation</span>
 <span class='co'># -: rejected perturbation</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>$</span><span class='va'>log</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>z</span><span class='op'>$</span><span class='kw'>log</span>)
 </div><div class='output co'>#&gt; 
 #&gt;   B   O   +   - 
 #&gt;  41 114  78   3 </div><div class='input'>

@@ -120,11 +120,11 @@
     <p><code>tauW</code>: Computes: (1) unweighted naive, (2) weighted naive, (3) unweighted <em>tau</em>, (4) weighted <em>tau</em> accuracy statistics</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tauW</span><span class='op'>(</span>
-  <span class='va'>CM</span>,
-  W <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>CM</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-  P <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>CM</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>CM</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tauW</span>(
+  <span class='kw'>CM</span>,
+  W = <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span>(<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span>(<span class='kw'>CM</span>)))),
+  P = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span>(<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span>(<span class='kw'>CM</span>)), <span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span>(<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span>(<span class='kw'>CM</span>)))
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,28 +173,28 @@
 <span class='co'># example confusion matrix</span>
 <span class='co'># rows: allocation (user's counts)</span>
 <span class='co'># columns: reference (producer's counts)</span>
-<span class='va'>crossclass</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>5</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,
+<span class='kw'>crossclass</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(data=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>5</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,
                             <span class='fl'>1</span>,<span class='fl'>74</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>6</span>,
                             <span class='fl'>0</span>,<span class='fl'>5</span>,<span class='fl'>8</span>,<span class='fl'>6</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,
                             <span class='fl'>6</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>91</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,
                             <span class='fl'>0</span>,<span class='fl'>4</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>4</span>,
-                            <span class='fl'>0</span>,<span class='fl'>6</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>4</span>,<span class='fl'>38</span><span class='op'>)</span>,
-                     nrow<span class='op'>=</span><span class='fl'>6</span>, byrow<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span><span class='op'>(</span><span class='va'>crossclass</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"OP"</span>, <span class='st'>"SA"</span>, <span class='st'>"UA"</span>, <span class='st'>"UC"</span>, <span class='st'>"AV"</span>, <span class='st'>"AC"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>crossclass</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span><span class='op'>(</span><span class='va'>crossclass</span><span class='op'>)</span>
+                            <span class='fl'>0</span>,<span class='fl'>6</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>4</span>,<span class='fl'>38</span>),
+                     nrow=<span class='fl'>6</span>, byrow=<span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='kw'>crossclass</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"OP"</span>, <span class='st'>"SA"</span>, <span class='st'>"UA"</span>, <span class='st'>"UC"</span>, <span class='st'>"AV"</span>, <span class='st'>"AC"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>crossclass</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='kw'>crossclass</span>)
 
 <span class='co'># build the weights matrix</span>
 <span class='co'># how much credit for a mis-allocation</span>
-<span class='va'>weights</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1.00</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,
+<span class='kw'>weights</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(data=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1.00</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,<span class='fl'>0.05</span>,<span class='fl'>0.15</span>,
                          <span class='fl'>0.05</span>,<span class='fl'>1.00</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>0.35</span>,
                          <span class='fl'>0.05</span>,<span class='fl'>0.05</span>,<span class='fl'>1.00</span>,<span class='fl'>0.20</span>,<span class='fl'>0.15</span>,<span class='fl'>0.15</span>,
                          <span class='fl'>0.15</span>,<span class='fl'>0.05</span>,<span class='fl'>0.25</span>,<span class='fl'>1.00</span>,<span class='fl'>0.10</span>,<span class='fl'>0.25</span>,
                          <span class='fl'>0.05</span>,<span class='fl'>0.10</span>,<span class='fl'>0.15</span>,<span class='fl'>0.10</span>,<span class='fl'>1.00</span>,<span class='fl'>0.15</span>,
-                         <span class='fl'>0.20</span>,<span class='fl'>0.30</span>,<span class='fl'>0.10</span>,<span class='fl'>0.25</span>,<span class='fl'>0.20</span>,<span class='fl'>1.00</span><span class='op'>)</span>,
-                  nrow<span class='op'>=</span><span class='fl'>6</span>, byrow<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+                         <span class='fl'>0.20</span>,<span class='fl'>0.30</span>,<span class='fl'>0.10</span>,<span class='fl'>0.25</span>,<span class='fl'>0.20</span>,<span class='fl'>1.00</span>),
+                  nrow=<span class='fl'>6</span>, byrow=<span class='fl'>TRUE</span>)
 
 <span class='co'># unweighted accuracy</span>
-<span class='fu'>summaryTauW</span><span class='op'>(</span><span class='va'>nnaive</span> <span class='op'>&lt;-</span> <span class='fu'>tauW</span><span class='op'>(</span><span class='va'>crossclass</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>summaryTauW</span>(<span class='kw'>nnaive</span> <span class='op'>&lt;-</span> <span class='fu'>tauW</span>(<span class='kw'>crossclass</span>))
 </div><div class='output co'>#&gt; [1] Cross-classification matrix:
 #&gt;      OP SA UA UC AV AC
 #&gt; [1,]  2  1  0  5  0  0
@@ -237,15 +237,15 @@
 #&gt; [1] Tau (unweighted): 0.7161
 #&gt; [1] Tau (weighted): 0.7161</div><div class='input'>
 <span class='co'># unweighted tau with equal priors, equivalent to Foody (1992) modified Kappa</span>
-<span class='fu'>tauW</span><span class='op'>(</span><span class='va'>crossclass</span><span class='op'>)</span><span class='op'>$</span><span class='va'>tau</span>
+<span class='fu'>tauW</span>(<span class='kw'>crossclass</span>)<span class='op'>$</span><span class='kw'>tau</span>
 </div><div class='output co'>#&gt; [1] 0.716129</div><div class='input'>
 <span class='co'># unweighted tau with user's = producer's marginals, equivalent to original kappa</span>
-<span class='op'>(</span><span class='va'>priors</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>crossclass</span>, <span class='fl'>2</span>, <span class='va'>sum</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>crossclass</span><span class='op'>)</span><span class='op'>)</span>
+(<span class='kw'>priors</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>crossclass</span>, <span class='fl'>2</span>, <span class='kw'>sum</span>)<span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>crossclass</span>))
 </div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
-#&gt; 0.03225806 0.32616487 0.05376344 0.37634409 0.02867384 0.18279570 </div><div class='input'><span class='fu'>tauW</span><span class='op'>(</span><span class='va'>crossclass</span>, P<span class='op'>=</span><span class='va'>priors</span><span class='op'>)</span><span class='op'>$</span><span class='va'>tau</span>
+#&gt; 0.03225806 0.32616487 0.05376344 0.37634409 0.02867384 0.18279570 </div><div class='input'><span class='fu'>tauW</span>(<span class='kw'>crossclass</span>, P=<span class='kw'>priors</span>)<span class='op'>$</span><span class='kw'>tau</span>
 </div><div class='output co'>#&gt; [1] 0.6685984</div><div class='input'>
 <span class='co'># weighted accuracy; tau with equal priors</span>
-<span class='fu'>summaryTauW</span><span class='op'>(</span><span class='va'>weighted</span> <span class='op'>&lt;-</span> <span class='fu'>tauW</span><span class='op'>(</span><span class='va'>crossclass</span>, W<span class='op'>=</span><span class='va'>weights</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>summaryTauW</span>(<span class='kw'>weighted</span> <span class='op'>&lt;-</span> <span class='fu'>tauW</span>(<span class='kw'>crossclass</span>, W=<span class='kw'>weights</span>))
 </div><div class='output co'>#&gt; [1] Cross-classification matrix:
 #&gt;      OP SA UA UC AV AC
 #&gt; [1,]  2  1  0  5  0  0
@@ -288,7 +288,7 @@
 #&gt; [1] Tau (unweighted): 0.7161
 #&gt; [1] Tau (weighted): 0.7253</div><div class='input'>
 <span class='co'># weighted accuracy; tau with user's = producer's marginals</span>
-<span class='fu'>summaryTauW</span><span class='op'>(</span><span class='fu'>tauW</span><span class='op'>(</span><span class='va'>crossclass</span>, W<span class='op'>=</span><span class='va'>weights</span>, P<span class='op'>=</span><span class='va'>priors</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>summaryTauW</span>(<span class='fu'>tauW</span>(<span class='kw'>crossclass</span>, W=<span class='kw'>weights</span>, P=<span class='kw'>priors</span>))
 </div><div class='output co'>#&gt; [1] Cross-classification matrix:
 #&gt;      OP SA UA UC AV AC
 #&gt; [1,]  2  1  0  5  0  0
@@ -331,10 +331,10 @@
 #&gt; [1] Tau (unweighted): 0.6686
 #&gt; [1] Tau (weighted): 0.6744</div><div class='input'>
 <span class='co'># change in accuracy statistics weighted vs. non-weighted</span>
-<span class='op'>(</span><span class='va'>weighted</span><span class='op'>$</span><span class='va'>overall.weighted</span> <span class='op'>-</span> <span class='va'>weighted</span><span class='op'>$</span><span class='va'>overall.naive</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.04050179</div><div class='input'><span class='op'>(</span><span class='va'>weighted</span><span class='op'>$</span><span class='va'>user.weighted</span> <span class='op'>-</span> <span class='va'>weighted</span><span class='op'>$</span><span class='va'>user.naive</span><span class='op'>)</span>
+(<span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>overall.weighted</span> <span class='op'>-</span> <span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>overall.naive</span>)
+</div><div class='output co'>#&gt; [1] 0.04050179</div><div class='input'>(<span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>user.weighted</span> <span class='op'>-</span> <span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>user.naive</span>)
 </div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
-#&gt; 0.10000000 0.02816092 0.08913043 0.01683168 0.12500000 0.06346154 </div><div class='input'><span class='op'>(</span><span class='va'>weighted</span><span class='op'>$</span><span class='va'>prod.weighted</span> <span class='op'>-</span> <span class='va'>weighted</span><span class='op'>$</span><span class='va'>prod.naive</span><span class='op'>)</span>
+#&gt; 0.10000000 0.02816092 0.08913043 0.01683168 0.12500000 0.06346154 </div><div class='input'>(<span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>prod.weighted</span> <span class='op'>-</span> <span class='kw'>weighted</span><span class='op'>$</span><span class='kw'>prod.naive</span>)
 </div><div class='output co'>#&gt;         OP         SA         UA         UC         AV         AC 
 #&gt; 0.10555556 0.02802198 0.07000000 0.02380952 0.13750000 0.06176471 </div><div class='input'>
 </div></pre>

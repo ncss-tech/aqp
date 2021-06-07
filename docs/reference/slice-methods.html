@@ -120,7 +120,7 @@
     <p>Slicing of SoilProfileCollection Objects</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slice.fast</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>fm</span>, top.down <span class='op'>=</span> <span class='cn'>TRUE</span>, just.the.data <span class='op'>=</span> <span class='cn'>FALSE</span>, strict <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>slice.fast</span>(<span class='kw'>object</span>, <span class='kw'>fm</span>, top.down = <span class='fl'>TRUE</span>, just.the.data = <span class='fl'>FALSE</span>, strict = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,15 +175,15 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)
 
 <span class='co'># simulate some data, IDs are 1:20</span>
-<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>20</span>, <span class='va'>random_profile</span><span class='op'>)</span>
-<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='st'>'rbind'</span>, <span class='va'>d</span><span class='op'>)</span>
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>20</span>, <span class='kw'>random_profile</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>'rbind'</span>, <span class='kw'>d</span>)
 
 <span class='co'># init SoilProfileCollection object</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>depths</span>(<span class='kw'>d</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span>(<span class='kw'>d</span>))
 </div><div class='output co'>#&gt;   id top bottom name         p1        p2          p3        p4        p5 hzID
 #&gt; 1  1   0      5   H1   2.100996 -13.12545  -1.4499223  14.73655  9.704684    1
 #&gt; 2  1   5     20   H2  -3.177135 -26.57304 -15.4318239  22.31482  7.598634    2
@@ -193,21 +193,21 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 #&gt; 6 10  10     26   H2  -3.332715 -32.90438   0.5579136 -15.36095  1.011233    6</div><div class='input'>
 <span class='co'># generate single slice at 10 cm</span>
 <span class='co'># output is a SoilProfileCollection object</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='va'>name</span> <span class='op'>+</span> <span class='va'>p1</span> <span class='op'>+</span> <span class='va'>p2</span> <span class='op'>+</span> <span class='va'>p3</span><span class='op'>)</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span>(<span class='kw'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='kw'>name</span> <span class='op'>+</span> <span class='kw'>p1</span> <span class='op'>+</span> <span class='kw'>p2</span> <span class='op'>+</span> <span class='kw'>p3</span>)
 
 <span class='co'># generate single slice at 10 cm, output data.frame</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='va'>name</span> <span class='op'>+</span> <span class='va'>p1</span> <span class='op'>+</span> <span class='va'>p2</span> <span class='op'>+</span> <span class='va'>p3</span>, just.the.data<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span>(<span class='kw'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='kw'>name</span> <span class='op'>+</span> <span class='kw'>p1</span> <span class='op'>+</span> <span class='kw'>p2</span> <span class='op'>+</span> <span class='kw'>p3</span>, just.the.data=<span class='fl'>TRUE</span>)
 
 <span class='co'># generate integer slices from 0 - 26 cm</span>
 <span class='co'># note that slices are specified by default as "top-down"</span>
 <span class='co'># e.g. the lower depth will always by top + 1</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>25</span> <span class='op'>~</span> <span class='va'>name</span> <span class='op'>+</span> <span class='va'>p1</span> <span class='op'>+</span> <span class='va'>p2</span> <span class='op'>+</span> <span class='va'>p3</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span>(<span class='kw'>d</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>25</span> <span class='op'>~</span> <span class='kw'>name</span> <span class='op'>+</span> <span class='kw'>p1</span> <span class='op'>+</span> <span class='kw'>p2</span> <span class='op'>+</span> <span class='kw'>p3</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>s</span>)
 </div><div class='img'><img src='slice-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># generate slices from 0 - 11 cm, for all variables</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>10</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span>(<span class='kw'>d</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>10</span> <span class='op'>~</span> <span class='kw'>.</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>s</span>)
 </div><div class='output co'>#&gt; SoilProfileCollection with 20 profiles and 220 horizons
 #&gt; profile ID: id  |  horizon ID: sliceID 
 #&gt; Depth range: 11 - 11 cm
@@ -236,9 +236,9 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 #&gt; [EMPTY]</div><div class='input'>
 <span class='co'># note that pct missing is computed for each slice,</span>
 <span class='co'># if all vars are missing, then NA is returned</span>
-<span class='va'>d</span><span class='op'>$</span><span class='va'>p1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='va'>.</span>, just.the.data<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
+<span class='kw'>d</span><span class='op'>$</span><span class='kw'>p1</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>] <span class='op'>&lt;-</span> <span class='fl'>NA</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span>(<span class='kw'>d</span>, <span class='fl'>10</span> <span class='op'>~</span> <span class='kw'>.</span>, just.the.data=<span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>s</span>)
 </div><div class='output co'>#&gt;    id top bottom name          p1          p2          p3          p4
 #&gt; 1   1  10     11   H2          NA -26.5730401 -15.4318239  22.3148208
 #&gt; 2  10  10     11   H2          NA -32.9043796   0.5579136 -15.3609482
@@ -281,33 +281,33 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 #&gt; 18   4.7379402   80   0.0000000
 #&gt; 19  -4.1472835   86   0.0000000
 #&gt; 20  -9.1912859   89   0.0000000</div><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>##</span>
 <span class='co'>## check sliced data</span>
 <span class='co'>##</span>
 
 <span class='co'># test that mean of 1 cm slices property is equal to the</span>
 <span class='co'># hz-thickness weighted mean value of that property</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># get the first profile</span>
-<span class='va'>sp1.sub</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>==</span> <span class='st'>'P009'</span><span class='op'>)</span>, <span class='op'>]</span>
+<span class='kw'>sp1.sub</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>sp1</span>) <span class='op'>==</span> <span class='st'>'P009'</span>), ]
 
 <span class='co'># compute hz-thickness wt. mean</span>
-<span class='va'>hz.wt.mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span>
-  <span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp1.sub</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>bottom</span> <span class='op'>-</span> <span class='va'>top</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>prop</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>bottom</span> <span class='op'>-</span> <span class='va'>top</span><span class='op'>)</span>
-<span class='op'>)</span>
+<span class='kw'>hz.wt.mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(
+  <span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span>(<span class='kw'>sp1.sub</span>),
+  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>((<span class='kw'>bottom</span> <span class='op'>-</span> <span class='kw'>top</span>) <span class='op'>*</span> <span class='kw'>prop</span>) <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>bottom</span> <span class='op'>-</span> <span class='kw'>top</span>)
+)
 
 <span class='co'># hopefully the same value, calculated via slice()</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span><span class='op'>(</span><span class='va'>sp1.sub</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fu'><a href='max.html'>max</a></span><span class='op'>(</span><span class='va'>sp1.sub</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>prop</span><span class='op'>)</span>
-<span class='va'>hz.slice.mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>prop</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>slice</span>(<span class='kw'>sp1.sub</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fu'><a href='max,SoilProfileCollection-method.html'>max</a></span>(<span class='kw'>sp1.sub</span>) <span class='op'>~</span> <span class='kw'>prop</span>)
+<span class='kw'>hz.slice.mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>prop</span>, na.rm=<span class='fl'>TRUE</span>)
 
 <span class='co'># same?</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/all.equal.data.table.html'>all.equal</a></span><span class='op'>(</span><span class='va'>hz.slice.mean</span>, <span class='va'>hz.wt.mean</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>'there is a bug in slice() !!!'</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='co'>if</span>(<span class='op'>!</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/all.equal.data.table.html'>all.equal</a></span>(<span class='kw'>hz.slice.mean</span>, <span class='kw'>hz.wt.mean</span>))
+  <span class='fu'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span>(<span class='st'>'there is a bug in slice() !!!'</span>)
+}
 
 </div></pre>
   </div>

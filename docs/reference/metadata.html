@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieve metadata from SoilProfileCollection — metadata • aqp</title>
+<title>Retrieve metadata from SoilProfileCollection — metadata,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Retrieve metadata from SoilProfileCollection — metadata" />
+<meta property="og:title" content="Retrieve metadata from SoilProfileCollection — metadata,SoilProfileCollection-method" />
 <meta property="og:description" content="Get metadata from SoilProfileCollection. Result is a list. Two entries (aqp_df_class, depth_units) should not be edited in the metadata list directly. There are methods that facilitate changing them -- and propagating their changes throughout the collection. Otherwise, metadata list is a free-form slot used to store arbitrary information about the data, how it was collected, citations, etc." />
 
 
@@ -121,9 +121,10 @@
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>metadata</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+<span class='fu'>metadata</span>(<span class='kw'>object</span>)
 
-<span class='fu'>metadata</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span></pre>
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>metadata</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,16 +141,17 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'># replace default metadata with itself</span>
-<span class='fu'>metadata</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'>metadata</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
+<span class='fu'>metadata</span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='fu'>metadata</span>(<span class='kw'>sp5</span>)
 
 <span class='co'># set new metadata attribute value</span>
-<span class='fu'>metadata</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span><span class='op'>$</span><span class='va'>newvalue</span> <span class='op'>&lt;-</span> <span class='st'>'foo'</span>
+<span class='fu'>metadata</span>(<span class='kw'>sp5</span>)<span class='op'>$</span><span class='kw'>newvalue</span> <span class='op'>&lt;-</span> <span class='st'>'foo'</span>
 
 <span class='co'># get metadata attribute</span>
-<span class='fu'>metadata</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span><span class='op'>$</span><span class='va'>newvalue</span>
+<span class='fu'>metadata</span>(<span class='kw'>sp5</span>)<span class='op'>$</span><span class='kw'>newvalue</span>
 </div><div class='output co'>#&gt; [1] "foo"</div><div class='input'>
 </div></pre>
   </div>

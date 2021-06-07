@@ -122,17 +122,17 @@ The upper boundary is where the clay increase threshold is met. The function use
 <p>The upper boundary is where the clay increase threshold is met. The function uses <code>crit.clay.argillic</code> as the threshold function for determining whether a clay increase occurs and <code>get.increase.matrix</code> to determine whether the increase is met, whether vertical distance of increase is sufficiently small, and in which horizon.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getArgillicBounds</span><span class='op'>(</span>
-  <span class='va'>p</span>,
-  hzdesgn <span class='op'>=</span> <span class='st'>"hzname"</span>,
-  clay.attr <span class='op'>=</span> <span class='st'>"clay"</span>,
-  texcl.attr <span class='op'>=</span> <span class='st'>"texcl"</span>,
-  require_t <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  bottom.pattern <span class='op'>=</span> <span class='st'>"Cr|R|Cd"</span>,
-  lower.grad.pattern <span class='op'>=</span> <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
-  sandy.texture.pattern <span class='op'>=</span> <span class='st'>"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getArgillicBounds</span>(
+  <span class='kw'>p</span>,
+  hzdesgn = <span class='st'>"hzname"</span>,
+  clay.attr = <span class='st'>"clay"</span>,
+  texcl.attr = <span class='st'>"texcl"</span>,
+  require_t = <span class='fl'>TRUE</span>,
+  bottom.pattern = <span class='st'>"Cr|R|Cd"</span>,
+  lower.grad.pattern = <span class='st'>"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
+  sandy.texture.pattern = <span class='st'>"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
+  verbose = <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,14 +190,14 @@ The upper boundary is where the clay increase threshold is met. The function use
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
-<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
-<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>getArgillicBounds</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn<span class='op'>=</span><span class='st'>'name'</span>, clay.attr <span class='op'>=</span> <span class='va'>attr</span>, texcl.attr<span class='op'>=</span><span class='st'>"texture"</span><span class='op'>)</span>
-<span class='va'>foo</span>
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
+<span class='kw'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
+<span class='kw'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>getArgillicBounds</span>(<span class='kw'>p</span>, hzdesgn=<span class='st'>'name'</span>, clay.attr = <span class='kw'>attr</span>, texcl.attr=<span class='st'>"texture"</span>)
+<span class='kw'>foo</span>
 </div><div class='output co'>#&gt; ubound lbound 
 #&gt;     49     89 </div><div class='input'>
 </div></pre>

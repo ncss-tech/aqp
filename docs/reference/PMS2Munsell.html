@@ -120,7 +120,7 @@
     <p>Convert Pantone PMS codes to Munsell notation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>PMS2Munsell</span><span class='op'>(</span><span class='va'>codes</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>PMS2Munsell</span>(<span class='kw'>codes</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,9 +148,9 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># safely handles NA</span>
-<span class='va'>codes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='st'>"7630-c"</span>, <span class='st'>"102-c"</span><span class='op'>)</span>
+<span class='kw'>codes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>NA</span>, <span class='st'>"7630-c"</span>, <span class='st'>"102-c"</span>)
 
-<span class='fu'>PMS2Munsell</span><span class='op'>(</span><span class='va'>codes</span><span class='op'>)</span>
+<span class='fu'>PMS2Munsell</span>(<span class='kw'>codes</span>)
 </div><div class='output co'>#&gt;     code     hex munsell      dE00
 #&gt; 1   &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        NA
 #&gt; 2 7630-c #633231  5R 3/4 2.9763935

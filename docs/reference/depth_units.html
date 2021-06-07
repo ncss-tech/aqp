@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get depth units from metadata — depth_units • aqp</title>
+<title>Get depth units from metadata — depth_units,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Get depth units from metadata — depth_units" />
+<meta property="og:title" content="Get depth units from metadata — depth_units,SoilProfileCollection-method" />
 <meta property="og:description" content="Get units of depth measurement from metadata. Default value is centimeters." />
 
 
@@ -120,6 +120,11 @@
     <p>Get units of depth measurement from metadata. Default value is centimeters.</p>
     </div>
 
+    <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>depth_units</span>(<span class='kw'>object</span>)
+
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>depth_units</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,16 +142,16 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
 
 <span class='co'>## get depth units</span>
-<span class='va'>du</span> <span class='op'>&lt;-</span> <span class='fu'>depth_units</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
+<span class='kw'>du</span> <span class='op'>&lt;-</span> <span class='fu'>depth_units</span>(<span class='kw'>sp5</span>)
 
 <span class='co'># set alternate units; e.g. inches</span>
-<span class='fu'>depth_units</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>'in'</span>
+<span class='fu'>depth_units</span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='st'>'in'</span>
 
 <span class='co'># replace original value (cm)</span>
-<span class='fu'>depth_units</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>du</span>
+<span class='fu'>depth_units</span>(<span class='kw'>sp5</span>) <span class='op'>&lt;-</span> <span class='kw'>du</span>
 
 </div></pre>
   </div>

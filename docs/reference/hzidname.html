@@ -122,35 +122,39 @@ Get column name containing unique horizon ID" />
 <p>Get column name containing unique horizon ID</p>
     </div>
 
+    <pre class="usage"><span class='fu'>hzidname</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span>
+
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>hzidname</span>(<span class='kw'>object</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>value</th>
-      <td><p>character, column name containing unique horizon ID values</p></td>
-    </tr>
-    <tr>
       <th>object</th>
       <td><p>a SoilProfileCollection</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>character, column name containing unique horizon ID values</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
 
 <span class='co'># promote to SPC</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># create new horizon ID</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>hzIDrev</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>hzID</span><span class='op'>)</span>
+<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hzIDrev</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='kw'>sp1</span><span class='op'>$</span><span class='kw'>hzID</span>)
 
 <span class='co'># set horizon designation column</span>
-<span class='fu'>hzidname</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"hzIDrev"</span>
+<span class='fu'>hzidname</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='st'>"hzIDrev"</span>
 
 <span class='co'># get horizon designation column</span>
-<span class='fu'>hzidname</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+<span class='fu'>hzidname</span>(<span class='kw'>sp1</span>)
 </div><div class='output co'>#&gt; [1] "hzIDrev"</div><div class='input'>
 </div></pre>
   </div>

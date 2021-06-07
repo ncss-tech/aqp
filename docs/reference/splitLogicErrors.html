@@ -120,7 +120,7 @@
     <p>Uses <code>checkHzDepthLogic</code> to identify presence of depth logic errors, same depths, missing depths, and overlaps/gaps between the horizons of each profile in a SoilProfileCollection.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>splitLogicErrors</span><span class='op'>(</span><span class='va'>object</span>, interact <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>splitLogicErrors</span>(<span class='kw'>object</span>, interact = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,11 +145,11 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># no errors (all four list elements return NULL)</span>
-<span class='fu'>splitLogicErrors</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
+<span class='fu'>splitLogicErrors</span>(<span class='kw'>sp4</span>)
 </div><div class='output co'>#&gt; $depthLogic
 #&gt; NULL
 #&gt; 
@@ -163,11 +163,11 @@
 #&gt; NULL
 #&gt; </div><div class='input'>
 <span class='co'># NA in top depth triggers depth logic and missing depth errors</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
-<span class='va'>sp4</span><span class='op'>$</span><span class='va'>top</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp4</span>)
+<span class='kw'>sp4</span><span class='op'>$</span><span class='kw'>top</span>[<span class='fl'>1</span>] <span class='op'>&lt;-</span> <span class='fl'>NA</span>
+<span class='fu'>depths</span>(<span class='kw'>sp4</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 </div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'>
-<span class='fu'>splitLogicErrors</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
+<span class='fu'>splitLogicErrors</span>(<span class='kw'>sp4</span>)
 </div><div class='output co'>#&gt; $depthLogic
 #&gt; SoilProfileCollection with 1 profiles and 4 horizons
 #&gt; profile ID: id  |  horizon ID: hzID 
@@ -216,7 +216,7 @@
 #&gt; </div><div class='input'>
 <span class='co'># interact = TRUE gets errors for profile 1 in same group</span>
 <span class='co'>#  and allows you to pass extra arguments to split.default()</span>
-<span class='fu'>splitLogicErrors</span><span class='op'>(</span><span class='va'>sp4</span>, interact <span class='op'>=</span> <span class='cn'>TRUE</span>, sep <span class='op'>=</span> <span class='st'>"_"</span>, drop <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>splitLogicErrors</span>(<span class='kw'>sp4</span>, interact = <span class='fl'>TRUE</span>, sep = <span class='st'>"_"</span>, drop = <span class='fl'>TRUE</span>)
 </div><div class='output co'>#&gt; $`___`
 #&gt; SoilProfileCollection with 9 profiles and 26 horizons
 #&gt; profile ID: id  |  horizon ID: hzID 

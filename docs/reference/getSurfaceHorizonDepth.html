@@ -40,9 +40,7 @@
 
 
 <meta property="og:title" content="Determine thickness of horizons (continuous from surface) matching a pattern — getSurfaceHorizonDepth" />
-<meta property="og:description" content="This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0).
-The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given pattern = &quot;A&quot;.
-getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; and, it is used by getMineralSoilSurfaceDepth to find the thickness of O horizons in lieu of lab data." />
+<meta property="og:description" content="Find the thickness of horizon designations, or any other character patterns, that are continuous from the soil surface (depth = 0 or shallowest depth in profile)." />
 
 
 
@@ -119,75 +117,84 @@ getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; an
     </div>
 
     <div class="ref-description">
-    <p>This function is used to find the thickness of arbitrary horizon designations that are continuous from the soil surface (depth = 0).</p>
-<p>The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given <code>pattern = "A"</code>.</p>
-<p>getSurfaceHorizonDepth is used by getPlowLayerDepth for matching Ap horizons; and, it is used by getMineralSoilSurfaceDepth to find the thickness of O horizons in lieu of lab data.</p>
+    <p>Find the thickness of horizon designations, or any other character patterns, that are continuous from the soil surface (depth = 0 or shallowest depth in profile).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getMineralSoilSurfaceDepth</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn <span class='op'>=</span> <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>, pattern <span class='op'>=</span> <span class='st'>"O"</span><span class='op'>)</span>
-
-<span class='fu'>getPlowLayerDepth</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn <span class='op'>=</span> <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>, pattern <span class='op'>=</span> <span class='st'>"^Ap[^b]*"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getSurfaceHorizonDepth</span>(
+  <span class='kw'>p</span>,
+  <span class='kw'>pattern</span>,
+  hzdesgn = <span class='fu'><a href='guessHzDesgnName.html'>guessHzDesgnName</a></span>(<span class='kw'>p</span>),
+  simplify = <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>p</th>
-      <td><p>A single-profile SoilProfileCollection object.</p></td>
+      <td><p>a SoilProfileCollection</p></td>
     </tr>
     <tr>
       <th>pattern</th>
-      <td><p>Regular expression pattern to match for all horizons to be considered part of the "surface".</p></td>
+      <td><p>a regular expression pattern to match for all horizons to be considered part of the "surface".</p></td>
     </tr>
     <tr>
       <th>hzdesgn</th>
-      <td><p>Column name containing horizon designation. Default: <code><a href='guessHzDesgnName.html'>guessHzDesgnName(p)</a></code>.</p></td>
+      <td><p>column name containing horizon designation. Default: <code><a href='guessHzDesgnName.html'>guessHzDesgnName(p)</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>simplify</th>
+      <td><p>logical. Return single profile results as vector (default: <code>TRUE</code>) or <code>data.frame</code> (<code>FALSE</code>)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface (depth = 0).</p>
+    <p>a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface. If <code>length(p) &gt; 1</code> then a <em>data.frame</em> containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The horizon designation to match is specified with the regular expression pattern 'pattern'. All horizons matching that pattern, that are continuous from the soil surface, count towards the depth / thickness value that is ultimately returned. For instance: horizon designations: A1-A2-A3-C-Ab , would return A3 bottom depth given <code>pattern = "^A[1-9]*$"</code>.</p>
+<p><code>getSurfaceHorizonDepth</code> is used by <code>getPlowLayerDepth</code> for matching Ap horizons; and, it is used by <code>getMineralSoilSurfaceDepth</code> to find the thickness of O horizons in lieu of lab data.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='site.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>, package = <span class='st'>'aqp'</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>group</span>
 
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
-<span class='va'>q</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>
+<span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>1</span>]
+<span class='kw'>q</span> <span class='op'>&lt;-</span> <span class='kw'>sp1</span>[<span class='fl'>2</span>]
 
 <span class='co'># look at horizon designations in p and q</span>
-<span class='va'>p</span><span class='op'>$</span><span class='va'>name</span>
-</div><div class='output co'>#&gt; [1] "A1" "A2" "AB" "BA" "Bt" "Rt"</div><div class='input'><span class='va'>q</span><span class='op'>$</span><span class='va'>name</span>
+<span class='kw'>p</span><span class='op'>$</span><span class='kw'>name</span>
+</div><div class='output co'>#&gt; [1] "A1" "A2" "AB" "BA" "Bt" "Rt"</div><div class='input'><span class='kw'>q</span><span class='op'>$</span><span class='kw'>name</span>
 </div><div class='output co'>#&gt; [1] "Oi" "A"  "C1" "C2"</div><div class='input'>
 <span class='co'># thickness of all surface horizons containing A</span>
-<span class='fu'>getSurfaceHorizonDepth</span><span class='op'>(</span><span class='va'>p</span>, pattern <span class='op'>=</span> <span class='st'>'A'</span>, hzdesgn <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
+<span class='fu'>getSurfaceHorizonDepth</span>(<span class='kw'>p</span>, pattern = <span class='st'>'A'</span>, hzdesgn = <span class='st'>'name'</span>)
 </div><div class='output co'>#&gt; [1] 57</div><div class='input'>
 <span class='co'># thickness of all surface horizons that start with A</span>
-<span class='fu'>getSurfaceHorizonDepth</span><span class='op'>(</span><span class='va'>p</span>, pattern <span class='op'>=</span> <span class='st'>'^A'</span>, hzdesgn <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
+<span class='fu'>getSurfaceHorizonDepth</span>(<span class='kw'>p</span>, pattern = <span class='st'>'^A'</span>, hzdesgn = <span class='st'>'name'</span>)
 </div><div class='output co'>#&gt; [1] 49</div><div class='input'>
 <span class='co'># thickness of all surface horizons that start with A, and the A is not followed by B</span>
-<span class='fu'>getSurfaceHorizonDepth</span><span class='op'>(</span><span class='va'>p</span>, pattern <span class='op'>=</span> <span class='st'>'^A[^B]*'</span>, hzdesgn <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
+<span class='fu'>getSurfaceHorizonDepth</span>(<span class='kw'>p</span>, pattern = <span class='st'>'^A[^B]*'</span>, hzdesgn = <span class='st'>'name'</span>)
 </div><div class='output co'>#&gt; [1] 49</div><div class='input'>
 <span class='co'># thickness of all surface horizons that start with A</span>
 <span class='co'>#  followed by a number from _2_ to 9 (returns ZERO)</span>
-<span class='fu'>getSurfaceHorizonDepth</span><span class='op'>(</span><span class='va'>p</span>, pattern <span class='op'>=</span> <span class='st'>'^A[2-9]*'</span>, hzdesgn <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
+<span class='fu'>getSurfaceHorizonDepth</span>(<span class='kw'>p</span>, pattern = <span class='st'>'^A[2-9]*'</span>, hzdesgn = <span class='st'>'name'</span>)
 </div><div class='output co'>#&gt; [1] 49</div><div class='input'>
 <span class='co'># getPlowLayerDepth matches first two horizons in fake Ap horizon data with "buried Ap"</span>
-<span class='va'>p</span><span class='op'>$</span><span class='va'>aphorizons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"Ap1"</span>,<span class='st'>"Ap2"</span>,<span class='st'>"AB"</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'C'</span>, <span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>4</span><span class='op'>)</span>, <span class='st'>"Apb"</span><span class='op'>)</span>
-<span class='fu'>getPlowLayerDepth</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn <span class='op'>=</span> <span class='st'>'aphorizons'</span><span class='op'>)</span>
+<span class='kw'>p</span><span class='op'>$</span><span class='kw'>aphorizons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"Ap1"</span>,<span class='st'>"Ap2"</span>,<span class='st'>"AB"</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>'C'</span>, <span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span>(<span class='kw'>p</span>) <span class='op'>-</span> <span class='fl'>4</span>), <span class='st'>"Apb"</span>)
+<span class='fu'>getPlowLayerDepth</span>(<span class='kw'>p</span>, hzdesgn = <span class='st'>'aphorizons'</span>)
 </div><div class='output co'>#&gt; [1] 14</div><div class='input'>
 <span class='co'># getMineralSoilSurfaceDepthmatches first 3 horizons in fake O horizon data</span>
-<span class='va'>p</span><span class='op'>$</span><span class='va'>ohorizons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"Oi1"</span>,<span class='st'>"Oi2"</span>,<span class='st'>"Oe"</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'C'</span>, <span class='fu'><a href='nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>4</span><span class='op'>)</span>, <span class='st'>"2C"</span><span class='op'>)</span>
-<span class='fu'>getMineralSoilSurfaceDepth</span><span class='op'>(</span><span class='va'>p</span>, hzdesgn<span class='op'>=</span><span class='st'>'ohorizons'</span><span class='op'>)</span>
+<span class='kw'>p</span><span class='op'>$</span><span class='kw'>ohorizons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"Oi1"</span>,<span class='st'>"Oi2"</span>,<span class='st'>"Oe"</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>'C'</span>, <span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span>(<span class='kw'>p</span>) <span class='op'>-</span> <span class='fl'>4</span>), <span class='st'>"2C"</span>)
+<span class='fu'>getMineralSoilSurfaceDepth</span>(<span class='kw'>p</span>, hzdesgn=<span class='st'>'ohorizons'</span>)
 </div><div class='output co'>#&gt; [1] 49</div><div class='input'>
 <span class='co'># matches first Oi horizon with original horizon designations of pedon 2</span>
-<span class='fu'>getMineralSoilSurfaceDepth</span><span class='op'>(</span><span class='va'>q</span>, hzdesgn<span class='op'>=</span><span class='st'>'name'</span><span class='op'>)</span>
+<span class='fu'>getMineralSoilSurfaceDepth</span>(<span class='kw'>q</span>, hzdesgn=<span class='st'>'name'</span>)
 </div><div class='output co'>#&gt; [1] 5</div><div class='input'>
 </div></pre>
   </div>

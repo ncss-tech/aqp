@@ -126,7 +126,7 @@ contents (thresholds) that must be met for an argillic horizon clay
 increase.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crit.clay.argillic</span><span class='op'>(</span><span class='va'>eluvial_clay_content</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>crit.clay.argillic</span>(<span class='kw'>eluvial_clay_content</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +172,7 @@ USDA-Natural Resources Conservation Service, Washington, DC.</p>
 <span class='co'># crit.clay.argillic uses different equations for clay content</span>
 <span class='co'># less than 15 %, between 15 and 40 %, and &gt;40 %</span>
 
-<span class='fu'>crit.clay.argillic</span><span class='op'>(</span>eluvial_clay_content<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>20</span>, <span class='fl'>45</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>crit.clay.argillic</span>(eluvial_clay_content=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>20</span>, <span class='fl'>45</span>))
 </div><div class='output co'>#&gt; [1]  8 24 53</div><div class='input'>
 </div></pre>
   </div>

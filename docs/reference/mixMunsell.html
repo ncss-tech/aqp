@@ -120,14 +120,15 @@
     <p>Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mixMunsell</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  w <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, times <span class='op'>=</span> <span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-  mixingMethod <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"reference"</span>, <span class='st'>"exact"</span>, <span class='st'>"estimate"</span>, <span class='st'>"adaptive"</span>, <span class='st'>"spectra"</span><span class='op'>)</span>,
-  n <span class='op'>=</span> <span class='fl'>1</span>,
-  keepMixedSpec <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  distThreshold <span class='op'>=</span> <span class='fl'>0.025</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mixMunsell</span>(
+  <span class='kw'>x</span>,
+  w = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, times = <span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span>(<span class='kw'>x</span>))<span class='op'>/</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span>(<span class='kw'>x</span>),
+  mixingMethod = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"reference"</span>, <span class='st'>"exact"</span>, <span class='st'>"estimate"</span>, <span class='st'>"adaptive"</span>, <span class='st'>"spectra"</span>),
+  n = <span class='fl'>1</span>,
+  keepMixedSpec = <span class='fl'>FALSE</span>,
+  distThreshold = <span class='fl'>0.025</span>,
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,6 +161,10 @@
     <tr>
       <th>distThreshold</th>
       <td><p>spectral distance used to compute <code>scaledDistance</code>, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  <code>mixingMethod = 'reference'</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments to <code><a href='spec2Munsell.html'>spec2Munsell</a></code></p></td>
     </tr>
     </table>
 
@@ -220,12 +225,12 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># try a couple different methods</span>
-<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 6/2'</span>, <span class='st'>'5YR 5/6'</span>, <span class='st'>'10B 4/4'</span><span class='op'>)</span>
-<span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>cols</span>, mixingMethod <span class='op'>=</span> <span class='st'>'reference'</span><span class='op'>)</span>
+<span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'10YR 6/2'</span>, <span class='st'>'5YR 5/6'</span>, <span class='st'>'10B 4/4'</span>)
+<span class='fu'>mixMunsell</span>(<span class='kw'>cols</span>, mixingMethod = <span class='st'>'reference'</span>)
 </div><div class='output co'>#&gt;   munsell   distance scaledDistance distanceMetric mixingMethod
-#&gt; 1  5Y 5/1 0.01311294      0.5245176          Gower    reference</div><div class='input'><span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>cols</span>, mixingMethod <span class='op'>=</span> <span class='st'>'exact'</span><span class='op'>)</span>
+#&gt; 1  5Y 5/1 0.01311294      0.5245176          Gower    reference</div><div class='input'><span class='fu'>mixMunsell</span>(<span class='kw'>cols</span>, mixingMethod = <span class='st'>'exact'</span>)
 </div><div class='output co'>#&gt;    munsell distance scaledDistance distanceMetric mixingMethod
-#&gt; 1 10YR 5/1 1.802268             NA           dE00        exact</div><div class='input'><span class='fu'>mixMunsell</span><span class='op'>(</span><span class='va'>cols</span>, mixingMethod <span class='op'>=</span> <span class='st'>'estimate'</span><span class='op'>)</span>
+#&gt; 1 10YR 5/1 1.802268             NA           dE00        exact</div><div class='input'><span class='fu'>mixMunsell</span>(<span class='kw'>cols</span>, mixingMethod = <span class='st'>'estimate'</span>)
 </div><div class='output co'>#&gt;     munsell distance scaledDistance distanceMetric mixingMethod
 #&gt; 1 7.5YR 5/2 1.256139             NA           dE00     estimate</div><div class='input'>
 

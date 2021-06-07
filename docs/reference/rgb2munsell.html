@@ -120,7 +120,7 @@
     <p>Convert sRGB color coordinates to the closest <code>n</code> Munsell chips in the <code>munsell</code> lookup table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rgb2munsell</span><span class='op'>(</span><span class='va'>color</span>, colorSpace <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"CIE2000"</span>, <span class='st'>"LAB"</span>, <span class='st'>"sRGB"</span><span class='op'>)</span>, nClosest <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rgb2munsell</span>(<span class='kw'>color</span>, colorSpace = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"CIE2000"</span>, <span class='st'>"LAB"</span>, <span class='st'>"sRGB"</span>), nClosest = <span class='fl'>1</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,22 +158,22 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Munsell notation to sRGB triplets [0-1] </span>
-<span class='va'>color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span>
-  the_hue <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'2.5YR'</span><span class='op'>)</span>, 
-  the_value <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span>, 
-  the_chroma <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>6</span><span class='op'>)</span>, 
-  return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
+<span class='kw'>color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span>(
+  the_hue = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'10YR'</span>, <span class='st'>'2.5YR'</span>), 
+  the_value = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>5</span>), 
+  the_chroma = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>6</span>), 
+  return_triplets = <span class='fl'>TRUE</span>
+)
 
 <span class='co'># result is a data.frame</span>
-<span class='va'>color</span>
+<span class='kw'>color</span>
 </div><div class='output co'>#&gt;           r         g          b
 #&gt; 1 0.3817539 0.2599868 0.09323485
 #&gt; 2 0.6642703 0.4232155 0.31003272</div><div class='input'>
 <span class='co'># sRGB triplets to closest Munsell color </span>
 <span class='co'># dE00 distandce metric</span>
 <span class='co'># result is a data.frame</span>
-<span class='fu'>rgb2munsell</span><span class='op'>(</span><span class='va'>color</span><span class='op'>)</span>
+<span class='fu'>rgb2munsell</span>(<span class='kw'>color</span>)
 </div><div class='output co'>#&gt;     hue value chroma sigma
 #&gt; 1  10YR     3      5     0
 #&gt; 2 2.5YR     5      6     0</div><div class='input'>

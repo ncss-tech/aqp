@@ -120,7 +120,7 @@
     <p>Makes the look up table based on pair-wise CIE2000 color contrast (<code>dE00</code>) of LAB colors with D65 illuminant of LAB colors for all whole value/chroma "chips" in the <code><a href='munsell.html'>aqp::munsell</a></code> data set via <code><a href='https://farver.data-imaginist.com/reference/compare_colour.html'>farver::compare_colour</a></code>. Specify a threshold in terms of a probability level of CIE2000 distance (relative to whole dataset).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.makeEquivalentMunsellLUT</span><span class='op'>(</span>threshold <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.makeEquivalentMunsellLUT</span>(threshold = <span class='fl'>0.001</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,33 +144,33 @@
     <div class='dont-index'><p><code><a href='equivalentMunsellChips.html'>equivalentMunsellChips</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
   <span class='co'># use default threshold</span>
-  <span class='va'>equivalent_chip_lut</span> <span class='op'>&lt;-</span> <span class='fu'>.makeEquivalentMunsellLUT</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='kw'>equivalent_chip_lut</span> <span class='op'>&lt;-</span> <span class='fu'>.makeEquivalentMunsellLUT</span>()
 
   <span class='co'># inspect the first 10 chips, it seems to work!</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>equivalent_chip_lut</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>i</span><span class='op'>)</span> <span class='va'>munsell</span><span class='op'>[</span><span class='va'>i</span>,<span class='op'>]</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>equivalent_chip_lut</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>], <span class='fu'>function</span>(<span class='kw'>i</span>) <span class='kw'>munsell</span>[<span class='kw'>i</span>,])
 
   <span class='co'># lets see some info on the number of chips per chip</span>
-  <span class='va'>nchipsper</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>equivalent_chip_lut</span>, <span class='va'>length</span><span class='op'>)</span>
+  <span class='kw'>nchipsper</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='kw'>equivalent_chip_lut</span>, <span class='kw'>length</span>)
 
   <span class='co'># top 10 are very high chroma chips with over 70 chips "identical"</span>
-  <span class='va'>nchipsper</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span><span class='op'>(</span><span class='va'>nchipsper</span>, decreasing <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span><span class='op'>]</span>
+  <span class='kw'>nchipsper</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='kw'>nchipsper</span>, decreasing = <span class='fl'>TRUE</span>)[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>]]
 
   <span class='co'># look at distribution</span>
-  <span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>nchipsper</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>nchipsper</span>))
 
   <span class='co'># median is 5 -- Q: is this true of the range of Munsell colors typically used for soils?</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>nchipsper</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>nchipsper</span>)
 
   <span class='co'># double the default threshold</span>
-  <span class='va'>doubletest</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'>.makeEquivalentMunsellLUT</span><span class='op'>(</span>threshold <span class='op'>=</span> <span class='fl'>0.002</span><span class='op'>)</span>, <span class='va'>length</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span><span class='op'>(</span><span class='va'>doubletest</span><span class='op'>)</span>, lty<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
+  <span class='kw'>doubletest</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'>.makeEquivalentMunsellLUT</span>(threshold = <span class='fl'>0.002</span>), <span class='kw'>length</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/density.html'>density</a></span>(<span class='kw'>doubletest</span>), lty=<span class='fl'>2</span>)
 
   <span class='co'># apprx. doubles the number of chips per chip in IQR</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>doubletest</span><span class='op'>)</span>
-<span class='op'>}</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>doubletest</span>)
+}
 
 </div></pre>
   </div>

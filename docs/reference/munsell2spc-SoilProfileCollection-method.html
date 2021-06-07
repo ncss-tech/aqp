@@ -117,18 +117,18 @@
     </div>
 
     <div class="ref-description">
-    <p>Convert Munsell hue, value and chroma into sRGB (<code>rgb_R, rgb_G, rgb_B</code>) and CIELAB (lab_L, lab_A, lab_B) color coordinates using <code>munsell2rgb</code>. The converted values are stored in the <code><a href='horizons.html'>horizons()</a></code> slot unless <code>as.spc</code> is <code>FALSE</code>, in which case the results are combined with profile and horizon ID columns and returned as the <code>data.frame</code> subclass used by the SPC.</p>
+    <p>Convert Munsell hue, value and chroma into sRGB (<code>rgb_R, rgb_G, rgb_B</code>) and CIELAB (lab_L, lab_A, lab_B) color coordinates using <code>munsell2rgb</code>. The converted values are stored in the <code><a href='horizons,SoilProfileCollection-method.html'>horizons()</a></code> slot unless <code>as.spc</code> is <code>FALSE</code>, in which case the results are combined with profile and horizon ID columns and returned as the <code>data.frame</code> subclass used by the SPC.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>munsell2spc</span><span class='op'>(</span>
-  <span class='va'>object</span>,
-  hue <span class='op'>=</span> <span class='st'>"hue"</span>,
-  value <span class='op'>=</span> <span class='st'>"value"</span>,
-  chroma <span class='op'>=</span> <span class='st'>"chroma"</span>,
-  .data <span class='op'>=</span> <span class='cn'>NULL</span>,
-  as.spc <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+<span class='fu'>munsell2spc</span>(
+  <span class='kw'>object</span>,
+  hue = <span class='st'>"hue"</span>,
+  value = <span class='st'>"value"</span>,
+  chroma = <span class='st'>"chroma"</span>,
+  .data = <span class='kw'>NULL</span>,
+  as.spc = <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,11 +168,11 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># inspect input data</span>
-<span class='fu'><a href='horizons.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>[</span>,<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"hue"</span>,<span class='st'>"value"</span>,<span class='st'>"chroma"</span><span class='op'>)</span><span class='op'>]</span>
+<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span>(<span class='kw'>sp3</span>)[,<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"hue"</span>,<span class='st'>"value"</span>,<span class='st'>"chroma"</span>)]
 </div><div class='output co'>#&gt;      hue value chroma
 #&gt; 1   10YR     5      3
 #&gt; 2   10YR     6      4
@@ -221,18 +221,18 @@
 #&gt; 45  10YR     6      3
 #&gt; 46  2.5Y     7      2</div><div class='input'>
 <span class='co'># do color conversions to sRGB and LAB, join into horizon data</span>
-<span class='va'>sp3</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2spc</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='kw'>sp3</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2spc</span>(<span class='kw'>sp3</span>)
 
 <span class='co'># plot rgb "R" coordinate by horizon</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"rgb_R"</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp3</span>, color = <span class='st'>"rgb_R"</span>)
 </div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># plot lab "A" coordinate by horizon</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"lab_A"</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp3</span>, color = <span class='st'>"lab_A"</span>)
 </div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># note that `lab_A` values do not exactly match the original `A` values</span>
 <span class='co'># this is because `lab_A` was computed from the (field determined) Munsell color notation,</span>
 <span class='co'># while `A` was directly measured in the lab by colorimeter</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>A</span>, <span class='va'>sp3</span><span class='op'>$</span><span class='va'>lab_A</span>, xlab <span class='op'>=</span> <span class='st'>'Measured'</span>, ylab <span class='op'>=</span> <span class='st'>'Converted from Field Observed Munsell'</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plot</a></span>(<span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>A</span>, <span class='kw'>sp3</span><span class='op'>$</span><span class='kw'>lab_A</span>, xlab = <span class='st'>'Measured'</span>, ylab = <span class='st'>'Converted from Field Observed Munsell'</span>)
 </div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-3.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>

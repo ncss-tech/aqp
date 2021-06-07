@@ -114,11 +114,15 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="aqp-130-2021-04-14" class="section level1">
+    <div id="aqp-130-2021-05-30" class="section level1">
 <h1 class="page-header" data-toc-text="1.30">
-<a href="#aqp-130-2021-04-14" class="anchor"></a>aqp 1.30 (2021-04-14)<small> Unreleased </small>
+<a href="#aqp-130-2021-05-30" class="anchor"></a>aqp 1.30 (2021-05-30)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<code><a href="../reference/plotColorMixture.html">plotColorMixture()</a></code> will respect “names” attribute of colors-to-mix</li>
+<li>
+<code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> now more robust, c/o P. Roudier</li>
 <li>
 <code>mixMunsell</code>:
 <ul>
@@ -126,6 +130,20 @@
 </ul>
 </li>
 <li>new convenience function <code><a href="../reference/PMS2Munsell.html">PMS2Munsell()</a></code> for converting PMS codes -&gt; closest Munsell chip (<a href="https://github.com/ncss-tech/aqp/issues/124" class="uri">https://github.com/ncss-tech/aqp/issues/124</a>)</li>
+<li>
+<code><a href="../reference/glom,SoilProfileCollection-method.html">glom()</a></code> <code>z1</code> and <code>z2</code> arguments vectorized to allow for profile-specific intervals
+<ul>
+<li>
+<code>z1</code> and <code>z2</code> support non-standard evaluation based on column names in <code><a href="../reference/siteNames&lt;-.html">siteNames(p)</a></code>, and also can take character vector (length 1) with column names in <code><a href="../reference/siteNames&lt;-.html">siteNames(p)</a></code>
+</li>
+</ul>
+</li>
+<li>
+<code><a href="../reference/depthOf.html">depthOf()</a></code>, <code><a href="../reference/depthOf.html">minDepthOf()</a></code>, <code><a href="../reference/depthOf.html">maxDepthOf()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getMineralSoilSurfaceDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getPlowLayerDepth()</a></code> can now be applied to multiple profiles.
+<ul>
+<li>If the input <em>SoilProfileCollection</em> has more than one profile then result is a <em>data.frame</em> containing profile ID, top or bottom depths, horizon designation and pattern</li>
+</ul>
+</li>
 </ul>
 </div>
     <div id="aqp-129-2021-04-05" class="section level1">
@@ -373,8 +391,8 @@
 </h1>
 <ul>
 <li>CRAN release</li>
-<li>new functions: <code><a href="../reference/hzDesgn.html">hzDesgn()</a></code>, get horizon designations from a SPC</li>
-<li>new functions: <code><a href="../reference/hzdesgnname.html">hzdesgnname()</a></code>/<code>hzdesgnname()&lt;-</code> and <code><a href="../reference/hztexclname.html">hztexclname()</a></code>/<code>hztexclname()&lt;-</code> get/set column containing horizon designations and texture classes</li>
+<li>new functions: <code><a href="../reference/hzDesgn,SoilProfileCollection-method.html">hzDesgn()</a></code>, get horizon designations from a SPC</li>
+<li>new functions: <code><a href="../reference/hzdesgnname,SoilProfileCollection-method.html">hzdesgnname()</a></code>/<code>hzdesgnname()&lt;-</code> and <code><a href="../reference/hztexclname,SoilProfileCollection-method.html">hztexclname()</a></code>/<code>hztexclname()&lt;-</code> get/set column containing horizon designations and texture classes</li>
 <li>better error/logic handling for <code><a href="../reference/glom,SoilProfileCollection-method.html">glom()</a></code>
 </li>
 </ul>
@@ -411,7 +429,7 @@
 </h1>
 <ul>
 <li>
-<code><a href="../reference/evalMissingData.html">evalMissingData()</a></code> gets new argument for relative vs. absolute evalulation of missing data</li>
+<code><a href="../reference/evalMissingData.html">evalMissingData()</a></code> gets new argument for relative vs. absolute evaluation of missing data</li>
 <li>
 <code><a href="../reference/horizonColorIndices.html">horizonColorIndices()</a></code>, <code><a href="../reference/harden.rubification.html">harden.rubification()</a></code>, <code><a href="../reference/harden.melanization.html">harden.melanization()</a></code>, <code><a href="../reference/thompson.bell.darkness.html">thompson.bell.darkness()</a></code> and associated functions in soilColorIndices.R</li>
 <li>fix for <a href="https://github.com/ncss-tech/aqp/issues/44" class="uri">https://github.com/ncss-tech/aqp/issues/44</a>
@@ -514,7 +532,7 @@
 </li>
 <li>new function: <code>horizonDepths()&lt;-</code>, edit top/bottom names after SPC init</li>
 <li>new function: <code>profile_id()&lt;-</code>, edit profile IDs after init; be careful!</li>
-<li>new functions: <code><a href="../reference/hzID.html">hzID()</a></code> and <code>hzID()&lt;-</code>, get/set unique horizon IDs</li>
+<li>new functions: <code><a href="../reference/hzID&lt;-,SoilProfileCollection-method.html">hzID()</a></code> and <code>hzID()&lt;-</code>, get/set unique horizon IDs</li>
 <li>new functions: <code><a href="../reference/hzidname&lt;-.html">hzidname()</a></code> and <code>hzidname()&lt;-</code>, get/set column containing unique horizon IDs</li>
 <li>
 <code>rbind.SoilProfileCollection()</code> has been deprecated in favor of <code><a href="https://Rdatatable.gitlab.io/data.table/reference/setops.html">union()</a></code>, gains new functionality: <a href="https://github.com/ncss-tech/aqp/issues/71" class="uri">https://github.com/ncss-tech/aqp/issues/71</a>
@@ -1216,7 +1234,7 @@
 <li>
 <code>site(SCP) &lt;- d</code> now tries to merge data from <a href="mailto:SPC@site" class="email">SPC@site</a> with ‘d’ via left join
 <ul>
-<li>this means that all new SPC objects will have a single column of <a href='https://github.com/site'>@site</a> data, containin profile IDs</li>
+<li>this means that all new SPC objects will have a single column of <a href='https://github.com/site'>@site</a> data, containing profile IDs</li>
 </ul>
 </li>
 <li>plot-SoilProfileCollection now tries to guess the best orientation of IDs

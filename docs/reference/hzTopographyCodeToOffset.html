@@ -120,11 +120,11 @@
     <p>This function will convert USDA-NCSS horizon boundary topography codes into a vertical offset, suitable for use in <code>plotSPC</code>. Default values are reasonable starting points for encoding smooth, wavy, irregular, or broken style horizon boundary topography as defined in <a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184'>Field Book for Describing and Sampling Soils, version 3.0</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hzTopographyCodeToOffset</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  codes <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"S"</span>, <span class='st'>"W"</span>, <span class='st'>"I"</span>, <span class='st'>"B"</span><span class='op'>)</span>,
-  offset <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span>, <span class='fl'>8</span>, <span class='fl'>12</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>hzTopographyCodeToOffset</span>(
+  <span class='kw'>x</span>,
+  codes = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"W"</span>, <span class='st'>"I"</span>, <span class='st'>"B"</span>),
+  offset = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span>, <span class='fl'>8</span>, <span class='fl'>12</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

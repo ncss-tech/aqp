@@ -132,13 +132,13 @@ gap or overlap between adjacent horizons
 
     </div>
 
-    <pre class="usage"><span class='fu'>checkHzDepthLogic</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  hzdepths <span class='op'>=</span> <span class='cn'>NULL</span>,
-  idname <span class='op'>=</span> <span class='cn'>NULL</span>,
-  fast <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  byhz <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>checkHzDepthLogic</span>(
+  <span class='kw'>x</span>,
+  hzdepths = <span class='kw'>NULL</span>,
+  idname = <span class='kw'>NULL</span>,
+  fast = <span class='fl'>FALSE</span>,
+  byhz = <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,7 +153,7 @@ gap or overlap between adjacent horizons
     </tr>
     <tr>
       <th>idname</th>
-      <td><p>SoilProfileCollection uses <code><a href='idname.html'>idname(x)</a></code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector with column name of unique profile ID;</p></td>
+      <td><p>SoilProfileCollection uses <code><a href='idname,SoilProfileCollection-method.html'>idname(x)</a></code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector with column name of unique profile ID;</p></td>
     </tr>
     <tr>
       <th>fast</th>
@@ -168,8 +168,8 @@ gap or overlap between adjacent horizons
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>data.frame</code> containing profile IDs, validity boolean (<code>valid</code>) and test results if <code>fast = FALSE</code>.</p>
-<p>The <code>data.frame</code> will have as many rows as profiles in <code>x</code> (<code><a href='length.html'>length(x)</a></code>).</p><ul>
-<li><p><code>id</code> : Profile IDs, named according to <code><a href='idname.html'>idname(x)</a></code></p></li>
+<p>The <code>data.frame</code> will have as many rows as profiles in <code>x</code> (<code><a href='length,SoilProfileCollection-method.html'>length(x)</a></code>).</p><ul>
+<li><p><code>id</code> : Profile IDs, named according to <code><a href='idname,SoilProfileCollection-method.html'>idname(x)</a></code></p></li>
 <li><p><code>valid</code> : boolean, profile passes all of the following tests</p><ul>
 <li><p><code>depthLogic</code> : boolean, errors related to depth logic</p></li>
 <li><p><code>sameDepth</code> : boolean, errors related to same top/bottom depths</p></li>
@@ -186,13 +186,13 @@ gap or overlap between adjacent horizons
     <pre class="examples"><div class='input'>
 <span class='co'>## sample data</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp3</span>)
+<span class='fu'>depths</span>(<span class='kw'>sp3</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
 
 <span class='co'># these data should be clean</span>
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span>(<span class='kw'>sp3</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>res</span>)
 </div><div class='output co'>#&gt;   id valid depthLogic sameDepth missingDepth overlapOrGap
 #&gt; 1  1  TRUE      FALSE     FALSE        FALSE        FALSE
 #&gt; 2 10  TRUE      FALSE     FALSE        FALSE        FALSE
@@ -201,9 +201,9 @@ gap or overlap between adjacent horizons
 #&gt; 5  4  TRUE      FALSE     FALSE        FALSE        FALSE
 #&gt; 6  5  TRUE      FALSE     FALSE        FALSE        FALSE</div><div class='input'>
 <span class='co'># less memory if only concerned about net validity</span>
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span><span class='op'>(</span><span class='va'>sp3</span>, fast <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>checkHzDepthLogic</span>(<span class='kw'>sp3</span>, fast = <span class='fl'>TRUE</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>res</span>)
 </div><div class='output co'>#&gt;   id valid
 #&gt; 1  1  TRUE
 #&gt; 2 10  TRUE
