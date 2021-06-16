@@ -10,7 +10,8 @@ aggregateColor(
   col = "soil_color",
   colorSpace = "CIE2000",
   k = NULL,
-  profile_wt = NULL
+  profile_wt = NULL,
+  mixingMethod = c("estimate", "exact")
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ aggregateColor(
 \item{k}{single integer specifying the number of colors discretized via PAM (cluster package), see details}
 
 \item{profile_wt}{the name of a site-level attribute used to modify weighting, e.g. area}
+
+\item{mixingMethod}{method used to estimate "aggregate" soil colors, see \code{\link{mixMunsell}}}
 }
 \value{
 A list with the following components:

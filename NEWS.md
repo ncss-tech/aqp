@@ -1,4 +1,5 @@
-# aqp 1.30 (2021-05-30)
+# aqp 1.30 (2021-06-16)
+ * `aggregateColor()` now uses `mixMunsell` for the estimation of soil color mixtures
  * `plotColorMixture()` will respect "names" attribute of colors-to-mix
  * `parseMunsell()` now more robust, c/o P. Roudier
  * `mixMunsell`:

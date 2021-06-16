@@ -58,15 +58,15 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
 
   expect_equal(round(a$scaled.data$A$weight, 3), c(0.342, 0.270, 0.258, 0.129))
 
-  test <- with(a$aggregate.data, paste0(munsell.hue, ' ', munsell.value, '/', munsell.chroma))
-  test2 <- with(a2$aggregate.data, paste0(munsell.hue, ' ', munsell.value, '/', munsell.chroma))
+  test <- with(a$aggregate.data, paste0(hue, ' ', value, '/', chroma))
+  test2 <- with(a2$aggregate.data, paste0(hue, ' ', value, '/', chroma))
 
   if(requireNamespace('farver', quietly = TRUE) & packageVersion("farver") >= '2.0.2') {
     expect_equal(test, '7.5YR 3/2')
-    expect_equal(test2, '10YR 3/2')
+    expect_equal(test2, '7.5YR 3/2')
   } else {
     expect_equal(test, '10YR 3/2')
-    expect_equal(test2, '10YR 3/2')
+    expect_equal(test2, '7.5YR 3/2')
   }
 })
 
@@ -85,9 +85,9 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
   a <- aggregateColor(x, groups = 'group', col = 'soil_color', colorSpace = 'CIE2000')
   
   # manually verified
-  expect_true(a$aggregate.data$munsell.hue == '5YR')
-  expect_true(a$aggregate.data$munsell.value == '5')
-  expect_true(a$aggregate.data$munsell.chroma == '5')
+  expect_true(a$aggregate.data$hue == '5YR')
+  expect_true(a$aggregate.data$value == '5')
+  expect_true(a$aggregate.data$chroma == '5')
   
   # TODO: verify weights
   

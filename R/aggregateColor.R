@@ -1,4 +1,6 @@
 
+## TODO: consider using Munsell notation for `col`, this would save an entire round-trip through the conversion process
+
 
 #' @title Summarize Soil Colors
 #' 
@@ -10,6 +12,8 @@
 #' @param colorSpace the name of color space or color distance metric to use for conversion of aggregate colors to Munsell; either CIE2000 (color distance metric), LAB, or sRGB. Default = 'CIE2000'
 #' @param k single integer specifying the number of colors discretized via PAM (cluster package), see details
 #' @param profile_wt the name of a site-level attribute used to modify weighting, e.g. area
+#' 
+#' @param mixingMethod method used to estimate "aggregate" soil colors, see [`mixMunsell`]
 #'
 #' @return A list with the following components:
 #' 
@@ -88,8 +92,11 @@
 #'   a$aggregate.data
 #' }
 #' 
-aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace = 'CIE2000', k = NULL, profile_wt = NULL) {
-
+aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace = 'CIE2000', k = NULL, profile_wt = NULL, mixingMethod = c('estimate', 'exact')) {
+  
+  # sanity check
+  mixingMethod <- match.arg(mixingMethod)
+  
   # sanity check
   if(!is.null(k)) {
     k <- round(k)
@@ -192,7 +199,6 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
       dE00 <- farver::compare_colour(v, v, from_space='lab', method='CIE2000', white_from='D65')
       dE00 <- as.dist(dE00)
       
-      
       # clustering from distance matrix
       # TODO: save clustering results for later
       v.pam <- pam(dE00, k = k.adj, diss = TRUE, pamonce=5)
@@ -230,6 +236,7 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
     # sort by thickness-- this is our metric for relevance
     res <- res[order(res$weight, decreasing=TRUE), ]
     
+    ## TODO: this is wasteful, as we likely "knew" the munsell notation before-hand
     # back-calculate the closest Munsell color
     m <- rgb2munsell(t(col2rgb(res[[col]])) / 255, colorSpace = colorSpace)
     
@@ -251,39 +258,23 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
   })
   
 
-  # compute weighted mean color for each group, in CIE LAB colorspace
-  # TODO: this is similar to soilDB::estimateColorMixture(), consider consolidation
-  # TODO: this is the second pass of color conversion, can it be done in a single pass?
-  # TODO: should aggregate colors be mixed from the discretized colors? probably
-  # TODO: color mixing should be performed using reflectance spectra
+  # iteration over groups, estimation of aggregate colors
   s.agg <- lapply(s.scaled, function(i) {
-    # convert to sRGB
-    v <- t(col2rgb(i[[col]])) / 255
-
-    # convert to LAB
-    v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
-
-    # compute weighted mean via matrix manip
-    w <- i$weight
-    vw <- sweep(v, 1, STATS = w, FUN = '*')
-    wm <- colSums(vw) / sum(w)
-
-    # convert back to sRGB
-    wm <- convertColor(wm, from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65')
-    dimnames(wm)[[2]] <- c('red', 'green', 'blue')
-
-    # convert result back to R color specification
-    wm.col <- rgb(wm, maxColorValue = 1)
-
-    # get closest Munsell color
-    wm.munsell <- rgb2munsell(wm, colorSpace = colorSpace)
-
+    
+    # estimation of mixture via wt. mean in CIELAB coordinates
+    mix <- mixMunsell(x = i$munsell, w = i$weight, mixingMethod = mixingMethod)
+    
+    # split into pieces for backwards-compatibility
+    m.pieces <- parseMunsell(mix$munsell, convertColors = FALSE)
+    col <- parseMunsell(mix$munsell)
+    
     # consolidate and return
     res <- data.frame(
       .id = i[['.id']][1],
-      munsell = wm.munsell, 
-      col = wm.col, 
-      wm, 
+      m.pieces,
+      munsell = mix$munsell,
+      distance = mix$distance,
+      col = col, 
       n = nrow(i)
     )
     
@@ -292,7 +283,8 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
   
   s.agg <- do.call('rbind', s.agg)
   names(s.agg)[1] <- groups
-
+  row.names(s.agg) <- NULL
+  
   # return scaled color data
   return(list(scaled.data = s.scaled, aggregate.data = s.agg))
 }
