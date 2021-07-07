@@ -314,8 +314,8 @@ perturb <- function(p,
   d <- diagnostic_hz(p)
   o.d <- data.frame()
   if (length(d) != 0) {
-    o.d <- cbind(data.frame(pID = pID), 
-                 d[rep(1:nrow(d), length(pID))])
+    o.d <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(d))), 
+                      d[rep(1:nrow(d), length(pID))])
   }
   names(o.d)[which(names(o.d) == 'pID')] <- new.idname
 
@@ -323,8 +323,8 @@ perturb <- function(p,
   re <- restrictions(p)
   o.r <- data.frame()
   if (nrow(re) > 0) {
-    o.r <- cbind(data.frame(pID = pID), 
-                 re[rep(1:nrow(re), length(pID))])
+    o.r <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(re))),
+                      re[rep(1:nrow(re), length(pID))])
   }
   names(o.r)[which(names(o.r) == 'pID')] <- new.idname
 
