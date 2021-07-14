@@ -153,10 +153,18 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   s <- do.call('rbind', s)
   row.names(s) <- NULL
 
-  ## TODO: enforce this beyond alpha-sorting
-  # set ID factor levels
-  # sorting is automatic because "color X" always comes before "mixture"
-  s$ID <- factor(s$ID)
+  # create sensible levels for plotting / legend
+  # names + mixtures
+  all.names <- unique(s$ID)
+  
+  # mixtures, sorted
+  mix.names <- sort(setdiff(all.names, nm))
+  
+  # original chip names + mixtures
+  color.chip.levels <- c(nm, mix.names)
+  
+  # encode chips names + mixture names as into factor
+  s$ID <- factor(s$ID, levels = color.chip.levels)
   
   # convert into colors for plotting
   s$color <- parseMunsell(s$munsell)
@@ -189,6 +197,8 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   match.rank <- sprintf("#%s", seq(from = 1, to = nrow(m)))
   # combined labels
   lab.text <- sprintf('%s\n%s', munsell.labels, c(wt.labels, match.rank))
+  
+  ## TODO: use grid::grid.layout() / grid viewports to manage a multi-panel figure
   
   # final figure
   pp <- xyplot(

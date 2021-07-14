@@ -27,6 +27,7 @@ names(chips) <- sprintf(
   
 plotColorMixture(chips, w = w, mixingMethod = 'exact')
 
+
 colorMixtureVenn(chips, w = w, mixingMethod = 'exact', names = TRUE)
 
 
