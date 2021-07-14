@@ -83,6 +83,9 @@
 #' 
 parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
   
+  # now fully vectorized, no wrangling of tiny data.frames
+  # https://github.com/ncss-tech/aqp/issues/230
+
   # empty result set for convertColors = FALSE
   empty <- data.frame(
     hue = NA_character_, 
@@ -110,73 +113,73 @@ parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
   # ensure colours are all upper case
   munsellColor <- toupper(munsellColor)
   
-  # For each munsellColor value
-  res <- lapply(
-    munsellColor,
-    function(mn) {
-      
-      # NA handling: return empty DF template
-      if(is.na(mn)) {
-        return(empty)
-      }
-      
-      ## TODO: parse hues directly from regex pattern of possible values
-      ##       ---> see parseOSD for those patterns
-      
-      # split color into pieces, first at hue[space]value/chroma
-      
-      # If the very first character of the Munsell string is not numeric 
-      # return empty DF template
-      if(is.na(suppressWarnings(as.numeric(substr(mn, 1, 1))))) {
-        # If that letter is not N we stop
-        if ( substr(mn, 1, 1) != "N") {
-          return(empty)
-         }
-      }
-      
-      # Extract hue number
-      hue_number <- str_trim(sub("[A-Z].*", "", mn), side = "both")
-      remaining <- substr(mn, str_length(hue_number) + 1, str_length(mn))
-      hue_letter <- str_trim(sub("[0-9].*", "", remaining), side = "both") 
-      remaining <- substr(remaining, str_length(hue_letter) + 1, str_length(remaining))
-      remaining <- str_trim(remaining, side = "both")
-      
-      if (is.na(delim)) {
-        value_chroma <- unlist(strsplit(remaining, "[:,'/_]"))
-      } else {
-        value_chroma <- unlist(strsplit(remaining, delim))
-      }
-      
-      # extract pieces, making sure no white space is left
-      hue <- paste0(hue_number, hue_letter)
-      value <- str_trim(value_chroma[1], side = "both")
-      
-      if (length(value_chroma) == 2) {
-        chroma <- str_trim(value_chroma[2], side = "both")
-      } else {
-        chroma <- ""
-      }
-      
-      d <- data.frame(
-        hue = hue, 
-        value = value, 
-        chroma = chroma, 
-        stringsAsFactors = FALSE
-      )
-      
-      return(d)
-    }
-  )
+  # total number of records, used to NA-padding
+  n <- length(munsellColor)
   
-  res <- do.call(rbind, res)
+  # Munsell notation validation
+  
+  # If the very first character of the Munsell string is not numeric OR 'N'
+  not.numeric.idx <- grep('^[0-9|N]', munsellColor, invert = TRUE)
+  if(length(not.numeric.idx) > 0) {
+    # can't do anything with this value
+    munsellColor[not.numeric.idx] <- NA
+  }
+  
+  # index non-NA values
+  not.na.idx <- which(!is.na(munsellColor))
+  mn <- munsellColor[not.na.idx]
+  
+  
+  ## split pieces
+  
+  # Extract hue number
+  hue_number <- str_trim(sub("[A-Z].*", "", mn), side = "both")
+  remaining <- substr(mn, str_length(hue_number) + 1, str_length(mn))
+  hue_letter <- str_trim(sub("[0-9].*", "", remaining), side = "both") 
+  remaining <- substr(remaining, str_length(hue_letter) + 1, str_length(remaining))
+  remaining <- str_trim(remaining, side = "both")
+  
+  # re-constitute hue
+  hue <- paste0(hue_number, hue_letter)
+  
+  # list, of typically 2-element vectors
+  if (is.na(delim)) {
+    value_chroma <- strsplit(remaining, "[:,'/_]")
+  } else {
+    value_chroma <- strsplit(remaining, delim)
+  }
+  
+  # attempt to extract value and chroma
+  value <- sapply(value_chroma, '[', 1)
+  chroma <- sapply(value_chroma, '[', 2)
+  
+  # clean any remaining whitespace
+  value <- str_trim(value, side = "both")
+  chroma <- str_trim(chroma, side = "both")
+  
+  ## TODO: this breaks the notion that chroma is numeric
+  #
+  # # convert NA chroma (should be limited to N hue) -> empty string
+  # chroma <- ifelse(is.na(chroma), '', chroma)
+  
+  # init empty data.frame
+  res <- empty[rep(1, times = length(munsellColor)), ]
   row.names(res) <- NULL
   
-  # parse, without conversion to numeric / munsell
+  # insert non-NA values
+  # always character
+  res$hue[not.na.idx] <- hue
+  # always numeric
+  res$value[not.na.idx] <- as.numeric(value)
+  # always numeric
+  res$chroma[not.na.idx] <- as.numeric(chroma)
+  
+  # parsed into columns within a data.frame, but not converted to colors
   if(convertColors == FALSE) {
     return(res)
   }
 
-  # otherwise convert
+  # otherwise convert using NA-padded data.frame
   res <- munsell2rgb(res$hue, res$value, res$chroma, ...)
   
   return(res)

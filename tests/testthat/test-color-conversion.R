@@ -47,7 +47,7 @@ test_that("parseMunsell()", {
   expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
 
   # splitting of text into columns within data.frame
-  expect_identical(x.p, data.frame(hue = "10YR", value = "3", chroma = "4", stringsAsFactors = FALSE))
+  expect_identical(x.p, data.frame(hue = "10YR", value = 3, chroma = 4, stringsAsFactors = FALSE))
 
   # Test not using spaces
   expect_equal(suppressWarnings(parseMunsell('2.5YR 3/4')), suppressWarnings(parseMunsell('2.5YR3/4')))
@@ -151,7 +151,13 @@ test_that("missing data", {
 
 })
 
-
+test_that("neutral hues", {
+  
+  N2 <- parseMunsell('N 2/')
+  N6 <- parseMunsell('N 6/')
+  expect_equal(N2, '#333333FF')
+  expect_equal(N6, '#999999FF')
+})
 
 test_that("closest Munsell chip based on sRGB coordinates", {
 
@@ -236,3 +242,4 @@ test_that("munsell2spc wrapper method works as expected", {
   expect_silent( { d3 <- horizons(munsell2spc(sp3, .data = parseMunsell(sp3$chip, convertColors = FALSE))) } )
   expect_silent( { d4 <- horizons(munsell2spc(sp3, .data = data.frame(foo = sp3$chip))) } )
 })
+
