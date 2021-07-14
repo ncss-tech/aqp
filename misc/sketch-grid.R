@@ -3,23 +3,39 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
   # number of profiles, possibly set as an argument
   n <- length(x)
   
+  hztb <- horizonDepths(x)
+  
   # calculation for profile widths, NPC
   profileWidth <- widthFactor * (100 / n) / 2 / 100
 
+  
+  ## viewport stuff isn't working as expected
+  # https://stat.ethz.ch/R-manual/R-devel/library/grid/doc/viewports.pdf
+  
   if(depthAxis) {
-    lay <- grid.layout(nrow = 1, ncol = 2, widths = c(0.95, 0.05))
+    ww <- unit(c(1, 1, 4), c('lines', 'null', 'lines'))
   } else {
-    lay <- grid.layout(nrow = 1, ncol = 1, widths = 1)
+    ww <- unit(c(1, 1, 2), c('lines', 'null', 'lines'))
   }
   
+  lay <- grid.layout(
+    nrow = 1, 
+    ncol = 3, 
+    widths = ww,
+    heights = unit(c(1, 1), c('npc'))
+  )
   
+  ## this is not right
+  # top level VP
+  vp <- viewport(layout = lay)
   
-  # main VIP
+  # main VP
   main.vp <- viewport(x = unit(0.5, 'npc'), y = unit(0.5, 'npc'), 
                  just = c("center", "center"),
                  width = unit(0.95, 'npc'), height = unit(0.95, 'npc'),
                  xscale = c(0, 1), yscale = c(max(x)+10, -10), 
-                 layout.pos.row = 1, layout.pos.col = 1
+                 name = 'main',
+                 layout.pos.row = 1, layout.pos.col = 2
   )
   
 
@@ -28,27 +44,27 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
                       just = c("center", "center"),
                       width = unit(0.95, 'npc'), height = unit(0.95, 'npc'),
                       xscale = c(0, 1), yscale = c(max(x)+10, -10),
-                      layout.pos.row = 1, layout.pos.col = 2
+                      name = 'depthAxis',
+                      layout.pos.row = 1, layout.pos.col = 3
   )
 
-  
   # blank page
   grid.newpage()
-  pushViewport(viewport(layout = lay))
   
-  ## check viewport geom
-  # showViewport(main.vp)
+  splot <- vpTree(vp, vpList(main.vp, depthAxis.vp))
+  pushViewport(splot)
+  
+  # check viewport geom
+  # showViewport(splot)
   
   # depth axis
   if(depthAxis) {
-    
-    pushViewport(depthAxis.vp)
+    seekViewport('depthAxis')
     .addDepthAxis(maxDepth = max(x), interval = 10)
-    popViewport()
   }
   
   # activate main VP
-  pushViewport(main.vp)
+  seekViewport('main')
   
   
   
@@ -70,8 +86,6 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
     gp <- gpar(fill = z$soil_color, col = 'black')
     
     # current horizon depths and derived
-    hztb <- horizonDepths(z)
-    
     tops <- z[[hztb[1]]]
     bottoms <- z[[hztb[2]]]
     thicks <- bottoms - tops 
@@ -125,6 +139,8 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
       name = sprintf('%s.hzdepth', id)
     )
   }
+  
+  # upViewport(0)
   
 }
 
