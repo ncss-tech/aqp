@@ -4,6 +4,7 @@
 # * gower's distance of {L,A,B} looks pretty good too
 # * more control over graphical elements and par()
 # * grid size estimation needs some work
+# * return dE00 stats for method = MDS or grid
  
 
 
@@ -121,6 +122,8 @@ previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), labels = NU
   d <- farver::compare_colour(cols.lab, from_space='lab', to_space = 'lab', method='CIE2000')
   d <- as.dist(t(d))
 
+  ## TODO: return / report group-wise summary (select quantiles) of dE00
+  
   if(method == 'grid') {
     # divisive hierarchical clustering for order
     col.order <- cluster::diana(d)$order
