@@ -47,7 +47,7 @@ Preview colors arranged according to CIE2000 distances or manual specification.
 \details{
 Color sorting is based on CIE2000 distances as calculated by \code{farver::compare_colour()}. The "grid" method arranges colors in a rectangular grid with ordering based on divisive hierarchical clustering of the pair-wise distances. Unique colors are used when \code{cols} contains more than 5,000 colors.
 
-The "MDS" method arranges unique colors via classical multidimensional scaling (principal coordinates) via \code{MASS::cmdscale}.
+The "MDS" method arranges unique colors via classical multidimensional scaling (principal coordinates) via \code{cmdscale()}.
 
 Colors can be manually arranged by supplying a vector of integers to \code{col.order} and setting \code{method='manual'}.
 }
