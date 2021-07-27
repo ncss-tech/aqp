@@ -1,4 +1,6 @@
 # aqp 1.30 (2021-07-14)
+ * `unique` method for `SoilProfileCollection` objects now returns a `SoilProfileCollection` by default
+   - this may break existing code! use the new argument `SPC = FALSE` for previous behavior
  * `aggregateColor()` now uses `mixMunsell` for the estimation of soil color mixtures
  * `plotColorMixture()` will respect "names" attribute of colors-to-mix, without erroneous alpha-sorting
  * `parseMunsell()` now more robust and faster, c/o P. Roudier

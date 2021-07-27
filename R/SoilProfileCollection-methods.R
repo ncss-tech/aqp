@@ -158,52 +158,92 @@ setMethod(
     nrow(x@horizons)
   }
 )
-#' Get the indices of unique profiles in a SoilProfileCollection
-#' @description Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.
-#' @param x a SoilProfileCollection
+  
+
+#' @title Uniqueness within a `SoilProfileCollection` via MD5 Hash
+#' @description Unique profiles within a `SoilProfileCollection` using and MD5 hash of select horizon and / or site level attributes.
+#' 
+#' @param x a `SoilProfileCollection`
 #' @param vars Variables to consider in uniqueness.
+#' @param SPC logical return a `SoilProfileCollection` when `TRUE`, otherwise vector of profile indices
+#' 
+#' @return `SoilProfileCollection` when `SPC = TRUE`, otherwise a vector of integers
+#' 
 #' @aliases unique
 #' @docType methods
 #' @rdname unique
+#' 
 #' @examples
 #'
-#' data(sp5)
+#'   # an example soil profile
+#'   x <- data.frame(
+#'     id = 'A',
+#'     name = c('A', 'E', 'Bhs', 'Bt1', 'Bt2', 'BC', 'C'),
+#'     top = c(0, 10, 20, 30, 40, 50, 100),
+#'     bottom = c(10, 20, 30, 40, 50, 100, 125),
+#'     z = c(8, 5, 3, 7, 10, 2, 12)
+#'   )
+#'   
+#'   # init SPC
+#'   depths(x) <- id ~ top + bottom
+#'   
+#'   # horizon depth variability for simulation
+#'   horizons(x)$.sd <- 2
+#'   
+#'   # duplicate several times
+#'   x.dupes <- duplicate(x, times = 5)
+#'   
+#'   # simulate some new profiles based on example
+#'   x.sim <- perturb(x, n = 5, thickness.attr = '.sd')
+#'   
+#'   # graphical check
+#'   plotSPC(x.dupes, name.style = 'center-center')
+#'   plotSPC(x.sim, name.style = 'center-center')
+#'   
+#'   # inspect unique results
+#'   plotSPC(unique(x.dupes, vars = c('top', 'bottom')), name.style = 'center-center')
+#'   
+#'   # uniqueness is a function of variable selection
+#'   plotSPC(unique(x.sim, vars = c('top', 'bottom')), name.style = 'center-center')
+#'   plotSPC(unique(x.sim, vars = c('name')), name.style = 'center-center')
+#'   
 #'
-#' # find indices where all specified vars are unique
-#' #  these match the indices of all profiles in sp5
-#' #  therefore, all profiles in sp5 are unique
-#'
-#' all(unique(sp5, vars=c("id","sand","silt","clay") == 1:length(sp5)))
 #'
 setMethod(f = 'unique',
           signature(x = "SoilProfileCollection"),
-          definition = function(x, vars) {
+          definition = function(x, vars, SPC = TRUE) {
   
-  # compute hash by profile, for selected variables
+            if(!requireNamespace("digest", quietly = TRUE))
+              stop("package `digest` is required", call.=FALSE)
+            
+            # compute hash by profile, for selected variables
+            md5 <- profileApply(x, function(i) {
+              # unlist in order to drop row names
+              digest::digest(unlist(as(i, 'data.frame')[, vars]))
+            })
+            
+            # get unique hashes
+            u.md5 <- unique(md5)
+            
+            # list profile idx by hash:
+            profiles.by.hash <- sapply(u.md5, function(i) which(md5 == i), simplify = FALSE)
+            
+            # get an index of the first copy of each profile
+            u.profiles <- sapply(profiles.by.hash, function(i) i[1])
+            
+            # down-grade to un-named vector of indices
+            u.profiles <- as.vector(u.profiles)
+            
+            if(SPC) {
+              # return the unique set of profiles as an SPC
+              return(x[u.profiles, ])
+            } else {
+              # return an index of unique profiles
+              return(u.profiles)
+            }
+          }
+)
   
-  md5 <- profileApply(x, function(i) {
-    # unlist in order to drop row names
-    
-    if(!requireNamespace("digest", quietly = TRUE))
-       stop("package `digest` is required", call.=FALSE)
-
-    digest::digest(unlist(as(i, 'data.frame')[, vars]))
-  })
-
-  # get unique hashes
-  u.md5 <- unique(md5)
-
-  # list profile idx by hash:
-  profiles.by.hash <- sapply(u.md5, function(i) which(md5 == i), simplify = FALSE)
-
-  # get an index of the first copy of each profile
-  u.profiles <- sapply(profiles.by.hash, function(i) i[1])
-
-  # return an index of unique profiles
-  # down-grade to un-named vector of indices
-  return(as.vector(u.profiles))
-})
-
 #' @title Subset a SoilProfileCollection with logical expressions
 #' @description \code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
 #'
