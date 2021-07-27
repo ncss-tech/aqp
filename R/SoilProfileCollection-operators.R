@@ -68,7 +68,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
                              }
 
                              # convert logical to integer
-                             # (thanks Jos? Padarian for the suggestion!)
+                             # (thanks Jose Padarian for the suggestion!)
                              if (is.logical(i)) {
                                i <- (1:length(x))[i]
                              }
