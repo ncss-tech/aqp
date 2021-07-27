@@ -163,12 +163,15 @@ perturb <- function(p,
   
   if (!missing(id)) {
     custom.ids <- TRUE
+    # keep track of missing `n` argument before it is set
+    missing.n <- missing(n)
+    
     n <- length(unique(id))
 
     if (n != length(id))
       stop("custom profile ID vector `id` contains non-unique values", call. = FALSE)
 
-    if (!missing(n) & !is.null(n))
+    if (!missing.n)
       message("if profile ID vector `id` is specified, `n` argument is ignored")
   }
 
