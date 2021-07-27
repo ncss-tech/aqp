@@ -33,7 +33,7 @@ dice(
 a \code{SoilProfileCollection} object, or \code{data.frame} when \code{SPC = FALSE}
 }
 \description{
-Cut ("dice") soil horizons into 1-unit thick slices. This function replaces \code{slice}.
+Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace \code{slice()}.
 }
 \author{
 D.E. Beaudette, A.G. Brown

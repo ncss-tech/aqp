@@ -28,6 +28,9 @@ alignTransect(x, x.min, x.max, fix = TRUE, ...)
 \description{
 This function is used to support relative positioning of soil profiles by \code{plotSPC}, based on transect or gradient values typically associated with a site level attribute (e.g. elevation). Gradient values specified in \code{x} are translated to the range used by \code{plotSPC} (usually \verb{1, length(SPC)}) specified in \code{x.min} and \code{x.max}.
 }
+\details{
+See the \href{http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html}{Pair-Wise Distances by Generalized Horizon Labels} tutorial for additional examples.
+}
 \examples{
 
 data("sierraTransect")

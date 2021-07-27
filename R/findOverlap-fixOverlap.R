@@ -120,7 +120,7 @@ overlapMetrics <- function(x, thresh) {
 #
 
 ## Ideas:
-# * there is probably a LP solution to this in ~ 5 lines of code...
+# * there is probably a LP solution to this in ~ 5 lines of code... (work wih Keith on this)
 # * secondary objective function: as close as possible to original configuration
 # * cleanup variable names: stats -> overlap, log -> x.log, etc.
 

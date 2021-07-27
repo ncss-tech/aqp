@@ -1,6 +1,6 @@
 context("methods for plotting slab() output")
 
-library(lattice, quietly = TRUE)
+suppressWarnings(library(lattice, quietly = TRUE))
 library(grid, quietly = TRUE)
 
 

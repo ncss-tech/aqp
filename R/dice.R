@@ -17,7 +17,7 @@
 
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
-#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function replaces `slice`.
+#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace `slice()`.
 #'
 #'
 #' @param x a `SoilProfileCollection` object

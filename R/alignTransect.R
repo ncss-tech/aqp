@@ -15,6 +15,8 @@
 #' 
 #' @description This function is used to support relative positioning of soil profiles by `plotSPC`, based on transect or gradient values typically associated with a site level attribute (e.g. elevation). Gradient values specified in `x` are translated to the range used by `plotSPC` (usually `1, length(SPC)`) specified in `x.min` and `x.max`.
 #'
+#' @details See the [Pair-Wise Distances by Generalized Horizon Labels](http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html) tutorial for additional examples.
+#'
 #' @param x numeric vector, describing values along a transect: distance, elevation, climatic variables, etc.. Typically sourced from the site level attributes of a `SoilProfileCollection` object. Order is not important.
 #' 
 #' @param x.min numeric, lower boundary to relative position scale
