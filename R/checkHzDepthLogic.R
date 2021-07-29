@@ -83,8 +83,10 @@ checkHzDepthLogic <- function(x,
       res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(.SD))))), .SDcols = hzd, by = c(eval(hby))][,
                  list(tests = tests, valid = all(!tests[[1]])), by = c(eval(hby))]
     } else {
-      res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(.SD))))), .SDcols = hzd, by = list(hzID=seq_len(nrow(h)))][,
-                 list(tests = tests, valid = all(!tests[[1]])), by = list(hzID=seq_len(nrow(h)))]
+      res <- h[, list(tests = list(tests = data.frame(t(hzDepthTests(.SD))))), .SDcols = hzd, by = list(.hzID = seq_len(nrow(h)))][,
+                 list(tests = tests, valid = all(!tests[[1]])), by = list(.hzID = seq_len(nrow(h)))]
+      res[[hzidname(x)]] <- hzID(x)
+      res$.hzID <- NULL
     }
     res <- cbind(res, data.table::rbindlist(res$tests))
     res$tests <- NULL
