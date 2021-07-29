@@ -349,6 +349,9 @@ perturb <- function(p,
   ## reset horizon IDs
   hzID(res) <- as.character(1:nrow(res))
 
+  # preserve original horizon designation
+  hzdesgnname(res) <- hzdesgnname(p)
+  
   if (custom.ids & length(unique(id)) == length(res))
     profile_id(res) <- id
 
