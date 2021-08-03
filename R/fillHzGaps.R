@@ -164,7 +164,7 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   # replace horizons (use df class in object x)
   replaceHorizons(x) <- .as.data.frame.aqp(res, aqp_df_class(x))
 
-  # use the autocalculated hzID (in case user had e.g. phiid, chiid set)
+  # use the auto-calculated hzID (in case user had e.g. phiid, chiid set)
   hzidname(x) <- "hzID"
 
   return(x)

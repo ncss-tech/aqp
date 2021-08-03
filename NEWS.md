@@ -1,3 +1,6 @@
+# aqp 1.31 (2021-07-29)
+ * bug fix in `checkHzDepthLogic()` when `byhz = TRUE`
+
 # aqp 1.30 (2021-07-14)
  * `unique` method for `SoilProfileCollection` objects now returns a `SoilProfileCollection` by default
    - this may break existing code! use the new argument `SPC = FALSE` for previous behavior (https://github.com/ncss-tech/aqp/issues/159)
@@ -10,7 +13,7 @@
  * `glom()` `z1` and `z2` arguments vectorized to allow for profile-specific intervals
    *  `z1` and `z2` support non-standard evaluation based on column names in `siteNames(p)`, and also can take character vector (length 1) with column names in `siteNames(p)`
  * `depthOf()`, `minDepthOf()`, `maxDepthOf()`, `getSurfaceHorizonDepth()`, `getMineralSoilSurfaceDepth()`, `getPlowLayerDepth()` can now be applied to multiple profiles.
-   *  If the input _SoilProfileCollection_ has more than one profile then result is a _data.frame_ containing profile ID, top or bottom depths, horizon designation and pattern
+   *  If the input `SoilProfileCollection` has more than one profile then result is a `data.frame` containing profile ID, top or bottom depths, horizon designation and pattern
 
 # aqp 1.29 (2021-04-05)
  * CRAN release
