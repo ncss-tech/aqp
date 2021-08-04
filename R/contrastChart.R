@@ -110,7 +110,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
   m$value <- as.integer(m$value)
   m$chroma <- as.integer(m$chroma)
 
-  # compute all pair-wise constrast classes and dE00
+  # compute all pair-wise contrast classes and dE00
   cc <- colorContrast(x$munsell, rep(m$queryColor, times = nrow(x)))
 
   # join for plotting
