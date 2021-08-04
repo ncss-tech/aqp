@@ -76,11 +76,31 @@ a <- aggregateColor(loafercreek, 'genhz', k = 8)
 
 cols <- .simulateColor(a)
 
-cols <- .simulateColorFromDE00(m = '10YR 4/6', n = 100, thresh = 6, hues = c('2.5Y','10YR', '7.5YR'))
+previewColors(parseMunsell(cols$A), method = 'MDS')
+
+
+cols <- .simulateColorFromDE00(m = '7.5YR 3/3', n = 10, thresh = 8, hues = c('7.5YR'))
 
 previewColors(parseMunsell(cols), method = 'MDS')
 
 
+s <- loafercreek[5, ]
 
+s$soil_color <- parseMunsell(sapply(cols, '[[', 1))
 
+horizons(s)$.hd <- 6
 
+z <- perturb(s, n = 10, boundary.attr = '.hd')
+
+plotSPC(z)
+
+l <- list()
+for(i in 1:6) {
+  z.i <- z[i, ]
+  horizons(z.i)$soil_color <- parseMunsell(sapply(cols, '[[', i))
+  l[[i]] <- z.i
+}
+
+zz <- combine(l)
+
+plotSPC(zz)
