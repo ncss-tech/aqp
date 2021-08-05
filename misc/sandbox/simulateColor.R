@@ -1,3 +1,4 @@
+# need the latest version, possibly the simulateColor branch
 library(aqp)
 
 data(loafercreek, package = 'soilDB')
