@@ -115,13 +115,21 @@ n.sim <- 15
 previewColors(parseMunsell(unlist(cols)), method = 'MDS')
 
 
+# self-calibration
+contrastChart(m = '7.5YR 3/3', hues = c('7.5YR'), thresh = 5)
+contrastChart(m = '7.5YR 4/4', hues = c('7.5YR'), thresh = 8)
+contrastChart(m = '7.5YR 4/4', hues = c('5YR', '7.5YR'), thresh = 8)
+contrastChart(m = '10YR 4/6', hues = c('10YR', '7.5YR'), thresh = 10)
+contrastChart(m = '2.5G 6/2', hues = c('2.5G', '2.5GY', '2.5BG'), thresh = 15)
+
+
 # using dE00 and hue constraints
 p <- list(
   'A' = list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR')),
-  'BA' = list(m = '7.5YR 4/4', thresh = 5, hues = c('7.5YR')),
-  'Bt1' = list(m = '7.5YR 4/4', thresh = 5, hues = c('5YR', '7.5YR')),
-  'Bt2' = list(m = '5YR 4/5', thresh = 5, hues = c('5YR', '7.5YR')),
-  'Bt3' = list(m = '10YR 4/5', thresh = 10, hues = c('10YR', '7.5YR')),
+  'BA' = list(m = '7.5YR 4/4', thresh = 8, hues = c('7.5YR')),
+  'Bt1' = list(m = '7.5YR 4/4', thresh = 8, hues = c('5YR', '7.5YR')),
+  'Bt2' = list(m = '5YR 4/5', thresh = 8, hues = c('5YR', '7.5YR')),
+  'Bt3' = list(m = '10YR 4/6', thresh = 10, hues = c('10YR', '7.5YR')),
   'Cr' = list(m = '2.5G 6/2', thresh = 15, hues = c('2.5G', '2.5GY', '2.5BG'))
   )
 
