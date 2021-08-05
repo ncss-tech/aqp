@@ -38,10 +38,12 @@ a <- aggregateColor(loafercreek, 'genhz', k = 8)
   munsell <- NULL
   load(system.file("data/munsell.rda", package = "aqp")[1])
   
-  
+  # extract parameters
   thresh <- parameters[['thresh']]
   m <- parameters[['m']]
   hues <- parameters[['hues']]
+  
+  ## borrowed / adapted from contrastChart()
   
   # extract just requested hues
   # along with standard value/chroma pairs found on a typical color book page
@@ -72,12 +74,18 @@ a <- aggregateColor(loafercreek, 'genhz', k = 8)
   # join for plotting
   z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE, sort=FALSE)
   
-  # dE00 thresholding
+  # dE00 threshold
   z <- z[which(z$dE00 < thresh), ]
   
+  # convert distances -> similarities
   s <- 1 / (1 + (z$dE00))
-  p <- s / sum(s)
   
+  # convert similarities (sum > 1) -> probabilities (sum == 1) 
+  # via softmax function
+  p <- exp(s) / sum(exp(s))
+  
+  # sample with replacement
+  # using translated dE00 as prior probabilities
   res <- sample(z$munsell, replace = TRUE, size = n, prob = p)
   
   return(res)
@@ -86,7 +94,7 @@ a <- aggregateColor(loafercreek, 'genhz', k = 8)
 
 
 # wrapper
-simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, ...) {
+simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC = NULL, ...) {
   
   method <- match.arg(method)
   
@@ -102,7 +110,30 @@ simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, ...)
     }
   )
   
-  return(res)
+  # result is a list
+  if(is.null(SPC)) {
+    return(res)
+  } else {
+    
+    # result is a modified SPC
+    
+    # basic error checking: number of horizons
+    
+    # copy colors in horizon-order, profile order doesn't matter
+    l <- list()
+    for(i in 1:length(SPC)) {
+      SPC.i <- SPC[i, ]
+      
+      ## TODO: hard-coded soil color column
+      horizons(SPC.i)$soil_color <- parseMunsell(sapply(res, '[[', i))
+      l[[i]] <- SPC.i
+    }
+    
+    # flatten and done
+    return(combine(l))
+  }
+  
+  
 }
 
 
@@ -133,8 +164,16 @@ p <- list(
   'Cr' = list(m = '2.5G 6/2', thresh = 15, hues = c('2.5G', '2.5GY', '2.5BG'))
   )
 
+# using dE00 threshold
 (cols <- simulateColor(method = 'dE00', n = n.sim, parameters = p))
 previewColors(parseMunsell(unlist(cols)), method = 'MDS')
+
+# check L1 and marginal quantiles: looks OK
+plotColorQuantiles(colorQuantiles(parseMunsell(cols$A)))
+plotColorQuantiles(colorQuantiles(parseMunsell(cols$Bt1)))
+plotColorQuantiles(colorQuantiles(parseMunsell(cols$Bt3)))
+plotColorQuantiles(colorQuantiles(parseMunsell(cols$Cr)))
+
 
 # seed profile
 s <- loafercreek[7, ]
@@ -142,19 +181,18 @@ s <- loafercreek[7, ]
 # static hz variability
 horizons(s)$.hd <- 6
 
-
+# simulate
 ids <- sprintf("%s-%03d", 'sim', 1:n.sim)
 z <- perturb(s, id = ids, boundary.attr = '.hd', min.thickness = 4)
 
-l <- list()
-for(i in 1:length(z)) {
-  z.i <- z[i, ]
-  horizons(z.i)$soil_color <- parseMunsell(sapply(cols, '[[', i))
-  l[[i]] <- z.i
-}
+# modify new SPC with simulated colors
+# hard-coded to use 'soil_color' horizon level attribute
+z <- simulateColor(method = 'dE00', n = n.sim, parameters = p, SPC = z)
 
-zz <- combine(l)
-zz <- combine(zz, s)
+# include original profile
+zz <- combine(z, s)
 
+# cool
 par(mar = c(0, 0, 0, 0))
 plotSPC(zz, name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, width = 0.3)
+
