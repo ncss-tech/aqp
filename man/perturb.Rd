@@ -152,7 +152,14 @@ p <- sp1[3]
 sp1 <- transform(sp1, midpt = (bottom - top) / 2 + top, bound_sd = midpt / 12)
 quantile(sp1$bound_sd)
 
-perturb(p, boundary.attr = "bound_sd")
+perturb(p, boundary.attr = "bound_sd", n = 10)
+
+
+### Custom IDs
+
+ids <- sprintf("\%s-\%03d", profile_id(p), 1:10) 
+perturb(p, boundary.attr = "bound_sd", id = ids)
+
 
 }
 \seealso{

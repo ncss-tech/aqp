@@ -15,8 +15,11 @@ loafercreek$genhz <- factor(loafercreek$genhz)
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
 
 
-.simulateColor <- function(a, n = 10) {
- x <- a[['scaled.data']]
+## simulate color via sampling with replacement and estimated proportions
+# n: number of simulations (typically horizons)
+# parameters: output from aqp::aggregateColor()
+.simulateColor <- function(n, parameters) {
+ x <- parameters[['scaled.data']]
  
  res <- lapply(x, function(i) {
    sample(i[['munsell']], size = n, replace = TRUE, prob = i[['weight']])
@@ -26,12 +29,19 @@ a <- aggregateColor(loafercreek, 'genhz', k = 8)
 }
 
 
-
-.simulateColorFromDE00 <- function(m, n = 10, thresh, hues) {
+## simulate color from an RV color in Munsell notation, dE00 threshold, and vector of possible Munsell hues
+# n: number of simulations (typically horizons)
+# parameters: list of parameters
+.simulateColorFromDE00 <- function(n, parameters) {
   # load Munsell LUT
   # safe for CRAN check
   munsell <- NULL
   load(system.file("data/munsell.rda", package = "aqp")[1])
+  
+  
+  thresh <- parameters[['thresh']]
+  m <- parameters[['m']]
+  hues <- parameters[['hues']]
   
   # extract just requested hues
   # along with standard value/chroma pairs found on a typical color book page
@@ -74,33 +84,69 @@ a <- aggregateColor(loafercreek, 'genhz', k = 8)
   
 }
 
-cols <- .simulateColor(a)
 
-previewColors(parseMunsell(cols$A), method = 'MDS')
+# wrapper
+simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, ...) {
+  
+  method <- match.arg(method)
+  
+  res <- switch(
+    method,
+    'dE00' = {
+      lapply(parameters, function(i) {
+        .simulateColorFromDE00(n = n, parameters = i)
+      })
+    },
+    'proportions' = {
+      .simulateColor(n = n, parameters = parameters, ...)
+    }
+  )
+  
+  return(res)
+}
 
 
-cols <- .simulateColorFromDE00(m = '7.5YR 3/3', n = 10, thresh = 8, hues = c('7.5YR'))
+## still a hack
 
-previewColors(parseMunsell(cols), method = 'MDS')
+n.sim <- 15
+
+# using output from aggregateColor()
+(cols <- simulateColor(method = 'proportions', n = n.sim, parameters = a))
+previewColors(parseMunsell(unlist(cols)), method = 'MDS')
 
 
-s <- loafercreek[5, ]
+# using dE00 and hue constraints
+p <- list(
+  'A' = list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR')),
+  'BA' = list(m = '7.5YR 4/4', thresh = 5, hues = c('7.5YR')),
+  'Bt1' = list(m = '7.5YR 4/4', thresh = 5, hues = c('5YR', '7.5YR')),
+  'Bt2' = list(m = '5YR 4/5', thresh = 5, hues = c('5YR', '7.5YR')),
+  'Bt3' = list(m = '10YR 4/5', thresh = 10, hues = c('10YR', '7.5YR')),
+  'Cr' = list(m = '2.5G 6/2', thresh = 15, hues = c('2.5G', '2.5GY', '2.5BG'))
+  )
 
-s$soil_color <- parseMunsell(sapply(cols, '[[', 1))
+(cols <- simulateColor(method = 'dE00', n = n.sim, parameters = p))
+previewColors(parseMunsell(unlist(cols)), method = 'MDS')
 
+# seed profile
+s <- loafercreek[7, ]
+
+# static hz variability
 horizons(s)$.hd <- 6
 
-z <- perturb(s, n = 10, boundary.attr = '.hd')
 
-plotSPC(z)
+ids <- sprintf("%s-%03d", 'sim', 1:n.sim)
+z <- perturb(s, id = ids, boundary.attr = '.hd', min.thickness = 4)
 
 l <- list()
-for(i in 1:6) {
+for(i in 1:length(z)) {
   z.i <- z[i, ]
   horizons(z.i)$soil_color <- parseMunsell(sapply(cols, '[[', i))
   l[[i]] <- z.i
 }
 
 zz <- combine(l)
+zz <- combine(zz, s)
 
-plotSPC(zz)
+par(mar = c(0, 0, 0, 0))
+plotSPC(zz, name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, width = 0.3)
