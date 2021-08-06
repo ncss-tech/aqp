@@ -27,6 +27,27 @@ a \code{list}, unless \code{SPC} is specified, then a \code{SoilProfileCollectio
 \description{
 Simulate plausible soil colors based on proportions by Munsell "chip", or using a seed Munsell chip and threshold specified via CIE2000 color contrast metric.
 }
+\examples{
+
+# m: representative or most likely color
+# thresh: dE00 threshold
+# hues: allowed Munsell hues
+p <- list(
+  'A' = list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR')),
+  'BA' = list(m = '7.5YR 4/4', thresh = 8, hues = c('7.5YR')),
+  'Bt1' = list(m = '7.5YR 4/4', thresh = 8, hues = c('5YR', '7.5YR')),
+  'Bt2' = list(m = '5YR 4/5', thresh = 8, hues = c('5YR', '7.5YR')),
+  'Bt3' = list(m = '10YR 4/6', thresh = 10, hues = c('10YR', '7.5YR')),
+  'Cr' = list(m = '2.5G 6/2', thresh = 15, hues = c('2.5G', '2.5GY', '2.5BG'))
+)
+
+# simulate
+(cols <- simulateColor(method = 'dE00', n = 10, parameters = p))
+
+# preview
+previewColors(parseMunsell(unlist(cols)), method = 'MDS')
+
+}
 \author{
 D.E. Beaudette
 }
