@@ -47,6 +47,27 @@ p <- list(
 # preview
 previewColors(parseMunsell(unlist(cols)), method = 'MDS')
 
+# another example, this time using a larger dE00 threshold
+p <- list(
+  'A' = list(m = '7.5YR 3/3', thresh = 20, hues = c('10YR', '7.5YR', '5YR'))
+)
+
+# simulate
+set.seed(54654)
+cols <- simulateColor(method = 'dE00', n = 200, parameters = p)
+
+# flatten
+cols <- unlist(cols)
+
+# tabulate, sort: most frequent color should be 7.5YR 3/3
+sort(table(cols), decreasing = TRUE)
+
+# review colors
+previewColors(parseMunsell(cols))
+
+# what does a dE00 threshold look like on 3 pages of hue?
+contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 20)
+
 }
 \author{
 D.E. Beaudette

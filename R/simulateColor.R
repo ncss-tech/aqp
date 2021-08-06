@@ -61,16 +61,25 @@
   # dE00 threshold
   z <- z[which(z$dE00 < thresh), ]
   
+  ## TODO: think about alternatives
   # convert distances -> similarities
   s <- 1 / (1 + (z$dE00))
   
+  ## according to ?sample there is no need to convert weights -> probabilities
+  
   # convert similarities (sum > 1) -> probabilities (sum == 1) 
+  # evaluate all of these
+  
   # via softmax function
-  p <- exp(s) / sum(exp(s))
+  # p <- exp(s) / sum(exp(s))
+  
+  # division by total
+  # p <- s / sum(s)
+  
   
   # sample with replacement
   # using translated dE00 as prior probabilities
-  res <- sample(z$munsell, replace = TRUE, size = n, prob = p)
+  res <- sample(z$munsell, replace = TRUE, size = n, prob = s)
   
   return(res)
   
@@ -117,6 +126,27 @@
 #' 
 #' # preview
 #' previewColors(parseMunsell(unlist(cols)), method = 'MDS')
+#'
+#' # another example, this time using a larger dE00 threshold
+#' p <- list(
+#'   'A' = list(m = '7.5YR 3/3', thresh = 20, hues = c('10YR', '7.5YR', '5YR'))
+#' )
+#' 
+#' # simulate
+#' set.seed(54654)
+#' cols <- simulateColor(method = 'dE00', n = 200, parameters = p)
+#' 
+#' # flatten
+#' cols <- unlist(cols)
+#' 
+#' # tabulate, sort: most frequent color should be 7.5YR 3/3
+#' sort(table(cols), decreasing = TRUE)
+#' 
+#' # review colors
+#' previewColors(parseMunsell(cols))
+#' 
+#' # what does a dE00 threshold look like on 3 pages of hue?
+#' contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 20)
 #'
 simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC = NULL) {
   
