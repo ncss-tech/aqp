@@ -54,7 +54,9 @@ title('aggregateColor based simulation')
 
 
 # self-calibration
-contrastChart(m = '7.5YR 3/3', hues = c('7.5YR'), thresh = 5)
+contrastChart(m = '7.5YR 3/3', hues = c('10YR', '7.5YR'), thresh = 10, gridLines = TRUE)
+contrastChart(m = '7.5YR 3/3', hues = c('10YR', '7.5YR', '10G'), thresh = 20, gridLines = TRUE)
+
 contrastChart(m = '7.5YR 4/4', hues = c('7.5YR'), thresh = 8)
 contrastChart(m = '7.5YR 4/4', hues = c('5YR', '7.5YR'), thresh = 8)
 contrastChart(m = '10YR 4/6', hues = c('10YR', '7.5YR'), thresh = 10)
