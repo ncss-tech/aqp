@@ -1,5 +1,6 @@
-# aqp 1.31 (2021-07-29)
+# aqp 1.31 (2021-08-06)
  * bug fix in `checkHzDepthLogic()` when `byhz = TRUE`
+ * new function `simulateColor()` for simulation of reasonable colors
 
 # aqp 1.30 (2021-07-14)
  * `unique` method for `SoilProfileCollection` objects now returns a `SoilProfileCollection` by default

@@ -90,7 +90,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
   # extract just requested hues
   # along with standard value/chroma pairs found on a typical color book page
   chroma.subset <- c(1, 2, 3, 4, 6, 8)
-  x <- munsell[which(munsell$value %in% 3:8 & munsell$chroma %in% chroma.subset & munsell$hue %in% hues), ]
+  x <- munsell[which(munsell$value %in% 2:8 & munsell$chroma %in% chroma.subset & munsell$hue %in% hues), ]
 
   # convert into hex notation for plotting
   x$color <- munsell2rgb(x$hue, x$value, x$chroma)
@@ -142,9 +142,9 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
   # make plot
   pp <- xyplot(fm, data = z,
                main = sprintf('Color Contrast Chart: %s', m$queryColor),
-               asp = 1, xlab='Chroma', ylab='Value',
+               asp = 1.2, xlab='Chroma', ylab='Value',
                xlim = c(0.75, 6.25), 
-               ylim = c(2.75, 8.25),
+               ylim = c(1.75, 8.25),
                scales = list(
                  alternating = 1, tick.number = 8, relation = 'free', y = list(
                    rot = 0
@@ -178,7 +178,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
                  
                  # grid system
                  if(gridLines) {
-                   panel.abline(h = 3:8, v=1:8, col=grey(0.85), lty=1) 
+                   panel.abline(h = 2:8, v=1:8, col=grey(0.85), lty=1) 
                  }
                  
                  # offsets, may require additional tinkering
