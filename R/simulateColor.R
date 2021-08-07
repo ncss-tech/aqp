@@ -30,9 +30,7 @@
   ## borrowed / adapted from contrastChart()
   
   # extract just requested hues
-  # along with standard value/chroma pairs found on a typical color book page
-  chroma.subset <- c(1, 2, 3, 4, 6, 8)
-  x <- munsell[which(munsell$value %in% 3:8 & munsell$chroma %in% chroma.subset & munsell$hue %in% hues), ]
+  x <- munsell[which(munsell$hue %in% hues), ]
   
   # convert into hex notation for plotting
   x$color <- munsell2rgb(x$hue, x$value, x$chroma)
@@ -59,7 +57,16 @@
   z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE, sort=FALSE)
   
   # dE00 threshold
-  z <- z[which(z$dE00 < thresh), ]
+  idx <- which(z$dE00 < thresh)
+  
+  # catch cases where the threshold is too low ... and ?
+  if(length(idx) == 0) {
+    message('Threshold too low.')
+    return(rep(m, times = n))
+  } else {
+    # apply filter
+    z <- z[idx, ]  
+  }
   
   ## TODO: think about alternatives
   # convert distances -> similarities
@@ -168,6 +175,8 @@ simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC 
   if(is.null(SPC)) {
     return(res)
   } else {
+    
+    ## TODO: make this mor efficient
     
     # result is a modified SPC
     
