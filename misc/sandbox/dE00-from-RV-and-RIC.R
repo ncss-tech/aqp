@@ -2,10 +2,6 @@
 
 
 
-library(aqp)
-library(soilDB)
-library(sharpshootR)
-library(latticeExtra)
 
 
 p <- list(
@@ -16,11 +12,14 @@ s <- simulateColor(method = 'dE00', n = 500, parameters = p)
 
 sort(table(s), decreasing = TRUE)
 
-colorChart(s[[1]], g = factor('Bt1'), chip.cex = 3, chip.alpha = 0.05)
+colorChart(s[[1]], g = factor('Bt1'), chip.cex = 3, alpha.wt = 10, annotate = TRUE)
 
 contrastChart('10YR 4/4', hues = c('10YR', '7.5YR'), thresh = 15)
 
 
+
+# library(aqp)
+library(soilDB)
 
 
 x <- fetchKSSL(series='clarksville', returnMorphologicData = TRUE, simplifyColors = TRUE)
@@ -39,7 +38,7 @@ m <- paste0(h$m_hue, ' ', h$m_value, '/', h$m_chroma)
 g <- h$genhz
 
 
-colorChart(m, g)
+colorChart(m, g = g, chip.cex = 2, annotate = TRUE)
 
 
 
@@ -51,8 +50,8 @@ rv <- '2.5YR 3/6'
 
 ric <- expand.grid(
   hue = c('2.5YR', '5YR'),
-  value = c(3, 5),
-  chroma = c(4, 8)
+  value = 3:5,
+  chroma = 4:8
 )
 
 ric <- sprintf("%s %s/%s", ric$hue, ric$value, ric$chroma)
@@ -64,9 +63,9 @@ p <- list(
 
 s <- simulateColor(method = 'dE00', n = 100, parameters = p)
 
-colorChart(c(rv, ric), g = factor('Bt1'), chip.cex = 4, chip.alpha = 1)
+colorChart(c(rv, ric), g = factor('Bt1'), chip.cex = 4, annotate = TRUE)
 
-colorChart(s[[1]], g = factor('Bt1'), chip.cex = 4)
+colorChart(s[[1]], g = factor('Group 1'), chip.cex = 3, annotate = TRUE)
 
 
 
@@ -76,12 +75,12 @@ rv <- '10YR 2/1'
 
 ric <- expand.grid(
   hue = c('10YR', '2.5Y', '5Y'),
-  value = c(2, 3),
-  chroma = c(1, 2)
+  value = 2:3,
+  chroma = 1:2
 )
 
 ric <- sprintf("%s %s/%s", ric$hue, ric$value, ric$chroma)
-colorChart(c(rv, ric), g = factor('A'), chip.cex = 4, chip.alpha = 1)
+colorChart(c(rv, ric), g = factor('A'), chip.cex = 4, annotate = TRUE)
 
 
 
