@@ -13,6 +13,15 @@ loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
 loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
 loafercreek$genhz <- factor(loafercreek$genhz)
 
+
+cols <- data.frame(
+  m = sprintf('%s %s/%s', loafercreek$m_hue, loafercreek$m_value, loafercreek$m_chroma),
+  g = loafercreek$genhz
+)
+
+colorChart(cols$m, annotate = TRUE)
+colorChart(cols$m, g = cols$g, annotate = TRUE)
+
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
 
 
