@@ -164,7 +164,7 @@ colorChart <- function(m, g = factor('All'), chip.cex = 3, alpha.wt = 10, alpha.
       # * other chip styling options
       
       # plot single instances of each chip, transparency weighted by frequency
-      panel.xyplot(
+      panel.points(
         p.data$x, 
         p.data$y, 
         pch = 15, 

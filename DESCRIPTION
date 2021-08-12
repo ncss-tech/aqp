@@ -1,6 +1,6 @@
 Package: aqp
 Version: 1.31
-Date: 2021-07-29
+Date: 2021-08-12
 Title: Algorithms for Quantitative Pedology
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@usda.gov"), person(given="Pierre", family="Roudier", email="roudierp@landcareresearch.co.nz", role = c("aut", "ctb")), person(given="Andrew", family="Brown", email="andrew.g.brown@usda.gov", role = c("aut", "ctb")))
 Author: Dylan Beaudette [aut, cre], Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb]
