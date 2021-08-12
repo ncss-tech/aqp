@@ -73,7 +73,7 @@ Region of California." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@ Region of California." />
 Region of California.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>ca630</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>ca630</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
@@ -170,111 +170,111 @@ with caution</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/jolars/tactile'>tactile</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://lattice.r-forge.r-project.org'>lattice</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://hbiostat.org/R/Hmisc'>Hmisc</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jolars/tactile'>tactile</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://hbiostat.org/R/Hmisc/'>Hmisc</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span>
 
 <span class='co'># check the data out:</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>ca630</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>ca630</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>ca630</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>ca630</span><span class='op'>)</span>
 
 <span class='co'># note that pedon_key is the link between the two tables</span>
 
 <span class='co'># make a copy of the horizon data</span>
-<span class='kw'>ca</span> <span class='op'>&lt;-</span> <span class='kw'>ca630</span><span class='op'>$</span><span class='kw'>lab</span>
+<span class='va'>ca</span> <span class='op'>&lt;-</span> <span class='va'>ca630</span><span class='op'>$</span><span class='va'>lab</span>
 
 <span class='co'># promote to a SoilProfileCollection class object</span>
-<span class='fu'>depths</span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='kw'>pedon_key</span> <span class='op'>~</span> <span class='kw'>hzn_top</span> <span class='op'>+</span> <span class='kw'>hzn_bot</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>pedon_key</span> <span class='op'>~</span> <span class='va'>hzn_top</span> <span class='op'>+</span> <span class='va'>hzn_bot</span>
 
 <span class='co'># add site data, based on pedon_key</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='kw'>ca630</span><span class='op'>$</span><span class='kw'>site</span>
+<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>ca630</span><span class='op'>$</span><span class='va'>site</span>
 
 <span class='co'># ID data missing coordinates: '|' is a logical OR</span>
-(<span class='kw'>missing.coords.idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>ca</span><span class='op'>$</span><span class='kw'>lat</span>) <span class='op'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>ca</span><span class='op'>$</span><span class='kw'>lon</span>)))
+<span class='op'>(</span><span class='va'>missing.coords.idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>$</span><span class='va'>lat</span><span class='op'>)</span> <span class='op'>|</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>$</span><span class='va'>lon</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># remove missing coordinates by safely subsetting</span>
-<span class='co'>if</span>(<span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span>(<span class='kw'>missing.coords.idx</span>) <span class='op'>&gt;</span> <span class='fl'>0</span>)
-  <span class='kw'>ca</span> <span class='op'>&lt;-</span> <span class='kw'>ca</span>[<span class='op'>-</span><span class='kw'>missing.coords.idx</span>, ]
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>missing.coords.idx</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='va'>ca</span> <span class='op'>&lt;-</span> <span class='va'>ca</span><span class='op'>[</span><span class='op'>-</span><span class='va'>missing.coords.idx</span>, <span class='op'>]</span>
 
 <span class='co'># register spatial data</span>
-<span class='fu'><a href='coordinates,SoilProfileCollection-method.html'>coordinates</a></span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>lon</span> <span class='op'>+</span> <span class='kw'>lat</span>
+<span class='fu'><a href='coordinates,SoilProfileCollection-method.html'>coordinates</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>lon</span> <span class='op'>+</span> <span class='va'>lat</span>
 
 <span class='co'># assign a coordinate reference system</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='kw'>ca</span>) <span class='op'>&lt;-</span> <span class='st'>'+proj=longlat +datum=NAD83'</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>'+proj=longlat +datum=NAD83'</span>
 
 <span class='co'># check the result</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>ca</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span>
 
 <span class='co'># aggregate %BS 7 for all profiles into 1 cm slices</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>ca</span>, fm= <span class='op'>~</span> <span class='kw'>bs_7</span>)
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span><span class='op'>(</span><span class='va'>ca</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>bs_7</span><span class='op'>)</span>
 
 <span class='co'># plot median &amp; IQR by 1 cm slice</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(
-<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span>, 
-data = <span class='kw'>a</span>, 
-lower=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q25</span>, 
-upper=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q75</span>,
-alpha=<span class='fl'>0.5</span>,
-ylim=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span>), 
-scales = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(alternating = <span class='fl'>1</span>, y = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.num = <span class='fl'>7</span>)),
-panel = <span class='kw'>panel.depth_function</span>, 
-prepanel = <span class='kw'>prepanel.depth_function</span>,
-ylab=<span class='st'>'Depth (cm)'</span>, xlab=<span class='st'>'Base Saturation at pH 7'</span>,
-par.settings = <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span>(superpose.line = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(col = <span class='st'>'black'</span>, lwd = <span class='fl'>2</span>))
-)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+<span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span>, 
+data <span class='op'>=</span> <span class='va'>a</span>, 
+lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, 
+upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>,
+alpha<span class='op'>=</span><span class='fl'>0.5</span>,
+ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, 
+scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.num <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>,
+panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>, 
+prepanel <span class='op'>=</span> <span class='va'>prepanel.depth_function</span>,
+ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>, xlab<span class='op'>=</span><span class='st'>'Base Saturation at pH 7'</span>,
+par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='st'>'black'</span>, lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># aggregate %BS at pH 8.2 for all profiles by MLRA, along 1 cm slices</span>
 <span class='co'># note that mlra is stored in @site</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span>(<span class='kw'>ca</span>, <span class='kw'>mlra</span> <span class='op'>~</span> <span class='kw'>bs_8.2</span>)
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slab-methods.html'>slab</a></span><span class='op'>(</span><span class='va'>ca</span>, <span class='va'>mlra</span> <span class='op'>~</span> <span class='va'>bs_8.2</span><span class='op'>)</span>
 
 <span class='co'># keep only MLRA 18 and 22</span>
-<span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>a</span>, subset=<span class='kw'>mlra</span> <span class='op'>%in%</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'18'</span>, <span class='st'>'22'</span>))
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>a</span>, subset<span class='op'>=</span><span class='va'>mlra</span> <span class='op'>%in%</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'18'</span>, <span class='st'>'22'</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># plot median &amp; IQR by 1 cm slice, using different colors for each MLRA</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span>(
-<span class='kw'>top</span> <span class='op'>~</span> <span class='kw'>p.q50</span>, 
-groups = <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>mlra</span>), 
-data = <span class='kw'>a</span>,
-lower=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q25</span>, 
-upper=<span class='kw'>a</span><span class='op'>$</span><span class='kw'>p.q75</span>,
-alpha=<span class='fl'>0.25</span>,
-sync.colors = <span class='fl'>TRUE</span>,
-ylim=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span>), 
-scales = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(alternating = <span class='fl'>1</span>, y = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(tick.num = <span class='fl'>7</span>)),
-panel = <span class='kw'>panel.depth_function</span>, 
-prepanel = <span class='kw'>prepanel.depth_function</span>,
-ylab=<span class='st'>'Depth (cm)'</span>, xlab=<span class='st'>'Base Saturation at pH 7'</span>,
-par.settings = <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span>(superpose.line = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(lwd = <span class='fl'>2</span>)),
-auto.key = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(lines = <span class='fl'>TRUE</span>, points = <span class='fl'>FALSE</span>, columns = <span class='fl'>2</span>)
-)
+<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
+<span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span>, 
+groups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mlra</span><span class='op'>)</span>, 
+data <span class='op'>=</span> <span class='va'>a</span>,
+lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q25</span>, 
+upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>p.q75</span>,
+alpha<span class='op'>=</span><span class='fl'>0.25</span>,
+sync.colors <span class='op'>=</span> <span class='cn'>TRUE</span>,
+ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, 
+scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>1</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>tick.num <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>,
+panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>, 
+prepanel <span class='op'>=</span> <span class='va'>prepanel.depth_function</span>,
+ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>, xlab<span class='op'>=</span><span class='st'>'Base Saturation at pH 7'</span>,
+par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tactile/man/tactile.theme.html'>tactile.theme</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span>, columns <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 
 <span class='co'># extract a SPDF with horizon data along a slice at 25 cm</span>
-<span class='kw'>s.25</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>ca</span>, fm=<span class='fl'>25</span> <span class='op'>~</span> <span class='kw'>bs_7</span> <span class='op'>+</span> <span class='kw'>CEC7</span> <span class='op'>+</span> <span class='kw'>ex_acid</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span>(
-<span class='kw'>s.25</span>, zcol=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span>), 
-par.settings = <span class='kw'>tactile.theme</span>,
-layout = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>1</span>)
-)
+<span class='va'>s.25</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>ca</span>, fm<span class='op'>=</span><span class='fl'>25</span> <span class='op'>~</span> <span class='va'>bs_7</span> <span class='op'>+</span> <span class='va'>CEC7</span> <span class='op'>+</span> <span class='va'>ex_acid</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/spplot.html'>spplot</a></span><span class='op'>(</span>
+<span class='va'>s.25</span>, zcol<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'bs_7'</span>,<span class='st'>'CEC7'</span>,<span class='st'>'ex_acid'</span><span class='op'>)</span>, 
+par.settings <span class='op'>=</span> <span class='va'>tactile.theme</span>,
+layout <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># note that the ordering is preserved:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='kw'>s.25</span><span class='op'>$</span><span class='kw'>pedon_key</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span>(<span class='kw'>ca</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='va'>s.25</span><span class='op'>$</span><span class='va'>pedon_key</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>ca</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># extract a data.frame with horizon data at 10, 20, and 50 cm</span>
-<span class='kw'>s.multiple</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span>(<span class='kw'>ca</span>, fm=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>50</span>) <span class='op'>~</span> <span class='kw'>bs_7</span> <span class='op'>+</span> <span class='kw'>CEC7</span> <span class='op'>+</span> <span class='kw'>ex_acid</span>)
+<span class='va'>s.multiple</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>ca</span>, fm<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>50</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>bs_7</span> <span class='op'>+</span> <span class='va'>CEC7</span> <span class='op'>+</span> <span class='va'>ex_acid</span><span class='op'>)</span>
 
 <span class='co'># Extract the 2nd horizon from all profiles as SPDF</span>
-<span class='kw'>ca.2</span> <span class='op'>&lt;-</span> <span class='kw'>ca</span>[, <span class='fl'>2</span>]
+<span class='va'>ca.2</span> <span class='op'>&lt;-</span> <span class='va'>ca</span><span class='op'>[</span>, <span class='fl'>2</span><span class='op'>]</span>
 
 <span class='co'># subset profiles 1 through 10</span>
-<span class='kw'>ca.1.to.10</span> <span class='op'>&lt;-</span> <span class='kw'>ca</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, ]
+<span class='va'>ca.1.to.10</span> <span class='op'>&lt;-</span> <span class='va'>ca</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='op'>]</span>
 
 <span class='co'># basic plot method: profile plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>1</span>))
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span>(<span class='kw'>ca.1.to.10</span>, name=<span class='st'>'hzn_desgn'</span>, color = <span class='st'>'CEC7'</span>)
-}
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>ca.1.to.10</span>, name<span class='op'>=</span><span class='st'>'hzn_desgn'</span>, color <span class='op'>=</span> <span class='st'>'CEC7'</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

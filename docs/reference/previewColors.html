@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -120,18 +120,18 @@
     <p>Preview colors arranged according to CIE2000 distances or manual specification.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>previewColors</span>(
-  <span class='kw'>cols</span>,
-  method = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"grid"</span>, <span class='st'>"MDS"</span>, <span class='st'>"manual"</span>),
-  labels = <span class='kw'>NULL</span>,
-  labels.cex = <span class='fl'>1</span>,
-  col.order = <span class='kw'>NULL</span>,
-  nrow = <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span>(<span class='kw'>cols</span>))),
-  ncol = <span class='kw'>nrow</span>,
-  border.col = <span class='st'>"black"</span>,
-  pt.cex = <span class='fl'>2</span>,
-  pt.pch = <span class='fl'>15</span>
-)</pre>
+    <pre class="usage"><span class='fu'>previewColors</span><span class='op'>(</span>
+  <span class='va'>cols</span>,
+  method <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"grid"</span>, <span class='st'>"MDS"</span>, <span class='st'>"manual"</span><span class='op'>)</span>,
+  labels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  labels.cex <span class='op'>=</span> <span class='fl'>1</span>,
+  col.order <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+  ncol <span class='op'>=</span> <span class='va'>nrow</span>,
+  border.col <span class='op'>=</span> <span class='st'>"black"</span>,
+  pt.cex <span class='op'>=</span> <span class='fl'>2</span>,
+  pt.pch <span class='op'>=</span> <span class='fl'>15</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,7 +184,7 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Color sorting is based on CIE2000 distances as calculated by <code><a href='https://farver.data-imaginist.com/reference/compare_colour.html'>farver::compare_colour()</a></code>. The "grid" method arranges colors in a rectangular grid with ordering based on divisive hierarchical clustering of the pair-wise distances. Unique colors are used when <code>cols</code> contains more than 5,000 colors.</p>
-<p>The "MDS" method arranges unique colors via classical multidimensional scaling (principal coordinates) via <code>MASS::cmdscale</code>.</p>
+<p>The "MDS" method arranges unique colors via classical multidimensional scaling (principal coordinates) via <code><a href='https://rdrr.io/r/stats/cmdscale.html'>cmdscale()</a></code>.</p>
 <p>Colors can be manually arranged by supplying a vector of integers to <code>col.order</code> and setting <code>method='manual'</code>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
@@ -193,25 +193,25 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 
 <span class='co'># convert into SoilProfileCollection object</span>
-<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
-<span class='fu'>previewColors</span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>soil_color</span>)
-</div><div class='img'><img src='previewColors-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'>previewColors</span>(<span class='kw'>sp2</span><span class='op'>$</span><span class='kw'>soil_color</span>, method = <span class='st'>'MDS'</span>, pt.cex = <span class='fl'>3</span>)
+<span class='fu'>previewColors</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>$</span><span class='va'>soil_color</span><span class='op'>)</span>
+</div><div class='img'><img src='previewColors-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'>previewColors</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>$</span><span class='va'>soil_color</span>, method <span class='op'>=</span> <span class='st'>'MDS'</span>, pt.cex <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='img'><img src='previewColors-2.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># create colors using HCL space</span>
-<span class='kw'>cols.hcl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span>(h = <span class='fl'>0</span><span class='op'>:</span><span class='fl'>360</span>, c = <span class='fl'>100</span>, l = <span class='fl'>50</span>)
+<span class='va'>cols.hcl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>360</span>, c <span class='op'>=</span> <span class='fl'>100</span>, l <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 
 <span class='co'># grid, colors sorted by dE00</span>
-<span class='fu'>previewColors</span>(<span class='kw'>cols.hcl</span>)
+<span class='fu'>previewColors</span><span class='op'>(</span><span class='va'>cols.hcl</span><span class='op'>)</span>
 </div><div class='img'><img src='previewColors-3.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># manual specification</span>
-<span class='fu'>previewColors</span>(<span class='kw'>cols.hcl</span>, method = <span class='st'>'manual'</span>, col.order = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>361</span>)
+<span class='fu'>previewColors</span><span class='op'>(</span><span class='va'>cols.hcl</span>, method <span class='op'>=</span> <span class='st'>'manual'</span>, col.order <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>361</span><span class='op'>)</span>
 </div><div class='img'><img src='previewColors-4.png' alt='' width='768' height='475' /></div><div class='input'>
 <span class='co'># MDS</span>
-<span class='fu'>previewColors</span>(<span class='kw'>cols.hcl</span>, method = <span class='st'>'MDS'</span>, pt.cex = <span class='fl'>1</span>)
+<span class='fu'>previewColors</span><span class='op'>(</span><span class='va'>cols.hcl</span>, method <span class='op'>=</span> <span class='st'>'MDS'</span>, pt.cex <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='previewColors-5.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>

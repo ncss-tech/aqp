@@ -75,7 +75,7 @@ The second is creation of site data from an external data.frame via merge (LEFT 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -127,9 +127,9 @@ The second is creation of site data from an external data.frame via merge (LEFT 
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>site</span>(<span class='kw'>object</span>)
+<span class='fu'>site</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
-<span class='fu'>site</span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
+<span class='fu'>site</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,16 +148,16 @@ The second is creation of site data from an external data.frame via merge (LEFT 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 
 <span class='co'># promote to SPC</span>
-<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># normalize a horizon-level attribute to site</span>
-<span class='fu'>site</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='kw'>surface</span>
+<span class='fu'>site</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>surface</span>
 
 <span class='co'># inspect site table</span>
-<span class='fu'>site</span>(<span class='kw'>sp2</span>)
+<span class='fu'>site</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        id         surface
 #&gt; 1   hon-1        holocene
 #&gt; 2  hon-10   lower modesto
@@ -178,15 +178,15 @@ The second is creation of site data from an external data.frame via merge (LEFT 
 #&gt; 17  hon-7   upper modesto
 #&gt; 18  hon-8   upper modesto</div><div class='input'>
 <span class='co'># make some data: classify two geomorphic surfaces with numeric value</span>
-<span class='kw'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(surface = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"holocene"</span>,
-                                  <span class='st'>"lower riverbank"</span>),
-                      newvalue = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='va'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>surface <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"holocene"</span>,
+                                  <span class='st'>"lower riverbank"</span><span class='op'>)</span>,
+                      newvalue <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># do left join based on newly-normalized "surface" attribute</span>
-<span class='fu'>site</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>newdata</span>
+<span class='fu'>site</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>newdata</span>
 
 <span class='co'># inspect site table: holocene &amp; lower riverbank have values</span>
-<span class='fu'>site</span>(<span class='kw'>sp2</span>)
+<span class='fu'>site</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;            surface     id newvalue
 #&gt; 1         holocene  hon-1        1
 #&gt; 2    lower modesto hon-10       NA

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -117,18 +117,18 @@
     </div>
 
     <div class="ref-description">
-    <p>A very simple function for generating labeled swatches of soil colors. Largely based on <code><a href='https://rdrr.io/pkg/colorspace/man/swatchplot.html'>colorspace::swatchplot</a></code>.</p>
+    <p>A very simple function for generating labeled swatches of soil colors. Largely based on <code><a href='https://colorspace.R-Forge.R-project.org//reference/swatchplot.html'>colorspace::swatchplot</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>soilPalette</span>(
-  <span class='kw'>colors</span>,
-  lab = <span class='kw'>colors</span>,
-  lab.cex = <span class='fl'>0.75</span>,
-  dynamic.labels = <span class='fl'>TRUE</span>,
-  x.inset = <span class='fl'>0.01</span>,
-  y.inset = <span class='fl'>0.01</span>,
-  <span class='kw'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>soilPalette</span><span class='op'>(</span>
+  <span class='va'>colors</span>,
+  lab <span class='op'>=</span> <span class='va'>colors</span>,
+  lab.cex <span class='op'>=</span> <span class='fl'>0.75</span>,
+  dynamic.labels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  x.inset <span class='op'>=</span> <span class='fl'>0.01</span>,
+  y.inset <span class='op'>=</span> <span class='fl'>0.01</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,7 +159,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments to <code><a href='https://rdrr.io/pkg/colorspace/man/swatchplot.html'>colorspace::swatchplot</a></code></p></td>
+      <td><p>further arguments to <code><a href='https://colorspace.R-Forge.R-project.org//reference/swatchplot.html'>colorspace::swatchplot</a></code></p></td>
     </tr>
     </table>
 
@@ -174,21 +174,21 @@
     <pre class="examples"><div class='input'>
 <span class='co'># maybe useful for teaching about soil color</span>
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># demonstrate range of Munsell value</span>
-<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>'10YR %s/4'</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>)
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>'10YR %s/4'</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span><span class='op'>)</span>
 <span class='co'># convert to hex representation</span>
-<span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span>(<span class='kw'>m</span>)
+<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 <span class='co'># plot</span>
-<span class='fu'>soilPalette</span>(<span class='kw'>cols</span>, <span class='kw'>m</span>)
+<span class='fu'>soilPalette</span><span class='op'>(</span><span class='va'>cols</span>, <span class='va'>m</span><span class='op'>)</span>
 
 <span class='co'># demonstrate range of Munsell chroma</span>
-<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>'10YR 4/%s'</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span>)
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>'10YR 4/%s'</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>8</span><span class='op'>)</span>
 <span class='co'># convert to hex representation</span>
-<span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span>(<span class='kw'>m</span>)
+<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 <span class='co'># plot</span>
-<span class='fu'>soilPalette</span>(<span class='kw'>cols</span>, <span class='kw'>m</span>)
+<span class='fu'>soilPalette</span><span class='op'>(</span><span class='va'>cols</span>, <span class='va'>m</span><span class='op'>)</span>
 </div><div class='img'><img src='soilPalette-1.png' alt='' width='768' height='475' /></div><div class='input'>
 </div></pre>
   </div>

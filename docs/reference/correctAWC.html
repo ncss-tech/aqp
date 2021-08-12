@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Apply rock fragment or salt correction to available water content</p>
     </div>
 
-    <pre class="usage"><span class='fu'>correctAWC</span>(<span class='kw'>awc</span>, <span class='kw'>total_rf</span>, gravel = <span class='kw'>NULL</span>, ec = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>correctAWC</span><span class='op'>(</span><span class='va'>awc</span>, <span class='va'>total_rf</span>, gravel <span class='op'>=</span> <span class='cn'>NULL</span>, ec <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,15 +150,15 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># medium organic matter, loam texture </span>
-<span class='kw'>base.awc</span> <span class='op'>&lt;-</span> <span class='fl'>0.18</span> <span class='co'># estimateAWC(texcl = "l", omcl = 2, na.rm = TRUE)</span>
+<span class='va'>base.awc</span> <span class='op'>&lt;-</span> <span class='fl'>0.18</span> <span class='co'># estimateAWC(texcl = "l", omcl = 2, na.rm = TRUE)</span>
 
 <span class='co'># medium organic matter, loam texture w/ 23% rock fragments by volume </span>
-<span class='kw'>corrected.awc</span> <span class='op'>&lt;-</span> <span class='fu'>correctAWC</span>(<span class='kw'>base.awc</span>, total_rf = <span class='fl'>23</span>)
-<span class='kw'>corrected.awc</span>
+<span class='va'>corrected.awc</span> <span class='op'>&lt;-</span> <span class='fu'>correctAWC</span><span class='op'>(</span><span class='va'>base.awc</span>, total_rf <span class='op'>=</span> <span class='fl'>23</span><span class='op'>)</span>
+<span class='va'>corrected.awc</span>
 </div><div class='output co'>#&gt; [1] 0.15</div><div class='input'>
 <span class='co'># medium organic matter, loam texture w/ 0% frags by volume and 8 mmhos/cm salts</span>
-<span class='kw'>salty.awc</span> <span class='op'>&lt;-</span> <span class='fu'>correctAWC</span>(<span class='kw'>base.awc</span>, total_rf = <span class='fl'>0</span>, ec = <span class='fl'>8</span>)
-<span class='kw'>salty.awc</span>
+<span class='va'>salty.awc</span> <span class='op'>&lt;-</span> <span class='fu'>correctAWC</span><span class='op'>(</span><span class='va'>base.awc</span>, total_rf <span class='op'>=</span> <span class='fl'>0</span>, ec <span class='op'>=</span> <span class='fl'>8</span><span class='op'>)</span>
+<span class='va'>salty.awc</span>
 </div><div class='output co'>#&gt; [1] 0.14</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

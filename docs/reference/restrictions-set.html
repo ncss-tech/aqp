@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Restrictions data in an object inheriting from <code>data.frame</code> can easily be added via merge (LEFT JOIN). There must be one or more same-named profile ID columns on the left and right hand side to facilitate the join: <code>restrictions(spc) &lt;- newdata</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='restrictions,SoilProfileCollection-method.html'>restrictions</a></span>(<span class='kw'>object</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
+    <pre class="usage"><span class='fu'><a href='restrictions,SoilProfileCollection-method.html'>restrictions</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,22 +139,22 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 
 <span class='co'># promote to SPC</span>
-<span class='fu'>depths</span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># assign abrupt textural change to a profile</span>
-<span class='kw'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(id = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"hon-21"</span>),
-                      restrkind = <span class='st'>"abrupt textural change"</span>,
-                      restrdep = <span class='fl'>46</span>)
+<span class='va'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"hon-21"</span><span class='op'>)</span>,
+                      restrkind <span class='op'>=</span> <span class='st'>"abrupt textural change"</span>,
+                      restrdep <span class='op'>=</span> <span class='fl'>46</span><span class='op'>)</span>
 
 <span class='co'># do left join</span>
-<span class='fu'><a href='restrictions,SoilProfileCollection-method.html'>restrictions</a></span>(<span class='kw'>sp2</span>) <span class='op'>&lt;-</span> <span class='kw'>newdata</span>
+<span class='fu'><a href='restrictions,SoilProfileCollection-method.html'>restrictions</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>newdata</span>
 
 <span class='co'># inspect site table: newvalue TRUE only for horizons</span>
 <span class='co'>#  with top depth equal to zero</span>
-<span class='fu'><a href='restrictions,SoilProfileCollection-method.html'>restrictions</a></span>(<span class='kw'>sp2</span>)
+<span class='fu'><a href='restrictions,SoilProfileCollection-method.html'>restrictions</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;       id              restrkind restrdep
 #&gt; 1 hon-21 abrupt textural change       46</div><div class='input'>
 </div></pre>

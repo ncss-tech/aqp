@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -114,15 +114,34 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="aqp-130-2021-05-30" class="section level1">
+    <div id="aqp-131-2021-08-06" class="section level1">
+<h1 class="page-header" data-toc-text="1.31">
+<a href="#aqp-131-2021-08-06" class="anchor"></a>aqp 1.31 (2021-08-06)<small> Unreleased </small>
+</h1>
+<ul>
+<li>bug fix in <code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code> when <code>byhz = TRUE</code>
+</li>
+<li>new function <code><a href="../reference/simulateColor.html">simulateColor()</a></code> for simulation of reasonable colors</li>
+<li>new function <code><a href="../reference/colorChart.html">colorChart()</a></code> for graphical depiction of Munsell chip frequency by group</li>
+</ul>
+</div>
+    <div id="aqp-130-2021-07-14" class="section level1">
 <h1 class="page-header" data-toc-text="1.30">
-<a href="#aqp-130-2021-05-30" class="anchor"></a>aqp 1.30 (2021-05-30)<small> Unreleased </small>
+<a href="#aqp-130-2021-07-14" class="anchor"></a>aqp 1.30 (2021-07-14)<small> 2021-07-27 </small>
 </h1>
 <ul>
 <li>
-<code><a href="../reference/plotColorMixture.html">plotColorMixture()</a></code> will respect “names” attribute of colors-to-mix</li>
+<code>unique</code> method for <code>SoilProfileCollection</code> objects now returns a <code>SoilProfileCollection</code> by default
+<ul>
+<li>this may break existing code! use the new argument <code>SPC = FALSE</code> for previous behavior (<a href="https://github.com/ncss-tech/aqp/issues/159" class="uri">https://github.com/ncss-tech/aqp/issues/159</a>)</li>
+</ul>
+</li>
 <li>
-<code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> now more robust, c/o P. Roudier</li>
+<code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> now uses <code>mixMunsell</code> for the estimation of soil color mixtures</li>
+<li>
+<code><a href="../reference/plotColorMixture.html">plotColorMixture()</a></code> will respect “names” attribute of colors-to-mix, without erroneous alpha-sorting</li>
+<li>
+<code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> now more robust and faster, c/o P. Roudier</li>
 <li>
 <code>mixMunsell</code>:
 <ul>
@@ -141,7 +160,7 @@
 <li>
 <code><a href="../reference/depthOf.html">depthOf()</a></code>, <code><a href="../reference/depthOf.html">minDepthOf()</a></code>, <code><a href="../reference/depthOf.html">maxDepthOf()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getMineralSoilSurfaceDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getPlowLayerDepth()</a></code> can now be applied to multiple profiles.
 <ul>
-<li>If the input <em>SoilProfileCollection</em> has more than one profile then result is a <em>data.frame</em> containing profile ID, top or bottom depths, horizon designation and pattern</li>
+<li>If the input <code>SoilProfileCollection</code> has more than one profile then result is a <code>data.frame</code> containing profile ID, top or bottom depths, horizon designation and pattern</li>
 </ul>
 </li>
 </ul>

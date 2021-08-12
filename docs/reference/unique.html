@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the indices of unique profiles in a SoilProfileCollection — unique,SoilProfileCollection-method • aqp</title>
+<title>Uniqueness within a SoilProfileCollection via MD5 Hash — unique,SoilProfileCollection-method • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get the indices of unique profiles in a SoilProfileCollection — unique,SoilProfileCollection-method" />
-<meta property="og:description" content="Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables." />
+<meta property="og:title" content="Uniqueness within a SoilProfileCollection via MD5 Hash — unique,SoilProfileCollection-method" />
+<meta property="og:description" content="Unique profiles within a SoilProfileCollection using and MD5 hash of select horizon and / or site level attributes." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -111,42 +111,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the indices of unique profiles in a SoilProfileCollection</h1>
+    <h1>Uniqueness within a <code>SoilProfileCollection</code> via MD5 Hash</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/SoilProfileCollection-methods.R'><code>R/SoilProfileCollection-methods.R</code></a></small>
     <div class="hidden name"><code>unique.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate MD5 hash of each profile in a SoilProfileCollection for the specified variables.</p>
+    <p>Unique profiles within a <code>SoilProfileCollection</code> using and MD5 hash of select horizon and / or site level attributes.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>unique</span>(<span class='kw'>x</span>, <span class='kw'>vars</span>)</pre>
+<span class='fu'>unique</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>vars</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a SoilProfileCollection</p></td>
+      <td><p>a <code>SoilProfileCollection</code></p></td>
     </tr>
     <tr>
       <th>vars</th>
       <td><p>Variables to consider in uniqueness.</p></td>
     </tr>
+    <tr>
+      <th>SPC</th>
+      <td><p>logical return a <code>SoilProfileCollection</code> when <code>TRUE</code>, otherwise vector of profile indices</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>SoilProfileCollection</code> when <code>SPC = TRUE</code>, otherwise a vector of integers</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp5</span>)
+  <span class='co'># an example soil profile</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    id <span class='op'>=</span> <span class='st'>'A'</span>,
+    name <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'E'</span>, <span class='st'>'Bhs'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'Bt2'</span>, <span class='st'>'BC'</span>, <span class='st'>'C'</span><span class='op'>)</span>,
+    top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>,
+    bottom <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>125</span><span class='op'>)</span>,
+    z <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>, <span class='fl'>5</span>, <span class='fl'>3</span>, <span class='fl'>7</span>, <span class='fl'>10</span>, <span class='fl'>2</span>, <span class='fl'>12</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  
+  <span class='co'># init SPC</span>
+  <span class='fu'>depths</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
+  
+  <span class='co'># horizon depth variability for simulation</span>
+  <span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>$</span><span class='va'>.sd</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
+  
+  <span class='co'># duplicate several times</span>
+  <span class='va'>x.dupes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='duplicate.html'>duplicate</a></span><span class='op'>(</span><span class='va'>x</span>, times <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+  
+  <span class='co'># simulate some new profiles based on example</span>
+  <span class='va'>x.sim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='perturb.html'>perturb</a></span><span class='op'>(</span><span class='va'>x</span>, n <span class='op'>=</span> <span class='fl'>5</span>, thickness.attr <span class='op'>=</span> <span class='st'>'.sd'</span><span class='op'>)</span>
+  
+  <span class='co'># graphical check</span>
+  <span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>x.dupes</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span><span class='op'>)</span>
+</div><div class='img'><img src='unique-1.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>x.sim</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span><span class='op'>)</span>
+</div><div class='img'><img src='unique-2.png' alt='' width='768' height='475' /></div><div class='input'>  
+  <span class='co'># inspect unique results</span>
+  <span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='fu'>unique</span><span class='op'>(</span><span class='va'>x.dupes</span>, vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'top'</span>, <span class='st'>'bottom'</span><span class='op'>)</span><span class='op'>)</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span><span class='op'>)</span>
+</div><div class='img'><img src='unique-3.png' alt='' width='768' height='475' /></div><div class='input'>  
+  <span class='co'># uniqueness is a function of variable selection</span>
+  <span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='fu'>unique</span><span class='op'>(</span><span class='va'>x.sim</span>, vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'top'</span>, <span class='st'>'bottom'</span><span class='op'>)</span><span class='op'>)</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span><span class='op'>)</span>
+</div><div class='img'><img src='unique-4.png' alt='' width='768' height='475' /></div><div class='input'>  <span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='fu'>unique</span><span class='op'>(</span><span class='va'>x.sim</span>, vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'name'</span><span class='op'>)</span><span class='op'>)</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span><span class='op'>)</span>
+</div><div class='img'><img src='unique-5.png' alt='' width='768' height='475' /></div><div class='input'>  
 
-<span class='co'># find indices where all specified vars are unique</span>
-<span class='co'>#  these match the indices of all profiles in sp5</span>
-<span class='co'>#  therefore, all profiles in sp5 are unique</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span>(<span class='fu'>unique</span>(<span class='kw'>sp5</span>, vars=<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(<span class='st'>"id"</span>,<span class='st'>"sand"</span>,<span class='st'>"silt"</span>,<span class='st'>"clay"</span>) <span class='op'>==</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span>(<span class='kw'>sp5</span>)))
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

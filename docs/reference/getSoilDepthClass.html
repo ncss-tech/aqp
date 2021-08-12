@@ -73,7 +73,7 @@ object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -122,12 +122,12 @@ object." />
 object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getSoilDepthClass</span>(
-  <span class='kw'>f</span>,
-  depth.classes = <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span>(very.shallow = <span class='fl'>25</span>, shallow = <span class='fl'>50</span>, mod.deep = <span class='fl'>100</span>, deep = <span class='fl'>150</span>,
-    very.deep = <span class='fl'>1000</span>),
-  <span class='kw'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>getSoilDepthClass</span><span class='op'>(</span>
+  <span class='va'>f</span>,
+  depth.classes <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span>very.shallow <span class='op'>=</span> <span class='fl'>25</span>, shallow <span class='op'>=</span> <span class='fl'>50</span>, mod.deep <span class='op'>=</span> <span class='fl'>100</span>, deep <span class='op'>=</span> <span class='fl'>150</span>,
+    very.deep <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,14 +159,14 @@ profile, see examples</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sp1</span>)
-<span class='fu'>depths</span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>id</span> <span class='op'>~</span> <span class='kw'>top</span> <span class='op'>+</span> <span class='kw'>bottom</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
+<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
 
 <span class='co'># generate depth-class matrix</span>
-<span class='kw'>sdc</span> <span class='op'>&lt;-</span> <span class='fu'>getSoilDepthClass</span>(<span class='kw'>sp1</span>, name=<span class='st'>'name'</span>)
+<span class='va'>sdc</span> <span class='op'>&lt;-</span> <span class='fu'>getSoilDepthClass</span><span class='op'>(</span><span class='va'>sp1</span>, name<span class='op'>=</span><span class='st'>'name'</span><span class='op'>)</span>
 
 <span class='co'># inspect</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>sdc</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>sdc</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     id depth very.shallow shallow mod.deep  deep very.deep depth.class
 #&gt; 1 P001    89        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
 #&gt; 2 P002    59        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
@@ -175,14 +175,14 @@ profile, see examples</p>
 #&gt; 5 P005    68        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep
 #&gt; 6 P006   200        FALSE   FALSE    FALSE FALSE      TRUE   very.deep</div><div class='input'>
 <span class='co'># join back into sp1 as site-level data</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span>(<span class='kw'>sp1</span>) <span class='op'>&lt;-</span> <span class='kw'>sdc</span>
+<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>sdc</span>
 
-<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>gopheridge</span>, package=<span class='st'>'soilDB'</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, package<span class='op'>=</span><span class='st'>'soilDB'</span><span class='op'>)</span>
 
-<span class='fu'>getSoilDepthClass</span>(<span class='kw'>gopheridge</span>)
-}
+<span class='fu'>getSoilDepthClass</span><span class='op'>(</span><span class='va'>gopheridge</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by <code><a href='munsell2rgb.html'>munsell2rgb</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parseMunsell</span>(<span class='kw'>munsellColor</span>, convertColors = <span class='fl'>TRUE</span>, delim = <span class='fl'>NA</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>parseMunsell</span><span class='op'>(</span><span class='va'>munsellColor</span>, convertColors <span class='op'>=</span> <span class='cn'>TRUE</span>, delim <span class='op'>=</span> <span class='cn'>NA</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,15 +153,15 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># just sRGB</span>
-<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets = <span class='fl'>TRUE</span>)
+<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           r         g          b
 #&gt; 1 0.3817539 0.2599868 0.09323485</div><div class='input'>
 <span class='co'># sRGB + CIELAB (D65 illuminant)</span>
-<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets = <span class='fl'>TRUE</span>, returnLAB = <span class='fl'>TRUE</span>)
+<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           r         g          b        L        A        B
 #&gt; 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</div><div class='input'>
 <span class='co'># CIELAB only</span>
-<span class='fu'>parseMunsell</span>(<span class='st'>"10YR 3/5"</span>, return_triplets = <span class='fl'>FALSE</span>, returnLAB = <span class='fl'>TRUE</span>)
+<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>FALSE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          L        A        B
 #&gt; 1 30.81482 9.000702 30.27227</div><div class='input'>
 

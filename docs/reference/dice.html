@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Efficient Slicing of SoilProfileCollection Objects — dice" />
-<meta property="og:description" content="Cut (&quot;dice&quot;) soil horizons into 1-unit thick slices. This function replaces slice." />
+<meta property="og:description" content="Cut (&quot;dice&quot;) soil horizons into 1-unit thick slices. This function will eventually replace slice()." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.30</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
       </span>
     </div>
 
@@ -117,18 +117,18 @@
     </div>
 
     <div class="ref-description">
-    <p>Cut ("dice") soil horizons into 1-unit thick slices. This function replaces <code>slice</code>.</p>
+    <p>Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace <code><a href='slice-methods.html'>slice()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dice</span>(
-  <span class='kw'>x</span>,
-  fm = <span class='kw'>NULL</span>,
-  SPC = <span class='fl'>TRUE</span>,
-  pctMissing = <span class='fl'>FALSE</span>,
-  fill = <span class='fl'>FALSE</span>,
-  strict = <span class='fl'>TRUE</span>,
-  byhz = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>dice</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  fm <span class='op'>=</span> <span class='cn'>NULL</span>,
+  SPC <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  pctMissing <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  fill <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  strict <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  byhz <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
