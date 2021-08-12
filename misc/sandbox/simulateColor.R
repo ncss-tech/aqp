@@ -13,17 +13,38 @@ loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
 loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
 loafercreek$genhz <- factor(loafercreek$genhz)
 
+
+cols <- data.frame(
+  m = sprintf('%s %s/%s', loafercreek$m_hue, loafercreek$m_value, loafercreek$m_chroma),
+  g = loafercreek$genhz
+)
+
+colorChart(cols$m, annotate = TRUE)
+colorChart(cols$m, g = cols$g, annotate = TRUE)
+
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
 
 
 
 ## aggregateColor proportions
 
-n.sim <- 15
+n.sim <- 100
 
 # using output from aggregateColor()
 (cols <- simulateColor(method = 'proportions', n = n.sim, parameters = a))
-previewColors(parseMunsell(unlist(cols)), method = 'MDS')
+
+d <- data.frame(
+  m = unlist(cols),
+  g = rep(names(cols), each = length(cols[[1]]))
+)
+
+d$g <- factor(d$g, levels = names(a$scaled.data))
+
+colorChart(d$m, g = d$g, chip.cex = 3, annotate = TRUE)
+
+
+
+previewColors(parseMunsell(d$m), method = 'MDS')
 
 
 # seed profile
@@ -33,6 +54,7 @@ s <- loafercreek[7, ]
 horizons(s)$.hd <- 6
 
 # simulate
+n.sim <- 15
 ids <- sprintf("%s-%03d", 'sim', 1:n.sim)
 z <- perturb(s, id = ids, boundary.attr = '.hd', min.thickness = 4)
 

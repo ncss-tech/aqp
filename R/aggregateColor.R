@@ -258,7 +258,10 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
   })
   
 
-  # iteration over groups, estimation of aggregate colors
+  # iteration over groups, estimation of:
+  # aggregate colors via mixing
+  # number of associated colors
+  # Shannon H, base 2
   s.agg <- lapply(s.scaled, function(i) {
     
     # estimation of mixture via wt. mean in CIELAB coordinates
@@ -275,7 +278,8 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
       munsell = mix$munsell,
       distance = mix$distance,
       col = col, 
-      n = nrow(i)
+      n = nrow(i),
+      H = shannonEntropy(i$weight)
     )
     
     return(res)

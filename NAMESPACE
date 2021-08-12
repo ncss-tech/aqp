@@ -51,6 +51,7 @@ importFrom(lattice,
   panel.grid,
   panel.rect,
   panel.text,
+  panel.points,
   strip.custom
 )
 

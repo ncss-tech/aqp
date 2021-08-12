@@ -68,21 +68,30 @@
     z <- z[idx, ]  
   }
   
+  
   ## TODO: think about alternatives
+  
+  # ? --> perform conversion without RV, then re-add just before sampling 
+  # z <- z[z$munsell != m$queryColor, ]
+  
   # convert distances -> similarities
+  
+  # standard conversion
+  # too fast of a drop off between RV and simulated values
   s <- 1 / (1 + (z$dE00))
+    
+  # linear re-mapping of dE00 -> similarity
+  # simulated values too close to RV
+  # s <- 1 - (z$dE00 / max(z$dE00))
   
   ## according to ?sample there is no need to convert weights -> probabilities
   
-  # convert similarities (sum > 1) -> probabilities (sum == 1) 
-  # evaluate all of these
-  
-  # via softmax function
-  # p <- exp(s) / sum(exp(s))
-  
-  # division by total
-  # p <- s / sum(s)
-  
+
+  # ## diagnostics for dE00 -> probability
+  # plot(s, z$dE00, type = 'n', las = 1)
+  # points(s, z$dE00, col = z$color, pch = 15)
+  # text(s, 0, z$munsell, cex = 0.5, srt = 90)
+
   
   # sample with replacement
   # using translated dE00 as prior probabilities
