@@ -8,10 +8,8 @@ colorChart(
   m,
   g = factor("All"),
   size = TRUE,
-  transparency = FALSE,
   annotate = FALSE,
   chip.cex = 3,
-  alpha.wt = 20,
   annotate.cex = chip.cex * 0.25
 )
 }
@@ -22,13 +20,9 @@ colorChart(
 
 \item{size}{logical, encode group-wise frequency with chip size}
 
-\item{transparency}{logical, encode group-wise frequency with chip transparency}
-
 \item{annotate}{logical, annotate chip frequency}
 
 \item{chip.cex}{scaling factor applied to each "chip"}
-
-\item{alpha.wt}{weight applied to chip transparency}
 
 \item{annotate.cex}{scaling factor for chip frequency annotation}
 }
@@ -53,9 +47,9 @@ if(!requireNamespace('latticeExtra')) {
   # combine hue, value, chroma into standard Munsell notation
   ric <- sprintf("\%s \%s/\%s", ric$hue, ric$value, ric$chroma)
   
-  # note that chip frequency-based size / transparency are disabled 
+  # note that chip frequency-based size is disabled 
   # because all chips have equal frequency
-  colorChart(ric, chip.cex = 4, size = TRUE, transparency = TRUE)
+  colorChart(ric, chip.cex = 4, size = TRUE)
   
   # annotation of frequency
   colorChart(ric, chip.cex = 4, annotate = TRUE)
@@ -63,14 +57,10 @@ if(!requireNamespace('latticeExtra')) {
   # bootstrap to larger size
   ric.big <- sample(ric, size = 100, replace = TRUE)
   
-  # frequency can be encoded in size and/or transparency
+  # frequency can be encoded in size
   colorChart(ric.big, chip.cex = 3)
-  colorChart(ric.big, chip.cex = 3, size = FALSE, transparency = TRUE)
+  colorChart(ric.big, chip.cex = 3, size = FALSE)
   colorChart(ric.big, chip.cex = 5, annotate = TRUE)
-  
-  # adjust transparency weighting
-  colorChart(ric.big, chip.cex = 5, annotate = TRUE, transparency = TRUE, alpha.wt = 50)
-  
   
   # simulate colors based dE00 thresholding
   p <- list(
