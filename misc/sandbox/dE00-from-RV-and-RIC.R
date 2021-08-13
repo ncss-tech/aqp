@@ -31,14 +31,15 @@ s <- x$SPC
 s$genhz <- generalize.hz(s$hzn_desgn, c('A', 'E', 'Bt', '2Bt', '3Bt'), pat=c('A', 'E', '^Bt', '2B', '3B'), non.matching.code = NA)
 s$genhz <- factor(s$genhz, levels = guessGenHzLevels(s, "genhz")$levels)
 
-# remove horizons that are missing moist colors
-h <- horizons(s)
-
-m <- paste0(h$m_hue, ' ', h$m_value, '/', h$m_chroma)
-g <- h$genhz
+m <- paste0(s$m_hue, ' ', s$m_value, '/', s$m_chroma)
+g <- s$genhz
 
 
-colorChart(m, g = g, chip.cex = 2, annotate = TRUE)
+colorChart(m, g = g, chip.cex = 3)
+
+colorChart(m, g = g, chip.cex = 2.5, size = FALSE, transparency = TRUE, alpha.wt = 20)
+
+colorChart(m, g = g, chip.cex = 2.5, size = FALSE, annotate = TRUE)
 
 
 
@@ -63,9 +64,12 @@ p <- list(
 
 s <- simulateColor(method = 'dE00', n = 100, parameters = p)
 
-colorChart(c(rv, ric), g = factor('Bt1'), chip.cex = 4, annotate = TRUE)
+colorChart(c(rv, ric), chip.cex = 4, size = FALSE, annotate = TRUE)
+colorChart(c(rv, ric), chip.cex = 4, size = FALSE, transparency = TRUE, annotate = TRUE)
+colorChart(c(rv, ric), chip.cex = 4, size = FALSE, annotate = TRUE)
 
-colorChart(s[[1]], g = factor('Group 1'), chip.cex = 3, annotate = TRUE)
+colorChart(s[[1]], chip.cex = 4)
+colorChart(s[[1]], chip.cex = 3, transparency = TRUE)
 
 
 

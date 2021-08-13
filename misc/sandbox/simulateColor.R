@@ -1,5 +1,19 @@
-# need the latest version, possibly the simulateColor branch
+
 library(aqp)
+
+
+p <- list(
+  list(m = '2.5BG 6/6', thresh = 8, hues = c('2.5BG'))
+)
+
+s <- simulateColor(method = 'dE00', n = 100, parameters = p)
+
+pp <- colorChart(s[[1]], annotate = TRUE)
+
+update(pp, asp = 0.5)
+
+
+
 
 data(loafercreek, package = 'soilDB')
 
@@ -20,6 +34,8 @@ cols <- data.frame(
 )
 
 colorChart(cols$m, annotate = TRUE)
+colorChart(cols$m, annotate = TRUE, alpha.toggle = FALSE)
+
 colorChart(cols$m, g = cols$g, annotate = TRUE)
 
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
