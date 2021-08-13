@@ -12,7 +12,7 @@ s <- simulateColor(method = 'dE00', n = 500, parameters = p)
 
 sort(table(s), decreasing = TRUE)
 
-colorChart(s[[1]], g = factor('Bt1'), chip.cex = 3, alpha.wt = 10, annotate = TRUE)
+colorChart(s[[1]], chip.cex = 3, annotate = TRUE)
 
 contrastChart('10YR 4/4', hues = c('10YR', '7.5YR'), thresh = 15)
 
@@ -37,7 +37,7 @@ g <- s$genhz
 
 colorChart(m, g = g, chip.cex = 3)
 
-colorChart(m, g = g, chip.cex = 2.5, size = FALSE, transparency = TRUE, alpha.wt = 20)
+colorChart(m, g = g, chip.cex = 2.5, size = FALSE)
 
 colorChart(m, g = g, chip.cex = 2.5, size = FALSE, annotate = TRUE)
 

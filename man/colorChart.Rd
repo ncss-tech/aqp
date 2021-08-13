@@ -10,6 +10,7 @@ colorChart(
   size = TRUE,
   annotate = FALSE,
   chip.cex = 3,
+  chip.border.col = "black",
   annotate.cex = chip.cex * 0.25
 )
 }
@@ -23,6 +24,8 @@ colorChart(
 \item{annotate}{logical, annotate chip frequency}
 
 \item{chip.cex}{scaling factor applied to each "chip"}
+
+\item{chip.border.col}{color for chip borders (outline)}
 
 \item{annotate.cex}{scaling factor for chip frequency annotation}
 }
@@ -59,8 +62,11 @@ if(!requireNamespace('latticeExtra')) {
   
   # frequency can be encoded in size
   colorChart(ric.big, chip.cex = 3)
-  colorChart(ric.big, chip.cex = 3, size = FALSE)
   colorChart(ric.big, chip.cex = 5, annotate = TRUE)
+  
+  # constant size
+  colorChart(ric.big, chip.cex = 3, size = FALSE)
+  colorChart(ric.big, chip.cex = 3, size = FALSE, chip.border.col = 'NA')
   
   # simulate colors based dE00 thresholding
   p <- list(
@@ -72,6 +78,8 @@ if(!requireNamespace('latticeExtra')) {
   
   # result is a list, use the first element
   colorChart(s[[1]], chip.cex = 4)
+  
+  colorChart(s[[1]], chip.cex = 4, annotate = TRUE)
   
 }
 
