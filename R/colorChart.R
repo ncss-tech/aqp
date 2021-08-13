@@ -13,6 +13,8 @@
 #' 
 #' @param chip.cex scaling factor applied to each "chip"
 #' 
+#' @param chip.border.col color for chip borders (outline)
+#' 
 #' @param annotate.cex scaling factor for chip frequency annotation
 #'
 #' @return a `trellis` object
@@ -46,8 +48,11 @@
 #'   
 #'   # frequency can be encoded in size
 #'   colorChart(ric.big, chip.cex = 3)
-#'   colorChart(ric.big, chip.cex = 3, size = FALSE)
 #'   colorChart(ric.big, chip.cex = 5, annotate = TRUE)
+#'   
+#'   # constant size
+#'   colorChart(ric.big, chip.cex = 3, size = FALSE)
+#'   colorChart(ric.big, chip.cex = 3, size = FALSE, chip.border.col = 'NA')
 #'   
 #'   # simulate colors based dE00 thresholding
 #'   p <- list(
@@ -60,9 +65,11 @@
 #'   # result is a list, use the first element
 #'   colorChart(s[[1]], chip.cex = 4)
 #'   
+#'   colorChart(s[[1]], chip.cex = 4, annotate = TRUE)
+#'   
 #' }
 #' 
-colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, annotate.cex = chip.cex * 0.25) {
+colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.border.col = 'black', annotate.cex = chip.cex * 0.25) {
   
   # requires latticeExtra and scales
   if(!requireNamespace('latticeExtra', quietly = TRUE) | !requireNamespace('scales', quietly = TRUE)) {
@@ -194,19 +201,22 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
       
       
       # grid lines: use original data
-      panel.abline(
-        v = min(tab$chroma):max(tab$chroma), 
-        h = min(tab$value):max(tab$value), 
-        col = grey(0.85), 
-        lty = 3
-      )
+      if(nrow(p.data) > 0) {
+        panel.abline(
+          v = unique(p.data$x), 
+          h = unique(p.data$y), 
+          col = grey(0.85), 
+          lty = 3
+        )
+      }
+      
       
       # plot single instances of each chip, transparency weighted by frequency
       panel.points(
         p.data$x, 
         p.data$y, 
         pch = 22, 
-        col = 'black',
+        col = chip.border.col,
         fill = p.data$transformed.col, 
         cex =  p.data$chip.size
       )
