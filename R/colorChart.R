@@ -9,13 +9,9 @@
 #' 
 #' @param size logical, encode group-wise frequency with chip size
 #' 
-#' @param transparency logical, encode group-wise frequency with chip transparency
-#' 
 #' @param annotate logical, annotate chip frequency
 #' 
 #' @param chip.cex scaling factor applied to each "chip"
-#' 
-#' @param alpha.wt weight applied to chip transparency
 #' 
 #' @param annotate.cex scaling factor for chip frequency annotation
 #'
@@ -38,9 +34,9 @@
 #'   # combine hue, value, chroma into standard Munsell notation
 #'   ric <- sprintf("%s %s/%s", ric$hue, ric$value, ric$chroma)
 #'   
-#'   # note that chip frequency-based size / transparency are disabled 
+#'   # note that chip frequency-based size is disabled 
 #'   # because all chips have equal frequency
-#'   colorChart(ric, chip.cex = 4, size = TRUE, transparency = TRUE)
+#'   colorChart(ric, chip.cex = 4, size = TRUE)
 #'   
 #'   # annotation of frequency
 #'   colorChart(ric, chip.cex = 4, annotate = TRUE)
@@ -48,14 +44,10 @@
 #'   # bootstrap to larger size
 #'   ric.big <- sample(ric, size = 100, replace = TRUE)
 #'   
-#'   # frequency can be encoded in size and/or transparency
+#'   # frequency can be encoded in size
 #'   colorChart(ric.big, chip.cex = 3)
-#'   colorChart(ric.big, chip.cex = 3, size = FALSE, transparency = TRUE)
+#'   colorChart(ric.big, chip.cex = 3, size = FALSE)
 #'   colorChart(ric.big, chip.cex = 5, annotate = TRUE)
-#'   
-#'   # adjust transparency weighting
-#'   colorChart(ric.big, chip.cex = 5, annotate = TRUE, transparency = TRUE, alpha.wt = 50)
-#'   
 #'   
 #'   # simulate colors based dE00 thresholding
 #'   p <- list(
@@ -70,7 +62,7 @@
 #'   
 #' }
 #' 
-colorChart <- function(m, g = factor('All'), size = TRUE, transparency = FALSE, annotate = FALSE, chip.cex = 3, alpha.wt = 20, annotate.cex = chip.cex * 0.25) {
+colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, annotate.cex = chip.cex * 0.25) {
   
   # requires latticeExtra and scales
   if(!requireNamespace('latticeExtra', quietly = TRUE) | !requireNamespace('scales', quietly = TRUE)) {
@@ -121,29 +113,30 @@ colorChart <- function(m, g = factor('All'), size = TRUE, transparency = FALSE, 
     factor(tab$hue, levels = huePosition(returnHues = TRUE))
   )
   
-  # disable variable size/transparenct when all frequencies are the same (no useful information)
+  # disable variable size when all frequencies are the same (no useful information)
   if(length(unique(tab$count)) == 1) {
     no.differeneces <- TRUE
   } else {
     no.differeneces <- FALSE
   }
   
-  # encode frequency via opacity (freq ~ opacity)
-  # transparency is normalized to total number of non-NA colors
-  if(transparency) {
-    
-    if(no.differeneces) {
-      tab$transformed.col <- tab$.color
-    } else {
-      tab$transformed.col <- scales::alpha(
-        colour = tab$.color, 
-        alpha = tab$prop * alpha.wt
-      )
-    }
-  } else {
-    # no transparency
-    tab$transformed.col <- tab$.color
-  }
+  ## changed my mind: transparency makes all colors look the same
+  # # encode frequency via opacity (freq ~ opacity)
+  # # transparency is normalized to total number of non-NA colors
+  # if(transparency) {
+  #   
+  #   if(no.differeneces) {
+  #     tab$transformed.col <- tab$.color
+  #   } else {
+  #     tab$transformed.col <- scales::alpha(
+  #       colour = tab$.color, 
+  #       alpha = tab$prop * alpha.wt
+  #     )
+  #   }
+  # } else {
+  #   # no transparency
+  #   tab$transformed.col <- tab$.color
+  # }
 
   # variable chip size
   if(size) {
@@ -160,6 +153,9 @@ colorChart <- function(m, g = factor('All'), size = TRUE, transparency = FALSE, 
   ## needs to be adjusted a group at a time
   # .f <- scales::col_numeric(viridis::viridis(100), domain = c(0, max(tab$prop)))
   # tab$transformed.col <- .f(tab$prop)
+  
+  # chip color is not modified for now
+  tab$transformed.col <- tab$.color
   
   ## TODO: 
   # * consider reporting Shannon entropy / group
@@ -220,11 +216,6 @@ colorChart <- function(m, g = factor('All'), size = TRUE, transparency = FALSE, 
         freq.txt <- round(p.data$count)
         # adjust based on lightness
         anno.col <- invertLabelColor(p.data$.color)
-        
-        # revert to 'black' when transparency is high
-        if(transparency) {
-          anno.col <- ifelse((p.data$prop * alpha.wt) < 0.2, 'black', anno.col)  
-        }
         
         # within-group frequency
         panel.text(

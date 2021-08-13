@@ -34,9 +34,10 @@ cols <- data.frame(
 )
 
 colorChart(cols$m, annotate = TRUE)
-colorChart(cols$m, annotate = TRUE, alpha.toggle = FALSE)
 
 colorChart(cols$m, g = cols$g, annotate = TRUE)
+
+colorChart(cols$m, g = cols$g)
 
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
 
