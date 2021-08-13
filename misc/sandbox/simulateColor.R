@@ -8,9 +8,9 @@ p <- list(
 
 s <- simulateColor(method = 'dE00', n = 100, parameters = p)
 
-pp <- colorChart(s[[1]], annotate = TRUE)
+pp <- colorChart(s[[1]], annotate = TRUE, chip.cex = 4.5)
 
-update(pp, asp = 0.5)
+update(pp, asp = 1)
 
 
 
