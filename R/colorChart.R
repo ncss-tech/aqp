@@ -69,7 +69,8 @@
 #'   # result is a list, use the first element
 #'   colorChart(s[[1]], chip.cex = 4)
 #'   
-#'   colorChart(s[[1]], chip.cex = 4, annotate = TRUE)
+#'   # increase the possible range of color chip sizes
+#'   colorChart(s[[1]], chip.cex = 4, chip.cex.min = 0.01, chip.cex.max = 2)
 #'   
 #' }
 #' 
