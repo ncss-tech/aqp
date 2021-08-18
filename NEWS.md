@@ -1,7 +1,7 @@
 # aqp 1.31 (2021-08-06)
  * bug fix in `checkHzDepthLogic()` when `byhz = TRUE`
  * new function `simulateColor()` for simulation of reasonable colors
- * new function `colorChart()` for graphical depiction of Munsell chip frequency by group
+ * new function `colorChart()` for [graphical depiction of Munsell chip frequency by group](https://ncss-tech.github.io/AQP/aqp/investigating-soil-color.html#Color_Book_Style_Presentation)
 
 # aqp 1.30 (2021-07-14)
  * `unique` method for `SoilProfileCollection` objects now returns a `SoilProfileCollection` by default

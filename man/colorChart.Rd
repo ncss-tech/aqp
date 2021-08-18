@@ -10,6 +10,8 @@ colorChart(
   size = TRUE,
   annotate = FALSE,
   chip.cex = 3,
+  chip.cex.min = 0.1,
+  chip.cex.max = 1,
   chip.border.col = "black",
   annotate.cex = chip.cex * 0.25
 )
@@ -17,13 +19,17 @@ colorChart(
 \arguments{
 \item{m}{character vector of color in Munsell notation ('10YR 4/6')}
 
-\item{g}{factor describing group membership, typically a generalization of horizon designation, default value will generat a fake grouping that covers all of the colors in \code{m}}
+\item{g}{factor describing group membership, typically a generalization of horizon designation, default value will generate a fake grouping that covers all of the colors in \code{m}}
 
 \item{size}{logical, encode group-wise frequency with chip size}
 
-\item{annotate}{logical, annotate chip frequency}
+\item{annotate}{logical, annotate color chip frequency}
 
-\item{chip.cex}{scaling factor applied to each "chip"}
+\item{chip.cex}{scaling factor applied to each color chip}
+
+\item{chip.cex.min}{lower limit for color chip frequency depiction}
+
+\item{chip.cex.max}{lower limit for color chip frequency depiction}
 
 \item{chip.border.col}{color for chip borders (outline)}
 

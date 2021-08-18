@@ -5,13 +5,17 @@
 #'
 #' @param m character vector of color in Munsell notation ('10YR 4/6')
 #' 
-#' @param g factor describing group membership, typically a generalization of horizon designation, default value will generat a fake grouping that covers all of the colors in `m`
+#' @param g factor describing group membership, typically a generalization of horizon designation, default value will generate a fake grouping that covers all of the colors in `m`
 #' 
 #' @param size logical, encode group-wise frequency with chip size
 #' 
-#' @param annotate logical, annotate chip frequency
+#' @param annotate logical, annotate color chip frequency
 #' 
-#' @param chip.cex scaling factor applied to each "chip"
+#' @param chip.cex scaling factor applied to each color chip
+#' 
+#' @param chip.cex.min lower limit for color chip frequency depiction
+#' 
+#' @param chip.cex.max lower limit for color chip frequency depiction
 #' 
 #' @param chip.border.col color for chip borders (outline)
 #' 
@@ -69,7 +73,7 @@
 #'   
 #' }
 #' 
-colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.border.col = 'black', annotate.cex = chip.cex * 0.25) {
+colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.cex.min = 0.1, chip.cex.max = 1, chip.border.col = 'black', annotate.cex = chip.cex * 0.25) {
   
   # requires latticeExtra and scales
   if(!requireNamespace('latticeExtra', quietly = TRUE) | !requireNamespace('scales', quietly = TRUE)) {
@@ -150,7 +154,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     if(no.differeneces) {
       tab$chip.size <- chip.cex
     } else {
-      tab$chip.size <- sqrt(scales::rescale(tab$prop, to = c(0.1, 1))) * chip.cex
+      tab$chip.size <- sqrt(scales::rescale(tab$prop, to = c(chip.cex.min, chip.cex.max))) * chip.cex
     }
   } else {
     tab$chip.size <- chip.cex
