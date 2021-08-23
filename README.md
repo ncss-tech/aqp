@@ -1,6 +1,9 @@
 [![R build status](https://github.com/ncss-tech/aqp/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/aqp/actions)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/aqp)](http://cran.r-project.org/web/packages/aqp)
 [![Total_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/aqp)](https://cran.r-project.org/package=aqp)
+[![aqp Manual](https://img.shields.io/badge/docs-HTML-informational)](http://ncss-tech.github.io/aqp/docs/)
+
+
 
 # Algorithms for Quantitative Pedology (aqp) package for R
 
