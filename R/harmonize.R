@@ -152,7 +152,7 @@ setMethod("harmonize", signature(x = "SoilProfileCollection"),
           profile_id(p.out) <- paste(profile_id(p), x.sets[i], sep = "_")
 
           # add to site table also (useful for filtering downstream)
-          site(p.out)[[grp.name]] <- x.sets[i]
+          p.out[[grp.name]] <- x.sets[i]
 
           # return modified profile
           return(p.out)

@@ -307,7 +307,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   hd.slices@restrictions <- object@restrictions
 
   # copy over metadata
-  hd.slices@metadata <- object@metadata
+  hd.slices <- .transfer.metadata.aqp(object, hd.slices)
 
   ## un-set horizon designation and texture class metadata if they aren't in the sliced data
   hn <- horizonNames(hd.slices)
