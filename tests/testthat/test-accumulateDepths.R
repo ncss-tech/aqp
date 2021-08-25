@@ -1,12 +1,30 @@
 test_that("accumulateDepths works", {
   
+  # sp4 is a data.frame
   data(sp4)
   
   # example using hzdatum argument data(sp4)
-  hz <- accumulateDepths(sp4, "id", c("top","bottom"), "name", hzdatum = 15)
+  hz <- accumulateDepths(sp4, "id", c("top", "bottom"), "name", hzdatum = 15)
   depths(hz) <- id ~ top + bottom
   expect_equal(min(hz$top), 15)
-
+  
+  # use the SPC interface by promoting sp4
+  depths(sp4) <- id ~ top + bottom
+  
+  # and a custom hzdatum for each profile
+  hz <- accumulateDepths(sp4,
+                         id = "id",
+                         hzdepths = c("top", "bottom"),
+                         hzname = "name",
+                         hzdatum = 5 * 1:length(sp4))
+  
+  # promote the result
+  depths(hz) <- id ~ top + bottom
+  
+  # deepest horizon will be in second to last profile with a linearly increasing datum
+  expect_true(max(hz$bottom) == 85 && sp4$id[which.max(hz$bottom)] == "shasta-trinity")
+  # plot(hz) 
+  
   # example using old-style O horizons
   hz <- read.table(text = "peiidref hzdept hzdepb hzname seqnum phiid
                                 11      0      5      A      2   295

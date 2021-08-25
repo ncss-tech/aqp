@@ -4,37 +4,45 @@
 #' 
 #' Fix old-style organic horizon depths, or depths with a non-standard datum, by the "depth accumulation" method.
 #' 
-#' The "depth accumulation" method calculates thicknesses of individual horizons and then cumulative sums them after putting them in `id` + top depth order. The routine tries to determine context based on `hzname` and `pattern`. The main transformation is if a top depth is deeper than the bottom depth, the depths are reflected on the Z-axis (made negative). The data are then `id` + top depth sorted again, the thickness calculated and accumulated to replace the old depths.
+#' @details The "depth accumulation" method calculates thicknesses of individual horizons and then cumulative sums them after putting them in `id` + top depth order. The routine tries to determine context based on `hzname` and `pattern`. The main transformation is if a top depth is deeper than the bottom depth, the depths are reflected on the Z-axis (made negative). The data are then `id` + top depth sorted again, the thickness calculated and accumulated to replace the old depths.
 #' 
 #' This function uses several heuristics to adjust data before transformation and thickness calculation:
+#'   
+#' #### Regex matching of horizon designation patterns and similar
+#'   - matches of `pattern` where both top and bottom depth `NA` -> `[0,1]` `[top,bottom]` depth
+#' - REMOVE horizons that do not match `pattern` where both top and bottom depths `NA`
 #' 
-#'  - matches of `pattern` where both top and bottom depth `NA` -> `[0,1]` `[top,bottom]` depth
-#'  - REMOVE horizons that do not match `pattern` where both top and bottom depths `NA`
-#'  - if `seqnum` specified "first record with `NA` `hzname`" is considered a `pattern` match if `seqnum == 1`
-#'  - Add 1 cm to bottom-most horizons with `NA` bottom depth
-#'  - Add 1 cm thickness to horizons with top and bottom depth equal
-#'  - Add 1 cm thickness to horizons with `NA` top depth and bottom depth `0`
-#'  
+#' #### Over-ride `hzname` handling with the sequence column argument `seqnum`
+#' - if `seqnum` column specified "first record with `NA` `hzname`" is considered a `pattern` match if `seqnum == 1`
+#' 
+#' #### Trigger "fixing" with the `fix` argument:
+#' - Add 1 cm to bottom-most horizons with `NA` bottom depth
+#' - Add 1 cm thickness to horizons with top and bottom depth equal
+#' - Add 1 cm thickness to horizons with `NA` top depth and bottom depth `0`
 #' @param x A `data.frame` or `SoilProfileCollection`
 #' @param id unique profile ID. Default: `NULL`, if `x` is a SoilProfileCollection `idname(x)`
 #' @param hzdepths character vector containing horizon top and bottom depth column names. Default: `NULL`, if `x` is a SoilProfileCollection `horizonDepths(x)`
 #' @param hzname character vector containing horizon designation or other label column names. Default: `NULL`, if `x` is a SoilProfileCollection `hzdesgnname(x)`
-#' @param hzdatum a numeric constant to add to accumulated depths. Default: `0`
+#' @param hzdatum a numeric vector to add to accumulated depths. Default: `0`. Can be equal in length to number of profiles if `x` is a `SoilProfileCollection` or number of (unique) IDs if `x` is a `data.frame`.
 #' @param seqnum Optional: character vector containing record "sequence number" column name; used in-lieu of `hzname` (when `NA`) to identify "first" record in a profile
 #' @param pattern pattern to search for in `hzname` to identify matching horizons to append the profile to
-#' @param fixer apply adjustments to missing (`NA`) depths and expand 0-thickness horizons? Default: `TRUE` 
+#' @param fix apply adjustments to missing (`NA`) depths and expand 0-thickness horizons? Default: `TRUE` 
 #'
 #' @return A horizon-level `data.frame`, suitable for promoting to SPC with `depths<-`, or a `SoilProfileCollection`, depending on the class of `x`.
 #' @export
 #'
 #' @examples
 #' 
-#' # example using z_datum argument
+#' # example using hzdatum argument
 #' data(sp4)
-#' hz <- accumulateDepths(sp4, "id", c("top","bottom"), "name", hzdatum = 15)
-#' depths(hz) <- id ~ top + bottom
+#' depths(sp4) <- id ~ top + bottom
+#' hz <- accumulateDepths(sp4,
+#'                        id = "id",
+#'                        hzdepths = c("top", "bottom"),
+#'                        hzname = "name",
+#'                        hzdatum = 5 * 1:length(sp4))
 #' plot(hz)
-#' 
+#'   
 #' # example using old-style O horizons
 #' hz <- read.table(text = "peiidref hzdept hzdepb hzname seqnum phiid
 #'                     1        11      0      5      A      2   295
@@ -78,11 +86,7 @@ accumulateDepths <- function(x,
                              hzdatum = 0,
                              seqnum = NULL,
                              pattern = "O",
-                             fixer = TRUE) {
-  
-  if(!length(hzdatum) == 0 && is.numeric(as.numeric(hzdatum)))
-    hzdatum <- hzdatum[1]
-  else stop("hzdatum must be a constant numeric value", call. = FALSE)
+                             fix = TRUE) {
   
   # x (becomes) a data.frame of horizon-level data
   if (inherits(x, 'SoilProfileCollection')) {
@@ -115,7 +119,17 @@ accumulateDepths <- function(x,
   .TOP <- hzdepths[1]
   .BOTTOM <- hzdepths[2]
   thk <- NULL
+  .hzdatum <- NULL
   dat <- data.table::as.data.table(dat)
+  nunique <- length(unique(dat[[.internalID]]))
+
+  # hzdatum must be constant (unit length) or unique to each profile ID
+  if (is.numeric(hzdatum) && length(hzdatum) == 1) {
+    hzdatum <- as.numeric(rep(hzdatum, nunique))
+  }
+  if (!is.numeric(hzdatum) || length(hzdatum) != nunique) {
+    stop("hzdatum must be a numeric vector equal in length to number of unique `id`, or constant (with length 1)", call. = FALSE)
+  }
   
   # set up for fix of matches where both top and bottom NA
   #  the rest of profile is "appended" to them if they match
@@ -123,14 +137,14 @@ accumulateDepths <- function(x,
                           is.na(dat[[.BOTTOM]]) &
                           grepl(pattern, dat[[hzname]]))
   
-  if (length(match.na.idx) > 0 && fixer)
+  if (length(match.na.idx) > 0 && fix)
     dat[[.BOTTOM]][match.na.idx] <- 0
   
   # seqnum specified triggers "first record with NA hzname" fixing
   if (!is.null(seqnum)) {
     bad.seq.idx <- which(is.na(dat[[hzname]]) & dat[[seqnum]] == 1)
     
-    if (length(bad.seq.idx) > 0 && fixer)
+    if (length(bad.seq.idx) > 0 && fix)
       dat[[.BOTTOM]][bad.seq.idx] <- 0
   }
   
@@ -159,7 +173,7 @@ accumulateDepths <- function(x,
   bad.thk.idx <- which(thk1 & thk2) 
   bad.thk.idx2 <- which(thk1 & thk3)  
   
-  if (fixer) {
+  if (fix) {
     
     # add 1 to bottom most horizons with na bottom depth
     dat[bad.bottom.idx, ][[.BOTTOM]] <- dat[bad.bottom.idx,][[.TOP]] + 1
@@ -200,9 +214,11 @@ accumulateDepths <- function(x,
   names(.BYLIST2) <- .internalID
   
   # cumulative sums of thickness to make new top/bottom depths
-  dat_after <- dat_sub[, list(top = c(hzdatum + min(abs(.SD[[.TOP]])), 
-                                      hzdatum + min(abs(.SD[[.TOP]])) + cumsum(thk[1:(.N - 1)])),
-                              bottom = hzdatum + min(abs(.SD[[.TOP]])) + cumsum(thk)), 
+  dat_sub$.hzdatum <- hzdatum[match(dat_sub[[.internalID]], unique(dat_sub[[.internalID]]))]
+           
+  dat_after <- dat_sub[, list(top = c(.hzdatum[1] + min(abs(.SD[[.TOP]])), 
+                                      .hzdatum[1] + min(abs(.SD[[.TOP]])) + cumsum(thk[1:(.N - 1)])),
+                              bottom = .hzdatum[1] + min(abs(.SD[[.TOP]])) + cumsum(thk)), 
                        by = .BYLIST2]
   
   .BYLIST3 <- list(dat_after[[.internalID]])
@@ -217,10 +233,10 @@ accumulateDepths <- function(x,
   
   ndrop <- sum(!dat_sub[[.internalID]] %in% dat[[.internalID]])
   
-  if(ndrop > 0)
-    message("profile IDs (n=",ndrop,") dropped from set")
+  if (ndrop > 0)
+    message("profile IDs (n=", ndrop, ") dropped from set")
   
-  if(nrow(dat) != nrow(dat_sub))
+  if (nrow(dat) != nrow(dat_sub))
     message("horizons (n=",(nrow(dat) - nrow(dat_sub)),") dropped from set")
   
   # return SPC if input was SPC

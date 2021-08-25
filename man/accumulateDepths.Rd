@@ -12,7 +12,7 @@ accumulateDepths(
   hzdatum = 0,
   seqnum = NULL,
   pattern = "O",
-  fixer = TRUE
+  fix = TRUE
 )
 }
 \arguments{
@@ -24,13 +24,13 @@ accumulateDepths(
 
 \item{hzname}{character vector containing horizon designation or other label column names. Default: \code{NULL}, if \code{x} is a SoilProfileCollection \code{hzdesgnname(x)}}
 
-\item{hzdatum}{a numeric constant to add to accumulated depths. Default: \code{0}}
+\item{hzdatum}{a numeric vector to add to accumulated depths. Default: \code{0}. Can be equal in length to number of profiles if \code{x} is a \code{SoilProfileCollection} or number of (unique) IDs if \code{x} is a \code{data.frame}.}
 
 \item{seqnum}{Optional: character vector containing record "sequence number" column name; used in-lieu of \code{hzname} (when \code{NA}) to identify "first" record in a profile}
 
 \item{pattern}{pattern to search for in \code{hzname} to identify matching horizons to append the profile to}
 
-\item{fixer}{apply adjustments to missing (\code{NA}) depths and expand 0-thickness horizons? Default: \code{TRUE}}
+\item{fix}{apply adjustments to missing (\code{NA}) depths and expand 0-thickness horizons? Default: \code{TRUE}}
 }
 \value{
 A horizon-level \code{data.frame}, suitable for promoting to SPC with \verb{depths<-}, or a \code{SoilProfileCollection}, depending on the class of \code{x}.
@@ -42,23 +42,39 @@ Fix old-style organic horizon depths, or depths with a non-standard datum, by th
 The "depth accumulation" method calculates thicknesses of individual horizons and then cumulative sums them after putting them in \code{id} + top depth order. The routine tries to determine context based on \code{hzname} and \code{pattern}. The main transformation is if a top depth is deeper than the bottom depth, the depths are reflected on the Z-axis (made negative). The data are then \code{id} + top depth sorted again, the thickness calculated and accumulated to replace the old depths.
 
 This function uses several heuristics to adjust data before transformation and thickness calculation:
+\subsection{Regex matching of horizon designation patterns and similar}{
 \itemize{
 \item matches of \code{pattern} where both top and bottom depth \code{NA} -> \verb{[0,1]} \verb{[top,bottom]} depth
 \item REMOVE horizons that do not match \code{pattern} where both top and bottom depths \code{NA}
-\item if \code{seqnum} specified "first record with \code{NA} \code{hzname}" is considered a \code{pattern} match if \code{seqnum == 1}
+}
+}
+
+\subsection{Over-ride \code{hzname} handling with the sequence column argument \code{seqnum}}{
+\itemize{
+\item if \code{seqnum} column specified "first record with \code{NA} \code{hzname}" is considered a \code{pattern} match if \code{seqnum == 1}
+}
+}
+
+\subsection{Trigger "fixing" with the \code{fix} argument:}{
+\itemize{
 \item Add 1 cm to bottom-most horizons with \code{NA} bottom depth
 \item Add 1 cm thickness to horizons with top and bottom depth equal
 \item Add 1 cm thickness to horizons with \code{NA} top depth and bottom depth \code{0}
 }
 }
+}
 \examples{
 
-# example using z_datum argument
+# example using hzdatum argument
 data(sp4)
-hz <- accumulateDepths(sp4, "id", c("top","bottom"), "name", hzdatum = 15)
-depths(hz) <- id ~ top + bottom
+depths(sp4) <- id ~ top + bottom
+hz <- accumulateDepths(sp4,
+                       id = "id",
+                       hzdepths = c("top", "bottom"),
+                       hzname = "name",
+                       hzdatum = 5 * 1:length(sp4))
 plot(hz)
-
+  
 # example using old-style O horizons
 hz <- read.table(text = "peiidref hzdept hzdepb hzname seqnum phiid
                     1        11      0      5      A      2   295
