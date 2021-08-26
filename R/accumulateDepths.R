@@ -95,25 +95,24 @@ accumulateDepths <- function(x,
     if (is.null(id))
       id <- idname(x)
     
-    if (is.null(hzname))
-      hzname <- hzdesgnname(x)
-    
-    if (is.null(hzdepths)) 
-      hzdepths <- horizonDepths(x)
+    if (is.null(hzname)) {
+      hzname <- hzdesgnname(x, required = TRUE)
+    }
     
   } else if (inherits(x, 'data.frame')) {
     
     dat <- x    
     
     if (is.null(id) || is.null(hzname) || is.null(hzdepths)) 
-      stop("if x is a data.frame `id`, `hzdepths` and `hzname` must be specified!", call. = FALSE)
+      stop("If x is a data.frame `id`, `hzdepths` and `hzname` must be specified!", call. = FALSE)
     
   } else {
-    stop("x must be SoilProfileCollection or data.frame", call. = FALSE)
+    stop("x must be a SoilProfileCollection or data.frame", call. = FALSE)
   }
   
   # convert to data.table, set up some safe globals to use
   .internalID <- id
+  .I <- NULL
   .N <- NULL
   .SD <- NULL
   .TOP <- hzdepths[1]
