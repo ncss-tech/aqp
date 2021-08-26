@@ -256,7 +256,7 @@ setMethod(f = 'unique',
 #'
 #' @aliases subset
 #'
-#' @details In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series. If you need to use the base method after loading aqp, you can use \code{stats::filter} to be explicit about which function you want. We mirror the dplyr package in over-loading the \code{filter} method with a generic that allows for arbitrary number of vectors (\code{...}) to be included in the "filter," which means you may also need to use \code{aqp::filter} or \code{dplyr::filter} as appropriate depending on the order you load packages or your conflict resolution option settings.
+#' @details In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series.
 #'
 #' @seealso \code{\link{filter}}
 #'
@@ -342,24 +342,6 @@ setMethod("subset", signature(x = "SoilProfileCollection"),
 
               # return SPC, subsetted using site level index
               return(object[na.omit(idx),])
-          })
-
-# if (!isGeneric("filter"))
-  setGeneric("filter", function(.data, ..., .preserve = FALSE)
-    standardGeneric("filter"))
-
-#' @export
-#' @param .data A SoilProfileCollection (\code{filter} method only, in lieu of \code{x})
-#' @param .preserve Relevant when the .data input is grouped. Not (yet) implemented for \code{SoilProfileCollection} objects.
-#' @aliases filter
-#' @rdname subset-SoilProfileCollection-method
-setMethod("filter", signature(.data = "SoilProfileCollection"),
-          function(.data, ..., .preserve = FALSE) {
-            .Deprecated("subset")
-            # this provides for possible alternate handling of filter() in future
-            #  as discussed, the base R verb for this op is subset
-            #  I like filter a lot, but don't really like masking stats::filter in principle
-            aqp::subset(x = .data, ...)
           })
 
 setGeneric("subsetHz", function(x, ...)
