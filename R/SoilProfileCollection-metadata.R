@@ -84,7 +84,8 @@ setGeneric("hzdesgnname", function(object, required = FALSE)
   standardGeneric("hzdesgnname"))
 
 #' @title Get or Set Horizon Designation Column Name
-#' @aliases hzdesgnname  hzdesgnname,SoilProfileCollection-method hzdesgnname<- hzdesgnname,SoilProfileCollection-method
+#' @name hzdesgnname
+#' @aliases hzdesgnname hzdesgnname,SoilProfileCollection-method hzdesgnname<- hzdesgnname,SoilProfileCollection-method
 #' @details Store the column name containing horizon designations or other identifiers in the metadata slot of the SoilProfileCollection.
 #' @description `hzdesgnname()`: Get column name containing horizon designations 
 #' @param object a SoilProfileCollection
@@ -179,7 +180,8 @@ setGeneric('hztexclname<-', function(object, required = FALSE, value)
   standardGeneric('hztexclname<-'))
 
 #' @title Get or Set Horizon Texture Class Column Name
-#' @aliases hztexclname  hztexclname,SoilProfileCollection-method, hztexclname<-  hztexclname<-,SoilProfileCollection-method
+#' @name hztexclname
+#' @aliases hztexclname hztexclname,SoilProfileCollection-method hztexclname<- hztexclname<-,SoilProfileCollection-method
 #' @description `hztexclname()`: Get column name containing horizon designation name
 #' @details Store the column name containing horizon texture classes or other identifiers in the metadata slot of the SoilProfileCollection.
 #' @param object a SoilProfileCollection 
