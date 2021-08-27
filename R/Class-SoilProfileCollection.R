@@ -898,82 +898,6 @@ setMethod("hzID", signature(object = "SoilProfileCollection"),
             return(object@horizons[[hzidname(object)]])
           })
 
-## get column containing horizon designations (there is a setter of same name)
-
-setGeneric("hzdesgnname", function(object, ..., required = FALSE)
-  standardGeneric("hzdesgnname"))
-
-#' @description `hzdesgnname()`: Get column name containing horizon designations 
-#' @param object a SoilProfileCollection
-#' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
-#' @docType methods
-#' @aliases hzdesgnname
-#' @rdname hzdesgnname
-setMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
-          function(object, required = FALSE) {
-            .require.metadata.aqp(object,
-                                  attr = "aqp_hzdesgn",
-                                  attrlabel = "Horizon designation",
-                                  message ="\nSee ??hzdesgnname",
-                                  required = required)
-          })
-
-
-setGeneric("hzDesgn", function(object, ...)
-  standardGeneric("hzDesgn"))
-
-#' Get horizon designation column name
-#'
-#' @description Get horizon designation names
-#'
-#' @param object a SoilProfileCollection
-#' @docType methods
-#' @aliases hzDesgn
-#' @rdname hzDesgn
-#'
-setMethod("hzDesgn", signature(object = "SoilProfileCollection"),
-          function(object) {
-
-            h <- object@horizons
-            hzd <- hzdesgnname(object)
-
-            if (length(hzd)) {
-
-              if (hzd %in% horizonNames(object)) {
-                res <- h[[hzd]]
-                return(res)
-              }
-
-            } else {
-
-              stop("horizon designation name (",
-                   hzd,
-                   ") not in horizonNames().",
-                   call. = FALSE)
-            }
-
-          })
-
-## get column containing horizon designations (there is a setter of same name)
-setGeneric("hztexclname", function(object, required = FALSE)
-  standardGeneric("hztexclname"))
-
-#' @description `hztexclname()`: Get column name containing horizon designation name
-#'
-#' @param object a SoilProfileCollection 
-#' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
-#' @docType methods
-#' @aliases hztexclname
-#' @rdname hztexclname
-setMethod("hztexclname", signature(object = "SoilProfileCollection"),
-          function(object, required = FALSE) {
-            .require.metadata.aqp(object,
-                                  attr = "aqp_hztexcl",
-                                  attrlabel = "Horizon texture class",
-                                  message = "\nSee ??hztexclname",
-                                  required = required)
-            })
-
 ## distinct profile IDs
 setGeneric("profile_id", function(object)
   standardGeneric("profile_id"))
@@ -1117,26 +1041,6 @@ setMethod(f = 'metadata', signature(object = 'SoilProfileCollection'),
 setGeneric("aqp_df_class", function(object)
   standardGeneric("aqp_df_class"))
            
-# takes two SPC as input, takes metadata other than original order from source
-# returns the destination SPC with modified metadata
-.transfer.metadata.aqp <- function(src, dest) {
-  if (inherits(src, 'SoilProfileCollection')) {
-    m <- metadata(src)
-  } else {
-    m <- src
-  }
-  stopifnot(inherits(dest, 'SoilProfileCollection'))
-  
-  # transfer attributes https://github.com/ncss-tech/aqp/issues/204
-  customattr <- attributes(src)
-  customattr <- customattr[!names(customattr) %in% names(attributes(SoilProfileCollection()))]
-  attributes(dest)[names(customattr)] <- attributes(src)[names(customattr)]
-  
-  cols <- names(m)[names(m) != "original.order"]
-  metadata(dest)[cols] <- m[cols]
-  dest
-}
-
 # if (!isGeneric("aqp_df_class"))
   setGeneric("aqp_df_class", function(object)
     standardGeneric("aqp_df_class"))
