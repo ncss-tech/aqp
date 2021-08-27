@@ -80,12 +80,11 @@
 
 ## get column containing horizon designations (there is a setter of same name)
 
-setGeneric("hzdesgnname", function(object, ..., required = FALSE)
+setGeneric("hzdesgnname", function(object, required = FALSE)
   standardGeneric("hzdesgnname"))
 
 #' @title Get or Set Horizon Designation Column Name
-#' @name hzdesgnname
-#' @aliases hzdesgnname,SoilProfileCollection-method
+#' @aliases hzdesgnname  hzdesgnname,SoilProfileCollection-method hzdesgnname<- hzdesgnname,SoilProfileCollection-method
 #' @details Store the column name containing horizon designations or other identifiers in the metadata slot of the SoilProfileCollection.
 #' @description `hzdesgnname()`: Get column name containing horizon designations 
 #' @param object a SoilProfileCollection
@@ -101,12 +100,10 @@ setMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
                                   required = required)
           })
 
-setGeneric('hzdesgnname<-', function(object, value, required = FALSE)
+setGeneric('hzdesgnname<-', function(object, required = FALSE, value)
   standardGeneric('hzdesgnname<-'))
 
 #' @description `hzdesgnname<-`: Set horizon designation column name
-#' @name hzdesgnname<-
-#' @aliases hzdesgnname<-,SoilProfileCollection-method
 #' @param object a SoilProfileCollection
 #' @param value character, name of column containing horizon designations
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid `value`.
@@ -127,7 +124,7 @@ setGeneric('hzdesgnname<-', function(object, value, required = FALSE)
 #' hzdesgnname(sp1)
 setReplaceMethod("hzdesgnname",
                  signature(object = "SoilProfileCollection"),
-                 function(object, value, required = FALSE) {
+                 function(object, required = FALSE, value) {
                    .set.metadata.aqp(
                      object = object,
                      value = value,
@@ -178,12 +175,11 @@ setMethod("hzDesgn", signature(object = "SoilProfileCollection"),
 setGeneric("hztexclname", function(object, required = FALSE)
   standardGeneric("hztexclname"))
 
-setGeneric('hztexclname<-', function(object, value, required = FALSE)
+setGeneric('hztexclname<-', function(object, required = FALSE, value)
   standardGeneric('hztexclname<-'))
 
 #' @title Get or Set Horizon Texture Class Column Name
-#' @name hztexclname
-#' @aliases hztexclname,SoilProfileCollection-method
+#' @aliases hztexclname  hztexclname,SoilProfileCollection-method, hztexclname<-  hztexclname<-,SoilProfileCollection-method
 #' @description `hztexclname()`: Get column name containing horizon designation name
 #' @details Store the column name containing horizon texture classes or other identifiers in the metadata slot of the SoilProfileCollection.
 #' @param object a SoilProfileCollection 
@@ -199,8 +195,6 @@ setMethod("hztexclname", signature(object = "SoilProfileCollection"),
                                   required = required)
           })
 #' @description `hztexclname<-`: Set horizon texture class column name for a SoilProfileCollection
-#' @name hztexclname<-
-#' @aliases hztexclname<-,SoilProfileCollection-method
 #' @param object a SoilProfileCollection
 #' @param value character, name of column containing horizon texture classes
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid `value`.
@@ -219,7 +213,7 @@ setMethod("hztexclname", signature(object = "SoilProfileCollection"),
 #' # get horizon texture class column
 #' hztexclname(sp1)
 setReplaceMethod("hztexclname", signature(object = "SoilProfileCollection"),
-                 function(object, value, required = FALSE) {
+                 function(object, required = FALSE, value) {
                    .set.metadata.aqp(
                      object = object,
                      value = value,
