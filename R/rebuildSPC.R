@@ -64,15 +64,9 @@ rebuildSPC <- function(x) {
     hztexclname(res) <- x.list$hztexclcol
   }
 
-  # metadata is a list now
-  olddata <- as.list(x.list$metadata)
-
-  # depths sets up basic metadata for res, copy over any missing data elements
-  x.list$metadata <- c(metadata(res), olddata[!names(olddata) %in% names(metadata(res))])
-
-  # replace metadata
-  metadata(res) <- x.list$metadata
-
+  # transfer metadata
+  res <- .transfer.metadata.aqp(x, res)
+    
   # replace site
   site(res) <- x.list$site
 

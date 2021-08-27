@@ -288,7 +288,11 @@ setMethod("[", signature(x = "SoilProfileCollection",
                              diagnostic = .as.data.frame.aqp(d, aqp_df_class(x)),
                              restrictions = .as.data.frame.aqp(r, aqp_df_class(x))
                            )
-
+                           
+                           # preserve metadata that may have been customized relative to defaults
+                           #  in prototype or resulting from construction of SPC
+                           res <- .transfer.metadata.aqp(x, res)
+                           
                            # fill in any missing data.frame class or group var
                            o.df.class <- aqp::metadata(x)$aqp_df_class
                            if(length(o.df.class) == 0) {
@@ -302,13 +306,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                            metadata(res)$aqp_df_class <- o.df.class
                            metadata(res)$aqp_group_by <- o.group.by
-
-                           # preserve slots that may have been customized relative to defaults
-                           #  in prototype or resulting from construction of SPC
-                           suppressMessages(hzidname(res) <- hzidname(x))
-                           suppressMessages(hzdesgnname(res) <- hzdesgnname(x))
-                           suppressMessages(hztexclname(res) <- hztexclname(x))
-
+                           
                            # there should be as many records in @site as there are profile IDs
                            pid.res <- profile_id(res)
                            site.res <- site(res)[[idname(res)]]
