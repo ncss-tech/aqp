@@ -238,8 +238,6 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
   new.metadata <- spc.list[[1]]$metadata
 
   # get the data.frame class and grouping variable into new metadata
-  new.metadata$aqp_df_class <- o.df.class
-  new.metadata$aqp_group_by <- o.group.by
 
   # transfer old slots if they are present
   hzdold <- spc.list[[1]]$hzdesgncol
@@ -456,14 +454,16 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
   diagnostic_hz(res) <- .as.data.frame.aqp(o.d, o.df.class)
   restrictions(res) <- .as.data.frame.aqp(o.r, o.df.class)
 
-  # append any novel metadata
-  #  note that o.df.class is calculated from all elements, and defaults to data.frame
-  #  this line is to cover metadata like citations etc. that are not part of all SPCs
-  new.names <- !(names(new.metadata) %in% names(res@metadata))
+  # # append any novel metadata
+  # #  note that o.df.class is calculated from all elements, and defaults to data.frame
+  # #  this line is to cover metadata like citations etc. that are not part of all SPCs
+  # new.names <- !(names(new.metadata) %in% names(res@metadata))
+  # 
+  # # explicit slot replacement
+  # res@metadata <- c(res@metadata, new.metadata[new.names])
 
-  # explicit slot replacement
-  res@metadata <- c(res@metadata, new.metadata[new.names])
-
+  res <- .transfer.metadata.aqp(new.metadata, res)
+  
   # attempt using a common ID
   suppressWarnings(hzidname(res) <- new.hzID)
 

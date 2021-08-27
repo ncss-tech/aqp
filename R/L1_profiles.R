@@ -196,6 +196,9 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constan
   # init SPC with new ID, top, bottom names
   depths(agg) <- group ~ top + bottom
   
+  # transfer metadata
+  agg <- .transfer.metadata.aqp(x, agg)
+  
   return(agg)
 }
 

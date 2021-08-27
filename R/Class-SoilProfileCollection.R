@@ -1116,7 +1116,31 @@ setMethod(f = 'metadata', signature(object = 'SoilProfileCollection'),
 
 setGeneric("aqp_df_class", function(object)
   standardGeneric("aqp_df_class"))
+           
+# takes two SPC as input, takes metadata other than original order from source
+# returns the destination SPC with modified metadata
+.transfer.metadata.aqp <- function(src, dest) {
+  if (inherits(src, 'SoilProfileCollection')) {
+    m <- metadata(src)
+  } else {
+    m <- src
+  }
+  stopifnot(inherits(dest, 'SoilProfileCollection'))
+  
+  # transfer attributes https://github.com/ncss-tech/aqp/issues/204
+  customattr <- attributes(src)
+  customattr <- customattr[!names(customattr) %in% names(attributes(SoilProfileCollection()))]
+  attributes(dest)[names(customattr)] <- attributes(src)[names(customattr)]
+  
+  cols <- names(m)[names(m) != "original.order"]
+  metadata(dest)[cols] <- m[cols]
+  dest
+}
 
+# if (!isGeneric("aqp_df_class"))
+  setGeneric("aqp_df_class", function(object)
+    standardGeneric("aqp_df_class"))
+             
 #' Get aqp_df_class entry from metadata or return a safe value.
 #'
 #' @description This is an accessor and replacement method for the \code{aqp_df_class} entry in the metadata slot. This entry is used internally by methods that interact with \code{data.frame} objects and slots to ensure that the same class used to promote to the SoilProfileCollection initially is used throughout the process.
