@@ -37,7 +37,7 @@ estimateAWC <- function(texcl, omcl, precision = 2,
   }
   
   if (length(texcl) != length(omcl))
-    stop("Error: Mismatch in length of input vectors `texcl` and `omcl`")
+    stop("Error: Mismatch in length of input vectors `texcl` and `omcl`", call. = FALSE)
   
   out <- rep(NA, length(texcl))
   idx <- match(toupper(texcl), toupper(awc_lut$texcl_label))
