@@ -30,6 +30,12 @@ estimateAWC <- function(texcl, omcl, precision = 2,
          hiOM_l = c(0.04, 0.04, 0.07, 0.07, 0.07, 0.07, 0.08, 0.1,  0.11, 0.11, 0.13, 0.16, 0.18, 0.2,  0.22, 0.21, 0.18, 0.17, 0.12, 0.13, 0.13, 0.15, 0.35, 0.45, 0.55), 
          hiOM_h = c(0.06, 0.06, 0.09, 0.09, 0.09, 0.08, 0.1,  0.13, 0.13, 0.14, 0.15, 0.18, 0.2,  0.22, 0.24, 0.23, 0.2,  0.19, 0.14, 0.15, 0.15, 0.18, 0.45, 0.55, 0.65), stringsAsFactors = FALSE)
   
+  
+  # sanity checks
+  if(! all(omcl %in% c(1, 2, 3))) {
+    stop('`omcl` must be 1, 2, or 3', call. = FALSE)
+  }
+  
   if (length(texcl) != length(omcl))
     stop("Error: Mismatch in length of input vectors `texcl` and `omcl`")
   
