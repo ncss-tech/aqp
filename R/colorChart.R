@@ -1,4 +1,6 @@
 
+## TODO
+## * display neutral hues
 
 #' @title Visualize soil colors in Munsell notation according to within-group frequency.
 #' 
@@ -20,6 +22,8 @@
 #' @param chip.border.col color for chip borders (outline)
 #' 
 #' @param annotate.cex scaling factor for chip frequency annotation
+#' 
+#' @param annotate.type character, within-group `count` or `percentage` 
 #'
 #' @return a `trellis` object
 #' 
@@ -47,13 +51,14 @@
 #'   # annotation of frequency
 #'   colorChart(ric, chip.cex = 4, annotate = TRUE)
 #'   
+#'   
 #'   # bootstrap to larger size
 #'   ric.big <- sample(ric, size = 100, replace = TRUE)
 #'   
 #'   # frequency can be encoded in size
 #'   colorChart(ric.big, chip.cex = 3)
 #'   colorChart(ric.big, chip.cex = 5, annotate = TRUE)
-#'   
+#'      
 #'   # constant size
 #'   colorChart(ric.big, chip.cex = 3, size = FALSE)
 #'   colorChart(ric.big, chip.cex = 3, size = FALSE, chip.border.col = 'NA')
@@ -74,11 +79,16 @@
 #'   
 #' }
 #' 
-colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.cex.min = 0.1, chip.cex.max = 1, chip.border.col = 'black', annotate.cex = chip.cex * 0.25) {
+colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.cex.min = 0.1, chip.cex.max = 1.5, chip.border.col = 'black', annotate.cex = chip.cex * 0.25, annotate.type = c('count', 'percentage')) {
   
   # requires latticeExtra and scales
   if(!requireNamespace('latticeExtra', quietly = TRUE) | !requireNamespace('scales', quietly = TRUE)) {
     stop('pleast install the `latticeExtra` and `scales` packages.', call.=FALSE)
+  }
+  
+  # annotation type
+  if(annotate) {
+    annotate.type <- match.arg(annotate.type)
   }
   
   # extract pieces / convert colors
@@ -87,6 +97,14 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     .groups = g,
     stringsAsFactors = FALSE
   )
+  
+  # remove obvious NA in colors or groups
+  z <- na.omit(z)
+  
+  # bogus colors can creep-in when composing Munsell notation from pieces
+  # remove anything like 'NA NA/NA'
+  idx <- grep('NA', z$.munsell, fixed = TRUE, invert = TRUE)
+  z <- z[idx, ]
   
   # within-group counts + proportions
   tab <- as.data.frame(table(z$.groups, z$.munsell))
@@ -132,23 +150,6 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     no.differeneces <- FALSE
   }
   
-  ## changed my mind: transparency makes all colors look the same
-  # # encode frequency via opacity (freq ~ opacity)
-  # # transparency is normalized to total number of non-NA colors
-  # if(transparency) {
-  #   
-  #   if(no.differeneces) {
-  #     tab$transformed.col <- tab$.color
-  #   } else {
-  #     tab$transformed.col <- scales::alpha(
-  #       colour = tab$.color, 
-  #       alpha = tab$prop * alpha.wt
-  #     )
-  #   }
-  # } else {
-  #   # no transparency
-  #   tab$transformed.col <- tab$.color
-  # }
 
   # variable chip size
   if(size) {
@@ -226,9 +227,17 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
         cex =  p.data$chip.size
       )
       
-      # annotate chips with frequency
+      # annotate chips
       if(annotate) {
-        freq.txt <- round(p.data$count)
+        
+        # count or percentage
+        # these are computed by group NOT by panel
+        ann.txt <- switch(
+          annotate.type,
+          'count' = round(p.data$count),
+          'percentage' = round(100 * p.data$prop)
+        )
+        
         # adjust based on lightness
         anno.col <- invertLabelColor(p.data$.color)
         
@@ -236,7 +245,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
         panel.text(
           x = p.data$x, 
           y = p.data$y, 
-          labels = freq.txt, 
+          labels = ann.txt, 
           cex = annotate.cex, 
           col = anno.col
         )
@@ -251,6 +260,11 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     strip = strip.custom(bg = grey(0.85), par.strip.text = list(cex=0.85)), 
     strip.left = strip.custom(bg = grey(0.85), par.strip.text = list(rot=0))
   )
+  
+  if(annotate) {
+    sub.txt <- sprintf('chip labels represent %ss', annotate.type)
+    pp <- update(pp, sub = list(sub.txt, font = 1))
+  }
   
   return(pp)  
 }

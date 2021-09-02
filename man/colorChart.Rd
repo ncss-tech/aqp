@@ -11,9 +11,10 @@ colorChart(
   annotate = FALSE,
   chip.cex = 3,
   chip.cex.min = 0.1,
-  chip.cex.max = 1,
+  chip.cex.max = 1.5,
   chip.border.col = "black",
-  annotate.cex = chip.cex * 0.25
+  annotate.cex = chip.cex * 0.25,
+  annotate.type = c("count", "percentage")
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ colorChart(
 \item{chip.border.col}{color for chip borders (outline)}
 
 \item{annotate.cex}{scaling factor for chip frequency annotation}
+
+\item{annotate.type}{character, within-group \code{count} or \code{percentage}}
 }
 \value{
 a \code{trellis} object
