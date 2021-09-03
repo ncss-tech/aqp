@@ -55,6 +55,11 @@ setClass(
   }
 )
 
+#' @export
+setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
+  paste0('SPC<', length(x), '>')
+})
+
 # 2019-03-15: creating an empty SpatialPoints object requires more effort
 # c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
 # old: new('SpatialPoints')
