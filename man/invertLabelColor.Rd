@@ -17,6 +17,20 @@ vector of label colors
 \description{
 Generate a vector of white or black label colors conditioned on a vector of colors to maximize label contrast.
 }
+\examples{
+
+# test with shades of grey
+s <- seq(0, 1, by = 0.05)
+cols <- grey(s)
+soilPalette(cols, lab = as.character(s))
+
+# test with 10YR x/3
+m <- sprintf('10YR \%s/3', 1:8)
+cols <- parseMunsell(m)
+soilPalette(cols, lab = m)
+
+
+}
 \author{
 D.E. Beaudette
 }
