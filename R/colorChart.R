@@ -1,4 +1,9 @@
 
+
+
+
+
+
 ## TODO
 ## * display neutral hues
 
@@ -81,6 +86,62 @@
 #' 
 colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.cex.min = 0.1, chip.cex.max = 1.5, chip.border.col = 'black', annotate.cex = chip.cex * 0.25, annotate.type = c('count', 'percentage')) {
   
+  # custom panel function defined here, so that it can "find" data within the colorChart function scope
+  panel.colorChart <- function(x, y, subscripts = subscripts, ...) {
+    
+    # panel-wise subset of required data
+    p.data <- tab[subscripts, ]
+    p.data$x <- x
+    p.data$y <- y
+    
+    # grid lines: use original data
+    if(nrow(p.data) > 0) {
+      panel.abline(
+        v = unique(p.data$x), 
+        h = unique(p.data$y), 
+        col = grey(0.85), 
+        lty = 3
+      )
+    }
+    
+    
+    # plot single instances of each chip, transparency weighted by frequency
+    panel.points(
+      p.data$x, 
+      p.data$y, 
+      pch = 22, 
+      col = chip.border.col,
+      fill = p.data$transformed.col, 
+      cex =  p.data$chip.size
+    )
+    
+    # annotate chips
+    if(annotate) {
+      
+      # count or percentage
+      # these are computed by group NOT by panel
+      ann.txt <- switch(
+        annotate.type,
+        'count' = round(p.data$count),
+        'percentage' = round(100 * p.data$prop)
+      )
+      
+      # adjust based on lightness
+      anno.col <- invertLabelColor(p.data$.color)
+      
+      # within-group frequency
+      panel.text(
+        x = p.data$x, 
+        y = p.data$y, 
+        labels = ann.txt, 
+        cex = annotate.cex, 
+        col = anno.col
+      )
+    }
+    
+  }
+  
+  
   # requires latticeExtra and scales
   if(!requireNamespace('latticeExtra', quietly = TRUE) | !requireNamespace('scales', quietly = TRUE)) {
     stop('pleast install the `latticeExtra` and `scales` packages.', call.=FALSE)
@@ -139,8 +200,9 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
   
   # encode hue as factor using standard hue order
   # second call to factor() drops unused levels
+  # note special argument to include neutral hues
   tab$hue <- factor(
-    factor(tab$hue, levels = huePosition(returnHues = TRUE))
+    factor(tab$hue, levels = huePosition(returnHues = TRUE, includeNeutral = TRUE))
   )
   
   # disable variable size when all frequencies are the same (no useful information)
@@ -176,8 +238,9 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
   
   # set reasonable limits: 
   # value / chroma: 2-8 unless data extend beyond those limits
+  # exception for N hues (chroma 0), min value is chroma of 1
   x.lim <- c(
-    pmin(min(tab$chroma), 2) - 0.5,
+    pmin(pmax(min(tab$chroma), 1), 2) - 0.5,
     pmax(max(tab$chroma), 8) + 0.5
   )
   
@@ -192,67 +255,70 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     data = tab,
     as.table = TRUE,
     subscripts = TRUE, 
-    xlim = x.lim, 
-    ylim = y.lim, 
-    scales = list(alternating = 3, tick.number = 8, y = list(rot = 0)), 
+    # this works until we attempt to use neutral hues
+    xlim = x.lim,
+    ylim = y.lim,
+    # simple version when no neutral hues
+    scales = list(
+      alternating = 3, 
+      y = list(rot = 0)
+    ), 
     main = '', 
     xlab = 'Chroma', 
     ylab = 'Value', 
-    panel = function(x, y, subscripts = subscripts, ...) {
-      
-      # panel-wise subset of required data
-      p.data <- tab[subscripts, ]
-      p.data$x <- x
-      p.data$y <- y
-      
-      
-      # grid lines: use original data
-      if(nrow(p.data) > 0) {
-        panel.abline(
-          v = unique(p.data$x), 
-          h = unique(p.data$y), 
-          col = grey(0.85), 
-          lty = 3
-        )
-      }
-      
-      
-      # plot single instances of each chip, transparency weighted by frequency
-      panel.points(
-        p.data$x, 
-        p.data$y, 
-        pch = 22, 
-        col = chip.border.col,
-        fill = p.data$transformed.col, 
-        cex =  p.data$chip.size
-      )
-      
-      # annotate chips
-      if(annotate) {
-        
-        # count or percentage
-        # these are computed by group NOT by panel
-        ann.txt <- switch(
-          annotate.type,
-          'count' = round(p.data$count),
-          'percentage' = round(100 * p.data$prop)
-        )
-        
-        # adjust based on lightness
-        anno.col <- invertLabelColor(p.data$.color)
-        
-        # within-group frequency
-        panel.text(
-          x = p.data$x, 
-          y = p.data$y, 
-          labels = ann.txt, 
-          cex = annotate.cex, 
-          col = anno.col
-        )
-      }
-      
-    }
+    panel = panel.colorChart
   )
+  
+  ## TODO: simplify this
+  ## more complex figure required when neutral hues are present
+  ll <- levels(tab$hue)
+  if('N' %in% ll) {
+    
+    # standards x-limits
+    x.at <- seq(x.lim[1] + 0.5, x.lim[2] - 0.5, by = 1)
+    
+    # replicate as many times are there are columns
+    # first column (N) gets no axes
+    x.at.list <- c(
+      list(''), 
+      lapply(1:(length(ll)-1), FUN = function(i) {x.at})
+    )
+    
+    # limits for as many columns
+    x.limits.list <- c(
+      list(c(0,0)), 
+      lapply(1:(length(ll)-1), FUN = function(i) {x.lim})
+    )
+    
+    # replicate to cover all columns * rows
+    n.groups <- length(levels(tab$.groups))
+    x.at.list <- rep(x.at.list, times = n.groups)
+    x.limits.list <- rep(x.limits.list, times = n.groups)
+    
+    pp <- xyplot(
+      value ~ chroma | hue + .groups, 
+      data = tab,
+      as.table = TRUE,
+      subscripts = TRUE, 
+      # panel-specific limits gets complicated
+      scales = list(
+        alternating = 3, 
+        y = list(rot = 0, limits = y.lim), 
+        x = list(
+          relation = 'free', 
+          at = x.at.list,
+          limits = x.limits.list
+        )
+      ), 
+      main = '', 
+      xlab = 'Chroma', 
+      ylab = 'Value', 
+      panel = panel.colorChart
+    )
+    
+    # proportional panel sizes, neutral gets 20% of normal space
+    pp <- latticeExtra::resizePanels(pp, w = c(0.2, rep(1, times = length(ll) - 1)))
+  }
   
   # move paneling by groups to outer panels
   pp <- latticeExtra::useOuterStrips(
@@ -265,6 +331,9 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     sub.txt <- sprintf('chip labels represent %ss', annotate.type)
     pp <- update(pp, sub = list(sub.txt, font = 1))
   }
+  
+  
+  
   
   return(pp)  
 }

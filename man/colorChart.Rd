@@ -66,13 +66,14 @@ if(!requireNamespace('latticeExtra')) {
   # annotation of frequency
   colorChart(ric, chip.cex = 4, annotate = TRUE)
   
+  
   # bootstrap to larger size
   ric.big <- sample(ric, size = 100, replace = TRUE)
   
   # frequency can be encoded in size
   colorChart(ric.big, chip.cex = 3)
   colorChart(ric.big, chip.cex = 5, annotate = TRUE)
-  
+     
   # constant size
   colorChart(ric.big, chip.cex = 3, size = FALSE)
   colorChart(ric.big, chip.cex = 3, size = FALSE, chip.border.col = 'NA')
