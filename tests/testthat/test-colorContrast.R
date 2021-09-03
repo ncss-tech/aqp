@@ -20,6 +20,14 @@ test_that("huePosition works as expected", {
 
   # bogus input should result in NA
   expect_true(is.na(huePosition('10YR 3/3')))
+  
+  # neutral hues require a special argument
+  expect_true(is.na(huePosition('N')))
+  
+  # position 1
+  expect_true(
+    huePosition('N', includeNeutral = TRUE) == 1
+  )
 
 })
 
@@ -89,7 +97,7 @@ test_that("colorContrast fails as expected", {
   expect_true(is.na(d$dE00))
 
   # bogus Munsell colors, all NA
-  d <- colorContrast('123sdf', '345gg')
+  d <- colorContrast(m1 = '123sdf', m2 = '345gg')
   expect_true(all(is.na(d[, -c(1:2)])))
 })
 
@@ -108,4 +116,20 @@ test_that("valid results", {
   ## TODO add some less-common colors
 
 })
+
+
+
+test_that("neutral hues", {
+  
+  # contrast metrics
+  d <- colorContrast('N 3/', 'N 6/')
+  
+  # hand-checked
+  expect_equal(d$dH, 0)
+  expect_equal(d$dV, 3)
+  expect_equal(d$dC, 0)
+  expect_equal(as.character(d$cc), 'Distinct')
+  
+})
+
 

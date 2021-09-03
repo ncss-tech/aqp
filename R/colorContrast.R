@@ -57,7 +57,10 @@
 #' colorContrastPlot('10B 4/13', '10YR 10/15',
 #' labels = c('helioblue-reddish', 'light cadmium yellow')
 #' )
-#'
+#' 
+#' # neutral hues
+#' colorContrast(m1 = 'N 3/', m2 = 'N 6/')
+#' 
 colorContrast <- function(m1, m2) {
 
   # sanity check, need this for color distance eval
@@ -85,7 +88,8 @@ colorContrast <- function(m1, m2) {
 
   # difference in number of hue chips, clock-wise, as specified in:
   # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
-  dH <- abs(huePosition(m1.pieces[[1]]) - huePosition(m2.pieces[[1]]))
+  # including neutral hues in position 1
+  dH <- abs(huePosition(m1.pieces[[1]], includeNeutral = TRUE) - huePosition(m2.pieces[[1]], includeNeutral = TRUE))
   # difference in number of value chips
   dV <- abs(m1.pieces[[2]] - m2.pieces[[2]])
   # difference in number of chroma chips

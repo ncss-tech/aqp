@@ -44,8 +44,11 @@ test_that("parseMunsell()", {
   expect_true(nrow(some.NA) == 2)
   
   # neutral colors
-  expect_true(inherits(parseMunsell('N 2/', convertColors = FALSE), 'data.frame'))
-
+  res <- parseMunsell('N 2/', convertColors = FALSE)
+  expect_true(inherits(res, 'data.frame'))
+  # chroma is arbitrarily set to 0
+  expect_true(res$chroma == 0)
+  
   # splitting of text into columns within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = 3, chroma = 4, stringsAsFactors = FALSE))
 

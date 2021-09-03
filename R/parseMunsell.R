@@ -77,7 +77,9 @@
 #' # CIELAB only
 #' parseMunsell("10YR 3/5", return_triplets = FALSE, returnLAB = TRUE)
 #' 
-#' 
+#' # neutral hue
+#' # note chroma encoded as '0'
+#' parseMunsell('N 3/', convertColors = FALSE)
 #' 
 parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
   
@@ -155,8 +157,8 @@ parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
   value <- str_trim(value, side = "both")
   chroma <- str_trim(chroma, side = "both")
   
-  # convert NA chroma -> 0 (should be limited to N hue)
-  chroma <- ifelse(is.na(chroma), 0, chroma)
+  # convert NA chroma -> 0 for N hues
+  chroma <- ifelse(is.na(chroma) & hue == 'N', 0, chroma)
   
   # init empty data.frame
   res <- empty[rep(1, times = length(munsellColor)), ]

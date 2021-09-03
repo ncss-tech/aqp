@@ -30,7 +30,10 @@ This function is fully vectorized.
 \examples{
 
 # get hue ordering for setting levels of a factor
-huePosition(x=NULL, returnHues=TRUE)
+huePosition(x = NULL, returnHues = TRUE)
+
+# get hue ordering including N (neutral)
+huePosition(x = NULL, returnHues = TRUE, includeNeutral = TRUE)
 
 # get position of the '10YR' hue (7)
 huePosition(x='10YR')

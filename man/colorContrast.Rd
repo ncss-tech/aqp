@@ -52,6 +52,9 @@ colorContrastPlot('10B 4/13', '10YR 10/15',
 labels = c('helioblue-reddish', 'light cadmium yellow')
 )
 
+# neutral hues
+colorContrast(m1 = 'N 3/', m2 = 'N 6/')
+
 }
 \references{
 \enumerate{
