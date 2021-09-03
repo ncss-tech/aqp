@@ -92,6 +92,13 @@ if(!requireNamespace('latticeExtra')) {
   # increase the possible range of color chip sizes
   colorChart(s[[1]], chip.cex = 4, chip.cex.min = 0.01, chip.cex.max = 2)
   
+  # slightly funky support for neutral hues
+  N <- sprintf('N \%s/', 2:8)
+  cols <- c(rep(N, times = 5), ric.big)
+  
+  # note special panel used to show neutral hues
+  colorChart(cols, size = FALSE, annotate = TRUE)
+  
 }
 
 }
