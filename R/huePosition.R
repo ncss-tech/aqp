@@ -12,6 +12,9 @@
 #' @param x character vector of hues, e.g. '10YR'
 #' @param returnHues logical, should the unique set of Munsell hues used for
 #' ordering be returned? See details.
+#' 
+#' @param includeNeutral logical, add 'N' to the beginning of the unique set of Munsell hues 
+#' 
 #' @return A vector of integer hue positions is typically returned, of the same
 #' length and order as \code{x}. If \code{returnHues} is TRUE, then the hue
 #' names and ordering is returned and \code{x} is ignored.
@@ -28,7 +31,7 @@
 #' # get position of the '10YR' hue (7)
 #' huePosition(x='10YR')
 #'
-huePosition <- function(x, returnHues=FALSE) {
+huePosition <- function(x, returnHues = FALSE, includeNeutral = FALSE) {
   # ordering via Tech Note #2
   # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
   hues <- c('5R', '7.5R', '10R',
@@ -42,7 +45,12 @@ huePosition <- function(x, returnHues=FALSE) {
 
   # just the hues
   if(returnHues) {
-    return(hues)
+    # N is added to the beginning, position 0
+    if(includeNeutral) {
+      return(c('N', hues))
+    } else {
+      return(hues)
+    }
   } else {
     # convert hue into position
     res <- match(x, hues)
