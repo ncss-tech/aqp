@@ -4,13 +4,15 @@
 \alias{huePosition}
 \title{Munsell Hue Position for Soil Color Description}
 \usage{
-huePosition(x, returnHues = FALSE)
+huePosition(x, returnHues = FALSE, includeNeutral = FALSE)
 }
 \arguments{
 \item{x}{character vector of hues, e.g. '10YR'}
 
 \item{returnHues}{logical, should the unique set of Munsell hues used for
 ordering be returned? See details.}
+
+\item{includeNeutral}{logical, add 'N' to the beginning of the unique set of Munsell hues}
 }
 \value{
 A vector of integer hue positions is typically returned, of the same
