@@ -1,3 +1,7 @@
+# aqp 1.32 (2021-09-03)
+ * `colorChart()` can now show neutral hues, still needs some refinement though
+ * updates to `colorContrast`, `parseMunsell`, and `huePosition` to work properly with neutral hues
+
 # aqp 1.31 (2021-08-19)
  * CRAN release
  * bug fix in `checkHzDepthLogic()` when `byhz = TRUE`
