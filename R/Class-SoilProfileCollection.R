@@ -55,11 +55,6 @@ setClass(
   }
 )
 
-#' @export
-setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
-  paste0('SPC<', length(x), '>')
-})
-
 # 2019-03-15: creating an empty SpatialPoints object requires more effort
 # c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
 # old: new('SpatialPoints')
@@ -420,7 +415,15 @@ setMethod(f = 'show',
 
           })
 
-
+#' @description `as.character()`: Character Representation of SoilProfileCollection Object
+#' @param x a SoilProfileCollection
+#' @param ... additional arguments (not used)
+#' @keywords internal
+#' @rdname show
+#' @export
+setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
+  paste0('SPC<', length(x), '>')
+})
 
 #' @title Wrapper method for data.frame subclass conversion
 #'
