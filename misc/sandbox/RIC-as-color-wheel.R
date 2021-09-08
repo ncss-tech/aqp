@@ -85,4 +85,37 @@ p1 + theme(
     )
 
 
+## output from aggregateColor
+
+p1 <- ggplot() +
+  geom_bar(
+    data = a,
+    aes(x = munsell, y = weight),
+    stat = "identity", fill = a$moist_soil_color) + 
+  theme_minimal() 
+
+p1 <- p1 +
+  coord_polar(start = 0)
+
+p1 <- p1 + facet_wrap(~ .id, strip.position = "top")
+
+p1 <- p1 + ylab('') + xlab('Munsell Color')
+
+## doesn't work all that well
+# p1 + facet_wrap(vars(g))
+
+
+p1
+
+
+p1 + theme(
+  axis.text = element_blank(),
+  axis.title = element_blank(),
+  panel.grid = element_blank()
+)
+
+
+
+
+
 
