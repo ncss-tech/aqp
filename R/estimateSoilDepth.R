@@ -110,10 +110,14 @@
 #'   # apply to an entire collection
 #'   profileApply(gopheridge, estimateSoilDepth)
 #' }
-
-
-estimateSoilDepth <- function(f, name='hzname', p='Cr|R|Cd', selection = min, no.contact.depth=NULL, no.contact.assigned=NULL) {
-
+estimateSoilDepth <- function(f,
+                              name = 'hzname',
+                              p = 'Cr|R|Cd',
+                              selection = min,
+                              no.contact.depth = NULL,
+                              no.contact.assigned = NULL) {
+  # TODO: vectorize
+  
   # sanity check: this function will only operate on an SPC
   if(! inherits(f, 'SoilProfileCollection')) {
     stop('`f` must be a SoilProfileCollection containing one profile', call. = FALSE)
@@ -123,20 +127,14 @@ estimateSoilDepth <- function(f, name='hzname', p='Cr|R|Cd', selection = min, no
   if(length(f) > 1) {
     stop('`f` can contain only one profile, see manual page for details')
   }
-    
   
   # use SPC depth column names
   depthcols <- horizonDepths(f)
   top <- depthcols[1]
   bottom <- depthcols[2]
   
-  ## TODO: guessing a horizon name isn't a good idea: this function requires that one be specified
-
-  # if name is not in horizons, look if it is set in hzdesgncol
-  hznames <- horizonNames(f)
-
   # if the user has not specified a column containing horizon designations
-  if(! name %in% hznames) {
+  if(!name %in% horizonNames(f)) {
     name <- guessHzDesgnName(f)
     if(is.na(name)) {
       stop("soil depth estimation relies on a column containing horizon designations", call.=FALSE)
@@ -154,12 +152,13 @@ estimateSoilDepth <- function(f, name='hzname', p='Cr|R|Cd', selection = min, no
   ## TODO: this is really hard to follow, simplify / test
   
   # no contact defined, use deepest hz bottom depth
-  if(length(contact.idx) < 1) {
-    d <- max(h[[bottom]][no.contact.idx], na.rm=TRUE)
-
+  if (length(contact.idx) < 1) {
+    d <- max(h[[bottom]][no.contact.idx], na.rm = TRUE)
+    
     # is there a user-specified depth at which we assume a standard depth?
-    if(! is.null(no.contact.depth) & ! is.null(no.contact.assigned)) {
-      if(d >= no.contact.depth & !is.null(no.contact.assigned)) {
+    if (!is.null(no.contact.depth) &
+        !is.null(no.contact.assigned)) {
+      if (d >= no.contact.depth & !is.null(no.contact.assigned)) {
         res <- no.contact.assigned
       } else {
         res <- d
@@ -168,11 +167,11 @@ estimateSoilDepth <- function(f, name='hzname', p='Cr|R|Cd', selection = min, no
       # otherwise use depth of deepest horizon
       res <- d
     }
-      
+    
   } else {
     # contact pattern matched
     # apply selection function
-    res <- selection(h[[top]][contact.idx], na.rm=TRUE)
+    res <- selection(h[[top]][contact.idx], na.rm = TRUE)
   }
     
 

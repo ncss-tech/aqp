@@ -32,5 +32,4 @@ depth_units(sp5) <- 'in'
 
 # replace original value (cm)
 depth_units(sp5) <- du
-
 }

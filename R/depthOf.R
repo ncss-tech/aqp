@@ -93,7 +93,7 @@ depthOf <- function(p,
 
   # if the user has not specified a column containing horizon designations
   if (!hzdesgn %in% hznames) {
-    hzdesgn <- guessHzDesgnName(p)
+    hzdesgn <- guessHzDesgnName(p, required = TRUE)
     if (!hzdesgn %in% hznames) {
       stop("depth estimation relies on a column containing horizon designations")
     }

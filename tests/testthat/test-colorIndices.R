@@ -33,5 +33,10 @@ test_that("harden.melanization works as expected", {
 })
 
 test_that("thompson.bell.darkness works as expected", {
-  expect_equivalent(thompson.bell.darkness(sp1[1], value="value", chroma="chroma"), 5.5)
+  expect_equivalent(thompson.bell.darkness(
+    sp1[1],
+    name = "name",
+    value = "value",
+    chroma = "chroma"
+  ), 5.5)
 })

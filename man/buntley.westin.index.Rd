@@ -21,5 +21,5 @@ Calculate "Color Development Equivalent" by the method of Buntley & Westin (1965
 Buntley, G.J. and Westin, F.C. (1965), A Comparative Study of Developmental Color in a Chestnut-Chernozem-Brunizem Soil Climosequence. Soil Science Society of America Journal, 29: 579-582. doi:10.2136/sssaj1965.03615995002900050029x
 }
 \author{
-Andrew G. Brown.
+Andrew G. Brown
 }

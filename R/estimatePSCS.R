@@ -63,7 +63,7 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
     stop("horizon designation, clay attribute or texture class attribute must have length 1")
 
   if (is.null(hzdesgn) | (!hzdesgn %in% horizonNames(p))) {
-    hzdesgn <- guessHzDesgnName(p)
+    hzdesgn <- guessHzDesgnName(p, required = TRUE)
     if (hzdesgn == "")
       stop("horizon designation column not correctly specified")
   }

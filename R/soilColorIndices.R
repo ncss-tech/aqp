@@ -7,7 +7,7 @@
 #' @param value Column name containing moist value; default: "m_value"
 #' @param chroma Column name containing moist chroma; default: "m_chroma"
 #' @return A data.frame containing unique pedon and horizon IDs and horizon-level color indices.
-#' @author Andrew G. Brown.
+#' @author Andrew G. Brown
 #' @seealso \code{\link{hurst.redness}} \code{\link{barron.torrent.redness.LAB}} \code{\link{buntley.westin.index}}
 #' @examples
 #' data(sp1)
@@ -47,7 +47,7 @@ horizonColorIndices <- function(p, hue="m_hue", value="m_value", chroma="m_chrom
 #' @param value A numeric vector containing Munsell values
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector of horizon redness index (lower values = redder).
-#' @author Andrew G. Brown.
+#' @author Andrew G. Brown
 #' @references Hurst, V.J. (1977) Visual estimation of iron in saprolite. GSA Bulletin. 88(2): 174–176. doi: https://doi.org/10.1130/0016-7606(1977)88<174:VEOIIS>2.0.CO;2
 #' @rdname hurst.redness
 #' @export hurst.redness
@@ -67,7 +67,7 @@ hurst.redness <-  function(hue, value, chroma) {
 #' @param value A numeric vector containing Munsell values
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector of horizon redness index (higher values = redder).
-#' @author Andrew G. Brown.
+#' @author Andrew G. Brown
 #' @references Barron, V. and Torrent, J. (1986), Use of the Kubelka—Munk theory to study the influence of iron oxides on soil colour. Journal of Soil Science, 37: 499-510. doi:10.1111/j.1365-2389.1986.tb00382.x
 #' @rdname barron.torrent.redness.LAB
 #' @export barron.torrent.redness.LAB
@@ -169,7 +169,7 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' @param value numeric vector containing Munsell values
 #' @param value_ref A numeric vector containingMunsell value(s) for reference material
 #' @return A numeric vector reflecting horizon darkening relative to a reference (e.g. parent) material.
-#' @author Andrew G. Brown.
+#' @author Andrew G. Brown
 #' @references Harden, J.W. (1982) A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California. Geoderma. 28(1) 1-28. doi:  10.1016/0016-7061(82)90037-4
 #' @rdname harden.melanization
 #' @export harden.melanization
@@ -238,7 +238,7 @@ harden.melanization <- function(value, value_ref) {
 #' @param hue A character vector containing Munsell hues (e.g. "7.5YR")
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector reflecting horizon color development.
-#' @author Andrew G. Brown.
+#' @author Andrew G. Brown
 #' @references Buntley, G.J. and Westin, F.C. (1965), A Comparative Study of Developmental Color in a Chestnut-Chernozem-Brunizem Soil Climosequence. Soil Science Society of America Journal, 29: 579-582. doi:10.2136/sssaj1965.03615995002900050029x
 #' @rdname buntley.westin.index
 #' @export buntley.westin.index
@@ -259,17 +259,23 @@ buntley.westin.index <- function(hue, chroma) {
 #' @param value Column name containing horizon color values (default: "m_value")
 #' @param chroma Column name containing horizon color chromas (default: "m_chroma")
 #' @return A numeric vector reflecting horizon darkness (lower values = darker).
-#' @author Andrew G. Brown.
+#' @author Andrew G. Brown
 #' @references Thompson, J.A. and Bell, J.C. (1996), Color Index for Identifying Hydric Conditions for Seasonally Saturated Mollisols in Minnesota. Soil Science Society of America Journal, 60: 1979-1988. doi:10.2136/sssaj1996.03615995006000060051x
 #' @rdname thompson.bell.darkness
 #' @export thompson.bell.darkness
-thompson.bell.darkness <- function(p, name = NULL, pattern="^A", value="m_value", chroma="m_chroma") {
+thompson.bell.darkness <-
+  function(p,
+           name = guessHzDesgnName(p),
+           pattern = "^A",
+           value = "m_value",
+           chroma = "m_chroma") {
+    
   # after Thompson & Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota"
   # 10.2136/sssaj1996.03615995006000060051x
   hz <- horizons(p)
   depthz <- horizonDepths(p)
-  if (missing(name)) {
-    name <- guessHzDesgnName(p)
+  if (!all(name %in% horizonNames(p))) {
+    name <- guessHzDesgnName(p, required = TRUE)
   }
 
   a.hz <- hz[grepl(hz[[name]], pattern = pattern),]

@@ -44,5 +44,5 @@ plot(sp1, color='buntley_westin')
 \code{\link{hurst.redness}} \code{\link{barron.torrent.redness.LAB}} \code{\link{buntley.westin.index}}
 }
 \author{
-Andrew G. Brown.
+Andrew G. Brown
 }

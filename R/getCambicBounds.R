@@ -45,8 +45,8 @@
 #' getCambicBounds(spc)
 #'
 getCambicBounds <- function(p,
-                            hzdesgn = guessHzDesgnName(p),
-                            texcl.attr = guessHzTexClName(p),
+                            hzdesgn = guessHzDesgnName(p, required = TRUE),
+                            texcl.attr = guessHzTexClName(p, required = TRUE),
                             clay.attr = guessHzAttrName(p, attr = 'clay', c("total", "_r")),
                             argi_bounds = NULL,
                             d_value = "d_value",

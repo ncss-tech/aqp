@@ -20,7 +20,7 @@
 
 \item{pattern}{Regex pattern to match for bottom of profile (passed to estimateSoilDepth) default: "R|Cr|Cd|qm"}
 
-\item{hzdesgn}{Column name in \code{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object)}}
+\item{hzdesgn}{Column name in \code{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object, required = TRUE)}}
 
 \item{...}{Additional arguments to \code{mpspline2::mpspline}}
 }
