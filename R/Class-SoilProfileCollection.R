@@ -415,7 +415,15 @@ setMethod(f = 'show',
 
           })
 
-
+#' @description `as.character()`: Character Representation of SoilProfileCollection Object
+#' @param x a SoilProfileCollection
+#' @param ... additional arguments (not used)
+#' @keywords internal
+#' @rdname show
+#' @export
+setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
+  paste0('SPC<', length(x), ",", nrow(x), '>')
+})
 
 #' @title Wrapper method for data.frame subclass conversion
 #'
