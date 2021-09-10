@@ -14,7 +14,7 @@
 #' @param object A SoilProfileCollection
 #' @param var_name Column name in \code{@horizons} slot of \code{object} containing numeric values to spline
 #' @param pattern Regex pattern to match for bottom of profile (passed to estimateSoilDepth) default: "R|Cr|Cd|qm"
-#' @param hzdesgn Column name in \code{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object)}
+#' @param hzdesgn Column name in \code{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object, required = TRUE)}
 #' @param ... Additional arguments to \code{mpspline2::mpspline}
 #'
 #' @author Andrew G. Brown
@@ -45,6 +45,10 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
   if (is.null(var_name) | !(var_name %in% horizonNames(object)))
     stop("argument `var_name` must specify a single horizon-level variable", call. = FALSE)
 
+  if (!hzdesgn %in% horizonNames(object)) {
+    hzdesgn <- guessHzDesgnName(object, required = TRUE)
+  }
+            
   hztop <- horizonDepths(object)[1]
   hzbot <- horizonDepths(object)[2]
 

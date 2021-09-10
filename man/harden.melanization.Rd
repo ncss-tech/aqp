@@ -77,5 +77,5 @@ lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
 Harden, J.W. (1982) A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California. Geoderma. 28(1) 1-28. doi:  10.1016/0016-7061(82)90037-4
 }
 \author{
-Andrew G. Brown.
+Andrew G. Brown
 }

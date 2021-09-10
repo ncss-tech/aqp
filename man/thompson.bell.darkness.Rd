@@ -6,7 +6,7 @@
 \usage{
 thompson.bell.darkness(
   p,
-  name = NULL,
+  name = guessHzDesgnName(p),
   pattern = "^A",
   value = "m_value",
   chroma = "m_chroma"
@@ -33,5 +33,5 @@ Calculate the "Profile Darkness Index" by the method of Thompson & Bell (1996) "
 Thompson, J.A. and Bell, J.C. (1996), Color Index for Identifying Hydric Conditions for Seasonally Saturated Mollisols in Minnesota. Soil Science Society of America Journal, 60: 1979-1988. doi:10.2136/sssaj1996.03615995006000060051x
 }
 \author{
-Andrew G. Brown.
+Andrew G. Brown
 }

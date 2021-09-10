@@ -8,7 +8,7 @@
 #'
 #' @param p a SoilProfileCollection
 #' @param pattern a regular expression pattern to match for all horizons to be considered part of the "surface".
-#' @param hzdesgn column name containing horizon designation. Default: \code{guessHzDesgnName(p)}.
+#' @param hzdesgn column name containing horizon designation. Default: \code{guessHzDesgnName(p, required = TRUE)}.
 #' @param simplify logical. Return single profile results as vector (default: `TRUE`) or `data.frame` (`FALSE`)
 #' @return a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface. If `length(p) > 1` then a _data.frame_ containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.
 #'
@@ -56,6 +56,12 @@
 #' getMineralSoilSurfaceDepth(q, hzdesgn='name')
 #'
 getSurfaceHorizonDepth <- function(p, pattern, hzdesgn = guessHzDesgnName(p), simplify = TRUE) {
+  
+  if (!hzdesgn[1] %in% horizonNames(p)) {
+    # error if no valid designation found or specified
+    hzdesgn <- guessHzDesgnName(p, required = TRUE)
+  }
+  
   hz <- data.table::as.data.table(horizons(p))
   depthz <- horizonDepths(p)
   
@@ -235,7 +241,7 @@ getSurfaceHorizonDepth <- function(p, pattern, hzdesgn = guessHzDesgnName(p), si
 # }
 
 getMineralSoilSurfaceDepth <-  function(p, hzdesgn = guessHzDesgnName(p), pattern = "O") {
-  #assumes OSM is given O designation;
+#assumes OSM is given O designation;
   #TODO: add support for lab-sampled organic measurements
   #      keep organic horizons with andic soil properties
   return(getSurfaceHorizonDepth(p, hzdesgn = hzdesgn, pattern = pattern))

@@ -2,9 +2,15 @@
 % Please edit documentation in R/guessColumnNames.R
 \name{guessHzAttrName}
 \alias{guessHzAttrName}
-\title{Guess Arbitrary Horizon Column Name}
+\alias{guessHzDesgnName}
+\alias{guessHzTexClName}
+\title{Guess Horizon Slot Column Names}
 \usage{
-guessHzAttrName(x, attr, optional = NULL, verbose = TRUE)
+guessHzAttrName(x, attr, optional = NULL, verbose = TRUE, required = FALSE)
+
+guessHzDesgnName(x, required = FALSE)
+
+guessHzTexClName(x, required = FALSE)
 }
 \arguments{
 \item{x}{A SoilProfileCollection}
@@ -14,14 +20,20 @@ guessHzAttrName(x, attr, optional = NULL, verbose = TRUE)
 \item{optional}{A character vector of regular expression(s) containing optional formative elements of attribute name.}
 
 \item{verbose}{A boolean value for whether to produce message output about guesses.}
+
+\item{required}{logical Default: \code{FALSE}. Is this attribute required? If it is, set to \code{TRUE} to trigger error on invalid value.}
 }
 \value{
 Character containing horizon attribute column name. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 }
 \description{
-Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
+\code{guessHzAttrName()}: Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 
 e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (\code{claytotal_r == totalclay_r}) over (\code{clay_r == claytotal == totalclay}) over \code{clay}.
+
+\code{guessHzDesgnName()}: This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
+
+\code{guessHzTexClName()}: This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
 }
 \examples{
 
@@ -49,9 +61,26 @@ depths(c) <- id ~ top + bottom
 
 guessHzAttrName(c, attr="clay", optional=c("total", "_r"))
 
-}
-\seealso{
-\code{\link{guessHzDesgnName}}, \code{\link{guessHzTexClName}}
+
+a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), horizonname=c("A","Bw"))
+depths(a) <- id ~ top + bottom
+
+# store guess in metadata
+hzdesgnname(a) <- guessHzDesgnName(a)
+
+# inspect result
+hzdesgnname(a)
+
+
+a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), texture=c("A","Bw"))
+depths(a) <- id ~ top + bottom
+
+# store guess in metadata
+hztexclname(a) <- guessHzTexClName(a)
+
+# inspect result
+hztexclname(a)
+
 }
 \author{
 Andrew G. Brown
