@@ -145,7 +145,6 @@ exportMethods(
   hzDesgn,
   hztexclname,
   "hztexclname<-",
-  filter,
   grepSPC,
   subApply
 )

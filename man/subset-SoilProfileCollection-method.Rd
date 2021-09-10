@@ -3,13 +3,9 @@
 \name{subset,SoilProfileCollection-method}
 \alias{subset,SoilProfileCollection-method}
 \alias{subset}
-\alias{filter,SoilProfileCollection-method}
-\alias{filter}
 \title{Subset a SoilProfileCollection with logical expressions}
 \usage{
 \S4method{subset}{SoilProfileCollection}(x, ..., greedy = FALSE)
-
-\S4method{filter}{SoilProfileCollection}(.data, ..., .preserve = FALSE)
 }
 \arguments{
 \item{x}{A SoilProfileCollection}
@@ -17,10 +13,6 @@
 \item{...}{Comma-separated set of R expressions that evaluate as TRUE or FALSE. Length for individual expressions matches number of sites OR number of horizons, in \code{object}.}
 
 \item{greedy}{Use "greedy" matching for combination of site and horizon level matches? \code{greedy = TRUE} is the union, whereas \code{greedy = FALSE} (default) is the intersection (of site and horizon matches).}
-
-\item{.data}{A SoilProfileCollection (\code{filter} method only, in lieu of \code{x})}
-
-\item{.preserve}{Relevant when the .data input is grouped. Not (yet) implemented for \code{SoilProfileCollection} objects.}
 }
 \value{
 A SoilProfileCollection.
@@ -29,7 +21,7 @@ A SoilProfileCollection.
 \code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
 }
 \details{
-In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series. If you need to use the base method after loading aqp, you can use \code{stats::filter} to be explicit about which function you want. We mirror the dplyr package in over-loading the \code{filter} method with a generic that allows for arbitrary number of vectors (\code{...}) to be included in the "filter," which means you may also need to use \code{aqp::filter} or \code{dplyr::filter} as appropriate depending on the order you load packages or your conflict resolution option settings.
+In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series.
 }
 \seealso{
 \code{\link{filter}}
