@@ -19,7 +19,7 @@
 #'
 #' @param width scaling of profile widths (typically 0.1 - 0.4)
 #'
-#' @param name quoted column name of the (horizon-level) attribute containing horizon designations, can be left as \code{NULL} and horizon designation column will be selected via \code{hzdesgnname(x)}. Suppress horizon name printing by setting \code{name=NA}.
+#' @param name quoted column name of the (horizon-level) attribute containing horizon designations or labels, if missing `hzdesgnname(x)` is used. Suppress horizon name printing by setting `name = NA` or `name = ''`.
 #'
 #' @param name.style one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'
 #'
@@ -295,28 +295,28 @@
 
 plotSPC <- function(
   x,
-  color='soil_color',
-  width=0.2,
-  name=NULL,
-  name.style='right-center',
-  label=idname(x),
-  hz.depths=FALSE,
-  alt.label=NULL,
-  alt.label.col='black',
-  cex.names=0.5,
-  cex.depth.axis=cex.names,
-  cex.id=cex.names+(0.2*cex.names),
-  font.id=2,
-  print.id=TRUE,
-  id.style='auto',
-  plot.order=1:length(x),
-  relative.pos=1:length(x),
-  add=FALSE,
-  scaling.factor=1,
+  color = 'soil_color',
+  width = 0.25,
+  name = hzdesgnname(x),
+  name.style = 'right-center',
+  label = idname(x),
+  hz.depths = FALSE,
+  alt.label = NULL,
+  alt.label.col = 'black',
+  cex.names = 0.5,
+  cex.depth.axis = cex.names,
+  cex.id = cex.names + (0.2 * cex.names),
+  font.id = 2,
+  print.id = TRUE,
+  id.style = 'auto',
+  plot.order = 1:length(x),
+  relative.pos = 1:length(x),
+  add = FALSE,
+  scaling.factor = 1,
   y.offset = rep(0, times = length(x)),
-  x.idx.offset=0,
-  n=length(x),
-  max.depth=ifelse(is.infinite(max(x)), 200, max(x)),
+  x.idx.offset = 0,
+  n = length(x),
+  max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
   n.depth.ticks = 5,
   shrink = FALSE,
   shrink.cutoff = 3,
@@ -483,20 +483,22 @@ plotSPC <- function(
 
   # get column names from horizon data
   nm <- names(h)
-  
-  ## TODO: there has to be a clear mechanism for suppressing labeling of horizon names
-  
-  # if the user has not specified a column containing horizon designations
-  #   or, if the specified value is not in the horizon names vector
-  #   try to make a guess
-  if(missing(name)) {
-    name <- guessHzDesgnName(x)
-  }
 
-  if(!is.na(name) & !all((name %in% horizonNames(x)))) {
-    name <- guessHzDesgnName(x)
+  
+  #########################
+  ## horizon designation ##
+  #########################
+  
+  # hzdesgnname() does most of the work here, with sensible defaults when metadata are missing
+  
+  # code can safely run with all input except NULL
+  if(is.null(name)) {
+    # set to empty string
+    name <- ''
   }
-
+  
+  
+  
   ####################
   ## horizon colors ##
   ####################

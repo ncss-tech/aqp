@@ -11,8 +11,8 @@
 plotSPC(
   x,
   color = "soil_color",
-  width = 0.2,
-  name = NULL,
+  width = 0.25,
+  name = hzdesgnname(x),
   name.style = "right-center",
   label = idname(x),
   hz.depths = FALSE,
@@ -69,7 +69,7 @@ plot(x, y, ...)
 
 \item{width}{scaling of profile widths (typically 0.1 - 0.4)}
 
-\item{name}{quoted column name of the (horizon-level) attribute containing horizon designations, can be left as \code{NULL} and horizon designation column will be selected via \code{hzdesgnname(x)}. Suppress horizon name printing by setting \code{name=NA}.}
+\item{name}{quoted column name of the (horizon-level) attribute containing horizon designations or labels, if missing \code{hzdesgnname(x)} is used. Suppress horizon name printing by setting \code{name = NA} or \code{name = ''}.}
 
 \item{name.style}{one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'}
 

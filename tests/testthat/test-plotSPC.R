@@ -16,6 +16,7 @@ p <- combine(p)
 # make a factor style hz attr
 p$p.factor <- cut(p$p1, quantile(p$p1), include.lowest = TRUE)
 
+# note: hzdesgnname() returns "" when metadata are missing
 
 ## tests
 

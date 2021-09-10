@@ -1,6 +1,9 @@
-# aqp 1.32 (2021-09-03)
+# aqp 1.32 (2021-09-10)
  * `colorChart()` can now show neutral hues, still needs some refinement though
  * updates to `colorContrast`, `parseMunsell`, and `huePosition` to work properly with neutral hues
+ * `plotSPC` defaults change:
+   - `width = 0.25`: slightly wider profile sketches
+   - `name = hzdesgnname(x)`: use metadata if present, no longer guessing. This may cause your figures to "lose" previously guessed horizon names, specifiy with `name = 'column name'` or set metadata with `hzdesgnname(x) <- 'hzname'`
 
 # aqp 1.31 (2021-08-19)
  * CRAN release
