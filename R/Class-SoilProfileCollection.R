@@ -422,7 +422,7 @@ setMethod(f = 'show',
 #' @rdname show
 #' @export
 setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
-  paste0('SPC<', length(x), '>')
+  paste0('SPC<', length(x), ",", nrow(x), '>')
 })
 
 #' @title Wrapper method for data.frame subclass conversion
