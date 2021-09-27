@@ -25,10 +25,12 @@ A \code{data.frame} with the following columns:
 }
 }
 \description{
-Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes and CIE delta-E 2000 metric.
+Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes (Soil Survey Technical Note 2) and CIE delta-E 2000 metric.
 }
 \details{
-This function is fully vectorized but expects input to be of the same length. Use \code{expand.grid} to generate suitable input from 1:many or many:1 type comparisons. See \href{http://ncss-tech.github.io/AQP/aqp/color-contrast.html}{this tutorial} for an expanded discussion and more examples.
+This function is fully vectorized but expects input to be of the same length. Use \code{expand.grid()} to generate suitable input from 1:many or many:1 type comparisons. See \href{http://ncss-tech.github.io/AQP/aqp/color-contrast.html}{this tutorial} for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.
+
+The most meaningful representation of color contrast is the CIE2000 (dE00) metric.
 }
 \note{
 delta-E00 is computed by the \href{https://CRAN.R-project.org/package=farver}{farver package}.
@@ -52,8 +54,17 @@ colorContrastPlot('10B 4/13', '10YR 10/15',
 labels = c('helioblue-reddish', 'light cadmium yellow')
 )
 
-# neutral hues
+
+## Note: neutral hues aren't defined in TN2
+# approximation / extension of the concept
 colorContrast(m1 = 'N 3/', m2 = 'N 6/')
+
+#
+colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
+
+m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
+m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
+colorContrast(m1, m2)
 
 }
 \references{
@@ -63,7 +74,7 @@ colorContrast(m1 = 'N 3/', m2 = 'N 6/')
 }
 }
 \seealso{
-\code{\link{colorContrastPlot}}, \code{\link{huePosition}}
+\link{colorContrastPlot}, \link{huePosition}, \link{huePositionCircle}
 }
 \author{
 D.E. Beaudette
