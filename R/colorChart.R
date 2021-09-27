@@ -201,8 +201,13 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
   # encode hue as factor using standard hue order
   # second call to factor() drops unused levels
   # note special argument to include neutral hues
+  # N is in position 41, we need it in position 1
+  hp <- huePosition(returnHues = TRUE, includeNeutral = TRUE)
+  N.idx <- match('N', hp)
+  hp <- c(hp[N.idx], hp[-N.idx])
+  
   tab$hue <- factor(
-    factor(tab$hue, levels = huePosition(returnHues = TRUE, includeNeutral = TRUE))
+    factor(tab$hue, levels = hp)
   )
   
   # disable variable size when all frequencies are the same (no useful information)
