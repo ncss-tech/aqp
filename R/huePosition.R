@@ -1,65 +1,108 @@
-# determine index of Munsell hue from 5R ---> 5PB
-# x: vector of Munsell hues
-# returnHues: return hue ordering, x is ignored
-#' Munsell Hue Position for Soil Color Description
+
+#' @title Munsell Hue Reference and Position Searching
 #'
-#' Munsell hues are typically arranged from 5R to 5PB in Munsell soil color
-#' books. This function matches a vector of Munsell hues to the position in
-#' this arrangement of 29 hues.
+#' @description The 40 Munsell hues are typically arranged from 5R to 2.5R moving clock wise on the unit circle. This function matches a vector of hues to positions on that circle, with options for setting a custom origin or search direction.
 #'
 #' This function is fully vectorized.
 #'
-#' @param x character vector of hues, e.g. '10YR'
-#' @param returnHues logical, should the unique set of Munsell hues used for
-#' ordering be returned? See details.
+#' @param x character vector of hues, e.g. c('10YR', '5YR'), optional if `returnHues = TRUE`
 #' 
-#' @param includeNeutral logical, add 'N' to the beginning of the unique set of Munsell hues 
+#' @param returnHues logical, should the full set of Munsell hues be returned? See details.
 #' 
-#' @return A vector of integer hue positions is typically returned, of the same
-#' length and order as \code{x}. If \code{returnHues} is TRUE, then the hue
-#' names and ordering is returned and \code{x} is ignored.
+#' @param includeNeutral logical, add 'N' to the end of the full set of Munsell hues 
+#' 
+#' @param origin hue to be used as the starting point for position searches (position 1)
+#' 
+#' @param direction indexing direction, should be `cw` (clock wise) or `ccw` (counter-clock wise)
+#' 
+#' @return A vector of integer hue positions is returned, of the same
+#' length and order as `x`. If `returnHues = TRUE`, then all hue
+#' names and ordering are returned and `x` is ignored.
+#' 
 #' @author D.E. Beaudette
-#' @seealso \code{\link{colorContrast}}
+#' 
+#' @seealso [colorContrast], [huePositionCircle]
+#' 
 #' @references
 #' https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+#' 
+#' Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
+#' 
 #' @keywords manip
 #' @examples
 #'
 #' # get hue ordering for setting levels of a factor
-#' huePosition(x = NULL, returnHues = TRUE)
+#' huePosition(returnHues = TRUE)
 #' 
 #' # get hue ordering including N (neutral)
-#' huePosition(x = NULL, returnHues = TRUE, includeNeutral = TRUE)
+#' huePosition(returnHues = TRUE, includeNeutral = TRUE)
 #'
-#' # get position of the '10YR' hue (7)
-#' huePosition(x='10YR')
+#' # get position of the '10YR' hue, relative to standard origin of '5R'
+#' # should be 7
+#' huePosition(x = '10YR')
+#' 
+#' # get position of the '10YR' hue, relative to standard origin of '5YR'
+#' # should be 3
+#' huePosition(x = '10YR', origin = '5YR')
+#' 
+#' # visualize
+#' op <- par(mar = c(0, 0, 0, 0), fg = 'white', bg = 'black')
+#' 
+#' huePositionCircle(huePosition(returnHues = TRUE, origin = '5YR'))
+#' 
+#' par(op)
 #'
-huePosition <- function(x, returnHues = FALSE, includeNeutral = FALSE) {
+huePosition <- function(x, returnHues = FALSE, includeNeutral = FALSE, origin = '5R', direction = c('cw', 'ccw')) {
   # ordering via Tech Note #2
   # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
   
-  # special case where N hues are important
-  if(includeNeutral) {
-    hues <- c('N', '5R', '7.5R', '10R',
-              '2.5YR', '5YR', '7.5YR', '10YR',
-              '2.5Y', '5Y', '7.5Y', '10Y',
-              '2.5GY', '5GY', '7.5GY', '10GY',
-              '2.5G', '5G', '7.5G', '10G',
-              '2.5BG', '5BG', '7.5BG', '10BG',
-              '2.5B', '5B', '7.5B', '10B',
-              '2.5PB', '5PB')
-  } else {
-    # standard ordering
-    hues <- c('5R', '7.5R', '10R',
-              '2.5YR', '5YR', '7.5YR', '10YR',
-              '2.5Y', '5Y', '7.5Y', '10Y',
-              '2.5GY', '5GY', '7.5GY', '10GY',
-              '2.5G', '5G', '7.5G', '10G',
-              '2.5BG', '5BG', '7.5BG', '10BG',
-              '2.5B', '5B', '7.5B', '10B',
-              '2.5PB', '5PB')
+  # sacrifice to CRAN deity
+  munsellHuePosition <- NULL
+  
+  # note: this is incompatible with LazyData: true
+  # load look-up table from our package
+  load(system.file("data/munsellHuePosition.rda", package="aqp")[1])
+  
+  ## basic error checking / argument processing
+  
+  # returnHues must be logical
+  if(! inherits(returnHues, 'logical')) {
+    stop('returnHues must be TRUE or FALSE', call. = FALSE)
   }
   
+  # origin must be a valid hue
+  if(! origin %in% munsellHuePosition$hues) {
+    stop('invalid hue', call. = FALSE)
+  }
+  
+  ## indexing direction 
+  direction <- match.arg(direction)
+  
+  ## extract hues
+  hues <- munsellHuePosition$hues
+  
+  ## optionally retain neutral, not typically useful
+  if(! includeNeutral) {
+    hues <- hues[which(hues != 'N')]
+  }
+  
+  ## adjust origin as needed
+  start.idx <- match(origin, hues)
+  
+  # anything other than 5R (position 1) requires an adjustment
+  if(start.idx > 1) {
+    # wrap-around
+    before.idx <- 1:(start.idx - 1)
+    hues <- hues[c(start.idx:length(hues), before.idx)]
+  } else {
+    # no change
+    # hues <- hues[start.idx:length(hues)]
+  }
+  
+  # enforce search direction
+  if(direction == 'ccw') {
+    hues <- c(hues[1], rev(hues[-1]))
+  }
 
   # just the hues
   if(returnHues) {
