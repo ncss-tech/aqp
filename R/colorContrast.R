@@ -107,9 +107,16 @@ colorContrast <- function(m1, m2) {
   dH <- abs(huePosition(m1.pieces[[1]], includeNeutral = TRUE) - huePosition(m2.pieces[[1]], includeNeutral = TRUE))
   
   ## TODO: not in standards
-  # correction for neutral hues: dH is always 1
-  N.idx <- which(m1.pieces[[1]] == 'N' | m2.pieces[[1]] == 'N')
-  dH[N.idx] <- 1
+  # correction for neutral hues, enforce with XOR
+  #   no N: dH is left alone
+  #   single N: dH is always 1
+  #   double N: dH is 0
+  N.idx <- which(xor(m1.pieces[[1]] == 'N', m2.pieces[[1]] == 'N'))
+  
+  if(length(N.idx) > 0) {
+    dH[N.idx] <- 1
+  }
+  
   
   # difference in number of value chips
   dV <- abs(m1.pieces[[2]] - m2.pieces[[2]])
