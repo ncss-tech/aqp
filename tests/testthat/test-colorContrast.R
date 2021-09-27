@@ -9,28 +9,6 @@ m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
 
 ## tests
 
-test_that("huePosition works as expected", {
-
-  x <- c('2.5YR', '7.5YR', '10YR', '5BG')
-  z <- huePosition(x)
-
-  # manually counted on the Munsell wheel
-  # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
-  expect_equal(z, c(4, 6, 7, 21))
-
-  # bogus input should result in NA
-  expect_true(is.na(huePosition('10YR 3/3')))
-  
-  # neutral hues require a special argument
-  expect_true(is.na(huePosition('N')))
-  
-  # position 1
-  expect_true(
-    huePosition('N', includeNeutral = TRUE) == 1
-  )
-
-})
-
 test_that("contrastClass works as expected", {
 
   ## hand-done tests
