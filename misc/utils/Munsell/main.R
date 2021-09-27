@@ -27,3 +27,6 @@ source('prepare-simplfied-spectra-library.R')
 
 # interpolate odd chroma spectra
 source('interpolate-spectra.R')
+
+# create Munsell hue position data
+source('make-munsellHuePosition.R')

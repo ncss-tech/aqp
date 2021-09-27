@@ -1502,3 +1502,18 @@ NULL
 "traditionalColorNames"
 
 
+#' @title Munsell Hue Position Reference
+#' 
+#' @description Position data for the 40 standard Munsell hues (and neutral). Data include angular positions (compass-style, origin at `[x = 0, y = 1]`, CW rotation) and Cartesian coordinates on the unit circle.
+#' 
+#' @references 
+#' 
+#' Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
+#'
+#' @keywords datasets
+#' @usage data(munsellHuePosition)
+#' 
+"munsellHuePosition"
+
+
+
