@@ -1,5 +1,6 @@
 library(aqp)
 library(stringr)
+library(ragg)
 
 mixIt <- function(x, y) {
   mix <- try(mixMunsell(c(x,y), mixingMethod = 'exact')$munsell)
@@ -108,9 +109,30 @@ plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'e
 x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
 g <- mixtureGrid(x)
 
-png(filename = 'spilled-paint2.png', width = 1500, height = 1515, res = 120, type = 'cairo', antialias = 'subpixel')
+agg_png(filename = 'spilled-paint3.png', width = 1600, height = 1600, scaling = 1.5)
 
 plotMixtureGrid(g, fig.title = 'Clown Barf (Exact)')
+
+dev.off()
+
+
+
+## just the primary hues
+hues <- huePosition(returnHues = TRUE)
+hues <- hues[grep('^5', hues)]
+
+x <- sprintf("%s 6/8", hues)
+g <- mixtureGrid(x)
+
+plotMixtureGrid(g, fig.title = 'Clown Barf (Exact)')
+
+
+x <- sprintf("%s 6/8", hues)
+
+agg_png(filename = 'taupe-is-all-colors.png', width = 800, height = 800, scaling = 1.33)
+
+par(mar = c(0, 0, 0, 0), bg = 'black', fg = 'white')
+sharpshootR::colorMixtureVenn(x[c(9, 1, 3, 5, 7)], mixingMethod = 'exact', ellipse = TRUE, labels = TRUE)
 
 dev.off()
 
