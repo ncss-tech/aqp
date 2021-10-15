@@ -1,3 +1,6 @@
+# aqp 1.33 (2021-10-15)
+ * fixed small bug in `panel.depth_function()` that affected plotting of grouped data, created by `slab()`
+
 # aqp 1.32 (2021-09-28)
  * `colorChart()` can now show neutral hues in a skinny panel
  * updates to `colorContrast()`, `parseMunsell()`, and `huePosition()` to work properly with neutral hues
