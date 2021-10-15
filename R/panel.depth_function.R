@@ -3,7 +3,9 @@
 ## TODO: 'id' isn't a very safe argument for defining profile IDs... (e.g. sp1)
 
 ## TODO: iterate over profile IDs instead of groups
-# note: confidence bands not defined when NA is present
+## TODO: confidence bands not defined when NA is present
+
+
 #' @title Lattice Panel Function for Soil Profiles
 #'
 #' @description Panel function for plotting grouped soil property data, along with upper and
@@ -239,10 +241,24 @@ panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, 
       
     # re-make a nice data.frame, assuming that we have 'groups' defined
     if(!missing(groups)) {
-      d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts], id=id[subscripts])
+      d <- data.frame(
+        prop = x, 
+        bnd = y, 
+        upper = upper[subscripts], 
+        lower = lower[subscripts], 
+        groups = groups[subscripts], 
+        id = id[subscripts]
+      )
     } else {
       # 'groups' is missing, add a fake 'groups' column
-      d <- data.frame(prop=x, bnd=y, upper=upper[subscripts], lower=lower[subscripts], groups=factor(1), id=id[subscripts])
+      d <- data.frame(
+        prop = x, 
+        bnd = y, 
+        upper = upper[subscripts], 
+        lower = lower[subscripts], 
+        groups = factor(1), 
+        id = id[subscripts]
+      )
     }
     
     
@@ -256,7 +272,14 @@ panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, 
     if(!missing(upper) & !missing(lower)) {
       # working with grouped data and paneled data
       if(!missing(groups) & !missing(subscripts)) {
-        d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=groups[subscripts])
+        d <- data.frame(
+          yhat = x, 
+          top = y, 
+          upper = upper[subscripts], 
+          lower = lower[subscripts], 
+          groups = groups[subscripts]
+        )
+        
         # levels in the groups, for color matching
         ll <- levels(d$groups)
         n_groups <- length(ll)
@@ -265,7 +288,13 @@ panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, 
       # no grouping, add a fake group for compatibility
       if(missing(groups)) {
         fake.groups <- factor(1)
-        d <- data.frame(yhat=x, top=y, upper=upper[subscripts], lower=lower[subscripts], groups=fake.groups)
+        d <- data.frame(
+          yhat = x, 
+          top = y, 
+          upper = upper[subscripts], 
+          lower = lower[subscripts], 
+          groups = fake.groups
+        )
         
         # levels in the groups, for color matching
         ll <- levels(d$groups)
@@ -273,21 +302,29 @@ panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, 
       }
       
       # optionally sync region + main line colors
-      if(sync.colors)
-        region.col <- rep(superpose.line$col, length.out=n_groups)
-      else
-        region.col <- rep(grey(0.7), length.out=n_groups)
+      if(sync.colors) {
+        region.col <- rep(superpose.line$col, length.out = n_groups)
+      } else {
+        region.col <- rep(grey(0.7), length.out = n_groups)
+      }
+        
       
       # add conf. intervals / aggregation uncertainty
       by(d, d$groups, function(d_i) {
+        
         # lookup color
-        m <- match(unique(d_i$group), ll)
+        m <- match(as.character(d_i$group[1]), ll)
         
         # cannot have NA in values that define polygon boundaries
         d_i <- d_i[which(!is.na(d_i$upper) & !is.na(d_i$lower)), ]
         
         # make conf.int polygon
-        panel.polygon(x=c(d_i$lower, rev(d_i$upper)), y=c(d_i$top, rev(d_i$top)), col=region.col[m], border=NA, ...)
+        x.coords <- c(d_i$lower, rev(d_i$upper))
+        y.coords <- c(d_i$top, rev(d_i$top))
+        poly.col <- region.col[m]
+        
+        # note: using tactile interfers with alpha
+        panel.polygon(x = x.coords, y = y.coords, col = poly.col, border = NA, ...)
       })
     }
     
