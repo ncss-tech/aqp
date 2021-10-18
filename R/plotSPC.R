@@ -616,7 +616,7 @@ plotSPC <- function(
     # extract / generate horizon name
     m <- match(name, cn)
     if(! is.na(m)) {
-      this_profile_names <- this_profile_data[[m]]
+      this_profile_names <- as.character(this_profile_data[[m]])
     } else {
       # otherwise use an empty string
       this_profile_names <- ''
