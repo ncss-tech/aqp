@@ -953,7 +953,7 @@ plotSPC <- function(
       
       # extra space between profile sketch and left-justified label
       # seems to scale with cex.names
-      hz.depths.xfuzz <- strwidth('0') / 3
+      hz.depths.xfuzz <- strwidth('0') / 4
       
       # top-horizon, top depth: vertical alignment is "top"
       hzd.txt <- this_profile_data[[tcol]][1]
