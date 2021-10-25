@@ -951,7 +951,8 @@ plotSPC <- function(
     ##################################
     if(hz.depths) {
       
-      # requires a fudge factor when specifying align argument
+      # extra space between profile sketch and left-justified label
+      # seems to scale with cex.names
       hz.depths.xfuzz <- strwidth('0') / 3
       
       # top-horizon, top depth: vertical alignment is "top"
@@ -988,6 +989,7 @@ plotSPC <- function(
         font = 1, 
         adj = c(0, 0)
       )
+      
     }
     
     
