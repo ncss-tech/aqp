@@ -342,23 +342,23 @@ plotSPC <- function(
   default.color = grey(0.95),
   ...
 ) {
-
+  
   ###################
   ## sanity checks ##
   ###################
-
+  
   # horizon name style
   if(! name.style %in% c('right-center', 'left-center', 'left-top', 'center-center', 'center-top')) {
     warning('invalid `name.style`', call. = FALSE)
     name.style <- 'right-center'
   }
-
+  
   # horizon distinctness offset column name must be valid
   if(!missing(hz.distinctness.offset)) {
     # valid name
     if(! hz.distinctness.offset %in% horizonNames(x))
       stop('invalid `hz.distinctness.offset` column name', call. = FALSE)
-
+    
     # must be numeric
     if(! is.numeric(x[[hz.distinctness.offset]]))
       stop('`hz.distinctness.offset` must be numeric', call. = FALSE)
@@ -368,7 +368,7 @@ plotSPC <- function(
     hz.distinctness.offset <- '.hdo'
     horizons(x)[[hz.distinctness.offset]] <- 0
   }
-
+  
   # horizon topography offset column name must be valid
   if(!missing(hz.topography.offset)) {
     # valid name
@@ -390,7 +390,7 @@ plotSPC <- function(
     # valid name
     if(! hz.boundary.lty %in% horizonNames(x))
       stop('invalid `hz.boundary.lty` column name', call. = FALSE)
-
+    
     # must be numeric
     if(! is.numeric(x[[hz.boundary.lty]]))
       stop('`hz.boundary.lty` must be numeric', call. = FALSE)
@@ -416,41 +416,41 @@ plotSPC <- function(
   # creates the possibility for new errors based on unexpected results
   # x <- repairMissingHzDepths(x)
   
-
+  
   ###################
   ## fudge factors ##
   ###################
-
+  
   # TODO: base calculations on strwidth() AFTER plot() has been called
-
+  
   # padding along x-axis, prevents crowding
   # dynamic adjustment must also taking into account figure size
   # roughly 10% of length(x)
   extra_x_space <- length(x) * 0.1
-
+  
   # multiplier (width * x_left_spac_mult) used to set left-side space along x-axis
   x_left_space_mult <- 2
-
+  
   # add a little extra x-space when n <= 5
   if(length(x) <= 5 & length(x) > 2) {
     extra_x_space <- extra_x_space + 0.25
     x_left_space_mult <- 2
-
+    
   }
-
+  
   # special cases
   if(length(x) == 2) {
     extra_x_space <- extra_x_space + 0.5
     x_left_space_mult <- 2.75
-
+    
   }
-
+  
   # special cases
   if(length(x) == 1) {
     extra_x_space <- extra_x_space + 0.5
     x_left_space_mult <- 3.5
   }
-
+  
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
   if(max.depth <=50)
@@ -459,10 +459,10 @@ plotSPC <- function(
     extra_y_space <- 10
   if(max.depth > 100)
     extra_y_space <- 15
-
+  
   # get profile IDs
   pIDs <- profile_id(x)
-
+  
   # save arguments to aqp env
   lsp <- list('width'=width,
               'plot.order'=plot.order,
@@ -475,15 +475,15 @@ plotSPC <- function(
               'n'=n,
               'extra_x_space'=extra_x_space,
               'extra_y_space'=extra_y_space)
-
+  
   assign('last_spc_plot', lsp, envir=aqp.env)
-
+  
   # get horizons
   h <- horizons(x)
-
+  
   # get column names from horizon data
   nm <- names(h)
-
+  
   
   #########################
   ## horizon designation ##
@@ -525,28 +525,28 @@ plotSPC <- function(
   hzDepthCols <- horizonDepths(x)
   tcol <- hzDepthCols[1]
   bcol <- hzDepthCols[2]
-
+  
   # get profile labels from @site
   pLabels <- site(x)[[label]]
-
+  
   ## this should probably use strwidth() AFTER plot() has been called
   # if profile style is auto, determine style based on font metrics
   if(id.style == 'auto') {
-  	sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
-  	plot.width <- par('pin')[1]
-  	ID.width.ratio <- sum.ID.str.width  / plot.width
-#   	print(ID.width.ratio)
-
-  	if(ID.width.ratio > 0.7)
-  		id.style <- 'side'
-  	else
-  		id.style <- 'top'
-  	}
-
-
+    sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
+    plot.width <- par('pin')[1]
+    ID.width.ratio <- sum.ID.str.width  / plot.width
+    #   	print(ID.width.ratio)
+    
+    if(ID.width.ratio > 0.7)
+      id.style <- 'side'
+    else
+      id.style <- 'top'
+  }
+  
+  
   # pre-compute nice range for depth axis, also used for plot init
   depth_axis_intervals <- pretty(seq(from=0, to = max.depth, by = 1), n = n.depth.ticks)
-
+  
   # init plotting region, unless we are appending to an existing plot
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
@@ -559,17 +559,17 @@ plotSPC <- function(
       -extra_y_space
     )
     
-	  plot(x = 0, y = 0, type='n', 
-	       xlim = c(width * x_left_space_mult, n+(extra_x_space)),
-	       ylim = ylim.range,
-	       axes=FALSE, xlab='', ylab=''
-	  )
+    plot(x = 0, y = 0, type='n', 
+         xlim = c(width * x_left_space_mult, n+(extra_x_space)),
+         ylim = ylim.range,
+         axes=FALSE, xlab='', ylab=''
+    )
   }
-
-
+  
+  
   # calculate width of a single character on current plot device
   one.char.width <- strwidth('W')
-
+  
   # TODO dynamically adjust `width` based on strwidth(longest.hz.name)
   # TODO abstract single profile sketch code into a single function
   # TODO skip sketch rendering when i=`n` outside of length(SPC) (depths are NA)
@@ -577,42 +577,42 @@ plotSPC <- function(
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
   for(i in 1:n) {
-	  # convert linear sequence into plotting order
-	  profile_i <- plot.order[i]
-
-	  # extract the current profile's horizon data
+    # convert linear sequence into plotting order
+    profile_i <- plot.order[i]
+    
+    # extract the current profile's horizon data
     this_profile_label <- pLabels[profile_i]
-	  this_profile_id <- pIDs[profile_i]
-
-	  this_profile_data <- h[h[[IDcol]] == this_profile_id, ]
-
+    this_profile_id <- pIDs[profile_i]
+    
+    this_profile_data <- h[h[[IDcol]] == this_profile_id, ]
+    
     # extract column names
     cn <- names(this_profile_data)
-
+    
     # extract / generate horizon color
     # note: the ".color" horizon attribute is auto-generated above
     # missing and NA colors have already been dealt with above
     this_profile_colors <- this_profile_data$.color
-
-	  # extract / generate horizon fill density
-	  if(! missing(density)) {
-	  	# if a single number was given, then recylce it over all horizons
-	  	if(is.numeric(density))
-	  		this_profile_density <- density
-	  	# otherwise we have a column name
-	  	else {
-	  		m <- match(density, cn)
-	  		if(! is.na(m))
-		  		this_profile_density <- this_profile_data[[m]]
-		  	else # user-defined column is missing
-			  	this_profile_density <- NULL
-	  	}
-	  } else {
-	    # no user-defined density column
-	    this_profile_density <- NULL
-	  }
-	  	
-
+    
+    # extract / generate horizon fill density
+    if(! missing(density)) {
+      # if a single number was given, then recylce it over all horizons
+      if(is.numeric(density))
+        this_profile_density <- density
+      # otherwise we have a column name
+      else {
+        m <- match(density, cn)
+        if(! is.na(m))
+          this_profile_density <- this_profile_data[[m]]
+        else # user-defined column is missing
+          this_profile_density <- NULL
+      }
+    } else {
+      # no user-defined density column
+      this_profile_density <- NULL
+    }
+    
+    
     # extract / generate horizon name
     m <- match(name, cn)
     if(! is.na(m)) {
@@ -621,378 +621,403 @@ plotSPC <- function(
       # otherwise use an empty string
       this_profile_names <- ''
     }
-      
-      
-
+    
+    
+    
     ########################################
-	  ## generate baseline horizon geometry ##
+    ## generate baseline horizon geometry ##
     ########################################
-
+    
     ## center of each sketch
     # 2019-07-15: added relative position feature, could use some more testing
     # x0 <- x.idx.offset + i
     x0 <- x.idx.offset + relative.pos[i]
-
-	  # get vectors of horizon boundaries, and scale
-	  y0 <- (this_profile_data[[bcol]] * scaling.factor) + y.offset[i]
-	  y1 <- (this_profile_data[[tcol]] * scaling.factor) + y.offset[i]
-
-
-	  
-	  ##############################
-	  ## create horizons + colors ##
-	  ##############################
-	  
-	  # horizons are parallelograms
-	  # offset described by hz.distinctness.offset
-	  # horizontal mid-points described by hz.topography.offset
-
-	  # iterate over horizons
-	  nh <- length(y0)
-	  
-	  # extract current distinctness offset
-	  hdo <- this_profile_data[[hz.distinctness.offset]]
-	  
-	  # apply sketch-wide scaling factor
-	  hdo <- hdo * scaling.factor
-	  
-	  # extract current topography offset
-	  hto <- this_profile_data[[hz.topography.offset]]
-	  
-	  # apply sketch-wide scaling factor
-	  hto <- hto * scaling.factor
-	  
-	  # extract current set of line types if provided
-	  if(! is.null(hz.boundary.lty)) {
-	    ht.lty <- this_profile_data[, hz.boundary.lty]
-	  } else {
-	    # use constant value
-	    ht.lty <- rep(1, times=nh)
-	  }
-	  
-	  
-	  
-	  # empty list for storing y-coordinates
-	  coords.list <- vector(mode = 'list', length = nh)
-	  
-	  # iterate over horizons
-	  for(j in 1:nh) {
-	    
-	    ## rectangle for reference
-	    # xx <- c(x0 - width, x0 + width, x0 + width, x0 - width)
-	    # yy <- c(y0[j], y0[j], y1[j], y1[j])
-	    
-	    # parallelogram geometry: x-coords are fixed, y-coords vary based on horizon sequence
-	    # y0 are bottom depths
-	    # y1 are top depths
-	    #
-	    # vertex order: ll, lc, lr, ur, uc, ul
-	    x.ll <- x0 - width
-	    x.lr <- x0 + width
-	    x.ur <- x0 + width
-	    x.ul <- x0 - width
-	    # mid-points for horizon topography
-	    x.lc <- x0
-	    x.uc <- x0
-	    xx <- c(x.ll, x.lc, x.lr, x.ur, x.uc, x.ul)
-	    
-	    # make polygons based on 1st, 2nd to j-1, last horizon
-	    
-	    # yikes! https://github.com/ncss-tech/aqp/issues/189
-	    # this doesn't work when: 
-	    # *  there is only a single horizon [now fixed below]
-	    # *  there is a "gap" between adjacent horizons (overlapOrGap = TRUE)
-	    
-	    if(j == 1 & nh == 1){
-	      # first horizon of a single-horizon profile
-	      y.ll <- pmin(y0[j] + hdo[j], y0[j]) # cannot exceed y.ll of next horizon
-	      y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
-	      y.ur <- y1[j] # use upper-right verbatim
-	      y.ul <- y1[j] # use upper-left verbatim
-	      # mid-points for horizon topography
-	      y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
-	      y.uc <- y1[j] # use upper-center verbatim
-	      
-	      # assemble y-coords and plot first horizon polygon, without borders
-	      yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-	      polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
-	      
-	    } else if(j == 1 & nh > 1){
-	      # first horizon, of several
-	      y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
-	      y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
-	      y.ur <- y1[j] # use upper-right verbatim
-	      y.ul <- y1[j] # use upper-left verbatim
-	      # mid-points for horizon topography
-	      y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
-	      y.uc <- y1[j] # use upper-center verbatim
-	      
-	      # assemble y-coords and plot first horizon polygon, without borders
-	      yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-	      polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
-	      
-	    } else if(j < nh) {
-	      # next horizons, except bottom-most horizon
-	      y.ll <- pmin(y0[j] + hdo[j], y0[j+1], na.rm = TRUE) # cannot exceed y.ll of next horizon
-	      y.lr <- pmax(y0[j] - hdo[j], y0[j-1]) # cannot exceed y.lr of previous horizon
-	      y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
-	      y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed y.ul of previous horizon
-	      # mid-points for horizon topography
-	      y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
-	      y.uc <- pmax(y1[j] - hto[j-1], y1[j-1]) # cannot exceed top depth of previous horizon
-	      
-	      # assemble y-coords and plot next n horizon's polygon, without borders
-	      yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-	      polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
-	      ## debugging
-	      # polygon(x = xx, y = yy, col=NA, border='red', density=this_profile_density[j], lwd=lwd, lty=lty)
-	      
-	    } else {
-	      # last horizon
-	      y.ll <- y0[j] # user lower-left verbatim
-	      y.lr <- y0[j] # use lower-right verbatim
-	      y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
-	      y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed lower depth of profile
-	      # mid-points for horizon topography
-	      y.lc <- y0[j] # truncate to lower depth of last horizon
-	      y.uc <- pmax(y1[j] - hto[j-1], y1[j-1]) # cannot exceed top of previous horizon
-	      
-	      # https://github.com/ncss-tech/aqp/issues/189
-	      # NA lower horizon depths ll, lc, lr to all be NA
-	      # this will break divide.hz functionality
-	      
-	      # assemble y-coords and plot last horizon polygon, without borders
-	      yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-	      polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
-	      
-	    }
-	    
-	    # save current iteration of coordinates and line type
-	    coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
-	    
-	  } # end looping over horizons
-	  
-	  
-	  ## note: have to do this after the polygons, otherwise the lines are over-plotted
-	  # optionally divide horizons with line segment
-	  if(divide.hz) {
-	    
-	    # iterate over coordinates
-	    # coordinate logic: ll, lc, lr, ur, uc, ul
-	    # line style included
-	    lapply(coords.list, function(seg) {
-	      # lower left -> lower center
-	      segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd=lwd, lty=seg$lty, lend=1)
-	      # lower center -> lower right
-	      segments(x0 = seg$xx[2], y0 = seg$yy[2], x1 = seg$xx[3], y1 = seg$yy[3], lwd=lwd, lty=seg$lty, lend=1)
-	    })
-	  }
-	  
-	  ## final rectangle border around entire profile
-	  # note: when manually specifying n > length(SPC)
-	  # x0,x1,y0,y1 are NA
-	  # using `na.rm = TRUE` in the following calls to min() or max() will generate warnings
-	  suppressWarnings(
-	    rect(
-	      xleft = x0 - width, 
-	      ybottom = min(y1, na.rm = TRUE), 
-	      xright = x0 + width, 
-	      ytop = max(y0, na.rm = TRUE), 
-	      lwd = lwd, 
-	      lty = lty, 
-	      lend = 2
-	    )
-	  )
-	  
-	  
-	  
-	  # # standard rectangles
-	  # # default are filled rectangles
-	  # if(divide.hz) {
-	  #   # classic approach: use rectangles, fully vectorized and automatic recycling over arguments
-	  #   # x0 and width have length of 1
-	  #   rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
-	  # 
-	  # } else {
-	  #   # otherwise, we only draw the left, top, right borders, and then fill
-	  # 
-	  #   rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-	  #   segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
-	  #   segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
-	  #   segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
-	  #   segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
-	  # }
-	  # 
-	  
-	  ##################################
-	  ## horizon designations (names) ##
-	  ##################################
-	  switch(
-	    name.style,
-	    'right-center' = {
-	      # standard annotation
-	      # offset from right-hand side
-	      hzname.x0 <- x0 + width + (one.char.width * 0.1)
-	      # horizon depth mid-point
-	      hzname.y0 <- ( y1 + y0 ) / 2
-	      # left-hand / vertical center justification
-	      hzname.adj <- c(0, 0.5)
-	      hzname.col <- par('fg') # use whatever the foreground color is
-	    },
-	    'left-center' = {
-	      # inset from left-hand side
-	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
-	      # horizon depth mid-point
-	      hzname.y0 <- ( y1 + y0 ) / 2
-	      # left-hand / vertical center justification
-	      hzname.adj <- c(0, 0.5)
-	      # high-contrast labels
-	      hzname.col <- invertLabelColor(this_profile_colors)
-	    },
-	    'left-top' = {
-	      # soilweb style
-	      # inset from upper-left corner
-	      hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
-	      hzname.y0 <- y1
-	      # left-hand / vertical top justification
-	      hzname.adj <- c(0, 1)
-	      # high-contrast labels
-	      hzname.col <- invertLabelColor(this_profile_colors)
-	    },
-	    'center-center' = {
-	      # inset from upper-left corner
-	      hzname.x0 <- x0
-	      hzname.y0 <- (y1 + y0) / 2
-	      # center just
-	      hzname.adj <- c(0.5, 0.5)
-	      # high-contrast labels
-	      hzname.col <- invertLabelColor(this_profile_colors)
-	    },
-	    'center-top' = {
-	      # inset from upper-left corner
-	      hzname.x0 <- x0
-	      hzname.y0 <- y1
-	      # center just
-	      hzname.adj <- c(0.5, 1)
-	      # high-contrast labels
-	      hzname.col <- invertLabelColor(this_profile_colors)
-	    }
-
-	  )
-
-
-	  ########################################
-	  
-	  ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)
-	  # print(hzname.y0)
-	  # 
-	  ## eval reasonable limit
-	  # determine cex.names influence
-	  # tr <- abs(strheight('W')) * 1.5 * (cex.names * 1)
-	  # 
-	  # print(tr)
-	  # print(findOverlap(hzname.y0, thresh = tr))
-	  # print(fixOverlap(hzname.y0, thresh = tr))
-	  # 
-	  ## this requires way more evaluation
-	  ## may require element-level bounds
-	  ## requires min(deviation-from-original)
-	  ## adj should be based on tr
-	  #
-	  # hzname.y0 <- fixOverlap(hzname.y0, thresh = tr, adj = 1)
-
-	  ########################################
-	  
-	  # optionally shrink the size of names if they are longer than a given thresh
-	  if(shrink) {
-	    
-	    # identify affected horizon names
-		  names.wide <- which(nchar(this_profile_names) > shrink.cutoff)
-		  cex.names.shrunk <- rep(cex.names, length(this_profile_data[[tcol]]))
-		  cex.names.shrunk[names.wide] <- cex.names.shrunk[names.wide] * 0.8
-		  
-		  # optionally shrink based on horizon thickness threshold
-		  if(!is.null(shrink.thin)) {
-		    
-		    # identify affected horizon names
-		    names.thin <- which((y0 - y1) < shrink.thin)
-		    # only apply shrinkage to those not already shrunk above
-		    names.thin <- names.thin[which(! names.thin %in% names.wide)]
-		    # apply shrinkage
-		    cex.names.shrunk[names.thin] <- cex.names.shrunk[names.thin] * 0.8
-		  }
-		  
-		  # add horizon names
-		  text(
-		    x = hzname.x0, 
-		    y = hzname.y0, 
-		    labels = this_profile_names, 
-		    cex = cex.names.shrunk, 
-		    adj = hzname.adj, 
-		    col = hzname.col
-		  )
-		  
-		  } else {
-	    # standard printing of names, all at the same size
-	    text(
-	      x = hzname.x0, 
-	      y = hzname.y0, 
-	      labels = this_profile_names, 
-	      cex = cex.names, 
-	      adj = hzname.adj, 
-	      col = hzname.col
-	    )
-		    
-		  }
-
-
-	  ##################################
-	  ## horizon depth annotation     ##
-	  ##################################
-	  if(hz.depths) {
-	    ## TODO: consider use of unicode arrow markers
-	    # hzd.txt <- sprintf('\u25c4%s', this_profile_data[, tcol])
-	    # text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0, font = 1)
+    
+    # get vectors of horizon boundaries, and scale
+    y0 <- (this_profile_data[[bcol]] * scaling.factor) + y.offset[i]
+    y1 <- (this_profile_data[[tcol]] * scaling.factor) + y.offset[i]
+    
+    
+    
+    ##############################
+    ## create horizons + colors ##
+    ##############################
+    
+    # horizons are parallelograms
+    # offset described by hz.distinctness.offset
+    # horizontal mid-points described by hz.topography.offset
+    
+    # iterate over horizons
+    nh <- length(y0)
+    
+    # extract current distinctness offset
+    hdo <- this_profile_data[[hz.distinctness.offset]]
+    
+    # apply sketch-wide scaling factor
+    hdo <- hdo * scaling.factor
+    
+    # extract current topography offset
+    hto <- this_profile_data[[hz.topography.offset]]
+    
+    # apply sketch-wide scaling factor
+    hto <- hto * scaling.factor
+    
+    # extract current set of line types if provided
+    if(! is.null(hz.boundary.lty)) {
+      ht.lty <- this_profile_data[, hz.boundary.lty]
+    } else {
+      # use constant value
+      ht.lty <- rep(1, times=nh)
+    }
+    
+    
+    
+    # empty list for storing y-coordinates
+    coords.list <- vector(mode = 'list', length = nh)
+    
+    # iterate over horizons
+    for(j in 1:nh) {
       
-	    ## TODO: consider top-align for first horizon depth and bottom-align for last
-	    
-	    # all horizon top depths
-	    hzd.txt <- this_profile_data[[tcol]]
-	    text(x = x0 + width, y = y1, labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
-	    
-	    # last horizon bottom depth
-	    hzd.txt <- this_profile_data[[bcol]][nh]
-	    text(x = x0 + width, y = y0[nh], labels = hzd.txt, cex = cex.names * 0.9, pos = 4, offset = 0.1, font = 1)
-	  }
-
-
-
-	  #################
-	  ## profile IDs ##
-	  #################
-	  
-	  # profile is placed relative to the y-offset vector
-	  
-	  if(print.id) {
-			# optionally abbreviate
-			if(abbr)
-		  	id.text <- abbreviate(as.character(this_profile_label), abbr.cutoff)
-
-			# no abbreviations of th ID
-			else
-	  		id.text <- as.character(this_profile_label)
-
-			# add the text: according to style
-			if(id.style == 'top')
-				text(x0, y.offset[i], id.text, pos=3, font=font.id, cex=cex.id)
-
-			if(id.style == 'side')
-				text(x0 - (width+0.025), y.offset[i], id.text, adj=c(1, -width), font=font.id, cex=cex.id, srt=90)
-			}
-	  
-	  } # end looping over profiles
-
-
+      ## rectangle for reference
+      # xx <- c(x0 - width, x0 + width, x0 + width, x0 - width)
+      # yy <- c(y0[j], y0[j], y1[j], y1[j])
+      
+      # parallelogram geometry: x-coords are fixed, y-coords vary based on horizon sequence
+      # y0 are bottom depths
+      # y1 are top depths
+      #
+      # vertex order: ll, lc, lr, ur, uc, ul
+      x.ll <- x0 - width
+      x.lr <- x0 + width
+      x.ur <- x0 + width
+      x.ul <- x0 - width
+      # mid-points for horizon topography
+      x.lc <- x0
+      x.uc <- x0
+      xx <- c(x.ll, x.lc, x.lr, x.ur, x.uc, x.ul)
+      
+      # make polygons based on 1st, 2nd to j-1, last horizon
+      
+      # yikes! https://github.com/ncss-tech/aqp/issues/189
+      # this doesn't work when: 
+      # *  there is only a single horizon [now fixed below]
+      # *  there is a "gap" between adjacent horizons (overlapOrGap = TRUE)
+      
+      if(j == 1 & nh == 1){
+        # first horizon of a single-horizon profile
+        y.ll <- pmin(y0[j] + hdo[j], y0[j]) # cannot exceed y.ll of next horizon
+        y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
+        y.ur <- y1[j] # use upper-right verbatim
+        y.ul <- y1[j] # use upper-left verbatim
+        # mid-points for horizon topography
+        y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
+        y.uc <- y1[j] # use upper-center verbatim
+        
+        # assemble y-coords and plot first horizon polygon, without borders
+        yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        
+      } else if(j == 1 & nh > 1){
+        # first horizon, of several
+        y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
+        y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
+        y.ur <- y1[j] # use upper-right verbatim
+        y.ul <- y1[j] # use upper-left verbatim
+        # mid-points for horizon topography
+        y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
+        y.uc <- y1[j] # use upper-center verbatim
+        
+        # assemble y-coords and plot first horizon polygon, without borders
+        yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        
+      } else if(j < nh) {
+        # next horizons, except bottom-most horizon
+        y.ll <- pmin(y0[j] + hdo[j], y0[j+1], na.rm = TRUE) # cannot exceed y.ll of next horizon
+        y.lr <- pmax(y0[j] - hdo[j], y0[j-1]) # cannot exceed y.lr of previous horizon
+        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
+        y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed y.ul of previous horizon
+        # mid-points for horizon topography
+        y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
+        y.uc <- pmax(y1[j] - hto[j-1], y1[j-1]) # cannot exceed top depth of previous horizon
+        
+        # assemble y-coords and plot next n horizon's polygon, without borders
+        yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        ## debugging
+        # polygon(x = xx, y = yy, col=NA, border='red', density=this_profile_density[j], lwd=lwd, lty=lty)
+        
+      } else {
+        # last horizon
+        y.ll <- y0[j] # user lower-left verbatim
+        y.lr <- y0[j] # use lower-right verbatim
+        y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
+        y.ul <- pmin(y1[j] + hdo[j-1], y0[j]) # cannot exceed lower depth of profile
+        # mid-points for horizon topography
+        y.lc <- y0[j] # truncate to lower depth of last horizon
+        y.uc <- pmax(y1[j] - hto[j-1], y1[j-1]) # cannot exceed top of previous horizon
+        
+        # https://github.com/ncss-tech/aqp/issues/189
+        # NA lower horizon depths ll, lc, lr to all be NA
+        # this will break divide.hz functionality
+        
+        # assemble y-coords and plot last horizon polygon, without borders
+        yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        
+      }
+      
+      # save current iteration of coordinates and line type
+      coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
+      
+    } # end looping over horizons
+    
+    
+    ## note: have to do this after the polygons, otherwise the lines are over-plotted
+    # optionally divide horizons with line segment
+    if(divide.hz) {
+      
+      # iterate over coordinates
+      # coordinate logic: ll, lc, lr, ur, uc, ul
+      # line style included
+      lapply(coords.list, function(seg) {
+        # lower left -> lower center
+        segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd=lwd, lty=seg$lty, lend=1)
+        # lower center -> lower right
+        segments(x0 = seg$xx[2], y0 = seg$yy[2], x1 = seg$xx[3], y1 = seg$yy[3], lwd=lwd, lty=seg$lty, lend=1)
+      })
+    }
+    
+    ## final rectangle border around entire profile
+    # note: when manually specifying n > length(SPC)
+    # x0,x1,y0,y1 are NA
+    # using `na.rm = TRUE` in the following calls to min() or max() will generate warnings
+    suppressWarnings(
+      rect(
+        xleft = x0 - width, 
+        ybottom = min(y1, na.rm = TRUE), 
+        xright = x0 + width, 
+        ytop = max(y0, na.rm = TRUE), 
+        lwd = lwd, 
+        lty = lty, 
+        lend = 2
+      )
+    )
+    
+    
+    
+    # # standard rectangles
+    # # default are filled rectangles
+    # if(divide.hz) {
+    #   # classic approach: use rectangles, fully vectorized and automatic recycling over arguments
+    #   # x0 and width have length of 1
+    #   rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
+    # 
+    # } else {
+    #   # otherwise, we only draw the left, top, right borders, and then fill
+    # 
+    #   rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
+    #   segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
+    #   segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
+    #   segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
+    #   segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
+    # }
+    # 
+    
+    ##################################
+    ## horizon designations (names) ##
+    ##################################
+    switch(
+      name.style,
+      'right-center' = {
+        # standard annotation
+        # offset from right-hand side
+        hzname.x0 <- x0 + width + (one.char.width * 0.1)
+        # horizon depth mid-point
+        hzname.y0 <- ( y1 + y0 ) / 2
+        # left-hand / vertical center justification
+        hzname.adj <- c(0, 0.5)
+        hzname.col <- par('fg') # use whatever the foreground color is
+      },
+      'left-center' = {
+        # inset from left-hand side
+        hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
+        # horizon depth mid-point
+        hzname.y0 <- ( y1 + y0 ) / 2
+        # left-hand / vertical center justification
+        hzname.adj <- c(0, 0.5)
+        # high-contrast labels
+        hzname.col <- invertLabelColor(this_profile_colors)
+      },
+      'left-top' = {
+        # soilweb style
+        # inset from upper-left corner
+        hzname.x0 <- (x0 - width) + (one.char.width * 0.1)
+        hzname.y0 <- y1
+        # left-hand / vertical top justification
+        hzname.adj <- c(0, 1)
+        # high-contrast labels
+        hzname.col <- invertLabelColor(this_profile_colors)
+      },
+      'center-center' = {
+        # inset from upper-left corner
+        hzname.x0 <- x0
+        hzname.y0 <- (y1 + y0) / 2
+        # center just
+        hzname.adj <- c(0.5, 0.5)
+        # high-contrast labels
+        hzname.col <- invertLabelColor(this_profile_colors)
+      },
+      'center-top' = {
+        # inset from upper-left corner
+        hzname.x0 <- x0
+        hzname.y0 <- y1
+        # center just
+        hzname.adj <- c(0.5, 1)
+        # high-contrast labels
+        hzname.col <- invertLabelColor(this_profile_colors)
+      }
+      
+    )
+    
+    
+    ########################################
+    
+    ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)
+    # print(hzname.y0)
+    # 
+    ## eval reasonable limit
+    # determine cex.names influence
+    # tr <- abs(strheight('W')) * 1.5 * (cex.names * 1)
+    # 
+    # print(tr)
+    # print(findOverlap(hzname.y0, thresh = tr))
+    # print(fixOverlap(hzname.y0, thresh = tr))
+    # 
+    ## this requires way more evaluation
+    ## may require element-level bounds
+    ## requires min(deviation-from-original)
+    ## adj should be based on tr
+    #
+    # hzname.y0 <- fixOverlap(hzname.y0, thresh = tr, adj = 1)
+    
+    ########################################
+    
+    # optionally shrink the size of names if they are longer than a given thresh
+    if(shrink) {
+      
+      # identify affected horizon names
+      names.wide <- which(nchar(this_profile_names) > shrink.cutoff)
+      cex.names.shrunk <- rep(cex.names, length(this_profile_data[[tcol]]))
+      cex.names.shrunk[names.wide] <- cex.names.shrunk[names.wide] * 0.8
+      
+      # optionally shrink based on horizon thickness threshold
+      if(!is.null(shrink.thin)) {
+        
+        # identify affected horizon names
+        names.thin <- which((y0 - y1) < shrink.thin)
+        # only apply shrinkage to those not already shrunk above
+        names.thin <- names.thin[which(! names.thin %in% names.wide)]
+        # apply shrinkage
+        cex.names.shrunk[names.thin] <- cex.names.shrunk[names.thin] * 0.8
+      }
+      
+      # add horizon names
+      text(
+        x = hzname.x0, 
+        y = hzname.y0, 
+        labels = this_profile_names, 
+        cex = cex.names.shrunk, 
+        adj = hzname.adj, 
+        col = hzname.col
+      )
+      
+    } else {
+      # standard printing of names, all at the same size
+      text(
+        x = hzname.x0, 
+        y = hzname.y0, 
+        labels = this_profile_names, 
+        cex = cex.names, 
+        adj = hzname.adj, 
+        col = hzname.col
+      )
+      
+    }
+    
+    
+    ##################################
+    ## horizon depth annotation     ##
+    ##################################
+    if(hz.depths) {
+      
+      # requires a fudge factor when specifying align argument
+      hz.depths.xfuzz <- strwidth('0') / 3
+      
+      # top-horizon, top depth: vertical alignment is "top"
+      hzd.txt <- this_profile_data[[tcol]][1]
+      text(
+        x = x0 + width + hz.depths.xfuzz, 
+        y = y1[1], 
+        labels = hzd.txt, 
+        cex = cex.names * 0.9, 
+        font = 1, 
+        adj = c(0, 1)
+      )
+      
+      # in-between horizons, if present: vertical align is "center"
+      if(nh > 1) {
+        hzd.txt <- this_profile_data[[tcol]][-1]
+        text(
+          x = x0 + width + hz.depths.xfuzz, 
+          y = y1[-1], 
+          labels = hzd.txt, 
+          cex = cex.names * 0.9, 
+          font = 1, 
+          adj = c(0, 0.5)
+        ) 
+      }
+      
+      # bottom-horizon, bottom depth: vertical alignment is "bottom"
+      hzd.txt <- this_profile_data[[bcol]][nh]
+      text(
+        x = x0 + width + hz.depths.xfuzz, 
+        y = y0[nh], 
+        labels = hzd.txt, 
+        cex = cex.names * 0.9, 
+        font = 1, 
+        adj = c(0, 0)
+      )
+    }
+    
+    
+    
+    #################
+    ## profile IDs ##
+    #################
+    
+    # profile is placed relative to the y-offset vector
+    
+    if(print.id) {
+      # optionally abbreviate
+      if(abbr)
+        id.text <- abbreviate(as.character(this_profile_label), abbr.cutoff)
+      
+      # no abbreviations of th ID
+      else
+        id.text <- as.character(this_profile_label)
+      
+      # add the text: according to style
+      if(id.style == 'top')
+        text(x0, y.offset[i], id.text, pos=3, font=font.id, cex=cex.id)
+      
+      if(id.style == 'side')
+        text(x0 - (width+0.025), y.offset[i], id.text, adj=c(1, -width), font=font.id, cex=cex.id, srt=90)
+    }
+    
+  } # end looping over profiles
+  
+  
   ################
   ## depth axis ##
   ################
@@ -1005,22 +1030,22 @@ plotSPC <- function(
   if(plot.depth.axis) {
     depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset[1]
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
-
+    
     axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
   }
-
-
-
+  
+  
+  
   ######################
   ## alternate labels ##
   ######################
   if(!missing(alt.label)) {
-  	al <- site(x)[[alt.label]]
-  	al <- al[plot.order]
-  	text(x = 1:length(x), y = y.offset + 3, labels = al, srt = 90, adj = c(1, 0.5), font = 2, cex = cex.id * 1.5, col = alt.label.col)
+    al <- site(x)[[alt.label]]
+    al <- al[plot.order]
+    text(x = 1:length(x), y = y.offset + 3, labels = al, srt = 90, adj = c(1, 0.5), font = 2, cex = cex.id * 1.5, col = alt.label.col)
   }
-
-
+  
+  
   ########################################
   ## legend for thematic profile sketch ##
   ########################################
@@ -1082,9 +1107,9 @@ plotSPC <- function(
   }
   
   
-
-
-  }
+  
+  
+}
 
 #' generic plot method for \code{SoilProfileCollection} objects
 #' @name plot
