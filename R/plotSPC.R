@@ -966,6 +966,9 @@ plotSPC <- function(
         adj = c(0, 1)
       )
       
+      ## TODO: add optional adjustments here using fixOverlap()
+      ##       https://github.com/ncss-tech/aqp/issues/240
+      
       # in-between horizons, if present: vertical align is "center"
       if(nh > 1) {
         hzd.txt <- this_profile_data[[tcol]][-1]
