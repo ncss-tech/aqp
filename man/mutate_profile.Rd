@@ -5,18 +5,23 @@
 \alias{mutate_profile,SoilProfileCollection-method}
 \title{Transform a SPC (by profile) with a set of expressions}
 \usage{
-mutate_profile(object, ...)
+mutate_profile(object, ..., horizon_level = NULL)
 }
 \arguments{
 \item{object}{A SoilProfileCollection}
 
 \item{...}{A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{mutate_profile(hzdept = max(hzdept) - hzdept)}}
+
+\item{horizon_level}{logical. If \code{TRUE} results of expressions are added to the SoilProfileCollection's horizon slot, if \code{FALSE} the results are added to the site slot. If \code{NULL} (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the \emph{first} and \emph{last} profile in the collection.}
 }
 \value{
 A SoilProfileCollection.
 }
 \description{
-\code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{mutate}, which is applied to pooled values (across individuals) in a collection/group.
+\code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{mutate}, which is applied to all values in a collection, regardless of which profile they came from.
+}
+\details{
+If the length an expression's result matches the number of horizons, the result is stored as a horizon-level variable. If the result has length 1, it is stored as a site-level variable. In the ambiguous case where the first and last profile have only \emph{one} horizon, the results are stored in the horizon slot by default. To force results into site slot use \code{horizon_level = FALSE}.
 }
 \author{
 Andrew G. Brown.

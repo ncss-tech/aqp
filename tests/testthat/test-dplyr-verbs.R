@@ -19,6 +19,13 @@ test_that("mutate & mutate_profile", {
   # degenerate case where most profiles have only one horizon
   (res2 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness)))
   expect_true(length(res2$rt2) == nrow(res2))
+  
+  # forcing horizon level result into site produces an error
+  expect_error({res3 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness), horizon_level = FALSE)})
+  
+  # however forcing a site-level result into horizon works
+  res4 <- mutate_profile(trunc(res, 0, 5), rt3 = sum((bottom - top) / sum(thickness)), horizon_level = TRUE)
+  expect_equal(length(res4$rt3), nrow(res4))
 })
 
 test_that("group_by & summarize", {
