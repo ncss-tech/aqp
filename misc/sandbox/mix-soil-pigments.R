@@ -4,6 +4,12 @@
 # remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
 # remotes::install_github("ncss-tech/sharpshootR", dependencies=FALSE, upgrade=FALSE, build=FALSE)
 
+## Shiny App Idea:
+# * specifiy colors in Munsell notation manually
+# * select colors from `soil_minerals` sample data
+# * specify weights with sliders
+# * dynamically create mixture viz
+
 library(aqp)
 library(sharpshootR)
 
@@ -24,10 +30,11 @@ names(chips) <- sprintf(
   plural, 
   c('quartz', 'hematite', 'humus')
 )
-  
+
+# plot 1  
 plotColorMixture(chips, w = w, mixingMethod = 'exact')
 
-
+# plot 2
 colorMixtureVenn(chips, w = w, mixingMethod = 'exact', names = TRUE)
 
 
