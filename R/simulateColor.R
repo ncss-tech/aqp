@@ -166,7 +166,13 @@
 #'
 simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC = NULL) {
   
+  # safely select method
   method <- match.arg(method)
+  
+  # if parameters is a single-depth list, add one more level
+  if(!inherits(parameters[[1]], 'list')) {
+    parameters <- list(parameters)
+  }
   
   res <- switch(
     method,

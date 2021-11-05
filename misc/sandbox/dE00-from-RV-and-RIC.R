@@ -159,3 +159,7 @@ sort(table(s), decreasing = TRUE)
 
 
 contrastChart(m = rv, hues = c('2.5YR', '5YR'), thres = ric.dE00)
+
+
+colorChart(s[[1]])
+
