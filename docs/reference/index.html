@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -134,6 +134,12 @@
       
       
       <tr>
+        
+        <td>
+          <p><code><a href="accumulateDepths.html">accumulateDepths()</a></code> </p>
+        </td>
+        <td><p>Accumulate horizon depths, and reflect reversed depths, relative to new datum</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="addBracket.html">addBracket()</a></code> </p>
@@ -594,21 +600,9 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="guessHzAttrName.html">guessHzAttrName()</a></code> </p>
+          <p><code><a href="guessHzAttrName.html">guessHzAttrName()</a></code> <code><a href="guessHzAttrName.html">guessHzDesgnName()</a></code> <code><a href="guessHzAttrName.html">guessHzTexClName()</a></code> </p>
         </td>
-        <td><p>Guess Arbitrary Horizon Column Name</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="guessHzDesgnName.html">guessHzDesgnName()</a></code> </p>
-        </td>
-        <td><p>Guess Horizon Designation Column Name</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="guessHzTexClName.html">guessHzTexClName()</a></code> </p>
-        </td>
-        <td><p>Guess Horizon Texture Class Column Name</p></td>
+        <td><p>Guess Horizon Slot Column Names</p></td>
       </tr><tr>
         
         <td>
@@ -662,7 +656,13 @@ a vertical distance specified</p></td>
         <td>
           <p><code><a href="huePosition.html">huePosition()</a></code> </p>
         </td>
-        <td><p>Munsell Hue Position for Soil Color Description</p></td>
+        <td><p>Munsell Hue Reference and Position Searching</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="huePositionCircle.html">huePositionCircle()</a></code> </p>
+        </td>
+        <td><p>Visual Description of Munsell Hue Ordering</p></td>
       </tr><tr>
         
         <td>
@@ -690,15 +690,9 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="hzdesgnname-set.html">`hzdesgnname&lt;-`()</a></code> </p>
+          <p><code><a href="hzdesgnname.html">hzdesgnname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="hzdesgnname.html">`hzdesgnname&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Set horizon designation column name</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hzdesgnname.html">hzdesgnname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get horizon designation column name</p></td>
+        <td><p>Get or Set Horizon Designation Column Name</p></td>
       </tr><tr>
         
         <td>
@@ -720,15 +714,9 @@ a vertical distance specified</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="hztexclname-set.html">`hztexclname&lt;-`()</a></code> </p>
+          <p><code><a href="hztexclname.html">hztexclname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="hztexclname.html">`hztexclname&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Set horizon texture class column name</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hztexclname.html">hztexclname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get horizon texture class column name</p></td>
+        <td><p>Get or Set Horizon Texture Class Column Name</p></td>
       </tr><tr>
         
         <td>
@@ -843,6 +831,12 @@ a vertical distance specified</p></td>
           <p><code><a href="munsell2spc-SoilProfileCollection-method.html">munsell2spc(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Merge Munsell Hue, Value, Chroma converted to sRGB &amp; CIELAB into a SoilProfileCollection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="munsellHuePosition.html">munsellHuePosition</a></code> </p>
+        </td>
+        <td><p>Munsell Hue Position Reference</p></td>
       </tr><tr>
         
         <td>
@@ -1057,12 +1051,6 @@ Class</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="show.html">show(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>SoilProfileCollection show method</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="sierraTransect.html">sierraTransect</a></code> </p>
         </td>
         <td><p>Soil Physical and Chemical Data Related to Studies in the Sierra Nevada
@@ -1238,7 +1226,7 @@ Mountains, CA, USA.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="subset-SoilProfileCollection-method.html">subset(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="subset-SoilProfileCollection-method.html">filter(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="subset-SoilProfileCollection-method.html">subset(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Subset a SoilProfileCollection with logical expressions</p></td>
       </tr><tr>

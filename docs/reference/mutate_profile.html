@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Transform a SPC (by profile) with a set of expressions — mutate_profile" />
-<meta property="og:description" content="mutate_profile() is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from mutate, which is applied to pooled values (across individuals) in a collection/group." />
+<meta property="og:description" content="mutate_profile() is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from mutate, which is applied to all values in a collection, regardless of which profile they came from." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -117,10 +117,10 @@
     </div>
 
     <div class="ref-description">
-    <p><code>mutate_profile()</code> is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from <code>mutate</code>, which is applied to pooled values (across individuals) in a collection/group.</p>
+    <p><code>mutate_profile()</code> is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from <code>mutate</code>, which is applied to all values in a collection, regardless of which profile they came from.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mutate_profile</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mutate_profile</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span>, horizon_level <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,11 +133,18 @@
       <th>...</th>
       <td><p>A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g <code>mutate_profile(hzdept = max(hzdept) - hzdept)</code></p></td>
     </tr>
+    <tr>
+      <th>horizon_level</th>
+      <td><p>logical. If <code>TRUE</code> results of expressions are added to the SoilProfileCollection's horizon slot, if <code>FALSE</code> the results are added to the site slot. If <code>NULL</code> (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the <em>first</em> and <em>last</em> profile in the collection.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A SoilProfileCollection.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If the length an expression's result matches the number of horizons, the result is stored as a horizon-level variable. If the result has length 1, it is stored as a site-level variable. In the ambiguous case where the first and last profile have only <em>one</em> horizon, the results are stored in the horizon slot by default. To force results into site slot use <code>horizon_level = FALSE</code>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown.</p>

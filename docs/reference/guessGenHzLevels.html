@@ -73,7 +73,7 @@ generalized horizon labels using the median of horizon depth mid-points." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -160,43 +160,47 @@ the proper ordering of these labels based on median horizon depth mid-point.</p>
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># load some example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package<span class='op'>=</span><span class='st'>'aqp'</span><span class='op'>)</span>
-
-<span class='co'># upgrade to SoilProfileCollection</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># generalize horizon names</span>
-<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span>
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>, <span class='va'>n</span>, <span class='va'>p</span><span class='op'>)</span>
-
-<span class='co'># note: levels are in the order in which originally defined:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "O"        "A"        "B"        "C"        "not-used"</div><div class='input'>
-<span class='co'># generalize horizons by depth slice</span>
-<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span>
-<span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>top</span>, <span class='st'>' cm'</span><span class='op'>)</span>
-<span class='co'># not a factor</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; NULL</div><div class='input'>
-<span class='co'># the proper ordering of these new labels can be guessed from horizon depths</span>
-<span class='fu'>guessGenHzLevels</span><span class='op'>(</span><span class='va'>s</span>, <span class='st'>'slice'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $levels
-#&gt; [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"
-#&gt; 
-#&gt; $median.depths
-#&gt;   5 cm  10 cm  15 cm  25 cm  50 cm 100 cm 150 cm 
-#&gt;    5.5   10.5   15.5   25.5   50.5  100.5  150.5 
-#&gt; </div><div class='input'>
-<span class='co'># convert to factor, and set proper order</span>
-<span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span>, levels<span class='op'>=</span><span class='fu'>guessGenHzLevels</span><span class='op'>(</span><span class='va'>s</span>, <span class='st'>'slice'</span><span class='op'>)</span><span class='op'>$</span><span class='va'>levels</span><span class='op'>)</span>
-
-<span class='co'># that is better</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># load some example data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package<span class='op'>=</span><span class='st'>'aqp'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># upgrade to SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># generalize horizon names</span></span>
+<span class='r-in'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>, <span class='va'>n</span>, <span class='va'>p</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># note: levels are in the order in which originally defined:</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>genhz</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "O"        "A"        "B"        "C"        "not-used"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># generalize horizons by depth slice</span></span>
+<span class='r-in'><span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>top</span>, <span class='st'>' cm'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># not a factor</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># the proper ordering of these new labels can be guessed from horizon depths</span></span>
+<span class='r-in'><span class='fu'>guessGenHzLevels</span><span class='op'>(</span><span class='va'>s</span>, <span class='st'>'slice'</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $levels</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $median.depths</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5 cm  10 cm  15 cm  25 cm  50 cm 100 cm 150 cm </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5.5   10.5   15.5   25.5   50.5  100.5  150.5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># convert to factor, and set proper order</span></span>
+<span class='r-in'><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span>, levels<span class='op'>=</span><span class='fu'>guessGenHzLevels</span><span class='op'>(</span><span class='va'>s</span>, <span class='st'>'slice'</span><span class='op'>)</span><span class='op'>$</span><span class='va'>levels</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># that is better</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>slice</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "5 cm"   "10 cm"  "15 cm"  "25 cm"  "50 cm"  "100 cm" "150 cm"</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

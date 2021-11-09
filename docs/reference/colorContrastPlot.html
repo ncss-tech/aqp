@@ -73,7 +73,7 @@ delta-E00." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -202,22 +202,24 @@ delta-E00</p>
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># two sets of colors to compare</span>
-<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 6/3'</span>, <span class='st'>'7.5YR 3/3'</span>, <span class='st'>'10YR 2/2'</span>, <span class='st'>'7.5YR 3/4'</span><span class='op'>)</span>
-<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span><span class='op'>)</span>
-
-<span class='co'># contrast metrics</span>
-<span class='fu'><a href='colorContrast.html'>colorContrast</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          m1        m2 dH dV dC      dE00        cc
-#&gt; 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent
-#&gt; 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint
-#&gt; 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint
-#&gt; 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.054654  Distinct</div><div class='input'>
-<span class='co'># graphical display</span>
-<span class='fu'>colorContrastPlot</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span>
-</div><div class='img'><img src='colorContrastPlot-1.png' alt='' width='768' height='475' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># two sets of colors to compare</span></span>
+<span class='r-in'><span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR 6/3'</span>, <span class='st'>'7.5YR 3/3'</span>, <span class='st'>'10YR 2/2'</span>, <span class='st'>'7.5YR 3/4'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR 3/4'</span>, <span class='st'>'7.5YR 4/4'</span>, <span class='st'>'2.5YR 2/2'</span>, <span class='st'>'7.5YR 6/3'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># contrast metrics</span></span>
+<span class='r-in'><span class='fu'><a href='colorContrast.html'>colorContrast</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.054654  Distinct</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># graphical display</span></span>
+<span class='r-in'><span class='fu'>colorContrastPlot</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='colorContrastPlot-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

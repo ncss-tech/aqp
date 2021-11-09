@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -151,27 +151,30 @@
     <div class='dont-index'><p><code><a href='hurst.redness.html'>hurst.redness</a></code> <code><a href='barron.torrent.redness.LAB.html'>barron.torrent.redness.LAB</a></code> <code><a href='buntley.westin.index.html'>buntley.westin.index</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Andrew G. Brown.</p>
+    <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-
-<span class='co'># promote sp1 data to SoilProfileCollection</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># move site data</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
-
-<span class='co'># compute indices</span>
-<span class='co'># merged into `sp1` with left-join on hzidname(sp1)</span>
-<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'>horizonColorIndices</span><span class='op'>(</span><span class='va'>sp1</span>, hue<span class='op'>=</span><span class='st'>"hue"</span>, value<span class='op'>=</span><span class='st'>"value"</span>, chroma<span class='op'>=</span><span class='st'>"chroma"</span><span class='op'>)</span>
-
-<span class='co'># visualize</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span>, color<span class='op'>=</span><span class='st'>'hurst_redness'</span><span class='op'>)</span>
-</div><div class='img'><img src='horizonColorIndices-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span>, color<span class='op'>=</span><span class='st'>'barron_torrent_redness'</span><span class='op'>)</span>
-</div><div class='img'><img src='horizonColorIndices-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span>, color<span class='op'>=</span><span class='st'>'buntley_westin'</span><span class='op'>)</span>
-</div><div class='img'><img src='horizonColorIndices-3.png' alt='' width='768' height='475' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># promote sp1 data to SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># move site data</span></span>
+<span class='r-in'><span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># compute indices</span></span>
+<span class='r-in'><span class='co'># merged into `sp1` with left-join on hzidname(sp1)</span></span>
+<span class='r-in'><span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'>horizonColorIndices</span><span class='op'>(</span><span class='va'>sp1</span>, hue<span class='op'>=</span><span class='st'>"hue"</span>, value<span class='op'>=</span><span class='st'>"value"</span>, chroma<span class='op'>=</span><span class='st'>"chroma"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># visualize</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span>, color<span class='op'>=</span><span class='st'>'hurst_redness'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='horizonColorIndices-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span>, color<span class='op'>=</span><span class='st'>'barron_torrent_redness'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='horizonColorIndices-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span>, color<span class='op'>=</span><span class='st'>'buntley_westin'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='horizonColorIndices-3.png' alt='' width='768' height='475' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

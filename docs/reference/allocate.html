@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -202,128 +202,152 @@
 <p>Soil Survey Staff, 2014. Keys to Soil Taxonomy, 12th ed. USDA-Natural Resources Conservation Service, Washington, D.C.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># Salt Severity</span>
-<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>
-  EC  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.75</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>8</span>, <span class='fl'>15</span>, <span class='fl'>30</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.05</span>, <span class='fl'>0.05</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-  pH  <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>8.1</span>, <span class='fl'>8.2</span>, <span class='fl'>8.3</span>, <span class='fl'>8.4</span>, <span class='fl'>8.5</span>, <span class='fl'>8.6</span><span class='op'>)</span>,
-  ESP <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>30</span>, <span class='fl'>50</span>, <span class='fl'>70</span>, <span class='fl'>100</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.1</span>, <span class='op'>-</span><span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>test</span><span class='op'>$</span><span class='va'>ss</span>      <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='fu'>allocate</span><span class='op'>(</span>EC <span class='op'>=</span> <span class='va'>EC</span>, pH <span class='op'>=</span> <span class='va'>pH</span>, ESP <span class='op'>=</span> <span class='va'>ESP</span>, to <span class='op'>=</span> <span class='st'>"FAO Salt Severity"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>ss</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt;            nonsaline      slightly saline    moderately saline 
-#&gt;                   40                   30                   30 
-#&gt;      strongly saline very strongly saline     extremely saline 
-#&gt;                   70                   90                  150 
-#&gt;         saline-sodic       slightly sodic     moderately sodic 
-#&gt;                  780                  352                  198 
-#&gt;       strongly sodic  very strongly sodic 
-#&gt;                  198                  330 </div><div class='input'>
-<span class='co'># Black Soil Category 1 (BS1)</span>
-<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>
-  dept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>50</span>, <span class='fl'>10</span><span class='op'>)</span>,
-  OC   <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.6</span>, <span class='fl'>1.2</span>, <span class='fl'>20</span>, <span class='fl'>40</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.05</span>, <span class='fl'>0.05</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-  chroma_moist  <span class='op'>=</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>4</span>,
-  value_moist   <span class='op'>=</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>4</span>,
-  value_dry     <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>6</span>,
-  thickness     <span class='op'>=</span> <span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span>,
-  CEC           <span class='op'>=</span> <span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span>,
-  BS            <span class='op'>=</span> <span class='fl'>49</span><span class='op'>:</span><span class='fl'>51</span>,
-  tropical      <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>test</span><span class='op'>$</span><span class='va'>pedon_id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>21870</span>, each <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span>
-<span class='va'>test</span><span class='op'>$</span><span class='va'>depb</span>     <span class='op'>&lt;-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>dept</span> <span class='op'>+</span> <span class='fl'>10</span>
-
-<span class='va'>bs1</span> <span class='op'>&lt;-</span> <span class='fu'>allocate</span><span class='op'>(</span><span class='va'>test</span>, pedonid <span class='op'>=</span> <span class='st'>"pedon_id"</span>, hztop <span class='op'>=</span> <span class='st'>"dept"</span>, hzbot <span class='op'>=</span> <span class='st'>"depb"</span>, 
-                OC <span class='op'>=</span> <span class='st'>"OC"</span>, m_chroma <span class='op'>=</span> <span class='st'>"chroma_moist"</span>, m_value <span class='op'>=</span> <span class='st'>"value_moist"</span>, 
-                d_value <span class='op'>=</span> <span class='st'>"value_dry"</span>, CEC <span class='op'>=</span> <span class='st'>"CEC"</span>, BS <span class='op'>=</span> <span class='st'>"BS"</span>, 
-                to <span class='op'>=</span> <span class='st'>"FAO Black Soil"</span>
-<span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span>BS1 <span class='op'>=</span> <span class='va'>bs1</span><span class='op'>$</span><span class='va'>BS1</span>, BS2 <span class='op'>=</span> <span class='va'>bs1</span><span class='op'>$</span><span class='va'>BS2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        BS2
-#&gt; BS1     FALSE  TRUE
-#&gt;   FALSE 20142   960
-#&gt;   TRUE      0   768</div><div class='input'>
-
-<span class='co'># SoilProfileCollection interface</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='hzdesgnname,SoilProfileCollection-method.html'>hzdesgnname</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>'name'</span>
-
-<span class='co'># fake base saturation</span>
-<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>$</span><span class='va'>bs</span> <span class='op'>&lt;-</span> <span class='fl'>75</span>
-
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-</div><div class='img'><img src='allocate-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='fu'>allocate</span><span class='op'>(</span>
-  <span class='va'>sp3</span>, 
-  to <span class='op'>=</span> <span class='st'>'FAO Black Soil'</span>, 
-  OC <span class='op'>=</span> <span class='st'>'tc'</span>, 
-  m_chroma <span class='op'>=</span> <span class='st'>'chroma'</span>, 
-  m_value <span class='op'>=</span> <span class='st'>'value'</span>, 
-  d_value <span class='op'>=</span> <span class='st'>'value'</span>,
-  CEC <span class='op'>=</span> <span class='st'>'cec'</span>,
-  BS <span class='op'>=</span> <span class='st'>'bs'</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;    peiid   BS1   BS2
-#&gt; 1      1 FALSE FALSE
-#&gt; 2     10 FALSE FALSE
-#&gt; 3      2 FALSE FALSE
-#&gt; 4      3 FALSE FALSE
-#&gt; 5      4 FALSE FALSE
-#&gt; 6      5 FALSE FALSE
-#&gt; 7      6 FALSE FALSE
-#&gt; 8      7 FALSE FALSE
-#&gt; 9      8 FALSE FALSE
-#&gt; 10     9 FALSE FALSE</div><div class='input'>
-<span class='co'># make a copy and edit horizon values</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>sp3</span>
-<span class='va'>x</span><span class='op'>$</span><span class='va'>value</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
-<span class='va'>x</span><span class='op'>$</span><span class='va'>chroma</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
-<span class='va'>x</span><span class='op'>$</span><span class='va'>cec</span> <span class='op'>&lt;-</span> <span class='fl'>26</span>
-<span class='va'>x</span><span class='op'>$</span><span class='va'>tc</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
-
-<span class='va'>x</span><span class='op'>$</span><span class='va'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>hue</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>value</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>chroma</span><span class='op'>)</span>
-
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='img'><img src='allocate-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='fu'>allocate</span><span class='op'>(</span>
-  <span class='va'>x</span>, 
-  to <span class='op'>=</span> <span class='st'>'FAO Black Soil'</span>, 
-  OC <span class='op'>=</span> <span class='st'>'tc'</span>, 
-  m_chroma <span class='op'>=</span> <span class='st'>'chroma'</span>, 
-  m_value <span class='op'>=</span> <span class='st'>'value'</span>, 
-  d_value <span class='op'>=</span> <span class='st'>'value'</span>,
-  CEC <span class='op'>=</span> <span class='st'>'cec'</span>,
-  BS <span class='op'>=</span> <span class='st'>'bs'</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;    peiid  BS1  BS2
-#&gt; 1      1 TRUE TRUE
-#&gt; 2     10 TRUE TRUE
-#&gt; 3      2 TRUE TRUE
-#&gt; 4      3 TRUE TRUE
-#&gt; 5      4 TRUE TRUE
-#&gt; 6      5 TRUE TRUE
-#&gt; 7      6 TRUE TRUE
-#&gt; 8      7 TRUE TRUE
-#&gt; 9      8 TRUE TRUE
-#&gt; 10     9 TRUE TRUE</div><div class='input'>
-
-<span class='co'># Soil Taxonomy Diagnostic Features</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>allocate</span><span class='op'>(</span>object <span class='op'>=</span> <span class='va'>sp1</span>, pedonid <span class='op'>=</span> <span class='st'>"id"</span>, hzname <span class='op'>=</span> <span class='st'>"name"</span>, 
-               hzdept <span class='op'>=</span> <span class='st'>"top"</span>, hzdepb <span class='op'>=</span> <span class='st'>"bot"</span>, texture <span class='op'>=</span> <span class='st'>"texture"</span>, 
-               to <span class='op'>=</span> <span class='st'>"ST Diagnostic Features"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing lithic contact</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing paralithic contact</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing densic contact</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing petrocalcic horizon</span></div><div class='output co'>#&gt; <span class='warning'>Warning: '-' not meaningful for factors</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing calcic horizon</span></div><div class='output co'>#&gt; <span class='warning'>Warning: '-' not meaningful for factors</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing secondary carbonates</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span></div><div class='output co'>#&gt; <span class='message'>guessing mollic epipedon</span></div><div class='output co'>#&gt; <span class='warning'>Warning: '-' not meaningful for factors</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>featdept</span> <span class='op'>~</span> <span class='va'>id</span>, data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>summary</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     id featdept.Min. featdept.1st Qu. featdept.Median featdept.Mean
-#&gt; 1 P001            89               89              89            89
-#&gt;   featdept.3rd Qu. featdept.Max.
-#&gt; 1               89            89</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># Salt Severity</span></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span></span>
+<span class='r-in'>  EC  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.75</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>8</span>, <span class='fl'>15</span>, <span class='fl'>30</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.05</span>, <span class='fl'>0.05</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  pH  <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>8.1</span>, <span class='fl'>8.2</span>, <span class='fl'>8.3</span>, <span class='fl'>8.4</span>, <span class='fl'>8.5</span>, <span class='fl'>8.6</span><span class='op'>)</span>,</span>
+<span class='r-in'>  ESP <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>30</span>, <span class='fl'>50</span>, <span class='fl'>70</span>, <span class='fl'>100</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.1</span>, <span class='op'>-</span><span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test</span><span class='op'>$</span><span class='va'>ss</span>      <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='fu'>allocate</span><span class='op'>(</span>EC <span class='op'>=</span> <span class='va'>EC</span>, pH <span class='op'>=</span> <span class='va'>pH</span>, ESP <span class='op'>=</span> <span class='va'>ESP</span>, to <span class='op'>=</span> <span class='st'>"FAO Salt Severity"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>ss</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            nonsaline      slightly saline    moderately saline </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   40                   30                   30 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      strongly saline very strongly saline     extremely saline </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   70                   90                  150 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         saline-sodic       slightly sodic     moderately sodic </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  780                  352                  198 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       strongly sodic  very strongly sodic </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  198                  330 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Black Soil Category 1 (BS1)</span></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span></span>
+<span class='r-in'>  dept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>50</span>, <span class='fl'>10</span><span class='op'>)</span>,</span>
+<span class='r-in'>  OC   <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.6</span>, <span class='fl'>1.2</span>, <span class='fl'>20</span>, <span class='fl'>40</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.05</span>, <span class='fl'>0.05</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  chroma_moist  <span class='op'>=</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>4</span>,</span>
+<span class='r-in'>  value_moist   <span class='op'>=</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>4</span>,</span>
+<span class='r-in'>  value_dry     <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>6</span>,</span>
+<span class='r-in'>  thickness     <span class='op'>=</span> <span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span>,</span>
+<span class='r-in'>  CEC           <span class='op'>=</span> <span class='fl'>24</span><span class='op'>:</span><span class='fl'>26</span>,</span>
+<span class='r-in'>  BS            <span class='op'>=</span> <span class='fl'>49</span><span class='op'>:</span><span class='fl'>51</span>,</span>
+<span class='r-in'>  tropical      <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test</span><span class='op'>$</span><span class='va'>pedon_id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>21870</span>, each <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test</span><span class='op'>$</span><span class='va'>depb</span>     <span class='op'>&lt;-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>dept</span> <span class='op'>+</span> <span class='fl'>10</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>bs1</span> <span class='op'>&lt;-</span> <span class='fu'>allocate</span><span class='op'>(</span><span class='va'>test</span>, pedonid <span class='op'>=</span> <span class='st'>"pedon_id"</span>, hztop <span class='op'>=</span> <span class='st'>"dept"</span>, hzbot <span class='op'>=</span> <span class='st'>"depb"</span>, </span>
+<span class='r-in'>                OC <span class='op'>=</span> <span class='st'>"OC"</span>, m_chroma <span class='op'>=</span> <span class='st'>"chroma_moist"</span>, m_value <span class='op'>=</span> <span class='st'>"value_moist"</span>, </span>
+<span class='r-in'>                d_value <span class='op'>=</span> <span class='st'>"value_dry"</span>, CEC <span class='op'>=</span> <span class='st'>"CEC"</span>, BS <span class='op'>=</span> <span class='st'>"BS"</span>, </span>
+<span class='r-in'>                to <span class='op'>=</span> <span class='st'>"FAO Black Soil"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span>BS1 <span class='op'>=</span> <span class='va'>bs1</span><span class='op'>$</span><span class='va'>BS1</span>, BS2 <span class='op'>=</span> <span class='va'>bs1</span><span class='op'>$</span><span class='va'>BS2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        BS2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BS1     FALSE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   FALSE 20142   960</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   TRUE      0   768</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># SoilProfileCollection interface</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'><span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>'name'</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># fake base saturation</span></span>
+<span class='r-in'><span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>$</span><span class='va'>bs</span> <span class='op'>&lt;-</span> <span class='fl'>75</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='allocate-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>allocate</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>sp3</span>, </span>
+<span class='r-in'>  to <span class='op'>=</span> <span class='st'>'FAO Black Soil'</span>, </span>
+<span class='r-in'>  OC <span class='op'>=</span> <span class='st'>'tc'</span>, </span>
+<span class='r-in'>  m_chroma <span class='op'>=</span> <span class='st'>'chroma'</span>, </span>
+<span class='r-in'>  m_value <span class='op'>=</span> <span class='st'>'value'</span>, </span>
+<span class='r-in'>  d_value <span class='op'>=</span> <span class='st'>'value'</span>,</span>
+<span class='r-in'>  CEC <span class='op'>=</span> <span class='st'>'cec'</span>,</span>
+<span class='r-in'>  BS <span class='op'>=</span> <span class='st'>'bs'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    peiid   BS1   BS2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      1 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     10 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      2 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      3 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      4 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      5 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7      6 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8      7 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9      8 FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     9 FALSE FALSE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># make a copy and edit horizon values</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>sp3</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='va'>value</span> <span class='op'>&lt;-</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='va'>chroma</span> <span class='op'>&lt;-</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='va'>cec</span> <span class='op'>&lt;-</span> <span class='fl'>26</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='va'>tc</span> <span class='op'>&lt;-</span> <span class='fl'>2</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='va'>soil_color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>hue</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>value</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>chroma</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='allocate-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>allocate</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>x</span>, </span>
+<span class='r-in'>  to <span class='op'>=</span> <span class='st'>'FAO Black Soil'</span>, </span>
+<span class='r-in'>  OC <span class='op'>=</span> <span class='st'>'tc'</span>, </span>
+<span class='r-in'>  m_chroma <span class='op'>=</span> <span class='st'>'chroma'</span>, </span>
+<span class='r-in'>  m_value <span class='op'>=</span> <span class='st'>'value'</span>, </span>
+<span class='r-in'>  d_value <span class='op'>=</span> <span class='st'>'value'</span>,</span>
+<span class='r-in'>  CEC <span class='op'>=</span> <span class='st'>'cec'</span>,</span>
+<span class='r-in'>  BS <span class='op'>=</span> <span class='st'>'bs'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    peiid  BS1  BS2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      1 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     10 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      2 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      3 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      4 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      5 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7      6 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8      7 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9      8 TRUE TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     9 TRUE TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Soil Taxonomy Diagnostic Features</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>allocate</span><span class='op'>(</span>object <span class='op'>=</span> <span class='va'>sp1</span>, pedonid <span class='op'>=</span> <span class='st'>"id"</span>, hzname <span class='op'>=</span> <span class='st'>"name"</span>, </span>
+<span class='r-in'>               hzdept <span class='op'>=</span> <span class='st'>"top"</span>, hzdepb <span class='op'>=</span> <span class='st'>"bot"</span>, texture <span class='op'>=</span> <span class='st'>"texture"</span>, </span>
+<span class='r-in'>               to <span class='op'>=</span> <span class='st'>"ST Diagnostic Features"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing lithic contact</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing paralithic contact</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing densic contact</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing petrocalcic horizon</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>'-' not meaningful for factors</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing calcic horizon</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>'-' not meaningful for factors</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing secondary carbonates</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>the minimum dataset includes: pedonid, hzdept, hzdepb, and hzname; if texture or rupreblkcem are missing the resulting diagnostic features are inferred from the available information</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing mollic epipedon</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>'-' not meaningful for factors</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>featdept</span> <span class='op'>~</span> <span class='va'>id</span>, data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>summary</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     id featdept.Min. featdept.1st Qu. featdept.Median featdept.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 P001            89               89              89            89</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   featdept.3rd Qu. featdept.Max.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1               89            89</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

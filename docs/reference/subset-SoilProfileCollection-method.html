@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -117,14 +117,11 @@
     </div>
 
     <div class="ref-description">
-    <p><code>subset()</code> is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the <code>tidyverse</code>. This greatly simplifies access to site and horizon-level variable compared to <code>subset.default</code>, as <code><a href='$.html'>`$`</a></code> or <code><a href='[[.html'>`[[`</a></code> methods are not needed.</p>
+    <p><code>subset()</code> is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the <code>tidyverse</code>. This greatly simplifies access to site and horizon-level variable compared to <code>subset.default</code>, as <code>`$`</code> or <code>`[[`</code> methods are not needed.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>subset</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, greedy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>filter</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, .preserve <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+<span class='fu'>subset</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, greedy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,14 +138,6 @@
       <th>greedy</th>
       <td><p>Use "greedy" matching for combination of site and horizon level matches? <code>greedy = TRUE</code> is the union, whereas <code>greedy = FALSE</code> (default) is the intersection (of site and horizon matches).</p></td>
     </tr>
-    <tr>
-      <th>.data</th>
-      <td><p>A SoilProfileCollection (<code>filter</code> method only, in lieu of <code>x</code>)</p></td>
-    </tr>
-    <tr>
-      <th>.preserve</th>
-      <td><p>Relevant when the .data input is grouped. Not (yet) implemented for <code>SoilProfileCollection</code> objects.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -156,10 +145,10 @@
     <p>A SoilProfileCollection.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>In base R, the method that performs extraction based on a set of expressions is <code>subset</code>, so this is the "default" name in the AQP package. The <code>filter</code> method is defined in the base R <code>stats</code> package for linear filtering of time series. If you need to use the base method after loading aqp, you can use <code><a href='https://rdrr.io/r/stats/filter.html'>stats::filter</a></code> to be explicit about which function you want. We mirror the dplyr package in over-loading the <code>filter</code> method with a generic that allows for arbitrary number of vectors (<code>...</code>) to be included in the "filter," which means you may also need to use <code>aqp::filter</code> or <code><a href='https://dplyr.tidyverse.org/reference/filter.html'>dplyr::filter</a></code> as appropriate depending on the order you load packages or your conflict resolution option settings.</p>
+    <p>In base R, the method that performs extraction based on a set of expressions is <code>subset</code>, so this is the "default" name in the AQP package. The <code>filter</code> method is defined in the base R <code>stats</code> package for linear filtering of time series.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>filter</code></p></div>
+    <div class='dont-index'><p><code><a href='https://rdrr.io/r/stats/filter.html'>filter</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown.</p>

@@ -73,7 +73,7 @@ groups." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -277,353 +277,363 @@ Biometrika 69:635-640.</p>
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'>##</span>
-<span class='co'>## basic examples</span>
-<span class='co'>##</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span>
-
-<span class='co'># load sample data, upgrade to SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># aggregate entire collection with two different segment sizes</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>prop</span><span class='op'>)</span>
-<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>prop</span>, slab.structure<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>
-
-<span class='co'># check output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 'data.frame':	240 obs. of  10 variables:
-#&gt;  $ variable             : Factor w/ 1 level "prop": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ all.profiles         : num  1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ p.q5                 : num  0 0 0 0.4 0.4 0.4 1.4 1.4 1.4 1.4 ...
-#&gt;  $ p.q25                : num  0 0 1 1 1 3 3 3 3 3 ...
-#&gt;  $ p.q50                : num  3 3 3 5 5 5 5 5 5 5 ...
-#&gt;  $ p.q75                : num  8 8 7 7 7 7 7 7 7 7 ...
-#&gt;  $ p.q95                : num  13.6 13.6 14 14 14 16.4 16.4 16.4 16.4 16.4 ...
-#&gt;  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...
-#&gt;  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...
-#&gt;  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'>
-<span class='co'># stack into long format</span>
-<span class='va'>ab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/make.groups.html'>make.groups</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span>
-<span class='va'>ab</span><span class='op'>$</span><span class='va'>which</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>which</span>, levels<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'a'</span>,<span class='st'>'b'</span><span class='op'>)</span>,
-labels<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'1-cm Interval'</span>, <span class='st'>'5-cm Interval'</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># plot median and IQR</span>
-<span class='co'># custom plotting function for uncertainty viz.</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>which</span>, data<span class='op'>=</span><span class='va'>ab</span>, ylab<span class='op'>=</span><span class='st'>'Depth'</span>,
-       xlab<span class='op'>=</span><span class='st'>'median bounded by 25th and 75th percentiles'</span>,
-       lower<span class='op'>=</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>p.q75</span>, ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,
-       panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,
-       prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
-       cf<span class='op'>=</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,
-       alpha<span class='op'>=</span><span class='fl'>0.5</span>,
-       layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-       <span class='op'>)</span>
-</div><div class='img'><img src='slab-methods-1.png' alt='' width='768' height='475' /></div><div class='input'>
-
-<span class='co'>###</span>
-<span class='co'>### re-arrange data / no aggregation</span>
-<span class='co'>###</span>
-
-<span class='co'># load sample data, upgrade to SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'>
-<span class='co'># arrange data by ID</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm <span class='op'>=</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>prop</span>, slab.fun<span class='op'>=</span><span class='va'>identity</span><span class='op'>)</span>
-
-<span class='co'># convert id to a factor for plotting</span>
-<span class='va'>a</span><span class='op'>$</span><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span>
-
-<span class='co'># check output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 'data.frame':	2160 obs. of  6 variables:
-#&gt;  $ variable             : Factor w/ 1 level "prop": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ id                   : Factor w/ 9 levels "P001","P002",..: 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ value                : int  13 13 7 7 7 7 7 7 7 7 ...
-#&gt;  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...
-#&gt;  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...
-#&gt;  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'>
-<span class='co'># plot via step function</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>id</span>, data<span class='op'>=</span><span class='va'>a</span>, ylab<span class='op'>=</span><span class='st'>'Depth'</span>,
-       ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, as.table<span class='op'>=</span><span class='cn'>TRUE</span>,
-       panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,
-       prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
-       scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='slab-methods-2.png' alt='' width='768' height='475' /></div><div class='input'>
-
-<span class='co'>##</span>
-<span class='co'>## categorical variable example</span>
-<span class='co'>##</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'>
-<span class='co'># normalize horizon names: result is a factor</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span>
-  <span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>,
-  new <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span>,
-  pat <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span><span class='op'>)</span>
-  <span class='op'>)</span>
-
-<span class='co'># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>name</span>, cpm<span class='op'>=</span><span class='fl'>1</span>, slab.structure<span class='op'>=</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>)</span>
-
-<span class='co'># convert wide -&gt; long for plotting</span>
-<span class='co'># result is a data.table</span>
-<span class='co'># genhz factor levels are set by order in `measure.vars`</span>
-<span class='va'>a.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>,
-  id.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'top'</span>,<span class='st'>'bottom'</span><span class='op'>)</span>,
-  measure.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span>,
-  <span class='op'>)</span>
-
-
-<span class='co'># plot horizon type proportions using panels</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>variable</span>,
-       data <span class='op'>=</span> <span class='va'>a.long</span>, subset<span class='op'>=</span><span class='va'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,
-       col <span class='op'>=</span> <span class='fl'>1</span>, lwd <span class='op'>=</span> <span class='fl'>2</span>,
-       xlab <span class='op'>=</span> <span class='st'>'Class Probability'</span>,
-       ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
-       strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,
-       scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>,
-       ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, type<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'S'</span>,<span class='st'>'g'</span><span class='op'>)</span>,
-       horizontal <span class='op'>=</span> <span class='cn'>TRUE</span>, layout <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>,<span class='fl'>1</span><span class='op'>)</span>
-       <span class='op'>)</span>
-</div><div class='img'><img src='slab-methods-3.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># again, this time using groups</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span>,
-       data <span class='op'>=</span> <span class='va'>a.long</span>,
-       groups <span class='op'>=</span> <span class='va'>variable</span>,
-       subset <span class='op'>=</span> <span class='va'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,
-       ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,
-       type <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'S'</span>,<span class='st'>'g'</span><span class='op'>)</span>,
-       horizontal <span class='op'>=</span> <span class='cn'>TRUE</span>,
-       asp <span class='op'>=</span> <span class='fl'>2</span>,
-       lwd <span class='op'>=</span> <span class='fl'>2</span>,
-       auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-         lines <span class='op'>=</span> <span class='cn'>TRUE</span>,
-         points <span class='op'>=</span> <span class='cn'>FALSE</span>,
-         cex <span class='op'>=</span> <span class='fl'>0.8</span>,
-         columns <span class='op'>=</span> <span class='fl'>1</span>,
-         space <span class='op'>=</span> <span class='st'>'right'</span>
-       <span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='slab-methods-4.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># adjust probability to size of collection, from 0-150</span>
-<span class='va'>a.1</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>name</span>, cpm <span class='op'>=</span> <span class='fl'>2</span>, slab.structure <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>)</span>
-
-<span class='co'># convert wide -&gt; long for plotting</span>
-<span class='co'># result is a data.table</span>
-<span class='co'># genhz factor levels are set by order in `measure.vars`</span>
-<span class='va'>a.1.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a.1</span><span class='op'>)</span>,
-  id.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'top'</span>,<span class='st'>'bottom'</span><span class='op'>)</span>,
-  measure.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># combine aggregation from `cpm` modes 1 and 2</span>
-<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/make.groups.html'>make.groups</a></span><span class='op'>(</span>cmp.mode.1 <span class='op'>=</span> <span class='va'>a.long</span>, cmp.mode.2 <span class='op'>=</span> <span class='va'>a.1.long</span><span class='op'>)</span>
-
-<span class='co'># plot horizon type proportions</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>variable</span>,
-       groups <span class='op'>=</span> <span class='va'>which</span>,
-       data <span class='op'>=</span> <span class='va'>g</span>, subset <span class='op'>=</span> <span class='va'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,
-       ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>240</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,
-       type <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'S'</span>,<span class='st'>'g'</span><span class='op'>)</span>,
-       horizontal <span class='op'>=</span> <span class='cn'>TRUE</span>,
-       layout <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>,<span class='fl'>1</span><span class='op'>)</span>,
-       auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span>, columns <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-       par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
-       scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>,
-       xlab <span class='op'>=</span> <span class='st'>'Class Probability'</span>,
-       ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
-       strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='slab-methods-5.png' alt='' width='768' height='475' /></div><div class='input'>
-
-<span class='co'># apply slice-wise evaluation of max probability, and assign ML-horizon at each slice</span>
-<span class='op'>(</span><span class='va'>gen.hz.ml</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get.ml.hz.html'>get.ml.hz</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   hz top bottom confidence pseudo.brier    mean.H
-#&gt; 1  O   0      2         37    0.3950617 0.9910761
-#&gt; 2  A   2     32         75    0.1547325 0.7922828
-#&gt; 3  B  32    145         57    0.3574667 1.0813045
-#&gt; 4  C 145    150         71    0.1250000 0.8112781</div><div class='input'>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'>##</span>
-<span class='co'>## HD quantile estimator</span>
-<span class='co'>##</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://ncss-tech.github.io/AQP/'>soilDB</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span>
-
-<span class='co'># sample data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'loafercreek'</span>, package <span class='op'>=</span> <span class='st'>'soilDB'</span><span class='op'>)</span>
-
-<span class='co'># defaul slab.fun wraps stats::quantile()</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>loafercreek</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>total_frags_pct</span> <span class='op'>+</span> <span class='va'>clay</span><span class='op'>)</span>
-
-<span class='co'># use HD quantile estimator from Hmisc package instead</span>
-<span class='va'>a.HD</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>loafercreek</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>total_frags_pct</span> <span class='op'>+</span> <span class='va'>clay</span>, slab.fun <span class='op'>=</span> <span class='fu'>aqp</span><span class='fu'>:::</span><span class='va'>.slab.fun.numeric.HD</span><span class='op'>)</span>
-
-<span class='co'># combine</span>
-<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/make.groups.html'>make.groups</a></span><span class='op'>(</span>standard<span class='op'>=</span><span class='va'>a</span>, HD<span class='op'>=</span><span class='va'>a.HD</span><span class='op'>)</span>
-
-<span class='co'># note differences</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/histogram.html'>densityplot</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>g</span>, groups<span class='op'>=</span><span class='va'>which</span>,
-            scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span>, alternating<span class='op'>=</span><span class='fl'>3</span>, tick.number<span class='op'>=</span><span class='fl'>10</span>, y<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>rot<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>,
-            xlab<span class='op'>=</span><span class='st'>'50th Percentile'</span>, pch<span class='op'>=</span><span class='cn'>NA</span>, main<span class='op'>=</span><span class='st'>'Loafercreek'</span>,
-            auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, points<span class='op'>=</span><span class='cn'>FALSE</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>,
-            par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># differences are slight but important</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
-  <span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>g</span>, groups<span class='op'>=</span><span class='va'>which</span>,
-  xlab<span class='op'>=</span><span class='st'>'Value'</span>, ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>,
-  asp<span class='op'>=</span><span class='fl'>1.5</span>, main<span class='op'>=</span><span class='st'>'Loafercreek'</span>,
-  lower<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>p.q75</span>,
-  sync.colors<span class='op'>=</span><span class='cn'>TRUE</span>, alpha<span class='op'>=</span><span class='fl'>0.25</span>, cf<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,
-  ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>115</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span><span class='op'>)</span><span class='op'>)</span>,
-  par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-  strip<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,
-  panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,
-  prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
-  auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'>##</span>
-<span class='co'>## multivariate examples</span>
-<span class='co'>##</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-
-<span class='co'># add new grouping factor</span>
-<span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='st'>'group 1'</span>
-<span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>5</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>'group 2'</span>
-<span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span><span class='op'>)</span>
-
-<span class='co'># upgrade to SPC</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
-
-<span class='co'># custom 'slab' function, returning mean +/- 1SD</span>
-<span class='va'>mean.and.sd</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>values</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>values</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='va'>upper</span> <span class='op'>&lt;-</span> <span class='va'>m</span> <span class='op'>+</span> <span class='va'>s</span>
-  <span class='va'>lower</span> <span class='op'>&lt;-</span> <span class='va'>m</span> <span class='op'>-</span> <span class='va'>s</span>
-  <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span>mean<span class='op'>=</span><span class='va'>m</span>, lower<span class='op'>=</span><span class='va'>lower</span>, upper<span class='op'>=</span><span class='va'>upper</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># aggregate several variables at once, within 'group'</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>, fm <span class='op'>=</span> <span class='va'>group</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>, slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span><span class='op'>)</span>
-
-<span class='co'># check the results:</span>
-<span class='co'># note that 'group' is the column containing group labels</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
-  <span class='va'>top</span> <span class='op'>~</span> <span class='va'>mean</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>a</span>, groups<span class='op'>=</span><span class='va'>group</span>,
-  lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>lower</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>upper</span>,
-  sync.colors<span class='op'>=</span><span class='cn'>TRUE</span>, alpha<span class='op'>=</span><span class='fl'>0.5</span>,
-  cf <span class='op'>=</span> <span class='va'>a</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,
-  xlab <span class='op'>=</span> <span class='st'>'Mean Bounded by +/- 1SD'</span>,
-  ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
-  ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>125</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>,
-  scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span><span class='op'>)</span><span class='op'>)</span>,
-  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-  panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,
-  prepanel <span class='op'>=</span> <span class='va'>prepanel.depth_function</span>,
-  strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,
-  auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-
-<span class='co'># compare a single profile to the group-level aggregate values</span>
-<span class='va'>a.1</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>, fm <span class='op'>=</span> <span class='va'>group</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>, slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span><span class='op'>)</span>
-
-<span class='co'># manually update the group column</span>
-<span class='va'>a.1</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='st'>'profile 1'</span>
-
-<span class='co'># combine into a single data.frame:</span>
-<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>a.1</span><span class='op'>)</span>
-
-<span class='co'># plot with customized line styles</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span>
-  <span class='va'>top</span> <span class='op'>~</span> <span class='va'>mean</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>g</span>, groups<span class='op'>=</span><span class='va'>group</span>, subscripts<span class='op'>=</span><span class='cn'>TRUE</span>,
-  lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>lower</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>upper</span>, ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>125</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,
-  layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span><span class='op'>)</span><span class='op'>)</span>,
-  xlab <span class='op'>=</span> <span class='st'>'Mean Bounded by +/- 1SD'</span>,
-  ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,
-  panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,
-  prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,
-  sync.colors <span class='op'>=</span> <span class='cn'>TRUE</span>, alpha <span class='op'>=</span> <span class='fl'>0.25</span>,
-  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-      col <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'orange'</span>, <span class='st'>'royalblue'</span>, <span class='st'>'black'</span><span class='op'>)</span>,
-      lwd <span class='op'>=</span> <span class='fl'>2</span>, lty <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span>
-    <span class='op'>)</span>
-  <span class='op'>)</span>,
-  strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,
-  auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>3</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-
-
-
-<span class='co'>## again, this time for a user-defined slab from 40-60 cm</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>,
-          fm <span class='op'>=</span> <span class='va'>group</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>,
-          slab.structure <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>,<span class='fl'>60</span><span class='op'>)</span>,
-          slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span>
-<span class='op'>)</span>
-
-<span class='co'># now we have weighted average properties (within the defined slab)</span>
-<span class='co'># for each variable, and each group</span>
-<span class='co'># convert long -&gt; wide</span>
-<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html'>dcast</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>,
-  formula <span class='op'>=</span> <span class='va'>group</span> <span class='op'>+</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span> <span class='op'>~</span> <span class='va'>variable</span>,
-  value.var <span class='op'>=</span> <span class='st'>'mean'</span>
-<span class='op'>)</span>
-
-<span class='co'>## this time, compute the weighted mean of selected properties, by profile ID</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>,
-          fm <span class='op'>=</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>,
-          slab.structure <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>,<span class='fl'>60</span><span class='op'>)</span>,
-          slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span>
-<span class='op'>)</span>
-
-<span class='co'># convert long -&gt; wide</span>
-<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html'>dcast</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>,
-  formula <span class='op'>=</span> <span class='va'>id</span> <span class='op'>+</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span> <span class='op'>~</span> <span class='va'>variable</span>,
-  value.var <span class='op'>=</span> <span class='st'>'mean'</span>
-<span class='op'>)</span>
-
-
-<span class='co'>## aggregate the entire collection, using default slab function (hdquantile)</span>
-<span class='co'>## note the missing left-hand side of the formula</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span><span class='op'>)</span>
-
-
-
-<span class='co'>## weighted-aggregation -- NOT YET IMPLEMENTED --</span>
-<span class='co'># load sample data, upgrade to SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># generate pretend weights as site-level attribute</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10101</span><span class='op'>)</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>site.wts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span>n<span class='op'>=</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>, min<span class='op'>=</span><span class='fl'>20</span>, max<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>## basic examples</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># load sample data, upgrade to SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># aggregate entire collection with two different segment sizes</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>prop</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>prop</span>, slab.structure<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># check output</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'data.frame':	240 obs. of  10 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ variable             : Factor w/ 1 level "prop": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ all.profiles         : num  1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ p.q5                 : num  0 0 0 0.4 0.4 0.4 1.4 1.4 1.4 1.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ p.q25                : num  0 0 1 1 1 3 3 3 3 3 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ p.q50                : num  3 3 3 5 5 5 5 5 5 5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ p.q75                : num  8 8 7 7 7 7 7 7 7 7 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ p.q95                : num  13.6 13.6 14 14 14 16.4 16.4 16.4 16.4 16.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># stack into long format</span></span>
+<span class='r-in'><span class='va'>ab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/make.groups.html'>make.groups</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ab</span><span class='op'>$</span><span class='va'>which</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>which</span>, levels<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'a'</span>,<span class='st'>'b'</span><span class='op'>)</span>,</span>
+<span class='r-in'>labels<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'1-cm Interval'</span>, <span class='st'>'5-cm Interval'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot median and IQR</span></span>
+<span class='r-in'><span class='co'># custom plotting function for uncertainty viz.</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>which</span>, data<span class='op'>=</span><span class='va'>ab</span>, ylab<span class='op'>=</span><span class='st'>'Depth'</span>,</span>
+<span class='r-in'>       xlab<span class='op'>=</span><span class='st'>'median bounded by 25th and 75th percentiles'</span>,</span>
+<span class='r-in'>       lower<span class='op'>=</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>p.q75</span>, ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,</span>
+<span class='r-in'>       panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,</span>
+<span class='r-in'>       prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,</span>
+<span class='r-in'>       cf<span class='op'>=</span><span class='va'>ab</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,</span>
+<span class='r-in'>       alpha<span class='op'>=</span><span class='fl'>0.5</span>,</span>
+<span class='r-in'>       layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>       <span class='op'>)</span></span>
+<span class='r-plt img'><img src='slab-methods-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>###</span></span>
+<span class='r-in'><span class='co'>### re-arrange data / no aggregation</span></span>
+<span class='r-in'><span class='co'>###</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># load sample data, upgrade to SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This is already a SoilProfileCollection-class object, doing nothing.</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># arrange data by ID</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm <span class='op'>=</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>prop</span>, slab.fun<span class='op'>=</span><span class='va'>identity</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># convert id to a factor for plotting</span></span>
+<span class='r-in'><span class='va'>a</span><span class='op'>$</span><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># check output</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'data.frame':	2160 obs. of  6 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ variable             : Factor w/ 1 level "prop": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ id                   : Factor w/ 9 levels "P001","P002",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ value                : int  13 13 7 7 7 7 7 7 7 7 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot via step function</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>id</span>, data<span class='op'>=</span><span class='va'>a</span>, ylab<span class='op'>=</span><span class='st'>'Depth'</span>,</span>
+<span class='r-in'>       ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>250</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, as.table<span class='op'>=</span><span class='cn'>TRUE</span>,</span>
+<span class='r-in'>       panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,</span>
+<span class='r-in'>       prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,</span>
+<span class='r-in'>       scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='slab-methods-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>## categorical variable example</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This is already a SoilProfileCollection-class object, doing nothing.</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># normalize horizon names: result is a factor</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generalize.hz.html'>generalize.hz</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>sp1</span><span class='op'>$</span><span class='va'>name</span>,</span>
+<span class='r-in'>  new <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span>,</span>
+<span class='r-in'>  pat <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'^A'</span>,<span class='st'>'^B'</span>,<span class='st'>'C'</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>name</span>, cpm<span class='op'>=</span><span class='fl'>1</span>, slab.structure<span class='op'>=</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># convert wide -&gt; long for plotting</span></span>
+<span class='r-in'><span class='co'># result is a data.table</span></span>
+<span class='r-in'><span class='co'># genhz factor levels are set by order in `measure.vars`</span></span>
+<span class='r-in'><span class='va'>a.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>,</span>
+<span class='r-in'>  id.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'top'</span>,<span class='st'>'bottom'</span><span class='op'>)</span>,</span>
+<span class='r-in'>  measure.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>, <span class='st'>'A'</span>, <span class='st'>'B'</span>, <span class='st'>'C'</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot horizon type proportions using panels</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>variable</span>,</span>
+<span class='r-in'>       data <span class='op'>=</span> <span class='va'>a.long</span>, subset<span class='op'>=</span><span class='va'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>       col <span class='op'>=</span> <span class='fl'>1</span>, lwd <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>       xlab <span class='op'>=</span> <span class='st'>'Class Probability'</span>,</span>
+<span class='r-in'>       ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,</span>
+<span class='r-in'>       strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>       scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>       ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, type<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'S'</span>,<span class='st'>'g'</span><span class='op'>)</span>,</span>
+<span class='r-in'>       horizontal <span class='op'>=</span> <span class='cn'>TRUE</span>, layout <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>,<span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'>       <span class='op'>)</span></span>
+<span class='r-plt img'><img src='slab-methods-3.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># again, this time using groups</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span>,</span>
+<span class='r-in'>       data <span class='op'>=</span> <span class='va'>a.long</span>,</span>
+<span class='r-in'>       groups <span class='op'>=</span> <span class='va'>variable</span>,</span>
+<span class='r-in'>       subset <span class='op'>=</span> <span class='va'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>       ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,</span>
+<span class='r-in'>       type <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'S'</span>,<span class='st'>'g'</span><span class='op'>)</span>,</span>
+<span class='r-in'>       horizontal <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>       asp <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>       lwd <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>       auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>         lines <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>         points <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
+<span class='r-in'>         cex <span class='op'>=</span> <span class='fl'>0.8</span>,</span>
+<span class='r-in'>         columns <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>         space <span class='op'>=</span> <span class='st'>'right'</span></span>
+<span class='r-in'>       <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='slab-methods-4.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># adjust probability to size of collection, from 0-150</span></span>
+<span class='r-in'><span class='va'>a.1</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp1</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>name</span>, cpm <span class='op'>=</span> <span class='fl'>2</span>, slab.structure <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># convert wide -&gt; long for plotting</span></span>
+<span class='r-in'><span class='co'># result is a data.table</span></span>
+<span class='r-in'><span class='co'># genhz factor levels are set by order in `measure.vars`</span></span>
+<span class='r-in'><span class='va'>a.1.long</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a.1</span><span class='op'>)</span>,</span>
+<span class='r-in'>  id.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'top'</span>,<span class='st'>'bottom'</span><span class='op'>)</span>,</span>
+<span class='r-in'>  measure.vars <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># combine aggregation from `cpm` modes 1 and 2</span></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/make.groups.html'>make.groups</a></span><span class='op'>(</span>cmp.mode.1 <span class='op'>=</span> <span class='va'>a.long</span>, cmp.mode.2 <span class='op'>=</span> <span class='va'>a.1.long</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot horizon type proportions</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span><span class='va'>top</span> <span class='op'>~</span> <span class='va'>value</span> <span class='op'>|</span> <span class='va'>variable</span>,</span>
+<span class='r-in'>       groups <span class='op'>=</span> <span class='va'>which</span>,</span>
+<span class='r-in'>       data <span class='op'>=</span> <span class='va'>g</span>, subset <span class='op'>=</span> <span class='va'>value</span> <span class='op'>&gt;</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>       ylim <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>240</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,</span>
+<span class='r-in'>       type <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'S'</span>,<span class='st'>'g'</span><span class='op'>)</span>,</span>
+<span class='r-in'>       horizontal <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>       layout <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>,<span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>       auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lines <span class='op'>=</span> <span class='cn'>TRUE</span>, points <span class='op'>=</span> <span class='cn'>FALSE</span>, columns <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>       par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, lwd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>       scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>alternating <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>,</span>
+<span class='r-in'>       xlab <span class='op'>=</span> <span class='st'>'Class Probability'</span>,</span>
+<span class='r-in'>       ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,</span>
+<span class='r-in'>       strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='slab-methods-5.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># apply slice-wise evaluation of max probability, and assign ML-horizon at each slice</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>gen.hz.ml</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get.ml.hz.html'>get.ml.hz</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'O'</span>,<span class='st'>'A'</span>,<span class='st'>'B'</span>,<span class='st'>'C'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   hz top bottom confidence pseudo.brier    mean.H</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  O   0      2         37    0.3950617 0.9910761</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  A   2     32         75    0.1547325 0.7922828</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  B  32    145         57    0.3574667 1.0813045</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  C 145    150         71    0.1250000 0.8112781</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>## HD quantile estimator</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://ncss-tech.github.io/AQP/'>soilDB</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lattice.r-forge.r-project.org/'>lattice</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># sample data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'loafercreek'</span>, package <span class='op'>=</span> <span class='st'>'soilDB'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># defaul slab.fun wraps stats::quantile()</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>loafercreek</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>total_frags_pct</span> <span class='op'>+</span> <span class='va'>clay</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># use HD quantile estimator from Hmisc package instead</span></span>
+<span class='r-in'><span class='va'>a.HD</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>loafercreek</span>, fm <span class='op'>=</span> <span class='op'>~</span> <span class='va'>total_frags_pct</span> <span class='op'>+</span> <span class='va'>clay</span>, slab.fun <span class='op'>=</span> <span class='fu'>aqp</span><span class='fu'>:::</span><span class='va'>.slab.fun.numeric.HD</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># combine</span></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/make.groups.html'>make.groups</a></span><span class='op'>(</span>standard<span class='op'>=</span><span class='va'>a</span>, HD<span class='op'>=</span><span class='va'>a.HD</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># note differences</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/histogram.html'>densityplot</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>g</span>, groups<span class='op'>=</span><span class='va'>which</span>,</span>
+<span class='r-in'>            scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span>, alternating<span class='op'>=</span><span class='fl'>3</span>, tick.number<span class='op'>=</span><span class='fl'>10</span>, y<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>rot<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>            xlab<span class='op'>=</span><span class='st'>'50th Percentile'</span>, pch<span class='op'>=</span><span class='cn'>NA</span>, main<span class='op'>=</span><span class='st'>'Loafercreek'</span>,</span>
+<span class='r-in'>            auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, points<span class='op'>=</span><span class='cn'>FALSE</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>,</span>
+<span class='r-in'>            par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># differences are slight but important</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>top</span> <span class='op'>~</span> <span class='va'>p.q50</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>g</span>, groups<span class='op'>=</span><span class='va'>which</span>,</span>
+<span class='r-in'>  xlab<span class='op'>=</span><span class='st'>'Value'</span>, ylab<span class='op'>=</span><span class='st'>'Depth (cm)'</span>,</span>
+<span class='r-in'>  asp<span class='op'>=</span><span class='fl'>1.5</span>, main<span class='op'>=</span><span class='st'>'Loafercreek'</span>,</span>
+<span class='r-in'>  lower<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>p.q25</span>, upper<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>p.q75</span>,</span>
+<span class='r-in'>  sync.colors<span class='op'>=</span><span class='cn'>TRUE</span>, alpha<span class='op'>=</span><span class='fl'>0.25</span>, cf<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,</span>
+<span class='r-in'>  ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>115</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  par.settings<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  strip<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,</span>
+<span class='r-in'>  prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,</span>
+<span class='r-in'>  auto.key<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>## multivariate examples</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add new grouping factor</span></span>
+<span class='r-in'><span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='st'>'group 1'</span></span>
+<span class='r-in'><span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>5</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>'group 2'</span></span>
+<span class='r-in'><span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>group</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># upgrade to SPC</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'><span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># custom 'slab' function, returning mean +/- 1SD</span></span>
+<span class='r-in'><span class='va'>mean.and.sd</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>values</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>values</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>upper</span> <span class='op'>&lt;-</span> <span class='va'>m</span> <span class='op'>+</span> <span class='va'>s</span></span>
+<span class='r-in'>  <span class='va'>lower</span> <span class='op'>&lt;-</span> <span class='va'>m</span> <span class='op'>-</span> <span class='va'>s</span></span>
+<span class='r-in'>  <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span>mean<span class='op'>=</span><span class='va'>m</span>, lower<span class='op'>=</span><span class='va'>lower</span>, upper<span class='op'>=</span><span class='va'>upper</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># aggregate several variables at once, within 'group'</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>, fm <span class='op'>=</span> <span class='va'>group</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>, slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># check the results:</span></span>
+<span class='r-in'><span class='co'># note that 'group' is the column containing group labels</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>top</span> <span class='op'>~</span> <span class='va'>mean</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>a</span>, groups<span class='op'>=</span><span class='va'>group</span>,</span>
+<span class='r-in'>  lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>lower</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>upper</span>,</span>
+<span class='r-in'>  sync.colors<span class='op'>=</span><span class='cn'>TRUE</span>, alpha<span class='op'>=</span><span class='fl'>0.5</span>,</span>
+<span class='r-in'>  cf <span class='op'>=</span> <span class='va'>a</span><span class='op'>$</span><span class='va'>contributing_fraction</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>'Mean Bounded by +/- 1SD'</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,</span>
+<span class='r-in'>  ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>125</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>, layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>  scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>superpose.line<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>lwd<span class='op'>=</span><span class='fl'>2</span>, col<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'RoyalBlue'</span>, <span class='st'>'Orange2'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  panel <span class='op'>=</span> <span class='va'>panel.depth_function</span>,</span>
+<span class='r-in'>  prepanel <span class='op'>=</span> <span class='va'>prepanel.depth_function</span>,</span>
+<span class='r-in'>  strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>2</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># compare a single profile to the group-level aggregate values</span></span>
+<span class='r-in'><span class='va'>a.1</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>, fm <span class='op'>=</span> <span class='va'>group</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>, slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># manually update the group column</span></span>
+<span class='r-in'><span class='va'>a.1</span><span class='op'>$</span><span class='va'>group</span> <span class='op'>&lt;-</span> <span class='st'>'profile 1'</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># combine into a single data.frame:</span></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>a.1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot with customized line styles</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lattice/man/xyplot.html'>xyplot</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>top</span> <span class='op'>~</span> <span class='va'>mean</span> <span class='op'>|</span> <span class='va'>variable</span>, data<span class='op'>=</span><span class='va'>g</span>, groups<span class='op'>=</span><span class='va'>group</span>, subscripts<span class='op'>=</span><span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  lower<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>lower</span>, upper<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>upper</span>, ylim<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>125</span>,<span class='op'>-</span><span class='fl'>5</span><span class='op'>)</span>,</span>
+<span class='r-in'>  layout<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>, scales<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>relation<span class='op'>=</span><span class='st'>'free'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>'Mean Bounded by +/- 1SD'</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>'Depth (cm)'</span>,</span>
+<span class='r-in'>  panel<span class='op'>=</span><span class='va'>panel.depth_function</span>,</span>
+<span class='r-in'>  prepanel<span class='op'>=</span><span class='va'>prepanel.depth_function</span>,</span>
+<span class='r-in'>  sync.colors <span class='op'>=</span> <span class='cn'>TRUE</span>, alpha <span class='op'>=</span> <span class='fl'>0.25</span>,</span>
+<span class='r-in'>  par.settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    superpose.line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>      col <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'orange'</span>, <span class='st'>'royalblue'</span>, <span class='st'>'black'</span><span class='op'>)</span>,</span>
+<span class='r-in'>      lwd <span class='op'>=</span> <span class='fl'>2</span>, lty <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  strip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/lattice/man/strip.default.html'>strip.custom</a></span><span class='op'>(</span>bg<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>0.85</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  auto.key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>columns<span class='op'>=</span><span class='fl'>3</span>, lines<span class='op'>=</span><span class='cn'>TRUE</span>, points<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## again, this time for a user-defined slab from 40-60 cm</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>,</span>
+<span class='r-in'>          fm <span class='op'>=</span> <span class='va'>group</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>,</span>
+<span class='r-in'>          slab.structure <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>,<span class='fl'>60</span><span class='op'>)</span>,</span>
+<span class='r-in'>          slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># now we have weighted average properties (within the defined slab)</span></span>
+<span class='r-in'><span class='co'># for each variable, and each group</span></span>
+<span class='r-in'><span class='co'># convert long -&gt; wide</span></span>
+<span class='r-in'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html'>dcast</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='va'>group</span> <span class='op'>+</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span> <span class='op'>~</span> <span class='va'>variable</span>,</span>
+<span class='r-in'>  value.var <span class='op'>=</span> <span class='st'>'mean'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## this time, compute the weighted mean of selected properties, by profile ID</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>,</span>
+<span class='r-in'>          fm <span class='op'>=</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span>,</span>
+<span class='r-in'>          slab.structure <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>,<span class='fl'>60</span><span class='op'>)</span>,</span>
+<span class='r-in'>          slab.fun <span class='op'>=</span> <span class='va'>mean.and.sd</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># convert long -&gt; wide</span></span>
+<span class='r-in'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html'>dcast</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='va'>id</span> <span class='op'>+</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span> <span class='op'>~</span> <span class='va'>variable</span>,</span>
+<span class='r-in'>  value.var <span class='op'>=</span> <span class='st'>'mean'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## aggregate the entire collection, using default slab function (hdquantile)</span></span>
+<span class='r-in'><span class='co'>## note the missing left-hand side of the formula</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>slab</span><span class='op'>(</span><span class='va'>sp3</span>, fm<span class='op'>=</span> <span class='op'>~</span> <span class='va'>L</span> <span class='op'>+</span> <span class='va'>A</span> <span class='op'>+</span> <span class='va'>B</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## weighted-aggregation -- NOT YET IMPLEMENTED --</span></span>
+<span class='r-in'><span class='co'># load sample data, upgrade to SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># generate pretend weights as site-level attribute</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10101</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>site.wts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span>n<span class='op'>=</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>, min<span class='op'>=</span><span class='fl'>20</span>, max<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

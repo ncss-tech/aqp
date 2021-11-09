@@ -74,7 +74,7 @@ The intention is to identify Munsell chips that may be &quot;functionally equiva
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -156,83 +156,90 @@ The intention is to identify Munsell chips that may be &quot;functionally equiva
     <div class='dont-index'><p><code><a href='colorContrast.html'>colorContrast</a></code> <code><a href='colorContrastPlot.html'>colorContrastPlot</a></code> <code><a href='equivalent_munsell.html'>equivalent_munsell</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># 7.5YR 4/4 (the one and only)</span>
-
-<span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"7.5YR"</span>, <span class='fl'>4</span>, <span class='fl'>4</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`7.5YR 4/4`
-#&gt;        hue value chroma         r        g         b        L       A       B
-#&gt; 8330 7.5YR     4      4 0.4923909 0.352334 0.2313328 41.26403 10.8689 23.5914
-#&gt; </div><div class='input'><span class='co'>#&gt;</span>
-<span class='co'>#&gt; $`7.5YR 4/4`</span>
-<span class='co'>#&gt;        hue value chroma         r        g         b        L       A       B</span>
-<span class='co'>#&gt; 8330 7.5YR     4      4 0.4923909 0.352334 0.2313328 41.26403 10.8689 23.5914</span>
-
-<span class='co'># 7.5YR 1/1 (two chips are equivalent; 3 row result)</span>
-
-<span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"7.5YR"</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`7.5YR 1/1`
-#&gt;        hue value chroma         r         g          b        L        A
-#&gt; 1983  10YR     1      1 0.1345633 0.1087014 0.07606787 10.64787 1.621323
-#&gt; 6189   5YR     1      1 0.1330994 0.1076359 0.09450179 10.63901 2.489012
-#&gt; 8303 7.5YR     1      1 0.1329483 0.1082380 0.08862581 10.64210 2.065514
-#&gt;             B
-#&gt; 1983 6.847629
-#&gt; 6189 3.515146
-#&gt; 8303 4.623922
-#&gt; </div><div class='input'><span class='co'>#&gt;</span>
-<span class='co'>#&gt; $`7.5YR 1/1`</span>
-<span class='co'>#&gt;        hue value chroma         r         g          b        L        A        B</span>
-<span class='co'>#&gt; 1983  10YR     1      1 0.1345633 0.1087014 0.07606787 10.64787 1.621323 6.847629</span>
-<span class='co'>#&gt; 6189   5YR     1      1 0.1330994 0.1076359 0.09450179 10.63901 2.489012 3.515146</span>
-<span class='co'>#&gt; 8303 7.5YR     1      1 0.1329483 0.1082380 0.08862581 10.64210 2.065514 4.623922</span>
-
-<span class='co'># 10YR 6/8 (two chips are equivalent; 3 row result)</span>
-
-<span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"10YR"</span>, <span class='fl'>6</span>, <span class='fl'>8</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`10YR 6/8`
-#&gt;       hue value chroma         r         g         b        L        A        B
-#&gt; 2039 10YR     6      7 0.7382230 0.5512957 0.2680260 61.76795 10.50886 44.78574
-#&gt; 2040 10YR     6      8 0.7519872 0.5472116 0.2157209 61.77496 11.83215 51.15496
-#&gt; 2041 10YR     6      9 0.7642826 0.5433189 0.1559069 61.78085 13.09599 57.49773
-#&gt; </div><div class='input'><span class='co'>#&gt;</span>
-<span class='co'>#&gt; $`10YR 6/8`</span>
-<span class='co'>#&gt;       hue value chroma         r         g         b        L        A        B</span>
-<span class='co'>#&gt; 2039 10YR     6      7 0.7382230 0.5512957 0.2680260 61.76795 10.50886 44.78574</span>
-<span class='co'>#&gt; 2040 10YR     6      8 0.7519872 0.5472116 0.2157209 61.77496 11.83215 51.15496</span>
-<span class='co'>#&gt; 2041 10YR     6      9 0.7642826 0.5433189 0.1559069 61.78085 13.09599 57.49773</span>
-
-<span class='co'># compare visually a very red color</span>
-
-<span class='va'>veryred</span> <span class='op'>&lt;-</span> <span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"10R"</span>, <span class='fl'>6</span>, <span class='fl'>28</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/pie.html'>pie</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>)</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>veryred</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span><span class='op'>)</span><span class='op'>)</span>,
-    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>veryred</span>, <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"%s %s/%s"</span>, <span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='equivalentMunsellChips-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>$</span><span class='va'>hue</span><span class='op'>)</span> <span class='co'># 2 hues</span>
-</div><div class='output co'>#&gt; 
-#&gt;  10R 7.5R 
-#&gt;    8   17 </div><div class='input'><span class='co'>#&gt; </span>
-<span class='co'>#&gt;  10R 7.5R </span>
-<span class='co'>#&gt;    8   17</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span> <span class='co'># 2 values</span>
-</div><div class='output co'>#&gt; 
-#&gt;  5  6 
-#&gt; 11 14 </div><div class='input'><span class='co'>#&gt; </span>
-<span class='co'>#&gt;  5  6 </span>
-<span class='co'>#&gt; 11 14</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>$</span><span class='va'>chroma</span><span class='op'>)</span> <span class='co'># 10 chromas</span>
-</div><div class='output co'>#&gt; 
-#&gt; 21 22 23 24 25 26 27 28 29 30 
-#&gt;  1  2  2  3  3  4  3  3  2  2 </div><div class='input'><span class='co'>#&gt; </span>
-<span class='co'>#&gt; 21 22 23 24 25 26 27 28 29 30 </span>
-<span class='co'>#&gt;  1  2  2  3  3  4  3  3  2  2</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># 7.5YR 4/4 (the one and only)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"7.5YR"</span>, <span class='fl'>4</span>, <span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`7.5YR 4/4`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        hue value chroma         r        g         b        L       A       B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8330 7.5YR     4      4 0.4923909 0.352334 0.2313328 41.26403 10.8689 23.5914</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='co'>#&gt;</span></span>
+<span class='r-in'><span class='co'>#&gt; $`7.5YR 4/4`</span></span>
+<span class='r-in'><span class='co'>#&gt;        hue value chroma         r        g         b        L       A       B</span></span>
+<span class='r-in'><span class='co'>#&gt; 8330 7.5YR     4      4 0.4923909 0.352334 0.2313328 41.26403 10.8689 23.5914</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 7.5YR 1/1 (two chips are equivalent; 3 row result)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"7.5YR"</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`7.5YR 1/1`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        hue value chroma         r         g          b        L        A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1983  10YR     1      1 0.1345633 0.1087014 0.07606787 10.64787 1.621323</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6189   5YR     1      1 0.1330994 0.1076359 0.09450179 10.63901 2.489012</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8303 7.5YR     1      1 0.1329483 0.1082380 0.08862581 10.64210 2.065514</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1983 6.847629</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6189 3.515146</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8303 4.623922</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='co'>#&gt;</span></span>
+<span class='r-in'><span class='co'>#&gt; $`7.5YR 1/1`</span></span>
+<span class='r-in'><span class='co'>#&gt;        hue value chroma         r         g          b        L        A        B</span></span>
+<span class='r-in'><span class='co'>#&gt; 1983  10YR     1      1 0.1345633 0.1087014 0.07606787 10.64787 1.621323 6.847629</span></span>
+<span class='r-in'><span class='co'>#&gt; 6189   5YR     1      1 0.1330994 0.1076359 0.09450179 10.63901 2.489012 3.515146</span></span>
+<span class='r-in'><span class='co'>#&gt; 8303 7.5YR     1      1 0.1329483 0.1082380 0.08862581 10.64210 2.065514 4.623922</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 10YR 6/8 (two chips are equivalent; 3 row result)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"10YR"</span>, <span class='fl'>6</span>, <span class='fl'>8</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`10YR 6/8`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       hue value chroma         r         g         b        L        A        B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2039 10YR     6      7 0.7382230 0.5512957 0.2680260 61.76795 10.50886 44.78574</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2040 10YR     6      8 0.7519872 0.5472116 0.2157209 61.77496 11.83215 51.15496</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2041 10YR     6      9 0.7642826 0.5433189 0.1559069 61.78085 13.09599 57.49773</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='co'>#&gt;</span></span>
+<span class='r-in'><span class='co'>#&gt; $`10YR 6/8`</span></span>
+<span class='r-in'><span class='co'>#&gt;       hue value chroma         r         g         b        L        A        B</span></span>
+<span class='r-in'><span class='co'>#&gt; 2039 10YR     6      7 0.7382230 0.5512957 0.2680260 61.76795 10.50886 44.78574</span></span>
+<span class='r-in'><span class='co'>#&gt; 2040 10YR     6      8 0.7519872 0.5472116 0.2157209 61.77496 11.83215 51.15496</span></span>
+<span class='r-in'><span class='co'>#&gt; 2041 10YR     6      9 0.7642826 0.5433189 0.1559069 61.78085 13.09599 57.49773</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># compare visually a very red color</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>veryred</span> <span class='op'>&lt;-</span> <span class='fu'>equivalentMunsellChips</span><span class='op'>(</span><span class='st'>"10R"</span>, <span class='fl'>6</span>, <span class='fl'>28</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/pie.html'>pie</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>)</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>veryred</span>, <span class='fu'><a href='munsell2rgb.html'>munsell2rgb</a></span><span class='op'>(</span><span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>veryred</span>, <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"%s %s/%s"</span>, <span class='va'>hue</span>, <span class='va'>value</span>, <span class='va'>chroma</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='equivalentMunsellChips-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>$</span><span class='va'>hue</span><span class='op'>)</span> <span class='co'># 2 hues</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  10R 7.5R </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    8   17 </span>
+<span class='r-in'><span class='co'>#&gt; </span></span>
+<span class='r-in'><span class='co'>#&gt;  10R 7.5R </span></span>
+<span class='r-in'><span class='co'>#&gt;    8   17</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span> <span class='co'># 2 values</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5  6 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 14 </span>
+<span class='r-in'><span class='co'>#&gt; </span></span>
+<span class='r-in'><span class='co'>#&gt;  5  6 </span></span>
+<span class='r-in'><span class='co'>#&gt; 11 14</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>veryred</span><span class='op'>$</span><span class='va'>chroma</span><span class='op'>)</span> <span class='co'># 10 chromas</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21 22 23 24 25 26 27 28 29 30 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1  2  2  3  3  4  3  3  2  2 </span>
+<span class='r-in'><span class='co'>#&gt; </span></span>
+<span class='r-in'><span class='co'>#&gt; 21 22 23 24 25 26 27 28 29 30 </span></span>
+<span class='r-in'><span class='co'>#&gt;  1  2  2  3  3  4  3  3  2  2</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

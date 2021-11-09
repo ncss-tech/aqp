@@ -41,7 +41,8 @@
 
 <meta property="og:title" content="SoilProfileCollection show method — show" />
 <meta property="og:description" content="Pretty output method for SoilProfileCollection objects. By default this method limits output to 10 columns and 6 rows from the site and horizon tables respectively.
-There is an aqp environment option you can set to increase the number of columns shown by default: options(.aqp.show.n.cols = 100)," />
+There is an aqp environment option you can set to increase the number of columns shown by default: options(.aqp.show.n.cols = 100),
+as.character(): Character Representation of SoilProfileCollection Object" />
 
 
 
@@ -73,7 +74,7 @@ There is an aqp environment option you can set to increase the number of columns
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -119,11 +120,15 @@ There is an aqp environment option you can set to increase the number of columns
 
     <div class="ref-description">
     <p>Pretty output method for SoilProfileCollection objects. By default this method limits output to 10 columns and 6 rows from the site and horizon tables respectively.</p>
-<p>There is an aqp environment option you can set to increase the number of columns shown by default: <code><a href='https://rdrr.io/r/base/options.html'>options(.aqp.show.n.cols = 100)</a></code>,</p>
+<p>There is an aqp environment option you can set to increase the number of columns shown by default: <code>options(.aqp.show.n.cols = 100)</code>,</p>
+<p><code><a href='https://rdrr.io/r/base/character.html'>as.character()</a></code>: Character Representation of SoilProfileCollection Object</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>show</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+<span class='fu'>show</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,71 +137,81 @@ There is an aqp environment option you can set to increase the number of columns
       <th>object</th>
       <td><p>a SoilProfileCollection</p></td>
     </tr>
+    <tr>
+      <th>x</th>
+      <td><p>a SoilProfileCollection</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments (not used)</p></td>
+    </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># load a SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
-
-<span class='co'># use the show() method</span>
-<span class='fu'>show</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1539 horizons
-#&gt; profile ID: soil  |  horizon ID: hzID 
-#&gt; Depth range: 70 - 841 cm
-#&gt; 
-#&gt; ----- Horizons (6 / 1539 rows  |  10 / 18 columns) -----
-#&gt;    soil hzID top bottom sand silt clay  R25  G25  B25
-#&gt;   soil1    1   0      8 32.3 10.9 52.8 0.41 0.38 0.34
-#&gt;   soil1    2   8     25 29.0 11.2 58.2 0.31 0.28 0.25
-#&gt;   soil1    3  25     55 34.9 11.6 51.9 0.31 0.28 0.25
-#&gt;   soil1    4  55    100 38.2 10.9 49.7 0.31 0.28 0.25
-#&gt;   soil1    5 100    267 32.2 10.8 55.6 0.55 0.46 0.36
-#&gt;  soil10    6   0     10 25.2 14.4 58.4 0.43 0.37 0.30
-#&gt; [... more horizons ...]
-#&gt; 
-#&gt; ----- Sites (6 / 296 rows  |  1 / 1 columns) -----
-#&gt;     soil
-#&gt;    soil1
-#&gt;   soil10
-#&gt;  soil100
-#&gt;  soil101
-#&gt;  soil102
-#&gt;  soil103
-#&gt; [... more sites ...]
-#&gt; 
-#&gt; Spatial Data:
-#&gt; [EMPTY]</div><div class='input'>
-<span class='co'># which is same as this (in the console)</span>
-<span class='va'>sp5</span>
-</div><div class='output co'>#&gt; SoilProfileCollection with 296 profiles and 1539 horizons
-#&gt; profile ID: soil  |  horizon ID: hzID 
-#&gt; Depth range: 70 - 841 cm
-#&gt; 
-#&gt; ----- Horizons (6 / 1539 rows  |  10 / 18 columns) -----
-#&gt;    soil hzID top bottom sand silt clay  R25  G25  B25
-#&gt;   soil1    1   0      8 32.3 10.9 52.8 0.41 0.38 0.34
-#&gt;   soil1    2   8     25 29.0 11.2 58.2 0.31 0.28 0.25
-#&gt;   soil1    3  25     55 34.9 11.6 51.9 0.31 0.28 0.25
-#&gt;   soil1    4  55    100 38.2 10.9 49.7 0.31 0.28 0.25
-#&gt;   soil1    5 100    267 32.2 10.8 55.6 0.55 0.46 0.36
-#&gt;  soil10    6   0     10 25.2 14.4 58.4 0.43 0.37 0.30
-#&gt; [... more horizons ...]
-#&gt; 
-#&gt; ----- Sites (6 / 296 rows  |  1 / 1 columns) -----
-#&gt;     soil
-#&gt;    soil1
-#&gt;   soil10
-#&gt;  soil100
-#&gt;  soil101
-#&gt;  soil102
-#&gt;  soil103
-#&gt; [... more sites ...]
-#&gt; 
-#&gt; Spatial Data:
-#&gt; [EMPTY]</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># load a SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># use the show() method</span></span>
+<span class='r-in'><span class='fu'>show</span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SoilProfileCollection with 296 profiles and 1539 horizons</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> profile ID: soil  |  horizon ID: hzID </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Depth range: 70 - 841 cm</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----- Horizons (6 / 1539 rows  |  10 / 18 columns) -----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    soil hzID top bottom sand silt clay  R25  G25  B25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    1   0      8 32.3 10.9 52.8 0.41 0.38 0.34</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    2   8     25 29.0 11.2 58.2 0.31 0.28 0.25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    3  25     55 34.9 11.6 51.9 0.31 0.28 0.25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    4  55    100 38.2 10.9 49.7 0.31 0.28 0.25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    5 100    267 32.2 10.8 55.6 0.55 0.46 0.36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil10    6   0     10 25.2 14.4 58.4 0.43 0.37 0.30</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [... more horizons ...]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----- Sites (6 / 296 rows  |  1 / 1 columns) -----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     soil</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    soil1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil100</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil101</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil102</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil103</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [... more sites ...]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Spatial Data:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [EMPTY]</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># which is same as this (in the console)</span></span>
+<span class='r-in'><span class='va'>sp5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SoilProfileCollection with 296 profiles and 1539 horizons</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> profile ID: soil  |  horizon ID: hzID </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Depth range: 70 - 841 cm</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----- Horizons (6 / 1539 rows  |  10 / 18 columns) -----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    soil hzID top bottom sand silt clay  R25  G25  B25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    1   0      8 32.3 10.9 52.8 0.41 0.38 0.34</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    2   8     25 29.0 11.2 58.2 0.31 0.28 0.25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    3  25     55 34.9 11.6 51.9 0.31 0.28 0.25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    4  55    100 38.2 10.9 49.7 0.31 0.28 0.25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil1    5 100    267 32.2 10.8 55.6 0.55 0.46 0.36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil10    6   0     10 25.2 14.4 58.4 0.43 0.37 0.30</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [... more horizons ...]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----- Sites (6 / 296 rows  |  1 / 1 columns) -----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     soil</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    soil1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   soil10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil100</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil101</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil102</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  soil103</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [... more sites ...]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Spatial Data:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [EMPTY]</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

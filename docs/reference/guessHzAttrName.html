@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Guess Arbitrary Horizon Column Name — guessHzAttrName • aqp</title>
+<title>Guess Horizon Slot Column Names — guessHzAttrName • aqp</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,11 @@
 
 
 
-<meta property="og:title" content="Guess Arbitrary Horizon Column Name — guessHzAttrName" />
-<meta property="og:description" content="Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have &quot;low, RV and high&quot; total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in horizonNames(x) with the most required plus optional patterns matched.
-e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &quot;_r&quot;)) matches (claytotal_r == totalclay_r) over (clay_r == claytotal == totalclay) over clay." />
+<meta property="og:title" content="Guess Horizon Slot Column Names — guessHzAttrName" />
+<meta property="og:description" content="guessHzAttrName(): Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have &quot;low, RV and high&quot; total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in horizonNames(x) with the most required plus optional patterns matched.
+e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &quot;_r&quot;)) matches (claytotal_r == totalclay_r) over (clay_r == claytotal == totalclay) over clay.
+guessHzDesgnName(): This follows the historic convention used by aqp::plotSPC() looking for &quot;hzname&quot; or other column names containing the regular expression &quot;name&quot;. If the pattern &quot;name&quot; is not found, the pattern &quot;desgn&quot; is searched as a fallback, as &quot;hzdesgn&quot; or &quot;hz_desgn&quot; are other common column naming schemes for horizon designation name.
+guessHzTexClName(): This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match &quot;texcl&quot; which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match &quot;texture&quot; for cases where &quot;texcl&quot; is absent (e.g. in NASIS Component Horizon)." />
 
 
 
@@ -73,7 +75,7 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -112,17 +114,23 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Guess Arbitrary Horizon Column Name</h1>
+    <h1>Guess Horizon Slot Column Names</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/guessColumnNames.R'><code>R/guessColumnNames.R</code></a></small>
     <div class="hidden name"><code>guessHzAttrName.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
+    <p><code>guessHzAttrName()</code>: Guess the horizon column name where possible/preferred formative elements are known. There is a preference for records where more optional requirements are met to handle cases where there will be many matches. For example, working with soil data one might have "low, RV and high" total clay, as well as clay fractions. One could distinguish between these different measurements using standard formative elements for column names from the database of interest. Result is the first match in <code>horizonNames(x)</code> with the most required plus optional patterns matched.</p>
 <p>e.g. <code>guessHzAttrName(x, attr="clay", optional=c("total", "_r"))</code> matches (<code>claytotal_r == totalclay_r</code>) over (<code>clay_r == claytotal == totalclay</code>) over <code>clay</code>.</p>
+<p><code>guessHzDesgnName()</code>: This follows the historic convention used by <code><a href='plotSPC.html'>aqp::plotSPC()</a></code> looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.</p>
+<p><code>guessHzTexClName()</code>: This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>attr</span>, optional <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>attr</span>, optional <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, required <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='fu'>guessHzDesgnName</span><span class='op'>(</span><span class='va'>x</span>, required <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='fu'>guessHzTexClName</span><span class='op'>(</span><span class='va'>x</span>, required <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,45 +151,74 @@ e.g. guessHzAttrName(x, attr=&quot;clay&quot;, optional=c(&quot;total&quot;, &qu
       <th>verbose</th>
       <td><p>A boolean value for whether to produce message output about guesses.</p></td>
     </tr>
+    <tr>
+      <th>required</th>
+      <td><p>logical Default: <code>FALSE</code>. Is this attribute required? If it is, set to <code>TRUE</code> to trigger error on invalid value.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Character containing horizon attribute column name. Result is the first match in <code><a href='horizonNames<-.html'>horizonNames(x)</a></code> with the most required plus optional patterns matched.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='guessHzDesgnName.html'>guessHzDesgnName</a></code>, <code><a href='guessHzTexClName.html'>guessHzTexClName</a></code></p></div>
+    <p>Character containing horizon attribute column name. Result is the first match in <code>horizonNames(x)</code> with the most required plus optional patterns matched.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># a has the required attr pattern, but none of the optional</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>,
-                clay<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>18</span>,<span class='fl'>19</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>a</span>, attr<span class='op'>=</span><span class='st'>"clay"</span>, optional<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"total"</span>, <span class='st'>"_r"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay`</span></div><div class='output co'>#&gt; [1] "clay"</div><div class='input'>
-<span class='co'># b has requried attr pattern, and one of the opional patterns</span>
-<span class='co'>#   notice that it also contains "clay" but preferentially matches more optional patterns</span>
-<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>,
-                clay<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0.18</span>,<span class='fl'>0.19</span><span class='op'>)</span>, clay_r<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>18</span>,<span class='fl'>19</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>b</span>, attr<span class='op'>=</span><span class='st'>"clay"</span>, optional<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"total"</span>, <span class='st'>"_r"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `clay_r`</span></div><div class='output co'>#&gt; [1] "clay_r"</div><div class='input'>
-<span class='co'># c has total and _r (both optional) on either side of clay</span>
-<span class='co'># having all of the optional patterns plus required is best evidence, and first</span>
-<span class='co'># column containing that combination will be returned</span>
-<span class='va'>c</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>,
-                totalclay_r<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>18</span>,<span class='fl'>19</span><span class='op'>)</span>, claytotal_r<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0.18</span>,<span class='fl'>0.19</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>c</span>, attr<span class='op'>=</span><span class='st'>"clay"</span>, optional<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"total"</span>, <span class='st'>"_r"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>guessing horizon attribute 'clay' is stored in `totalclay_r`</span></div><div class='output co'>#&gt; [1] "totalclay_r"</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># a has the required attr pattern, but none of the optional</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>,</span>
+<span class='r-in'>                clay<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>18</span>,<span class='fl'>19</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>a</span>, attr<span class='op'>=</span><span class='st'>"clay"</span>, optional<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"total"</span>, <span class='st'>"_r"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing horizon attribute 'clay' is stored in `clay`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "clay"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># b has requried attr pattern, and one of the opional patterns</span></span>
+<span class='r-in'><span class='co'>#   notice that it also contains "clay" but preferentially matches more optional patterns</span></span>
+<span class='r-in'><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>,</span>
+<span class='r-in'>                clay<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0.18</span>,<span class='fl'>0.19</span><span class='op'>)</span>, clay_r<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>18</span>,<span class='fl'>19</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>b</span>, attr<span class='op'>=</span><span class='st'>"clay"</span>, optional<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"total"</span>, <span class='st'>"_r"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing horizon attribute 'clay' is stored in `clay_r`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "clay_r"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># c has total and _r (both optional) on either side of clay</span></span>
+<span class='r-in'><span class='co'># having all of the optional patterns plus required is best evidence, and first</span></span>
+<span class='r-in'><span class='co'># column containing that combination will be returned</span></span>
+<span class='r-in'><span class='va'>c</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>,</span>
+<span class='r-in'>                totalclay_r<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>18</span>,<span class='fl'>19</span><span class='op'>)</span>, claytotal_r<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0.18</span>,<span class='fl'>0.19</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>guessHzAttrName</span><span class='op'>(</span><span class='va'>c</span>, attr<span class='op'>=</span><span class='st'>"clay"</span>, optional<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"total"</span>, <span class='st'>"_r"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> guessing horizon attribute 'clay' is stored in `totalclay_r`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "totalclay_r"</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>, horizonname<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>,<span class='st'>"Bw"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># store guess in metadata</span></span>
+<span class='r-in'><span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'>guessHzDesgnName</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect result</span></span>
+<span class='r-in'><span class='fu'><a href='hzdesgnname.html'>hzdesgnname</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "horizonname"</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span>, top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span><span class='op'>)</span>, bottom<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>40</span><span class='op'>)</span>, texture<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>,<span class='st'>"Bw"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># store guess in metadata</span></span>
+<span class='r-in'><span class='fu'><a href='hztexclname.html'>hztexclname</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'>guessHzTexClName</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect result</span></span>
+<span class='r-in'><span class='fu'><a href='hztexclname.html'>hztexclname</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "texture"</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

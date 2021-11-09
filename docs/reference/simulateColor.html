@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@
       <th>parameters</th>
       <td><p>a <code>list</code>, format depends on <code>method</code>:</p><ul>
 <li><p><code>proportions</code>: output from <code><a href='aggregateColor.html'>aggregateColor</a></code></p></li>
-<li><p><code>dE00</code>: formatted as <code><a href='https://rdrr.io/r/base/list.html'>list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))</a></code></p></li>
+<li><p><code>dE00</code>: formatted as <code>list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))</code></p></li>
 </ul>
 
 <p>Where <code>m</code> is a single representative Munsell chip, <code>thresh</code> is a threshold specified in CIE2000 color contrast (dE00), and <code>hues</code> is a vector of allowed Munsell hues.</p></td>
@@ -156,98 +156,103 @@
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># m: representative or most likely color</span>
-<span class='co'># thresh: dE00 threshold</span>
-<span class='co'># hues: allowed Munsell hues</span>
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='st'>'A'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 3/3'</span>, thresh <span class='op'>=</span> <span class='fl'>5</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='st'>'BA'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 4/4'</span>, thresh <span class='op'>=</span> <span class='fl'>8</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='st'>'Bt1'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 4/4'</span>, thresh <span class='op'>=</span> <span class='fl'>8</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR'</span>, <span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='st'>'Bt2'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'5YR 4/5'</span>, thresh <span class='op'>=</span> <span class='fl'>8</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR'</span>, <span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='st'>'Bt3'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'10YR 4/6'</span>, thresh <span class='op'>=</span> <span class='fl'>10</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='st'>'Cr'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'2.5G 6/2'</span>, thresh <span class='op'>=</span> <span class='fl'>15</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'2.5G'</span>, <span class='st'>'2.5GY'</span>, <span class='st'>'2.5BG'</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># simulate</span>
-<span class='op'>(</span><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>simulateColor</span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>'dE00'</span>, n <span class='op'>=</span> <span class='fl'>10</span>, parameters <span class='op'>=</span> <span class='va'>p</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $A
-#&gt;  [1] "7.5YR 3/4" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3"
-#&gt;  [7] "7.5YR 3/2" "7.5YR 3/4" "7.5YR 3/3" "7.5YR 3/4"
-#&gt; 
-#&gt; $BA
-#&gt;  [1] "7.5YR 4/4" "7.5YR 4/4" "7.5YR 4/5" "7.5YR 4/6" "7.5YR 4/3" "7.5YR 4/2"
-#&gt;  [7] "7.5YR 4/4" "7.5YR 4/4" "7.5YR 4/6" "7.5YR 4/4"
-#&gt; 
-#&gt; $Bt1
-#&gt;  [1] "5YR 4/4"   "7.5YR 4/4" "5YR 4/5"   "7.5YR 4/4" "5YR 4/6"   "7.5YR 4/4"
-#&gt;  [7] "5YR 4/4"   "7.5YR 4/3" "7.5YR 4/3" "7.5YR 4/6"
-#&gt; 
-#&gt; $Bt2
-#&gt;  [1] "5YR 4/4" "5YR 4/5" "5YR 4/6" "5YR 4/5" "5YR 4/3" "5YR 4/5" "5YR 4/5"
-#&gt;  [8] "5YR 4/5" "5YR 4/7" "5YR 4/5"
-#&gt; 
-#&gt; $Bt3
-#&gt;  [1] "10YR 4/12"  "10YR 3/7"   "10YR 4/12"  "7.5YR 4/13" "10YR 4/6"  
-#&gt;  [6] "10YR 4/8"   "7.5YR 4/8"  "10YR 4/8"   "10YR 3/9"   "10YR 4/11" 
-#&gt; 
-#&gt; $Cr
-#&gt;  [1] "2.5G 7/1"  "2.5G 5/2"  "2.5G 6/2"  "2.5G 6/2"  "2.5G 6/1"  "2.5G 5/1" 
-#&gt;  [7] "2.5BG 5/1" "2.5G 5/1"  "2.5G 6/4"  "2.5GY 7/3"
-#&gt; </div><div class='input'>
-<span class='co'># preview</span>
-<span class='fu'><a href='previewColors.html'>previewColors</a></span><span class='op'>(</span><span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>'MDS'</span><span class='op'>)</span>
-</div><div class='img'><img src='simulateColor-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># another example, this time using a larger dE00 threshold</span>
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='st'>'A'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 3/3'</span>, thresh <span class='op'>=</span> <span class='fl'>20</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'7.5YR'</span>, <span class='st'>'5YR'</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># simulate</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>54654</span><span class='op'>)</span>
-<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>simulateColor</span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>'dE00'</span>, n <span class='op'>=</span> <span class='fl'>200</span>, parameters <span class='op'>=</span> <span class='va'>p</span><span class='op'>)</span>
-
-<span class='co'># flatten</span>
-<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span>
-
-<span class='co'># tabulate, sort: most frequent color should be 7.5YR 3/3</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span>, decreasing <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; cols
-#&gt;  7.5YR 3/3   10YR 2/3    5YR 3/3  7.5YR 3/2  7.5YR 3/6   10YR 3/3   10YR 4/3 
-#&gt;         20          7          7          5          5          4          4 
-#&gt;    5YR 3/4    5YR 3/5  7.5YR 3/4   10YR 2/1   10YR 2/4   10YR 2/7   10YR 3/1 
-#&gt;          4          4          4          3          3          3          3 
-#&gt;  10YR 3/10   10YR 3/5    5YR 4/8    5YR 4/9  7.5YR 2/2  7.5YR 3/1  7.5YR 3/5 
-#&gt;          3          3          3          3          3          3          3 
-#&gt;   10YR 1/3   10YR 3/2   10YR 3/6   10YR 3/9   10YR 4/1   10YR 4/7   10YR 5/2 
-#&gt;          2          2          2          2          2          2          2 
-#&gt;    5YR 1/3    5YR 1/4    5YR 2/2    5YR 2/3    5YR 2/4    5YR 2/5    5YR 3/2 
-#&gt;          2          2          2          2          2          2          2 
-#&gt;    5YR 3/9   5YR 4/11    5YR 4/3    5YR 4/4    5YR 4/5    5YR 5/2  7.5YR 2/5 
-#&gt;          2          2          2          2          2          2          2 
-#&gt;  7.5YR 2/6  7.5YR 3/7  7.5YR 3/9  7.5YR 4/2  7.5YR 4/4  7.5YR 4/9  7.5YR 5/4 
-#&gt;          2          2          2          2          2          2          2 
-#&gt;   10YR 1/2   10YR 1/4   10YR 2/2   10YR 2/5   10YR 3/4   10YR 3/7   10YR 3/8 
-#&gt;          1          1          1          1          1          1          1 
-#&gt;  10YR 4/10  10YR 4/11  10YR 4/12   10YR 4/6   10YR 4/8   10YR 4/9   10YR 5/3 
-#&gt;          1          1          1          1          1          1          1 
-#&gt;   10YR 5/4    5YR 1/1    5YR 1/2    5YR 1/5    5YR 1/7    5YR 2/1   5YR 2/10 
-#&gt;          1          1          1          1          1          1          1 
-#&gt;    5YR 2/6    5YR 2/7    5YR 2/8    5YR 3/1   5YR 3/12    5YR 3/8    5YR 4/1 
-#&gt;          1          1          1          1          1          1          1 
-#&gt;   5YR 4/13   5YR 4/14    5YR 4/2    5YR 4/6    5YR 4/7    5YR 5/3    5YR 5/4 
-#&gt;          1          1          1          1          1          1          1 
-#&gt;    5YR 5/5  7.5YR 1/1  7.5YR 1/2  7.5YR 1/3  7.5YR 2/3  7.5YR 2/7  7.5YR 3/8 
-#&gt;          1          1          1          1          1          1          1 
-#&gt;  7.5YR 4/1 7.5YR 4/10 7.5YR 4/13  7.5YR 4/5  7.5YR 4/6 
-#&gt;          1          1          1          1          1 </div><div class='input'>
-<span class='co'># review colors</span>
-<span class='fu'><a href='previewColors.html'>previewColors</a></span><span class='op'>(</span><span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='simulateColor-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># what does a dE00 threshold look like on 3 pages of hue?</span>
-<span class='fu'><a href='contrastChart.html'>contrastChart</a></span><span class='op'>(</span><span class='st'>'7.5YR 3/3'</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'7.5YR'</span>, <span class='st'>'5YR'</span><span class='op'>)</span>, thresh <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
-</div><div class='img'><img src='simulateColor-3.png' alt='' width='768' height='475' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># m: representative or most likely color</span></span>
+<span class='r-in'><span class='co'># thresh: dE00 threshold</span></span>
+<span class='r-in'><span class='co'># hues: allowed Munsell hues</span></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='st'>'A'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 3/3'</span>, thresh <span class='op'>=</span> <span class='fl'>5</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>'BA'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 4/4'</span>, thresh <span class='op'>=</span> <span class='fl'>8</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>'Bt1'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 4/4'</span>, thresh <span class='op'>=</span> <span class='fl'>8</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR'</span>, <span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>'Bt2'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'5YR 4/5'</span>, thresh <span class='op'>=</span> <span class='fl'>8</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'5YR'</span>, <span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>'Bt3'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'10YR 4/6'</span>, thresh <span class='op'>=</span> <span class='fl'>10</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'7.5YR'</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>'Cr'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'2.5G 6/2'</span>, thresh <span class='op'>=</span> <span class='fl'>15</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'2.5G'</span>, <span class='st'>'2.5GY'</span>, <span class='st'>'2.5BG'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># simulate</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>simulateColor</span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>'dE00'</span>, n <span class='op'>=</span> <span class='fl'>10</span>, parameters <span class='op'>=</span> <span class='va'>p</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "7.5YR 3/4" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "7.5YR 3/2" "7.5YR 3/4" "7.5YR 3/3" "7.5YR 3/4"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $BA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "7.5YR 4/4" "7.5YR 4/4" "7.5YR 4/5" "7.5YR 4/6" "7.5YR 4/3" "7.5YR 4/2"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "7.5YR 4/4" "7.5YR 4/4" "7.5YR 4/6" "7.5YR 4/4"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $Bt1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "5YR 4/4"   "7.5YR 4/4" "5YR 4/5"   "7.5YR 4/4" "5YR 4/6"   "7.5YR 4/4"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "5YR 4/4"   "7.5YR 4/3" "7.5YR 4/3" "7.5YR 4/6"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $Bt2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "5YR 4/4" "5YR 4/5" "5YR 4/6" "5YR 4/5" "5YR 4/3" "5YR 4/5" "5YR 4/5"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] "5YR 4/5" "5YR 4/7" "5YR 4/5"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $Bt3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "10YR 4/12"  "10YR 3/7"   "10YR 4/12"  "7.5YR 4/13" "10YR 4/6"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6] "10YR 4/8"   "7.5YR 4/8"  "10YR 4/8"   "10YR 3/9"   "10YR 4/11" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $Cr</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "2.5G 7/1"  "2.5G 5/2"  "2.5G 6/2"  "2.5G 6/2"  "2.5G 6/1"  "2.5G 5/1" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "2.5BG 5/1" "2.5G 5/1"  "2.5G 6/4"  "2.5GY 7/3"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># preview</span></span>
+<span class='r-in'><span class='fu'><a href='previewColors.html'>previewColors</a></span><span class='op'>(</span><span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>'MDS'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='simulateColor-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># another example, this time using a larger dE00 threshold</span></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='st'>'A'</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='st'>'7.5YR 3/3'</span>, thresh <span class='op'>=</span> <span class='fl'>20</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'7.5YR'</span>, <span class='st'>'5YR'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># simulate</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>54654</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>simulateColor</span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>'dE00'</span>, n <span class='op'>=</span> <span class='fl'>200</span>, parameters <span class='op'>=</span> <span class='va'>p</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># flatten</span></span>
+<span class='r-in'><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># tabulate, sort: most frequent color should be 7.5YR 3/3</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span>, decreasing <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cols</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7.5YR 3/3   10YR 2/3    5YR 3/3  7.5YR 3/2  7.5YR 3/6   10YR 3/3   10YR 4/3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         20          7          7          5          5          4          4 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5YR 3/4    5YR 3/5  7.5YR 3/4   10YR 2/1   10YR 2/4   10YR 2/7   10YR 3/1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4          4          4          3          3          3          3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  10YR 3/10   10YR 3/5    5YR 4/8    5YR 4/9  7.5YR 2/2  7.5YR 3/1  7.5YR 3/5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3          3          3          3          3          3          3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   10YR 1/3   10YR 3/2   10YR 3/6   10YR 3/9   10YR 4/1   10YR 4/7   10YR 5/2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2          2          2          2          2          2          2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5YR 1/3    5YR 1/4    5YR 2/2    5YR 2/3    5YR 2/4    5YR 2/5    5YR 3/2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2          2          2          2          2          2          2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5YR 3/9   5YR 4/11    5YR 4/3    5YR 4/4    5YR 4/5    5YR 5/2  7.5YR 2/5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2          2          2          2          2          2          2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7.5YR 2/6  7.5YR 3/7  7.5YR 3/9  7.5YR 4/2  7.5YR 4/4  7.5YR 4/9  7.5YR 5/4 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2          2          2          2          2          2          2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   10YR 1/2   10YR 1/4   10YR 2/2   10YR 2/5   10YR 3/4   10YR 3/7   10YR 3/8 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1          1          1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  10YR 4/10  10YR 4/11  10YR 4/12   10YR 4/6   10YR 4/8   10YR 4/9   10YR 5/3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1          1          1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   10YR 5/4    5YR 1/1    5YR 1/2    5YR 1/5    5YR 1/7    5YR 2/1   5YR 2/10 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1          1          1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5YR 2/6    5YR 2/7    5YR 2/8    5YR 3/1   5YR 3/12    5YR 3/8    5YR 4/1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1          1          1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5YR 4/13   5YR 4/14    5YR 4/2    5YR 4/6    5YR 4/7    5YR 5/3    5YR 5/4 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1          1          1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5YR 5/5  7.5YR 1/1  7.5YR 1/2  7.5YR 1/3  7.5YR 2/3  7.5YR 2/7  7.5YR 3/8 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1          1          1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7.5YR 4/1 7.5YR 4/10 7.5YR 4/13  7.5YR 4/5  7.5YR 4/6 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1          1          1          1          1 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># review colors</span></span>
+<span class='r-in'><span class='fu'><a href='previewColors.html'>previewColors</a></span><span class='op'>(</span><span class='fu'><a href='parseMunsell.html'>parseMunsell</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='simulateColor-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># what does a dE00 threshold look like on 3 pages of hue?</span></span>
+<span class='r-in'><span class='fu'><a href='contrastChart.html'>contrastChart</a></span><span class='op'>(</span><span class='st'>'7.5YR 3/3'</span>, hues <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'10YR'</span>, <span class='st'>'7.5YR'</span>, <span class='st'>'5YR'</span><span class='op'>)</span>, thresh <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='simulateColor-3.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

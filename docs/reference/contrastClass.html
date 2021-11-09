@@ -75,7 +75,7 @@ information." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -188,24 +188,26 @@ length.</p>
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'>## standard use, result is an ordered factor</span>
-<span class='co'># 10YR 6/3 vs 5YR 3/4</span>
-<span class='fu'>contrastClass</span><span class='op'>(</span>v1<span class='op'>=</span><span class='fl'>6</span>, c1<span class='op'>=</span><span class='fl'>3</span>, v2<span class='op'>=</span><span class='fl'>3</span>, c2<span class='op'>=</span><span class='fl'>4</span>, dH<span class='op'>=</span><span class='fl'>2</span>, dV<span class='op'>=</span><span class='fl'>3</span>, dC<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] Prominent
-#&gt; Levels: Faint &lt; Distinct &lt; Prominent</div><div class='input'>
-<span class='co'>## verbose output, useful for testing rules/cases</span>
-<span class='co'># 10YR 6/3 vs 5YR 3/4</span>
-<span class='fu'>contrastClass</span><span class='op'>(</span>v1<span class='op'>=</span><span class='fl'>6</span>, c1<span class='op'>=</span><span class='fl'>3</span>, v2<span class='op'>=</span><span class='fl'>3</span>, c2<span class='op'>=</span><span class='fl'>4</span>, dH<span class='op'>=</span><span class='fl'>2</span>, dV<span class='op'>=</span><span class='fl'>3</span>, dC<span class='op'>=</span><span class='fl'>1</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $faint
-#&gt;   v1 c1 v2 c2 dH dV dC f.case1 f.case2 f.case3 low.value.chroma       res
-#&gt; 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE            FALSE Prominent
-#&gt; 
-#&gt; $distinct
-#&gt;   v1 c1 v2 c2 dH dV dC d.case1 d.case2 d.case3       res
-#&gt; 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE Prominent
-#&gt; </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'>## standard use, result is an ordered factor</span></span>
+<span class='r-in'><span class='co'># 10YR 6/3 vs 5YR 3/4</span></span>
+<span class='r-in'><span class='fu'>contrastClass</span><span class='op'>(</span>v1<span class='op'>=</span><span class='fl'>6</span>, c1<span class='op'>=</span><span class='fl'>3</span>, v2<span class='op'>=</span><span class='fl'>3</span>, c2<span class='op'>=</span><span class='fl'>4</span>, dH<span class='op'>=</span><span class='fl'>2</span>, dV<span class='op'>=</span><span class='fl'>3</span>, dC<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] Prominent</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Levels: Faint &lt; Distinct &lt; Prominent</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## verbose output, useful for testing rules/cases</span></span>
+<span class='r-in'><span class='co'># 10YR 6/3 vs 5YR 3/4</span></span>
+<span class='r-in'><span class='fu'>contrastClass</span><span class='op'>(</span>v1<span class='op'>=</span><span class='fl'>6</span>, c1<span class='op'>=</span><span class='fl'>3</span>, v2<span class='op'>=</span><span class='fl'>3</span>, c2<span class='op'>=</span><span class='fl'>4</span>, dH<span class='op'>=</span><span class='fl'>2</span>, dV<span class='op'>=</span><span class='fl'>3</span>, dC<span class='op'>=</span><span class='fl'>1</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $faint</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   v1 c1 v2 c2 dH dV dC f.case1 f.case2 f.case3 low.value.chroma       res</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE            FALSE Prominent</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $distinct</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   v1 c1 v2 c2 dH dV dC d.case1 d.case2 d.case3       res</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE Prominent</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

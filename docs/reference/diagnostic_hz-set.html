@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -137,29 +137,30 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># load test data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
-
-<span class='co'># promote to SPC</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># assign two profiles a zone related to the mollic epipedon</span>
-<span class='va'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"hon-1"</span>,<span class='st'>"hon-17"</span><span class='op'>)</span>,
-                      featkind <span class='op'>=</span> <span class='st'>"fixed-depth surface sample"</span>,
-                      featdept <span class='op'>=</span> <span class='fl'>0</span>,
-                      featdepb <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span>
-
-<span class='co'># do left join</span>
-<span class='fu'><a href='diagnostic_hz,SoilProfileCollection-method.html'>diagnostic_hz</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>newdata</span>
-
-<span class='co'># inspect site table: newvalue TRUE only for horizons</span>
-<span class='co'>#  with top depth equal to zero</span>
-<span class='fu'><a href='diagnostic_hz,SoilProfileCollection-method.html'>diagnostic_hz</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       id                   featkind featdept featdepb
-#&gt; 1  hon-1 fixed-depth surface sample        0       18
-#&gt; 2 hon-17 fixed-depth surface sample        0       18</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># load test data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># promote to SPC</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># assign two profiles a zone related to the mollic epipedon</span></span>
+<span class='r-in'><span class='va'>newdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"hon-1"</span>,<span class='st'>"hon-17"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                      featkind <span class='op'>=</span> <span class='st'>"fixed-depth surface sample"</span>,</span>
+<span class='r-in'>                      featdept <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>                      featdepb <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># do left join</span></span>
+<span class='r-in'><span class='fu'><a href='diagnostic_hz,SoilProfileCollection-method.html'>diagnostic_hz</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>newdata</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect site table: newvalue TRUE only for horizons</span></span>
+<span class='r-in'><span class='co'>#  with top depth equal to zero</span></span>
+<span class='r-in'><span class='fu'><a href='diagnostic_hz,SoilProfileCollection-method.html'>diagnostic_hz</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       id                   featkind featdept featdepb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  hon-1 fixed-depth surface sample        0       18</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 hon-17 fixed-depth surface sample        0       18</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

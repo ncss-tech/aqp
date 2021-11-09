@@ -73,7 +73,7 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -134,154 +134,160 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <p>SpatialPoints</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># load example data stored as SoilProfileCollection</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
-
-<span class='co'># sp5</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
-#&gt;   ..@ idcol       : chr "soil"
-#&gt;   ..@ hzidcol     : chr "hzID"
-#&gt;   ..@ depthcols   : chr [1:2] "top" "bottom"
-#&gt;   ..@ metadata    :List of 10
-#&gt;   .. ..$ aqp_df_class    : chr "data.frame"
-#&gt;   .. ..$ aqp_group_by    : chr ""
-#&gt;   .. ..$ aqp_hzdesgn     : chr ""
-#&gt;   .. ..$ aqp_hztexcl     : chr ""
-#&gt;   .. ..$ depth_units     : chr "cm"
-#&gt;   .. ..$ stringsAsFactors: logi FALSE
-#&gt;   .. ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
-#&gt;   .. ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
-#&gt;   .. ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__
-#&gt;   .. ..$ dateAdded       : Date[1:1], format: "2018-12-27"
-#&gt;   ..@ horizons    :'data.frame':	1539 obs. of  18 variables:
-#&gt;   .. ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...
-#&gt;   .. ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...
-#&gt;   .. ..$ silt      : num [1:1539] 10.9 11.2 11.6 10.9 10.8 ...
-#&gt;   .. ..$ clay      : num [1:1539] 52.8 58.2 51.9 49.7 55.6 ...
-#&gt;   .. ..$ R25       : num [1:1539] 0.41 0.31 0.31 0.31 0.55 0.43 0.44 0.34 0.35 0.35 ...
-#&gt;   .. ..$ G25       : num [1:1539] 0.38 0.28 0.28 0.28 0.46 0.37 0.37 0.28 0.27 0.27 ...
-#&gt;   .. ..$ B25       : num [1:1539] 0.34 0.25 0.25 0.25 0.36 0.3 0.31 0.23 0.19 0.19 ...
-#&gt;   .. ..$ pH        : num [1:1539] 6.85 8.08 9.2 9.29 9.24 8.26 8.95 9.34 9.24 9.13 ...
-#&gt;   .. ..$ EC        : num [1:1539] 24 10 23.9 41.6 73.6 14.5 16.1 26.1 43.8 61.5 ...
-#&gt;   .. ..$ CaCO3     : num [1:1539] 0.05 0.05 0.3 0.4 0.7 0.1 0.5 1 1.05 1.1 ...
-#&gt;   .. ..$ C         : num [1:1539] 2.29 0.9 0.74 0.35 0.25 1.06 0.66 0.58 0.47 0.36 ...
-#&gt;   .. ..$ Ca        : num [1:1539] 183 234 231 168 203 ...
-#&gt;   .. ..$ Mg        : num [1:1539] 146 172 166 152 167 ...
-#&gt;   .. ..$ Na        : num [1:1539] 19 34.1 70.2 81.7 100 ...
-#&gt;   .. ..$ top       : int [1:1539] 0 8 25 55 100 0 10 25 40 70 ...
-#&gt;   .. ..$ bottom    : int [1:1539] 8 25 55 100 267 10 25 40 70 100 ...
-#&gt;   .. ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...
-#&gt;   .. ..$ hzID      : chr [1:1539] "1" "2" "3" "4" ...
-#&gt;   ..@ site        :'data.frame':	296 obs. of  1 variable:
-#&gt;   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...
-#&gt;   ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots
-#&gt;   .. .. ..@ coords     : num [1, 1] 0
-#&gt;   .. .. ..@ bbox       : logi [1, 1] NA
-#&gt;   .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
-#&gt;   .. .. .. .. ..@ projargs: chr NA
-#&gt;   ..@ diagnostic  :'data.frame':	0 obs. of  0 variables
-#&gt;   ..@ restrictions:'data.frame':	0 obs. of  0 variables</div><div class='input'>
-<span class='co'># list output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'list'</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 9
-#&gt;  $ idcol       : chr "soil"
-#&gt;  $ hzidcol     : chr "hzID"
-#&gt;  $ depthcols   : chr [1:2] "top" "bottom"
-#&gt;  $ metadata    :List of 10
-#&gt;   ..$ aqp_df_class    : chr "data.frame"
-#&gt;   ..$ aqp_group_by    : chr ""
-#&gt;   ..$ aqp_hzdesgn     : chr ""
-#&gt;   ..$ aqp_hztexcl     : chr ""
-#&gt;   ..$ depth_units     : chr "cm"
-#&gt;   ..$ stringsAsFactors: logi FALSE
-#&gt;   ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
-#&gt;   ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...
-#&gt;   ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__
-#&gt;   ..$ dateAdded       : Date[1:1], format: "2018-12-27"
-#&gt;  $ horizons    :'data.frame':	1539 obs. of  18 variables:
-#&gt;   ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...
-#&gt;   ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...
-#&gt;   ..$ silt      : num [1:1539] 10.9 11.2 11.6 10.9 10.8 ...
-#&gt;   ..$ clay      : num [1:1539] 52.8 58.2 51.9 49.7 55.6 ...
-#&gt;   ..$ R25       : num [1:1539] 0.41 0.31 0.31 0.31 0.55 0.43 0.44 0.34 0.35 0.35 ...
-#&gt;   ..$ G25       : num [1:1539] 0.38 0.28 0.28 0.28 0.46 0.37 0.37 0.28 0.27 0.27 ...
-#&gt;   ..$ B25       : num [1:1539] 0.34 0.25 0.25 0.25 0.36 0.3 0.31 0.23 0.19 0.19 ...
-#&gt;   ..$ pH        : num [1:1539] 6.85 8.08 9.2 9.29 9.24 8.26 8.95 9.34 9.24 9.13 ...
-#&gt;   ..$ EC        : num [1:1539] 24 10 23.9 41.6 73.6 14.5 16.1 26.1 43.8 61.5 ...
-#&gt;   ..$ CaCO3     : num [1:1539] 0.05 0.05 0.3 0.4 0.7 0.1 0.5 1 1.05 1.1 ...
-#&gt;   ..$ C         : num [1:1539] 2.29 0.9 0.74 0.35 0.25 1.06 0.66 0.58 0.47 0.36 ...
-#&gt;   ..$ Ca        : num [1:1539] 183 234 231 168 203 ...
-#&gt;   ..$ Mg        : num [1:1539] 146 172 166 152 167 ...
-#&gt;   ..$ Na        : num [1:1539] 19 34.1 70.2 81.7 100 ...
-#&gt;   ..$ top       : int [1:1539] 0 8 25 55 100 0 10 25 40 70 ...
-#&gt;   ..$ bottom    : int [1:1539] 8 25 55 100 267 10 25 40 70 100 ...
-#&gt;   ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...
-#&gt;   ..$ hzID      : chr [1:1539] "1" "2" "3" "4" ...
-#&gt;  $ site        :'data.frame':	296 obs. of  1 variable:
-#&gt;   ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...
-#&gt;  $ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots
-#&gt;   .. ..@ coords     : num [1, 1] 0
-#&gt;   .. ..@ bbox       : logi [1, 1] NA
-#&gt;   .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
-#&gt;   .. .. .. ..@ projargs: chr NA
-#&gt;  $ diagnostic  :'data.frame':	0 obs. of  0 variables
-#&gt;  $ restrictions:'data.frame':	0 obs. of  0 variables</div><div class='input'>
-<span class='co'># data.frame output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'data.frame'</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 'data.frame':	1539 obs. of  18 variables:
-#&gt;  $ soil      : chr  "soil1" "soil1" "soil1" "soil1" ...
-#&gt;  $ sand      : num  32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...
-#&gt;  $ silt      : num  10.9 11.2 11.6 10.9 10.8 ...
-#&gt;  $ clay      : num  52.8 58.2 51.9 49.7 55.6 ...
-#&gt;  $ R25       : num  0.41 0.31 0.31 0.31 0.55 0.43 0.44 0.34 0.35 0.35 ...
-#&gt;  $ G25       : num  0.38 0.28 0.28 0.28 0.46 0.37 0.37 0.28 0.27 0.27 ...
-#&gt;  $ B25       : num  0.34 0.25 0.25 0.25 0.36 0.3 0.31 0.23 0.19 0.19 ...
-#&gt;  $ pH        : num  6.85 8.08 9.2 9.29 9.24 8.26 8.95 9.34 9.24 9.13 ...
-#&gt;  $ EC        : num  24 10 23.9 41.6 73.6 14.5 16.1 26.1 43.8 61.5 ...
-#&gt;  $ CaCO3     : num  0.05 0.05 0.3 0.4 0.7 0.1 0.5 1 1.05 1.1 ...
-#&gt;  $ C         : num  2.29 0.9 0.74 0.35 0.25 1.06 0.66 0.58 0.47 0.36 ...
-#&gt;  $ Ca        : num  183 234 231 168 203 ...
-#&gt;  $ Mg        : num  146 172 166 152 167 ...
-#&gt;  $ Na        : num  19 34.1 70.2 81.7 100 ...
-#&gt;  $ top       : int  0 8 25 55 100 0 10 25 40 70 ...
-#&gt;  $ bottom    : int  8 25 55 100 267 10 25 40 70 100 ...
-#&gt;  $ soil_color: chr  "#696157" "#4F4740" "#4F4740" "#4F4740" ...
-#&gt;  $ hzID      : chr  "1" "2" "3" "4" ...</div><div class='input'>
-<span class='co'># Spatial Objects</span>
-<span class='co'># make some random coordinate data for each profile</span>
-<span class='va'>sp5</span><span class='op'>$</span><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>sp5</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='coordinates,SoilProfileCollection-method.html'>coordinates</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>y</span>
-
-<span class='co'># SpatialPointsDataFrame output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'SpatialPointsDataFrame'</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>only site data are extracted</span></div><div class='output co'>#&gt; Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
-#&gt;   ..@ data       :'data.frame':	296 obs. of  1 variable:
-#&gt;   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...
-#&gt;   ..@ coords.nrs : num(0) 
-#&gt;   ..@ coords     : num [1:296, 1:2] -1.2248 0.0849 0.5814 0.4506 0.497 ...
-#&gt;   .. ..- attr(*, "dimnames")=List of 2
-#&gt;   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ : chr [1:2] "x" "y"
-#&gt;   ..@ bbox       : num [1:2, 1:2] -3.1 -3.1 2.69 2.69
-#&gt;   .. ..- attr(*, "dimnames")=List of 2
-#&gt;   .. .. ..$ : chr [1:2] "x" "y"
-#&gt;   .. .. ..$ : chr [1:2] "min" "max"
-#&gt;   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
-#&gt;   .. .. ..@ projargs: chr NA</div><div class='input'>
-<span class='co'># SpatialPoints output</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'SpatialPoints'</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Formal class 'SpatialPoints' [package "sp"] with 3 slots
-#&gt;   ..@ coords     : num [1:296, 1:2] -1.2248 0.0849 0.5814 0.4506 0.497 ...
-#&gt;   .. ..- attr(*, "dimnames")=List of 2
-#&gt;   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ : chr [1:2] "x" "y"
-#&gt;   ..@ bbox       : num [1:2, 1:2] -3.1 -3.1 2.69 2.69
-#&gt;   .. ..- attr(*, "dimnames")=List of 2
-#&gt;   .. .. ..$ : chr [1:2] "x" "y"
-#&gt;   .. .. ..$ : chr [1:2] "min" "max"
-#&gt;   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
-#&gt;   .. .. ..@ projargs: chr NA</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># load example data stored as SoilProfileCollection</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># sp5</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ idcol       : chr "soil"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ hzidcol     : chr "hzID"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ depthcols   : chr [1:2] "top" "bottom"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ metadata    :List of 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ aqp_df_class    : chr "data.frame"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ aqp_group_by    : chr ""</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ aqp_hzdesgn     : chr ""</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ aqp_hztexcl     : chr ""</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ depth_units     : chr "cm"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ stringsAsFactors: logi FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ dateAdded       : Date[1:1], format: "2018-12-27"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ horizons    :'data.frame':	1539 obs. of  18 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ silt      : num [1:1539] 10.9 11.2 11.6 10.9 10.8 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ clay      : num [1:1539] 52.8 58.2 51.9 49.7 55.6 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ R25       : num [1:1539] 0.41 0.31 0.31 0.31 0.55 0.43 0.44 0.34 0.35 0.35 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ G25       : num [1:1539] 0.38 0.28 0.28 0.28 0.46 0.37 0.37 0.28 0.27 0.27 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ B25       : num [1:1539] 0.34 0.25 0.25 0.25 0.36 0.3 0.31 0.23 0.19 0.19 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ pH        : num [1:1539] 6.85 8.08 9.2 9.29 9.24 8.26 8.95 9.34 9.24 9.13 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ EC        : num [1:1539] 24 10 23.9 41.6 73.6 14.5 16.1 26.1 43.8 61.5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ CaCO3     : num [1:1539] 0.05 0.05 0.3 0.4 0.7 0.1 0.5 1 1.05 1.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ C         : num [1:1539] 2.29 0.9 0.74 0.35 0.25 1.06 0.66 0.58 0.47 0.36 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ Ca        : num [1:1539] 183 234 231 168 203 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ Mg        : num [1:1539] 146 172 166 152 167 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ Na        : num [1:1539] 19 34.1 70.2 81.7 100 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ top       : int [1:1539] 0 8 25 55 100 0 10 25 40 70 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ bottom    : int [1:1539] 8 25 55 100 267 10 25 40 70 100 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ hzID      : chr [1:1539] "1" "2" "3" "4" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ site        :'data.frame':	296 obs. of  1 variable:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..@ coords     : num [1, 1] 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..@ bbox       : logi [1, 1] NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. .. .. ..@ projargs: chr NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ diagnostic  :'data.frame':	0 obs. of  0 variables</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ restrictions:'data.frame':	0 obs. of  0 variables</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># list output</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'list'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ idcol       : chr "soil"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ hzidcol     : chr "hzID"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ depthcols   : chr [1:2] "top" "bottom"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ metadata    :List of 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ aqp_df_class    : chr "data.frame"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ aqp_group_by    : chr ""</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ aqp_hzdesgn     : chr ""</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ aqp_hztexcl     : chr ""</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth_units     : chr "cm"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ stringsAsFactors: logi FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ dateAdded       : Date[1:1], format: "2018-12-27"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ horizons    :'data.frame':	1539 obs. of  18 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ silt      : num [1:1539] 10.9 11.2 11.6 10.9 10.8 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ clay      : num [1:1539] 52.8 58.2 51.9 49.7 55.6 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ R25       : num [1:1539] 0.41 0.31 0.31 0.31 0.55 0.43 0.44 0.34 0.35 0.35 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ G25       : num [1:1539] 0.38 0.28 0.28 0.28 0.46 0.37 0.37 0.28 0.27 0.27 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ B25       : num [1:1539] 0.34 0.25 0.25 0.25 0.36 0.3 0.31 0.23 0.19 0.19 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ pH        : num [1:1539] 6.85 8.08 9.2 9.29 9.24 8.26 8.95 9.34 9.24 9.13 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ EC        : num [1:1539] 24 10 23.9 41.6 73.6 14.5 16.1 26.1 43.8 61.5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ CaCO3     : num [1:1539] 0.05 0.05 0.3 0.4 0.7 0.1 0.5 1 1.05 1.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ C         : num [1:1539] 2.29 0.9 0.74 0.35 0.25 1.06 0.66 0.58 0.47 0.36 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Ca        : num [1:1539] 183 234 231 168 203 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Mg        : num [1:1539] 146 172 166 152 167 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Na        : num [1:1539] 19 34.1 70.2 81.7 100 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ top       : int [1:1539] 0 8 25 55 100 0 10 25 40 70 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ bottom    : int [1:1539] 8 25 55 100 267 10 25 40 70 100 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ hzID      : chr [1:1539] "1" "2" "3" "4" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ site        :'data.frame':	296 obs. of  1 variable:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..@ coords     : num [1, 1] 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..@ bbox       : logi [1, 1] NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. .. ..@ projargs: chr NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ diagnostic  :'data.frame':	0 obs. of  0 variables</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ restrictions:'data.frame':	0 obs. of  0 variables</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># data.frame output</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'data.frame'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'data.frame':	1539 obs. of  18 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ soil      : chr  "soil1" "soil1" "soil1" "soil1" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ sand      : num  32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ silt      : num  10.9 11.2 11.6 10.9 10.8 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ clay      : num  52.8 58.2 51.9 49.7 55.6 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ R25       : num  0.41 0.31 0.31 0.31 0.55 0.43 0.44 0.34 0.35 0.35 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ G25       : num  0.38 0.28 0.28 0.28 0.46 0.37 0.37 0.28 0.27 0.27 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ B25       : num  0.34 0.25 0.25 0.25 0.36 0.3 0.31 0.23 0.19 0.19 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ pH        : num  6.85 8.08 9.2 9.29 9.24 8.26 8.95 9.34 9.24 9.13 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ EC        : num  24 10 23.9 41.6 73.6 14.5 16.1 26.1 43.8 61.5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ CaCO3     : num  0.05 0.05 0.3 0.4 0.7 0.1 0.5 1 1.05 1.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ C         : num  2.29 0.9 0.74 0.35 0.25 1.06 0.66 0.58 0.47 0.36 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ Ca        : num  183 234 231 168 203 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ Mg        : num  146 172 166 152 167 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ Na        : num  19 34.1 70.2 81.7 100 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ top       : int  0 8 25 55 100 0 10 25 40 70 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ bottom    : int  8 25 55 100 267 10 25 40 70 100 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ soil_color: chr  "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ hzID      : chr  "1" "2" "3" "4" ...</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Spatial Objects</span></span>
+<span class='r-in'><span class='co'># make some random coordinate data for each profile</span></span>
+<span class='r-in'><span class='va'>sp5</span><span class='op'>$</span><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>sp5</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='coordinates,SoilProfileCollection-method.html'>coordinates</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>y</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># SpatialPointsDataFrame output</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'SpatialPointsDataFrame'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> only site data are extracted</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ data       :'data.frame':	296 obs. of  1 variable:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ coords.nrs : num(0) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ coords     : num [1:296, 1:2] -1.2248 0.0849 0.5814 0.4506 0.497 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -3.1 -3.1 2.69 2.69</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:2] "min" "max"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..@ projargs: chr NA</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># SpatialPoints output</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>as</span><span class='op'>(</span><span class='va'>sp5</span>, <span class='st'>'SpatialPoints'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ coords     : num [1:296, 1:2] -1.2248 0.0849 0.5814 0.4506 0.497 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -3.1 -3.1 2.69 2.69</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..$ : chr [1:2] "min" "max"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .. .. ..@ projargs: chr NA</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

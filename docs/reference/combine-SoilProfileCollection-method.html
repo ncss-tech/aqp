@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -147,25 +147,25 @@
     <p>A SoilProfileCollection</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># example data</span>
-<span class='va'>spc1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='fl'>1</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>spc2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='fl'>2</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>spc3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='st'>'A'</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># combine into a single SPC, ... interface</span>
-<span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>combine</span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span>, <span class='va'>spc3</span><span class='op'>)</span>
-
-<span class='co'># combine into a single SPC, list interface</span>
-<span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>combine</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span>, <span class='va'>spc3</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># input are combined into a single SPC</span>
-<span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>c</span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span>, <span class='va'>spc3</span><span class='op'>)</span>
-
-<span class='co'># result is a list when a mixture of objects are provided</span>
-<span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>c</span><span class='op'>(</span><span class='va'>spc1</span>, bar<span class='op'>=</span><span class='va'>spc2</span>, baz<span class='op'>=</span><span class='st'>"foo"</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># example data</span></span>
+<span class='r-in'><span class='va'>spc1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='fl'>1</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>spc2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='fl'>2</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>spc3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='random_profile.html'>random_profile</a></span><span class='op'>(</span><span class='st'>'A'</span>, SPC <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># combine into a single SPC, ... interface</span></span>
+<span class='r-in'><span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>combine</span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span>, <span class='va'>spc3</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># combine into a single SPC, list interface</span></span>
+<span class='r-in'><span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>combine</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span>, <span class='va'>spc3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># input are combined into a single SPC</span></span>
+<span class='r-in'><span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>c</span><span class='op'>(</span><span class='va'>spc1</span>, <span class='va'>spc2</span>, <span class='va'>spc3</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># result is a list when a mixture of objects are provided</span></span>
+<span class='r-in'><span class='va'>spc</span> <span class='op'>&lt;-</span> <span class='fu'>c</span><span class='op'>(</span><span class='va'>spc1</span>, bar<span class='op'>=</span><span class='va'>spc2</span>, baz<span class='op'>=</span><span class='st'>"foo"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

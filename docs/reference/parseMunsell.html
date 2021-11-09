@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parse Munsell Color Notation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/munsell2rgb.R'><code>R/munsell2rgb.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/parseMunsell.R'><code>R/parseMunsell.R</code></a></small>
     <div class="hidden name"><code>parseMunsell.Rd</code></div>
     </div>
 
@@ -127,7 +127,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>munsellColor</th>
-      <td><p>character vector of Munsell colors (e.g. <code><a href='c,SoilProfileCollection-method.html'>c('10YR 3/4', '5YR 4/6')</a></code>)</p></td>
+      <td><p>character vector of Munsell colors (e.g. <code>c('10YR 3/4', '5YR 4/6')</code>)</p></td>
     </tr>
     <tr>
       <th>convertColors</th>
@@ -151,22 +151,29 @@
     <p>P. Roudier and D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># just sRGB</span>
-<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           r         g          b
-#&gt; 1 0.3817539 0.2599868 0.09323485</div><div class='input'>
-<span class='co'># sRGB + CIELAB (D65 illuminant)</span>
-<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           r         g          b        L        A        B
-#&gt; 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</div><div class='input'>
-<span class='co'># CIELAB only</span>
-<span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>FALSE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          L        A        B
-#&gt; 1 30.81482 9.000702 30.27227</div><div class='input'>
-
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># just sRGB</span></span>
+<span class='r-in'><span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           r         g          b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.3817539 0.2599868 0.09323485</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># sRGB + CIELAB (D65 illuminant)</span></span>
+<span class='r-in'><span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>TRUE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           r         g          b        L        A        B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># CIELAB only</span></span>
+<span class='r-in'><span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>"10YR 3/5"</span>, return_triplets <span class='op'>=</span> <span class='cn'>FALSE</span>, returnLAB <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          L        A        B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 30.81482 9.000702 30.27227</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># neutral hue</span></span>
+<span class='r-in'><span class='co'># note chroma encoded as '0'</span></span>
+<span class='r-in'><span class='fu'>parseMunsell</span><span class='op'>(</span><span class='st'>'N 3/'</span>, convertColors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   hue value chroma</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   N     3      0</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -174,93 +174,99 @@ or possibly <code>mean</code>: somewhere in-between.</p>
     <p>D.E. Beaudette and J.M. Skovlin</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-
-<span class='co'>## consider a situation where there were multiple candidate</span>
-<span class='co'>## "contacts": 2 Cd horizons over an R</span>
-
-<span class='co'># init hypothetical profile</span>
-<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-  id <span class='op'>=</span> <span class='st'>'1'</span>,
-  top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
-  bottom <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span>, <span class='fl'>80</span><span class='op'>)</span>,
-  name <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'Bt2'</span>, <span class='st'>'BC'</span>, <span class='st'>'Cd1'</span>, <span class='st'>'Cd2'</span>, <span class='st'>'R'</span><span class='op'>)</span>,
-  stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span>
-
-<span class='co'># upgrade to SPC</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># visual check</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, hz.depths <span class='op'>=</span> <span class='cn'>TRUE</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, cex.names <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='img'><img src='estimateSoilDepth-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># top of the first Cd</span>
-<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 40</div><div class='input'>
-<span class='co'># top of the first Cd</span>
-<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>min</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 40</div><div class='input'>
-<span class='co'># top of the R</span>
-<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>max</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 60</div><div class='input'>
-<span class='co'># top of the second Cd</span>
-<span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>max</span>, p <span class='op'>=</span> <span class='st'>'Cd'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 50</div><div class='input'>
-
-<span class='co'>## another example</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># apply to each profile in a collection, and save as site-level attribute</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>depth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='va'>estimateSoilDepth</span>, name<span class='op'>=</span><span class='st'>'name'</span><span class='op'>)</span>
-
-<span class='co'># this function can be used to "find" depth to any feature </span>
-<span class='co'># that can be defined via REGEX pattern matching on the horizon name</span>
-<span class='co'># for example, locate the depth to the top "Bt" horizon</span>
-<span class='co'># returning NA when there is no match</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>top_Bt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span>
-  <span class='va'>sp1</span>, <span class='va'>estimateSoilDepth</span>, 
-  name<span class='op'>=</span><span class='st'>'name'</span>, 
-  p<span class='op'>=</span><span class='st'>'Bt'</span>, 
-  no.contact.depth<span class='op'>=</span><span class='fl'>0</span>, 
-  no.contact.assigned<span class='op'>=</span><span class='cn'>NA</span>
-<span class='op'>)</span>
-
-<span class='co'># reduced margins</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># adjust default y-offset and depth scaling for following examples</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp1</span>, y.offset<span class='op'>=</span><span class='fl'>10</span>, scaling.factor<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
-</div><div class='input'>
-<span class='co'># get plotting parameters for profile widths and depth scaling factors</span>
-<span class='va'>lsp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span><span class='op'>(</span><span class='st'>"last_spc_plot"</span>, envir <span class='op'>=</span> <span class='va'>aqp.env</span><span class='op'>)</span>
-
-<span class='co'># positions on x-axis, same for both depth and top "Bt" horizon</span>
-<span class='va'>x.positions</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>width</span>
-
-<span class='co'># annotate contact with unicode right-arrow</span>
-<span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span>
-<span class='va'>y.positions</span> <span class='op'>&lt;-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>y.offset</span> <span class='op'>+</span> <span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>depth</span> <span class='op'>*</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>scaling.factor</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='va'>x.positions</span>, <span class='va'>y.positions</span>, <span class='st'>'\u2192'</span>, col<span class='op'>=</span><span class='st'>'red'</span>, adj<span class='op'>=</span><span class='fl'>1</span>, cex<span class='op'>=</span><span class='fl'>1.25</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
-</div><div class='input'>
-<span class='co'># annotate top "Bt" depth with unicode right-arrow</span>
-<span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span>
-<span class='va'>y.positions</span> <span class='op'>&lt;-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>y.offset</span> <span class='op'>+</span> <span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>top_Bt</span> <span class='op'>*</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>scaling.factor</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='va'>x.positions</span>, <span class='va'>y.positions</span>, <span class='st'>'\u2192'</span>, col<span class='op'>=</span><span class='st'>'blue'</span>, adj<span class='op'>=</span><span class='fl'>1</span>, cex<span class='op'>=</span><span class='fl'>1.25</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='estimateSoilDepth-2.png' alt='' width='768' height='475' /></div><div class='input'>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='co'># sample data</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, package<span class='op'>=</span><span class='st'>'soilDB'</span><span class='op'>)</span>
-  
-  <span class='co'># run on a single profile</span>
-  <span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>gopheridge</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span><span class='op'>)</span>
-  
-  <span class='co'># apply to an entire collection</span>
-  <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, <span class='va'>estimateSoilDepth</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## consider a situation where there were multiple candidate</span></span>
+<span class='r-in'><span class='co'>## "contacts": 2 Cd horizons over an R</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># init hypothetical profile</span></span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span class='r-in'>  id <span class='op'>=</span> <span class='st'>'1'</span>,</span>
+<span class='r-in'>  top <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,</span>
+<span class='r-in'>  bottom <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>60</span>, <span class='fl'>80</span><span class='op'>)</span>,</span>
+<span class='r-in'>  name <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'A'</span>, <span class='st'>'Bt1'</span>, <span class='st'>'Bt2'</span>, <span class='st'>'BC'</span>, <span class='st'>'Cd1'</span>, <span class='st'>'Cd2'</span>, <span class='st'>'R'</span><span class='op'>)</span>,</span>
+<span class='r-in'>  stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># upgrade to SPC</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># visual check</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, hz.depths <span class='op'>=</span> <span class='cn'>TRUE</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, cex.names <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='estimateSoilDepth-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># top of the first Cd</span></span>
+<span class='r-in'><span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 40</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># top of the first Cd</span></span>
+<span class='r-in'><span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>min</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 40</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># top of the R</span></span>
+<span class='r-in'><span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>max</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 60</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># top of the second Cd</span></span>
+<span class='r-in'><span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>d</span>, name <span class='op'>=</span> <span class='st'>'name'</span>, selection <span class='op'>=</span> <span class='va'>max</span>, p <span class='op'>=</span> <span class='st'>'Cd'</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 50</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## another example</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># apply to each profile in a collection, and save as site-level attribute</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>depth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span><span class='va'>sp1</span>, <span class='va'>estimateSoilDepth</span>, name<span class='op'>=</span><span class='st'>'name'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># this function can be used to "find" depth to any feature </span></span>
+<span class='r-in'><span class='co'># that can be defined via REGEX pattern matching on the horizon name</span></span>
+<span class='r-in'><span class='co'># for example, locate the depth to the top "Bt" horizon</span></span>
+<span class='r-in'><span class='co'># returning NA when there is no match</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>top_Bt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>sp1</span>, <span class='va'>estimateSoilDepth</span>, </span>
+<span class='r-in'>  name<span class='op'>=</span><span class='st'>'name'</span>, </span>
+<span class='r-in'>  p<span class='op'>=</span><span class='st'>'Bt'</span>, </span>
+<span class='r-in'>  no.contact.depth<span class='op'>=</span><span class='fl'>0</span>, </span>
+<span class='r-in'>  no.contact.assigned<span class='op'>=</span><span class='cn'>NA</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># reduced margins</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># adjust default y-offset and depth scaling for following examples</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sp1</span>, y.offset<span class='op'>=</span><span class='fl'>10</span>, scaling.factor<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># get plotting parameters for profile widths and depth scaling factors</span></span>
+<span class='r-in'><span class='va'>lsp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span><span class='op'>(</span><span class='st'>"last_spc_plot"</span>, envir <span class='op'>=</span> <span class='va'>aqp.env</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># positions on x-axis, same for both depth and top "Bt" horizon</span></span>
+<span class='r-in'><span class='va'>x.positions</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>width</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># annotate contact with unicode right-arrow</span></span>
+<span class='r-in'><span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span></span>
+<span class='r-in'><span class='va'>y.positions</span> <span class='op'>&lt;-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>y.offset</span> <span class='op'>+</span> <span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>depth</span> <span class='op'>*</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>scaling.factor</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='va'>x.positions</span>, <span class='va'>y.positions</span>, <span class='st'>'\u2192'</span>, col<span class='op'>=</span><span class='st'>'red'</span>, adj<span class='op'>=</span><span class='fl'>1</span>, cex<span class='op'>=</span><span class='fl'>1.25</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># annotate top "Bt" depth with unicode right-arrow</span></span>
+<span class='r-in'><span class='co'># y-position is adjusted based on plot y-offset and scaling factor</span></span>
+<span class='r-in'><span class='va'>y.positions</span> <span class='op'>&lt;-</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>y.offset</span> <span class='op'>+</span> <span class='op'>(</span><span class='va'>sp1</span><span class='op'>$</span><span class='va'>top_Bt</span> <span class='op'>*</span> <span class='va'>lsp</span><span class='op'>$</span><span class='va'>scaling.factor</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='va'>x.positions</span>, <span class='va'>y.positions</span>, <span class='st'>'\u2192'</span>, col<span class='op'>=</span><span class='st'>'blue'</span>, adj<span class='op'>=</span><span class='fl'>1</span>, cex<span class='op'>=</span><span class='fl'>1.25</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='estimateSoilDepth-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='co'># sample data</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, package<span class='op'>=</span><span class='st'>'soilDB'</span><span class='op'>)</span></span>
+<span class='r-in'>  </span>
+<span class='r-in'>  <span class='co'># run on a single profile</span></span>
+<span class='r-in'>  <span class='fu'>estimateSoilDepth</span><span class='op'>(</span><span class='va'>gopheridge</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'>  </span>
+<span class='r-in'>  <span class='co'># apply to an entire collection</span></span>
+<span class='r-in'>  <span class='fu'><a href='profileApply.html'>profileApply</a></span><span class='op'>(</span><span class='va'>gopheridge</span>, <span class='va'>estimateSoilDepth</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

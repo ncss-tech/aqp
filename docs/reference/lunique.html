@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -139,35 +139,39 @@
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
-
-<span class='co'># EXAMPLE #1 -- resolving overlap</span>
-
-<span class='co'># 6 profiles in four sets, and 5,6,7 are missing</span>
-<span class='va'>input</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>4</span><span class='op'>)</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span>, <span class='cn'>NA</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>,<span class='fl'>9</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>idx</span><span class='op'>)</span> <span class='op'>{</span>
-      <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>idx</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-       <span class='va'>sp5</span><span class='op'>[</span><span class='va'>idx</span>,<span class='op'>]</span>
-<span class='op'>}</span><span class='op'>)</span>
-
-<span class='va'>output</span> <span class='op'>&lt;-</span> <span class='fu'>lunique</span><span class='op'>(</span><span class='va'>input</span><span class='op'>)</span>
-
-<span class='co'># 6 profiles are in final SPC; 5,6,7 are missing</span>
-<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='fu'><a href='pbindlist.html'>pbindlist</a></span><span class='op'>(</span><span class='va'>output</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>pbindlist: one or more input list elements is NA</span></div><div class='output co'>#&gt; [1] 1 2 3 4 8 9</div><div class='input'>
-<span class='co'># EXAMPLE #2 -- exact duplicates</span>
-
-<span class='co'># deliberately duplicate an SPC</span>
-<span class='va'>sp5_2</span> <span class='op'>&lt;-</span> <span class='va'>sp5</span>
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>lunique</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sp5</span>, <span class='va'>sp5_2</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># the number of profiles in first element is equal to number in sp5</span>
-<span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>==</span> <span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='co'># second list element contains NA b/c all uniques are in #1</span>
-<span class='va'>res</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; [1] NA</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># EXAMPLE #1 -- resolving overlap</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 6 profiles in four sets, and 5,6,7 are missing</span></span>
+<span class='r-in'><span class='va'>input</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>4</span><span class='op'>)</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span>, <span class='cn'>NA</span>, <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>,<span class='fl'>9</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>idx</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>      <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>idx</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>       <span class='va'>sp5</span><span class='op'>[</span><span class='va'>idx</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>output</span> <span class='op'>&lt;-</span> <span class='fu'>lunique</span><span class='op'>(</span><span class='va'>input</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 6 profiles are in final SPC; 5,6,7 are missing</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='fu'><a href='pbindlist.html'>pbindlist</a></span><span class='op'>(</span><span class='va'>output</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> pbindlist: one or more input list elements is NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1 2 3 4 8 9</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># EXAMPLE #2 -- exact duplicates</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># deliberately duplicate an SPC</span></span>
+<span class='r-in'><span class='va'>sp5_2</span> <span class='op'>&lt;-</span> <span class='va'>sp5</span></span>
+<span class='r-in'><span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>lunique</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sp5</span>, <span class='va'>sp5_2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># the number of profiles in first element is equal to number in sp5</span></span>
+<span class='r-in'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>==</span> <span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># second list element contains NA b/c all uniques are in #1</span></span>
+<span class='r-in'><span class='va'>res</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

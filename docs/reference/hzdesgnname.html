@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get horizon designation column name — hzdesgnname,SoilProfileCollection-method • aqp</title>
+<title>Get or Set Horizon Designation Column Name — hzdesgnname • aqp</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Get horizon designation column name — hzdesgnname,SoilProfileCollection-method" />
-<meta property="og:description" content="Get column name containing horizon designation name" />
+<meta property="og:title" content="Get or Set Horizon Designation Column Name — hzdesgnname" />
+<meta property="og:description" content="hzdesgnname(): Get column name containing horizon designations
+hzdesgnname&amp;lt;-: Set horizon designation column name" />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -111,17 +112,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get horizon designation column name</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/Class-SoilProfileCollection.R'><code>R/Class-SoilProfileCollection.R</code></a></small>
+    <h1>Get or Set Horizon Designation Column Name</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/aqp/blob/master/R/SoilProfileCollection-metadata.R'><code>R/SoilProfileCollection-metadata.R</code></a></small>
     <div class="hidden name"><code>hzdesgnname.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get column name containing horizon designation name</p>
+    <p><code>hzdesgnname()</code>: Get column name containing horizon designations</p>
+<p><code>hzdesgnname&lt;-</code>: Set horizon designation column name</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for SoilProfileCollection</span>
-<span class='fu'>hzdesgnname</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+<span class='fu'>hzdesgnname</span><span class='op'>(</span><span class='va'>object</span>, required <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='co'># S4 method for SoilProfileCollection</span>
+<span class='fu'>hzdesgnname</span><span class='op'>(</span><span class='va'>object</span>, required <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,9 +135,37 @@
       <th>object</th>
       <td><p>a SoilProfileCollection</p></td>
     </tr>
+    <tr>
+      <th>required</th>
+      <td><p>logical, is this attribute required? If it is, set to <code>TRUE</code> to trigger error on invalid <code>value</code>.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>character, name of column containing horizon designations</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>Store the column name containing horizon designations or other identifiers in the metadata slot of the SoilProfileCollection.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='hzDesgn,SoilProfileCollection-method.html'>hzDesgn()</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># promote to SPC</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># set horizon designation column</span></span>
+<span class='r-in'><span class='fu'>hzdesgnname</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"name"</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># get horizon designation column</span></span>
+<span class='r-in'><span class='fu'>hzdesgnname</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "name"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

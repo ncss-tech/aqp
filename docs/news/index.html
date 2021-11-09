@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -114,9 +114,44 @@
       <small>Source: <a href='https://github.com/ncss-tech/aqp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="aqp-133-2021-10-25" class="section level1">
+<h1 class="page-header" data-toc-text="1.33">
+<a href="#aqp-133-2021-10-25" class="anchor"></a>aqp 1.33 (2021-10-25)<small> Unreleased </small>
+</h1>
+<ul>
+<li>fixed small bug in <code><a href="../reference/panel.depth_function.html">panel.depth_function()</a></code> that affected plotting of grouped data, created by <code><a href="../reference/slab-methods.html">slab()</a></code>
+</li>
+<li>
+<code><a href="../reference/plotSPC.html">plotSPC()</a></code> now uses variable (vertical) text alignment for horizon depth labels</li>
+</ul>
+</div>
+    <div id="aqp-132-2021-09-28" class="section level1">
+<h1 class="page-header" data-toc-text="1.32">
+<a href="#aqp-132-2021-09-28" class="anchor"></a>aqp 1.32 (2021-09-28)<small> 2021-09-29 </small>
+</h1>
+<ul>
+<li>
+<code><a href="../reference/colorChart.html">colorChart()</a></code> can now show neutral hues in a skinny panel</li>
+<li>updates to <code><a href="../reference/colorContrast.html">colorContrast()</a></code>, <code><a href="../reference/parseMunsell.html">parseMunsell()</a></code>, and <code><a href="../reference/huePosition.html">huePosition()</a></code> to work properly with neutral hues</li>
+<li>
+<code><a href="../reference/huePosition.html">huePosition()</a></code> gains new arguments and functionality: <code>origin</code> and <code>direction</code>
+</li>
+<li>new function <code><a href="../reference/huePositionCircle.html">huePositionCircle()</a></code> for helping visualize differences in Munsell hue on the unit circle</li>
+<li>
+<code>plotSPC</code> defaults change:
+<ul>
+<li>
+<code>width = 0.25</code>: slightly wider profile sketches</li>
+<li>
+<code>name = hzdesgnname(x)</code>: use metadata if present, no longer guessing. This may cause your figures to “lose” previously guessed horizon names, specify with <code>name = 'column name'</code> or set metadata with <code>hzdesgnname(x) &lt;- 'hzname'</code>
+</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="aqp-131-2021-08-19" class="section level1">
 <h1 class="page-header" data-toc-text="1.31">
-<a href="#aqp-131-2021-08-19" class="anchor"></a>aqp 1.31 (2021-08-19)<small> Unreleased </small>
+<a href="#aqp-131-2021-08-19" class="anchor"></a>aqp 1.31 (2021-08-19)<small> 2021-08-19 </small>
 </h1>
 <ul>
 <li>CRAN release</li>
@@ -155,7 +190,7 @@
 <code><a href="../reference/glom,SoilProfileCollection-method.html">glom()</a></code> <code>z1</code> and <code>z2</code> arguments vectorized to allow for profile-specific intervals
 <ul>
 <li>
-<code>z1</code> and <code>z2</code> support non-standard evaluation based on column names in <code><a href="../reference/siteNames&lt;-.html">siteNames(p)</a></code>, and also can take character vector (length 1) with column names in <code><a href="../reference/siteNames&lt;-.html">siteNames(p)</a></code>
+<code>z1</code> and <code>z2</code> support non-standard evaluation based on column names in <code>siteNames(p)</code>, and also can take character vector (length 1) with column names in <code>siteNames(p)</code>
 </li>
 </ul>
 </li>
@@ -280,7 +315,7 @@
 </h1>
 <ul>
 <li>
-<code>mutate_profile</code> uses <code><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">data.table::rbindlist(fill=TRUE)</a></code> to combine site- and horizon-level transformations</li>
+<code>mutate_profile</code> uses <code>data.table::rbindlist(fill=TRUE)</code> to combine site- and horizon-level transformations</li>
 <li>updates to horizon boundary encoding functions (<code>hzTopographyCodeToOffset</code>, <code>hzTopographyCodeToLineType</code>, <code>hzDistinctnessCodeToOffset</code>)</li>
 <li>new function <code>L1_profiles</code> computes multivariate (L1) medians, compare to marginal medians via <code>slab</code>
 </li>
@@ -343,7 +378,7 @@
 </li>
 <li>add <code>returnData</code> argument to <code>contrastChart</code>
 </li>
-<li>improvements to <code><a href="../reference/glom,SoilProfileCollection-method.html">glom(..., invert=TRUE)</a></code>, <code>glomApply</code>, and better tests</li>
+<li>improvements to <code>glom(..., invert=TRUE)</code>, <code>glomApply</code>, and better tests</li>
 <li>new wrapper method around <code>glomApply</code>: <code><a href="../reference/trunc,SoilProfileCollection-method.html">aqp::trunc</a></code> for cases when top and bottom depth interval is the same for all profiles in a <em>SoilProfileCollection</em>
 </li>
 <li>fix for routing of <code>NULL</code> through <code>$&lt;-</code> and <code>horizons&lt;-</code> or <code>site&lt;-</code> (<a href="https://github.com/ncss-tech/aqp/issues/163" class="uri">https://github.com/ncss-tech/aqp/issues/163</a>)</li>
@@ -357,7 +392,7 @@
 </h1>
 <ul>
 <li>enhanced <em>SoilProfileCollection</em> object validity checks via S4; new method <code>spc_in_sync</code> (<a href="https://github.com/ncss-tech/aqp/pull/152" class="uri">https://github.com/ncss-tech/aqp/pull/152</a>)</li>
-<li>optimization of <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> subset method and optional use of <code>data.table</code> (<a href="https://github.com/ncss-tech/aqp/pull/155" class="uri">https://github.com/ncss-tech/aqp/pull/155</a>)</li>
+<li>optimization of <code>[</code> subset method and optional use of <code>data.table</code> (<a href="https://github.com/ncss-tech/aqp/pull/155" class="uri">https://github.com/ncss-tech/aqp/pull/155</a>)</li>
 <li>
 <code>depths&lt;-</code> has been optimized and minimally validates input data</li>
 <li>default horizon ID (<code>hzID</code>) is now a <code>character</code> data type</li>
@@ -391,7 +426,7 @@
 <li>ROSETTA centroids and water retention by texture class (<a href="https://github.com/ncss-tech/aqp/issues/131" class="uri">https://github.com/ncss-tech/aqp/issues/131</a>)</li>
 <li>fix for <code>getSurfaceHorizonDepth</code> with buried horizons / non-contiguous instances of matching horizons (<a href="https://github.com/ncss-tech/aqp/issues/132" class="uri">https://github.com/ncss-tech/aqp/issues/132</a>)</li>
 <li>fix for default <code>plotSPC</code> with small number of profiles ((<a href="https://github.com/ncss-tech/aqp/issues/128" class="uri">https://github.com/ncss-tech/aqp/issues/128</a>)</li>
-<li>remove implicit conversion to SpatialPointsDataFrame with unit-length <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> j-index subset ((<a href="https://github.com/ncss-tech/aqp/issues/125" class="uri">https://github.com/ncss-tech/aqp/issues/125</a>)</li>
+<li>remove implicit conversion to SpatialPointsDataFrame with unit-length <code>[</code> j-index subset ((<a href="https://github.com/ncss-tech/aqp/issues/125" class="uri">https://github.com/ncss-tech/aqp/issues/125</a>)</li>
 <li>fix in slab when <code>slab.structure[2] &gt; max(x)</code>
 </li>
 </ul>
@@ -402,7 +437,7 @@
 </h1>
 <ul>
 <li>proof of concept for tidy SoilProfileCollection subsetting</li>
-<li>define <code><a href="../reference/%5B%5B.html">[[</a></code> subsetting method; an “ambivalent” accessor for site- or horizon-level properties</li>
+<li>define <code>[[</code> subsetting method; an “ambivalent” accessor for site- or horizon-level properties</li>
 <li>new subset verbs <code>grepSPC</code>, <code>filter</code>, <code>subApply</code> for use in <code>%&gt;%</code>-lines</li>
 </ul>
 </div>
@@ -413,7 +448,7 @@
 <ul>
 <li>CRAN release</li>
 <li>new functions: <code><a href="../reference/hzDesgn,SoilProfileCollection-method.html">hzDesgn()</a></code>, get horizon designations from a SPC</li>
-<li>new functions: <code><a href="../reference/hzdesgnname,SoilProfileCollection-method.html">hzdesgnname()</a></code>/<code>hzdesgnname()&lt;-</code> and <code><a href="../reference/hztexclname,SoilProfileCollection-method.html">hztexclname()</a></code>/<code>hztexclname()&lt;-</code> get/set column containing horizon designations and texture classes</li>
+<li>new functions: <code><a href="../reference/hzdesgnname.html">hzdesgnname()</a></code>/<code>hzdesgnname()&lt;-</code> and <code><a href="../reference/hztexclname.html">hztexclname()</a></code>/<code>hztexclname()&lt;-</code> get/set column containing horizon designations and texture classes</li>
 <li>better error/logic handling for <code><a href="../reference/glom,SoilProfileCollection-method.html">glom()</a></code>
 </li>
 </ul>
@@ -687,7 +722,7 @@
 <li>
 <code>texture.triangle.low.rv.high()</code> renamed to <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code>. The old name still works, but a message is issued</li>
 <li>new argument to <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code> <code>texture.names</code>: for toggling texture class names</li>
-<li>minor bug fix in <code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary(..., sim=TRUE)</a></code>, previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.</li>
+<li>minor bug fix in <code>textureTriangleSummary(..., sim=TRUE)</code>, previous simulated compositional data was not correct because the stats::var() was being used vs. compositions::var.acomp(). the variance / covariance values were 2-5x too small.</li>
 <li>new function <code><a href="../reference/tauW.html">tauW()</a></code>, added by D.G. Rossiter: see manual page for references</li>
 </ul>
 </div>
@@ -776,7 +811,7 @@
 <ul>
 <li>fixed a nasty bug in <code>rbind.SoilProfileCollection()</code> related to object re-ordering
 <ul>
-<li>in aqp &lt; 1.9.3: there was a chance than <code><a href="../reference/profile_id&lt;-.html">profile_id(x)</a></code> and <code>site(x)[[idname(x)]])</code> would not match</li>
+<li>in aqp &lt; 1.9.3: there was a chance than <code>profile_id(x)</code> and <code>site(x)[[idname(x)]])</code> would not match</li>
 <li>bugs like this will no longer be a possibility after aqp 2.0, new SPC object structure planned</li>
 </ul>
 </li>

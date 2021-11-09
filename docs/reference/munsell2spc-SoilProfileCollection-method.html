@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -167,74 +167,78 @@
     <div class='dont-index'><p><code><a href='parseMunsell.html'>parseMunsell</a></code> <code><a href='rgb2munsell.html'>rgb2munsell</a></code> <code><a href='munsell2rgb.html'>munsell2rgb</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># inspect input data</span>
-<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>[</span>,<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"hue"</span>,<span class='st'>"value"</span>,<span class='st'>"chroma"</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;      hue value chroma
-#&gt; 1   10YR     5      3
-#&gt; 2   10YR     6      4
-#&gt; 3   10YR     6      4
-#&gt; 4  7.5YR     6      6
-#&gt; 5  7.5YR     6      5
-#&gt; 6   10YR     5      3
-#&gt; 7   10YR     6      3
-#&gt; 8   10YR     6      3
-#&gt; 9   2.5Y     6      4
-#&gt; 10   5YR     4      4
-#&gt; 11   5YR     5      6
-#&gt; 12   5YR     4      6
-#&gt; 13   5YR     4      6
-#&gt; 14 2.5YR     4      6
-#&gt; 15  10YR     5      4
-#&gt; 16 2.5YR     3      6
-#&gt; 17 7.5YR     5      4
-#&gt; 18   5YR     5      6
-#&gt; 19   5YR     5      6
-#&gt; 20   5YR     4      6
-#&gt; 21  10YR     5      4
-#&gt; 22  10YR     5      3
-#&gt; 23 7.5YR     5      6
-#&gt; 24   5YR     5      6
-#&gt; 25   5YR     5      5
-#&gt; 26 7.5YR     4      4
-#&gt; 27 2.5YR     4      3
-#&gt; 28 7.5YR     4      4
-#&gt; 29   5YR     5      6
-#&gt; 30   5YR     5      6
-#&gt; 31   5YR     5      7
-#&gt; 32  10YR     4      3
-#&gt; 33  10YR     6      3
-#&gt; 34  10YR     6      5
-#&gt; 35  10YR     5      2
-#&gt; 36  10YR     5      2
-#&gt; 37  10YR     5      2
-#&gt; 38  10YR     6      3
-#&gt; 39  10YR     5      2
-#&gt; 40  10YR     5      2
-#&gt; 41  2.5Y     5      2
-#&gt; 42  2.5Y     6      3
-#&gt; 43  10YR     4      2
-#&gt; 44  10YR     6      2
-#&gt; 45  10YR     6      3
-#&gt; 46  2.5Y     7      2</div><div class='input'>
-<span class='co'># do color conversions to sRGB and LAB, join into horizon data</span>
-<span class='va'>sp3</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2spc</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span>
-
-<span class='co'># plot rgb "R" coordinate by horizon</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"rgb_R"</span><span class='op'>)</span>
-</div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># plot lab "A" coordinate by horizon</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"lab_A"</span><span class='op'>)</span>
-</div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># note that `lab_A` values do not exactly match the original `A` values</span>
-<span class='co'># this is because `lab_A` was computed from the (field determined) Munsell color notation,</span>
-<span class='co'># while `A` was directly measured in the lab by colorimeter</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>A</span>, <span class='va'>sp3</span><span class='op'>$</span><span class='va'>lab_A</span>, xlab <span class='op'>=</span> <span class='st'>'Measured'</span>, ylab <span class='op'>=</span> <span class='st'>'Converted from Field Observed Munsell'</span><span class='op'>)</span>
-</div><div class='img'><img src='munsell2spc-SoilProfileCollection-method-3.png' alt='' width='768' height='475' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect input data</span></span>
+<span class='r-in'><span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span><span class='op'>[</span>,<span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"hue"</span>,<span class='st'>"value"</span>,<span class='st'>"chroma"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      hue value chroma</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   10YR     5      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   10YR     6      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   10YR     6      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  7.5YR     6      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  7.5YR     6      5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   10YR     5      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7   10YR     6      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8   10YR     6      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9   2.5Y     6      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10   5YR     4      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11   5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12   5YR     4      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13   5YR     4      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14 2.5YR     4      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15  10YR     5      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 2.5YR     3      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 7.5YR     5      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18   5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19   5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20   5YR     4      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21  10YR     5      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22  10YR     5      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23 7.5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24   5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25   5YR     5      5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26 7.5YR     4      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27 2.5YR     4      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28 7.5YR     4      4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29   5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30   5YR     5      6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31   5YR     5      7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32  10YR     4      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 33  10YR     6      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 34  10YR     6      5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 35  10YR     5      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 36  10YR     5      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 37  10YR     5      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 38  10YR     6      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 39  10YR     5      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 40  10YR     5      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 41  2.5Y     5      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 42  2.5Y     6      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 43  10YR     4      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 44  10YR     6      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 45  10YR     6      3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 46  2.5Y     7      2</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># do color conversions to sRGB and LAB, join into horizon data</span></span>
+<span class='r-in'><span class='va'>sp3</span> <span class='op'>&lt;-</span> <span class='fu'>munsell2spc</span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot rgb "R" coordinate by horizon</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"rgb_R"</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='munsell2spc-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot lab "A" coordinate by horizon</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span>, color <span class='op'>=</span> <span class='st'>"lab_A"</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='munsell2spc-SoilProfileCollection-method-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># note that `lab_A` values do not exactly match the original `A` values</span></span>
+<span class='r-in'><span class='co'># this is because `lab_A` was computed from the (field determined) Munsell color notation,</span></span>
+<span class='r-in'><span class='co'># while `A` was directly measured in the lab by colorimeter</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp3</span><span class='op'>$</span><span class='va'>A</span>, <span class='va'>sp3</span><span class='op'>$</span><span class='va'>lab_A</span>, xlab <span class='op'>=</span> <span class='st'>'Measured'</span>, ylab <span class='op'>=</span> <span class='st'>'Converted from Field Observed Munsell'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='munsell2spc-SoilProfileCollection-method-3.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

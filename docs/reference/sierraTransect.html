@@ -76,7 +76,7 @@ Sierra Nevada mountains." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -150,58 +150,62 @@ California, Geoderma, Volume 78, Issues 3–4, 1997, Pages 207-236.</p>
 Gradient on Andesitic Lahar. Soil Sci. Soc. Am. J., 71: 225-237.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sierraTransect</span><span class='op'>)</span>
-
-<span class='co'># tighter margins</span>
-<span class='va'>op</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># quick sketch</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sierraTransect</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, width<span class='op'>=</span><span class='fl'>0.3</span><span class='op'>)</span>
-</div><div class='input'>
-<span class='co'># split by transect</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span>
-<span class='va'>sierraTransect</span>, groups<span class='op'>=</span><span class='st'>'transect'</span>,
-group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, width<span class='op'>=</span><span class='fl'>0.3</span>,
-name.style<span class='op'>=</span><span class='st'>'center-center'</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='sierraTransect-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># thematic</span>
-<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span>
-<span class='va'>sierraTransect</span>, groups<span class='op'>=</span><span class='st'>'transect'</span>,
-group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, width<span class='op'>=</span><span class='fl'>0.3</span>,
-name.style<span class='op'>=</span><span class='st'>'center-center'</span>, color<span class='op'>=</span><span class='st'>'Fe_o_to_Fe_d'</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='sierraTransect-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># horizon boundary viz</span>
-<span class='va'>sierraTransect</span><span class='op'>$</span><span class='va'>hzd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span><span class='op'>(</span><span class='va'>sierraTransect</span><span class='op'>$</span><span class='va'>hz_boundary</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span>
-<span class='va'>sierraTransect</span>, groups<span class='op'>=</span><span class='st'>'transect'</span>, group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>,
-width<span class='op'>=</span><span class='fl'>0.3</span>, name.style<span class='op'>=</span><span class='st'>'center-center'</span>, color<span class='op'>=</span><span class='st'>'Fe_o_to_Fe_d'</span>,
-hz.distinctness.offset<span class='op'>=</span><span class='st'>'hzd'</span><span class='op'>)</span>
-</div><div class='img'><img src='sierraTransect-3.png' alt='' width='768' height='475' /></div><div class='input'>
-
-<span class='co'># split transects</span>
-<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>sierraTransect</span>, <span class='va'>transect</span> <span class='op'>==</span> <span class='st'>'Granite'</span><span class='op'>)</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>sierraTransect</span>, <span class='va'>transect</span> <span class='op'>==</span> <span class='st'>'Andesite'</span><span class='op'>)</span>
-
-<span class='va'>g.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>)</span>
-<span class='va'>a.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>)</span>
-
-<span class='co'># order (left -&gt; right) by elevation</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>2</span><span class='op'>)</span>, mfrow<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>g</span>, width<span class='op'>=</span><span class='fl'>0.3</span>, name.style<span class='op'>=</span><span class='st'>'center-center'</span>, cex.names<span class='op'>=</span><span class='fl'>0.75</span>, plot.order<span class='op'>=</span><span class='va'>g.order</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span><span class='fl'>1</span>, at<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span>, labels<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>[</span><span class='va'>g.order</span><span class='op'>]</span>, line<span class='op'>=</span><span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
-
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>a</span>, width<span class='op'>=</span><span class='fl'>0.3</span>, name.style<span class='op'>=</span><span class='st'>'center-center'</span>, cex.names<span class='op'>=</span><span class='fl'>0.75</span>, plot.order<span class='op'>=</span><span class='va'>a.order</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span><span class='fl'>1</span>, at<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, labels<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>[</span><span class='va'>a.order</span><span class='op'>]</span>, line<span class='op'>=</span><span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
-</div><div class='img'><img src='sierraTransect-4.png' alt='' width='768' height='475' /></div><div class='input'>
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>op</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sierraTransect</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># tighter margins</span></span>
+<span class='r-in'><span class='va'>op</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># quick sketch</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>sierraTransect</span>, name.style <span class='op'>=</span> <span class='st'>'center-center'</span>, width<span class='op'>=</span><span class='fl'>0.3</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># split by transect</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span></span>
+<span class='r-in'><span class='va'>sierraTransect</span>, groups<span class='op'>=</span><span class='st'>'transect'</span>,</span>
+<span class='r-in'>group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, width<span class='op'>=</span><span class='fl'>0.3</span>,</span>
+<span class='r-in'>name.style<span class='op'>=</span><span class='st'>'center-center'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='sierraTransect-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># thematic</span></span>
+<span class='r-in'><span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span></span>
+<span class='r-in'><span class='va'>sierraTransect</span>, groups<span class='op'>=</span><span class='st'>'transect'</span>,</span>
+<span class='r-in'>group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, width<span class='op'>=</span><span class='fl'>0.3</span>,</span>
+<span class='r-in'>name.style<span class='op'>=</span><span class='st'>'center-center'</span>, color<span class='op'>=</span><span class='st'>'Fe_o_to_Fe_d'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='sierraTransect-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># horizon boundary viz</span></span>
+<span class='r-in'><span class='va'>sierraTransect</span><span class='op'>$</span><span class='va'>hzd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hzDistinctnessCodeToOffset.html'>hzDistinctnessCodeToOffset</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span><span class='op'>(</span><span class='va'>sierraTransect</span><span class='op'>$</span><span class='va'>hz_boundary</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='groupedProfilePlot.html'>groupedProfilePlot</a></span><span class='op'>(</span></span>
+<span class='r-in'><span class='va'>sierraTransect</span>, groups<span class='op'>=</span><span class='st'>'transect'</span>, group.name.offset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>,</span>
+<span class='r-in'>width<span class='op'>=</span><span class='fl'>0.3</span>, name.style<span class='op'>=</span><span class='st'>'center-center'</span>, color<span class='op'>=</span><span class='st'>'Fe_o_to_Fe_d'</span>,</span>
+<span class='r-in'>hz.distinctness.offset<span class='op'>=</span><span class='st'>'hzd'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='sierraTransect-3.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># split transects</span></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>sierraTransect</span>, <span class='va'>transect</span> <span class='op'>==</span> <span class='st'>'Granite'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='subset,SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>sierraTransect</span>, <span class='va'>transect</span> <span class='op'>==</span> <span class='st'>'Andesite'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>g.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>a.order</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setorder.html'>order</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># order (left -&gt; right) by elevation</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>2</span><span class='op'>)</span>, mfrow<span class='op'>=</span><span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>g</span>, width<span class='op'>=</span><span class='fl'>0.3</span>, name.style<span class='op'>=</span><span class='st'>'center-center'</span>, cex.names<span class='op'>=</span><span class='fl'>0.75</span>, plot.order<span class='op'>=</span><span class='va'>g.order</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span><span class='fl'>1</span>, at<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span>, labels<span class='op'>=</span><span class='va'>g</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>[</span><span class='va'>g.order</span><span class='op'>]</span>, line<span class='op'>=</span><span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>a</span>, width<span class='op'>=</span><span class='fl'>0.3</span>, name.style<span class='op'>=</span><span class='st'>'center-center'</span>, cex.names<span class='op'>=</span><span class='fl'>0.75</span>, plot.order<span class='op'>=</span><span class='va'>a.order</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span><span class='fl'>1</span>, at<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, labels<span class='op'>=</span><span class='va'>a</span><span class='op'>$</span><span class='va'>elev</span><span class='op'>[</span><span class='va'>a.order</span><span class='op'>]</span>, line<span class='op'>=</span><span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='sierraTransect-4.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>op</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

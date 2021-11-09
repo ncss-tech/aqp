@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
     </tr>
     <tr>
       <th>f</th>
-      <td><p>a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that <code><a href='https://rdrr.io/r/base/factor.html'>as.factor(f)</a></code> defines the grouping, or a list of such factors in which case their interaction is used for the grouping.</p></td>
+      <td><p>a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that <code>as.factor(f)</code> defines the grouping, or a list of such factors in which case their interaction is used for the grouping.</p></td>
     </tr>
     <tr>
       <th>drop</th>
@@ -149,47 +149,56 @@
     <p>A list of SoilProfileCollections or <code>NULL</code> for empty result.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>As of aqp 1.25, omission of <code>f</code> argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to <code><a href='idname,SoilProfileCollection-method.html'>idname(x)</a></code>, e.g. a list as long as <code><a href='length,SoilProfileCollection-method.html'>length(x)</a></code>, with a single-profile SoilProfileCollection per list element. Replicate this behavior using <code>f = idname(x)</code> or <code>f = profile_id(x)</code></p>
+    <p>As of aqp 1.25, omission of <code>f</code> argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to <code>idname(x)</code>, e.g. a list as long as <code>length(x)</code>, with a single-profile SoilProfileCollection per list element. Replicate this behavior using <code>f = idname(x)</code> or <code>f = profile_id(x)</code></p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># add a more interesting site-level attribute</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>surface</span>
-
-<span class='co'># using identity site-level attribute (profile ID)</span>
-<span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='fu'><a href='idname,SoilProfileCollection-method.html'>idname</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>converting id to factor</span></div><div class='input'><span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"
-#&gt;  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" 
-#&gt; [17] "hon-7"  "hon-8" </div><div class='input'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 18</div><div class='input'>
-<span class='co'># using vector equal in length to number of profiles (profile ID, again)</span>
-<span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"
-#&gt;  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" 
-#&gt; [17] "hon-7"  "hon-8" </div><div class='input'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 18</div><div class='input'>
-<span class='co'># which are both equivalent to setting `f` to NULL</span>
-<span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-<span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"
-#&gt;  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" 
-#&gt; [17] "hon-7"  "hon-8" </div><div class='input'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 18</div><div class='input'>
-<span class='co'># split on surface (age) site-level var</span>
-<span class='va'>p4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='st'>"surface"</span><span class='op'>)</span>
-<span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p4</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "holocene"        "lower modesto"   "upper modesto"   "lower riverbank"
-#&gt; [5] "lower laguna"   </div><div class='input'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p4</span><span class='op'>)</span> <span class='co'># 5 unique "surfaces", 5 SPCs in result list</span>
-</div><div class='output co'>#&gt; [1] 5</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add a more interesting site-level attribute</span></span>
+<span class='r-in'><span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>surface</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># using identity site-level attribute (profile ID)</span></span>
+<span class='r-in'><span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='fu'><a href='idname,SoilProfileCollection-method.html'>idname</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> converting id to factor</span>
+<span class='r-in'><span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [17] "hon-7"  "hon-8" </span>
+<span class='r-in'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 18</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># using vector equal in length to number of profiles (profile ID, again)</span></span>
+<span class='r-in'><span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='fu'><a href='profile_id<-.html'>profile_id</a></span><span class='op'>(</span><span class='va'>sp2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [17] "hon-7"  "hon-8" </span>
+<span class='r-in'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 18</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># which are both equivalent to setting `f` to NULL</span></span>
+<span class='r-in'><span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [17] "hon-7"  "hon-8" </span>
+<span class='r-in'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 18</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># split on surface (age) site-level var</span></span>
+<span class='r-in'><span class='va'>p4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/split.html'>split</a></span><span class='op'>(</span><span class='va'>sp2</span>, f <span class='op'>=</span> <span class='st'>"surface"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='names,SoilProfileCollection-method.html'>names</a></span><span class='op'>(</span><span class='va'>p4</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "holocene"        "lower modesto"   "upper modesto"   "lower riverbank"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5] "lower laguna"   </span>
+<span class='r-in'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>p4</span><span class='op'>)</span> <span class='co'># 5 unique "surfaces", 5 SPCs in result list</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 5</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -141,24 +141,27 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## init SoilProfileCollection objects from data.frame of horizon data</span>
-
-<span class='co'># load demo data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-
-<span class='co'># promote to SPC</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># plot</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-</div><div class='img'><img src='depths-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># number of profiles</span>
-<span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 9</div><div class='input'>
-<span class='co'># number of horizons</span>
-<span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 60</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'>## init SoilProfileCollection objects from data.frame of horizon data</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># load demo data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># promote to SPC</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='depths-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># number of profiles</span></span>
+<span class='r-in'><span class='fu'><a href='length,SoilProfileCollection-method.html'>length</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 9</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># number of horizons</span></span>
+<span class='r-in'><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 60</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

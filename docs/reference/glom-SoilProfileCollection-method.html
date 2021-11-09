@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -141,11 +141,11 @@
     </tr>
     <tr>
       <th>z1</th>
-      <td><p>numeric vector of top depth to intersect horizon (required). Can be an expression involving <code><a href='siteNames<-.html'>siteNames(p)</a></code> or quoted column name. Should evaluate to numeric length <code>1</code> or length equal to <code><a href='length,SoilProfileCollection-method.html'>length(p)</a></code></p></td>
+      <td><p>numeric vector of top depth to intersect horizon (required). Can be an expression involving <code>siteNames(p)</code> or quoted column name. Should evaluate to numeric length <code>1</code> or length equal to <code>length(p)</code></p></td>
     </tr>
     <tr>
       <th>z2</th>
-      <td><p>numeric vector bottom depth of intersection interval (optional). Can also be an expression involving <code><a href='siteNames<-.html'>siteNames(p)</a></code> or quoted column name. Should evaluate to numeric length <code>1</code>, length equal to <code><a href='length,SoilProfileCollection-method.html'>length(p)</a></code> or <code>NULL</code>. Default: <code>NULL</code> is "point" intersection</p></td>
+      <td><p>numeric vector bottom depth of intersection interval (optional). Can also be an expression involving <code>siteNames(p)</code> or quoted column name. Should evaluate to numeric length <code>1</code>, length equal to <code>length(p)</code> or <code>NULL</code>. Default: <code>NULL</code> is "point" intersection</p></td>
     </tr>
     <tr>
       <th>ids</th>
@@ -153,7 +153,7 @@
     </tr>
     <tr>
       <th>df</th>
-      <td><p>return a data.frame, by intersection with <code><a href='horizons,SoilProfileCollection-method.html'>horizons(p)</a></code>? default: <code>FALSE</code></p></td>
+      <td><p>return a data.frame, by intersection with <code>horizons(p)</code>? default: <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>truncate</th>
@@ -175,8 +175,8 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>"To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.</p>
-<p>The full depth range of horizons included within the interval are returned (a "ragged" SoilProfileCollection) unless the <code>truncate</code> argument is set as <code>TRUE</code>. Horizon intersection is based on unique ID <code><a href='hzidname<-.html'>hzidname(spc)</a></code> and depth range of interest. Profiles that lack data in the range of interest will be dropped from the resulting SoilProfileCollection.</p>
-<p>If inverting results with <code>invert</code>, it is possible that thick horizons (whose boundaries span wider than the specified interval) will be split into <em>two</em> horizons, where previously they were one. This may make the results from <code>ids = TRUE</code> different from what you expect, as they will be based on a profile with an "extra" horizon and re-calculated unique horizon ID (<code><a href='hzidname<-.html'>hzidname(spc)</a></code>) <code>"hzID"</code>.</p>
+<p>The full depth range of horizons included within the interval are returned (a "ragged" SoilProfileCollection) unless the <code>truncate</code> argument is set as <code>TRUE</code>. Horizon intersection is based on unique ID <code>hzidname(spc)</code> and depth range of interest. Profiles that lack data in the range of interest will be dropped from the resulting SoilProfileCollection.</p>
+<p>If inverting results with <code>invert</code>, it is possible that thick horizons (whose boundaries span wider than the specified interval) will be split into <em>two</em> horizons, where previously they were one. This may make the results from <code>ids = TRUE</code> different from what you expect, as they will be based on a profile with an "extra" horizon and re-calculated unique horizon ID (<code>hzidname(spc)</code>) <code>"hzID"</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='glomApply.html'>glomApply</a></code> <code><a href='trunc,SoilProfileCollection-method.html'>trunc</a></code></p></div>
@@ -185,58 +185,65 @@
     <p>Andrew G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
-
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fl'>25</span>, <span class='fl'>150</span><span class='op'>)</span>
-
-<span class='co'># 28 horizons</span>
-<span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span> 
-</div><div class='output co'>#&gt; [1] 32</div><div class='input'>
-<span class='co'># inspect graphically</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='glom-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'>## glom(..., truncate = TRUE)</span>
-
-<span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fl'>25</span>, <span class='fl'>150</span>, truncate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># 28 horizons</span>
-<span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span> 
-</div><div class='output co'>#&gt; [1] 32</div><div class='input'>
-<span class='co'># inspect graphically</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p2</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='glom-SoilProfileCollection-method-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'>## glom(..., truncate = TRUE, invert = TRUE)</span>
-
-<span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fl'>25</span>, <span class='fl'>150</span>, truncate <span class='op'>=</span> <span class='cn'>TRUE</span>, invert <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># 45 horizons</span>
-<span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>p3</span><span class='op'>)</span> 
-</div><div class='output co'>#&gt; [1] 40</div><div class='input'>
-<span class='co'># inspect graphically</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p3</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='glom-SoilProfileCollection-method-3.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'>## profile-specific interval, using expressions evaluated within sp1@site</span>
-
-<span class='co'># calculate some new site-level variables containing target interval</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>glom_top</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>9</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>10</span>
-<span class='va'>sp1</span><span class='op'>$</span><span class='va'>glom_bottom</span> <span class='op'>&lt;-</span> <span class='fl'>10</span> <span class='op'>+</span> <span class='va'>sp1</span><span class='op'>$</span><span class='va'>glom_top</span>
-
-<span class='co'># glom evaluates non-standard expressions using siteNames(sp1) column names</span>
-<span class='va'>p4</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='va'>glom_top</span> <span class='op'>/</span> <span class='fl'>2</span>, <span class='va'>glom_bottom</span> <span class='op'>*</span> <span class='fl'>1.2</span>, truncate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># inspect graphically</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p4</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
-</div><div class='img'><img src='glom-SoilProfileCollection-method-4.png' alt='' width='768' height='475' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'><span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fl'>25</span>, <span class='fl'>150</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 28 horizons</span></span>
+<span class='r-in'><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect graphically</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='glom-SoilProfileCollection-method-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## glom(..., truncate = TRUE)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fl'>25</span>, <span class='fl'>150</span>, truncate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 28 horizons</span></span>
+<span class='r-in'><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect graphically</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p2</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='glom-SoilProfileCollection-method-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## glom(..., truncate = TRUE, invert = TRUE)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='fl'>25</span>, <span class='fl'>150</span>, truncate <span class='op'>=</span> <span class='cn'>TRUE</span>, invert <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 45 horizons</span></span>
+<span class='r-in'><span class='fu'><a href='nrow,SoilProfileCollection-method.html'>nrow</a></span><span class='op'>(</span><span class='va'>p3</span><span class='op'>)</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 40</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect graphically</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p3</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>h <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>100</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='glom-SoilProfileCollection-method-3.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## profile-specific interval, using expressions evaluated within sp1@site</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># calculate some new site-level variables containing target interval</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>glom_top</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>9</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>10</span></span>
+<span class='r-in'><span class='va'>sp1</span><span class='op'>$</span><span class='va'>glom_bottom</span> <span class='op'>&lt;-</span> <span class='fl'>10</span> <span class='op'>+</span> <span class='va'>sp1</span><span class='op'>$</span><span class='va'>glom_top</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># glom evaluates non-standard expressions using siteNames(sp1) column names</span></span>
+<span class='r-in'><span class='va'>p4</span> <span class='op'>&lt;-</span> <span class='fu'>glom</span><span class='op'>(</span><span class='va'>sp1</span>, <span class='va'>glom_top</span> <span class='op'>/</span> <span class='fl'>2</span>, <span class='va'>glom_bottom</span> <span class='op'>*</span> <span class='fl'>1.2</span>, truncate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect graphically</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plot</a></span><span class='op'>(</span><span class='va'>p4</span>, color <span class='op'>=</span> <span class='st'>"prop"</span>, max.depth <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='glom-SoilProfileCollection-method-4.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

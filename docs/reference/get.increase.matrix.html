@@ -79,7 +79,7 @@ attr increase." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -181,24 +181,25 @@ criteria were met.</p>
     <p>Andrew Gene Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-<span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span>
-
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
-<span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span>
-<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.matrix</span><span class='op'>(</span><span class='va'>p</span>, threshold.fun <span class='op'>=</span> <span class='va'>crit.clay.argillic</span>,
-                           attr <span class='op'>=</span> <span class='va'>attr</span>, vertical.distance <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
-<span class='va'>foo</span>
-</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
-#&gt; [1,] FALSE FALSE FALSE FALSE FALSE FALSE
-#&gt; [2,] FALSE FALSE FALSE  TRUE FALSE FALSE
-#&gt; [3,] FALSE FALSE FALSE  TRUE  TRUE FALSE
-#&gt; [4,] FALSE FALSE FALSE FALSE  TRUE FALSE
-#&gt; [5,] FALSE FALSE FALSE FALSE FALSE FALSE
-#&gt; [6,] FALSE FALSE FALSE FALSE FALSE FALSE</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp1</span>, package <span class='op'>=</span> <span class='st'>'aqp'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'><span class='fu'><a href='site,SoilProfileCollection-method.html'>site</a></span><span class='op'>(</span><span class='va'>sp1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='op'>~</span> <span class='va'>group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sp1</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>attr</span> <span class='op'>&lt;-</span> <span class='st'>'prop'</span> <span class='co'># clay contents</span></span>
+<span class='r-in'><span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='fu'>get.increase.matrix</span><span class='op'>(</span><span class='va'>p</span>, threshold.fun <span class='op'>=</span> <span class='va'>crit.clay.argillic</span>,</span>
+<span class='r-in'>                           attr <span class='op'>=</span> <span class='va'>attr</span>, vertical.distance <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>foo</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       [,1]  [,2]  [,3]  [,4]  [,5]  [,6]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] FALSE FALSE FALSE  TRUE FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] FALSE FALSE FALSE  TRUE  TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [4,] FALSE FALSE FALSE FALSE  TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5,] FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [6,] FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

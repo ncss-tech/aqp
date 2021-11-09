@@ -77,7 +77,7 @@ bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.33</span>
       </span>
     </div>
 
@@ -149,7 +149,7 @@ bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
     </tr>
     <tr>
       <th>to_bottom</th>
-      <td><p>numeric, fill from deepest bottom depth in each profile to specified depth? default: <code><a href='max,SoilProfileCollection-method.html'>aqp::max(x)</a></code></p></td>
+      <td><p>numeric, fill from deepest bottom depth in each profile to specified depth? default: <code>aqp::max(x)</code></p></td>
     </tr>
     </table>
 
@@ -161,64 +161,73 @@ bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
     <p>A.G. Brown and D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-
-<span class='co'># introduce depth logic errors</span>
-<span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>6</span><span class='op'>:</span><span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>12</span><span class='op'>)</span>
-<span class='va'>sp4</span><span class='op'>$</span><span class='va'>top</span><span class='op'>[</span><span class='va'>idx</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-
-<span class='co'># check</span>
-<span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span><span class='op'>[</span><span class='va'>idx</span>, <span class='op'>]</span>
-</div><div class='output co'>#&gt;          id name top bottom   K   Mg  Ca CEC_7 ex_Ca_to_Mg sand silt clay   CF
-#&gt; 2    colusa  ABt  NA      8 0.2 23.7 5.6  21.4        0.23   42   31   27 0.27
-#&gt; 6     glenn   Bt  NA     34 0.3 18.9 4.5  27.5        0.20   49   18   34 0.84
-#&gt; 7     kings    A  NA      4 0.2 12.1 1.4  23.7        0.58   43   55    3 0.50
-#&gt; 8     kings  Bt1  NA     13 0.6 12.1 7.0  18.0        0.51   36   49   15 0.75
-#&gt; 12 mariposa  Bt2  NA     34 0.3 44.3 6.2  34.1        0.14   36   33   31 0.71
-#&gt;    hzID
-#&gt; 2     2
-#&gt; 6     6
-#&gt; 7     7
-#&gt; 8     8
-#&gt; 12   12</div><div class='input'>
-<span class='co'># create gaps by removing logic errors</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HzDepthLogicSubset.html'>HzDepthLogicSubset</a></span><span class='op'>(</span><span class='va'>sp4</span>, byhz <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>dropping horizons with invalid depth logic, see `metadata(x)$removed.horizons`</span></div><div class='input'>
-<span class='co'># inspect</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>x</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, default.color <span class='op'>=</span> <span class='st'>'royalblue'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span><span class='op'>)</span>
-</div><div class='img'><img src='fillHzGaps-1.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>x</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='img'><img src='fillHzGaps-2.png' alt='' width='768' height='475' /></div><div class='input'>
-<span class='co'># fill top to 0 cm</span>
-<span class='va'>z2</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>x</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span>, to_top <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z2</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># fill bottom to max(SPC)</span>
-<span class='va'>z3</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>x</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span>, to_top <span class='op'>=</span> <span class='fl'>0</span>, to_bottom <span class='op'>=</span> <span class='fu'><a href='max,SoilProfileCollection-method.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z3</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'>## another example</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span>
-<span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span>
-</div><div class='output co'>#&gt; <span class='message'>This is already a SoilProfileCollection-class object, doing nothing.</span></div><div class='input'>
-<span class='co'># remove 1st horizons from profiles 1:4</span>
-<span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span>,, <span class='va'>.FIRST</span>, <span class='va'>.HZID</span><span class='op'>]</span>
-<span class='fu'>replaceHorizons</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span><span class='op'>[</span><span class='op'>-</span><span class='va'>idx</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='op'>]</span>
-
-<span class='co'># prepare for dice()</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>sp4</span>, to_top <span class='op'>=</span> <span class='fl'>0</span>, to_bottom <span class='op'>=</span> <span class='fl'>50</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> 
-
-<span class='co'># empty-horizon padding is in place for formula interface to dice()</span>
-<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dice.html'>dice</a></span><span class='op'>(</span><span class='va'>z</span>, fm <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>50</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>dropping profiles with invalid depth logic, see `metadata(x)$removed.profiles`</span></div><div class='output co'>#&gt; <span class='message'>OBF: 4.5</span></div><div class='input'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, color <span class='op'>=</span> <span class='st'>'Ca'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='img'><img src='fillHzGaps-3.png' alt='' width='768' height='475' /></div><div class='input'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='img'><img src='fillHzGaps-4.png' alt='' width='768' height='475' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># introduce depth logic errors</span></span>
+<span class='r-in'><span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>6</span><span class='op'>:</span><span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sp4</span><span class='op'>$</span><span class='va'>top</span><span class='op'>[</span><span class='va'>idx</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># check</span></span>
+<span class='r-in'><span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span><span class='op'>[</span><span class='va'>idx</span>, <span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          id name top bottom   K   Mg  Ca CEC_7 ex_Ca_to_Mg sand silt clay   CF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    colusa  ABt  NA      8 0.2 23.7 5.6  21.4        0.23   42   31   27 0.27</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     glenn   Bt  NA     34 0.3 18.9 4.5  27.5        0.20   49   18   34 0.84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7     kings    A  NA      4 0.2 12.1 1.4  23.7        0.58   43   55    3 0.50</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8     kings  Bt1  NA     13 0.6 12.1 7.0  18.0        0.51   36   49   15 0.75</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 mariposa  Bt2  NA     34 0.3 44.3 6.2  34.1        0.14   36   33   31 0.71</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    hzID</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7     7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8     8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12   12</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># create gaps by removing logic errors</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HzDepthLogicSubset.html'>HzDepthLogicSubset</a></span><span class='op'>(</span><span class='va'>sp4</span>, byhz <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> dropping horizons with invalid depth logic, see `metadata(x)$removed.horizons`</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># inspect</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='c,SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>x</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, default.color <span class='op'>=</span> <span class='st'>'royalblue'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='fillHzGaps-1.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>x</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='fillHzGaps-2.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># fill top to 0 cm</span></span>
+<span class='r-in'><span class='va'>z2</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>x</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span>, to_top <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z2</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># fill bottom to max(SPC)</span></span>
+<span class='r-in'><span class='va'>z3</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>x</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span>, to_top <span class='op'>=</span> <span class='fl'>0</span>, to_bottom <span class='op'>=</span> <span class='fu'><a href='max,SoilProfileCollection-method.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>z3</span>, width <span class='op'>=</span> <span class='fl'>0.3</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, name <span class='op'>=</span> <span class='st'>'hzID'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## another example</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>depths</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>id</span> <span class='op'>~</span> <span class='va'>top</span> <span class='op'>+</span> <span class='va'>bottom</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This is already a SoilProfileCollection-class object, doing nothing.</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># remove 1st horizons from profiles 1:4</span></span>
+<span class='r-in'><span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>sp4</span><span class='op'>[</span>,, <span class='va'>.FIRST</span>, <span class='va'>.HZID</span><span class='op'>]</span></span>
+<span class='r-in'><span class='fu'>replaceHorizons</span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='horizons,SoilProfileCollection-method.html'>horizons</a></span><span class='op'>(</span><span class='va'>sp4</span><span class='op'>)</span><span class='op'>[</span><span class='op'>-</span><span class='va'>idx</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># prepare for dice()</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>fillHzGaps</span><span class='op'>(</span><span class='va'>sp4</span>, to_top <span class='op'>=</span> <span class='fl'>0</span>, to_bottom <span class='op'>=</span> <span class='fl'>50</span>, flag <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># empty-horizon padding is in place for formula interface to dice()</span></span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dice.html'>dice</a></span><span class='op'>(</span><span class='va'>z</span>, fm <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>50</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> dropping profiles with invalid depth logic, see `metadata(x)$removed.profiles`</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> OBF: 4.5</span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, color <span class='op'>=</span> <span class='st'>'Ca'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='fillHzGaps-3.png' alt='' width='768' height='475' /></span>
+<span class='r-in'><span class='fu'><a href='plotSPC.html'>plotSPC</a></span><span class='op'>(</span><span class='va'>d</span>, color <span class='op'>=</span> <span class='st'>'.filledGap'</span>, show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='fillHzGaps-4.png' alt='' width='768' height='475' /></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

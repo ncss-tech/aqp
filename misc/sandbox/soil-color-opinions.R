@@ -22,7 +22,7 @@ m2 <- m2[[1]]
 # check
 colorChart(m2)
 colorChart(m2, annotate = TRUE, annotate.type = 'percentage', size = FALSE)
-previewColors(parseMunsell(m2))
+previewColors(parseMunsell(m2), labels = m2)
 
 
 ## idea 3

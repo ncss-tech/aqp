@@ -133,14 +133,14 @@ print(cc$fig)
 
 ## can we model dE00 contours via gam?
 library(mgcv)
-m <- gam(dE00 ~ s(chroma, value, k=10, bs='tp', fx=FALSE), data=cc$data)
+m <- gam(dE00 ~ s(as.integer(chroma), value, bs='tp'), data=cc$data)
 plot(m)
 
-nd <- expand.grid(chroma=seq(1, 8, by=0.1), value=seq(3, 8, by=0.1))
+nd <- expand.grid(chroma=seq(1, 8, by=0.1), value=seq(2, 8, by=0.1))
 nd$p <- predict(m, nd)
 
 # interesting
-levelplot(p ~ chroma * value, data=nd, col.regions=viridis::viridis)
+levelplot(p ~ chroma * value, data=nd, col.regions=viridis::viridis, xlim = c(0.5, 8.5), ylim = c(1.5, 8.5))
 
 
 d <- farver::compare_colour(cc$data[, c('L', 'A', 'B')], from_space='lab', white_from = 'D65', method='cie2000')
