@@ -16,6 +16,11 @@
 #' marginal distributions of sand, silt, and clay fractions. It is recommended
 #' that at least 10 samples be drawn for reasonable estimates.
 #'
+#' The function \code{texture_to_texmod()} parses texture (e.g. GR-CL) to extract the texmod values from it in the scenario where it is missing from
+#' texmod column. If multiple texmod values are present (for example in the 
+#' case of stratified textures) and \code{duplicates = "combine"} they will be combined in the output (e.g. GR & CBV). Otherwise if \code{duplicates = "max"} 
+#' the texmod with the highest rock fragment (e.g. CBV) will be returned.
+#'
 #' Unlike the other functions, \code{texture_to_taxpartsize()} is intended to
 #' be computed on weighted averages within the family particle size control
 #' section. Also recall from the criteria that carbonate clay should be
@@ -30,17 +35,16 @@
 
 #' @param texcl vector of texture classes than conform to the USDA code
 #' conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)
-#'
-#' @param clay vector of clay percentages#'
-#' @param sand vector of sand percentages
-#'
-#' @param fragvoltot vector of rock fragment percentages
 #' @param texmod vector of textural modifiers that conform to the USDA code
 #' convenctions (e.g. gr|GR, grv|GRV)
-#'
 #' @param lieutex vector of in lieu of texture terms that conform to the USDA
 #' code convenctions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 #' are > 90 percent by volume (default: NULL))
+#' @param texture vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)
+#'
+#' @param clay vector of clay percentages
+#' @param sand vector of sand percentages
+#' @param fragvoltot vector of rock fragment percentages
 #'
 #' @param as.is logical: should character vectors be converted to factors?
 #' (default: TRUE)
@@ -51,6 +55,8 @@
 
 #' @param sample logical: should ssc be random sampled from the lookup table?
 #' (default: FALSE)
+#' 
+#' @param duplicates character: specifying how multiple values should be handled, options are `"combined"` (e.g. 'GR & GRV) or `"max"`(e.g. 'GRV') 
 #'
 #' @return - `texcl_to_ssc`: A `data.frame` containing columns `"sand"`,`"silt"`, `"clay"`
 #'
@@ -481,4 +487,104 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
 
   return(df$fpsc)
 }
+
+
+texture_to_texmod <- function(texture, duplicates = "combine") {
+  
+  # test
+  is_char <- is.character(texture)
+  is_fact <- is.factor(texture)
+  
+  if (!is_char & !is_fact) stop("texture must be a character or a factor")
+  
+  if (is_fact) texture <- as.character(texture)
+  
+  
+  # load lookup tables
+  load(system.file("data/soiltexture.rda", package = "aqp")[1])
+  texmod_df <- soiltexture$texmod
+  texmod    <- texmod_df$texmod[grepl("gravel|cobbl|ston|boulder|channer|flag", texmod_df$texmod_label)]
+  
+  # lieutex <- metadata[metadata$ColumnPhysicalName == "lieutex", ]$ChoiceName
+  
+  tex   <- tolower(texture)
+  tex_l <- strsplit(tex, "-| |_|\\/|&|,|;|\\.|\\*|\\+")
+  
+  
+  # find which records have a texmod
+  idx_mod  <- which(sapply(tex_l, function(x) any(x %in% texmod)))
+  # idx_lieu <- which(sapply(tex_l, function(x) any(x %in% lieutex)))
+  
+  
+  # create a logical matrix of texmod presence/absence
+  tex_m  <- lapply(tex_l[idx_mod], function(x) texmod %in% x)
+  tex_df <- as.data.frame(do.call("rbind", tex_m))
+  names(tex_df) <- texmod
+  
+  # slightly slower simpler(/better?) alternative
+  # not better, this mistakenly matches words entered into this field
+  # I would rather have false negatives than false positives
+  # tex_m  <- sapply(texmod, function(x) grepl(x, tex))
+  
+  
+  # duplicates ----
+  ## combine texmod (if multiple exist)
+  if (duplicates == "combine") {
+    texmod_parse <- apply(tex_df, 1, function(x) {
+      paste0(names(x)[which(x)], collapse = " & ")
+    })
+  }
+  
+  
+  ## find texmod with the highest rock fragment content (if multiple exist)
+  if (duplicates == "max") {
+    tex_m <- sapply(texmod, function(x) {
+      vals <- suppressMessages(texmod_to_fragvoltot(x))
+      rf   <- ifelse(tex_df[x] == TRUE, vals$fragvoltot_r, 0)
+      })
+    idx_col <- max.col(tex_m)
+    texmod_parse <- names(tex_df)[idx_col]
+  }
+  
+  
+  # results ----
+  n  <- length(texture)
+  df <- data.frame(texmod = rep(NA, n)) #, lieutex = rep(NA, n))
+  df[idx_mod, "texmod"] <- texmod_parse
+  
+  return(df$texmod)
+}
+
+
+# add feature to uncode
+# texture_to_texcl <- function(texclLabel, droplevels = FALSE 
+#                              # , stringsAsFactors = FALSE
+#                              ) {
+#   
+#   # standardize inputs
+#   texclLabel <- tolower(texclLabel)
+#   
+#   # load lookup table
+#   load(system.file("data/soiltexture.rda", package = "aqp")[1])
+#   sub <- soiltexture$averages
+#   
+#   # check
+#   idx <- ! texclLabel %in% sub$texcl_label
+#   if (any(idx)) {
+#     warning("not all the user supplied texture values match the lookup table")
+#   }
+#   
+#   # convert
+#   texcl <- factor(texclLabel, levels = tolower(sub$texcl_label), label = sub$texcl, ordered = TRUE)
+#   
+#   if (droplevels == TRUE) {
+#     texcl <- droplevels(texcl)
+#   }
+#   
+#   # if (stringsAsFactors == TRUE) {
+#   #   texcl <- as.character(texcl)
+#   # }
+#   
+#   return(texcl)
+# }
 

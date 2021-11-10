@@ -46,6 +46,10 @@ code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 are > 90 percent by volume (default: NULL))}
 
 \item{fragvoltot}{vector of rock fragment percentages}
+
+\item{texture}{vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)}
+
+\item{duplicates}{character: specifying how multiple values should be handled, options are \code{"combined"} (e.g. 'GR & GRV) or \code{"max"}(e.g. 'GRV')}
 }
 \value{
 \itemize{
@@ -81,6 +85,11 @@ functionality described by Levi (2017).
 When \code{sample = TRUE}, the results can be used to estimate within-class,
 marginal distributions of sand, silt, and clay fractions. It is recommended
 that at least 10 samples be drawn for reasonable estimates.
+
+The function \code{texture_to_texmod()} parses texture (e.g. GR-CL) to extract the texmod values from it in the scenario where it is missing from
+texmod column. If multiple texmod values are present (for example in the
+case of stratified textures) and \code{duplicates = "combine"} they will be combined in the output (e.g. GR & CBV). Otherwise if \code{duplicates = "max"}
+the texmod with the highest rock fragment (e.g. CBV) will be returned.
 
 Unlike the other functions, \code{texture_to_taxpartsize()} is intended to
 be computed on weighted averages within the family particle size control
@@ -135,6 +144,10 @@ tex$fpsc <- texture_to_taxpartsize(texcl = tex$texcl,
                                    sand = tex$sand,
                                    fragvoltot = tex$fragvoltot)
 head(tex)
+
+
+# example of texture_to_texcl
+texture_to_texcl("Clay Loam", stringsAsFactors = TRUE)
 
 
 # example of texture_to_taxpartsize() with carbonate clay and very fine sand

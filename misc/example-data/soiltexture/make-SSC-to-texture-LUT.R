@@ -113,5 +113,15 @@ texmod <- within(texmod, {
 soiltexture$texmod <- texmod
 
 
+## append labels from soilDB metadata
+sub <- metadata[metadata$ColumnPhysicalName == "texcl", ]
+temp <- data.frame(texcl = sub$ChoiceName, texcl_label = tolower(sub$ChoiceLabel))
+soiltexture$averages <- merge(temp, soiltexture$averages, by = "texcl", sort = FALSE)
+
+sub <- metadata[metadata$ColumnPhysicalName == "texmod", ]
+temp <- data.frame(texmod = sub$ChoiceName, texmod_label = tolower(sub$ChoiceLabel))
+soiltexture$texmod <- merge(temp, soiltexture$texmod, by = "texmod", sort = TRUE)
+
+
 ## save
 save(soiltexture, file = "../../../data/soiltexture.rda")
