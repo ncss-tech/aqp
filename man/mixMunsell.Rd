@@ -27,9 +27,9 @@ mixMunsell(
 \item \code{adaptive} : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
 }}
 
-\item{n}{number of closest matching color chips (\code{mixingMethod = spectra} only)}
+\item{n}{number of closest matching color chips (\code{mixingMethod = reference} only)}
 
-\item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list} (\code{mixingMethod = spectra} only)}
+\item{keepMixedSpec}{keep weighted geometric mean spectra, final result is a \code{list} (\code{mixingMethod = reference} only)}
 
 \item{distThreshold}{spectral distance used to compute \code{scaledDistance}, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  \code{mixingMethod = 'reference'}.}
 

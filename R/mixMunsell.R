@@ -125,9 +125,9 @@
 #'    
 #'    * `adaptive` : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates
 #'
-#' @param n number of closest matching color chips (`mixingMethod = spectra` only)
+#' @param n number of closest matching color chips (`mixingMethod = reference` only)
 #'
-#' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list` (`mixingMethod = spectra` only)
+#' @param keepMixedSpec keep weighted geometric mean spectra, final result is a `list` (`mixingMethod = reference` only)
 #' 
 #' @param distThreshold spectral distance used to compute `scaledDistance`, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  `mixingMethod = 'reference'`.
 #' 
