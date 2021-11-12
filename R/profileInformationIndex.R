@@ -119,6 +119,8 @@ profileInformationIndex <- function(x, vars, method = c('median', 'mean', 'sum')
     vars <- unique(c(vars, horizonDepths(x)))
   }
   
+  ## TODO: think about how to make this more efficient when n > 1000
+  
   # iterate over profiles
   # result is a vector suitable for site-level attribute
   res <- profileApply(x, simplify = TRUE, FUN = .pii_by_profile, vars = vars, method = method, baseline = baseline, numericDigits = numericDigits)

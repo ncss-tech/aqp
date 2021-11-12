@@ -76,7 +76,9 @@ splom(z, par.settings = tactile.theme())
 sc <- data.table::fread('https://github.com/ncss-tech/SoilWeb-data/raw/main/files/SC-database.csv.gz')
 sc <- as.data.frame(sc)
 
-sc.sub <- subset(sc, subset = taxgrtgroup %in% c('haploxeralfs', 'haploxerolls', 'palexeralfs', 'xerorthents'))
+sc.sub <- subset(sc, subset = taxgrtgroup %in% c('haploxeralfs', 'haploxerepts', 'palexeralfs', 'xerorthents', 'haploxererts'))
+
+table(sc.sub$taxgrtgroup)
 
 s <- sc.sub$soilseriesname
 s <- split(s, makeChunks(s, size = 20))
@@ -105,35 +107,51 @@ hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = l
 
 
 
-x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE)
+x$pi <- profileInformationIndex(x, vars = vars)
 x$nhz <- profileApply(x, FUN = nrow, simplify = TRUE)
 
-x$greatgroup <- factor(x$greatgroup, levels = c('palexeralfs', 'haploxeralfs', 'haploxerolls', 'xerorthents'))
+x$greatgroup <- factor(x$greatgroup, levels = c('palexeralfs', 'haploxeralfs', 'haploxerepts', 'xerorthents', 'haploxererts'))
 
 
 hist(x$pi)
 
 par(mar = c(0, 0, 0, 0))
-plotSPC(x[x$pi > 0.75, ], width = 0.3, name.style = 'center-center', cex.names = 0.75, shrink = TRUE)
+plotSPC(x[x$pi > 0.8, ], width = 0.3, name.style = 'center-center', cex.names = 0.75, shrink = TRUE)
 
 
 
 
-bwplot(greatgroup ~ pi, data = site(x), par.settings = tactile.theme(), varwidth = TRUE, notch = TRUE, xlab = 'Profile Information Index')
+bwplot(greatgroup ~ pi, data = site(x), par.settings = tactile.theme(axis.text = list(cex = 1)), varwidth = TRUE, notch = TRUE, xlab = 'Profile Information Index')
 
 bwplot(greatgroup ~ nhz, data = site(x), par.settings = tactile.theme(), varwidth = TRUE, notch = TRUE, xlab = 'Number of Horizons')
 
 bwplot(pi ~ factor(nhz) | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons')
 
 
-xyplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', type = c('g', 'p', 'r'))
-
-hexbinplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', trans = log, inv = exp, xbins = 10, colramp = viridis, colorkey = FALSE, layout = c(2, 2))
+hexbinplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', trans = log, inv = exp, xbins = 10, colramp = viridis, colorkey = FALSE)
 
 
 
 cor(x$nhz, x$pi)
 
+
+
+library(ggdist)
+library(ggplot2)
+
+ggplot(site(x), aes(x = pi, y = greatgroup)) +
+  stat_interval(inherit.aes = TRUE, orientation = 'horizontal') + 
+  theme_minimal() +
+  theme(legend.position = c(1, 1), legend.justification ='right', legend.direction	
+        = 'horizontal', legend.background = element_rect(fill = 'white', color = NA), axis.text.y = element_text(face = 'bold')) + 
+  stat_summary(geom = 'point', fun = median, shape = 21, fill = 'black', col = 'white', cex = 2) +
+  scale_color_brewer() + 
+  scale_x_continuous(n.breaks = 16, limits = c(0, 1)) +
+  xlab('CEC by Ammonium Acetate at pH 7 (cmol[+]/kg), <2mm Fraction') + ylab('') +
+  labs(title = 'Interpretation of Clay Fraction Mineralogy (XRD), KSSL Snapshot', color = 'Interval')
+
+
+##### 
 
 
 
