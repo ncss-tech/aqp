@@ -20,97 +20,6 @@ b <- format(b, digits = 4)
 length(memCompress(a, type = 'gzip')) / length(memCompress(b, type = 'gzip'))
 
 
-.pii_by_profile <- function(x, vars, method, numericDigits) {
- 
-  # working with horizons of a single SPC
-  h <- horizons(x)
-  
-  # select variables
-  # iterate over columns and compute column-wise PII
-  h <- lapply(h[, vars, drop = FALSE], FUN = .pii_by_column, numericDigits = numericDigits)
-  
-  # each list element is a 1-length numeric
-  h <- unlist(h)
-  
-  # unless it is all NA
-  if(all(is.na(h))) {
-    return(NA)
-  }
-  
-  # reduce to single number
-  res <- switch(method,
-                mean = {
-                  mean(h, na.rm = TRUE) - 1  
-                },
-                median = {
-                  median(h, na.rm = TRUE) - 1
-                },
-                sum = {
-                  sum(h, na.rm = TRUE) 
-                }
-  )
-  
-  return(res)
-   
-}
-
-
-.pii_by_column <- function(i, numericDigits) {
-  
-  if(all(is.na(i))) {
-    return(NA)
-  }
-  
-  
-  # alternative baseline: single "horizon" of data
-  
-  # baseline is mean(i)
-  if(is.numeric(i)) {
-    
-    v <- as.character(signif(na.omit(i), digits = numericDigits))
-    b <- as.character(signif(rep(mean(i, na.rm = TRUE), times = length(v)), digits = numericDigits))
-    
-    v <- memCompress(v, type = 'gzip')
-    b <- memCompress(b, type = 'gzip')
-    
-  } else {
-    
-    # treating all categorical variables as nominal for now
-    v <- as.character(na.omit(i))
-    
-    # baseline is the most frequent
-    b <- names(sort(table(v), decreasing = TRUE))[1]
-    b <- rep(b, times = length(v))
-    
-    # compress values, baseline: smallest possible representation
-    v <- memCompress(v, type = 'gzip')
-    b <- memCompress(b, type = 'gzip')
-    
-  }
-  
-  # result is ratio: values / baseline
-  res <- length(v) / length(b)
-  return(res)
-}
-
-
-profileInformationIndex <- function(x, vars, method = c('median', 'mean', 'sum'), useDepths = TRUE, numericDigits = 4) {
-  
-  # method
-  method <- match.arg(method)
-  
-  # depths
-  if(useDepths) {
-    vars <- unique(c(vars, horizonDepths(x)))
-  }
-  
-  # iterate over profiles
-  # result is a vector suitable for site-level attribute
-  res <- profileApply(x, simplify = TRUE, FUN = .pii_by_profile, vars = vars, method = method, numericDigits = numericDigits)
-  
-  # done
-  return(res)
-}
 
 
 
@@ -118,21 +27,56 @@ profileInformationIndex <- function(x, vars, method = c('median', 'mean', 'sum')
 s <- c('holland', 'sierra', 'musick', 'hanford', 'grangeville', 'delhi', 'amador', 'cecil', 'leon', 'lucy', 'clarksville', 'zook', 'clear lake', 'yolo', 'calhi', 'corralitos', 'sacramento', 'dodgeland')
 x <- fetchOSD(s)
 
+vars <- c('hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH', 'pH_class', 'distinctness', 'topography')
 
-vars <- c('hzname', 'hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH', 'pH_class', 'distinctness', 'topography')
+x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'median')
 
-
-x$pi <- profileInformationIndex(x, vars = vars)
-
-par(mar = c(3, 0, 0, 1))
+par(mar = c(3, 0, 1, 1))
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+title('baseline = FALSE, method = median')
+
+
+
+x$pi <- profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'median')
+
+par(mar = c(3, 0, 1, 1))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+title('baseline = TRUE, method = median')
+
+
+x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'sum')
+
+par(mar = c(3, 0, 1, 1))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+title('baseline = FALSE, method = sum')
+
+
+x$pi <- profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'sum')
+
+par(mar = c(3, 0, 1, 1))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+title('baseline = TRUE, method = sum')
+
+
+z <- data.frame(
+  baseline.sum = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'sum'),
+  sum = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'sum'),
+  baseline.median = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'median'),
+  median = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'median')
+)
+
+cor(z)
+splom(z, par.settings = tactile.theme())
 
 
 sc <- data.table::fread('https://github.com/ncss-tech/SoilWeb-data/raw/main/files/SC-database.csv.gz')
 sc <- as.data.frame(sc)
 
-sc.sub <- subset(sc, subset = taxgrtgroup %in% c('haploxeralfs', 'palexeralfs', 'xerorthents'))
+sc.sub <- subset(sc, subset = taxgrtgroup %in% c('haploxeralfs', 'haploxerolls', 'palexeralfs', 'xerorthents'))
 
 s <- sc.sub$soilseriesname
 s <- split(s, makeChunks(s, size = 20))
@@ -148,10 +92,23 @@ x <- combine(x)
 vars <- c('hzname', 'hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH_class', 'distinctness', 'topography')
 
 
-x$pi <- profileInformationIndex(x, vars = vars)
+z <- data.frame(
+  baseline.sum = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'sum'),
+  baseline.median = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'median'),
+  sum = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'sum'),
+  median = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'median')
+)
+
+cor(z)
+
+hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = viridis, colorkey = FALSE, varname.cex = 0.75, varname.font = 2)
+
+
+
+x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE)
 x$nhz <- profileApply(x, FUN = nrow, simplify = TRUE)
 
-x$greatgroup <- factor(x$greatgroup, levels = c('palexeralfs', 'haploxeralfs', 'xerorthents'))
+x$greatgroup <- factor(x$greatgroup, levels = c('palexeralfs', 'haploxeralfs', 'haploxerolls', 'xerorthents'))
 
 
 hist(x$pi)
@@ -171,7 +128,7 @@ bwplot(pi ~ factor(nhz) | greatgroup, data = site(x), par.settings = tactile.the
 
 xyplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', type = c('g', 'p', 'r'))
 
-hexbinplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', trans = log, inv = exp, xbins = 10, colramp = viridis, colorkey = FALSE, layout = c(3, 1))
+hexbinplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', trans = log, inv = exp, xbins = 10, colramp = viridis, colorkey = FALSE, layout = c(2, 2))
 
 
 
