@@ -5,6 +5,8 @@
 \alias{ssc_to_texcl}
 \alias{texmod_to_fragvoltot}
 \alias{texture_to_taxpartsize}
+\alias{texture_to_texmod}
+\alias{fragvol_to_texmod}
 \title{Textural conversions}
 \usage{
 texcl_to_ssc(texcl = NULL, clay = NULL, sample = FALSE)
@@ -18,6 +20,26 @@ texture_to_taxpartsize(
   clay = NULL,
   sand = NULL,
   fragvoltot = NULL
+)
+
+texture_to_texmod(texture, duplicates = "combine")
+
+fragvol_to_texmod(
+  df = NULL,
+  gravel = NULL,
+  cobbles = NULL,
+  stones = NULL,
+  boulders = NULL,
+  channers = NULL,
+  flagstones = NULL,
+  paragravel = NULL,
+  paracobbles = NULL,
+  parastones = NULL,
+  paraboulders = NULL,
+  parachanners = NULL,
+  paraflagstones = NULL,
+  as.is = TRUE,
+  droplevels = TRUE
 )
 }
 \arguments{
@@ -50,6 +72,34 @@ are > 90 percent by volume (default: NULL))}
 \item{texture}{vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)}
 
 \item{duplicates}{character: specifying how multiple values should be handled, options are \code{"combined"} (e.g. 'GR & GRV) or \code{"max"}(e.g. 'GRV')}
+
+\item{df}{data.frame: containing the following column names: gravel, cobbles,
+stones, boulders, channers, flagstones, paragravel, paracobbles, parastones,
+paraboulders, parachanners, paraflagstones}
+
+\item{gravel}{numeric: gravel volume \%}
+
+\item{cobbles}{numeric: cobble volume \%}
+
+\item{stones}{numeric: stone volume \%}
+
+\item{boulders}{numeric: boulder volume \%}
+
+\item{channers}{numeric: channer volume \%}
+
+\item{flagstones}{numeric: flagstone volume \%}
+
+\item{paragravel}{numeric: para gravel volume \%}
+
+\item{paracobbles}{numeric: para cobble volume \%}
+
+\item{parastones}{numeric: para stone volume \%}
+
+\item{paraboulders}{numeric: para boulder volume \%}
+
+\item{parachanners}{numeric: para channer volume \%}
+
+\item{paraflagstones}{numeric: para flagstone volume \%}
 }
 \value{
 \itemize{
@@ -61,11 +111,19 @@ are > 90 percent by volume (default: NULL))}
 }
 
 \itemize{
-\item \code{texmod_to_fragvoltot}: A \code{numeric} vector containing total fragment volume
+\item \code{texmod_to_fragvoltot}: A \code{data.frame} containing columns \code{"texmod"},\code{"texmod_label"}, \code{"fragvoltot_l"}, \code{"fragvoltot_r"}, \code{"fragvoltot_h"}, \code{"fragvoltot_l_nopf"}, \code{"fragvoltot_r_nopf"}, \code{"fragvoltot_h_nopf"}
 }
 
 \itemize{
 \item \code{texture_to_taxpartsize}: a character vector containing \code{"taxpartsize"} classes
+}
+
+\itemize{
+\item \code{texture_to_texmod}: a character vector containing \code{"texmod"} classes
+}
+
+\itemize{
+\item \code{texmod}: a data.frame containing \code{"texmod"} and \code{"lieutex"} classes
 }
 }
 \description{
@@ -85,6 +143,16 @@ functionality described by Levi (2017).
 When \code{sample = TRUE}, the results can be used to estimate within-class,
 marginal distributions of sand, silt, and clay fractions. It is recommended
 that at least 10 samples be drawn for reasonable estimates.
+
+The function \code{texmod_to_fragvoltot} returns a data.frame with multiple
+fragvoltot columns differentiated by tailing abbreviations (e.g. _r) which
+refer to the following:
+\enumerate{
+\item l = low
+\item r = representative
+\item h = high
+\item nopf = no pararock fragments (i.e. total fragments - pararock fragments)
+}
 
 The function \code{texture_to_texmod()} parses texture (e.g. GR-CL) to extract the texmod values from it in the scenario where it is missing from
 texmod column. If multiple texmod values are present (for example in the
@@ -129,7 +197,7 @@ ssc <- texcl_to_ssc(texcl = st$texcl)
 head(cbind(texcl = st$texcl, clay = ssc$clay))
 
 
-# example of texmod_to_fragvoltol()
+# example of texmod_to_fragvoltol
 frags <- c("gr", "grv", "grx", "pgr", "pgrv", "pgrx")
 head(texmod_to_fragvoltot(frags))
 
@@ -144,10 +212,6 @@ tex$fpsc <- texture_to_taxpartsize(texcl = tex$texcl,
                                    sand = tex$sand,
                                    fragvoltot = tex$fragvoltot)
 head(tex)
-
-
-# example of texture_to_texcl
-texture_to_texcl("Clay Loam", stringsAsFactors = TRUE)
 
 
 # example of texture_to_taxpartsize() with carbonate clay and very fine sand
@@ -168,6 +232,25 @@ ssc1$sample <- FALSE
 ssc2$sample <- TRUE
 ssc  <- rbind(ssc1, ssc2)
 aggregate(clay ~ sample + texcl, data = ssc, summary)
+}
+\donttest{
+# example of texture_to_texmod()
+tex <- c("SL", "GR-SL", "CBV-L", "SR- GR-FS GRX-COS")
+texture_to_texmod(tex)
+texture_to_texmod(tex, duplicates = "max")
+}
+\donttest{
+# example of fragvol_to_texmod()
+df <- expand.grid(
+  gravel  = seq(0, 100, 5), 
+  cobbles = seq(0, 100, 5), 
+  stones  = seq(0, 100, 5), 
+  boulder = seq(0, 100, 5)
+  )
+df <- df[rowSums(df) < 100, ]
+test <- fragvol_to_texmod(df)
+table(test)
+
 }
 }
 \references{
