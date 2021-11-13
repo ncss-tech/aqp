@@ -774,32 +774,32 @@ fragvol_to_texmod <- function(
     x1534 <- sum_nopf >= 15 & sum_nopf <  35
     texmod  = ifelse(x1534 & x_gr_by           & gr >= cn & gr > 0, "gr", texmod)
     texmod  = ifelse(x1534 & x_gr_by           & gr <  cn & cn > 0, "cn", texmod)
-    texmod  = ifelse(x1534 & x_gr_by           & cb >= fl & cb > 0, "cb", texmod)
-    texmod  = ifelse(x1534 & x_gr_by           & cb <  fl & fl > 0, "fl", texmod)
+    texmod  = ifelse(x1534 & x_cb_by           & cb >= fl & cb > 0, "cb", texmod)
+    texmod  = ifelse(x1534 & x_cb_by           & cb <  fl & fl > 0, "fl", texmod)
     texmod  = ifelse(x1534 & st    >= 1.5 * by            & st > 0, "st", texmod)
     texmod  = ifelse(x1534 & st    <  1.5 * by            & by > 0, "by", texmod)
     # 35-59%
     x3559 <- sum_nopf >= 35 & sum_nopf <  60
     texmod  = ifelse(x3559 & x_gr_by           & gr >= cn & gr > 0, "grv", texmod)
     texmod  = ifelse(x3559 & x_gr_by           & gr <  cn & cn > 0, "cnv", texmod)
-    texmod  = ifelse(x3559 & x_gr_by           & cb >= fl & cb > 0, "cbv", texmod)
-    texmod  = ifelse(x3559 & x_gr_by           & cb <  fl & fl > 0, "flv", texmod)
+    texmod  = ifelse(x3559 & x_cb_by           & cb >= fl & cb > 0, "cbv", texmod)
+    texmod  = ifelse(x3559 & x_cb_by           & cb <  fl & fl > 0, "flv", texmod)
     texmod  = ifelse(x3559 & st    >= 1.5 * by            & st > 0, "stv", texmod)
     texmod  = ifelse(x3559 & st    <  1.5 * by            & by > 0, "byv", texmod)
     # 60-89%
     x6089 <- sum_nopf >= 60 & sum_nopf <  90
     texmod  = ifelse(x6089 & x_gr_by           & gr >= cn & gr > 0, "grx", texmod)
     texmod  = ifelse(x6089 & x_gr_by           & gr <  cn & cn > 0, "cnx", texmod)
-    texmod  = ifelse(x6089 & x_gr_by           & cb >= fl & cb > 0, "cbx", texmod)
-    texmod  = ifelse(x6089 & x_gr_by           & cb <  fl & fl > 0, "flx", texmod)
+    texmod  = ifelse(x6089 & x_cb_by           & cb >= fl & cb > 0, "cbx", texmod)
+    texmod  = ifelse(x6089 & x_cb_by           & cb <  fl & fl > 0, "flx", texmod)
     texmod  = ifelse(x6089 & st    >= 1.5 * by            & st > 0, "stx", texmod)
     texmod  = ifelse(x6089 & st    <  1.5 * by            & by > 0, "byx", texmod)
     # 90-100%
     x90 <- sum_nopf >= 90
     lieutex = ifelse(x90 & x_gr_by           & gr >= cn & gr > 0, "gr", lieutex)
     lieutex = ifelse(x90 & x_gr_by           & gr <  cn & cn > 0, "cn", lieutex)
-    lieutex = ifelse(x90 & x_gr_by           & cb >= fl & cb > 0, "cb", lieutex)
-    lieutex = ifelse(x90 & x_gr_by           & cb <  fl & fl > 0, "fl", lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb >= fl & cb > 0, "cb", lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb <  fl & fl > 0, "fl", lieutex)
     lieutex = ifelse(x90 & st    >= 1.5 * by            & st > 0, "st", lieutex)
     lieutex = ifelse(x90 & st    <  1.5 * by            & by > 0, "by", lieutex)
     
