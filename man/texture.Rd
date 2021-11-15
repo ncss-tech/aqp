@@ -25,7 +25,7 @@ texture_to_taxpartsize(
 texture_to_texmod(texture, duplicates = "combine")
 
 fragvol_to_texmod(
-  df = NULL,
+  object = NULL,
   gravel = NULL,
   cobbles = NULL,
   stones = NULL,
@@ -73,7 +73,7 @@ are > 90 percent by volume (default: NULL))}
 
 \item{duplicates}{character: specifying how multiple values should be handled, options are \code{"combined"} (e.g. 'GR & GRV) or \code{"max"}(e.g. 'GRV')}
 
-\item{df}{data.frame: containing the following column names: gravel, cobbles,
+\item{object}{data.frame: containing the following column names: gravel, cobbles,
 stones, boulders, channers, flagstones, paragravel, paracobbles, parastones,
 paraboulders, parachanners, paraflagstones}
 

@@ -621,7 +621,7 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 
 #' Convert frags to texmod
 #'
-#' @param df data.frame: containing the following column names: gravel, cobbles,
+#' @param object data.frame: containing the following column names: gravel, cobbles,
 #'  stones, boulders, channers, flagstones, paragravel, paracobbles, parastones,
 #'   paraboulders, parachanners, paraflagstones
 #' @param gravel numeric: gravel volume % 
@@ -658,7 +658,7 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #' 
 #' }
 fragvol_to_texmod <- function(
-  df       = NULL,
+  object       = NULL,
   gravel   = NULL, 
   cobbles  = NULL,
   stones   = NULL, 
@@ -680,27 +680,27 @@ fragvol_to_texmod <- function(
   var_mods <- c("gr", "cb", "st", "by", "cn", "fl", "pgr", "pcb", "pst", "pby", "pcn", "pfl")
   
   
-  # df = NULL; gravel =  NULL; cobbles =  NULL; stones =  NULL; boulders =  NULL; channers =  NULL; flagstones =  NULL; paragravel =  NULL; paracobbles =  NULL; parastones =  NULL; paraboulders =  NULL; parachanners =  NULL; paraflagstones =  NULL
-  # df <- expand.grid(gravel = seq(0, 105, 5), cobbles = seq(0, 100, 5), stones = seq(0, 100, 5), boulders = seq(0, 100, 5))
-  # df <- transform(df, paragravel = sample(gravel, nrow(df)), paracobbles = sample(cobbles, nrow(df)))
-  # df <- df[rowSums(df) <= 105, ]
-  # df <- rbind(df, rep(NA, ncol(df)))
+  # object = NULL; gravel =  NULL; cobbles =  NULL; stones =  NULL; boulders =  NULL; channers =  NULL; flagstones =  NULL; paragravel =  NULL; paracobbles =  NULL; parastones =  NULL; paraboulders =  NULL; parachanners =  NULL; paraflagstones =  NULL
+  # object <- expand.grid(gravel = seq(0, 105, 5), cobbles = seq(0, 100, 5), stones = seq(0, 100, 5), boulders = seq(0, 100, 5))
+  # object <- transform(object, paragravel = sample(gravel, nrow(object)), paracobbles = sample(cobbles, nrow(object)))
+  # object <- object[rowSums(object) <= 105, ]
+  # object <- rbind(object, rep(NA, ncol(object)))
   vars_l <- list(gravel, cobbles, stones, boulders, channers, flagstones, paragravel, paracobbles, parastones, paraboulders, parachanners, paraflagstones)
   names(vars_l) <- var_cols
   
   
   # check inputs----
   vars_null <- sapply(vars_l, is.null)
-  df_null   <- is.null(df)
+  df_null   <- is.null(object)
   vars_len  <- sapply(vars_l, length)
   
   ## overlapping inputs
   if (!df_null & any(!vars_null)) {
-    warning("if df and any other rock fragment arguments are both not null, only df will be used")
+    warning("if object and any other rock fragment arguments are both not null, only object will be used")
   }
-  ## df matching columns
-  if (!df_null & all(!var_cols %in% names(df))) {
-    stop(paste("df is missing columns matching any of the following columns", 
+  ## object matching columns
+  if (!df_null & all(!var_cols %in% names(object))) {
+    stop(paste("object is missing columns matching any of the following columns", 
                paste0(var_cols, collapse = ", "))
     )
   }
@@ -710,7 +710,7 @@ fragvol_to_texmod <- function(
   
   # standardize inputs again ----
   ## subset columns
-  if (any(!vars_null) & is.null(df)) {
+  if (any(!vars_null) & is.null(object)) {
     df <- as.data.frame(vars_l[!vars_null])
   } 
   
@@ -731,10 +731,10 @@ fragvol_to_texmod <- function(
   ## calculate sums
   gr  <- NULL;   cb <- NULL;  st <- NULL;  by <- NULL;  cn <- NULL;  fl <- NULL
   pgr  <- NULL; pcb <- NULL; pst <- NULL; pby <- NULL; pcn <- NULL; pfl <- NULL
-  gr_cn <- NULL; cb_fl <- NULL; pgr_pcn <- NULL; pcb_pfl <- NULL; 
-  sum_nopf <- NULL; sum_pf <- NULL; 
+  gr_cn <- NULL; cb_fl <- NULL; pgr_pcn <- NULL; pcb_pfl <- NULL;
+  sum_nopf <- NULL; sum_pf <- NULL;
   fgr  <- NULL; fcb <- NULL; fst <- NULL; fby <- NULL; fcn <- NULL; ffl <- NULL
-                                fgr_fcn <- NULL; fcb_ffl <- NULL; 
+                                fgr_fcn <- NULL; fcb_ffl <- NULL;
   sum_f <- NULL
   
   df$sum_nopf <- rowSums(df[, 1:6],  na.rm = TRUE)
@@ -745,7 +745,7 @@ fragvol_to_texmod <- function(
   df$cb_fl    <- rowSums(df[c("cb",  "fl")], na.rm = TRUE)
   
   df$pgr_pcn  <- rowSums(df[c("pgr", "pcn")], na.rm = TRUE)
-  df$fcb_pfl  <- rowSums(df[c("pcb", "pfl")], na.rm = TRUE)
+  df$pcb_pfl  <- rowSums(df[c("pcb", "pfl")], na.rm = TRUE)
  
   df$fgr_fcn  <- rowSums(df[c("gr",  "cn", "pgr", "pcn")], na.rm = TRUE)
   df$fcb_ffl  <- rowSums(df[c("cb",  "fl", "pcb", "pfl")], na.rm = TRUE)
@@ -782,8 +782,8 @@ fragvol_to_texmod <- function(
   df_sub <- within(df_sub, {
     
     # nopf
-    texmod  = NA
-    lieutex = NA
+    texmod  = NA_character_
+    lieutex = NA_character_
     x_gr_by = gr_cn >= ((1.5 * cb_fl) + (2 * st) + (2.5 * by))
     x_cb_by = cb_fl >= ((1.5 * st)    + (2 * by))
     # 15-34%
@@ -821,8 +821,8 @@ fragvol_to_texmod <- function(
     
     
     # pf
-    texmod_pf  = NA
-    lieutex_pf = NA
+    texmod_pf  = NA_character_
+    lieutex_pf = NA_character_
     x_pgr_pby  = pgr_pcn >= ((1.5 * pcb_pfl) + (2 * pst) + (2.5 * pby))
     x_pcb_pby  = pcb_pfl >= ((1.5 * pst)     + (2 * pby))
     # 15-34%
@@ -860,7 +860,7 @@ fragvol_to_texmod <- function(
     
     
     # f
-    texmod_f = NA
+    texmod_f = NA_character_
     x_fgr_fby = fgr_fcn >= ((1.5 * fcb_ffl) + (2 * fst) + (2.5 * fby))
     x_fcb_fby = fcb_ffl >= ((1.5 * fst)     + (2 * fby))
     # 15-34%
@@ -898,8 +898,10 @@ fragvol_to_texmod <- function(
   
   
   # standardize output----
-  df$texmod[!idx_sum]  <- df_sub$texmod
-  df$lieutex[!idx_sum] <- df_sub$lieutex
+  if (nrow(df_sub) > 0) {
+    df$texmod[!idx_sum]  <- df_sub$texmod
+    df$lieutex[!idx_sum] <- df_sub$lieutex
+  } else df[c("texmod", "lieutex")] <- NA_character_
   df <- df[c("texmod", "lieutex")]
   
   
