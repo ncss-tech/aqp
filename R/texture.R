@@ -686,7 +686,7 @@ fragvol_to_texmod <- function(
   # df <- df[rowSums(df) <= 105, ]
   # df <- rbind(df, rep(NA, ncol(df)))
   vars_l <- list(gravel, cobbles, stones, boulders, channers, flagstones, paragravel, paracobbles, parastones, paraboulders, parachanners, paraflagstones)
-  names(vars_l) <- var_mods
+  names(vars_l) <- var_cols
   
   
   # check inputs----
@@ -710,13 +710,15 @@ fragvol_to_texmod <- function(
   
   # standardize inputs again ----
   ## subset columns
+  if (any(!vars_null) & is.null(df)) {
+    df <- as.data.frame(vars_l[!vars_null])
+  } 
+  
   idx <- var_cols %in% names(df)
   var_cols_sub <- var_cols[idx]
   var_mods_sub <- var_mods[idx]
+  df <- df[var_cols_sub]
   
-  if (any(!vars_null) & is.null(df)) {
-    df <- as.data.frame(vars_l[!vars_null])
-  } else df <- df[var_cols_sub]
   
   ## append missing columns
   df_mis <- as.data.frame(matrix(data = 0, nrow = nrow(df), ncol = sum(!idx)))
@@ -735,9 +737,9 @@ fragvol_to_texmod <- function(
                                 fgr_fcn <- NULL; fcb_ffl <- NULL; 
   sum_f <- NULL
   
-  df$sum_nopf <- rowSums(df[1:6],  na.rm = TRUE)
-  df$sum_pf   <- rowSums(df[7:12], na.rm = TRUE)
-  df$sum_f    <- rowSums(df[1:12], na.rm = TRUE)
+  df$sum_nopf <- rowSums(df[, 1:6],  na.rm = TRUE)
+  df$sum_pf   <- rowSums(df[, 7:12], na.rm = TRUE)
+  df$sum_f    <- rowSums(df[, 1:12], na.rm = TRUE)
   
   df$gr_cn    <- rowSums(df[c("gr",  "cn")], na.rm = TRUE)
   df$cb_fl    <- rowSums(df[c("cb",  "fl")], na.rm = TRUE)
