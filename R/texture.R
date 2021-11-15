@@ -902,7 +902,12 @@ fragvol_to_texmod <- function(
   
   
   if (as.is == FALSE) {
-    lv <- c(var_mods[c(7:12, 1:6)])
+    lv <- paste0(
+      c(rep(var_mods[(7:12)], times = 3,  length.out = 18),
+        rep(var_mods[(1:6)],  times = 3,  length.out = 18)
+      ),
+      rep(c("", "v", "x"),    each  = 6,  length.out = 36)
+      )
     tn <- names(sort(table(df$texmod), decreasing = TRUE))
     lv <- c(lv, tn[! tn %in% lv])
     
