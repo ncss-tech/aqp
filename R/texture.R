@@ -710,9 +710,10 @@ fragvol_to_texmod <- function(
   
   # standardize inputs again ----
   ## subset columns
+  df <- NULL
   if (any(!vars_null) & is.null(object)) {
     df <- as.data.frame(vars_l[!vars_null])
-  } 
+  } else df <- object
   
   idx <- var_cols %in% names(df)
   var_cols_sub <- var_cols[idx]
