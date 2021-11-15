@@ -6,7 +6,7 @@
 \alias{[[<-,SoilProfileCollection,ANY,ANY-method}
 \title{Add or change column of horizon or site data in a SoilProfileCollection}
 \usage{
-\S4method{[[}{SoilProfileCollection,ANY,ANY,ANY}(x, i) <- value
+\S4method{[[}{SoilProfileCollection,ANY,ANY}(x, i) <- value
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
