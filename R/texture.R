@@ -700,8 +700,7 @@ fragvol_to_texmod <- function(
     warning("if object and any other rock fragment arguments are both not null, only object will be used")
   }
   ## object matching column
-  idx <- var_cols %in% names(object)
-  if (!df_null & any(idx)) {
+  if (!df_null & all(!var_cols %in% names(object))) {
     stop(paste("object is missing columns matching any of the following columns", 
                paste0(var_cols, collapse = ", "))
     )
