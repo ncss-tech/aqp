@@ -245,7 +245,7 @@ df <- expand.grid(
   gravel  = seq(0, 100, 5), 
   cobbles = seq(0, 100, 5), 
   stones  = seq(0, 100, 5), 
-  boulder = seq(0, 100, 5)
+  boulders = seq(0, 100, 5)
   )
 df <- df[rowSums(df) < 100, ]
 test <- fragvol_to_texmod(df)

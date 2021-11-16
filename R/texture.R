@@ -654,7 +654,8 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #'   )
 #' df <- df[rowSums(df) < 100, ]
 #' test <- fragvol_to_texmod(df)
-#' table(test)
+#' table(test$texmod)
+#' table(test$lieutex)
 #' 
 #' }
 fragvol_to_texmod <- function(
@@ -821,12 +822,12 @@ fragvol_to_texmod <- function(
     texmod  = ifelse(x6089 & st    <  1.5 * by            & by > 0 & is.na(texmod), "byx", texmod)
     # 90-100%
     x90 = sum_nopf >= 90
-    lieutex = ifelse(x90 & x_gr_by           & gr >= cn & gr > 0, "gr"                , lieutex)
-    lieutex = ifelse(x90 & x_gr_by           & gr <  cn & cn > 0, "cn" & is.na(texmod), lieutex)
-    lieutex = ifelse(x90 & x_cb_by           & cb >= fl & cb > 0, "cb" & is.na(texmod), lieutex)
-    lieutex = ifelse(x90 & x_cb_by           & cb <  fl & fl > 0, "fl" & is.na(texmod), lieutex)
-    lieutex = ifelse(x90 & st    >= 1.5 * by            & st > 0, "st" & is.na(texmod), lieutex)
-    lieutex = ifelse(x90 & st    <  1.5 * by            & by > 0, "by" & is.na(texmod), lieutex)
+    lieutex = ifelse(x90 & x_gr_by           & gr >= cn & gr > 0,                 "gr", lieutex)
+    lieutex = ifelse(x90 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cn", lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cb", lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "fl", lieutex)
+    lieutex = ifelse(x90 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "st", lieutex)
+    lieutex = ifelse(x90 & st    <  1.5 * by            & by > 0 & is.na(texmod), "by", lieutex)
     
     
     # pf
@@ -924,7 +925,7 @@ fragvol_to_texmod <- function(
     tn <- names(sort(table(df$texmod), decreasing = TRUE))
     lv <- c(lv, tn[! tn %in% lv])
     
-    df$texmod <- factor(df$texmod, levels = lv)
+    df$texmod  <- factor(df$texmod,  levels = lv)
     df$lieutex <- factor(df$lieutex, levels = var_mods[1:6])
   }
   
