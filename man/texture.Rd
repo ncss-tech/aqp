@@ -249,7 +249,8 @@ df <- expand.grid(
   )
 df <- df[rowSums(df) < 100, ]
 test <- fragvol_to_texmod(df)
-table(test)
+table(test$texmod)
+table(test$lieutex)
 
 }
 }
