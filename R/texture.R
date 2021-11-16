@@ -650,7 +650,7 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #'   gravel  = seq(0, 100, 5), 
 #'   cobbles = seq(0, 100, 5), 
 #'   stones  = seq(0, 100, 5), 
-#'   boulder = seq(0, 100, 5)
+#'   boulders = seq(0, 100, 5)
 #'   )
 #' df <- df[rowSums(df) < 100, ]
 #' test <- fragvol_to_texmod(df)
@@ -658,7 +658,7 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #' 
 #' }
 fragvol_to_texmod <- function(
-  object       = NULL,
+  object   = NULL,
   gravel   = NULL, 
   cobbles  = NULL,
   stones   = NULL, 
@@ -694,12 +694,14 @@ fragvol_to_texmod <- function(
   df_null   <- is.null(object)
   vars_len  <- sapply(vars_l, length)
   
+  
   ## overlapping inputs
   if (!df_null & any(!vars_null)) {
     warning("if object and any other rock fragment arguments are both not null, only object will be used")
   }
-  ## object matching columns
-  if (!df_null & all(!var_cols %in% names(object))) {
+  ## object matching column
+  idx <- var_cols %in% names(object)
+  if (!df_null & any(idx)) {
     stop(paste("object is missing columns matching any of the following columns", 
                paste0(var_cols, collapse = ", "))
     )
@@ -709,7 +711,7 @@ fragvol_to_texmod <- function(
   
   
   # standardize inputs again ----
-  ## subset columns
+  ## subset and select correct inputs
   df <- NULL
   if (any(!vars_null) & is.null(object)) {
     df <- as.data.frame(vars_l[!vars_null])
@@ -717,7 +719,7 @@ fragvol_to_texmod <- function(
   
   idx <- var_cols %in% names(df)
   var_cols_sub <- var_cols[idx]
-  var_mods_sub <- var_mods[idx]
+  # var_mods_sub <- var_mods[idx]
   df <- df[var_cols_sub]
   
   
@@ -729,7 +731,14 @@ fragvol_to_texmod <- function(
   df[is.na(df)] <- 0
   
   
-  ## calculate sums
+  # check inputs again ----
+  ## correct datatype
+  if (!all(sapply(df, function(x)  inherits(x, "integer") | inherits(x, "numeric")))) {
+    stop("all fragments must be numeric or integer")
+  }
+
+  
+  ## calculate sums ----
   gr  <- NULL;   cb <- NULL;  st <- NULL;  by <- NULL;  cn <- NULL;  fl <- NULL
   pgr  <- NULL; pcb <- NULL; pst <- NULL; pby <- NULL; pcn <- NULL; pfl <- NULL
   gr_cn <- NULL; cb_fl <- NULL; pgr_pcn <- NULL; pcb_pfl <- NULL;
@@ -770,7 +779,7 @@ fragvol_to_texmod <- function(
   df_sub  <- df[!idx_sum, ]
   
   
-  ## check inputs again
+  # check inputs again ----
   if (any(df$sum_nopf > 100)) {
     warning("some rows total rock fragments > 100")
   }
@@ -789,36 +798,36 @@ fragvol_to_texmod <- function(
     x_cb_by = cb_fl >= ((1.5 * st)    + (2 * by))
     # 15-34%
     x1534 = sum_nopf >= 15 & sum_nopf <  35
-    texmod  = ifelse(x1534 & x_gr_by           & gr >= cn & gr > 0, "gr", texmod)
-    texmod  = ifelse(x1534 & x_gr_by           & gr <  cn & cn > 0, "cn", texmod)
-    texmod  = ifelse(x1534 & x_cb_by           & cb >= fl & cb > 0, "cb", texmod)
-    texmod  = ifelse(x1534 & x_cb_by           & cb <  fl & fl > 0, "fl", texmod)
-    texmod  = ifelse(x1534 & st    >= 1.5 * by            & st > 0, "st", texmod)
-    texmod  = ifelse(x1534 & st    <  1.5 * by            & by > 0, "by", texmod)
+    texmod  = ifelse(x1534 & x_gr_by           & gr >= cn & gr > 0                , "gr", texmod)
+    texmod  = ifelse(x1534 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cn", texmod)
+    texmod  = ifelse(x1534 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cb", texmod)
+    texmod  = ifelse(x1534 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "fl", texmod)
+    texmod  = ifelse(x1534 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "st", texmod)
+    texmod  = ifelse(x1534 & st    <  1.5 * by            & by > 0 & is.na(texmod), "by", texmod)
     # 35-59%
     x3559 = sum_nopf >= 35 & sum_nopf <  60
-    texmod  = ifelse(x3559 & x_gr_by           & gr >= cn & gr > 0, "grv", texmod)
-    texmod  = ifelse(x3559 & x_gr_by           & gr <  cn & cn > 0, "cnv", texmod)
-    texmod  = ifelse(x3559 & x_cb_by           & cb >= fl & cb > 0, "cbv", texmod)
-    texmod  = ifelse(x3559 & x_cb_by           & cb <  fl & fl > 0, "flv", texmod)
-    texmod  = ifelse(x3559 & st    >= 1.5 * by            & st > 0, "stv", texmod)
-    texmod  = ifelse(x3559 & st    <  1.5 * by            & by > 0, "byv", texmod)
+    texmod  = ifelse(x3559 & x_gr_by           & gr >= cn & gr > 0,                 "grv", texmod)
+    texmod  = ifelse(x3559 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cnv", texmod)
+    texmod  = ifelse(x3559 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cbv", texmod)
+    texmod  = ifelse(x3559 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "flv", texmod)
+    texmod  = ifelse(x3559 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "stv", texmod)
+    texmod  = ifelse(x3559 & st    <  1.5 * by            & by > 0 & is.na(texmod), "byv", texmod)
     # 60-89%
     x6089 = sum_nopf >= 60 & sum_nopf <  90
-    texmod  = ifelse(x6089 & x_gr_by           & gr >= cn & gr > 0, "grx", texmod)
-    texmod  = ifelse(x6089 & x_gr_by           & gr <  cn & cn > 0, "cnx", texmod)
-    texmod  = ifelse(x6089 & x_cb_by           & cb >= fl & cb > 0, "cbx", texmod)
-    texmod  = ifelse(x6089 & x_cb_by           & cb <  fl & fl > 0, "flx", texmod)
-    texmod  = ifelse(x6089 & st    >= 1.5 * by            & st > 0, "stx", texmod)
-    texmod  = ifelse(x6089 & st    <  1.5 * by            & by > 0, "byx", texmod)
+    texmod  = ifelse(x6089 & x_gr_by           & gr >= cn & gr > 0                , "grx", texmod)
+    texmod  = ifelse(x6089 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cnx", texmod)
+    texmod  = ifelse(x6089 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cbx", texmod)
+    texmod  = ifelse(x6089 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "flx", texmod)
+    texmod  = ifelse(x6089 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "stx", texmod)
+    texmod  = ifelse(x6089 & st    <  1.5 * by            & by > 0 & is.na(texmod), "byx", texmod)
     # 90-100%
     x90 = sum_nopf >= 90
-    lieutex = ifelse(x90 & x_gr_by           & gr >= cn & gr > 0, "gr", lieutex)
-    lieutex = ifelse(x90 & x_gr_by           & gr <  cn & cn > 0, "cn", lieutex)
-    lieutex = ifelse(x90 & x_cb_by           & cb >= fl & cb > 0, "cb", lieutex)
-    lieutex = ifelse(x90 & x_cb_by           & cb <  fl & fl > 0, "fl", lieutex)
-    lieutex = ifelse(x90 & st    >= 1.5 * by            & st > 0, "st", lieutex)
-    lieutex = ifelse(x90 & st    <  1.5 * by            & by > 0, "by", lieutex)
+    lieutex = ifelse(x90 & x_gr_by           & gr >= cn & gr > 0, "gr"                , lieutex)
+    lieutex = ifelse(x90 & x_gr_by           & gr <  cn & cn > 0, "cn" & is.na(texmod), lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb >= fl & cb > 0, "cb" & is.na(texmod), lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb <  fl & fl > 0, "fl" & is.na(texmod), lieutex)
+    lieutex = ifelse(x90 & st    >= 1.5 * by            & st > 0, "st" & is.na(texmod), lieutex)
+    lieutex = ifelse(x90 & st    <  1.5 * by            & by > 0, "by" & is.na(texmod), lieutex)
     
     
     # pf
@@ -828,36 +837,36 @@ fragvol_to_texmod <- function(
     x_pcb_pby  = pcb_pfl >= ((1.5 * pst)     + (2 * pby))
     # 15-34%
     x1534 = sum_pf >= 15 & sum_pf <  35
-    texmod_pf  = ifelse(x1534 & x_pgr_pby        & pgr >= pcn & pgr > 0, "pgr", texmod_pf)
-    texmod_pf  = ifelse(x1534 & x_pgr_pby        & pgr <  pcn & pcn > 0, "pcn", texmod_pf)
-    texmod_pf  = ifelse(x1534 & x_pcb_pby        & pcb >= pfl & pcb > 0, "pcb", texmod_pf)
-    texmod_pf  = ifelse(x1534 & x_pcb_pby        & pcb <  pfl & pfl > 0, "pfl", texmod_pf)
-    texmod_pf  = ifelse(x1534 & pst >= 1.5 * pby              & pst > 0, "pst", texmod_pf)
-    texmod_pf  = ifelse(x1534 & pst <  1.5 * pby              & pby > 0, "pby", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pgr_pby        & pgr >= pcn & pgr > 0,                    "pgr", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pgr_pby        & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcn", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pcb_pby        & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcb", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pcb_pby        & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pfl", texmod_pf)
+    texmod_pf  = ifelse(x1534 & pst >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pst", texmod_pf)
+    texmod_pf  = ifelse(x1534 & pst <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pby", texmod_pf)
     # 35-59%
     x3559 = sum_pf >= 35 & sum_pf <  60
-    texmod_pf  = ifelse(x3559 & x_pgr_pby        & pgr >= pcn & pgr > 0, "pgrv", texmod_pf)
-    texmod_pf  = ifelse(x3559 & x_pgr_pby        & pgr <  pcn & pcn > 0, "pcnv", texmod_pf)
-    texmod_pf  = ifelse(x3559 & x_pcb_pby        & pcb >= pfl & pcb > 0, "pcbv", texmod_pf)
-    texmod_pf  = ifelse(x3559 & x_pcb_pby        & pcb <  pfl & pfl > 0, "pflv", texmod_pf)
-    texmod_pf  = ifelse(x3559 & pst >= 1.5 * pby              & pst > 0, "pstv", texmod_pf)
-    texmod_pf  = ifelse(x3559 & pst <  1.5 * pby              & pby > 0, "pbyv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pgr_pby        & pgr >= pcn & pgr > 0,                    "pgrv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pgr_pby        & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcnv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pcb_pby        & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcbv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pcb_pby        & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pflv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & pst >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pstv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & pst <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pbyv", texmod_pf)
     # 60-89%
     x6089 = sum_pf >= 60 & sum_pf <  90
-    texmod_pf  = ifelse(x6089 & x_pgr_pby        & pgr >= pcn & pgr > 0, "pgrx", texmod_pf)
-    texmod_pf  = ifelse(x6089 & x_pgr_pby        & pgr <  pcn & pcn > 0, "pcnx", texmod_pf)
-    texmod_pf  = ifelse(x6089 & x_pcb_pby        & pcb >= pfl & pcb > 0, "pcbx", texmod_pf)
-    texmod_pf  = ifelse(x6089 & x_pcb_pby        & pcb <  pfl & pfl > 0, "pflx", texmod_pf)
-    texmod_pf  = ifelse(x6089 & pst >= 1.5 * pby              & pst > 0, "pstx", texmod_pf)
-    texmod_pf  = ifelse(x6089 & pst <  1.5 * pby              & pby > 0, "pbyx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pgr_pby        & pgr >= pcn & pgr > 0,                    "pgrx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pgr_pby        & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcnx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pcb_pby        & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcbx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pcb_pby        & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pflx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & pst >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pstx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & pst <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pbyx", texmod_pf)
     # 90-100%
     x90 = sum_pf >= 90
-    lieutex_pf = ifelse(x90 & x_pgr_pby           & pgr >= pcn & pgr > 0, "pgr", lieutex_pf)
-    lieutex_pf = ifelse(x90 & x_pgr_pby           & pgr <  pcn & pcn > 0, "pcn", lieutex_pf)
-    lieutex_pf = ifelse(x90 & x_pcb_pby           & pcb >= pfl & pcb > 0, "pcb", lieutex_pf)
-    lieutex_pf = ifelse(x90 & x_pcb_pby           & pcb <  pfl & pfl > 0, "pfl", lieutex_pf)
-    lieutex_pf = ifelse(x90 & pst    >= 1.5 * by               & pst > 0, "pst", lieutex_pf)
-    lieutex_pf = ifelse(x90 & pst    <  1.5 * by               & pby > 0, "pby", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pgr_pby           & pgr >= pcn & pgr > 0,                    "pgr", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pgr_pby           & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcn", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pcb_pby           & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcb", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pcb_pby           & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pfl", lieutex_pf)
+    lieutex_pf = ifelse(x90 & pst    >= 1.5 * by               & pst > 0 & is.na(texmod_pf), "pst", lieutex_pf)
+    lieutex_pf = ifelse(x90 & pst    <  1.5 * by               & pby > 0 & is.na(texmod_pf), "pby", lieutex_pf)
     
     
     # f
@@ -866,15 +875,15 @@ fragvol_to_texmod <- function(
     x_fcb_fby = fcb_ffl >= ((1.5 * fst)     + (2 * fby))
     # 15-34%
     x1534 = sum_nopf < 15 & sum_pf < 15 & sum_f >= 15
-    texmod_f  = ifelse(x1534 & x_fgr_fby        & fgr >= fcn & fgr > 0, "pgr", texmod_f)
-    texmod_f  = ifelse(x1534 & x_fgr_fby        & fgr <  fcn & fcn > 0, "pcn", texmod_f)
-    texmod_f  = ifelse(x1534 & x_fcb_fby        & fcb >= ffl & fcb > 0, "pcb", texmod_f)
-    texmod_f  = ifelse(x1534 & x_fcb_fby        & fcb <  ffl & ffl > 0, "pfl", texmod_f)
-    texmod_f  = ifelse(x1534 & fst >= 1.5 * fby              & fst > 0, "pst", texmod_f)
-    texmod_f  = ifelse(x1534 & fst <  1.5 * fby              & fby > 0, "pby", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fgr_fby        & fgr >= fcn & fgr > 0,                   "pgr", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fgr_fby        & fgr <  fcn & fcn > 0 & is.na(texmod_f), "pcn", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fcb_fby        & fcb >= ffl & fcb > 0 & is.na(texmod_f), "pcb", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fcb_fby        & fcb <  ffl & ffl > 0 & is.na(texmod_f), "pfl", texmod_f)
+    texmod_f  = ifelse(x1534 & fst >= 1.5 * fby              & fst > 0 & is.na(texmod_f), "pst", texmod_f)
+    texmod_f  = ifelse(x1534 & fst <  1.5 * fby              & fby > 0 & is.na(texmod_f), "pby", texmod_f)
     
     
-    # combine texmod & texmod_pf----
+    # combine texmods and lieutex ----
     texmod  = ifelse(is.na(texmod),  texmod_pf,  texmod)
     texmod  = ifelse(is.na(texmod),  texmod_f,   texmod)
     lieutex = ifelse(is.na(lieutex), lieutex_pf, lieutex)
