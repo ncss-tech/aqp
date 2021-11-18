@@ -133,6 +133,7 @@ estimateSoilDepth <- function(f,
   top <- depthcols[1]
   bottom <- depthcols[2]
   
+  ## TODO: not using this approach any longer, fix default arguments
   # if the user has not specified a column containing horizon designations
   if(!name %in% horizonNames(f)) {
     name <- guessHzDesgnName(f)
@@ -171,6 +172,9 @@ estimateSoilDepth <- function(f,
   } else {
     # contact pattern matched
     # apply selection function
+    
+    ## BUG: this is not robust to NA in some cases
+    ## https://github.com/ncss-tech/aqp/issues/241
     res <- selection(h[[top]][contact.idx], na.rm = TRUE)
   }
     
