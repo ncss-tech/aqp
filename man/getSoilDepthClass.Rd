@@ -23,8 +23,7 @@ a \code{data.frame} containing soil depth and depth class for each
 profile, see examples
 }
 \description{
-Generate a boolean matrix of soil depth classes from a SoilProfileCollection
-object.
+Generate a boolean matrix of soil depth classes, actual soil depth class, and estimate of soil depth from a \code{SoilProfileCollection} object. Soil depths are estimated using pattern matching applied to horizon designations, by \code{\link[=estimateSoilDepth]{estimateSoilDepth()}}. The default REGEX pattern (\code{p = 'Cr|R|Cd'}) will match most "contacts" described using the USDA / Soil Taxonomy horizon designation conventions.
 }
 \examples{
 
@@ -32,7 +31,7 @@ data(sp1)
 depths(sp1) <- id ~ top + bottom
 
 # generate depth-class matrix
-sdc <- getSoilDepthClass(sp1, name='name')
+sdc <- getSoilDepthClass(sp1, name = 'name')
 
 # inspect
 head(sdc)
@@ -44,7 +43,7 @@ site(sp1) <- sdc
 # sample data
 data(gopheridge, package='soilDB')
 
-getSoilDepthClass(gopheridge)
+getSoilDepthClass(gopheridge, name = 'hzname')
 }
 
 }

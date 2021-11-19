@@ -1,7 +1,8 @@
-# aqp 1.33 (2021-11-12)
+# aqp 1.33 (2021-11-18)
  * fixed small bug in `panel.depth_function()` that affected plotting of grouped data, created by `slab()`
  * `plotSPC()` now uses variable (vertical) text alignment for horizon depth labels
  * new function `profileInformationIndex()`
+ * `estimateSoilDepth()` now requires a valid horizon designation (no longer attempts a guess)
 
 # aqp 1.32 (2021-09-28)
  * `colorChart()` can now show neutral hues in a skinny panel
