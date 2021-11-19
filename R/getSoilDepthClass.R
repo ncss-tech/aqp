@@ -1,5 +1,4 @@
 ## TODO: 
-# * data.table safety
 # * data.table optimization -> no iteration over profiles
 
 #' @title Generate Soil Depth Class Matrix

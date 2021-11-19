@@ -120,3 +120,42 @@ test_that("soil depth class assignment, using USDA-NRCS class breaks", {
 })
   
 
+test_that("data.table safety", {
+  
+  d <-
+    rbind(
+      data.frame(
+        id = c(1, 1, 1),
+        top = c(0, 20, 35),
+        bottom = c(20, 35, 110),
+        name = c('A', 'Bt', 'C')
+      ),
+      data.frame(
+        id = c(2, 2, 2),
+        top = c(0, 20, 55),
+        bottom = c(20, 55, 80),
+        name = c('A', 'Bt', 'Cr')
+      ),
+      data.frame(
+        id = c(3, 3, 3),
+        top = c(0, 20, 48),
+        bottom = c(20, 48, 130),
+        name = c('A', 'Bt', 'Cd')
+      ),
+      data.frame(
+        id = c(4, 4),
+        top = c(0, 20),
+        bottom = c(20, 180),
+        name = c('A', 'R')
+      ))
+  
+  d <- data.table(d)
+  depths(d) <- id ~ top + bottom
+  
+  res <- profileApply(d, estimateSoilDepth, name = 'name', no.contact.depth=100, no.contact.assigned=150)
+  expect_equivalent(res, c(150, 55, 48, 20))
+  
+  sdc <- getSoilDepthClass(d, name = 'name', no.contact.depth=100, no.contact.assigned=150)
+  expect_equivalent(sdc$depth, c(150, 55, 48, 20))
+})
+

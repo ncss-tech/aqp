@@ -1,6 +1,5 @@
 
 ## TODO: 
-# * data.table safety
 # * data.table optimization -> no iteration over profiles
 
 #' @title Estimate Soil Depth
@@ -150,7 +149,7 @@ estimateSoilDepth <- function(f,
 
   # extract horizons
   h <- horizons(f)
-  h <- h[, c(name, top, bottom)]
+  h <- .data.frame.j(h, col.names = c(name, top, bottom))
   
   # omit NA in hzname, top, bottom
   # can't match or use these data
