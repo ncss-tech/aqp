@@ -1,11 +1,15 @@
 
+## TODO: 
+# * data.table safety
+# * data.table optimization -> no iteration over profiles
+
 #' @title Estimate Soil Depth
 #' @description Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}}.
 #' 
 #' @param f SoilProfileCollection object of length 1, e.g. a single profile
 #' @param name name of the column that contains horizon designations
 #' @param p REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. `Bt`)
-#' @param selection function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.
+#' @param selection an R function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.
 #' @param no.contact.depth in the absence of contact matching \code{p}, a depth at which we can assume a standard depth-to-contact
 #' @param no.contact.assigned value assigned when no contact is encountered at or below \code{no.contact.depth}
 #' 
@@ -41,9 +45,12 @@
 #' # upgrade to SPC
 #' depths(d) <- id ~ top + bottom
 #' 
+#' # init horizon designation
+#' hzdesgnname(d) <- 'name'
+#' 
 #' # visual check
 #' par(mar = c(0, 0, 0, 1))
-#' plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1)
+#' plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1, width = 0.1)
 #' 
 #' # top of the first Cd
 #' estimateSoilDepth(d, name = 'name')
@@ -62,6 +69,9 @@
 #' 
 #' data(sp1)
 #' depths(sp1) <- id ~ top + bottom
+#' 
+#' # init horizon designation
+#' hzdesgnname(d) <- 'name'
 #' 
 #' # apply to each profile in a collection, and save as site-level attribute
 #' sp1$depth <- profileApply(sp1, estimateSoilDepth, name='name')
@@ -105,13 +115,13 @@
 #'   data(gopheridge, package='soilDB')
 #'   
 #'   # run on a single profile
-#'   estimateSoilDepth(gopheridge[1, ])
+#'   estimateSoilDepth(gopheridge[1, ], name = 'hzname')
 #'   
 #'   # apply to an entire collection
-#'   profileApply(gopheridge, estimateSoilDepth)
+#'   profileApply(gopheridge, estimateSoilDepth, name = 'hzname')
 #' }
 estimateSoilDepth <- function(f,
-                              name = 'hzname',
+                              name = hzdesgnname(f),
                               p = 'Cr|R|Cd',
                               selection = min,
                               no.contact.depth = NULL,
@@ -128,22 +138,23 @@ estimateSoilDepth <- function(f,
     stop('`f` can contain only one profile, see manual page for details')
   }
   
+  # must have a valid horizon designation
+  if(! name %in% horizonNames(f)) {
+    stop("soil depth estimation relies on a column containing horizon designations", call.=FALSE)
+  }
+  
   # use SPC depth column names
   depthcols <- horizonDepths(f)
   top <- depthcols[1]
   bottom <- depthcols[2]
-  
-  ## TODO: not using this approach any longer, fix default arguments
-  # if the user has not specified a column containing horizon designations
-  if(!name %in% horizonNames(f)) {
-    name <- guessHzDesgnName(f)
-    if(is.na(name)) {
-      stop("soil depth estimation relies on a column containing horizon designations", call.=FALSE)
-    }
-  }
 
   # extract horizons
   h <- horizons(f)
+  h <- h[, c(name, top, bottom)]
+  
+  # omit NA in hzname, top, bottom
+  # can't match or use these data
+  h <- na.omit(h)
 
   # extract possible contact
   contact.idx <- grep(p, h[[name]], ignore.case=TRUE)

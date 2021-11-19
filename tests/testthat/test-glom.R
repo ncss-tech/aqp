@@ -142,6 +142,7 @@ test_that("glomApply works as expected", {
   test_that("realistic glomApply scenarios", {
     data(sp3)
     depths(sp3) <- id ~ top + bottom
+    hzdesgnname(sp3) <- 'name'
 
     # constant depths, whole horizon returns by default
     expect_silent(glomApply(sp3, function(p) c(25,100)))

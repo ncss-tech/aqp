@@ -45,6 +45,9 @@ A SoilProfileCollection.
 data(sp3)
 depths(sp3) <- id ~ top + bottom
 
+# init horizon designation column in metadata, used by estimateSoilDepth
+hzdesgnname(sp3) <- 'name'
+
 # constant depths, whole horizon returns by default
 plot(glomApply(sp3, function(p) c(25,100)))
 

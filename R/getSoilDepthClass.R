@@ -1,7 +1,10 @@
-#' Generate Soil Depth Class Matrix
+## TODO: 
+# * data.table safety
+# * data.table optimization -> no iteration over profiles
+
+#' @title Generate Soil Depth Class Matrix
 #'
-#' Generate a boolean matrix of soil depth classes from a SoilProfileCollection
-#' object.
+#' @description Generate a boolean matrix of soil depth classes, actual soil depth class, and estimate of soil depth from a `SoilProfileCollection` object. Soil depths are estimated using pattern matching applied to horizon designations, by [`estimateSoilDepth()`]. The default REGEX pattern (`p = 'Cr|R|Cd'`) will match most "contacts" described using the USDA / Soil Taxonomy horizon designation conventions.
 #'
 #'
 #' @param f a SoilProfileCollection object
@@ -18,7 +21,7 @@
 #' depths(sp1) <- id ~ top + bottom
 #'
 #' # generate depth-class matrix
-#' sdc <- getSoilDepthClass(sp1, name='name')
+#' sdc <- getSoilDepthClass(sp1, name = 'name')
 #'
 #' # inspect
 #' head(sdc)
@@ -30,7 +33,7 @@
 #' # sample data
 #' data(gopheridge, package='soilDB')
 #'
-#' getSoilDepthClass(gopheridge)
+#' getSoilDepthClass(gopheridge, name = 'hzname')
 #' }
 #'
 getSoilDepthClass <- function(f, depth.classes=c('very.shallow'=25, 'shallow'=50, 'mod.deep'=100, 'deep'=150, 'very.deep'=1000), ...) {
@@ -45,28 +48,47 @@ getSoilDepthClass <- function(f, depth.classes=c('very.shallow'=25, 'shallow'=50
   # evaluate depth-class rules
   depth.class.matrix <- t(sapply(soil.depth, function(i) i < depth.classes))
 
-  # determine shallowest matching rule
-  best.match <- apply(depth.class.matrix, 1, function(i) names(which.min(which(i))))
+  # determine shallowest matching rule by-row
+  # safely deal with NA or inf
+  best.match <- apply(
+    depth.class.matrix, 
+    MARGIN = 1, FUN = function(i) {
+      if(all(is.na(i)) | all(is.infinite(i))) {
+        NA
+      } else {
+        names(which.min(which(i)))      
+      }
+    }
+  )
 
   # zero-out the depth class matrix
   depth.class.matrix[] <- FALSE
 
   # load best matching depth class by row
   for(i in 1:nrow(depth.class.matrix)) {
-    depth.class.matrix[i, best.match[i]] <- TRUE
+    # safely account for NA
+    if(is.na(best.match[i])) {
+      depth.class.matrix[i, ] <- NA
+    } else {
+      depth.class.matrix[i, best.match[i]] <- TRUE
+    }
   }
 
-  # extract a vector of depth classes
-  dc <- names(depth.classes)[apply(depth.class.matrix, 1, which)]
-
+  
   # add-in ID and actual depth
-  d <- data.frame(profile_id(f), depth=soil.depth, depth.class.matrix, depth.class=dc, stringsAsFactors=FALSE)
+  d <- data.frame(
+    profile_id(f), 
+    depth = soil.depth, 
+    depth.class.matrix, 
+    depth.class = best.match, 
+    stringsAsFactors=FALSE
+  )
 
   # fix ID name
   names(d)[1] <- idname(f)
 
   # set factor levels
-  d$depth.class <- factor(d$depth.class, levels=names(depth.classes))
+  d$depth.class <- factor(d$depth.class, levels = names(depth.classes))
 
   return(d)
 }

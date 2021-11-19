@@ -6,7 +6,7 @@
 \usage{
 estimateSoilDepth(
   f,
-  name = "hzname",
+  name = hzdesgnname(f),
   p = "Cr|R|Cd",
   selection = min,
   no.contact.depth = NULL,
@@ -20,7 +20,7 @@ estimateSoilDepth(
 
 \item{p}{REGEX pattern for determining "contact", or depth to some morphologic feature (e.g. \code{Bt})}
 
-\item{selection}{function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.}
+\item{selection}{an R function applied in the presence of multiple matching horizons: \code{min} (default), \code{max}, \code{mean}, etc.}
 
 \item{no.contact.depth}{in the absence of contact matching \code{p}, a depth at which we can assume a standard depth-to-contact}
 
@@ -56,9 +56,12 @@ d <- data.frame(
 # upgrade to SPC
 depths(d) <- id ~ top + bottom
 
+# init horizon designation
+hzdesgnname(d) <- 'name'
+
 # visual check
 par(mar = c(0, 0, 0, 1))
-plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1)
+plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1, width = 0.1)
 
 # top of the first Cd
 estimateSoilDepth(d, name = 'name')
@@ -77,6 +80,9 @@ estimateSoilDepth(d, name = 'name', selection = max, p = 'Cd')
 
 data(sp1)
 depths(sp1) <- id ~ top + bottom
+
+# init horizon designation
+hzdesgnname(d) <- 'name'
 
 # apply to each profile in a collection, and save as site-level attribute
 sp1$depth <- profileApply(sp1, estimateSoilDepth, name='name')
@@ -120,10 +126,10 @@ text(x.positions, y.positions, '\u2192', col='blue', adj=1, cex=1.25, lwd=2)
   data(gopheridge, package='soilDB')
   
   # run on a single profile
-  estimateSoilDepth(gopheridge[1, ])
+  estimateSoilDepth(gopheridge[1, ], name = 'hzname')
   
   # apply to an entire collection
-  profileApply(gopheridge, estimateSoilDepth)
+  profileApply(gopheridge, estimateSoilDepth, name = 'hzname')
 }
 }
 \seealso{
