@@ -72,8 +72,3 @@ summarizeSPC <-  function(object, ...) {
     # return result in same class as SPC slots
     return(.as.data.frame.aqp(final, aqp_df_class(object)))
 }
-
-summarize <- function(object, ...) {
-  .Deprecated("summarizeSPC")
-  summarizeSPC(object, ...)
-}

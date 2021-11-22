@@ -37,11 +37,3 @@ setMethod("transform", signature(`_data` = "SoilProfileCollection"),
 
   return(`_data`)
 })
-
-# if (!isGeneric("mutate"))
-  setGeneric("mutate", function(object, ...) standardGeneric("mutate"))
-
-setMethod("mutate", signature(object = "SoilProfileCollection"), function(object, ...) {
-   .Deprecated("transform")
-  aqp::transform(object, ...)
-})

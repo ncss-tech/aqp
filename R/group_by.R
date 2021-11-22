@@ -23,16 +23,16 @@ groupSPC <- function(object, ...) {
       bar <- as.character(x[[n]])
 
       if(inherits(foo, 'try-error'))
-        stop("group_by expects expressions that resolve to one or more site or horizon level column names", call.=FALSE)
+        stop("groupSPC expects expressions that resolve to one or more site or horizon level column names", call.=FALSE)
 
       if(any(is.na(bar))) {
-        stop(sprintf("group_by expects no NA values in '%s'", n), call.=FALSE)
+        stop(sprintf("groupSPC expects no NA values in '%s'", n), call.=FALSE)
       } else if(length(bar) == length(object)){
         foo <- c(foo, n)
       } else if(bar %in% siteNames(object)) {
         foo <- c(foo, bar)
       } else {
-        stop("group_by expects expressions that resolve to one or more site or horizon level attributes", call.=FALSE)
+        stop("groupSPC expects expressions that resolve to one or more site or horizon level attributes", call.=FALSE)
       }
     }
 
@@ -43,9 +43,4 @@ groupSPC <- function(object, ...) {
     object@metadata$aqp_group_by <- paste0(foo, collapse = "|")
 
     return(object)
-}
-
-group_by <- function(object, ...) {
-  .Deprecated("groupSPC")
-  groupSPC(object, ...)
 }
