@@ -4,13 +4,17 @@
 #' to texture class and visa versa, textural modifiers to rock fragments, and
 #' grain size composition to the family particle size class.
 #'
-#' These functions are intended to estimate missing values or check existing
-#' values. The \code{ssc_to_texcl()} function uses the same logic as the
-#' particle size estimator calculation in NASIS to classify sand and clay into
-#' texture class. The results are stored in \code{soiltexture} and used by
-#' \code{texcl_to_ssc()} as a lookup table to convert texture class to sand,
-#' silt and clay. The function \code{texcl_to_ssc()} replicates the
-#' functionality described by Levi (2017).
+#' These functions are intended to estimate missing values or allocate particle
+#' size fractions to classes. The \code{ssc_to_texcl()} function uses the same 
+#' logic as the particle size estimator calculation in NASIS to classify sand 
+#' and clay into texture class. The results are stored in \code{soiltexture} 
+#' and used by \code{texcl_to_ssc()} as a lookup table to convert texture class 
+#' to sand, silt and clay. The function \code{texcl_to_ssc()} replicates the
+#' functionality described by Levi (2017). The \code{texmod_to_fragvol()} 
+#' function similarly uses the logical from the 
+#' Exhibit618-11_texture_modifier.xls spreadsheet to determine the textural 
+#' modifier from the various combinations of rock and pararock fragments 
+#' (e.g. GR and PGR).
 #'
 #' When \code{sample = TRUE}, the results can be used to estimate within-class,
 #' marginal distributions of sand, silt, and clay fractions. It is recommended
@@ -329,55 +333,61 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
 #' are > 90 percent by volume (default: NULL))
 #' @rdname texture
 #' 
-#' @return  - `texmod_to_fragvoltot`: A `data.frame` containing columns `"texmod"`,`"texmod_label"`, `"fragvoltot_l"`, `"fragvoltot_r"`, `"fragvoltot_h"`, `"fragvoltot_l_nopf"`, `"fragvoltot_r_nopf"`, `"fragvoltot_h_nopf"`
+#' @return  - `texmod_to_fragvoltot`: A `data.frame` containing columns `"fragvoltot_l"`,
+#' `"fragvoltot_r"`, `"fragvoltot_h"`, `"fragvoltot_l_nopf"`, `"fragvoltot_r_nopf"`, `"fragvoltot_h_nopf"`
 #' 
 #' @export
 texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
-
-  # check
-  idx <- any(!is.na(texmod) & !is.na(lieutex))
-  if (idx) {
-    warning("texmod and lieutex should not both be present, they are mutually exclusive, only the texmod will be returned")
-  }
-
-
-  # standardize inputs
-  df <- data.frame(texmod = tolower(texmod), stringsAsFactors = FALSE)
-  df$rn = row.names(df)
-
-
+  
+  # standardize inputs ----
+  vars_l <- list(texmod = texmod, lieutex = lieutex)
+  # vars_l <- list(texmod = c("GR", "CBV", NA), lieutex = c(NA, NA, "BY"))
+  df <- NULL
+  df <- .format_inputs(vars_l, names(vars_l), NA_character_, "character")
+  df$texmod  <- tolower(df$texmod)
+  df$lieutex <- toupper(df$lieutex)
+  df$rn <- 1:nrow(df)
+  
+  
   # load lookup table
   # fix for R CMD check
   #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
   soiltexture <- NULL
   load(system.file("data/soiltexture.rda", package="aqp")[1])
 
+  
+  # check inputs ----
+  ## both present?
+  idx <- any(complete.cases(df))
+  if (idx) {
+    warning("texmod and lieutex should not both be present, they are mutually exclusive, only the results for texmod will be returned")
+  }
 
-  # check for texmod and lieutex that don't match
+  # texmod and lieutex don't match
   idx <- ! df$texmod %in% soiltexture$texmod$texmod
-  if (any(idx)) {
+  if (any(idx & !is.na(df$texmod))) {
     message("not all the texmod supplied match the lookup table")
   }
 
-  idx <-  ! toupper(lieutex) %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
-  if (all(!is.null(lieutex)) & any(idx)) {
-    message("not all the texmod supplied match the lookup table")
+  idx <-  ! df$lieutex %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
+  if (any(idx & !is.na(df$lieutex))) {
+    message("not all the lieutex supplied match the lookup table")
   }
 
 
   # merge
   df <- merge(df, soiltexture$texmod, by = "texmod", all.x = TRUE, sort = FALSE)
-  df <- df[(order(as.integer(df$rn))), ]
-  df$rn     <- NULL
+  df <- df[order(df$rn), ]
+  df$rn <- NULL
 
 
   # lieutex
-  if (all(!is.null(lieutex))) {
+  if (any(!is.na(df$lieutex))) {
 
-    idx1 <- is.na(texmod) & !is.na(lieutex) & grepl("GR|CB|ST|BY|CN|FL", lieutex)
-    idx2 <- is.na(texmod) & !is.na(lieutex) & grepl("PG|PCB|PST|PBY|PCN|PFL", lieutex)
+    idx1 <- !is.na(df$lieutex) & df$lieutex %in% c("GR", "CB",  "ST",  "BY",  "CN", "FL")
+    idx2 <- !is.na(df$lieutex) & df$lieutex %in% c("PG", "PCB", "PST", "PBY", "PCN", "PFL")
 
-    df$lieutex <- toupper(lieutex)
+    # df$lieutex <- toupper(lieutex)
 
     df <- within(df, {
       fragvoltot_l = ifelse(idx1, 90, fragvoltot_l)
@@ -388,10 +398,10 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
       fragvoltot_r_nopf = ifelse(idx2, 0,  fragvoltot_l)
       fragvoltot_h_nopf = ifelse(idx2, 0, fragvoltot_l)
       })
-    df$lieutex <- lieutex
+    # df$lieutex <- lieutex
   }
-
-
+  
+  df[c("texmod", "lieutex", "texmod_label")] <- NULL
 
   return(df)
 }
@@ -401,10 +411,10 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #' @param texcl vector of texture classes than conform to the USDA code
 #' conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)
 #'
-#' @param clay vector of clay percentages#'
+#' @param clay vector of clay percentages
 #' @param sand vector of sand percentages
 #'
-#' @param fragvoltot vector of rock fragment percentages
+#' @param fragvoltot vector of total rock fragment percentages
 #'
 #' @return - `texture_to_taxpartsize`: a character vector containing `"taxpartsize"` classes
 #' 
@@ -637,7 +647,7 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #' @param parachanners numeric: para channer volume % 
 #' @param paraflagstones numeric: para flagstone volume % 
 #'
-#' @return - `texmod`: a data.frame containing `"texmod"` and `"lieutex"` classes
+#' @return - `texmod_to_fragvol`: a data.frame containing `"texmod"` and `"lieutex"` classes
 #' 
 #' @rdname texture
 #' 
@@ -653,9 +663,14 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #'   boulders = seq(0, 100, 5)
 #'   )
 #' df <- df[rowSums(df) < 100, ]
+#' 
+#' # data.frame input
 #' test <- fragvol_to_texmod(df)
 #' table(test$texmod)
 #' table(test$lieutex)
+#' 
+#' # vector inputs
+#' fragvol_to_texmod(gravel = 10, cobbles = 10)
 #' 
 #' }
 fragvol_to_texmod <- function(
@@ -680,16 +695,14 @@ fragvol_to_texmod <- function(
   var_cols <- c("gravel", "cobbles", "stones", "boulders", "channers", "flagstones", "paragravel", "paracobbles", "parastones", "paraboulders", "parachanners", "paraflagstones")
   var_mods <- c("gr", "cb", "st", "by", "cn", "fl", "pgr", "pcb", "pst", "pby", "pcn", "pfl")
   
-  
-  # object = NULL; gravel =  NULL; cobbles =  NULL; stones =  NULL; boulders =  NULL; channers =  NULL; flagstones =  NULL; paragravel =  NULL; paracobbles =  NULL; parastones =  NULL; paraboulders =  NULL; parachanners =  NULL; paraflagstones =  NULL
+  # object = NULL; gravel =  10; cobbles =  10; stones =  NULL; boulders =  NULL; channers =  NULL; flagstones =  NULL; paragravel =  NULL; paracobbles =  NULL; parastones =  NULL; paraboulders =  NULL; parachanners =  NULL; paraflagstones =  NULL
   # object <- expand.grid(gravel = seq(0, 105, 5), cobbles = seq(0, 100, 5), stones = seq(0, 100, 5), boulders = seq(0, 100, 5))
-  # object <- transform(object, paragravel = sample(gravel, nrow(object)), paracobbles = sample(cobbles, nrow(object)))
   # object <- object[rowSums(object) <= 105, ]
   # object <- rbind(object, rep(NA, ncol(object)))
   vars_l <- list(gravel, cobbles, stones, boulders, channers, flagstones, paragravel, paracobbles, parastones, paraboulders, parachanners, paraflagstones)
   names(vars_l) <- var_cols
   
-  
+
   # check inputs----
   vars_null <- sapply(vars_l, is.null)
   df_null   <- is.null(object)
@@ -700,42 +713,43 @@ fragvol_to_texmod <- function(
   if (!df_null & any(!vars_null)) {
     warning("if object and any other rock fragment arguments are both not null, only object will be used")
   }
-  ## object matching column
-  if (!df_null & all(!var_cols %in% names(object))) {
-    stop(paste("object is missing columns matching any of the following columns", 
-               paste0(var_cols, collapse = ", "))
-    )
-  }
-  ## vars_l length of inputs
-  if (all(vars_len == max(vars_len)) & df_null) {stop("length of inputs do not match")}
+  # ## object matching column
+  # if (!df_null & all(!var_cols %in% names(object))) {
+  #   stop(paste("object is missing columns matching any of the following columns", 
+  #              paste0(var_cols, collapse = ", "))
+  #   )
+  # }
+  # ## vars_l length of inputs
+  # if (all(vars_len == max(vars_len)) & df_null) {stop("length of inputs do not match")}
   
   
   # standardize inputs again ----
   ## subset and select correct inputs
   df <- NULL
   if (any(!vars_null) & is.null(object)) {
-    df <- as.data.frame(vars_l[!vars_null])
-  } else df <- object
+    # df <- as.data.frame(vars_l[!vars_null])
+    df <- .format_inputs(vars_l, var_cols, 0, "numeric")
+  } else df <- .format_inputs(as.list(object), var_cols, 0, "numeric")
   
-  idx <- var_cols %in% names(df)
-  var_cols_sub <- var_cols[idx]
-  # var_mods_sub <- var_mods[idx]
-  df <- df[var_cols_sub]
-  
-  
-  ## append missing columns
-  df_mis <- as.data.frame(matrix(data = 0, nrow = nrow(df), ncol = sum(!idx)))
-  names(df_mis) <- var_cols[!idx]
-  df <- cbind(df_mis, df)[var_cols]
+  # idx <- var_cols %in% names(df)
+  # var_cols_sub <- var_cols[idx]
+  # # var_mods_sub <- var_mods[idx]
+  # df <- df[var_cols_sub]
+  # 
+  # 
+  # ## append missing columns
+  # df_mis <- as.data.frame(matrix(data = 0, nrow = nrow(df), ncol = sum(!idx)))
+  # names(df_mis) <- var_cols[!idx]
+  # df <- cbind(df_mis, df)[var_cols]
   names(df) <- var_mods
-  df[is.na(df)] <- 0
-  
-  
-  # check inputs again ----
-  ## correct datatype
-  if (!all(sapply(df, function(x)  inherits(x, "integer") | inherits(x, "numeric")))) {
-    stop("all fragments must be numeric or integer")
-  }
+  # df[is.na(df)] <- 0
+  # 
+  # 
+  # # check inputs again ----
+  # ## correct datatype
+  # if (!all(sapply(df, function(x)  inherits(x, "integer") | inherits(x, "numeric")))) {
+  #   stop("all fragments must be numeric or integer")
+  # }
 
   
   ## calculate sums ----
@@ -958,6 +972,53 @@ fragvol_to_texmod <- function(
     df <- droplevels.data.frame(df)
   }
   
+  
+  return(df)
+}
+
+
+# format function inputs ----
+# format vector argument inputs into a data.frame 
+.format_inputs <- function(vars_l = NULL, var_cols, mis_value = NA, datatype = NULL) {
+  
+  # check inputs----
+  vars_null <- sapply(vars_l, is.null)
+  vars_len  <- sapply(vars_l[!vars_null], length)
+  nm        <- var_cols
+  n         <- length(var_cols)
+  df <- NULL
+  
+  ## all inputs are NULL
+  if (all(vars_null)) {
+    stop("all inputs are NULL")
+  }
+  
+  ## length of inputs
+  if (!all(vars_len == max(vars_len))) {
+    stop("length of inputs do not match")
+  }
+  
+  # standardize inputs
+  # create data.frame
+  df <- as.data.frame(vars_l[!vars_null])
+  
+  # append missing columns
+  idx <- nm %in% names(df)
+  df_mis <- as.data.frame(matrix(data = mis_value, nrow = nrow(df), ncol = sum(!idx)))
+  names(df_mis) <- nm[!idx]
+  df <- cbind(df_mis, df)[nm]
+  
+  
+  ## correct datatype
+  df[1:n] <- lapply(df, function(x) if (is.factor(x))  as.character(x) else x)
+  df[1:n] <- lapply(df, function(x) if (is.integer(x)) as.numeric(x)   else x)
+  dt <- unlist(lapply(df, class))
+  
+  ## check datatype
+  idx <- dt == datatype | dt == "logical"
+  if (!all(idx)) {
+    stop(paste("unexpected input data types, must be", datatype))
+  }
   
   return(df)
 }

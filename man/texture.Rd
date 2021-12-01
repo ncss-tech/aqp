@@ -46,7 +46,7 @@ fragvol_to_texmod(
 \item{texcl}{vector of texture classes than conform to the USDA code
 conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)}
 
-\item{clay}{vector of clay percentages#'}
+\item{clay}{vector of clay percentages}
 
 \item{sample}{logical: should ssc be random sampled from the lookup table?
 (default: FALSE)}
@@ -67,7 +67,7 @@ conventions (e.g. gr|GR, grv|GRV)}
 code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 are > 90 percent by volume (default: NULL))}
 
-\item{fragvoltot}{vector of rock fragment percentages}
+\item{fragvoltot}{vector of total rock fragment percentages}
 
 \item{texture}{vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)}
 
@@ -111,7 +111,7 @@ paraboulders, parachanners, paraflagstones}
 }
 
 \itemize{
-\item \code{texmod_to_fragvoltot}: A \code{data.frame} containing columns \code{"texmod"},\code{"texmod_label"}, \code{"fragvoltot_l"}, \code{"fragvoltot_r"}, \code{"fragvoltot_h"}, \code{"fragvoltot_l_nopf"}, \code{"fragvoltot_r_nopf"}, \code{"fragvoltot_h_nopf"}
+\item \code{texmod_to_fragvoltot}: A \code{data.frame} containing columns \code{"fragvoltot_r"}, \code{"fragvoltot_h"}, \code{"fragvoltot_l_nopf"}, \code{"fragvoltot_r_nopf"}, \code{"fragvoltot_h_nopf"}
 }
 
 \itemize{
@@ -123,7 +123,7 @@ paraboulders, parachanners, paraflagstones}
 }
 
 \itemize{
-\item \code{texmod}: a data.frame containing \code{"texmod"} and \code{"lieutex"} classes
+\item \code{texmod_to_fragvol}: a data.frame containing \code{"texmod"} and \code{"lieutex"} classes
 }
 }
 \description{
@@ -132,13 +132,17 @@ to texture class and visa versa, textural modifiers to rock fragments, and
 grain size composition to the family particle size class.
 }
 \details{
-These functions are intended to estimate missing values or check existing
-values. The \code{ssc_to_texcl()} function uses the same logic as the
-particle size estimator calculation in NASIS to classify sand and clay into
-texture class. The results are stored in \code{soiltexture} and used by
-\code{texcl_to_ssc()} as a lookup table to convert texture class to sand,
-silt and clay. The function \code{texcl_to_ssc()} replicates the
-functionality described by Levi (2017).
+These functions are intended to estimate missing values or allocate particle
+size fractions to classes. The \code{ssc_to_texcl()} function uses the same
+logic as the particle size estimator calculation in NASIS to classify sand
+and clay into texture class. The results are stored in \code{soiltexture}
+and used by \code{texcl_to_ssc()} as a lookup table to convert texture class
+to sand, silt and clay. The function \code{texcl_to_ssc()} replicates the
+functionality described by Levi (2017). The \code{texmod_to_fragvol()}
+function similarly uses the logical from the
+Exhibit618-11_texture_modifier.xls spreadsheet to determine the textural
+modifier from the various combinations of rock and pararock fragments
+(e.g. GR and PGR).
 
 When \code{sample = TRUE}, the results can be used to estimate within-class,
 marginal distributions of sand, silt, and clay fractions. It is recommended
@@ -248,9 +252,14 @@ df <- expand.grid(
   boulders = seq(0, 100, 5)
   )
 df <- df[rowSums(df) < 100, ]
+
+# data.frame input
 test <- fragvol_to_texmod(df)
 table(test$texmod)
 table(test$lieutex)
+
+# vector inputs
+fragvol_to_texmod(gravel = 10, cobbles = 10)
 
 }
 }
