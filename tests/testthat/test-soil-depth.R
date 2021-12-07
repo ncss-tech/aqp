@@ -159,3 +159,31 @@ test_that("data.table safety", {
   expect_equivalent(sdc$depth, c(150, 55, 48, 20))
 })
 
+
+
+test_that("really deep", {
+  
+  d <-
+    rbind(
+      data.frame(
+        id = c(1, 1, 1),
+        top = c(0, 20, 35),
+        bottom = c(20, 35, 2000),
+        name = c('A', 'Bt', 'C')
+      ))
+  
+  depths(d) <- id ~ top + bottom
+  
+  res <- profileApply(d, estimateSoilDepth, name = 'name')
+  expect_equivalent(res, 2000)
+  
+  sdc <- getSoilDepthClass(d, name = 'name')
+  expect_equivalent(sdc$depth, 2000)
+  expect_equivalent(as.character(sdc$depth.class), 'very.deep')
+})
+
+
+
+
+
+

@@ -35,7 +35,7 @@
 #' getSoilDepthClass(gopheridge, name = 'hzname')
 #' }
 #'
-getSoilDepthClass <- function(f, depth.classes=c('very.shallow'=25, 'shallow'=50, 'mod.deep'=100, 'deep'=150, 'very.deep'=1000), ...) {
+getSoilDepthClass <- function(f, depth.classes=c('very.shallow'=25, 'shallow'=50, 'mod.deep'=100, 'deep'=150, 'very.deep'=10000), ...) {
 
   # apply soil-depth finding function
   # horizon top/bottom depths automatically extracted
