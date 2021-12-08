@@ -7,7 +7,7 @@
 getSoilDepthClass(
   f,
   depth.classes = c(very.shallow = 25, shallow = 50, mod.deep = 100, deep = 150,
-    very.deep = 1000),
+    very.deep = 10000),
   ...
 )
 }
