@@ -87,19 +87,29 @@ setReplaceMethod("depths", "data.frame",
   return(depth)
 }
 
-.prototypeSPC <- function(idn, hzd) {
+# create 0-length spc from id and horizon depth columns (`idn`, `hzd`)
+#  - allows template horizon (`hz`) and site (`st`) data to be provided (for additional columns)
+.prototypeSPC <- function(idn, hzd, hz = data.frame(), st = data.frame()) {
   
+  # create bare minimum data
   nuhz <- data.frame(id = character(0), 
                      hzID = character(0), 
                      top = numeric(0),
                      bottom = numeric(0), 
                      stringsAsFactors = FALSE)
+  # use idname/horizon depths
   colnames(nuhz) <- c(idn, "hzID", hzd)
   
+  # dummy site data
   nust <- data.frame(id = character(0), 
                      stringsAsFactors = FALSE)
   colnames(nust) <- idn
   
+  # add other columns
+  nuhz <- cbind(nuhz, hz[0, !colnames(hz) %in% colnames(nuhz), drop = FALSE])
+  nust <- cbind(nuhz, st[0, !colnames(st) %in% colnames(nust), drop = FALSE])
+  
+  # return 0-length SPC
   return(SoilProfileCollection(idcol = idn, 
                                depthcols = hzd,
                                horizons = nuhz,
@@ -139,7 +149,7 @@ setReplaceMethod("depths", "data.frame",
   if (all(is.na(data[[depthcols[1]]])) || all(is.na(data[[depthcols[2]]]))) {
       warning("all top and/or bottom depths missing from input data", call. = FALSE)
       # return a empty (0-length) SPC prototype using id and depthcols
-      return(.prototypeSPC(nm[1], depthcols))
+      return(.prototypeSPC(nm[1], depthcols, hz = data))
   }
 
   tdep <- data[[depthcols[1]]]
