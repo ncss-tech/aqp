@@ -552,40 +552,42 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
   
   
   # find which records have a texmod
-  idx_mod  <- which(sapply(tex_l, function(x) any(x %in% texmod)))
+  idx_mod  <- which(sapply(tex_l, function(x) any(x[-length(x)] %in% texmod)))
   # idx_lieu <- which(sapply(tex_l, function(x) any(x %in% lieutex)))
   
   
   # create a logical matrix of texmod presence/absence
-  tex_m  <- lapply(tex_l[idx_mod], function(x) texmod %in% x)
-  tex_df <- as.data.frame(do.call("rbind", tex_m))
-  names(tex_df) <- texmod
-  
-  # slightly slower simpler(/better?) alternative
-  # not better, this mistakenly matches words entered into this field
-  # I would rather have false negatives than false positives
-  # tex_m  <- sapply(texmod, function(x) grepl(x, tex))
-  
-  
-  # duplicates ----
-  ## combine texmod (if multiple exist)
-  if (duplicates == "combine") {
-    texmod_parse <- apply(tex_df, 1, function(x) {
-      paste0(names(x)[which(x)], collapse = " & ")
-    })
-  }
-  
-  
-  ## find texmod with the highest rock fragment content (if multiple exist)
-  if (duplicates == "max") {
-    tex_m <- sapply(texmod, function(x) {
-      vals <- suppressMessages(texmod_to_fragvoltot(x))
-      rf   <- ifelse(tex_df[x] == TRUE, vals$fragvoltot_r, 0)
+  if (!all(is.na(tex))) {
+    tex_m  <- lapply(tex_l[idx_mod], function(x)
+      texmod %in% x)
+    tex_df <- as.data.frame(do.call("rbind", tex_m))
+    names(tex_df) <- texmod
+    
+    # slightly slower simpler(/better?) alternative
+    # not better, this mistakenly matches words entered into this field
+    # I would rather have false negatives than false positives
+    # tex_m  <- sapply(texmod, function(x) grepl(x, tex))
+    
+    
+    # duplicates ----
+    ## combine texmod (if multiple exist)
+    if (duplicates == "combine") {
+      texmod_parse <- apply(tex_df, 1, function(x) {
+        paste0(names(x)[which(x)], collapse = " & ")
       })
-    idx_col <- max.col(tex_m)
-    texmod_parse <- names(tex_df)[idx_col]
+    }
+    
+    
+    ## find texmod with the highest rock fragment content (if multiple exist)
+    if (duplicates == "max") {
+      tex_m <- sapply(texmod, function(x) {
+        vals <- suppressMessages(texmod_to_fragvoltot(x))
+        rf   <- ifelse(tex_df[x] == TRUE, vals$fragvoltot_r, 0)
+      })
+      idx_col <- max.col(tex_m)
+      texmod_parse <- names(tex_df)[idx_col]
+    }
   }
-  
   
   # results ----
   n  <- length(texture)
