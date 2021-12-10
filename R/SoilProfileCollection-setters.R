@@ -111,9 +111,18 @@ setReplaceMethod("depths", "data.frame",
   colnames(nust) <- idn
   
   # add other columns
-  nuhz <- cbind(nuhz, hz[0, !colnames(hz) %in% colnames(nuhz), drop = FALSE][iid,])
-  nust <- cbind(nuhz, st[0, !colnames(st) %in% colnames(nust), drop = FALSE][iid,])
+  if (ncol(hz) > 0) {
+    hz$.dummyVar <- ""[nrow(hz)]
+    nuhz <- cbind(nuhz, hz[0, !colnames(hz) %in% colnames(nuhz), drop = FALSE][iid,])
+    nuhz$.dummyVar <- NULL
+  }
   
+  if (ncol(st) > 0) {
+    st$.dummyVar <- ""[nrow(st)]
+    nust <- cbind(nust, st[0, !colnames(st) %in% colnames(nust), drop = FALSE][iid,])
+    nust$.dummyVar <- NULL
+  }
+    
   # return 0-length or n-length (ID only) SPC
   return(SoilProfileCollection(idcol = idn, 
                                depthcols = hzd,
