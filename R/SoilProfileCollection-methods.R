@@ -75,9 +75,10 @@ setMethod(
     x@horizons <- h[idx,]
     
     # return the shallowest (of the deepest depths in each profile)
+    # returning Inf with no non-missing arguments to min
     .LAST <- NULL
     .HZID <- NULL
-    return(min(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = na.rm))
+    return(suppressWarnings(min(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = na.rm)))
   }
 )
 
@@ -114,9 +115,10 @@ setMethod(
     
     
     # return the deepest (of the deepest depths in each profile)
+    # returning -Inf with no non-missing arguments to max
     .LAST <- NULL
     .HZID <- NULL
-    return(max(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = na.rm))
+    return(suppressWarnings(max(horizons(x)[x[,, .LAST, .HZID],][[htb[2]]], na.rm = na.rm)))
   }
 )
 
