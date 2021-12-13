@@ -4,16 +4,55 @@
 \alias{repairMissingHzDepths}
 \title{Repair Problematic Lower Horizon Depths}
 \usage{
-repairMissingHzDepths(x, adj = 10)
+repairMissingHzDepths(x, adj = 10, max.depth = 200)
 }
 \arguments{
 \item{x}{\code{SoilProfileCollection}}
 
-\item{adj}{vertical offset applied to "repair" affected bottom depths}
+\item{adj}{vertical offset applied to "repair" missing bottom depths when top and bottom depth are equal or bottom depth is missing. (\code{NA} to use \code{max.depth})}
+
+\item{max.depth}{If adj is \code{NA}, or the resulting offset sum exceeds \code{max.depth}, \code{max.depth} is used.}
 }
 \value{
 \code{SoilProfileCollection} with a new (logical) horizon-level attribute \code{.repaired} marking affected horizons
 }
 \description{
-Attempt a simple repair of horizon bottom depths in the presence of \code{NA}, or in cases where the horizon shares a common top and bottom depth. Both situations are common in pedon description where "contact" (Cd, Cr, R, etc.) was described without a lower depth. This repair is only applied to the deepest horizon within a profile as identified by \code{\link{getLastHorizonID}}.
+Attempt a simple repair of horizon bottom depths in the presence of \code{NA}, or in cases where the horizon shares a common top and bottom depth. Both situations are common in pedon description where "contact" (Cd, Cr, R, etc.) was described without a lower depth.
+}
+\details{
+This repair is applied to the deepest horizon within a profile as identified by \code{\link{getLastHorizonID}}, as well as to bottom depths of any horizon that has a horizon below it. Horizon bottom depths are adjusted by adding \code{adj} (if non-NA). If the resulting value exceeds \code{max.depth}, the \code{max.depth} value is returned (if not \code{NA}).
+}
+\examples{
+h <- data.frame(
+  id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),
+  top = c(0:2, 0:3, 0:1) * 10,
+  bottom = c(rep(NA_integer_, 7), c(10, 99))
+)
+
+# NA depths result in warnings
+suppressWarnings({
+  depths(h) <- id ~ top + bottom
+})
+
+# inspect data before repairs
+plot(h)
+
+g <- repairMissingHzDepths(h)
+
+# all depth logic now valid
+all(checkHzDepthLogic(g)$valid)
+
+# inspect 
+plot(g)
+
+# no adj, max.depth only
+f <- repairMissingHzDepths(h, adj = NA, max.depth = 200)
+all(checkHzDepthLogic(f)$valid)
+plot(f) 
+
+# max.depth defaults to max(x) if too small
+f$bottom[c(3,7)] <- NA
+d <- repairMissingHzDepths(f, adj = NA, max.depth = 20)
+all(checkHzDepthLogic(d)$valid)
+plot(d)
 }
