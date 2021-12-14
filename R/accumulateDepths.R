@@ -2,7 +2,7 @@
 
 #' Accumulate horizon depths, and reflect reversed depths, relative to new datum
 #' 
-#' Fix old-style organic horizon depths, or depths with a non-standard datum, by the "depth accumulation" method.
+#' Fix old-style organic horizon depths or depths with a non-standard datum by the "depth accumulation" method.
 #' 
 #' @details The "depth accumulation" method calculates thicknesses of individual horizons and then cumulative sums them after putting them in `id` + top depth order. The routine tries to determine context based on `hzname` and `pattern`. The main transformation is if a top depth is deeper than the bottom depth, the depths are reflected on the Z-axis (made negative). The data are then `id` + top depth sorted again, the thickness calculated and accumulated to replace the old depths.
 #' 
