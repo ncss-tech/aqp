@@ -94,6 +94,7 @@ Jos
 KCl
 Kearney
 Kempen
+Kollmorgen
 Kubelka
 LPP
 Lahar
@@ -161,6 +162,7 @@ SL
 SPC
 SPCs
 SSSA
+SSTN
 Sadler
 Saginor
 Sata
@@ -174,6 +176,7 @@ Serpentinitic
 Sharma
 Skovlin
 SoilProfileCollection
+SoilProfileCollection's
 SoilProfileCollections
 SoilProfiles
 SoilWeb
@@ -215,6 +218,7 @@ al
 amonium
 andesitic
 andisols
+anisotropy
 antigorite
 aov
 arenic
@@ -241,6 +245,7 @@ cmol
 coeficient
 coercible
 colorContrast
+colorContrastPlot
 colorconverter
 colorimetric
 colorscience
@@ -293,10 +298,7 @@ frameify
 genhz
 geoderma
 getArgillicBounds
-getMineralSoilSurfaceDepth
-getPlowLayerDepth
 getSoilDepthClass
-getSurfaceHorizonDepth
 github
 glom
 glomalin
@@ -310,6 +312,7 @@ grossarenic
 grv
 gsharma
 gsoc
+gzip
 harmonizations
 hgroup
 horizonNames
