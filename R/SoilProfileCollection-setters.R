@@ -19,8 +19,8 @@ setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 #' @name depths<-
 #' @param object An object to promote to SoilProfileCollection (inherits from data.frame)
 #' @param value A formula specifying the unique profile ID, top and bottom depth column names
-#'
 #' @aliases depths<-,data.frame-method
+#' @details The input horizon data, and the resulting profile order, is sorted based on unique profile ID and top depth. ID columns are converted to character, depth columns are converted to integer. If `NA` values exist in all of the top depths, a prototype with 1 horizon per profile ID is returned, with `NA` in all non-essential columns. If the input `object` has 0 rows, a prototype with 0 horizons and 0 rows, but same column names as `object`, is returned. 
 #' @rdname depths
 #'
 #' @examples
@@ -87,19 +87,43 @@ setReplaceMethod("depths", "data.frame",
   return(depth)
 }
 
-.prototypeSPC <- function(idn, hzd) {
+# create 0-length spc from id and horizon depth columns (`idn`, `hzd`)
+#  - allows template horizon (`hz`) and site (`st`) data to be provided (for additional columns)
+.prototypeSPC <- function(idn, hzd, 
+                          hz = data.frame(), st = data.frame(), 
+                          fill_top = NA_integer_, fill_bottom = NA_integer_) {
   
-  nuhz <- data.frame(id = character(0), 
-                     hzID = character(0), 
-                     top = numeric(0),
-                     bottom = numeric(0), 
+  # create bare minimum data
+  id <- hz[[idn]]
+  nid <- length(id)
+  iid <- seq_along(id)
+  nuhz <- data.frame(id = as.character(id), 
+                     hzID = iid, 
+                     top = fill_top[nid],
+                     bottom = fill_bottom[nid], 
                      stringsAsFactors = FALSE)
+  # use idname/horizon depths
   colnames(nuhz) <- c(idn, "hzID", hzd)
   
-  nust <- data.frame(id = character(0), 
+  # dummy site data
+  nust <- data.frame(id = as.character(id), 
                      stringsAsFactors = FALSE)
   colnames(nust) <- idn
   
+  # add other columns
+  if (ncol(hz) > 0) {
+    hz$.dummyVar <- ""[nrow(hz)]
+    nuhz <- cbind(nuhz, hz[0, !colnames(hz) %in% colnames(nuhz), drop = FALSE][iid,])
+    nuhz$.dummyVar <- NULL
+  }
+  
+  if (ncol(st) > 0) {
+    st$.dummyVar <- ""[nrow(st)]
+    nust <- cbind(nust, st[0, !colnames(st) %in% colnames(nust), drop = FALSE][iid,])
+    nust$.dummyVar <- NULL
+  }
+    
+  # return 0-length or n-length (ID only) SPC
   return(SoilProfileCollection(idcol = idn, 
                                depthcols = hzd,
                                horizons = nuhz,
@@ -108,8 +132,12 @@ setReplaceMethod("depths", "data.frame",
 
 ##
 ## initialize SP/SPC objects from a model.frame
-##
-.initSPCfromMF <- function(data, mf, use_class) {
+## - data is a horizon-level data.frame
+## - mf is a model frame expressing the id ~ top + bottom formula
+## - use_class is the data.frame class to use ("data.frame", "tbl_df", or "data.table")
+## 
+# TODO: top and bottom are depth used to fill in an empty horizon for profiles where all top depths are missing. Default `NA_integer_`. Not exposed through depths<- at this time because it only covers the case where every single profile in the collection has all missing top depths. Doing more involved inspection of the SPC inputs to find cases that may have multiple NA-horizons per profile, removing extras, splicing in clean NA-filled data may be more than we want to do in the object constructing method
+.initSPCfromMF <- function(data, mf, use_class, top = NA_integer_, bottom = NA_integer_) {
   # get column names containing id, top, bottom
   nm <- names(mf)
 
@@ -128,20 +156,25 @@ setReplaceMethod("depths", "data.frame",
   # depth column names
   depthcols <- c(nm[2], nm[3])
 
-  # enforce numeric depths and provide QC warnings as needed
-  data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
-  data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
-
   # get column containing IDs
   data_id <- data[[nm[1]]]
 
   # check for all depths NA or 0-length
-  if (all(is.na(data[[depthcols[1]]])) || all(is.na(data[[depthcols[2]]]))) {
-      warning("all top and/or bottom depths missing from input data", call. = FALSE)
-      # return a empty (0-length) SPC prototype using id and depthcols
-      return(.prototypeSPC(nm[1], depthcols))
+  if (all(is.na(data[[depthcols[1]]]))) {
+    # all top depths missing is intractable, all bottom depths is fixable
+    warning("all top depths missing from input data", call. = FALSE)
+    # return a filled (n-length) SPC prototype from the horizon data
+    return(.prototypeSPC(nm[1], depthcols, hz = data, fill_top = top, fill_bottom = bottom))
+  } else if(nrow(data) == 0) {
+    warning("input data have 0 rows", call. = FALSE)
+    # return a empty (0-length) SPC prototype from the horizon data
+    return(.prototypeSPC(nm[1], depthcols, hz = data, fill_top = top, fill_bottom = bottom))
   }
-
+  
+  # enforce numeric depths and provide QC warnings as needed
+  data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
+  data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
+  
   tdep <- data[[depthcols[1]]]
 
   # calculate ID-top depth order, re-order input data
@@ -160,6 +193,7 @@ setReplaceMethod("depths", "data.frame",
                                site = nusite,
                                horizons = data)
 
+  
   # check for horizon ID name conflict
   if (hzidname(res) %in% names(data)) {
 

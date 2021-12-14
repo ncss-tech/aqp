@@ -18,6 +18,9 @@
 \description{
 Initialize a SoilProfileCollection from a data.frame object
 }
+\details{
+The input horizon data, and the resulting profile order, is sorted based on unique profile ID and top depth. ID columns are converted to character, depth columns are converted to integer. If \code{NA} values exist in all of the top depths, a prototype with 1 horizon per profile ID is returned, with \code{NA} in all non-essential columns. If the input \code{object} has 0 rows, a prototype with 0 horizons and 0 rows, but same column names as \code{object}, is returned.
+}
 \examples{
 ## init SoilProfileCollection objects from data.frame of horizon data
 
