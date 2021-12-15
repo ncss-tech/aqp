@@ -1,6 +1,17 @@
 # https://www.stat.auckland.ac.nz/~paul/useR2015-grid/grid-slides.html#1
 
 
+## patterns
+# https://davenquinn.com/projects/geologic-patterns/
+# https://github.com/davenquinn/geologic-patterns/tree/master/assets/svg
+
+# https://github.com/coolbutuseless/svgparser
+# https://coolbutuseless.github.io/package/svgparser/articles/tileable.html
+
+# https://www.stat.auckland.ac.nz/~paul/Reports/GraphicsEngine/definitions/definitions.html
+
+
+
 library(aqp)
 library(soilDB)
 library(grid)
@@ -31,9 +42,6 @@ grid.ls()
 
 current.vpTree()
 
-# semi-graceful failures
-x$top[c(4, 8, 16, 22)] <- NA
-sketch(x)
 
 horizons(x)$.sd <- 5
 sketch(
@@ -45,3 +53,6 @@ sketch(
 )
 
 
+# semi-graceful failures
+x$top[c(4, 8, 16, 22)] <- NA
+sketch(x)

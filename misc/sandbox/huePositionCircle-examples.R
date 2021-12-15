@@ -6,9 +6,16 @@ library(aqp)
 library(sharpshootR)
 library(vegan)
 
-# Munsell value and chroma to combine with hues
+## Munsell value and chroma to combine with hues
+
+# bright, for demonstration
 value <- 6
 chroma <- 15
+
+# # closer to soil colors
+# value <- 4
+# chroma <- 6
+
 
 # baseline set of hues
 hues <- huePosition(returnHues = TRUE, includeNeutral = TRUE)
@@ -18,7 +25,7 @@ hues <- huePosition(returnHues = TRUE, includeNeutral = TRUE)
 # ragg::agg_png(file = 'E:/temp/munsell-hue-circle.png', height = 900, width = 900, scaling = 1.75)
 
 par(mar = c(0, 0, 0, 0), fg = 'white', bg = 'black')
-huePositionCircle(hues, chroma = 15)
+huePositionCircle(hues, chroma = chroma, value = value)
 
 # dev.off()
 

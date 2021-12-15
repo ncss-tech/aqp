@@ -1,4 +1,4 @@
-sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
+sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.depthAxis = 0.5, widthFactor = 1, depthAxis = FALSE) {
   
   # number of profiles, possibly set as an argument
   n <- length(x)
@@ -7,7 +7,7 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
   
   # calculation for profile widths, NPC
   profileWidth <- widthFactor * (100 / n) / 2 / 100
-
+  
   
   ## viewport stuff isn't working as expected
   # https://stat.ethz.ch/R-manual/R-devel/library/grid/doc/viewports.pdf
@@ -31,23 +31,23 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
   
   # main VP
   main.vp <- viewport(x = unit(0.5, 'npc'), y = unit(0.5, 'npc'), 
-                 just = c("center", "center"),
-                 width = unit(0.95, 'npc'), height = unit(0.95, 'npc'),
-                 xscale = c(0, 1), yscale = c(max(x)+10, -10), 
-                 name = 'main',
-                 layout.pos.row = 1, layout.pos.col = 2
-  )
-  
-
-  # depth axis VP
-  depthAxis.vp <- viewport(x = unit(0.5, 'npc'), y = unit(0.5, 'npc'),
                       just = c("center", "center"),
                       width = unit(0.95, 'npc'), height = unit(0.95, 'npc'),
-                      xscale = c(0, 1), yscale = c(max(x)+10, -10),
-                      name = 'depthAxis',
-                      layout.pos.row = 1, layout.pos.col = 3
+                      xscale = c(0, 1), yscale = c(max(x)+10, -10), 
+                      name = 'main',
+                      layout.pos.row = 1, layout.pos.col = 2
   )
-
+  
+  
+  # depth axis VP
+  depthAxis.vp <- viewport(x = unit(0.5, 'npc'), y = unit(0.5, 'npc'),
+                           just = c("center", "center"),
+                           width = unit(0.95, 'npc'), height = unit(0.95, 'npc'),
+                           xscale = c(0, 1), yscale = c(max(x)+10, -10),
+                           name = 'depthAxis',
+                           layout.pos.row = 1, layout.pos.col = 3
+  )
+  
   # blank page
   grid.newpage()
   
@@ -60,7 +60,7 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
   # depth axis
   if(depthAxis) {
     seekViewport('depthAxis')
-    .addDepthAxis(maxDepth = max(x), interval = 10)
+    .addDepthAxis(maxDepth = max(x), interval = 10, cex.da = cex.depthAxis)
   }
   
   # activate main VP
@@ -98,6 +98,9 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
     # current x-position, NPC
     x.pos <- pos[i]
     
+    ## TODO: patterns !
+    
+    
     # profiles as rectangles
     grid.rect(
       x = unit(x.pos, 'npc'), 
@@ -109,13 +112,45 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
       name = sprintf('%s.shape', id)
     )
     
+    
+    ## TODO: is this vectorized?
+    # optional pattern overlay
+    for(hz.i in seq_along(tops)) {
+      
+      pat <- pattern(
+        # x = runif(1, min = 0.2, max = 0.8),
+        # y = runif(1, min = 0.4, max = 0.6),
+        grob = pat_grob, 
+        extend = 'repeat',
+        height = unit(4, 'cm'),
+        width = unit(4, 'cm')
+      )
+      
+      # optional pattern
+      gp.pattern <- gpar(fill = pat, col = NA)
+      
+      
+      grid.rect(
+        x = unit(x.pos, 'npc'), 
+        y = unit(tops[hz.i], 'native'), 
+        just = c('center', 'bottom'), 
+        width = unit(profileWidth, 'npc'), 
+        height = unit(thicks[hz.i], 'native'), 
+        gp = gp.pattern, 
+        name = sprintf('%s.shape.pattern', id)
+      )
+    }
+    
+    
+    
+    
     # IDs or profile labels
     grid.text(
       label = id, 
       x = unit(x.pos, 'npc'), 
       y = unit(1, 'npc'), 
       just = c('center', 'top'), 
-      gp = gpar(font = 2),
+      gp = gpar(font = 2, cex = cex.ids),
       name = sprintf('%s.id', id)
     )
     
@@ -125,7 +160,7 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
       x = unit(x.pos, 'npc'), 
       y = unit(mids, 'native'), 
       just = c('center', 'center'), 
-      gp = gpar(col = invertLabelColor(z$soil_color), font = 3, cex = 0.66),
+      gp = gpar(col = invertLabelColor(z$soil_color), font = 3, cex = cex.names),
       name = sprintf('%s.hzlabel', id)
     )
     
@@ -135,7 +170,7 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
       x = unit(x.pos + (profileWidth/2) + 0.002, 'npc'), 
       y = unit(tops, 'native'), 
       just = c('left', 'center'), 
-      gp = gpar(cex = 0.66),
+      gp = gpar(cex = cex.depths),
       name = sprintf('%s.hzdepth', id)
     )
   }
@@ -145,7 +180,7 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
 }
 
 
-.addDepthAxis <- function(maxDepth, interval = 10, col = c('white', grey(0.3))) {
+.addDepthAxis <- function(maxDepth, interval = 10, col = c('white', grey(0.3)), cex.da = 0.5) {
   
   center.npc <- 0.5
   
@@ -165,7 +200,7 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
     x = unit(center.npc, 'npc'), 
     y = unit(s, 'native'), 
     just = c('center', 'top'), 
-    gp = gpar(cex = 0.5, col = invertLabelColor(cols)),
+    gp = gpar(cex = cex.da, col = invertLabelColor(cols)),
     name = 'depthAxisTextMaxWidth'
   )
   
@@ -186,9 +221,9 @@ sketch <- function(x, widthFactor = 1, depthAxis = FALSE) {
   grid.text(
     label = s, 
     x = unit(center.npc, 'npc'), 
-    y = unit(s, 'native'), 
+    y = unit(s, 'native') - unit(0.0025, 'npc'), 
     just = c('center', 'top'), 
-    gp = gpar(cex = 0.5, col = invertLabelColor(cols)),
+    gp = gpar(cex = cex.da, col = invertLabelColor(cols)),
     name = 'depthAxisText'
   )
 }
