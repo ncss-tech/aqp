@@ -1,4 +1,4 @@
-sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.depthAxis = 0.5, widthFactor = 1, depthAxis = FALSE) {
+sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.depthAxis = 0.5, widthFactor = 1, depthAxis = FALSE, depthAxis.interval = 10) {
   
   # number of profiles, possibly set as an argument
   n <- length(x)
@@ -60,7 +60,7 @@ sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.dept
   # depth axis
   if(depthAxis) {
     seekViewport('depthAxis')
-    .addDepthAxis(maxDepth = max(x), interval = 10, cex.da = cex.depthAxis)
+    .addDepthAxis(maxDepth = max(x), interval = depthAxis.interval, cex.da = cex.depthAxis)
   }
   
   # activate main VP
@@ -116,6 +116,8 @@ sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.dept
     ## TODO: is this vectorized?
     # optional pattern overlay
     for(hz.i in seq_along(tops)) {
+      
+      ## TODO: can we add some randomness to the fill between horizons / profiles?
       
       pat <- pattern(
         # x = runif(1, min = 0.2, max = 0.8),

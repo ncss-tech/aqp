@@ -16,17 +16,30 @@ library(soilDB)
 library(svgparser)
 library(grid)
 
-
+# example data
 s <- c('amador', 'drummer', 'lucy', 'cecil', 'tristan', 'pierre', 'reddig', 'zook', 'ramona', 'peterz', 'pentz', 'dylan')
 x <- fetchOSD(s)
 
 
-## TODO: move to saved object
+## standard patterns:
+# arbitrary SVG source is nice, but requires svgparser pkg
+# select 10-20 reasonable patterns and store in .rda
+# https://davenquinn.com/projects/geologic-patterns/
+# 
+# some are too large to be used by grid (?)
+
+pat.svg <- 'https://raw.githubusercontent.com/davenquinn/geologic-patterns/master/assets/svg/606.svg'
+
+# pat.svg <- 'https://raw.githubusercontent.com/davenquinn/geologic-patterns/master/assets/svg/102-K.svg'
+ 
+
+
+
 # load this from an SVG -> saved .rda
 # load with absolute units (mm) for fixed size
 # can't use stroke = 'white' -> tiling borders become visible
 pat_grob <- svgparser::read_svg(
-  svg_file = 'https://raw.githubusercontent.com/davenquinn/geologic-patterns/master/assets/svg/606.svg', 
+  svg_file = pat.svg, 
   scale = 1, 
   style_default = list(fill = grey(0.25)), 
   default.units = 'mm'
@@ -44,6 +57,7 @@ pat_grob$vp <- viewport(width = unit(4, 'cm'), height = unit(4, 'cm'))
 ## ragg output devices don't work
 ##
 ## have to use Cairo PNG
+# https://developer.r-project.org/Blog/public/2020/07/15/new-features-in-the-r-graphics-engine/index.html
 
 source('sketch-grid.R')
 
