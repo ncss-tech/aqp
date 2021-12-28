@@ -557,7 +557,7 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
   
   
   # create a logical matrix of texmod presence/absence
-  if (!all(is.na(tex))) {
+  if (length(idx_mod > 0)) {
     tex_m  <- lapply(tex_l[idx_mod], function(x)
       texmod %in% x)
     tex_df <- as.data.frame(do.call("rbind", tex_m))
@@ -591,8 +591,8 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
   
   # results ----
   n  <- length(texture)
-  df <- data.frame(texmod = rep(NA, n)) #, lieutex = rep(NA, n))
-  df[idx_mod, "texmod"] <- texmod_parse
+  df <- data.frame(texmod = rep(NA_character_, n)) #, lieutex = rep(NA, n))
+  if (length(idx_mod) > 0) df[idx_mod, "texmod"] <- texmod_parse
   
   return(df$texmod)
 }

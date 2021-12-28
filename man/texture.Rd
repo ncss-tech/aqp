@@ -111,7 +111,8 @@ paraboulders, parachanners, paraflagstones}
 }
 
 \itemize{
-\item \code{texmod_to_fragvoltot}: A \code{data.frame} containing columns \code{"fragvoltot_r"}, \code{"fragvoltot_h"}, \code{"fragvoltot_l_nopf"}, \code{"fragvoltot_r_nopf"}, \code{"fragvoltot_h_nopf"}
+\item \code{texmod_to_fragvoltot}: A \code{data.frame} containing columns \code{"fragvoltot_l"},
+\code{"fragvoltot_r"}, \code{"fragvoltot_h"}, \code{"fragvoltot_l_nopf"}, \code{"fragvoltot_r_nopf"}, \code{"fragvoltot_h_nopf"}
 }
 
 \itemize{
