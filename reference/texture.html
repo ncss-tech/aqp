@@ -68,6 +68,26 @@ grain size composition to the family particle size class.</p>
   clay <span class="op">=</span> <span class="cn">NULL</span>,
   sand <span class="op">=</span> <span class="cn">NULL</span>,
   fragvoltot <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">texture</span>, duplicates <span class="op">=</span> <span class="st">"combine"</span><span class="op">)</span>
+
+<span class="fu">fragvol_to_texmod</span><span class="op">(</span>
+  object <span class="op">=</span> <span class="cn">NULL</span>,
+  gravel <span class="op">=</span> <span class="cn">NULL</span>,
+  cobbles <span class="op">=</span> <span class="cn">NULL</span>,
+  stones <span class="op">=</span> <span class="cn">NULL</span>,
+  boulders <span class="op">=</span> <span class="cn">NULL</span>,
+  channers <span class="op">=</span> <span class="cn">NULL</span>,
+  flagstones <span class="op">=</span> <span class="cn">NULL</span>,
+  paragravel <span class="op">=</span> <span class="cn">NULL</span>,
+  paracobbles <span class="op">=</span> <span class="cn">NULL</span>,
+  parastones <span class="op">=</span> <span class="cn">NULL</span>,
+  paraboulders <span class="op">=</span> <span class="cn">NULL</span>,
+  parachanners <span class="op">=</span> <span class="cn">NULL</span>,
+  paraflagstones <span class="op">=</span> <span class="cn">NULL</span>,
+  as.is <span class="op">=</span> <span class="cn">TRUE</span>,
+  droplevels <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -77,7 +97,7 @@ grain size composition to the family particle size class.</p>
 <dd><p>vector of texture classes than conform to the USDA code
 conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)</p></dd>
 <dt>clay</dt>
-<dd><p>vector of clay percentages#'</p></dd>
+<dd><p>vector of clay percentages</p></dd>
 <dt>sample</dt>
 <dd><p>logical: should ssc be random sampled from the lookup table?
 (default: FALSE)</p></dd>
@@ -98,27 +118,76 @@ conventions (e.g. gr|GR, grv|GRV)</p></dd>
 code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 are &gt; 90 percent by volume (default: NULL))</p></dd>
 <dt>fragvoltot</dt>
-<dd><p>vector of rock fragment percentages</p></dd>
+<dd><p>vector of total rock fragment percentages</p></dd>
+<dt>texture</dt>
+<dd><p>vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)</p></dd>
+<dt>duplicates</dt>
+<dd><p>character: specifying how multiple values should be handled, options are <code>"combined"</code> (e.g. 'GR &amp; GRV) or <code>"max"</code>(e.g. 'GRV')</p></dd>
+<dt>object</dt>
+<dd><p>data.frame: containing the following column names: gravel, cobbles,
+stones, boulders, channers, flagstones, paragravel, paracobbles, parastones,
+paraboulders, parachanners, paraflagstones</p></dd>
+<dt>gravel</dt>
+<dd><p>numeric: gravel volume %</p></dd>
+<dt>cobbles</dt>
+<dd><p>numeric: cobble volume %</p></dd>
+<dt>stones</dt>
+<dd><p>numeric: stone volume %</p></dd>
+<dt>boulders</dt>
+<dd><p>numeric: boulder volume %</p></dd>
+<dt>channers</dt>
+<dd><p>numeric: channer volume %</p></dd>
+<dt>flagstones</dt>
+<dd><p>numeric: flagstone volume %</p></dd>
+<dt>paragravel</dt>
+<dd><p>numeric: para gravel volume %</p></dd>
+<dt>paracobbles</dt>
+<dd><p>numeric: para cobble volume %</p></dd>
+<dt>parastones</dt>
+<dd><p>numeric: para stone volume %</p></dd>
+<dt>paraboulders</dt>
+<dd><p>numeric: para boulder volume %</p></dd>
+<dt>parachanners</dt>
+<dd><p>numeric: para channer volume %</p></dd>
+<dt>paraflagstones</dt>
+<dd><p>numeric: para flagstone volume %</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <ul><li><p><code>texcl_to_ssc</code>: A <code>data.frame</code> containing columns <code>"sand"</code>,<code>"silt"</code>, <code>"clay"</code></p></li>
 </ul><ul><li><p><code>ssc_to_texcl</code>: A <code>character</code> vector containing texture class</p></li>
-</ul><ul><li><p><code>texmod_to_fragvoltot</code>: A <code>numeric</code> vector containing total fragment volume</p></li>
+</ul><ul><li><p><code>texmod_to_fragvoltot</code>: A <code>data.frame</code> containing columns <code>"fragvoltot_l"</code>,
+<code>"fragvoltot_r"</code>, <code>"fragvoltot_h"</code>, <code>"fragvoltot_l_nopf"</code>, <code>"fragvoltot_r_nopf"</code>, <code>"fragvoltot_h_nopf"</code></p></li>
 </ul><ul><li><p><code>texture_to_taxpartsize</code>: a character vector containing <code>"taxpartsize"</code> classes</p></li>
+</ul><ul><li><p><code>texture_to_texmod</code>: a character vector containing <code>"texmod"</code> classes</p></li>
+</ul><ul><li><p><code>texmod_to_fragvol</code>: a data.frame containing <code>"texmod"</code> and <code>"lieutex"</code> classes</p></li>
 </ul></div>
     <div id="details">
     <h2>Details</h2>
-    <p>These functions are intended to estimate missing values or check existing
-values. The <code>ssc_to_texcl()</code> function uses the same logic as the
-particle size estimator calculation in NASIS to classify sand and clay into
-texture class. The results are stored in <code>soiltexture</code> and used by
-<code>texcl_to_ssc()</code> as a lookup table to convert texture class to sand,
-silt and clay. The function <code>texcl_to_ssc()</code> replicates the
-functionality described by Levi (2017).</p>
+    <p>These functions are intended to estimate missing values or allocate particle
+size fractions to classes. The <code>ssc_to_texcl()</code> function uses the same
+logic as the particle size estimator calculation in NASIS to classify sand
+and clay into texture class. The results are stored in <code>soiltexture</code>
+and used by <code>texcl_to_ssc()</code> as a lookup table to convert texture class
+to sand, silt and clay. The function <code>texcl_to_ssc()</code> replicates the
+functionality described by Levi (2017). The <code>texmod_to_fragvol()</code>
+function similarly uses the logical from the
+Exhibit618-11_texture_modifier.xls spreadsheet to determine the textural
+modifier from the various combinations of rock and pararock fragments
+(e.g. GR and PGR).</p>
 <p>When <code>sample = TRUE</code>, the results can be used to estimate within-class,
 marginal distributions of sand, silt, and clay fractions. It is recommended
 that at least 10 samples be drawn for reasonable estimates.</p>
+<p>The function <code>texmod_to_fragvoltot</code> returns a data.frame with multiple
+fragvoltot columns differentiated by tailing abbreviations (e.g. _r) which
+refer to the following:</p><ol><li><p>l = low</p></li>
+<li><p>r = representative</p></li>
+<li><p>h = high</p></li>
+<li><p>nopf = no pararock fragments (i.e. total fragments - pararock fragments)</p></li>
+</ol><p>The function <code>texture_to_texmod()</code> parses texture (e.g. GR-CL) to extract the texmod values from it in the scenario where it is missing from
+texmod column. If multiple texmod values are present (for example in the
+case of stratified textures) and <code>duplicates = "combine"</code> they will be combined in the output (e.g. GR &amp; CBV). Otherwise if <code>duplicates = "max"</code>
+the texmod with the highest rock fragment (e.g. CBV) will be returned.</p>
 <p>Unlike the other functions, <code>texture_to_taxpartsize()</code> is intended to
 be computed on weighted averages within the family particle size control
 section. Also recall from the criteria that carbonate clay should be
@@ -193,23 +262,23 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6,] "sl"  "10"</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># example of texmod_to_fragvoltol()</span></span>
+<span class="r-in"><span class="co"># example of texmod_to_fragvoltol</span></span>
 <span class="r-in"><span class="va">frags</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"gr"</span>, <span class="st">"grv"</span>, <span class="st">"grx"</span>, <span class="st">"pgr"</span>, <span class="st">"pgrv"</span>, <span class="st">"pgrx"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">texmod_to_fragvoltot</span><span class="op">(</span><span class="va">frags</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   texmod fragvoltot_l fragvoltot_r fragvoltot_h fragvoltot_h_nopf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     gr           15           25           34                34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    grv           35           48           59                59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    grx           60           75           89                89</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    pgr           15           25           34                 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   pgrv           35           48           59                 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   pgrx           60           75           89                 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   fragvoltot_r_nopf fragvoltot_l_nopf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                25                15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                48                35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                75                60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                 0                 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 0                 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 0                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   fragvoltot_l fragvoltot_r fragvoltot_h fragvoltot_h_nopf fragvoltot_r_nopf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           15           25           34                34                25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           35           48           59                59                48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           60           75           89                89                75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           15           25           34                 0                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           35           48           59                 0                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           60           75           89                 0                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   fragvoltot_l_nopf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 0</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># example of texture_to_taxpartsize()</span></span>
@@ -269,6 +338,41 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4     23.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     10.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6     19.00</span>
+<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-in"><span class="co"># example of texture_to_texmod()</span></span>
+<span class="r-in"><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"SL"</span>, <span class="st">"GR-SL"</span>, <span class="st">"CBV-L"</span>, <span class="st">"SR- GR-FS GRX-COS"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA         "gr"       "cbv"      "gr &amp; grx"</span>
+<span class="r-in"><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">tex</span>, duplicates <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA    "gr"  "cbv" "grx"</span>
+<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-in"><span class="co"># example of fragvol_to_texmod()</span></span>
+<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
+<span class="r-in">  gravel  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span>
+<span class="r-in">  cobbles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span>
+<span class="r-in">  stones  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span>
+<span class="r-in">  boulders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="op">]</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># data.frame input</span></span>
+<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">fragvol_to_texmod</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">texmod</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   by  byv  byx   cb  cbv  cbx   gr  grv  grx   st  stv  stx </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   81  510 2135   37  192  710   20   82  273   57  371 1502 </span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">lieutex</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   by   cb   gr   st </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1634   37    2 1197 </span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># vector inputs</span></span>
+<span class="r-in"><span class="fu">fragvol_to_texmod</span><span class="op">(</span>gravel <span class="op">=</span> <span class="fl">10</span>, cobbles <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   texmod lieutex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     cb    &lt;NA&gt;</span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># }</span></span>
 </code></pre></div>
     </div>
