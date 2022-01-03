@@ -1,12 +1,12 @@
 # Here are some ideas I have been considering around indexing horizon data in a SoilProfileCollection based on "spatial predicates" that operate on the "horizon geometry". 
 # I want to be able to find the horizons that are above or below arbitrary horizons for the whole collection.
 
-# spc_horizonOffset() allows for vertical offset (in terms of j index units) of horizon IDs. Two aliases are `horizon_above()` and `horizon_below()` that just use a different sign on the `offset` argument. 
+# hzOffset() allows for vertical offset (in terms of j index units) of horizon IDs. Two aliases are `hzAbove()` and `hzBelow()` that just use a different sign on the `offset` argument. 
 
 # I think we could also probably do things like hz_adjacent(), hz_between/within(). Also we could make it more convenient to prepare the vectors of target horizon IDs. 
 
 
-#' Horizons Above/Below 
+#' Horizons Above or Below 
 #'
 #' @param x A SoilProfileCollection
 #' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
@@ -16,18 +16,18 @@
 #' @param simplify If `TRUE` return a vector (all elements combined), or a list (1 element per profile). If `SPC` is `TRUE` then `simplify` is `TRUE`.
 #' @return A SoilProfileCollection (when `SPC = TRUE`) or a vector of horizon row indices (when `SPC = FALSE` and `simplify = TRUE`) or a list (when `SPC = FALSE` and `simplify = FALSE`))
 #' @export
-#' @rdname spc_horizonOffset
+#' @rdname hzOffset
 #' @examples
 #' data(sp4)
 #' depths(sp4) <- id ~ top + bottom
 #' 
 #' # get the horizon above the last horizon (j-index of bottom horizon minus 1)
-#' horizon_above(sp4, hzID(sp4) %in% getLastHorizonID(sp4))
+#' hzAbove(sp4, hzID(sp4) %in% getLastHorizonID(sp4))
 #' 
 #' # get horizons below the last horizon (none; j-index of bottom horizon plus 1)
-#' horizon_below(sp4, hzID(sp4) %in% getLastHorizonID(sp4))
+#' hzBelow(sp4, hzID(sp4) %in% getLastHorizonID(sp4))
 #' 
-horizon_above <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
+hzAbove <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
   # "above" is a negative offset in j index
   
   # capture expression(s) at function
@@ -51,12 +51,12 @@ horizon_above <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
     stop(sprintf("%s is not logical", badxpr), call. = FALSE)
   }
   
-  spc_horizonOffset(x, hzid = which(subcrit), offset = -offset, SPC = SPC, simplify = simplify)
+  hzOffset(x, hzid = which(subcrit), offset = -offset, SPC = SPC, simplify = simplify)
 }
 
 #' @export
-#' @rdname spc_horizonOffset
-horizon_below <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
+#' @rdname hzOffset
+hzBelow <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
   # "below" is a positive offset in j index
   
   # capture expression(s) at function
@@ -80,12 +80,12 @@ horizon_below <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
     stop(sprintf("%s is not logical", badxpr), call. = FALSE)
   }
   
-  spc_horizonOffset(x, hzid = which(subcrit), offset = offset, SPC = SPC, simplify = simplify)
+  hzOffset(x, hzid = which(subcrit), offset = offset, SPC = SPC, simplify = simplify)
 }
 
 #' @export
-#' @rdname spc_horizonOffset
-spc_horizonOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
+#' @rdname hzOffset
+hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
   # define SPC k-keywords as local vars for R CMD CHECK
   .LAST <- NULL; .HZID <- NULL
   

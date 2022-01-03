@@ -92,7 +92,7 @@ repairMissingHzDepths <- function(x, adj = 10, max.depth = 200) {
   idx2 <- setdiff(na.bottom, bottom.idx)
   
   # replace the bottom depths
-  x[[hztb[2]]][is.na(x[[hztb[2]]])] <-  x[[hztb[1]]][spc_horizonOffset(x, hzid = idx2, offset = 1)]
+  x[[hztb[2]]][is.na(x[[hztb[2]]])] <-  x[[hztb[1]]][hzOffset(x, hzid = idx2, offset = 1)]
   #                                     x[[hztb[1]]][which(is.na(x[[hztb[2]]])) + 1]
   
   
