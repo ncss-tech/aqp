@@ -16,7 +16,10 @@
 a SoilProfileCollection with a subset of horizons, possibly with some sites removed
 }
 \description{
-Subset the horizons in a SoilProfileCollection using logical criteria
+\code{subsetHz()} is a function used for extracting horizons from a SoilProfileCollection based on logical criteria.
+}
+\details{
+To minimize likelihood of issues with non-standard evaluation context, especially when using \code{subsetHz()} inside another function, all expressions used in \code{...} should be in terms of variables that are in the horizon data frame.
 }
 \examples{
 
