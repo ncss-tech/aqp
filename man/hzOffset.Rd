@@ -31,6 +31,9 @@ A SoilProfileCollection (when \code{SPC = TRUE}) or a vector of horizon row indi
 \description{
 Horizons Above or Below
 }
+\details{
+To minimize likelihood of issues with non-standard evaluation context, especially when using \code{hzAbove()}/\code{hzBelow()} inside another function, all expressions used in \code{...} should be in terms of variables that are in the horizon data frame.
+}
 \examples{
 data(sp4)
 depths(sp4) <- id ~ top + bottom

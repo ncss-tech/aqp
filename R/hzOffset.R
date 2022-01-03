@@ -15,6 +15,8 @@
 #' @param SPC Return a SoilProfileCollection? Default `TRUE` for `horizon_*` methods.
 #' @param simplify If `TRUE` return a vector (all elements combined), or a list (1 element per profile). If `SPC` is `TRUE` then `simplify` is `TRUE`.
 #' @return A SoilProfileCollection (when `SPC = TRUE`) or a vector of horizon row indices (when `SPC = FALSE` and `simplify = TRUE`) or a list (when `SPC = FALSE` and `simplify = FALSE`))
+#' 
+#' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `hzAbove()`/`hzBelow()` inside another function, all expressions used in `...` should be in terms of variables that are in the horizon data frame.
 #' @export
 #' @rdname hzOffset
 #' @examples

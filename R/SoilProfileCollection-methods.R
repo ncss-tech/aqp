@@ -352,7 +352,7 @@ setGeneric("subsetHz", function(x, ...)
 #' @param x a SoilProfileCollection
 #' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
 #' 
-#' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `subsetHz()` inside another function, all expressions used in `...` should be in terms of variables that are in the horizons data frame.
+#' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `subsetHz()` inside another function, all expressions used in `...` should be in terms of variables that are in the horizon data frame.
 #' 
 #' @return a SoilProfileCollection with a subset of horizons, possibly with some sites removed
 #' @export
