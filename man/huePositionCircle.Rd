@@ -12,7 +12,9 @@ huePositionCircle(
   label.cex = 0.66,
   seg.adj = 0.8,
   seg.col = "grey",
-  plot = TRUE
+  plot = TRUE,
+  simulateCVD = NULL,
+  CVDseverity = 1
 )
 }
 \arguments{
@@ -31,6 +33,10 @@ huePositionCircle(
 \item{seg.col}{single color, color used for line segment cues}
 
 \item{plot}{logical, generate output on the current graphics device}
+
+\item{simulateCVD}{simulate color vision deficiencies with the colorspace package, should be the character representation of a function name, one of: 'deutan', 'protan', or 'tritan'.}
+
+\item{CVDseverity}{numeric value between 0 (none) and 1 (total), describing the severity of the color vision deficiency}
 }
 \value{
 an invisible \code{data.frame} of data used to create the figure

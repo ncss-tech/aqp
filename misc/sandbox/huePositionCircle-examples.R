@@ -5,6 +5,7 @@
 library(aqp)
 library(sharpshootR)
 library(vegan)
+library(colorspace)
 
 ## Munsell value and chroma to combine with hues
 
@@ -28,6 +29,26 @@ par(mar = c(0, 0, 0, 0), fg = 'white', bg = 'black')
 huePositionCircle(hues, chroma = chroma, value = value)
 
 # dev.off()
+
+
+## simulate color vision deficiency
+
+ragg::agg_png(file = 'E:/temp/munsell-hue-circle-cvd.png', height = 1800, width = 1700, scaling = 2.5)
+
+par(mar = c(0, 0, 3, 0), fg = 'white', bg = 'black', mfrow = c(2,2))
+huePositionCircle(hues, chroma = chroma, value = value)
+title('Average Human Vision', col.main = 'white')
+
+huePositionCircle(hues, chroma = chroma, value = value, simulateCVD = 'protan')
+title('Protanope\nred deficient: L cone absent', col.main = 'white')
+
+huePositionCircle(hues, chroma = chroma, value = value, simulateCVD = 'deutan')
+title('Deuteranope\ngreen deficient: M cone absent', col.main = 'white')
+
+huePositionCircle(hues, chroma = chroma, value = value, simulateCVD = 'tritan')
+title('Tritanope\nblue deficient: S cone absent', col.main = 'white')
+
+dev.off()
 
 
 ## average human perception via nMDS of CIE2000 color contrast
