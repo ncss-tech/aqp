@@ -1,4 +1,4 @@
-# aqp 1.33 (2021-11-22)
+# aqp 1.4 (2022-01-03)
  * fixed small bug in `panel.depth_function()` that affected plotting of grouped data, created by `slab()`
  * `plotSPC()` now uses variable (vertical) text alignment for horizon depth labels
  * new function `profileInformationIndex()`
