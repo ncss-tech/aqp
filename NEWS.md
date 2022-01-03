@@ -4,7 +4,9 @@
  * new function `profileInformationIndex()`
  * `estimateSoilDepth()` now requires a valid horizon designation (no longer attempts a guess)
  * {aqp} no longer masks {dplyr} verbs: `group_by()`, `summarize()`, `mutate()`
- 
+ * removed (deprecated) `f.noise()` and `resample.twotheta()`: use {powdR} package instead
+ * new functions: `texture_to_texmod()` and `fragvol_to_texmod()` c/o @smroecker
+
 # aqp 1.32 (2021-09-28)
  * `colorChart()` can now show neutral hues in a skinny panel
  * updates to `colorContrast()`, `parseMunsell()`, and `huePosition()` to work properly with neutral hues
