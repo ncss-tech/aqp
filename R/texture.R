@@ -4,17 +4,34 @@
 #' to texture class and visa versa, textural modifiers to rock fragments, and
 #' grain size composition to the family particle size class.
 #'
-#' These functions are intended to estimate missing values or check existing
-#' values. The \code{ssc_to_texcl()} function uses the same logic as the
-#' particle size estimator calculation in NASIS to classify sand and clay into
-#' texture class. The results are stored in \code{soiltexture} and used by
-#' \code{texcl_to_ssc()} as a lookup table to convert texture class to sand,
-#' silt and clay. The function \code{texcl_to_ssc()} replicates the
-#' functionality described by Levi (2017).
+#' These functions are intended to estimate missing values or allocate particle
+#' size fractions to classes. The \code{ssc_to_texcl()} function uses the same 
+#' logic as the particle size estimator calculation in NASIS to classify sand 
+#' and clay into texture class. The results are stored in \code{soiltexture} 
+#' and used by \code{texcl_to_ssc()} as a lookup table to convert texture class 
+#' to sand, silt and clay. The function \code{texcl_to_ssc()} replicates the
+#' functionality described by Levi (2017). The \code{texmod_to_fragvol()} 
+#' function similarly uses the logical from the 
+#' Exhibit618-11_texture_modifier.xls spreadsheet to determine the textural 
+#' modifier from the various combinations of rock and pararock fragments 
+#' (e.g. GR and PGR).
 #'
 #' When \code{sample = TRUE}, the results can be used to estimate within-class,
 #' marginal distributions of sand, silt, and clay fractions. It is recommended
 #' that at least 10 samples be drawn for reasonable estimates.
+#' 
+#' The function \code{texmod_to_fragvoltot} returns a data.frame with multiple  
+#' fragvoltot columns differentiated by tailing abbreviations (e.g. _r) which 
+#' refer to the following: 
+#' 1. l = low
+#' 2. r = representative
+#' 3. h = high
+#' 4. nopf = no pararock fragments (i.e. total fragments - pararock fragments)
+#'
+#' The function \code{texture_to_texmod()} parses texture (e.g. GR-CL) to extract the texmod values from it in the scenario where it is missing from
+#' texmod column. If multiple texmod values are present (for example in the 
+#' case of stratified textures) and \code{duplicates = "combine"} they will be combined in the output (e.g. GR & CBV). Otherwise if \code{duplicates = "max"} 
+#' the texmod with the highest rock fragment (e.g. CBV) will be returned.
 #'
 #' Unlike the other functions, \code{texture_to_taxpartsize()} is intended to
 #' be computed on weighted averages within the family particle size control
@@ -30,17 +47,16 @@
 
 #' @param texcl vector of texture classes than conform to the USDA code
 #' conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)
-#'
-#' @param clay vector of clay percentages#'
-#' @param sand vector of sand percentages
-#'
-#' @param fragvoltot vector of rock fragment percentages
 #' @param texmod vector of textural modifiers that conform to the USDA code
-#' convenctions (e.g. gr|GR, grv|GRV)
-#'
+#' conventions (e.g. gr|GR, grv|GRV)
 #' @param lieutex vector of in lieu of texture terms that conform to the USDA
 #' code convenctions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 #' are > 90 percent by volume (default: NULL))
+#' @param texture vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)
+#'
+#' @param clay vector of clay percentages
+#' @param sand vector of sand percentages
+#' @param fragvoltot vector of rock fragment percentages
 #'
 #' @param as.is logical: should character vectors be converted to factors?
 #' (default: TRUE)
@@ -51,7 +67,7 @@
 
 #' @param sample logical: should ssc be random sampled from the lookup table?
 #' (default: FALSE)
-#'
+#' 
 #' @return - `texcl_to_ssc`: A `data.frame` containing columns `"sand"`,`"silt"`, `"clay"`
 #'
 #' @author Stephen Roecker
@@ -86,7 +102,7 @@
 #' head(cbind(texcl = st$texcl, clay = ssc$clay))
 #'
 #'
-#' # example of texmod_to_fragvoltol()
+#' # example of texmod_to_fragvoltol
 #' frags <- c("gr", "grv", "grx", "pgr", "pgrv", "pgrx")
 #' head(texmod_to_fragvoltot(frags))
 #'
@@ -316,54 +332,62 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, as.is = FALSE, droplevels = T
 #' code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 #' are > 90 percent by volume (default: NULL))
 #' @rdname texture
-#' @return  - `texmod_to_fragvoltot`: A `numeric` vector containing total fragment volume
+#' 
+#' @return  - `texmod_to_fragvoltot`: A `data.frame` containing columns `"fragvoltot_l"`,
+#' `"fragvoltot_r"`, `"fragvoltot_h"`, `"fragvoltot_l_nopf"`, `"fragvoltot_r_nopf"`, `"fragvoltot_h_nopf"`
+#' 
 #' @export
 texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
-  # fix for R CMD check
-  #  texmod_to_fragvoltot: no visible binding for global variable ‘soiltexture’
-  soiltexture <- NULL
-
-  # check
-  idx <- any(!is.na(texmod) & !is.na(lieutex))
-  if (idx) {
-    warning("texmod and lieutex should not both be present, they are mutually exclusive, only the texmod will be returned")
-  }
-
-
-  # standardize inputs
-  df <- data.frame(texmod = tolower(texmod), stringsAsFactors = FALSE)
-  df$rn = row.names(df)
-
-
+  
+  # standardize inputs ----
+  vars_l <- list(texmod = texmod, lieutex = lieutex)
+  # vars_l <- list(texmod = c("GR", "CBV", NA), lieutex = c(NA, NA, "BY"))
+  df <- NULL
+  df <- .format_inputs(vars_l, names(vars_l), NA_character_, "character")
+  df$texmod  <- tolower(df$texmod)
+  df$lieutex <- toupper(df$lieutex)
+  df$rn <- 1:nrow(df)
+  
+  
   # load lookup table
+  # fix for R CMD check
+  #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
+  soiltexture <- NULL
   load(system.file("data/soiltexture.rda", package="aqp")[1])
 
+  
+  # check inputs ----
+  ## both present?
+  idx <- any(complete.cases(df))
+  if (idx) {
+    warning("texmod and lieutex should not both be present, they are mutually exclusive, only the results for texmod will be returned")
+  }
 
-  # check for texmod and lieutex that don't match
+  # texmod and lieutex don't match
   idx <- ! df$texmod %in% soiltexture$texmod$texmod
-  if (any(idx)) {
+  if (any(idx & !is.na(df$texmod))) {
     message("not all the texmod supplied match the lookup table")
   }
 
-  idx <-  ! toupper(lieutex) %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
-  if (all(!is.null(lieutex)) & any(idx)) {
-    message("not all the texmod supplied match the lookup table")
+  idx <-  ! df$lieutex %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
+  if (any(idx & !is.na(df$lieutex))) {
+    message("not all the lieutex supplied match the lookup table")
   }
 
 
   # merge
   df <- merge(df, soiltexture$texmod, by = "texmod", all.x = TRUE, sort = FALSE)
-  df <- df[(order(as.integer(df$rn))), ]
-  df$rn     <- NULL
+  df <- df[order(df$rn), ]
+  df$rn <- NULL
 
 
   # lieutex
-  if (all(!is.null(lieutex))) {
+  if (any(!is.na(df$lieutex))) {
 
-    idx1 <- is.na(texmod) & !is.na(lieutex) & grepl("GR|CB|ST|BY|CN|FL", lieutex)
-    idx2 <- is.na(texmod) & !is.na(lieutex) & grepl("PG|PCB|PST|PBY|PCN|PFL", lieutex)
+    idx1 <- !is.na(df$lieutex) & df$lieutex %in% c("GR", "CB",  "ST",  "BY",  "CN", "FL")
+    idx2 <- !is.na(df$lieutex) & df$lieutex %in% c("PG", "PCB", "PST", "PBY", "PCN", "PFL")
 
-    df$lieutex <- toupper(lieutex)
+    # df$lieutex <- toupper(lieutex)
 
     df <- within(df, {
       fragvoltot_l = ifelse(idx1, 90, fragvoltot_l)
@@ -374,10 +398,10 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
       fragvoltot_r_nopf = ifelse(idx2, 0,  fragvoltot_l)
       fragvoltot_h_nopf = ifelse(idx2, 0, fragvoltot_l)
       })
-    df$lieutex <- lieutex
+    # df$lieutex <- lieutex
   }
-
-
+  
+  df[c("texmod", "lieutex", "texmod_label")] <- NULL
 
   return(df)
 }
@@ -387,10 +411,10 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #' @param texcl vector of texture classes than conform to the USDA code
 #' conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)
 #'
-#' @param clay vector of clay percentages#'
+#' @param clay vector of clay percentages
 #' @param sand vector of sand percentages
 #'
-#' @param fragvoltot vector of rock fragment percentages
+#' @param fragvoltot vector of total rock fragment percentages
 #'
 #' @return - `texture_to_taxpartsize`: a character vector containing `"taxpartsize"` classes
 #' 
@@ -480,5 +504,524 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   df$fpsc <- ifelse(df$fragvoltot > 90, "fragmental", df$fpsc)
 
   return(df$fpsc)
+}
+
+
+#' Parse texmod from texture
+#'
+#' @param texmod vector of textural modifiers that conform to the USDA code
+#' conventions (e.g. gr|GR, grv|GRV)
+#' @param texture vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)
+#'
+#' @param duplicates character: specifying how multiple values should be handled, options are `"combined"` (e.g. 'GR & GRV) or `"max"`(e.g. 'GRV') 
+#'
+#' @return - `texture_to_texmod`: a character vector containing `"texmod"` classes
+#' 
+#' @rdname texture
+#' 
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # example of texture_to_texmod()
+#' tex <- c("SL", "GR-SL", "CBV-L", "SR- GR-FS GRX-COS")
+#' texture_to_texmod(tex)
+#' texture_to_texmod(tex, duplicates = "max")
+#' }
+texture_to_texmod <- function(texture, duplicates = "combine") {
+  
+  # test
+  is_char <- is.character(texture)
+  is_fact <- is.factor(texture)
+  
+  if (!is_char & !is_fact) stop("texture must be a character or a factor")
+  
+  if (is_fact) texture <- as.character(texture)
+  
+  
+  # load lookup tables
+  soiltexture <- NULL
+  load(system.file("data/soiltexture.rda", package = "aqp")[1])
+  texmod_df <- soiltexture$texmod
+  texmod    <- texmod_df$texmod[grepl("gravel|cobbl|ston|boulder|channer|flag", texmod_df$texmod_label)]
+  
+  # lieutex <- metadata[metadata$ColumnPhysicalName == "lieutex", ]$ChoiceName
+  
+  tex   <- tolower(texture)
+  tex_l <- strsplit(tex, "-| |_|\\/|&|,|;|\\.|\\*|\\+")
+  
+  
+  # find which records have a texmod
+  idx_mod  <- which(sapply(tex_l, function(x) any(x[-length(x)] %in% texmod)))
+  # idx_lieu <- which(sapply(tex_l, function(x) any(x %in% lieutex)))
+  
+  
+  # create a logical matrix of texmod presence/absence
+  if (length(idx_mod > 0)) {
+    tex_m  <- lapply(tex_l[idx_mod], function(x)
+      texmod %in% x)
+    tex_df <- as.data.frame(do.call("rbind", tex_m))
+    names(tex_df) <- texmod
+    
+    # slightly slower simpler(/better?) alternative
+    # not better, this mistakenly matches words entered into this field
+    # I would rather have false negatives than false positives
+    # tex_m  <- sapply(texmod, function(x) grepl(x, tex))
+    
+    
+    # duplicates ----
+    ## combine texmod (if multiple exist)
+    if (duplicates == "combine") {
+      texmod_parse <- apply(tex_df, 1, function(x) {
+        paste0(names(x)[which(x)], collapse = " & ")
+      })
+    }
+    
+    
+    ## find texmod with the highest rock fragment content (if multiple exist)
+    if (duplicates == "max") {
+      tex_m <- sapply(texmod, function(x) {
+        vals <- suppressMessages(texmod_to_fragvoltot(x))
+        rf   <- ifelse(tex_df[x] == TRUE, vals$fragvoltot_r, 0)
+      })
+      idx_col <- max.col(tex_m)
+      texmod_parse <- names(tex_df)[idx_col]
+    }
+  }
+  
+  # results ----
+  n  <- length(texture)
+  df <- data.frame(texmod = rep(NA_character_, n)) #, lieutex = rep(NA, n))
+  if (length(idx_mod) > 0) df[idx_mod, "texmod"] <- texmod_parse
+  
+  return(df$texmod)
+}
+
+
+# add feature to uncode
+# texture_to_texcl <- function(texclLabel, droplevels = FALSE 
+#                              # , stringsAsFactors = FALSE
+#                              ) {
+#   
+#   # standardize inputs
+#   texclLabel <- tolower(texclLabel)
+#   
+#   # load lookup table
+#   load(system.file("data/soiltexture.rda", package = "aqp")[1])
+#   sub <- soiltexture$averages
+#   
+#   # check
+#   idx <- ! texclLabel %in% sub$texcl_label
+#   if (any(idx)) {
+#     warning("not all the user supplied texture values match the lookup table")
+#   }
+#   
+#   # convert
+#   texcl <- factor(texclLabel, levels = tolower(sub$texcl_label), label = sub$texcl, ordered = TRUE)
+#   
+#   if (droplevels == TRUE) {
+#     texcl <- droplevels(texcl)
+#   }
+#   
+#   # if (stringsAsFactors == TRUE) {
+#   #   texcl <- as.character(texcl)
+#   # }
+#   
+#   return(texcl)
+# }
+
+
+#' Convert frags to texmod
+#'
+#' @param object data.frame: containing the following column names: gravel, cobbles,
+#'  stones, boulders, channers, flagstones, paragravel, paracobbles, parastones,
+#'   paraboulders, parachanners, paraflagstones
+#' @param gravel numeric: gravel volume % 
+#' @param cobbles numeric: cobble volume % 
+#' @param stones numeric: stone volume % 
+#' @param boulders numeric: boulder volume % 
+#' @param channers numeric: channer volume % 
+#' @param flagstones numeric: flagstone volume % 
+#' @param paragravel numeric: para gravel volume % 
+#' @param paracobbles numeric: para cobble volume % 
+#' @param parastones numeric: para stone volume % 
+#' @param paraboulders numeric: para boulder volume % 
+#' @param parachanners numeric: para channer volume % 
+#' @param paraflagstones numeric: para flagstone volume % 
+#'
+#' @return - `texmod_to_fragvol`: a data.frame containing `"texmod"` and `"lieutex"` classes
+#' 
+#' @rdname texture
+#' 
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # example of fragvol_to_texmod()
+#' df <- expand.grid(
+#'   gravel  = seq(0, 100, 5), 
+#'   cobbles = seq(0, 100, 5), 
+#'   stones  = seq(0, 100, 5), 
+#'   boulders = seq(0, 100, 5)
+#'   )
+#' df <- df[rowSums(df) < 100, ]
+#' 
+#' # data.frame input
+#' test <- fragvol_to_texmod(df)
+#' table(test$texmod)
+#' table(test$lieutex)
+#' 
+#' # vector inputs
+#' fragvol_to_texmod(gravel = 10, cobbles = 10)
+#' 
+#' }
+fragvol_to_texmod <- function(
+  object   = NULL,
+  gravel   = NULL, 
+  cobbles  = NULL,
+  stones   = NULL, 
+  boulders = NULL, 
+  channers = NULL, 
+  flagstones = NULL, 
+  paragravel     = NULL, 
+  paracobbles    = NULL, 
+  parastones     = NULL,
+  paraboulders   = NULL, 
+  parachanners   = NULL, 
+  paraflagstones = NULL,
+  as.is      = TRUE,
+  droplevels = TRUE
+  ) {
+  
+  # standardize inputs ----
+  var_cols <- c("gravel", "cobbles", "stones", "boulders", "channers", "flagstones", "paragravel", "paracobbles", "parastones", "paraboulders", "parachanners", "paraflagstones")
+  var_mods <- c("gr", "cb", "st", "by", "cn", "fl", "pgr", "pcb", "pst", "pby", "pcn", "pfl")
+  
+  # object = NULL; gravel =  10; cobbles =  10; stones =  NULL; boulders =  NULL; channers =  NULL; flagstones =  NULL; paragravel =  NULL; paracobbles =  NULL; parastones =  NULL; paraboulders =  NULL; parachanners =  NULL; paraflagstones =  NULL
+  # object <- expand.grid(gravel = seq(0, 105, 5), cobbles = seq(0, 100, 5), stones = seq(0, 100, 5), boulders = seq(0, 100, 5))
+  # object <- object[rowSums(object) <= 105, ]
+  # object <- rbind(object, rep(NA, ncol(object)))
+  vars_l <- list(gravel, cobbles, stones, boulders, channers, flagstones, paragravel, paracobbles, parastones, paraboulders, parachanners, paraflagstones)
+  names(vars_l) <- var_cols
+  
+
+  # check inputs----
+  vars_null <- sapply(vars_l, is.null)
+  df_null   <- is.null(object)
+  vars_len  <- sapply(vars_l, length)
+  
+  
+  ## overlapping inputs
+  if (!df_null & any(!vars_null)) {
+    warning("if object and any other rock fragment arguments are both not null, only object will be used")
+  }
+  # ## object matching column
+  # if (!df_null & all(!var_cols %in% names(object))) {
+  #   stop(paste("object is missing columns matching any of the following columns", 
+  #              paste0(var_cols, collapse = ", "))
+  #   )
+  # }
+  # ## vars_l length of inputs
+  # if (all(vars_len == max(vars_len)) & df_null) {stop("length of inputs do not match")}
+  
+  
+  # standardize inputs again ----
+  ## subset and select correct inputs
+  df <- NULL
+  if (any(!vars_null) & is.null(object)) {
+    # df <- as.data.frame(vars_l[!vars_null])
+    df <- .format_inputs(vars_l, var_cols, 0, "numeric")
+  } else df <- .format_inputs(as.list(object), var_cols, 0, "numeric")
+  
+  # idx <- var_cols %in% names(df)
+  # var_cols_sub <- var_cols[idx]
+  # # var_mods_sub <- var_mods[idx]
+  # df <- df[var_cols_sub]
+  # 
+  # 
+  # ## append missing columns
+  # df_mis <- as.data.frame(matrix(data = 0, nrow = nrow(df), ncol = sum(!idx)))
+  # names(df_mis) <- var_cols[!idx]
+  # df <- cbind(df_mis, df)[var_cols]
+  names(df) <- var_mods
+  # df[is.na(df)] <- 0
+  # 
+  # 
+  # # check inputs again ----
+  # ## correct datatype
+  # if (!all(sapply(df, function(x)  inherits(x, "integer") | inherits(x, "numeric")))) {
+  #   stop("all fragments must be numeric or integer")
+  # }
+
+  
+  ## calculate sums ----
+  gr  <- NULL;   cb <- NULL;  st <- NULL;  by <- NULL;  cn <- NULL;  fl <- NULL
+  pgr  <- NULL; pcb <- NULL; pst <- NULL; pby <- NULL; pcn <- NULL; pfl <- NULL
+  gr_cn <- NULL; cb_fl <- NULL; pgr_pcn <- NULL; pcb_pfl <- NULL;
+  sum_nopf <- NULL; sum_pf <- NULL;
+  fgr  <- NULL; fcb <- NULL; fst <- NULL; fby <- NULL; fcn <- NULL; ffl <- NULL
+                                fgr_fcn <- NULL; fcb_ffl <- NULL;
+  sum_f <- NULL
+  
+  df$sum_nopf <- rowSums(df[, 1:6],  na.rm = TRUE)
+  df$sum_pf   <- rowSums(df[, 7:12], na.rm = TRUE)
+  df$sum_f    <- rowSums(df[, 1:12], na.rm = TRUE)
+  
+  df$gr_cn    <- rowSums(df[c("gr",  "cn")], na.rm = TRUE)
+  df$cb_fl    <- rowSums(df[c("cb",  "fl")], na.rm = TRUE)
+  
+  df$pgr_pcn  <- rowSums(df[c("pgr", "pcn")], na.rm = TRUE)
+  df$pcb_pfl  <- rowSums(df[c("pcb", "pfl")], na.rm = TRUE)
+ 
+  df$fgr_fcn  <- rowSums(df[c("gr",  "cn", "pgr", "pcn")], na.rm = TRUE)
+  df$fcb_ffl  <- rowSums(df[c("cb",  "fl", "pcb", "pfl")], na.rm = TRUE)
+  
+  df$fgr <- rowSums(df[c("gr", "pgr")], na.rm = TRUE)
+  df$fcb <- rowSums(df[c("cb", "pcb")], na.rm = TRUE)
+  df$fst <- rowSums(df[c("st", "pst")], na.rm = TRUE)
+  df$fby <- rowSums(df[c("by", "pby")], na.rm = TRUE)
+  df$fcn <- rowSums(df[c("cn", "pcn")], na.rm = TRUE)
+  df$ffl <- rowSums(df[c("fl", "pfl")], na.rm = TRUE)
+  
+  
+  # # load lookup table
+  # soiltexture <- NULL
+  # load(system.file("data/soiltexture.rda", package="aqp")[1])
+  # texmod <- soiltexture$texmod
+  
+  
+  ## filter rows with no rock fragments 
+  idx_sum <- df$sum_nopf < 15 & df$sum_pf < 15 & df$sum_f < 15
+  df_sub  <- df[!idx_sum, ]
+  
+  
+  # check inputs again ----
+  if (any(df$sum_nopf > 100)) {
+    warning("some rows total rock fragments > 100")
+  }
+  if (any(df$sum_pf > 100)) {
+    warning("some rows total pararock fragments > 100")
+  }
+  
+  
+  # calculate texmod & lieutex---- 
+  df_sub <- within(df_sub, {
+    
+    # nopf
+    texmod  = NA_character_
+    lieutex = NA_character_
+    x_gr_by = gr_cn >= ((1.5 * cb_fl) + (2 * st) + (2.5 * by))
+    x_cb_by = cb_fl >= ((1.5 * st)    + (2 * by))
+    # 15-34%
+    x1534 = sum_nopf >= 15 & sum_nopf <  35
+    texmod  = ifelse(x1534 & x_gr_by           & gr >= cn & gr > 0                , "gr", texmod)
+    texmod  = ifelse(x1534 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cn", texmod)
+    texmod  = ifelse(x1534 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cb", texmod)
+    texmod  = ifelse(x1534 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "fl", texmod)
+    texmod  = ifelse(x1534 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "st", texmod)
+    texmod  = ifelse(x1534 & st    <  1.5 * by            & by > 0 & is.na(texmod), "by", texmod)
+    # 35-59%
+    x3559 = sum_nopf >= 35 & sum_nopf <  60
+    texmod  = ifelse(x3559 & x_gr_by           & gr >= cn & gr > 0,                 "grv", texmod)
+    texmod  = ifelse(x3559 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cnv", texmod)
+    texmod  = ifelse(x3559 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cbv", texmod)
+    texmod  = ifelse(x3559 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "flv", texmod)
+    texmod  = ifelse(x3559 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "stv", texmod)
+    texmod  = ifelse(x3559 & st    <  1.5 * by            & by > 0 & is.na(texmod), "byv", texmod)
+    # 60-89%
+    x6089 = sum_nopf >= 60 & sum_nopf <  90
+    texmod  = ifelse(x6089 & x_gr_by           & gr >= cn & gr > 0                , "grx", texmod)
+    texmod  = ifelse(x6089 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cnx", texmod)
+    texmod  = ifelse(x6089 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cbx", texmod)
+    texmod  = ifelse(x6089 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "flx", texmod)
+    texmod  = ifelse(x6089 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "stx", texmod)
+    texmod  = ifelse(x6089 & st    <  1.5 * by            & by > 0 & is.na(texmod), "byx", texmod)
+    # 90-100%
+    x90 = sum_nopf >= 90
+    lieutex = ifelse(x90 & x_gr_by           & gr >= cn & gr > 0,                 "gr", lieutex)
+    lieutex = ifelse(x90 & x_gr_by           & gr <  cn & cn > 0 & is.na(texmod), "cn", lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb >= fl & cb > 0 & is.na(texmod), "cb", lieutex)
+    lieutex = ifelse(x90 & x_cb_by           & cb <  fl & fl > 0 & is.na(texmod), "fl", lieutex)
+    lieutex = ifelse(x90 & st    >= 1.5 * by            & st > 0 & is.na(texmod), "st", lieutex)
+    lieutex = ifelse(x90 & st    <  1.5 * by            & by > 0 & is.na(texmod), "by", lieutex)
+    
+    
+    # pf
+    texmod_pf  = NA_character_
+    lieutex_pf = NA_character_
+    x_pgr_pby  = pgr_pcn >= ((1.5 * pcb_pfl) + (2 * pst) + (2.5 * pby))
+    x_pcb_pby  = pcb_pfl >= ((1.5 * pst)     + (2 * pby))
+    # 15-34%
+    x1534 = sum_pf >= 15 & sum_pf <  35 & sum_nopf <= 0
+    texmod_pf  = ifelse(x1534 & x_pgr_pby        & pgr >= pcn & pgr > 0,                    "pgr", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pgr_pby        & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcn", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pcb_pby        & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcb", texmod_pf)
+    texmod_pf  = ifelse(x1534 & x_pcb_pby        & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pfl", texmod_pf)
+    texmod_pf  = ifelse(x1534 & pst >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pst", texmod_pf)
+    texmod_pf  = ifelse(x1534 & pst <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pby", texmod_pf)
+    # 35-59%
+    x3559 = sum_pf >= 35 & sum_pf <  60 & sum_nopf <= 0
+    texmod_pf  = ifelse(x3559 & x_pgr_pby        & pgr >= pcn & pgr > 0,                    "pgrv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pgr_pby        & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcnv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pcb_pby        & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcbv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & x_pcb_pby        & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pflv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & pst >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pstv", texmod_pf)
+    texmod_pf  = ifelse(x3559 & pst <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pbyv", texmod_pf)
+    # 60-89%
+    x6089 = sum_pf >= 60 & sum_pf <  90 & sum_nopf <= 0
+    texmod_pf  = ifelse(x6089 & x_pgr_pby        & pgr >= pcn & pgr > 0,                    "pgrx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pgr_pby        & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcnx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pcb_pby        & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcbx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & x_pcb_pby        & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pflx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & pst >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pstx", texmod_pf)
+    texmod_pf  = ifelse(x6089 & pst <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pbyx", texmod_pf)
+    # 90-100%
+    x90 = sum_pf >= 90                  & sum_nopf <= 0
+    lieutex_pf = ifelse(x90 & x_pgr_pby           & pgr >= pcn & pgr > 0,                    "pgr", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pgr_pby           & pgr <  pcn & pcn > 0 & is.na(texmod_pf), "pcn", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pcb_pby           & pcb >= pfl & pcb > 0 & is.na(texmod_pf), "pcb", lieutex_pf)
+    lieutex_pf = ifelse(x90 & x_pcb_pby           & pcb <  pfl & pfl > 0 & is.na(texmod_pf), "pfl", lieutex_pf)
+    lieutex_pf = ifelse(x90 & pst    >= 1.5 * pby              & pst > 0 & is.na(texmod_pf), "pst", lieutex_pf)
+    lieutex_pf = ifelse(x90 & pst    <  1.5 * pby              & pby > 0 & is.na(texmod_pf), "pby", lieutex_pf)
+    
+    
+    # f
+    texmod_f = NA_character_
+    lieutex_f = NA_character_
+    x_fgr_fby = fgr_fcn >= ((1.5 * fcb_ffl) + (2 * fst) + (2.5 * fby))
+    x_fcb_fby = fcb_ffl >= ((1.5 * fst)     + (2 * fby))
+    x1534 = sum_f >= 15 & sum_f <  35 & sum_nopf < 15
+    texmod_f  = ifelse(x1534 & x_fgr_fby        & fgr >= fcn & fgr > 0,                   "pgr", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fgr_fby        & fgr <  fcn & fcn > 0 & is.na(texmod_f), "pcn", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fcb_fby        & fcb >= ffl & fcb > 0 & is.na(texmod_f), "pcb", texmod_f)
+    texmod_f  = ifelse(x1534 & x_fcb_fby        & fcb <  ffl & ffl > 0 & is.na(texmod_f), "pfl", texmod_f)
+    texmod_f  = ifelse(x1534 & fst >= 1.5 * fby              & fst > 0 & is.na(texmod_f), "pst", texmod_f)
+    texmod_f  = ifelse(x1534 & fst <  1.5 * fby              & fby > 0 & is.na(texmod_f), "pby", texmod_f)
+    # 35-59%
+    x3559 = sum_f >= 35 & sum_f <  60 & sum_nopf < 15
+    texmod_f  = ifelse(x3559 & x_fgr_fby        & fgr >= fcn & fgr > 0,                   "pgrv", texmod_f)
+    texmod_f  = ifelse(x3559 & x_fgr_fby        & fgr <  fcn & fcn > 0 & is.na(texmod_f), "pcnv", texmod_f)
+    texmod_f  = ifelse(x3559 & x_fcb_fby        & fcb >= ffl & fcb > 0 & is.na(texmod_f), "pcbv", texmod_f)
+    texmod_f  = ifelse(x3559 & x_fcb_fby        & fcb <  ffl & ffl > 0 & is.na(texmod_f), "pflv", texmod_f)
+    texmod_f  = ifelse(x3559 & fst >= 1.5 * fby              & fst > 0 & is.na(texmod_f), "pstv", texmod_f)
+    texmod_f  = ifelse(x3559 & fst <  1.5 * fby              & fby > 0 & is.na(texmod_f), "pbyv", texmod_f)
+    # 60-89%
+    x6089 = sum_f >= 60 & sum_f <  90 & sum_nopf < 15
+    texmod_f  = ifelse(x6089 & x_fgr_fby        & fgr >= fcn & fgr > 0,                   "pgrx", texmod_f)
+    texmod_f  = ifelse(x6089 & x_fgr_fby        & fgr <  fcn & fcn > 0 & is.na(texmod_f), "pcnx", texmod_f)
+    texmod_f  = ifelse(x6089 & x_fcb_fby        & fcb >= ffl & fcb > 0 & is.na(texmod_f), "pcbx", texmod_f)
+    texmod_f  = ifelse(x6089 & x_fcb_fby        & fcb <  ffl & ffl > 0 & is.na(texmod_f), "pflx", texmod_f)
+    texmod_f  = ifelse(x6089 & fst >= 1.5 * fby              & fst > 0 & is.na(texmod_f), "pstx", texmod_f)
+    texmod_f  = ifelse(x6089 & fst <  1.5 * fby              & fby > 0 & is.na(texmod_f), "pbyx", texmod_f)
+    # 90-100%
+    x90 = sum_f >= 90                 & sum_nopf < 15
+    lieutex_f = ifelse(x90 & x_fgr_fby           & fgr >= fcn & fgr > 0,                   "pgr", lieutex_f)
+    lieutex_f = ifelse(x90 & x_fgr_fby           & fgr <  fcn & fcn > 0 & is.na(texmod_f), "pcn", lieutex_f)
+    lieutex_f = ifelse(x90 & x_fcb_fby           & fcb >= ffl & fcb > 0 & is.na(texmod_f), "pcb", lieutex_f)
+    lieutex_f = ifelse(x90 & x_fcb_fby           & fcb <  ffl & ffl > 0 & is.na(texmod_f), "pfl", lieutex_f)
+    lieutex_f = ifelse(x90 & fst    >= 1.5 * fby              & fst > 0 & is.na(texmod_f), "pst", lieutex_f)
+    lieutex_f = ifelse(x90 & fst    <  1.5 * fby              & fby > 0 & is.na(texmod_f), "pby", lieutex_f)
+    
+    
+    # combine texmods and lieutex ----
+    texmod  = ifelse(is.na(texmod),  texmod_f,   texmod)
+    texmod  = ifelse(is.na(texmod),  texmod_pf,  texmod)
+    lieutex = ifelse(is.na(lieutex), lieutex_f,  lieutex)
+    lieutex = ifelse(is.na(lieutex), lieutex_pf, lieutex)
+  })
+  
+  # idx <- 1:ncol(df_sub)
+  # df_mod <- df_sub
+  # df_mod[idx] <- lapply(idx, function(i) {
+  #   texmod <- rep(NA_character_, nrow(df_sub))
+  #   texmod[df_sub[, i] >= 15 & df_sub[, i] < 35] <- var_mods_sub[i]
+  #   texmod[df_sub[, i] >= 35 & df_sub[, i] < 60] <- paste0(var_mods_sub[i], "v")
+  #   texmod[df_sub[, i] >= 60 & df_sub[, i] < 90] <- paste0(var_mods_sub[i], "x")
+  #   return(texmod)
+  # })
+  # 
+  # df_lieu <- df_sub
+  # df_lieu[idx] <- lapply(idx, function(i) {
+  #   lieutex <- rep(NA_character_, nrow(df_sub))
+  #   lieutex[df_sub[i] >= 90] <- var_mods_sub[i]
+  #   return(lieutex)
+  # })
+  
+  
+  # standardize output----
+  if (nrow(df_sub) > 0) {
+    df$texmod[!idx_sum]  <- df_sub$texmod
+    df$lieutex[!idx_sum] <- df_sub$lieutex
+  } else df[c("texmod", "lieutex")] <- NA_character_
+  df <- df[c("texmod", "lieutex")]
+  
+  
+  if (as.is == FALSE) {
+    lv <- paste0(
+      c(rep(var_mods[(7:12)], times = 3,  length.out = 18),
+        rep(var_mods[(1:6)],  times = 3,  length.out = 18)
+      ),
+      rep(c("", "v", "x"),    each  = 6,  length.out = 36)
+      )
+    tn <- names(sort(table(df$texmod), decreasing = TRUE))
+    lv <- c(lv, tn[! tn %in% lv])
+    
+    df$texmod  <- factor(df$texmod,  levels = lv)
+    df$lieutex <- factor(df$lieutex, levels = var_mods[1:6])
+  }
+  
+  if (as.is == FALSE & droplevels == TRUE) {
+    df <- droplevels.data.frame(df)
+  }
+  
+  
+  return(df)
+}
+
+
+# format function inputs ----
+# format vector argument inputs into a data.frame 
+.format_inputs <- function(vars_l = NULL, var_cols, mis_value = NA, datatype = NULL) {
+  
+  # check inputs----
+  vars_null <- sapply(vars_l, is.null)
+  vars_len  <- sapply(vars_l[!vars_null], length)
+  nm        <- var_cols
+  n         <- length(var_cols)
+  df <- NULL
+  
+  ## all inputs are NULL
+  if (all(vars_null)) {
+    stop("all inputs are NULL")
+  }
+  
+  ## length of inputs
+  if (!all(vars_len == max(vars_len))) {
+    stop("length of inputs do not match")
+  }
+  
+  # standardize inputs
+  # create data.frame
+  df <- as.data.frame(vars_l[!vars_null])
+  
+  # append missing columns
+  idx <- nm %in% names(df)
+  df_mis <- as.data.frame(matrix(data = mis_value, nrow = nrow(df), ncol = sum(!idx)))
+  names(df_mis) <- nm[!idx]
+  df <- cbind(df_mis, df)[nm]
+  
+  
+  ## correct datatype
+  df[1:n] <- lapply(df, function(x) if (is.factor(x))  as.character(x) else x)
+  df[1:n] <- lapply(df, function(x) if (is.integer(x)) as.numeric(x)   else x)
+  dt <- unlist(lapply(df, class))
+  
+  ## check datatype
+  idx <- dt == datatype | dt == "logical"
+  if (!all(idx)) {
+    stop(paste("unexpected input data types, must be", datatype))
+  }
+  
+  return(df)
 }
 
