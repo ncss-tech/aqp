@@ -245,7 +245,7 @@ setMethod(f = 'unique',
 )
   
 #' @title Subset a SoilProfileCollection with logical expressions
-#' @description \code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
+#' @description \code{subset()} is a function used for extracting profiles from a SoilProfileCollection based on logical criteria. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation.
 #'
 #' @param x A SoilProfileCollection
 
@@ -256,9 +256,7 @@ setMethod(f = 'unique',
 #'
 #' @aliases subset
 #'
-#' @details In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series.
-#'
-#' @seealso \code{\link{filter}}
+#' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `subset()` inside another function, all expressions used in `...` should be in terms of variables that are in the site or horizon data frame.
 #'
 #' @return A SoilProfileCollection.
 #'
@@ -348,10 +346,14 @@ setGeneric("subsetHz", function(x, ...)
   standardGeneric("subsetHz"))
 
 #' Subset the horizons in a SoilProfileCollection using logical criteria
-#'
+#' 
+#' \code{subsetHz()} is a function used for extracting horizons from a SoilProfileCollection based on logical criteria.
+#' 
 #' @param x a SoilProfileCollection
 #' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
-#'
+#' 
+#' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `subsetHz()` inside another function, all expressions used in `...` should be in terms of variables that are in the horizons data frame.
+#' 
 #' @return a SoilProfileCollection with a subset of horizons, possibly with some sites removed
 #' @export
 #' @aliases subsetHz
