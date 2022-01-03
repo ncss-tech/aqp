@@ -205,9 +205,6 @@
     <loc>/reference/explainPlotSPC.html</loc>
   </url>
   <url>
-    <loc>/reference/f.noise.html</loc>
-  </url>
-  <url>
     <loc>/reference/fillHzGaps.html</loc>
   </url>
   <url>
@@ -458,9 +455,6 @@
   </url>
   <url>
     <loc>/reference/replaceHorizons.html</loc>
-  </url>
-  <url>
-    <loc>/reference/resample.twotheta.html</loc>
   </url>
   <url>
     <loc>/reference/restrictions-set.html</loc>
