@@ -113,6 +113,8 @@ the proper ordering of these labels based on median horizon depth mid-point.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># generalize horizons by depth slice</span></span>
 <span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="slice-methods.html">slice</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">25</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">150</span><span class="op">)</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"><span class="va">s</span><span class="op">$</span><span class="va">slice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">top</span>, <span class="st">' cm'</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># not a factor</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">slice</span><span class="op">)</span></span>

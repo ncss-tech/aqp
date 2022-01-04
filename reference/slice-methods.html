@@ -124,20 +124,28 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-in"><span class="co"># generate single slice at 10 cm</span></span>
 <span class="r-in"><span class="co"># output is a SoilProfileCollection object</span></span>
 <span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># generate single slice at 10 cm, output data.frame</span></span>
 <span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span>, just.the.data<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># generate integer slices from 0 - 26 cm</span></span>
 <span class="r-in"><span class="co"># note that slices are specified by default as "top-down"</span></span>
 <span class="r-in"><span class="co"># e.g. the lower depth will always by top + 1</span></span>
 <span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="slice-methods-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># generate slices from 0 - 11 cm, for all variables</span></span>
 <span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">10</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 20 profiles and 220 horizons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: sliceID </span>
@@ -170,6 +178,8 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-in"><span class="co"># if all vars are missing, then NA is returned</span></span>
 <span class="r-in"><span class="va">d</span><span class="op">$</span><span class="va">p1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">.</span>, just.the.data<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id top bottom name         p1          p2         p3         p4          p5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1  10     11   H1         NA  -4.0385981   2.344391  -4.589098   4.0915670</span>

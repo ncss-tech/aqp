@@ -249,7 +249,11 @@ Biometrika 69:635-640.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># aggregate entire collection with two different segment sizes</span></span>
 <span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">prop</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">prop</span>, slab.structure<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># check output</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
@@ -295,6 +299,8 @@ Biometrika 69:635-640.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># arrange data by ID</span></span>
 <span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm <span class="op">=</span> <span class="va">id</span> <span class="op">~</span> <span class="va">prop</span>, slab.fun<span class="op">=</span><span class="va">identity</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># convert id to a factor for plotting</span></span>
 <span class="r-in"><span class="va">a</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
@@ -336,6 +342,8 @@ Biometrika 69:635-640.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span></span>
 <span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm<span class="op">=</span><span class="fl">1</span>, slab.structure<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># convert wide -&gt; long for plotting</span></span>
 <span class="r-in"><span class="co"># result is a data.table</span></span>
@@ -382,6 +390,8 @@ Biometrika 69:635-640.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># adjust probability to size of collection, from 0-150</span></span>
 <span class="r-in"><span class="va">a.1</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm <span class="op">=</span> <span class="fl">2</span>, slab.structure <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># convert wide -&gt; long for plotting</span></span>
 <span class="r-in"><span class="co"># result is a data.table</span></span>

@@ -120,6 +120,8 @@ confusion within each ML.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span></span>
 <span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm<span class="op">=</span><span class="fl">1</span>, slab.structure<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># generate table of ML horizonation</span></span>
 <span class="r-in"><span class="fu">get.ml.hz</span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
