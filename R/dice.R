@@ -1,25 +1,16 @@
 
-
-# simpler, faster version of slice via `data.table` / FULL JOIN
-# less robust to errors than current slice()
-# slices entire profiles
-# returns all depths / columns
-
 ## https://github.com/ncss-tech/aqp/issues/115
 
-## TODO: suggest / offer repairMissingHzDepths() before running
-
-## TODO: fully integrate new fillHzGaps
-##   * always fill / pad?
-##   * additional arguments for gaps vs top / bottom?
-##   * backwards compatibility with slice
+## TODO: 
+##   * add S4 interface
+##   * suggest / offer repairMissingHzDepths() before running
 ##   * DT full outer join ideas
 ##     https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
 
 
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
-#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace `slice()`.
+#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace `aqp::slice()`.
 #'
 #'
 #' @param x a `SoilProfileCollection` object
@@ -36,6 +27,7 @@
 #' 
 #' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
 #' 
+#' @details For large and potentially messy collections that include missing horizon bottom depths, or 0-thickness horions, consider using `repairMissingHzDepths()` before `dice()`.
 #' 
 #'
 #' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`

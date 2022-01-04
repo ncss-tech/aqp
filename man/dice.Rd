@@ -33,7 +33,10 @@ dice(
 a \code{SoilProfileCollection} object, or \code{data.frame} when \code{SPC = FALSE}
 }
 \description{
-Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace \code{slice()}.
+Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace \code{aqp::slice()}.
+}
+\details{
+For large and potentially messy collections that include missing horizon bottom depths, or 0-thickness horions, consider using \code{repairMissingHzDepths()} before \code{dice()}.
 }
 \author{
 D.E. Beaudette, A.G. Brown

@@ -1,10 +1,15 @@
 
-## latest tinkering / testing based on updates to fillHzGaps
 
-## TODO: fully integrate new fillHzGaps
-##   * always fill / pad?
-##   * additional arguments for gaps vs top / bottom?
-##   * backwards compatibility with slice
+## TODO: offer repairMissingHzDepths()
+
+## DT full outer join ideas
+# https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
+# 
+
+## address TODO and major design questions:
+# https://github.com/ncss-tech/aqp/issues/115
+
+
 
 
 set.seed(1010)
@@ -113,13 +118,7 @@ site(d)$group <- factor(sample(letters[1:10], size = length(d), replace =TRUE))
 plotSPC(d[1:10, ], color = 'p1', show.legend = FALSE)
 
 
-## DT full outer join ideas
-# https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
-# 
-
-## address TODO and major design questions:
-# https://github.com/ncss-tech/aqp/issues/115
-
+###
 
 
 # quick check
