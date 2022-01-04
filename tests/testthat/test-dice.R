@@ -71,29 +71,73 @@ test_that("formula interface", {
 
 test_that("percent missing calculation", {
   
-  sp4$K[c(1, 5, 10)] <- NA
-  sp4$Ca[c(1, 5, 20)] <- NA
+  sp4$K[c(1, 5, 10, 30)] <- NA
+  sp4$Ca[c(1, 5, 20, 30)] <- NA
+  sp4$CEC_7[c(30)] <- NA
   
-  expect_warning(s <- dice(sp4, fm = ~ Ca + K, pctMissing = TRUE))
+  s <- dice(sp4, fm = ~ Ca + K + CEC_7, pctMissing = TRUE)
   
   # visual check
-  # plotSPC(s, color = '.pctMissing')
+  plotSPC(s, color = 'Ca')
+  plotSPC(s, color = 'K')
+  plotSPC(s, color = '.pctMissing')
   
   # new column
   expect_true('.pctMissing' %in% horizonNames(s))
   
   # some should be non-zero
   expect_true(any(s$.pctMissing > 0) & ! all(s$.pctMissing > 0))
+  
+  # check exact values
+  # 1st horizon, 2/3 missing
+  expect_true(all(s[1, ]$.pctMissing[1:3] == 2/3))
+  # all horizons, 1/3 missing
+  expect_true(all(s[7, ]$.pctMissing == 1/3))
+  # last horizon, 100% missing
+  expect_true(all(s[10, ]$.pctMissing[8:16] == 1))
 })
 
 
-test_that("padding with NA, backwards-compat with slice", {
-  
+test_that("padding with NA, backwards-compatible with slice", {
   
   s <- dice(sp4, fm = 0:80 ~ ., fill = TRUE)
   
   # all profiles should be the same "depth", including empty (NA) horizons
   expect_true(all(profileApply(s, max) == 80))
+  
+})
+
+
+test_that("testing exact values", {
+  
+  # typical soil profile, no problem horizons
+  x <- data.frame(
+    id = 'A',
+    top = c(0, 10, 15, 20, 40, 50, 100),
+    bottom = c(10, 15, 20, 40, 50, 100, 165),
+    p = 1:7
+  )
+  
+  # init SPC
+  depths(x) <- id ~ top + bottom
+  
+  # dice with defaults
+  s <- dice(x)
+  
+  # horizon thickness
+  thick <- x$bottom - x$top
+  
+  # check no. contiguous sliced values = horizon thickness
+  expect_true(all(rle(s$p)$lengths == thick))
+  
+  # check values within chunks
+  expect_true(all(rle(s$p)$values == x$p))
+  
+  # do it again with a formula
+  s <- dice(x, fm = 0:106 ~ .)
+  
+  # the last horizon is truncated to 107cm
+  expect_true(rle(s$p)$lengths[7] == 7)
   
 })
 

@@ -1,11 +1,11 @@
 
 
-
-
 # simpler, faster version of slice via `data.table` / FULL JOIN
 # less robust to errors than current slice()
 # slices entire profiles
 # returns all depths / columns
+
+## https://github.com/ncss-tech/aqp/issues/115
 
 ## TODO: suggest / offer repairMissingHzDepths() before running
 
@@ -13,6 +13,8 @@
 ##   * always fill / pad?
 ##   * additional arguments for gaps vs top / bottom?
 ##   * backwards compatibility with slice
+##   * DT full outer join ideas
+##     https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
 
 
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
@@ -163,13 +165,25 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   # consider an index, seems to have no effect
   # setindexv(h, hzidn)
   
-  ## TODO: this will have to be made more intelligent in the presence of overlap
-  ## mapply() call takes 1/4 of total time
-  ## consider custom function
-  # expand 1 unit slices to max depth of each profile
-  # NA in hz depths or 0-thickness horizons are not allowed
+  ## expand 1 unit slices to max depth of each profile
+  # TODO: this will have to be made more intelligent in the presence of overlap
+  # mapply() call takes 1/4 of total time
+  
+  # safe wrapper to base::seq
+  # NA in from/to (hz depths) not allowed
+  # TODO: from == to (0-thickness) horizons ??
+  .seq.safe <- function(from, to, by) {
+    if(any(is.na(from)) | any(is.na(to))) {
+      stop('corrupt horizonation, consider using `strict = TRUE`', call. = FALSE)
+    }
+    
+    return(
+      seq(from = from, to = to, by = by)
+    )
+  }
+  
   tops <- mapply(
-    FUN = seq, 
+    FUN = .seq.safe, 
     from = h[[htb[1]]], 
     to = h[[htb[2]]] - 1, 
     by = 1, 
@@ -238,12 +252,16 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
     # res[['.pctMissing']] <- .pctMissing(res, vars)
     
     # native DT approach
-    ## TODO: throws warning
+    ## TODO: throws warning: https://github.com/ncss-tech/aqp/issues/115#issuecomment-785301769
     # count number of NA in vars, by row 
-    res[, .pctMissing := rowSums(is.na(res[, .SD, .SDcols = vars]))]
+    # res[, .pctMissing := rowSums(is.na(res[, .SD, .SDcols = vars]))]
+    
+    res$'.pctMissing' <- NA
+    set(res, j = '.pctMissing', value = rowSums(is.na(res[, .SD, .SDcols = vars])))
     
     # convert NA count to percentage
-    res[, .pctMissing := .pctMissing / length(vars)]
+    # res[, .pctMissing := .pctMissing / length(vars)]
+    set(res, j = '.pctMissing', value = res$.pctMissing / length(vars))
   }
   
   # only returning horizons as a data.frame
@@ -263,7 +281,11 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   f.size <- object.size(x)
   
   # object bloat factor
-  message(sprintf("OBF: %s", round(f.size / o.size, 1)))
+  OBF <- round(f.size / o.size, 1)
+  metadata(x)$OBF <- OBF
+  
+  # possibly informative 
+  message(sprintf("Object Bloat Factor: %s", OBF))
   
   return(x)
 }
