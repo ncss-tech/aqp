@@ -28,14 +28,16 @@ font_add('BRAILLE1', regular = 'E:/working-from-home-to-file/SPC-visually-impair
 
 showtext_auto()
 
-svglite(file = 'E:/working-from-home-to-file/SPC-visually-impaired/braille-example.svg', width = 16, height = 12, pointsize = 14, standalone = TRUE)
+svglite(file = 'E:/working_copies/ncss-tech.github.io/AQP/SVG-examples/braille-example.svg', width = 16, height = 12, pointsize = 14, standalone = TRUE)
+
+# pdf(file = 'braille-example.pdf', width = 16, height = 12, pointsize = 14)
 
 par(mar = c(0, 0, 0, 0), family = 'BRAILLE1')
 
 # plot dendrogram + profiles
 # SoilTaxonomyDendrogram(h, y.offset = 0.325, name = 'newname', width = 0.3, cex.taxon.labels = 0.55, name.style = 'center-center', hz.depths =  TRUE, plot.depth.axis = FALSE, cex.id = 0.66, cex.names = 0.55)
 
-# plot dendrogram + profiles
+# plot profiles
 plotSPC(h, width = 0.3, name.style = 'center-center', hz.depths =  TRUE, plot.depth.axis = FALSE, cex.id = 0.66, cex.names = 0.55, color = NA)
 
 dev.off()
