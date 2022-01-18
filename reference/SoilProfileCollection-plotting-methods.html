@@ -100,6 +100,7 @@
   lwd <span class="op">=</span> <span class="fl">1</span>,
   lty <span class="op">=</span> <span class="fl">1</span>,
   default.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span>,
+  fixLabelCollisions <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -200,6 +201,8 @@
 <dd><p>line style used for sketches</p></dd>
 <dt>default.color</dt>
 <dd><p>default horizon fill color used when <code>color</code> attribute is <code>NA</code></p></dd>
+<dt>fixLabelCollisions</dt>
+<dd><p>use <code><a href="fixOverlap.html">aqp::fixOverlap()</a></code> to attempt fixing labeling collisions, will slow plotting of large collections</p></dd>
 <dt>...</dt>
 <dd><p>other arguments passed into lower level plotting functions</p></dd>
 <dt>y</dt>
@@ -391,7 +394,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span class="co"># align / adjust relative x positions</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 58 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 136 iterations</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">plotSPC</span><span class="op">(</span><span class="va">x</span>, </span>
@@ -420,7 +423,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
