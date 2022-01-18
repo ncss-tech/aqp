@@ -55,6 +55,7 @@ plotSPC(
   lwd = 1,
   lty = 1,
   default.color = grey(0.95),
+  fixLabelCollisions = FALSE,
   ...
 )
 
@@ -152,6 +153,8 @@ plot(x, y, ...)
 \item{lty}{line style used for sketches}
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
+
+\item{fixLabelCollisions}{use \code{aqp::fixOverlap()} to attempt fixing labeling collisions, will slow plotting of large collections}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 

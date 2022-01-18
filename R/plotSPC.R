@@ -102,6 +102,8 @@
 #' @param lty line style used for sketches
 #'
 #' @param default.color default horizon fill color used when \code{color} attribute is \code{NA}
+#' 
+#' @param fixLabelCollisions use `aqp::fixOverlap()` to attempt fixing labeling collisions, will slow plotting of large collections
 #'
 #' @param \dots other arguments passed into lower level plotting functions
 #'
@@ -340,6 +342,7 @@ plotSPC <- function(
   lwd = 1,
   lty = 1,
   default.color = grey(0.95),
+  fixLabelCollisions = FALSE,
   ...
 ) {
   
@@ -566,6 +569,8 @@ plotSPC <- function(
     )
   }
   
+  
+  ## TODO: consider using cex.names as the starting character scaling value
   
   # calculate width of a single character on current plot device
   one.char.width <- strwidth('W')
@@ -881,28 +886,9 @@ plotSPC <- function(
     )
     
     
-    ########################################
-    
-    ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)
-    # print(hzname.y0)
-    # 
-    ## eval reasonable limit
-    # determine cex.names influence
-    # tr <- abs(strheight('W')) * 1.5 * (cex.names * 1)
-    # 
-    # print(tr)
-    # print(findOverlap(hzname.y0, thresh = tr))
-    # print(fixOverlap(hzname.y0, thresh = tr))
-    # 
-    ## this requires way more evaluation
-    ## may require element-level bounds
-    ## requires min(deviation-from-original)
-    ## adj should be based on tr
-    #
-    # hzname.y0 <- fixOverlap(hzname.y0, thresh = tr, adj = 1)
-    
-    ########################################
-    
+
+   ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)    ## See hz depth annotation code below
+
     # optionally shrink the size of names if they are longer than a given thresh
     if(shrink) {
       
@@ -951,19 +937,25 @@ plotSPC <- function(
     ##################################
     if(hz.depths) {
       
+      # scaling factor for hz depths
+      hz.depths.cex <- cex.names * 0.9
+      
       # extra space between profile sketch and left-justified label
       # seems to scale with cex.names
-      hz.depths.xfuzz <- strwidth('0') / 4
+      hz.depths.xfuzz <- strwidth('0', cex = hz.depths.cex) / 3
       
-      # top-horizon, top depth: vertical alignment is "top"
+      # device coordinates: scaling / offset applied
+      hzd.txt.x <- x0 + width + hz.depths.xfuzz
+      
+      # top-horizon, top depth: vertical alignment is close to "top"
       hzd.txt <- this_profile_data[[tcol]][1]
       text(
-        x = x0 + width + hz.depths.xfuzz, 
+        x = hzd.txt.x, 
         y = y1[1], 
         labels = hzd.txt, 
-        cex = cex.names * 0.9, 
+        cex = hz.depths.cex, 
         font = 1, 
-        adj = c(0, 1)
+        adj = c(0, 0.8)
       )
       
       ## TODO: add optional adjustments here using fixOverlap()
@@ -971,12 +963,39 @@ plotSPC <- function(
       
       # in-between horizons, if present: vertical align is "center"
       if(nh > 1) {
+        # horizon depth annotation text (no scaling / offset applied here)
         hzd.txt <- this_profile_data[[tcol]][-1]
+        
+        # device coordinates: scaling / offset applied
+        hzd.txt.y <- y1[-1]
+        
+        ## collision detection / fix
+        if(fixLabelCollisions) {
+          # reasonable threshold for label collision detection
+          y.thresh <- 1.25 * abs(strheight('0', cex = hz.depths.cex))
+          # print(y.thresh)
+          # print(diff(y1))
+          
+          # must include top + bottom depths for collision detection
+          hzd.txt.y.fixed <- suppressMessages(fixOverlap( 
+            c(y1, y0[nh]), 
+            thresh = y.thresh, 
+            min.x = y1[1], 
+            max.x = y0[nh], 
+            adj = y.thresh * 1/3
+          ))
+          
+          # remove top + bottom horizon depths
+          hzd.txt.y <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
+        }
+        
+        
+        # annotate
         text(
-          x = x0 + width + hz.depths.xfuzz, 
-          y = y1[-1], 
+          x = hzd.txt.x, 
+          y = hzd.txt.y, 
           labels = hzd.txt, 
-          cex = cex.names * 0.9, 
+          cex = hz.depths.cex, 
           font = 1, 
           adj = c(0, 0.5)
         ) 
@@ -985,10 +1004,10 @@ plotSPC <- function(
       # bottom-horizon, bottom depth: vertical alignment is "bottom"
       hzd.txt <- this_profile_data[[bcol]][nh]
       text(
-        x = x0 + width + hz.depths.xfuzz, 
+        x = hzd.txt.x, 
         y = y0[nh], 
         labels = hzd.txt, 
-        cex = cex.names * 0.9, 
+        cex = hz.depths.cex, 
         font = 1, 
         adj = c(0, 0)
       )
