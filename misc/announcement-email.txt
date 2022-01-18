@@ -1,0 +1,98 @@
+Greetings,
+
+I would like to announce a project that may be of interest to the
+Pedometrics / DSM groups. The Algorithms for Quantitative Pedology (AQP)
+project was started as a place to put some of the functions I used on a daily
+basis. It slowly grew into a collection of algorithms that support studies
+related to soil genesis, taxonomy, and mapping. The short list of
+functionality includes:
+
+- classes for storing and manipulating soil profile data
+- functions for plotting soil profile sketches
+- color conversion functions (Munsell to RGB)
+- plotting functions for groups of soil profiles
+- plotting functions for depth-functions + uncertainty estimates
+- functions for re-sampling genetic horizons to regular sequences
+- profile aggregation functions
+- an implementation of between-profile dissimilarity calculation
+- functions for re-sampling XRD patterns to a common basis
+- functions for performing full-pattern matching of XRD patterns
+
+Obviously, this project is far from an exhaustive implementation of what the
+name might otherwise suggest.
+
+My reasoning for putting this package together is based on the premise that
+methods used by pedologists have grown with our understanding of natural
+systems and our ability to work with larger and larger datasets-- however,
+coupling of theory and practice to modern numerical methods is rare outside
+of academic circles. That is not to say that federal agencies and the soil
+science community are not catching up. Rather, it seems like the adoption of
+these new approaches can by hindered by a lack of an implementation that is
+more accessible than an article in a scientific journal. I am speaking from
+my experience in the western United States, therefore I apologies if I have
+not adequately described corresponding conditions in other parts of the
+world.
+
+The naming of the package. It is currently named "Algorithms for Quantitative
+Pedology", inspired by Jenny's treatise on the topic. It could be argued that
+most modern pedologic studies (i.e. on the topic of soil genesis, morphology,
+classification, and mapping) are by and large a quantitative effort-- so this
+name may be more of a convenient acronym than descriptive label. In naming
+this package I was hoping to encapsulate the idea of how modern numerical
+methods might be applied to the field of pedology. Well, the
+word "Pedometrics" does a pretty good job of conveying that idea. In
+particular, it falls well in line with Alex's initial description of
+Pedometrics:
+
+“the application of mathematical and statistical methods for the study of the
+distribution and genesis of soils.”
+
+On the other hand, the potential for a diffuse interpretation of the
+word "Pedometrics" could lead to a package that lacks focus and ultimately
+critical mass. In that case, an entire suite of related R packages would
+likely work. There are several cases on CRAN / R-Forge where large efforts
+are split into several, related packages. In addition, the term 'Pedometrics'
+means many different things to many different people.
+
+I would like to present a couple ideas on how this project, and extensions of
+it, might function as a liaison between rapid advances in the realm of
+Pedometrics and those interested in the application of these methods.
+
+1. R is an ideal environment for working with soils information and the
+packaging system is a robust approach to encapsulating code, documentation,
+and discussion.
+
+2. A suite of R packages, each geared towards a specific realm of what most
+soil scientists do (or would like to do) with their data, may be one way in
+which common work flows can be streamlined and better documented. These
+packages would be the vehicle by which theory, defined in academic journals,
+could be translated into well-documented tools for a wider range of
+practitioners.
+
+3. Within this suite, a master package (why not call it "pedometrics") could
+contain classes and utility functions for describing and manipulating objects
+that represent the complex structure of a soil profile. The companion
+packages would build on these common data structures and methods, making the
+implementation of newly discovered or experimental methods much simpler.
+
+4. The R-Forge system would facilitate concurrent access to the source code
+and documentation through the use of revision control. In this way, changes
+would be documented, and versions could be seamlessly forked or merged so
+that rapid development would not result in an unstable product.
+
+
+Ultimately, I am interested in getting modern tools into the hands of current
+pedologists, and making it simpler for the adoption of these tools by new
+pedologists. If you are interested in these efforts, have comments or
+criticisms please don't hesitate to contact me. There is a mini-manual with
+an extended discussion on the AQP package, included in the source. I would
+encourage anyone that is interested to check the R-Forge site:
+
+http://aqp.r-forge.r-project.org/
+
+A slightly older version is available on CRAN:
+http://cran.r-project.org/web/packages/aqp/
+
+
+Cheers,
+Dylan
