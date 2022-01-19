@@ -1,3 +1,7 @@
+# aqp 1.41 (2022-01-19)
+ * `plotSPC()` gains new arguments for controlling horizon depth labels
+ * `plotSPC()` gains horizon depth annotation collision fixes (https://github.com/ncss-tech/aqp/issues/240)
+
 # aqp 1.40 (2022-01-04)
  * CRAN release
  * fixed small bug in `panel.depth_function()` that affected plotting of grouped data, created by `slab()`

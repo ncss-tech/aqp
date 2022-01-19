@@ -32,9 +32,10 @@ plotSPC(x, hz.depths = TRUE, name.style = 'center-center', plot.depth.axis = FAL
 
 
 
+## attempt in a dendrogram, checking that scaling / offset applied correctly
 
 
-
+library(soilDB)
 library(cluster)
 library(ape)
 library(colorspace)
