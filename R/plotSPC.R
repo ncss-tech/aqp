@@ -1056,22 +1056,27 @@ plotSPC <- function(
       ##############################
       if(hz.depths.lines) {
         
-        # horizontal spike (skipping top + bottom labels)
-        # right-edge, at depth -> padded, left-edge/center of annotation (no collision fix)
-        segments(
-          x0 = x0 + width, y0 = y1[-1], 
-          x1 = x0 + width + (hz.depths.xfuzz / 2), y1 = y1[-1]
-        )
+        ## TODO: abstract to function
         
-        # connector member (skipping top + bottom labels)
-        # diagonal when collision fix has been applied
-        #
-        # right-end of spike member ->
-        # padded, left-edge/center of annotation (after collision fix)
-        segments(
-          x0 = x0 + width + (hz.depths.xfuzz / 2), y0 = y1[-1],
-          x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = hzd.txt.y
-        )
+        # middle horizons, if present
+        if(nh > 1) {
+          # horizontal spike (skipping top + bottom labels)
+          # right-edge, at depth -> padded, left-edge/center of annotation (no collision fix)
+          segments(
+            x0 = x0 + width, y0 = y1[-1], 
+            x1 = x0 + width + (hz.depths.xfuzz / 2), y1 = y1[-1]
+          )
+          
+          # connector member (skipping top + bottom labels)
+          # diagonal when collision fix has been applied
+          #
+          # right-end of spike member ->
+          # padded, left-edge/center of annotation (after collision fix)
+          segments(
+            x0 = x0 + width + (hz.depths.xfuzz / 2), y0 = y1[-1],
+            x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = hzd.txt.y
+          ) 
+        }
         
         
         # top

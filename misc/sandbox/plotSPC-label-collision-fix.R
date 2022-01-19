@@ -1,5 +1,23 @@
 library(soilDB)
 
+## test single-horizon SPC
+x <- data.frame(
+  id = 'BOGUS',
+  top = 0,
+  bottom = 100,
+  name = 'NODATA'
+)
+
+# init
+depths(x) <- id ~ top + bottom
+hzdesgnname(x) <- 'name'
+x$distinctness <- NA
+
+plotSPC(x, fixLabelCollisions = TRUE, hz.depths = TRUE, hz.depths.offset = 0.1, cex.names = 2)
+
+
+
+
 x <- fetchOSD(c('ames', 'zook', 'clarksville', 'fullerton', 'inks', 'vleck', 'pardee', 'cecil', 'pierre'))
 
 x$hzd <- hzDistinctnessCodeToOffset(x$distinctness, codes = c('abrupt', 'clear', 'gradual', 'diffuse'))
@@ -20,7 +38,8 @@ plotSPC(x, hz.depths = TRUE, name.style = 'center-center', plot.depth.axis = FAL
 
 
 
-
+dev.off()
+par(mar = c(0, 0, 0, 0))
 plotSPC(x, hz.depths = TRUE, name.style = 'center-center', plot.depth.axis = FALSE, cex.names = 0.8, fixLabelCollisions = TRUE, hz.depths.offset = 0.05)
 
 
