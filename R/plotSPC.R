@@ -26,6 +26,10 @@
 #' @param label quoted column name of the (site-level) attribute used to identify profile sketches
 #'
 #' @param hz.depths logical, annotate horizon top depths to the right of each sketch (FALSE)
+#' 
+#' @param hz.depths.offset numeric, user coordinates for left-right adjustment for horizon depth annotation; reasonable values are usually within 0.01-0.05 (default: 0)
+#' 
+#' @param hz.depths.lines logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or `fixLabelCollisions = TRUE`
 #'
 #' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
 #'
@@ -73,7 +77,7 @@
 #'
 #' @param divide.hz logical, divide horizons with line segment? (TRUE), see details
 #'
-#' @param hz.distinctness.offset NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}
+#' @param hz.distinctness.offset NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}; consider setting `hz.depths.lines = TRUE` when used in conjunction with `hz.depths = TRUE`
 #' 
 #' @param hz.topography.offset NULL, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and code{\link{hzTopographyCodeToOffset}}
 #'
@@ -103,7 +107,7 @@
 #'
 #' @param default.color default horizon fill color used when \code{color} attribute is \code{NA}
 #' 
-#' @param fixLabelCollisions use `aqp::fixOverlap()` to attempt fixing labeling collisions, will slow plotting of large collections
+#' @param fixLabelCollisions use `aqp::fixOverlap()` to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`
 #'
 #' @param \dots other arguments passed into lower level plotting functions
 #'
@@ -150,43 +154,48 @@
 #'
 #' # promote to SoilProfileCollection
 #' depths(sp1) <- id ~ top + bottom
-#'
+#' 
+#' # init horizon designation 
+#' hzdesgnname(sp1) <- 'name'
+#' 
 #' # plot profiles
-#' plot(sp1, id.style='side')
+#' plotSPC(sp1, id.style='side')
 #'
 #' # title, note line argument:
 #' title('Sample Data 1', line=1, cex.main=0.75)
 #'
 #' # plot profiles without horizon-line divisions
-#' plot(sp1, divide.hz=FALSE)
+#' plotSPC(sp1, divide.hz=FALSE)
 #'
-#' # add dashed lines illustrating horizon boundary distinctness
+#' # diagonal lines encode horizon boundary distinctness
 #' sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
-#' plot(sp1, hz.distinctness.offset='hzD')
+#' plotSPC(sp1, hz.distinctness.offset = 'hzD', name.style = 'center-center')
 #'
 #' # plot horizon color according to some property
 #' data(sp4)
 #' depths(sp4) <- id ~ top + bottom
-#' plot(sp4, color='clay')
+#' hzdesgnname(sp4) <- 'name'
+#' plotSPC(sp4, color='clay')
 #'
 #' # another example
 #' data(sp2)
 #' depths(sp2) <- id ~ top + bottom
+#' hzdesgnname(sp2) <- 'name'
 #' site(sp2) <- ~ surface
 #'
 #' # label with site-level attribute: `surface`
-#' plot(sp2, label='surface', plot.order=order(sp2$surface))
+#' plotSPC(sp2, label='surface', plot.order=order(sp2$surface))
 #'
 #' # example using a categorical attribute
-#' plot(sp2, color = "plasticity")
+#' plotSPC(sp2, color = "plasticity")
 #'
 #' # plot two SPC objects in the same figure
 #' par(mar=c(1,1,1,1))
 #' # plot the first SPC object and
 #' # allocate space for the second SPC object
-#' plot(sp1, n=length(sp1) + length(sp2))
+#' plotSPC(sp1, n=length(sp1) + length(sp2))
 #' # plot the second SPC, starting from the first empty space
-#' plot(sp2, x.idx.offset=length(sp1), add=TRUE)
+#' plotSPC(sp2, x.idx.offset=length(sp1), add=TRUE)
 #'
 #'
 #' ##
@@ -198,6 +207,7 @@
 #' # shrink "long" horizon names
 #' plotSPC(
 #'   jacobs2000, 
+#'   name = 'name',
 #'   name.style = 'center-center', 
 #'   shrink = TRUE, 
 #'   cex.names = 0.8
@@ -206,6 +216,7 @@
 #' # shrink horizon names in "thin" horizons
 #' plotSPC(
 #'   jacobs2000, 
+#'   name = 'name',
 #'   name.style = 'center-center', 
 #'   shrink = TRUE, 
 #'   shrink.thin = 15,
@@ -228,10 +239,10 @@
 #'
 #' # note that there are enough colors for 15 classes (vs. previous limit of 10)
 #' # note that the legend is split into 2 rows when length(classes) > n.legend argument
-#' plot(sp3, color='fake.data', name='fake.data', cex.names=0.8)
+#' plotSPC(sp3, color='fake.data', name='fake.data', cex.names=0.8)
 #'
 #' # make enough room in a single legend row
-#' plot(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
+#' plotSPC(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
 #' 
 #' 
 #' ##
@@ -242,6 +253,7 @@
 #' # example data and local copy
 #' data("jacobs2000")
 #' x <- jacobs2000
+#' hzdesgnname(x) <- 'name'
 #' 
 #' # y-axis offsets, simulating a elevation along a hillslope sequence
 #' # same units as horizon depths in `x`
@@ -260,13 +272,16 @@
 #' # plotSPC(x, color = 'matrix_color', cex.names = 0.66, y.offset = 1:2)
 #' 
 #' # variable y-offset
-#' par(mar = c(0, 0, 2, 0))
+#' # fix overlapping horizon depth labels
+#' par(mar = c(0, 0, 1, 0))
 #' plotSPC(
 #'   x, 
 #'   y.offset = y.offset, 
 #'   color = 'matrix_color', 
-#'   cex.names = 0.66, 
+#'   cex.names = 0.75, 
 #'   hz.depths = TRUE, 
+#'   hz.depths.offset = 0.05,
+#'   fixLabelCollisions = TRUE,
 #'   name.style = 'center-center'
 #' )
 #' 
@@ -298,11 +313,13 @@
 plotSPC <- function(
   x,
   color = 'soil_color',
-  width = 0.25,
+  width = ifelse(length(x) < 2, 0.15, 0.25),
   name = hzdesgnname(x),
   name.style = 'right-center',
   label = idname(x),
   hz.depths = FALSE,
+  hz.depths.offset = 0,
+  hz.depths.lines = fixLabelCollisions,
   alt.label = NULL,
   alt.label.col = 'black',
   cex.names = 0.5,
@@ -940,10 +957,11 @@ plotSPC <- function(
       
       # extra space between profile sketch and left-justified label
       # seems to scale with cex.names
-      hz.depths.xfuzz <- strwidth('0', cex = hz.depths.cex) / 3
+      hz.depths.xfuzz <- strwidth('5', cex = hz.depths.cex) / 2
       
       # device coordinates: scaling / offset applied
-      hzd.txt.x <- x0 + width + hz.depths.xfuzz
+      # along with user adjustment
+      hzd.txt.x <- x0 + width + hz.depths.xfuzz + hz.depths.offset
       
       # top-horizon, top depth: vertical alignment is close to "top"
       hzd.txt <- this_profile_data[[tcol]][1]
@@ -994,7 +1012,9 @@ plotSPC <- function(
           # normalize
           .badness <- sum(abs(.badness)) / y0[nh]
           
+          # print(.badness)
           
+          ## TODO: this will error when n > length(x)
           # if not too "bad", keep suggested adjustments
           if(.badness < 0.2) {
             hzd.txt.y <- hzd.txt.y.fixed
@@ -1003,7 +1023,7 @@ plotSPC <- function(
             # print(.badness)
           }
           
-          # otherwise, ignore and hope for the best
+          # otherwise, keep original configuration
           
         }
         
@@ -1030,7 +1050,59 @@ plotSPC <- function(
         adj = c(0, 0)
       )
       
-    }
+      
+      ##############################
+      ## hz depth connector lines ##
+      ##############################
+      if(hz.depths.lines) {
+        
+        # horizontal spike (skipping top + bottom labels)
+        # right-edge, at depth -> padded, left-edge/center of annotation (no collision fix)
+        segments(
+          x0 = x0 + width, y0 = y1[-1], 
+          x1 = x0 + width + (hz.depths.xfuzz / 2), y1 = y1[-1]
+        )
+        
+        # connector member (skipping top + bottom labels)
+        # diagonal when collision fix has been applied
+        #
+        # right-end of spike member ->
+        # padded, left-edge/center of annotation (after collision fix)
+        segments(
+          x0 = x0 + width + (hz.depths.xfuzz / 2), y0 = y1[-1],
+          x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = hzd.txt.y
+        )
+        
+        
+        # top
+        segments(
+          x0 = x0[1] + width, y0 = y1[1], 
+          x1 = x0[1] + width + (hz.depths.xfuzz / 2), y1 = y1[1]
+        )
+        
+        segments(
+          x0 = x0[1] + width + (hz.depths.xfuzz / 2), y0 = y1[1],
+          x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = y1[1] - (strheight('0', cex = hz.depths.cex) / 4)
+        )
+        
+        # bottom
+        segments(
+          x0 = x0[1] + width, y0 = y0[nh], 
+          x1 = x0[1] + width + (hz.depths.xfuzz / 2), y1 = y0[nh]
+        )
+        
+        segments(
+          x0 = x0[1] + width + (hz.depths.xfuzz / 2), y0 = y0[nh],
+          x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = y0[nh] + (strheight('0', cex = hz.depths.cex) / 3)
+        )
+        
+      }
+      
+      
+    } # end horizon depth annotation
+    
+    
+    
     
     
     
