@@ -570,8 +570,6 @@ plotSPC <- function(
   }
   
   
-  ## TODO: consider using cex.names as the starting character scaling value
-  
   # calculate width of a single character on current plot device
   one.char.width <- strwidth('W')
   
@@ -973,6 +971,7 @@ plotSPC <- function(
         if(fixLabelCollisions) {
           # reasonable threshold for label collision detection
           y.thresh <- 1.25 * abs(strheight('0', cex = hz.depths.cex))
+          
           # print(y.thresh)
           # print(diff(y1))
           
@@ -982,11 +981,30 @@ plotSPC <- function(
             thresh = y.thresh, 
             min.x = y1[1], 
             max.x = y0[nh], 
-            adj = y.thresh * 1/3
+            adj = 1,
+            k = 20,
+            trace = FALSE
           ))
           
           # remove top + bottom horizon depths
-          hzd.txt.y <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
+          hzd.txt.y.fixed <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
+          
+          # how much shuffling was performed
+          .badness <- (hzd.txt.y - hzd.txt.y.fixed)
+          # normalize
+          .badness <- sum(abs(.badness)) / y0[nh]
+          
+          
+          # if not too "bad", keep suggested adjustments
+          if(.badness < 0.2) {
+            hzd.txt.y <- hzd.txt.y.fixed
+          } else {
+            ## TODO: consider a message or keeping track of which profiles
+            # print(.badness)
+          }
+          
+          # otherwise, ignore and hope for the best
+          
         }
         
         
