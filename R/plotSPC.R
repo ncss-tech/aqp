@@ -988,7 +988,7 @@ plotSPC <- function(
         ## collision detection / fix
         if(fixLabelCollisions) {
           # reasonable threshold for label collision detection
-          y.thresh <- 1.25 * abs(strheight('0', cex = hz.depths.cex))
+          y.thresh <- 1.25 * abs(strheight('0', cex = cex.names))
           
           # print(y.thresh)
           # print(diff(y1))
@@ -1024,7 +1024,6 @@ plotSPC <- function(
           }
           
           # otherwise, keep original configuration
-          
         }
         
         
@@ -1056,15 +1055,20 @@ plotSPC <- function(
       ##############################
       if(hz.depths.lines) {
         
-        ## TODO: abstract to function
-        
-        # middle horizons, if present
-        if(nh > 1) {
+        # .x0, .y0: staring coordinates of spike
+        # .x1, .y1: ending coordinates of spike + staring coordinates for diagonal member
+        # .xfuzz: horizontal offset for labels
+        # .txt.x: annotation x-coordinate
+        # .txt.y: annotation y-coordinate
+        .connectorLines <- function(.x0, .y0, .x1, .y1, .xfuzz, .txt.x, .txt.y) {
+          
           # horizontal spike (skipping top + bottom labels)
           # right-edge, at depth -> padded, left-edge/center of annotation (no collision fix)
           segments(
-            x0 = x0 + width, y0 = y1[-1], 
-            x1 = x0 + width + (hz.depths.xfuzz / 2), y1 = y1[-1]
+            x0 = .x0, 
+            y0 = .y0, 
+            x1 = .x1 + (.xfuzz / 2), 
+            y1 = .y1
           )
           
           # connector member (skipping top + bottom labels)
@@ -1073,36 +1077,54 @@ plotSPC <- function(
           # right-end of spike member ->
           # padded, left-edge/center of annotation (after collision fix)
           segments(
-            x0 = x0 + width + (hz.depths.xfuzz / 2), y0 = y1[-1],
-            x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = hzd.txt.y
+            x0 = .x0 + (.xfuzz / 2), 
+            y0 = .y1,
+            x1 = .txt.x - (.xfuzz / 3), 
+            y1 = .txt.y, 
           ) 
+          
         }
         
         
-        # top
-        segments(
-          x0 = x0[1] + width, y0 = y1[1], 
-          x1 = x0[1] + width + (hz.depths.xfuzz / 2), y1 = y1[1]
+        ## middle horizon labels, if present
+        if(nh > 1) {
+          
+          .connectorLines(
+            .x0 = x0 + width,
+            .y0 = y1[-1],
+            .x1 = x0 + width,
+            .y1 = y1[-1],
+            .xfuzz = hz.depths.xfuzz,
+            .txt.x = hzd.txt.x,
+            .txt.y = hzd.txt.y
+          )
+        }
+        
+        
+        ## top horizon label
+        .connectorLines(
+          .x0 = x0[1] + width,
+          .y0 = y1[1],
+          .x1 = x0[1] + width,
+          .y1 = y1[1],
+          .xfuzz = hz.depths.xfuzz,
+          .txt.x = hzd.txt.x,
+          .txt.y = y1[1] - (strheight('0', cex = hz.depths.cex) / 4)
         )
         
-        segments(
-          x0 = x0[1] + width + (hz.depths.xfuzz / 2), y0 = y1[1],
-          x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = y1[1] - (strheight('0', cex = hz.depths.cex) / 4)
+        
+        ## bottom horizon label
+        .connectorLines(
+          .x0 = x0[1] + width,
+          .y0 = y0[nh],
+          .x1 = x0[1] + width,
+          .y1 = y0[nh],
+          .xfuzz = hz.depths.xfuzz,
+          .txt.x = hzd.txt.x,
+          .txt.y = y0[nh] + (strheight('0', cex = hz.depths.cex) / 3)
         )
         
-        # bottom
-        segments(
-          x0 = x0[1] + width, y0 = y0[nh], 
-          x1 = x0[1] + width + (hz.depths.xfuzz / 2), y1 = y0[nh]
-        )
-        
-        segments(
-          x0 = x0[1] + width + (hz.depths.xfuzz / 2), y0 = y0[nh],
-          x1 = hzd.txt.x - (hz.depths.xfuzz / 3), y1 = y0[nh] + (strheight('0', cex = hz.depths.cex) / 3)
-        )
-        
-      }
-      
+      } # end depth annotation lines
       
     } # end horizon depth annotation
     
@@ -1141,7 +1163,7 @@ plotSPC <- function(
   ## depth axis ##
   ################
   
-  # suppress legend when there are multiple y.offsets
+  # suppress when there are multiple y.offsets
   if(length(unique(y.offset)) > 1) {
     plot.depth.axis <- FALSE 
   }

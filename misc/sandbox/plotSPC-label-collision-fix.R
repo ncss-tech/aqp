@@ -16,6 +16,23 @@ x$distinctness <- NA
 plotSPC(x, fixLabelCollisions = TRUE, hz.depths = TRUE, hz.depths.offset = 0.1, cex.names = 2)
 
 
+## thin horizon
+x <- data.frame(
+  id = 'Test',
+  top = c(0, 25, 30),
+  bottom = c(25, 30, 100),
+  name = c('A', 'B', 'C')
+)
+
+# init
+depths(x) <- id ~ top + bottom
+hzdesgnname(x) <- 'name'
+x$distinctness <- NA
+
+plotSPC(x, fixLabelCollisions = TRUE, hz.depths = TRUE, hz.depths.offset = 0.1, cex.names = 2)
+
+
+
 
 
 x <- fetchOSD(c('ames', 'zook', 'clarksville', 'fullerton', 'inks', 'vleck', 'pardee', 'cecil', 'pierre'))
