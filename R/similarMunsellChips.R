@@ -45,7 +45,8 @@
 #' }
 #'
 #' @importFrom farver compare_colour
-#'
+#' @keywords internal
+#' @noRd
 .makeEquivalentMunsellLUT <- function(threshold = 0.001) {
   munsell <- NULL
   load(system.file("data/munsell.rda", package = "aqp")[1])
