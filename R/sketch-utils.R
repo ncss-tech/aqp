@@ -25,7 +25,7 @@
 
     # there is at least 1 non-NA color to work with
 
-    # 1. numeric vector, rescale and apply color ramp
+    # 1. numeric vector, re-scale and apply color ramp
     if(is.numeric(h[[color]])) {
 
       # generate color ramp function
@@ -42,12 +42,19 @@
       h$.color <- NA
 
       # convert non-NA values into colors
-      h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue=255)
+      h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue = 255)
 
       # generate range / colors for legend
       pretty.vals <- pretty(h[[color]], n = n.legend)
+      
+      ## TODO: think about a smarter way to do this
+      ##       -> sometimes the colors used in the legend are misleading
+      
+      # constrain legend to min/max
+      # pretty.vals[1] <- min(h[[color]], na.rm = TRUE)
+      # pretty.vals[length(pretty.vals)] <- max(h[[color]], na.rm = TRUE)
 
-      # truncate to 3 signif vals and convert to character for correct interpretation of floating point values
+      # truncate to 3 significant digits and convert to character for correct interpretation of floating point values
       leg.pretty.vals <- as.character(signif(pretty.vals, 3))
 
       # special case: there are < 3 unique values -> convert to factor
