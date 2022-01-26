@@ -1,3 +1,4 @@
+library(aqp)
 library(soilDB)
 library(sharpshootR)
 library(igraph)
@@ -16,46 +17,45 @@ library(cluster)
 
 
 # get lab / morphologic data
-x <- fetchKSSL(series='pierre', returnMorphologicData = TRUE)
+x <- fetchKSSL(series='clarksville', returnMorphologicData = TRUE, simplifyColors = TRUE)
 
 # extract pedons into SoilProfileCollection
 s <- x$SPC
 
-# extract horizon data from SPC
-h <- horizons(s)
+s <- subsetHz(s, ! is.na(m_hue) & ! is.na(m_value) & ! is.na(m_chroma))
 
-# simplify color data: 1 row / horizon, from morphologic data tables
-x.colors <- simplifyColorData(x$morph$phcolor, id.var = 'labsampnum', wt='colorpct')
+s <- HzDepthLogicSubset(s)
 
-# merge color data into SPC
-h <- join(h, x.colors, by='labsampnum', type='left', match='first')
+s <- subApply(s, .fun = function(i) {nrow(i) > 1})
 
-# remove horizons that are missing moist colors
-h <- subset(h, h$m_hue != '' & ! is.na(h$m_hue) & ! is.na(h$m_value) & ! is.na(h$m_chroma))
+plotSPC(s[1:30, ])
+
+s <- s[1:20, ]
+
+s <- trunc(s, 0, 150)
+
 
 # re-assemble Munsell color notation for moist color
-h$color <- paste0(h$m_hue, ' ', h$m_value, '/', h$m_chroma)
-
-# pack horizon data back into SPC
-slot(h, 'horizons') <- h
-
-# https://github.com/thomasp85/farver
+horizons(s)$color <- sprintf("%s %s/%s", s$m_hue, s$m_value, s$m_chroma)
 
 cols <- parseMunsell(s[1, ]$color, return_triplets=TRUE)
 
-# is this sRGB?
-compare_colour(cols, from_space = 'rgb', white_from = "D65", method = 'cie2000')
+# sRGB
+# must be scaled to [0, 255]
+compare_colour(cols * 255, from_space = 'rgb', white_from = "D65", method = 'cie2000')
 
+
+## TODO: this requires > 1 horizon
 # perceptual color change with depth, normalized to hz mid-point to mid-point distance in cm
-colorDistanceByDepth <- function(i, cumulative=FALSE) {
-  cols <- parseMunsell(i$color, return_triplets=TRUE)
+colorDistanceByDepth <- function(i, cumulative = FALSE) {
+  cols <- parseMunsell(i$color, return_triplets = TRUE)
   hd <- horizonDepths(i)
   i.h <- horizons(i)
   md <- (i.h[[hd[1]]] + i.h[[hd[2]]]) / 2
   
   # pair-wise color distances
-  # is this sRGB?
-  cols.dist <- compare_colour(cols, from_space = 'rgb', method = 'cie2000')
+  # must be scaled to [0, 255]
+  cols.dist <- compare_colour(cols * 255, from_space = 'rgb', method = 'cie2000')
   
   ## TODO horizon boundary distinctness would make more sense
   # change with depth from midpoint to midpoint
@@ -83,20 +83,20 @@ colorDistanceByDepth <- function(i, cumulative=FALSE) {
 
 
 
-s$color.dist <- round(profileApply(s, colorDistanceByDepth) * 10000)
-s$cumulative.color.dist <- round(profileApply(s, colorDistanceByDepth, cumulative=TRUE) * 10000)
+s$color.dist <- round(profileApply(s, colorDistanceByDepth))
+s$cumulative.color.dist <- round(profileApply(s, colorDistanceByDepth, cumulative=TRUE))
 
 color.distances <- profileApply(s, colorDistanceByDepth, cumulative=TRUE, simplify = FALSE)
 
-max.color.distance <- sapply(color.distances, max) * 10000
+max.color.distance <- sapply(color.distances, max)
 new.order <- order(max.color.distance)
 
-par(mar=c(2,0,3,1), mfrow=c(2,1))
-plot(s, color='moist_soil_color', name='cumulative.color.dist', plot.order=new.order, print.id=FALSE)
+par(mar=c(2.5, 0, 3, 1), mfrow=c(2,1))
+plotSPC(s, color = 'moist_soil_color', name = 'color.dist', plot.order=new.order, print.id = FALSE, name.style = 'center-center', width = 0.35)
 axis(side=1, at=1:length(s), labels = round(max.color.distance[new.order]), cex.axis=0.8)
-title('Pierre Soil Sieres: CIE2000 Distance * 1000 / cm')
+title(bquote(Clarksville~Delta*E['00']/cm))
 
-plot(s, color='cumulative.color.dist', print.id=FALSE, plot.order=new.order, col.legend.cex=0.85, col.label='Cumulative CIE2000 Distance * 10000 / cm')
+plot(s, name = 'cumulative.color.dist', color='cumulative.color.dist', print.id=FALSE, plot.order=new.order, col.legend.cex=0.85, col.label = bquote(Cumulative~Delta*E['00']/cm), name.style = 'center-center', width = 0.35)
 axis(side=1, at=1:length(s), labels = round(max.color.distance[new.order]), cex.axis=0.8)
 
 
@@ -112,11 +112,13 @@ d <- daisy(pig[, -1])
 dd <- diana(d)
 
 
+dev.off()
+
 par(mar=c(0,1,3,1))
-plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2.5, scaling.factor = 0.4, y.offset = max(d) / 20, width=0.15, cex.names=0.45, color='moist_soil_color', print.id=FALSE, name='hzn_desgn')
-title('Holland Soil Series: `depthSlices` based color signature')
+plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2.5, scaling.factor = 0.4, y.offset = max(d) / 20, width=0.3, cex.names=0.45, color='moist_soil_color', print.id=FALSE, name='hzn_desgn', name.style = 'center-center')
+title('Clarksville Soil Series: `depthSlices` based color signature')
 
-plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2.5, scaling.factor = 0.4, y.offset = max(d) / 20, width=0.15, cex.names=0.45, color='color.dist', print.id=FALSE, name='hzn_desgn', col.legend.cex=0.85, col.label='CIE2000 Distance * 10000 / cm')
+plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2.5, scaling.factor = 0.4, y.offset = max(d) / 20, width=0.3, cex.names=0.45, color='color.dist', print.id=FALSE, name='hzn_desgn', name.style = 'center-center', col.legend.cex=0.85, col.label='CIE2000 Distance / cm')
 
-plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2.5, scaling.factor = 0.4, y.offset = max(d) / 20, width=0.15, cex.names=0.45, color='cumulative.color.dist', print.id=FALSE, name='hzn_desgn', col.legend.cex=0.85, col.label='Cumulative CIE2000 Distance * 10000 / cm')
+plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2.5, scaling.factor = 0.4, y.offset = max(d) / 20, width=0.3, cex.names=0.45, color='cumulative.color.dist', print.id=FALSE, name='hzn_desgn', name.style = 'center-center', col.legend.cex=0.85, col.label='Cumulative CIE2000 Distance / cm')
 
