@@ -1,26 +1,17 @@
 library(aqp)
 library(soilDB)
 
-
-osds <- fetchOSD(c('leon', 'musick', 'clarksville', 'sierra', 'pardee', 'amador', 'lucy', 'dylan', 'tristan', 'pierre', 'drummer', 'zook'))
+s <- c('leon', 'musick', 'clarksville', 'sierra', 'pardee', 'amador', 'lucy', 'dylan', 'tristan', 'pierre', 'drummer', 'zook')
+osds <- fetchOSD(s)
 
 # encode horizon boundarydistinctness via vertical offset
-osds$hd <- hzDistinctnessCodeToOffset(
-  osds$distinctness, 
-  codes=c('very abrupt', 'abrupt', 'clear', 'gradual', 'diffuse')
-  )
+osds$hd <- hzDistinctnessCodeToOffset(osds$distinctness)
 
 # encode horizon boundary topography via vertical offset
-osds$hzto <- hzTopographyCodeToOffset(
-  osds$topography, 
-  codes = c('smooth', 'wavy', 'irregular', 'broken')
-)
+osds$hzto <- hzTopographyCodeToOffset(osds$topography)
 
 # also encode horizon boundary topography las line type
-osds$hzto.lty <- hzTopographyCodeToLineType(
-  osds$topography,
-  codes = c('smooth', 'wavy', 'irregular', 'broken')
-)
+osds$hzto.lty <- hzTopographyCodeToLineType(osds$topography)
 
 site(osds)$code <- 'OSD'
 
@@ -30,6 +21,7 @@ osds$bnd.code <- sprintf(
   substr(osds$topography, 1, 1)
 )
 
+# remove missing (NA) labels
 osds$bnd.code <- gsub('NANA', '', osds$bnd.code)
 
 # ok
@@ -58,7 +50,7 @@ plotSPC(osds[, 1], width = 0.3, hz.distinctness.offset = 'hd', hz.topography.off
 
 
 # keep a single OSD for the demo
-x <- filter(osds, id == 'LEON')
+x <- subset(osds, id == 'LEON')
 
 # safely duplicate these data 6 times
 # --> new IDs generated, old IDs saved into .oldID
@@ -139,7 +131,7 @@ title('Horizon Boundary Distinctness', line = 0, col.main = 'white')
 
 ## combinations
 
-x <- filter(osds, id == 'DRUMMER')
+x <- subset(osds, id == 'DRUMMER')
 
 # full set
 g <- expand.grid(
