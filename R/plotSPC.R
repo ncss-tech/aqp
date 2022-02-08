@@ -446,27 +446,27 @@ plotSPC <- function(
   # padding along x-axis, prevents crowding
   # dynamic adjustment must also taking into account figure size
   # roughly 10% of length(x)
-  extra_x_space <- length(x) * 0.1
+  extra_x_space <- n * 0.1
   
   # multiplier (width * x_left_spac_mult) used to set left-side space along x-axis
   x_left_space_mult <- 2
   
   # add a little extra x-space when n <= 5
-  if(length(x) <= 5 & length(x) > 2) {
+  if(n <= 5 & n > 2) {
     extra_x_space <- extra_x_space + 0.25
     x_left_space_mult <- 2
     
   }
   
   # special cases
-  if(length(x) == 2) {
+  if(n == 2) {
     extra_x_space <- extra_x_space + 0.5
     x_left_space_mult <- 2.75
     
   }
   
   # special cases
-  if(length(x) == 1) {
+  if(n == 1) {
     extra_x_space <- extra_x_space + 0.5
     x_left_space_mult <- 3.5
   }
@@ -590,9 +590,11 @@ plotSPC <- function(
   # calculate width of a single character on current plot device
   one.char.width <- strwidth('W')
   
-  # TODO dynamically adjust `width` based on strwidth(longest.hz.name)
-  # TODO abstract single profile sketch code into a single function
-  # TODO skip sketch rendering when i=`n` outside of length(SPC) (depths are NA)
+  ## TODO dynamically adjust `width` based on strwidth(longest.hz.name)
+  ## TODO abstract single profile sketch code into a single function
+  ## TODO skip sketch rendering when i=`n` outside of length(SPC) (depths are NA)
+  
+  ## TODO only iterate over real profiles, this will require testing of plot.order and relativePos
   
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
@@ -1010,17 +1012,17 @@ plotSPC <- function(
           # how much shuffling was performed
           .badness <- (hzd.txt.y - hzd.txt.y.fixed)
           # normalize
-          .badness <- sum(abs(.badness)) / y0[nh]
+          .badness <- sum(abs(.badness), na.rm = TRUE) / y0[nh]
           
-          # print(.badness)
-          
-          ## TODO: this will error when n > length(x)
-          # if not too "bad", keep suggested adjustments
-          if(.badness < 0.2) {
-            hzd.txt.y <- hzd.txt.y.fixed
-          } else {
-            ## TODO: consider a message or keeping track of which profiles
-            # print(.badness)
+          # when n > length(x), we are iterating over non-profiles and .badness is NA
+          if(!is.na(.badness)) {
+            # if not too "bad", keep suggested adjustments
+            if(.badness < 0.2) {
+              hzd.txt.y <- hzd.txt.y.fixed
+            } else {
+              ## TODO: consider a message or keeping track of which profiles
+              # print(.badness)
+            }
           }
           
           # otherwise, keep original configuration
