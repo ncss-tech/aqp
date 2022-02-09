@@ -370,6 +370,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># y-axis offsets, simulating a elevation along a hillslope sequence</span></span>
 <span class="r-in"><span class="co"># same units as horizon depths in `x`</span></span>
+<span class="r-in"><span class="co"># same order as profiles in `x`</span></span>
 <span class="r-in"><span class="va">y.offset</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">10</span>, <span class="fl">22</span>, <span class="fl">65</span>, <span class="fl">35</span>, <span class="fl">15</span>, <span class="fl">12</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -405,13 +406,26 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># random y-axis offsets</span></span>
 <span class="r-in"><span class="va">yoff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># random gradient of x-positions</span></span>
 <span class="r-in"><span class="va">xoff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">plotSPC</span><span class="op">(</span><span class="va">x</span>, </span>
+<span class="r-in">        relative.pos <span class="op">=</span> <span class="va">xoff</span>, </span>
+<span class="r-in">        y.offset <span class="op">=</span> <span class="va">yoff</span>, </span>
+<span class="r-in">        color <span class="op">=</span> <span class="st">'matrix_color'</span>, </span>
+<span class="r-in">        cex.names <span class="op">=</span> <span class="fl">0.66</span>, </span>
+<span class="r-in">        hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span class="r-in">        name.style <span class="op">=</span> <span class="st">'center-center'</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-15.png" alt="" width="768" height="475"></span>
+<span class="r-in"></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># align / adjust relative x positions</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 37 iterations</span>
+<span class="r-in"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, thresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 14 iterations</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># y-offset is automatically re-ordered according to</span></span>
 <span class="r-in"><span class="co"># plot.order</span></span>
@@ -420,7 +434,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span class="fu">plotSPC</span><span class="op">(</span><span class="va">x</span>, </span>
 <span class="r-in">        plot.order <span class="op">=</span> <span class="va">pos</span><span class="op">$</span><span class="va">order</span>, </span>
 <span class="r-in">        relative.pos <span class="op">=</span> <span class="va">pos</span><span class="op">$</span><span class="va">relative.pos</span>, </span>
-<span class="r-in">        y.offset <span class="op">=</span> <span class="va">y.offset</span>, </span>
+<span class="r-in">        y.offset <span class="op">=</span> <span class="va">yoff</span>, </span>
 <span class="r-in">        color <span class="op">=</span> <span class="st">'matrix_color'</span>, </span>
 <span class="r-in">        cex.names <span class="op">=</span> <span class="fl">0.66</span>, </span>
 <span class="r-in">        hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span>
@@ -428,7 +442,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/box.html" class="external-link">box</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-15.png" alt="" width="768" height="475"></span>
+<span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-16.png" alt="" width="768" height="475"></span>
 </code></pre></div>
     </div>
   </div>
