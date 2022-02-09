@@ -257,6 +257,7 @@
 #' 
 #' # y-axis offsets, simulating a elevation along a hillslope sequence
 #' # same units as horizon depths in `x`
+#' # same order as profiles in `x`
 #' y.offset <- c(-5, -10, 22, 65, 35, 15, 12)
 #' 
 #' par(mar = c(0, 0, 2, 2))
@@ -289,12 +290,24 @@
 #' 
 #' # random y-axis offsets
 #' yoff <- runif(n = length(x), min = 1, max = 100)
+#' 
 #' # random gradient of x-positions
 #' xoff <- runif(n = length(x), min = 1, max = length(x))
 #' 
+#' 
+#' plotSPC(x, 
+#'         relative.pos = xoff, 
+#'         y.offset = yoff, 
+#'         color = 'matrix_color', 
+#'         cex.names = 0.66, 
+#'         hz.depths = TRUE, 
+#'         name.style = 'center-center'
+#' )
+#' 
+#' 
 #' # align / adjust relative x positions
 #' set.seed(111)
-#' pos <- alignTransect(xoff, x.min = 1, x.max = length(x))
+#' pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.5)
 #' 
 #' # y-offset is automatically re-ordered according to
 #' # plot.order
@@ -303,7 +316,7 @@
 #' plotSPC(x, 
 #'         plot.order = pos$order, 
 #'         relative.pos = pos$relative.pos, 
-#'         y.offset = y.offset, 
+#'         y.offset = yoff, 
 #'         color = 'matrix_color', 
 #'         cex.names = 0.66, 
 #'         hz.depths = TRUE, 
