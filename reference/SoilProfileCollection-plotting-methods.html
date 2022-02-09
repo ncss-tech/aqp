@@ -156,7 +156,7 @@
 <dt>scaling.factor</dt>
 <dd><p>vertical scaling of profile depths, useful for adding profiles to an existing figure</p></dd>
 <dt>y.offset</dt>
-<dd><p>numeric vector of vertical offset for top of profiles in depth units of <code>x</code>, can either be a single numeric value or vector of length = <code>length(x)</code></p></dd>
+<dd><p>numeric vector of vertical offset for top of profiles in depth units of <code>x</code>, can either be a single numeric value or vector of length = <code>length(x)</code>. A vector of y-offsets will be automatically re-ordered according to <code>plot.order</code>.</p></dd>
 <dt>x.idx.offset</dt>
 <dd><p>integer specifying horizontal offset from 0 (left-hand edge)</p></dd>
 <dt>n</dt>
@@ -411,7 +411,10 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span class="co"># align / adjust relative x positions</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 179 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 37 iterations</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># y-offset is automatically re-ordered according to</span></span>
+<span class="r-in"><span class="co"># plot.order</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">plotSPC</span><span class="op">(</span><span class="va">x</span>, </span>
