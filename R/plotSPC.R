@@ -55,7 +55,7 @@
 #'
 #' @param scaling.factor vertical scaling of profile depths, useful for adding profiles to an existing figure
 #'
-#' @param y.offset numeric vector of vertical offset for top of profiles in depth units of `x`, can either be a single numeric value or vector of length = `length(x)`
+#' @param y.offset numeric vector of vertical offset for top of profiles in depth units of `x`, can either be a single numeric value or vector of length = `length(x)`. A vector of y-offsets will be automatically re-ordered according to `plot.order`.
 #'
 #' @param x.idx.offset integer specifying horizontal offset from 0 (left-hand edge)
 #'
@@ -296,6 +296,9 @@
 #' set.seed(111)
 #' pos <- alignTransect(xoff, x.min = 1, x.max = length(x))
 #' 
+#' # y-offset is automatically re-ordered according to
+#' # plot.order
+#' 
 #' par(mar = c(0.5, 0.5, 0.5, 0.5))
 #' plotSPC(x, 
 #'         plot.order = pos$order, 
@@ -482,6 +485,9 @@ plotSPC <- function(
   
   # get profile IDs
   pIDs <- profile_id(x)
+  
+  # re-order y-offset according to plot.order
+  y.offset <- y.offset[plot.order]
   
   # save arguments to aqp env
   lsp <- list('width'=width,

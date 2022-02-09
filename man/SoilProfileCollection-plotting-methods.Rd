@@ -108,7 +108,7 @@ plot(x, y, ...)
 
 \item{scaling.factor}{vertical scaling of profile depths, useful for adding profiles to an existing figure}
 
-\item{y.offset}{numeric vector of vertical offset for top of profiles in depth units of \code{x}, can either be a single numeric value or vector of length = \code{length(x)}}
+\item{y.offset}{numeric vector of vertical offset for top of profiles in depth units of \code{x}, can either be a single numeric value or vector of length = \code{length(x)}. A vector of y-offsets will be automatically re-ordered according to \code{plot.order}.}
 
 \item{x.idx.offset}{integer specifying horizontal offset from 0 (left-hand edge)}
 
@@ -342,6 +342,9 @@ xoff <- runif(n = length(x), min = 1, max = length(x))
 # align / adjust relative x positions
 set.seed(111)
 pos <- alignTransect(xoff, x.min = 1, x.max = length(x))
+
+# y-offset is automatically re-ordered according to
+# plot.order
 
 par(mar = c(0.5, 0.5, 0.5, 0.5))
 plotSPC(x, 

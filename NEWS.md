@@ -1,7 +1,8 @@
-# aqp 1.41 (2022-01-19)
+# aqp 1.41 (2022-02-09)
  * `plotSPC()` gains new arguments for controlling horizon depth labels
  * `plotSPC()` gains horizon depth annotation collision fixes (https://github.com/ncss-tech/aqp/issues/240)
  * `plotSPC()` minor bugfix for cases when `n != length(x)`
+ * `plotSPC()` important change! `y.offset` is now automatically re-ordered by `plot.order`
 
 # aqp 1.40 (2022-01-04)
  * CRAN release
