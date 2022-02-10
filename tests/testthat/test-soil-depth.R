@@ -98,6 +98,10 @@ test_that("depthOf - no match", {
   expect_equal(depthOf(d[1,], "X"), NA_real_)
   expect_equal(depthOf(d[2,], "Cr|R|Cd", no.contact.depth = 50), NA_real_)
 
+  expect_true(inherits(depthOf(d, "X"), 'data.frame'))
+  d$name[1] <- "X"
+  expect_true(inherits(maxDepthOf(d, "X"), 'data.frame'))
+  
   d2 <- d
   d2$name <- NULL
   expect_error(depthOf(d2[1,], "A|B|C"))

@@ -188,12 +188,18 @@ depthOf <- function(p,
  
   if (inherits(res, 'data.frame')) {
   # otherwise, return the FUN value)) {
+    naldx <- logical(0)
+    if (all(is.na(res[[depthcol]]))) {
+      idx <- 1:nrow(res)
+    } else {
+      # handle warnings about e.g. no non-missing arguments to FUN
+      idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == suppressWarnings(FUN(.SD[[depthcol]], na.rm = na.rm))],
+                                            by = id, .SDcols = depthcol]$V1 
+      naldx <- is.na(idx)
+      idx <- idx[!naldx]
+    }
     
-    # handle warnings about e.g. no non-missing arguments to FUN
-    idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == suppressWarnings(FUN(.SD[[depthcol]], na.rm = na.rm))],
-                                          by = list(res[[id]]), .SDcols = depthcol]$V1
-    
-    res2 <- res[idx, c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
+    res2 <- res[c(which(naldx), idx), c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
     
   } else {
     res2 <- suppressWarnings(FUN(res, na.rm = na.rm))
@@ -215,7 +221,7 @@ maxDepthOf <- function(p,
                        no.contact.depth = NULL,
                        no.contact.assigned = NA,
                        na.rm = TRUE) {
-    .funDepthOf(
+   .funDepthOf(
       p = p,
       pattern = pattern,
       FUN = max,
