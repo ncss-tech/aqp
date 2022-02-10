@@ -100,7 +100,7 @@ test_that("depthOf - no match", {
 
   expect_true(inherits(depthOf(d, "X"), 'data.frame'))
   d$name[1] <- "X"
-  expect_true(inherits(maxDepthOf(d, "X"), 'data.frame'))
+  expect_equal(maxDepthOf(d, "X")$top, c(0, NA, NA, NA))
   
   d2 <- d
   d2$name <- NULL

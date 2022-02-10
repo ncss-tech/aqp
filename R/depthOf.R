@@ -199,7 +199,8 @@ depthOf <- function(p,
       idx <- idx[!naldx]
     }
     
-    res2 <- res[c(which(naldx), idx), c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
+    idx2 <- sort(c(which(naldx), idx))
+    res2 <- res[idx2, c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
     
   } else {
     res2 <- suppressWarnings(FUN(res, na.rm = na.rm))
