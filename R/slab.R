@@ -313,7 +313,7 @@
 
 	# optionally account for extra arguments
 	else {
-		the.args <- c(list(formula=aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun), extra.args)
+		the.args <- c(list(aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun), extra.args)
 		d.slabbed <- do.call(what='aggregate', args=the.args)
 	}
 
