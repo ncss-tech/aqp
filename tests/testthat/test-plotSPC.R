@@ -139,6 +139,30 @@ test_that("plotSPC: re-ordering via relative spacing", {
   expect_equal(lsp$x0, x.pos)
 })
 
+
+test_that("plotSPC: y-offset reordered by plot.order", {
+
+  data("jacobs2000")
+  x <- jacobs2000
+  hzdesgnname(x) <- 'name'
+  
+  # y-offset + reverse order
+  lsp <- explainPlotSPC(x, y.offset = (1:7) * 10, plot.order = 7:1)
+  
+  # check that y-offset is re-ordered
+  expect_true(
+    all(lsp$y.offset == rev((1:7) * 10))
+  )
+  
+  # check IDs are reordered
+  expect_equal(rev(profile_id(x)), lsp$pIDs)
+  
+})
+
+
+
+
+
 test_that("addBracket works", {
 
   expect_silent(addBracket(data.frame(id = profile_id(sp1), label="bar", top = 0, bottom = 25)))
