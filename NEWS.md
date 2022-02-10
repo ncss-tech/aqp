@@ -4,7 +4,8 @@
  * `plotSPC()` minor bugfix for cases when `n != length(x)`
  * `plotSPC()` important change! `y.offset` is now automatically re-ordered by `plot.order`
  * bugfix for R 4.2, related to named arguments passed to `base::aggregate` (thanks AGB)
-
+ * `depthOf()` and related functions: better handling of `NA` results from `FUN`
+ 
 # aqp 1.40 (2022-01-04)
  * CRAN release
  * fixed small bug in `panel.depth_function()` that affected plotting of grouped data, created by `slab()`

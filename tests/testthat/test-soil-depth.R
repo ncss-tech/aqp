@@ -98,9 +98,22 @@ test_that("depthOf - no match", {
   expect_equal(depthOf(d[1,], "X"), NA_real_)
   expect_equal(depthOf(d[2,], "Cr|R|Cd", no.contact.depth = 50), NA_real_)
 
+  # multiple SPC return data.frame 
   expect_true(inherits(depthOf(d, "X"), 'data.frame'))
+  
+  # one match -- other pedons no match
   d$name[1] <- "X"
-  expect_equal(maxDepthOf(d, "X")$top, c(0, NA, NA, NA))
+  expect_equal(maxDepthOf(d, "X")$top, c(0, NA_real_, NA_real_, NA_real_))
+  
+  # two matches, more than one NA depth
+  d$name[2] <- "X"
+  d$top[1:2] <- NA
+  
+  # first profile has two matches; all NA
+  expect_equal(depthOf(d, "X")$top, c(NA_real_, NA_real_, NA_real_, NA_real_, NA_real_))
+  
+  # using functional (1 value per profile)
+  expect_equal(maxDepthOf(d, "X")$top, c(NA_real_, NA_real_, NA_real_, NA_real_))
   
   d2 <- d
   d2$name <- NULL

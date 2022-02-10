@@ -132,7 +132,7 @@ depthOf <- function(p,
   }
 
   # if there are non-NA results, return all of them
-  if (length(res) > 0 && any(!is.na(res))) {
+  if (length(res) > 0) {
     
     # backwards compatible: simplify=TRUE and SPC length is 1
     if (length(p) == 1 && simplify) {
@@ -190,7 +190,7 @@ depthOf <- function(p,
   # otherwise, return the FUN value)) {
     naldx <- logical(0)
     if (all(is.na(res[[depthcol]]))) {
-      idx <- 1:nrow(res)
+      idx <- data.table::as.data.table(res)[, .I[1], by = id]$V1 
     } else {
       # handle warnings about e.g. no non-missing arguments to FUN
       idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == suppressWarnings(FUN(.SD[[depthcol]], na.rm = na.rm))],
