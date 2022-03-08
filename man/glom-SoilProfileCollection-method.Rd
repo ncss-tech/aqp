@@ -13,6 +13,7 @@
   df = FALSE,
   truncate = FALSE,
   invert = FALSE,
+  fill = FALSE,
   modality = "all"
 )
 }
@@ -30,6 +31,8 @@
 \item{truncate}{truncate horizon top and bottom depths to \code{z1} and \code{z2}? default: \code{FALSE}}
 
 \item{invert}{get horizons \emph{outside} the interval \verb{[z1,z2]}? default: \code{FALSE}}
+
+\item{fill}{keep sites and preserve order for profiles that do not have horizons in interval by filling with a single horizon with \code{NA} top and bottom depth. default: \code{FALSE}}
 
 \item{modality}{default: \code{"all"} return all horizons; or \code{modality = "thickest"}) to return the \emph{thickest} horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.}
 }

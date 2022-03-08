@@ -5,6 +5,7 @@
  * `plotSPC()` important change! `y.offset` is now automatically re-ordered by `plot.order`
  * bugfix for R 4.2, related to named arguments passed to `base::aggregate` (thanks AGB)
  * `depthOf()` and related functions: better handling of `NA` results from `FUN`
+ * `getArgillicBounds()`, `getCambicBounds()`, `mollic.thickness.requirement()`, `getSurfaceHorizonDepth()` and related functions have been optimized and now work on SoilProfileCollection objects with length > 1
  
 # aqp 1.40 (2022-01-04)
  * CRAN release

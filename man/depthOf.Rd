@@ -17,6 +17,28 @@ depthOf(
   na.rm = TRUE,
   simplify = TRUE
 )
+
+maxDepthOf(
+  p,
+  pattern,
+  top = TRUE,
+  hzdesgn = guessHzDesgnName(p),
+  no.contact.depth = NULL,
+  no.contact.assigned = NA,
+  na.rm = TRUE,
+  simplify = TRUE
+)
+
+minDepthOf(
+  p,
+  pattern,
+  top = TRUE,
+  hzdesgn = guessHzDesgnName(p),
+  no.contact.depth = NULL,
+  no.contact.assigned = NA,
+  na.rm = TRUE,
+  simplify = TRUE
+)
 }
 \arguments{
 \item{p}{a SoilProfileCollection}

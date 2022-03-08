@@ -37,8 +37,8 @@ hztexclname(spc2) <- 'texcl'
 test_that("mollic.thickness.requirement", {
   expect_equal(mollic.thickness.requirement(spc, clay.attr = 'prop'), 18)
   expect_equal(mollic.thickness.requirement(spc, clay.attr = 'prop', truncate = FALSE), 49 / 3)
-  expect_equal(mollic.thickness.requirement(trunc(spc, 0, 9),  clay.attr = 'prop'), 10)
-  
+  expect_equal(mollic.thickness.requirement(trunc(spc, 0, 9), clay.attr = 'prop'), 10)
+
   # this is a controversial/undefined case:
   # 
   #  the Bk is identified as a cambic below an argillic 

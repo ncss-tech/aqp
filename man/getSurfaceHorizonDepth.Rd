@@ -12,6 +12,20 @@ getSurfaceHorizonDepth(
   hzdesgn = guessHzDesgnName(p),
   simplify = TRUE
 )
+
+getMineralSoilSurfaceDepth(
+  p,
+  hzdesgn = guessHzDesgnName(p),
+  pattern = "O",
+  simplify = TRUE
+)
+
+getPlowLayerDepth(
+  p,
+  hzdesgn = guessHzDesgnName(p),
+  pattern = "^Ap[^b]*",
+  simplify = TRUE
+)
 }
 \arguments{
 \item{p}{a SoilProfileCollection}

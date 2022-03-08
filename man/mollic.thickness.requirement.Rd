@@ -6,6 +6,7 @@
 \usage{
 mollic.thickness.requirement(
   p,
+  hzdesgn = guessHzDesgnName(p),
   texcl.attr = guessHzTexClName(p),
   clay.attr = guessHzAttrName(p, "clay", c("total", "_r")),
   truncate = TRUE
@@ -13,6 +14,8 @@ mollic.thickness.requirement(
 }
 \arguments{
 \item{p}{A single-profile SoilProfileCollection.}
+
+\item{hzdesgn}{Column in horizon table containing designations. Default: \code{guessHzDesgnName(p)}}
 
 \item{texcl.attr}{Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}}
 

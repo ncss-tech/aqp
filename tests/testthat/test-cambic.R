@@ -23,7 +23,7 @@ test_that("getCambicBounds - basic functionality", {
   expect_equal(as.numeric(dfbound[,c("cambic_top","cambic_bottom")]), c(32,49))
 
   # exclude by entry of non-cambic bounds
-  expect_equal(nrow(getCambicBounds(spc, argi_bounds = c(32,49))), 0)
+  expect_true(is.na(getCambicBounds(spc, argi_bounds = c(32,49))$cambic_index))
 
   # empty spc input
   expect_error(getCambicBounds(spc[0,]))
@@ -33,13 +33,13 @@ test_that("getCambicBounds - special cases", {
   spc2 <- spc
   spc2$texcl <- "S" # all sandy textures
   dfbound <- getCambicBounds(spc2)
-  expect_equal(nrow(dfbound), 0)
+  expect_true(is.na(dfbound$cambic_index))
 
   spc2 <- spc
   spc2$hzname <- c("A","Bt","BE","Bhs","Bt'")
   spc2$clay <- c(11,18,16,17,22)
   dfbound <- getCambicBounds(spc2)
-  expect_equal(nrow(dfbound), 0)
+  expect_true(is.na(dfbound$cambic_index))
 })
 
 test_that("getArgillicBounds - error conditions", {

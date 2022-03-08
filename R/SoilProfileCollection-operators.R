@@ -75,7 +75,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                              can.cast <- is.numeric(i)
                              if (can.cast) {
-                               if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5)) {
+                               if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5, na.rm = TRUE)) {
                                  i <- as.integer(i)
                                } else {
                                  stop("Numeric site index does not contain whole numbers.")

@@ -14,6 +14,8 @@
 #' @param lower.grad.pattern this is a pattern for adjusting the bottom depth of the argillic horizon upwards from the bottom depth of the soil. The absence of illuviation is used as a final control on horizon pattern matching.
 #' @param sandy.texture.pattern this is a pattern for matching sandy textural classes: `-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$`
 #' @param verbose Print out information about 't' subscripts, sandy textures, plow layers and lower gradational horizons?
+#' @param vertical.distance Vertical distance in which clay increase must be met. Default `30` cm
+#' @param simplify Return a length 2 vector with upper and lower boundary when `p` has length 1? Default `TRUE`.
 #'
 #' @description \code{getArgillicBounds} estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object (`p`).
 #'
@@ -31,7 +33,7 @@
 #'
 #' @author Andrew G. Brown
 #'
-#' @return Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound"
+#' @return Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound". If `p` has more than one profile or if `simplify = FALSE` the result is a data.frame containing profile ID, upper and lower boundary columns.
 #'
 #' @export
 #'
@@ -53,13 +55,11 @@ getArgillicBounds <- function(p,
                               bottom.pattern = "Cr|R|Cd",
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
                               sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
+                              vertical.distance = 30,
+                              simplify = TRUE,
                               verbose = FALSE) {
-
-  if (length(p) != 1)
-   stop("`p` must be a SoilProfileCollection containing one profile", call.=FALSE)
-
   hz <- horizons(p)
-  depthcol <- horizonDepths(p)
+  hzd <- horizonDepths(p)
 
   # ease removal of attribute name arguments -- deprecate them later
   # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
@@ -82,160 +82,81 @@ getArgillicBounds <- function(p,
   }
 
   # get upper bound...
-  mss <- getMineralSoilSurfaceDepth(p, hzdesgn = hzdesgn)
-  pld <- getPlowLayerDepth(p, hzdesgn = hzdesgn)
+  mss <- getMineralSoilSurfaceDepth(p, hzdesgn = hzdesgn, simplify = FALSE)
+  pld <- getPlowLayerDepth(p, hzdesgn = hzdesgn, simplify = FALSE)
 
   # estimate the thickness of the soil profile
   # (you will need to specify alternate pattern if Cr|R|Cd
   # doesn't match your contacts)
-  soil.depth <- estimateSoilDepth(p, name = hzdesgn,
-                                  p = bottom.pattern)
+  soil.depth <- minDepthOf(p, pattern = bottom.pattern, hzdesgn = hzdesgn, simplify = FALSE)
 
   # find all horizons with t subscripts; some old/converted horizons have all capital letters
   has_t <- grepl(as.character(hz[[hzdesgn]]), pattern = "[Tt]")
-
+  
+  # clay attribute and clay thresholds
+  ivar <- hz[[clay.attr]]
+  thresh <- crit.clay.argillic(ivar) # threshold.fun()
+  
   # in lieu of plow layer and LD, the clay increase depth determines upper bound
-  upper.bound <- argillic.clay.increase.depth(p, clay.attr)
-  lower.bound <- -Inf
-
+  # upper.bound <- argillic.clay.increase.depth(p, clay.attr)
+  .N <- NULL; .SD <- NULL; increase.var <- NULL; threshold.vector <- NULL; vdist <- NULL; middepth <- NULL; .hzID <- NULL
+  dt <- data.table::data.table(
+    id = hz[[idname(p)]],
+    middepth = hz[[hzd[1]]] + (hz[[hzd[2]]] - hz[[hzd[1]]]) / 2, # TODO: evaluate midpoint
+    increase.var = ivar,
+    threshold.vector = thresh,
+    .hzID = 1:nrow(hz)
+  )
+  
+  .dmax <- function(x, n) {
+    res <- c(0, diff(c(0, x[-n])))
+    if(length(res) == 0) 
+      return(NA_real_)
+    res
+  }
+  
+  dt$vdist <- dt[, list(vdist = .dmax(middepth, .N)), by = "id"]$vdist
+  increase.met <- dt[, list(increase.met = .hzID[which(increase.var[2:.N] > threshold.vector[1:(.N - 1)] &
+                                                         vdist[2:.N] <= vertical.distance)[1]]), 
+                     by = "id"]$increase.met
+  upper.bound <- hz[increase.met + 1, ][[hzd[1]]]
+  lower.bound <- rep(NA, length(upper.bound))
+  
   # handle case where Ap disturbs upper bound of argillic
+  shallowest_t <- minDepthOf(p, pattern = "[Tt]", hzdesgn = hzdesgn, simplify = FALSE)
+  idx2 <- which(pld[[hzd[2]]] == shallowest_t[[hzd[1]]] & pld[[hzd[2]]] != 0)
+  upper.bound[idx2] <- shallowest_t[[hzd[1]]][idx2]
+  
   # or a lithologic discontinuity overrides the clay increase req
-  #  eliminating evidence of accumulation
-  if (is.na(upper.bound)) {
-    shallowest_t <- minDepthOf(p, pattern = "[Tt]", hzdesgn = hzdesgn)
-    depth_ld <- depthOf(p, pattern = "^[2-9].*[Tt]", hzdesgn = hzdesgn)
-    if (!is.na(shallowest_t)) {
-      if (pld == shallowest_t)
-        upper.bound <- shallowest_t
+  depth_ld <- depthOf(p, pattern = "^[2-9].*[Tt]", hzdesgn = hzdesgn, simplify = FALSE)
+  idx3 <- which(shallowest_t[[hzd[1]]] %in% depth_ld[[hzd[1]]])
+  upper.bound[idx3] <- shallowest_t[[hzd[1]]][idx3]
 
-      if (!all(is.na(depth_ld)))
-        if (any(shallowest_t %in% depth_ld))
-          upper.bound <- shallowest_t
-    }
+  deepest_t <- maxDepthOf(p, pattern = "[Tt]", hzdesgn = hzdesgn, top = FALSE, simplify = FALSE)
+  c_idx <- minDepthOf(p, pattern = lower.grad.pattern, hzdesgn = hzdesgn, simplify = FALSE)
+  
+  idx4 <- which(!is.na(upper.bound))
+  lower.bound[idx4] <- pmin(deepest_t[[hzd[2]]], c_idx[[hzd[1]]], na.rm = TRUE)[idx4]
+  
+  # calculate baseline minimum rhickness
+  min.thickness <- pmax(7.5, soil.depth[[hzd[1]]] / 10)
+  textures <- data.table::data.table(glom(p, upper.bound, lower.bound, df = TRUE))
+  
+  # sandy textures require 15cm minimum thickness
+  idx5 <- which(textures[, list(is_sandy = all(grepl(sandy.texture.pattern, .SD[[texcl.attr]]))),
+                   by = eval(idname(p))]$is_sandy)
+  min.thickness[idx5] <- 15
+  
+  idx6 <- which((lower.bound - upper.bound ) < min.thickness)
+  upper.bound[idx6] <- NA
+  lower.bound[idx6] <- NA
+  
+  if (length(p) == 1 && simplify) {
+    return(c(ubound = upper.bound, lbound = lower.bound))
   }
-
-  # if upper.bound is non-NA, we might have argillic, because clay increase is met at some depth
-  if (!is.na(upper.bound)) {
-
-    ########
-    # TODO: allow evidence of illuviation from lab data fine clay ratios etc? how?
-    #
-    # TODO: if `require_t` is set to `FALSE`... or in a future getKandicBounds()...
-    #       how do you detect the bottom of a argillic or kandic horizon (which need not have clay films)
-    #          in e.g. saprolite ?
-    #       could you look for C in master horizon designation for e.g. rock structure / parent material?
-    #       in lieu of checking for t and a cemented bedrock contact... is that how lower.bound should be determined?
-    ########
-    if (sum(has_t) | !require_t) {
-      # get index of last horizon with t
-      idx.last <- rev(which(has_t))[1]
-
-      ## Partial fix for TODO #2? seems reasnable for the require_t=FALSE lower.bound case
-      # take _very_ last horizon depth first (will be truncated to contact depth if needed)
-      depth.last <- as.numeric(.data.frame.j(hz[nrow(hz),], depthcol[2], aqp_df_class(p)))
-
-      # take the top depth of any B or C horizon  without t subscript above "depth.last"
-      c.idx <- which(grepl(hz[[hzdesgn]], pattern = lower.grad.pattern))
-      if (length(c.idx)) {
-        c.horizon <- as.numeric(.data.frame.j(hz[c.idx[1], ], depthcol[1], aqp_df_class(p)))
-
-        # if the _shallowest C horizon_ top depth is above the _last horizon_ bottom depth (could be top depth of same hz)
-        if (c.horizon < depth.last)  {
-          # use the top depth of the first C horizon that matched the pattern
-          if (verbose)
-            message(paste0("Found ",paste0(hz[[hzdesgn]][c.idx], collapse = ","),
-                         " below argillic, adjusting lower bound (",
-                         idname(p),": ", profile_id(p),")"))
-          # plot(p)
-          # print(c.idx)
-          depth.last <- c.horizon
-        }
-      }
-
-      # get the bottom depth of the last horizon with a t (this could be same as c.horizon above)
-      if (require_t)
-        depth.last <- as.numeric(.data.frame.j(hz[idx.last,],
-                                               depthcol[2],
-                                               aqp_df_class(p)))
-
-      # in rare cases, the bottom depth of the bedrock/contact is not populated
-      # step back until we find one that is not NA
-      idx.last.i <- idx.last
-      while (is.na(depth.last) & idx.last.i >= 0) {
-        depth.last <- as.numeric(.data.frame.j(hz[idx.last.i,],
-                                               depthcol[2],
-                                               aqp_df_class(p)))
-        idx.last.i <- idx.last.i - 1
-      }
-
-      # if the last horizon with a t is below the contact (Crt or Rt) or some other weird reason
-      if (soil.depth < depth.last) {
-        # return the soil depth to contact
-        lower.bound <- soil.depth
-
-      } else {
-        #otherwise, return the bottom depth of the last horizon with a t
-        lower.bound <- depth.last
-      }
-    } else {
-      if (verbose)
-        message(paste0("Profile (",profile_id(p),") has clay increase with no evidence of illuviation (t)."))
-      lower.bound <- NA
-      upper.bound <- NA
-    }
-  } else {
-
-    # if the upper bound is NA, return NA for the lower bound
-    lower.bound <- NA
-  }
-
-  if (!is.finite(lower.bound))
-    lower.bound <- NA
-
-  if (is.na(upper.bound))
-    return(c(ubound = NA, lbound = NA))
-
-  bdepthspc <- glom(p, mss, upper.bound, df = TRUE)
-
-  # if there are no overlying horizons, return NA
-  if (is.null(bdepthspc) | all(is.na(bdepthspc))) {
-    if (verbose)
-      message(paste0("Profile (",profile_id(p),
-                     ") has no horizons overlying a [possible] argillic."))
-    return(c(ubound = NA, lbound = NA))
-  }
-
-  bdepths <- bdepthspc[[depthcol[2]]]
-  if (all(!is.na(c(upper.bound, lower.bound)))) {
-
-    # if argi bounds are found check that minimum thickness requirements are met
-    min.thickness <- max(7.5, max(bdepths, na.rm = TRUE) / 10)
-
-    textures <- glom(p, upper.bound, lower.bound, df = TRUE)[[texcl.attr]]
-    is_sandy <- all(grepl(sandy.texture.pattern, textures, ignore.case = TRUE))
-
-    if (is_sandy) {
-      min.thickness <- 15
-    }
-
-    if (lower.bound - upper.bound < min.thickness) {
-      if (verbose)
-        message(paste0("Profile (",profile_id(p),
-                     ") does not meet thickness requirement."))
-      return(c(ubound = NA, lbound = NA))
-    }
-  }
-
-  if (!is.na(upper.bound)) {
-    # it is possible that a subhorizon of the Ap horizon meets the clay increase
-    if (pld > upper.bound) {
-      upper.bound <- pld
-      if (verbose)
-        message(paste0("Profile (",profile_id(p),
-                       ") meets clay increase within plowed layer."))
-    }
-  }
-  return(c(ubound = upper.bound, lbound = lower.bound))
+  res <- data.frame(id = profile_id(p), ubound = upper.bound, lbound = lower.bound)
+  colnames(res)[1] <- idname(p)
+  .as.data.frame.aqp(res, aqp_df_class(p))
 }
 #' Determines threshold (minimum) clay content for argillic upper bound
 #'

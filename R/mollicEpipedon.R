@@ -3,6 +3,7 @@
 #' @description Utilize horizon depths, designations and textures in a profile to estimate the thickness requirement for the Mollic or Umbric epipedon, per criterion 6 in the U.S. Keys to Soil Taxonomy (12th Edition).
 #'
 #' @param p A single-profile SoilProfileCollection.
+#' @param hzdesgn Column in horizon table containing designations. Default: `guessHzDesgnName(p)`
 #' @param texcl.attr Column in horizon table containing texture classes. Default: \code{guessHzTexClName(p)}
 #' @param clay.attr Column in horizon table containing clay contents. Default: \code{guessHzAttrName(p, 'clay', c('total','_r'))}
 #' @param truncate Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)
@@ -35,182 +36,165 @@
 #'            thickness_req_nobound = mollic.thickness.requirement(spc,
 #'                                         clay.attr='prop', truncate=FALSE))
 #'
-mollic.thickness.requirement <- function(p, texcl.attr = guessHzTexClName(p),
+mollic.thickness.requirement <- function(p, 
+                                         hzdesgn = guessHzDesgnName(p),
+                                         texcl.attr = guessHzTexClName(p),
                                          clay.attr = guessHzAttrName(p, 'clay', c('total','_r')),
                                          truncate = TRUE) {
 
-  if(length(p) > 1) {
-    stop("`p` must be a single-profile SoilProfileCollection")
-  }
+  hzd <- horizonDepths(p)
+  buf <- rep(NA_real_, length(p))
   
   if (nrow(p) == 0) {
-    return(NA)
+    return(numeric(0))
   }
 
   # determine boundaries
   # For purposes of identification of minimum thickness of mollic for field descriptions
   #   technically it is not applying the true taxonomic rules b/c it is based on hz desgn
-  mss <- getMineralSoilSurfaceDepth(p)
+  mss <- getMineralSoilSurfaceDepth(p, hzdesgn = hzdesgn, simplify = FALSE)
 
-  if (is.na(mss)) {
-    return(NA)
-  }
-  
-  soil_depth <- minDepthOf(p, "Cr|R|Cd|m",
-                         no.contact.depth = 200,
-                         no.contact.assigned = NA)
-
-  if(!is.na(soil_depth) & soil_depth == 0) {
-    return(10)
-  }
+  soil_depth <- minDepthOf(p, pattern = "Cr|R|Cd|m",
+                           hzdesgn = hzdesgn,
+                           no.contact.depth = 200,
+                           no.contact.assigned = NA,
+                           simplify = FALSE)
+  .LAST <- NULL
+  idx1 <- which(soil_depth[[hzd[1]]] == 0)
+  buf[idx1] <- 10
 
   #  if criteria aren't met in at least some part of upper 25 of mineral soil material, they won't be met deeper
   #  it is possible there are criteria greater than 25cm that affect total mollic thickness, but here we
   #  are only calculating the thickness _requirement_
 
   # get horizon data within mineral soil surface "critical zone"
-  cztop <- mss
-  czbot <- mss + min(soil_depth - mss, 25, na.rm = TRUE)
-  deepest.bot.depth <- max(p[[horizonDepths(p)[2]]], na.rm=TRUE)
-  if(cztop >= deepest.bot.depth) {
-    warning("no mineral soil material present in profile")
-    return(NA)
-  }
-  suppressWarnings(epi <- glom(p, cztop, czbot, truncate = TRUE))
-  if (!inherits(epi, 'SoilProfileCollection')) {
-    return(NA)
-  }
+  cztop <- mss[[hzd[2]]]
+  czbot <- cztop + pmin(soil_depth[[hzd[1]]] - cztop, 25, na.rm = TRUE)
+  deepest.bot.depth <- p[, , .LAST][[hzd[2]]]
+  
+  # soils with no mineral soil material have NA minimum thickness
+  buf[which(cztop >= deepest.bot.depth)] <- NA
+  
+  epi <- trunc(p, cztop, czbot)
+
   # get horizon data from mineral soil surface to bedrock, physical root restriction,
   #  or pedogenic cementation >90% OR bottom of profile OR 250cm (~beyond SCS)
-  soil.bottom <- min(soil_depth, deepest.bot.depth, 250, na.rm = TRUE)
-  suppressWarnings(sol <- glom(p, mss, soil.bottom, truncate = TRUE))
-  if(!inherits(sol, 'SoilProfileCollection')) {
-    return(NA)
-  }
+  soil.bottom <- pmin(soil_depth[[hzd[1]]], deepest.bot.depth, 250, na.rm = TRUE)
+  sol <- trunc(p, mss[[hzd[2]]], soil.bottom)
 
   # 6C1 - TODO: create functions for testing basic field criteria for these diagnostics
   #       and lab data extension to support carbonates/calcic
-
-  # Again, for purposes of identification of minimum thickness of mollic this is fast and
-  #   probably fine 95% of the time
-  #   but technically it is not applying the true taxonomic rules b/c it is based on hz desgn
-  cemented_depth <- depthOf(p, "m", no.contact.assigned = NA)
-  carbonate_depth <- depthOf(p, "k", no.contact.assigned = NA)
-  fragipan_depth <- depthOf(p, "x", no.contact.assigned = NA)
-
+  # cemented, carbonates or fragipan depth
+  pan_depth <- minDepthOf(p,
+                          pattern = "m|k|x",
+                          hzdesgn = hzdesgn,
+                          no.contact.assigned = NA,
+                          simplify = FALSE)[[hzd[1]]]
+  
   # calculate "shallowest of secondary carbonates/calcic, petrocalcic, duripan, fragipan"
-  crit6c1 <- suppressWarnings(min(carbonate_depth,
-                                  fragipan_depth,
-                                  cemented_depth, na.rm=TRUE))
-
+  crit6c1 <- pan_depth 
+  
   # 6C2 - identify argillic boundaries via aqp::getArgillicBounds
   # TODO: create functions for testing basic field criteria for these diagnostics (color structure)
   #       and lab data extension for spodic materials; can use logic from "sandy cambic" demo -- but more is needed
-  argi_bounds <- getArgillicBounds(p, clay.attr = clay.attr, texcl.attr = texcl.attr)
-  argillic_bottom <- NA
-  if(is.finite(argi_bounds[2])) {
-    argillic_bottom <- argi_bounds[2]
-  }
+  argi_bounds <- getArgillicBounds(p, hzdesgn = hzdesgn, 
+                                   clay.attr = clay.attr, 
+                                   texcl.attr = texcl.attr, 
+                                   simplify = FALSE)
+  argillic_bottom <- argi_bounds$lbound
 
   # AGAIN, for purposes of identification of minimum thickness of mollic this is fast and probably fine
   #   but technically it is not applying the true taxonomic rules b/c it is based on hz desgn
-  natric_bottom <- maxDepthOf(p, pattern="n", top=FALSE,
-                                no.contact.assigned = NA)
-  oxic_bottom <- maxDepthOf(p, pattern="o", top=FALSE,
-                              no.contact.assigned = NA)
-  spodic_bottom <- maxDepthOf(p, pattern="h|s[^s]", top=FALSE, #NB slickensides!!!!!
-                                no.contact.assigned = NA)
 
-  #   the B|w == cambic was particularly egregious
-  cambic_bottom <- suppressWarnings(max(getCambicBounds(p, argi_bounds=argi_bounds)$cambic_bottom, na.rm=TRUE))
+  natric_oxic_spodic_cambic_bottom <- maxDepthOf(p,
+                                                 pattern = "n|o|h|s[^s]",
+                                                 top = FALSE,
+                                                 no.contact.assigned = NA,
+                                                 simplify = FALSE)
+  
+  #suppressWarnings(max(getCambicBounds(p, argi_bounds = argi_bounds)$cambic_bottom, na.rm=TRUE))
+  
+  .I <- NULL; cambic_bottom <- NULL
+  
+  .maxcmb <- function(x) {
+    res <- suppressWarnings(max(x, na.rm = TRUE))
+    if (!is.finite(res) || length(x) == 0) return(NA_real_)
+    res
+  }
+  cmb <- data.table::data.table(getCambicBounds(p, 
+                                                hzdesgn = hzdesgn,
+                                                clay.attr = clay.attr,
+                                                texcl.attr = texcl.attr,
+                                                argi_bounds = argi_bounds))[,
+                                .maxcmb(cambic_bottom), by = c(idname(p))]$V1
 
   # calculate "deepest of lower boundary of argillic/natric, cambic, oxic, spodic"
-  crit6c2 <- suppressWarnings(max(c(argillic_bottom,
-                                    natric_bottom,
-                                    cambic_bottom,
-                                    oxic_bottom,
-                                    spodic_bottom), na.rm=TRUE))
+  crit6c2 <- pmax(
+    argillic_bottom,
+    natric_oxic_spodic_cambic_bottom[[hzd[2]]],
+    cmb,
+    na.rm = TRUE
+  )
 
   # SHORT CIRCUITS
-  sandy.textures <- (grepl("S$", epi[[texcl.attr]], ignore.case = TRUE) &
-                     !grepl("LVFS|LFS$", epi[[texcl.attr]], ignore.case = TRUE))
+  depi <- data.table::data.table(id = horizons(epi)[[idname(p)]], texcl = epi[[texcl.attr]])
+  
+  sandy.textures <- depi[,list(sandy.textures = all(grepl("S$", epi[[texcl.attr]], ignore.case = TRUE) &
+                               !grepl("LVFS$|LFS$", epi[[texcl.attr]], ignore.case = TRUE))), by = "id"]$sandy.textures
+  # 6A - assumes you must check for sandy textures throughout 0-25 to trigger minimum thickness of 25cm
+  #      there is an implicit assumption that after mixing any non-sandy texture into sandy texture
+  #      you would have non-sandy. this logic could be altered to be more "restrictive" by changing
+  #      all() to any() -- forcing the 25cm requirement.
+  #
+  #      in that case, _any_ sandy texture would imply sandy textures, importantly: precluding
+  #      the 10cm requirement.
+  buf[sandy.textures] <- 25
 
-  if(all(sandy.textures)) {
-    # 6A - assumes you must check for sandy textures throughout 0-25 to trigger minimum thickness of 25cm
-    #      there is an implicit assumption that after mixing any non-sandy texture into sandy texture
-    #      you would have non-sandy. this logic could be altered to be more "restrictive" by changing
-    #      all() to any() -- forcing the 25cm requirement.
-    #
-    #      in that case, _any_ sandy texture would imply sandy textures, importantly: precluding
-    #      the 10cm requirement.
-      return(25)
-  } else {
-    maxdepth <- suppressWarnings(max(sol$hzdepb, na.rm=TRUE))
-    if(is.finite(maxdepth) & maxdepth < 25) {
-    # 6B - if all horizons above a contact are non-sandy and meet all mollic characteristics then
-    #      the minimum thickness could be only 10cm, we have filtered out sandy textures
-    #
-    #      technically, the 10cm requirement requires knowledge of whether other mollic requirements are met,
-    #      so gives the epipedon a somewhat circular definition. This case applies in deep soils with mollic materials
-    #      all the way to contact -- but only practically matters where a contact is less than 25cm depth,
-    #      so that is when we return it.
-      return(10)
-    }
-  }
-
-  # If no diagnostics are present...
-  if(!is.finite(crit6c1) & !is.finite(crit6c2)) {
-    # TODO: "fluventic" soils with no other diagnostics have minimum thickness of 25cm
-    if(grepl("fluv|cumulic", p$taxsubgrp)) {
-      # for now, hope that the assigned taxonomic class reflects floodplain condition where it matters
-      ## for example:
-      # tolerance <- 0.1 # set a threshold for "different" carbon contents of 0.1%
-      #                  # carbon-depth "fluctuations" less or equal to tolerance will be ignored
-      #                  # for different data sources this number may need to be higher
-
-      # irregular.decrease <- diff(epi$estimated_organic_carbon) < 0
-      # if(length(irregular.decrease[irregular.decrease >= tolerance]) {
-      #  return(25)
-      # }
-      # TODO: most pedons don't have OC measured, develop color-carbon-depth-spatial surrogate model?
-      return(25)
-    }
-    # this is criterion 6d (if "none of above" apply)
-    return(18)
-  }
+  maxdepth <- sol[ , , .LAST][[hzd[2]]]    
+  # 6B - if all horizons above a contact are non-sandy and meet all mollic characteristics then
+  #      the minimum thickness could be only 10cm, we have filtered out sandy textures
+  #
+  #      technically, the 10cm requirement requires knowledge of whether other mollic requirements are met,
+  #      so gives the epipedon a somewhat circular definition. This case applies in deep soils with mollic materials
+  #      all the way to contact -- but only practically matters where a contact is less than 25cm depth,
+  #      so that is when we return it.
+  buf[maxdepth < 25] <- 10
+  
+  # no diagnostics present
+  crit6c <- !is.na(crit6c1) & !is.na(crit6c2) 
+  
+  # TODO: "fluventic" soils with no other diagnostics have minimum thickness of 25cm  
+  #     # for now, hope that the assigned "taxsubgrp" reflects floodplain condition where it matters
+  #     ## for example:
+  #     # tolerance <- 0.1 # set a threshold for "different" carbon contents of 0.1%
+  #     #                  # carbon-depth "fluctuations" less or equal to tolerance will be ignored
+  #     #                  # for different data sources this number may need to be higher
+  # 
+  #     # irregular.decrease <- diff(epi$estimated_organic_carbon) < 0
+  #     # if(length(irregular.decrease[irregular.decrease >= tolerance]) {
+  #     #  return(25)
+  #     # }
+  #     # TODO: most pedons don't have OC measured, develop color-carbon-depth-spatial surrogate model?
+  buf[crit6c & grepl("fluv|cumulic", site(p)$taxsubgrp)] <- 25
 
   # calculate the most restrictive requirement from 6a, 6b, 6c
   #   which contain several restatements of the fundamental criteria for a sliding scale thickness
-  sixcdepths <- c(crit6c1 / 3, crit6c2 / 3)
-
-  # only some diagnostics are present per subcriteria 1 and 2
-  no.diag <- which(is.infinite(sixcdepths))
-  if(length(no.diag)) {
-    sixcdepths <- sixcdepths[-no.diag]
-  }
-
-  # debug: see "true" (unrestricted 18-25 depth)
-  # print(max(sixcdepths))
+  sixcdepths <- pmax(crit6c1 / 3, crit6c2 / 3, na.rm = TRUE)
 
   # the thickness requirement is based on the most restrictive condition
   sixcdepths.t <- sixcdepths
-
+  
   # sliding scale depths based on diagnostics are truncated to [18, 25]
-  #  for investigations evaluating particular criteria, may be useful to ignore this limit
-  if(truncate) {
+  if (truncate) {
     sixcdepths.t[sixcdepths > 25] <- 25
     sixcdepths.t[sixcdepths < 18] <- 18
   }
-  most.restrictive <- max(sixcdepths.t)
-
-  # this should not happen with properly populated pedons
-  #  (missing horizon designations or bottom depths?)
-  if(is.infinite(most.restrictive)) {
-    warning(paste0("cannot evaluate mollic miniumum thickness requirement (",
-                   idname(p),":",profile_id(p),")"))
-  }
-
-  return(most.restrictive)
+  buf[is.na(buf)] <- sixcdepths.t[is.na(buf)]
+  
+  # this is criterion 6d (if "none of above" apply)
+  buf[is.na(buf)] <- 18
+  
+  buf
 }
 
 #' Find horizons with colors darker than a Munsell hue, value, chroma threshold

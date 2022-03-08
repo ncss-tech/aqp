@@ -37,7 +37,7 @@ depths(d) <- id ~ top + bottom
 test_that("error conditions", {
 
   # function will only accept a single profile
-  expect_error(estimateSoilDepth(d, name='name', top='top', bottom='bottom'))
+  expect_error(estimateSoilDepth(d, name='name'))
 
   # not specified -> error 
   expect_error(profileApply(d, estimateSoilDepth))
@@ -88,8 +88,8 @@ test_that("depthOf - simple match", {
 test_that("depthOf - multiple match", {
   expect_equal(depthOf(d[1,], "A|B|C"), c(0,20,35))
   expect_equal(depthOf(d[1,], "A|B|C", top = FALSE), c(20,35,110))
-  expect_equal(minDepthOf(d[1,],"A|B|C"), 0)
-  expect_equal(maxDepthOf(d[1,],"A|B|C"), 35)
+  expect_equal(minDepthOf(d[1,], "A|B|C"), 0)
+  expect_equal(maxDepthOf(d[1,], "A|B|C"), 35)
   expect_equal(minDepthOf(d[1,], "A|B|C", top = FALSE), 20)
   expect_equal(maxDepthOf(d[1,], "A|B|C", top = FALSE), 110)
 })
