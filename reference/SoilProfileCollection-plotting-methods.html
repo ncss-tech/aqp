@@ -69,6 +69,7 @@
   cex.depth.axis <span class="op">=</span> <span class="va">cex.names</span>,
   cex.id <span class="op">=</span> <span class="va">cex.names</span> <span class="op">+</span> <span class="op">(</span><span class="fl">0.2</span> <span class="op">*</span> <span class="va">cex.names</span><span class="op">)</span>,
   font.id <span class="op">=</span> <span class="fl">2</span>,
+  srt.id <span class="op">=</span> <span class="fl">0</span>,
   print.id <span class="op">=</span> <span class="cn">TRUE</span>,
   id.style <span class="op">=</span> <span class="st">"auto"</span>,
   plot.order <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
@@ -143,6 +144,8 @@
 <dd><p>character scaling applied to <code>label</code></p></dd>
 <dt>font.id</dt>
 <dd><p>font style applied to <code>label</code>, default is 2 (bold)</p></dd>
+<dt>srt.id</dt>
+<dd><p>rotation applied to <code>label</code>, only when <code>id.style = 'top'</code></p></dd>
 <dt>print.id</dt>
 <dd><p>logical, print <code>label</code> above/beside each profile? (TRUE)</p></dd>
 <dt>id.style</dt>
@@ -300,8 +303,10 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span class="co"># plot two SPC objects in the same figure</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># plot the first SPC object and</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># allocate space for the second SPC object</span></span>
 <span class="r-in"><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp1</span>, n<span class="op">=</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># plot the second SPC, starting from the first empty space</span></span>
 <span class="r-in"><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp2</span>, x.idx.offset<span class="op">=</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span>, add<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-7.png" alt="" width="768" height="475"></span>
@@ -425,7 +430,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span class="co"># align / adjust relative x positions</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, thresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 14 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 25 iterations</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># y-offset is automatically re-ordered according to</span></span>
 <span class="r-in"><span class="co"># plot.order</span></span>
