@@ -41,7 +41,9 @@
 #'
 #' @param cex.id character scaling applied to \code{label}
 #'
-#' @param font.id font style applied to \code{label}, default is 2 (bold)
+#' @param font.id font style applied to `label`, default is 2 (bold)
+#' 
+#' @param srt.id rotation applied to `label`, only when `id.style = 'top'`
 #'
 #' @param print.id logical, print \code{label} above/beside each profile? (TRUE)
 #'
@@ -192,8 +194,10 @@
 #' # plot two SPC objects in the same figure
 #' par(mar=c(1,1,1,1))
 #' # plot the first SPC object and
+#' 
 #' # allocate space for the second SPC object
 #' plotSPC(sp1, n=length(sp1) + length(sp2))
+#' 
 #' # plot the second SPC, starting from the first empty space
 #' plotSPC(sp2, x.idx.offset=length(sp1), add=TRUE)
 #'
@@ -342,6 +346,7 @@ plotSPC <- function(
   cex.depth.axis = cex.names,
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
+  srt.id = 0, 
   print.id = TRUE,
   id.style = 'auto',
   plot.order = 1:length(x),
@@ -1170,11 +1175,14 @@ plotSPC <- function(
         id.text <- as.character(this_profile_label)
       
       # add the text: according to style
-      if(id.style == 'top')
-        text(x0, y.offset[i], id.text, pos=3, font=font.id, cex=cex.id)
-      
-      if(id.style == 'side')
-        text(x0 - (width+0.025), y.offset[i], id.text, adj=c(1, -width), font=font.id, cex=cex.id, srt=90)
+      if(id.style == 'top') {
+        text(x = x0, y = y.offset[i], id.text, pos = 3, font = font.id, cex = cex.id, srt = srt.id)
+      }
+        
+      if(id.style == 'side') {
+        text(x0 - (width+0.025), y.offset[i], id.text, adj = c(1, -width), font = font.id, cex = cex.id, srt = 90)
+      }
+        
     }
     
   } # end looping over profiles

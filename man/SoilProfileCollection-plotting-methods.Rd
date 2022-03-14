@@ -24,6 +24,7 @@ plotSPC(
   cex.depth.axis = cex.names,
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
+  srt.id = 0,
   print.id = TRUE,
   id.style = "auto",
   plot.order = 1:length(x),
@@ -95,6 +96,8 @@ plot(x, y, ...)
 \item{cex.id}{character scaling applied to \code{label}}
 
 \item{font.id}{font style applied to \code{label}, default is 2 (bold)}
+
+\item{srt.id}{rotation applied to \code{label}, only when \code{id.style = 'top'}}
 
 \item{print.id}{logical, print \code{label} above/beside each profile? (TRUE)}
 
@@ -239,8 +242,10 @@ plotSPC(sp2, color = "plasticity")
 # plot two SPC objects in the same figure
 par(mar=c(1,1,1,1))
 # plot the first SPC object and
+
 # allocate space for the second SPC object
 plotSPC(sp1, n=length(sp1) + length(sp2))
+
 # plot the second SPC, starting from the first empty space
 plotSPC(sp2, x.idx.offset=length(sp1), add=TRUE)
 
