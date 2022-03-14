@@ -62,6 +62,7 @@
   df <span class="op">=</span> <span class="cn">FALSE</span>,
   truncate <span class="op">=</span> <span class="cn">FALSE</span>,
   invert <span class="op">=</span> <span class="cn">FALSE</span>,
+  fill <span class="op">=</span> <span class="cn">FALSE</span>,
   modality <span class="op">=</span> <span class="st">"all"</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -82,6 +83,8 @@
 <dd><p>truncate horizon top and bottom depths to <code>z1</code> and <code>z2</code>? default: <code>FALSE</code></p></dd>
 <dt>invert</dt>
 <dd><p>get horizons <em>outside</em> the interval <code>[z1,z2]</code>? default: <code>FALSE</code></p></dd>
+<dt>fill</dt>
+<dd><p>keep sites and preserve order for profiles that do not have horizons in interval by filling with a single horizon with <code>NA</code> top and bottom depth. default: <code>FALSE</code></p></dd>
 <dt>modality</dt>
 <dd><p>default: <code>"all"</code> return all horizons; or <code>modality = "thickest"</code>) to return the <em>thickest</em> horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.</p></dd>
 </dl></div>

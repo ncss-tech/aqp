@@ -55,6 +55,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mollic.thickness.requirement</span><span class="op">(</span>
   <span class="va">p</span>,
+  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
   texcl.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzTexClName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
   clay.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzAttrName</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"clay"</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"_r"</span><span class="op">)</span><span class="op">)</span>,
   truncate <span class="op">=</span> <span class="cn">TRUE</span>
@@ -65,6 +66,8 @@
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection.</p></dd>
+<dt>hzdesgn</dt>
+<dd><p>Column in horizon table containing designations. Default: <code>guessHzDesgnName(p)</code></p></dd>
 <dt>texcl.attr</dt>
 <dd><p>Column in horizon table containing texture classes. Default: <code>guessHzTexClName(p)</code></p></dd>
 <dt>clay.attr</dt>

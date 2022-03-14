@@ -65,6 +65,28 @@ If you need all depths of occurrence for a particular pattern, depthOf is what y
   no.contact.assigned <span class="op">=</span> <span class="cn">NA_real_</span>,
   na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
   simplify <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="fu">maxDepthOf</span><span class="op">(</span>
+  <span class="va">p</span>,
+  <span class="va">pattern</span>,
+  top <span class="op">=</span> <span class="cn">TRUE</span>,
+  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
+  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,
+  no.contact.assigned <span class="op">=</span> <span class="cn">NA</span>,
+  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
+  simplify <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="fu">minDepthOf</span><span class="op">(</span>
+  <span class="va">p</span>,
+  <span class="va">pattern</span>,
+  top <span class="op">=</span> <span class="cn">TRUE</span>,
+  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
+  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,
+  no.contact.assigned <span class="op">=</span> <span class="cn">NA</span>,
+  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
+  simplify <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -134,7 +156,7 @@ If you need all depths of occurrence for a particular pattern, depthOf is what y
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># deepest bottom depth above 35cm</span></span>
 <span class="r-in"><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, top <span class="op">=</span> <span class="cn">FALSE</span>, no.contact.depth <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># assign infinity (Inf) if B horizon does not start within 10cm</span></span>
 <span class="r-in"><span class="fu">minDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, no.contact.depth <span class="op">=</span> <span class="fl">10</span>, no.contact.assigned <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>

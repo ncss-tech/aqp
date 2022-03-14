@@ -64,6 +64,8 @@ The upper boundary is where the clay increase threshold is met. The function use
   bottom.pattern <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,
   lower.grad.pattern <span class="op">=</span> <span class="st">"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
   sandy.texture.pattern <span class="op">=</span> <span class="st">"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
+  vertical.distance <span class="op">=</span> <span class="fl">30</span>,
+  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
   verbose <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -86,12 +88,16 @@ The upper boundary is where the clay increase threshold is met. The function use
 <dd><p>this is a pattern for adjusting the bottom depth of the argillic horizon upwards from the bottom depth of the soil. The absence of illuviation is used as a final control on horizon pattern matching.</p></dd>
 <dt>sandy.texture.pattern</dt>
 <dd><p>this is a pattern for matching sandy textural classes: <code>-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$</code></p></dd>
+<dt>vertical.distance</dt>
+<dd><p>Vertical distance in which clay increase must be met. Default <code>30</code> cm</p></dd>
+<dt>simplify</dt>
+<dd><p>Return a length 2 vector with upper and lower boundary when <code>p</code> has length 1? Default <code>TRUE</code>.</p></dd>
 <dt>verbose</dt>
 <dd><p>Print out information about 't' subscripts, sandy textures, plow layers and lower gradational horizons?</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound"</p>
+    <p>Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound". If <code>p</code> has more than one profile or if <code>simplify = FALSE</code> the result is a data.frame containing profile ID, upper and lower boundary columns.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
