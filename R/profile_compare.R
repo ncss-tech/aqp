@@ -333,7 +333,8 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 		# cleanup
 		rm(s.sub)
 		}
-
+	
+	
 
 	##
 	## new version for computing slice-wise dissimilarities... fast!
@@ -616,7 +617,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 ## NOTE: don't mess with this!
 # setup generic function
 # if (!isGeneric("profile_compare"))
-  setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
+setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
 
 # temp interface to SPC class objects
 
