@@ -33,7 +33,7 @@ plot(sp4, color='CF')
 ```
 
 ## Citation
-Dylan Beaudette, Pierre Roudier and Andrew Brown (2021). aqp: Algorithms for Quantitative Pedology. R package version 1.29. https://CRAN.R-project.org/package=aqp
+Dylan Beaudette, Pierre Roudier and Andrew Brown (2022). aqp: Algorithms for Quantitative Pedology. R package version 1.41. https://CRAN.R-project.org/package=aqp
 
 D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004, http://dx.doi.org/10.1016/j.cageo.2012.10.020.
   
