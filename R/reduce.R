@@ -7,7 +7,7 @@
 #' @param column_names a set of additional columns to include in the result
 #' @details 
 #' 
-#' Minimum column names included (when column_names = NULL)
+#' Minimum column names included (when `column_names = NULL`)
 #'  - `idname(p)`, `horizonDepths(p)`, `hzidname(p)`
 #'  
 #' Optional column names included (when metadata are set)
@@ -27,7 +27,6 @@ reduceSPC <- function(p, column_names = NULL) {
   stn <- sn[sn %in% ecn]
   hzn <- c(minnames, extnames[extnames != ""], hn[hn %in% ecn])
   msn <- ecn[!(ecn %in% stn | ecn %in% hzn)]
-  st <- .data.frame.j(site(p), c(idname(p), stn))
   
   if (length(msn) > 0) {
     stop(sprintf("column names (%s) not found in SoilProfileCollection",

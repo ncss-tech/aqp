@@ -18,7 +18,7 @@ a SoilProfileCollection
 Reduce the number of columns in a SoilProfileCollection to a minimal set plus additional selected columns. Optional metadata columns are included if set. At a minimum the profileID, horizon top and bottom depth, horizon ID are included. Horizon designation and horizon texture class column names are included if metadata attributes are set. See details.
 }
 \details{
-Minimum column names included (when column_names = NULL)
+Minimum column names included (when \code{column_names = NULL})
 \itemize{
 \item \code{idname(p)}, \code{horizonDepths(p)}, \code{hzidname(p)}
 }
