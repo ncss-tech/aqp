@@ -1,13 +1,15 @@
-# aqp 1.41 (2022-03-14)
+# aqp 1.42 (2022-03-14)
+ * `getArgillicBounds()`, `getCambicBounds()`, `mollic.thickness.requirement()`, `getSurfaceHorizonDepth()` and related functions have been optimized and now work on SoilProfileCollection objects with length > 1
+ * Added `reduceSPC()` function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection
+
+# aqp 1.41 (2022-02-11)
  * `plotSPC()` gains new arguments for controlling horizon depth labels
  * `plotSPC()` gains horizon depth annotation collision fixes (https://github.com/ncss-tech/aqp/issues/240)
  * `plotSPC()` minor bugfix for cases when `n != length(x)`
  * `plotSPC()` important change! `y.offset` is now automatically re-ordered by `plot.order`
  * bugfix for R 4.2, related to named arguments passed to `base::aggregate` (thanks AGB)
  * `depthOf()` and related functions: better handling of `NA` results from `FUN`
- * `getArgillicBounds()`, `getCambicBounds()`, `mollic.thickness.requirement()`, `getSurfaceHorizonDepth()` and related functions have been optimized and now work on SoilProfileCollection objects with length > 1
- * Added `reduceSPC()` function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection
- 
+
 # aqp 1.40 (2022-01-04)
  * CRAN release
  * fixed small bug in `panel.depth_function()` that affected plotting of grouped data, created by `slab()`
