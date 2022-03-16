@@ -38,7 +38,7 @@
 setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
           function(object, var_name = NULL,
                    pattern = "R|Cr|Cd|qm",
-                   hzdesgn = guessHzDesgnName(object),
+                   hzdesgn = NULL,
                    ...) {
             .NHZ <- NULL
             .LAST <- NULL 
@@ -49,11 +49,7 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             
             if (is.null(var_name) | !(var_name %in% horizonNames(object)))
               stop("argument `var_name` must specify a single horizon-level variable", call. = FALSE)
-            
-            if (!hzdesgn %in% horizonNames(object)) {
-              hzdesgn <- guessHzDesgnName(object, required = TRUE)
-            }
-            
+
             hztop <- horizonDepths(object)[1]
             hzbot <- horizonDepths(object)[2]
             
@@ -61,23 +57,30 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             spc.sub <- glom(object, object[[hztop]][object[, 1, .HZID]], 
                                     object[[hzbot]][object[, , .LAST, .HZID]])
             
-            # debug : inspect  horizon values for var_name
-            #plot(spc.sub[1:10,], color=var_name)
-            
-            # only take profiles that have 100% data coverage in above interval
-            #  i.e. if a single horizon is missing data, remove whole profile
+            # mpspline2::mpspline contains its own NA fixing/handling code, but we 
+            # need to be able to account for what it removes, and dice() can't handle it
             na.idx <- which(is.na(spc.sub[[var_name]]))
             spc.sub <- spc.sub[!profile_id(spc.sub) %in% object@horizons[[idname(spc.sub)]][na.idx]]
+            # # TODO:
+            # # need to remove the horizons that have NA in var_name at a minimum
+            # # something like...
+            # spc.sub$.missingData <- is.na(spc.sub[[var_name]])
+            # spc.sub <- subsetHz(spc.sub, !.missingData)
             
-            # calculate the deepest top depth and shallowest bottom depth
-            mindepth <- max(spc.sub[, 1][[hztop]], na.rm = TRUE)
+            # calculate the top depth and bottom depth for each profile
+            mindepth <- spc.sub[, 1][[hztop]]
             
-            # TODO: decide if it is necessary to be so restrictive
-            maxdepth <- max(c(minDepthOf(spc.sub, pattern = pattern, hzdesgn = hzdesgn)[[hztop]], 
-                            max(spc.sub)), na.rm = TRUE)
+            # optionally constrained by some pattern matching
+            if (!missing(hzdesgn) && !is.null(hzdesgn)) {
+              hzpatdep <- minDepthOf(spc.sub, pattern = pattern, hzdesgn = hzdesgn)[[hztop]]
+            } else {
+              hzpatdep <- numeric(0)
+            }
             
-            # we will only make interpolations that the "whole SPC supports"
-            # the thought is that these 1cm slices will be further aggregated downstream
+            # either the bottom depth of last horizon or the matched pattern top depth
+            maxdepth <- pmin(c(hzpatdep, spc.sub[, , .LAST][[hzbot]]), na.rm = TRUE)
+            
+            # truncate using vectors of top and bottom
             spc.sub <- trunc(spc.sub, mindepth, maxdepth)
             
             # do the splines
@@ -90,12 +93,13 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             spc.sub <- spc.sub[which(spc.sub[, , .NHZ] > 1),]
             
             # concatenate results for re-insertion
-            res2 <- do.call('c', lapply(profile_id(spc.sub), function(pid) {
-              drange <- mindepth:maxdepth
+            pid <- profile_id(spc.sub)
+            res2 <- do.call('c', lapply(seq_along(pid), function(i) {
+              drange <- mindepth[i]:maxdepth[i]
               zero.idx <- drange == 0
               if (any(zero.idx))
                 drange <- drange[-which(zero.idx)]
-              return(res[[pid]]$est_1cm[drange])
+              return(res[[pid[i]]]$est_1cm[drange])
               # this returns the 1cm estimate which conforms with sliced spc
               #
               # debug: prove that mass is preserved in output by returning block estimates
@@ -116,9 +120,8 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             #reserr
             
             # create slices 1cm thick to insert spline result
-            spc.spl <- suppressMessages(aqp::dice(spc.sub, formula(sprintf("%s:%s ~ %s",
-                                                           mindepth, maxdepth,
-                                                           var_name))))
+            spc.spl <- suppressMessages(aqp::dice(spc.sub))
+                                                     
             
             # create new "spline_"+var_name variable
             spc.spl[[paste0(var_name,"_spline")]] <- res2
