@@ -26,7 +26,8 @@ You can access the contents of a SoilProfileCollection by profile and horizon "i
 \itemize{
 \item \code{.LAST} (last horizon in each profile): return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
 \item \code{.FIRST} (first horizon in each profile): return the last horizon from each profile. This uses \code{i} but ignores the regular \code{j} index.
-\item \code{.HZID} (horizon index not \code{SoilProfileCollection} result): return the horizon indices corresponding to \code{i}+\code{j}+\code{...} ("k") constraints
+\item \code{.HZID} (horizon index): return the horizon indices corresponding to \code{i}+\code{j}+\code{...} ("k") constraints
+\item \code{.NHZ} (number of horizons): return the number of horizons in the profiles resulting from \code{i}+\code{j}+\code{...} ("k") constraints
 }
 }
 }
