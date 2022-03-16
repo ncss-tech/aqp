@@ -29,7 +29,7 @@ test_that("spc2mpspline works as expected", {
   # profile 1: set bedrock clay content to zero
   sp1fix@horizons[6,]$prop <- 0
   
-  res3 <- spc2mpspline(sp1fix, "prop")
+  res3 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300))
   expect_equal(length(res3), length(sp1fix)) # first profile was fixed
 
   # the available interval is still the same
