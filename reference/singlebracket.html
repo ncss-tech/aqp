@@ -5,7 +5,8 @@ j refers to the horizon or &quot;slice&quot; index. This index is most useful wh
 ... is an area to specify an expression that is evaluated in the subset. Currently supported
 .LAST (last horizon in each profile): return the last horizon from each profile. This uses i but ignores the regular j index.
 .FIRST (first horizon in each profile): return the last horizon from each profile. This uses i but ignores the regular j index.
-.HZID (horizon index not SoilProfileCollection result): return the horizon indices corresponding to i+j+... (&quot;k&quot;) constraints
+.HZID (horizon index): return the horizon indices corresponding to i+j+... (&quot;k&quot;) constraints
+.NHZ (number of horizons): return the number of horizons in the profiles resulting from i+j+... (&quot;k&quot;) constraints
 
 
 "><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -26,7 +27,7 @@ j refers to the horizon or &quot;slice&quot; index. This index is most useful wh
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.41</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.42</span>
       </span>
     </div>
 
@@ -62,7 +63,8 @@ j refers to the horizon or &quot;slice&quot; index. This index is most useful wh
 <li><p><code>j</code> refers to the horizon or "slice" index. This index is most useful when either a) working with <code>slice</code>'d SoilProfileCollection or b) working with single-profile collections. <code>j</code> returns the layer in the specified index positions for all profiles in a collection.</p></li>
 <li><p><code>...</code> is an area to specify an expression that is evaluated in the subset. Currently supported</p><ul><li><p><code>.LAST</code> (last horizon in each profile): return the last horizon from each profile. This uses <code>i</code> but ignores the regular <code>j</code> index.</p></li>
 <li><p><code>.FIRST</code> (first horizon in each profile): return the last horizon from each profile. This uses <code>i</code> but ignores the regular <code>j</code> index.</p></li>
-<li><p><code>.HZID</code> (horizon index not <code>SoilProfileCollection</code> result): return the horizon indices corresponding to <code>i</code>+<code>j</code>+<code>...</code> ("k") constraints</p></li>
+<li><p><code>.HZID</code> (horizon index): return the horizon indices corresponding to <code>i</code>+<code>j</code>+<code>...</code> ("k") constraints</p></li>
+<li><p><code>.NHZ</code> (number of horizons): return the number of horizons in the profiles resulting from <code>i</code>+<code>j</code>+<code>...</code> ("k") constraints</p></li>
 </ul></li>
 </ul></div>
 

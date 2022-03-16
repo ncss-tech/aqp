@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.41</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.42</span>
       </span>
     </div>
 
@@ -48,7 +48,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.41" id="aqp-141-2022-03-14">aqp 1.41 (2022-03-14)<small>2022-02-11</small><a class="anchor" aria-label="anchor" href="#aqp-141-2022-03-14"></a></h2>
+<h2 class="page-header" data-toc-text="1.42" id="aqp-142-2022-03-15">aqp 1.42 (2022-03-15)<a class="anchor" aria-label="anchor" href="#aqp-142-2022-03-15"></a></h2>
+<ul><li>
+<code><a href="../reference/getArgillicBounds.html">getArgillicBounds()</a></code>, <code><a href="../reference/getCambicBounds.html">getCambicBounds()</a></code>, <code><a href="../reference/mollic.thickness.requirement.html">mollic.thickness.requirement()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code> and related functions have been optimized and now work on SoilProfileCollection objects with length &gt; 1</li>
+<li>Added <code><a href="../reference/reduceSPC.html">reduceSPC()</a></code> function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection</li>
+<li>Added new “k-keyword” <code>.NHZ</code> for use with SoilProfileCollection <code>[</code> method
+<ul><li>
+<code>object[,,.NHZ]</code> returns a vector with the number of horizons in each profile</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.41" id="aqp-141-2022-02-11">aqp 1.41 (2022-02-11)<small>2022-02-11</small><a class="anchor" aria-label="anchor" href="#aqp-141-2022-02-11"></a></h2>
 <ul><li>
 <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gains new arguments for controlling horizon depth labels</li>
 <li>
@@ -63,9 +73,6 @@
 <li>
 <code><a href="../reference/depthOf.html">depthOf()</a></code> and related functions: better handling of <code>NA</code> results from <code>FUN</code>
 </li>
-<li>
-<code><a href="../reference/getArgillicBounds.html">getArgillicBounds()</a></code>, <code><a href="../reference/getCambicBounds.html">getCambicBounds()</a></code>, <code><a href="../reference/mollic.thickness.requirement.html">mollic.thickness.requirement()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code> and related functions have been optimized and now work on SoilProfileCollection objects with length &gt; 1</li>
-<li>Added <code><a href="../reference/reduceSPC.html">reduceSPC()</a></code> function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.40" id="aqp-140-2022-01-04">aqp 1.40 (2022-01-04)<small>2022-01-04</small><a class="anchor" aria-label="anchor" href="#aqp-140-2022-01-04"></a></h2>
