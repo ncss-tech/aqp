@@ -17,18 +17,23 @@ test_that("spc2mpspline works as expected", {
   # plot(res2, color = "prop_spline", divide.hz = FALSE)
 
   # max and min of SPC are equal for spline'd result due to truncation to available data interval
-  expect_equal(max(res1), 59)
+  expect_equal(max(res1), 240)
   expect_equal(max(res1), min(res1))
 
   # # actually fix the data
   sp1fix <- sp1
+  
+  # profile 1: set bedrock bottom depth to 200cm
   sp1fix@horizons[6,]$bottom <- 200
+  
+  # profile 1: set bedrock clay content to zero
   sp1fix@horizons[6,]$prop <- 0
+  
   res3 <- spc2mpspline(sp1fix, "prop")
   expect_equal(length(res3), length(sp1fix)) # first profile was fixed
 
   # the available interval is still the same
-  expect_equal(max(res3), 59)
+  expect_equal(max(res3), 240)
   expect_equal(max(res3), min(res3))
 
   # if you want to show original and spline together, create combined horizon var

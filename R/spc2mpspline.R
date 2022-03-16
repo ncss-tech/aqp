@@ -73,8 +73,8 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             mindepth <- max(spc.sub[, 1][[hztop]], na.rm = TRUE)
             
             # TODO: decide if it is necessary to be so restrictive
-            maxdepth <- min(c(minDepthOf(spc.sub, pattern = pattern, hzdesgn = hzdesgn)[[hztop]], 
-                            min(spc.sub)), na.rm = TRUE)
+            maxdepth <- max(c(minDepthOf(spc.sub, pattern = pattern, hzdesgn = hzdesgn)[[hztop]], 
+                            max(spc.sub)), na.rm = TRUE)
             
             # we will only make interpolations that the "whole SPC supports"
             # the thought is that these 1cm slices will be further aggregated downstream
