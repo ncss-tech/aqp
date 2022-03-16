@@ -9,7 +9,7 @@
   object,
   var_name = NULL,
   pattern = "R|Cr|Cd|qm",
-  hzdesgn = guessHzDesgnName(object),
+  hzdesgn = NULL,
   ...
 )
 }
@@ -18,9 +18,9 @@
 
 \item{var_name}{Column name in \verb{@horizons} slot of \code{object} containing numeric values to spline}
 
-\item{pattern}{Regex pattern to match for bottom of profile (passed to estimateSoilDepth) default: "R|Cr|Cd|qm"}
+\item{pattern}{Regex pattern to match for bottom of profile (passed to \code{minDepthOf()}) default: "R|Cr|Cd|qm"; only used if \code{hzdesgn} is specified}
 
-\item{hzdesgn}{Column name in \verb{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object, required = TRUE)}}
+\item{hzdesgn}{Column name in \verb{@horizons} slot of \code{object} containing horizon designations default: \code{NULL}}
 
 \item{...}{Additional arguments to \code{mpspline2::mpspline()}}
 }

@@ -15,8 +15,8 @@
 #'
 #' @param object A SoilProfileCollection
 #' @param var_name Column name in `@horizons` slot of `object` containing numeric values to spline
-#' @param pattern Regex pattern to match for bottom of profile (passed to estimateSoilDepth) default: "R|Cr|Cd|qm"
-#' @param hzdesgn Column name in `@horizons` slot of `object` containing horizon designations default: `aqp::guessHzDesgnName(object, required = TRUE)`
+#' @param pattern Regex pattern to match for bottom of profile (passed to `minDepthOf()`) default: "R|Cr|Cd|qm"; only used if `hzdesgn` is specified
+#' @param hzdesgn Column name in `@horizons` slot of `object` containing horizon designations default: `NULL`
 #' @param ... Additional arguments to `mpspline2::mpspline()`
 #'
 #' @author Andrew G. Brown
