@@ -3,7 +3,7 @@
 \name{spc2mpspline,SoilProfileCollection-method}
 \alias{spc2mpspline,SoilProfileCollection-method}
 \alias{spc2mpspline}
-\title{Missing-data-safe, SPC-wide wrapper around mpspline2::mpspline "continuous" 1cm output}
+\title{Missing-data-safe, SPC-wide wrapper around \code{mpspline2::mpspline()} "continuous" 1cm output}
 \usage{
 \S4method{spc2mpspline}{SoilProfileCollection}(
   object,
@@ -16,21 +16,24 @@
 \arguments{
 \item{object}{A SoilProfileCollection}
 
-\item{var_name}{Column name in \code{@horizons} slot of \code{object} containing numeric values to spline}
+\item{var_name}{Column name in \verb{@horizons} slot of \code{object} containing numeric values to spline}
 
 \item{pattern}{Regex pattern to match for bottom of profile (passed to estimateSoilDepth) default: "R|Cr|Cd|qm"}
 
-\item{hzdesgn}{Column name in \code{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object, required = TRUE)}}
+\item{hzdesgn}{Column name in \verb{@horizons} slot of \code{object} containing horizon designations default: \code{aqp::guessHzDesgnName(object, required = TRUE)}}
 
-\item{...}{Additional arguments to \code{mpspline2::mpspline}}
+\item{...}{Additional arguments to \code{mpspline2::mpspline()}}
 }
 \value{
-A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in attr(result, 'removed').
+A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in \code{attr(result, 'removed')}.
 }
 \description{
-Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with \code{mpspline2::mpspline}. Currently only works with a single attribute.This function will automatically filter profiles with \code{NA} in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggregated over the full interval where data was available.
+Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with \code{mpspline2::mpspline()}. Currently only works with a single attribute at a time.
+}
+\details{
+This function will automatically filter profiles with \code{NA} in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggregated over the full interval where data was available.
 
-Data completeness is assessed and the input SPC is filtered and truncated to create a container for the 1cm results from \code{mpspline2::mpspline}.
+Data completeness is assessed and the input SPC is filtered and truncated to create a container for the 1cm results from \code{mpspline2::mpspline()}.
 }
 \examples{
 

@@ -14,21 +14,22 @@ test_that("spc2mpspline works as expected", {
   res2 <- spc2mpspline(sp1filt, "prop")
   expect_equal(length(res2), length(sp1filt)) # due to 89-89cm R layer
 
-  # plot(res2, color = "spline_prop")
+  # plot(res2, color = "prop_spline", divide.hz = FALSE)
 
   # max and min of SPC are equal for spline'd result due to truncation to available data interval
   expect_equal(max(res1), 59)
   expect_equal(max(res1), min(res1))
 
-  # actually fix the data
+  # # actually fix the data
   sp1fix <- sp1
   sp1fix@horizons[6,]$bottom <- 200
+  sp1fix@horizons[6,]$prop <- 0
   res3 <- spc2mpspline(sp1fix, "prop")
   expect_equal(length(res3), length(sp1fix)) # first profile was fixed
 
   # the available interval is still the same
-  expect_equal(max(res1), 59)
-  expect_equal(max(res1), min(res1))
+  expect_equal(max(res3), 59)
+  expect_equal(max(res3), min(res3))
 
   # if you want to show original and spline together, create combined horizon var
   sp1$prop_combined <- sp1$prop
