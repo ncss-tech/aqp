@@ -323,25 +323,30 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
 
   ## 2016-03-07: "fix" neutral hues
   ## they will typically be missing chroma or have some arbitrary number
-  ## set it to 0 for correct mattching
+  ## set it to 0 for correct matching
   N.idx <- which(the_hue == 'N')
   if(length(N.idx) > 0)
     the_chroma[N.idx] <- 0
-
-
-  ## TODO: interpolate all 1/2 chips : https://github.com/ncss-tech/aqp/issues/178
-  # 2016-03-07: "fix" values of 2.5 by rounding to 2
-  the_value <- ifelse(the_value == 2.5, 2, the_value)
-
-  ## temporary fix for #44 (https://github.com/ncss-tech/aqp/issues/44)
-  # round non integer value and chroma
-  if ( !isTRUE(all.equal(as.character(the_value), as.character(as.integer(the_value)) )) ) {
-    the_value <- round(the_value)
-    warning("'the_value' has been rounded to the nearest integer.", call. = FALSE)
+  
+  # value / chroma should be within unique set of allowed chips
+  valid.value <- unique(as.character(munsell$value))
+  valid.chroma <- unique(as.character(munsell$chroma))
+  
+  ## warn if non-standard notation
+  
+  ## TODO: should rounding be enabled by default for backwards compatibility?
+  ## TODO: rounding is wrong with e.g. 10YR 2.6 / 3 --> closest value is 2.5
+  
+  # value
+  if(any(! as.character(na.omit(the_value)) %in% valid.value)) {
+    warning("non-standard notation in Munsell value, use getClosestMunsellChip()", call. = FALSE)
+    the_value <- ifelse(as.character(the_value) %in% valid.value, the_value, round(the_value))
   }
-  if ( !isTRUE(all.equal(as.character(the_chroma), as.character(as.integer(the_chroma)) )) ) {
+  
+  # chroma
+  if(any(! as.character(na.omit(the_chroma)) %in% valid.chroma)) {
+    warning("non-standard notation in Munsell chroma, use getClosestMunsellChip()", call. = FALSE)
     the_chroma <- round(the_chroma)
-    warning("'the_chroma' has been rounded to the nearest integer.", call. = FALSE)
   }
   
   

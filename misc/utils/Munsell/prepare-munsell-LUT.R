@@ -83,8 +83,7 @@ m.new.chroma <- rbind(m.new.chroma, m.2.5.values)
 # sort
 m.new.chroma <- m.new.chroma[order(m.new.chroma$H, m.new.chroma$V, m.new.chroma$C), ]
 
-nrow(m.new.chroma)
-
+str(m.new.chroma)
 
 ## graphical check
 g <- make.groups(
@@ -115,7 +114,7 @@ m.sRGB <- XYZ2rgb(m.XYZ)
 # z <- convertColor(m.XYZ, from = 'XYZ', to = 'sRGB', from.ref.white = 'D65', to.ref.white = 'D65')
 
 
-m.final <- cbind(m.new.chroma, m.sRGB)
+m.final <- data.frame(m.new.chroma, m.sRGB)
 
 plot_cols <- rgb(m.final$R, m.final$G, m.final$B)
 
@@ -150,7 +149,7 @@ n <- read.csv(file = 'neutrals_colordata.csv')
 n <- n[, c('id', 'Lin.sRGB.R', 'Lin.sRGB.G', 'Lin.sRGB.B')]
 names(n) <- c('id', 'R', 'G', 'B')
 
-n$V <- sapply(strsplit(n$id, '-', fixed = TRUE), '[', 1)
+n$V <- as.numeric(sapply(strsplit(n$id, '-', fixed = TRUE), '[', 1))
 
 previewColors(rgb(n$R, n$G, n$B))
 
@@ -180,13 +179,15 @@ nrow(m.final)
 ## add CIELAB coordinates
 ##
 lab <- convertColor(m.final[, c('R', 'G', 'B')], from = 'sRGB', to = 'Lab')
-m.final.lab <- cbind(m.final, lab)
+m.final.lab <- data.frame(m.final, lab)
 
 ##
 ## cleanup names / row.names
 ##
 names(m.final.lab) <- c('hue', 'value', 'chroma', 'r', 'g', 'b', 'L', 'A', 'B')
 row.names(m.final.lab) <- NULL
+
+str(m.final.lab)
 
 ##
 ## check
@@ -210,10 +211,53 @@ xyplot(B.y ~ B.x, data = z)
 # my original estimates were too light
 z[z$hue == 'N', ]
 
+## DE00 old vs new
+library(farver)
+
+d <- vector(mode = 'numeric', length = nrow(z))
+
+for(i in 1:nrow(z)) {
+  d[i] <- compare_colour(
+    from = z[i, c('L.x', 'A.x', 'B.x')], 
+    to = z[i, c('L.y', 'A.y', 'B.y')], 
+    from_space = 'lab', 
+    to_space = 'lab', 
+    white_from = 'D65', 
+    white_to = 'D65', method = 'cie2000'
+  )
+}
+
+
+# changes with dE00 > 2
+idx <- which(d > 2)
+zz <- z[idx, ]
+zz$dE00 <- d[idx]
+zz <- zz[order(zz$dE00, decreasing = TRUE), ]
+
+head(zz, 50)
+
+table(zz$hue)
+table(zz$value)
+table(zz$chroma)
+
+## N chips are the top differences
+## everything else is dE00 < 4
+## mostly value == 1
+
+
+
 
 ##
 ## save to munsell.rda
 ##
+munsell <- m.final.lab
+save(munsell, file = '../../../data/munsell.rda')
+
+munsell2rgb('10YR', 3.5, 2, returnLAB = TRUE)
+munsell2rgb('10YR', 4, 2, returnLAB = TRUE)
+
+munsell2rgb('10YR', 2.5, 2, returnLAB = TRUE)
+munsell2rgb('10YR', 2, 2, returnLAB = TRUE)
 
 
 

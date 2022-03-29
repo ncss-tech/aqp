@@ -83,7 +83,7 @@ test_that("Munsell hue parsing", {
 test_that("non-integer value and chroma are rounded", {
 
   # rounding of value, throws warning
-  expect_warning(res <- parseMunsell('10YR 3.3/4'), regexp = 'rounded')
+  expect_warning(res <- parseMunsell('10YR 3.3/4'), regexp = 'non-standard notation')
   # this will not throw a warning
   res <- parseMunsell('10YR 3.3/4', convertColors = FALSE)
   # results should be the same
@@ -93,7 +93,7 @@ test_that("non-integer value and chroma are rounded", {
   )
 
   # rounding of chroma, throws warning
-  expect_warning(res <- parseMunsell('10YR 3/4.6'), regexp = 'rounded')
+  expect_warning(res <- parseMunsell('10YR 3/4.6'), regexp = 'non-standard notation')
   # this will not throw a warning
   res <- parseMunsell('10YR 3/4.6', convertColors = FALSE)
   # results should be the same

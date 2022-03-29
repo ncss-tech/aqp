@@ -49,6 +49,7 @@ getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
     closest.hue[i] <- paste0(all.hue.data[idx, ][closest.idx, ], collapse = '')
   }
   
+  ## TODO: don't round 2.5 values: https://github.com/ncss-tech/aqp/issues/251
   # locate closest value and chroma by rounding
   closest.value <- round(as.numeric(cd$value))
   closest.chroma <- round(as.numeric(cd$chroma))
