@@ -1,5 +1,7 @@
 ## TODO: use scanned chips from Munsell color atlas
 
+## TODO: interpolare 2.5 value
+
 
 library(aqp)
 data(munsell)
