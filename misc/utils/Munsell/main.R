@@ -1,9 +1,8 @@
 ## Code / Data related to preparation of Munsell color interpretation in aqp
-## 2021-04-22
-## D.E. Beaudette
+## 2022-03-29
+## D.E. Beaudette, A.G. Brown
 
 
-## TODO: re-make / refactor code + data used to create `munsell.rda` 
 
 
 # make munsell and related LUT

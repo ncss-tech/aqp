@@ -6,7 +6,7 @@
 ## CIE reference data at 5nm resolution
 # see cie.15.2004.tables.xls
 # subset to 380--730nm
-spectral.reference <- read.csv('misc/utils/Munsell/spectral-reference-data.csv')
+spectral.reference <- read.csv('spectral-reference-data.csv')
 
 # save to local data
-save(spectral.reference, file = 'data/spectral.reference.rda')
+save(spectral.reference, file = '../../../data/spectral.reference.rda')

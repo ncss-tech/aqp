@@ -1,3 +1,8 @@
+
+
+## TODO: interpolation 2.5 values
+
+
 library(lattice)
 library(tactile)
 library(pbapply)
@@ -129,7 +134,7 @@ xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance <= 0, dat
 idx <- which(m.final$reflectance <= 0)
 m.final[idx, ]
 
-# replace with minimum relfectance, ignoring these values
+# replace with minimum reflectance, ignoring these values
 m.final$reflectance[idx] <- min(m.final$reflectance[-idx])
 
 
