@@ -39,18 +39,18 @@ interpolateChroma <- function(m.i) {
 
 
 # 2022-03-29
-interpolateValue <- function(m.i) {
+# for now only interpolating 2.5 value
+# usually interpolating xyY, 
+# but important to interpolate sRGB for neutral hues
+interpolateValue <- function(m.i, new.V = 2.5, vars = c('x', 'y', 'Y')) {
   
-  # for now only interpolating 2.5 value
-  new.V <- 2.5
-  
-  # linear interpolation between values 2--3
+  # linear interpolation over value
   # x ~ V
-  s.x <- approxfun(m.i$V, m.i$x)
+  s.1 <- approxfun(m.i$V, m.i[[vars[1]]])
   # y ~ V
-  s.y <- approxfun(m.i$V, m.i$y)
+  s.2 <- approxfun(m.i$V, m.i[[vars[2]]])
   # Y ~ V
-  s.Y <- approxfun(m.i$V, m.i$Y)
+  s.3 <- approxfun(m.i$V, m.i[[vars[3]]])
   
   # combine interpolated values into data.frame
   # H, C are constant
@@ -58,11 +58,12 @@ interpolateValue <- function(m.i) {
     H = m.i$H[1],
     V = new.V,
     C = m.i$C[1],
-    x = s.x(new.V),
-    y = s.y(new.V),
-    Y= s.Y(new.V)
+    p1 = s.1(new.V),
+    p2 = s.2(new.V),
+    p3 = s.3(new.V)
   )
     
+  names(m.new) <- c('H', 'V', 'C', vars)
   
   # only return new rows
   return(m.new)

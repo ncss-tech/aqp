@@ -3,6 +3,7 @@ library(tactile)
 library(grDevices)
 library(scales)
 library(pbapply)
+library(aqp)
 
 source('local-functions.R') 
 
@@ -62,7 +63,7 @@ m.sub <- subset(m.new.chroma, V %in% c(2, 3))
 m.sub <- split(m.sub, list(m.sub$H, m.sub$C))
 
 # note: some combinations are missing values 2 AND 3
-# table(sapply(m.sub, nrow))
+table(sapply(m.sub, nrow))
 # 0    1    2 
 # 1102  140  718 
 
@@ -74,6 +75,7 @@ m.2.5.values <- pblapply(m.sub, interpolateValue)
 m.2.5.values <- do.call('rbind', m.2.5.values)
 
 nrow(m.2.5.values)
+head(m.2.5.values)
 
 ## stack interpolated 2.5 values
 m.new.chroma <- rbind(m.new.chroma, m.2.5.values)
@@ -135,19 +137,78 @@ p1
 ##
 ## subset / rename columns
 ##
+m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 
 
 ##
 ## add neutral chips
 ##
 
+# manually edited file, exported from Nix Pro app
+n <- read.csv(file = 'neutrals_colordata.csv')
+
+n <- n[, c('id', 'Lin.sRGB.R', 'Lin.sRGB.G', 'Lin.sRGB.B')]
+names(n) <- c('id', 'R', 'G', 'B')
+
+n$V <- sapply(strsplit(n$id, '-', fixed = TRUE), '[', 1)
+
+previewColors(rgb(n$R, n$G, n$B))
+
+# TODO: eval over replicates
+
+# take mean over replicates
+n.agg <- aggregate(cbind(R, G, B) ~ V, data = n, FUN = mean)
+
+n.agg$H <- 'N'
+n.agg$C <- 0
+
+n.agg <- n.agg[, c('H', 'V', 'C', 'R', 'G', 'B')]
+
+# interpolate 2.5 value
+n.agg.2.5 <- interpolateValue(n.agg[1:2, ], vars = c('R', 'G', 'B'))
+
+n.agg.final <- rbind(n.agg, n.agg.2.5)
+n.agg.final <- n.agg.final[order(n.agg.final$V), ]
+
+
+# combine
+m.final <- rbind(m.final, n.agg.final)
+
+nrow(m.final)
 
 ##
 ## add CIELAB coordinates
 ##
+lab <- convertColor(m.final[, c('R', 'G', 'B')], from = 'sRGB', to = 'Lab')
+m.final.lab <- cbind(m.final, lab)
 
+##
+## cleanup names / row.names
+##
+names(m.final.lab) <- c('hue', 'value', 'chroma', 'r', 'g', 'b', 'L', 'A', 'B')
+row.names(m.final.lab) <- NULL
 
+##
 ## check
+##
+
+## make backup copy of old LUT
+# data(munsell)
+# saveRDS(munsell, file = 'munsell-LUT-2022-03-29.rds')
+
+z.old <- readRDS('munsell-LUT-2022-03-29.rds')
+
+z <- merge(z.old, m.final.lab, by = c('hue', 'value', 'chroma'), all.x = TRUE)
+
+str(z)
+
+# looks pretty good, note changes in N chips
+xyplot(L.y ~ L.x, data = z)
+xyplot(A.y ~ A.x, data = z)
+xyplot(B.y ~ B.x, data = z)
+
+# my original estimates were too light
+z[z$hue == 'N', ]
 
 
 ##
