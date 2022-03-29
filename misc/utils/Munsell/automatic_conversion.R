@@ -17,7 +17,7 @@
 # optionally only read in common colors:
 # all <- read.table("soil_colors", header=F, col.names=c("H","V","C","x","y","Y"))
 # 
-all <- read.table("munsell-all.dat", header=TRUE)
+all <- read.table("munsell-all.dat.gz", header=TRUE)
 
 
 X <- (all$x * all$Y ) / all$y

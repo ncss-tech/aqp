@@ -1,3 +1,6 @@
+## TODO: use scanned chips from Munsell color atlas
+
+
 library(aqp)
 data(munsell)
 
