@@ -1,7 +1,7 @@
 
 
-## TODO: interpolation 2.5 values
-
+## TODO: interpolation of 2.5 values
+## TODO: interpolation of 1 chroma
 
 library(lattice)
 library(tactile)
