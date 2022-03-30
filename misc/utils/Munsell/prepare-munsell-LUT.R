@@ -253,11 +253,20 @@ table(zz$chroma)
 munsell <- m.final.lab
 save(munsell, file = '../../../data/munsell.rda')
 
+
+## install / or reload from source
+
+
 munsell2rgb('10YR', 3.5, 2, returnLAB = TRUE)
 munsell2rgb('10YR', 4, 2, returnLAB = TRUE)
 
 munsell2rgb('10YR', 2.5, 2, returnLAB = TRUE)
 munsell2rgb('10YR', 2, 2, returnLAB = TRUE)
+
+# check neutral
+m <- sprintf('N %s/', 2:9)
+cols <- parseMunsell(m)
+soilPalette(cols, lab = m)
 
 
 
