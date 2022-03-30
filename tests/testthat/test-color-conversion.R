@@ -108,18 +108,18 @@ test_that("non-integer value and chroma are rounded", {
 test_that("Munsell <--> sRGB and back again", {
 
   # sRGB in hex notation
-  expect_equal(m, '#5E4323FF')
+  expect_equal(m, '#5C4222FF')
   expect_equal(parseMunsell(x), m)
 
   # sRGB triplets
-  expect_equal(m.rgb$r, 0.3679063, tolerance=0.0001)
-  expect_equal(m.rgb$g, 0.2644507, tolerance=0.0001)
-  expect_equal(m.rgb$b, 0.1364835, tolerance=0.0001)
+  expect_equal(m.rgb$r, 0.3618738, tolerance=0.0001)
+  expect_equal(m.rgb$g, 0.2598939, tolerance=0.0001)
+  expect_equal(m.rgb$b, 0.1337521, tolerance=0.0001)
 
   # neutral colors
-  expect_equal(x.neutral$r, 0.2, tolerance=0.01)
-  expect_equal(x.neutral$g, 0.2, tolerance=0.01)
-  expect_equal(x.neutral$b, 0.2, tolerance=0.01)
+  expect_equal(x.neutral$r, 0.03278, tolerance=0.001)
+  expect_equal(x.neutral$g, 0.03305, tolerance=0.001)
+  expect_equal(x.neutral$b, 0.03305, tolerance=0.001)
 
   # sRGB --> Munsell
   expect_equal(x.back$hue, '10YR')
@@ -130,7 +130,7 @@ test_that("Munsell <--> sRGB and back again", {
   expect_equal(x.back.trunc$hue, '10YR')
   expect_equal(x.back.trunc$value, 3)
   expect_equal(x.back.trunc$chroma, 4)
-  })
+})
 
 
 test_that("missing data", {
@@ -158,9 +158,10 @@ test_that("neutral hues", {
   
   N2 <- parseMunsell('N 2/')
   N6 <- parseMunsell('N 6/')
-  expect_equal(N2, '#333333FF')
-  expect_equal(N6, '#999999FF')
+  expect_equal(N2, '#080808FF')
+  expect_equal(N6, '#464848FF')
 })
+
 
 test_that("closest Munsell chip based on sRGB coordinates", {
 
@@ -198,15 +199,17 @@ test_that("Munsell --> LAB + sRGB coordinates", {
   expect_equal(test.1[, 3], test.4[, 3], tolerance=0.1)
 })
 
+
 test_that("similar colors result in same, closest chip", {
 
-  cols <- t(col2rgb(c('#5F5345', '#554636'))) / 255
+  cols <- t(col2rgb(c('#5F5335', '#5F5236'))) / 255
   res <-  rgb2munsell(cols)
 
   expect_equal(res$hue[1], res$hue[2])
   expect_equal(res$value[1], res$value[2])
   expect_equal(res$chroma[1], res$chroma[2])
 })
+
 
 test_that("munsell2spc wrapper method works as expected", {
 
