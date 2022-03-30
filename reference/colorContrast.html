@@ -107,18 +107,18 @@
 <span class="r-in"><span class="co"># contrast metrics</span></span>
 <span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.054654  Distinct</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.313572 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.647979     Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.265955  Distinct</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># adjacent chips</span></span>
 <span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'10YR 3/4'</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1       m2 dH dV dC     dE00    cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 10YR 3/4  0  0  1 3.142401 Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 10YR 3/4  0  0  1 3.125407 Faint</span>
 <span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'7.5YR 3/3'</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1        m2 dH dV dC     dE00    cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 7.5YR 3/3  1  0  0 3.341738 Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 7.5YR 3/3  1  0  0 3.320583 Faint</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># highly contrasting colors</span></span>
 <span class="r-in"><span class="co"># http://colour.granjow.net/fabercastell-polychromos.html</span></span>
@@ -132,21 +132,21 @@
 <span class="r-in"><span class="co"># approximation / extension of the concept</span></span>
 <span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'N 3/'</span>, m2 <span class="op">=</span> <span class="st">'N 6/'</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     m1   m2 dH dV dC     dE00       cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 N 3/ N 6/  0  3  0 30.10136 Distinct</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 N 3/ N 6/  0  3  0 17.20472 Distinct</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">#</span></span>
 <span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'10YR 3/3'</span>, m2 <span class="op">=</span> <span class="st">'N 3/'</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1   m2 dH dV dC     dE00        cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 N 3/  1  0  3 13.83611 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 N 3/  1  0  3 22.02127 Prominent</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'N 3/'</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.112562 Prominent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.522489     Faint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.959582     Faint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      N 3/ 7.5YR 6/3  1  3  3 31.499243 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.313572 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.647979     Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      N 3/ 7.5YR 6/3  1  3  3 47.657510 Prominent</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

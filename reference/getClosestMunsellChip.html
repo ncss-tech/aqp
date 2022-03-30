@@ -75,10 +75,19 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="co"># convert a non-standard color to closest "chip" in `munsell` look-up table</span></span>
 <span class="r-in"><span class="fu">getClosestMunsellChip</span><span class="op">(</span><span class="st">'7.9YR 2.7/2.0'</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "7.5YR 3/2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "7.5YR 2.5/2"</span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># convert directly to R color</span></span>
 <span class="r-in"><span class="fu">getClosestMunsellChip</span><span class="op">(</span><span class="st">'7.9YR 2.7/2.0'</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#584537FF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#4B392DFF"</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># special case for 2.5 value -&gt; no rounding, we have these records in the conversion LUT</span></span>
+<span class="r-in"><span class="fu">getClosestMunsellChip</span><span class="op">(</span><span class="st">'7.5YR 2.5/2'</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "7.5YR 2.5/2"</span>
+<span class="r-in"></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">getClosestMunsellChip</span><span class="op">(</span><span class="st">'7.5YR 6.8/4.4'</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "7.5YR 7/4"</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

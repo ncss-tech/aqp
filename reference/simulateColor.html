@@ -96,8 +96,8 @@
 <span class="r-in"><span class="co"># simulate</span></span>
 <span class="r-in"><span class="op">(</span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">10</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "7.5YR 3/4" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3" "7.5YR 3/3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "7.5YR 3/2" "7.5YR 3/4" "7.5YR 3/3" "7.5YR 3/4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "7.5YR 3/2"   "7.5YR 3/4"   "7.5YR 3/3"   "7.5YR 3/3"   "7.5YR 3/3"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "7.5YR 3/3"   "7.5YR 2.5/4" "7.5YR 2.5/3" "7.5YR 3/3"   "7.5YR 2.5/3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $BA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "7.5YR 4/4" "7.5YR 4/4" "7.5YR 4/5" "7.5YR 4/6" "7.5YR 4/3" "7.5YR 4/2"</span>
@@ -113,11 +113,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Bt3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "10YR 4/12"  "10YR 3/7"   "10YR 4/12"  "7.5YR 4/13" "10YR 4/6"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "10YR 4/8"   "7.5YR 4/8"  "10YR 4/8"   "10YR 3/9"   "10YR 4/11" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "10YR 4/8"   "7.5YR 4/8"  "10YR 4/8"   "7.5YR 4/14" "10YR 4/11" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Cr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "2.5G 7/1"  "2.5G 5/2"  "2.5G 6/2"  "2.5G 6/2"  "2.5G 6/1"  "2.5G 5/1" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "2.5BG 5/1" "2.5G 5/1"  "2.5G 6/4"  "2.5GY 7/3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "2.5G 6/5"  "2.5G 5/2"  "2.5G 6/2"  "2.5G 6/2"  "2.5G 6/1"  "2.5BG 5/3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "2.5BG 5/1" "2.5BG 5/3" "2.5G 6/4"  "2.5G 6/7" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># preview</span></span>
@@ -139,34 +139,42 @@
 <span class="r-in"><span class="co"># tabulate, sort: most frequent color should be 7.5YR 3/3</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cols</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7.5YR 3/3   10YR 2/3    5YR 3/3  7.5YR 3/2  7.5YR 3/6   10YR 3/3   10YR 4/3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         20          7          7          5          5          4          4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5YR 3/4    5YR 3/5  7.5YR 3/4   10YR 2/1   10YR 2/4   10YR 2/7   10YR 3/1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          4          4          4          3          3          3          3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  10YR 3/10   10YR 3/5    5YR 4/8    5YR 4/9  7.5YR 2/2  7.5YR 3/1  7.5YR 3/5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3          3          3          3          3          3          3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10YR 1/3   10YR 3/2   10YR 3/6   10YR 3/9   10YR 4/1   10YR 4/7   10YR 5/2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2          2          2          2          2          2          2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5YR 1/3    5YR 1/4    5YR 2/2    5YR 2/3    5YR 2/4    5YR 2/5    5YR 3/2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2          2          2          2          2          2          2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5YR 3/9   5YR 4/11    5YR 4/3    5YR 4/4    5YR 4/5    5YR 5/2  7.5YR 2/5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2          2          2          2          2          2          2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7.5YR 2/6  7.5YR 3/7  7.5YR 3/9  7.5YR 4/2  7.5YR 4/4  7.5YR 4/9  7.5YR 5/4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2          2          2          2          2          2          2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10YR 1/2   10YR 1/4   10YR 2/2   10YR 2/5   10YR 3/4   10YR 3/7   10YR 3/8 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1          1          1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  10YR 4/10  10YR 4/11  10YR 4/12   10YR 4/6   10YR 4/8   10YR 4/9   10YR 5/3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1          1          1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   10YR 5/4    5YR 1/1    5YR 1/2    5YR 1/5    5YR 1/7    5YR 2/1   5YR 2/10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1          1          1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5YR 2/6    5YR 2/7    5YR 2/8    5YR 3/1   5YR 3/12    5YR 3/8    5YR 4/1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1          1          1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5YR 4/13   5YR 4/14    5YR 4/2    5YR 4/6    5YR 4/7    5YR 5/3    5YR 5/4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1          1          1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5YR 5/5  7.5YR 1/1  7.5YR 1/2  7.5YR 1/3  7.5YR 2/3  7.5YR 2/7  7.5YR 3/8 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1          1          1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7.5YR 4/1 7.5YR 4/10 7.5YR 4/13  7.5YR 4/5  7.5YR 4/6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1          1          1          1          1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 3/3   7.5YR 3/4  10YR 2.5/4  10YR 2.5/3    10YR 3/5     5YR 3/3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          17           6           5           4           4           4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5YR 3/5     5YR 4/3   7.5YR 3/1   7.5YR 3/5    10YR 3/3   5YR 2.5/2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           4           4           4           4           3           3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5YR 2/8     5YR 3/4     5YR 3/7     5YR 4/2   7.5YR 3/2  7.5YR 4/14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           3           3           3           3           3           3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    10YR 1/3  10YR 2.5/1  10YR 2.5/2  10YR 2.5/5  10YR 2.5/6  10YR 2.5/8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2           2           2           2           2           2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    10YR 2/3    10YR 2/6    10YR 3/2    10YR 3/4    10YR 4/1    10YR 4/7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2           2           2           2           2           2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5YR 2.5/1   5YR 2.5/5   5YR 2.5/6     5YR 2/5    5YR 3/11     5YR 3/2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2           2           2           2           2           2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5YR 3/6     5YR 3/8     5YR 4/1     5YR 5/2     5YR 5/4 7.5YR 2.5/1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2           2           2           2           2           2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7.5YR 2.5/2 7.5YR 2.5/3 7.5YR 2.5/8   7.5YR 2/1   7.5YR 2/2   7.5YR 2/4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2           2           2           2           2           2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 2/7   7.5YR 3/9   7.5YR 4/3   7.5YR 5/3    10YR 1/2    10YR 1/4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2           2           2           2           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    10YR 2/2    10YR 2/4    10YR 2/7    10YR 2/8    10YR 3/1   10YR 3/10 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    10YR 3/7   10YR 4/10   10YR 4/12    10YR 4/2    10YR 4/5    10YR 4/6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    10YR 5/2    10YR 5/3     5YR 1/2     5YR 1/5  5YR 2.5/10   5YR 2.5/3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5YR 2.5/4   5YR 2.5/7   5YR 2.5/8    5YR 2/10     5YR 2/3     5YR 2/9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5YR 3/1     5YR 3/9    5YR 4/10    5YR 4/12     5YR 4/4     5YR 4/6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     5YR 4/7     5YR 4/9     5YR 5/3     5YR 5/5   7.5YR 1/2   7.5YR 1/3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 1/4   7.5YR 1/6 7.5YR 2.5/4 7.5YR 2.5/6 7.5YR 2.5/7   7.5YR 2/3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 2/6  7.5YR 3/10   7.5YR 3/8  7.5YR 4/10   7.5YR 4/5   7.5YR 4/8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 4/9   7.5YR 5/4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           1 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># review colors</span></span>
 <span class="r-in"><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span></span>

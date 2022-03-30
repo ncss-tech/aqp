@@ -82,17 +82,17 @@
 <span class="r-in"><span class="co"># just sRGB</span></span>
 <span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           r         g          b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3817539 0.2599868 0.09323485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3755239 0.2554937 0.09112035</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># sRGB + CIELAB (D65 illuminant)</span></span>
 <span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span>, returnLAB <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           r         g          b        L        A        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3817539 0.2599868 0.09323485 30.81482 9.000702 30.27227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3755239 0.2554937 0.09112035 30.27982 8.897842 29.92632</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># CIELAB only</span></span>
 <span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">FALSE</span>, returnLAB <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          L        A        B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 30.81482 9.000702 30.27227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 30.27982 8.897842 29.92632</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># neutral hue</span></span>
 <span class="r-in"><span class="co"># note chroma encoded as '0'</span></span>
