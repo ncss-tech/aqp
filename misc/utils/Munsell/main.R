@@ -4,7 +4,7 @@
 
 # make Munsell and related LUT
 # add neutral chips
-# xyY -> XYZ -> sRGB -> LAB
+# xyY [C] -> XYZ [D65] -> sRGB -> CIELAB
 source('prepare-munsell-LUT.R')
 
 # spectral reference data
@@ -17,7 +17,7 @@ source('traditional-names.R')
 # prepare a simplified spectral library of Munsell color chips
 source('prepare-simplfied-spectra-library.R')
 
-# interpolate odd chroma spectra
+# interpolate odd chroma and 2.5 value spectra
 source('interpolate-spectra.R')
 
 # create Munsell hue position data
