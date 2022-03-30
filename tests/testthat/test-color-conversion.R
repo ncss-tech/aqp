@@ -168,7 +168,9 @@ test_that("closest Munsell chip based on sRGB coordinates", {
   # closest chip in aqp LUT
   expect_equal(getClosestMunsellChip('10YR 3.3/5', convertColors = FALSE), '10YR 3/5')
   expect_equal(getClosestMunsellChip('9YR 3.8/3', convertColors = FALSE), '10YR 4/3')
-  expect_equal(getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE), '7.5YR 3/2')
+  
+  # 2022-03-30: now we get correct selection of 2.5 value
+  expect_equal(getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE), '7.5YR 2.5/2')
 })
 
 

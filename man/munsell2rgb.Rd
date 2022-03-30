@@ -41,7 +41,6 @@ This function is vectorized without recycling: i.e. the length of each argument 
 Neutral hues are approximated by greyscale shades ranging from 20\\% (darker) to 80\\% (lighter). No chroma is required for neutral hues.
 
 Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.
-Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
 Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the \code{munsell} sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
 
 See examples below.
@@ -51,10 +50,13 @@ Care should be taken when using the resulting sRGB values; they are close to the
 }
 \examples{
 
-# neutral heues (N) map to approximate greyscale colors
-# chroma may be any number or NA
-g <- expand.grid(hue='N', value=2:8, chroma=NA, stringsAsFactors=FALSE)
-munsell2rgb(g$hue, g$value, g$chroma)
+# neutral hues (N) can be defined with chroma of 0 or NA 
+g <- expand.grid(hue='N', value=2:8, chroma=0, stringsAsFactors=FALSE)
+(m <- munsell2rgb(g$hue, g$value, g$chroma))
+soilPalette(m)
+
+# back-transform
+rgb2munsell(t(col2rgb(m)) / 255)
 
 
 # basic example
@@ -66,7 +68,7 @@ plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
 
 # multiple pages of hue:
 hues <- c('2.5YR','5YR','7.5YR','10YR')
-d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
+d <- expand.grid(hue=hues, value=c(2, 2.5, 3:8), chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
 # convert Munsell -> sRGB
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 

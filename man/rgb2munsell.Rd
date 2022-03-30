@@ -26,18 +26,17 @@ This function is fully vectorized and will pad output with NA-records when NA ar
 
 # Munsell notation to sRGB triplets [0-1] 
 color <- munsell2rgb(
-  the_hue = c('10YR', '2.5YR'), 
-  the_value = c(3, 5), 
-  the_chroma = c(5, 6), 
+  the_hue = c('10YR', '2.5YR', '5YR'), 
+  the_value = c(3, 5, 2.5), 
+  the_chroma = c(5, 6, 2), 
   return_triplets = TRUE
 )
 
 # result is a data.frame
 color
 
-# sRGB triplets to closest Munsell color 
-# dE00 distandce metric
-# result is a data.frame
+# back-transform sRGB -> closest Munsell color
+# sigma is the dE00 color contrast metric
 rgb2munsell(color)
 
 }

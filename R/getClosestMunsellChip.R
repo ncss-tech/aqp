@@ -18,8 +18,15 @@
 #' 
 #' # convert a non-standard color to closest "chip" in `munsell` look-up table
 #' getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
+#' 
 #' # convert directly to R color
 #' getClosestMunsellChip('7.9YR 2.7/2.0')
+#' 
+#' # special case for 2.5 value -> no rounding, we have these records in the conversion LUT
+#' getClosestMunsellChip('7.5YR 2.5/2', convertColors = FALSE)
+#' 
+#' 
+#' getClosestMunsellChip('7.5YR 6.8/4.4', convertColors = FALSE)
 #' 
 getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
   
@@ -49,12 +56,28 @@ getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
     closest.hue[i] <- paste0(all.hue.data[idx, ][closest.idx, ], collapse = '')
   }
   
-  ## TODO: don't round 2.5 values: https://github.com/ncss-tech/aqp/issues/251
-  # locate closest value and chroma by rounding
-  closest.value <- round(as.numeric(cd$value))
-  closest.chroma <- round(as.numeric(cd$chroma))
+  # valid value / chroma in our LUT
+  valid.value <- unique(munsell$value)
+  valid.chroma <- unique(munsell$chroma)
   
-  # convert values < 1 -> 1
+  # treat as numeric
+  cd$value <- as.numeric(cd$value)
+  cd$chroma <- as.numeric(cd$chroma)
+  
+  # locate closest value / chroma
+  closest.value <- vector(mode = 'numeric', length = nrow(cd))
+  closest.chroma <- vector(mode = 'numeric', length = nrow(cd))
+  for(i in 1:nrow(cd)) {
+    # search for closest value
+    idx <- which.min(abs(cd$value[i] - valid.value))
+    closest.value[i] <- valid.value[idx]
+    
+    # search for closest chroma
+    idx <- which.min(abs(cd$chroma[i] - valid.chroma))
+    closest.chroma[i] <- valid.chroma[idx]
+  }
+  
+  # convert values and chroma < 1 -> 1
   closest.value <- ifelse(closest.value < 1, 1, closest.value)
   closest.chroma <- ifelse(closest.chroma < 1, 1, closest.chroma)
   

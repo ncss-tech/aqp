@@ -1,8 +1,10 @@
-# aqp 1.42 (2022-03-15)
+# aqp 1.42 (2022-03-30)
  * `getArgillicBounds()`, `getCambicBounds()`, `mollic.thickness.requirement()`, `getSurfaceHorizonDepth()` and related functions have been optimized and now work on SoilProfileCollection objects with length > 1
  * Added `reduceSPC()` function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection
  * Added new "k-keyword" `.NHZ` for use with SoilProfileCollection `[` method
    * `object[,,.NHZ]` returns a vector with the number of horizons in each profile
+ * proper identification and conversion of Munsell value == 2.5
+ * interpolated reference spectra for Munsell value == 2.5 
 
 # aqp 1.41 (2022-02-11)
  * `plotSPC()` gains new arguments for controlling horizon depth labels

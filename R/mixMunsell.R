@@ -197,6 +197,11 @@
 #' mixMunsell(cols, mixingMethod = 'exact')
 #' mixMunsell(cols, mixingMethod = 'estimate')
 #' 
+#' # 2.5 values
+#' cols <- c('10YR 2.5/2', '5YR 5/6')
+#' mixMunsell(cols, mixingMethod = 'reference')
+#' mixMunsell(cols, mixingMethod = 'exact')
+#' mixMunsell(cols, mixingMethod = 'estimate')
 #' 
 mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact', 'estimate', 'adaptive', 'spectra'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025, ...) {
 

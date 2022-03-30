@@ -1,9 +1,4 @@
 
-
-
-
-
-
 #' @title sRGB to Munsell Color Conversion
 #' 
 #' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the \code{munsell} lookup table. 
@@ -32,18 +27,17 @@
 #' 
 #' # Munsell notation to sRGB triplets [0-1] 
 #' color <- munsell2rgb(
-#'   the_hue = c('10YR', '2.5YR'), 
-#'   the_value = c(3, 5), 
-#'   the_chroma = c(5, 6), 
+#'   the_hue = c('10YR', '2.5YR', '5YR'), 
+#'   the_value = c(3, 5, 2.5), 
+#'   the_chroma = c(5, 6, 2), 
 #'   return_triplets = TRUE
 #' )
 #' 
 #' # result is a data.frame
 #' color
 #' 
-#' # sRGB triplets to closest Munsell color 
-#' # dE00 distandce metric
-#' # result is a data.frame
+#' # back-transform sRGB -> closest Munsell color
+#' # sigma is the dE00 color contrast metric
 #' rgb2munsell(color)
 #'
 rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest = 1) {
@@ -135,18 +129,11 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
       idx <- order(sigma)[1:nClosest]
     }
 
-
-    # ## TODO: this doesn't actually trap the condition we are attempting to trap!
-    # # https://github.com/ncss-tech/aqp/issues/160
-    # # with NA as an input, there will be no output
-    # if(length(idx) == 0)
-    #   res[[i]] <- data.frame(hue=NA, value=NA, chroma=NA, sigma=NA, stringsAsFactors=FALSE)
-    #
-    # # otherwise return the closest color
-    # else
-    #   res[[i]] <- data.frame(munsell[idx, 1:3], sigma=sigma[idx])
-
-    res[[i]] <- data.frame(munsell[idx, 1:3], sigma = sigma[idx])
+    # pack results, sorted by closest results
+    res[[i]] <- data.frame(
+      munsell[idx, 1:3], 
+      sigma = sigma[idx]
+    )
 
   }
 
@@ -204,7 +191,6 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' 
 #' Gley soil colors that are missing a chroma will not be correctly interpreted. Consider using a chroma of 1.
 # 
-#' Values of "2.5" (common in soil color descriptions) are silently truncated to "2".
 # 
 #' Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the \code{munsell} sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
 #' 
@@ -223,10 +209,13 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #'
 #' @examples
 #' 
-#' # neutral heues (N) map to approximate greyscale colors
-#' # chroma may be any number or NA
-#' g <- expand.grid(hue='N', value=2:8, chroma=NA, stringsAsFactors=FALSE)
-#' munsell2rgb(g$hue, g$value, g$chroma)
+#' # neutral hues (N) can be defined with chroma of 0 or NA 
+#' g <- expand.grid(hue='N', value=2:8, chroma=0, stringsAsFactors=FALSE)
+#' (m <- munsell2rgb(g$hue, g$value, g$chroma))
+#' soilPalette(m)
+#' 
+#' # back-transform
+#' rgb2munsell(t(col2rgb(m)) / 255)
 #' 
 #' 
 #' # basic example
@@ -238,7 +227,7 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' 
 #' # multiple pages of hue:
 #' hues <- c('2.5YR','5YR','7.5YR','10YR')
-#' d <- expand.grid(hue=hues, value=2:8, chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
+#' d <- expand.grid(hue=hues, value=c(2, 2.5, 3:8), chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
 #' # convert Munsell -> sRGB
 #' d$color <- with(d, munsell2rgb(hue, value, chroma))
 #' 
