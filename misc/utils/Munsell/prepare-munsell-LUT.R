@@ -31,6 +31,7 @@ m$Y <- rescale(m$Y, to = c(0, 1))
 m <- subset(m, V >= 1)
 
 ## interpolate odd chroma chips
+# also interpolate backwards to C == 1
 m.split <- split(m, list(m$H, m$V))
 
 # this combines original + interpolated values
@@ -39,14 +40,14 @@ m.new.chroma <- do.call('rbind', m.new.chroma)
 
 
 ## graphical check
-p.1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25) 
+p.1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
 
 p.2 <- xyplot(x ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
 
 p.1 + p.2
 
 
-p.1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25) 
+p.1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
 
 p.2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
 
@@ -92,7 +93,8 @@ g <- make.groups(
 )
 
 # ok
-xyplot(x ~ V | factor(C), groups = which, data = g, subset = H %in% c('2.5YR'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16) 
+xyplot(x ~ V | factor(C), groups = which, data = g, subset = H %in% c('2.5YR'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16, xlim = c(0, 10)) 
+
 
 
 ##
@@ -173,6 +175,7 @@ n.agg.final <- n.agg.final[order(n.agg.final$V), ]
 # combine
 m.final <- rbind(m.final, n.agg.final)
 
+# 9227
 nrow(m.final)
 
 ##
@@ -262,6 +265,10 @@ munsell2rgb('10YR', 4, 2, returnLAB = TRUE)
 
 munsell2rgb('10YR', 2.5, 2, returnLAB = TRUE)
 munsell2rgb('10YR', 2, 2, returnLAB = TRUE)
+
+munsell2rgb('10YR', 2, 1, returnLAB = TRUE)
+munsell2rgb('10YR', 5, 1, returnLAB = TRUE)
+
 
 # check neutral
 m <- sprintf('N %s/', 2:9)

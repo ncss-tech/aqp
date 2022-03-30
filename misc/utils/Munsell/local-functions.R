@@ -6,10 +6,10 @@ interpolateChroma <- function(m.i) {
   s.x <- splinefun(m.i$C, m.i$x)
   s.y <- splinefun(m.i$C, m.i$y)
   
-  # make predictions along range of min(C) -> max(C)
+  # make predictions along range of 1 -> max(C)
   # but only where we are missing data
   C.original <- m.i$C
-  C.full <- seq(from = min(m.i$C), to = max(m.i$C), by = 1)
+  C.full <- seq(from = 1, to = max(m.i$C), by = 1)
   C.new <- setdiff(C.full, C.original)
   
   # eval spline functions along missing points
