@@ -2,17 +2,10 @@
 ## 2022-03-29
 ## D.E. Beaudette, A.G. Brown
 
-
-
-
-# make munsell and related LUT
-# munsell hue / value / chroma
-# sRGB, CIELAB coordinates
-
-
+# make Munsell and related LUT
 # add neutral chips
-
-
+# xyY -> XYZ -> sRGB -> LAB
+source('prepare-munsell-LUT.R')
 
 # spectral reference data
 # illuminants / observers

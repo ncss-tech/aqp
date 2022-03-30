@@ -7,7 +7,7 @@ test_that("mixMunsell works as expected", {
   expect_error(mixMunsell(c(NA, '10YR 3/4')))
 
   # invalid Munsell notation
-  expect_error(mixMunsell(c('10YR 5/3', '10YR 3/99')))
+  expect_error(expect_warning(mixMunsell(c('10YR 5/3', '10YR 3/99'))))
 
   # singleton
   x <- mixMunsell(c('10YR 5/3'))
