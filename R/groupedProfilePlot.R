@@ -150,10 +150,13 @@ groupedProfilePlot <- function(x, groups, group.name.offset=-5, group.name.cex=0
   # group boundaries on x-axis
   boundary.positions <-  cumsum(group.lengths)[-length(group.lengths)] + 0.5
 
-  # resonable upper / lower boundaries on y-axis
+  # reasonable upper / lower boundaries on y-axis
   # these are informed by plotting parameters sent to plotSPC()
-  upper.position <- (lsp$y.offset) + (group.name.offset/2 * lsp$scaling.factor)
-  lower.position <- (lsp$y.offset) + (lsp$max.depth * lsp$scaling.factor)
+  # note: this is a vector -> reduce to scalar
+  .yoffset <- mean(lsp$y.offset)
+  
+  upper.position <- (.yoffset) + (group.name.offset/2 * lsp$scaling.factor)
+  lower.position <- (.yoffset) + (lsp$max.depth * lsp$scaling.factor)
 
   if(length(boundary.positions)) { # only add grouping symbols if number of groups is > 1
     # add group boundaries
