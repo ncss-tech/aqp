@@ -254,7 +254,7 @@ table(zz$chroma)
 ## save to munsell.rda
 ##
 munsell <- m.final.lab
-save(munsell, file = '../../../data/munsell.rda')
+save(munsell, file = '../../../data/munsell.rda', compress = 'xz')
 
 
 ## install / or reload from source

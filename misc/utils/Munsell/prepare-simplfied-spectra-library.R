@@ -47,5 +47,5 @@ m.rel <- data.frame(
 m.rel <- m.rel[order(m.rel$hue, m.rel$value, m.rel$chroma, m.rel$wavelength), ]
 
 # save
-saveRDS(m.rel, file = 'simplified-Munsell-spectra.rds')
+saveRDS(m.rel, file = 'simplified-Munsell-spectra.rds', compress = 'xz')
 

@@ -234,8 +234,8 @@ reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 munsell.spectra <- m.final
 munsell.spectra.wide <- reference
 
-save(munsell.spectra, file = '../../../data/munsell.spectra.rda')
-save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda')
+save(munsell.spectra, file = '../../../data/munsell.spectra.rda', compress = 'xz')
+save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda', compress = 'xz')
 
 # cleanup
 unlink(c('interpolated-Munsell-spectra-wide.rds', 'interpolated-Munsell-spectra.rds', 'simplified-Munsell-spectra.rds'))
