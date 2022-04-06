@@ -1,5 +1,3 @@
-context("spc2mpspline - 1cm spline interpolation w/ mpspline2")
-
 test_that("spc2mpspline works as expected", {
   data(sp1)
   depths(sp1) <- id ~ top + bottom
@@ -38,4 +36,22 @@ test_that("spc2mpspline works as expected", {
   expect_equal(length(sp1union), 2*length(sp1))
 
   # plot(sp1union, color = "prop_combined", divide.hz = FALSE)
+})
+
+test_that("alternate depth output methods", {
+  data(sp1, package = "aqp")
+  depths(sp1) <- id ~ top + bottom
+  
+  res1 <- spc2mpspline(sp1, 'prop', 
+                       method = "est_icm", 
+                       hzdesgn = 'name')
+  # contains one horizon with equal top and bottom
+  expect_equal(nrow(sp1) - 1, nrow(res1))
+  
+  res2 <- spc2mpspline(sp1, 'prop', 
+                       method = "est_dcm", 
+                       hzdesgn = 'name')
+  # 6 layers per input profile in output
+  expect_equal(6*length(sp1), nrow(res2))
+  
 })
