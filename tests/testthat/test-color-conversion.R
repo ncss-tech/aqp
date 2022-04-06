@@ -43,12 +43,6 @@ test_that("parseMunsell()", {
   expect_true(inherits(some.NA, 'data.frame'))
   expect_true(nrow(some.NA) == 2)
   
-  # neutral colors
-  res <- parseMunsell('N 2/', convertColors = FALSE)
-  expect_true(inherits(res, 'data.frame'))
-  # chroma is arbitrarily set to 0
-  expect_true(res$chroma == 0)
-  
   # splitting of text into columns within data.frame
   expect_identical(x.p, data.frame(hue = "10YR", value = 3, chroma = 4, stringsAsFactors = FALSE))
 
@@ -71,6 +65,20 @@ test_that("Munsell hue parsing", {
   expect_equal(res$hue.character, 'YR')
   expect_equal(nrow(res), 1)
 
+  # white space is trimmed
+  res <- aqp:::.parseMunsellHue('10 YR')
+  expect_true(inherits(res, 'data.frame'))
+  expect_equal(res$hue.numeric, 10L)
+  expect_equal(res$hue.character, 'YR')
+  expect_equal(nrow(res), 1)
+  
+  # decimal, won't convert correctly, but should be split
+  res <- aqp:::.parseMunsellHue('10.1YR')
+  expect_true(inherits(res, 'data.frame'))
+  expect_equal(res$hue.numeric, 10.1)
+  expect_equal(res$hue.character, 'YR')
+  expect_equal(nrow(res), 1)
+  
   # bogus hue
   res <- aqp:::.parseMunsellHue('G1 ')
   expect_true(inherits(res, 'data.frame'))
@@ -80,12 +88,13 @@ test_that("Munsell hue parsing", {
 })
 
 
-test_that("non-integer value and chroma are rounded", {
+test_that("non-integer value and chroma are selectively rounded", {
 
   # rounding of value, throws warning
   expect_warning(res <- parseMunsell('10YR 3.3/4'), regexp = 'non-standard notation')
   # this will not throw a warning
   res <- parseMunsell('10YR 3.3/4', convertColors = FALSE)
+  
   # results should be the same
   expect_equal(
     suppressWarnings(parseMunsell('10YR 3.3/4')),
@@ -96,12 +105,18 @@ test_that("non-integer value and chroma are rounded", {
   expect_warning(res <- parseMunsell('10YR 3/4.6'), regexp = 'non-standard notation')
   # this will not throw a warning
   res <- parseMunsell('10YR 3/4.6', convertColors = FALSE)
+  
   # results should be the same
   expect_equal(
     suppressWarnings(parseMunsell('10YR 3/4.6')),
     parseMunsell('10YR 3/5')
   )
 
+  # no rounding of 2.5 values
+  res <- parseMunsell('10YR 2.5/2')
+  res.test <- rgb2munsell(t(col2rgb('#493A2BFF')/255))
+  
+  expect_true(res.test$value == 2.5)
 })
 
 
@@ -156,10 +171,32 @@ test_that("missing data", {
 
 test_that("neutral hues", {
   
+  # neutral colors
+  res <- parseMunsell('N 2/', convertColors = FALSE)
+  expect_true(inherits(res, 'data.frame'))
+  
+  # chroma is arbitrarily set to 0
+  expect_true(res$chroma == 0)
+  
   N2 <- parseMunsell('N 2/')
   N6 <- parseMunsell('N 6/')
   expect_equal(N2, '#080808FF')
   expect_equal(N6, '#464848FF')
+  
+  # alternative notation
+  N2 <- parseMunsell('N 2')
+  N6 <- parseMunsell('N 6/0')
+  expect_equal(N2, '#080808FF')
+  expect_equal(N6, '#464848FF')
+  
+  # missing, 0, or bogus chroma are all ignored
+  N2 <- munsell2rgb('N', 2, NA)
+  N4 <- munsell2rgb('N', 4, 0)
+  N6 <- munsell2rgb('N', 6, 4)
+  expect_equal(N2, '#080808FF')
+  expect_equal(N4, '#1B1C1CFF')
+  expect_equal(N6, '#464848FF')
+  
 })
 
 
