@@ -2,14 +2,14 @@
   setGeneric("spc2mpspline", function(object,
                                       var_name = NULL,
                                       pattern = "R|Cr|Cd|qm",
-                                      hzdesgn = guessHzDesgnName(object), ...)
+                                      hzdesgn = NULL, ...)
     standardGeneric("spc2mpspline"))
 
 #' @title Missing-data-safe, SPC-wide wrapper around `mpspline2::mpspline()` "continuous" 1cm output
 #'
 #' @description Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with `mpspline2::mpspline()`. Currently only works with a single attribute at a time. 
 #' 
-#' @details This function will automatically filter profiles with `NA` in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggregated over the full interval where data was available.
+#' @details This function now relies on the missing data checks provided by mpspline2 package. See `attr(..., 'removed')` to see whole profiles that were removed from the set. Horizons containing `NA` in the property of interest are dropped with a message.
 #'
 #' Data completeness is assessed and the input SPC is filtered and truncated to create a container for the 1cm results from `mpspline2::mpspline()`.
 #'
@@ -57,45 +57,43 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             spc.sub <- glom(object, object[[hztop]][object[, 1, .HZID]], 
                                     object[[hzbot]][object[, , .LAST, .HZID]])
             
-            # mpspline2::mpspline contains its own NA fixing/handling code, but we 
-            # need to be able to account for what it removes, and dice() can't handle it
-            na.idx <- which(is.na(spc.sub[[var_name]]))
-            spc.sub <- spc.sub[!profile_id(spc.sub) %in% object@horizons[[idname(spc.sub)]][na.idx]]
-            # # TODO:
-            # # need to remove the horizons that have NA in var_name at a minimum
-            # # something like...
-            # spc.sub$.missingData <- is.na(spc.sub[[var_name]])
-            # spc.sub <- subsetHz(spc.sub, !.missingData)
+            # remove any horizons that have 0 or NA thickness (no mass)
+            .sameTopBottom <- NULL
+            spc.sub$.sameTopBottom <- spc.sub[[hztop]] == spc.sub[[hzbot]]
+            spc.sub$.sameTopBottom <- spc.sub$.sameTopBottom | is.na(spc.sub$.sameTopBottom)
+            spc.sub <- subsetHz(spc.sub, !.sameTopBottom)
             
             # calculate the top depth and bottom depth for each profile
-            mindepth <- spc.sub[, 1][[hztop]]
-            
+            spc.sub$.mindepth <- spc.sub[, 1][[hztop]]
+
             # optionally constrained by some pattern matching
             if (!missing(hzdesgn) && !is.null(hzdesgn)) {
-              hzpatdep <- minDepthOf(spc.sub, pattern = pattern, hzdesgn = hzdesgn)[[hztop]]
+              hzpatdep <- minDepthOf(
+                spc.sub,
+                pattern = pattern,
+                hzdesgn = hzdesgn,
+                no.contact.assigned = Inf
+              )[[hztop]]
             } else {
-              hzpatdep <- numeric(0)
+              hzpatdep <- rep(Inf, length(spc.sub))
             }
             
             # either the bottom depth of last horizon or the matched pattern top depth
-            maxdepth <- pmin(c(hzpatdep, spc.sub[, , .LAST][[hzbot]]), na.rm = TRUE)
+            spc.sub$.maxdepth <- pmin(hzpatdep, spc.sub[, , .LAST][[hzbot]], na.rm = TRUE)
             
             # truncate using vectors of top and bottom
-            spc.sub <- trunc(spc.sub, mindepth, maxdepth)
-            
+            spc.sub <- trunc(spc.sub, spc.sub$.mindepth, spc.sub$.maxdepth)
+
             # do the splines
             res <- mpspline2::mpspline(horizons(spc.sub)[c(idname(spc.sub),
                                                            horizonDepths(spc.sub),
                                                            var_name)],
                                        var_name = var_name, ...)
             
-            # single horizon results cannot be splined, filter those out
-            spc.sub <- spc.sub[which(spc.sub[, , .NHZ] > 1),]
-            
             # concatenate results for re-insertion
             pid <- profile_id(spc.sub)
             res2 <- do.call('c', lapply(seq_along(pid), function(i) {
-              drange <- mindepth[i]:maxdepth[i]
+              drange <- spc.sub$.mindepth[i]:spc.sub$.maxdepth[i]
               zero.idx <- drange == 0
               if (any(zero.idx))
                 drange <- drange[-which(zero.idx)]
@@ -115,29 +113,23 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             reserr_iqr <- reserr[names(reserr) == "RMSE_IQR"]
             reserr <- reserr[names(reserr) == "RMSE"]
             
-            # inspect
-            #reserr_iqr
-            #reserr
+            # profiles removed (NA in all horizons)
+            spc.sub <- spc.sub[profile_id(spc.sub) %in% names(res),]
             
             # create slices 1cm thick to insert spline result
             spc.spl <- suppressMessages(aqp::dice(spc.sub))
-                                                     
             
             # create new "spline_"+var_name variable
-            spc.spl[[paste0(var_name,"_spline")]] <- res2
+            spc.spl[[paste0(var_name, "_spline")]] <- res2
             
             # create new "rmse_"+var_name as site level attributes
-            spc.spl[[paste0(var_name,"_rmse")]] <- reserr
-            spc.spl[[paste0(var_name,"_rmse_iqr")]] <- reserr_iqr
+            spc.spl[[paste0(var_name, "_rmse")]] <- reserr
+            spc.spl[[paste0(var_name, "_rmse_iqr")]] <- reserr_iqr
             
             # determine what profiles were removed
             removed <- profile_id(object)[!profile_id(object) %in% profile_id(spc.spl)]
             
-            # add an attribute with removed profile IDs. there are three steps
-            # that possibly remove data:
-            #  - profiles removed by glom have no var_name data at all.
-            #  - 100% coverage filtering step -- conservative filter to keep from making splines from bad data
-            #  - mpspline itself will remove profiles with e.g. just one horizon
+            # add an attribute with removed profile IDs
             attr(spc.spl, "removed") <- unique(removed)
             
             return(spc.spl)

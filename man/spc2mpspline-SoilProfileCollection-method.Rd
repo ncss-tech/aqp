@@ -31,7 +31,7 @@ A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixe
 Facilitate safe use of just about any numeric SPC horizon attribute, from any SPC, with \code{mpspline2::mpspline()}. Currently only works with a single attribute at a time.
 }
 \details{
-This function will automatically filter profiles with \code{NA} in attribute of interest which may be more conservative filtering than you expect. The intention here is that a SPC of related profile instances could be splined, and then the spline results aggregated over the full interval where data was available.
+This function now relies on the missing data checks provided by mpspline2 package. See \code{attr(..., 'removed')} to see whole profiles that were removed from the set. Horizons containing \code{NA} in the property of interest are dropped with a message.
 
 Data completeness is assessed and the input SPC is filtered and truncated to create a container for the 1cm results from \code{mpspline2::mpspline()}.
 }

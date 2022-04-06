@@ -4,14 +4,9 @@ test_that("spc2mpspline works as expected", {
   data(sp1)
   depths(sp1) <- id ~ top + bottom
   
-  # # alternate/future: horizons with NA in property of interest are removed, not whole profiles
-  # res0 <- spc2mpspline(sp1, "prop")
-  # expect_equal(length(res0), length(sp1))
-  
-  # profiles with NA in property of interest are removed
-  res1 <- spc2mpspline(sp1, "prop")
-  expect_equal(length(res1), length(sp1) - 1)
-  expect_equal(attr(res1, "removed"), "P001")
+  # horizons with NA in property of interest are removed (not whole profiles)
+  res1 <- spc2mpspline(sp1, "prop", hzdesgn = 'name')
+  expect_equal(length(res1), length(sp1))
 
   # correspond to profiles P002 and P009
   expect_equal(max(res1), 240)
