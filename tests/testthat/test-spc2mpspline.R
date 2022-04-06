@@ -21,7 +21,14 @@ test_that("spc2mpspline works as expected", {
   
   # pass d= argument for greater max depth
   res3 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300))
-  expect_equal(length(res3), length(sp1fix)) # first profile was fixed
+  
+  # pass d= argument (with method="est_dcm")
+  res4 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300), method = "est_dcm")
+  expect_equal(nrow(res4), length(sp1fix)*7) # first profile was fixed
+  
+  # pass d= argument (with method="est_icm")
+  res4 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300), method = "est_icm")
+  expect_equal(nrow(res4), nrow(sp1fix)) # first profile was fixed
 
   expect_equal(max(res3), 240)
   expect_equal(min(res1), 59)

@@ -147,17 +147,23 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
                      spc.spl <- spc.sub
                    },
                    "est_dcm" = {
-                     if (is.null(list(...)$d)) {
-                       d <- c(0, 5, 15, 30, 60, 100, 200)
-                     } 
-                     newhzd <- data.frame(id = profile_id(spc.sub),
-                                          top = do.call('c', lapply(d[1:(length(d) - 1)], 
-                                                                    rep, length(spc.sub))),
-                                          bottom = do.call('c', lapply(d[2:length(d)], 
-                                                                       rep, length(spc.sub))))
-                     colnames(newhzd) <- c(idname(spc.sub), horizonDepths(spc.sub))
-                     depths(newhzd) <- colnames(newhzd)
-                     spc.spl <- newhzd
+                     .new_d_horizons <- function(x, ...) {
+                       if (is.null(list(...)$d)) {
+                         d <- c(0, 5, 15, 30, 60, 100, 200)
+                       } else {
+                         d <- list(...)$d
+                       }                  
+                       newhzd <- data.frame(
+                         id = profile_id(x),
+                         top = do.call('c', lapply(d[1:(length(d) - 1)], rep, length(x))),
+                         bottom = do.call('c', lapply(d[2:length(d)], rep, length(x)))
+                       )
+                       colnames(newhzd) <- c(idname(x), horizonDepths(x))
+                       depths(newhzd) <- colnames(newhzd)
+                       newhzd
+                     }
+
+                     spc.spl <- .new_d_horizons(spc.sub, ...)
                    })
                    
             # create new "spline_"+var_name variable
