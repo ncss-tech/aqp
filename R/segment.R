@@ -3,7 +3,7 @@
 
 #' @title Segmenting of Soil Horizon Data by Depth Interval
 #' 
-#' @description This function adds depth interval ("segment") labels to soil horizon data associated with \code{SoilProfileCollection} and \code{data.frame} objects. Additional horizon records are inserted when a segment label does not overlap with a horizon boundary. See examples.
+#' @description This function segments or subdivides horizon data from a \code{SoilProfileCollection} or \code{data.frame} by depth interval (e.g. 0-10, 0:50, or 25-100). This results in horizon records being split at the specified depth intervals, which duplicates the original horizon data but also adds new horizon depths. In addition, labels (i.e. "segment_id") are added to each horizon record that correspond with their depth interval (e.g. 025-100). This function is intended to harmonize horizons to a common support (i.e. depth interval) for further aggregation or summary. See the examples.
 #'
 #' @param object either a \code{SoilProfileCollection} or \code{data.frame}
 #' @param intervals a vector of integers over which to slice the horizon data (e.g. \code{c(25, 100)} or \code{25:100})
@@ -11,11 +11,13 @@
 #' @param hzdepcols a character vector of length 2 specifying the names of the horizon depths (e.g. \code{c("hzdept", "hzdepb")}), only necessary if \code{object} is a \code{data.frame}.
 #' 
 #' 
-#' @details This function adds segment labels to soil horizon data according to \code{intgervals} (e.g. c(25, 100) or 25:100). Compared to \code{slice}, \code{slab}, and \code{glom}, \code{segment} performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice} or \code{slab}.
+#' @details Compared to \code{slice}, \code{slab}, and \code{glom}, \code{segment} performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice} or \code{slab}.
 #'
 #' @return Either a \code{SoilProfileCollection} or \code{data.frame} with the original horizon data segmented by depth intervals. There are usually more records in the resulting object, one for each time a segment interval partially overlaps with a horizon. A new column called \code{segment_id} identifying the depth interval is added.
 #' 
 #' @author Stephen Roecker
+#' 
+#' @seealso \code{\link{slice}, \link{dice}, \link{glom}}
 #' 
 #' @export
 #'
@@ -113,7 +115,12 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
     bot = intervals[-1],
     stringsAsFactors = FALSE
   )
-  dep$id <- paste0(dep$top, "-", dep$bot)
+  n <- max(nchar(intervals))
+  dep$id <- paste0(
+    formatC(dep$top, width = n, flag = 0), 
+    "-", 
+    formatC(dep$bot, width = n, flag = 0)
+  )
   
   # argument sanity check
   test_spc <- inherits(object, 'SoilProfileCollection')
@@ -208,3 +215,124 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 }
 
 
+#' @title Dissolving horizon boundaries by grouping variables
+#' 
+#' @description This function dissolves or combines horizons share have a common set of grouping variables. It only combines those horizon records that are sequential (e.g. share a horizon boundary). Thus, it can be used to identify discontinuities in the grouping variables along a profile. 
+#'
+#' @param object a \code{data.frame}
+#' @param by character: column names, to be used as grouping variables, within the object.
+#' @param id character: column name of the pedon ID within the object.
+#' @param top character: column name of the horizon top depth within the object.
+#' @param bot character: column name of the horizon bottom depth in the object.
+#' @param collapse logical: indicating whether to not combine grouping variables before dissolving.
+#' @param order logical: indicating whether or not to order the object by the id, top, and bot columns. 
+#' #' 
+#' @details This function assumes the profiles and horizons within the object follow the logic defined by \code{checkHzDepthLogic} (e.g. records are ordered sequentially by id, top, and bot and without gaps). If the records are not order, set the argument \code{order = TRUE}.
+#'
+#' @return A \code{data.frame} with the original id, by grouping variables, and non-consecutive horizon depths. 
+#' 
+#' @author Stephen Roecker
+#' 
+#' @seealso \code{\link{checkHzDepthLogic}}
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' # example data
+#' data(jacobs2000)
+#' 
+#' spc <- jacobs2000
+#' 
+#' spc$dep_5 <- spc$depletion_pct >=5
+#' spc$genhz <- generalize.hz(spc$name, c("A", "E", "B", "C"), c("A", "E", "B", "C")) 
+#' h <- horizons(spc)
+#' 
+#' test <- dissolve_hz(h, by = c("genhz", "dep_5"), id = "id", top = "top", bot = "bottom")
+#' 
+#' head(h[c("id", "top", "bottom", "genhz", "dep_5")])
+#' head(test)
+#' 
+
+dissolve_hz <- function(object, by, collapse = FALSE, id = "peiid", top = "hzdept", bot = "hzdepb", order = FALSE) {
+  
+  # id = "peiid"; top = "hzdept"; bot = "hzdepb"
+  
+  # test inputs ----
+  # argument sanity check
+  # test_spc <- inherits(object, 'SoilProfileCollection')
+  
+  # check that object & by are the right class
+  test_object   <- inherits(object,   "data.frame")
+  test_by <- inherits(by, "character")
+  
+  if (! any(test_object | test_by)) {
+    stop("the object argument must be a data.frame, and by a character")
+  }
+  
+  # check that by is not NULL
+  if (is.null(by)) stop("the by argument must not be NULL")
+  
+  # check that collapse is a logical of length 1
+  if (class(collapse) != "logical" & length(collapse) == 1) {
+    stop("the collapse argument must be logical and a length of one")
+  }
+  
+  # check that the column names exisit within the object
+  var_names <- c(id = id, top = top, bot = bot, by)
+  if (! all(var_names %in% names(object))) {
+    stop("all arguments must match object names")
+  }
+  
+  # check that "by" are characters or convert
+  if (any(! "character" %in% sapply(object[by], class))) {
+    message("non-character grouping variables are being converted to characters")
+    object[by] <- lapply(object[by], as.character)
+  }
+  
+  
+  # standardize inputs ----
+  df <- object
+  idx_names <- sapply(var_names[1:3], function(x) which(names(df) == x))
+  names(df)[idx_names] <- names(var_names)[1:3]
+  
+  # valid
+  # vd_idx <- validate_depths(df, id = "id", top = "hzdept", bot = "hzdepb")
+  if (order == TRUE) {
+    df <- df[order(df$id, df$top, df$bot), ]
+  }
+  
+  if (collapse == TRUE) {
+    by_co <- paste(by, collapse = " & ")
+    df[by_co] <- apply(df[by], 1, paste, collapse = " & ")
+    by    <- by_co
+  }
+  
+  
+  # var thickness ----
+  var_dep <- lapply(by, function(x) {
+    
+    con_bot <- rle(    paste(df$id, df[, x]))$length
+    con_top <- rle(rev(paste(df$id, df[, x])))$length
+    
+    bot_idx <- cumsum(con_bot)
+    top_idx <- cumsum(con_top)
+    
+    vd <- data.frame(
+      id  = df[bot_idx, "id"],
+      top = rev(rev(df$top)[top_idx]),
+      bot = df[bot_idx, "bot"],
+      var = x,
+      val = df[bot_idx,    x]
+    )
+    
+    return(vd)
+  })
+  var_dep <- do.call("rbind", var_dep)
+  
+  # undo standardization ----
+  names(var_dep)[1:3] <- var_names[1:3]
+  
+  
+  return(var_dep)
+}
