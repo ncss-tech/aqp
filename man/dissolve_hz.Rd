@@ -7,10 +7,10 @@
 dissolve_hz(
   object,
   by,
-  collapse = FALSE,
   id = "peiid",
-  top = "hzdept",
-  bot = "hzdepb",
+  hztop = "hzdept",
+  hzbot = "hzdepb",
+  collapse = FALSE,
   order = FALSE
 )
 }
@@ -19,41 +19,60 @@ dissolve_hz(
 
 \item{by}{character: column names, to be used as grouping variables, within the object.}
 
-\item{collapse}{logical: indicating whether to not combine grouping variables before dissolving.}
-
 \item{id}{character: column name of the pedon ID within the object.}
 
-\item{top}{character: column name of the horizon top depth within the object.}
+\item{hztop}{character: column name of the horizon top depth within the object.}
 
-\item{bot}{character: column name of the horizon bottom depth in the object.}
+\item{hzbot}{character: column name of the horizon bottom depth in the object.}
 
-\item{order}{logical: indicating whether or not to order the object by the id, top, and bot columns.
+\item{collapse}{logical: indicating whether to not combine grouping variables before dissolving.}
+
+\item{order}{logical: indicating whether or not to order the object by the id, hztop, and hzbot columns.
 #'}
 }
 \value{
 A \code{data.frame} with the original id, by grouping variables, and non-consecutive horizon depths.
 }
 \description{
-This function dissolves or combines horizons share have a common set of grouping variables. It only combines those horizon records that are sequential (e.g. share a horizon boundary). Thus, it can be used to identify discontinuities in the grouping variables along a profile.
+This function dissolves or combines horizons that have a common set of grouping variables. It only combines those horizon records that are sequential (e.g. share a horizon boundary). Thus, it can be used to identify discontinuities in the grouping variables along a profile and their unique depths. It is particularly useful for determining the depth to the top or bottom of horizons with a specific category, and should be simpler than previous methods that require aggregating over profiles.
 }
 \details{
-This function assumes the profiles and horizons within the object follow the logic defined by \code{checkHzDepthLogic} (e.g. records are ordered sequentially by id, top, and bot and without gaps). If the records are not order, set the argument \code{order = TRUE}.
+This function assumes the profiles and horizons within the object follow the logic defined by \code{checkHzDepthLogic} (e.g. records are ordered sequentially by id, hztop, and hzbot and without gaps). If the records are not ordered, set the \code{order = TRUE}.
 }
 \examples{
 
-# example data
+# example 1
 data(jacobs2000)
-
 spc <- jacobs2000
 
 spc$dep_5 <- spc$depletion_pct >=5
 spc$genhz <- generalize.hz(spc$name, c("A", "E", "B", "C"), c("A", "E", "B", "C")) 
 h <- horizons(spc)
 
-test <- dissolve_hz(h, by = c("genhz", "dep_5"), id = "id", top = "top", bot = "bottom")
+test <- dissolve_hz(h, by = c("genhz", "dep_5"), id = "id", hztop = "top", hzbot = "bottom")
 
-head(h[c("id", "top", "bottom", "genhz", "dep_5")])
-head(test)
+vars <- c("id", "top", "bottom", "genhz", "dep_5")
+h[h$id == "92-1", vars]
+test[test$id == "92-1", ]
+
+
+# example 2
+df <- data.frame(
+    peiid = 1,
+    hzdept = c(0, 5,  10, 15, 25, 50), 
+    hzdepb = c(5, 10, 15, 25, 50, 100),
+    hzname = c("A1",  "A2",  "E/A", "2Bt1", "2Bt2", "2C"),
+    genhz  = c("A",   "A",   "E",   "2Bt",  "2Bt", "2C"),
+    texcl  = c("sil", "sil", "sil", "sl",   "sl",   "s")
+    )
+
+df
+
+dissolve_hz(df, c("genhz", "texcl"))
+dissolve_hz(df, c("genhz", "texcl"), collapse = TRUE)
+
+test <- dissolve_hz(df, "genhz")
+subset(test, value == "2Bt")
 
 }
 \seealso{

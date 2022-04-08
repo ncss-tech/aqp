@@ -217,17 +217,17 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 
 #' @title Dissolving horizon boundaries by grouping variables
 #' 
-#' @description This function dissolves or combines horizons share have a common set of grouping variables. It only combines those horizon records that are sequential (e.g. share a horizon boundary). Thus, it can be used to identify discontinuities in the grouping variables along a profile. 
+#' @description This function dissolves or combines horizons that have a common set of grouping variables. It only combines those horizon records that are sequential (e.g. share a horizon boundary). Thus, it can be used to identify discontinuities in the grouping variables along a profile and their unique depths. It is particularly useful for determining the depth to the top or bottom of horizons with a specific category, and should be simpler than previous methods that require aggregating over profiles. 
 #'
 #' @param object a \code{data.frame}
 #' @param by character: column names, to be used as grouping variables, within the object.
 #' @param id character: column name of the pedon ID within the object.
-#' @param top character: column name of the horizon top depth within the object.
-#' @param bot character: column name of the horizon bottom depth in the object.
+#' @param hztop character: column name of the horizon top depth within the object.
+#' @param hzbot character: column name of the horizon bottom depth in the object.
 #' @param collapse logical: indicating whether to not combine grouping variables before dissolving.
-#' @param order logical: indicating whether or not to order the object by the id, top, and bot columns. 
+#' @param order logical: indicating whether or not to order the object by the id, hztop, and hzbot columns. 
 #' #' 
-#' @details This function assumes the profiles and horizons within the object follow the logic defined by \code{checkHzDepthLogic} (e.g. records are ordered sequentially by id, top, and bot and without gaps). If the records are not order, set the argument \code{order = TRUE}.
+#' @details This function assumes the profiles and horizons within the object follow the logic defined by \code{checkHzDepthLogic} (e.g. records are ordered sequentially by id, hztop, and hzbot and without gaps). If the records are not ordered, set the \code{order = TRUE}.
 #'
 #' @return A \code{data.frame} with the original id, by grouping variables, and non-consecutive horizon depths. 
 #' 
@@ -239,24 +239,44 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 #'
 #' @examples
 #' 
-#' # example data
+#' # example 1
 #' data(jacobs2000)
-#' 
 #' spc <- jacobs2000
 #' 
 #' spc$dep_5 <- spc$depletion_pct >=5
 #' spc$genhz <- generalize.hz(spc$name, c("A", "E", "B", "C"), c("A", "E", "B", "C")) 
 #' h <- horizons(spc)
 #' 
-#' test <- dissolve_hz(h, by = c("genhz", "dep_5"), id = "id", top = "top", bot = "bottom")
+#' test <- dissolve_hz(h, by = c("genhz", "dep_5"), id = "id", hztop = "top", hzbot = "bottom")
 #' 
-#' head(h[c("id", "top", "bottom", "genhz", "dep_5")])
-#' head(test)
+#' vars <- c("id", "top", "bottom", "genhz", "dep_5")
+#' h[h$id == "92-1", vars]
+#' test[test$id == "92-1", ]
+#' 
+#' 
+#' # example 2
+#' df <- data.frame(
+#'     peiid = 1,
+#'     hzdept = c(0, 5,  10, 15, 25, 50), 
+#'     hzdepb = c(5, 10, 15, 25, 50, 100),
+#'     hzname = c("A1",  "A2",  "E/A", "2Bt1", "2Bt2", "2C"),
+#'     genhz  = c("A",   "A",   "E",   "2Bt",  "2Bt", "2C"),
+#'     texcl  = c("sil", "sil", "sil", "sl",   "sl",   "s")
+#'     )
+#' 
+#' df
+#' 
+#' dissolve_hz(df, c("genhz", "texcl"))
+#' dissolve_hz(df, c("genhz", "texcl"), collapse = TRUE)
+#' 
+#' test <- dissolve_hz(df, "genhz")
+#' subset(test, value == "2Bt")
 #' 
 
-dissolve_hz <- function(object, by, collapse = FALSE, id = "peiid", top = "hzdept", bot = "hzdepb", order = FALSE) {
+
+dissolve_hz <- function(object, by, id = "peiid", hztop = "hzdept", hzbot = "hzdepb", collapse = FALSE, order = FALSE) {
   
-  # id = "peiid"; top = "hzdept"; bot = "hzdepb"
+  # id = "peiid"; hztop = "hzdept"; hzbot = "hzdepb", collapse = FALSE, order = FALSE
   
   # test inputs ----
   # argument sanity check
@@ -279,7 +299,7 @@ dissolve_hz <- function(object, by, collapse = FALSE, id = "peiid", top = "hzdep
   }
   
   # check that the column names exisit within the object
-  var_names <- c(id = id, top = top, bot = bot, by)
+  var_names <- c(id = id, top = hztop, bot = hzbot, by)
   if (! all(var_names %in% names(object))) {
     stop("all arguments must match object names")
   }
@@ -297,7 +317,7 @@ dissolve_hz <- function(object, by, collapse = FALSE, id = "peiid", top = "hzdep
   names(df)[idx_names] <- names(var_names)[1:3]
   
   # valid
-  # vd_idx <- validate_depths(df, id = "id", top = "hzdept", bot = "hzdepb")
+  # vd_idx <- validate_depths(df, id = "id", hztop = "hzdept", bot = "hzdepb")
   if (order == TRUE) {
     df <- df[order(df$id, df$top, df$bot), ]
   }
@@ -322,8 +342,8 @@ dissolve_hz <- function(object, by, collapse = FALSE, id = "peiid", top = "hzdep
       id  = df[bot_idx, "id"],
       top = rev(rev(df$top)[top_idx]),
       bot = df[bot_idx, "bot"],
-      var = x,
-      val = df[bot_idx,    x]
+      variable = x,
+      value    = df[bot_idx,    x]
     )
     
     return(vd)
