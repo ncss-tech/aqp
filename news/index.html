@@ -48,16 +48,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.42" id="aqp-142-2022-03-30">aqp 1.42 (2022-03-30)<a class="anchor" aria-label="anchor" href="#aqp-142-2022-03-30"></a></h2>
-<ul><li>
+<h2 class="page-header" data-toc-text="1.42" id="aqp-142-2022-04-08">aqp 1.42 (2022-04-08)<a class="anchor" aria-label="anchor" href="#aqp-142-2022-04-08"></a></h2>
+<ul><li>CRAN release</li>
+<li>
 <code><a href="../reference/getArgillicBounds.html">getArgillicBounds()</a></code>, <code><a href="../reference/getCambicBounds.html">getCambicBounds()</a></code>, <code><a href="../reference/mollic.thickness.requirement.html">mollic.thickness.requirement()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code> and related functions have been optimized and now work on SoilProfileCollection objects with length &gt; 1</li>
 <li>Added <code><a href="../reference/reduceSPC.html">reduceSPC()</a></code> function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection</li>
-<li>Added new “k-keyword” <code>.NHZ</code> for use with SoilProfileCollection <code>[</code> method
+<li>Added new “k-keyword” <code>.NHZ</code> for use with <code>SoilProfileCollection</code> <code>[</code> method
 <ul><li>
 <code>object[,,.NHZ]</code> returns a vector with the number of horizons in each profile</li>
 </ul></li>
 <li>proper identification and conversion of Munsell value == 2.5</li>
 <li>interpolated reference spectra for Munsell value == 2.5</li>
+<li>neutral color chips in the Munsell look-up table are now based on direct measurement vs. estimation</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.41" id="aqp-141-2022-02-11">aqp 1.41 (2022-02-11)<small>2022-02-11</small><a class="anchor" aria-label="anchor" href="#aqp-141-2022-02-11"></a></h2>
