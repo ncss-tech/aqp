@@ -312,7 +312,7 @@ res <- lapply(dfclasses, function(use_class) {
 
       # this should work
       foo <- explainPlotSPC(sp1df)
-      expect_equal(length(foo), 11)
+      expect_true(is.list(foo))
     })
 
     test_that(sprintf("SPC diagnostics and restrictions (%s)", use_class), {

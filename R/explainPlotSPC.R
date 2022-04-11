@@ -57,6 +57,9 @@ explainPlotSPC <- function(x, ...) {
   plotSPC(x, id.style='side', ...)
   box()
   
+  # figure coordinates
+  .usr <- par('usr')
+  
   # get last plot parameters
   lsp <- get('last_spc_plot', envir=aqp.env)
   
@@ -76,15 +79,21 @@ explainPlotSPC <- function(x, ...) {
   # suitable location for x-space annotation
   # index of last profile + some
   x.space.x <- lsp$n + (length(x) * 0.05)
-  # 95% of total scaled depths
-  x.space.y <- max(scaled.max.depths) * 0.95
+  
+  # 95% of lower figure coordinates
+  x.space.y <- .usr[3] * 0.95
   
   # original profile index text y-coordinate
   # roughly 10% of the max(transformed depths)
   original.profile.idx.y <- lsp$y.offset + (-max(scaled.max.depths) * 0.08)
   
+  # segment depth starting locations
+  # 90% of bottom of plotting region ----> scaled max depths 
+  # or max(scaled depths), whichever is larger
+  .segment.bottom.y <- pmax(.usr[3] * 0.9, max(scaled.max.depths, na.rm = TRUE))
+  
   # inspect plotting area, very simple to overlay graphical elements
-  segments(x0 = lsp$x0, x1=lsp$x0, y0=lsp$max.depth, y1=scaled.max.depths, lty=3, lwd=2, col='darkgreen')
+  segments(x0 = lsp$x0, x1 = lsp$x0, y0 = .segment.bottom.y, y1 = scaled.max.depths, lty=3, lwd=2, col='darkgreen')
   
   # profiles are centered at integers, from 1 to length(obj)
   axis(1, line=0.25, at=round(lsp$x0, 2), cex.axis=0.75, font=4, col='darkgreen', col.axis='darkgreen', lwd=2)
@@ -112,6 +121,14 @@ explainPlotSPC <- function(x, ...) {
   # plotting order
   text(x=lsp$x0, y=original.profile.idx.y, labels=lsp$plot.order, col='darkred', font=4, cex=0.75)
   mtext('original profile index', side=3, line=0, font=4, col='darkred')
+  
+  # hz depth label adjustment index
+  if(! all(is.na(lsp$hz.depth.LAI))) {
+    # annotate
+    .LAI.txt <- sprintf("LAI\n%s", round(lsp$hz.depth.LAI, 2))
+    text(x = lsp$x0 + lsp$width, y = .segment.bottom.y, pos = 4, cex = 0.66, labels = .LAI.txt)
+  }
+  
   
   invisible(lsp)
 }

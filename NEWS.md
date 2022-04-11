@@ -1,3 +1,8 @@
+# aqp 1.43 (2022-04-11)
+ * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
+ * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
+ * aesthetic cleanup in `explainPlotSPC()`
+
 # aqp 1.42 (2022-04-08)
  * CRAN release
  * `getArgillicBounds()`, `getCambicBounds()`, `mollic.thickness.requirement()`, `getSurfaceHorizonDepth()` and related functions have been optimized and now work on SoilProfileCollection objects with length > 1
