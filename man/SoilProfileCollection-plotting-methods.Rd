@@ -16,7 +16,7 @@ plotSPC(
   name.style = "right-center",
   label = idname(x),
   hz.depths = FALSE,
-  hz.depths.offset = 0,
+  hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
   alt.label = NULL,
   alt.label.col = "black",
@@ -59,6 +59,7 @@ plotSPC(
   lty = 1,
   default.color = grey(0.95),
   fixLabelCollisions = FALSE,
+  maxLabelAdjustmentIndex = 4,
   ...
 )
 
@@ -164,6 +165,8 @@ plot(x, y, ...)
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
 \item{fixLabelCollisions}{use \code{aqp::fixOverlap()} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
+
+\item{maxLabelAdjustmentIndex}{numeric, maximum (total) adjustments allowed when \code{fixLabelCollisions = TRUE}, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 
