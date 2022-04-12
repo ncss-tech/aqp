@@ -4,9 +4,17 @@
 
 #' @title Estimate dry soil colors from moist soil colors and vice versa.
 #' 
-#' @description Estimate dry soil colors from moist soil colors and vice versa.
+#' @description Soil color is typically described at dry and moist conditions. This function attempts to estimate soil color at dry or moist condition when one is missing. Estimation proceeds as:
+#'   * convert Munsell notation to CIELAB color coordinates via `munsell2rgb()`
+#'   * apply scaling, rotation, and translation parameters in CIELAB color space
+#'   * convert CIELAB to sRGB coordinates
+#'   * locate closest Munsell chip to sRGB coordinates via `rgb2munsell()`
+#'   
+#' Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.
 #' 
-#' @details Pending. Estimation from dry<-->moist is no always symmetric. 
+#' @details Scaling, rotation, and translation parameters for shifting between dry <--> moist CIELAB coordinates was determined using `vegan::procrustes()`, from those official series descriptions (OSD) where moist and dry soil colors were available.
+#' 
+#' This is still a work in progress.
 #' 
 #' @author D.E. Beaudette
 #' 
@@ -15,12 +23,16 @@
 #' @param chroma vector of Munsell chroma (2, 3, 4, etc.)
 #' @param sourceMoistureState character, source colors are either 'dry' or 'moist' 
 #'
-#' @return `data.frame` of estimated Munsell colors
+#' @return `data.frame` of estimated colors in Munsell notation. The `sigma` column contains CIE2000 color contrast metric values describing the perceptual distance between estimated color in CIELAB coordinates and closest Munsell chip.
+#' 
 #' @export
 #'
 #' @examples
 #' 
 #' estimateSoilColor(hue = '10YR', value = 3, chroma = 3, sourceMoistureState = 'moist')
+#' 
+#' # note that estimation is not symmetric
+#' estimateSoilColor(hue = '10YR', value = 5, chroma = 3, sourceMoistureState = 'dry')
 #' 
 estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry', 'moist')) {
   
@@ -69,12 +81,16 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   Y <- sweep(Y, MARGIN = 2, STATS = params$translation, FUN = "+")
   
   ## CIELAB -> sRGB
-  .srgb <- farver::convert_colour(Y, from = 'lab', to = 'rgb', white_from = 'D65', white_to = 'D65')
+  ## TODO: why does farver give slightly different results?
+  
+  ## farver: results are scaled 0-255
+  # .srgb <- farver::convert_colour(Y, from = 'lab', to = 'rgb', white_from = 'D65', white_to = 'D65')
+  
+  ## grDevices: results are scaled 0-1
+  .srgb <- convertColor(Y, from = 'Lab', to = 'sRGB', from.ref.white='D65', to.ref.white = 'D65')
   
   ## sRGB -> Munsell
-  # requires rescaling to 0,1
-  .srgb <- .srgb / 255
-  res <- rgb2munsell(.srgb)
+  res <- rgb2munsell(color = .srgb, colorSpace = 'CIE2000', nClosest = 1)
   
   ## additional diagnostics... ?
   

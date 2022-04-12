@@ -16,17 +16,30 @@ estimateSoilColor(hue, value, chroma, sourceMoistureState = c("dry", "moist"))
 \item{sourceMoistureState}{character, source colors are either 'dry' or 'moist'}
 }
 \value{
-\code{data.frame} of estimated Munsell colors
+\code{data.frame} of estimated colors in Munsell notation. The \code{sigma} column contains CIE2000 color contrast metric values describing the perceptual distance between estimated color in CIELAB coordinates and closest Munsell chip.
 }
 \description{
-Estimate dry soil colors from moist soil colors and vice versa.
+Soil color is typically described at dry and moist conditions. This function attempts to estimate soil color at dry or moist condition when one is missing. Estimation proceeds as:
+\itemize{
+\item convert Munsell notation to CIELAB color coordinates via \code{munsell2rgb()}
+\item apply scaling, rotation, and translation parameters in CIELAB color space
+\item convert CIELAB to sRGB coordinates
+\item locate closest Munsell chip to sRGB coordinates via \code{rgb2munsell()}
+}
+
+Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.
 }
 \details{
-Pending
+Scaling, rotation, and translation parameters for shifting between dry <--> moist CIELAB coordinates was determined using \code{vegan::procrustes()}, from those official series descriptions (OSD) where moist and dry soil colors were available.
+
+This is still a work in progress.
 }
 \examples{
 
 estimateSoilColor(hue = '10YR', value = 3, chroma = 3, sourceMoistureState = 'moist')
+
+# note that estimation is not symmetric
+estimateSoilColor(hue = '10YR', value = 5, chroma = 3, sourceMoistureState = 'dry')
 
 }
 \author{
