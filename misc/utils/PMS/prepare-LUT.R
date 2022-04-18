@@ -43,4 +43,4 @@ str(z)
 pms.munsell.lut <- z
 
 # save
-save(pms.munsell.lut, file = '../../../data/pms.munsell.lut.rda')
+save(pms.munsell.lut, file = '../../../data/pms.munsell.lut.rda', compress = 'xz')

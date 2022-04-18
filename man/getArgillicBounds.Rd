@@ -13,6 +13,8 @@ getArgillicBounds(
   bottom.pattern = "Cr|R|Cd",
   lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
   sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
+  vertical.distance = 30,
+  simplify = TRUE,
   verbose = FALSE
 )
 }
@@ -33,10 +35,14 @@ getArgillicBounds(
 
 \item{sandy.texture.pattern}{this is a pattern for matching sandy textural classes: \verb{-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$}}
 
+\item{vertical.distance}{Vertical distance in which clay increase must be met. Default \code{30} cm}
+
+\item{simplify}{Return a length 2 vector with upper and lower boundary when \code{p} has length 1? Default \code{TRUE}.}
+
 \item{verbose}{Print out information about 't' subscripts, sandy textures, plow layers and lower gradational horizons?}
 }
 \value{
-Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound"
+Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound". If \code{p} has more than one profile or if \code{simplify = FALSE} the result is a data.frame containing profile ID, upper and lower boundary columns.
 }
 \description{
 \code{getArgillicBounds} estimates the upper and lower boundary of argillic diagnostic subsurface horizon for a profile in a single-profile SoilProfileCollection object (\code{p}).

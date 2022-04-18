@@ -18,13 +18,10 @@
 A SoilProfileCollection.
 }
 \description{
-\code{subset()} is a function used for subsetting SoilProfileCollections. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation found in the \code{tidyverse}. This greatly simplifies access to site and horizon-level variable compared to \code{subset.default}, as \code{`$`} or \code{`[[`} methods are not needed.
+\code{subset()} is a function used for extracting profiles from a SoilProfileCollection based on logical criteria. It allows the user to specify an arbitrary number of logical vectors (equal in length to site or horizon), separated by commas. The function includes some support for non-standard evaluation.
 }
 \details{
-In base R, the method that performs extraction based on a set of expressions is \code{subset}, so this is the "default" name in the AQP package. The \code{filter} method is defined in the base R \code{stats} package for linear filtering of time series.
-}
-\seealso{
-\code{\link{filter}}
+To minimize likelihood of issues with non-standard evaluation context, especially when using \code{subset()} inside another function, all expressions used in \code{...} should be in terms of variables that are in the site or horizon data frame.
 }
 \author{
 Andrew G. Brown.

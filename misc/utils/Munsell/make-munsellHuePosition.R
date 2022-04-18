@@ -57,7 +57,7 @@ d.N <- data.frame(
 munsellHuePosition <- rbind(d, d.N)
 
 # save
-save(munsellHuePosition, file = '../../../data/munsellHuePosition.rda')
+save(munsellHuePosition, file = '../../../data/munsellHuePosition.rda', compress = 'xz')
 
 
 

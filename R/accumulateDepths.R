@@ -92,11 +92,16 @@ accumulateDepths <- function(x,
   if (inherits(x, 'SoilProfileCollection')) {
     dat <- horizons(x)
     
-    if (is.null(id))
+    if (is.null(id)) {
       id <- idname(x)
+    }
     
     if (is.null(hzname)) {
       hzname <- hzdesgnname(x, required = TRUE)
+    }
+    
+    if (is.null(hzdepths)) {
+      hzdepths <- horizonDepths(x)
     }
     
   } else if (inherits(x, 'data.frame')) {

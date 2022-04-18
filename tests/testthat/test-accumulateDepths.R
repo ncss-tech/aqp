@@ -3,20 +3,18 @@ test_that("accumulateDepths works", {
   # sp4 is a data.frame
   data(sp4)
   
-  # example using hzdatum argument data(sp4)
-  hz <- accumulateDepths(sp4, "id", c("top", "bottom"), "name", hzdatum = 15)
+  # example using hzdatum argument data(sp4) data.frame
+  hz <- accumulateDepths(sp4, id = "id", hzdepths = c("top", "bottom"), hzname = "name", hzdatum = 15)
   depths(hz) <- id ~ top + bottom
   expect_equal(min(hz$top), 15)
   
   # use the SPC interface by promoting sp4
   depths(sp4) <- id ~ top + bottom
   
+  hzdesgnname(sp4) <- "name"
+  
   # and a custom hzdatum for each profile
-  hz <- accumulateDepths(sp4,
-                         id = "id",
-                         hzdepths = c("top", "bottom"),
-                         hzname = "name",
-                         hzdatum = 5 * 1:length(sp4))
+  hz <- accumulateDepths(sp4, hzdatum = 5 * 1:length(sp4))
   
   # promote the result
   depths(hz) <- id ~ top + bottom
@@ -47,10 +45,9 @@ test_that("accumulateDepths works", {
 
   expect_warning({depths(hz) <- peiidref ~ hzdept + hzdepb})
 
-  hz_fixed <- accumulateDepths(hz,
-                                id = "peiidref",
-                                hzdepths = c("hzdept", "hzdepb"),
-                                hzname = "hzname")
+  hzdesgnname(hz) <- "hzname"
+  
+  hz_fixed <- accumulateDepths(hz)
 
   is_valid <- checkHzDepthLogic(hz_fixed)$valid
 
@@ -67,5 +64,5 @@ test_that("accumulateDepths works", {
   # and the correct O horizons have 0 top depth and appropriate bottom depths
   expect_true(all(test1[,1]$hzname == c("Oi", "Oe", "Oi") &
                   test1[,1]$hzdept == rep(0, 3) &
-                  test1[,1]$hzdepb == c(2,1,1)))
+                  test1[,1]$hzdepb == c(2, 1, 1)))
 })

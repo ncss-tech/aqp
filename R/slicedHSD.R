@@ -1,8 +1,11 @@
 
-#' .parseHSD_formula
+#' 
 #' @description internally used function to parse slicedHSD formula notation
 #' @param fm to parse, 0:100 ~ variable | group
 #' @return list with formula pieces
+#' 
+#' @keywords internal
+#' @noRd
 .parseGrouped_formula <- function(fm) {
 
   ## testing
@@ -43,6 +46,9 @@
 #' @param z data.frame containing basic metadata, horizon top/bottom, variable of interest, and grouping variable
 #' @param aov.fm formula suitable for aov(): variable ~ group
 #' @param conf confidence level for TukeyHSD
+#' 
+#' @keywords internal
+#' @noRd
 .HSD <- function(z, aov.fm, conf = 0.95) {
 
   # sanity checks

@@ -23,7 +23,14 @@ Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-nei
 
 # convert a non-standard color to closest "chip" in `munsell` look-up table
 getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
+
 # convert directly to R color
 getClosestMunsellChip('7.9YR 2.7/2.0')
+
+# special case for 2.5 value -> no rounding, we have these records in the conversion LUT
+getClosestMunsellChip('7.5YR 2.5/2', convertColors = FALSE)
+
+
+getClosestMunsellChip('7.5YR 6.8/4.4', convertColors = FALSE)
 
 }

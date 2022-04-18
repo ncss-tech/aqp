@@ -69,8 +69,6 @@
 #' 
 #' @param maxDepthConstant positive integer, maximum depth when \code{maxDepthRule = 'constant'}
 #' 
-#' @param strict passed to \code{slice}
-#' 
 #' @details See [this related tutorial](https://ncss-tech.github.io/AQP/aqp/L1-profiles.html) for additional examples. The `method`, `maxDepthRule`, and `maxDepthConstant` arguments set the maximum depth (over the entire collection) of analysis used to build "L1 profiles". The following rules are available:
 #'   
 #'   * `method = 'regex'` uses pattern matching on horizon designations (note that `hzdesgnname` metadata must be set with `hzdesgnname(x) <- 'columnname'`)
@@ -84,7 +82,7 @@
 #' @return a \code{SoilProfileCollection} object
 #' @export
 #'
-L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constant'), maxDepthRule = c('max', 'min'), maxDepthConstant = NULL, strict = FALSE) {
+L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constant'), maxDepthRule = c('max', 'min'), maxDepthConstant = NULL) {
   
   # sanity check, need this for L1 median
   if(!requireNamespace('Gmedian'))
@@ -158,12 +156,12 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constan
   )
    
   
-  # create slice formula
+  # create formula
   # this only needs the top/bottom depths
   slice.fm <- as.formula(sprintf("%s:%s ~ %s", collection.top, collection.bottom, paste(vars, collapse = ' + ')))
   
   # re-format for slice-wise L1 median
-  s <- slice(x, slice.fm, strict = strict)
+  s <- dice(x, fm = slice.fm, strict = TRUE, SPC = TRUE)
   
   # work on de-normalized data as a DF
   h <- as(s, 'data.frame')

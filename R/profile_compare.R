@@ -333,7 +333,8 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 		# cleanup
 		rm(s.sub)
 		}
-
+	
+	
 
 	##
 	## new version for computing slice-wise dissimilarities... fast!
@@ -364,7 +365,9 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 		## this is where we run into memory-size limitations
 		## an ff object would help here... however it can not preserve all of the information
 		## that a list can... we would need to store these data as raw matrices
-
+    
+	  ## TODO: sometimes we don't want to standardize, and use Euclidean distance
+	  
 	  ## TODO: don't call daisy on bogus input data, temp fix: disable warnings (#7)
 	  ## if all of the input to daisy is NA, then we get warnings from min() and max()
 	  ## this happens when we set a max depth that is beyond most profiles
@@ -614,7 +617,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 ## NOTE: don't mess with this!
 # setup generic function
 # if (!isGeneric("profile_compare"))
-  setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
+setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
 
 # temp interface to SPC class objects
 

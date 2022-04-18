@@ -18,11 +18,11 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
        par.settings = tactile.theme()
 )
 
-# split by hue/value
+# split by hue/value/wavelength
 m <- split(m.rel, list(m.rel$hue, m.rel$value, m.rel$wavelength))
 
 # interpolation of odd chroma
-interpolateOddChroma <- function(i) {
+interpolateOddChromaSpectra <- function(i) {
   
   # 0-row input
   if(nrow(i) < 1)
@@ -89,8 +89,7 @@ interpolateOddChroma <- function(i) {
 }
 
 # do interpolation
-mm <- pblapply(m, interpolateOddChroma)
-
+mm <- pblapply(m, interpolateOddChromaSpectra)
 
 # combine
 mm <- do.call('rbind', mm)
@@ -129,12 +128,100 @@ xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance <= 0, dat
 idx <- which(m.final$reflectance <= 0)
 m.final[idx, ]
 
-# replace with minimum relfectance, ignoring these values
+# replace with minimum reflectance, ignoring these values
 m.final$reflectance[idx] <- min(m.final$reflectance[-idx])
 
 
+## check: OK
+s <- subset(m.final, subset = hue == '2.5YR' & value == 4 & chroma %in% 2:4)
 
-# long -> wide for comparisons
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       par.settings = tactile.theme()
+)
+
+
+
+
+## interpolate 2.5 value
+
+# just 2/3 value
+m.sub <- subset(m.final, subset = value %in% 2:3)
+
+head(m.sub)
+
+# check
+s <- subset(m.sub, subset = hue == '2.5YR' & chroma == 3)
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 2),
+       par.settings = tactile.theme()
+)
+
+
+# split by hue/chroma/wavelength
+m <- split(m.sub, list(m.sub$hue, m.sub$chroma, m.sub$wavelength))
+
+
+interpolateValueSpectra <- function(i) {
+  
+  # 0 or 1 row input: no interpolation possible
+  if(nrow(i) < 2)
+    return(NULL)
+  
+  # linear interpolation between value 2--3
+  a.fun <- approxfun(i$value, i$reflectance)
+  
+  # single value for now
+  v.target <- 2.5
+  
+  # re-assemble into original format
+  res <- data.frame(
+    munsell = sprintf("%s %s/%s", i$hue[1], v.target, i$chroma[1]),
+    hue = i$hue[1],
+    value = v.target,
+    chroma = i$chroma[1],
+    wavelength = i$wavelength[1],
+    reflectance = a.fun(v.target),
+    stringsAsFactors = FALSE
+  )
+  
+  return(res)
+}
+
+
+# do interpolation
+mm <- pblapply(m, interpolateValueSpectra)
+
+# combine
+mm <- do.call('rbind', mm)
+
+
+# re-order
+m.final <- rbind(m.final, mm)
+m.final <- m.final[order(m.final$hue, m.final$value, m.final$chroma), ]
+
+
+# check: OK
+str(m.final)
+
+s <- subset(m.final, subset = hue == '2.5YR' & chroma == 3)
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 2),
+       par.settings = tactile.theme()
+)
+
+
+
+
+## long -> wide for comparisons
 reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 
 
@@ -147,8 +234,8 @@ reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 munsell.spectra <- m.final
 munsell.spectra.wide <- reference
 
-save(munsell.spectra, file = '../../../data/munsell.spectra.rda')
-save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda')
+save(munsell.spectra, file = '../../../data/munsell.spectra.rda', compress = 'xz')
+save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda', compress = 'xz')
 
 # cleanup
 unlink(c('interpolated-Munsell-spectra-wide.rds', 'interpolated-Munsell-spectra.rds', 'simplified-Munsell-spectra.rds'))

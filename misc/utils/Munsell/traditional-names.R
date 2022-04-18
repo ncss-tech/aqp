@@ -8,9 +8,10 @@
 ## 
 
 # copy -> paste -> edit -> CSV
-traditionalColorNames <- read.csv('misc/utils/Munsell/traditional-names-from-NASIS.csv')
+traditionalColorNames <- read.csv('traditional-names-from-NASIS.csv')
 traditionalColorNames$traditional_name <- trimws(traditionalColorNames$traditional_name)
-save(traditionalColorNames, file = 'data/traditionalColorNames.rda')
+
+save(traditionalColorNames, file = '../../../data/traditionalColorNames.rda', compress = 'xz')
 
 # another, possibly better approach
 # using Color Block via 'munsellinterpol' package

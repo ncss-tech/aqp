@@ -65,31 +65,32 @@ getCambicBounds <- function(p,
   empty_frame_names[1] <- idname(p)
   names(empty_frame) <- empty_frame_names
 
-  depths <- horizonDepths(p)
+  hzd <- horizonDepths(p)
 
   if (is.null(argi_bounds)) {
-    argi_bounds <- getArgillicBounds(p, hzdesgn, clay.attr, texcl.attr, ...)
-  }
-
-  cambic_top <- minDepthOf(p, pattern = "B", no.contact.assigned = NA)
-  cambic_bottom <- maxDepthOf(p, pattern = "B", top = FALSE, no.contact.assigned = NA)
-
-  if (any(is.na(cambic_top), is.na(cambic_bottom))) {
-    return(empty_frame)
-  }
-
-  cambic <- glom(p, cambic_top, cambic_bottom, truncate = TRUE)
-
-  if (all(is.finite(argi_bounds))) {
-    if (all(c(cambic_bottom <= argi_bounds[2], cambic_top >= argi_bounds[1]))) {
-      return(empty_frame)
+    argi_bounds <- getArgillicBounds(p, hzdesgn = hzdesgn, 
+                                     clay.attr = clay.attr, texcl.attr = texcl.attr, 
+                                     ..., 
+                                     simplify = FALSE)
+  } else if (is.vector(argi_bounds)) {
+    if (length(p) > 1) {
+      stop("`argi_bounds` should be a data.frame if `p` has more than one profile", call. = FALSE)
     }
+    argi_bounds <- data.frame(id = profile_id(p), ubound = argi_bounds[1], lbound = argi_bounds[2])
+    colnames(argi_bounds)[1] <- idname(p)
+  } 
 
+  cambictop <- minDepthOf(p, pattern = "B", hzdesgn = hzdesgn, no.contact.assigned = NA, simplify = FALSE)
+  cambicbottom <- maxDepthOf(p, pattern = "B", hzdesgn = hzdesgn, top = FALSE, no.contact.assigned = NA, simplify = FALSE)
+
+  cambic <- glom(p, cambictop[[hzd[1]]], cambicbottom[[hzd[2]]], truncate = TRUE, fill = TRUE)
+
+  if (any(!is.na(argi_bounds$ubound), !is.na(argi_bounds$lbound))) {
     # if an argillic is present, remove with glom truncate+invert
-    non.argillic <- suppressWarnings(glom(cambic, argi_bounds[1], argi_bounds[2],
-                                          truncate = TRUE, invert = TRUE))
-
-    # commonly, a warning occurs due to argillic bottom depth at contact
+    cab <- argi_bounds[complete.cases(argi_bounds),]
+    non.argillic <- glom(cambic, 
+                         argi_bounds$ubound, argi_bounds$lbound, 
+                         truncate = TRUE, invert = TRUE, fill = TRUE)
   } else {
     non.argillic <- cambic
   }
@@ -97,12 +98,8 @@ getCambicBounds <- function(p,
   dark.colors <- hasDarkColors(non.argillic)
   non.argillic$w <- rep(1, nrow(non.argillic))
 
-  textures <- non.argillic[[hztexclname(p)]]
+  textures <- non.argillic[[texcl.attr]]
   sandy.textures <- grepl(sandy.texture.pattern, textures, ignore.case = TRUE)
-
-  if (!length(sandy.textures) | !length(dark.colors)) {
-    return(empty_frame)
-  }
 
   nhz <- horizons(non.argillic)
 
@@ -111,39 +108,55 @@ getCambicBounds <- function(p,
     nhz <- nhz[-which(sandy.textures | dark.colors),]
   }
 
-  final <- data.frame(cambic_top = NA, cambic_bottom = NA)
+  final <- data.frame(id = NA_character_, cambic_top = NA_real_, cambic_bottom = NA_real_)[0,]
 
   # iterate through combinations of horizons, check topology and thickness
   # finds multiple occurrences of cambic horizons, excluding argillics
-  for (j in 1:nrow(nhz)) {
-    for (i in j:nrow(nhz)) {
-
-      ftop <- nhz[j:i, depths[1]]
-      fbot <- nhz[j:i, depths[2]]
-
-      if (any(hzDepthTests(ftop, fbot))) {
-        i <- i - 1
-        break;
-      }
-    }
-
-    if (is.numeric(fbot) & is.numeric(ftop)) {
-      pcamb.thickness <- fbot - ftop
-      if (length(pcamb.thickness) > 0 & sum(pcamb.thickness, na.rm = TRUE) >= 15) {
+  nhzs <- split(nhz, nhz[[idname(p)]])
+  for (k in seq_along(nhzs)){
+    for (j in 1:nrow(nhzs[[k]])) {
+      for (i in j:nrow(nhzs[[k]])) {
   
-        final <- rbind(final, data.frame(cambic_top = min(ftop, na.rm = TRUE),
-                                         cambic_bottom = max(fbot, na.rm = TRUE)))
+        ftop <- nhzs[[k]][j:i, hzd[1]]
+        fbot <- nhzs[[k]][j:i, hzd[2]]
+
+        if (any(suppressWarnings(hzDepthTests(ftop, fbot)))) {
+          i <- i - 1
+          break;
+        }
+      }
+  
+      if (is.numeric(fbot) & is.numeric(ftop)) {
+        pcamb.thickness <- fbot - ftop
+        if (length(pcamb.thickness) > 0 & sum(pcamb.thickness, na.rm = TRUE) >= 15) {
+    
+          final <- rbind(final, data.frame(id = as.character(nhzs[[k]][[idname(p)]][1]),
+                                           cambic_top = min(ftop, na.rm = TRUE),
+                                           cambic_bottom = max(fbot, na.rm = TRUE)))
+          if (i == nrow(nhzs[[k]])) {
+              k = k + 1
+              break
+          }
+        }
+      }
+      if (k > length(nhzs)) { 
+        break
       }
     }
   }
+  names(final)[1] <- idname(p)
 
-  # construct data.frame result
-  final <- final[complete.cases(final),]
-  if (nrow(final) == 0) {
-    return(empty_frame)
+  .N <- NULL 
+  iddf <- data.table::data.table(id = as.character(final[[idname(p)]]))[, list(cambic_index = 1:.N), by = "id"]
+  nadf <- data.frame(id = profile_id(p)[!profile_id(p) %in% final[[idname(p)]]])
+  if (!is.null(nadf$id)){
+    nadf[[idname(p)]] <- as.character(nadf$id)
+    nadf$cambic_index <- rep(NA_real_, nrow(nadf))
+    nadf$cambic_top <- rep(NA_real_, nrow(nadf))
+    nadf$cambic_bottom <- rep(NA_real_, nrow(nadf))
   }
-
-  iddf <- data.frame(id = profile_id(p), cambic_index = 1:nrow(final))
-  colnames(iddf) <- c(idname(p), "cambic_id")
-  return(cbind(iddf, final))
+  iddf <- iddf[,-1]
+  res <- cbind(final, iddf)
+  res <- data.table::rbindlist(list(res, nadf), fill = TRUE)
+  .as.data.frame.aqp(res, aqp_df_class(p))
 }

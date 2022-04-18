@@ -123,7 +123,15 @@ profileInformationIndex <- function(x, vars, method = c('median', 'mean', 'sum')
   
   # iterate over profiles
   # result is a vector suitable for site-level attribute
-  res <- profileApply(x, simplify = TRUE, FUN = .pii_by_profile, vars = vars, method = method, baseline = baseline, numericDigits = numericDigits)
+  res <- profileApply(
+    x, 
+    simplify = TRUE, 
+    FUN = .pii_by_profile, 
+    vars = vars, 
+    method = method, 
+    baseline = baseline, 
+    numericDigits = numericDigits
+  )
   
   # done
   return(res)

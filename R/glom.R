@@ -1,6 +1,6 @@
 setGeneric("glom", function(p, z1, z2 = NULL,
                             ids = FALSE, df = FALSE,
-                            truncate = FALSE, invert = FALSE,
+                            truncate = FALSE, invert = FALSE, fill = FALSE,
                             modality = "all")
   standardGeneric("glom"))
 
@@ -13,6 +13,7 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' @param df return a data.frame, by intersection with `horizons(p)`? default: `FALSE`
 #' @param truncate truncate horizon top and bottom depths to `z1` and \code{z2}? default: `FALSE`
 #' @param invert get horizons _outside_ the interval `[z1,z2]`? default: `FALSE`
+#' @param fill keep sites and preserve order for profiles that do not have horizons in interval by filling with a single horizon with `NA` top and bottom depth. default: `FALSE`
 #' @param modality default: `"all"` return all horizons; or `modality = "thickest"`) to return the _thickest_ horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.
 #'
 #' @description Make a "clod" of horizons from a SoilProfileCollection given a point or a depth interval to intersect. The interval `[z1,z2]` may be profile-specific (equal in length to `p`), or may be recycled over all profiles (if boundaries are length 1). For "point" intersection, `z2` may be left as the default value `NULL`. 
@@ -92,8 +93,10 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
                    df = FALSE,
                    truncate = FALSE,
                    invert = FALSE,
+                   fill = FALSE,
                    modality = "all") {
             
+  
   # handle unquoted symbols from @site column names (or expressions using them)
   zz <- eval(substitute(list(z1, z2)),
              envir = site(p), 
@@ -121,6 +124,7 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
   }
   
   depthn <- horizonDepths(p) 
+  fillids <- profile_id(p)
   
   # recycle z1 to size of SPC if length is 1
   if (length(z1) == 1) {
@@ -192,6 +196,7 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
 
   # or "invert" and truncate
   } else if (invert & truncate & !is.null(z2)) {
+    p0 <- p
 
     .top <- h[[depthn[1]]]
     .bottom <- h[[depthn[2]]]
@@ -204,15 +209,14 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     if(inherits(p1, 'SoilProfileCollection') && 
        inherits(p2, 'SoilProfileCollection')) {
       
-      if(nrow(p1) > 0) {
+      if (nrow(p1) > 0) {
         p <- p1
         if(inherits(p2, 'SoilProfileCollection') && nrow(p2) > 0) {
           h <- rbind(horizons(p1), horizons(p2))
         } else {
           h <- horizons(p1)
         }
-      }
-      
+      } 
     } else {
       h <- horizons(p2)
     }
@@ -221,19 +225,41 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
       first.thickest.idx <- .thickestHzID(p, h)
       h <- h[first.thickest.idx,]
     }
-
+    
     # enforce ID+top depth order after combining upper and lower SPCs
     h <- h[order(h[[idname(p)]], h[[depthn[1]]]), ]          
     
     # replace horizon IDs because we split horizons possibly
-    h$hzID <- as.character(1:nrow(h))
+    h$hzID <- as.character(seq_len(nrow(h)))
     
     # force autocalculated ID
     hzidname(p) <- "hzID"
+    
+    if (fill) {
+      p <- p0
+    }
   }
   
-  # update slots for new h
-  p <- .updateSite(p, h)
+  if (fill) {
+    missingid <- fillids[!fillids %in% h[[idname(p)]]]
+    if (length(missingid) > 0) {
+      hmissing <- h[0,][1:length(missingid),]
+      hmissing[[idname(p)]] <- missingid
+      h <- rbind(h, hmissing)
+    }
+    
+    # enforce ID+top depth order after combining upper and lower SPCs
+    h <- h[order(h[[idname(p)]], h[[depthn[1]]]), ]          
+    
+    # replace horizon IDs because we split horizons possibly
+    h$hzID <- as.character(seq_len(nrow(h)))
+    
+    # force autocalculated ID
+    hzidname(p) <- "hzID"
+  } else {
+    # update slots for new h
+    p <- .updateSite(p, h)
+  }
 
   if (nrow(h) > 0) {
     # replace @horizons with h
@@ -268,13 +294,12 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
   
   # appease R CMD check
   .thk <- NULL
-  id <- NULL
   
   htb <- horizonDepths(p)
   # make a data.table with id and thickness (.thk)
   res <- data.table::data.table(id = newhz[[idname(p)]], .thk = newhz[[htb[2]]] - newhz[[htb[1]]])
   # get the row index where the thickness is maximized (by profile ID)
-  res[, .I[.thk >= suppressWarnings(max(.thk))], by = id]$V1
+  res[, .I[.thk >= suppressWarnings(max(.thk))], by = "id"]$V1
 }
 
 .updateSite <- function(p, newhz = horizons(p)) {

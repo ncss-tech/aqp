@@ -26,15 +26,18 @@ test_that("plotSPC: aqp.env settings", {
   explainPlotSPC(sp1)
 
   # get plotting details from aqp environment
-  lsp <- get('last_spc_plot', envir=aqp.env)
+  lsp <- get('last_spc_plot', envir = aqp.env)
 
   # should be a list
   expect_true(is.list(lsp))
 
   # check for required components
-  expect_equal(names(lsp), c("width", "plot.order", "x0", "pIDs", "idname", "y.offset", "scaling.factor",
-                             "max.depth", "n", "extra_x_space", "extra_y_space"))
-
+  expect_true(
+    all(
+      c("width", "plot.order", "x0", "pIDs", "idname", "y.offset", "scaling.factor","max.depth", "n", "extra_x_space", "extra_y_space", "hz.depth.LAI") %in% names(lsp)
+    )
+  )
+    
   # basic integrity checks
   expect_equal(profile_id(sp1), lsp$pIDs)
   expect_equal(idname(sp1), lsp$idname)
@@ -138,6 +141,30 @@ test_that("plotSPC: re-ordering via relative spacing", {
   # x0 adjusted as expected
   expect_equal(lsp$x0, x.pos)
 })
+
+
+test_that("plotSPC: y-offset reordered by plot.order", {
+
+  data("jacobs2000")
+  x <- jacobs2000
+  hzdesgnname(x) <- 'name'
+  
+  # y-offset + reverse order
+  lsp <- explainPlotSPC(x, y.offset = (1:7) * 10, plot.order = 7:1)
+  
+  # check that y-offset is re-ordered
+  expect_true(
+    all(lsp$y.offset == rev((1:7) * 10))
+  )
+  
+  # check IDs are reordered
+  expect_equal(rev(profile_id(x)), lsp$pIDs)
+  
+})
+
+
+
+
 
 test_that("addBracket works", {
 

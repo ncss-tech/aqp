@@ -24,7 +24,9 @@
 #'
 #'    - `.LAST` (last horizon in each profile): return the last horizon from each profile. This uses `i` but ignores the regular `j` index.
 #'    - `.FIRST` (first horizon in each profile): return the last horizon from each profile. This uses `i` but ignores the regular `j` index.
-#'    - `.HZID` (horizon index not `SoilProfileCollection` result): return the horizon indices corresponding to `i`+`j`+`...` ("k") constraints
+#'    
+#'    - `.HZID` (horizon index): return the horizon indices corresponding to `i`+`j`+`...` ("k") constraints
+#'    - `.NHZ` (number of horizons): return the number of horizons in the profiles resulting from `i`+`j`+`...` ("k") constraints
 #'
 #' @param x a SoilProfileCollection
 #' @param i a numeric or logical value denoting profile indices to select in a subset
@@ -57,6 +59,9 @@ setMethod("[", signature(x = "SoilProfileCollection",
                                       },
                                       ".HZID" = {
                                         ksubflag <- TRUE
+                                      },
+                                      ".NHZ" = {
+                                        ksubflag <- TRUE
                                       })
                              }
                            }
@@ -75,7 +80,7 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                              can.cast <- is.numeric(i)
                              if (can.cast) {
-                               if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5)) {
+                               if (all(abs(i - round(i)) < .Machine$double.eps ^ 0.5, na.rm = TRUE)) {
                                  i <- as.integer(i)
                                } else {
                                  stop("Numeric site index does not contain whole numbers.")
@@ -125,11 +130,17 @@ setMethod("[", signature(x = "SoilProfileCollection",
                            h <- .as.data.frame.aqp(h, aqp_df_class(x))
                            pidx <- h[[idname(x)]] %in% p.ids
                            h <- h[pidx,]
-
+                            
+                           # TODO: combine?
+                           # if (ksubflag && ".NHZ" %in% ksub) { 
+                           #   
+                           #   j.idx.allowed <- seq_len(nrow(x@horizons))[pidx]
+                           #   
+                           # } else 
                            if (ksubflag && ".HZID" %in% ksub) {
 
                              j.idx.allowed <- seq_len(nrow(x@horizons))[pidx]
-
+                           
                            } else {
                              j.idx.allowed <- seq_len(nrow(h))
 
@@ -201,18 +212,21 @@ setMethod("[", signature(x = "SoilProfileCollection",
                                  j.idx <- h[, .I[1:.N %in% j], by = bylist]$V1
                                }
                              }
-
+                             
                              # short circuit for horizon-slot indices
                              if (ksubflag && ".HZID" %in% ksub) {
-                               return(j.idx.allowed[j.idx])
+                               return(j.idx)
+                             } else if (ksubflag && ".NHZ" %in% ksub) {
+                               # short circuit for number of horizons
+                               return(h[j.idx, .N, by = list(bylist[[1]][j.idx])]$N)
                              }
-
+                             
                              # determine which site indices to keep
                              # in case all horizons are removed, remove sites too
                              if (length(j.idx) == 0) {
                                i.idx <- numeric(0)
                              } else {
-                               # determine which profiles to  KEEP
+                               # determine which profiles to KEEP
                                i.idx <- which(profile_id(x) %in% unique(h[j.idx,][[idn]]))
                              }
 

@@ -27,7 +27,7 @@ test_that("spec2Munsell works as expected", {
     )
   
   # expected dE00
-  expect_equal(m$sigma, 0.6454, tolerance = 1e-4)
+  expect_equal(m$sigma, 0.64280, tolerance = 1e-4)
       
 })
 

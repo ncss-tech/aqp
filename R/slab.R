@@ -134,6 +134,9 @@
 	if(any(vars %in% object.names) == FALSE) # bogus column names in right-hand side
 		stop('column names in formula do not match column names in dataframe', call.=FALSE)
 
+	
+	## old slice() version ###############################
+	
 	# make formula for slicing
 	## TODO: slice() returns an extra row, so only request slices to max-1
 	fm.slice <- formula(paste('0:', max(object)-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
@@ -146,6 +149,31 @@
 	# slice into 1cm increments, result is a data.frame
 	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
 
+	#######################################################
+	
+	
+	## dice() version  ####################################
+	# https://github.com/ncss-tech/aqp/issues/115
+	
+	## TODO:
+	#  * enforce filling / check assumptions about length
+	#  * consider total re-write vs. adaptation
+	
+	# # make formula for slicing
+	# fm.slice <- formula(paste('0:', max(object), ' ~ ', paste(vars, collapse=' + '), sep=''))
+	# 
+	# # short-cut for user-defined slab
+	# if(length(slab.structure) == 2 )
+	#   fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2], ' ~ ', paste(vars, collapse=' + '), sep=''))
+	# 
+	# # slice into 1cm increments, result is a data.frame
+	# data <- dice(x = object, fm = fm.slice, strict = strict, SPC = FALSE, pctMissing = TRUE)
+	
+	#######################################################
+	
+	
+	
+	
 	# extract site data
 	site.data <- site(object)
 
@@ -285,7 +313,7 @@
 
 	# optionally account for extra arguments
 	else {
-		the.args <- c(list(formula=aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun), extra.args)
+		the.args <- c(list(aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun), extra.args)
 		d.slabbed <- do.call(what='aggregate', args=the.args)
 	}
 

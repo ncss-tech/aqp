@@ -11,17 +11,20 @@
 plotSPC(
   x,
   color = "soil_color",
-  width = 0.25,
+  width = ifelse(length(x) < 2, 0.15, 0.25),
   name = hzdesgnname(x),
   name.style = "right-center",
   label = idname(x),
   hz.depths = FALSE,
+  hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
+  hz.depths.lines = fixLabelCollisions,
   alt.label = NULL,
   alt.label.col = "black",
   cex.names = 0.5,
   cex.depth.axis = cex.names,
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
+  srt.id = 0,
   print.id = TRUE,
   id.style = "auto",
   plot.order = 1:length(x),
@@ -55,6 +58,8 @@ plotSPC(
   lwd = 1,
   lty = 1,
   default.color = grey(0.95),
+  fixLabelCollisions = FALSE,
+  maxLabelAdjustmentIndex = 4,
   ...
 )
 
@@ -77,6 +82,10 @@ plot(x, y, ...)
 
 \item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (FALSE)}
 
+\item{hz.depths.offset}{numeric, user coordinates for left-right adjustment for horizon depth annotation; reasonable values are usually within 0.01-0.05 (default: 0)}
+
+\item{hz.depths.lines}{logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or \code{fixLabelCollisions = TRUE}}
+
 \item{alt.label}{quoted column name of the (site-level) attribute used for secondary annotation}
 
 \item{alt.label.col}{color used for secondary annotation text}
@@ -88,6 +97,8 @@ plot(x, y, ...)
 \item{cex.id}{character scaling applied to \code{label}}
 
 \item{font.id}{font style applied to \code{label}, default is 2 (bold)}
+
+\item{srt.id}{rotation applied to \code{label}, only when \code{id.style = 'top'}}
 
 \item{print.id}{logical, print \code{label} above/beside each profile? (TRUE)}
 
@@ -101,7 +112,7 @@ plot(x, y, ...)
 
 \item{scaling.factor}{vertical scaling of profile depths, useful for adding profiles to an existing figure}
 
-\item{y.offset}{numeric vector of vertical offset for top of profiles in depth units of \code{x}, can either be a single numeric value or vector of length = \code{length(x)}}
+\item{y.offset}{numeric vector of vertical offset for top of profiles in depth units of \code{x}, can either be a single numeric value or vector of length = \code{length(x)}. A vector of y-offsets will be automatically re-ordered according to \code{plot.order}.}
 
 \item{x.idx.offset}{integer specifying horizontal offset from 0 (left-hand edge)}
 
@@ -123,7 +134,7 @@ plot(x, y, ...)
 
 \item{divide.hz}{logical, divide horizons with line segment? (TRUE), see details}
 
-\item{hz.distinctness.offset}{NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}}
+\item{hz.distinctness.offset}{NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}; consider setting \code{hz.depths.lines = TRUE} when used in conjunction with \code{hz.depths = TRUE}}
 
 \item{hz.topography.offset}{NULL, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and code{\link{hzTopographyCodeToOffset}}}
 
@@ -152,6 +163,10 @@ plot(x, y, ...)
 \item{lty}{line style used for sketches}
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
+
+\item{fixLabelCollisions}{use \code{aqp::fixOverlap()} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
+
+\item{maxLabelAdjustmentIndex}{numeric, maximum (total) adjustments allowed when \code{fixLabelCollisions = TRUE}, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 
@@ -193,42 +208,49 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 # promote to SoilProfileCollection
 depths(sp1) <- id ~ top + bottom
 
+# init horizon designation 
+hzdesgnname(sp1) <- 'name'
+
 # plot profiles
-plot(sp1, id.style='side')
+plotSPC(sp1, id.style='side')
 
 # title, note line argument:
 title('Sample Data 1', line=1, cex.main=0.75)
 
 # plot profiles without horizon-line divisions
-plot(sp1, divide.hz=FALSE)
+plotSPC(sp1, divide.hz=FALSE)
 
-# add dashed lines illustrating horizon boundary distinctness
+# diagonal lines encode horizon boundary distinctness
 sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
-plot(sp1, hz.distinctness.offset='hzD')
+plotSPC(sp1, hz.distinctness.offset = 'hzD', name.style = 'center-center')
 
 # plot horizon color according to some property
 data(sp4)
 depths(sp4) <- id ~ top + bottom
-plot(sp4, color='clay')
+hzdesgnname(sp4) <- 'name'
+plotSPC(sp4, color='clay')
 
 # another example
 data(sp2)
 depths(sp2) <- id ~ top + bottom
+hzdesgnname(sp2) <- 'name'
 site(sp2) <- ~ surface
 
 # label with site-level attribute: `surface`
-plot(sp2, label='surface', plot.order=order(sp2$surface))
+plotSPC(sp2, label='surface', plot.order=order(sp2$surface))
 
 # example using a categorical attribute
-plot(sp2, color = "plasticity")
+plotSPC(sp2, color = "plasticity")
 
 # plot two SPC objects in the same figure
 par(mar=c(1,1,1,1))
 # plot the first SPC object and
+
 # allocate space for the second SPC object
-plot(sp1, n=length(sp1) + length(sp2))
+plotSPC(sp1, n=length(sp1) + length(sp2))
+
 # plot the second SPC, starting from the first empty space
-plot(sp2, x.idx.offset=length(sp1), add=TRUE)
+plotSPC(sp2, x.idx.offset=length(sp1), add=TRUE)
 
 
 ##
@@ -240,6 +262,7 @@ data("jacobs2000")
 # shrink "long" horizon names
 plotSPC(
   jacobs2000, 
+  name = 'name',
   name.style = 'center-center', 
   shrink = TRUE, 
   cex.names = 0.8
@@ -248,6 +271,7 @@ plotSPC(
 # shrink horizon names in "thin" horizons
 plotSPC(
   jacobs2000, 
+  name = 'name',
   name.style = 'center-center', 
   shrink = TRUE, 
   shrink.thin = 15,
@@ -270,10 +294,10 @@ par(mar=c(0,0,3,1))
 
 # note that there are enough colors for 15 classes (vs. previous limit of 10)
 # note that the legend is split into 2 rows when length(classes) > n.legend argument
-plot(sp3, color='fake.data', name='fake.data', cex.names=0.8)
+plotSPC(sp3, color='fake.data', name='fake.data', cex.names=0.8)
 
 # make enough room in a single legend row
-plot(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
+plotSPC(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
 
 
 ##
@@ -284,9 +308,11 @@ plot(sp3, color='fake.data', name='fake.data', cex.names=0.8, n.legend=15)
 # example data and local copy
 data("jacobs2000")
 x <- jacobs2000
+hzdesgnname(x) <- 'name'
 
 # y-axis offsets, simulating a elevation along a hillslope sequence
 # same units as horizon depths in `x`
+# same order as profiles in `x`
 y.offset <- c(-5, -10, 22, 65, 35, 15, 12)
 
 par(mar = c(0, 0, 2, 2))
@@ -302,13 +328,16 @@ plotSPC(x, color = 'matrix_color', cex.names = 0.66, y.offset = 50)
 # plotSPC(x, color = 'matrix_color', cex.names = 0.66, y.offset = 1:2)
 
 # variable y-offset
-par(mar = c(0, 0, 2, 0))
+# fix overlapping horizon depth labels
+par(mar = c(0, 0, 1, 0))
 plotSPC(
   x, 
   y.offset = y.offset, 
   color = 'matrix_color', 
-  cex.names = 0.66, 
+  cex.names = 0.75, 
   hz.depths = TRUE, 
+  hz.depths.offset = 0.05,
+  fixLabelCollisions = TRUE,
   name.style = 'center-center'
 )
 
@@ -316,18 +345,33 @@ plotSPC(
 
 # random y-axis offsets
 yoff <- runif(n = length(x), min = 1, max = 100)
+
 # random gradient of x-positions
 xoff <- runif(n = length(x), min = 1, max = length(x))
 
+
+plotSPC(x, 
+        relative.pos = xoff, 
+        y.offset = yoff, 
+        color = 'matrix_color', 
+        cex.names = 0.66, 
+        hz.depths = TRUE, 
+        name.style = 'center-center'
+)
+
+
 # align / adjust relative x positions
 set.seed(111)
-pos <- alignTransect(xoff, x.min = 1, x.max = length(x))
+pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.5)
+
+# y-offset is automatically re-ordered according to
+# plot.order
 
 par(mar = c(0.5, 0.5, 0.5, 0.5))
 plotSPC(x, 
         plot.order = pos$order, 
         relative.pos = pos$relative.pos, 
-        y.offset = y.offset, 
+        y.offset = yoff, 
         color = 'matrix_color', 
         cex.names = 0.66, 
         hz.depths = TRUE, 

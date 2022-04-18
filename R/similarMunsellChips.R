@@ -45,18 +45,23 @@
 #' }
 #'
 #' @importFrom farver compare_colour
-#'
+#' @keywords internal
+#' @noRd
 .makeEquivalentMunsellLUT <- function(threshold = 0.001) {
   munsell <- NULL
   load(system.file("data/munsell.rda", package = "aqp")[1])
 
-  # this produces an 8467x8467 matrix ~285MB; just want upper triangle no diagonal
+  # 2022-03-31: updated neutral chips and 2.5 value chips now included
+  
+  
+  ## this version creates too-large of an output, will have to investigate that some other time
+  # this produces an 9227x9227matrix ~285MB; just want upper triangle no diagonal
   # # thanks to @dylanbeaudette for pointing out better farver syntax
   # system.time(x <- farver::compare_colour(munsell[, c('L', 'A', 'B')],
   #                                         from_space='lab', white_from = 'D65', method='cie2000'))
   # # # takes about a half minute to run
   # # # user  system elapsed
-  # # # 31.465   0.364  31.913
+  # # # 89.07    0.43   89.65 
   #
   # x[lower.tri(x, diag = TRUE)] <- NA # convert 0 to NA to ignore in stats
   # xdat <- x
@@ -64,13 +69,19 @@
   # TODO: ... some unholy indexry I cant quite figure out; the stats are right but order is wrong
 
   # this one that takes 2x as long to built the LUT, and is 2x as big in memory
-  (x <- farver::compare_colour(from = munsell[,c('L','A','B')], from_space = 'lab',
+  # user  system elapsed 
+  # 190.73    0.73  194.42
+  system.time(
+    x <- farver::compare_colour(from = munsell[,c('L','A','B')], from_space = 'lab',
                               to = munsell[,c('L','A','B')], to_space = 'lab',
-                              method = 'cie2000', white_from = 'D65', white_to = 'D65'))
+                              method = 'cie2000', white_from = 'D65', white_to = 'D65')
+  )
+  
   xdat <- x
   x[lower.tri(x, diag = TRUE)] <- NA 
   # remove lower triangle for statistics (only count each pair distance 1x)
 
+  # roughly dE00 ~ 2.24 -- this is close to the perceptible limit of average human color vision with "good" lighting
   # calculate quantiles
   xqtl <- quantile(x, p = threshold, na.rm = TRUE)[1]
 
@@ -122,7 +133,7 @@
   equivalent_munsell <- xin1
   names(equivalent_munsell) <- sprintf("%s %s/%s", munsell$hue, munsell$value, munsell$chroma)
 
-  # this is only 90kB written to Rda
+  # this is only 107kB written to Rda
   # save(equivalent_munsell, file="data/equivalent_munsell.rda")
 
   return(equivalent_munsell)

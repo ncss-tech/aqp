@@ -166,6 +166,15 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
 
 slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE){
 
+  ## Plan:
+  #   1. message about future deprecation -> dice()
+  message('Note: aqp::slice() will be deprecated in aqp version 2.0\n--> Please consider using the more efficient aqp::dice()')
+  
+  #   2. deprecation -> dice() in aqp 2.0
+  
+  #   3. masking / removal of slice(), shortly there after
+  
+  
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
 

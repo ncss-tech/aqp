@@ -10,8 +10,7 @@ L1_profiles(
   basis = 1,
   method = c("regex", "simple", "constant"),
   maxDepthRule = c("max", "min"),
-  maxDepthConstant = NULL,
-  strict = FALSE
+  maxDepthConstant = NULL
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ L1_profiles(
 \item{maxDepthRule}{maximum depth rule: "max" or "min" See details.}
 
 \item{maxDepthConstant}{positive integer, maximum depth when \code{maxDepthRule = 'constant'}}
-
-\item{strict}{passed to \code{slice}}
 }
 \value{
 a \code{SoilProfileCollection} object

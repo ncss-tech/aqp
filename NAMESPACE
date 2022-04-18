@@ -5,7 +5,7 @@ importFrom("grDevices", "chull", "col2rgb", "colorRamp", "rgb2hsv", "hsv",
 
 importFrom("graphics", "abline", "arrows", "axis", "box", "grid",
              "image", "legend", "lines", "mtext", "par", "points",
-             "polygon", "rect", "segments", "strwidth", "text")
+             "polygon", "rect", "segments", "strwidth", "strheight", "text")
 
 importFrom("stats", "aggregate", "approxfun", "as.dist", "as.formula",
              "complete.cases", "cov", "formula", "median", "model.frame",

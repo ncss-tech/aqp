@@ -37,7 +37,7 @@ depths(d) <- id ~ top + bottom
 test_that("error conditions", {
 
   # function will only accept a single profile
-  expect_error(estimateSoilDepth(d, name='name', top='top', bottom='bottom'))
+  expect_error(estimateSoilDepth(d, name='name'))
 
   # not specified -> error 
   expect_error(profileApply(d, estimateSoilDepth))
@@ -88,8 +88,8 @@ test_that("depthOf - simple match", {
 test_that("depthOf - multiple match", {
   expect_equal(depthOf(d[1,], "A|B|C"), c(0,20,35))
   expect_equal(depthOf(d[1,], "A|B|C", top = FALSE), c(20,35,110))
-  expect_equal(minDepthOf(d[1,],"A|B|C"), 0)
-  expect_equal(maxDepthOf(d[1,],"A|B|C"), 35)
+  expect_equal(minDepthOf(d[1,], "A|B|C"), 0)
+  expect_equal(maxDepthOf(d[1,], "A|B|C"), 35)
   expect_equal(minDepthOf(d[1,], "A|B|C", top = FALSE), 20)
   expect_equal(maxDepthOf(d[1,], "A|B|C", top = FALSE), 110)
 })
@@ -98,6 +98,23 @@ test_that("depthOf - no match", {
   expect_equal(depthOf(d[1,], "X"), NA_real_)
   expect_equal(depthOf(d[2,], "Cr|R|Cd", no.contact.depth = 50), NA_real_)
 
+  # multiple SPC return data.frame 
+  expect_true(inherits(depthOf(d, "X"), 'data.frame'))
+  
+  # one match -- other pedons no match
+  d$name[1] <- "X"
+  expect_equal(maxDepthOf(d, "X")$top, c(0, NA_real_, NA_real_, NA_real_))
+  
+  # two matches, more than one NA depth
+  d$name[2] <- "X"
+  d$top[1:2] <- NA
+  
+  # first profile has two matches; all NA
+  expect_equal(depthOf(d, "X")$top, c(NA_real_, NA_real_, NA_real_, NA_real_, NA_real_))
+  
+  # using functional (1 value per profile)
+  expect_equal(maxDepthOf(d, "X")$top, c(NA_real_, NA_real_, NA_real_, NA_real_))
+  
   d2 <- d
   d2$name <- NULL
   expect_error(depthOf(d2[1,], "A|B|C"))

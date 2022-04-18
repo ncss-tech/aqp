@@ -6,14 +6,14 @@
 \usage{
 hzDistinctnessCodeToOffset(
   x,
-  codes = c("V", "A", "C", "G", "D"),
+  codes = c("very abrupt", "abrupt", "clear", "gradual", "diffuse"),
   offset = c(0.5, 2, 5, 15, 20)/2
 )
 }
 \arguments{
 \item{x}{vector of boundary distinctness codes to be converted}
 
-\item{codes}{code values, adjust as needed}
+\item{codes}{character vector of distinctness terms ('clear') or codes ('C'), case insensitive, see details}
 
 \item{offset}{vertical offset factors (cm), approximating 1/2 of the transitional zone thickness, see details}
 }
@@ -25,6 +25,12 @@ This function will convert USDA-NCSS horizon boundary distinctness codes into ve
 }
 \details{
 The default offsets are based on the high-end of ranges presented in "transitional zone thickness criteria" from the Field Book version 3.0 (page 2-6). Offsets are returned as 1/2 of the transitional zone thickness so that horizon boundaries can be adjusted up/down from horizon depths. See \code{\link{plotSPC}}, specifically the \code{hz.distinctness.offset} argument for visualization ideas. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as 0 offsets.
+
+Either format (or mixture) are accepted, case insensitive:
+\itemize{
+\item terms: \code{c('very abrupt', 'abrupt', 'clear', 'gradual', 'diffuse')}
+\item coded values: \verb{c('v', 'a', 'c', 'g', d')}
+}
 
 Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}.
 }
@@ -40,6 +46,7 @@ sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
 
 # promote to SoilProfileCollection
 depths(sp1) <- id ~ top + bottom
+hzdesgnname(sp1) <- 'name'
 
 # adjust margins
 op <- par(mar=c(0,0,0,1.5))

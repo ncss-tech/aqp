@@ -1,4 +1,5 @@
 
+library(aqp)
 library(sharpshootR)
 library(soilDB)
 library(showtext)
@@ -11,17 +12,24 @@ s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 'reiff',
 h <- fetchOSD(s.list)
 
 
+
+
 png(file='font-test.png', width=850, height=450, type='cairo', res=120, antialias = 'subpixel')
+
+showtext_auto()
+
 par(family='Arial Narrow')
 
 # plot dendrogram + profiles
 SoilTaxonomyDendrogram(h, width=0.2, font.id=1)
+
 dev.off()
 
 
 # https://cran.rstudio.com/web/packages/showtext/vignettes/introduction.html
 ## Loading Google fonts (http://www.google.com/fonts)
 font_add_google("Roboto Condensed")
+showtext_auto()
 
 png(file='font-test-RC.png', width=900, height=500, type='cairo', res=80, antialias = 'subpixel')
 

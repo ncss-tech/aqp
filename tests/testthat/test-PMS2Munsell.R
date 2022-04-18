@@ -10,7 +10,7 @@ test_that('basic functionality', {
   expect_true(nrow(x) == length(codes))
   
   expect_true(is.na(x$munsell[1]))
-  expect_equal(x$munsell[2], '5R 3/4')
+  expect_equal(x$munsell[2], '7.5R 2.5/5')
   expect_equal(x$munsell[3], '5Y 9/13')
   
 })

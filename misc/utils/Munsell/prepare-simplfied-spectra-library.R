@@ -1,7 +1,7 @@
 library(reshape2)
 
 # missing odd chroma
-x <- read.table('SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt.gz', skip=13, header=TRUE, stringsAsFactors = FALSE, sep=',')
+x <- read.table('SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt.gz', skip = 13, header = TRUE, stringsAsFactors = FALSE, sep = ',')
 
 # long format simpler to work with
 m <- melt(x, id.vars = 'Name')
@@ -34,12 +34,12 @@ table(d$chroma)
 
 # re-assemble
 m.rel <- data.frame(
-  munsell=sprintf("%s %s/%s", d$hue, d$value, d$chroma),
-  hue=d$hue, 
-  value=d$value, 
-  chroma=d$chroma, 
-  wavelength=m$wavelength, 
-  reflectance=m$reflectance, 
+  munsell = sprintf("%s %s/%s", d$hue, d$value, d$chroma),
+  hue = d$hue, 
+  value = d$value, 
+  chroma = d$chroma, 
+  wavelength = m$wavelength, 
+  reflectance = m$reflectance, 
   stringsAsFactors = FALSE
 )
 
@@ -47,5 +47,5 @@ m.rel <- data.frame(
 m.rel <- m.rel[order(m.rel$hue, m.rel$value, m.rel$chroma, m.rel$wavelength), ]
 
 # save
-saveRDS(m.rel, file = 'simplified-Munsell-spectra.rds')
+saveRDS(m.rel, file = 'simplified-Munsell-spectra.rds', compress = 'xz')
 

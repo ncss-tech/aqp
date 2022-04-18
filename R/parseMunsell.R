@@ -40,11 +40,18 @@
       next
     }
     # otherwise continue processing
+    # remove numeric portion
     hue.character[i] <- gsub(hue.numeric[i], '', hue[i], fixed = TRUE)
   }
+  
   # convert numeric part to numbers
   hue.numeric <- as.numeric(hue.numeric)
-  return(data.frame(hue.numeric, hue.character, stringsAsFactors = FALSE))
+  
+  # strip white space form character portion
+  hue.character <- trimws(hue.character, which = 'both')
+  
+  res <- data.frame(hue.numeric, hue.character, stringsAsFactors = FALSE)
+  return(res)
 }
 
 

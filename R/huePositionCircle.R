@@ -12,6 +12,8 @@
 #' @param seg.adj numeric, scaling for line segment cues
 #' @param seg.col single color, color used for line segment cues
 #' @param plot logical, generate output on the current graphics device
+#' @param simulateCVD simulate color vision deficiencies with the colorspace package, should be the character representation of a function name, one of: 'deutan', 'protan', or 'tritan'.
+#' @param CVDseverity numeric value between 0 (none) and 1 (total), describing the severity of the color vision deficiency
 #'
 #' @note The best results are obtained when setting margins to zero, and inverting foreground / background colors. For example: `par(mar = c(0, 0, 0, 0), fg = 'white', bg = 'black')`.
 #' 
@@ -36,7 +38,7 @@
 #' # reset graphics state
 #' par(op)
 #' 
-huePositionCircle <- function(hues = huePosition(returnHues = TRUE), value = 6, chroma = 10, chip.cex = 5.5, label.cex = 0.66, seg.adj = 0.8, seg.col = 'grey', plot = TRUE) {
+huePositionCircle <- function(hues = huePosition(returnHues = TRUE), value = 6, chroma = 10, chip.cex = 5.5, label.cex = 0.66, seg.adj = 0.8, seg.col = 'grey', plot = TRUE, simulateCVD = NULL, CVDseverity = 1) {
   
   # sacrifice to CRAN deity
   munsellHuePosition <- NULL
@@ -54,6 +56,27 @@ huePositionCircle <- function(hues = huePosition(returnHues = TRUE), value = 6, 
   
   # convert colors
   d$cols <- parseMunsell(sprintf('%s %s/%s', d$hues, value, chroma))
+  
+  ## optionally simulate color vision deficiency with colorspace package
+  
+  # something specified
+  if(!is.null(simulateCVD)) {
+    
+    # sanity check
+    if(!simulateCVD %in% c('deutan', 'protan', 'tritan')) {
+      stop("simulateCVD should be one of c('deutan', 'protan', 'tritan')", call. = FALSE)
+    }
+    
+    if(!requireNamespace('colorspace', quietly = TRUE))
+      stop('please install the `colorspace` package.', call.=FALSE)
+    
+    # simulate full severity
+    d$cols <- switch(simulateCVD, 
+                     deutan = colorspace::deutan(d$cols, severity = CVDseverity),
+                     protan = colorspace::protan(d$cols, severity = CVDseverity),
+                     tritan = colorspace::tritan(d$cols, severity = CVDseverity)
+                     )
+  }
   
   # neutral color at center
   n.col <- parseMunsell(sprintf('N %s/', value))

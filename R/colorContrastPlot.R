@@ -95,12 +95,12 @@ colorContrastPlot <- function(
   # usually want to add the contrast metrics, but sometimes it is handy to suppress
   if(printMetrics) {
     # positions for color contrast class
-    cc.y <- rep(0.45, times=nx)
+    cc.y <- rep(0.46, times=nx)
     cc.lab <- as.character(d$cc)
     text(x.pos, cc.y, labels = cc.lab, adj = 0, font=cc.font, cex=d.cex)
 
     # positions for dE00
-    dE00.y <- rep(0.4, times=nx)
+    dE00.y <- rep(0.39, times=nx)
     dE00.lab <- signif(d$dE00, 3)
 
     # this is clunky but I can't figure out a better solution

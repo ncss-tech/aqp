@@ -111,6 +111,7 @@ depthOf <- function(p,
   # remove results greater than the cutoff depth: `no.contact.depth`
   if (any(res > no.contact.depth)) {
     hz.match <- hz.match[-which(res > no.contact.depth),]
+    res <- hz.match[[depthcol]]
   }
   
   # if no horizons match, return `no.contact.assigned`
@@ -132,7 +133,7 @@ depthOf <- function(p,
   }
 
   # if there are non-NA results, return all of them
-  if (length(res) > 0 && any(!is.na(res))) {
+  if (length(res) > 0) {
     
     # backwards compatible: simplify=TRUE and SPC length is 1
     if (length(p) == 1 && simplify) {
@@ -177,45 +178,50 @@ depthOf <- function(p,
   depthcol <- horizonDepths(p)[ifelse(top, 1, 2)]
   
   # depthOf returns all top or bottom depths of horizons matching `hzdesgn`
-  res <- depthOf(p = p,
+  res <- data.table::as.data.table(depthOf(p = p,
                  pattern = pattern,
                  FUN = NULL,
                  top = top,
                  hzdesgn = hzdesgn,
                  no.contact.depth = no.contact.depth,
                  no.contact.assigned = no.contact.assigned,
-                 simplify = simplify)
- 
-  if (inherits(res, 'data.frame')) {
+                 na.rm = na.rm,
+                 simplify = FALSE))
+  
   # otherwise, return the FUN value)) {
-    
-    # handle warnings about e.g. no non-missing arguments to FUN
-    idx <- data.table::as.data.table(res)[, .I[.SD[[depthcol]] == suppressWarnings(FUN(.SD[[depthcol]], na.rm = na.rm))],
-                                          by = list(res[[id]]), .SDcols = depthcol]$V1
-    
-    res2 <- res[idx, c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
-    
+  idx <- numeric(0)
+  naldx <- is.na(res[[depthcol]])
+  
+  if (all(naldx)) {
+    naldx <- logical(0)
+    idx <- res[, .I[1], by = id]$V1
   } else {
-    res2 <- suppressWarnings(FUN(res, na.rm = na.rm))
-    
-    # if not found, depth is infinite
-    if (length(p) == 1 && (!is.finite(res2) | is.na(res2))) {
-      return(no.contact.assigned)
-    }
+    # handle warnings about e.g. no non-missing arguments to FUN
+    idx <- res[, .I[which(.SD[[depthcol]] %in% suppressWarnings(FUN(.SD[[depthcol]], na.rm = na.rm)))][1], by = id, .SDcols = depthcol]$V1
+    idx <- idx[!is.na(idx)]
   }
   
-  return(res2)
+  idx2 <- sort(unique(c(which(naldx), idx)))
+  res <- res[idx2, .SD[1, ], by = id, .SDcols = c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
+  
+  if (length(p) == 1 && simplify) {  
+    return(res[[depthcol]])
+  }
+  .as.data.frame.aqp(res, aqp_df_class(p))
 }
   
 # maxDepthOf is a wrapper around depthOf to return a single, maximum value
+#' @rdname depthOf
+#' @export
 maxDepthOf <- function(p,
                        pattern,
                        top = TRUE,
                        hzdesgn = guessHzDesgnName(p),
                        no.contact.depth = NULL,
                        no.contact.assigned = NA,
-                       na.rm = TRUE) {
-    .funDepthOf(
+                       na.rm = TRUE,
+                       simplify = TRUE) {
+   .funDepthOf(
       p = p,
       pattern = pattern,
       FUN = max,
@@ -223,19 +229,23 @@ maxDepthOf <- function(p,
       hzdesgn = hzdesgn,
       no.contact.depth = no.contact.depth,
       no.contact.assigned = no.contact.assigned,
-      na.rm = na.rm
+      na.rm = na.rm,
+      simplify = simplify
     )
     
   }
 
-# minDepthOf is a wrapper around depthOf to return a single, minimum value
+# minDepthOf is a wrapper around depthOf to return a single, minimum value\
+#' @rdname depthOf
+#' @export
 minDepthOf <- function(p,
                        pattern,
                        top = TRUE,
                        hzdesgn = guessHzDesgnName(p),
                        no.contact.depth = NULL,
                        no.contact.assigned = NA,
-                       na.rm = TRUE) {
+                       na.rm = TRUE,
+                       simplify = TRUE) {
     .funDepthOf(
       p = p,
       pattern = pattern,
@@ -244,7 +254,8 @@ minDepthOf <- function(p,
       hzdesgn = hzdesgn,
       no.contact.depth = no.contact.depth,
       no.contact.assigned = no.contact.assigned,
-      na.rm = na.rm
+      na.rm = na.rm,
+      simplify = simplify
     )
     
   }

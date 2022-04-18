@@ -1,10 +1,15 @@
 
-## latest tinkering / testing based on updates to fillHzGaps
 
-## TODO: fully integrate new fillHzGaps
-##   * always fill / pad?
-##   * additional arguments for gaps vs top / bottom?
-##   * backwards compatibility with slice
+## TODO: offer repairMissingHzDepths()
+
+## DT full outer join ideas
+# https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
+# 
+
+## address TODO and major design questions:
+# https://github.com/ncss-tech/aqp/issues/115
+
+
 
 
 set.seed(1010)
@@ -26,8 +31,8 @@ plotSPC(fillHzGaps(x, to_bottom = NULL), color = '.filledGap')
 all(checkHzDepthLogic(x, fast = TRUE, byhz = TRUE)$valid)
 
 
-# ?!
-# what is causing filling to happen in 3?
+# OK
+# note we set `p1` to NA above, this is profile #4 in the collection
 s <- dice(d, byhz = FALSE, fill = FALSE)
 plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
 abline(h = max(d), lwd = 2, lty = 1)
@@ -57,14 +62,15 @@ s <- dice(d, byhz = TRUE, fill = TRUE, fm = 5 ~ .)
 plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
 abline(h = 5, lwd = 2, lty = 1)
 
-# ?!
-# bottom depth not correct in 10 / 3 / 6 
+# TODO: BUG
+# profiles 10 / 3 / 6 contain data that extends below 132cm -> data extend to 133
+# other profiles should extend to 133 as well
 # auto-filling of gaps introduced (byhz = TRUE) and to max(z)
 s <- dice(d, byhz = TRUE, fill = TRUE, fm = 0:132 ~ .)
 plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
 abline(h = 132, lwd = 2, lty = 1)
 
-
+max(s[1, ])
 
 
 ### finish updating these
@@ -79,18 +85,19 @@ x <- soilDB::fetchOSD('tatum')
 # works, O horizon lost
 s <- slice(x, fm = 0:100 ~ .)
 par(mar = c(0, 0, 0, 0))
-plotSPC(s)
+plotSPC(s, width = 0.15)
 
-# nope
+# works
 d <- dice(x, fm = 0:100 ~ ., strict = FALSE)
+plotSPC(d, width = 0.15)
 
 # works
 d <- dice(x, fm = 0:100 ~ ., strict = TRUE, byhz = TRUE)
-plotSPC(d)
+plotSPC(d, width = 0.15)
 
 # works
 d <- dice(x, strict = TRUE, byhz = TRUE)
-plotSPC(d)
+plotSPC(d, width = 0.15)
 
 
 ## indexes vs. keys
@@ -111,13 +118,7 @@ site(d)$group <- factor(sample(letters[1:10], size = length(d), replace =TRUE))
 plotSPC(d[1:10, ], color = 'p1', show.legend = FALSE)
 
 
-## DT full outer join ideas
-# https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
-# 
-
-## address TODO and major design questions:
-# https://github.com/ncss-tech/aqp/issues/115
-
+###
 
 
 # quick check
@@ -192,6 +193,7 @@ plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 zz <- dice(z, pctMissing = TRUE, byhz = TRUE)
 horizonNames(zz)
 plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+plotSPC(zz, color = '.pctMissing', name = NA, divide.hz = FALSE)
 
 
 
@@ -239,13 +241,14 @@ depths(sp4) <- id ~ top + bottom
 
 sp4$top[1:2] <- NA
 
-## this throws an error
+## horizons dropped
 d <- dice(sp4, fm = 5 ~ ., byhz = TRUE)
 
-## this works, but a profile is dropped
+## this works, but corrupt profile is dropped
 d <- dice(sp4, fm = 5 ~ ., byhz = FALSE)
 
-## this breaks at mapply step
+## stops with suggestion to use `strict = TRUE`
+# safely wraps base::seq()
 d <- dice(sp4, fm = 5 ~ ., strict = FALSE)
 
 # old slice, NA returned

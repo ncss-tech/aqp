@@ -6,14 +6,14 @@
 \usage{
 hzTopographyCodeToLineType(
   x,
-  codes = c("S", "W", "I", "B"),
+  codes = c("smooth", "wavy", "irregular", "broken"),
   lty = c(1, 2, 3, 4)
 )
 }
 \arguments{
 \item{x}{vector of boundary topography codes to be converted}
 
-\item{codes}{code values, adjust as needed}
+\item{codes}{character vector of topography terms ('smooth') or codes ('S'), case insensitive, see details}
 
 \item{lty}{line types}
 }
@@ -24,7 +24,13 @@ vector of line types with same length as \code{x}
 This function will convert USDA-NCSS horizon boundary topography codes into line types, based on the \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
 }
 \details{
-Visualization of horizon boundary topography can be difficult, line type offers an additional visual cue. See \code{hzTopographyCodeToOffset} for an offset-based approach. Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}.
+Visualization of horizon boundary topography can be difficult, line type offers an additional visual cue. See \code{hzTopographyCodeToOffset} for an offset-based approach. Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as line type 1.
+
+Either format (or mixture) are accepted, case insensitive:
+\itemize{
+\item terms: \code{c('smooth', 'wavy', 'irregular', 'broken')}
+\item coded values: \code{c('s', 'w', 'i', 'b')}
+}
 }
 \references{
 \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}

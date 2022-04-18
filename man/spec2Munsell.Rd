@@ -43,7 +43,7 @@ data("munsell.spectra.wide")
 spec2Munsell(munsell.spectra.wide[, '10YR 3/3'])
 
 # attempt several
-cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4', '5G 4/4', '2.5Y 8/2', '10YR 3/3')
+cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4', '5G 4/4', '2.5Y 8/2', '10YR 3/3', '7.5YR 2.5/2')
 
 # most are exact or very close
 z <- do.call(
