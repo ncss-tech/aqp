@@ -15,12 +15,12 @@
 \arguments{
 \item{obj}{A SoilProfileCollection}
 
-\item{value}{A proj4string}
+\item{value}{A PROJ4, WKT string or equivalent or {sp} CRS object}
 }
 \description{
 \code{proj4string()}: Get Coordinate Reference System as PROJ4 String
 
-\verb{wkt():} Get Coordinate Reference System for as Well-Known Text
+\verb{wkt():} Get Coordinate Reference System as Well-Known Text
 
 \verb{proj4string()<-}: Set Coordinate Reference System string for the SoilProfileCollection
 }

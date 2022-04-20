@@ -32,26 +32,33 @@
 #' @rdname SoilProfileCollection-crs
 setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
           function(obj) {
-            suppressWarnings(proj4string(obj@sp))
+            slot(slot(obj@sp, "proj4string"), "projargs")
           }
 )
 
-#' @description `wkt():` Get Coordinate Reference System for as Well-Known Text
+#' @description `wkt():` Get Coordinate Reference System as Well-Known Text
 #'
 #' @rdname SoilProfileCollection-crs
 setMethod(f = 'wkt', signature(obj = 'SoilProfileCollection'),
           function(obj) {
-            suppressWarnings(wkt(obj@sp))
+            w <- suppressWarnings(wkt(slot(obj@sp, "proj4string")))
+            if (is.null(w)) {
+              w <- suppressWarnings(comment(slot(obj@sp, "proj4string")))
+            }
+            w
           }
 )
 
 #' @description `proj4string()<-`: Set Coordinate Reference System string for the SoilProfileCollection
 #'
-#' @param value A proj4string
+#' @param value A PROJ4, WKT string or equivalent or {sp} CRS object
 #' @rdname SoilProfileCollection-crs
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
   function(obj, value) {
-    suppressWarnings(proj4string(obj@sp) <- value)
+    if (!inherits(value, 'CRS')) {
+      value <- CRS(value)
+    }
+    suppressWarnings(slot(obj@sp, "proj4string") <- value)
     obj
   }
 )
