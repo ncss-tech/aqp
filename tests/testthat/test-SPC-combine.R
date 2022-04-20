@@ -10,9 +10,7 @@ sp1$y <- seq(38, 39, length.out = length(sp1))
 
 sp::coordinates(sp1) <- ~ x + y
 
-sp::proj4string(sp1) <- '+proj=longlat +datum=WGS84'
-# PROJ6
-# sp::proj4string(sp1) <- sp::CRS(SRS_string = "OGC:CRS84")
+sp::proj4string(sp1) <- 'EPSG:4326'
 
 test_that("basic combination tests", {
 
@@ -133,27 +131,26 @@ test_that("combine with non-conformal spatial data", {
 
   # alter CRS, this generates an sp warning
   # 2020-07-12: now caught with all other rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-method
-  sp::proj4string(y) <- '+proj=utm +zone=10 +datum=NAD83'
+  sp::proj4string(y) <- 'EPSG:26910' # NAD83 UTM Zone 10
 
-  # should throw an error
-
-
-  # this should not work, IDs aren't unqiue
-  expect_error(combine(list(x, y)), 'non-unique profile IDs detected')
-
+  # this should not work, IDs aren't unique
+  expect_error(expect_message(combine(list(x, y)),
+                              "inconsistent CRS, dropping spatial data"),
+               "non-unique profile IDs detected")
 
   # make IDs unique
   profile_id(y) <- sprintf("%s-copy", profile_id(y))
   profile_id(z) <- sprintf("%s-copy-copy", profile_id(z))
 
-  # remove sp data for one
+  # create non-conformal sp data for x=z
   z@sp <- new('SpatialPoints')
 
-  # remove all CRS
+  res <- combine(list(x, y, z))
+  
+  # remove CRS (avoids "inconsistent CRS, dropping spatial data")
   sp::proj4string(x) <- ''
   sp::proj4string(y) <- ''
-  sp::proj4string(z) <- ''
-
+  
   expect_message(res <- combine(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
   expect_true(inherits(res, 'SoilProfileCollection'))
 
