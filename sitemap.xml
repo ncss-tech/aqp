@@ -28,6 +28,9 @@
     <loc>/reference/SoilProfileCollection-class.html</loc>
   </url>
   <url>
+    <loc>/reference/SoilProfileCollection-crs.html</loc>
+  </url>
+  <url>
     <loc>/reference/SoilProfileCollection-plotting-methods.html</loc>
   </url>
   <url>
@@ -434,12 +437,6 @@
   </url>
   <url>
     <loc>/reference/profile_id.html</loc>
-  </url>
-  <url>
-    <loc>/reference/proj4string-SoilProfileCollection-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/proj4string-set-SoilProfileCollection-ANY-method.html</loc>
   </url>
   <url>
     <loc>/reference/random_profile.html</loc>
