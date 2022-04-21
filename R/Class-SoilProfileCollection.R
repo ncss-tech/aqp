@@ -495,7 +495,7 @@ setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
            #  make a warning with a stack trace
            if (as.class != "data.frame") {
              message(sprintf("failed to use %s as data.frame class", as.class))
-             metadata(object)$aqp_df_class <- "data.frame"
+             metadata(x)$aqp_df_class <- "data.frame"
              warning(
                "data.table and tbl_df in SoilProfileCollection data.frame slots are EXPERIMENTAL, defaulting to data.frame",
                call. = FALSE
