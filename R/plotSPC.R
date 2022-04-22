@@ -1017,11 +1017,25 @@ plotSPC <- function(
         
         ## collision detection / fix
         if(fixLabelCollisions) {
+          
+          ## TODO: make these adjustable via aqp options
+          
           # reasonable threshold for label collision detection
+          # this depends on graphics device / figure scale / cex.names
           y.thresh <- 1.25 * abs(strheight('0', cex = cex.names))
           
-          # print(y.thresh)
-          # print(diff(y1))
+          # adjustment suggestion must be on the same scale as threshold
+          .adj <- y.thresh * 1/4
+          
+          ## debugging
+          # print(
+          #   sprintf(
+          #     "y.thresh: %s   |   adj: %s",
+          #     signif(y.thresh, 3), 
+          #     signif(.adj, 3)
+          #   )
+          # )
+          
           
           # must include top + bottom depths for collision detection
           hzd.txt.y.fixed <- suppressMessages(fixOverlap( 
@@ -1029,7 +1043,7 @@ plotSPC <- function(
             thresh = y.thresh, 
             min.x = y1[1], 
             max.x = y0[nh], 
-            adj = 1,
+            adj = .adj,
             k = 20,
             trace = FALSE
           ))
