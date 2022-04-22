@@ -1004,8 +1004,6 @@ plotSPC <- function(
         adj = c(0, 0.8)
       )
       
-      ## TODO: add optional adjustments here using fixOverlap()
-      ##       https://github.com/ncss-tech/aqp/issues/240
       
       # in-between horizons, if present: vertical align is "center"
       if(nh > 1) {

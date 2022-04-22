@@ -1,5 +1,6 @@
 # aqp 1.43 (2022-04-11)
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
+ * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
  * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
  * aesthetic cleanup in `explainPlotSPC()`
 
