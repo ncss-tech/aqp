@@ -1,5 +1,5 @@
 ---
-title: "Introduction-to-SoilProfileCollection-Objects"
+title: "Introduction to SoilProfileCollection Objects"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction-to-SoilProfileCollection-Objects}
@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r setup, echo=FALSE, results='hide', warning=FALSE}
-library(knitr, quietly=TRUE)
+library(knitr, quietly = TRUE)
 
 opts_chunk$set(
   message = FALSE, 
@@ -18,8 +18,7 @@ opts_chunk$set(
   tidy = FALSE, 
   verbose = FALSE,
   collapse = TRUE,
-  comment = "#>",
-  eval = !is.null(getOption('soilDB.NASIS.credentials', default = NULL)) # only run on machines with NASIS (CRAN safeguard)
+  comment = "#>"
 )
 
 options(width = 100, stringsAsFactors = FALSE)
