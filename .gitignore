@@ -4,3 +4,4 @@ man/.Rhistory
 aqp.Rproj
 docs/reference/*.pdf
 *Rplots.pdf
+inst/doc
