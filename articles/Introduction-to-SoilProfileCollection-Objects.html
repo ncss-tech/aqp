@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduction-to-SoilProfileCollection-Objects • aqp</title>
+<title>Introduction to SoilProfileCollection Objects • aqp</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction-to-SoilProfileCollection-Objects">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to SoilProfileCollection Objects">
 <meta property="og:description" content="aqp">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Introduction-to-SoilProfileCollection-Objects.html">Introduction-to-SoilProfileCollection-Objects</a>
+      <a href="../articles/Introduction-to-SoilProfileCollection-Objects.html">Introduction to SoilProfileCollection Objects</a>
     </li>
   </ul>
 </li>
@@ -78,7 +78,7 @@
       </header><script src="Introduction-to-SoilProfileCollection-Objects_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Introduction-to-SoilProfileCollection-Objects</h1>
+      <h1 data-toc-skip>Introduction to SoilProfileCollection Objects</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/ncss-tech/aqp/blob/HEAD/vignettes/Introduction-to-SoilProfileCollection-Objects.Rmd" class="external-link"><code>vignettes/Introduction-to-SoilProfileCollection-Objects.Rmd</code></a></small>
@@ -118,6 +118,20 @@
 <span class="co"># load sample data set, a data.frame object with horizon-level data from 10 profiles</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
+<span class="co">#&gt; 'data.frame':    30 obs. of  13 variables:</span>
+<span class="co">#&gt;  $ id         : chr  "colusa" "colusa" "colusa" "colusa" ...</span>
+<span class="co">#&gt;  $ name       : chr  "A" "ABt" "Bt1" "Bt2" ...</span>
+<span class="co">#&gt;  $ top        : int  0 3 8 30 0 9 0 4 13 0 ...</span>
+<span class="co">#&gt;  $ bottom     : int  3 8 30 42 9 34 4 13 40 6 ...</span>
+<span class="co">#&gt;  $ K          : num  0.3 0.2 0.1 0.1 0.2 0.3 0.2 0.6 0.8 0.4 ...</span>
+<span class="co">#&gt;  $ Mg         : num  25.7 23.7 23.2 44.3 21.9 18.9 12.1 12.1 17.7 16.4 ...</span>
+<span class="co">#&gt;  $ Ca         : num  9 5.6 1.9 0.3 4.4 4.5 1.4 7 4.4 24.1 ...</span>
+<span class="co">#&gt;  $ CEC_7      : num  23 21.4 23.7 43 18.8 27.5 23.7 18 20 31.1 ...</span>
+<span class="co">#&gt;  $ ex_Ca_to_Mg: num  0.35 0.23 0.08 0.01 0.2 0.2 0.58 0.51 0.25 1.47 ...</span>
+<span class="co">#&gt;  $ sand       : int  46 42 40 27 54 49 43 36 27 43 ...</span>
+<span class="co">#&gt;  $ silt       : int  33 31 28 18 20 18 55 49 45 42 ...</span>
+<span class="co">#&gt;  $ clay       : int  21 27 32 55 25 34 3 15 27 15 ...</span>
+<span class="co">#&gt;  $ CF         : num  0.12 0.27 0.27 0.16 0.55 0.84 0.5 0.75 0.67 0.02 ...</span>
 
 <span class="co"># optionally read about it...</span>
 <span class="co"># ?sp4</span>
@@ -133,7 +147,36 @@
 
 <span class="co"># check it out:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></code></pre></div>
+<span class="co">#&gt; [1] "SoilProfileCollection"</span>
+<span class="co">#&gt; attr(,"package")</span>
+<span class="co">#&gt; [1] "aqp"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
+<span class="co">#&gt; SoilProfileCollection with 10 profiles and 30 horizons</span>
+<span class="co">#&gt; profile ID: id  |  horizon ID: hzID </span>
+<span class="co">#&gt; Depth range: 16 - 49 cm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ----- Horizons (6 / 30 rows  |  10 / 14 columns) -----</span>
+<span class="co">#&gt;  name     id hzID top bottom   K   Mg  Ca CEC_7 ex_Ca_to_Mg</span>
+<span class="co">#&gt;     A colusa    1   0      3 0.3 25.7 9.0  23.0        0.35</span>
+<span class="co">#&gt;   ABt colusa    2   3      8 0.2 23.7 5.6  21.4        0.23</span>
+<span class="co">#&gt;   Bt1 colusa    3   8     30 0.1 23.2 1.9  23.7        0.08</span>
+<span class="co">#&gt;   Bt2 colusa    4  30     42 0.1 44.3 0.3  43.0        0.01</span>
+<span class="co">#&gt;     A  glenn    5   0      9 0.2 21.9 4.4  18.8        0.20</span>
+<span class="co">#&gt;    Bt  glenn    6   9     34 0.3 18.9 4.5  27.5        0.20</span>
+<span class="co">#&gt; [... more horizons ...]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ----- Sites (6 / 10 rows  |  1 / 1 columns) -----</span>
+<span class="co">#&gt;         id</span>
+<span class="co">#&gt;     colusa</span>
+<span class="co">#&gt;      glenn</span>
+<span class="co">#&gt;      kings</span>
+<span class="co">#&gt;   mariposa</span>
+<span class="co">#&gt;  mendocino</span>
+<span class="co">#&gt;       napa</span>
+<span class="co">#&gt; [... more sites ...]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Spatial Data:</span>
+<span class="co">#&gt; [EMPTY]</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="accessing-setting-and-replacing-data">Accessing, Setting, and Replacing Data<a class="anchor" aria-label="anchor" href="#accessing-setting-and-replacing-data"></a>
@@ -209,7 +252,10 @@
 
 <span class="co"># extraction of specific attributes by name</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span>
+<span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span>
+<span class="co">#&gt;  [1]  894.4829 1038.8687  833.4114  987.9462 1001.3501 1119.3568 1121.3587 1065.0976 1163.9112</span>
+<span class="co">#&gt; [10]  905.0706</span>
 
 <span class="co"># assign a single single value into horizon-level attributes</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">constant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times<span class="op">=</span><span class="fu"><a href="../reference/nrow.html">nrow</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span>
@@ -239,7 +285,33 @@
 <span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">s</span>
 
 <span class="co"># check:</span>
-<span class="va">sp4</span></code></pre></div>
+<span class="va">sp4</span>
+<span class="co">#&gt; SoilProfileCollection with 10 profiles and 30 horizons</span>
+<span class="co">#&gt; profile ID: id  |  horizon ID: hzID </span>
+<span class="co">#&gt; Depth range: 16 - 49 cm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ----- Horizons (6 / 30 rows  |  10 / 16 columns) -----</span>
+<span class="co">#&gt;  name     id hzID top bottom   K   Mg  Ca CEC_7 ex_Ca_to_Mg</span>
+<span class="co">#&gt;     A colusa    1   0      3 0.3 25.7 9.0  23.0        0.35</span>
+<span class="co">#&gt;   ABt colusa    2   3      8 0.2 23.7 5.6  21.4        0.23</span>
+<span class="co">#&gt;   Bt1 colusa    3   8     30 0.1 23.2 1.9  23.7        0.08</span>
+<span class="co">#&gt;   Bt2 colusa    4  30     42 0.1 44.3 0.3  43.0        0.01</span>
+<span class="co">#&gt;     A  glenn    5   0      9 0.2 21.9 4.4  18.8        0.20</span>
+<span class="co">#&gt;    Bt  glenn    6   9     34 0.3 18.9 4.5  27.5        0.20</span>
+<span class="co">#&gt; [... more horizons ...]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ----- Sites (6 / 10 rows  |  4 / 4 columns) -----</span>
+<span class="co">#&gt;         id elevation constant group</span>
+<span class="co">#&gt;     colusa  894.4829        1     A</span>
+<span class="co">#&gt;      glenn 1038.8687        1     B</span>
+<span class="co">#&gt;      kings  833.4114        1     A</span>
+<span class="co">#&gt;   mariposa  987.9462        1     B</span>
+<span class="co">#&gt;  mendocino 1001.3501        1     A</span>
+<span class="co">#&gt;       napa 1119.3568        1     B</span>
+<span class="co">#&gt; [... more sites ...]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Spatial Data:</span>
+<span class="co">#&gt; [EMPTY]</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="diagnostic-horizons">Diagnostic Horizons<a class="anchor" aria-label="anchor" href="#diagnostic-horizons"></a>
@@ -289,7 +361,18 @@
 <span class="fu"><a href="../reference/restrictions.html">restrictions</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">rf</span>
 
 <span class="co"># check</span>
-<span class="fu"><a href="../reference/restrictions.html">restrictions</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/restrictions.html">restrictions</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
+<span class="co">#&gt;                id top bottom kind</span>
+<span class="co">#&gt; 1          colusa  42     62 fake</span>
+<span class="co">#&gt; 2           glenn  34     54 fake</span>
+<span class="co">#&gt; 3           kings  40     60 fake</span>
+<span class="co">#&gt; 4        mariposa  49     69 fake</span>
+<span class="co">#&gt; 5       mendocino  30     50 fake</span>
+<span class="co">#&gt; 6            napa  20     40 fake</span>
+<span class="co">#&gt; 7      san benito  20     40 fake</span>
+<span class="co">#&gt; 8          shasta  40     60 fake</span>
+<span class="co">#&gt; 9  shasta-trinity  40     60 fake</span>
+<span class="co">#&gt; 10         tehama  16     36 fake</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="spatial-data">Spatial Data<a class="anchor" aria-label="anchor" href="#spatial-data"></a>
@@ -305,10 +388,22 @@
 
 <span class="co"># extract coordinates as matrix</span>
 <span class="fu"><a href="../reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
+<span class="co">#&gt;           x       y</span>
+<span class="co">#&gt; 1  354345.0 4109425</span>
+<span class="co">#&gt; 2  354054.6 4109460</span>
+<span class="co">#&gt; 3  354017.8 4109637</span>
+<span class="co">#&gt; 4  353965.8 4109625</span>
+<span class="co">#&gt; 5  354104.3 4109533</span>
+<span class="co">#&gt; 6  353743.7 4109578</span>
+<span class="co">#&gt; 7  354032.2 4109511</span>
+<span class="co">#&gt; 8  353880.3 4109552</span>
+<span class="co">#&gt; 9  353962.9 4109506</span>
+<span class="co">#&gt; 10 354053.9 4109413</span>
 
 <span class="co"># get/set spatial reference system using PROJ4 syntax</span>
 <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span>
 <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
+<span class="co">#&gt; [1] "+proj=utm +zone=11 +datum=NAD83"</span>
 
 <span class="co"># extract spatial data + site level attribtutes</span>
 <span class="co"># see ?SpatialPointsDataFrame for details</span>
@@ -318,7 +413,13 @@
 <span class="co"># 1. a new SoilProfileCollection (&gt; 1 horizon / profile)</span>
 <span class="co"># 2. a new SpatialPointsDataFrame (1 horizon / profile)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span> <span class="co"># profile 1 from the collection</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># horizon 1 from each profile</span></code></pre></div>
+<span class="co">#&gt; [1] "SoilProfileCollection"</span>
+<span class="co">#&gt; attr(,"package")</span>
+<span class="co">#&gt; [1] "aqp"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># horizon 1 from each profile</span>
+<span class="co">#&gt; [1] "SoilProfileCollection"</span>
+<span class="co">#&gt; attr(,"package")</span>
+<span class="co">#&gt; [1] "aqp"</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="subsetting-soilprofilecollection-objects">Subsetting SoilProfileCollection Objects<a class="anchor" aria-label="anchor" href="#subsetting-soilprofilecollection-objects"></a>
@@ -435,6 +536,7 @@
 <code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duplicate.html">duplicate</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, times <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d</span>, color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="selecting-unique-profiles">Selecting Unique Profiles<a class="anchor" aria-label="anchor" href="#selecting-unique-profiles"></a>
@@ -466,11 +568,16 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># inspect unique results</span>
-<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x.dupes</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, width <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>
-
+<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x.dupes</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, width <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co"># uniqueness is a function of variable selection</span>
-<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'name'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, width <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-9-2.png" width="768" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'name'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, width <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-9-3.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -482,33 +589,40 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 </h3>
 <p>The <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> function is helpful for adjusting some of the more obscure arguments to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>.</p>
 <p>A basic plot with debugging information overlayed.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span><span class="op">)</span></code></pre></div>
-<p>Make sketches wider.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, width<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span></code></pre></div>
-<p>Move soil surface at 0cm “down” 5cm.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, y.offset<span class="op">=</span><span class="fl">5</span><span class="op">)</span></code></pre></div>
-<p>Move soil surface at 0cm “up” 10cm; useful for sketches of shallow profiles.</p>
+<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-10-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>Make sketches wider.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, y.offset<span class="op">=</span><span class="op">-</span><span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p>Scale depths by 50%.</p>
+<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, width<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-11-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>Move soil surface at 0cm “down” 5cm.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, scaling.factor<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p>A graphical explanation of how profiles are re-arranged via <code>plot.order</code> argument.</p>
+<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, y.offset<span class="op">=</span><span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>Move soil surface at 0cm “up” 10cm; useful for sketches of shallow profiles.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, plot.order<span class="op">=</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p>Leave room for an additional 2 profile sketches.</p>
+<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, y.offset<span class="op">=</span><span class="op">-</span><span class="fl">10</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-13-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>Scale depths by 50%.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, scaling.factor<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-14-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>A graphical explanation of how profiles are re-arranged via <code>plot.order</code> argument.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, plot.order<span class="op">=</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-15-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>Leave room for an additional 2 profile sketches.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, n<span class="op">=</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">+</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-16-1.png" width="864" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="small-soilprofilecollections">Small SoilProfileCollections<a class="anchor" aria-label="anchor" href="#small-soilprofilecollections"></a>
 </h4>
@@ -523,86 +637,98 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <li>move depth axis to the left with negative <code>axis.line.offset</code> values</li>
 </ul>
 <p>Get some example data from the Official Series Descriptions.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ncss-tech.github.io/soilDB/" class="external-link">soilDB</a></span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncss-tech.github.io/soilDB/reference/fetchOSD.html" class="external-link">fetchOSD</a></span><span class="op">(</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'appling'</span>, <span class="st">'cecil'</span>, <span class="st">'bonneau'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Using 5x6 inch output device.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># set margins and turn off clipping</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, cex.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p>Using 7x6 inch output device, slight adjustments to <code>width</code> usually required.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># set margins and turn off clipping</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, width <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
-<p>Using 8x6 inch output device, slight adjustments to <code>axis.line.offset</code> and <code>width</code> are usually required.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># set margins and turn off clipping</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
+<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, cex.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-18-1.png" width="480" style="display: block; margin: auto;"></p>
+<p>Using 7x6 inch output device, slight adjustments to <code>width</code> usually required.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># set margins and turn off clipping</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
+<span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, width <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;"></p>
+<p>Using 8x6 inch output device, slight adjustments to <code>axis.line.offset</code> and <code>width</code> are usually required.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># set margins and turn off clipping</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, axis.line.offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="horizon-depth-labeling">Horizon Depth Labeling<a class="anchor" aria-label="anchor" href="#horizon-depth-labeling"></a>
 </h3>
 <p>Horizon depths can be labeled for each profile as an alternative to a single depth axis. As of aqp version 1.41, it is possible to “fix” overlapping horizon depth labels with the new <code>fixLabelCollisions</code> argument. This approach to labeling depths works best when moving horizon designations with the <code>name.style</code> argument. Note that setting <code>fixLabelCollisions = TRUE</code> may incur a significant performance penalty when plotting large <code>SoilProfileCollection</code> objects.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># set margins and turn off clipping</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, width <span class="op">=</span> <span class="fl">0.3</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, fixLabelCollisions <span class="op">=</span> <span class="cn">TRUE</span>, hz.depths.offset <span class="op">=</span> <span class="fl">0.08</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-21-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="relative-horizontal-positioning">Relative Horizontal Positioning<a class="anchor" aria-label="anchor" href="#relative-horizontal-positioning"></a>
 </h3>
 <p>Relative horizontal positioning via <code>relative.pos</code> argument. Can be used with <code>plot.order</code> but be careful: <code>relative.pos</code> must be specified in the <em>final</em> ordering of profiles. See <code><a href="../reference/SoilProfileCollection-plotting-methods.html">?plotSPC</a></code> for details.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'name'</span>, relative.pos <span class="op">=</span> <span class="va">pos</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>Relative positioning works well when the vector of positions is close to the default spacing along an integer sequence, but not when positions are closer than the width of a profile sketch.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5.2</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">9</span>, <span class="fl">10</span><span class="op">)</span>
 <span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'name'</span>, relative.pos <span class="op">=</span> <span class="va">pos</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-23-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>The <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> function can be used to find a suitable arrangement of profiles based on a compromise between the suggested relative positions and minimization of overlap. This is an iterative procedure, based on random perturbations of overlapping profiles, therefore it is possible for the algorithm to stop at a sub-optimal configuration. Results can be controlled using <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">new.pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">pos</span><span class="op">)</span>
 <span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'name'</span>, relative.pos <span class="op">=</span> <span class="va">new.pos</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-24-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>There are several parameters available for optimizing horizontal position in the presence of overlap. See <code><a href="../reference/fixOverlap.html">?fixOverlap</a></code> for details and further examples. The <a href="http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html" class="external-link">SPC plotting ideas tutorial</a> contains several practical examples.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">new.pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">pos</span>, thresh <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>
 <span class="fu"><a href="../reference/explainPlotSPC.html">explainPlotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'name'</span>, relative.pos <span class="op">=</span> <span class="va">new.pos</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-25-1.png" width="864" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="thematic-sketches">Thematic Sketches<a class="anchor" aria-label="anchor" href="#thematic-sketches"></a>
 </h3>
 <p>Horizon-level attributes can be symbolized with color, in this case using the horizon-level attribute “clay”:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot again, this time using new colors</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighter figure margins</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, color<span class="op">=</span><span class="st">'clay'</span>, col.label<span class="op">=</span><span class="st">'Clay Content (%)'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-26-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Use a different set of colors.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot again, this time using new colors</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighter figure margins</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, color<span class="op">=</span><span class="st">'clay'</span>, col.palette<span class="op">=</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">'Spectral'</span><span class="op">)</span>, col.label<span class="op">=</span><span class="st">'Clay Content (%)'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-27-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Categorical properties can also be used to make a thematic sketch. Colors are interpolated when there are more classes than colors provided by <code>col.palette</code>.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighter figure margins</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, color<span class="op">=</span><span class="st">'name'</span>, col.palette<span class="op">=</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">'Set1'</span><span class="op">)</span>, col.label<span class="op">=</span><span class="st">'Original Horizon Name'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-28-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Try with <a href="http://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.html" class="external-link">generalized horizon labels</a>.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighter figure margins</span>
 
 <span class="co"># generalize horizon names into 3 groups</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">genhz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generalize.hz.html">generalize.hz</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">$</span><span class="va">name</span>, new <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'AB'</span>, <span class="st">'Bt'</span><span class="op">)</span>, pat<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A[0-9]?'</span>, <span class="st">'AB'</span>, <span class="st">'^Bt'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span>, color<span class="op">=</span><span class="st">'genhz'</span>, col.palette<span class="op">=</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">'Spectral'</span><span class="op">)</span>, col.label<span class="op">=</span><span class="st">'Generalized Horizon Name'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-29-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Horizon-level attributes that represent a volume fraction (e.g. coarse-fragment percentage) can be added to an existing figure. See <code><a href="../reference/addVolumeFraction.html">?addVolumeFraction</a></code> for additional customization ideas.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># tighter figure margins</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> 
 <span class="co"># convert fraction -&gt; percent</span>
@@ -612,12 +738,13 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'frag_pct'</span>, color <span class="op">=</span> <span class="st">'frag_pct'</span><span class="op">)</span>
 <span class="co"># symbolize volume fraction data</span>
 <span class="fu"><a href="../reference/addVolumeFraction.html">addVolumeFraction</a></span><span class="op">(</span><span class="va">sp4</span>, colname <span class="op">=</span> <span class="st">'frag_pct'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/plotting-vol-fraction-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="depth-intervals">Depth Intervals<a class="anchor" aria-label="anchor" href="#depth-intervals"></a>
 </h3>
 <p>Annotation of depth-intervals can be accomplished using “brackets”:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># extract top/bottom depths associated with all A horizons</span>
 
 <span class="co"># see ?DepthOf</span>
@@ -629,14 +756,26 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">IDs</span>, top <span class="op">=</span> <span class="va">tops</span>, bottom <span class="op">=</span> <span class="va">bottoms</span><span class="op">)</span>
 
 <span class="co"># check: OK</span>
-<span class="va">a</span></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<span class="va">a</span>
+<span class="co">#&gt;                            id top bottom</span>
+<span class="co">#&gt; colusa                 colusa   0      8</span>
+<span class="co">#&gt; glenn                   glenn   0      9</span>
+<span class="co">#&gt; kings                   kings   0      4</span>
+<span class="co">#&gt; mariposa             mariposa   0      3</span>
+<span class="co">#&gt; mendocino           mendocino   0      2</span>
+<span class="co">#&gt; napa                     napa   0      6</span>
+<span class="co">#&gt; san benito         san benito   0      8</span>
+<span class="co">#&gt; shasta                 shasta   0      3</span>
+<span class="co">#&gt; shasta-trinity shasta-trinity   0     12</span>
+<span class="co">#&gt; tehama                 tehama   0      3</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 <span class="co"># annotate with brackets</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a</span>, col<span class="op">=</span><span class="st">'red'</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-30-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Labels.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add a label for each bracket</span>
 <span class="va">a</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">id</span>
 <span class="co"># tighter figure margins</span>
@@ -644,15 +783,17 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name<span class="op">=</span><span class="st">'name'</span><span class="op">)</span>
 <span class="co"># note that depth brackets "know which profiles to use"</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a</span>, col<span class="op">=</span><span class="st">'red'</span>, label.cex <span class="op">=</span> <span class="fl">0.75</span>, missing.bottom.depth <span class="op">=</span> <span class="fl">25</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-31-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>It is possible to arrange profile sketches by site-level grouping variable:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># use improvised site-level attribute 'group' </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighter figure margins</span>
 <span class="fu"><a href="../reference/groupedProfilePlot.html">groupedProfilePlot</a></span><span class="op">(</span><span class="va">sp4</span>, groups<span class="op">=</span><span class="st">'group'</span><span class="op">)</span>
 <span class="co"># note that depth brackets "know" which profiles to use</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a</span>, col<span class="op">=</span><span class="st">'red'</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-32-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>There need not be brackets for all profiles in a collection:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add a label for each bracket</span>
 <span class="va">a.sub</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="op">]</span>
 
@@ -662,23 +803,26 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 
 <span class="co"># note that depth brackets "know which profiles to use"</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a.sub</span>, col<span class="op">=</span><span class="st">'red'</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-33-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>When bottom depths are missing an arrow is used:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">a</span><span class="op">$</span><span class="va">bottom</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 <span class="co"># tighter figure margins</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/groupedProfilePlot.html">groupedProfilePlot</a></span><span class="op">(</span><span class="va">sp4</span>, groups<span class="op">=</span><span class="st">'group'</span><span class="op">)</span>
 <span class="co"># note that depth brackets "know which profiles to use"</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a</span>, col<span class="op">=</span><span class="st">'red'</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-34-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Manually define bottom depth</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># tighter figure margins</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/groupedProfilePlot.html">groupedProfilePlot</a></span><span class="op">(</span><span class="va">sp4</span>, groups<span class="op">=</span><span class="st">'group'</span><span class="op">)</span>
 <span class="co"># note that depth brackets "know which profiles to use"</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a</span>, col<span class="op">=</span><span class="st">'red'</span>, label.cex <span class="op">=</span> <span class="fl">0.75</span>, missing.bottom.depth <span class="op">=</span> <span class="fl">25</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-35-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Further customization of brackets:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># copy root-restricting features </span>
 <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/restrictions.html">restrictions</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 
@@ -692,6 +836,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 
 <span class="co"># add restrictions using vertical bars</span>
 <span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span><span class="va">a</span>, col<span class="op">=</span><span class="st">'red'</span>, label.cex <span class="op">=</span> <span class="fl">0.75</span>, tick.length <span class="op">=</span> <span class="fl">0</span>, lwd<span class="op">=</span><span class="fl">3</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-36-1.png" width="768" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
 </h4>
@@ -702,7 +847,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <h3 id="svg-output-for-use-in-page-layout-tools">SVG Output for Use in Page Layout Tools<a class="anchor" aria-label="anchor" href="#svg-output-for-use-in-page-layout-tools"></a>
 </h3>
 <p>Sketches for use in layout tools such as Adobe Illustrator or Inkscape should be stored in a vector file format. SVG is compatible with most software titles. WMF output is compatible with MS Office tools and can be written with the <code><a href="https://rdrr.io/r/grDevices/windows.html" class="external-link">win.metafile()</a></code> function.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># library(svglite)</span>
 <span class="co"># svglite(filename = 'e:/temp/fig.svg', width = 7, height = 6, pointsize = 12)</span>
 <span class="co"># </span>
@@ -716,7 +861,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <h2 id="iterating-over-profiles-in-a-collection">Iterating Over Profiles in a Collection<a class="anchor" aria-label="anchor" href="#iterating-over-profiles-in-a-collection"></a>
 </h2>
 <p>The <code><a href="../reference/profileApply.html">profileApply()</a></code> function is an extension of the familiar <em>apply()</em> family of functions that operate on vectors (<code>sapply</code> and <code>tapply</code>), matrices (<code>apply</code>), and lists (<code>lapply</code>)– extended to <code>SoilProfileCollection</code> objects. The function named in the <code>FUN</code> argument is evaluated once for each profile in the collection, typically returning a single value per profile. In this case, the ordering of the results would match the ordering of values in the site level attribute table.</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># max() returns the depth of a soil profile</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">soil.depth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, FUN <span class="op">=</span> <span class="va">max</span><span class="op">)</span>
 <span class="co"># max() with additional argument give max depth to non-missing 'clay'</span>
@@ -728,14 +873,21 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="co"># estimate soil depth based on horizon designation</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">soil.depth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">estimateSoilDepth</span>, name <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></code></pre></div>
 <p>When <code>FUN</code> returns a vector of the same length as the number of horizons in a profile, <code><a href="../reference/profileApply.html">profileApply()</a></code> can be used to create new horizon-level attributes. For example, the change in clay content with depth could be calculated via:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># save as horizon-level attribute</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">delta.clay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">i</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># check results:</span>
-<span class="fu"><a href="../reference/horizons.html">horizons</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'id'</span>, <span class="st">'top'</span>, <span class="st">'bottom'</span>, <span class="st">'clay'</span>, <span class="st">'delta.clay'</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<span class="fu"><a href="../reference/horizons.html">horizons</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'id'</span>, <span class="st">'top'</span>, <span class="st">'bottom'</span>, <span class="st">'clay'</span>, <span class="st">'delta.clay'</span><span class="op">)</span><span class="op">]</span>
+<span class="co">#&gt;       id top bottom clay delta.clay</span>
+<span class="co">#&gt; 1 colusa   0      3   21         NA</span>
+<span class="co">#&gt; 2 colusa   3      8   27          6</span>
+<span class="co">#&gt; 3 colusa   8     30   32          5</span>
+<span class="co">#&gt; 4 colusa  30     42   55         23</span>
+<span class="co">#&gt; 5  glenn   0      9   25         NA</span>
+<span class="co">#&gt; 6  glenn   9     34   34          9</span></code></pre></div>
 <p>More complex summaries can be generated by writing a custom function that is then called by <code><a href="../reference/profileApply.html">profileApply()</a></code>. Note that each profile is passed into this function and accessed via a temporary variable (<code>i</code>), which is a <code>SoilProfileCollection</code> object containing a single profile. A list of <code>SoilProfileCollection</code> objects returned from a custom function can be re-constituted into a single <code>SoilProfileCollection</code> object via <code>combine</code>. See <code><a href="../reference/profileApply.html">help(profileApply)</a></code> for details.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compute hz-thickness weighted mean exchangeable-Ca:Mg</span>
 <span class="va">wt.mean.ca.mg</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
     <span class="co"># use horizon thickness as a weight</span>
@@ -748,7 +900,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="co"># apply our custom function and save results as a site-level attribute</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">wt.mean.ca.to.mg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">wt.mean.ca.mg</span><span class="op">)</span></code></pre></div>
 <p>We can now use our some of our new site-level attributes to order the profiles when plotting. In this case profiles are ordered based on the horizon-thickness weighted mean, exchangeable Ca:Mg values. Horizons are colored by exchangeable Ca:Mg values.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># the result is an index of rank</span>
 <span class="va">new.order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">order</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">$</span><span class="va">wt.mean.ca.to.mg</span><span class="op">)</span>
 <span class="co"># plot the data using our new order based on Ca:Mg</span>
@@ -757,27 +909,32 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="co"># add an axis labeled with the sorting criteria</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, at<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">$</span><span class="va">wt.mean.ca.to.mg</span>, <span class="fl">3</span><span class="op">)</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="fl">1</span>, line<span class="op">=</span><span class="fl">2.25</span>, text<span class="op">=</span><span class="st">'Horizon Thickness Weighted Mean Ex. Ca:Mg'</span>, cex<span class="op">=</span><span class="fl">0.75</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/profileApply-4-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="slicing-soil-profile-collections">Slicing Soil Profile Collections<a class="anchor" aria-label="anchor" href="#slicing-soil-profile-collections"></a>
 </h2>
 <p>Collections of soil profiles can be sliced (or re-sampled) into regular depth-intervals with the <code><a href="../reference/dice.html">dice()</a></code> function. The slicing structure and variables of interest are defined via formula notation:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># slice select horizon-level attributes</span>
 <span class="va">seq</span> <span class="op">~</span> <span class="va">var.1</span> <span class="op">+</span> <span class="va">var.2</span> <span class="op">+</span> <span class="va">var.3</span> <span class="op">+</span> <span class="va">...</span>
 <span class="co"># slice all horizon-level attributes</span>
 <span class="va">seq</span> <span class="op">~</span> <span class="va">.</span></code></pre></div>
 <p>where <code>seq</code> is a sequence of integers (e.g. <code>0:15</code>, <code>c(5,10,15,20)</code>, etc.) and <code>var.1 + var.2 + var.3 + ...</code> are horizon-level attributes to slice. Both continuous and categorical variables can be named on the right-hand-side of the formula. The results returned by <code><a href="../reference/dice.html">dice()</a></code> is either a <code>SoilProfileCollection</code>, or <code>data.frame</code> when called with the optional argument <code>SPC = FALSE</code>. For example, to slice our sample data set into 1-cm intervals, from 0–15 cm:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># resample to 1cm slices</span>
 <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dice.html">dice</a></span><span class="op">(</span><span class="va">sp4</span>, fm<span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">15</span> <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span> <span class="op">+</span> <span class="va">name</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span><span class="op">)</span>
 <span class="co"># check the result</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>
+<span class="co">#&gt; [1] "SoilProfileCollection"</span>
+<span class="co">#&gt; attr(,"package")</span>
+<span class="co">#&gt; [1] "aqp"</span>
 <span class="co"># plot sliced data</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighten figure margins</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-38-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Once soil profile data have been sliced, it is simple to extract “chunks” of data by depth interval via <code>[</code>-subsetting:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># slice from 0 to max depth in the collection</span>
 <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dice.html">dice</a></span><span class="op">(</span><span class="va">sp4</span>, fm<span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fu"><a href="../reference/max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span> <span class="op">+</span> <span class="va">name</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span><span class="op">)</span>
 <span class="co"># extract all data over the range of 5--10 cm:</span>
@@ -791,7 +948,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <h2 id="ragged-selection-glom">Ragged Selection: <code>glom</code><a class="anchor" aria-label="anchor" href="#ragged-selection-glom"></a>
 </h2>
 <p>Select all horizons that overlap the interval of 5-15cm.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># truncate to the interval 0-15cm</span>
 <span class="va">clods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">glom</span>, z1 <span class="op">=</span> <span class="fl">5</span>, z2 <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>
 <span class="va">clods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">combine</a></span><span class="op">(</span><span class="va">clods</span><span class="op">)</span>
@@ -800,16 +957,18 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">clods</span>, name<span class="op">=</span><span class="st">'name'</span>, color<span class="op">=</span><span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span>xleft <span class="op">=</span> <span class="fl">0.5</span>, ybottom <span class="op">=</span> <span class="fl">15</span>, xright <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, ytop <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-40-1.png" width="768" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="truncation-trunc">Truncation: <code>trunc</code><a class="anchor" aria-label="anchor" href="#truncation-trunc"></a>
 </h3>
 <p>Truncate the SPC to the interval of 5-15cm.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># truncate to the interval 0-15cm</span>
 <span class="va">sp4.truncated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trunc-SoilProfileCollection-method.html">trunc</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>
 <span class="co"># check</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighten figure margins</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4.truncated</span>, name<span class="op">=</span><span class="st">'name'</span>, color<span class="op">=</span><span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-41-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -822,24 +981,52 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <li>a vector of 2 integers (e.g. <code>c(50, 60)</code>): data are aggregated over depths spanning 50–60 units</li>
 <li>a vector of 3 or more integers (e.g. <code>c(0, 5, 10, 50, 100)</code>): data are aggregated over the depths spanning 0–5, 5–10, 10–50, 50–100 units</li>
 </ul>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># aggregate a couple of the horizon-level attributes, </span>
 <span class="co"># across the entire collection, </span>
 <span class="co"># from 0--10 cm</span>
 <span class="co"># computing the mean value ignoring missing data</span>
 <span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp4</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span>, slab.structure <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10</span><span class="op">)</span>, slab.fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt;   variable all.profiles value top bottom contributing_fraction</span>
+<span class="co">#&gt; 1     sand            1 47.63   0     10                     1</span>
+<span class="co">#&gt; 2     silt            1 31.15   0     10                     1</span>
+<span class="co">#&gt; 3     clay            1 21.11   0     10                     1</span>
 
 <span class="co"># again, this time within groups defined by a site-level attribute:</span>
 <span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp4</span>, fm <span class="op">=</span> <span class="va">group</span> <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span>, slab.structure<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10</span><span class="op">)</span>, slab.fun<span class="op">=</span><span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt;   variable group value top bottom contributing_fraction</span>
+<span class="co">#&gt; 1     sand     A 48.26   0     10                     1</span>
+<span class="co">#&gt; 2     silt     A 31.52   0     10                     1</span>
+<span class="co">#&gt; 3     clay     A 20.30   0     10                     1</span>
+<span class="co">#&gt; 4     sand     B 47.00   0     10                     1</span>
+<span class="co">#&gt; 5     silt     B 30.78   0     10                     1</span>
+<span class="co">#&gt; 6     clay     B 21.92   0     10                     1</span>
 
 <span class="co"># again, this time over several depth ranges</span>
 <span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp4</span>, fm <span class="op">=</span>  <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span>, slab.structure <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10</span>,<span class="fl">25</span>,<span class="fl">40</span><span class="op">)</span>, slab.fun<span class="op">=</span><span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt;   variable all.profiles    value top bottom contributing_fraction</span>
+<span class="co">#&gt; 1     sand            1 47.63000   0     10             1.0000000</span>
+<span class="co">#&gt; 2     sand            1 42.38931  10     25             0.8733333</span>
+<span class="co">#&gt; 3     sand            1 32.14607  25     40             0.5933333</span>
+<span class="co">#&gt; 4     silt            1 31.15000   0     10             1.0000000</span>
+<span class="co">#&gt; 5     silt            1 29.41221  10     25             0.8733333</span>
+<span class="co">#&gt; 6     silt            1 31.34831  25     40             0.5933333</span>
+<span class="co">#&gt; 7     clay            1 21.11000   0     10             1.0000000</span>
+<span class="co">#&gt; 8     clay            1 28.10687  10     25             0.8733333</span>
+<span class="co">#&gt; 9     clay            1 36.26966  25     40             0.5933333</span>
 
 <span class="co"># again, this time along 1-cm slices, computing quantiles</span>
 <span class="va">agg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp4</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">Mg</span> <span class="op">+</span> <span class="va">Ca</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span> <span class="op">+</span> <span class="va">CEC_7</span> <span class="op">+</span> <span class="va">clay</span><span class="op">)</span>
 
 <span class="co"># see ?slab for details on the default aggregate function</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">agg</span><span class="op">)</span>
+<span class="co">#&gt;   variable all.profiles  p.q5  p.q25 p.q50  p.q75 p.q95 top bottom contributing_fraction</span>
+<span class="co">#&gt; 1       Mg            1 6.015 12.175 14.60 21.125 27.13   0      1                     1</span>
+<span class="co">#&gt; 2       Mg            1 6.015 12.175 14.60 21.125 27.13   1      2                     1</span>
+<span class="co">#&gt; 3       Mg            1 6.015 12.175 19.15 25.650 27.76   2      3                     1</span>
+<span class="co">#&gt; 4       Mg            1 6.195 13.175 21.05 25.050 30.73   3      4                     1</span>
+<span class="co">#&gt; 5       Mg            1 6.195 13.175 21.05 25.050 30.73   4      5                     1</span>
+<span class="co">#&gt; 6       Mg            1 6.195 13.175 21.05 26.250 31.72   5      6                     1</span>
 
 <span class="co"># plot median +/i bounds defined by the 25th and 75th percentiles</span>
 <span class="co"># this is lattice graphics, syntax is a little rough</span>
@@ -854,8 +1041,9 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
              layout<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">)</span>, strip<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/strip.default.html" class="external-link">strip.custom</a></span><span class="op">(</span>bg<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>,
              scales<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>tick.number<span class="op">=</span><span class="fl">4</span>, alternating<span class="op">=</span><span class="fl">3</span>, relation<span class="op">=</span><span class="st">'free'</span><span class="op">)</span><span class="op">)</span>
              <span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/slab-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Depth-wise aggregation can be useful for visual evaluation of multivariate similarity among groups of profiles.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># processing the "napa" and tehama profiles</span>
 <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="../reference/profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'napa'</span>, <span class="st">'tehama'</span><span class="op">)</span><span class="op">)</span>
 <span class="va">napa.and.tehama</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">Mg</span> <span class="op">+</span> <span class="va">Ca</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span> <span class="op">+</span> <span class="va">CEC_7</span> <span class="op">+</span> <span class="va">clay</span><span class="op">)</span>
@@ -875,11 +1063,12 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
              scales<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>tick.number<span class="op">=</span><span class="fl">4</span>, alternating<span class="op">=</span><span class="fl">3</span>, relation<span class="op">=</span><span class="st">'free'</span><span class="op">)</span><span class="op">)</span>,
              auto.key<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>columns<span class="op">=</span><span class="fl">2</span>, lines<span class="op">=</span><span class="cn">TRUE</span>, points<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
              <span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/slab-2-1.png" width="768" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="change-of-support-re-alignment-of-horizon-depths-via-aggregation">Change of Support: re-alignment of horizon depths via aggregation<a class="anchor" aria-label="anchor" href="#change-of-support-re-alignment-of-horizon-depths-via-aggregation"></a>
 </h3>
 <p>Occasionally there is a need for converting data associated with soil horizons, as described in the field, to a new set of depth intervals. This kind of <em>change of support</em> operation requires some form of aggregation (mean, median, etc.) and possibly interpolation (e.g. splines). The <code>slab</code> function is the simplest way to implement a change of depth support via aggregation. The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape" class="external-link">reshape2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span>
 
@@ -908,9 +1097,17 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 
 <span class="co"># note: result is in long-format</span>
 <span class="co"># note: horizon names are lost due to aggregation</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span>
+<span class="co">#&gt;   variable id    value top bottom contributing_fraction</span>
+<span class="co">#&gt; 1       p1  1 43.04898   0      5             1.0000000</span>
+<span class="co">#&gt; 2       p1  1 43.04898   5     15             1.0000000</span>
+<span class="co">#&gt; 3       p1  1 43.44420  15     30             1.0000000</span>
+<span class="co">#&gt; 4       p1  1 44.91344  30     60             1.0000000</span>
+<span class="co">#&gt; 5       p1  1 38.06609  60    100             1.0000000</span>
+<span class="co">#&gt; 6       p1  1 34.10603 100    200             0.3611111</span>
+<span class="co">#&gt; 7       p1  2 16.53976   0      5             1.0000000</span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil profile data.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># reshape to wide format</span>
 <span class="co"># this scales to &gt; 1 aggregated variables</span>
 <span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/cast.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'value'</span><span class="op">)</span>
@@ -923,8 +1120,9 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d</span>, color<span class="op">=</span><span class="st">'p1'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d.gsm.pedons</span>, color<span class="op">=</span><span class="st">'p1'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-43-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>Note that re-aligned data may not represent reality (and should therefore be used with caution) when the original soil depth is shallower than the deepest of the new (re-aligned) horizon depths. The <code>contributing_fraction</code> metric returned by <code><a href="../reference/slab-methods.html">slab()</a></code> can be useful for assessing how much <em>real</em> data were used to generate the new set of re-aligned data.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># reshape to wide format</span>
 <span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/cast.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'contributing_fraction'</span><span class="op">)</span>
 <span class="fu">depths</span><span class="op">(</span><span class="va">d.gsm.pedons.2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span>
@@ -933,6 +1131,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d.gsm.pedons</span>, name<span class="op">=</span><span class="st">''</span>, color<span class="op">=</span><span class="st">'p1'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d.gsm.pedons.2</span>, name<span class="op">=</span><span class="st">''</span>, color<span class="op">=</span><span class="st">'p1'</span>, col.label<span class="op">=</span><span class="st">'Contributing Fraction'</span>, col.palette<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">'Spectral'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-44-1.png" width="864" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -945,7 +1144,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <li><a href="http://ncss-tech.github.io/AQP/soilDB/competing-series.html" class="external-link">Competing Soil Series</a></li>
 <li><a href="http://ncss-tech.github.io/AQP/aqp/aqp-profile-dissimilarity.html" class="external-link">Soil Profile Distances</a></li>
 </ul>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span>
 
@@ -962,6 +1161,20 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 
 <span class="co"># check distance matrix:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="co">#&gt; Dissimilarities :</span>
+<span class="co">#&gt;                colusa glenn kings mariposa mendocino napa san benito shasta shasta-trinity</span>
+<span class="co">#&gt; glenn            13.5                                                                     </span>
+<span class="co">#&gt; kings            16.0  12.7                                                               </span>
+<span class="co">#&gt; mariposa          8.4  11.3  16.5                                                         </span>
+<span class="co">#&gt; mendocino        11.5   8.0  16.4     15.0                                                </span>
+<span class="co">#&gt; napa             30.4  24.1  29.4     29.2      21.6                                      </span>
+<span class="co">#&gt; san benito       25.7  20.6  26.3     28.2      15.8 18.0                                 </span>
+<span class="co">#&gt; shasta           17.2  13.3   8.7     17.6      17.1 33.7       22.2                      </span>
+<span class="co">#&gt; shasta-trinity    6.4  16.6  22.3      9.6      16.5 29.8       27.2   23.3               </span>
+<span class="co">#&gt; tehama           28.7  22.9  27.9     27.3      20.0  8.8       15.1   31.4           27.9</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Metric :  mixed ;  Types = I, I </span>
+<span class="co">#&gt; Number of objects : 10</span>
 
 <span class="co"># visualize dissimilarity matrix via divisive hierarchical clustering</span>
 <span class="va">d.diana</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>
@@ -970,14 +1183,16 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <span class="co"># requires some manual adjustments</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">d.diana</span>, scaling.factor <span class="op">=</span> <span class="fl">0.8</span>, y.offset <span class="op">=</span> <span class="fl">5</span>, cex.names<span class="op">=</span><span class="fl">0.7</span>, width<span class="op">=</span><span class="fl">0.3</span>, color<span class="op">=</span><span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-45-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>Try again in <code>debug</code> mode to ensure that profiles are sorted correctly.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">d.diana</span>, scaling.factor <span class="op">=</span> <span class="fl">0.8</span>, y.offset <span class="op">=</span> <span class="fl">5</span>, cex.names<span class="op">=</span><span class="fl">0.7</span>, width<span class="op">=</span><span class="fl">0.3</span>, color<span class="op">=</span><span class="st">'ex_Ca_to_Mg'</span>, debug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-46-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="object-metadata">Object Metadata<a class="anchor" aria-label="anchor" href="#object-metadata"></a>
 </h2>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># print metadata:</span>
 <span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 
@@ -1004,7 +1219,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <div class="section level2">
 <h2 id="validity-and-horizon-logic">Validity and Horizon Logic<a class="anchor" aria-label="anchor" href="#validity-and-horizon-logic"></a>
 </h2>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/checkSPC.html">checkSPC</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 <span class="fu"><a href="../reference/spc_in_sync.html">spc_in_sync</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rebuildSPC.html">rebuildSPC</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
@@ -1013,7 +1228,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <div class="section level2">
 <h2 id="coercion">Coercion<a class="anchor" aria-label="anchor" href="#coercion"></a>
 </h2>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># check our work by viewing the internal structure</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 
