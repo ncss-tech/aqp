@@ -14,6 +14,8 @@
 #' 
 #' @details Scaling, rotation, and translation parameters for shifting between dry <--> moist CIELAB coordinates was determined using `vegan::procrustes()`, from those official series descriptions (OSD) where moist and dry soil colors were available.
 #' 
+#' Estimates for colors having a (dry or moist) Munsell value of 10 are not likely correct.
+#' 
 #' This is still a work in progress.
 #' 
 #' @author D.E. Beaudette
