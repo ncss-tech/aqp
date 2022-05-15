@@ -2,14 +2,15 @@
 title: "Introduction to SoilProfileCollection Objects"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction-to-SoilProfileCollection-Objects}
+  %\VignetteIndexEntry{Introduction to SoilProfileCollection Objects}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, echo=FALSE, results='hide', warning=FALSE}
 library(knitr, quietly = TRUE)
-
+ogbmt <- getOption("bitmapType")
+options(bitmapType = "cairo")
 opts_chunk$set(
   message = FALSE, 
   warning = FALSE, 
@@ -25,7 +26,7 @@ options(width = 100, stringsAsFactors = FALSE)
 ```
 
 # Introduction
-This is a very basic introduction to the `SoilProfileCollection` class object defined in the `aqp` package for **R**. The `SoilProfileCollection` class was designed to simplify the process of working with the collection of data associated with soil profiles: site-level data, horizon-level data, spatial data, diagnostic horizon data, metadata, etc. Examples listed below are meant to be copied/pasted from this document and interactively run within **R**. Comments (green text) briefly describe what the code in each line does. This document assumes a basic level of proficiency with **R** which can be gained by reviewing some of the material in [tutorials like this](http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf). Further documentation on objects and functions from the `aqp` package can be accessed by typing `help(aqp)` (or more generally, `?function_name`) at the **R** console.
+This is a very basic introduction to the `SoilProfileCollection` class object defined in the `aqp` package for **R**. The `SoilProfileCollection` class was designed to simplify the process of working with the collection of data associated with soil profiles: site-level data, horizon-level data, spatial data, diagnostic horizon data, metadata, etc. Examples listed below are meant to be copied/pasted from this document and interactively run within **R**. Comments (green text) briefly describe what the code in each line does. Further documentation on objects and functions from the `aqp` package can be accessed by typing `help(aqp)` (or more generally, `?function_name`) at the **R** console.
 
 
 # Object Creation
@@ -872,7 +873,7 @@ xyplot(top ~ p.q50 | variable, groups=which, data=g, ylab='Depth',
 
 Occasionally there is a need for converting data associated with soil horizons, as described in the field, to a new set of depth intervals. This kind of *change of support* operation requires some form of aggregation (mean, median, etc.) and possibly interpolation (e.g. splines). The `slab` function is the simplest way to implement a change of depth support via aggregation. The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.
 ```{r, fig.height=4.5, fig.width=9}
-library(reshape2)
+library(data.table)
 library(RColorBrewer)
 
 # 9 random profiles
@@ -896,7 +897,7 @@ gsm.depths <- c(0, 5, 15, 30, 60, 100, 200)
 
 # aggregate using mean: wt.mean within slabs
 # see ?slab for ideas on how to parameterize slab.fun
-d.gsm <- slab(d, fm=id ~ p1, slab.structure = gsm.depths, slab.fun = mean, na.rm=TRUE)
+d.gsm <- data.table(slab(d, fm=id ~ p1, slab.structure = gsm.depths, slab.fun = mean, na.rm=TRUE))
 
 # note: result is in long-format
 # note: horizon names are lost due to aggregation
@@ -1029,3 +1030,7 @@ as(sp4, 'SpatialPointsDataFrame')
 
 ----------------------------
 This document is based on `aqp` version `r utils::packageDescription("aqp", field="Version")`.
+
+```{r, echo=FALSE}
+options(bitmapType = ogbmt)
+```
