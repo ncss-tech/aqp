@@ -10,7 +10,9 @@ sp1$soil_color <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma)
 ## tests
 
 test_that("basic functionality", {
-
+  
+  skip_if_not_installed('gower')
+  
   # group all horizons
   x <- sp1
   x$genhz <- rep('A', times=nrow(x))
@@ -35,6 +37,7 @@ test_that("basic functionality", {
 
 ## TODO: test for expected error conditions
 test_that("expected error conditions", {
+  skip_if_not_installed('gower')
   expect_error(aggregateColor(x, groups='foo', col='soil_color'))
   expect_error(aggregateColor(x, groups='genhz', col='foo'))
   expect_error(aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'foo'))
@@ -43,6 +46,7 @@ test_that("expected error conditions", {
 
 ## TODO: add a couple more of these
 test_that("manual calculation using CIE2000 and LAB, single profile", {
+  skip_if_not_installed('gower')
 
   x <- sp1[1, ]
   x$genhz <- rep('A', times=nrow(x))
@@ -72,6 +76,7 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
 
 
 test_that("manual calculation using CIE2000 and LAB, single profile", {
+  skip_if_not_installed('gower')
   
   data(sp3)
   depths(sp3) <- id ~ top + bottom

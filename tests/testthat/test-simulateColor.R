@@ -9,6 +9,8 @@ sp1$soil_color <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma)
 
 test_that("aggregate color (proportions method)", {
   
+  skip_if_not_installed('gower')
+  
   horizons(sp1)$genhz <- 'A'
   a <- aggregateColor(sp1, groups='genhz', col='soil_color')
   

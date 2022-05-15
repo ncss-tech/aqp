@@ -5,6 +5,8 @@ data(sp5)
 
 test_that("colorQuantiles works as expected", {
   
+  skip_if_not_installed('Gmedian')
+  
   # compute marginal quantiles and L1 median
   cq <- colorQuantiles(sp5$soil_color, p = c(0.05, 0.5, 0.95))
   
@@ -17,6 +19,8 @@ test_that("colorQuantiles works as expected", {
 
 
 test_that("plotColorQuantiles works as expected", {
+  
+  skip_if_not_installed('Gmedian')
   
   # compute marginal quantiles and L1 median
   cq <- colorQuantiles(sp5$soil_color, p = c(0.05, 0.5, 0.95))

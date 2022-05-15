@@ -1,4 +1,6 @@
 test_that("spc2mpspline works as expected", {
+  skip_if_not_installed('mpspline2')
+  
   data(sp1)
   depths(sp1) <- id ~ top + bottom
   
@@ -46,6 +48,8 @@ test_that("spc2mpspline works as expected", {
 })
 
 test_that("alternate depth output methods", {
+  skip_if_not_installed('mpspline2')
+  
   data(sp1, package = "aqp")
   depths(sp1) <- id ~ top + bottom
   

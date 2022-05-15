@@ -2,7 +2,8 @@ context("mixing Munsell colors")
 
 
 test_that("mixMunsell works as expected", {
-
+  skip_if_not_installed('gower')
+  
   ## error conditions
   expect_error(mixMunsell(c(NA, '10YR 3/4')))
 
@@ -37,6 +38,8 @@ test_that("mixMunsell works as expected", {
 })
 
 test_that("multiple matches", {
+  skip_if_not_installed('gower')
+  
   m <- mixMunsell(c('10YR 6/2', '10YR 2/2'), n = 3)
   
   # verified results
@@ -48,6 +51,8 @@ test_that("multiple matches", {
 
 
 test_that("mixed spectra option", {
+  skip_if_not_installed('gower')
+  
   mx <- mixMunsell(c('10YR 6/2', '10YR 2/2'), n = 3, keepMixedSpec = TRUE)
   
   # results are a list vs. data.frame
@@ -63,7 +68,9 @@ test_that("mixed spectra option", {
   expect_true(m$munsell[2] == '5Y 4/2')
 })
 
-test_that("mxing methods", {
+test_that("mixing methods", {
+  
+  skip_if_not_installed('gower')
   
   ## all reference spectra available
   
@@ -98,6 +105,8 @@ test_that("mxing methods", {
 })
 
 test_that("additional arguments via ...", {
+  
+  skip_if_not_installed('gower')
   
   # NO conversion to closest Munsell chip via rgb2munsell()
   m <- mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'exact', convert = FALSE)

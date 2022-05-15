@@ -4,6 +4,7 @@ context("L1 profiles")
 
 
 test_that("works as expected", {
+  skip_if_not_installed('Gmedian')
   
   # overly simplistic example data
   p <- lapply(as.character(1:20), random_profile, method = 'LPP', SPC = TRUE)
