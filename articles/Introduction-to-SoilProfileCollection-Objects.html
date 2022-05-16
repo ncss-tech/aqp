@@ -91,7 +91,7 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This is a very basic introduction to the <code>SoilProfileCollection</code> class object defined in the <code>aqp</code> package for <strong>R</strong>. The <code>SoilProfileCollection</code> class was designed to simplify the process of working with the collection of data associated with soil profiles: site-level data, horizon-level data, spatial data, diagnostic horizon data, metadata, etc. Examples listed below are meant to be copied/pasted from this document and interactively run within <strong>R</strong>. Comments (green text) briefly describe what the code in each line does. This document assumes a basic level of proficiency with <strong>R</strong> which can be gained by reviewing some of the material in <a href="http://cran.r-project.org/doc/contrib/Verzani-SimpleR.pdf" class="external-link">tutorials like this</a>. Further documentation on objects and functions from the <code>aqp</code> package can be accessed by typing <code><a href="../reference/aqp-package.html">help(aqp)</a></code> (or more generally, <code>?function_name</code>) at the <strong>R</strong> console.</p>
+<p>This is a very basic introduction to the <code>SoilProfileCollection</code> class object defined in the <code>aqp</code> package for <strong>R</strong>. The <code>SoilProfileCollection</code> class was designed to simplify the process of working with the collection of data associated with soil profiles: site-level data, horizon-level data, spatial data, diagnostic horizon data, metadata, etc. Examples listed below are meant to be copied/pasted from this document and interactively run within <strong>R</strong>. Comments (green text) briefly describe what the code in each line does. Further documentation on objects and functions from the <code>aqp</code> package can be accessed by typing <code><a href="../reference/aqp-package.html">help(aqp)</a></code> (or more generally, <code>?function_name</code>) at the <strong>R</strong> console.</p>
 </div>
 <div class="section level2">
 <h2 id="object-creation">Object Creation<a class="anchor" aria-label="anchor" href="#object-creation"></a>
@@ -254,8 +254,8 @@
 <span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span>
 <span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span>
-<span class="co">#&gt;  [1] 1093.9391  922.5541  802.1538 1089.6011 1109.4977  964.5967 1189.0637  800.5520 1044.5277</span>
-<span class="co">#&gt; [10]  955.8000</span>
+<span class="co">#&gt;  [1] 1295.2324 1042.9314 1077.9262  884.2221  777.2105 1048.7686 1096.4052  916.2350  978.0918</span>
+<span class="co">#&gt; [10] 1010.5835</span>
 
 <span class="co"># assign a single single value into horizon-level attributes</span>
 <span class="va">sp4</span><span class="op">$</span><span class="va">constant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times<span class="op">=</span><span class="fu"><a href="../reference/nrow.html">nrow</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span>
@@ -302,12 +302,12 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ----- Sites (6 / 10 rows  |  4 / 4 columns) -----</span>
 <span class="co">#&gt;         id elevation constant group</span>
-<span class="co">#&gt;     colusa 1093.9391        1     A</span>
-<span class="co">#&gt;      glenn  922.5541        1     B</span>
-<span class="co">#&gt;      kings  802.1538        1     A</span>
-<span class="co">#&gt;   mariposa 1089.6011        1     B</span>
-<span class="co">#&gt;  mendocino 1109.4977        1     A</span>
-<span class="co">#&gt;       napa  964.5967        1     B</span>
+<span class="co">#&gt;     colusa 1295.2324        1     A</span>
+<span class="co">#&gt;      glenn 1042.9314        1     B</span>
+<span class="co">#&gt;      kings 1077.9262        1     A</span>
+<span class="co">#&gt;   mariposa  884.2221        1     B</span>
+<span class="co">#&gt;  mendocino  777.2105        1     A</span>
+<span class="co">#&gt;       napa 1048.7686        1     B</span>
 <span class="co">#&gt; [... more sites ...]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Spatial Data:</span>
@@ -389,16 +389,16 @@
 <span class="co"># extract coordinates as matrix</span>
 <span class="fu"><a href="../reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>
 <span class="co">#&gt;           x       y</span>
-<span class="co">#&gt; 1  354030.6 4109570</span>
-<span class="co">#&gt; 2  353876.1 4109697</span>
-<span class="co">#&gt; 3  353968.2 4109572</span>
-<span class="co">#&gt; 4  353937.1 4109692</span>
-<span class="co">#&gt; 5  353851.0 4109618</span>
-<span class="co">#&gt; 6  354040.3 4109670</span>
-<span class="co">#&gt; 7  354099.0 4109422</span>
-<span class="co">#&gt; 8  353808.7 4109396</span>
-<span class="co">#&gt; 9  354211.5 4109590</span>
-<span class="co">#&gt; 10 354032.2 4109731</span>
+<span class="co">#&gt; 1  354145.4 4109404</span>
+<span class="co">#&gt; 2  354001.8 4109532</span>
+<span class="co">#&gt; 3  353993.3 4109520</span>
+<span class="co">#&gt; 4  353947.0 4109591</span>
+<span class="co">#&gt; 5  354171.9 4109441</span>
+<span class="co">#&gt; 6  353958.3 4109655</span>
+<span class="co">#&gt; 7  354041.5 4109494</span>
+<span class="co">#&gt; 8  353980.7 4109406</span>
+<span class="co">#&gt; 9  353965.3 4109534</span>
+<span class="co">#&gt; 10 353806.2 4109634</span>
 
 <span class="co"># get/set spatial reference system using PROJ4 syntax</span>
 <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span>
@@ -1069,7 +1069,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 </h3>
 <p>Occasionally there is a need for converting data associated with soil horizons, as described in the field, to a new set of depth intervals. This kind of <em>change of support</em> operation requires some form of aggregation (mean, median, etc.) and possibly interpolation (e.g. splines). The <code>slab</code> function is the simplest way to implement a change of depth support via aggregation. The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape" class="external-link">reshape2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span>
 
 <span class="co"># 9 random profiles</span>
@@ -1093,24 +1093,24 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 
 <span class="co"># aggregate using mean: wt.mean within slabs</span>
 <span class="co"># see ?slab for ideas on how to parameterize slab.fun</span>
-<span class="va">d.gsm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">d</span>, fm<span class="op">=</span><span class="va">id</span> <span class="op">~</span> <span class="va">p1</span>, slab.structure <span class="op">=</span> <span class="va">gsm.depths</span>, slab.fun <span class="op">=</span> <span class="va">mean</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">d.gsm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="fu"><a href="../reference/slab-methods.html">slab</a></span><span class="op">(</span><span class="va">d</span>, fm<span class="op">=</span><span class="va">id</span> <span class="op">~</span> <span class="va">p1</span>, slab.structure <span class="op">=</span> <span class="va">gsm.depths</span>, slab.fun <span class="op">=</span> <span class="va">mean</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># note: result is in long-format</span>
 <span class="co"># note: horizon names are lost due to aggregation</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span>
-<span class="co">#&gt;   variable id    value top bottom contributing_fraction</span>
-<span class="co">#&gt; 1       p1  1 16.80451   0      5            1.00000000</span>
-<span class="co">#&gt; 2       p1  1 18.44495   5     15            1.00000000</span>
-<span class="co">#&gt; 3       p1  1 21.08092  15     30            1.00000000</span>
-<span class="co">#&gt; 4       p1  1 27.24110  30     60            1.00000000</span>
-<span class="co">#&gt; 5       p1  1 25.63310  60    100            1.00000000</span>
-<span class="co">#&gt; 6       p1  1 24.60465 100    200            0.01265823</span>
-<span class="co">#&gt; 7       p1  2 17.40650   0      5            1.00000000</span></code></pre></div>
+<span class="co">#&gt;    variable id    value top bottom contributing_fraction</span>
+<span class="co">#&gt; 1:       p1  1 19.52563   0      5             1.0000000</span>
+<span class="co">#&gt; 2:       p1  1 19.52564   5     15             1.0000000</span>
+<span class="co">#&gt; 3:       p1  1 19.52567  15     30             1.0000000</span>
+<span class="co">#&gt; 4:       p1  1 19.53850  30     60             1.0000000</span>
+<span class="co">#&gt; 5:       p1  1 20.99727  60    100             1.0000000</span>
+<span class="co">#&gt; 6:       p1  1 20.13628 100    200             0.5230769</span>
+<span class="co">#&gt; 7:       p1  2 25.71398   0      5             1.0000000</span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil profile data.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># reshape to wide format</span>
 <span class="co"># this scales to &gt; 1 aggregated variables</span>
-<span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/cast.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'value'</span><span class="op">)</span>
+<span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'value'</span><span class="op">)</span>
 <span class="fu">depths</span><span class="op">(</span><span class="va">d.gsm.pedons</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span>
 
 <span class="co"># iterate over aggregated profiles and make new hz names</span>
@@ -1124,7 +1124,7 @@ z <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilP
 <p>Note that re-aligned data may not represent reality (and should therefore be used with caution) when the original soil depth is shallower than the deepest of the new (re-aligned) horizon depths. The <code>contributing_fraction</code> metric returned by <code><a href="../reference/slab-methods.html">slab()</a></code> can be useful for assessing how much <em>real</em> data were used to generate the new set of re-aligned data.</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># reshape to wide format</span>
-<span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/cast.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'contributing_fraction'</span><span class="op">)</span>
+<span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'contributing_fraction'</span><span class="op">)</span>
 <span class="fu">depths</span><span class="op">(</span><span class="va">d.gsm.pedons.2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span>
 
 <span class="co"># compare original and aggregated</span>
