@@ -510,22 +510,6 @@ plotSPC <- function(
   # re-order y-offset according to plot.order
   y.offset <- y.offset[plot.order]
   
-  # sketch parameters for follow-up overlay / inspection
-  lsp <- list('width' = width,
-              'plot.order' = plot.order,
-              'x0' = relative.pos + x.idx.offset,
-              'pIDs' = pIDs[plot.order],
-              'idname' = idname(x),
-              'y.offset' = y.offset,
-              'scaling.factor' = scaling.factor,
-              'max.depth' = max.depth,
-              'n' = n,
-              'extra_x_space' = extra_x_space,
-              'extra_y_space' = extra_y_space,
-              'hz.depth.LAI' = rep(NA_real_, n)
-  )
-  
-  
   # get horizons
   h <- horizons(x)
   
@@ -562,6 +546,23 @@ plotSPC <- function(
   # legend data if relevant, otherwise NULL
   hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
   h[['.color']] <- hz.color.interpretation$colors
+  
+  # sketch parameters for follow-up overlay / inspection
+  lsp <- list('width' = width,
+              'plot.order' = plot.order,
+              'x0' = relative.pos + x.idx.offset,
+              'pIDs' = pIDs[plot.order],
+              'idname' = idname(x),
+              'y.offset' = y.offset,
+              'scaling.factor' = scaling.factor,
+              'max.depth' = max.depth,
+              'n' = n,
+              'extra_x_space' = extra_x_space,
+              'extra_y_space' = extra_y_space,
+              'hz.depth.LAI' = rep(NA_real_, n),
+              'legend.colors' = hz.color.interpretation$colors,
+              'legend.data' = hz.color.interpretation$color.legend.data
+  )
   
   
   ####################
