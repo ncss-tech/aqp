@@ -31,6 +31,7 @@ w$biome <- factor(w$biome, levels = c('Oak', 'Ponderosa pine', 'White fir', 'Red
 # ordering Oak -> Red fir / parent material
 w$.id <- interaction(w$biome, w$pm)
 # looks right
+
 # 0-padding for proper sorts
 w$.id <- sprintf('%03d', as.integer(w$.id))
 
@@ -50,6 +51,10 @@ groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', n
 groupedProfilePlot(w, groups = 'biome', group.name.offset = -15, label = 'pm', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
 
 ## TODO: generate docs + units
+
+# re-name and save
+
+
 
 
 ## load original Sierra Transect (central Sierra, granite) data from CSV
