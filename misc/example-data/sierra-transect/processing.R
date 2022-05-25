@@ -3,6 +3,16 @@ library(aqp)
 library(cluster)
 library(sharpshootR)
 
+## Wilson et al. paper with excellent synthesis over all three transects
+# field names need manual adjustment
+# note that not all sites from original papers are included
+# some depths / horizon designations are not the same
+# minor formatted adjustments and splitting of depths
+w <- read.csv('wilson-et-al-appdx-tables.csv')
+
+head(w)
+
+
 ## load original Sierra Transect (central Sierra, granite) data from CSV
 granite <- read.csv('dahlgren-granitics.csv', stringsAsFactors=FALSE)
 
