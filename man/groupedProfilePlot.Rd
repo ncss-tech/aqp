@@ -12,7 +12,8 @@ groupedProfilePlot(
   group.line.col = "RoyalBlue",
   group.line.lwd = 2,
   group.line.lty = 2,
-  break.style = "line",
+  break.style = c("line", "arrow", "both"),
+  break.offset = 0.5,
   arrow.offset = group.name.offset + 5,
   arrow.length = 0.1,
   ...
@@ -37,6 +38,8 @@ value or vector of offsets}
 
 \item{break.style}{style of group boundaries: "line", "arrow", "both"}
 
+\item{break.offset}{horizontal offset used to place vertical breaks and/or arrows, shifted slightly to the right of default when \code{hz.depths=TRUE} is passed to \code{plotSPC()}}
+
 \item{arrow.offset}{vertical offset for "arrow" style boundaries, single
 numeric value or vector of offsets}
 
@@ -45,9 +48,8 @@ numeric value or vector of offsets}
 \item{\dots}{further arguments to \code{plotSPC}}
 }
 \description{
-Plot a collection of soil profiles, sorted and labeled by group.
-}
-\details{
+Plot a collection of soil profiles, sorted by group.
+
 The left-right ordering of groups can be adjusted by converting
 \code{groups} into a factor and explicitly setting factor levels.
 Alpha-numeric ordering is used for all other types.
