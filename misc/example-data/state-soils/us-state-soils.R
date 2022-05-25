@@ -2,13 +2,13 @@
 ## 2020-10-08
 ##
 
-# lookup abbreviations
+# look-up abbreviations
 library(datasets)
 data('state')
 
 x <- read.csv('state_soils.csv', stringsAsFactors = FALSE)
 
-# abbrevaiated names
+# abbreviated names
 x$abbreviated <- state.abb[match(x$state, state.name)]
 
 # fix PR and VI
