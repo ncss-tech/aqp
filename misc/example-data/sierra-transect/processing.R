@@ -1,4 +1,4 @@
-# need these packages
+
 library(aqp)
 library(cluster)
 library(sharpshootR)
