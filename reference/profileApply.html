@@ -71,6 +71,7 @@
   frameify <span class="op">=</span> <span class="cn">FALSE</span>,
   chunk.size <span class="op">=</span> <span class="fl">100</span>,
   column.names <span class="op">=</span> <span class="cn">NULL</span>,
+  APPLY.FUN <span class="op">=</span> <span class="va">lapply</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -89,6 +90,8 @@
 <dd><p>numeric, size of "chunks" for faster processing of large SoilProfileCollection objects; default: 100</p></dd>
 <dt>column.names</dt>
 <dd><p>character, optional character vector to replace frameify-derived column names; should match length of colnames() from FUN result; default: NULL</p></dd>
+<dt>APPLY.FUN</dt>
+<dd><p>function, optional alternate <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function for processing chunks. For example <code>future.apply::future_lapply()</code> for processing chunks in parallel. Default <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">base::lapply()</a></code>.</p></dd>
 <dt>...</dt>
 <dd><p>additional arguments passed to FUN</p></dd>
 </dl></div>
