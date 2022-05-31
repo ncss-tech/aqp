@@ -28,7 +28,7 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
     
     # iterate over expressions left to right
     for (i in 1:length(.dots)) {
-      if (is.null(horizon_level) || !is.logical(horizon_level)){
+      if (is.null(horizon_level) || !is.logical(horizon_level)) {
         horizon_level <- FALSE
         
         # decide whether we are adding/modifying a site or horizon level variable so
@@ -42,42 +42,22 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
         }
       }
       
-      # then iterate over profiles within expression, frameify results
-      res <- profileApply(object, function(o) {
-
-        # create composite object to facilitate eval_tidy
-        .data <- compositeSPC(o)
-        res_eval <- .data_dots(.data, eval(.dots[[i]]))[[1]]
-
-        if (horizon_level) {
-          horizons(o)[[.names[i]]] <- res_eval
-        } else {
-          site(o)[[.names[i]]] <- res_eval
-        }
-
-        return(list(st = site(o), hz = horizons(o)))
-      }, simplify = FALSE)
-
-      # make a big data.frame
-      if (requireNamespace("data.table")) {
-        if (!horizon_level)
-         .site <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$st })), aqp_df_class(object))
-        else
-         .hz <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$hz })), aqp_df_class(object))
-      } else {
-        if (!horizon_level)
-         .site <- do.call('rbind', lapply(res, function(r) { r$st }))
-        else
-         .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
-      }
-
+      x <- data.table::data.table(object@site)[object@horizons, on = idname(object)]
+      .SD <- NULL
+      
+      res <- x[, list(.hzidname = .SD[[hzidname(object)]], 
+                      eval(.dots[[i]], envir = .SD)), by = c(idname(object))]
+      colnames(res) <- c(idname(object), hzidname(object), .names[i])
       if (!horizon_level) {
-        rownames(.site) <- NULL
-        slot(object, 'site') <- .site
+        if (nrow(unique(res[-which(colnames(res) == hzidname(object))])) >= length(object)) {
+          stop("mutate_profile: some profiles returned more than one result and `horizon_level=FALSE`", call. = FALSE)
+        }
+        res[[hzidname(object)]] <- NULL
+        site(object) <- res
       } else {
-        rownames(.hz) <- NULL
-        slot(object, 'horizons') <- .hz
+        horizons(object) <- res
       }
+      
     }
 
     return(object)
