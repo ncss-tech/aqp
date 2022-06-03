@@ -1,4 +1,4 @@
-sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.depthAxis = 0.5, widthFactor = 1, depthAxis = FALSE, depthAxis.interval = 10) {
+sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.depthAxis = 0.5, widthFactor = 1, depthAxis = FALSE, depthAxis.interval = 10, fill.pattern = FALSE) {
   
   # number of profiles, possibly set as an argument
   n <- length(x)
@@ -115,34 +115,38 @@ sketch <- function(x, cex.ids = 1, cex.names = 0.66, cex.depths = 0.66, cex.dept
     
     ## TODO: is this vectorized?
     # optional pattern overlay
-    for(hz.i in seq_along(tops)) {
+    if(fill.pattern) {
       
-      ## TODO: can we add some randomness to the fill between horizons / profiles?
-      
-      pat <- pattern(
-        # x = runif(1, min = 0.2, max = 0.8),
-        # y = runif(1, min = 0.4, max = 0.6),
-        grob = pat_grob, 
-        extend = 'repeat',
-        height = unit(4, 'cm'),
-        width = unit(4, 'cm')
-      )
-      
-      # optional pattern
-      gp.pattern <- gpar(fill = pat, col = NA)
-      
-      
-      grid.rect(
-        x = unit(x.pos, 'npc'), 
-        y = unit(tops[hz.i], 'native'), 
-        just = c('center', 'bottom'), 
-        width = unit(profileWidth, 'npc'), 
-        height = unit(thicks[hz.i], 'native'), 
-        gp = gp.pattern, 
-        name = sprintf('%s.shape.pattern', id)
-      )
+      for(hz.i in seq_along(tops)) {
+        
+        ## TODO: can we add some randomness to the fill between horizons / profiles?
+        
+        ## TODO: pattern should be selected based on rules / interpretation of hz data
+        
+        pat <- pattern(
+          # x = runif(1, min = 0.2, max = 0.8),
+          # y = runif(1, min = 0.4, max = 0.6),
+          grob = pat_grob, 
+          extend = 'repeat',
+          height = unit(4, 'cm'),
+          width = unit(4, 'cm')
+        )
+        
+        # pattern encoded into grid graphics parameters
+        gp.pattern <- gpar(fill = pat, col = NA)
+        
+        # apply pattern
+        grid.rect(
+          x = unit(x.pos, 'npc'), 
+          y = unit(tops[hz.i], 'native'), 
+          just = c('center', 'bottom'), 
+          width = unit(profileWidth, 'npc'), 
+          height = unit(thicks[hz.i], 'native'), 
+          gp = gp.pattern, 
+          name = sprintf('%s.shape.pattern', id)
+        )
+      }
     }
-    
     
     
     

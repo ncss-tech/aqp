@@ -52,7 +52,7 @@ sketch(
   perturb(x[3, ], n = 25, thickness.attr = '.sd'), depthAxis = TRUE
 )
 
-
-# semi-graceful failures
+# demonstrate graceful failure to draw bogus horizons
 x$top[c(4, 8, 16, 22)] <- NA
 sketch(x)
+

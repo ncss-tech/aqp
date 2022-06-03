@@ -10,6 +10,8 @@
 # 
 # x <- duplicate(x, times = 2)
 
+# remotes::install_github('coolbutuseless/svgparser')
+
 
 library(aqp)
 library(soilDB)
@@ -59,11 +61,13 @@ pat_grob$vp <- viewport(width = unit(4, 'cm'), height = unit(4, 'cm'))
 ## have to use Cairo PNG
 # https://developer.r-project.org/Blog/public/2020/07/15/new-features-in-the-r-graphics-engine/index.html
 
+## TODO: fix this so that the pattern grob is created within the function vs. object in top env.
+
 source('sketch-grid.R')
 
 png(file = 'test.png', width = 1000, height = 650, type = 'cairo')
 
-sketch(x, depthAxis = TRUE, cex.names = 0.85,  cex.depths = 0.85, cex.depthAxis = 0.85)
+sketch(x, depthAxis = TRUE, cex.names = 0.85,  cex.depths = 0.85, cex.depthAxis = 0.85, fill.pattern = TRUE)
 
 dev.off()
 
