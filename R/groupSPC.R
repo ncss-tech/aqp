@@ -1,9 +1,9 @@
 
-#' (EXPERIMENTAL) Store groupings within a profile collection.
+#' Store groupings within a profile collection.
 #' @name groupSPC
-#' @aliases group_by
 #' @param object SoilProfileCollection.
 #' @param ... One or more expressions evaluated within the context of \code{object} that resolve to vectors that can be coerced to factor "groups."
+#' @export
 groupSPC <- function(object, ...) {
 
     # capture expression(s) at function
@@ -44,3 +44,4 @@ groupSPC <- function(object, ...) {
 
     return(object)
 }
+

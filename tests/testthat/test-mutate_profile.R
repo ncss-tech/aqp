@@ -1,7 +1,5 @@
 data(sp3)
 depths(sp3) <- id ~ top + bottom
-site(sp3)$group <- "A"
-sp3$group[3:6] <- "B"
 
 test_that("transform & mutate_profile", {
   
@@ -34,17 +32,4 @@ test_that("transform & mutate_profile", {
   # however forcing a site-level result into horizon works
   res4 <- mutate_profile(trunc(res, 0, 5), rt3 = sum((bottom - top) / sum(thickness)), horizon_level = TRUE)
   expect_equal(length(res4$rt3), nrow(res4))
-})
-
-test_that("group_by & summarize", {
-  
-  sp3 <- groupSPC(sp3, group)
-  expect_equal(metadata(sp3)$aqp_group_by, "group")
-  
-  # mean for A and B group horizon data
-  summa <- summarizeSPC(sp3, round(mean(clay)), round(sd(clay)))
-  expect_equal(summa, structure(list(group = c("A", "B"),
-                                     `round(mean(clay))` = c(11,29),
-                                     `round(sd(clay))` = c(5, 12)),
-                                class = "data.frame", row.names = c(NA, -2L)))
 })
