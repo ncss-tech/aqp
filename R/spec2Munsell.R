@@ -7,8 +7,6 @@
 ## TODO: allow for more flexibility in spectra min/max/res wavelength
 
 #' @title Convert reflectance spectra to closest Munsell chip
-#' 
-#' 
 #' @param x reflectance spectra, (380nm to 730nm, 10nm resolution)
 #' 
 #' @param convert logical, convert sRGB coordinates to closest Munsell chip (see `?munsell`)

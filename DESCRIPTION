@@ -14,6 +14,6 @@ Repository: CRAN
 URL: https://github.com/ncss-tech/aqp
 BugReports: https://github.com/ncss-tech/aqp/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
