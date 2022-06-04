@@ -1,23 +1,31 @@
-context("dplyr-like verbs")
-
 data(sp3)
 depths(sp3) <- id ~ top + bottom
 site(sp3)$group <- "A"
 sp3$group[3:6] <- "B"
 
-test_that("mutate & mutate_profile", {
-
-  # mutate
+test_that("transform & mutate_profile", {
+  
+  # transform
   res <- transform(sp3, thickness = bottom - top)
   expect_equal(mean(res$thickness), 18.5652174)
-  # plot(res, color="thickness")
-
+  
+  # transform (existing column)
+  res <- transform(sp3, thickness = (bottom - top) / 100)
+  expect_equal(mean(res$thickness), 0.18565217)
+  
   # mutate_profile
-  res <- mutate_profile(res, relthickness = (bottom - top) / sum(thickness))
+  res <- mutate_profile(res, relthickness = (bottom - top) / (sum(thickness) * 100))
   expect_equal(mean(res$relthickness), 0.2173913)
-
+  
+  # mutate_profile (two existing columns)
+  res <- mutate_profile(res, thickness = bottom - top,
+                             relthickness = (thickness) / sum(thickness),
+                             sumrelthickness = sum(relthickness))
+  expect_equal(mean(res$relthickness), 0.2173913)
+  expect_true(all(res$sumrelthickness == 1))
+  
   # degenerate case where most profiles have only one horizon
-  (res2 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness)))
+  res2 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness))
   expect_true(length(res2$rt2) == nrow(res2))
   
   # forcing horizon level result into site produces an error
@@ -29,10 +37,10 @@ test_that("mutate & mutate_profile", {
 })
 
 test_that("group_by & summarize", {
-
+  
   sp3 <- groupSPC(sp3, group)
   expect_equal(metadata(sp3)$aqp_group_by, "group")
-
+  
   # mean for A and B group horizon data
   summa <- summarizeSPC(sp3, round(mean(clay)), round(sd(clay)))
   expect_equal(summa, structure(list(group = c("A", "B"),

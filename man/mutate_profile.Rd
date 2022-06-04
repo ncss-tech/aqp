@@ -18,7 +18,7 @@ mutate_profile(object, ..., horizon_level = NULL)
 A SoilProfileCollection.
 }
 \description{
-\code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{mutate}, which is applied to all values in a collection, regardless of which profile they came from.
+\code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{transform}, which is applied to all values in a collection, regardless of which profile they came from.
 }
 \details{
 If the length an expression's result matches the number of horizons, the result is stored as a horizon-level variable. If the result has length 1, it is stored as a site-level variable. In the ambiguous case where the first and last profile have only \emph{one} horizon, the results are stored in the horizon slot by default. To force results into site slot use \code{horizon_level = FALSE}.

@@ -1,7 +1,7 @@
 #' @title Transform a SPC (by profile) with a set of expressions
 #' @name mutate_profile
 #' @aliases mutate_profile,SoilProfileCollection-method
-#' @description \code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{mutate}, which is applied to all values in a collection, regardless of which profile they came from.
+#' @description \code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{transform}, which is applied to all values in a collection, regardless of which profile they came from.
 #' @param object A SoilProfileCollection
 #' @param ... A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{mutate_profile(hzdept = max(hzdept) - hzdept)}
 #' @param horizon_level logical. If `TRUE` results of expressions are added to the SoilProfileCollection's horizon slot, if `FALSE` the results are added to the site slot. If `NULL` (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the _first_ and _last_ profile in the collection.
@@ -48,12 +48,17 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
       res <- x[, list(.hzidname = .SD[[hzidname(object)]], 
                       eval(.dots[[i]], envir = .SD)), by = c(idname(object))]
       colnames(res) <- c(idname(object), hzidname(object), .names[i])
+      if (any(.names[i] %in% names(object))) {
+        for (n in .names[i]) {
+          object[[n]] <- NULL
+        }
+      }
       if (!horizon_level) {
         if (nrow(unique(res[-which(colnames(res) == hzidname(object))])) >= length(object)) {
           stop("mutate_profile: some profiles returned more than one result and `horizon_level=FALSE`", call. = FALSE)
         }
         res[[hzidname(object)]] <- NULL
-        site(object) <- res
+        site(object) <- unique(res)
       } else {
         horizons(object) <- res
       }
