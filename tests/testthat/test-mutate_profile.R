@@ -21,6 +21,10 @@ test_that("transform & mutate_profile", {
                              sumrelthickness = sum(relthickness))
   expect_equal(mean(res$relthickness), 0.2173913)
   expect_true(all(res$sumrelthickness == 1))
+
+  # mutate existing column name (using same column as input)
+  res <- mutate_profile(res, thickness = thickness / 10,
+                             thickness = thickness * 10)
   
   # degenerate case where most profiles have only one horizon
   res2 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness))
