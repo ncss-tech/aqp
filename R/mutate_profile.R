@@ -54,7 +54,7 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
         }
       }
       if (!horizon_level) {
-        if (nrow(unique(res[-which(colnames(res) == hzidname(object))])) >= length(object)) {
+        if (nrow(unique(res[, .SD, .SDcols = colnames(res)[colnames(res) != hzidname(object)]])) > length(object)) {
           stop("mutate_profile: some profiles returned more than one result and `horizon_level=FALSE`", call. = FALSE)
         }
         res[[hzidname(object)]] <- NULL
