@@ -202,7 +202,7 @@ groupedProfilePlot <- function(x, groups, group.name.offset = -5, group.name.cex
     }
   }
 
-  # annotate with group labels
-  text(lab.positions, group.name.offset, unique.lab, cex = group.name.cex, adj = c(0.75, 0), font = 4)
+  # annotate with group labels at group centers
+  text(lab.positions, group.name.offset, unique.lab, cex = group.name.cex, adj = c(0.5, 0), font = 4)
 }
 
