@@ -1,10 +1,7 @@
 
-
-
-
 #' @title Get Approximate Munsell Chip
 #' 
-#' @description Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
+#' @description Non-standard Munsell notation ('7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via `getClosestMunsellChip()`. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package. For example, conversion from Munsell to CIELAB, assuming a D65 illuminant via: `MunsellToLab('0.1Y 3.3/4.4', white='D65', adapt='Bradford')`.
 #'
 #' @param munsellColor character vector of strings containing Munsell notation of color, e.g. '10YR 4/3'
 #' @param convertColors logical, should parsed Munsell colors be converted into sRGB values
@@ -38,6 +35,11 @@ getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
   
   # extract pieces of hue
   hue.data <- .parseMunsellHue(cd$hue)
+  
+  ## TODO: evaluate closest standard hue via evaluation of hue positions
+  ##       -> huePosition(returnHues = TRUE)
+  ##       -> interpreting 10YR as the same as 0Y
+  
   
   # note: this is incompatible with LazyData: true
   # extract pieces from unique Munsell hues
