@@ -65,65 +65,84 @@ If you need all depths of occurrence for a particular pattern, depthOf is what y
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">depthOf</span><span class="op">(</span>
-  <span class="va">p</span>,
-  <span class="va">pattern</span>,
-  FUN <span class="op">=</span> <span class="cn">NULL</span>,
-  top <span class="op">=</span> <span class="cn">TRUE</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,
-  no.contact.assigned <span class="op">=</span> <span class="cn">NA_real_</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">maxDepthOf</span><span class="op">(</span>
-  <span class="va">p</span>,
-  <span class="va">pattern</span>,
-  top <span class="op">=</span> <span class="cn">TRUE</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,
-  no.contact.assigned <span class="op">=</span> <span class="cn">NA</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">minDepthOf</span><span class="op">(</span>
-  <span class="va">p</span>,
-  <span class="va">pattern</span>,
-  top <span class="op">=</span> <span class="cn">TRUE</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,
-  no.contact.assigned <span class="op">=</span> <span class="cn">NA</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">depthOf</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  <span class="va">pattern</span>,</span>
+<span>  FUN <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  top <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  no.contact.assigned <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">maxDepthOf</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  <span class="va">pattern</span>,</span>
+<span>  top <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  no.contact.assigned <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">minDepthOf</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  <span class="va">pattern</span>,</span>
+<span>  top <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  no.contact.depth <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  no.contact.assigned <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>a SoilProfileCollection</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>a regular expression to match in the horizon designation column. See:<code>hzdesgn</code></p></dd>
+
+
 <dt>FUN</dt>
 <dd><p>a function that returns a single value, and takes argument <code>na.rm</code></p></dd>
+
+
 <dt>top</dt>
 <dd><p>should the top (TRUE) or bottom (FALSE) depth be returned for matching horizons? Default: <code>TRUE</code>.</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>column name containing horizon designations. Default: <code>guessHzDesgnName(p)</code></p></dd>
+
+
 <dt>no.contact.depth</dt>
 <dd><p>depth to assume that contact did not occur.</p></dd>
+
+
 <dt>no.contact.assigned</dt>
 <dd><p>depth to assign when a contact did not occur.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>logical. Remove <code>NA</code>? (default: <code>TRUE</code>)</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>logical. Return single profile results as vector (default: <code>TRUE</code>) or <code>data.frame</code> (<code>FALSE</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a numeric vector containing specified depth(s) of horizons matching a pattern. If <code>length(p) &gt; 1</code> then a <em>data.frame</em> containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.</p>
+    
+
+<p>a numeric vector containing specified depth(s) of horizons matching a pattern. If <code>length(p) &gt; 1</code> then a <em>data.frame</em> containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -132,46 +151,46 @@ If you need all depths of occurrence for a particular pattern, depthOf is what y
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># construct a fake profile</span></span>
-<span class="r-in"><span class="va">spc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span>, taxsubgrp <span class="op">=</span> <span class="st">"Lithic Haploxerepts"</span>,</span>
-<span class="r-in">                  hzname   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"AB"</span>,<span class="st">"Bw"</span>,<span class="st">"BC"</span>,<span class="st">"R"</span><span class="op">)</span>,</span>
-<span class="r-in">                  hzdept   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,  <span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>,  <span class="fl">49</span><span class="op">)</span>,</span>
-<span class="r-in">                  hzdepb   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>, <span class="fl">49</span>, <span class="fl">200</span><span class="op">)</span>,</span>
-<span class="r-in">                  clay     <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">22</span>, <span class="fl">22</span>, <span class="fl">21</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  texcl    <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>, <span class="st">"l"</span>,<span class="st">"br"</span><span class="op">)</span>,</span>
-<span class="r-in">                  d_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,   <span class="fl">5</span>,  <span class="fl">5</span>,  <span class="fl">6</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  m_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  m_chroma <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,   <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span>
-<span class="r-in"><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span>
-<span class="r-in"><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># multiple horizons contain B</span></span>
-<span class="r-in"><span class="fu">depthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># construct a fake profile</span></span></span>
+<span class="r-in"><span><span class="va">spc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span>, taxsubgrp <span class="op">=</span> <span class="st">"Lithic Haploxerepts"</span>,</span></span>
+<span class="r-in"><span>                  hzname   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"AB"</span>,<span class="st">"Bw"</span>,<span class="st">"BC"</span>,<span class="st">"R"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  hzdept   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,  <span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>,  <span class="fl">49</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  hzdepb   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>, <span class="fl">49</span>, <span class="fl">200</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  clay     <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">22</span>, <span class="fl">22</span>, <span class="fl">21</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  texcl    <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>, <span class="st">"l"</span>,<span class="st">"br"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  d_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,   <span class="fl">5</span>,  <span class="fl">5</span>,  <span class="fl">6</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  m_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  m_chroma <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,   <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># multiple horizons contain B</span></span></span>
+<span class="r-in"><span><span class="fu">depthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20 32 42</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># deepest top depth of horizon containing B</span></span>
-<span class="r-in"><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># deepest top depth of horizon containing B</span></span></span>
+<span class="r-in"><span><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 42</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># shallowest top depth</span></span>
-<span class="r-in"><span class="fu">minDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># shallowest top depth</span></span></span>
+<span class="r-in"><span><span class="fu">minDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># deepest bottom depth</span></span>
-<span class="r-in"><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, top <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># deepest bottom depth</span></span></span>
+<span class="r-in"><span><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, top <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># deepest bottom depth above 35cm</span></span>
-<span class="r-in"><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, top <span class="op">=</span> <span class="cn">FALSE</span>, no.contact.depth <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># deepest bottom depth above 35cm</span></span></span>
+<span class="r-in"><span><span class="fu">maxDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, top <span class="op">=</span> <span class="cn">FALSE</span>, no.contact.depth <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># assign infinity (Inf) if B horizon does not start within 10cm</span></span>
-<span class="r-in"><span class="fu">minDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, no.contact.depth <span class="op">=</span> <span class="fl">10</span>, no.contact.assigned <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># assign infinity (Inf) if B horizon does not start within 10cm</span></span></span>
+<span class="r-in"><span><span class="fu">minDepthOf</span><span class="op">(</span><span class="va">spc</span>, <span class="st">"B"</span>, no.contact.depth <span class="op">=</span> <span class="fl">10</span>, no.contact.assigned <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] Inf</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -186,7 +205,7 @@ If you need all depths of occurrence for a particular pattern, depthOf is what y
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -126,113 +126,113 @@ Foundation of Soil Science.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">## this example investigates the concept of a "median profile"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># required packages</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span> <span class="op">&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># generate a RGB version of soil colors</span></span>
-<span class="r-in">  <span class="co"># and convert to HSV for aggregation</span></span>
-<span class="r-in">  <span class="va">sp3</span><span class="op">$</span><span class="va">h</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span class="r-in">  <span class="va">sp3</span><span class="op">$</span><span class="va">s</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span class="r-in">  <span class="va">sp3</span><span class="op">$</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span class="r-in">  <span class="va">sp3.rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">sp3</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'h'</span>, <span class="st">'s'</span>, <span class="st">'v'</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3.rgb</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb2hsv.html" class="external-link">rgb2hsv</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">g</span>, <span class="va">b</span>, maxColorValue <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in">  <span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># aggregate across entire collection</span></span>
-<span class="r-in">  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp3</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">clay</span> <span class="op">+</span> <span class="va">cec</span> <span class="op">+</span> <span class="va">ph</span> <span class="op">+</span> <span class="va">h</span> <span class="op">+</span> <span class="va">s</span> <span class="op">+</span> <span class="va">v</span>, slab.structure <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># check</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># convert back to wide format</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">a.wide.q25</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'p.q25'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">a.wide.q50</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'p.q50'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">a.wide.q75</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'p.q75'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># add a new id for the 25th, 50th, and 75th percentile pedons</span></span>
-<span class="r-in">  <span class="va">a.wide.q25</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">'Q25'</span></span>
-<span class="r-in">  <span class="va">a.wide.q50</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">'Q50'</span></span>
-<span class="r-in">  <span class="va">a.wide.q75</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">'Q75'</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># combine original data with "mean profile"</span></span>
-<span class="r-in">  <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span>, <span class="st">'id'</span>, <span class="st">'clay'</span>, <span class="st">'cec'</span>, <span class="st">'ph'</span>, <span class="st">'h'</span>, <span class="st">'s'</span>, <span class="st">'v'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># make data.frame version of sp3</span></span>
-<span class="r-in">  <span class="va">sp3.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="st">'data.frame'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">sp3.grouped</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sp3.df</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span>, <span class="va">a.wide.q25</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span>, <span class="va">a.wide.q50</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span>, <span class="va">a.wide.q75</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># re-constitute the soil color from HSV triplets</span></span>
-<span class="r-in">  <span class="co"># convert HSV back to standard R colors</span></span>
-<span class="r-in">  <span class="va">sp3.grouped</span><span class="op">$</span><span class="va">soil_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3.grouped</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/hsv.html" class="external-link">hsv</a></span><span class="op">(</span><span class="va">h</span>, <span class="va">s</span>, <span class="va">v</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># give each horizon a name</span></span>
-<span class="r-in">  <span class="va">sp3.grouped</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="st">'/'</span> ,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">cec</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="st">'/'</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">ph</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co">## perform comparison, and convert to phylo class object</span></span>
-<span class="r-in">  <span class="co">## D is rescaled to [0,]</span></span>
-<span class="r-in">  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="pc.html">profile_compare</a></span><span class="op">(</span></span>
-<span class="r-in">                        <span class="va">sp3.grouped</span>,</span>
-<span class="r-in">                        vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'clay'</span>, <span class="st">'cec'</span>, <span class="st">'ph'</span><span class="op">)</span>,</span>
-<span class="r-in">                        max_d <span class="op">=</span> <span class="fl">100</span>,</span>
-<span class="r-in">                        k <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span class="r-in">                        replace_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                        add_soil_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                        rescale.result <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">                      <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">d</span>, method <span class="op">=</span> <span class="st">'ward'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ape/man/ladderize.html" class="external-link">ladderize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/as.phylo.html" class="external-link">as.phylo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># look at distance plot-- just the median profile</span></span>
-<span class="r-in">  <span class="fu"><a href="plot_distance_graph.html">plot_distance_graph</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">12</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># similarity relative to median profile (profile #12)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>,<span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co">## make dendrogram + soil profiles</span></span>
-<span class="r-in">  <span class="co"># first promote to SoilProfileCollection</span></span>
-<span class="r-in">  <span class="fu">depths</span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># setup plot: note that D has a scale of [0,1]</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># get the last plot geometry</span></span>
-<span class="r-in">  <span class="va">lastPP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>, envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># the original labels, and new (indexed) order of pedons in dendrogram</span></span>
-<span class="r-in">  <span class="va">d.labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">'Labels'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">new_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span>,</span>
-<span class="r-in">                      <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span class="r-in">                        <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">xx</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># plot the profiles, in the ordering defined by the dendrogram</span></span>
-<span class="r-in">  <span class="co"># with a couple fudge factors to make them fit</span></span>
-<span class="r-in">  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">sp3.grouped</span>,</span>
-<span class="r-in">    color <span class="op">=</span> <span class="st">"soil_color"</span>,</span>
-<span class="r-in">    plot.order <span class="op">=</span> <span class="va">new_order</span>,</span>
-<span class="r-in">    scaling.factor <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span class="r-in">    width <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">    cex.names <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">    y.offset <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">yy</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">    add <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## this example investigates the concept of a "median profile"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># required packages</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span> <span class="op">&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># generate a RGB version of soil colors</span></span></span>
+<span class="r-in"><span>  <span class="co"># and convert to HSV for aggregation</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3</span><span class="op">$</span><span class="va">h</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3</span><span class="op">$</span><span class="va">s</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3</span><span class="op">$</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">sp3</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'h'</span>, <span class="st">'s'</span>, <span class="st">'v'</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3.rgb</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb2hsv.html" class="external-link">rgb2hsv</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">g</span>, <span class="va">b</span>, maxColorValue <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span>  <span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># aggregate across entire collection</span></span></span>
+<span class="r-in"><span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp3</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">clay</span> <span class="op">+</span> <span class="va">cec</span> <span class="op">+</span> <span class="va">ph</span> <span class="op">+</span> <span class="va">h</span> <span class="op">+</span> <span class="va">s</span> <span class="op">+</span> <span class="va">v</span>, slab.structure <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># check</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># convert back to wide format</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">a.wide.q25</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'p.q25'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">a.wide.q50</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'p.q50'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">a.wide.q75</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'p.q75'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># add a new id for the 25th, 50th, and 75th percentile pedons</span></span></span>
+<span class="r-in"><span>  <span class="va">a.wide.q25</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">'Q25'</span></span></span>
+<span class="r-in"><span>  <span class="va">a.wide.q50</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">'Q50'</span></span></span>
+<span class="r-in"><span>  <span class="va">a.wide.q75</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">'Q75'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># combine original data with "mean profile"</span></span></span>
+<span class="r-in"><span>  <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span>, <span class="st">'id'</span>, <span class="st">'clay'</span>, <span class="st">'cec'</span>, <span class="st">'ph'</span>, <span class="st">'h'</span>, <span class="st">'s'</span>, <span class="st">'v'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># make data.frame version of sp3</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="st">'data.frame'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.grouped</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sp3.df</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span>, <span class="va">a.wide.q25</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span>, <span class="va">a.wide.q50</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span>, <span class="va">a.wide.q75</span><span class="op">[</span>, <span class="va">vars</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># re-constitute the soil color from HSV triplets</span></span></span>
+<span class="r-in"><span>  <span class="co"># convert HSV back to standard R colors</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.grouped</span><span class="op">$</span><span class="va">soil_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3.grouped</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/hsv.html" class="external-link">hsv</a></span><span class="op">(</span><span class="va">h</span>, <span class="va">s</span>, <span class="va">v</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># give each horizon a name</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.grouped</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'/'</span> ,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">cec</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'/'</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">ph</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co">## perform comparison, and convert to phylo class object</span></span></span>
+<span class="r-in"><span>  <span class="co">## D is rescaled to [0,]</span></span></span>
+<span class="r-in"><span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="pc.html">profile_compare</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                        <span class="va">sp3.grouped</span>,</span></span>
+<span class="r-in"><span>                        vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'clay'</span>, <span class="st">'cec'</span>, <span class="st">'ph'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        max_d <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                        k <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
+<span class="r-in"><span>                        replace_na <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                        add_soil_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                        rescale.result <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>                      <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">d</span>, method <span class="op">=</span> <span class="st">'ward'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ape/man/ladderize.html" class="external-link">ladderize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/as.phylo.html" class="external-link">as.phylo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># look at distance plot-- just the median profile</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plot_distance_graph.html">plot_distance_graph</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># similarity relative to median profile (profile #12)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>,<span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co">## make dendrogram + soil profiles</span></span></span>
+<span class="r-in"><span>  <span class="co"># first promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span>  <span class="fu">depths</span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># setup plot: note that D has a scale of [0,1]</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># get the last plot geometry</span></span></span>
+<span class="r-in"><span>  <span class="va">lastPP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>, envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># the original labels, and new (indexed) order of pedons in dendrogram</span></span></span>
+<span class="r-in"><span>  <span class="va">d.labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">'Labels'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">new_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span>,</span></span>
+<span class="r-in"><span>                      <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                        <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">xx</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># plot the profiles, in the ordering defined by the dendrogram</span></span></span>
+<span class="r-in"><span>  <span class="co"># with a couple fudge factors to make them fit</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">sp3.grouped</span>,</span></span>
+<span class="r-in"><span>    color <span class="op">=</span> <span class="st">"soil_color"</span>,</span></span>
+<span class="r-in"><span>    plot.order <span class="op">=</span> <span class="va">new_order</span>,</span></span>
+<span class="r-in"><span>    scaling.factor <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
+<span class="r-in"><span>    width <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>    cex.names <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>    y.offset <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">yy</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>    add <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	72 obs. of  10 variables:</span>
@@ -252,7 +252,7 @@ Foundation of Soil Science.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing dissimilarity matrices from 13 profiles</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  [0.26 Mb]</span>
 <span class="r-plt img"><img src="sp3-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -267,7 +267,7 @@ Foundation of Soil Science.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

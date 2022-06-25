@@ -63,25 +63,34 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dE00"</span>, <span class="st">"proportions"</span><span class="op">)</span>, <span class="va">n</span>, <span class="va">parameters</span>, SPC <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dE00"</span>, <span class="st">"proportions"</span><span class="op">)</span>, <span class="va">n</span>, <span class="va">parameters</span>, SPC <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>simulation method, see details</p></dd>
+
+
 <dt>n</dt>
 <dd><p>number of simulated colors per horizon</p></dd>
+
+
 <dt>parameters</dt>
 <dd><p>a <code>list</code>, format depends on <code>method</code>:</p><ul><li><p><code>proportions</code>: output from <code><a href="aggregateColor.html">aggregateColor</a></code></p></li>
 <li><p><code>dE00</code>: formatted as <code>list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))</code></p></li>
 </ul><p>Where <code>m</code> is a single representative Munsell chip, <code>thresh</code> is a threshold specified in CIE2000 color contrast (dE00), and <code>hues</code> is a vector of allowed Munsell hues.</p></dd>
+
+
 <dt>SPC</dt>
 <dd><p><code>SoilProfileCollection</code>, attempt to modify <code>SPC</code> with simulated colors</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>list</code>, unless <code>SPC</code> is specified, then a <code>SoilProfileCollection</code> object</p>
+    
+
+<p>a <code>list</code>, unless <code>SPC</code> is specified, then a <code>SoilProfileCollection</code> object</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -90,21 +99,21 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># m: representative or most likely color</span></span>
-<span class="r-in"><span class="co"># thresh: dE00 threshold</span></span>
-<span class="r-in"><span class="co"># hues: allowed Munsell hues</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">'A'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 3/3'</span>, thresh <span class="op">=</span> <span class="fl">5</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">'BA'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 4/4'</span>, thresh <span class="op">=</span> <span class="fl">8</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">'Bt1'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 4/4'</span>, thresh <span class="op">=</span> <span class="fl">8</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">'Bt2'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'5YR 4/5'</span>, thresh <span class="op">=</span> <span class="fl">8</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">'Bt3'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 4/6'</span>, thresh <span class="op">=</span> <span class="fl">10</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">'Cr'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'2.5G 6/2'</span>, thresh <span class="op">=</span> <span class="fl">15</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'2.5G'</span>, <span class="st">'2.5GY'</span>, <span class="st">'2.5BG'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># simulate</span></span>
-<span class="r-in"><span class="op">(</span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">10</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># m: representative or most likely color</span></span></span>
+<span class="r-in"><span><span class="co"># thresh: dE00 threshold</span></span></span>
+<span class="r-in"><span><span class="co"># hues: allowed Munsell hues</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'A'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 3/3'</span>, thresh <span class="op">=</span> <span class="fl">5</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'BA'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 4/4'</span>, thresh <span class="op">=</span> <span class="fl">8</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'Bt1'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 4/4'</span>, thresh <span class="op">=</span> <span class="fl">8</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'Bt2'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'5YR 4/5'</span>, thresh <span class="op">=</span> <span class="fl">8</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'Bt3'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 4/6'</span>, thresh <span class="op">=</span> <span class="fl">10</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'Cr'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'2.5G 6/2'</span>, thresh <span class="op">=</span> <span class="fl">15</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'2.5G'</span>, <span class="st">'2.5GY'</span>, <span class="st">'2.5BG'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simulate</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">10</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "7.5YR 3/2"   "7.5YR 3/4"   "7.5YR 3/3"   "7.5YR 3/3"   "7.5YR 3/3"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "7.5YR 3/3"   "7.5YR 2.5/4" "7.5YR 2.5/3" "7.5YR 3/3"   "7.5YR 2.5/3"</span>
@@ -129,25 +138,25 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "2.5G 6/5"  "2.5G 5/2"  "2.5G 6/2"  "2.5G 6/2"  "2.5G 6/1"  "2.5BG 5/3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "2.5BG 5/1" "2.5BG 5/3" "2.5G 6/4"  "2.5G 6/7" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># preview</span></span>
-<span class="r-in"><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">'MDS'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># preview</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">'MDS'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="simulateColor-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># another example, this time using a larger dE00 threshold</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">'A'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 3/3'</span>, thresh <span class="op">=</span> <span class="fl">20</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span>, <span class="st">'5YR'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># simulate</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">54654</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">200</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># flatten</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># tabulate, sort: most frequent color should be 7.5YR 3/3</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># another example, this time using a larger dE00 threshold</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'A'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'7.5YR 3/3'</span>, thresh <span class="op">=</span> <span class="fl">20</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span>, <span class="st">'5YR'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simulate</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">54654</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">200</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># flatten</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># tabulate, sort: most frequent color should be 7.5YR 3/3</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cols</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 3/3   7.5YR 3/4  10YR 2.5/4  10YR 2.5/3    10YR 3/5     5YR 3/3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          17           6           5           4           4           4 </span>
@@ -185,15 +194,15 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>           1           1           1           1           1           1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   7.5YR 4/9   7.5YR 5/4 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           1           1 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># review colors</span></span>
-<span class="r-in"><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># review colors</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="simulateColor-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># what does a dE00 threshold look like on 3 pages of hue?</span></span>
-<span class="r-in"><span class="fu"><a href="contrastChart.html">contrastChart</a></span><span class="op">(</span><span class="st">'7.5YR 3/3'</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span>, <span class="st">'5YR'</span><span class="op">)</span>, thresh <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># what does a dE00 threshold look like on 3 pages of hue?</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="contrastChart.html">contrastChart</a></span><span class="op">(</span><span class="st">'7.5YR 3/3'</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span>, <span class="st">'5YR'</span><span class="op">)</span>, thresh <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="simulateColor-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -208,7 +217,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

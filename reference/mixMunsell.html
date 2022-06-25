@@ -63,41 +63,56 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mixMunsell</span><span class="op">(</span>
-  <span class="va">x</span>,
-  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"reference"</span>, <span class="st">"exact"</span>, <span class="st">"estimate"</span>, <span class="st">"adaptive"</span>, <span class="st">"spectra"</span><span class="op">)</span>,
-  n <span class="op">=</span> <span class="fl">1</span>,
-  keepMixedSpec <span class="op">=</span> <span class="cn">FALSE</span>,
-  distThreshold <span class="op">=</span> <span class="fl">0.025</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mixMunsell</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"reference"</span>, <span class="st">"exact"</span>, <span class="st">"estimate"</span>, <span class="st">"adaptive"</span>, <span class="st">"spectra"</span><span class="op">)</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  keepMixedSpec <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  distThreshold <span class="op">=</span> <span class="fl">0.025</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>vector of colors in Munsell notation</p></dd>
+
+
 <dt>w</dt>
 <dd><p>vector of proportions, can sum to any number</p></dd>
+
+
 <dt>mixingMethod</dt>
 <dd><p>approach used to simulate a mixture:</p><ul><li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra from <code><a href="munsell.spectra.html">munsell.spectra.wide</a></code></p></li>
 <li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see details)</p></li>
 <li><p><code>estimate</code> : closest Munsell chip to a weighted mean of CIELAB coordinates</p></li>
 <li><p><code>adaptive</code> : use reference spectra when possible, falling-back to weighted mean of CIELAB coordinates</p></li>
 </ul></dd>
+
+
 <dt>n</dt>
 <dd><p>number of closest matching color chips (<code>mixingMethod = reference</code> only)</p></dd>
+
+
 <dt>keepMixedSpec</dt>
 <dd><p>keep weighted geometric mean spectra, final result is a <code>list</code> (<code>mixingMethod = reference</code> only)</p></dd>
+
+
 <dt>distThreshold</dt>
 <dd><p>spectral distance used to compute <code>scaledDistance</code>, default value is based on an analysis of spectral distances associated with adjacent Munsell color chips. This argument is only used with  <code>mixingMethod = 'reference'</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to <code><a href="spec2Munsell.html">spec2Munsell</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with the closest matching Munsell color(s):</p><ul><li><p><code>munsell</code>: Munsell notation of the n-closest spectra</p></li>
+    
+
+<p>A <code>data.frame</code> with the closest matching Munsell color(s):</p><ul><li><p><code>munsell</code>: Munsell notation of the n-closest spectra</p></li>
 <li><p><code>distance</code>: spectral (Gower) distance to the n-closest spectra</p></li>
 <li><p><code>scaledDistance</code>: spectral distance scaled by <code>distThreshold</code></p></li>
 <li><p><code>mixingMethod</code>: method used for each mixture</p></li>
@@ -137,31 +152,31 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># try a couple different methods</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/2'</span>, <span class="st">'5YR 5/6'</span>, <span class="st">'10B 4/4'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'reference'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># try a couple different methods</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/2'</span>, <span class="st">'5YR 5/6'</span>, <span class="st">'10B 4/4'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'reference'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   munsell   distance scaledDistance distanceMetric mixingMethod</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  5Y 5/1 0.01311294      0.5245176          Gower    reference</span>
-<span class="r-in"><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    munsell distance scaledDistance distanceMetric mixingMethod</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 5/1 1.670085             NA           dE00        exact</span>
-<span class="r-in"><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     munsell distance scaledDistance distanceMetric mixingMethod</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR 5/2 1.241368             NA           dE00     estimate</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 2.5 values</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 2.5/2'</span>, <span class="st">'5YR 5/6'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'reference'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 2.5 values</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 2.5/2'</span>, <span class="st">'5YR 5/6'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'reference'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   munsell   distance scaledDistance distanceMetric mixingMethod</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  5Y 4/3 0.01107466      0.4429862          Gower    reference</span>
-<span class="r-in"><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     munsell distance scaledDistance distanceMetric mixingMethod</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR 4/3 3.469518             NA           dE00        exact</span>
-<span class="r-in"><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     munsell distance scaledDistance distanceMetric mixingMethod</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR 4/4 2.463059             NA           dE00     estimate</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -176,7 +191,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

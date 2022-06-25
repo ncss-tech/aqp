@@ -63,24 +63,33 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for SoilProfileCollection</span>
-<span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">f</span>, drop <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SoilProfileCollection</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">f</span>, drop <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a SoilProfileCollection object</p></dd>
+
+
 <dt>f</dt>
 <dd><p>a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that <code>as.factor(f)</code> defines the grouping, or a list of such factors in which case their interaction is used for the grouping.</p></dd>
+
+
 <dt>drop</dt>
 <dd><p>logical indicating if levels that do not occur should be dropped (if f is a factor or a list).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments are ignored</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of SoilProfileCollections or <code>NULL</code> for empty result.</p>
+    
+
+<p>A list of SoilProfileCollections or <code>NULL</code> for empty result.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -93,49 +102,49 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># add a more interesting site-level attribute</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">surface</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># using identity site-level attribute (profile ID)</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add a more interesting site-level attribute</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">surface</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using identity site-level attribute (profile ID)</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> converting id to factor</span>
-<span class="r-in"><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [17] "hon-7"  "hon-8" </span>
-<span class="r-in"><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># using vector equal in length to number of profiles (profile ID, again)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using vector equal in length to number of profiles (profile ID, again)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [17] "hon-7"  "hon-8" </span>
-<span class="r-in"><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># which are both equivalent to setting `f` to NULL</span></span>
-<span class="r-in"><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># which are both equivalent to setting `f` to NULL</span></span></span>
+<span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "hon-1"  "hon-10" "hon-11" "hon-13" "hon-14" "hon-17" "hon-18" "hon-19"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "hon-2"  "hon-20" "hon-21" "hon-22" "hon-3"  "hon-4"  "hon-5"  "hon-6" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [17] "hon-7"  "hon-8" </span>
-<span class="r-in"><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># split on surface (age) site-level var</span></span>
-<span class="r-in"><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="st">"surface"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># split on surface (age) site-level var</span></span></span>
+<span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="st">"surface"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "holocene"        "lower modesto"   "upper modesto"   "lower riverbank"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "lower laguna"   </span>
-<span class="r-in"><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span> <span class="co"># 5 unique "surfaces", 5 SPCs in result list</span></span>
+<span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span> <span class="co"># 5 unique "surfaces", 5 SPCs in result list</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -150,7 +159,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,33 +63,46 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">soilPalette</span><span class="op">(</span>
-  <span class="va">colors</span>,
-  lab <span class="op">=</span> <span class="va">colors</span>,
-  lab.cex <span class="op">=</span> <span class="fl">0.75</span>,
-  dynamic.labels <span class="op">=</span> <span class="cn">TRUE</span>,
-  x.inset <span class="op">=</span> <span class="fl">0.01</span>,
-  y.inset <span class="op">=</span> <span class="fl">0.01</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">soilPalette</span><span class="op">(</span></span>
+<span>  <span class="va">colors</span>,</span>
+<span>  lab <span class="op">=</span> <span class="va">colors</span>,</span>
+<span>  lab.cex <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  dynamic.labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  x.inset <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  y.inset <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>colors</dt>
 <dd><p>vector of hex colors (e.g. #A66E46FF)</p></dd>
+
+
 <dt>lab</dt>
 <dd><p>vector of labels</p></dd>
+
+
 <dt>lab.cex</dt>
 <dd><p>character scaling for labels</p></dd>
+
+
 <dt>dynamic.labels</dt>
 <dd><p>logical, adjust label colors for maximum contrast via <code>invertLabelColor</code></p></dd>
+
+
 <dt>x.inset</dt>
 <dd><p>horizontal adjustment for labels</p></dd>
+
+
 <dt>y.inset</dt>
 <dd><p>vertical adjustment for labels</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments to <code><a href="https://colorspace.R-Forge.R-project.org/reference/swatchplot.html" class="external-link">colorspace::swatchplot</a></code></p></dd>
+
 </dl></div>
     <div id="note">
     <h2>Note</h2>
@@ -102,26 +115,26 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># maybe useful for teaching about soil color</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># demonstrate range of Munsell value</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'10YR %s/4'</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># convert to hex representation</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># plot</span></span>
-<span class="r-in"><span class="fu">soilPalette</span><span class="op">(</span><span class="va">cols</span>, <span class="va">m</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># demonstrate range of Munsell chroma</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'10YR 4/%s'</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># convert to hex representation</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># plot</span></span>
-<span class="r-in"><span class="fu">soilPalette</span><span class="op">(</span><span class="va">cols</span>, <span class="va">m</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># maybe useful for teaching about soil color</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># demonstrate range of Munsell value</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'10YR %s/4'</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># convert to hex representation</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># plot</span></span></span>
+<span class="r-in"><span><span class="fu">soilPalette</span><span class="op">(</span><span class="va">cols</span>, <span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># demonstrate range of Munsell chroma</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'10YR 4/%s'</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># convert to hex representation</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># plot</span></span></span>
+<span class="r-in"><span><span class="fu">soilPalette</span><span class="op">(</span><span class="va">cols</span>, <span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="soilPalette-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -136,7 +149,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

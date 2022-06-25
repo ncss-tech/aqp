@@ -65,37 +65,40 @@ Get column name containing unique horizon ID"><!-- mathjax --><script src="https
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">hzidname</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for SoilProfileCollection</span>
-<span class="fu">hzidname</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hzidname</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for SoilProfileCollection</span></span>
+<span><span class="fu">hzidname</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>a SoilProfileCollection</p></dd>
+
+
 <dt>value</dt>
 <dd><p>character, column name containing unique horizon ID values</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SPC</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create new horizon ID</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">hzIDrev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hzID</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set horizon designation column</span></span>
-<span class="r-in"><span class="fu">hzidname</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"hzIDrev"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get horizon designation column</span></span>
-<span class="r-in"><span class="fu">hzidname</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SPC</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create new horizon ID</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">hzIDrev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hzID</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set horizon designation column</span></span></span>
+<span class="r-in"><span><span class="fu">hzidname</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"hzIDrev"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get horizon designation column</span></span></span>
+<span class="r-in"><span><span class="fu">hzidname</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hzIDrev"</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -110,7 +113,7 @@ Get column name containing unique horizon ID"><!-- mathjax --><script src="https
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

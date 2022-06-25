@@ -65,49 +65,72 @@ The upper boundary is where the clay increase threshold is met. The function use
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getArgillicBounds</span><span class="op">(</span>
-  <span class="va">p</span>,
-  hzdesgn <span class="op">=</span> <span class="st">"hzname"</span>,
-  clay.attr <span class="op">=</span> <span class="st">"clay"</span>,
-  texcl.attr <span class="op">=</span> <span class="st">"texcl"</span>,
-  require_t <span class="op">=</span> <span class="cn">TRUE</span>,
-  bottom.pattern <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,
-  lower.grad.pattern <span class="op">=</span> <span class="st">"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,
-  sandy.texture.pattern <span class="op">=</span> <span class="st">"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
-  vertical.distance <span class="op">=</span> <span class="fl">30</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getArgillicBounds</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="st">"hzname"</span>,</span>
+<span>  clay.attr <span class="op">=</span> <span class="st">"clay"</span>,</span>
+<span>  texcl.attr <span class="op">=</span> <span class="st">"texcl"</span>,</span>
+<span>  require_t <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bottom.pattern <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,</span>
+<span>  lower.grad.pattern <span class="op">=</span> <span class="st">"^[2-9]*B*CB*[^rtd]*[1-9]*$"</span>,</span>
+<span>  sandy.texture.pattern <span class="op">=</span> <span class="st">"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,</span>
+<span>  vertical.distance <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>the name of the column/attribute containing the horizon designation; default="hzname"</p></dd>
+
+
 <dt>clay.attr</dt>
 <dd><p>the name of the column/attribute containing the clay content; default="clay"</p></dd>
+
+
 <dt>texcl.attr</dt>
 <dd><p>the name of the column/attribute containing the textural class (used for finding sandy horizons); default="texcl"</p></dd>
+
+
 <dt>require_t</dt>
 <dd><p>require a "t" subscript for positive identification of upper and lower bound of argillic? default: TRUE</p></dd>
+
+
 <dt>bottom.pattern</dt>
 <dd><p>regular expression passed to <code>estimateSoilDepth</code> to match the lower boundary of the soil. default is "Cr|R|Cd" which approximately matches paralithic, lithic and densic contacts.</p></dd>
+
+
 <dt>lower.grad.pattern</dt>
 <dd><p>this is a pattern for adjusting the bottom depth of the argillic horizon upwards from the bottom depth of the soil. The absence of illuviation is used as a final control on horizon pattern matching.</p></dd>
+
+
 <dt>sandy.texture.pattern</dt>
 <dd><p>this is a pattern for matching sandy textural classes: <code>-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$</code></p></dd>
+
+
 <dt>vertical.distance</dt>
 <dd><p>Vertical distance in which clay increase must be met. Default <code>30</code> cm</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>Return a length 2 vector with upper and lower boundary when <code>p</code> has length 1? Default <code>TRUE</code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Print out information about 't' subscripts, sandy textures, plow layers and lower gradational horizons?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound". If <code>p</code> has more than one profile or if <code>simplify = FALSE</code> the result is a data.frame containing profile ID, upper and lower boundary columns.</p>
+    
+
+<p>Returns a numeric vector; first value is top depth, second value is bottom depth. If as.list is TRUE, returns a list with top depth named "ubound" and bottom depth named "lbound". If <code>p</code> has more than one profile or if <code>simplify = FALSE</code> the result is a data.frame containing profile ID, upper and lower boundary columns.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -124,17 +147,17 @@ The upper boundary is where the clay increase threshold is met. The function use
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package <span class="op">=</span> <span class="st">'aqp'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">attr</span> <span class="op">&lt;-</span> <span class="st">'prop'</span> <span class="co"># clay contents</span></span>
-<span class="r-in"><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">getArgillicBounds</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span>, clay.attr <span class="op">=</span> <span class="va">attr</span>, texcl.attr<span class="op">=</span><span class="st">"texture"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">foo</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package <span class="op">=</span> <span class="st">'aqp'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">attr</span> <span class="op">&lt;-</span> <span class="st">'prop'</span> <span class="co"># clay contents</span></span></span>
+<span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">getArgillicBounds</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span>, clay.attr <span class="op">=</span> <span class="va">attr</span>, texcl.attr<span class="op">=</span><span class="st">"texture"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">foo</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ubound lbound </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     49     89 </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -149,7 +172,7 @@ The upper boundary is where the clay increase threshold is met. The function use
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

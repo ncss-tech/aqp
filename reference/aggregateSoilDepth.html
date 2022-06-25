@@ -63,34 +63,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">aggregateSoilDepth</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">groups</span>,
-  crit.prob <span class="op">=</span> <span class="fl">0.9</span>,
-  name <span class="op">=</span> <span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  p <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aggregateSoilDepth</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">groups</span>,</span>
+<span>  crit.prob <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  p <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a <code>SoilProfileCollection</code> object</p></dd>
+
+
 <dt>groups</dt>
 <dd><p>the name of a site-level attribute that defines groups of profiles within a collection</p></dd>
+
+
 <dt>crit.prob</dt>
 <dd><p>probability cutoff used to determine where the most likely depth to contact will be, e.g. 0.9 translates to 90% of profiles are shallower than this depth</p></dd>
+
+
 <dt>name</dt>
 <dd><p>horizon-level attribute where horizon designation is stored, defaults to <code>hzdesgnname(x)</code></p></dd>
+
+
 <dt>p</dt>
 <dd><p>a REGEX pattern that matches non-soil genetic horizons</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to <code>slab</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> is returned, with as many rows as there are unique group labels, as specified in <code>groups</code>.</p>
+    
+
+<p>A <code>data.frame</code> is returned, with as many rows as there are unique group labels, as specified in <code>groups</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -107,21 +120,21 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set horizon designation in SPC</span></span>
-<span class="r-in"><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'name'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">aggregateSoilDepth</span><span class="op">(</span><span class="va">sp1</span>, <span class="st">'group'</span>, crit.prob <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set horizon designation in SPC</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'name'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">aggregateSoilDepth</span><span class="op">(</span><span class="va">sp1</span>, <span class="st">'group'</span>, crit.prob <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   group soil.top soil.bottom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     1        0         232</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     2        0          67</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -136,7 +149,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

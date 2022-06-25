@@ -63,21 +63,28 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mutate_profile</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, horizon_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutate_profile</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, horizon_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>A SoilProfileCollection</p></dd>
+
+
 <dt>...</dt>
 <dd><p>A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g <code>mutate_profile(hzdept = max(hzdept) - hzdept)</code></p></dd>
+
+
 <dt>horizon_level</dt>
 <dd><p>logical. If <code>TRUE</code> results of expressions are added to the SoilProfileCollection's horizon slot, if <code>FALSE</code> the results are added to the site slot. If <code>NULL</code> (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the <em>first</em> and <em>last</em> profile in the collection.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SoilProfileCollection.</p>
+    
+
+<p>A SoilProfileCollection.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -100,7 +107,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

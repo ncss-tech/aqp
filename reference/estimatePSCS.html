@@ -70,45 +70,60 @@ from the Keys to Soil Taxonomy (12th edition).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">estimatePSCS</span><span class="op">(</span>
-  <span class="va">p</span>,
-  hzdesgn <span class="op">=</span> <span class="st">"hzname"</span>,
-  clay.attr <span class="op">=</span> <span class="st">"clay"</span>,
-  texcl.attr <span class="op">=</span> <span class="st">"texcl"</span>,
-  tax_order_field <span class="op">=</span> <span class="st">"tax_order"</span>,
-  bottom.pattern <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimatePSCS</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="st">"hzname"</span>,</span>
+<span>  clay.attr <span class="op">=</span> <span class="st">"clay"</span>,</span>
+<span>  texcl.attr <span class="op">=</span> <span class="st">"texcl"</span>,</span>
+<span>  tax_order_field <span class="op">=</span> <span class="st">"tax_order"</span>,</span>
+<span>  bottom.pattern <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection object</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>Name of the horizon attribute containing the horizon
 designation. Default 'hzname'</p></dd>
+
+
 <dt>clay.attr</dt>
 <dd><p>Name of the horizon attribute containing clay contents.
 Default 'clay'</p></dd>
+
+
 <dt>texcl.attr</dt>
 <dd><p>Name of the horizon attribute containing textural class
 (used for finding sandy textures). Default 'texcl'</p></dd>
+
+
 <dt>tax_order_field</dt>
 <dd><p>Name of the site attribute containing taxonomic
 order; for handling PSCS rules for Andisols in lieu of lab data. May be NA
 or column missing altogether, in which case Andisol PSC possibility is
 ignored.</p></dd>
+
+
 <dt>bottom.pattern</dt>
 <dd><p>Regular expression pattern to match a root-restrictive
 contact. Default matches Cr, R or Cd. This argument is passed to both
 estimateSoilDepth and getArgillicBounds.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments are passed to getArgillicBounds()</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric vector containing the top and bottom depth of the particle
+    
+
+<p>A numeric vector containing the top and bottom depth of the particle
 size control section. First value is top, second value is bottom.</p>
     </div>
     <div id="details">
@@ -138,18 +153,18 @@ USDA-Natural Resources Conservation Service, Washington, DC.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package <span class="op">=</span> <span class="st">'aqp'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">attr</span> <span class="op">&lt;-</span> <span class="st">'prop'</span> <span class="co"># clay contents</span></span>
-<span class="r-in"><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">estimatePSCS</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span>, clay.attr <span class="op">=</span> <span class="va">attr</span>, texcl.attr<span class="op">=</span><span class="st">"texture"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">foo</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package <span class="op">=</span> <span class="st">'aqp'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">attr</span> <span class="op">&lt;-</span> <span class="st">'prop'</span> <span class="co"># clay contents</span></span></span>
+<span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">estimatePSCS</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span>, clay.attr <span class="op">=</span> <span class="va">attr</span>, texcl.attr<span class="op">=</span><span class="st">"texture"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">foo</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49 89</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -164,7 +179,7 @@ USDA-Natural Resources Conservation Service, Washington, DC.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -65,23 +65,32 @@ In Harden (1982) rubification is calculated relative to a reference parent mater
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">harden.rubification</span><span class="op">(</span><span class="va">hue</span>, <span class="va">chroma</span>, <span class="va">hue_ref</span>, <span class="va">chroma_ref</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">harden.rubification</span><span class="op">(</span><span class="va">hue</span>, <span class="va">chroma</span>, <span class="va">hue_ref</span>, <span class="va">chroma_ref</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>hue</dt>
 <dd><p>A character vector containing Munsell hues (e.g. "7.5YR")</p></dd>
+
+
 <dt>chroma</dt>
 <dd><p>A numeric vector containing Munsell chromas</p></dd>
+
+
 <dt>hue_ref</dt>
 <dd><p>A character vector containing Munsell hue(s) (e.g. "10YR") for reference material</p></dd>
+
+
 <dt>chroma_ref</dt>
 <dd><p>A numeric vector containing Munsell chroma(s) for reference material</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric vector reflecting horizon redness increase relative to a reference (e.g. parent) material.</p>
+    
+
+<p>A numeric vector reflecting horizon redness increase relative to a reference (e.g. parent) material.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -94,63 +103,63 @@ In Harden (1982) rubification is calculated relative to a reference parent mater
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"jacobs2000"</span>, package<span class="op">=</span><span class="st">"aqp"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># LEFT JOIN hue, value, chroma matrix color columns</span></span>
-<span class="r-in"><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span>, <span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">                              <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">matrix_color_munsell</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#' # calculate a mixed 150-200cm color ~"parent material"</span></span>
-<span class="r-in"><span class="va">jacobs2000</span><span class="op">$</span><span class="va">c_horizon_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">jacobs2000</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># and derive the parent material from the 150-200cm interval</span></span>
-<span class="r-in">  <span class="va">p150_200</span> <span class="op">&lt;-</span> <span class="fu"><a href="glom-SoilProfileCollection-method.html">glom</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">150</span>, <span class="fl">200</span>, truncate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">p150_200</span><span class="op">$</span><span class="va">thickness</span> <span class="op">&lt;-</span> <span class="va">p150_200</span><span class="op">$</span><span class="va">bottom</span> <span class="op">-</span> <span class="va">p150_200</span><span class="op">$</span><span class="va">top</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># subset colors and thickness</span></span>
-<span class="r-in">  <span class="va">clrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p150_200</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'matrix_color_munsell'</span>,<span class="st">'thickness'</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># simulate a subtractive mixture using thickness as weight</span></span>
-<span class="r-in">  <span class="fu"><a href="mixMunsell.html">mixMunsell</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">clrs</span><span class="op">$</span><span class="va">matrix_color_munsell</span>, </span>
-<span class="r-in">  w <span class="op">=</span> <span class="va">clrs</span><span class="op">$</span><span class="va">thickness</span>, </span>
-<span class="r-in">  mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span><span class="op">$</span><span class="va">munsell</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># segment profile into 1cm slices (for proper depth weighting)</span></span>
-<span class="r-in"><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubif</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">jacobs2000</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># sum the melanization index over the 0-100cm interval</span></span>
-<span class="r-in">  <span class="va">p0_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="segment.html">segment</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">ccol</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">c_horizon_color</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">harden.rubification</span><span class="op">(</span></span>
-<span class="r-in">    hue <span class="op">=</span> <span class="va">p0_100</span><span class="op">$</span><span class="va">hue</span>,</span>
-<span class="r-in">    chroma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">p0_100</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span>,</span>
-<span class="r-in">    hue_ref <span class="op">=</span> <span class="va">ccol</span><span class="op">$</span><span class="va">hue</span>,</span>
-<span class="r-in">    chroma_ref <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ccol</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubiforder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubif</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Plot in order of increasing Rubification index</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">jacobs2000</span>, axis.line.offset <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
-<span class="r-in">        color <span class="op">=</span> <span class="st">"matrix_color"</span>,</span>
-<span class="r-in">        label <span class="op">=</span> <span class="st">"rubif"</span>,</span>
-<span class="r-in">        plot.order <span class="op">=</span> <span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubiforder</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">100</span>,<span class="fl">150</span>,<span class="fl">200</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add [estimated] parent material color swatches</span></span>
-<span class="r-in"><span class="va">trash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">c_horizon_color</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span><span class="va">i</span> <span class="op">-</span> <span class="fl">0.15</span>, <span class="fl">250</span>, <span class="va">i</span> <span class="op">+</span> <span class="fl">0.15</span>, <span class="fl">225</span>,</span>
-<span class="r-in">       col <span class="op">=</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">c_horizon_color</span><span class="op">[</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubiforder</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"jacobs2000"</span>, package<span class="op">=</span><span class="st">"aqp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># LEFT JOIN hue, value, chroma matrix color columns</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span>, <span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                              <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">matrix_color_munsell</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' # calculate a mixed 150-200cm color ~"parent material"</span></span></span>
+<span class="r-in"><span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">c_horizon_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">jacobs2000</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># and derive the parent material from the 150-200cm interval</span></span></span>
+<span class="r-in"><span>  <span class="va">p150_200</span> <span class="op">&lt;-</span> <span class="fu"><a href="glom-SoilProfileCollection-method.html">glom</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">150</span>, <span class="fl">200</span>, truncate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">p150_200</span><span class="op">$</span><span class="va">thickness</span> <span class="op">&lt;-</span> <span class="va">p150_200</span><span class="op">$</span><span class="va">bottom</span> <span class="op">-</span> <span class="va">p150_200</span><span class="op">$</span><span class="va">top</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># subset colors and thickness</span></span></span>
+<span class="r-in"><span>  <span class="va">clrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p150_200</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'matrix_color_munsell'</span>,<span class="st">'thickness'</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># simulate a subtractive mixture using thickness as weight</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mixMunsell.html">mixMunsell</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">clrs</span><span class="op">$</span><span class="va">matrix_color_munsell</span>, </span></span>
+<span class="r-in"><span>  w <span class="op">=</span> <span class="va">clrs</span><span class="op">$</span><span class="va">thickness</span>, </span></span>
+<span class="r-in"><span>  mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span><span class="op">$</span><span class="va">munsell</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># segment profile into 1cm slices (for proper depth weighting)</span></span></span>
+<span class="r-in"><span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubif</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">jacobs2000</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># sum the melanization index over the 0-100cm interval</span></span></span>
+<span class="r-in"><span>  <span class="va">p0_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="segment.html">segment</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">ccol</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">c_horizon_color</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">harden.rubification</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    hue <span class="op">=</span> <span class="va">p0_100</span><span class="op">$</span><span class="va">hue</span>,</span></span>
+<span class="r-in"><span>    chroma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">p0_100</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    hue_ref <span class="op">=</span> <span class="va">ccol</span><span class="op">$</span><span class="va">hue</span>,</span></span>
+<span class="r-in"><span>    chroma_ref <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ccol</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubiforder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubif</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plot in order of increasing Rubification index</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">jacobs2000</span>, axis.line.offset <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        color <span class="op">=</span> <span class="st">"matrix_color"</span>,</span></span>
+<span class="r-in"><span>        label <span class="op">=</span> <span class="st">"rubif"</span>,</span></span>
+<span class="r-in"><span>        plot.order <span class="op">=</span> <span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubiforder</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">100</span>,<span class="fl">150</span>,<span class="fl">200</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add [estimated] parent material color swatches</span></span></span>
+<span class="r-in"><span><span class="va">trash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">c_horizon_color</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span><span class="va">i</span> <span class="op">-</span> <span class="fl">0.15</span>, <span class="fl">250</span>, <span class="va">i</span> <span class="op">+</span> <span class="fl">0.15</span>, <span class="fl">225</span>,</span></span>
+<span class="r-in"><span>       col <span class="op">=</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">c_horizon_color</span><span class="op">[</span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubiforder</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harden.rubification-1.png" alt="" width="768" height="475"></span>
 </code></pre></div>
     </div>
@@ -166,7 +175,7 @@ In Harden (1982) rubification is calculated relative to a reference parent mater
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

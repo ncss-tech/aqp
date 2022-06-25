@@ -63,21 +63,31 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bootstrapSoilTexture</span><span class="op">(</span><span class="va">ssc</span>, method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dirichlet"</span>, <span class="st">"normal"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bootstrapSoilTexture</span><span class="op">(</span><span class="va">ssc</span>, method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dirichlet"</span>, <span class="st">"normal"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ssc</dt>
 <dd><p>a <code>data.frame</code> object with 3 columns: <code>sand</code>, <code>silt</code>, <code>clay</code> and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>type of simulation: <code>dirichlet</code> or <code>normal</code>. See details.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>number of simulated compositions. See details.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>list</code> containing:</p><ul><li><p><code>samples</code> - <code>data.frame</code> of simulated sand, silt, clay values</p></li>
+    
+
+<p>a <code>list</code> containing:</p>
+
+
+<ul><li><p><code>samples</code> - <code>data.frame</code> of simulated sand, silt, clay values</p></li>
 <li><p><code>mean</code> - compositional mean</p></li>
 <li><p><code>var</code> - compositional variance-covariance matrix</p></li>
 <li><p><code>D.alpha</code> - (fitted) alpha parameters of the Dirichlet distribution, <code>NULL</code> when <code>method = 'normal'</code></p></li>
@@ -106,70 +116,70 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"compositions"</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"soiltexture"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># sample data, data.frame</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'sp4'</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># filter just Bt horizon data</span></span>
-<span class="r-in">  <span class="va">ssc</span> <span class="op">&lt;-</span> <span class="va">sp4</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'^Bt'</span>, <span class="va">sp4</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'sand'</span>, <span class="st">'silt'</span>, <span class="st">'clay'</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in">  <span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># simulate 100 samples</span></span>
-<span class="r-in">  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">bootstrapSoilTexture</span><span class="op">(</span><span class="va">ssc</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">s</span> <span class="op">&lt;-</span> <span class="va">s</span><span class="op">$</span><span class="va">samples</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># empty soil texture triangle</span></span>
-<span class="r-in">  <span class="va">TT</span> <span class="op">&lt;-</span> <span class="fu">soiltexture</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/soiltexture/man/TT.plot.html" class="external-link">TT.plot</a></span><span class="op">(</span></span>
-<span class="r-in">    class.sys<span class="op">=</span> <span class="st">"USDA-NCSS.TT"</span>,</span>
-<span class="r-in">    main<span class="op">=</span> <span class="st">""</span>,</span>
-<span class="r-in">    tri.sum.tst<span class="op">=</span><span class="cn">FALSE</span>,</span>
-<span class="r-in">    cex.lab<span class="op">=</span><span class="fl">0.75</span>,</span>
-<span class="r-in">    cex.axis<span class="op">=</span><span class="fl">0.75</span>,</span>
-<span class="r-in">    frame.bg.col<span class="op">=</span><span class="st">'white'</span>,</span>
-<span class="r-in">    class.lab.col<span class="op">=</span><span class="st">'black'</span>,</span>
-<span class="r-in">    lwd.axis<span class="op">=</span><span class="fl">1.5</span>,</span>
-<span class="r-in">    arrows.show<span class="op">=</span><span class="cn">TRUE</span>,</span>
-<span class="r-in">    new.mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># add original data points</span></span>
-<span class="r-in">  <span class="fu">soiltexture</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/soiltexture/man/TT.points.html" class="external-link">TT.points</a></span><span class="op">(</span></span>
-<span class="r-in">    tri.data <span class="op">=</span> <span class="va">s</span>, geo <span class="op">=</span> <span class="va">TT</span>, col<span class="op">=</span><span class="st">'firebrick'</span>, </span>
-<span class="r-in">    pch <span class="op">=</span> <span class="fl">3</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, lwd <span class="op">=</span> <span class="fl">1</span>, </span>
-<span class="r-in">    tri.sum.tst <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># add simulated points</span></span>
-<span class="r-in">  <span class="fu">soiltexture</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/soiltexture/man/TT.points.html" class="external-link">TT.points</a></span><span class="op">(</span></span>
-<span class="r-in">    tri.data <span class="op">=</span> <span class="va">ssc</span>, geo <span class="op">=</span> <span class="va">TT</span>, bg<span class="op">=</span><span class="st">'royalblue'</span>, </span>
-<span class="r-in">    pch <span class="op">=</span> <span class="fl">22</span>, cex <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1</span>, </span>
-<span class="r-in">    tri.sum.tst <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># simple legend</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'top'</span>, </span>
-<span class="r-in">         legend <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'Source'</span>, <span class="st">'Simulated'</span><span class="op">)</span>, </span>
-<span class="r-in">         pch <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">22</span>, <span class="fl">3</span><span class="op">)</span>, </span>
-<span class="r-in">         col <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'black'</span>, <span class="st">'firebrick'</span><span class="op">)</span>, </span>
-<span class="r-in">         pt.bg <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'royalblue'</span>, <span class="cn">NA</span><span class="op">)</span>, </span>
-<span class="r-in">         horiz <span class="op">=</span> <span class="cn">TRUE</span>, bty <span class="op">=</span> <span class="st">'n'</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"compositions"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"soiltexture"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># sample data, data.frame</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'sp4'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># filter just Bt horizon data</span></span></span>
+<span class="r-in"><span>  <span class="va">ssc</span> <span class="op">&lt;-</span> <span class="va">sp4</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'^Bt'</span>, <span class="va">sp4</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'sand'</span>, <span class="st">'silt'</span>, <span class="st">'clay'</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># simulate 100 samples</span></span></span>
+<span class="r-in"><span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">bootstrapSoilTexture</span><span class="op">(</span><span class="va">ssc</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="va">s</span><span class="op">$</span><span class="va">samples</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># empty soil texture triangle</span></span></span>
+<span class="r-in"><span>  <span class="va">TT</span> <span class="op">&lt;-</span> <span class="fu">soiltexture</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/soiltexture/man/TT.plot.html" class="external-link">TT.plot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    class.sys<span class="op">=</span> <span class="st">"USDA-NCSS.TT"</span>,</span></span>
+<span class="r-in"><span>    main<span class="op">=</span> <span class="st">""</span>,</span></span>
+<span class="r-in"><span>    tri.sum.tst<span class="op">=</span><span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>    cex.lab<span class="op">=</span><span class="fl">0.75</span>,</span></span>
+<span class="r-in"><span>    cex.axis<span class="op">=</span><span class="fl">0.75</span>,</span></span>
+<span class="r-in"><span>    frame.bg.col<span class="op">=</span><span class="st">'white'</span>,</span></span>
+<span class="r-in"><span>    class.lab.col<span class="op">=</span><span class="st">'black'</span>,</span></span>
+<span class="r-in"><span>    lwd.axis<span class="op">=</span><span class="fl">1.5</span>,</span></span>
+<span class="r-in"><span>    arrows.show<span class="op">=</span><span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    new.mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># add original data points</span></span></span>
+<span class="r-in"><span>  <span class="fu">soiltexture</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/soiltexture/man/TT.points.html" class="external-link">TT.points</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    tri.data <span class="op">=</span> <span class="va">s</span>, geo <span class="op">=</span> <span class="va">TT</span>, col<span class="op">=</span><span class="st">'firebrick'</span>, </span></span>
+<span class="r-in"><span>    pch <span class="op">=</span> <span class="fl">3</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, lwd <span class="op">=</span> <span class="fl">1</span>, </span></span>
+<span class="r-in"><span>    tri.sum.tst <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># add simulated points</span></span></span>
+<span class="r-in"><span>  <span class="fu">soiltexture</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/soiltexture/man/TT.points.html" class="external-link">TT.points</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    tri.data <span class="op">=</span> <span class="va">ssc</span>, geo <span class="op">=</span> <span class="va">TT</span>, bg<span class="op">=</span><span class="st">'royalblue'</span>, </span></span>
+<span class="r-in"><span>    pch <span class="op">=</span> <span class="fl">22</span>, cex <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1</span>, </span></span>
+<span class="r-in"><span>    tri.sum.tst <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># simple legend</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'top'</span>, </span></span>
+<span class="r-in"><span>         legend <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'Source'</span>, <span class="st">'Simulated'</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>         pch <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">22</span>, <span class="fl">3</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>         col <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'black'</span>, <span class="st">'firebrick'</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>         pt.bg <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'royalblue'</span>, <span class="cn">NA</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>         horiz <span class="op">=</span> <span class="cn">TRUE</span>, bty <span class="op">=</span> <span class="st">'n'</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: compositions</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: soiltexture</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no DISPLAY variable so Tk is not available</span>
 <span class="r-plt img"><img src="bootstrapSoilTexture-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -184,7 +194,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

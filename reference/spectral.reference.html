@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">spectral.reference</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">spectral.reference</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="format">
@@ -79,61 +79,61 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"spectral.reference"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'xbar_2'</span>, <span class="st">'ybar_2'</span>, <span class="st">'zbar_2'</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">  ylim <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  type <span class="op">=</span> <span class="st">'l'</span>,</span>
-<span class="r-in">  lwd <span class="op">=</span> <span class="fl">2</span>, </span>
-<span class="r-in">  lty <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  las <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">'Wavelength (nm)'</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">'Weight | Intensity'</span>,</span>
-<span class="r-in">  main <span class="op">=</span> <span class="st">"CIE1931 (2\u00B0) and CIE1964 (10\u00B0) Standard Observers</span>
-<span class="r-in">  D65 and F2 Illuminant Power Spectrum (rescaled / offset for clarity)"</span>,</span>
-<span class="r-in">  cex.main <span class="op">=</span> <span class="fl">0.9</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matlines</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'xbar_10'</span>, <span class="st">'ybar_10'</span>, <span class="st">'zbar_10'</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">  type <span class="op">=</span> <span class="st">'l'</span>,</span>
-<span class="r-in">  lwd <span class="op">=</span> <span class="fl">2</span>, </span>
-<span class="r-in">  lty <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">  las <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">'Wavelength (nm)'</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">'Weight | Intensity'</span>,</span>
-<span class="r-in">  main <span class="op">=</span> <span class="st">'CIE1931 Standard Observer Weights\nD65 Standard Illuminant'</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">$</span><span class="va">w</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="op">(</span><span class="va">spectral.reference</span><span class="op">$</span><span class="va">D65</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.33</span>,</span>
-<span class="r-in">  lty <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  col <span class="op">=</span> <span class="st">'royalblue'</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">$</span><span class="va">w</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="op">(</span><span class="va">spectral.reference</span><span class="op">$</span><span class="va">F2</span> <span class="op">/</span> <span class="fl">25</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.4</span>,</span>
-<span class="r-in">  lty <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  col <span class="op">=</span> <span class="st">'violet'</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">'topright'</span>,</span>
-<span class="r-in">  legend <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'X_2'</span>, <span class="st">'Y_2'</span>, <span class="st">'Z_2'</span>, <span class="st">'X_10'</span>, <span class="st">'Y_10'</span>, <span class="st">'Z_10'</span>, <span class="st">'D65'</span>, <span class="st">'F2'</span><span class="op">)</span>,</span>
-<span class="r-in">  col <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="st">'royalblue'</span>, <span class="st">'violet'</span><span class="op">)</span>,</span>
-<span class="r-in">  lwd <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">  lty <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">  bty <span class="op">=</span> <span class="st">'n'</span>,</span>
-<span class="r-in">  cex <span class="op">=</span> <span class="fl">0.85</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"spectral.reference"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'xbar_2'</span>, <span class="st">'ybar_2'</span>, <span class="st">'zbar_2'</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  ylim <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">'l'</span>,</span></span>
+<span class="r-in"><span>  lwd <span class="op">=</span> <span class="fl">2</span>, </span></span>
+<span class="r-in"><span>  lty <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  las <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">'Wavelength (nm)'</span>,</span></span>
+<span class="r-in"><span>  ylab <span class="op">=</span> <span class="st">'Weight | Intensity'</span>,</span></span>
+<span class="r-in"><span>  main <span class="op">=</span> <span class="st">"CIE1931 (2\u00B0) and CIE1964 (10\u00B0) Standard Observers</span></span></span>
+<span class="r-in"><span><span class="st">  D65 and F2 Illuminant Power Spectrum (rescaled / offset for clarity)"</span>,</span></span>
+<span class="r-in"><span>  cex.main <span class="op">=</span> <span class="fl">0.9</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matlines</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'xbar_10'</span>, <span class="st">'ybar_10'</span>, <span class="st">'zbar_10'</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">'l'</span>,</span></span>
+<span class="r-in"><span>  lwd <span class="op">=</span> <span class="fl">2</span>, </span></span>
+<span class="r-in"><span>  lty <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  las <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">'Wavelength (nm)'</span>,</span></span>
+<span class="r-in"><span>  ylab <span class="op">=</span> <span class="st">'Weight | Intensity'</span>,</span></span>
+<span class="r-in"><span>  main <span class="op">=</span> <span class="st">'CIE1931 Standard Observer Weights\nD65 Standard Illuminant'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">$</span><span class="va">w</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="op">(</span><span class="va">spectral.reference</span><span class="op">$</span><span class="va">D65</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.33</span>,</span></span>
+<span class="r-in"><span>  lty <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  col <span class="op">=</span> <span class="st">'royalblue'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">spectral.reference</span><span class="op">$</span><span class="va">w</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="op">(</span><span class="va">spectral.reference</span><span class="op">$</span><span class="va">F2</span> <span class="op">/</span> <span class="fl">25</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>  lty <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  col <span class="op">=</span> <span class="st">'violet'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'topright'</span>,</span></span>
+<span class="r-in"><span>  legend <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'X_2'</span>, <span class="st">'Y_2'</span>, <span class="st">'Z_2'</span>, <span class="st">'X_10'</span>, <span class="st">'Y_10'</span>, <span class="st">'Z_10'</span>, <span class="st">'D65'</span>, <span class="st">'F2'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  col <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="st">'royalblue'</span>, <span class="st">'violet'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  lwd <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  lty <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  bty <span class="op">=</span> <span class="st">'n'</span>,</span></span>
+<span class="r-in"><span>  cex <span class="op">=</span> <span class="fl">0.85</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spectral.reference-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -148,7 +148,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

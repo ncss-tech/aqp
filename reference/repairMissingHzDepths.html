@@ -63,21 +63,28 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">x</span>, adj <span class="op">=</span> <span class="fl">10</span>, max.depth <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">x</span>, adj <span class="op">=</span> <span class="fl">10</span>, max.depth <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p><code>SoilProfileCollection</code></p></dd>
+
+
 <dt>adj</dt>
 <dd><p>vertical offset applied to "repair" missing bottom depths when top and bottom depth are equal or bottom depth is missing. (<code>NA</code> to use <code>max.depth</code>)</p></dd>
+
+
 <dt>max.depth</dt>
 <dd><p>If adj is <code>NA</code>, or the resulting offset sum exceeds <code>max.depth</code>, <code>max.depth</code> is used.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>SoilProfileCollection</code> with a new (logical) horizon-level attribute <code>.repaired</code> marking affected horizons</p>
+    
+
+<p><code>SoilProfileCollection</code> with a new (logical) horizon-level attribute <code>.repaired</code> marking affected horizons</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -86,45 +93,45 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  id <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">  top <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span>,</span>
-<span class="r-in">  bottom <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA_integer_</span>, <span class="fl">7</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">99</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># NA depths result in warnings</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">  <span class="fu">depths</span><span class="op">(</span><span class="va">h</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inspect data before repairs</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  top <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  bottom <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA_integer_</span>, <span class="fl">7</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">99</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># NA depths result in warnings</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">depths</span><span class="op">(</span><span class="va">h</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># inspect data before repairs</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="repairMissingHzDepths-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">h</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># all depth logic now valid</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">h</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># all depth logic now valid</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inspect </span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># inspect </span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="repairMissingHzDepths-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># no adj, max.depth only</span></span>
-<span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">h</span>, adj <span class="op">=</span> <span class="cn">NA</span>, max.depth <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># no adj, max.depth only</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">h</span>, adj <span class="op">=</span> <span class="cn">NA</span>, max.depth <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span> </span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span> </span></span>
 <span class="r-plt img"><img src="repairMissingHzDepths-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># max.depth defaults to max(x) if too small</span></span>
-<span class="r-in"><span class="va">f</span><span class="op">$</span><span class="va">bottom</span><span class="op">[</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">f</span>, adj <span class="op">=</span> <span class="cn">NA</span>, max.depth <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># max.depth defaults to max(x) if too small</span></span></span>
+<span class="r-in"><span><span class="va">f</span><span class="op">$</span><span class="va">bottom</span><span class="op">[</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">repairMissingHzDepths</span><span class="op">(</span><span class="va">f</span>, adj <span class="op">=</span> <span class="cn">NA</span>, max.depth <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using max.depth = 99</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="repairMissingHzDepths-4.png" alt="" width="768" height="475"></span>
 </code></pre></div>
     </div>
@@ -140,7 +147,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

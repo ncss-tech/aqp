@@ -69,31 +69,48 @@ information.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">contrastClass</span><span class="op">(</span><span class="va">v1</span>, <span class="va">c1</span>, <span class="va">v2</span>, <span class="va">c2</span>, <span class="va">dH</span>, <span class="va">dV</span>, <span class="va">dC</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">contrastClass</span><span class="op">(</span><span class="va">v1</span>, <span class="va">c1</span>, <span class="va">v2</span>, <span class="va">c2</span>, <span class="va">dH</span>, <span class="va">dV</span>, <span class="va">dC</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>v1</dt>
 <dd><p>Munsell value of first color</p></dd>
+
+
 <dt>c1</dt>
 <dd><p>Munsell chroma of first color</p></dd>
+
+
 <dt>v2</dt>
 <dd><p>Munsell value of second color</p></dd>
+
+
 <dt>c2</dt>
 <dd><p>Munsell chroma of second color</p></dd>
+
+
 <dt>dH</dt>
 <dd><p>delta Hue</p></dd>
+
+
 <dt>dV</dt>
 <dd><p>delta Value</p></dd>
+
+
 <dt>dC</dt>
 <dd><p>delta Chroma</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>return a list for testing rules/cases</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of color contrast classes (ordered factor). A list when
+    
+
+<p>A vector of color contrast classes (ordered factor). A list when
 <code>verbose</code> is TRUE.</p>
     </div>
     <div id="details">
@@ -117,16 +134,16 @@ length.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">## standard use, result is an ordered factor</span></span>
-<span class="r-in"><span class="co"># 10YR 6/3 vs 5YR 3/4</span></span>
-<span class="r-in"><span class="fu">contrastClass</span><span class="op">(</span>v1<span class="op">=</span><span class="fl">6</span>, c1<span class="op">=</span><span class="fl">3</span>, v2<span class="op">=</span><span class="fl">3</span>, c2<span class="op">=</span><span class="fl">4</span>, dH<span class="op">=</span><span class="fl">2</span>, dV<span class="op">=</span><span class="fl">3</span>, dC<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## standard use, result is an ordered factor</span></span></span>
+<span class="r-in"><span><span class="co"># 10YR 6/3 vs 5YR 3/4</span></span></span>
+<span class="r-in"><span><span class="fu">contrastClass</span><span class="op">(</span>v1<span class="op">=</span><span class="fl">6</span>, c1<span class="op">=</span><span class="fl">3</span>, v2<span class="op">=</span><span class="fl">3</span>, c2<span class="op">=</span><span class="fl">4</span>, dH<span class="op">=</span><span class="fl">2</span>, dV<span class="op">=</span><span class="fl">3</span>, dC<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] Prominent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: Faint &lt; Distinct &lt; Prominent</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## verbose output, useful for testing rules/cases</span></span>
-<span class="r-in"><span class="co"># 10YR 6/3 vs 5YR 3/4</span></span>
-<span class="r-in"><span class="fu">contrastClass</span><span class="op">(</span>v1<span class="op">=</span><span class="fl">6</span>, c1<span class="op">=</span><span class="fl">3</span>, v2<span class="op">=</span><span class="fl">3</span>, c2<span class="op">=</span><span class="fl">4</span>, dH<span class="op">=</span><span class="fl">2</span>, dV<span class="op">=</span><span class="fl">3</span>, dC<span class="op">=</span><span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## verbose output, useful for testing rules/cases</span></span></span>
+<span class="r-in"><span><span class="co"># 10YR 6/3 vs 5YR 3/4</span></span></span>
+<span class="r-in"><span><span class="fu">contrastClass</span><span class="op">(</span>v1<span class="op">=</span><span class="fl">6</span>, c1<span class="op">=</span><span class="fl">3</span>, v2<span class="op">=</span><span class="fl">3</span>, c2<span class="op">=</span><span class="fl">4</span>, dH<span class="op">=</span><span class="fl">2</span>, dV<span class="op">=</span><span class="fl">3</span>, dC<span class="op">=</span><span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   v1 c1 v2 c2 dH dV dC f.case1 f.case2 f.case3 low.value.chroma       res</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE            FALSE Prominent</span>
@@ -135,7 +152,7 @@ length.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   v1 c1 v2 c2 dH dV dC d.case1 d.case2 d.case3       res</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  6  3  3  4  2  3  1   FALSE   FALSE   FALSE Prominent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -150,7 +167,7 @@ length.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

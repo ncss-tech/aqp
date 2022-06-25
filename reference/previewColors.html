@@ -63,46 +63,67 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">previewColors</span><span class="op">(</span>
-  <span class="va">cols</span>,
-  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"grid"</span>, <span class="st">"MDS"</span>, <span class="st">"manual"</span><span class="op">)</span>,
-  labels <span class="op">=</span> <span class="cn">NULL</span>,
-  labels.cex <span class="op">=</span> <span class="fl">1</span>,
-  col.order <span class="op">=</span> <span class="cn">NULL</span>,
-  nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-  ncol <span class="op">=</span> <span class="va">nrow</span>,
-  border.col <span class="op">=</span> <span class="st">"black"</span>,
-  pt.cex <span class="op">=</span> <span class="fl">2</span>,
-  pt.pch <span class="op">=</span> <span class="fl">15</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">previewColors</span><span class="op">(</span></span>
+<span>  <span class="va">cols</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"grid"</span>, <span class="st">"MDS"</span>, <span class="st">"manual"</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  labels.cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col.order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="va">nrow</span>,</span>
+<span>  border.col <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  pt.cex <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  pt.pch <span class="op">=</span> <span class="fl">15</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>cols</dt>
 <dd><p>vector of R colors</p></dd>
+
+
 <dt>method</dt>
 <dd><p>either "grid", "MDS", or "manual", see details</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>optional vector of labels, disabled when <code>length(cols) &gt; 5000</code></p></dd>
+
+
 <dt>labels.cex</dt>
 <dd><p>scaling factor for labels</p></dd>
+
+
 <dt>col.order</dt>
 <dd><p>integer vector used to order colors</p></dd>
+
+
 <dt>nrow</dt>
 <dd><p>number of rows used by "grid" method</p></dd>
+
+
 <dt>ncol</dt>
 <dd><p>number of columns used by "grid" method</p></dd>
+
+
 <dt>border.col</dt>
 <dd><p>border color used by "grid" method</p></dd>
+
+
 <dt>pt.cex</dt>
 <dd><p>point scaling factor used by "MDS" method</p></dd>
+
+
 <dt>pt.pch</dt>
 <dd><p>point symbol used by "MDS" method</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>When <code>method = "grid" or "manual"</code> a vector of color order is returned. When <code>method = "MDS"</code>, the output from <code>MASS::cmdscale</code>.</p>
+    
+
+<p>When <code>method = "grid" or "manual"</code> a vector of color order is returned. When <code>method = "MDS"</code>, the output from <code>MASS::cmdscale</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -117,33 +138,33 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># example data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert into SoilProfileCollection object</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">previewColors</span><span class="op">(</span><span class="va">sp2</span><span class="op">$</span><span class="va">soil_color</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert into SoilProfileCollection object</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">previewColors</span><span class="op">(</span><span class="va">sp2</span><span class="op">$</span><span class="va">soil_color</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="previewColors-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"><span class="fu">previewColors</span><span class="op">(</span><span class="va">sp2</span><span class="op">$</span><span class="va">soil_color</span>, method <span class="op">=</span> <span class="st">'MDS'</span>, pt.cex <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">previewColors</span><span class="op">(</span><span class="va">sp2</span><span class="op">$</span><span class="va">soil_color</span>, method <span class="op">=</span> <span class="st">'MDS'</span>, pt.cex <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="previewColors-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create colors using HCL space</span></span>
-<span class="r-in"><span class="va">cols.hcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">360</span>, c <span class="op">=</span> <span class="fl">100</span>, l <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># grid, colors sorted by dE00</span></span>
-<span class="r-in"><span class="fu">previewColors</span><span class="op">(</span><span class="va">cols.hcl</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create colors using HCL space</span></span></span>
+<span class="r-in"><span><span class="va">cols.hcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">360</span>, c <span class="op">=</span> <span class="fl">100</span>, l <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># grid, colors sorted by dE00</span></span></span>
+<span class="r-in"><span><span class="fu">previewColors</span><span class="op">(</span><span class="va">cols.hcl</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="previewColors-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># manual specification</span></span>
-<span class="r-in"><span class="fu">previewColors</span><span class="op">(</span><span class="va">cols.hcl</span>, method <span class="op">=</span> <span class="st">'manual'</span>, col.order <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">361</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># manual specification</span></span></span>
+<span class="r-in"><span><span class="fu">previewColors</span><span class="op">(</span><span class="va">cols.hcl</span>, method <span class="op">=</span> <span class="st">'manual'</span>, col.order <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">361</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="previewColors-4.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># MDS</span></span>
-<span class="r-in"><span class="fu">previewColors</span><span class="op">(</span><span class="va">cols.hcl</span>, method <span class="op">=</span> <span class="st">'MDS'</span>, pt.cex <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># MDS</span></span></span>
+<span class="r-in"><span><span class="fu">previewColors</span><span class="op">(</span><span class="va">cols.hcl</span>, method <span class="op">=</span> <span class="st">'MDS'</span>, pt.cex <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="previewColors-5.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -158,7 +179,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

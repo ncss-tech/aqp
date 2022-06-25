@@ -69,51 +69,74 @@ Alpha-numeric ordering is used for all other types.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">groupedProfilePlot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">groups</span>,
-  group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>,
-  group.name.cex <span class="op">=</span> <span class="fl">0.75</span>,
-  group.line.col <span class="op">=</span> <span class="st">"RoyalBlue"</span>,
-  group.line.lwd <span class="op">=</span> <span class="fl">2</span>,
-  group.line.lty <span class="op">=</span> <span class="fl">2</span>,
-  break.style <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"line"</span>, <span class="st">"arrow"</span>, <span class="st">"both"</span><span class="op">)</span>,
-  break.offset <span class="op">=</span> <span class="fl">0.5</span>,
-  arrow.offset <span class="op">=</span> <span class="va">group.name.offset</span> <span class="op">+</span> <span class="fl">5</span>,
-  arrow.length <span class="op">=</span> <span class="fl">0.1</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">groupedProfilePlot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">groups</span>,</span>
+<span>  group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>,</span>
+<span>  group.name.cex <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  group.line.col <span class="op">=</span> <span class="st">"RoyalBlue"</span>,</span>
+<span>  group.line.lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  group.line.lty <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  break.style <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"line"</span>, <span class="st">"arrow"</span>, <span class="st">"both"</span><span class="op">)</span>,</span>
+<span>  break.offset <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  arrow.offset <span class="op">=</span> <span class="va">group.name.offset</span> <span class="op">+</span> <span class="fl">5</span>,</span>
+<span>  arrow.length <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a <code>SoilProfileCollection</code> object</p></dd>
+
+
 <dt>groups</dt>
 <dd><p>the name of a site-level attribute that defines groups, factor
 levels will influence plotting order</p></dd>
+
+
 <dt>group.name.offset</dt>
 <dd><p>vertical offset for group names, single numeric
 value or vector of offsets</p></dd>
+
+
 <dt>group.name.cex</dt>
 <dd><p>font size for group names</p></dd>
+
+
 <dt>group.line.col</dt>
 <dd><p>color for line that splits groups</p></dd>
+
+
 <dt>group.line.lwd</dt>
 <dd><p>width of line that splits groups</p></dd>
+
+
 <dt>group.line.lty</dt>
 <dd><p>style of line that splits groups</p></dd>
+
+
 <dt>break.style</dt>
 <dd><p>style of group boundaries: "line", "arrow", "both"</p></dd>
+
+
 <dt>break.offset</dt>
 <dd><p>horizontal offset used to place vertical breaks and/or arrows, shifted slightly to the right of default when <code>hz.depths=TRUE</code> is passed to <code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code></p></dd>
+
+
 <dt>arrow.offset</dt>
 <dd><p>vertical offset for "arrow" style boundaries, single
 numeric value or vector of offsets</p></dd>
+
+
 <dt>arrow.length</dt>
 <dd><p>value passed to <code>arrows</code> to define arrow head size</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments to <code>plotSPC</code></p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -126,87 +149,87 @@ numeric value or vector of offsets</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># sample data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># convert colors from Munsell to hex-encoded RGB</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">soil_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># add a groups</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">group.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">group</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert fake groupt to factor with new levels</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">group.3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">group.2</span>, levels<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'C-2'</span>, <span class="st">'B-2'</span>, <span class="st">'A-2'</span>, <span class="st">'C-1'</span>, <span class="st">'B-1'</span>, <span class="st">'A-1'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot profiles, sorted and annotated by 'group' (integers)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sample data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># convert colors from Munsell to hex-encoded RGB</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">soil_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add a groups</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">group.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">group</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert fake groupt to factor with new levels</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">group.3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">group.2</span>, levels<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'C-2'</span>, <span class="st">'B-2'</span>, <span class="st">'A-2'</span>, <span class="st">'C-1'</span>, <span class="st">'B-1'</span>, <span class="st">'A-1'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot profiles, sorted and annotated by 'group' (integers)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="groupedProfilePlot-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot profiles, sorted and annotated by 'group.2' (characters)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group.2'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot profiles, sorted and annotated by 'group.2' (characters)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group.2'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="groupedProfilePlot-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot profiles, sorted and annotated by 'group.3' (characters)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group.3'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot profiles, sorted and annotated by 'group.3' (characters)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group.3'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="groupedProfilePlot-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># make fake site-level attribute and adjust levels</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, size<span class="op">=</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># tabulate pedons / group</span></span>
-<span class="r-in"><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># sort large -&gt; small</span></span>
-<span class="r-in"><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">tab</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set levels based on sorted tabulation</span></span>
-<span class="r-in"><span class="co"># assign custom labels</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span>, levels<span class="op">=</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>,</span>
-<span class="r-in">labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>, <span class="st">' ('</span>, <span class="va">tab</span>, <span class="st">')'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span>
-<span class="r-in">group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># make fake site-level attribute and adjust levels</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, size<span class="op">=</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># tabulate pedons / group</span></span></span>
+<span class="r-in"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sort large -&gt; small</span></span></span>
+<span class="r-in"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">tab</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set levels based on sorted tabulation</span></span></span>
+<span class="r-in"><span><span class="co"># assign custom labels</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">new.group</span>, levels<span class="op">=</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>, <span class="st">' ('</span>, <span class="va">tab</span>, <span class="st">')'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span></span>
+<span class="r-in"><span>group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="groupedProfilePlot-4.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># offsets can be set using a vector of values, recycled as needed</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span>
-<span class="r-in">group.name.offset<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">5</span><span class="op">)</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># offsets can be set using a vector of values, recycled as needed</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span></span>
+<span class="r-in"><span>group.name.offset<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">5</span><span class="op">)</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="groupedProfilePlot-5.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># annotate with arrows instead of vertical lines</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span>
-<span class="r-in">group.name.offset<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">12</span><span class="op">)</span>, break.style<span class="op">=</span><span class="st">'arrow'</span>, arrow.offset<span class="op">=</span><span class="op">-</span><span class="fl">3</span>,</span>
-<span class="r-in">group.line.lty <span class="op">=</span> <span class="fl">1</span>, group.line.lwd <span class="op">=</span> <span class="fl">1</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># annotate with arrows instead of vertical lines</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span></span>
+<span class="r-in"><span>group.name.offset<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">12</span><span class="op">)</span>, break.style<span class="op">=</span><span class="st">'arrow'</span>, arrow.offset<span class="op">=</span><span class="op">-</span><span class="fl">3</span>,</span></span>
+<span class="r-in"><span>group.line.lty <span class="op">=</span> <span class="fl">1</span>, group.line.lwd <span class="op">=</span> <span class="fl">1</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="groupedProfilePlot-6.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># more complete example using data from soilDB package</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">loafercreek</span>, package<span class="op">=</span><span class="st">'soilDB'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># lines</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">loafercreek</span>, groups<span class="op">=</span><span class="st">'hillslopeprof'</span>, group.name.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># arrows</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">loafercreek</span>, groups<span class="op">=</span><span class="st">'hillslopeprof'</span>, group.name.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, break.style <span class="op">=</span><span class="st">'arrow'</span>, group.line.lty <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">group.line.lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># both</span></span>
-<span class="r-in"><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">loafercreek</span>, groups<span class="op">=</span><span class="st">'hillslopeprof'</span>, group.name.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, break.style <span class="op">=</span><span class="st">'both'</span>, group.line.lty <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">group.line.lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># more complete example using data from soilDB package</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">loafercreek</span>, package<span class="op">=</span><span class="st">'soilDB'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># lines</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">loafercreek</span>, groups<span class="op">=</span><span class="st">'hillslopeprof'</span>, group.name.cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># arrows</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">loafercreek</span>, groups<span class="op">=</span><span class="st">'hillslopeprof'</span>, group.name.cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, break.style <span class="op">=</span><span class="st">'arrow'</span>, group.line.lty <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>group.line.lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># both</span></span></span>
+<span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">loafercreek</span>, groups<span class="op">=</span><span class="st">'hillslopeprof'</span>, group.name.cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, break.style <span class="op">=</span><span class="st">'both'</span>, group.line.lty <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>group.line.lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -221,7 +244,7 @@ numeric value or vector of offsets</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

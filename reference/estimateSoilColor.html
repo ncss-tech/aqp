@@ -74,23 +74,32 @@ Estimation of dry from moist soil color state is not guaranteed to be symmetric 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">estimateSoilColor</span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span>, sourceMoistureState <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dry"</span>, <span class="st">"moist"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimateSoilColor</span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span>, sourceMoistureState <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dry"</span>, <span class="st">"moist"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>hue</dt>
 <dd><p>vector of Munsell hue ('10YR', '2.5Y', etc.)</p></dd>
+
+
 <dt>value</dt>
 <dd><p>vector of Munsell value (2,2.5 2.5, 3, 5, 6, etc.)</p></dd>
+
+
 <dt>chroma</dt>
 <dd><p>vector of Munsell chroma (2, 3, 4, etc.)</p></dd>
+
+
 <dt>sourceMoistureState</dt>
 <dd><p>character, source colors are either 'dry' or 'moist'</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>data.frame</code> of estimated colors in Munsell notation. The <code>sigma</code> column contains CIE2000 color contrast metric values describing the perceptual distance between estimated color in CIELAB coordinates and closest Munsell chip.</p>
+    
+
+<p><code>data.frame</code> of estimated colors in Munsell notation. The <code>sigma</code> column contains CIE2000 color contrast metric values describing the perceptual distance between estimated color in CIELAB coordinates and closest Munsell chip.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -105,16 +114,16 @@ Estimation of dry from moist soil color state is not guaranteed to be symmetric 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">estimateSoilColor</span><span class="op">(</span>hue <span class="op">=</span> <span class="st">'10YR'</span>, value <span class="op">=</span> <span class="fl">3</span>, chroma <span class="op">=</span> <span class="fl">3</span>, sourceMoistureState <span class="op">=</span> <span class="st">'moist'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">estimateSoilColor</span><span class="op">(</span>hue <span class="op">=</span> <span class="st">'10YR'</span>, value <span class="op">=</span> <span class="fl">3</span>, chroma <span class="op">=</span> <span class="fl">3</span>, sourceMoistureState <span class="op">=</span> <span class="st">'moist'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    hue value chroma    sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR     5      3 3.881019</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># note that estimation is not symmetric</span></span>
-<span class="r-in"><span class="fu">estimateSoilColor</span><span class="op">(</span>hue <span class="op">=</span> <span class="st">'10YR'</span>, value <span class="op">=</span> <span class="fl">5</span>, chroma <span class="op">=</span> <span class="fl">3</span>, sourceMoistureState <span class="op">=</span> <span class="st">'dry'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># note that estimation is not symmetric</span></span></span>
+<span class="r-in"><span><span class="fu">estimateSoilColor</span><span class="op">(</span>hue <span class="op">=</span> <span class="st">'10YR'</span>, value <span class="op">=</span> <span class="fl">5</span>, chroma <span class="op">=</span> <span class="fl">3</span>, sourceMoistureState <span class="op">=</span> <span class="st">'dry'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    hue value chroma    sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR     4      3 4.161117</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -129,7 +138,7 @@ Estimation of dry from moist soil color state is not guaranteed to be symmetric 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

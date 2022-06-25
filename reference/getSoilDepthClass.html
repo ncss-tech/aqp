@@ -63,26 +63,33 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getSoilDepthClass</span><span class="op">(</span>
-  <span class="va">f</span>,
-  depth.classes <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>very.shallow <span class="op">=</span> <span class="fl">25</span>, shallow <span class="op">=</span> <span class="fl">50</span>, mod.deep <span class="op">=</span> <span class="fl">100</span>, deep <span class="op">=</span> <span class="fl">150</span>,
-    very.deep <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getSoilDepthClass</span><span class="op">(</span></span>
+<span>  <span class="va">f</span>,</span>
+<span>  depth.classes <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>very.shallow <span class="op">=</span> <span class="fl">25</span>, shallow <span class="op">=</span> <span class="fl">50</span>, mod.deep <span class="op">=</span> <span class="fl">100</span>, deep <span class="op">=</span> <span class="fl">150</span>,</span>
+<span>    very.deep <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>f</dt>
 <dd><p>a SoilProfileCollection object</p></dd>
+
+
 <dt>depth.classes</dt>
 <dd><p>a named vector of classes and depth breaks</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to <code><a href="estimateSoilDepth.html">estimateSoilDepth</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>data.frame</code> containing soil depth and depth class for each
+    
+
+<p>a <code>data.frame</code> containing soil depth and depth class for each
 profile, see examples</p>
     </div>
     <div id="see-also">
@@ -96,15 +103,15 @@ profile, see examples</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># generate depth-class matrix</span></span>
-<span class="r-in"><span class="va">sdc</span> <span class="op">&lt;-</span> <span class="fu">getSoilDepthClass</span><span class="op">(</span><span class="va">sp1</span>, name <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inspect</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sdc</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># generate depth-class matrix</span></span></span>
+<span class="r-in"><span><span class="va">sdc</span> <span class="op">&lt;-</span> <span class="fu">getSoilDepthClass</span><span class="op">(</span><span class="va">sp1</span>, name <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># inspect</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sdc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id depth very.shallow shallow mod.deep  deep very.deep depth.class</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 P001    89        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 P002    59        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep</span>
@@ -112,17 +119,17 @@ profile, see examples</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 P004    62        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 P005    68        FALSE   FALSE     TRUE FALSE     FALSE    mod.deep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 P006   200        FALSE   FALSE    FALSE FALSE      TRUE   very.deep</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># join back into sp1 as site-level data</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sdc</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># sample data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gopheridge</span>, package<span class="op">=</span><span class="st">'soilDB'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">getSoilDepthClass</span><span class="op">(</span><span class="va">gopheridge</span>, name <span class="op">=</span> <span class="st">'hzname'</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># join back into sp1 as site-level data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sdc</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># sample data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gopheridge</span>, package<span class="op">=</span><span class="st">'soilDB'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">getSoilDepthClass</span><span class="op">(</span><span class="va">gopheridge</span>, name <span class="op">=</span> <span class="st">'hzname'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -137,7 +144,7 @@ profile, see examples</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

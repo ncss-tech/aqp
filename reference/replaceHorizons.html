@@ -63,38 +63,41 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">replaceHorizons</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">replaceHorizons</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>A SoilProfileCollection</p></dd>
+
+
 <dt>value</dt>
 <dd><p>An object inheriting <code>data.frame</code></p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># load test data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SPC</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># one profile</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp2</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 23 variables in horizon data</span></span>
-<span class="r-in"><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="fu"><a href="horizonNames.html">horizonNames</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load test data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SPC</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># one profile</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp2</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 23 variables in horizon data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="fu"><a href="horizonNames.html">horizonNames</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 23</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># remove all but essential ones</span></span>
-<span class="r-in"><span class="fu">replaceHorizons</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,<span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,<span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inspect result (a clean slate)</span></span>
-<span class="r-in"><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># remove all but essential ones</span></span></span>
+<span class="r-in"><span><span class="fu">replaceHorizons</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,<span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,<span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># inspect result (a clean slate)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id hzID top bottom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 hon-1    1   0     12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 hon-1    2  12     16</span>
@@ -105,7 +108,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7 hon-1    7  95    122</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8 hon-1    8 122    140</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9 hon-1    9 140    170</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -120,7 +123,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,38 +63,53 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dissolve_hz</span><span class="op">(</span>
-  <span class="va">object</span>,
-  <span class="va">by</span>,
-  id <span class="op">=</span> <span class="st">"peiid"</span>,
-  hztop <span class="op">=</span> <span class="st">"hzdept"</span>,
-  hzbot <span class="op">=</span> <span class="st">"hzdepb"</span>,
-  collapse <span class="op">=</span> <span class="cn">FALSE</span>,
-  order <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dissolve_hz</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">by</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"peiid"</span>,</span>
+<span>  hztop <span class="op">=</span> <span class="st">"hzdept"</span>,</span>
+<span>  hzbot <span class="op">=</span> <span class="st">"hzdepb"</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  order <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>a <code>data.frame</code></p></dd>
+
+
 <dt>by</dt>
 <dd><p>character: column names, to be used as grouping variables, within the object.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>character: column name of the pedon ID within the object.</p></dd>
+
+
 <dt>hztop</dt>
 <dd><p>character: column name of the horizon top depth within the object.</p></dd>
+
+
 <dt>hzbot</dt>
 <dd><p>character: column name of the horizon bottom depth in the object.</p></dd>
+
+
 <dt>collapse</dt>
 <dd><p>logical: indicating whether to not combine grouping variables before dissolving.</p></dd>
+
+
 <dt>order</dt>
 <dd><p>logical: indicating whether or not to order the object by the id, hztop, and hzbot columns.
 #'</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with the original id, by grouping variables, and non-consecutive horizon depths.</p>
+    
+
+<p>A <code>data.frame</code> with the original id, by grouping variables, and non-consecutive horizon depths.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -111,20 +126,20 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># example 1</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">spc</span> <span class="op">&lt;-</span> <span class="va">jacobs2000</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">spc</span><span class="op">$</span><span class="va">dep_5</span> <span class="op">&lt;-</span> <span class="va">spc</span><span class="op">$</span><span class="va">depletion_pct</span> <span class="op">&gt;=</span><span class="fl">5</span></span>
-<span class="r-in"><span class="va">spc</span><span class="op">$</span><span class="va">genhz</span> <span class="op">&lt;-</span> <span class="fu"><a href="generalize.hz.html">generalize.hz</a></span><span class="op">(</span><span class="va">spc</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"E"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"E"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span> </span>
-<span class="r-in"><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">h</span>, by <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"dep_5"</span><span class="op">)</span>, id <span class="op">=</span> <span class="st">"id"</span>, hztop <span class="op">=</span> <span class="st">"top"</span>, hzbot <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example 1</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spc</span> <span class="op">&lt;-</span> <span class="va">jacobs2000</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">spc</span><span class="op">$</span><span class="va">dep_5</span> <span class="op">&lt;-</span> <span class="va">spc</span><span class="op">$</span><span class="va">depletion_pct</span> <span class="op">&gt;=</span><span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="va">spc</span><span class="op">$</span><span class="va">genhz</span> <span class="op">&lt;-</span> <span class="fu"><a href="generalize.hz.html">generalize.hz</a></span><span class="op">(</span><span class="va">spc</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"E"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"E"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">h</span>, by <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"dep_5"</span><span class="op">)</span>, id <span class="op">=</span> <span class="st">"id"</span>, hztop <span class="op">=</span> <span class="st">"top"</span>, hzbot <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> non-character grouping variables are being converted to characters</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span>, <span class="st">"genhz"</span>, <span class="st">"dep_5"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">h</span><span class="op">[</span><span class="va">h</span><span class="op">$</span><span class="va">id</span> <span class="op">==</span> <span class="st">"92-1"</span>, <span class="va">vars</span><span class="op">]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span>, <span class="st">"genhz"</span>, <span class="st">"dep_5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">h</span><span class="op">[</span><span class="va">h</span><span class="op">$</span><span class="va">id</span> <span class="op">==</span> <span class="st">"92-1"</span>, <span class="va">vars</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id top bottom genhz dep_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 92-1   0     18     A FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 92-1  18     43     E FALSE</span>
@@ -133,7 +148,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 92-1 130    153     B FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 92-1 153    156     C FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7 92-1 156    213     C  TRUE</span>
-<span class="r-in"><span class="va">test</span><span class="op">[</span><span class="va">test</span><span class="op">$</span><span class="va">id</span> <span class="op">==</span> <span class="st">"92-1"</span>, <span class="op">]</span></span>
+<span class="r-in"><span><span class="va">test</span><span class="op">[</span><span class="va">test</span><span class="op">$</span><span class="va">id</span> <span class="op">==</span> <span class="st">"92-1"</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id top bottom variable value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  92-1   0     18    genhz     A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  92-1  18     43    genhz     E</span>
@@ -141,19 +156,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  92-1 153    213    genhz     C</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27 92-1   0    156    dep_5 FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28 92-1 156    213    dep_5  TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example 2</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">    peiid <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">    hzdept <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>,  <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>, </span>
-<span class="r-in">    hzdepb <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">25</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
-<span class="r-in">    hzname <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A1"</span>,  <span class="st">"A2"</span>,  <span class="st">"E/A"</span>, <span class="st">"2Bt1"</span>, <span class="st">"2Bt2"</span>, <span class="st">"2C"</span><span class="op">)</span>,</span>
-<span class="r-in">    genhz  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,   <span class="st">"A"</span>,   <span class="st">"E"</span>,   <span class="st">"2Bt"</span>,  <span class="st">"2Bt"</span>, <span class="st">"2C"</span><span class="op">)</span>,</span>
-<span class="r-in">    texcl  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"sil"</span>, <span class="st">"sil"</span>, <span class="st">"sil"</span>, <span class="st">"sl"</span>,   <span class="st">"sl"</span>,   <span class="st">"s"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">df</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example 2</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    peiid <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>    hzdept <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>,  <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>    hzdepb <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">25</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    hzname <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A1"</span>,  <span class="st">"A2"</span>,  <span class="st">"E/A"</span>, <span class="st">"2Bt1"</span>, <span class="st">"2Bt2"</span>, <span class="st">"2C"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    genhz  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,   <span class="st">"A"</span>,   <span class="st">"E"</span>,   <span class="st">"2Bt"</span>,  <span class="st">"2Bt"</span>, <span class="st">"2C"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    texcl  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"sil"</span>, <span class="st">"sil"</span>, <span class="st">"sil"</span>, <span class="st">"sl"</span>,   <span class="st">"sl"</span>,   <span class="st">"s"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">df</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   peiid hzdept hzdepb hzname genhz texcl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     1      0      5     A1     A   sil</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     1      5     10     A2     A   sil</span>
@@ -161,8 +176,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4     1     15     25   2Bt1   2Bt    sl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     1     25     50   2Bt2   2Bt    sl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6     1     50    100     2C    2C     s</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"texcl"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"texcl"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   peiid hzdept hzdepb variable value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     1      0     10    genhz     A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     1     10     15    genhz     E</span>
@@ -171,18 +186,18 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     1      0     15    texcl   sil</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6     1     15     50    texcl    sl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7     1     50    100    texcl     s</span>
-<span class="r-in"><span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"texcl"</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"texcl"</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   peiid hzdept hzdepb      variable    value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     1      0     10 genhz &amp; texcl  A &amp; sil</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     1     10     15 genhz &amp; texcl  E &amp; sil</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     1     15     50 genhz &amp; texcl 2Bt &amp; sl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4     1     50    100 genhz &amp; texcl   2C &amp; s</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">df</span>, <span class="st">"genhz"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">value</span> <span class="op">==</span> <span class="st">"2Bt"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">dissolve_hz</span><span class="op">(</span><span class="va">df</span>, <span class="st">"genhz"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">value</span> <span class="op">==</span> <span class="st">"2Bt"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   peiid hzdept hzdepb variable value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     1     15     50    genhz   2Bt</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -197,7 +212,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,26 +63,29 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">overlapMetrics</span><span class="op">(</span><span class="va">x</span>, <span class="va">thresh</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">overlapMetrics</span><span class="op">(</span><span class="va">x</span>, <span class="va">thresh</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>vector of relative horizontal positions, one for each profile</p></dd>
+
+
 <dt>thresh</dt>
 <dd><p>threshold defining "overlap", typically &lt; 1</p>
 <p>@return a <code>list</code>:</p><ul><li><p><code>idx</code>: unique index to overlapping elements in <code>x</code></p></li>
 <li><p><code>ov</code>: normalized overlap (see details)</p></li>
 </ul></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3.4</span>, <span class="fl">3.5</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">overlapMetrics</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3.4</span>, <span class="fl">3.5</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">overlapMetrics</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $idx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 4 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -103,7 +106,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

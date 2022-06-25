@@ -119,11 +119,11 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># load sample data set, a simple data.frame object with horizon-level data from 10 profiles</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load sample data set, a simple data.frame object with horizon-level data from 10 profiles</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	30 obs. of  13 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ id         : chr  "colusa" "colusa" "colusa" "colusa" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ name       : chr  "A" "ABt" "Bt1" "Bt2" ...</span>
@@ -138,22 +138,22 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ silt       : int  33 31 28 18 20 18 55 49 45 42 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ clay       : int  21 27 32 55 25 34 3 15 27 15 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ CF         : num  0.12 0.27 0.27 0.16 0.55 0.84 0.5 0.75 0.67 0.02 ...</span>
-<span class="r-in"><span class="va">sp4</span><span class="op">$</span><span class="va">idbak</span> <span class="op">&lt;-</span> <span class="va">sp4</span><span class="op">$</span><span class="va">id</span></span>
-<span class="r-in"><span class="co">#sp4 &lt;- sp4[order(match(sp4$id, aqp:::.coalesce.idx(sort(sp4$id))), sp4$top),]</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># upgrade to SoilProfileCollection</span></span>
-<span class="r-in"><span class="co"># 'id' is the name of the column containing the profile ID</span></span>
-<span class="r-in"><span class="co"># 'top' is the name of the column containing horizon upper boundaries</span></span>
-<span class="r-in"><span class="co"># 'bottom' is the name of the column containing horizon lower boundaries</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check it out</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># class name</span></span>
+<span class="r-in"><span><span class="va">sp4</span><span class="op">$</span><span class="va">idbak</span> <span class="op">&lt;-</span> <span class="va">sp4</span><span class="op">$</span><span class="va">id</span></span></span>
+<span class="r-in"><span><span class="co">#sp4 &lt;- sp4[order(match(sp4$id, aqp:::.coalesce.idx(sort(sp4$id))), sp4$top),]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># upgrade to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="co"># 'id' is the name of the column containing the profile ID</span></span></span>
+<span class="r-in"><span><span class="co"># 'top' is the name of the column containing horizon upper boundaries</span></span></span>
+<span class="r-in"><span><span class="co"># 'bottom' is the name of the column containing horizon lower boundaries</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check it out</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># class name</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SoilProfileCollection"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"package")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aqp"</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># internal structure</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># internal structure</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ idcol       : chr "id"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ hzidcol     : chr "hzID"</span>
@@ -191,14 +191,14 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. .. ..@ projargs: chr NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ diagnostic  :'data.frame':	0 obs. of  0 variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ restrictions:'data.frame':	0 obs. of  0 variables</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check integrity of site:horizon linkage</span></span>
-<span class="r-in"><span class="fu"><a href="spc_in_sync.html">spc_in_sync</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check integrity of site:horizon linkage</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="spc_in_sync.html">spc_in_sync</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nSites relativeOrder valid</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   TRUE          TRUE  TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check horizon depth logic</span></span>
-<span class="r-in"><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check horizon depth logic</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                id valid depthLogic sameDepth missingDepth overlapOrGap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          colusa  TRUE      FALSE     FALSE        FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           glenn  TRUE      FALSE     FALSE        FALSE        FALSE</span>
@@ -210,17 +210,17 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8          shasta  TRUE      FALSE     FALSE        FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  shasta-trinity  TRUE      FALSE     FALSE        FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10         tehama  TRUE      FALSE     FALSE        FALSE        FALSE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inspect object properties</span></span>
-<span class="r-in"><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># self-explanitory</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># inspect object properties</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># self-explanitory</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "id"</span>
-<span class="r-in"><span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># self-explanitory</span></span>
+<span class="r-in"><span><span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># self-explanitory</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "top"    "bottom"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># you can change these:</span></span>
-<span class="r-in"><span class="fu"><a href="depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># defaults to 'cm'</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># you can change these:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># defaults to 'cm'</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cm"</span>
-<span class="r-in"><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># not much to start with</span></span>
+<span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># not much to start with</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $aqp_df_class</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data.frame"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -243,44 +243,44 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [26] 26 27 28 29 30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># alter the depth unit metadata</span></span>
-<span class="r-in"><span class="fu"><a href="depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'inches'</span> <span class="co"># units are really 'cm'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># more generic interface for adjusting metadata</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># add attributes to metadata list</span></span>
-<span class="r-in"><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">describer</span> <span class="op">&lt;-</span> <span class="st">'DGM'</span></span>
-<span class="r-in"><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">'2009-01-01'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">citation</span> <span class="op">&lt;-</span> <span class="st">'McGahan, D.G., Southard, R.J, Claassen, V.P.</span>
-<span class="r-in">2009. Plant-Available Calcium Varies Widely in Soils</span>
-<span class="r-in">on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'cm'</span> <span class="co"># fix depth units, back to 'cm'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># further inspection with common function overloads</span></span>
-<span class="r-in"><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># number of profiles in the collection</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># alter the depth unit metadata</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'inches'</span> <span class="co"># units are really 'cm'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># more generic interface for adjusting metadata</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add attributes to metadata list</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">describer</span> <span class="op">&lt;-</span> <span class="st">'DGM'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">'2009-01-01'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">citation</span> <span class="op">&lt;-</span> <span class="st">'McGahan, D.G., Southard, R.J, Claassen, V.P.</span></span></span>
+<span class="r-in"><span><span class="st">2009. Plant-Available Calcium Varies Widely in Soils</span></span></span>
+<span class="r-in"><span><span class="st">on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'cm'</span> <span class="co"># fix depth units, back to 'cm'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># further inspection with common function overloads</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># number of profiles in the collection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-in"><span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># number of horizons in the collection</span></span>
+<span class="r-in"><span><span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># number of horizons in the collection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
-<span class="r-in"><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># column names</span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># column names</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     horizons1     horizons2     horizons3     horizons4     horizons5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          "id"        "name"         "top"      "bottom"           "K" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     horizons6     horizons7     horizons8     horizons9    horizons10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          "Mg"          "Ca"       "CEC_7" "ex_Ca_to_Mg"        "sand" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    horizons11    horizons12    horizons13    horizons14    horizons15 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        "silt"        "clay"          "CF"       "idbak"        "hzID" </span>
-<span class="r-in"><span class="fu"><a href="min.html">min</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># shallowest profile depth in collection</span></span>
+<span class="r-in"><span><span class="fu"><a href="min.html">min</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># shallowest profile depth in collection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 16</span>
-<span class="r-in"><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># deepest profile depth in collection</span></span>
+<span class="r-in"><span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># deepest profile depth in collection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extraction of soil profile components</span></span>
-<span class="r-in"><span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># vector of profile IDs</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extraction of soil profile components</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># vector of profile IDs</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "colusa"         "glenn"          "kings"          "mariposa"      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "mendocino"      "napa"           "san benito"     "shasta"        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "shasta-trinity" "tehama"        </span>
-<span class="r-in"><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># horizon data</span></span>
+<span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># horizon data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                id name top bottom   K   Mg   Ca CEC_7 ex_Ca_to_Mg sand silt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          colusa    A   0      3 0.3 25.7  9.0  23.0        0.35   46   33</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          colusa  ABt   3      8 0.2 23.7  5.6  21.4        0.23   42   31</span>
@@ -343,14 +343,14 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28   24 0.43         tehama   28</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29   25 0.10         tehama   29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30   32 0.34         tehama   30</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extraction of specific horizon attributes</span></span>
-<span class="r-in"><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extraction of specific horizon attributes</span></span></span>
+<span class="r-in"><span><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [26] 51 67 24 25 32</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># subsetting SoilProfileCollection objects</span></span>
-<span class="r-in"><span class="va">sp4</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="co"># first profile in the collection</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># subsetting SoilProfileCollection objects</span></span></span>
+<span class="r-in"><span><span class="va">sp4</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="co"># first profile in the collection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 1 profiles and 4 horizons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: hzID </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 42 - 42 cm</span>
@@ -370,7 +370,7 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:  NA</span>
-<span class="r-in"><span class="va">sp4</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="co"># first horizon from each profile</span></span>
+<span class="r-in"><span><span class="va">sp4</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="co"># first horizon from each profile</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 10 profiles and 10 horizons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: hzID </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 2 - 9 cm</span>
@@ -397,42 +397,42 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [EMPTY]</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># basic plot method, highly customizable: see manual page ?plotSPC</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># inspect plotting area, very simple to overlay graphical elements</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">3</span>, col<span class="op">=</span><span class="st">'blue'</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># profiles are centered at integers, from 1 to length(obj)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, line<span class="op">=</span><span class="op">-</span><span class="fl">1.5</span>, at<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span>, font<span class="op">=</span><span class="fl">4</span>, col<span class="op">=</span><span class="st">'blue'</span>, lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># y-axis is based on profile depths</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, line<span class="op">=</span><span class="op">-</span><span class="fl">1</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span>, font<span class="op">=</span><span class="fl">4</span>, las<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">'blue'</span>, lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># basic plot method, highly customizable: see manual page ?plotSPC</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># inspect plotting area, very simple to overlay graphical elements</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">3</span>, col<span class="op">=</span><span class="st">'blue'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># profiles are centered at integers, from 1 to length(obj)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, line<span class="op">=</span><span class="op">-</span><span class="fl">1.5</span>, at<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span>, font<span class="op">=</span><span class="fl">4</span>, col<span class="op">=</span><span class="st">'blue'</span>, lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># y-axis is based on profile depths</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, line<span class="op">=</span><span class="op">-</span><span class="fl">1</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span>, font<span class="op">=</span><span class="fl">4</span>, las<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">'blue'</span>, lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># symbolize soil properties via color</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'clay'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># symbolize soil properties via color</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'clay'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'CF'</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'CF'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># apply a function to each profile, returning a single value per profile,</span></span>
-<span class="r-in"><span class="co"># in the same order as profile_id(sp4)</span></span>
-<span class="r-in"><span class="va">soil.depths</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">max</span><span class="op">)</span> <span class="co"># recall that max() gives the depth of a soil profile</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check that the order is correct</span></span>
-<span class="r-in"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/all.equal.data.table.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">soil.depths</span><span class="op">)</span>, <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># apply a function to each profile, returning a single value per profile,</span></span></span>
+<span class="r-in"><span><span class="co"># in the same order as profile_id(sp4)</span></span></span>
+<span class="r-in"><span><span class="va">soil.depths</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="va">max</span><span class="op">)</span> <span class="co"># recall that max() gives the depth of a soil profile</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check that the order is correct</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">soil.depths</span><span class="op">)</span>, <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># a vector of values that is the same length as the number of profiles</span></span>
-<span class="r-in"><span class="co"># can be stored into site-level data</span></span>
-<span class="r-in"><span class="va">sp4</span><span class="op">$</span><span class="va">depth</span> <span class="op">&lt;-</span> <span class="va">soil.depths</span></span>
-<span class="r-in"><span class="co"># check: looks good</span></span>
-<span class="r-in"><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">sp4</span><span class="op">$</span><span class="va">depth</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># a vector of values that is the same length as the number of profiles</span></span></span>
+<span class="r-in"><span><span class="co"># can be stored into site-level data</span></span></span>
+<span class="r-in"><span><span class="va">sp4</span><span class="op">$</span><span class="va">depth</span> <span class="op">&lt;-</span> <span class="va">soil.depths</span></span></span>
+<span class="r-in"><span><span class="co"># check: looks good</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">sp4</span><span class="op">$</span><span class="va">depth</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extract site-level data</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># as a data.frame</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extract site-level data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="co"># as a data.frame</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                id depth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          colusa    42</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           glenn    34</span>
@@ -444,17 +444,17 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8          shasta    40</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  shasta-trinity    40</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10         tehama    16</span>
-<span class="r-in"><span class="va">sp4</span><span class="op">$</span><span class="va">depth</span> <span class="co"># specific columns as a vector</span></span>
+<span class="r-in"><span><span class="va">sp4</span><span class="op">$</span><span class="va">depth</span> <span class="co"># specific columns as a vector</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 42 34 40 49 30 20 20 40 40 16</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># use site-level data to alter plotting order</span></span>
-<span class="r-in"><span class="va">new.order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">order</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">$</span><span class="va">depth</span><span class="op">)</span> <span class="co"># the result is an index of rank</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, plot.order<span class="op">=</span><span class="va">new.order</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># use site-level data to alter plotting order</span></span></span>
+<span class="r-in"><span><span class="va">new.order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">$</span><span class="va">depth</span><span class="op">)</span> <span class="co"># the result is an index of rank</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, plot.order<span class="op">=</span><span class="va">new.order</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-4.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># deconstruct SoilProfileCollection into a data.frame, with horizon+site data</span></span>
-<span class="r-in"><span class="fu"><a href="coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'data.frame'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># deconstruct SoilProfileCollection into a data.frame, with horizon+site data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'data.frame'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                id name top bottom   K   Mg   Ca CEC_7 ex_Ca_to_Mg sand silt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          colusa    A   0      3 0.3 25.7  9.0  23.0        0.35   46   33</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          colusa  ABt   3      8 0.2 23.7  5.6  21.4        0.23   42   31</span>
@@ -517,7 +517,7 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28   24 0.43         tehama   28    16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29   25 0.10         tehama   29    16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30   32 0.34         tehama   30    16</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -532,7 +532,7 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

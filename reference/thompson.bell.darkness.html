@@ -63,31 +63,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">thompson.bell.darkness</span><span class="op">(</span>
-  <span class="va">p</span>,
-  name <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  pattern <span class="op">=</span> <span class="st">"^A"</span>,
-  value <span class="op">=</span> <span class="st">"m_value"</span>,
-  chroma <span class="op">=</span> <span class="st">"m_chroma"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">thompson.bell.darkness</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"^A"</span>,</span>
+<span>  value <span class="op">=</span> <span class="st">"m_value"</span>,</span>
+<span>  chroma <span class="op">=</span> <span class="st">"m_chroma"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection (e.g. via profileApply())</p></dd>
+
+
 <dt>name</dt>
 <dd><p>Column name containing horizon designations used to find A horizons (default: first column name containing 'name')</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>Regular expression to match A horizons (default: "^A" which means horizon designation <em>starts with</em> A)</p></dd>
+
+
 <dt>value</dt>
 <dd><p>Column name containing horizon color values (default: "m_value")</p></dd>
+
+
 <dt>chroma</dt>
 <dd><p>Column name containing horizon color chromas (default: "m_chroma")</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric vector reflecting horizon darkness (lower values = darker).</p>
+    
+
+<p>A numeric vector reflecting horizon darkness (lower values = darker).</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -110,7 +121,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

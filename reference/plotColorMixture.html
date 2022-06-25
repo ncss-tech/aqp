@@ -63,42 +63,59 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plotColorMixture</span><span class="op">(</span>
-  <span class="va">x</span>,
-  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"reference"</span>, <span class="st">"exact"</span><span class="op">)</span>,
-  n <span class="op">=</span> <span class="fl">1</span>,
-  swatch.cex <span class="op">=</span> <span class="fl">6</span>,
-  label.cex <span class="op">=</span> <span class="fl">0.85</span>,
-  showMixedSpec <span class="op">=</span> <span class="cn">FALSE</span>,
-  overlapFix <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotColorMixture</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"reference"</span>, <span class="st">"exact"</span><span class="op">)</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  swatch.cex <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  label.cex <span class="op">=</span> <span class="fl">0.85</span>,</span>
+<span>  showMixedSpec <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overlapFix <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>vector of colors in Munsell notation, should not contain duplicates</p></dd>
+
+
 <dt>w</dt>
 <dd><p>vector of weights, can sum to any number</p></dd>
+
+
 <dt>mixingMethod</dt>
 <dd><p>approach used to simulate a mixture:</p><ul><li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra</p></li>
 <li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see <code><a href="mixMunsell.html">mixMunsell</a></code>)</p></li>
 </ul></dd>
+
+
 <dt>n</dt>
 <dd><p>number of closest mixture candidates when <code>mixingMethod = 'reference'</code> (see <code><a href="mixMunsell.html">mixMunsell</a></code>), results can be hard to interpret when <code>n &gt; 2</code></p></dd>
+
+
 <dt>swatch.cex</dt>
 <dd><p>scaling factor for color swatch</p></dd>
+
+
 <dt>label.cex</dt>
 <dd><p>scaling factor for swatch labels</p></dd>
+
+
 <dt>showMixedSpec</dt>
 <dd><p>show weighted geometric mean (mixed) spectra as dotted line (only when <code>mixingMethod = 'reference'</code>)</p></dd>
+
+
 <dt>overlapFix</dt>
 <dd><p>attempt to "fix" overlapping chip labels via <code><a href="fixOverlap.html">fixOverlap</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>lattice</code> graphics object</p>
+    
+
+<p>a <code>lattice</code> graphics object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -111,33 +128,33 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># color chips</span></span>
-<span class="r-in"><span class="va">chips</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5B 5/10'</span>, <span class="st">'5Y 8/8'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">chips</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">chips</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># weights</span></span>
-<span class="r-in"><span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plotColorMixture</span><span class="op">(</span></span>
-<span class="r-in">x <span class="op">=</span> <span class="va">chips</span>, </span>
-<span class="r-in">w <span class="op">=</span> <span class="va">wt</span>, </span>
-<span class="r-in">swatch.cex <span class="op">=</span> <span class="fl">4</span>, </span>
-<span class="r-in">label.cex <span class="op">=</span> <span class="fl">0.65</span>, </span>
-<span class="r-in">showMixedSpec <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span class="r-in">mixingMethod <span class="op">=</span> <span class="st">'reference'</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># color chips</span></span></span>
+<span class="r-in"><span><span class="va">chips</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5B 5/10'</span>, <span class="st">'5Y 8/8'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">chips</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">chips</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># weights</span></span></span>
+<span class="r-in"><span><span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plotColorMixture</span><span class="op">(</span></span></span>
+<span class="r-in"><span>x <span class="op">=</span> <span class="va">chips</span>, </span></span>
+<span class="r-in"><span>w <span class="op">=</span> <span class="va">wt</span>, </span></span>
+<span class="r-in"><span>swatch.cex <span class="op">=</span> <span class="fl">4</span>, </span></span>
+<span class="r-in"><span>label.cex <span class="op">=</span> <span class="fl">0.65</span>, </span></span>
+<span class="r-in"><span>showMixedSpec <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
+<span class="r-in"><span>mixingMethod <span class="op">=</span> <span class="st">'reference'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotColorMixture-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plotColorMixture</span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">chips</span>, </span>
-<span class="r-in">  w <span class="op">=</span> <span class="va">wt</span>, </span>
-<span class="r-in">  swatch.cex <span class="op">=</span> <span class="fl">4</span>, </span>
-<span class="r-in">  label.cex <span class="op">=</span> <span class="fl">0.65</span>, </span>
-<span class="r-in">  mixingMethod <span class="op">=</span> <span class="st">'exact'</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plotColorMixture</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">chips</span>, </span></span>
+<span class="r-in"><span>  w <span class="op">=</span> <span class="va">wt</span>, </span></span>
+<span class="r-in"><span>  swatch.cex <span class="op">=</span> <span class="fl">4</span>, </span></span>
+<span class="r-in"><span>  label.cex <span class="op">=</span> <span class="fl">0.65</span>, </span></span>
+<span class="r-in"><span>  mixingMethod <span class="op">=</span> <span class="st">'exact'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotColorMixture-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -152,7 +169,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

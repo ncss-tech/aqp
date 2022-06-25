@@ -63,37 +63,54 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dice</span><span class="op">(</span>
-  <span class="va">x</span>,
-  fm <span class="op">=</span> <span class="cn">NULL</span>,
-  SPC <span class="op">=</span> <span class="cn">TRUE</span>,
-  pctMissing <span class="op">=</span> <span class="cn">FALSE</span>,
-  fill <span class="op">=</span> <span class="cn">FALSE</span>,
-  strict <span class="op">=</span> <span class="cn">TRUE</span>,
-  byhz <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dice</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  fm <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  SPC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  pctMissing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  strict <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  byhz <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a <code>SoilProfileCollection</code> object</p></dd>
+
+
 <dt>fm</dt>
 <dd><p>optional <code>formula</code> describing top depths and horizon level attributes to include: <code>integer.vector ~ var1 + var2 + var3</code> or <code>integer.vector ~ .</code> to include all horizon level attributes. When <code>NULL</code> profiles are "diced" to depth and results will include all horizon level attributes.</p></dd>
+
+
 <dt>SPC</dt>
 <dd><p>return the diced <code>SoilPrfolileCollection</code>, if <code>FALSE</code> a <code>data.frame</code> of horizon-level attributes</p></dd>
+
+
 <dt>pctMissing</dt>
 <dd><p>compute "percent missing data" by slice (when <code>TRUE</code> expect 6-8x longer run time)</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in <code>fm</code>. Automatically set to <code>TRUE</code> when <code>fm</code> is specified. Backwards compatibility with <code>slice</code> is maintained by setting <code>fill = TRUE</code> with or without <code>fm</code>.</p></dd>
+
+
 <dt>strict</dt>
 <dd><p>perform horizon depth logic checking / flagging / removal</p></dd>
+
+
 <dt>byhz</dt>
 <dd><p>Evaluate horizon depth logic at the horizon level (<code>TRUE</code>) or profile level (<code>FALSE</code>). Invalid depth logic invokes <code>HzDepthLogicSubset</code> which removes offending profiles or horizon records.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>SoilProfileCollection</code> object, or <code>data.frame</code> when <code>SPC = FALSE</code></p>
+    
+
+<p>a <code>SoilProfileCollection</code> object, or <code>data.frame</code> when <code>SPC = FALSE</code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -116,7 +133,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

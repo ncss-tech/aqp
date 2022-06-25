@@ -63,66 +63,73 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for SoilProfileCollection</span>
-<span class="fu">unique</span><span class="op">(</span><span class="va">x</span>, <span class="va">vars</span>, SPC <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SoilProfileCollection</span></span>
+<span><span class="fu">unique</span><span class="op">(</span><span class="va">x</span>, <span class="va">vars</span>, SPC <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a <code>SoilProfileCollection</code></p></dd>
+
+
 <dt>vars</dt>
 <dd><p>Variables to consider in uniqueness.</p></dd>
+
+
 <dt>SPC</dt>
 <dd><p>logical return a <code>SoilProfileCollection</code> when <code>TRUE</code>, otherwise vector of profile indices</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>SoilProfileCollection</code> when <code>SPC = TRUE</code>, otherwise a vector of integers</p>
+    
+
+<p><code>SoilProfileCollection</code> when <code>SPC = TRUE</code>, otherwise a vector of integers</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in">  <span class="co"># an example soil profile</span></span>
-<span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">    id <span class="op">=</span> <span class="st">'A'</span>,</span>
-<span class="r-in">    name <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'E'</span>, <span class="st">'Bhs'</span>, <span class="st">'Bt1'</span>, <span class="st">'Bt2'</span>, <span class="st">'BC'</span>, <span class="st">'C'</span><span class="op">)</span>,</span>
-<span class="r-in">    top <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
-<span class="r-in">    bottom <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">125</span><span class="op">)</span>,</span>
-<span class="r-in">    z <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># init SPC</span></span>
-<span class="r-in">  <span class="fu">depths</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># horizon depth variability for simulation</span></span>
-<span class="r-in">  <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">.sd</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># duplicate several times</span></span>
-<span class="r-in">  <span class="va">x.dupes</span> <span class="op">&lt;-</span> <span class="fu"><a href="duplicate.html">duplicate</a></span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># simulate some new profiles based on example</span></span>
-<span class="r-in">  <span class="va">x.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="perturb.html">perturb</a></span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">5</span>, thickness.attr <span class="op">=</span> <span class="st">'.sd'</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># graphical check</span></span>
-<span class="r-in">  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x.dupes</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># an example soil profile</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">'A'</span>,</span></span>
+<span class="r-in"><span>    name <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'E'</span>, <span class="st">'Bhs'</span>, <span class="st">'Bt1'</span>, <span class="st">'Bt2'</span>, <span class="st">'BC'</span>, <span class="st">'C'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    top <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    bottom <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">125</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    z <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># init SPC</span></span></span>
+<span class="r-in"><span>  <span class="fu">depths</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># horizon depth variability for simulation</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">.sd</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># duplicate several times</span></span></span>
+<span class="r-in"><span>  <span class="va">x.dupes</span> <span class="op">&lt;-</span> <span class="fu"><a href="duplicate.html">duplicate</a></span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># simulate some new profiles based on example</span></span></span>
+<span class="r-in"><span>  <span class="va">x.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="perturb.html">perturb</a></span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">5</span>, thickness.attr <span class="op">=</span> <span class="st">'.sd'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># graphical check</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x.dupes</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="unique-1.png" alt="" width="768" height="475"></span>
-<span class="r-in">  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x.sim</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x.sim</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="unique-2.png" alt="" width="768" height="475"></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># inspect unique results</span></span>
-<span class="r-in">  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">x.dupes</span>, vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># inspect unique results</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">x.dupes</span>, vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="unique-3.png" alt="" width="768" height="475"></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># uniqueness is a function of variable selection</span></span>
-<span class="r-in">  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># uniqueness is a function of variable selection</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="unique-4.png" alt="" width="768" height="475"></span>
-<span class="r-in">  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'name'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">x.sim</span>, vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'name'</span><span class="op">)</span><span class="op">)</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="unique-5.png" alt="" width="768" height="475"></span>
-<span class="r-in">  </span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -137,7 +144,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,19 +63,27 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>m1</dt>
 <dd><p>vector of Munsell colors ('10YR 3/3')</p></dd>
+
+
 <dt>m2</dt>
 <dd><p>vector of Munsell colors ('10YR 3/6')</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with the following columns:</p><ul><li><p>m1: Munsell color 1</p></li>
+    
+
+<p>A <code>data.frame</code> with the following columns:</p>
+
+
+<ul><li><p>m1: Munsell color 1</p></li>
 <li><p>m2: Munsell color 2</p></li>
 <li><p>dH: delta-hue, as computed by <code>huePosition</code></p></li>
 <li><p>dV: delta-value, absolute value of difference in Munsell value (m1 vs. m2)</p></li>
@@ -109,55 +117,55 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># two sets of colors to compare</span></span>
-<span class="r-in"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'7.5YR 3/4'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># contrast metrics</span></span>
-<span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># two sets of colors to compare</span></span></span>
+<span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'7.5YR 3/4'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrast metrics</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.313572 Prominent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.647979     Faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.265955  Distinct</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># adjacent chips</span></span>
-<span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'10YR 3/4'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># adjacent chips</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'10YR 3/4'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1       m2 dH dV dC     dE00    cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 10YR 3/4  0  0  1 3.125407 Faint</span>
-<span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'7.5YR 3/3'</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'7.5YR 3/3'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1        m2 dH dV dC     dE00    cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 7.5YR 3/3  1  0  0 3.320583 Faint</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># highly contrasting colors</span></span>
-<span class="r-in"><span class="co"># http://colour.granjow.net/fabercastell-polychromos.html</span></span>
-<span class="r-in"><span class="fu"><a href="colorContrastPlot.html">colorContrastPlot</a></span><span class="op">(</span><span class="st">'10B 4/13'</span>, <span class="st">'10YR 10/15'</span>,</span>
-<span class="r-in">labels <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'helioblue-reddish'</span>, <span class="st">'light cadmium yellow'</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># highly contrasting colors</span></span></span>
+<span class="r-in"><span><span class="co"># http://colour.granjow.net/fabercastell-polychromos.html</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="colorContrastPlot.html">colorContrastPlot</a></span><span class="op">(</span><span class="st">'10B 4/13'</span>, <span class="st">'10YR 10/15'</span>,</span></span>
+<span class="r-in"><span>labels <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'helioblue-reddish'</span>, <span class="st">'light cadmium yellow'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="colorContrast-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## Note: neutral hues aren't defined in TN2</span></span>
-<span class="r-in"><span class="co"># approximation / extension of the concept</span></span>
-<span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'N 3/'</span>, m2 <span class="op">=</span> <span class="st">'N 6/'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Note: neutral hues aren't defined in TN2</span></span></span>
+<span class="r-in"><span><span class="co"># approximation / extension of the concept</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'N 3/'</span>, m2 <span class="op">=</span> <span class="st">'N 6/'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     m1   m2 dH dV dC     dE00       cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 N 3/ N 6/  0  3  0 17.20472 Distinct</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#</span></span>
-<span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'10YR 3/3'</span>, m2 <span class="op">=</span> <span class="st">'N 3/'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'10YR 3/3'</span>, m2 <span class="op">=</span> <span class="st">'N 3/'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1   m2 dH dV dC     dE00        cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 N 3/  1  0  3 22.02127 Prominent</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'N 3/'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'N 3/'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.313572 Prominent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.647979     Faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4      N 3/ 7.5YR 6/3  1  3  3 47.657510 Prominent</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -172,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

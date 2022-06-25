@@ -63,106 +63,127 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">colorChart</span><span class="op">(</span>
-  <span class="va">m</span>,
-  g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="st">"All"</span><span class="op">)</span>,
-  size <span class="op">=</span> <span class="cn">TRUE</span>,
-  annotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  chip.cex <span class="op">=</span> <span class="fl">3</span>,
-  chip.cex.min <span class="op">=</span> <span class="fl">0.1</span>,
-  chip.cex.max <span class="op">=</span> <span class="fl">1.5</span>,
-  chip.border.col <span class="op">=</span> <span class="st">"black"</span>,
-  annotate.cex <span class="op">=</span> <span class="va">chip.cex</span> <span class="op">*</span> <span class="fl">0.25</span>,
-  annotate.type <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"percentage"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colorChart</span><span class="op">(</span></span>
+<span>  <span class="va">m</span>,</span>
+<span>  g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="st">"All"</span><span class="op">)</span>,</span>
+<span>  size <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  annotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  chip.cex <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  chip.cex.min <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  chip.cex.max <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  chip.border.col <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  annotate.cex <span class="op">=</span> <span class="va">chip.cex</span> <span class="op">*</span> <span class="fl">0.25</span>,</span>
+<span>  annotate.type <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"percentage"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>m</dt>
 <dd><p>character vector of color in Munsell notation ('10YR 4/6')</p></dd>
+
+
 <dt>g</dt>
 <dd><p>factor describing group membership, typically a generalization of horizon designation, default value will generate a fake grouping that covers all of the colors in <code>m</code></p></dd>
+
+
 <dt>size</dt>
 <dd><p>logical, encode group-wise frequency with chip size</p></dd>
+
+
 <dt>annotate</dt>
 <dd><p>logical, annotate color chip frequency</p></dd>
+
+
 <dt>chip.cex</dt>
 <dd><p>scaling factor applied to each color chip</p></dd>
+
+
 <dt>chip.cex.min</dt>
 <dd><p>lower limit for color chip frequency depiction</p></dd>
+
+
 <dt>chip.cex.max</dt>
 <dd><p>lower limit for color chip frequency depiction</p></dd>
+
+
 <dt>chip.border.col</dt>
 <dd><p>color for chip borders (outline)</p></dd>
+
+
 <dt>annotate.cex</dt>
 <dd><p>scaling factor for chip frequency annotation</p></dd>
+
+
 <dt>annotate.type</dt>
 <dd><p>character, within-group <code>count</code> or <code>percentage</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>trellis</code> object</p>
+    
+
+<p>a <code>trellis</code> object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># required for latticeExtra:useOuterStrips</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">'latticeExtra'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># two hue pages</span></span>
-<span class="r-in">  <span class="va">ric</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
-<span class="r-in">    hue <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span>,</span>
-<span class="r-in">    value <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">8</span>,</span>
-<span class="r-in">    chroma <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">8</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># combine hue, value, chroma into standard Munsell notation</span></span>
-<span class="r-in">  <span class="va">ric</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s %s/%s"</span>, <span class="va">ric</span><span class="op">$</span><span class="va">hue</span>, <span class="va">ric</span><span class="op">$</span><span class="va">value</span>, <span class="va">ric</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># note that chip frequency-based size is disabled </span></span>
-<span class="r-in">  <span class="co"># because all chips have equal frequency</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># annotation of frequency</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># bootstrap to larger size</span></span>
-<span class="r-in">  <span class="va">ric.big</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">ric</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># frequency can be encoded in size</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">5</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">     </span>
-<span class="r-in">  <span class="co"># constant size</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">3</span>, size <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">3</span>, size <span class="op">=</span> <span class="cn">FALSE</span>, chip.border.col <span class="op">=</span> <span class="st">'NA'</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># simulate colors based dE00 thresholding</span></span>
-<span class="r-in">  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 4/4'</span>, thresh <span class="op">=</span> <span class="fl">10</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># perform 500 simulations</span></span>
-<span class="r-in">  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulateColor.html">simulateColor</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">500</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># result is a list, use the first element</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">s</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, chip.cex <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># increase the possible range of color chip sizes</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">s</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, chip.cex.min <span class="op">=</span> <span class="fl">0.01</span>, chip.cex.max <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># slightly funky support for neutral hues</span></span>
-<span class="r-in">  <span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'N %s/'</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">N</span>, times <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, <span class="va">ric.big</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># note special panel used to show neutral hues</span></span>
-<span class="r-in">  <span class="fu">colorChart</span><span class="op">(</span><span class="va">cols</span>, size <span class="op">=</span> <span class="cn">FALSE</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># required for latticeExtra:useOuterStrips</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">'latticeExtra'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># two hue pages</span></span></span>
+<span class="r-in"><span>  <span class="va">ric</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    hue <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    value <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">8</span>,</span></span>
+<span class="r-in"><span>    chroma <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">8</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># combine hue, value, chroma into standard Munsell notation</span></span></span>
+<span class="r-in"><span>  <span class="va">ric</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s %s/%s"</span>, <span class="va">ric</span><span class="op">$</span><span class="va">hue</span>, <span class="va">ric</span><span class="op">$</span><span class="va">value</span>, <span class="va">ric</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># note that chip frequency-based size is disabled </span></span></span>
+<span class="r-in"><span>  <span class="co"># because all chips have equal frequency</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># annotation of frequency</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># bootstrap to larger size</span></span></span>
+<span class="r-in"><span>  <span class="va">ric.big</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">ric</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># frequency can be encoded in size</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">5</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     </span></span>
+<span class="r-in"><span>  <span class="co"># constant size</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">3</span>, size <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric.big</span>, chip.cex <span class="op">=</span> <span class="fl">3</span>, size <span class="op">=</span> <span class="cn">FALSE</span>, chip.border.col <span class="op">=</span> <span class="st">'NA'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># simulate colors based dE00 thresholding</span></span></span>
+<span class="r-in"><span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 4/4'</span>, thresh <span class="op">=</span> <span class="fl">10</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'7.5YR'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># perform 500 simulations</span></span></span>
+<span class="r-in"><span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulateColor.html">simulateColor</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'dE00'</span>, n <span class="op">=</span> <span class="fl">500</span>, parameters <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># result is a list, use the first element</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">s</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, chip.cex <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># increase the possible range of color chip sizes</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">s</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, chip.cex.min <span class="op">=</span> <span class="fl">0.01</span>, chip.cex.max <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># slightly funky support for neutral hues</span></span></span>
+<span class="r-in"><span>  <span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'N %s/'</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">N</span>, times <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, <span class="va">ric.big</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># note special panel used to show neutral hues</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">cols</span>, size <span class="op">=</span> <span class="cn">FALSE</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -177,7 +198,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

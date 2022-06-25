@@ -63,55 +63,82 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">textureTriangleSummary</span><span class="op">(</span>
-  <span class="va">ssc</span>,
-  p <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span>,
-  delta <span class="op">=</span> <span class="fl">1</span>,
-  rv.col <span class="op">=</span> <span class="st">"red"</span>,
-  range.border <span class="op">=</span> <span class="st">"black"</span>,
-  range.col <span class="op">=</span> <span class="st">"RoyalBlue"</span>,
-  range.alpha <span class="op">=</span> <span class="fl">80</span>,
-  range.lty <span class="op">=</span> <span class="fl">1</span>,
-  range.lwd <span class="op">=</span> <span class="fl">2</span>,
-  main <span class="op">=</span> <span class="st">"Soil Textures"</span>,
-  legend.cex <span class="op">=</span> <span class="fl">0.75</span>,
-  legend <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">textureTriangleSummary</span><span class="op">(</span></span>
+<span>  <span class="va">ssc</span>,</span>
+<span>  p <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span>,</span>
+<span>  delta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  rv.col <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>  range.border <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  range.col <span class="op">=</span> <span class="st">"RoyalBlue"</span>,</span>
+<span>  range.alpha <span class="op">=</span> <span class="fl">80</span>,</span>
+<span>  range.lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  range.lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Soil Textures"</span>,</span>
+<span>  legend.cex <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ssc</dt>
 <dd><p><code>data.frame</code> with columns: 'SAND', 'SILT', 'CLAY', values are percentages that should add to 100. No NA allowed.</p></dd>
+
+
 <dt>p</dt>
 <dd><p>vector of percentiles (length = 3) defining 'low', 'representative value', and 'high'</p></dd>
+
+
 <dt>delta</dt>
 <dd><p>grid size used to form low-high region</p></dd>
+
+
 <dt>rv.col</dt>
 <dd><p>color used for representative value (RV) symbol</p></dd>
+
+
 <dt>range.border</dt>
 <dd><p>color used for polygon border enclosing the low-high region</p></dd>
+
+
 <dt>range.col</dt>
 <dd><p>color used for polygon enclosing the low-high region</p></dd>
+
+
 <dt>range.alpha</dt>
 <dd><p>transparency of the low-high range polygon (0-255)</p></dd>
+
+
 <dt>range.lty</dt>
 <dd><p>line style for polygon enclosing the low-high region</p></dd>
+
+
 <dt>range.lwd</dt>
 <dd><p>line weight polygon enclosing the low-high region</p></dd>
+
+
 <dt>main</dt>
 <dd><p>plot title</p></dd>
+
+
 <dt>legend.cex</dt>
 <dd><p>scaling factor for legend</p></dd>
+
+
 <dt>legend</dt>
 <dd><p>logical, enable/disable automatic legend</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to <code><a href="https://rdrr.io/pkg/soiltexture/man/TT.points.html" class="external-link">soiltexture::TT.points</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an invisible <code>matrix</code> with marginal percentiles of sand, silt, and clay</p>
+    
+
+<p>an invisible <code>matrix</code> with marginal percentiles of sand, silt, and clay</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -124,51 +151,51 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"Hmisc"</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"compositions"</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"soiltexture"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># sample data</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'sp4'</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># subset rows / columns</span></span>
-<span class="r-in">  <span class="va">ssc</span> <span class="op">&lt;-</span> <span class="va">sp4</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'^Bt'</span>, <span class="va">sp4</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'sand'</span>, <span class="st">'silt'</span>, <span class="st">'clay'</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in">  <span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># make figure, marginal percentiles are silently returned</span></span>
-<span class="r-in">  <span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu">textureTriangleSummary</span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">ssc</span>, pch <span class="op">=</span> <span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span class="r-in">    range.alpha <span class="op">=</span> <span class="fl">50</span>, </span>
-<span class="r-in">    range.lwd <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, </span>
-<span class="r-in">    legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># check</span></span>
-<span class="r-in">  <span class="va">stats</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># simulate some data and try again</span></span>
-<span class="r-in">  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="bootstrapSoilTexture.html">bootstrapSoilTexture</a></span><span class="op">(</span><span class="va">ssc</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">$</span><span class="va">samples</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="co"># make the figure, ignore results</span></span>
-<span class="r-in">  <span class="fu">textureTriangleSummary</span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">s</span>, pch <span class="op">=</span> <span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span class="r-in">    range.alpha <span class="op">=</span> <span class="fl">50</span>, </span>
-<span class="r-in">    range.lwd <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, </span>
-<span class="r-in">    legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"Hmisc"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"compositions"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"soiltexture"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># sample data</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'sp4'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># subset rows / columns</span></span></span>
+<span class="r-in"><span>  <span class="va">ssc</span> <span class="op">&lt;-</span> <span class="va">sp4</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'^Bt'</span>, <span class="va">sp4</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'sand'</span>, <span class="st">'silt'</span>, <span class="st">'clay'</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># make figure, marginal percentiles are silently returned</span></span></span>
+<span class="r-in"><span>  <span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu">textureTriangleSummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">ssc</span>, pch <span class="op">=</span> <span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, </span></span>
+<span class="r-in"><span>    range.alpha <span class="op">=</span> <span class="fl">50</span>, </span></span>
+<span class="r-in"><span>    range.lwd <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>    legend <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># check</span></span></span>
+<span class="r-in"><span>  <span class="va">stats</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># simulate some data and try again</span></span></span>
+<span class="r-in"><span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="bootstrapSoilTexture.html">bootstrapSoilTexture</a></span><span class="op">(</span><span class="va">ssc</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">$</span><span class="va">samples</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># make the figure, ignore results</span></span></span>
+<span class="r-in"><span>  <span class="fu">textureTriangleSummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">s</span>, pch <span class="op">=</span> <span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, </span></span>
+<span class="r-in"><span>    range.alpha <span class="op">=</span> <span class="fl">50</span>, </span></span>
+<span class="r-in"><span>    range.lwd <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>    legend <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="textureTriangleSummary-1.png" alt="" width="768" height="475"></span>
 <span class="r-plt img"><img src="textureTriangleSummary-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -183,7 +210,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,31 +63,44 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">hzAbove</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, offset <span class="op">=</span> <span class="fl">1</span>, SPC <span class="op">=</span> <span class="cn">TRUE</span>, simplify <span class="op">=</span> <span class="va">SPC</span><span class="op">)</span>
-
-<span class="fu">hzBelow</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, offset <span class="op">=</span> <span class="fl">1</span>, SPC <span class="op">=</span> <span class="cn">TRUE</span>, simplify <span class="op">=</span> <span class="va">SPC</span><span class="op">)</span>
-
-<span class="fu">hzOffset</span><span class="op">(</span><span class="va">x</span>, <span class="va">hzid</span>, <span class="va">offset</span>, SPC <span class="op">=</span> <span class="cn">FALSE</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hzAbove</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, offset <span class="op">=</span> <span class="fl">1</span>, SPC <span class="op">=</span> <span class="cn">TRUE</span>, simplify <span class="op">=</span> <span class="va">SPC</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hzBelow</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, offset <span class="op">=</span> <span class="fl">1</span>, SPC <span class="op">=</span> <span class="cn">TRUE</span>, simplify <span class="op">=</span> <span class="va">SPC</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hzOffset</span><span class="op">(</span><span class="va">x</span>, <span class="va">hzid</span>, <span class="va">offset</span>, SPC <span class="op">=</span> <span class="cn">FALSE</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A SoilProfileCollection</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Comma-separated set of R expressions that evaluate as <code>TRUE</code> or <code>FALSE</code> in context of horizon data frame. Length for individual expressions matches number of horizons, in <code>x</code>.</p></dd>
+
+
 <dt>offset</dt>
 <dd><p>Integer offset in terms of SoilProfileCollection <code>[,j]</code> (horizon/slice) index</p></dd>
+
+
 <dt>SPC</dt>
 <dd><p>Return a SoilProfileCollection? Default <code>TRUE</code> for <code>horizon_*</code> methods.</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>If <code>TRUE</code> return a vector (all elements combined), or a list (1 element per profile). If <code>SPC</code> is <code>TRUE</code> then <code>simplify</code> is <code>TRUE</code>.</p></dd>
+
+
 <dt>hzid</dt>
 <dd><p>A vector of target horizon IDs. These are calculated from <code>...</code> for <code>horizon_*()</code> methods</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SoilProfileCollection (when <code>SPC = TRUE</code>) or a vector of horizon row indices (when <code>SPC = FALSE</code> and <code>simplify = TRUE</code>) or a list (when <code>SPC = FALSE</code> and <code>simplify = FALSE</code>))</p>
+    
+
+<p>A SoilProfileCollection (when <code>SPC = TRUE</code>) or a vector of horizon row indices (when <code>SPC = FALSE</code> and <code>simplify = TRUE</code>) or a list (when <code>SPC = FALSE</code> and <code>simplify = FALSE</code>))</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -96,17 +109,17 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get the horizon above the last horizon (j-index of bottom horizon minus 1)</span></span>
-<span class="r-in"><span class="fu">hzAbove</span><span class="op">(</span><span class="va">sp4</span>, <span class="fu"><a href="hzID.html">hzID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="getLastHorizonID.html">getLastHorizonID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get the horizon above the last horizon (j-index of bottom horizon minus 1)</span></span></span>
+<span class="r-in"><span><span class="fu">hzAbove</span><span class="op">(</span><span class="va">sp4</span>, <span class="fu"><a href="hzID.html">hzID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="getLastHorizonID.html">getLastHorizonID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in (function (classes, fdef, mtable) {    methods &lt;- .findInheritedMethods(classes, fdef, mtable)    if (length(methods) == 1L)         return(methods[[1L]])    else if (length(methods) == 0L) {        cnames &lt;- paste0("\"", vapply(classes, as.character,             ""), "\"", collapse = ", ")        stop(gettextf("unable to find an inherited method for function %s for signature %s",             sQuote(fdef@generic), sQuote(cnames)), domain = NA)    }    else stop("Internal error in finding inherited methods; didn't return a unique method",         domain = NA)})(list("data.frame"), new("standardGeneric", .Data = function (object) standardGeneric("hzID"), generic = structure("hzID", package = "aqp"),     package = "aqp", group = list(), valueClass = character(0),     signature = "object", default = NULL, skeleton = (function (object)     stop(gettextf("invalid call in method dispatch to '%s' (no default method)",         "hzID"), domain = NA))(object)), &lt;environment&gt;):</span> unable to find an inherited method for function ‘hzID’ for signature ‘"data.frame"’</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get horizons below the last horizon (none; j-index of bottom horizon plus 1)</span></span>
-<span class="r-in"><span class="fu">hzBelow</span><span class="op">(</span><span class="va">sp4</span>, <span class="fu"><a href="hzID.html">hzID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="getLastHorizonID.html">getLastHorizonID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get horizons below the last horizon (none; j-index of bottom horizon plus 1)</span></span></span>
+<span class="r-in"><span><span class="fu">hzBelow</span><span class="op">(</span><span class="va">sp4</span>, <span class="fu"><a href="hzID.html">hzID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="getLastHorizonID.html">getLastHorizonID</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in (function (classes, fdef, mtable) {    methods &lt;- .findInheritedMethods(classes, fdef, mtable)    if (length(methods) == 1L)         return(methods[[1L]])    else if (length(methods) == 0L) {        cnames &lt;- paste0("\"", vapply(classes, as.character,             ""), "\"", collapse = ", ")        stop(gettextf("unable to find an inherited method for function %s for signature %s",             sQuote(fdef@generic), sQuote(cnames)), domain = NA)    }    else stop("Internal error in finding inherited methods; didn't return a unique method",         domain = NA)})(list("data.frame"), new("standardGeneric", .Data = function (object) standardGeneric("hzID"), generic = structure("hzID", package = "aqp"),     package = "aqp", group = list(), valueClass = character(0),     signature = "object", default = NULL, skeleton = (function (object)     stop(gettextf("invalid call in method dispatch to '%s' (no default method)",         "hzID"), domain = NA))(object)), &lt;environment&gt;):</span> unable to find an inherited method for function ‘hzID’ for signature ‘"data.frame"’</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -121,7 +134,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

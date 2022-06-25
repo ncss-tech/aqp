@@ -63,19 +63,24 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">invertLabelColor</span><span class="op">(</span><span class="va">colors</span>, threshold <span class="op">=</span> <span class="fl">0.65</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">invertLabelColor</span><span class="op">(</span><span class="va">colors</span>, threshold <span class="op">=</span> <span class="fl">0.65</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>colors</dt>
 <dd><p>vector of colors</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>black | white threshold</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>vector of label colors</p>
+    
+
+<p>vector of label colors</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -84,20 +89,20 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># test with shades of grey</span></span>
-<span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="soilPalette.html">soilPalette</a></span><span class="op">(</span><span class="va">cols</span>, lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># test with shades of grey</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="soilPalette.html">soilPalette</a></span><span class="op">(</span><span class="va">cols</span>, lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="invertLabelColor-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># test with 10YR x/3</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'10YR %s/3'</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="soilPalette.html">soilPalette</a></span><span class="op">(</span><span class="va">cols</span>, lab <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># test with 10YR x/3</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'10YR %s/3'</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="soilPalette.html">soilPalette</a></span><span class="op">(</span><span class="va">cols</span>, lab <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="invertLabelColor-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -112,7 +117,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

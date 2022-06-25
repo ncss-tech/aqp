@@ -63,46 +63,67 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fixOverlap</span><span class="op">(</span>
-  <span class="va">x</span>,
-  thresh <span class="op">=</span> <span class="fl">0.6</span>,
-  adj <span class="op">=</span> <span class="va">thresh</span> <span class="op">*</span> <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>,
-  min.x <span class="op">=</span> <span class="fu"><a href="min.html">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">0.2</span>,
-  max.x <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.2</span>,
-  maxIter <span class="op">=</span> <span class="fl">1000</span>,
-  trace <span class="op">=</span> <span class="cn">FALSE</span>,
-  tiny <span class="op">=</span> <span class="fl">1e-04</span>,
-  T0 <span class="op">=</span> <span class="fl">500</span>,
-  k <span class="op">=</span> <span class="fl">10</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fixOverlap</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  thresh <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  adj <span class="op">=</span> <span class="va">thresh</span> <span class="op">*</span> <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>,</span>
+<span>  min.x <span class="op">=</span> <span class="fu"><a href="min.html">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">0.2</span>,</span>
+<span>  max.x <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.2</span>,</span>
+<span>  maxIter <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  trace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tiny <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  T0 <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>vector of horizontal positions</p></dd>
+
+
 <dt>thresh</dt>
 <dd><p>horizontal threshold defining "overlap" or distance between elements of <code>x</code>. For adjusting soil profile sketches values are typically &lt; 1 and likely in (0.3, 0.8).</p></dd>
+
+
 <dt>adj</dt>
 <dd><p>specifies the size of perturbations within <code>runif(min = adj * -1, max = adj)</code>. Larger values will sometimes reduce the number of iterations required to solve particularly difficult overlap conditions. See <code>coolingRate</code> argument when <code>adj</code> is large</p></dd>
+
+
 <dt>min.x</dt>
 <dd><p>left-side boundary condition, consider expanding if a solution cannot be found within <code>maxIter</code>.</p></dd>
+
+
 <dt>max.x</dt>
 <dd><p>right-side boundary condition, consider expanding if a solution cannot be found within <code>maxIter</code>.</p></dd>
+
+
 <dt>maxIter</dt>
 <dd><p>maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence</p></dd>
+
+
 <dt>trace</dt>
 <dd><p>print diagnostics, result is a <code>list</code> vs <code>vector</code></p></dd>
+
+
 <dt>tiny</dt>
 <dd><p>the smallest allowable overlap</p></dd>
+
+
 <dt>T0</dt>
 <dd><p>starting temperature</p></dd>
+
+
 <dt>k</dt>
 <dd><p>cooling constant</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>When <code>trace = FALSE</code>, a vector of the same length as <code>x</code>, preserving rank-ordering and boundary conditions. When <code>trace = TRUE</code> a list containing the new sequence along with information about objective functions and decisions made during iteration.</p>
+    
+
+<p>When <code>trace = FALSE</code>, a vector of the same length as <code>x</code>, preserving rank-ordering and boundary conditions. When <code>trace = TRUE</code> a list containing the new sequence along with information about objective functions and decisions made during iteration.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -118,70 +139,70 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3.4</span>, <span class="fl">3.5</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># easy</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.2</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3.4</span>, <span class="fl">3.5</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># easy</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.2</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 9 iterations</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># harder</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.6</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># harder</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.6</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 21 iterations</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># much harder</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.9</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># much harder</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.9</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 440 iterations</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># interpret `trace` output</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># relatively challenging</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3.4</span>, <span class="fl">3.4</span>, <span class="fl">3.4</span>, <span class="fl">3.4</span>, <span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">12</span>, <span class="fl">13</span>, <span class="fl">13</span>, <span class="fl">15</span>, <span class="fl">15.5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># fix overlap, return debugging information</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.8</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># interpret `trace` output</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># relatively challenging</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3.4</span>, <span class="fl">3.4</span>, <span class="fl">3.4</span>, <span class="fl">3.4</span>, <span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">12</span>, <span class="fl">13</span>, <span class="fl">13</span>, <span class="fl">15</span>, <span class="fl">15.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># fix overlap, return debugging information</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">fixOverlap</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.8</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duplicates in `x`, applying jitter</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 237 iterations</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># setup plot device</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, widths <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># objective function = overlap + SSD</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">stats</span>, </span>
-<span class="r-in">  type <span class="op">=</span> <span class="st">'h'</span>, las <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'Overlap'</span>,</span>
-<span class="r-in">  cex.axis <span class="op">=</span> <span class="fl">0.8</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># SSD: deviation from original configuration </span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">ssd</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">ssd</span>, </span>
-<span class="r-in">  type <span class="op">=</span> <span class="st">'h'</span>, las <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'Deviation'</span>,</span>
-<span class="r-in">  cex.axis <span class="op">=</span> <span class="fl">0.8</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># adjustments at each iteration</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">z</span><span class="op">$</span><span class="va">states</span>, type <span class="op">=</span> <span class="st">'l'</span>, </span>
-<span class="r-in">  lty <span class="op">=</span> <span class="fl">1</span>, las <span class="op">=</span> <span class="fl">1</span>, </span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'x-position'</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># setup plot device</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, widths <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># objective function = overlap + SSD</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">stats</span>, </span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">'h'</span>, las <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'Overlap'</span>,</span></span>
+<span class="r-in"><span>  cex.axis <span class="op">=</span> <span class="fl">0.8</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># SSD: deviation from original configuration </span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">ssd</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">ssd</span>, </span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">'h'</span>, las <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'Deviation'</span>,</span></span>
+<span class="r-in"><span>  cex.axis <span class="op">=</span> <span class="fl">0.8</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># adjustments at each iteration</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">z</span><span class="op">$</span><span class="va">states</span>, type <span class="op">=</span> <span class="st">'l'</span>, </span></span>
+<span class="r-in"><span>  lty <span class="op">=</span> <span class="fl">1</span>, las <span class="op">=</span> <span class="fl">1</span>, </span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'x-position'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="fixOverlap-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># trace log</span></span>
-<span class="r-in"><span class="co"># B: boundary condition violation</span></span>
-<span class="r-in"><span class="co"># O: rank (order) violation</span></span>
-<span class="r-in"><span class="co"># +: accepted perturbation</span></span>
-<span class="r-in"><span class="co"># -: rejected perturbation</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">log</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># trace log</span></span></span>
+<span class="r-in"><span><span class="co"># B: boundary condition violation</span></span></span>
+<span class="r-in"><span><span class="co"># O: rank (order) violation</span></span></span>
+<span class="r-in"><span><span class="co"># +: accepted perturbation</span></span></span>
+<span class="r-in"><span><span class="co"># -: rejected perturbation</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">log</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   B   O   +   - </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  41 114  78   3 </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -196,7 +217,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -67,38 +67,38 @@ grain size composition to the family particle size class.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="cn">NULL</span>, clay <span class="op">=</span> <span class="cn">NULL</span>, sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">ssc_to_texcl</span><span class="op">(</span>sand <span class="op">=</span> <span class="cn">NULL</span>, clay <span class="op">=</span> <span class="cn">NULL</span>, as.is <span class="op">=</span> <span class="cn">FALSE</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">texmod_to_fragvoltot</span><span class="op">(</span>texmod <span class="op">=</span> <span class="cn">NULL</span>, lieutex <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">texture_to_taxpartsize</span><span class="op">(</span>
-  texcl <span class="op">=</span> <span class="cn">NULL</span>,
-  clay <span class="op">=</span> <span class="cn">NULL</span>,
-  sand <span class="op">=</span> <span class="cn">NULL</span>,
-  fragvoltot <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">texture</span>, duplicates <span class="op">=</span> <span class="st">"combine"</span><span class="op">)</span>
-
-<span class="fu">fragvol_to_texmod</span><span class="op">(</span>
-  object <span class="op">=</span> <span class="cn">NULL</span>,
-  gravel <span class="op">=</span> <span class="cn">NULL</span>,
-  cobbles <span class="op">=</span> <span class="cn">NULL</span>,
-  stones <span class="op">=</span> <span class="cn">NULL</span>,
-  boulders <span class="op">=</span> <span class="cn">NULL</span>,
-  channers <span class="op">=</span> <span class="cn">NULL</span>,
-  flagstones <span class="op">=</span> <span class="cn">NULL</span>,
-  paragravel <span class="op">=</span> <span class="cn">NULL</span>,
-  paracobbles <span class="op">=</span> <span class="cn">NULL</span>,
-  parastones <span class="op">=</span> <span class="cn">NULL</span>,
-  paraboulders <span class="op">=</span> <span class="cn">NULL</span>,
-  parachanners <span class="op">=</span> <span class="cn">NULL</span>,
-  paraflagstones <span class="op">=</span> <span class="cn">NULL</span>,
-  as.is <span class="op">=</span> <span class="cn">TRUE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="cn">NULL</span>, clay <span class="op">=</span> <span class="cn">NULL</span>, sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ssc_to_texcl</span><span class="op">(</span>sand <span class="op">=</span> <span class="cn">NULL</span>, clay <span class="op">=</span> <span class="cn">NULL</span>, as.is <span class="op">=</span> <span class="cn">FALSE</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">texmod_to_fragvoltot</span><span class="op">(</span>texmod <span class="op">=</span> <span class="cn">NULL</span>, lieutex <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">texture_to_taxpartsize</span><span class="op">(</span></span>
+<span>  texcl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clay <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sand <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fragvoltot <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">texture</span>, duplicates <span class="op">=</span> <span class="st">"combine"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">fragvol_to_texmod</span><span class="op">(</span></span>
+<span>  object <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gravel <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cobbles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stones <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  boulders <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  channers <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  flagstones <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  paragravel <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  paracobbles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parastones <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  paraboulders <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parachanners <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  paraflagstones <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  as.is <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -106,65 +106,114 @@ grain size composition to the family particle size class.</p>
     <dl><dt>texcl</dt>
 <dd><p>vector of texture classes than conform to the USDA code
 conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)</p></dd>
+
+
 <dt>clay</dt>
 <dd><p>vector of clay percentages</p></dd>
+
+
 <dt>sample</dt>
 <dd><p>logical: should ssc be random sampled from the lookup table?
 (default: FALSE)</p></dd>
+
+
 <dt>sand</dt>
 <dd><p>vector of sand percentages</p></dd>
+
+
 <dt>as.is</dt>
 <dd><p>logical: should character vectors be converted to factors?
 (default: TRUE)</p></dd>
+
+
 <dt>droplevels</dt>
 <dd><p>logical: indicating whether to drop unused levels in
 factors. This is useful when the results have a large number of unused
 classes, which can waste space in tables and figures.</p></dd>
+
+
 <dt>texmod</dt>
 <dd><p>vector of textural modifiers that conform to the USDA code
 conventions (e.g. gr|GR, grv|GRV)</p></dd>
+
+
 <dt>lieutex</dt>
 <dd><p>vector of in lieu of texture terms that conform to the USDA
 code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 are &gt; 90 percent by volume (default: NULL))</p></dd>
+
+
 <dt>fragvoltot</dt>
 <dd><p>vector of total rock fragment percentages</p></dd>
+
+
 <dt>texture</dt>
 <dd><p>vector of combinations of texcl, texmod, and lieutex (e.g. CL, GR-CL, CBV-S, GR)</p></dd>
+
+
 <dt>duplicates</dt>
 <dd><p>character: specifying how multiple values should be handled, options are <code>"combined"</code> (e.g. 'GR &amp; GRV) or <code>"max"</code>(e.g. 'GRV')</p></dd>
+
+
 <dt>object</dt>
 <dd><p>data.frame: containing the following column names: gravel, cobbles,
 stones, boulders, channers, flagstones, paragravel, paracobbles, parastones,
 paraboulders, parachanners, paraflagstones</p></dd>
+
+
 <dt>gravel</dt>
 <dd><p>numeric: gravel volume %</p></dd>
+
+
 <dt>cobbles</dt>
 <dd><p>numeric: cobble volume %</p></dd>
+
+
 <dt>stones</dt>
 <dd><p>numeric: stone volume %</p></dd>
+
+
 <dt>boulders</dt>
 <dd><p>numeric: boulder volume %</p></dd>
+
+
 <dt>channers</dt>
 <dd><p>numeric: channer volume %</p></dd>
+
+
 <dt>flagstones</dt>
 <dd><p>numeric: flagstone volume %</p></dd>
+
+
 <dt>paragravel</dt>
 <dd><p>numeric: para gravel volume %</p></dd>
+
+
 <dt>paracobbles</dt>
 <dd><p>numeric: para cobble volume %</p></dd>
+
+
 <dt>parastones</dt>
 <dd><p>numeric: para stone volume %</p></dd>
+
+
 <dt>paraboulders</dt>
 <dd><p>numeric: para boulder volume %</p></dd>
+
+
 <dt>parachanners</dt>
 <dd><p>numeric: para channer volume %</p></dd>
+
+
 <dt>paraflagstones</dt>
 <dd><p>numeric: para flagstone volume %</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <ul><li><p><code>texcl_to_ssc</code>: A <code>data.frame</code> containing columns <code>"sand"</code>,<code>"silt"</code>, <code>"clay"</code></p></li>
+    
+
+<ul><li><p><code>texcl_to_ssc</code>: A <code>data.frame</code> containing columns <code>"sand"</code>,<code>"silt"</code>, <code>"clay"</code></p></li>
 </ul><ul><li><p><code>ssc_to_texcl</code>: A <code>character</code> vector containing texture class</p></li>
 </ul><ul><li><p><code>texmod_to_fragvoltot</code>: A <code>data.frame</code> containing columns <code>"fragvoltot_l"</code>,
 <code>"fragvoltot_r"</code>, <code>"fragvoltot_h"</code>, <code>"fragvoltot_l_nopf"</code>, <code>"fragvoltot_r_nopf"</code>, <code>"fragvoltot_h_nopf"</code></p></li>
@@ -222,12 +271,12 @@ it should be subtracted from the sand, and added to the silt content.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># example of ssc_to_texcl()</span></span>
-<span class="r-in"><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>sand <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span>, clay <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">tex</span>, <span class="op">(</span><span class="va">sand</span> <span class="op">+</span> <span class="va">clay</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">101</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tex</span><span class="op">$</span><span class="va">texcl</span> <span class="op">&lt;-</span> <span class="fu">ssc_to_texcl</span><span class="op">(</span>sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span>, clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># example of ssc_to_texcl()</span></span></span>
+<span class="r-in"><span><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>sand <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span>, clay <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">tex</span>, <span class="op">(</span><span class="va">sand</span> <span class="op">+</span> <span class="va">clay</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">101</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tex</span><span class="op">$</span><span class="va">texcl</span> <span class="op">&lt;-</span> <span class="fu">ssc_to_texcl</span><span class="op">(</span>sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span>, clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sand clay texcl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    0    0    si</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    1    0    si</span>
@@ -235,14 +284,14 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    3    0    si</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5    4    0    si</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6    5    0    si</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of texcl_to_ssc(texcl)</span></span>
-<span class="r-in"><span class="va">texcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"cos"</span>, <span class="st">"s"</span>, <span class="st">"fs"</span>, <span class="st">"vfs"</span>, <span class="st">"lcos"</span>, <span class="st">"ls"</span>,</span>
-<span class="r-in">          <span class="st">"lfs"</span>, <span class="st">"lvfs"</span>, <span class="st">"cosl"</span>, <span class="st">"sl"</span>, <span class="st">"fsl"</span>, <span class="st">"vfsl"</span>, <span class="st">"l"</span>,</span>
-<span class="r-in">          <span class="st">"sil"</span>, <span class="st">"si"</span>, <span class="st">"scl"</span>, <span class="st">"cl"</span>, <span class="st">"sicl"</span>, <span class="st">"sc"</span>, <span class="st">"sic"</span>, <span class="st">"c"</span></span>
-<span class="r-in">          <span class="op">)</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">texcl_to_ssc</span><span class="op">(</span><span class="va">texcl</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="va">test</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of texcl_to_ssc(texcl)</span></span></span>
+<span class="r-in"><span><span class="va">texcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"cos"</span>, <span class="st">"s"</span>, <span class="st">"fs"</span>, <span class="st">"vfs"</span>, <span class="st">"lcos"</span>, <span class="st">"ls"</span>,</span></span>
+<span class="r-in"><span>          <span class="st">"lfs"</span>, <span class="st">"lvfs"</span>, <span class="st">"cosl"</span>, <span class="st">"sl"</span>, <span class="st">"fsl"</span>, <span class="st">"vfsl"</span>, <span class="st">"l"</span>,</span></span>
+<span class="r-in"><span>          <span class="st">"sil"</span>, <span class="st">"si"</span>, <span class="st">"scl"</span>, <span class="st">"cl"</span>, <span class="st">"sicl"</span>, <span class="st">"sc"</span>, <span class="st">"sic"</span>, <span class="st">"c"</span></span></span>
+<span class="r-in"><span>          <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">texcl_to_ssc</span><span class="op">(</span><span class="va">texcl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="va">test</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    texcl sand silt clay</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    cos   92    5    3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      s   92    5    3</span>
@@ -254,15 +303,15 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8   lvfs   82   12    6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9   cosl   65   25   10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10    sl   65   25   10</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of texcl_to_ssc(texcl, clay)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">soiltexture</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">st</span> <span class="op">&lt;-</span> <span class="va">soiltexture</span><span class="op">$</span><span class="va">values</span></span>
-<span class="r-in"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">st</span><span class="op">$</span><span class="va">texcl</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">st</span> <span class="op">&lt;-</span> <span class="va">st</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="va">ssc</span> <span class="op">&lt;-</span> <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span>, clay <span class="op">=</span> <span class="va">ssc</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of texcl_to_ssc(texcl, clay)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">soiltexture</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">st</span> <span class="op">&lt;-</span> <span class="va">soiltexture</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">st</span><span class="op">$</span><span class="va">texcl</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">st</span> <span class="op">&lt;-</span> <span class="va">st</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">ssc</span> <span class="op">&lt;-</span> <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span>, clay <span class="op">=</span> <span class="va">ssc</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      texcl clay</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,] "ls"  "6" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,] "sil" "13"</span>
@@ -270,11 +319,11 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,] "s"   "3" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5,] "sl"  "10"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6,] "sl"  "10"</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of texmod_to_fragvoltol</span></span>
-<span class="r-in"><span class="va">frags</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"gr"</span>, <span class="st">"grv"</span>, <span class="st">"grx"</span>, <span class="st">"pgr"</span>, <span class="st">"pgrv"</span>, <span class="st">"pgrx"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">texmod_to_fragvoltot</span><span class="op">(</span><span class="va">frags</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of texmod_to_fragvoltol</span></span></span>
+<span class="r-in"><span><span class="va">frags</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"gr"</span>, <span class="st">"grv"</span>, <span class="st">"grx"</span>, <span class="st">"pgr"</span>, <span class="st">"pgrv"</span>, <span class="st">"pgrx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">texmod_to_fragvoltot</span><span class="op">(</span><span class="va">frags</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   fragvoltot_l fragvoltot_r fragvoltot_h fragvoltot_h_nopf fragvoltot_r_nopf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           15           25           34                34                25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           35           48           59                59                48</span>
@@ -289,51 +338,51 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4                 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5                 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6                 0</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of texture_to_taxpartsize()</span></span>
-<span class="r-in"><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>texcl <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"cl"</span>, <span class="st">"l"</span>, <span class="st">"ls"</span>, <span class="st">"s"</span><span class="op">)</span>,</span>
-<span class="r-in">                  clay  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">55</span>, <span class="fl">33</span>, <span class="fl">18</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">                  sand  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">33</span>, <span class="fl">42</span>, <span class="fl">82</span>, <span class="fl">93</span><span class="op">)</span>,</span>
-<span class="r-in">                  fragvoltot <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">15</span>, <span class="fl">34</span>, <span class="fl">60</span>, <span class="fl">91</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tex</span><span class="op">$</span><span class="va">fpsc</span> <span class="op">&lt;-</span> <span class="fu">texture_to_taxpartsize</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">texcl</span>,</span>
-<span class="r-in">                                   clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span>,</span>
-<span class="r-in">                                   sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span>,</span>
-<span class="r-in">                                   fragvoltot <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">fragvoltot</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of texture_to_taxpartsize()</span></span></span>
+<span class="r-in"><span><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>texcl <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"cl"</span>, <span class="st">"l"</span>, <span class="st">"ls"</span>, <span class="st">"s"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  clay  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">55</span>, <span class="fl">33</span>, <span class="fl">18</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  sand  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">33</span>, <span class="fl">42</span>, <span class="fl">82</span>, <span class="fl">93</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  fragvoltot <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">15</span>, <span class="fl">34</span>, <span class="fl">60</span>, <span class="fl">91</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tex</span><span class="op">$</span><span class="va">fpsc</span> <span class="op">&lt;-</span> <span class="fu">texture_to_taxpartsize</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">texcl</span>,</span></span>
+<span class="r-in"><span>                                   clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span>,</span></span>
+<span class="r-in"><span>                                   sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span>,</span></span>
+<span class="r-in"><span>                                   fragvoltot <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">fragvoltot</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   texcl clay sand fragvoltot            fpsc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     c   55   20         35 clayey-skeletal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    cl   33   33         15      fine-loamy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     l   18   42         34      fine-loamy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    ls    6   82         60  loamy-skeletal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     s    3   93         91      fragmental</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of texture_to_taxpartsize() with carbonate clay and very fine sand</span></span>
-<span class="r-in"><span class="va">carbclay</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">vfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">st</span><span class="op">$</span><span class="va">fpsc</span> <span class="op">&lt;-</span> <span class="fu">texture_to_taxpartsize</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">texcl</span>,</span>
-<span class="r-in">                                  clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span> <span class="op">-</span> <span class="va">carbclay</span>,</span>
-<span class="r-in">                                  sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span> <span class="op">-</span> <span class="va">vfs</span>,</span>
-<span class="r-in">                                  fragvoltot <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">fragvoltot</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of texture_to_taxpartsize() with carbonate clay and very fine sand</span></span></span>
+<span class="r-in"><span><span class="va">carbclay</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">vfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">st</span><span class="op">$</span><span class="va">fpsc</span> <span class="op">&lt;-</span> <span class="fu">texture_to_taxpartsize</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">texcl</span>,</span></span>
+<span class="r-in"><span>                                  clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span> <span class="op">-</span> <span class="va">carbclay</span>,</span></span>
+<span class="r-in"><span>                                  sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span> <span class="op">-</span> <span class="va">vfs</span>,</span></span>
+<span class="r-in"><span>                                  fragvoltot <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">fragvoltot</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>some of the texcl records don't match the calculated texcl via ssc_to_texcl()</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   texcl clay sand fragvoltot            fpsc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     c   55   20         35 clayey-skeletal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    cl   33   33         15      fine-loamy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     l   18   42         34      fine-loamy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    ls    6   82         60  loamy-skeletal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     s    3   93         91      fragmental</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of sample = TRUE</span></span>
-<span class="r-in"><span class="va">texcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"cl"</span>, <span class="st">"sil"</span>, <span class="st">"sl"</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ssc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">texcl</span>, sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ssc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">texcl</span>, sample <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ssc1</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
-<span class="r-in"><span class="va">ssc2</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="va">ssc</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">ssc1</span>, <span class="va">ssc2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">clay</span> <span class="op">~</span> <span class="va">sample</span> <span class="op">+</span> <span class="va">texcl</span>, data <span class="op">=</span> <span class="va">ssc</span>, <span class="va">summary</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of sample = TRUE</span></span></span>
+<span class="r-in"><span><span class="va">texcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"cl"</span>, <span class="st">"sil"</span>, <span class="st">"sl"</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ssc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">texcl</span>, sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ssc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">texcl</span>, sample <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ssc1</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="va">ssc2</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="va">ssc</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">ssc1</span>, <span class="va">ssc2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">clay</span> <span class="op">~</span> <span class="va">sample</span> <span class="op">+</span> <span class="va">texcl</span>, data <span class="op">=</span> <span class="va">ssc</span>, <span class="va">summary</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample texcl clay.Min. clay.1st Qu. clay.Median clay.Mean clay.3rd Qu.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  FALSE    cl     33.00        33.00       33.00     33.00        33.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   TRUE    cl     27.00        29.25       32.50     32.20        35.75</span>
@@ -348,42 +397,42 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4     23.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     10.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6     19.00</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># example of texture_to_texmod()</span></span>
-<span class="r-in"><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"SL"</span>, <span class="st">"GR-SL"</span>, <span class="st">"CBV-L"</span>, <span class="st">"SR- GR-FS GRX-COS"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># example of texture_to_texmod()</span></span></span>
+<span class="r-in"><span><span class="va">tex</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"SL"</span>, <span class="st">"GR-SL"</span>, <span class="st">"CBV-L"</span>, <span class="st">"SR- GR-FS GRX-COS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA         "gr"       "cbv"      "gr &amp; grx"</span>
-<span class="r-in"><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">tex</span>, duplicates <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">texture_to_texmod</span><span class="op">(</span><span class="va">tex</span>, duplicates <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA    "gr"  "cbv" "grx"</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># example of fragvol_to_texmod()</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
-<span class="r-in">  gravel  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span>
-<span class="r-in">  cobbles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span>
-<span class="r-in">  stones  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span>
-<span class="r-in">  boulders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># data.frame input</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">fragvol_to_texmod</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">texmod</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># example of fragvol_to_texmod()</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  gravel  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>  cobbles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>  stones  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>  boulders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># data.frame input</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">fragvol_to_texmod</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">texmod</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   by  byv  byx   cb  cbv  cbx   gr  grv  grx   st  stv  stx </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   81  510 2135   37  192  710   20   82  273   57  371 1502 </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">lieutex</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">lieutex</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   by   cb   gr   st </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1634   37    2 1197 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># vector inputs</span></span>
-<span class="r-in"><span class="fu">fragvol_to_texmod</span><span class="op">(</span>gravel <span class="op">=</span> <span class="fl">10</span>, cobbles <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># vector inputs</span></span></span>
+<span class="r-in"><span><span class="fu">fragvol_to_texmod</span><span class="op">(</span>gravel <span class="op">=</span> <span class="fl">10</span>, cobbles <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   texmod lieutex</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     cb    &lt;NA&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -398,7 +447,7 @@ it should be subtracted from the sand, and added to the silt content.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

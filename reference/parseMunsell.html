@@ -63,23 +63,32 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">parseMunsell</span><span class="op">(</span><span class="va">munsellColor</span>, convertColors <span class="op">=</span> <span class="cn">TRUE</span>, delim <span class="op">=</span> <span class="cn">NA</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parseMunsell</span><span class="op">(</span><span class="va">munsellColor</span>, convertColors <span class="op">=</span> <span class="cn">TRUE</span>, delim <span class="op">=</span> <span class="cn">NA</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>munsellColor</dt>
 <dd><p>character vector of Munsell colors (e.g. <code>c('10YR 3/4', '5YR 4/6')</code>)</p></dd>
+
+
 <dt>convertColors</dt>
 <dd><p>logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates</p></dd>
+
+
 <dt>delim</dt>
 <dd><p>optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to <code><a href="munsell2rgb.html">munsell2rgb</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>data.frame</code> object</p>
+    
+
+<p>a <code>data.frame</code> object</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -88,28 +97,28 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># just sRGB</span></span>
-<span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># just sRGB</span></span></span>
+<span class="r-in"><span><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           r         g          b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3755239 0.2554937 0.09112035</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># sRGB + CIELAB (D65 illuminant)</span></span>
-<span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span>, returnLAB <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sRGB + CIELAB (D65 illuminant)</span></span></span>
+<span class="r-in"><span><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span>, returnLAB <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           r         g          b        L        A        B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3755239 0.2554937 0.09112035 30.27982 8.897842 29.92632</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># CIELAB only</span></span>
-<span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">FALSE</span>, returnLAB <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># CIELAB only</span></span></span>
+<span class="r-in"><span><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">"10YR 3/5"</span>, return_triplets <span class="op">=</span> <span class="cn">FALSE</span>, returnLAB <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          L        A        B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 30.27982 8.897842 29.92632</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># neutral hue</span></span>
-<span class="r-in"><span class="co"># note chroma encoded as '0'</span></span>
-<span class="r-in"><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">'N 3/'</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># neutral hue</span></span></span>
+<span class="r-in"><span><span class="co"># note chroma encoded as '0'</span></span></span>
+<span class="r-in"><span><span class="fu">parseMunsell</span><span class="op">(</span><span class="st">'N 3/'</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   hue value chroma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   N     3      0</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -124,7 +133,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

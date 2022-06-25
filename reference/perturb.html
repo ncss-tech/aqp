@@ -65,40 +65,59 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">perturb</span><span class="op">(</span>
-  <span class="va">p</span>,
-  n <span class="op">=</span> <span class="fl">100</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  thickness.attr <span class="op">=</span> <span class="cn">NULL</span>,
-  boundary.attr <span class="op">=</span> <span class="cn">NULL</span>,
-  min.thickness <span class="op">=</span> <span class="fl">1</span>,
-  max.depth <span class="op">=</span> <span class="cn">NULL</span>,
-  new.idname <span class="op">=</span> <span class="st">"pID"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">perturb</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  thickness.attr <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  boundary.attr <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  min.thickness <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  max.depth <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  new.idname <span class="op">=</span> <span class="st">"pID"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of new profiles to generate (default: 100)</p></dd>
+
+
 <dt>id</dt>
 <dd><p>a vector of profile IDs with length equal to (<code>n</code>). Overrides use of <code>seq_len(n)</code> as default profile ID values.</p></dd>
+
+
 <dt>thickness.attr</dt>
 <dd><p>Horizon variance attribute containing numeric "standard deviations" reflecting horizon thickness</p></dd>
+
+
 <dt>boundary.attr</dt>
 <dd><p>Horizon variance attribute containing numeric "standard deviations" reflecting boundary transition distinctness</p></dd>
+
+
 <dt>min.thickness</dt>
 <dd><p>Minimum thickness of permuted horizons (default: <code>1</code>)</p></dd>
+
+
 <dt>max.depth</dt>
 <dd><p>Depth below which horizon depths are not perturbed (default: <code>NULL</code>)</p></dd>
+
+
 <dt>new.idname</dt>
 <dd><p>New column name to contain unique profile ID (default: <code>pID</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a SoilProfileCollection with <code>n</code> realizations of <code>p</code></p>
+    
+
+<p>a SoilProfileCollection with <code>n</code> realizations of <code>p</code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -117,118 +136,118 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">### THICKNESS</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># load sample data and convert into SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># select a profile to use as the basis for simulation</span></span>
-<span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">sp3</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># reset horizon names</span></span>
-<span class="r-in"><span class="va">s</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'H'</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">''</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># simulate 25 new profiles</span></span>
-<span class="r-in"><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">hz.sd</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># constant standard deviation</span></span>
-<span class="r-in"><span class="va">sim.1</span> <span class="op">&lt;-</span> <span class="fu">perturb</span><span class="op">(</span><span class="va">s</span>, n <span class="op">=</span> <span class="fl">25</span>, thickness.attr <span class="op">=</span> <span class="st">"hz.sd"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># simulate 25 new profiles using different SD for each horizon</span></span>
-<span class="r-in"><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">hz.sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sim.2</span> <span class="op">&lt;-</span> <span class="fu">perturb</span><span class="op">(</span><span class="va">s</span>, n <span class="op">=</span> <span class="fl">25</span>, thickness.attr <span class="op">=</span> <span class="st">"hz.sd"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sim.1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">'SD = 2'</span>,</span>
-<span class="r-in">  side <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">  line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span>
-<span class="r-in">  font <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">  cex <span class="op">=</span> <span class="fl">0.75</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sim.2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">'SD = c(1, 2, 5, 5, 5, 10, 3)'</span>,</span>
-<span class="r-in">  side <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">  line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span>
-<span class="r-in">  font <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">  cex <span class="op">=</span> <span class="fl">0.75</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### THICKNESS</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load sample data and convert into SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># select a profile to use as the basis for simulation</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">sp3</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># reset horizon names</span></span></span>
+<span class="r-in"><span><span class="va">s</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'H'</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">''</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simulate 25 new profiles</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">hz.sd</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># constant standard deviation</span></span></span>
+<span class="r-in"><span><span class="va">sim.1</span> <span class="op">&lt;-</span> <span class="fu">perturb</span><span class="op">(</span><span class="va">s</span>, n <span class="op">=</span> <span class="fl">25</span>, thickness.attr <span class="op">=</span> <span class="st">"hz.sd"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simulate 25 new profiles using different SD for each horizon</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">hz.sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim.2</span> <span class="op">&lt;-</span> <span class="fu">perturb</span><span class="op">(</span><span class="va">s</span>, n <span class="op">=</span> <span class="fl">25</span>, thickness.attr <span class="op">=</span> <span class="st">"hz.sd"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sim.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'SD = 2'</span>,</span></span>
+<span class="r-in"><span>  side <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span></span>
+<span class="r-in"><span>  font <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  cex <span class="op">=</span> <span class="fl">0.75</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sim.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'SD = c(1, 2, 5, 5, 5, 10, 3)'</span>,</span></span>
+<span class="r-in"><span>  side <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span></span>
+<span class="r-in"><span>  font <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  cex <span class="op">=</span> <span class="fl">0.75</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="perturb-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># aggregate horizonation of simulated data</span></span>
-<span class="r-in"><span class="co"># note: set class_prob_mode=2 as profiles were not defined to a constant depth</span></span>
-<span class="r-in"><span class="va">sim.2</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sim.2</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sim.2</span>, <span class="op">~</span> <span class="va">name</span>, class_prob_mode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># aggregate horizonation of simulated data</span></span></span>
+<span class="r-in"><span><span class="co"># note: set class_prob_mode=2 as profiles were not defined to a constant depth</span></span></span>
+<span class="r-in"><span><span class="va">sim.2</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sim.2</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sim.2</span>, <span class="op">~</span> <span class="va">name</span>, class_prob_mode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert to long format for plotting simplicity</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">a.long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>,</span>
-<span class="r-in">               id.vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span>,</span>
-<span class="r-in">                measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">sim.2</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot horizon probabilities derived from simulated data</span></span>
-<span class="r-in"><span class="co"># dashed lines are the original horizon boundaries</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lattice.r-forge.r-project.org/" class="external-link">lattice</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html" class="external-link">xyplot</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">top</span> <span class="op">~</span> <span class="va">value</span>,</span>
-<span class="r-in">  groups <span class="op">=</span> <span class="va">variable</span>,</span>
-<span class="r-in">  data <span class="op">=</span> <span class="va">a.long</span>,</span>
-<span class="r-in">  subset <span class="op">=</span> <span class="va">value</span> <span class="op">&gt;</span> <span class="fl">0</span>,</span>
-<span class="r-in">  ylim <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="op">-</span><span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">  type <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'l'</span>, <span class="st">'g'</span><span class="op">)</span>,</span>
-<span class="r-in">  asp <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">'Depth (cm)'</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">'Probability'</span>,</span>
-<span class="r-in">  auto.key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    columns <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">    lines <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    points <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  panel <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/lattice/man/panel.xyplot.html" class="external-link">panel.xyplot</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/lattice/man/panel.functions.html" class="external-link">panel.abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">top</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert to long format for plotting simplicity</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a.long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               id.vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="st">'bottom'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">sim.2</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot horizon probabilities derived from simulated data</span></span></span>
+<span class="r-in"><span><span class="co"># dashed lines are the original horizon boundaries</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lattice.r-forge.r-project.org/" class="external-link">lattice</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html" class="external-link">xyplot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">top</span> <span class="op">~</span> <span class="va">value</span>,</span></span>
+<span class="r-in"><span>  groups <span class="op">=</span> <span class="va">variable</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">a.long</span>,</span></span>
+<span class="r-in"><span>  subset <span class="op">=</span> <span class="va">value</span> <span class="op">&gt;</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  ylim <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="op">-</span><span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'l'</span>, <span class="st">'g'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  asp <span class="op">=</span> <span class="fl">1.5</span>,</span></span>
+<span class="r-in"><span>  ylab <span class="op">=</span> <span class="st">'Depth (cm)'</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">'Probability'</span>,</span></span>
+<span class="r-in"><span>  auto.key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    columns <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>    lines <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    points <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  panel <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/lattice/man/panel.xyplot.html" class="external-link">panel.xyplot</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/lattice/man/panel.functions.html" class="external-link">panel.abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">top</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="perturb-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">### BOUNDARIES</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example with sp1 (using boundary distinctness)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"sp1"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># specify "standard deviation" for boundary thickness</span></span>
-<span class="r-in"><span class="co">#   consider a normal curve centered at boundary RV depth</span></span>
-<span class="r-in"><span class="co"># lookup table: ~maximum thickness of boundary distinctness classes, divided by 3</span></span>
-<span class="r-in"><span class="va">bound.lut</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'V'</span><span class="op">=</span><span class="fl">0.5</span>,<span class="st">'A'</span><span class="op">=</span><span class="fl">2</span>,<span class="st">'C'</span><span class="op">=</span><span class="fl">5</span>,<span class="st">'G'</span><span class="op">=</span><span class="fl">15</span>,<span class="st">'D'</span><span class="op">=</span><span class="fl">45</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## V          A          C          G          D</span></span>
-<span class="r-in"><span class="co">## 0.1666667  0.6666667  1.6666667  5.0000000 15.0000000</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span> <span class="op">&lt;-</span> <span class="va">bound.lut</span><span class="op">[</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_distinct</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># hold any NA boundary distinctness constant</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### BOUNDARIES</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example with sp1 (using boundary distinctness)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"sp1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># specify "standard deviation" for boundary thickness</span></span></span>
+<span class="r-in"><span><span class="co">#   consider a normal curve centered at boundary RV depth</span></span></span>
+<span class="r-in"><span><span class="co"># lookup table: ~maximum thickness of boundary distinctness classes, divided by 3</span></span></span>
+<span class="r-in"><span><span class="va">bound.lut</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'V'</span><span class="op">=</span><span class="fl">0.5</span>,<span class="st">'A'</span><span class="op">=</span><span class="fl">2</span>,<span class="st">'C'</span><span class="op">=</span><span class="fl">5</span>,<span class="st">'G'</span><span class="op">=</span><span class="fl">15</span>,<span class="st">'D'</span><span class="op">=</span><span class="fl">45</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## V          A          C          G          D</span></span></span>
+<span class="r-in"><span><span class="co">## 0.1666667  0.6666667  1.6666667  5.0000000 15.0000000</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span> <span class="op">&lt;-</span> <span class="va">bound.lut</span><span class="op">[</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_distinct</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># hold any NA boundary distinctness constant</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0%       25%       50%       75%      100% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.0000000 0.0000000 0.6666667 0.6666667 1.6666667 </span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># assume boundary sd is 1/12 midpoint of horizon depth</span></span>
-<span class="r-in"><span class="co"># (i.e. general relationship: SD increases (less well known) with depth)</span></span>
-<span class="r-in"><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/transform.data.table.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">sp1</span>, midpt <span class="op">=</span> <span class="op">(</span><span class="va">bottom</span> <span class="op">-</span> <span class="va">top</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span> <span class="op">+</span> <span class="va">top</span>, bound_sd <span class="op">=</span> <span class="va">midpt</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># assume boundary sd is 1/12 midpoint of horizon depth</span></span></span>
+<span class="r-in"><span><span class="co"># (i.e. general relationship: SD increases (less well known) with depth)</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">sp1</span>, midpt <span class="op">=</span> <span class="op">(</span><span class="va">bottom</span> <span class="op">-</span> <span class="va">top</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span> <span class="op">+</span> <span class="va">top</span>, bound_sd <span class="op">=</span> <span class="va">midpt</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_sd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          0%         25%         50%         75%        100% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  0.08333333  0.92708333  3.75000000  9.25000000 19.41666667 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">perturb</span><span class="op">(</span><span class="va">p</span>, boundary.attr <span class="op">=</span> <span class="st">"bound_sd"</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">perturb</span><span class="op">(</span><span class="va">p</span>, boundary.attr <span class="op">=</span> <span class="st">"bound_sd"</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 10 profiles and 50 horizons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: pID  |  horizon ID: hzID </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 63 - 67 cm</span>
@@ -255,12 +274,12 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [EMPTY]</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">### Custom IDs</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%03d"</span>, <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> </span>
-<span class="r-in"><span class="fu">perturb</span><span class="op">(</span><span class="va">p</span>, boundary.attr <span class="op">=</span> <span class="st">"bound_sd"</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Custom IDs</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%03d"</span>, <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="fu">perturb</span><span class="op">(</span><span class="va">p</span>, boundary.attr <span class="op">=</span> <span class="st">"bound_sd"</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 10 profiles and 50 horizons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: pID  |  horizon ID: hzID </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 64 - 67 cm</span>
@@ -294,8 +313,8 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [EMPTY]</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -310,7 +329,7 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -65,34 +65,47 @@ See examples below for ideas."><!-- mathjax --><script src="https://cdnjs.cloudf
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">profileGroupLabels</span><span class="op">(</span>
-  <span class="va">x0</span>,
-  <span class="va">x1</span>,
-  <span class="va">labels</span>,
-  y0 <span class="op">=</span> <span class="fl">100</span>,
-  y1 <span class="op">=</span> <span class="fl">98</span>,
-  label.offset <span class="op">=</span> <span class="fl">2</span>,
-  label.cex <span class="op">=</span> <span class="fl">0.75</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">profileGroupLabels</span><span class="op">(</span></span>
+<span>  <span class="va">x0</span>,</span>
+<span>  <span class="va">x1</span>,</span>
+<span>  <span class="va">labels</span>,</span>
+<span>  y0 <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  y1 <span class="op">=</span> <span class="fl">98</span>,</span>
+<span>  label.offset <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  label.cex <span class="op">=</span> <span class="fl">0.75</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x0</dt>
 <dd><p>integer indices to the first profile within each group</p></dd>
+
+
 <dt>x1</dt>
 <dd><p>integer indices to the last profile within each group</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>vector of group labels</p></dd>
+
+
 <dt>y0</dt>
 <dd><p>baseline depth used for group brackets</p></dd>
+
+
 <dt>y1</dt>
 <dd><p>depth used for start and end markers for group brackets (see
 examples)</p></dd>
+
+
 <dt>label.offset</dt>
 <dd><p>vertical offset of group labels from baseline</p></dd>
+
+
 <dt>label.cex</dt>
 <dd><p>label size</p></dd>
+
 </dl></div>
     <div id="note">
     <h2>Note</h2>
@@ -110,43 +123,43 @@ such as <code><a href="plotMultipleSPC.html">plotMultipleSPC</a></code>.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># load sample data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert soil colors</span></span>
-<span class="r-in"><span class="va">sp3</span><span class="op">$</span><span class="va">h</span> <span class="op">&lt;-</span> <span class="cn">NA</span> ; <span class="va">sp3</span><span class="op">$</span><span class="va">s</span> <span class="op">&lt;-</span> <span class="cn">NA</span> ; <span class="va">sp3</span><span class="op">$</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span class="r-in"><span class="va">sp3.rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span>, return_triplets<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sp3</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'h'</span>,<span class="st">'s'</span>,<span class="st">'v'</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3.rgb</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb2hsv.html" class="external-link">rgb2hsv</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">g</span>, <span class="va">b</span>, maxColorValue<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># combine into a list</span></span>
-<span class="r-in"><span class="va">spc.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute group lengths and start/stop locations</span></span>
-<span class="r-in"><span class="va">n.groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">spc.list</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">spc.lengths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">spc.list</span>, <span class="va">length</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">n.pedons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">spc.lengths</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">group.starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">spc.lengths</span><span class="op">[</span><span class="op">-</span><span class="va">n.groups</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">group.ends</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">spc.lengths</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># determine depths of first / last profile in each group</span></span>
-<span class="r-in"><span class="va">yy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">spc.list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tick.heights</span> <span class="op">&lt;-</span> <span class="va">yy</span><span class="op">[</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="va">group.starts</span>, <span class="va">group.ends</span><span class="op">)</span><span class="op">]</span> <span class="op">+</span> <span class="fl">2</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot 2 SoilProfileCollection objects on the same axis</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp3</span>, n<span class="op">=</span><span class="va">n.pedons</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, add<span class="op">=</span><span class="cn">TRUE</span>, x.idx.offset<span class="op">=</span><span class="va">group.ends</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, plot.depth.axis<span class="op">=</span><span class="cn">FALSE</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># annotate groups</span></span>
-<span class="r-in"><span class="fu">profileGroupLabels</span><span class="op">(</span>x0<span class="op">=</span><span class="va">group.starts</span>, x1<span class="op">=</span><span class="va">group.ends</span>,</span>
-<span class="r-in">labels<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'Collection 1'</span>, <span class="st">'Collection 2'</span><span class="op">)</span>, y0<span class="op">=</span><span class="fl">120</span>, y1<span class="op">=</span><span class="va">tick.heights</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load sample data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert soil colors</span></span></span>
+<span class="r-in"><span><span class="va">sp3</span><span class="op">$</span><span class="va">h</span> <span class="op">&lt;-</span> <span class="cn">NA</span> ; <span class="va">sp3</span><span class="op">$</span><span class="va">s</span> <span class="op">&lt;-</span> <span class="cn">NA</span> ; <span class="va">sp3</span><span class="op">$</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span><span class="va">sp3.rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span>, return_triplets<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp3</span><span class="op">[</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'h'</span>,<span class="st">'s'</span>,<span class="st">'v'</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp3.rgb</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb2hsv.html" class="external-link">rgb2hsv</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">g</span>, <span class="va">b</span>, maxColorValue<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># combine into a list</span></span></span>
+<span class="r-in"><span><span class="va">spc.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sp3</span>, <span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute group lengths and start/stop locations</span></span></span>
+<span class="r-in"><span><span class="va">n.groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">spc.list</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spc.lengths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">spc.list</span>, <span class="va">length</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">n.pedons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">spc.lengths</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">group.starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">spc.lengths</span><span class="op">[</span><span class="op">-</span><span class="va">n.groups</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">group.ends</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">spc.lengths</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># determine depths of first / last profile in each group</span></span></span>
+<span class="r-in"><span><span class="va">yy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">spc.list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tick.heights</span> <span class="op">&lt;-</span> <span class="va">yy</span><span class="op">[</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="va">group.starts</span>, <span class="va">group.ends</span><span class="op">)</span><span class="op">]</span> <span class="op">+</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot 2 SoilProfileCollection objects on the same axis</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp3</span>, n<span class="op">=</span><span class="va">n.pedons</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, add<span class="op">=</span><span class="cn">TRUE</span>, x.idx.offset<span class="op">=</span><span class="va">group.ends</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, plot.depth.axis<span class="op">=</span><span class="cn">FALSE</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># annotate groups</span></span></span>
+<span class="r-in"><span><span class="fu">profileGroupLabels</span><span class="op">(</span>x0<span class="op">=</span><span class="va">group.starts</span>, x1<span class="op">=</span><span class="va">group.ends</span>,</span></span>
+<span class="r-in"><span>labels<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'Collection 1'</span>, <span class="st">'Collection 2'</span><span class="op">)</span>, y0<span class="op">=</span><span class="fl">120</span>, y1<span class="op">=</span><span class="va">tick.heights</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileGroupLabels-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -161,7 +174,7 @@ such as <code><a href="plotMultipleSPC.html">plotMultipleSPC</a></code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -65,48 +65,71 @@ delta-E00.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">colorContrastPlot</span><span class="op">(</span>
-  <span class="va">m1</span>,
-  <span class="va">m2</span>,
-  col.cex <span class="op">=</span> <span class="fl">1</span>,
-  col.font <span class="op">=</span> <span class="fl">2</span>,
-  d.cex <span class="op">=</span> <span class="fl">1</span>,
-  cc.font <span class="op">=</span> <span class="fl">3</span>,
-  dE00.font <span class="op">=</span> <span class="fl">1</span>,
-  labels <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>,
-  label.cex <span class="op">=</span> <span class="fl">1</span>,
-  label.font <span class="op">=</span> <span class="fl">1</span>,
-  printMetrics <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colorContrastPlot</span><span class="op">(</span></span>
+<span>  <span class="va">m1</span>,</span>
+<span>  <span class="va">m2</span>,</span>
+<span>  col.cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col.font <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  d.cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  cc.font <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  dE00.font <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"m1"</span>, <span class="st">"m2"</span><span class="op">)</span>,</span>
+<span>  label.cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  label.font <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  printMetrics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>m1</dt>
 <dd><p>first set of Munsell colors for comparison (e.g. '5YR 3/2')</p></dd>
+
+
 <dt>m2</dt>
 <dd><p>second set of Munsell colors for comparison</p></dd>
+
+
 <dt>col.cex</dt>
 <dd><p>scaling factor for color labels</p></dd>
+
+
 <dt>col.font</dt>
 <dd><p>font for color labels</p></dd>
+
+
 <dt>d.cex</dt>
 <dd><p>contrast for contrast metric labels</p></dd>
+
+
 <dt>cc.font</dt>
 <dd><p>font for contrast class</p></dd>
+
+
 <dt>dE00.font</dt>
 <dd><p>font for delta-E00</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>labels for compared colors, vector length 2</p></dd>
+
+
 <dt>label.cex</dt>
 <dd><p>scaling factor for labels</p></dd>
+
+
 <dt>label.font</dt>
 <dd><p>font for labels</p></dd>
+
+
 <dt>printMetrics</dt>
 <dd><p>logical, print metrics between color swatches</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments to <code><a href="https://colorspace.R-Forge.R-project.org/reference/swatchplot.html" class="external-link">colorspace::swatchplot</a></code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -124,23 +147,23 @@ delta-E00</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># two sets of colors to compare</span></span>
-<span class="r-in"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'7.5YR 3/4'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># contrast metrics</span></span>
-<span class="r-in"><span class="fu"><a href="colorContrast.html">colorContrast</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># two sets of colors to compare</span></span></span>
+<span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'7.5YR 3/4'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrast metrics</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="colorContrast.html">colorContrast</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.313572 Prominent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.647979     Faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 7.5YR 3/4 7.5YR 6/3  0  3  1 30.265955  Distinct</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># graphical display</span></span>
-<span class="r-in"><span class="fu">colorContrastPlot</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># graphical display</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrastPlot</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="colorContrastPlot-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -155,7 +178,7 @@ delta-E00</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

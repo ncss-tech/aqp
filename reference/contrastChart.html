@@ -63,33 +63,46 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">contrastChart</span><span class="op">(</span>
-  <span class="va">m</span>,
-  <span class="va">hues</span>,
-  ccAbbreviate <span class="op">=</span> <span class="fl">1</span>,
-  style <span class="op">=</span> <span class="st">"hue"</span>,
-  gridLines <span class="op">=</span> <span class="cn">FALSE</span>,
-  thresh <span class="op">=</span> <span class="cn">NULL</span>,
-  returnData <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">contrastChart</span><span class="op">(</span></span>
+<span>  <span class="va">m</span>,</span>
+<span>  <span class="va">hues</span>,</span>
+<span>  ccAbbreviate <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  style <span class="op">=</span> <span class="st">"hue"</span>,</span>
+<span>  gridLines <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  thresh <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  returnData <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>m</dt>
 <dd><p>Munsell representation of a single color for comparison e.g. '10YR 4/3'</p></dd>
+
+
 <dt>hues</dt>
 <dd><p>vector of one or more Munsell hue pages to display</p></dd>
+
+
 <dt>ccAbbreviate</dt>
 <dd><p>length of abbreviated contrast classes, use 0 to suppress labels</p></dd>
+
+
 <dt>style</dt>
 <dd><p>'hue' or 'CC', see details</p></dd>
+
+
 <dt>gridLines</dt>
 <dd><p>logical, add grid lines to the color contrast chart</p></dd>
+
+
 <dt>thresh</dt>
 <dd><p>threshold (&lt;) applied to pair-wise comparisons and resulting color chips</p></dd>
+
+
 <dt>returnData</dt>
 <dd><p>logical, return lattice figure + data used to generate the figure</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -110,23 +123,23 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># single hue page</span></span>
-<span class="r-in"><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 3/3'</span>, hues <span class="op">=</span> <span class="st">'10YR'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># single hue page</span></span></span>
+<span class="r-in"><span><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 3/3'</span>, hues <span class="op">=</span> <span class="st">'10YR'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="contrastChart-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># multiple hue pages</span></span>
-<span class="r-in"><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 3/3'</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'2.5Y'</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># multiple hue pages</span></span></span>
+<span class="r-in"><span><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 3/3'</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'2.5Y'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="contrastChart-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># contrast class, single hue</span></span>
-<span class="r-in"><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 3/3'</span>, hues <span class="op">=</span> <span class="st">'10YR'</span>, style<span class="op">=</span><span class="st">'CC'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrast class, single hue</span></span></span>
+<span class="r-in"><span><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 3/3'</span>, hues <span class="op">=</span> <span class="st">'10YR'</span>, style<span class="op">=</span><span class="st">'CC'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="contrastChart-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># contrast class, multiple hues</span></span>
-<span class="r-in"><span class="co"># consider latticeExtra::useOuterStrips()</span></span>
-<span class="r-in"><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 5/6'</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'2.5Y'</span><span class="op">)</span>, style<span class="op">=</span><span class="st">'CC'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrast class, multiple hues</span></span></span>
+<span class="r-in"><span><span class="co"># consider latticeExtra::useOuterStrips()</span></span></span>
+<span class="r-in"><span><span class="fu">contrastChart</span><span class="op">(</span>m <span class="op">=</span> <span class="st">'10YR 5/6'</span>, hues <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR'</span>, <span class="st">'2.5Y'</span><span class="op">)</span>, style<span class="op">=</span><span class="st">'CC'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="contrastChart-4.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -141,7 +154,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

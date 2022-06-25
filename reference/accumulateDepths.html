@@ -63,40 +63,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">accumulateDepths</span><span class="op">(</span>
-  <span class="va">x</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  hzdepths <span class="op">=</span> <span class="cn">NULL</span>,
-  hzname <span class="op">=</span> <span class="cn">NULL</span>,
-  hzdatum <span class="op">=</span> <span class="fl">0</span>,
-  seqnum <span class="op">=</span> <span class="cn">NULL</span>,
-  pattern <span class="op">=</span> <span class="st">"O"</span>,
-  fix <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">accumulateDepths</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hzdepths <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hzname <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hzdatum <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  seqnum <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"O"</span>,</span>
+<span>  fix <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code>data.frame</code> or <code>SoilProfileCollection</code></p></dd>
+
+
 <dt>id</dt>
 <dd><p>unique profile ID. Default: <code>NULL</code>, if <code>x</code> is a SoilProfileCollection <code>idname(x)</code></p></dd>
+
+
 <dt>hzdepths</dt>
 <dd><p>character vector containing horizon top and bottom depth column names. Default: <code>NULL</code>, if <code>x</code> is a SoilProfileCollection <code>horizonDepths(x)</code></p></dd>
+
+
 <dt>hzname</dt>
 <dd><p>character vector containing horizon designation or other label column names. Default: <code>NULL</code>, if <code>x</code> is a SoilProfileCollection <code>hzdesgnname(x)</code></p></dd>
+
+
 <dt>hzdatum</dt>
 <dd><p>a numeric vector to add to accumulated depths. Default: <code>0</code>. Can be equal in length to number of profiles if <code>x</code> is a <code>SoilProfileCollection</code> or number of (unique) IDs if <code>x</code> is a <code>data.frame</code>.</p></dd>
+
+
 <dt>seqnum</dt>
 <dd><p>Optional: character vector containing record "sequence number" column name; used in-lieu of <code>hzname</code> (when <code>NA</code>) to identify "first" record in a profile</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>pattern to search for in <code>hzname</code> to identify matching horizons to append the profile to</p></dd>
+
+
 <dt>fix</dt>
 <dd><p>apply adjustments to missing (<code>NA</code>) depths and expand 0-thickness horizons? Default: <code>TRUE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A horizon-level <code>data.frame</code>, suitable for promoting to SPC with <code>depths&lt;-</code>, or a <code>SoilProfileCollection</code>, depending on the class of <code>x</code>.</p>
+    
+
+<p>A horizon-level <code>data.frame</code>, suitable for promoting to SPC with <code>depths&lt;-</code>, or a <code>SoilProfileCollection</code>, depending on the class of <code>x</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -126,42 +143,57 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># example using hzdatum argument</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="va">hz</span> <span class="op">&lt;-</span> <span class="fu">accumulateDepths</span><span class="op">(</span><span class="va">sp4</span>,</span>
-<span class="r-in">                       id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span class="r-in">                       hzdepths <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
-<span class="r-in">                       hzname <span class="op">=</span> <span class="st">"name"</span>,</span>
-<span class="r-in">                       hzdatum <span class="op">=</span> <span class="fl">5</span> <span class="op">*</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">hz</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example using hzdatum argument</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="va">hz</span> <span class="op">&lt;-</span> <span class="fu">accumulateDepths</span><span class="op">(</span><span class="va">sp4</span>,</span></span>
+<span class="r-in"><span>                       id <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>                       hzdepths <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                       hzname <span class="op">=</span> <span class="st">"name"</span>,</span></span>
+<span class="r-in"><span>                       hzdatum <span class="op">=</span> <span class="fl">5</span> <span class="op">*</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">hz</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="accumulateDepths-1.png" alt="" width="768" height="475"></span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="co"># example using old-style O horizons</span></span>
-<span class="r-in"><span class="va">hz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">[1032 chars quoted with '"']</span><span class="op">)</span></span>
-<span class="r-in">                    </span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">hz</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">peiidref</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="co"># example using old-style O horizons</span></span></span>
+<span class="r-in"><span><span class="va">hz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"peiidref hzdept hzdepb hzname seqnum phiid</span></span></span>
+<span class="r-in"><span><span class="st">                    1        11      0      5      A      2   295</span></span></span>
+<span class="r-in"><span><span class="st">                    2        11      1      0     Oe      1   294</span></span></span>
+<span class="r-in"><span><span class="st">                    3        11      5     13     C1      3   296</span></span></span>
+<span class="r-in"><span><span class="st">                    4        11     13     58     C2      4   297</span></span></span>
+<span class="r-in"><span><span class="st">                    5        11     58    152     C3      5   298</span></span></span>
+<span class="r-in"><span><span class="st">                    6        13      0      5      A      2   303</span></span></span>
+<span class="r-in"><span><span class="st">                    7        13      1      0     Oe      1   302</span></span></span>
+<span class="r-in"><span><span class="st">                    8        13      5     25     Bw      3   304</span></span></span>
+<span class="r-in"><span><span class="st">                    9        13     25     61      C      4   305</span></span></span>
+<span class="r-in"><span><span class="st">                    10       13     61     NA      R      5   306</span></span></span>
+<span class="r-in"><span><span class="st">                    11      136      0     13     A1      3   695</span></span></span>
+<span class="r-in"><span><span class="st">                    12      136      1      0     Oe      2   694</span></span></span>
+<span class="r-in"><span><span class="st">                    13      136      2      1     Oi      1   693</span></span></span>
+<span class="r-in"><span><span class="st">                    14      136     13     61     C1      4   696</span></span></span>
+<span class="r-in"><span><span class="st">                    15      136     61     76     C2      5   697"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                    </span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">hz</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">peiidref</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> converting profile IDs from integer to character</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Horizon bottom depths contain NA! Check depth logic with aqp::checkHzDepthLogic()</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">hz_fixed</span> <span class="op">&lt;-</span> <span class="fu">accumulateDepths</span><span class="op">(</span><span class="va">hz</span>,</span>
-<span class="r-in">                             id <span class="op">=</span> <span class="st">"peiidref"</span>,</span>
-<span class="r-in">                             hzdepths <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"hzdept"</span>, <span class="st">"hzdepb"</span><span class="op">)</span>,</span>
-<span class="r-in">                             hzname <span class="op">=</span> <span class="st">"hzname"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">is_valid</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">hz_fixed</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test0</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz_fixed</span>, <span class="op">!</span><span class="va">is_valid</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">test1</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz_fixed</span>, <span class="va">is_valid</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">origO</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="va">hzname</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fixedO</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz_fixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="va">hzname</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">origO</span>, max.depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">fixedO</span>, max.depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">hz_fixed</span> <span class="op">&lt;-</span> <span class="fu">accumulateDepths</span><span class="op">(</span><span class="va">hz</span>,</span></span>
+<span class="r-in"><span>                             id <span class="op">=</span> <span class="st">"peiidref"</span>,</span></span>
+<span class="r-in"><span>                             hzdepths <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"hzdept"</span>, <span class="st">"hzdepb"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                             hzname <span class="op">=</span> <span class="st">"hzname"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">is_valid</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">hz_fixed</span><span class="op">)</span><span class="op">$</span><span class="va">valid</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test0</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz_fixed</span>, <span class="op">!</span><span class="va">is_valid</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">test1</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz_fixed</span>, <span class="va">is_valid</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">origO</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="va">hzname</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fixedO</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">hz_fixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="va">hzname</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">origO</span>, max.depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">fixedO</span>, max.depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="accumulateDepths-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -176,7 +208,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

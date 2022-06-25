@@ -63,108 +63,125 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for SoilProfileCollection</span>
-<span class="fu">profileApply</span><span class="op">(</span>
-  <span class="va">object</span>,
-  <span class="va">FUN</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  frameify <span class="op">=</span> <span class="cn">FALSE</span>,
-  chunk.size <span class="op">=</span> <span class="fl">100</span>,
-  column.names <span class="op">=</span> <span class="cn">NULL</span>,
-  APPLY.FUN <span class="op">=</span> <span class="va">lapply</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SoilProfileCollection</span></span>
+<span><span class="fu">profileApply</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">FUN</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  frameify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  chunk.size <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  column.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  APPLY.FUN <span class="op">=</span> <span class="va">lapply</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>a SoilProfileCollection</p></dd>
+
+
 <dt>FUN</dt>
 <dd><p>a function to be applied to each profile within the collection</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>logical, should the result be simplified to a vector? default: TRUE; see examples</p></dd>
+
+
 <dt>frameify</dt>
 <dd><p>logical, should the result be collapsed into a data.frame? default: FALSE; overrides simplify argument; see examples</p></dd>
+
+
 <dt>chunk.size</dt>
 <dd><p>numeric, size of "chunks" for faster processing of large SoilProfileCollection objects; default: 100</p></dd>
+
+
 <dt>column.names</dt>
 <dd><p>character, optional character vector to replace frameify-derived column names; should match length of colnames() from FUN result; default: NULL</p></dd>
+
+
 <dt>APPLY.FUN</dt>
 <dd><p>function, optional alternate <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function for processing chunks. For example <code>future.apply::future_lapply()</code> for processing chunks in parallel. Default <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">base::lapply()</a></code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments passed to FUN</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>When simplify is TRUE, a vector of length nrow(object) (horizon data) or of length length(object) (site data). When simplify is FALSE, a list is returned. When frameify is TRUE, a data.frame is returned. An attempt is made to identify idname and/or hzidname in the data.frame result, safely ensuring that IDs are preserved to facilitate merging profileApply result downstream.</p>
+    
+
+<p>When simplify is TRUE, a vector of length nrow(object) (horizon data) or of length length(object) (site data). When simplify is FALSE, a list is returned. When frameify is TRUE, a data.frame is returned. An attempt is made to identify idname and/or hzidname in the data.frame result, safely ensuring that IDs are preserved to facilitate merging profileApply result downstream.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># estimate soil depth using horizon designations</span></span>
-<span class="r-in"><span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">estimateSoilDepth</span>, name<span class="op">=</span><span class="st">'name'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate soil depth using horizon designations</span></span></span>
+<span class="r-in"><span><span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">estimateSoilDepth</span>, name<span class="op">=</span><span class="st">'name'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P001 P002 P003 P004 P005 P006 P007 P008 P009 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   89   59   67   62   68  200  233  200  240 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># scale a single property 'prop' in horizon table</span></span>
-<span class="r-in"><span class="co"># scaled = (x - mean(x)) / sd(x)</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, name<span class="op">=</span><span class="st">'d'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># scale a single property 'prop' in horizon table</span></span></span>
+<span class="r-in"><span><span class="co"># scaled = (x - mean(x)) / sd(x)</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, name<span class="op">=</span><span class="st">'d'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileApply-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute depth-wise differencing by profile</span></span>
-<span class="r-in"><span class="co"># note that our function expects that the column 'prop' exists</span></span>
-<span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">)</span><span class="op">)</span> <span class="op">}</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="va">f</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, name<span class="op">=</span><span class="st">'d'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute depth-wise differencing by profile</span></span></span>
+<span class="r-in"><span><span class="co"># note that our function expects that the column 'prop' exists</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">)</span><span class="op">)</span> <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, name<span class="op">=</span><span class="st">'d'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileApply-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute depth-wise cumulative sum by profile</span></span>
-<span class="r-in"><span class="co"># note the use of an anonymous function</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, name<span class="op">=</span><span class="st">'d'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute depth-wise cumulative sum by profile</span></span></span>
+<span class="r-in"><span><span class="co"># note the use of an anonymous function</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, name<span class="op">=</span><span class="st">'d'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileApply-3.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute profile-means, and save to @site</span></span>
-<span class="r-in"><span class="co"># there must be some data in @site for this to work</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">mean_prop</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># re-plot using ranks defined by computed summaries (in @site)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, plot.order<span class="op">=</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/frank.html" class="external-link">rank</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">mean_prop</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute profile-means, and save to @site</span></span></span>
+<span class="r-in"><span><span class="co"># there must be some data in @site for this to work</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">mean_prop</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, FUN<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">prop</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># re-plot using ranks defined by computed summaries (in @site)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span>, plot.order<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">mean_prop</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileApply-4.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## iterate over profiles, calculate on each horizon, merge into original SPC</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## iterate over profiles, calculate on each horizon, merge into original SPC</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is already a SoilProfileCollection-class object, doing nothing.</span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(predvars, data, env):</span> object 'group' not found</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># calculate horizon thickness and proportional thickness</span></span>
-<span class="r-in"><span class="co"># returns a data.frame result with multiple attributes per horizon</span></span>
-<span class="r-in"><span class="va">thicknessFunction</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">hz</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">depthnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fu"><a href="hzID.html">hzID</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
-<span class="r-in">                    thk<span class="op">=</span><span class="op">(</span><span class="va">hz</span><span class="op">[[</span><span class="va">depthnames</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="va">hz</span><span class="op">[[</span><span class="va">depthnames</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">res</span><span class="op">$</span><span class="va">hz_prop</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">thk</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">thk</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="st">'hz_thickness'</span>, <span class="st">'hz_prop'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># list output option with simplify=F, list names are profile_id(sp1)</span></span>
-<span class="r-in"><span class="va">list.output</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">thicknessFunction</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">list.output</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate horizon thickness and proportional thickness</span></span></span>
+<span class="r-in"><span><span class="co"># returns a data.frame result with multiple attributes per horizon</span></span></span>
+<span class="r-in"><span><span class="va">thicknessFunction</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">hz</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">depthnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fu"><a href="hzID.html">hzID</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    thk<span class="op">=</span><span class="op">(</span><span class="va">hz</span><span class="op">[[</span><span class="va">depthnames</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="va">hz</span><span class="op">[[</span><span class="va">depthnames</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">res</span><span class="op">$</span><span class="va">hz_prop</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">thk</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">thk</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="st">'hz_thickness'</span>, <span class="st">'hz_prop'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># list output option with simplify=F, list names are profile_id(sp1)</span></span></span>
+<span class="r-in"><span><span class="va">list.output</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">thicknessFunction</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">list.output</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $P001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id hzID hz_thickness    hz_prop</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 P001    1            2 0.02247191</span>
@@ -217,10 +234,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  P006   33           10   0.050</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 P006   34           30   0.150</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># data.frame output option with frameify=TRUE</span></span>
-<span class="r-in"><span class="va">df.output</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">thicknessFunction</span>, frameify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df.output</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># data.frame output option with frameify=TRUE</span></span></span>
+<span class="r-in"><span><span class="va">df.output</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">thicknessFunction</span>, frameify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df.output</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id hzID hz_thickness    hz_prop</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 P001    1            2 0.02247191</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 P001    2           12 0.13483146</span>
@@ -228,54 +245,54 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 P001    4            8 0.08988764</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 P001    5           32 0.35955056</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 P001    6            0 0.00000000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># since df.output contains idname(sp1) and hzidname(sp1),</span></span>
-<span class="r-in"><span class="co"># it can safely be merged by a left-join via horizons&lt;- setter</span></span>
-<span class="r-in"><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">df.output</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hz_thickness</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, main<span class="op">=</span><span class="st">"Density plot of Horizon Thickness"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># since df.output contains idname(sp1) and hzidname(sp1),</span></span></span>
+<span class="r-in"><span><span class="co"># it can safely be merged by a left-join via horizons&lt;- setter</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">df.output</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hz_thickness</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, main<span class="op">=</span><span class="st">"Density plot of Horizon Thickness"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileApply-5.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## iterate over profiles, subsetting horizon data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## iterate over profiles, subsetting horizon data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is already a SoilProfileCollection-class object, doing nothing.</span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(predvars, data, env):</span> object 'group' not found</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># make some fake site data related to a depth of some importance</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">dep</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">1</span>, mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">i</span><span class="op">$</span><span class="va">top</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># custom function for subsetting horizon data, by profile</span></span>
-<span class="r-in"><span class="co"># keep horizons with lower boundary &lt; site-level attribute 'dep'</span></span>
-<span class="r-in"><span class="va">fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># extract horizons</span></span>
-<span class="r-in">  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># make an expression to subset horizons</span></span>
-<span class="r-in">  <span class="va">exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'bottom &lt; '</span>, <span class="va">i</span><span class="op">$</span><span class="va">dep</span>, sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># subset horizons, and write-back into current SPC</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/methods/slot.html" class="external-link">slot</a></span><span class="op">(</span><span class="va">i</span>, <span class="st">'horizons'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">h</span>, subset<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/parse.html" class="external-link">parse</a></span><span class="op">(</span>text<span class="op">=</span><span class="va">exp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># return modified SPC</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># list of modified SoilProfileCollection objects</span></span>
-<span class="r-in"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">fun</span>, simplify<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># re-combine list of SoilProfileCollection objects into a single SoilProfileCollection</span></span>
-<span class="r-in"><span class="va">sp1.sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="pbindlist.html">pbindlist</a></span><span class="op">(</span><span class="va">l</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># graphically check</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">dep</span>, col<span class="op">=</span><span class="st">'red'</span>, pch<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1.sub</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># make some fake site data related to a depth of some importance</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">dep</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">1</span>, mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">i</span><span class="op">$</span><span class="va">top</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># custom function for subsetting horizon data, by profile</span></span></span>
+<span class="r-in"><span><span class="co"># keep horizons with lower boundary &lt; site-level attribute 'dep'</span></span></span>
+<span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># extract horizons</span></span></span>
+<span class="r-in"><span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># make an expression to subset horizons</span></span></span>
+<span class="r-in"><span>  <span class="va">exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'bottom &lt; '</span>, <span class="va">i</span><span class="op">$</span><span class="va">dep</span>, sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># subset horizons, and write-back into current SPC</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/methods/slot.html" class="external-link">slot</a></span><span class="op">(</span><span class="va">i</span>, <span class="st">'horizons'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">h</span>, subset<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/parse.html" class="external-link">parse</a></span><span class="op">(</span>text<span class="op">=</span><span class="va">exp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># return modified SPC</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># list of modified SoilProfileCollection objects</span></span></span>
+<span class="r-in"><span><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu">profileApply</span><span class="op">(</span><span class="va">sp1</span>, <span class="va">fun</span>, simplify<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># re-combine list of SoilProfileCollection objects into a single SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="va">sp1.sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="pbindlist.html">pbindlist</a></span><span class="op">(</span><span class="va">l</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># graphically check</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">dep</span>, col<span class="op">=</span><span class="st">'red'</span>, pch<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp1.sub</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="profileApply-6.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -290,7 +307,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

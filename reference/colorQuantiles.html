@@ -63,19 +63,27 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">colorQuantiles</span><span class="op">(</span><span class="va">soilColors</span>, p <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colorQuantiles</span><span class="op">(</span><span class="va">soilColors</span>, p <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>soilColors</dt>
 <dd><p>vector of R colors (sRGB colorspace)</p></dd>
+
+
 <dt>p</dt>
 <dd><p>marginal quantiles of interest</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A List containing the following elements:</p><ul><li><p>marginal: <code>data.frame</code> containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00</p></li>
+    
+
+<p>A List containing the following elements:</p>
+
+
+<ul><li><p>marginal: <code>data.frame</code> containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00</p></li>
 <li><p>L1: L1 median CIELAB (D65) values, closest Munsell chip, and dE00</p></li>
 </ul></div>
     <div id="details">
@@ -90,28 +98,28 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># example data, see manual page for details</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># slice top 25 cm</span></span>
-<span class="r-in"><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="slice-methods.html">slice</a></span><span class="op">(</span><span class="va">sp5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check some of the data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">25</span><span class="op">)</span>, divide.hz<span class="op">=</span><span class="cn">FALSE</span>, name<span class="op">=</span><span class="st">''</span>, print.id<span class="op">=</span><span class="cn">FALSE</span>, width<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># colors</span></span>
-<span class="r-in"><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="unique.html">unique</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">soil_color</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute marginal quantiles and L1 median</span></span>
-<span class="r-in"><span class="va">cq</span> <span class="op">&lt;-</span> <span class="fu">colorQuantiles</span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">soil_color</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># simple graphical display of results</span></span>
-<span class="r-in"><span class="fu"><a href="plotColorQuantiles.html">plotColorQuantiles</a></span><span class="op">(</span><span class="va">cq</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># example data, see manual page for details</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># slice top 25 cm</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="slice-methods.html">slice</a></span><span class="op">(</span><span class="va">sp5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check some of the data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">25</span><span class="op">)</span>, divide.hz<span class="op">=</span><span class="cn">FALSE</span>, name<span class="op">=</span><span class="st">''</span>, print.id<span class="op">=</span><span class="cn">FALSE</span>, width<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># colors</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="previewColors.html">previewColors</a></span><span class="op">(</span><span class="fu"><a href="unique.html">unique</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">soil_color</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute marginal quantiles and L1 median</span></span></span>
+<span class="r-in"><span><span class="va">cq</span> <span class="op">&lt;-</span> <span class="fu">colorQuantiles</span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">soil_color</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simple graphical display of results</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotColorQuantiles.html">plotColorQuantiles</a></span><span class="op">(</span><span class="va">cq</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -126,7 +134,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

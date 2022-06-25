@@ -72,32 +72,45 @@ gap or overlap between adjacent horizons
 </ol></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">checkHzDepthLogic</span><span class="op">(</span>
-  <span class="va">x</span>,
-  hzdepths <span class="op">=</span> <span class="cn">NULL</span>,
-  idname <span class="op">=</span> <span class="cn">NULL</span>,
-  fast <span class="op">=</span> <span class="cn">FALSE</span>,
-  byhz <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">checkHzDepthLogic</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  hzdepths <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  idname <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fast <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  byhz <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p><code>SoilProfileCollection</code> or <code>data.frame</code> object to check</p></dd>
+
+
 <dt>hzdepths</dt>
 <dd><p>SoilProfileCollection uses <code>horizonDepths(x)</code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector of column names of top and bottom depths</p></dd>
+
+
 <dt>idname</dt>
 <dd><p>SoilProfileCollection uses <code>idname(x)</code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector with column name of unique profile ID;</p></dd>
+
+
 <dt>fast</dt>
 <dd><p>If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: <code>FALSE</code></p></dd>
+
+
 <dt>byhz</dt>
 <dd><p>Apply logic tests to profiles or individual horizons?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> containing profile IDs, validity boolean (<code>valid</code>) and test results if <code>fast = FALSE</code>.
-The <code>data.frame</code> will have as many rows as profiles in <code>x</code> (<code>length(x)</code>).</p><ul><li><p><code>id</code> : Profile IDs, named according to <code>idname(x)</code></p></li>
+    
+
+<p>A <code>data.frame</code> containing profile IDs, validity boolean (<code>valid</code>) and test results if <code>fast = FALSE</code>.</p>
+
+
+<p>The <code>data.frame</code> will have as many rows as profiles in <code>x</code> (<code>length(x)</code>).</p><ul><li><p><code>id</code> : Profile IDs, named according to <code>idname(x)</code></p></li>
 <li><p><code>valid</code> : boolean, profile passes all of the following tests</p><ul><li><p><code>depthLogic</code> : boolean, errors related to depth logic</p></li>
 <li><p><code>sameDepth</code> : boolean, errors related to same top/bottom depths</p></li>
 <li><p><code>missingDepth</code> : boolean, NA in top / bottom depths</p></li>
@@ -111,16 +124,16 @@ The <code>data.frame</code> will have as many rows as profiles in <code>x</code>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">## sample data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># these data should be clean</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">checkHzDepthLogic</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## sample data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># these data should be clean</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">checkHzDepthLogic</span><span class="op">(</span><span class="va">sp3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id valid depthLogic sameDepth missingDepth overlapOrGap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1  TRUE      FALSE     FALSE        FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 10  TRUE      FALSE     FALSE        FALSE        FALSE</span>
@@ -128,11 +141,11 @@ The <code>data.frame</code> will have as many rows as profiles in <code>x</code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  3  TRUE      FALSE     FALSE        FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  4  TRUE      FALSE     FALSE        FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  5  TRUE      FALSE     FALSE        FALSE        FALSE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># less memory if only concerned about net validity</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">checkHzDepthLogic</span><span class="op">(</span><span class="va">sp3</span>, fast <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># less memory if only concerned about net validity</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">checkHzDepthLogic</span><span class="op">(</span><span class="va">sp3</span>, fast <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id valid</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 10  TRUE</span>
@@ -140,7 +153,7 @@ The <code>data.frame</code> will have as many rows as profiles in <code>x</code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  3  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  4  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  5  TRUE</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -155,7 +168,7 @@ The <code>data.frame</code> will have as many rows as profiles in <code>x</code>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,31 +63,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mollic.thickness.requirement</span><span class="op">(</span>
-  <span class="va">p</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  texcl.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzTexClName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  clay.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzAttrName</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"clay"</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"_r"</span><span class="op">)</span><span class="op">)</span>,
-  truncate <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mollic.thickness.requirement</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  texcl.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzTexClName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  clay.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzAttrName</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"clay"</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"_r"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  truncate <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection.</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>Column in horizon table containing designations. Default: <code>guessHzDesgnName(p)</code></p></dd>
+
+
 <dt>texcl.attr</dt>
 <dd><p>Column in horizon table containing texture classes. Default: <code>guessHzTexClName(p)</code></p></dd>
+
+
 <dt>clay.attr</dt>
 <dd><p>Column in horizon table containing clay contents. Default: <code>guessHzAttrName(p, 'clay', c('total','_r'))</code></p></dd>
+
+
 <dt>truncate</dt>
 <dd><p>Should sliding scale (Criterion 6C) results be truncated to 18 to 25cm interval? (Experimental; Default: TRUE)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.</p>
+    
+
+<p>A unit length numeric vector containing Mollic or Umbric epipedon minimum thickness requirement.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -96,30 +107,30 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># construct a fake profile</span></span>
-<span class="r-in"><span class="va">spc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span>, taxsubgrp <span class="op">=</span> <span class="st">"Lithic Haploxeralfs"</span>,</span>
-<span class="r-in">                  hzname   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"AB"</span>,<span class="st">"Bt"</span>,<span class="st">"BCt"</span>,<span class="st">"R"</span><span class="op">)</span>,</span>
-<span class="r-in">                  hzdept   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,  <span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>,  <span class="fl">49</span><span class="op">)</span>,</span>
-<span class="r-in">                  hzdepb   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>, <span class="fl">49</span>, <span class="fl">200</span><span class="op">)</span>,</span>
-<span class="r-in">                  prop     <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">22</span>, <span class="fl">28</span>, <span class="fl">24</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  texcl    <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"cl"</span>, <span class="st">"l"</span>,<span class="st">"br"</span><span class="op">)</span>,</span>
-<span class="r-in">                  d_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,   <span class="fl">5</span>,  <span class="fl">5</span>,  <span class="fl">6</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  m_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  m_chroma <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,   <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span>
-<span class="r-in"><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span>
-<span class="r-in"><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># print results in table</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">spc</span><span class="op">[[</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>,</span>
-<span class="r-in">           thickness_req <span class="op">=</span> <span class="fu">mollic.thickness.requirement</span><span class="op">(</span><span class="va">spc</span>, clay.attr<span class="op">=</span><span class="st">'prop'</span><span class="op">)</span>,</span>
-<span class="r-in">           thickness_req_nobound <span class="op">=</span> <span class="fu">mollic.thickness.requirement</span><span class="op">(</span><span class="va">spc</span>,</span>
-<span class="r-in">                                        clay.attr<span class="op">=</span><span class="st">'prop'</span>, truncate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># construct a fake profile</span></span></span>
+<span class="r-in"><span><span class="va">spc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span>, taxsubgrp <span class="op">=</span> <span class="st">"Lithic Haploxeralfs"</span>,</span></span>
+<span class="r-in"><span>                  hzname   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"AB"</span>,<span class="st">"Bt"</span>,<span class="st">"BCt"</span>,<span class="st">"R"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  hzdept   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,  <span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>,  <span class="fl">49</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  hzdepb   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>, <span class="fl">49</span>, <span class="fl">200</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  prop     <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">22</span>, <span class="fl">28</span>, <span class="fl">24</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  texcl    <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"cl"</span>, <span class="st">"l"</span>,<span class="st">"br"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  d_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,   <span class="fl">5</span>,  <span class="fl">5</span>,  <span class="fl">6</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  m_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  m_chroma <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,   <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print results in table</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">spc</span><span class="op">[[</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>           thickness_req <span class="op">=</span> <span class="fu">mollic.thickness.requirement</span><span class="op">(</span><span class="va">spc</span>, clay.attr<span class="op">=</span><span class="st">'prop'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>           thickness_req_nobound <span class="op">=</span> <span class="fu">mollic.thickness.requirement</span><span class="op">(</span><span class="va">spc</span>,</span></span>
+<span class="r-in"><span>                                        clay.attr<span class="op">=</span><span class="st">'prop'</span>, truncate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id thickness_req thickness_req_nobound</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1            18              16.33333</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -134,7 +145,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

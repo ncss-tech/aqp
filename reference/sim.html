@@ -63,25 +63,38 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sim</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">1</span>, iterations <span class="op">=</span> <span class="fl">25</span>, hz.sd <span class="op">=</span> <span class="fl">2</span>, min.thick <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sim</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">1</span>, iterations <span class="op">=</span> <span class="fl">25</span>, hz.sd <span class="op">=</span> <span class="fl">2</span>, min.thick <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a SoilProfileCollection object containing a single profile from which to draw simulated data</p></dd>
+
+
 <dt>n</dt>
 <dd><p>the number of requested simulations</p></dd>
+
+
 <dt>iterations</dt>
 <dd><p>sampling iterations used to determine each horizon thickness</p></dd>
+
+
 <dt>hz.sd</dt>
 <dd><p>standard deviation used to simulate horizon thickness, can be a vector but must divide evenly into the number of horizons found in <code>x</code></p></dd>
+
+
 <dt>min.thick</dt>
 <dd><p>minimum horizon thickness allowed in simulation results</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SoilProfileCollection object with <code>n</code> simulated profiles, each containing the same number of horizons and same data as <code>x</code></p>
+    
+
+<p>A SoilProfileCollection object with <code>n</code> simulated profiles, each containing the same number of horizons and same data as <code>x</code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -98,10 +111,10 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># please see documentation for perturb() for examples</span></span>
-<span class="r-in"><span class="co">#  the sim() function calls perturb() internally</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># please see documentation for perturb() for examples</span></span></span>
+<span class="r-in"><span><span class="co">#  the sim() function calls perturb() internally</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -117,7 +130,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

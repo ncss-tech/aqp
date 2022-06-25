@@ -65,46 +65,67 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getCambicBounds</span><span class="op">(</span>
-  <span class="va">p</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  texcl.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzTexClName</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  clay.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzAttrName</a></span><span class="op">(</span><span class="va">p</span>, attr <span class="op">=</span> <span class="st">"clay"</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"_r"</span><span class="op">)</span><span class="op">)</span>,
-  argi_bounds <span class="op">=</span> <span class="cn">NULL</span>,
-  d_value <span class="op">=</span> <span class="st">"d_value"</span>,
-  m_value <span class="op">=</span> <span class="st">"m_value"</span>,
-  m_chroma <span class="op">=</span> <span class="st">"m_chroma"</span>,
-  sandy.texture.pattern <span class="op">=</span> <span class="st">"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getCambicBounds</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  texcl.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzTexClName</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  clay.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzAttrName</a></span><span class="op">(</span><span class="va">p</span>, attr <span class="op">=</span> <span class="st">"clay"</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"_r"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  argi_bounds <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  d_value <span class="op">=</span> <span class="st">"d_value"</span>,</span>
+<span>  m_value <span class="op">=</span> <span class="st">"m_value"</span>,</span>
+<span>  m_chroma <span class="op">=</span> <span class="st">"m_chroma"</span>,</span>
+<span>  sandy.texture.pattern <span class="op">=</span> <span class="st">"-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>A single-profile SoilProfileCollection</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>Column name containing horizon designations.</p></dd>
+
+
 <dt>texcl.attr</dt>
 <dd><p>Arguments to <code><a href="getArgillicBounds.html">getArgillicBounds()</a></code></p></dd>
+
+
 <dt>clay.attr</dt>
 <dd><p>Arguments to <code><a href="getArgillicBounds.html">getArgillicBounds()</a></code></p></dd>
+
+
 <dt>argi_bounds</dt>
 <dd><p>Optional: numeric vector of length 2 with top and bottom of argillic; (Default: NULL)</p></dd>
+
+
 <dt>d_value</dt>
 <dd><p>Column name containing dry value. Default: d_value</p></dd>
+
+
 <dt>m_value</dt>
 <dd><p>Column name containing moist value. Default: m_value</p></dd>
+
+
 <dt>m_chroma</dt>
 <dd><p>Column name containing moist chroma Default: m_chroma</p></dd>
+
+
 <dt>sandy.texture.pattern</dt>
 <dd><p>this is a pattern for matching sandy textural classes: <code>-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments to <code><a href="getArgillicBounds.html">getArgillicBounds()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> containing profile, cambic indexes, along with top and bottom depths.</p>
+    
+
+<p>A <code>data.frame</code> containing profile, cambic indexes, along with top and bottom depths.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -113,28 +134,28 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># construct a fake profile</span></span>
-<span class="r-in"><span class="va">spc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span>, taxsubgrp <span class="op">=</span> <span class="st">"Lithic Haploxerepts"</span>,</span>
-<span class="r-in">                  hzname   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"AB"</span>,<span class="st">"Bw"</span>,<span class="st">"BC"</span>,<span class="st">"R"</span><span class="op">)</span>,</span>
-<span class="r-in">                  hzdept   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,  <span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>,  <span class="fl">49</span><span class="op">)</span>,</span>
-<span class="r-in">                  hzdepb   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>, <span class="fl">49</span>, <span class="fl">200</span><span class="op">)</span>,</span>
-<span class="r-in">                  clay     <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">22</span>, <span class="fl">22</span>, <span class="fl">21</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  texcl    <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>, <span class="st">"l"</span>,<span class="st">"br"</span><span class="op">)</span>,</span>
-<span class="r-in">                  d_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,   <span class="fl">5</span>,  <span class="fl">5</span>,  <span class="fl">6</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  m_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">                  m_chroma <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,   <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># promote to SoilProfileCollection</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span>
-<span class="r-in"><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span>
-<span class="r-in"><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># print results in table</span></span>
-<span class="r-in"><span class="fu">getCambicBounds</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># construct a fake profile</span></span></span>
+<span class="r-in"><span><span class="va">spc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span>, taxsubgrp <span class="op">=</span> <span class="st">"Lithic Haploxerepts"</span>,</span></span>
+<span class="r-in"><span>                  hzname   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"AB"</span>,<span class="st">"Bw"</span>,<span class="st">"BC"</span>,<span class="st">"R"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  hzdept   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,  <span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>,  <span class="fl">49</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  hzdepb   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">32</span>, <span class="fl">42</span>, <span class="fl">49</span>, <span class="fl">200</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  clay     <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">22</span>, <span class="fl">22</span>, <span class="fl">21</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  texcl    <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>, <span class="st">"l"</span>,<span class="st">"br"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  d_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">5</span>,   <span class="fl">5</span>,  <span class="fl">5</span>,  <span class="fl">6</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  m_value  <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  m_chroma <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>,   <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">4</span>,  <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print results in table</span></span></span>
+<span class="r-in"><span><span class="fu">getCambicBounds</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> guessing horizon attribute 'clay' is stored in `clay`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id cambic_top cambic_bottom cambic_index</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1         32            49            1</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -149,7 +170,7 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,52 +63,75 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">soilColorSignature</span><span class="op">(</span>
-  <span class="va">spc</span>,
-  r <span class="op">=</span> <span class="st">"r"</span>,
-  g <span class="op">=</span> <span class="st">"g"</span>,
-  b <span class="op">=</span> <span class="st">"b"</span>,
-  method <span class="op">=</span> <span class="st">"colorBucket"</span>,
-  pam.k <span class="op">=</span> <span class="fl">3</span>,
-  RescaleLightnessBy <span class="op">=</span> <span class="fl">1</span>,
-  useProportions <span class="op">=</span> <span class="cn">TRUE</span>,
-  pigmentNames <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">".white.pigment"</span>, <span class="st">".red.pigment"</span>, <span class="st">".green.pigment"</span>,
-    <span class="st">".yellow.pigment"</span>, <span class="st">".blue.pigment"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">soilColorSignature</span><span class="op">(</span></span>
+<span>  <span class="va">spc</span>,</span>
+<span>  r <span class="op">=</span> <span class="st">"r"</span>,</span>
+<span>  g <span class="op">=</span> <span class="st">"g"</span>,</span>
+<span>  b <span class="op">=</span> <span class="st">"b"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"colorBucket"</span>,</span>
+<span>  pam.k <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  RescaleLightnessBy <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  useProportions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  pigmentNames <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">".white.pigment"</span>, <span class="st">".red.pigment"</span>, <span class="st">".green.pigment"</span>,</span>
+<span>    <span class="st">".yellow.pigment"</span>, <span class="st">".blue.pigment"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>spc</dt>
 <dd><p>a <code>SoilProfileCollection</code> object</p></dd>
+
+
 <dt>r</dt>
 <dd><p>horizon level attribute containing soil color (sRGB) red values</p></dd>
+
+
 <dt>g</dt>
 <dd><p>horizon level attribute containing soil color (sRGB) green values</p></dd>
+
+
 <dt>b</dt>
 <dd><p>horizon level attribute containing soil color (sRGB) blue values</p></dd>
+
+
 <dt>method</dt>
 <dd><p>algorithm used to compute color signature, <code>colorBucket</code>, <code>depthSlices</code>, or <code>pam</code></p></dd>
+
+
 <dt>pam.k</dt>
 <dd><p>number of classes to request from <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code></p></dd>
+
+
 <dt>RescaleLightnessBy</dt>
 <dd><p>rescaling factor for CIE LAB L-coordinate</p></dd>
+
+
 <dt>useProportions</dt>
 <dd><p>use proportions or quantities, see details</p></dd>
+
+
 <dt>pigmentNames</dt>
 <dd><p>names for resulting pigment proportions or quantities</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>For the <code>colorBucket</code> method, a <code>data.frame</code> object containing:</p><ul><li><p>id column: set according to <code>idname(spc)</code></p></li>
+    
+
+<p>For the <code>colorBucket</code> method, a <code>data.frame</code> object containing:</p><ul><li><p>id column: set according to <code>idname(spc)</code></p></li>
 <li><p><code>.white.pigment</code>: proportion or quantity of CIE LAB L-values</p></li>
 <li><p><code>.red.pigment</code>: proportion or quantity of CIE LAB positive A-values</p></li>
 <li><p><code>.green.pigment</code>: proportion or quantity of CIE LAB negative A-values</p></li>
 <li><p><code>.yellow.pigment</code>: proportion or quantity of CIE LAB positive B-values</p></li>
 <li><p><code>.blue.pigment</code>: proportion or quantity of CIE LAB negative B-values</p></li>
-</ul><p>Column names can be adjusted with the <code>pigmentNames</code> argument.
-For the <code>depthSlices</code> method ...
-For the <code>pam</code> method ...</p>
+</ul><p>Column names can be adjusted with the <code>pigmentNames</code> argument.</p>
+
+
+<p>For the <code>depthSlices</code> method ...</p>
+
+
+<p>For the <code>pam</code> method ...</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -129,20 +152,20 @@ For the <code>pam</code> method ...</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># trivial example, not very interesting</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert Munsell -&gt; sRGB triplets</span></span>
-<span class="r-in"><span class="va">rgb.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hue</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">value</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">chroma</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">r</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">r</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">g</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">b</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extract color signature</span></span>
-<span class="r-in"><span class="va">pig</span> <span class="op">&lt;-</span> <span class="fu">soilColorSignature</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># trivial example, not very interesting</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert Munsell -&gt; sRGB triplets</span></span></span>
+<span class="r-in"><span><span class="va">rgb.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hue</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">value</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">chroma</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">r</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">r</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">g</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">b</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extract color signature</span></span></span>
+<span class="r-in"><span><span class="va">pig</span> <span class="op">&lt;-</span> <span class="fu">soilColorSignature</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -157,7 +180,7 @@ For the <code>pam</code> method ...</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -65,27 +65,38 @@ probability matrices.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">hzTransitionProbabilities</span><span class="op">(</span><span class="va">x</span>, <span class="va">name</span>, loopTerminalStates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hzTransitionProbabilities</span><span class="op">(</span><span class="va">x</span>, <span class="va">name</span>, loopTerminalStates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code>SoilProfileCollection</code> object.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>A horizon level attribute in <code>x</code> that names horizons.</p></dd>
+
+
 <dt>loopTerminalStates</dt>
 <dd><p>should terminal states loop back to themselves?
 This is useful when the transition probability matrix will be used to
 initialize a <code>markovchain</code> object. See examples below.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The function <code>hzTransitionProbabilities</code> returns a square
-matrix of transition probabilities. See examples.
-The function <code>genhzTableToAdjMat</code> returns a square adjacency matrix.
-See examples.
-The function <code>mostLikelyHzSequence</code> returns the most likely sequence of
+    
+
+<p>The function <code>hzTransitionProbabilities</code> returns a square
+matrix of transition probabilities. See examples.</p>
+
+
+<p>The function <code>genhzTableToAdjMat</code> returns a square adjacency matrix.
+See examples.</p>
+
+
+<p>The function <code>mostLikelyHzSequence</code> returns the most likely sequence of
 horizons, given a <code>markovchain</code> object initialized from horizon
 transition probabilities and an initial state, <code>t0</code>. See examples.</p>
     </div>
@@ -116,12 +127,12 @@ TP</dt>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># horizon transition probabilities: row -&gt; col transitions</span></span>
-<span class="r-in"><span class="op">(</span><span class="va">tp</span> <span class="op">&lt;-</span> <span class="fu">hzTransitionProbabilities</span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'name'</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># horizon transition probabilities: row -&gt; col transitions</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">tp</span> <span class="op">&lt;-</span> <span class="fu">hzTransitionProbabilities</span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'name'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>ties in transition probability matrix</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     A A1 A2 AB       ABt        Bt       Bt1 Bt2 Bt3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A   0  0  0  0 0.1111111 0.4444444 0.4444444   0   0</span>
@@ -135,44 +146,44 @@ TP</dt>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bt3 0  0  0  0 0.0000000 0.0000000 0.0000000   0   0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"ties")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">## plot TP matrix with functions from sharpshootR package</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfcol<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html" class="external-link">plotSoilRelationGraph</a></span><span class="op">(</span><span class="va">tp</span>, graph.mode <span class="op">=</span> <span class="st">'directed'</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## demonstrate genhzTableToAdjMat usage</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">loafercreek</span>, package<span class="op">=</span><span class="st">'soilDB'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert contingency table -&gt; adj matrix / TP matrix</span></span>
-<span class="r-in"><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">loafercreek</span><span class="op">$</span><span class="va">hzname</span>, <span class="va">loafercreek</span><span class="op">$</span><span class="va">genhz</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">genhzTableToAdjMat</span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfcol<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html" class="external-link">plotSoilRelationGraph</a></span><span class="op">(</span><span class="va">m</span>, graph.mode <span class="op">=</span> <span class="st">'directed'</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## demonstrate markovchain integration</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/spedygiorgio/markovchain/" class="external-link">markovchain</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tp.loops</span> <span class="op">&lt;-</span> <span class="fu">hzTransitionProbabilities</span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'name'</span>, loopTerminalStates <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># init new markovchain from TP matrix</span></span>
-<span class="r-in"><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="st">"markovchain"</span>, states<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">tp.loops</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, transitionMatrix <span class="op">=</span> <span class="va">tp.loops</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># simple plot</span></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">mc</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check absorbing states</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/markovchain/man/structuralAnalysis.html" class="external-link">absorbingStates</a></span><span class="op">(</span><span class="va">mc</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># steady-state:</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/markovchain/man/steadyStates.html" class="external-link">steadyStates</a></span><span class="op">(</span><span class="va">mc</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">## plot TP matrix with functions from sharpshootR package</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfcol<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html" class="external-link">plotSoilRelationGraph</a></span><span class="op">(</span><span class="va">tp</span>, graph.mode <span class="op">=</span> <span class="st">'directed'</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## demonstrate genhzTableToAdjMat usage</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">loafercreek</span>, package<span class="op">=</span><span class="st">'soilDB'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert contingency table -&gt; adj matrix / TP matrix</span></span></span>
+<span class="r-in"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">loafercreek</span><span class="op">$</span><span class="va">hzname</span>, <span class="va">loafercreek</span><span class="op">$</span><span class="va">genhz</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">genhzTableToAdjMat</span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfcol<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html" class="external-link">plotSoilRelationGraph</a></span><span class="op">(</span><span class="va">m</span>, graph.mode <span class="op">=</span> <span class="st">'directed'</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## demonstrate markovchain integration</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/spedygiorgio/markovchain/" class="external-link">markovchain</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tp.loops</span> <span class="op">&lt;-</span> <span class="fu">hzTransitionProbabilities</span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'name'</span>, loopTerminalStates <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># init new markovchain from TP matrix</span></span></span>
+<span class="r-in"><span><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="st">"markovchain"</span>, states<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">tp.loops</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, transitionMatrix <span class="op">=</span> <span class="va">tp.loops</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simple plot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">mc</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check absorbing states</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/markovchain/man/structuralAnalysis.html" class="external-link">absorbingStates</a></span><span class="op">(</span><span class="va">mc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># steady-state:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/markovchain/man/steadyStates.html" class="external-link">steadyStates</a></span><span class="op">(</span><span class="va">mc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -187,7 +198,7 @@ TP</dt>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

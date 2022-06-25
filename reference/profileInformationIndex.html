@@ -63,34 +63,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">profileInformationIndex</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">vars</span>,
-  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"median"</span>, <span class="st">"mean"</span>, <span class="st">"sum"</span><span class="op">)</span>,
-  baseline <span class="op">=</span> <span class="cn">TRUE</span>,
-  useDepths <span class="op">=</span> <span class="cn">TRUE</span>,
-  numericDigits <span class="op">=</span> <span class="fl">4</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">profileInformationIndex</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">vars</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"median"</span>, <span class="st">"mean"</span>, <span class="st">"sum"</span><span class="op">)</span>,</span>
+<span>  baseline <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  useDepths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  numericDigits <span class="op">=</span> <span class="fl">4</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p><code>SoilProfileCollection</code> object</p></dd>
+
+
 <dt>vars</dt>
 <dd><p>character vector of site or horizon level attributes to consider</p></dd>
+
+
 <dt>method</dt>
 <dd><p>character: aggregation method, information content evaluated over <code>vars</code>: 'median', 'mean', or 'sum'</p></dd>
+
+
 <dt>baseline</dt>
 <dd><p>logical, compute ratio to "baseline" information content, see details</p></dd>
+
+
 <dt>useDepths</dt>
 <dd><p>logical, include horizon depths in <code>vars</code></p></dd>
+
+
 <dt>numericDigits</dt>
 <dd><p>integer, number of significant digits to retain in numeric -&gt; character conversion</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a numeric vector of the same length as <code>length(x)</code> and in the same order, suitable for direct assignment to a new site-level attribute</p>
+    
+
+<p>a numeric vector of the same length as <code>length(x)</code> and in the same order, suitable for direct assignment to a new site-level attribute</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -115,7 +128,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

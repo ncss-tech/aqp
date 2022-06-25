@@ -63,35 +63,48 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for SoilProfileCollection</span>
-<span class="fu">spc2mpspline</span><span class="op">(</span>
-  <span class="va">object</span>,
-  var_name <span class="op">=</span> <span class="cn">NULL</span>,
-  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"est_1cm"</span>, <span class="st">"est_icm"</span>, <span class="st">"est_dcm"</span><span class="op">)</span>,
-  pattern <span class="op">=</span> <span class="st">"R|Cr|Cd|qm"</span>,
-  hzdesgn <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SoilProfileCollection</span></span>
+<span><span class="fu">spc2mpspline</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  var_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"est_1cm"</span>, <span class="st">"est_icm"</span>, <span class="st">"est_dcm"</span><span class="op">)</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"R|Cr|Cd|qm"</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>A SoilProfileCollection</p></dd>
+
+
 <dt>var_name</dt>
 <dd><p>Column name in <code>@horizons</code> slot of <code>object</code> containing numeric values to spline</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Options include "est_1cm" (default; 1cm estimates), "est_icm" (estimates over original layer boundaries), "est_dcm" (estimates over constant interval, specified with <code>d</code> argument to <code>mpspline3::mpspline()</code>). Default value for <code>d</code> is <code>c(0, 5, 15, 30, 60, 100, 200)</code>.</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>Regex pattern to match for bottom of profile (passed to <code><a href="depthOf.html">minDepthOf()</a></code>) default: "R|Cr|Cd|qm"; only used if <code>hzdesgn</code> is specified</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>Column name in <code>@horizons</code> slot of <code>object</code> containing horizon designations default: <code>NULL</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments to <code><a href="https://rdrr.io/pkg/mpspline2/man/mpspline.html" class="external-link">mpspline2::mpspline()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in <code>attr(result, 'removed')</code>.</p>
+    
+
+<p>A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in <code>attr(result, 'removed')</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -110,16 +123,15 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">spc2mpspline</span><span class="op">(</span><span class="va">sp1</span>, <span class="st">"prop"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: mpspline2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, color <span class="op">=</span> <span class="st">"prop_spline"</span>, divide.hz <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">spc2mpspline</span><span class="op">(</span><span class="va">sp1</span>, <span class="st">"prop"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, color <span class="op">=</span> <span class="st">"prop_spline"</span>, divide.hz <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spc2mpspline-SoilProfileCollection-method-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -134,7 +146,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

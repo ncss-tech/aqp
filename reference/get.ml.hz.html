@@ -67,40 +67,48 @@ boundaries.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get.ml.hz</span><span class="op">(</span><span class="va">x</span>, o.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"original.levels"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get.ml.hz</span><span class="op">(</span><span class="va">x</span>, o.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"original.levels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>output from <code><a href="slab-methods.html">slab</a></code></p></dd>
+
+
 <dt>o.names</dt>
 <dd><p>an optional character vector of horizon designations that
 will be used in the final table</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A dataframe with the following columns:</p>
+    
+
+<p>A dataframe with the following columns:</p>
 <dl><dt>hz</dt>
 <dd><p>horizon names</p></dd>
+
 <dt>top</dt>
 <dd><p>top boundary</p></dd>
-<dt>bottom</dt>
+ <dt>bottom</dt>
 <dd><p>bottom boundary</p></dd>
+
 <dt>confidence</dt>
 <dd><p>integrated probability over thickness of each ML horizon,
 rounded to the nearest integer</p></dd>
-<dt>pseudo.brier</dt>
+ <dt>pseudo.brier</dt>
 <dd><p>A "pseudo"" Brier Score
 for a multi-class prediction, where the most-likely horizon label is treated
 as the "correct" outcome. Details on the calculation for traditional Brier
 Scores here: <a href="https://en.wikipedia.org/wiki/Brier_score" class="external-link">https://en.wikipedia.org/wiki/Brier_score</a>. Lower values
 suggest better agreement between ML horizon label and class-wise
 probabilities.</p></dd>
-<dt>mean.H</dt>
+ <dt>mean.H</dt>
 <dd><p>mean Shannon entropy (bits), derived from
 probabilities within each most-likely horizon. Larger values suggest more
 confusion within each ML.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -119,28 +127,28 @@ confusion within each ML.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># normalize horizon names: result is a factor</span></span>
-<span class="r-in"><span class="va">sp1</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="generalize.hz.html">generalize.hz</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">name</span>,</span>
-<span class="r-in">  new<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'O'</span>,<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span><span class="op">)</span>,</span>
-<span class="r-in">  pat<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'O'</span>, <span class="st">'^A'</span>,<span class="st">'^B'</span>,<span class="st">'C'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm<span class="op">=</span><span class="fl">1</span>, slab.structure<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># normalize horizon names: result is a factor</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu"><a href="generalize.hz.html">generalize.hz</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">name</span>,</span></span>
+<span class="r-in"><span>  new<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'O'</span>,<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  pat<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'O'</span>, <span class="st">'^A'</span>,<span class="st">'^B'</span>,<span class="st">'C'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm<span class="op">=</span><span class="fl">1</span>, slab.structure<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># generate table of ML horizonation</span></span>
-<span class="r-in"><span class="fu">get.ml.hz</span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># generate table of ML horizonation</span></span></span>
+<span class="r-in"><span><span class="fu">get.ml.hz</span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   hz top bottom confidence pseudo.brier    mean.H</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  O   0      2         37    0.3950617 0.9910761</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  A   2     32         75    0.1547325 0.7922828</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  B  32    145         57    0.3574667 1.0813045</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  C 145    150         71    0.1250000 0.8112781</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -155,7 +163,7 @@ confusion within each ML.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

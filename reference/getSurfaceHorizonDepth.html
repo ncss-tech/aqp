@@ -63,42 +63,51 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span>
-  <span class="va">p</span>,
-  <span class="va">pattern</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">getMineralSoilSurfaceDepth</span><span class="op">(</span>
-  <span class="va">p</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  pattern <span class="op">=</span> <span class="st">"O"</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">getPlowLayerDepth</span><span class="op">(</span>
-  <span class="va">p</span>,
-  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,
-  pattern <span class="op">=</span> <span class="st">"^Ap[^b]*"</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  <span class="va">pattern</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">getMineralSoilSurfaceDepth</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"O"</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">getPlowLayerDepth</span><span class="op">(</span></span>
+<span>  <span class="va">p</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"^Ap[^b]*"</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
 <dd><p>a SoilProfileCollection</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>a regular expression pattern to match for all horizons to be considered part of the "surface".</p></dd>
+
+
 <dt>hzdesgn</dt>
 <dd><p>column name containing horizon designation. Default: <code>guessHzDesgnName(p, required = TRUE)</code>.</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>logical. Return single profile results as vector (default: <code>TRUE</code>) or <code>data.frame</code> (<code>FALSE</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface. If <code>length(p) &gt; 1</code> then a <em>data.frame</em> containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.</p>
+    
+
+<p>a numeric value corresponding to the bottom depth of the last horizon matching 'pattern' that is contiguous with other matching horizons up to the soil surface. If <code>length(p) &gt; 1</code> then a <em>data.frame</em> containing profile ID, horizon ID, top or bottom depths, horizon designation and pattern.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -112,51 +121,51 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package <span class="op">=</span> <span class="st">'aqp'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
-<span class="r-in"><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">q</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># look at horizon designations in p and q</span></span>
-<span class="r-in"><span class="va">p</span><span class="op">$</span><span class="va">name</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package <span class="op">=</span> <span class="st">'aqp'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># look at horizon designations in p and q</span></span></span>
+<span class="r-in"><span><span class="va">p</span><span class="op">$</span><span class="va">name</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A1" "A2" "AB" "BA" "Bt" "Rt"</span>
-<span class="r-in"><span class="va">q</span><span class="op">$</span><span class="va">name</span></span>
+<span class="r-in"><span><span class="va">q</span><span class="op">$</span><span class="va">name</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Oi" "A"  "C1" "C2"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># thickness of all surface horizons containing A</span></span>
-<span class="r-in"><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'A'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># thickness of all surface horizons containing A</span></span></span>
+<span class="r-in"><span><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'A'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 57</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># thickness of all surface horizons that start with A</span></span>
-<span class="r-in"><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'^A'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># thickness of all surface horizons that start with A</span></span></span>
+<span class="r-in"><span><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'^A'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># thickness of all surface horizons that start with A, and the A is not followed by B</span></span>
-<span class="r-in"><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'^A[^B]*'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># thickness of all surface horizons that start with A, and the A is not followed by B</span></span></span>
+<span class="r-in"><span><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'^A[^B]*'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># thickness of all surface horizons that start with A</span></span>
-<span class="r-in"><span class="co">#  followed by a number from _2_ to 9 (returns ZERO)</span></span>
-<span class="r-in"><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'^A[2-9]*'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># thickness of all surface horizons that start with A</span></span></span>
+<span class="r-in"><span><span class="co">#  followed by a number from _2_ to 9 (returns ZERO)</span></span></span>
+<span class="r-in"><span><span class="fu">getSurfaceHorizonDepth</span><span class="op">(</span><span class="va">p</span>, pattern <span class="op">=</span> <span class="st">'^A[2-9]*'</span>, hzdesgn <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># getPlowLayerDepth matches first two horizons in fake Ap horizon data with "buried Ap"</span></span>
-<span class="r-in"><span class="va">p</span><span class="op">$</span><span class="va">aphorizons</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"Ap1"</span>,<span class="st">"Ap2"</span>,<span class="st">"AB"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'C'</span>, <span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">-</span> <span class="fl">4</span><span class="op">)</span>, <span class="st">"Apb"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">getPlowLayerDepth</span><span class="op">(</span><span class="va">p</span>, hzdesgn <span class="op">=</span> <span class="st">'aphorizons'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># getPlowLayerDepth matches first two horizons in fake Ap horizon data with "buried Ap"</span></span></span>
+<span class="r-in"><span><span class="va">p</span><span class="op">$</span><span class="va">aphorizons</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"Ap1"</span>,<span class="st">"Ap2"</span>,<span class="st">"AB"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'C'</span>, <span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">-</span> <span class="fl">4</span><span class="op">)</span>, <span class="st">"Apb"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">getPlowLayerDepth</span><span class="op">(</span><span class="va">p</span>, hzdesgn <span class="op">=</span> <span class="st">'aphorizons'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 14</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># getMineralSoilSurfaceDepthmatches first 3 horizons in fake O horizon data</span></span>
-<span class="r-in"><span class="va">p</span><span class="op">$</span><span class="va">ohorizons</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"Oi1"</span>,<span class="st">"Oi2"</span>,<span class="st">"Oe"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'C'</span>, <span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">-</span> <span class="fl">4</span><span class="op">)</span>, <span class="st">"2C"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">getMineralSoilSurfaceDepth</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'ohorizons'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># getMineralSoilSurfaceDepthmatches first 3 horizons in fake O horizon data</span></span></span>
+<span class="r-in"><span><span class="va">p</span><span class="op">$</span><span class="va">ohorizons</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"Oi1"</span>,<span class="st">"Oi2"</span>,<span class="st">"Oe"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'C'</span>, <span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">-</span> <span class="fl">4</span><span class="op">)</span>, <span class="st">"2C"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">getMineralSoilSurfaceDepth</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'ohorizons'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># matches first Oi horizon with original horizon designations of pedon 2</span></span>
-<span class="r-in"><span class="fu">getMineralSoilSurfaceDepth</span><span class="op">(</span><span class="va">q</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># matches first Oi horizon with original horizon designations of pedon 2</span></span></span>
+<span class="r-in"><span><span class="fu">getMineralSoilSurfaceDepth</span><span class="op">(</span><span class="va">q</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -171,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
