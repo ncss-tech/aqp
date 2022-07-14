@@ -4,7 +4,13 @@
 \alias{correctAWC}
 \title{Apply rock fragment or salt correction to available water content}
 \usage{
-correctAWC(awc, total_rf, gravel = NULL, ec = NULL)
+correctAWC(
+  awc,
+  total_rf = numeric(length(ec)),
+  gravel = NULL,
+  ec = NULL,
+  nullFragsAreZero = TRUE
+)
 }
 \arguments{
 \item{awc}{Numeric vector of available water capacities (e.g. from \code{estimateAWC})}
@@ -14,6 +20,8 @@ correctAWC(awc, total_rf, gravel = NULL, ec = NULL)
 \item{gravel}{Numeric vector of gravel volume percentage, 0 - 100}
 
 \item{ec}{Numeric vector of electrical conductivity, mmhos/cm}
+
+\item{nullFragsAreZero}{Interpret \code{NA} in \code{total_rf}, \code{gravel} or \code{ec} as \code{0}? Default: \code{TRUE}}
 }
 \value{
 A numeric vector (double) containing estimated available water capacities corrected for rock fragments and salts
