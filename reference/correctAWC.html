@@ -63,7 +63,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correctAWC</span><span class="op">(</span><span class="va">awc</span>, <span class="va">total_rf</span>, gravel <span class="op">=</span> <span class="cn">NULL</span>, ec <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correctAWC</span><span class="op">(</span></span>
+<span>  <span class="va">awc</span>,</span>
+<span>  total_rf <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">ec</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  gravel <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ec <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -82,6 +88,10 @@
 
 <dt>ec</dt>
 <dd><p>Numeric vector of electrical conductivity, mmhos/cm</p></dd>
+
+
+<dt>nullFragsAreZero</dt>
+<dd><p>Interpret <code>NA</code> in <code>total_rf</code>, <code>gravel</code> or <code>ec</code> as <code>0</code>? Default: <code>TRUE</code></p></dd>
 
 </dl></div>
     <div id="value">
