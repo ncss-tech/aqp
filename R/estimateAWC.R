@@ -77,7 +77,7 @@ estimateAWC <- function(texcl, omcl, precision = 2,
 #' # medium organic matter, loam texture w/ 0% frags by volume and 8 mmhos/cm salts
 #' salty.awc <- correctAWC(base.awc, total_rf = 0, ec = 8)
 #' salty.awc
-correctAWC <- function(awc, total_rf = numeric(length(ec)), gravel = NULL, ec = NULL, nullFragsAreZero = TRUE) {
+correctAWC <- function(awc, total_rf = numeric(length(awc)), gravel = NULL, ec = NULL, nullFragsAreZero = TRUE) {
   
   # rf_lut from region2 rock fragment/salt correction lookup table
   rf_lut <- .get_rf_ec_lut_RO2()

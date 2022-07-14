@@ -6,7 +6,7 @@
 \usage{
 correctAWC(
   awc,
-  total_rf = numeric(length(ec)),
+  total_rf = numeric(length(awc)),
   gravel = NULL,
   ec = NULL,
   nullFragsAreZero = TRUE
