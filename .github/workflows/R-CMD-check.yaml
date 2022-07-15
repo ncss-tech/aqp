@@ -76,6 +76,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          if (!requireNamespace('markovchain')) install.packages("https://cran.microsoft.com/snapshot/2020-04-23/src/contrib/markovchain_0.8.4.tar.gz", repos = NULL)
         shell: Rscript {0}
 
       - name: Check
