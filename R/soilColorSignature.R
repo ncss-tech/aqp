@@ -1,4 +1,4 @@
-
+## TODO: convert to dice()
 
 # compute LAB coordinates from clusters of slices
 .pigments.pam <- function(x, k) {
@@ -29,11 +29,12 @@
   if(nrow(x.slices) < k+1)
     return(NULL)
   
-  ## TODO: 
-  ##   use distance matrix via delta-E00 as implemented in farver::compare_colour()
-  ##   see recent changes in aggregateSoilColor() for dE00 example
+  # compute perceptually based distance matrix on sliced colors, CIELAB
+  dE00 <- farver::compare_colour(x.slices[, -1], x.slices[, -1], from_space='lab', method='CIE2000', white_from='D65')
+  dE00 <- as.dist(dE00)
+  
   # use PAM to cluster, note `pamonce=5`` used for optimization
-  cl <- pam(x.slices[, -1], k = k, stand = FALSE, pamonce = 5)
+  cl <- pam(dE00, k = k, diss = TRUE, pamonce = 5)
   
   # get data
   x.medoids <- x.slices[cl$id.med, c(idname(x), 'L', 'A', 'B')]
@@ -69,6 +70,8 @@
 
 # compute LAB coordinates at select percentiles of depth
 .pigments.depths <- function(x, p = c(0.1, 0.5, 0.9)) {
+  
+  # print(profile_id(x))
   
   # extract just horizons that have color data
   h <- horizons(x)
@@ -181,6 +184,7 @@
 #' @param RescaleLightnessBy rescaling factor for CIE LAB L-coordinate
 #' @param useProportions use proportions or quantities, see details
 #' @param pigmentNames names for resulting pigment proportions or quantities
+#' @param apply.fun function passed to `aqp::profileApply(APPLY.FUN)` argument, can be used to add progress bars via `pbapply::pblapply`, or parallel processing with `furrr::future_map` 
 #'
 #'
 #' @details See the [related tutorial](http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html).
@@ -226,11 +230,16 @@
 #' # extract color signature
 #' pig <- soilColorSignature(sp1)
 #' 
-soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = 'colorBucket', pam.k = 3, RescaleLightnessBy = 1, useProportions = TRUE, pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment')) {
+soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = c('colorBucket', 'depthSlices', 'pam'), pam.k = 3, RescaleLightnessBy = 1, useProportions = TRUE, pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment'), apply.fun = lapply) {
   
-  # warn about methods
-  if(! method  %in% c('colorBucket', 'depthSlices', 'pam'))
-    message('method must be either `colorBucket` or `depthSlices`')
+  # sanity check on method
+  method <- match.arg(method)
+  
+  # farver pkg required for method = pam
+  if(method == 'pam') {
+    if (!requireNamespace('farver', quietly = TRUE))
+      stop('please install the `farver` package.', call.=FALSE)
+  }
   
   # extract horizons
   h <- horizons(spc)
@@ -239,8 +248,9 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = 'colorBu
   # create LAB colors
   # note: source colors are sRGB
   # note: convertColor() expects a matrix
-  lab.colors <- convertColor(as.matrix(h[, c(r, g, b)]), from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+  lab.colors <- convertColor(as.matrix(h[, c(r, g, b)]), from = 'sRGB', to = 'Lab', from.ref.white = 'D65', to.ref.white = 'D65')
   
+  ## TODO: only for those methods NOT using dE00!
   ## TODO: does it make sense to normalize based on limited data or entire possible range?
   # normalize the L coordinate
   lab.colors[, 1] <- lab.colors[, 1] / RescaleLightnessBy
@@ -269,7 +279,8 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = 'colorBu
       FUN = .pigments.proportions, 
       useProportions = useProportions, 
       pigmentNames = pigmentNames, 
-      simplify = FALSE
+      simplify = FALSE,
+      APPLY.FUN = apply.fun
     )
     
   }
@@ -285,7 +296,8 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = 'colorBu
     col.data <- profileApply(
       spc, 
       FUN = .pigments.depths, 
-      simplify = FALSE
+      simplify = FALSE,
+      APPLY.FUN = apply.fun
     )
     
   }
@@ -302,7 +314,8 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = 'colorBu
       spc, 
       FUN = .pigments.pam, 
       k = pam.k, 
-      simplify = FALSE
+      simplify = FALSE,
+      APPLY.FUN = apply.fun
     )
     
   }
