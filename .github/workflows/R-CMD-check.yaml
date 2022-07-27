@@ -81,6 +81,7 @@ jobs:
       - name: Install markovchain from MRAN (3.6 only)
         if: matrix.config.r == '3.6'
         run: |
+          install.packages(c('matlab', 'expm', 'RcppParallel'))
           install.packages("https://cran.microsoft.com/snapshot/2020-04-23/src/contrib/markovchain_0.8.4.tar.gz", repos = NULL)
         shell: Rscript {0}
         
