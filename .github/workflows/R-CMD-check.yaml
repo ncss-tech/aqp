@@ -76,11 +76,17 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
-          if (!requireNamespace('markovchain')) install.packages("https://cran.microsoft.com/snapshot/2020-04-23/src/contrib/markovchain_0.8.4.tar.gz", repos = NULL)
         shell: Rscript {0}
 
+      - name: Install markovchain from MRAN (3.6 only)
+        if: matrix.config.r == '3.6'
+        run: |
+          install.packages("https://cran.microsoft.com/snapshot/2020-04-23/src/contrib/markovchain_0.8.4.tar.gz", repos = NULL)
+        shell: Rscript {0}
+        
       - name: Check
         env:
+          _R_CHECK_FORCE_SUGGESTS_: false
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
