@@ -4,7 +4,14 @@
 \name{as}
 \alias{as}
 \alias{as,SoilProfileCollection-method}
+\alias{as.data.frame,SoilProfileCollection-method}
 \title{Coerce SoilProfileCollection with \code{as()}}
+\usage{
+\S4method{as.data.frame}{SoilProfileCollection}(x)
+}
+\arguments{
+\item{x}{a SoilProfileCollection}
+}
 \value{
 list
 

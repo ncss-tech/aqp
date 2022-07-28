@@ -136,3 +136,10 @@ setAs("SoilProfileCollection", "SpatialPoints", function(from) {
     SpatialPoints(coordinates(from), proj4string = CRS(proj4string(from)))
   }
 )
+
+#' @param x a SoilProfileCollection
+#' @export 
+#' @rdname coercion-methods
+setMethod("as.data.frame", "SoilProfileCollection", function(x) {
+  as(x, 'data.frame')
+})
