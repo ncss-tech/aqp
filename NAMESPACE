@@ -98,6 +98,9 @@ importFrom(sp,
   rbind.SpatialPoints
 )
 
+importFrom(gower,
+           gower_topn)
+
 exportClasses(SoilProfileCollection)
 
 exportMethods(

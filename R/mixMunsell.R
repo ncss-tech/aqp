@@ -188,7 +188,7 @@
 #' 
 #'
 #' @seealso \code{\link{munsell.spectra}}
-#' 
+#' @importFrom gower gower_topn
 #' @examples 
 #' 
 #' # try a couple different methods
