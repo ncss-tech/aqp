@@ -39,17 +39,17 @@ This function now relies on the missing data checks provided by the mpspline2 pa
 Data completeness is assessed and the input SoilProfileCollection is filtered and truncated to create a container for the results from \code{mpspline2::mpspline()}.
 }
 \examples{
+if (requireNamespace("mpspline2")) {
+  data(sp1)
+  depths(sp1) <- id ~ top + bottom
 
-data(sp1)
-depths(sp1) <- id ~ top + bottom
+  res <- spc2mpspline(sp1, "prop")
 
-res <- spc2mpspline(sp1, "prop")
-
-plotSPC(res[1:5,], color = "prop_spline", divide.hz = FALSE)
-
+  plotSPC(res[1:5,], color = "prop_spline", divide.hz = FALSE)
+}
 }
 \references{
-T.F.A. Bishop, A.B. McBratney, G.M. Laslett (1999)   Modelling soil attribute depth functions with equal-area quadratic smoothing splines.  Geoderma 91(1–2), pp. 27-45. \doi{https://doi.org/10.1016/S0016-7061(99)00003-8}
+Bishop, T.F.A., McBratney, A.B., Laslett, G.M. (1999) Modelling soil attribute depth functions with equal-area quadratic smoothing splines. Geoderma 91(1–2), pp. 27-45. \doi{https://doi.org/10.1016/S0016-7061(99)00003-8}
 
 O'Brien, Lauren (2022). mpspline2: Mass-Preserving Spline Functions for Soil Data. R package version 0.1.6. \url{https://cran.r-project.org/package=mpspline2}
 }
