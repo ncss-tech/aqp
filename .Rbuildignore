@@ -7,3 +7,5 @@ README.md
 ^misc$
 ^\.github$
 ^CITATION\.cff$
+^README\.Rmd$
+^man/figures$
