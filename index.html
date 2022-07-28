@@ -86,33 +86,54 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Get the stable version from CRAN:</p>
-<p><code>install.packages('aqp', dep=TRUE)</code></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'aqp'</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Get the development version from Github, after installing the CRAN version + dependencies:</p>
-<p><code>remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)</code></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ncss-tech/aqp"</span>, dependencies<span class="op">=</span><span class="cn">FALSE</span>, upgrade<span class="op">=</span><span class="cn">FALSE</span>, build<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <!-- aqp hexsticker! --><p><a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" class="external-link"> <img src="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width="45%" height="45%" hspace="15" vspace="15" align="right"></a></p>
 </div>
 <div class="section level2">
 <h2 id="website">Website<a class="anchor" aria-label="anchor" href="#website"></a>
 </h2>
-<p><a href="http://ncss-tech.github.io/AQP/" class="external-link">http://ncss-tech.github.io/AQP/</a></p>
+<p><a href="http://ncss-tech.github.io/AQP/" class="external-link uri">http://ncss-tech.github.io/AQP/</a></p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; This is aqp 1.43</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'clay'</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'CF'</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color <span class="op">=</span> <span class="st">'clay'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color <span class="op">=</span> <span class="st">'CF'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-2-2.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>Dylan Beaudette, Pierre Roudier and Andrew Brown (2022). aqp: Algorithms for Quantitative Pedology. R package version 1.41. <a href="https://CRAN.R-project.org/package=aqp" class="external-link uri">https://CRAN.R-project.org/package=aqp</a></p>
-<p>D.E. Beaudette, P. Roudier, A.T. O’Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers &amp; Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004, <a href="http://dx.doi.org/10.1016/j.cageo.2012.10.020" class="external-link uri">http://dx.doi.org/10.1016/j.cageo.2012.10.020</a>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"aqp"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To cite aqp in publications use:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Beaudette, D., Roudier, P., Brown, A. (2022). aqp: Algorithms for</span></span>
+<span><span class="co">#&gt;   Quantitative Pedology. R package version 1.42.</span></span>
+<span><span class="co">#&gt;   &lt;https://CRAN.R-project.org/package=aqp&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Beaudette, D.E., Roudier, P., O'Geen, A.T. Algorithms for</span></span>
+<span><span class="co">#&gt;   quantitative pedology: A toolkit for soil scientists, Computers &amp;</span></span>
+<span><span class="co">#&gt;   Geosciences, Volume 52, March 2013, Pages 258-268, ISSN 0098-3004,</span></span>
+<span><span class="co">#&gt;   http://dx.doi.org/10.1016/j.cageo.2012.10.020.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
+<span><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
+<span><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="related-packages">Related Packages<a class="anchor" aria-label="anchor" href="#related-packages"></a>
