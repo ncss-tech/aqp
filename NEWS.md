@@ -1,9 +1,15 @@
-# aqp 1.43 (2022-07-14)
+# aqp 1.43 (2022-07-27)
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
  * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
  * aesthetic cleanup in `explainPlotSPC()`
  * `soilColorSignature()` gains arguments and perceptual color distances (dE00) via farver package
+ * `as(<SPC>, "data.frame")`: Replace join with merge 
+ * Add S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
+ * `correctAWC()`: NA handling  - return NA when frags are NA 
+ * `mutate_profile()`: Faster (data.table-based) evaluation of profile-level expressions (#255)
+ * `profileApply`: Add support for custom `lapply()`-like function (`APPLY.FUN`) for processing chunks (#256) 
+*  Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()` (#254)
 
 # aqp 1.42 (2022-04-08)
  * CRAN release
