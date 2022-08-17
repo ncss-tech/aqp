@@ -69,7 +69,13 @@ grain size composition to the family particle size class.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="cn">NULL</span>, clay <span class="op">=</span> <span class="cn">NULL</span>, sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ssc_to_texcl</span><span class="op">(</span>sand <span class="op">=</span> <span class="cn">NULL</span>, clay <span class="op">=</span> <span class="cn">NULL</span>, as.is <span class="op">=</span> <span class="cn">FALSE</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">ssc_to_texcl</span><span class="op">(</span></span>
+<span>  sand <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clay <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  as.is <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">texmod_to_fragvoltot</span><span class="op">(</span>texmod <span class="op">=</span> <span class="cn">NULL</span>, lieutex <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
@@ -119,6 +125,10 @@ conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)</p></dd>
 
 <dt>sand</dt>
 <dd><p>vector of sand percentages</p></dd>
+
+
+<dt>simplify</dt>
+<dd><p>Passed to <code><a href="SoilTextureLevels.html">SoilTextureLevels()</a></code> to set the nu mber of possible texture classes. If <code>TRUE</code>, the ordered factor has a maximum of 12 levels, if <code>FALSE</code> (default) the ordered factor has a maximum of 21 levels (including e.g. very fine/fine/coarse variants)</p></dd>
 
 
 <dt>as.is</dt>

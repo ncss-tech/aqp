@@ -63,13 +63,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SoilTextureLevels</span><span class="op">(</span>which <span class="op">=</span> <span class="st">"codes"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SoilTextureLevels</span><span class="op">(</span>which <span class="op">=</span> <span class="st">"codes"</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>which</dt>
 <dd><p>'codes' (texture codes) or 'names' (texture class names)</p></dd>
+
+
+<dt>simplify</dt>
+<dd><p>Return 12-class factor levels (<code>TRUE</code>) or 21-class factor levels (default: <code>FALSE</code>)? The 12-class system does not separate sands, loamy sands and sandy loams into sand fraction variants (e.g. "very fine sandy loam" in the 21-class system is "sandy loam" in 12-class system)</p></dd>
 
 </dl></div>
     <div id="value">
@@ -102,6 +106,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [16] sandy clay loam      clay loam            silty clay loam     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [19] sandy clay           silty clay           clay                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21 Levels: coarse sand &lt; sand &lt; fine sand &lt; ... &lt; clay</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simpler class names</span></span></span>
+<span class="r-in"><span><span class="fu">SoilTextureLevels</span><span class="op">(</span>which <span class="op">=</span> <span class="st">'names'</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] sand            loamy sand      sandy loam      loam           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] silt loam       silt            sandy clay loam clay loam      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] silty clay loam sandy clay      silty clay      clay           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 Levels: sand &lt; loamy sand &lt; sandy loam &lt; loam &lt; silt loam &lt; ... &lt; clay</span>
 <span class="r-in"><span> </span></span>
 </code></pre></div>
     </div>
