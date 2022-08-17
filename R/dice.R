@@ -36,19 +36,26 @@
 #' 
 #' @export
 #' 
-dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, strict = TRUE, byhz = FALSE) {
-  
+dice <-  function(x,
+                  fm = NULL,
+                  SPC = TRUE,
+                  pctMissing = FALSE,
+                  fill = FALSE,
+                  strict = TRUE,
+                  byhz = FALSE,
+                  verbose = FALSE) {
+    
   # sacrifice to R CMD check spirits
   .pctMissing <- NULL
   
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
-  if(strict) {
-    x <- HzDepthLogicSubset(x, byhz = byhz)
+  if  (strict) {
+    x <- HzDepthLogicSubset(x, byhz = TRUE)
     
     ## TODO: this could invoke 2x calls to fillHzGaps
     # removed horizons will trigger an automatic gap-filling
-    if(!is.null(metadata(x)$removed.horizons)) {
+    if (!is.null(metadata(x)$removed.horizons)) {
       message('filling gaps left by HzDepthLogicSubset')
       x <- fillHzGaps(x, flag = TRUE, to_top = NULL, to_bottom = NULL)
     }
@@ -67,13 +74,12 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   ids.top.bottom.idx <- match(c(idn, hzidn, htb), hznames)
   
   # interpret optional formula
-  if(!is.null(fm)) {
+  if (!is.null(fm)) {
     # something supplied
     # reasonable?
-    if(! inherits(fm, "formula")) {
+    if (!inherits(fm, "formula")) {
       stop('must provide a valid formula', call. = FALSE)
     }
-    
     
     # extract components of the formula:
     fm <- str_c(deparse(fm, 500), collapse = "")
@@ -92,17 +98,17 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
     vars <- fm[[2]] 
     
     # check for bogus left/right side problems with the formula
-    if(any(z < 0) | any(is.na(z))) {
+    if (any(z < 0) | any(is.na(z))) {
       stop('z-slice must be >= 0', call. = FALSE)
     }
       
     # check for integer / numeric slices
-    if(! inherits(z,  c('numeric','integer'))) {
+    if (!inherits(z,  c('numeric','integer'))) {
       stop('z-slice must be either numeric or integer', call. = FALSE)
     }
       
     # if z-index is missing set to NULL for later on
-    if(length(z) == 0) {
+    if (length(z) == 0) {
       z <- NULL
     } else {
       # z index is specified
@@ -111,13 +117,13 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
     }
     
     # check for '.' --> all variables, minus ID/depths
-    if(any(vars == '.')) {
+    if (any(vars == '.')) {
       # all variables except profile ID, horizon ID, top, bottom
       vars <- hznames[-ids.top.bottom.idx]
     }
 
     # check for column names that don't exist
-    if(! any(vars %in% hznames)) {
+    if (!any(vars %in% hznames)) {
       stop('names in formula do not match any horizon attributes', call. = FALSE)
     }
       
@@ -127,7 +133,7 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
     # slice to-depth of collection
     
     # optionally fill all gaps between min(x) --- [gaps] --- max(x)
-    if(fill) {
+    if (fill) {
       x <- fillHzGaps(x, flag = TRUE, to_top = min(x), to_bottom = max(x))
     }
     
@@ -147,11 +153,12 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   )
   
   # convert to DT
-  if(! inherits(h, 'data.table')) {
+  if (!inherits(h, 'data.table')) {
     h <- as.data.table(h)
   }
   
   ## TODO: are keys worth the extra sorting / re-sorting?
+  ##       no, probably not inherently worth it -AGB 2022/08/17
   # init keys, sorts the data on hzID (alpha-sort)
   # setkeyv(h, hzidn)
   # consider an index, seems to have no effect
@@ -163,21 +170,31 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   
   # safe wrapper to base::seq
   # NA in from/to (hz depths) not allowed
-  # TODO: from == to (0-thickness) horizons ??
   .seq.safe <- function(from, to, by) {
-    if(any(is.na(from)) | any(is.na(to))) {
+    if (any(is.na(from)) | any(is.na(to))) {
       stop('corrupt horizonation, consider using `strict = TRUE`', call. = FALSE)
     }
-    
+    if (from > to) {
+      toold <- to
+      to <- from
+      from <- toold
+    }
     return(
-      seq(from = from, to = to, by = by)
+      seq(from = from, to = to, by = abs(by))
     )
   }
   
+  # from == to (0-thickness) horizons -- these should be removed -AGB 2022/08/17
+  zthk <- h[[htb[1]]] == h[[htb[2]]]
+  if (any(zthk, na.rm = TRUE)) {
+    message("horizons with zero thickness have been omitted from results")
+  }
+  h.sub <- h[which(!zthk),]
+  
   tops <- mapply(
     FUN = .seq.safe, 
-    from = h[[htb[1]]], 
-    to = h[[htb[2]]] - 1, 
+    from = h.sub[[htb[1]]], 
+    to = h.sub[[htb[2]]] - 1, 
     by = 1, 
     SIMPLIFY = FALSE
   )
@@ -188,30 +205,21 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   # expand slice IDs (horizon IDs)
   # these are used to join with horizons
   sliceIDs <- rep(
-    h[[hzidn]], 
-    times = h[[htb[2]]] - h[[htb[1]]]
+    h.sub[[hzidn]], 
+    times = h.sub[[htb[2]]] - h.sub[[htb[1]]]
   )
-  
   
   # assemble slice LUT for JOIN
   s <- data.table(
     sliceID = sliceIDs, 
-    .sliceTop = tops, 
-    .sliceBottom = bottoms
+    .sliceTop = tops[1:length(sliceIDs)], 
+    .sliceBottom = bottoms[1:length(sliceIDs)]
   )
   
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
-  
-  
-  ## TODO: are keys worth the extra sorting / re-sorting?
-  # note: sorts data
-  # setkeyv(s, hzidn)
-  # consider an index, seems to have no effect
-  # setindexv(s, hzidn)
-  
+
   # FULL JOIN via fast data.table compiled code
-  # using index (?)
   res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
   ## TODO: update to := syntax, but how does it work with with variables?
@@ -231,14 +239,13 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   res[['.sliceTop']] <- NULL
   res[['.sliceBottom']] <- NULL
   
-  
   ## TODO: move z-index subset"up" to original sequence creation to save a lot of time
-  if(!is.null(z)) {
+  if (!is.null(z)) {
     res <- res[which(res[[htb[1]]] %in% z), ]
   }
   
   # slice-wise "percent missing" calculation
-  if(pctMissing) {
+  if (pctMissing) {
     
     # this is quite slow: DT -> DF -> matrix -> apply (8x longer)
     # res[['.pctMissing']] <- .pctMissing(res, vars)
@@ -257,7 +264,7 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   }
   
   # only returning horizons as a data.frame
-  if(!SPC) {
+  if (!SPC) {
     return(as.data.frame(res))
   }
   
@@ -276,8 +283,10 @@ dice <- function(x, fm = NULL, SPC = TRUE, pctMissing = FALSE, fill = FALSE, str
   OBF <- round(f.size / o.size, 1)
   metadata(x)$OBF <- OBF
   
-  # possibly informative 
-  message(sprintf("Object Bloat Factor: %s", OBF))
+  if (verbose) {
+    # turned off by default; possibly informative 
+    message(sprintf("Object Bloat Factor: %s", OBF))
+  }
   
   return(x)
 }
