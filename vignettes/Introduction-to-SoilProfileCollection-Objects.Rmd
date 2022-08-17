@@ -1,6 +1,9 @@
 ---
 title: "Introduction to SoilProfileCollection Objects"
-output: rmarkdown::html_vignette
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{Introduction to SoilProfileCollection Objects}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,32 +29,45 @@ options(width = 100, stringsAsFactors = FALSE)
 ```
 
 # Introduction
-This is a very basic introduction to the `SoilProfileCollection` class object defined in the `aqp` package for **R**. The `SoilProfileCollection` class was designed to simplify the process of working with the collection of data associated with soil profiles: site-level data, horizon-level data, spatial data, diagnostic horizon data, metadata, etc. Examples listed below are meant to be copied/pasted from this document and interactively run within **R**. Comments (green text) briefly describe what the code in each line does. Further documentation on objects and functions from the `aqp` package can be accessed by typing `help(aqp)` (or more generally, `?function_name`) at the **R** console.
 
+This is a basic introduction to the `SoilProfileCollection` class object defined in the `aqp` package for **R**. 
+
+The `SoilProfileCollection` class was designed to simplify the process of working with the collection of data associated with soil profiles: site-level data, horizon-level data, spatial data, diagnostic horizon data, metadata, etc. 
+
+Examples listed below are meant to be copied/pasted from this document and interactively run within **R**. Comments (preceded by `#` symbol) briefly describe what the code in each line does. Further documentation on objects and functions from the `aqp` package can be accessed by typing `help(aqp)` (or more generally, `?function_name`) at the **R** console.
 
 # Object Creation
+
 `SoilProfileCollection` objects are typically created by "promoting" `data.frame` objects (rectangular tables of data) that contain at least three essential columns:
 
    1. an ID column uniquely identifying groups of horizons (e.g. pedons)
    2. horizon top boundaries
    3. horizon bottom boundaries
 
-The `data.frame` should be pre-sorted according to the profile ID and horizon top boundary. Formula notation is used to define the columns used to promote a `data.frame` object:
+The `data.frame` is sorted internally according to the profile ID and horizon top boundary. Formula notation is used to define the columns used to promote a `data.frame` object:
 
 ```{r promote_to_spc, eval=FALSE} 
 idcolumn ~ hz_top_column + hz_bottom_column
 ```
 
 In this tutorial we will use some sample data included with the `aqp` package, based on characterization data from 10 soils sampled on serpentinitic parent material as described in [McGahan et al, 2009](https://www.soils.org/publications/sssaj/articles/73/6/2087).
-```{r creation}
-# load required packages, you may have to install these if missing:
-# install.packages('aqp', dep = TRUE)
-# remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
-library(aqp)
-library(Hmisc)
-library(lattice)
-library(MASS)
 
+To begin you will load required packages. You may have to first install these if missing:
+
+```{r install, eval=FALSE}
+# install CRAN release + dependencies
+install.packages('aqp', dependencies = TRUE)
+
+# install latest version from GitHub
+remotes::install_github("ncss-tech/aqp", dependencies = FALSE)
+```
+
+```{r load-packages}
+library(aqp)
+library(lattice) # used for slice/slab-wise profile plots
+```
+
+```{r creation}
 # load sample data set, a data.frame object with horizon-level data from 10 profiles
 data(sp4)
 str(sp4)
@@ -65,7 +81,7 @@ str(sp4)
 # 'bottom' is the name of the column containing horizon lower boundaries
 depths(sp4) <- id ~ top + bottom
 
-# register horizon designation column
+# define "horizon designation" column name for the collection
 hzdesgnname(sp4) <- 'name'
 
 # check it out:
@@ -73,16 +89,17 @@ class(sp4)
 print(sp4)
 ```
 
-
 # Accessing, Setting, and Replacing Data
+
 "Accessor" functions are used to extract specific components from within `SoilProfileCollection` objects.
 
    * Methods that return a column name. These are useful for extracting depths, horizon designations, IDs, etc. before taking an SPC apart for a specific task.
 
       + `idname(sp4)`: extract profile ID name (column name used to init SPC)
-      + `hzidname(sp4)`: horizon ID name (typically automatically built at init time)
       + `horizonDepths(sp4)`: horizon top / bottom depth names (used to init SPC)
+      + `hzidname(sp4)`: horizon ID name (typically automatically built at init time)
       + `hzdesgnname(sp4)`: horizon designation name (if set)
+      + `hztexclname(sp4)`: horizon texture class name (if set)
 
    * Methods that return a vector of values.
    
@@ -104,85 +121,113 @@ print(sp4)
    * Other methods.
       
       + `depth_units(sp4)`: defaults to 'cm' at SPC creation
-      + `metadata(sp4)`
-
-
-
+      + `metadata(sp4)`: returns `list` object with base + optional (user-defined) metadata elements
 
 # Horizon and Site Data
-Typically, horizon and site data are the most important components of `SoilProfileCollection` objects. Both are internally stored as `data.frame`, `data.table`, or `tbl_df` objects; with one or more rows (per profile ID) in the horizon table and one row (per profile ID) in the site table. Columns from either table can be accessed with the `$` style notation of `data.frames`. New data can be assigned to either table in the same manner, as long as the length of the new data is either:
+
+Horizon data and information about key columns (unique profile ID and depths) are the primary input to the methods provided to create the object. Site data can be derived from unique profile-specific values within the input horizon data, or joined in from an external source based on profile ID. 
+
+Both site and horizon data are stored as `data.frame` within the SoilProfileCollection; with one or more rows (per profile ID) in the horizon table and one row (per profile ID) in the site table. The SoilProfileCollection also supports `data.table`, or `tibble` objects in the `data.frame` slots. 
+
+Columns from site or horizon tables can be accessed with the `$` syntax notation, similar to the `data.frame`. New data can be assigned to either table in the same manner, as long as the length of the new data is:
 
    1. same length as the number of profiles in the collection (target is the site table)
    2. same length as the number of horizons in the collection (target is the horizon table)
- 
+   3. length 1; and selecting the target table requires `site(object)$new_column <- new_value` for new site data and `horizons(object)$new_column <- new value` for horizon
+   
+Assignment of new data to existing or new attributes can proceed as follows.
+
 ```{r hz_and_site_data}
-# assignment of new data to existing or new attributes
-sp4$elevation <- rnorm(n=length(sp4), mean=1000, sd=150) # site-level, based on length of assigned data
-sp4$thickness <- sp4$bottom - sp4$top # horizon-level
+# site-level (based on length of assigned data == number of profiles)
+sp4$elevation <- rnorm(n = length(sp4), mean = 1000, sd = 150) 
+
+# horizon-level (calculated from two horizon-level columns)
+sp4$thickness <- sp4$bottom - sp4$top 
 
 # extraction of specific attributes by name
 sp4$clay # vector of clay content (horizon data)
 sp4$elevation # vector of simulated elevation (site data)
 
-# assign a single single value into horizon-level attributes
-sp4$constant <- rep(1, times=nrow(sp4))
+# unit-length value explicitly targeting site data
+site(sp4)$collection_id <- 1
 
-# promote horizon-level data to site-level data (when it makes sense to do so)
-# note that this _moves_ the named column from horizon to site
+# assign a single single value into horizon-level attributes
+sp4$constant <- rep(1, times = nrow(sp4))
+
+# unit-length value explicitly targeting horizon data
+horizons(sp4)$analysis_group <- "SERP"
+
+# _moves_ the named column from horizon to site
 site(sp4) <- ~ constant 
 ```
 
+Horizon and site data can be modified via extraction to `data.frame` followed by replacement (horizon data) or join (site data). Note that while this approach gives the most flexibility, it is also the most dangerous--replacement of horizon data with new data that don't exactly conform to the original sorting may corrupt your `SoilProfileCollection`.
 
-Horizon and site data can also be modified via extraction to `data.frame` followed by replacement (horizon data) or join (site data). Note that while this approach gives the most flexibility, it is also the most dangerous-- replacement of horizon data with new data that don't exactly conform to the original sorting may corrupt your `SoilProfileCollection`.
 ```{r hz_and_site_data_2}
 # extract horizon data to data.frame
 h <- horizons(sp4)
 
 # add a new column and save back to original object
-h$random.numbers <- rnorm(n=nrow(h), mean=0, sd=1)
+h$random.numbers <- rnorm(n = nrow(h), mean = 0, sd = 1)
 
 # _replace_ original horizon data with modified version
-# ! row-order should not be altered !
-horizons(sp4) <- h
+replaceHorizons(sp4) <- h
 
 # extract site data to data.frame
 s <- site(sp4)
 
 # add a fake group to the site data
-s$group <- factor(rep(c('A', 'B'), length.out=nrow(s)))
+s$group <- factor(rep(c('A', 'B'), length.out = nrow(s)))
 
 # join new site data with previous data: old data are _not_ replaced
 site(sp4) <- s
 
-# check:
+# check
 sp4
 ```
 
-
 # Diagnostic Horizons
-Diagnostic horizons typically span several genetic horizons and may or may not be present in all profiles. To accommodate the wide range of possibilities, diagnostic horizon data are stored as a `data.frame` in "long format": each row corresponds to a diagnostic horizon, identified with a column matching the ID column used to initialize the `SoilProfileCollection` object.
+
+Diagnostic horizons typically span several genetic horizons and may or may not be present in every profile. 
+
+To accommodate the wide range of possibilities, diagnostic horizon data are stored as a `data.frame` in "long format": each row corresponds to a diagnostic feature in a single profile, identified with a column matching the ID column used to initialize the `SoilProfileCollection` object and a label reflecting the feature kind.
+
+For diagnostic horizon data there are no restrictions on data content, as long as each row has an ID that exists within the collection. Be sure to use the ID column name that was used to initialize the SoilProfileCollection object.
+
 ```{r diagnostic}
-# manually create some diagnostic horizon data
-# there is no restrictions on data format, as long as each row has an ID that exists within the collection
-# be sure to use the ID column name that was used to initialize the SoilProfileCollection object
-# check via: idname(sp4)
-dh <- data.frame(id='colusa', kind='argillic', top=8, bottom=42, stringsAsFactors=FALSE)
+dh <- data.frame(
+  id = 'colusa',
+  kind = 'argillic',
+  top = 8,
+  bottom = 42,
+  stringsAsFactors = FALSE
+)
 
 # overwrite any existing diagnostic horizon data
 diagnostic_hz(sp4) <- dh
 
 # append to diagnostic horizon data
 dh <- diagnostic_hz(sp4)
-dh.new <- data.frame(id='napa', kind='argillic', top=6, bottom=20, stringsAsFactors=FALSE)
+dh.new <- data.frame(
+  id = 'napa',
+  kind = 'argillic',
+  top = 6,
+  bottom = 20,
+  stringsAsFactors = FALSE
+)
 
 # overwrite existing diagnostic horizon data with appended data
 diagnostic_hz(sp4) <- rbind(dh, dh.new)
 ```
 
 # Root Restrictive Features
-Features that restrict root entry (fine or very fine roots) are commonly used to estimate *functional* soil depth. Restrictive features include duripans, fragipans, paralithic matrials, lithic contact, or an abrupt change in chemical property. Not all soils have restrictive features, therefore these data are stored as a `data.frame` in "long format". Each row corresponds to a restrictive feature, associated depths, and identified by `profile_id()`. There may be more than one restrictive feature per soil profile.
 
-The example data `sp4` does not contain restrictive features, so we will simulate some at the bottom of each profile + 20cm.
+Features that restrict root entry (fine or very fine roots) are commonly used to estimate *functional* soil depth. Restrictive features include salt accumulations, duripans, fragipans, paralithic matrials, lithic contact, or an abrupt change in chemical property. 
+
+Not all soils have restrictive features, therefore these data are stored as a `data.frame` in "long format". Each row corresponds to a restrictive feature, associated depths, and identified by `profile_id()`. There may be more than one restrictive feature per soil profile.
+
+The example data `sp4` does not describe the restrictive features, so we will simulate some at the bottom of each profile + 20cm.
+
 ```{r restrictions}
 # get the depth of each profile
 rf.top <- profileApply(sp4, max)
@@ -191,14 +236,13 @@ rf.bottom <- rf.top + 20
 # the profile IDs can be extracted from the names attribute
 pIDs <- names(rf.top)
 
-# carefully make data.frame
 # note: profile IDs must be stored in a column named for idname(sp4) -> 'id'
 rf <- data.frame(
   id = pIDs, 
   top = rf.top, 
   bottom = rf.bottom, 
-  kind='fake', 
-  stringsAsFactors=FALSE
+  kind = 'fake',
+  stringsAsFactors = FALSE
 )
 
 # overwrite any existing diagnostic horizon data
@@ -209,7 +253,11 @@ restrictions(sp4)
 ```
 
 # Spatial Data
-Spatial data can be explicitly stored within a `SoilProfileCollection` object and accessed with methods imported from the [sp](http://cran.at.r-project.org/web/packages/sp/index.html) package. The use of `sp` classes (in this case `SpatialPoints` and `SpatialPointsDataFrame` objects) simplifies operations such as [plotting spatial data, coordinate system transformations, and spatial queries](http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf).
+
+Spatial data can be explicitly stored within a `SoilProfileCollection` object and accessed with methods imported from the [sp](http://cran.at.r-project.org/web/packages/sp/index.html) package.
+
+The use of `sp` classes (in this case `SpatialPoints` and `SpatialPointsDataFrame` objects) simplifies operations such as [plotting spatial data, coordinate system transformations, and spatial queries](http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf).
+
 ```{r}
 # generate some fake coordinates as site level attributes
 sp4$x <- rnorm(n = length(sp4), mean = 354000, sd = 100)
@@ -228,19 +276,95 @@ proj4string(sp4)
 # extract spatial data + site level attribtutes
 # see ?SpatialPointsDataFrame for details
 sp4.sp <- as(sp4, 'SpatialPointsDataFrame')
+```
+# Object Metadata
 
-# in the presence of spatial data, subsetting can either result in 
-# 1. a new SoilProfileCollection (> 1 horizon / profile)
-# 2. a new SpatialPointsDataFrame (1 horizon / profile)
-class(sp4[1, ]) # profile 1 from the collection
-class(sp4[, 1]) # horizon 1 from each profile
+SoilProfileCollection metadata can be extracted and set using the `metadata()` and `metadata<-` methods.
+
+```{r metadata}
+# metadata structure
+str(metadata(sp4))
+
+# alter the depth unit metadata attribute
+depth_units(sp4) <- 'inches' # units are really 'cm'
+
+# add or replace custom metadata
+metadata(sp4)$describer <- 'DGM'
+metadata(sp4)$date <- as.Date('2009-01-01')
+metadata(sp4)$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P. 2009. Plant-Available Calcium Varies Widely in Soils on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'
+
+# check new values have been added
+str(metadata(sp4))
+
+# fix depth units, set back to 'cm'
+depth_units(sp4) <- 'cm'
 ```
 
 
+# Validity and Horizon Logic
+
+There are several SoilProfileCollection methods defined to identify corrupted objects/bad depth logic and fix them.
+
+Usually an "invalid" or "corrupt" SoilProfileCollection  comes from direct modification of the S4 object slot contents (not using standard methods), which can result in omissions or reordering that bypasses internal accounting methods.
+
+Occasionally issues arise from illogical inputs (depths) or collections that are missing data. The latter cases (standard methods produce a corrupt SPC given some "degenerate" input data) are considered "bugs" that should reported on the issue tracker: https://github.com/ncss-tech/aqp/issues
+
+`checkSPC()` returns TRUE for a SoilProfileCollection that contains all slots defined in the class prototype.
+
+```{r, eval=FALSE}
+checkSPC(sp4)
+```
+
+`spc_in_sync()` is used as the validity method for the SoilProfileCollection, it determines if some reordering of the horizon data relative to the unique profile ID / site order has occurred.
+
+```{r}
+spc_in_sync(sp4)
+```
+
+`rebuildSPC()` is used to re-construct all the required slots of a SoilProfileCollection, given a source, possibly corrupt, object. This function fixes major issues related to the internal ordering of data in slots, as well as missing slots or metadata.
+
+```{r}
+z <- rebuildSPC(sp4)
+```
+
+`checkHzDepthLogic()` has the ability to perform logical tests on whole profiles or individual horizons. Four different tests are performed related to 
+
+```{r}
+checkHzDepthLogic(sp4)
+checkHzDepthLogic(sp4, byhz = TRUE)
+```
+
+# Coercion
+
+SoilProfileCollections can be coerced to `data.frame`, `list` and `SpatialPointsDataFrame` (when spatial slot has been set up):
+
+```{r coercion, eval=FALSE}
+# check our work by viewing the internal structure
+str(sp4)
+
+# create a data.frame from horizon+site data
+as(sp4, 'data.frame') 
+
+# or, equivalently:
+as.data.frame(sp4)
+
+# convert SoilProfileCollection to a named list containing all slots
+as(sp4, 'list')
+
+# extraction of site + spatial data as SpatialPointsDataFrame
+as(sp4, 'SpatialPointsDataFrame')
+```
+
 # Subsetting SoilProfileCollection Objects
-`SoilProfileCollection` objects can be subset using the familiar `[`-style notation used by matrix and `data.frame` objects, such that: `spc[i, j]` will return profiles identified by the integer vector `i`, and horizons identified by the integer vector `j`. Omitting either index will result in all profiles (`i` omitted) or all horizons (`j` omitted). Typically, site-level attributes will be used as the subsetting criteria. Functions that return an index to matches (such as `grep()` or `which()`) provide the link between attributes and an index to matching profiles. Some examples:
+
+`SoilProfileCollection` objects can be subset using the familiar `[`-style notation used by matrix and `data.frame` objects, such that: `spc[i, j]` will return profiles identified by the integer vector `i`, and horizons identified by the integer vector `j`. 
+
+Omitting either index will result in all profiles (`i` omitted) or all horizons (`j` omitted). 
+
+Typically, site-level attributes will be used as the subsetting criteria. Functions that return an index to matches (such as `grep()` or `which()`) provide the link between attributes and an index to matching profiles.
 
 ## Profiles
+
 Using the *i* index, select one or more profiles by numeric index. An index greater than the number of profiles will return an empty `SoilProfileCollection` object.
 ```{r eval=FALSE}
 # explicit string matching
@@ -257,6 +381,7 @@ sp4[idx, ]
 ```
 
 In an interactive session, it is often simpler to use `subset()` directly:
+
 ```{r eval=FALSE}
 subset(sp4, group == 'A')
 subset(sp4, elevation < 1000)
@@ -264,23 +389,27 @@ subset(sp4, grepl('shasta', id, ignore.case = TRUE))
 ```
 
 ## Horizons by Index
+
 Using the *j* index, select the 2nd horizon from each profile in the collection. Use with caution, asking for a horizon beyond the length of any profile in the collection will result in an error.
+
 ```{r eval = FALSE}
 sp4[, 2]
 ```
 
-
 ## Horizons by Keyword
+
 Using the *k* index, select the `.FIRST` first or `.LAST` horizons (by profile) within a collection. Note that `.FIRST` and `.LAST` are special keywords used by the `SoilProfileCollection` subset methods.
+
 ```{r eval = FALSE}
 sp4[, , .FIRST]
 sp4[, , .LAST]
 ```
 
-
-
 # Splitting, Duplication, and Selection of Unique Profiles
-`SoilProfileCollection` objects are combined by passing a list of objects to the `combine` function. Ideally all objects share the same internal structure, profile ID, horizon ID, depth units, and other parameters of a `SoilProfileCollection`. Manually subset the example data into 3 pieces, compile into a list, and then `combine` back together.
+
+`SoilProfileCollection` objects are combined by passing a list of objects to the `combine()` function. 
+
+Ideally all objects share the same internal structure, profile ID, horizon ID, depth units, and other parameters of a `SoilProfileCollection`. Manually subset the example data into 3 pieces, compile into a list, and then `combine` back together.
  
 ```{r concatenation, eval=FALSE}
 # subset data into chunks
@@ -295,8 +424,8 @@ s <- combine(list(s1, s2, s3))
 plotSPC(s)
 ```
 
-
 It is possible to combine `SoilProfileCollection` objects with different internal structure. The final object will contain the all site and horizon columns from the inputs, possibly creating sparse tables. IDs and horizon depth names are taken from the first object.
+
 ```{r eval=FALSE}
 # sample data as data.frame objects
 data(sp1)
@@ -338,9 +467,10 @@ plotSPC(x, color='.horizon_ids_numeric', col.label = 'Horizon ID')
 groupedProfilePlot(x, 'g', color='.horizon_ids_numeric', col.label = 'Horizon ID', group.name.offset = -15)
 ```
 
-
 ## Splitting
-The inverse of `combine` is `split`: subsets of the `SoilProfileCollection` are split into list elements, each containing a new `SoilProfileCollection`.
+
+The inverse of `combine()` is `split()`: subsets of the `SoilProfileCollection` are split into list elements, each containing a new `SoilProfileCollection`.
+
 ```{r eval=FALSE}
 # continuing from above
 # split subsets of x into a list of SoilProfileCollection objects using site-level attribute 'g'
@@ -348,24 +478,26 @@ res <- split(x, 'g')
 str(res, 1)
 ```
 
-
 ## Duplication
+
 Duplicate the first profile in `sp4` (Colusa) 8 times, resulting in a new `SoilProfileCollection` object containing unique profile IDs.
+
 ```{r fig.height=4, fig.width=8}
 d <- duplicate(sp4[1, ], times = 8)
-par(mar = c(0,2,0,1))
+par(mar = c(0, 2, 0, 1))
 plotSPC(d, color = 'ex_Ca_to_Mg')
 ```
 
 ## Selecting Unique Profiles
+
 ```{r fig.height=4, fig.width=8}
 # an example soil profile  
 x <- data.frame(
-id = 'A',
-name = c('A', 'E', 'Bhs', 'Bt1', 'Bt2', 'BC', 'C'),
-top = c(0, 10, 20, 30, 40, 50, 100),
-bottom = c(10, 20, 30, 40, 50, 100, 125),
-z = c(8, 5, 3, 7, 10, 2, 12)
+  id = 'A',
+  name = c('A', 'E', 'Bhs', 'Bt1', 'Bt2', 'BC', 'C'),
+  top = c(0, 10, 20, 30, 40, 50, 100),
+  bottom = c(10, 20, 30, 40, 50, 100, 125),
+  z = c(8, 5, 3, 7, 10, 2, 12)
 )
 
 # init SPC
@@ -382,67 +514,87 @@ x.dupes <- duplicate(x, times = 5)
 x.sim <- perturb(x, n = 5, thickness.attr = '.sd')
 
 # graphical check
-par(mar=c(0,2,0,4))
+par(mar = c(0, 2, 0, 4))
 
 # inspect unique results
-plotSPC(unique(x.dupes, vars = c('top', 'bottom')), name.style = 'center-center', width = 0.15)
+plotSPC(unique(x.dupes, vars = c('top', 'bottom')),
+        name.style = 'center-center',
+        width = 0.15)
 
-# uniqueness is a function of variable selection
-plotSPC(unique(x.sim, vars = c('top', 'bottom')), name.style = 'center-center')
-plotSPC(unique(x.sim, vars = c('name')), name.style = 'center-center', width = 0.15)
+# "uniqueness" is a function of variable selection
+plotSPC(unique(x.sim, vars = c('top', 'bottom')),
+        name.style = 'center-center')
+
+plotSPC(unique(x.sim, vars = c('name')),
+        name.style = 'center-center',
+        width = 0.15)
 ```
 
 # Plotting SoilProfileCollection Objects
-The `plotSPC()` method for `SoilProfileCollection` objects generates sketches of profiles within the collection based on horizon boundaries, vertically aligned to an integer sequence from 1 to the number of profiles. Horizon names are automatically extracted from a horizon-level attribute `name` (if present), or via an alternate attributed given as an argument: `name='column.name'`. Horizon colors are automatically generated from the horizon-level attribute `soil_color`, or any other attribute of **R**-compatible color description given as an argument: `color='column.name'`. This function is highly customizable, therefore, it is prudent to consult `help(plotSPC)` from time to time. Soil colors in Munsell notation can be converted to **R**-compatible colors via `munsell2rgb()`.
+
+The `plotSPC()` method for `SoilProfileCollection` objects generates sketches of profiles within the collection based on horizon boundaries, vertically aligned to an integer sequence from 1 to the number of profiles. 
+
+Horizon names are automatically extracted from a horizon-level attribute `name` (if present), or via an alternate attributed given as an argument: `name='column.name'`. 
+
+Horizon colors are automatically generated from the horizon-level attribute `soil_color`, or any other attribute of **R**-compatible color description given as an argument: `color='column.name'`. This function is highly customizable, therefore, it is prudent to consult `help(plotSPC)` from time to time. Soil colors in Munsell notation can be converted to **R**-compatible colors via `munsell2rgb()`.
+
+Many of the following examples make use of `par()` to set graphical options such as `mar` (customized margins) and/or `xpd = NA` (turn off clipping) to optimize display of different numbers of profiles and various `plotSPC()` arguments.
 
 ## Making Adjustments
+
 The `explainPlotSPC()` function is helpful for adjusting some of the more obscure arguments to `plotSPC()`.
 
-A basic plot with debugging information overlayed.
+A basic plot with debugging information overlaid:
+
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name')
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name')
 ```
 
-Make sketches wider.
+Make sketches wider:
+
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name', width=0.3)
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name', width = 0.3)
 ```
 
+Move soil surface at 0cm "down" 5cm:
 
-Move soil surface at 0cm "down" 5cm.
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name', y.offset=5)
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name', y.offset = 5)
 ```
 
-Move soil surface at 0cm "up" 10cm; useful for sketches of shallow profiles.
+Move soil surface at 0cm "up" 10cm; useful for sketches of shallow profiles:
+
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name', y.offset=-10)
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name', y.offset = -10)
 ```
 
-Scale depths by 50%.
+Scale depths by 50%:
+
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name', scaling.factor=0.5)
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name', scaling.factor = 0.5)
 ```
 
-A graphical explanation of how profiles are re-arranged via `plot.order` argument.
+A graphical explanation of how profiles are re-arranged via `plot.order` argument:
+
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name', plot.order=length(sp4):1)
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name', plot.order = length(sp4):1)
 ```
 
-Leave room for an additional 2 profile sketches.
-```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
-explainPlotSPC(sp4, name='name', n=length(sp4) + 2)
-```
+Leave room for an additional 2 profile sketches:
 
+```{r fig.height=5, fig.width=9}
+par(mar = c(4, 3, 2, 2))
+explainPlotSPC(sp4, name = 'name', n = length(sp4) + 2)
+```
 
 ### Small SoilProfileCollections
+
 Making quality figures with fewer than 5 soil profiles usually requires more customization of the basic call to `plotSPC`. In general, the following are a good starting point:
  
  * shrink margins and disable clipping with `par`
@@ -451,227 +603,277 @@ Making quality figures with fewer than 5 soil profiles usually requires more cus
  * adjust sketch width with `width`, typically within 0.15-0.35
  * move depth axis to the left with negative `axis.line.offset` values
 
+Get some example data from the Official Series Descriptions:
 
-Get some example data from the Official Series Descriptions.
 ```{r, fig.width=5, fig.height=6}
 library(soilDB)
 x <- fetchOSD(c('appling', 'cecil', 'bonneau'))
 ```
 
-Using 5x6 inch output device.
+Using 5x6 inch output device:
+
 ```{r, fig.width=5, fig.height=6}
-# set margins and turn off clipping
-par(mar = c(0,2,0,4), xpd = NA)
+par(mar = c(0, 2, 0, 4), xpd = NA)
 plotSPC(x[1, ], cex.names = 1)
 ```
 
-Using 7x6 inch output device, slight adjustments to `width` usually required.
+Using 7x6 inch output device, slight adjustments to `width` usually required:
+
 ```{r, fig.width=7, fig.height=6}
 # set margins and turn off clipping
-par(mar = c(0,2,0,4), xpd = NA)
+par(mar = c(0, 2, 0, 4), xpd = NA)
 plotSPC(x[1:2, ], cex.names = 1, width = 0.25)
 ```
 
-Using 8x6 inch output device, slight adjustments to `axis.line.offset` and `width` are usually required.
+Using 8x6 inch output device, slight adjustments to `axis.line.offset` and `width` are usually required:
+
 ```{r, fig.width=8, fig.height=6}
-# set margins and turn off clipping
-par(mar = c(0,2,0,4), xpd = NA)
+par(mar = c(0, 2, 0, 4), xpd = NA)
 plotSPC(x, cex.names = 1, axis.line.offset = -0.1, width = 0.3)
 ```
 
 ## Horizon Depth Labeling
-Horizon depths can be labeled for each profile as an alternative to a single depth axis. As of aqp version 1.41, it is possible to "fix" overlapping horizon depth labels with the new `fixLabelCollisions` argument. This approach to labeling depths works best when moving horizon designations with the `name.style` argument. Note that setting `fixLabelCollisions = TRUE` may incur a significant performance penalty when plotting large `SoilProfileCollection` objects.
+
+Horizon depths can be labeled for each profile as an alternative to a single depth axis. 
 
 ```{r, fig.width=8, fig.height=6}
-# set margins and turn off clipping
 par(mar = c(0, 0, 1, 1))
-plotSPC(x, cex.names = 1, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, fixLabelCollisions = TRUE, hz.depths.offset = 0.08)
+plotSPC(
+  x,
+  cex.names = 1,
+  name.style = 'center-center',
+  width = 0.3,
+  plot.depth.axis = FALSE,
+  hz.depths = TRUE,
+  fixLabelCollisions = TRUE,
+  hz.depths.offset = 0.08
+)
 ```
-
-
+As of aqp version 1.41, it is possible to "fix" overlapping horizon depth labels with the new `fixLabelCollisions` argument. This approach to labeling depths works best when moving horizon designations with the `name.style` argument. Note that setting `fixLabelCollisions = TRUE` may incur a significant performance penalty when plotting large `SoilProfileCollection` objects.
 
 ## Relative Horizontal Positioning
 
 Relative horizontal positioning via `relative.pos` argument. Can be used with `plot.order` but be careful: `relative.pos` must be specified in the *final* ordering of profiles. See `?plotSPC` for details.
 
 ```{r fig.height=5, fig.width=9}
-par(mar=c(4,3,2,2))
+par(mar = c(4, 3, 2, 2))
 pos <- jitter(1:length(sp4))
 explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 ```
 
 Relative positioning works well when the vector of positions is close to the default spacing along an integer sequence, but not when positions are closer than the width of a profile sketch.
+
 ```{r fig.height=5, fig.width=9}
-par(mar = c(4,3,2,2))
+par(mar = c(4, 3, 2, 2))
 pos <- c(1, 1.2, 3, 4, 5, 5.2, 7, 8, 9, 10)
 explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 ```
 
-The `fixOverlap()` function can be used to find a suitable arrangement of profiles based on a compromise between the suggested relative positions and minimization of overlap. This is an iterative procedure, based on random perturbations of overlapping profiles, therefore it is possible for the algorithm to stop at a sub-optimal configuration. Results can be controlled using `set.seed()`.
+The `fixOverlap()` function can be used to find a suitable arrangement of profiles based on a compromise between the suggested relative positions and minimization of overlap. 
+
+This is an iterative procedure, based on random perturbations of overlapping profiles, therefore it is possible for the algorithm to stop at a sub-optimal configuration. Results can be controlled using `set.seed()`.
+
 ```{r fig.height=5, fig.width=9}
-par(mar = c(4,3,2,2))
+par(mar = c(4, 3, 2, 2))
 new.pos <- fixOverlap(pos)
 explainPlotSPC(sp4, name = 'name', relative.pos = new.pos)
 ```
 
-There are several parameters available for optimizing horizontal position in the presence of overlap. See `?fixOverlap` for details and further examples. The [SPC plotting ideas tutorial](http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html) contains several practical examples.
+There are several parameters available for optimizing horizontal position in the presence of overlap. See `?fixOverlap` for details and further examples. 
+
 ```{r fig.height=5, fig.width=9}
-par(mar = c(4,3,2,2))
+par(mar = c(4, 3, 2, 2))
 new.pos <- fixOverlap(pos, thresh = 0.7)
 explainPlotSPC(sp4, name = 'name', relative.pos = new.pos)
 ```
-
+The [SPC plotting ideas tutorial](http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html) contains several additional examples.
 
 ## Thematic Sketches
 
 Horizon-level attributes can be symbolized with color, in this case using the horizon-level attribute "clay":
+
 ```{r fig.height=4, fig.width=8}
-# plot again, this time using new colors
-par(mar=c(0,0,3,0)) # tighter figure margins
-plotSPC(sp4, name='name', color='clay', col.label='Clay Content (%)')
+par(mar = c(0, 0, 3, 0))
+plotSPC(sp4,
+        name = 'name',
+        color = 'clay',
+        col.label = 'Clay Content (%)')
 ```
 
-Use a different set of colors.
+Use a different set of colors:
+
 ```{r fig.height=4, fig.width=8}
-# plot again, this time using new colors
-par(mar=c(0,0,3,0)) # tighter figure margins
-plotSPC(sp4, name='name', color='clay', col.palette=RColorBrewer::brewer.pal(10, 'Spectral'), col.label='Clay Content (%)')
+par(mar = c(0, 0, 3, 0)) 
+plotSPC(
+  sp4,
+  name = 'name',
+  color = 'clay',
+  col.palette = RColorBrewer::brewer.pal(10, 'Spectral'),
+  col.label = 'Clay Content (%)'
+)
 ```
 
-Categorical properties can also be used to make a thematic sketch. Colors are interpolated when there are more classes than colors provided by `col.palette`.
+Categorical properties can also be used to make a thematic sketch. Colors are interpolated when there are more classes than colors provided by `col.palette`:
+
 ```{r fig.height=4, fig.width=8}
-par(mar=c(0,0,3,0)) # tighter figure margins
-plotSPC(sp4, name='name', color='name', col.palette=RColorBrewer::brewer.pal(5, 'Set1'), col.label='Original Horizon Name')
+par(mar = c(0, 0, 3, 0))
+plotSPC(
+  sp4,
+  name = 'name',
+  color = 'name',
+  col.palette = RColorBrewer::brewer.pal(5, 'Set1'),
+  col.label = 'Original Horizon Name'
+)
 ```
 
-Try with [generalized horizon labels](http://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.html).
+Try with [generalized horizon labels](http://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.html):
+
 ```{r fig.height=4, fig.width=8}
-par(mar=c(0,0,3,0)) # tighter figure margins
+par(mar = c(0, 0, 3, 0)) 
 
 # generalize horizon names into 3 groups
-sp4$genhz <- generalize.hz(sp4$name, new = c('A', 'AB', 'Bt'), pat=c('A[0-9]?', 'AB', '^Bt'))
+sp4$genhz <- generalize.hz(sp4$name, new = c('A', 'AB', 'Bt'), pat = c('A[0-9]?', 'AB', '^Bt'))
 
-plotSPC(sp4, name='name', color='genhz', col.palette=RColorBrewer::brewer.pal(3, 'Spectral'), col.label='Generalized Horizon Name')
+plotSPC(
+  sp4,
+  name = 'name',
+  color = 'genhz',
+  col.palette = RColorBrewer::brewer.pal(3, 'Spectral'),
+  col.label = 'Generalized Horizon Name'
+)
 ```
 
+Horizon-level attributes that represent a volume fraction (e.g. coarse-fragment percentage) can be added to an existing figure. See `?addVolumeFraction` for adding layers to an existing plot based on these attributes.
 
-Horizon-level attributes that represent a volume fraction (e.g. coarse-fragment percentage) can be added to an existing figure. See `?addVolumeFraction` for additional customization ideas.
 ```{r plotting-vol-fraction, fig.height=4, fig.width=8}
-# tighter figure margins
-par(mar=c(0,0,3,0)) 
-# convert fraction -> percent
+par(mar = c(0, 0, 3, 0)) 
+# convert coarse rock fragment proportion to percentage
 sp4$frag_pct <- sp4$CF * 100
 
 # label horizons with fragment percent
 plotSPC(sp4, name = 'frag_pct', color = 'frag_pct')
+
 # symbolize volume fraction data
 addVolumeFraction(sp4, colname = 'frag_pct')
 ```
 
-
 ## Depth Intervals
 
-Annotation of depth-intervals can be accomplished using "brackets":
+Annotation of depth-intervals can be accomplished using "brackets". Here we extract top/bottom depths associated with top and bottom depth A horizons using the min/max variants of the `depthOf()` function. See ?depthOf for more details.
+
 ```{r plotting-depth-interval}
 # extract top/bottom depths associated with all A horizons
+tops <- minDepthOf(sp4, pattern = '^A', hzdesgn = 'name', top = TRUE)
+bottoms <- maxDepthOf(sp4, pattern = '^A', hzdesgn = 'name', top = FALSE)
 
-# see ?DepthOf
-tops <- profileApply(sp4, FUN = minDepthOf, pattern = '^A', hzdesgn = 'name', top = TRUE)
-bottoms <- profileApply(sp4, FUN = maxDepthOf, pattern = '^A', hzdesgn = 'name', top = FALSE)
 IDs <- profile_id(sp4)
 
 # assemble data.frame
-a <- data.frame(id = IDs, top = tops, bottom = bottoms)
+a <- data.frame(id = IDs, top = tops$top, bottom = bottoms$bottom)
 
-# check: OK
+# check
 a
 ```
 
 ```{r fig.height=4, fig.width=8}
-par(mar = c(0,0,0,0))
+par(mar = c(0, 0, 0, 0))
 plotSPC(sp4)
-# annotate with brackets
-addBracket(a, col='red', offset = -0.4)
+
+# annotate A horizon depth interval with brackets
+addBracket(a, col = 'red', offset = -0.4)
 ```
 
-Labels.
+Add labels:
+
 ```{r, fig.height=4, fig.width=8}
-# add a label for each bracket
+par(mar = c(0, 0, 0, 0))
+plotSPC(sp4, name = 'name')
+
+# addBracket() looks for a column `label`; add a ID for each bracket
 a$label <- site(sp4)$id
-# tighter figure margins
-par(mar=c(0,0,0,0))
-plotSPC(sp4, name='name')
-# note that depth brackets "know which profiles to use"
-addBracket(a, col='red', label.cex = 0.75, missing.bottom.depth = 25, offset = -0.4)
+
+# note that depth brackets "knows which profiles to use" via profile ID
+addBracket(
+  a,
+  col = 'red',
+  label.cex = 0.75,
+  missing.bottom.depth = 25,
+  offset = -0.4
+)
 ```
 
 It is possible to arrange profile sketches by site-level grouping variable:
+
 ```{r, fig.height=4, fig.width=8}
-# use improvised site-level attribute 'group' 
-par(mar=c(0,0,0,0)) # tighter figure margins
-groupedProfilePlot(sp4, groups='group')
-# note that depth brackets "know" which profiles to use
-addBracket(a, col='red', offset = -0.4)
+par(mar = c(0, 0, 0, 0)) 
+groupedProfilePlot(sp4, groups = 'group')
+addBracket(a, col = 'red', offset = -0.4)
 ```
 
 There need not be brackets for all profiles in a collection:
+
 ```{r, fig.height=4, fig.width=8}
-# add a label for each bracket
-a.sub <- a[1:4, ]
-
-# tighter figure margins
-par(mar=c(0,0,0,0))
-groupedProfilePlot(sp4, groups='group')
-
-# note that depth brackets "know which profiles to use"
-addBracket(a.sub, col='red', offset = -0.4)
+par(mar = c(0, 0, 0, 0))
+a.sub <- a[1:4,]
+groupedProfilePlot(sp4, groups = 'group')
+addBracket(a.sub, col = 'red', offset = -0.4)
 ```
-
 
 When bottom depths are missing an arrow is used:
+
 ```{r, fig.height=4, fig.width=8}
 a$bottom <- NA
-# tighter figure margins
-par(mar=c(0,0,0,0))
-groupedProfilePlot(sp4, groups='group')
-# note that depth brackets "know which profiles to use"
-addBracket(a, col='red', offset = -0.4)
+par(mar = c(0, 0, 0, 0))
+groupedProfilePlot(sp4, groups = 'group')
+addBracket(a, col = 'red', offset = -0.4)
 ```
 
-Manually define bottom depth
+Manually define bottom depth:
+
 ```{r, fig.height=4, fig.width=8}
-# tighter figure margins
-par(mar=c(0,0,0,0))
-groupedProfilePlot(sp4, groups='group')
-# note that depth brackets "know which profiles to use"
-addBracket(a, col='red', label.cex = 0.75, missing.bottom.depth = 25, offset = -0.4)
+par(mar = c(0, 0, 0, 0))
+groupedProfilePlot(sp4, groups = 'group')
+addBracket(
+  a,
+  col = 'red',
+  label.cex = 0.75,
+  missing.bottom.depth = 25,
+  offset = -0.4
+)
 ```
 
 Further customization of brackets:
+
 ```{r, fig.height=4, fig.width=8}
-# copy root-restricting features 
-a <- restrictions(sp4)
-
-# add a label for each bracket, using restrictive feature 'kind'
-# addBracket() looks for a column called `label`
-a$label <- a$kind
-
-# plot with tighter margings
-par(mar=c(0,0,0,0))
+par(mar = c(0, 0, 0, 0))
 plotSPC(sp4, max.depth = 75)
 
+# copy root-restricting features
+a <- restrictions(sp4)
+
+# add a label: restrictive feature 'kind'
+a$label <- a$kind
+
 # add restrictions using vertical bars
-addBracket(a, col='red', label.cex = 0.75, tick.length = 0, lwd=3, offset = -0.4)
+addBracket(
+  a,
+  col = 'red',
+  label.cex = 0.75,
+  tick.length = 0,
+  lwd = 3,
+  offset = -0.4
+)
 ```
 
-
 ### Notes
-These functions (`addBracket`, `addDiagnosticBracket`, and `addVolumeFraction`) will automatically compensate for alternative sketch ordering or relative positioning.
 
-
+These functions (`addBracket()`, `addDiagnosticBracket()`, and `addVolumeFraction()`) will automatically compensate for alternative sketch ordering or relative positioning of profiles.
 
 ## SVG Output for Use in Page Layout Tools
+
 Sketches for use in layout tools such as Adobe Illustrator or Inkscape should be stored in a vector file format. SVG is compatible with most software titles. WMF output is compatible with MS Office tools and can be written with the `win.metafile()` function.
+
+<!-- including this example (uncommented) will require svglite added to Suggests -->
 
 ```{r, eval=FALSE}
 # library(svglite)
@@ -683,62 +885,79 @@ Sketches for use in layout tools such as Adobe Illustrator or Inkscape should be
 # dev.off()
 ```
 
-
 # Iterating Over Profiles in a Collection
-The `profileApply()` function is an extension of the familiar *apply()* family of functions that operate on vectors (`sapply` and `tapply`), matrices (`apply`), and lists (`lapply`)-- extended to `SoilProfileCollection` objects. The function named in the `FUN` argument is evaluated once for each profile in the collection, typically returning a single value per profile. In this case, the ordering of the results would match the ordering of values in the site level attribute table.
+
+The `profileApply()` function is an extension of the familiar *apply()* family of functions that operate on vectors (`sapply()` and `tapply()`), matrices (`apply()`), and lists (`lapply()`)-- extended to `SoilProfileCollection` objects. 
+
+The function named in the `FUN` argument is evaluated once for each profile in the collection, typically returning a single value per profile. In this case, the ordering of the results would match the ordering of values in the site level attribute table.
+
 ```{r profileApply-1}
 # max() returns the depth of a soil profile
 sp4$soil.depth <- profileApply(sp4, FUN = max)
+
 # max() with additional argument give max depth to non-missing 'clay'
 sp4$soil.depth.clay <- profileApply(sp4, FUN = max, v = 'clay')
+
 # nrow() returns the number of horizons
 sp4$n.hz <- profileApply(sp4, FUN = nrow)
+
 # compute the mean clay content by profile using an inline function
-sp4$mean.clay <- profileApply(sp4, FUN=function(i) mean(i$clay))
+sp4$mean.clay <- profileApply(sp4, FUN = function(i) mean(i$clay))
+
 # estimate soil depth based on horizon designation
 sp4$soil.depth <- profileApply(sp4, estimateSoilDepth, name = 'name')
 ```
 
-When `FUN` returns a vector of the same length as the number of horizons in a profile, `profileApply()` can be used to create new horizon-level attributes. For example, the change in clay content with depth could be calculated via:
+When `FUN` returns a vector of the same length as the number of horizons in a profile, `profileApply()` can be used to create new horizon-level attributes. For example, the change in clay content by horizon depth (`delta.clay`, below) could be calculated as:
+
 ```{r profileApply-2}
 # save as horizon-level attribute
-sp4$delta.clay <- profileApply(sp4, FUN=function(i) c(NA, diff(i$clay)))
+sp4$delta.clay <- profileApply(sp4, FUN = function(i) c(NA, diff(i$clay)))
 
 # check results:
 horizons(sp4)[1:6, c('id', 'top', 'bottom', 'clay', 'delta.clay')]
 ```
 
+More complex summaries can be generated by writing a custom function that is then called by `profileApply()`. Note that each profile is passed into this function and accessed via a temporary variable (`i`), which is a `SoilProfileCollection` object containing a single profile. See `help(profileApply)` for details.
 
-More complex summaries can be generated by writing a custom function that is then called by `profileApply()`. Note that each profile is passed into this function and accessed via a temporary variable (`i`), which is a `SoilProfileCollection` object containing a single profile. A list of `SoilProfileCollection` objects returned from a custom function can be re-constituted into a single `SoilProfileCollection` object via `combine`. See `help(profileApply)` for details.
+A list of `SoilProfileCollection` objects returned from a custom function can be combined into a single `SoilProfileCollection` object via `combine()`.
+
 ```{r profileApply-3}
 # compute hz-thickness weighted mean exchangeable-Ca:Mg
 wt.mean.ca.mg <- function(i) {
-	# use horizon thickness as a weight
-	thick <- i$bottom - i$top
-	# compute the weighted mean, accounting for the possibility of missing data
-	m <- wtd.mean(i$ex_Ca_to_Mg, weights=thick, na.rm=TRUE)
-	return(m)
-	}
+  # use horizon thickness as a weight
+  thick <- i$bottom - i$top
+  
+  # compute the thickness weighted mean, ignoring missing values
+  weighted.mean(i$ex_Ca_to_Mg, w = thick, na.rm = TRUE)
+}
 
 # apply our custom function and save results as a site-level attribute
 sp4$wt.mean.ca.to.mg <- profileApply(sp4, wt.mean.ca.mg)
 ```
 
-We can now use our some of our new site-level attributes to order the profiles when plotting. In this case profiles are ordered based on the horizon-thickness weighted mean, exchangeable Ca:Mg values. Horizons are colored by exchangeable Ca:Mg values.
+We can now use our some of our new site-level attributes to order the profiles when plotting. 
+
+In this case profiles are ordered based on the horizon-thickness weighted mean, exchangeable Ca:Mg values. Horizons are colored by exchangeable Ca:Mg values.
+
 ```{r profileApply-4, fig.height=5, fig.width=8}
-# the result is an index of rank
+# plot the data using our new order based on Ca:Mg weighted average
+# the result is an index of rank 
 new.order <- order(sp4$wt.mean.ca.to.mg)
-# plot the data using our new order based on Ca:Mg
-par(mar=c(4,0,3,0)) # tighten figure margins
-plotSPC(sp4, name='name', color='ex_Ca_to_Mg', plot.order=new.order)
+
+par(mar = c(4, 0, 3, 0)) # tighten figure margins
+plotSPC(sp4,
+        name = 'name',
+        color = 'ex_Ca_to_Mg',
+        plot.order = new.order)
+
 # add an axis labeled with the sorting criteria
-axis(1, at=1:length(sp4), labels=round(sp4$wt.mean.ca.to.mg, 3), cex.axis=0.75)
-mtext(1, line=2.25, text='Horizon Thickness Weighted Mean Ex. Ca:Mg', cex=0.75)
+axis(1, at = 1:length(sp4), labels = round(sp4$wt.mean.ca.to.mg, 3), cex.axis = 0.75)
+mtext(1, line = 2.25, text = 'Horizon Thickness Weighted Mean Ex. Ca:Mg', cex = 0.75)
 ```
 
+# Slicing Horizons: `dice()`
 
-
-# Slicing Soil Profile Collections
 Collections of soil profiles can be sliced (or re-sampled) into regular depth-intervals with the `dice()` function. The slicing structure and variables of interest are defined via formula notation:
 
 ```{r slice-formula, eval=FALSE}
@@ -750,57 +969,61 @@ seq ~ .
 
 where `seq` is a sequence of integers (e.g. `0:15`, `c(5,10,15,20)`, etc.) and `var.1 + var.2 + var.3 + ...` are horizon-level attributes to slice. Both continuous and categorical variables can be named on the right-hand-side of the formula. The results returned by `dice()` is either a `SoilProfileCollection`, or `data.frame` when called with the optional argument `SPC = FALSE`. For example, to slice our sample data set into 1-cm intervals, from 0--15 cm:
 
-
 ```{r fig.height=4, fig.width=8}
 # resample to 1cm slices
-s <- dice(sp4, fm= 0:15 ~ sand + silt + clay + name + ex_Ca_to_Mg)
+s <- dice(sp4, fm = 0:15 ~ sand + silt + clay + name + ex_Ca_to_Mg)
+
 # check the result
 class(s)
+
 # plot sliced data
-par(mar = c(0,0,3,0)) # tighten figure margins
+par(mar = c(0, 0, 3, 0)) # tighten figure margins
 plotSPC(s, color = 'ex_Ca_to_Mg')
 ```
 
-
 Once soil profile data have been sliced, it is simple to extract "chunks" of data by depth interval via `[`-subsetting:
+
 ```{r eval=FALSE}
 # slice from 0 to max depth in the collection
 s <- dice(sp4, fm= 0:max(sp4) ~ sand + silt + clay + name + ex_Ca_to_Mg)
+
 # extract all data over the range of 5--10 cm:
 plotSPC(s[, 5:10])
+
 # extract all data over the range of 25--50 cm:
 plotSPC(s[, 25:50])
+
 # extract all data over the range of 10--20 and 40--50 cm:
 plotSPC(s[, c(10:20, 40:50)])
 ```
 
+# Ragged Extraction: `glom()`
 
-# Ragged Selection: `glom`
-Select all horizons that overlap the interval of 5-15cm.
+Select all horizons that overlap the interval of 5-15cm:
+
 ```{r fig.height=4, fig.width=8}
-# truncate to the interval 0-15cm
-clods <- profileApply(sp4, glom, z1 = 5, z2 = 15)
-clods <- combine(clods)
-# check
-par(mar=c(0,0,3,0)) # tighten figure margins
-plotSPC(clods, name='name', color='ex_Ca_to_Mg')
+# truncate to the interval 5-15cm
+clods <- glom(sp4, z1 = 5, z2 = 15)
 
-rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 0)
+par(mar = c(0, 0, 3, 0)) 
+plotSPC(clods, name = 'name', color = 'ex_Ca_to_Mg')
+rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5)
 ```
 
+# Truncation: `trunc()`
 
-## Truncation: `trunc`
-Truncate the SPC to the interval of 5-15cm.
+Truncate the SPC to the interval of 5-15cm:
+
 ```{r fig.height=4, fig.width=8}
-# truncate to the interval 0-15cm
-sp4.truncated <- trunc(sp4, 0, 15)
-# check
-par(mar=c(0,0,3,0)) # tighten figure margins
-plotSPC(sp4.truncated, name='name', color='ex_Ca_to_Mg')
+# truncate to the interval 5-15cm
+sp4.truncated <- trunc(sp4, 5, 15)
+par(mar = c(0, 0, 3, 0))
+plotSPC(sp4.truncated, name = 'name', color = 'ex_Ca_to_Mg')
+rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5)
 ```
 
+# Depth Aggregation: `slab()`
 
-# Aggregating Soil Profile Collections Along Regular "Slabs"
 Depth-wise summary of horizon-level attributes is performed with the `slab()` function. Profile grouping criteria and horizon attribute selection is parametrized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
 
 The depth structure ("slabs") over which summaries are computed is defined with the `slab.structure` argument using:
@@ -814,64 +1037,98 @@ The depth structure ("slabs") over which summaries are computed is defined with 
 # across the entire collection, 
 # from 0--10 cm
 # computing the mean value ignoring missing data
-slab(sp4, fm = ~ sand + silt + clay, slab.structure = c(0,10), slab.fun = mean, na.rm = TRUE)
+slab(
+  sp4,
+  fm = ~ sand + silt + clay,
+  slab.structure = c(0, 10),
+  slab.fun = mean,
+  na.rm = TRUE
+)
 
 # again, this time within groups defined by a site-level attribute:
-slab(sp4, fm = group ~ sand + silt + clay, slab.structure=c(0,10), slab.fun=mean, na.rm = TRUE)
+slab(
+  sp4,
+  fm = group ~ sand + silt + clay,
+  slab.structure = c(0,  10),
+  slab.fun = mean,
+  na.rm = TRUE
+)
 
 # again, this time over several depth ranges
-slab(sp4, fm =  ~ sand + silt + clay, slab.structure = c(0,10,25,40), slab.fun=mean, na.rm = TRUE)
+slab(
+  sp4,
+  fm = ~ sand + silt + clay,
+  slab.structure = c(0, 10, 25, 40),
+  slab.fun = mean,
+  na.rm = TRUE
+)
 
 # again, this time along 1-cm slices, computing quantiles
-agg <- slab(sp4, fm= ~ Mg + Ca + ex_Ca_to_Mg + CEC_7 + clay)
+agg <- slab(sp4, fm = ~ Mg + Ca + ex_Ca_to_Mg + CEC_7 + clay)
 
 # see ?slab for details on the default aggregate function
 head(agg)
 
 # plot median +/i bounds defined by the 25th and 75th percentiles
 # this is lattice graphics, syntax is a little rough
-xyplot(top ~ p.q50 | variable, data=agg, ylab='Depth',
-			 xlab='median bounded by 25th and 75th percentiles',
-			 lower=agg$p.q25, upper=agg$p.q75, ylim=c(42,-2),
-			 panel=panel.depth_function,
-			 alpha=0.25, sync.colors=TRUE,
-			 par.settings=list(superpose.line=list(col='RoyalBlue', lwd=2)),
-			 prepanel=prepanel.depth_function,
-			 cf=agg$contributing_fraction, cf.col='black', cf.interval=5, 
-			 layout=c(5,1), strip=strip.custom(bg=grey(0.8)),
-			 scales=list(x=list(tick.number=4, alternating=3, relation='free'))
-			 )
+xyplot(top ~ p.q50 | variable, data = agg, ylab = 'Depth', 
+       xlab = 'median bounded by 25th and 75th percentiles',
+       lower = agg$p.q25, upper = agg$p.q75, ylim = c(42, -2),
+       panel = panel.depth_function,
+       alpha = 0.25, sync.colors = TRUE,
+       par.settings = list(superpose.line = list(col = 'RoyalBlue', lwd = 2)), 
+       prepanel = prepanel.depth_function,
+       cf = agg$contributing_fraction, cf.col = 'black', cf.interval = 5,
+       layout = c(5, 1), strip = strip.custom(bg = grey(0.8)),
+       scales = list(x = list(
+         tick.number = 4,
+         alternating = 3,
+         relation = 'free'
+       ))
+)
 ```
 
+Depth-wise aggregation can be useful for visual evaluation of multivariate similarity among groups of profiles. 
 
-Depth-wise aggregation can be useful for visual evaluation of multivariate similarity among groups of profiles.
 ```{r slab-2, fig.height=4, fig.width=8}
 # processing the "napa" and tehama profiles
 idx <- which(profile_id(sp4) %in% c('napa', 'tehama'))
-napa.and.tehama <- slab(sp4[idx, ], fm= ~ Mg + Ca + ex_Ca_to_Mg + CEC_7 + clay)
+napa.and.tehama <- slab(sp4[idx,], fm = ~ Mg + Ca + ex_Ca_to_Mg + CEC_7 + clay)
 
 # combine with the collection-wide aggregate data
-g <- make.groups(collection=agg, napa.and.tehama=napa.and.tehama)
+g <- make.groups(collection = agg, napa.and.tehama = napa.and.tehama)
 
 # compare graphically:
-xyplot(top ~ p.q50 | variable, groups=which, data=g, ylab='Depth',
-			 xlab='median bounded by 25th and 75th percentiles',
-			 lower=g$p.q25, upper=g$p.q75, ylim=c(42,-2),
-			 panel=panel.depth_function,
-			 alpha=0.25, sync.colors=TRUE, cf=g$contributing_fraction, cf.interval=10, 
-			 par.settings=list(superpose.line=list(col=c('RoyalBlue', 'Red4'), lwd=2, lty=c(1,2))),
-			 prepanel=prepanel.depth_function,
-			 layout=c(5,1), strip=strip.custom(bg=grey(0.8)),
-			 scales=list(x=list(tick.number=4, alternating=3, relation='free')),
-			 auto.key=list(columns=2, lines=TRUE, points=FALSE)
-			 )
-
+xyplot(top ~ p.q50 | variable, groups = which, data = g, ylab = 'Depth',
+       xlab = 'median bounded by 25th and 75th percentiles',
+       lower = g$p.q25, upper = g$p.q75, ylim = c(42, -2),
+       panel = panel.depth_function,
+       alpha = 0.25, sync.colors = TRUE, cf = g$contributing_fraction, cf.interval = 10,
+       par.settings = list(superpose.line = list(
+         col = c('RoyalBlue', 'Red4'),
+         lwd = 2,
+         lty = c(1, 2)
+       )),
+       prepanel = prepanel.depth_function,
+       layout = c(5, 1), 
+       strip = strip.custom(bg = grey(0.8)),
+       scales = list(x = list(
+         tick.number = 4,
+         alternating = 3,
+         relation = 'free'
+       )),
+       auto.key = list(columns = 2,
+                       lines = TRUE,
+                       points = FALSE)
+)
 ```
 
+## Change of Support
 
-## Change of Support: re-alignment of horizon depths via aggregation
+There is often a need for converting data to a new set of depth intervals. This re-alignment of horizon depths via aggregation can be considered a type of *change of support*. The operation on SoilProfileCollections requires some aggregation function (mean, median, etc.) and possibly interpolation (e.g. splines). 
 
-Occasionally there is a need for converting data associated with soil horizons, as described in the field, to a new set of depth intervals. This kind of *change of support* operation requires some form of aggregation (mean, median, etc.) and possibly interpolation (e.g. splines). The `slab` function is the simplest way to implement a change of depth support via aggregation. The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.
+The `slab()` function is the simplest way to implement a change of depth support via aggregation. The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.
+
 ```{r, fig.height=4.5, fig.width=9}
 library(data.table)
 library(RColorBrewer)
@@ -897,51 +1154,57 @@ gsm.depths <- c(0, 5, 15, 30, 60, 100, 200)
 
 # aggregate using mean: wt.mean within slabs
 # see ?slab for ideas on how to parameterize slab.fun
-d.gsm <- data.table(slab(d, fm=id ~ p1, slab.structure = gsm.depths, slab.fun = mean, na.rm=TRUE))
+d.gsm <- slab(d, fm = id ~ p1, slab.structure = gsm.depths, slab.fun = mean, na.rm = TRUE)
 
 # note: result is in long-format
 # note: horizon names are lost due to aggregation
 head(d.gsm, 7)
 ```
 
-A simple graphical comparison of the original and re-aligned soil profile data.
+A simple graphical comparison of the original and re-aligned soil profile data, after converting `slab()` result from long -> wide format with {data.table} `dcast()`:
+
 ```{r, fig.height=7, fig.width=9}
 # reshape to wide format
 # this scales to > 1 aggregated variables
-d.gsm.pedons <- dcast(d.gsm, id + top + bottom ~ variable, value.var = 'value')
+d.gsm.pedons <- data.table::dcast(data.table(d.gsm), id + top + bottom ~ variable, value.var = 'value')
 depths(d.gsm.pedons) <- id ~ top + bottom
 
 # iterate over aggregated profiles and make new hz names
-d.gsm.pedons$hzname <- profileApply(d.gsm.pedons, function(i) {paste0('GSM-', 1:nrow(i))})
+d.gsm.pedons$hzname <- profileApply(d.gsm.pedons, function(i) {
+  paste0('GSM-', 1:nrow(i))
+})
 
 # compare original and aggregated
-par(mar=c(1,0,3,3), mfrow=c(2,1))
-plotSPC(d, color='p1')
-plotSPC(d.gsm.pedons, color='p1')
+par(mar = c(1, 0, 3, 3), mfrow = c(2, 1))
+plotSPC(d, color = 'p1')
+plotSPC(d.gsm.pedons, color = 'p1')
 ```
 
 Note that re-aligned data may not represent reality (and should therefore be used with caution) when the original soil depth is shallower than the deepest of the new (re-aligned) horizon depths. The `contributing_fraction` metric returned by `slab()` can be useful for assessing how much *real* data were used to generate the new set of re-aligned data.
+
 ```{r, fig.height=7, fig.width=9}
 # reshape to wide format
-d.gsm.pedons.2 <- dcast(d.gsm, id + top + bottom ~ variable, value.var = 'contributing_fraction')
+d.gsm.pedons.2 <- data.table::dcast(data.table(d.gsm), id + top + bottom ~ variable, value.var = 'contributing_fraction')
+
 depths(d.gsm.pedons.2) <- id ~ top + bottom
 
 # compare original and aggregated
-par(mar=c(1,0,3,3), mfrow=c(2,1))
-plotSPC(d.gsm.pedons, name='', color='p1')
-plotSPC(d.gsm.pedons.2, name='', color='p1', col.label='Contributing Fraction', col.palette=brewer.pal(10, 'Spectral'))
+par(mar = c(1, 0, 3, 3), mfrow = c(2, 1))
+plotSPC(d.gsm.pedons, name = '', color = 'p1')
+plotSPC(
+  d.gsm.pedons.2,
+  name = '',
+  color = 'p1',
+  col.label = 'Contributing Fraction',
+  col.palette = brewer.pal(10, 'Spectral')
+)
 ```
 
+# Pair-Wise Dissimilarity: `profile_compare()`
 
+Calculation of between-profile dissimilarity is performed using the `profile_compare()` function. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`max_d`). 
 
-# Pair-Wise Dissimilarity
-Calculation of between-profile dissimilarity is performed using the `profile_compare()` function. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`max_d`). See the [function manual page](http://ncss-tech.github.io/aqp/reference/pc.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
-
-Some additional examples can be found in:
-
-   * [Pair-Wise Distances by Generalized Horizon Labels](http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html)
-   * [Competing Soil Series](http://ncss-tech.github.io/AQP/soilDB/competing-series.html)
-   * [Soil Profile Distances](http://ncss-tech.github.io/AQP/aqp/aqp-profile-dissimilarity.html)
+See the [function manual page](http://ncss-tech.github.io/aqp/reference/pc.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
 
 ```{r fig.height=6, fig.width=10}
 library(cluster)
@@ -975,58 +1238,11 @@ Try again in `debug` mode to ensure that profiles are sorted correctly.
 plotProfileDendrogram(sp4, d.diana, scaling.factor = 0.8, y.offset = 5, cex.names=0.7, width=0.3, color='ex_Ca_to_Mg', debug = TRUE)
 ```
 
+Some additional examples can be found in:
 
-
-# Object Metadata
-```{r metadata, eval=FALSE}
-# print metadata:
-metadata(sp4)
-
-# alter the depth unit metadata attribute
-depth_units(sp4) <- 'inches' # units are really 'cm'
-
-# more generic interface for adjusting metadata
-md <- metadata(sp4) # save original metadata
-
-# add columns
-md$describer <- 'DGM'
-md$date <- as.Date('2009-01-01')
-md$citation <- 'McGahan, D.G., Southard, R.J, Claassen, V.P. 2009. Plant-Available Calcium Varies Widely in Soils on Serpentinite Landscapes. Soil Sci. Soc. Am. J. 73: 2087-2095.'
-
-# re-assign user defined metadata to original object
-metadata(sp4) <- md
-
-# check:
-metadata(sp4)
-
-# fix depth units, set back to 'cm'
-depth_units(sp4) <- 'cm'
-```
-
-
-# Validity and Horizon Logic
-```{r, eval=FALSE}
-checkSPC(sp4)
-spc_in_sync(sp4)
-z <- rebuildSPC(sp4)
-checkHzDepthLogic(sp4)
-```
-
-# Coercion
-```{r coercion, eval=FALSE}
-# check our work by viewing the internal structure
-str(sp4)
-
-# deconstruct SoilProfileCollection into a data.frame, with horizon+site data
-as(sp4, 'data.frame')
-
-# deconstruct SoilProfileCollection into a list containing all slots
-as(sp4, 'list')
-
-# extraction of site + spatial data as SpatialPointsDataFrame
-as(sp4, 'SpatialPointsDataFrame')
-```
-
+   * [Pair-Wise Distances by Generalized Horizon Labels](http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html)
+   * [Competing Soil Series](http://ncss-tech.github.io/AQP/soilDB/competing-series.html)
+   * [Soil Profile Distances](http://ncss-tech.github.io/AQP/aqp/aqp-profile-dissimilarity.html)
 
 ----------------------------
 This document is based on `aqp` version `r utils::packageDescription("aqp", field="Version")`.
