@@ -1,7 +1,7 @@
 # default slab function for categorical variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
-.slab.fun.factor.default <- function(values, cpm) {
+.slab.fun.factor.default <- function(values, cpm, ...) {
 
   if (cpm == 1) {
 	  # probabilities are relative to number of contributing profiles
@@ -25,24 +25,24 @@
 	return(pt)
 }
 
-.slab.fun.factor.weighted <- function(values, w) {
+.slab.fun.factor.weighted <- function(values, w, na.rm = TRUE, ...) {
   # TODO
 }
   
 # default slab function for continuous variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
-.slab.fun.numeric.default <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
-  .slab.fun.numeric.fast(values, probs = probs)
+.slab.fun.numeric.default <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE, ...) {
+  .slab.fun.numeric.fast(values, probs = probs, na.rm = na.rm, ...)
 }
 
 # for a site or horizon level weight column, use Hmisc::wtd.quantile
 #   note that "frequency weights" are assumed to be most common use case, so normwt=FALSE by default, 
 #   normwt=TRUE can be passed as optional argument for slab.fun from slab() interface
-.slab.fun.numeric.weighted <- function(values, w, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), normwt = FALSE) {
+.slab.fun.numeric.weighted <- function(values, w, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), normwt = FALSE, na.rm = TRUE, ...) {
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `wtd.quantile()` method', call. = FALSE)
-  res <- try(Hmisc::wtd.quantile(values, w, probs = probs, na.rm = TRUE, normwt = normwt), silent = TRUE)
+  res <- try(Hmisc::wtd.quantile(values, w, probs = probs, na.rm = na.rm, normwt = normwt), silent = TRUE)
   if (inherits(res, 'try-error') && grepl("zero non-NA points", res[1])) {
     res <- rep(NA_real_, length(probs))
   } else {
@@ -52,20 +52,20 @@
 }
 
 # easy specification of Hmisc::hdquantile if available
-.slab.fun.numeric.HD <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
+.slab.fun.numeric.HD <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE, ...) {
   # sanity check, need this for color distance eval
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `hdquantile()` method', call. = FALSE)
   
-  res <- Hmisc::hdquantile(values, probs = probs, na.rm = TRUE)
+  res <- Hmisc::hdquantile(values, probs = probs, na.rm = na.rm)
   
   names(res) <- paste('p.q', round(probs * 100), sep = '')
   return(res)
 }
 
 # basic quantile evaluation, better for large data sets
-.slab.fun.numeric.fast <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
-  res <- quantile(values, probs = probs, na.rm = TRUE)
+.slab.fun.numeric.fast <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE, ...) {
+  res <- quantile(values, probs = probs, na.rm = na.rm)
   names(res) <- paste('p.q', round(probs * 100), sep = '')
   return(res)
 }
@@ -238,7 +238,7 @@
 	    FUN <- slab.fun
 	  }
 	  wt <- eval(weights)
-	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[wt]]))), by = c('variable', g, 'seg.label')])
+	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[wt]], ...))), by = c('variable', g, 'seg.label')])
 	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, by = c('variable', g, 'seg.label')]$V1
 
 	} else {
