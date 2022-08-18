@@ -27,6 +27,8 @@
 #' 
 #' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
 #' 
+#' @param verbose Print information about object size/memory usage. Default: `FALSE`
+#' 
 #' @details For large and potentially messy collections that include missing horizon bottom depths, or 0-thickness horions, consider using `repairMissingHzDepths()` before `dice()`.
 #' 
 #'

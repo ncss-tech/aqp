@@ -11,7 +11,8 @@ dice(
   pctMissing = FALSE,
   fill = FALSE,
   strict = TRUE,
-  byhz = FALSE
+  byhz = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ dice(
 \item{strict}{perform horizon depth logic checking / flagging / removal}
 
 \item{byhz}{Evaluate horizon depth logic at the horizon level (\code{TRUE}) or profile level (\code{FALSE}). Invalid depth logic invokes \code{HzDepthLogicSubset} which removes offending profiles or horizon records.}
+
+\item{verbose}{Print information about object size/memory usage. Default: \code{FALSE}}
 }
 \value{
 a \code{SoilProfileCollection} object, or \code{data.frame} when \code{SPC = FALSE}
