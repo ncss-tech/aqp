@@ -1,5 +1,3 @@
-
-
 # default slab function for categorical variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
@@ -27,53 +25,53 @@
 	return(pt)
 }
 
-## TODO: make these exported functions with documentation (https://github.com/ncss-tech/aqp/issues/99)
-
+.slab.fun.factor.weighted <- function(values, weights) {
+  # TODO
+}
+  
 # default slab function for continuous variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
-.slab.fun.numeric.default <- function(values) {
-	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-	## 2019-10-30: dropping Hmisc as a suggested package
-	# res <- Hmisc::hdquantile(values, probs=q.probs, na.rm=TRUE)
-	res <- quantile(values, probs = q.probs, na.rm = TRUE)
-	names(res) <- paste('p.q', round(q.probs * 100), sep = '')
-	return(res)
+.slab.fun.numeric.default <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
+  .slab.fun.numeric.fast(values, probs = probs)
+}
+
+# for a site or horizon level weight column, use Hmisc::wtd.quantile
+#   note that "frequency weights" are assumed to be most common use case, so normwt=FALSE by default, 
+#   normwt=TRUE can be passed as optional argument for slab.fun from slab() interface
+.slab.fun.numeric.weighted <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), wt, normwt = FALSE) {
+  if (!requireNamespace('Hmisc', quietly = TRUE))
+    stop('please install the `Hmisc` package to use `wtd.quantile()` method', call. = FALSE)
+  res <- try(Hmisc::wtd.quantile(values, weights = wt, probs = probs, na.rm = TRUE, normwt = normwt), silent = TRUE)
+  if (inherits(res, 'try-error') && grepl("zero non-NA points", res[1])) {
+    res <- rep(NA_real_, length(probs))
+  } else if (inherits(res, 'try-error')) {
+    print(res)
+    return(NULL)
+  } else {
+    names(res) <- paste('p.q', round(probs * 100), sep = '')
+  }
+  return(res)
 }
 
 # easy specification of Hmisc::hdquantile if available
-.slab.fun.numeric.HD <- function(values) {
+.slab.fun.numeric.HD <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
   # sanity check, need this for color distance eval
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `hdquantile()` method', call. = FALSE)
   
-  q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+  res <- Hmisc::hdquantile(values, probs = probs, na.rm = TRUE)
   
-  res <- Hmisc::hdquantile(values, probs = q.probs, na.rm = TRUE)
-  
-  names(res) <- paste('p.q', round(q.probs * 100), sep = '')
+  names(res) <- paste('p.q', round(probs * 100), sep = '')
   return(res)
 }
 
-# basic quantile evaluation, better for large datasets
-.slab.fun.numeric.fast <- function(values) {
-	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-	res <- quantile(values, probs = q.probs, na.rm = TRUE)
-	names(res) <- paste('p.q', round(q.probs * 100), sep = '')
-	return(res)
+# basic quantile evaluation, better for large data sets
+.slab.fun.numeric.fast <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
+  res <- quantile(values, probs = probs, na.rm = TRUE)
+  names(res) <- paste('p.q', round(probs * 100), sep = '')
+  return(res)
 }
-
-# ## TODO: not yet implemented
-# # default slab function for weighted, continuous variables
-# # returns a named vector of results
-# # this type of function is compatible with aggregate()
-# # NOTE: nw (normalize-weights) argument will affect the results!
-# .slab.fun.wtd.numeric.default <- function(values, w, nw=TRUE) {
-# 	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-# 	res <- wtd.quantile(values, weights=w, probs=q.probs, na.rm=TRUE, normwt=nw)
-# 	names(res) <- paste('p.q', round(q.probs * 100), sep='')
-# 	return(res)
-# }
 
 # SoilProfileCollection method
 # object: SoilProfileCollection
@@ -82,22 +80,22 @@
 # progress: plyr-progress display
 # slab.fun: aggregate function applied to data chunks (must return a single row / chunk)
 # cpm: class probability normalization mode
-# weights: character vector naming column containing weights
+# weights: character vector naming column in site slot containing weights
 # ... : extra arguments passed on to slab.fun
 .slab <- function(object,
                   fm,
                   slab.structure = 1,
                   strict = FALSE,
-                  slab.fun = .slab.fun.numeric.default,
+                  slab.fun = slab_function(method = "numeric"),
                   cpm = 1,
                   weights = NULL,
                   ...) {
 
+  # define keywords for data.table
+  .SD <- NULL; .N <- NULL
+  
 	# get extra arguments: length of 0 if no extra arguments
 	extra.args <- list(...)
-
-	## important: change the default behavior of data.frame and melt
-	opt.original <- options(stringsAsFactors = FALSE)
 
 	# get unique list of names in object
 	object.names <- unique(unlist(names(object)))
@@ -117,7 +115,7 @@
 	# extract components of the formula:
 	g <- all.vars(update(fm, .~0)) # left-hand side
 	vars <- all.vars(update(fm, 0~.)) # right-hand side
-
+	
 	# sanity check:
 	if (!inherits(fm, "formula"))
 	  stop('must provide a valid formula: groups ~ var1 + var2 + ...', call. = FALSE)
@@ -145,17 +143,11 @@
 
 	# check groups for NA, if grouping variable was given
 	if (g != '.' && any(is.na(site.data[, g]))) {
-		  stop('grouping variable must not contain NA', call. = FALSE)
+		stop('grouping variable must not contain NA', call. = FALSE)
 	}
 	
-	### !!! this runs out of memory when groups contains NA !!!
-	## this is generating a lot of extra objects and possibly wasting memory
 	# merge site data back into the result, this would include site-level weights
 	data <- merge(x = data, y = site.data, by = object.ID, all.x = TRUE, sort = FALSE)
-
-	# clean-up
-	rm(object, site.data)
-	gc()
 
 	# check variable classes
 	if (length(vars) > 1) {
@@ -180,7 +172,7 @@
 
 		# check for weights
 		if (!missing(weights)) {
-		  stop('weighted aggregation of categorical variables not yet implemented', call. = FALSE)
+		  slab.fun <- .slab.fun.factor.weighted
 		}
 
 		# re-set default function, currently no user-supply-able option
@@ -216,71 +208,75 @@
 		g <- 'all.profiles' # add new grouping variable to horizons
 		data[, g] <- 1
 	}
-
+ 	
+ 	# convert wide -> long format
+ 	d.long <- data.table::melt(
+ 	  as.data.table(data[which(!is.na(data$seg.label)), ]),
+ 	  id.vars = unique(c(object.ID, 'seg.label', g, weights)),
+ 	  measure.vars = vars
+ 	)
+ 	
+ 	# make a formula for aggregate()
+ 	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep = ''))
+ 	
 	# check for weights
 	if (!missing(weights)) {
-  	## TODO: adding weighted aggregation via data.table
-	  stop('weighted aggregation is not yet supported', call. = FALSE)
+	  if (missing(slab.fun)) {
+	    # default _weighted_ aggregation fun is .slab.fun.numeric.weighted
+	    FUN <- .slab.fun.numeric.weighted
+	    # custom weighted aggregation fun should take first argument as values w. named "weights" argument
+	  } else FUN <- slab.fun
+	  
+	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, wt = weights))), by = c('variable', g, 'seg.label')])
+	  d.slabbed$variable
+	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, by = c('variable', g, 'seg.label')]$V1
+
+	} else {
+	  # convert back to data.frame
+	  d.long <- as.data.frame(d.long)
+	  
+	  # reset factor levels in d.long[[value]]
+	  if (.factorFlag) {
+	    d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
+	  }
+	  
+	  # process chunks according to group -> variable -> segment
+	  # NA values are not explicitly dropped
+	  if (length(extra.args) == 0) {
+	    d.slabbed <- aggregate(aggregate.fm, data = d.long, na.action = na.pass, FUN = slab.fun)
+	  } else {
+	    # optionally account for extra arguments
+	    the.args <- c(list(aggregate.fm, data = d.long, na.action = na.pass, FUN = slab.fun), extra.args)
+	    d.slabbed <- do.call(what = 'aggregate', args = the.args)
+	  }
+	  
+	  # if slab.fun returns a vector of length > 1 we must:
+	  # convert the complex data.frame returned by aggregate into a regular data.frame
+	  # the column 'value' is a matrix with the results of slab.fun
+	  if (inherits(d.slabbed$value, 'matrix')) {
+	    d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
+	  }
+	  
+	  # ensure that the names returned from slab.fun are legal
+	  names(d.slabbed) <- make.names(names(d.slabbed)) 
+	  
+   	# estimate contributing fraction
+   	d.slabbed$contributing_fraction <- aggregate(
+   	  aggregate.fm,
+   	  data = d.long,
+   	  na.action = na.pass,
+   	  FUN = function(i) {
+   	    length(na.omit(i)) / length(i)
+   	  }
+   	)$value
+   	
 	}
  	
- 	## TODO: why would this ever happen?
-	# throwing out those rows with an NA segment label
-	seg.label.is.not.NA <- which(!is.na(data$seg.label))
-
-	# convert wide -> long format w/ data.table::melt()
-	# will not preserve factor levels when 'vars' is categorical;  must call unique() on `id.vars`
-	d.long <- melt(
-	  as.data.table(data[seg.label.is.not.NA, ]),
-	  id.vars = unique(c(object.ID, 'seg.label', g)),
-	  measure.vars = vars,
-	 )
-
-	# convert back to data.frame
-	d.long <- as.data.frame(d.long)
-
-  # reset factor levels in d.long[[value]]
-	if (.factorFlag) {
-	  d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
-	}
-
-	# make a formula for aggregate()
-	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep = ''))
-
-	# process chunks according to group -> variable -> segment
-	# NA values are not explicitly dropped
-	if (length(extra.args) == 0) {
-	  d.slabbed <- aggregate(aggregate.fm, data = d.long, na.action = na.pass, FUN = slab.fun)
-	} else {
-	  # optionally account for extra arguments
-	  the.args <- c(list(aggregate.fm, data = d.long, na.action = na.pass, FUN = slab.fun), extra.args)
-		d.slabbed <- do.call(what = 'aggregate', args = the.args)
-	}
-
-	# if slab.fun returns a vector of length > 1 we must:
-	# convert the complex data.frame returned by aggregate into a regular data.frame
-	# the column 'value' is a matrix with the results of slab.fun
-	if (inherits(d.slabbed$value, 'matrix')) {
-		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
-	}
-	
-  # ensure that the names returned from slab.fun are legal
-  names(d.slabbed) <- make.names(names(d.slabbed))
-
-	# convert the slab.label column into top/bottom as integers
-	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
-	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
-	d.slabbed$bottom <- as.integer(lapply(slab.depths, function(i) i[2]))
-
-	# estimate contributing fraction
-	d.slabbed$contributing_fraction <- aggregate(
-	    aggregate.fm,
-	    data = d.long,
-	    na.action = na.pass,
-	    FUN = function(i) {
-	      length(na.omit(i)) / length(i)
-	    }
-	  )$value
-
+ 	# convert the slab.label column into top/bottom as integers
+ 	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
+ 	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
+ 	d.slabbed$bottom <- as.integer(lapply(slab.depths, function(i) i[2]))
+ 	
 	# remove seg.label from result
 	d.slabbed$seg.label <- NULL
 
@@ -291,8 +287,6 @@
     attr(d.slabbed, 'original.levels') <- original.levels
   }
 	
-	# reset options
-	options(opt.original)
 	return(d.slabbed)
 }
 
@@ -301,7 +295,7 @@ setGeneric("slab", function(object,
                               fm,
                               slab.structure = 1,
                               strict = FALSE,
-                              slab.fun = .slab.fun.numeric.default,
+                              slab.fun = slab_function(method = "numeric"),
                               cpm = 1,
                               weights = NULL,
                               ...)
@@ -368,7 +362,7 @@ setGeneric("slab", function(object,
 #' either: number of profiles with data at the current slice (cpm=1), or by the
 #' number of profiles in the collection (cpm=2). Mode 1 values will always sum
 #' to the contributing fraction, while mode 2 values will always sum to 1.
-#' @param weights Column name containing weights. NOT YET IMPLEMENTED
+#' @param weights Column name containing site-level weights
 #' @param \dots further arguments passed to \code{slab.fun}
 #' @return Output is returned in long format, such that slice-wise aggregates
 #' are returned once for each combination of grouping level (optional),
@@ -745,3 +739,21 @@ setGeneric("slab", function(object,
 setMethod(f = 'slab',
           signature = 'SoilProfileCollection',
           definition = .slab)
+
+#' @param method one of `"numeric"`, `"factor"`, `"hd"`, `"weighted.numeric"`, `"weighted.factor"`, `"fast"`
+#' @details `slab_function()`: The default `"numeric"` aggregation method is the `"fast"` numeric (quantile) method. Additional methods include `"factor"` for categorical data, `"hd"` to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "`weighted`" to use a weighted quantile method from the Hmisc package
+#' @return `slab_function()`: return an aggregation function based on the `method` argument
+#' @rdname slab-methods
+#' @export
+slab_function <- function(method = c("numeric", "factor", "hd", "weighted.numeric", "weighted.factor", "fast")) {
+  switch(method,
+         numeric = .slab.fun.numeric.default, # uses "fast" numeric method
+         factor = .slab.fun.factor.default, 
+         weighted.factor = .slab.fun.factor.weighted, 
+         hd = .slab.fun.numeric.HD, 
+         weighted.numeric = .slab.fun.numeric.weighted,
+         weighted.factor = .slab.fun.numeric.weighted,
+         fast = .slab.fun.numeric.fast,
+         .slab.fun.numeric.default
+  )
+}

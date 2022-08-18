@@ -35,7 +35,32 @@ test_that("basic slab functionality", {
   expect_true(any(grepl('p.q', nm)))
 })
 
-
+test_that("extended slab functionality: weighted aggregation", {
+  
+  data(sp1, package = 'aqp')
+  depths(sp1) <- id ~ top + bottom
+  
+  sp1$weights <- rep(1:2, length(sp1))[1:length(sp1)]
+  sp1$wtgrp <- rep(1, length(sp1))
+  
+  # we expect quantile estimates to vary (given weighted v.s. unweighted)
+  a.0 <- slab(sp1, fm = ~ prop, weights = "weights")
+  a.1 <- slab(sp1, fm = ~ prop, strict = TRUE, weights = "weights")
+  a.2 <- slab(sp1, fm = wtgrp ~ prop, strict = TRUE, weights = "weights")
+  a.3 <- slab(sp1, fm = wtgrp ~ prop, strict = TRUE)
+  
+  # expect consistent structure for weighted/unweighted: same column names except for group
+  ungroupcols <- colnames(a.3)
+  ungroupcols[2] <- "all.profiles"
+  expect_equal(colnames(a.0), ungroupcols)
+  expect_equal(colnames(a.1), ungroupcols)
+  expect_equal(colnames(a.2), colnames(a.3))
+  
+  # contributing fractions should be identical
+  expect_true(all(a.1$contributing_fraction == a.2$contributing_fraction))
+  expect_true(all(a.2$contributing_fraction == a.3$contributing_fraction))
+  
+})
 
 test_that("slab calculations: mean, single profile", {
   
