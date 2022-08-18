@@ -15,13 +15,15 @@
   fm,
   slab.structure = 1,
   strict = FALSE,
-  slab.fun = slab_function(method = "default"),
+  slab.fun = slab_function(method = "numeric"),
   cpm = 1,
   weights = NULL,
   ...
 )
 
-slab_function(method = c("default", "factor", "hd", "weighted", "fast"))
+slab_function(
+  method = c("numeric", "factor", "hd", "weighted.numeric", "weighted.factor", "fast")
+)
 }
 \arguments{
 \item{object}{a SoilProfileCollection}
@@ -49,7 +51,7 @@ to the contributing fraction, while mode 2 values will always sum to 1.}
 
 \item{\dots}{further arguments passed to \code{slab.fun}}
 
-\item{method}{one of \code{"default"}, \code{"factor"}, \code{"hd"}, \code{"weighted"}, \code{"fast"}}
+\item{method}{one of \code{"numeric"}, \code{"factor"}, \code{"hd"}, \code{"weighted.numeric"}, \code{"weighted.factor"}, \code{"fast"}}
 }
 \value{
 Output is returned in long format, such that slice-wise aggregates
@@ -124,7 +126,7 @@ units} \item{a vector of 3 or more integers}{e.g. c(0, 5, 10, 50, 100): data
 are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
 }
 
-\code{slab_function()}: The \code{"default"} aggregation method is the \code{"fast"} numeric (quantile) method. Additional methods include \code{"factor"} for categorical data, \code{"hd"} to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "\code{weighted}" to use a weighted quantile method from the Hmisc package
+\code{slab_function()}: The default \code{"numeric"} aggregation method is the \code{"fast"} numeric (quantile) method. Additional methods include \code{"factor"} for categorical data, \code{"hd"} to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "\code{weighted}" to use a weighted quantile method from the Hmisc package
 }
 \note{
 Arguments to \code{slab} have changed with \code{aqp} 1.5 (2012-12-29)

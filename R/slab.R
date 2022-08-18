@@ -92,7 +92,7 @@
                   ...) {
 
   # define keywords for data.table
-  .SD <- NULL; .N <- NULL
+  .SD <- NULL; .N <- NULL; value <- NULL
   
 	# get extra arguments: length of 0 if no extra arguments
 	extra.args <- list(...)
@@ -113,8 +113,8 @@
 	original.levels <- NULL
 
 	# extract components of the formula:
-	g <- all.vars(update(fm, .~0)) # left-hand side
-	vars <- all.vars(update(fm, 0~.)) # right-hand side
+	g <- all.vars(update(fm, . ~ 0)) # left-hand side
+	vars <- all.vars(update(fm, 0 ~ .)) # right-hand side
 	
 	# sanity check:
 	if (!inherits(fm, "formula"))
@@ -128,15 +128,22 @@
 	  stop('column names in formula do not match column names in dataframe', call. = FALSE)
 	
 	# make formula for slicing
-	fm.slice <- formula(paste('0:', max(object), ' ~ ', paste(vars, collapse = ' + '), sep = ''))
-
-	# short-cut for user-defined slab
 	if (length(slab.structure) == 2) {
+  	# user-defined single slab
 	  fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2], ' ~ ', paste(vars, collapse = ' + '), sep = ''))
+	} else {
+	  fm.slice <- formula(paste('0:', max(object), ' ~ ', paste(vars, collapse = ' + '), sep = ''))
 	}
 	
 	# slice into 1cm increments, result is a data.frame
 	data <- dice(x = object, fm = fm.slice, strict = strict, SPC = FALSE, pctMissing = TRUE)
+  
+	# Note: in this case we need to subtract the extra slice included by slice()/dice()
+  # do it to sliced result so that the genSlabLabels have the correct length
+  ldx <- data[[horizonDepths(object)[2]]] > slab.structure[2]
+	if (length(slab.structure) == 2 && any(ldx, na.rm = TRUE)) {
+	  data <- data[which(!ldx), ]  
+	}
 	
 	# extract site data
 	site.data <- site(object)
@@ -193,10 +200,6 @@
 
 	## Note: use of factor labels could be slowing things down...
 	## Note: this assumes ordering is correct in source data / segment labels
-	
-	## TODO: make sure that nrow(data) == genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
-	##       - I think the source of problems related to genSlabLabels not conforming with number of rows has been fixed -AGB 2022/08/17
-	
 	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
 	##       l <- split(data, data$seg.label, drop=FALSE)
 

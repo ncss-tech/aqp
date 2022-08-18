@@ -22,7 +22,6 @@ genSlabLabels <- function(slab.structure = 1, max.d, n.profiles) {
     if (slab.structure[1] == 0 & length(slab.structure) > 2) {
       # trivial case where segments start from 0
       
-      
       seg.label <- rep(slab.structure[-1], times = diff(slab.structure))[1:max.d]
     
     } else {
@@ -30,15 +29,14 @@ genSlabLabels <- function(slab.structure = 1, max.d, n.profiles) {
       if (length(slab.structure) != 2)
         stop('user-defined slab boundaries must either start from 0, or contain two values between 0 and the max soil depth')
       
-      # calculate thickness of each slab
+      # calculate thickness of slab
       slab.thickness <- diff(slab.structure)
       
       # make a new label for the slab
       new.label <- paste(slab.structure, collapse = '-')
       
-      # generate an index for the slab
       slab.idx <- rep(new.label, times = slab.thickness)
-      seg.label <- slab.idx 
+      seg.label <- slab.idx
     }
     
     # generate segment labels	

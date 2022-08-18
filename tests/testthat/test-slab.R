@@ -1,7 +1,5 @@
 context("slab method for SoilProfileCollection objects")
 
-
-
 test_that("basic slab functionality", {
   
   data(sp1, package = 'aqp')
@@ -34,6 +32,32 @@ test_that("basic slab functionality", {
   expect_true(any(grepl('contributing_fraction', nm)))
   expect_true(any(grepl('p.q', nm)))
 })
+
+test_that("slab structure for a single slab", {
+  data(sp4, package = 'aqp')
+  depths(sp4) <- id ~ top + bottom
+  
+  sp4$group <- c(rep('A',5), rep('B',5))
+  a.1 <- slab(
+    sp4,
+    fm = ~ sand + silt + clay,
+    slab.structure = c(0, 10),
+    slab.fun = mean,
+    na.rm = TRUE
+  )
+  expect_equal(nrow(a.1), 3)
+  
+  # again, this time within groups defined by a site-level attribute:
+  a.1 <- slab(
+    sp4,
+    fm = group ~ sand + silt + clay,
+    slab.structure = c(0, 10),
+    slab.fun = mean,
+    na.rm = TRUE
+  )
+  expect_equal(nrow(a.1), 6)
+})
+
 
 test_that("extended slab functionality: weighted aggregation", {
   
