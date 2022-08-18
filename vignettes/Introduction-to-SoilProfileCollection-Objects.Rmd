@@ -277,6 +277,7 @@ proj4string(sp4)
 # see ?SpatialPointsDataFrame for details
 sp4.sp <- as(sp4, 'SpatialPointsDataFrame')
 ```
+
 # Object Metadata
 
 SoilProfileCollection metadata can be extracted and set using the `metadata()` and `metadata<-` methods.
@@ -299,7 +300,6 @@ str(metadata(sp4))
 # fix depth units, set back to 'cm'
 depth_units(sp4) <- 'cm'
 ```
-
 
 # Validity and Horizon Logic
 
@@ -327,7 +327,15 @@ spc_in_sync(sp4)
 z <- rebuildSPC(sp4)
 ```
 
-`checkHzDepthLogic()` has the ability to perform logical tests on whole profiles or individual horizons. Four different tests are performed related to 
+`checkHzDepthLogic()` has the ability to perform logical tests on whole profiles or individual horizons. Four different tests are performed related to four common errors in horizon depths:
+
+ - bottom depth shallower than top depth
+
+ - equal top and bottom depth
+
+ - missing (`NA`) top or bottom depth 
+
+ - gap or overlap between adjacent horizons
 
 ```{r}
 checkHzDepthLogic(sp4)
@@ -336,7 +344,7 @@ checkHzDepthLogic(sp4, byhz = TRUE)
 
 # Coercion
 
-SoilProfileCollections can be coerced to `data.frame`, `list` and `SpatialPointsDataFrame` (when spatial slot has been set up):
+SoilProfileCollection objects can be coerced to `data.frame`, `list` and `SpatialPointsDataFrame` (when spatial slot has been set up):
 
 ```{r coercion, eval=FALSE}
 # check our work by viewing the internal structure
@@ -366,6 +374,7 @@ Typically, site-level attributes will be used as the subsetting criteria. Functi
 ## Profiles
 
 Using the *i* index, select one or more profiles by numeric index. An index greater than the number of profiles will return an empty `SoilProfileCollection` object.
+
 ```{r eval=FALSE}
 # explicit string matching
 idx <- which(sp4$group == 'A')
@@ -511,6 +520,7 @@ horizons(x)$.sd <- 2
 x.dupes <- duplicate(x, times = 5)
 
 # simulate some new profiles based on example
+# 2cm constant standard deviation of transition between horizons assumed
 x.sim <- perturb(x, n = 5, thickness.attr = '.sd')
 
 # graphical check
@@ -520,8 +530,10 @@ par(mar = c(0, 2, 0, 4))
 plotSPC(unique(x.dupes, vars = c('top', 'bottom')),
         name.style = 'center-center',
         width = 0.15)
+```
 
-# "uniqueness" is a function of variable selection
+```{r fig.height=4, fig.width=8}
+# "uniqueness" is a function of variables selected to consider
 plotSPC(unique(x.sim, vars = c('top', 'bottom')),
         name.style = 'center-center')
 
@@ -649,6 +661,7 @@ plotSPC(
   hz.depths.offset = 0.08
 )
 ```
+
 As of aqp version 1.41, it is possible to "fix" overlapping horizon depth labels with the new `fixLabelCollisions` argument. This approach to labeling depths works best when moving horizon designations with the `name.style` argument. Note that setting `fixLabelCollisions = TRUE` may incur a significant performance penalty when plotting large `SoilProfileCollection` objects.
 
 ## Relative Horizontal Positioning
@@ -1196,7 +1209,7 @@ plotSPC(
   name = '',
   color = 'p1',
   col.label = 'Contributing Fraction',
-  col.palette = brewer.pal(10, 'Spectral')
+  col.palette = RColorBrewer::brewer.pal(10, 'Spectral')
 )
 ```
 
@@ -1219,7 +1232,7 @@ hzdesgnname(sp4) <- 'name'
 # using Ex-Ca:Mg and CEC at pH 7
 # with no depth-weighting (k=0)
 # to a maximum depth of 40 cm
-d <- profile_compare(sp4, vars=c('ex_Ca_to_Mg', 'CEC_7'), k=0, max_d=40)
+d <- profile_compare(sp4, vars = c('ex_Ca_to_Mg', 'CEC_7'), k = 0, max_d = 40)
 
 # check distance matrix:
 round(d, 1)
@@ -1229,13 +1242,16 @@ d.diana <- diana(d)
 
 # this function is from the sharpshootR package
 # requires some manual adjustments
-par(mar=c(0, 0, 4, 1))
-plotProfileDendrogram(sp4, d.diana, scaling.factor = 0.8, y.offset = 5, cex.names=0.7, width=0.3, color='ex_Ca_to_Mg')
-```
-
-Try again in `debug` mode to ensure that profiles are sorted correctly.
-```{r fig.height=6, fig.width=10}
-plotProfileDendrogram(sp4, d.diana, scaling.factor = 0.8, y.offset = 5, cex.names=0.7, width=0.3, color='ex_Ca_to_Mg', debug = TRUE)
+par(mar = c(0, 0, 4, 1))
+plotProfileDendrogram(
+  sp4,
+  d.diana,
+  scaling.factor = 0.8,
+  y.offset = 5,
+  cex.names = 0.7,
+  width = 0.3,
+  color = 'ex_Ca_to_Mg'
+)
 ```
 
 Some additional examples can be found in:
