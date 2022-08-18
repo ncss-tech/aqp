@@ -267,8 +267,8 @@
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span></span>
 <span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span>
-<span><span class="co">#&gt;  [1]  822.9878  781.0421  904.4200 1038.8606 1131.3793  948.6661 1061.8130 1195.3006  909.7417</span></span>
-<span><span class="co">#&gt; [10] 1190.0723</span></span>
+<span><span class="co">#&gt;  [1] 1062.3876  969.8368 1131.4817 1155.9594  959.2442 1266.2825  988.6302 1029.7367 1149.1280</span></span>
+<span><span class="co">#&gt; [10]  858.5380</span></span>
 <span></span>
 <span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -319,12 +319,12 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa  822.9878             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn  781.0421             1        1     B</span></span>
-<span><span class="co">#&gt;      kings  904.4200             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa 1038.8606             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1131.3793             1        1     A</span></span>
-<span><span class="co">#&gt;       napa  948.6661             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa 1062.3876             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn  969.8368             1        1     B</span></span>
+<span><span class="co">#&gt;      kings 1131.4817             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa 1155.9594             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino  959.2442             1        1     A</span></span>
+<span><span class="co">#&gt;       napa 1266.2825             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -417,16 +417,16 @@
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           x       y</span></span>
-<span><span class="co">#&gt; 1  354157.6 4109623</span></span>
-<span><span class="co">#&gt; 2  354121.0 4109544</span></span>
-<span><span class="co">#&gt; 3  354171.8 4109505</span></span>
-<span><span class="co">#&gt; 4  353804.8 4109567</span></span>
-<span><span class="co">#&gt; 5  354073.3 4109440</span></span>
-<span><span class="co">#&gt; 6  353866.6 4109561</span></span>
-<span><span class="co">#&gt; 7  353831.4 4109551</span></span>
-<span><span class="co">#&gt; 8  354033.1 4109536</span></span>
-<span><span class="co">#&gt; 9  353930.6 4109584</span></span>
-<span><span class="co">#&gt; 10 353935.8 4109512</span></span>
+<span><span class="co">#&gt; 1  353917.9 4109523</span></span>
+<span><span class="co">#&gt; 2  353860.3 4109510</span></span>
+<span><span class="co">#&gt; 3  354123.7 4109559</span></span>
+<span><span class="co">#&gt; 4  353984.7 4109470</span></span>
+<span><span class="co">#&gt; 5  353953.6 4109584</span></span>
+<span><span class="co">#&gt; 6  354012.2 4109649</span></span>
+<span><span class="co">#&gt; 7  354033.9 4109552</span></span>
+<span><span class="co">#&gt; 8  353993.5 4109589</span></span>
+<span><span class="co">#&gt; 9  353930.9 4109454</span></span>
+<span><span class="co">#&gt; 10 354055.2 4109494</span></span>
 <span></span>
 <span><span class="co"># get/set spatial reference system using PROJ4 syntax</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -1335,13 +1335,13 @@
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   variable id    value top bottom contributing_fraction</span></span>
-<span><span class="co">#&gt; 1       p1  1 16.60142   0      5                  1.00</span></span>
-<span><span class="co">#&gt; 2       p1  1 18.02131   5     15                  1.00</span></span>
-<span><span class="co">#&gt; 3       p1  1 24.16619  15     30                  1.00</span></span>
-<span><span class="co">#&gt; 4       p1  1 29.35488  30     60                  1.00</span></span>
-<span><span class="co">#&gt; 5       p1  1 29.06808  60    100                  0.95</span></span>
-<span><span class="co">#&gt; 6       p1  1      NaN 100    200                  0.00</span></span>
-<span><span class="co">#&gt; 7       p1  2 11.12494   0      5                  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; 1       p1  1 12.30079   0      5            1.00000000</span></span>
+<span><span class="co">#&gt; 2       p1  1 12.30079   5     15            1.00000000</span></span>
+<span><span class="co">#&gt; 3       p1  1 12.30112  15     30            1.00000000</span></span>
+<span><span class="co">#&gt; 4       p1  1 12.33870  30     60            1.00000000</span></span>
+<span><span class="co">#&gt; 5       p1  1 13.83085  60    100            1.00000000</span></span>
+<span><span class="co">#&gt; 6       p1  1 13.55248 100    200            0.04651163</span></span>
+<span><span class="co">#&gt; 7       p1  2 45.86579   0      5            1.00000000</span></span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil profile data, after converting <code><a href="../reference/slab-methods.html">slab()</a></code> result from long -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reshape to wide format</span></span>
