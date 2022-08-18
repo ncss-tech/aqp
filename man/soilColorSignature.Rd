@@ -13,8 +13,8 @@ soilColorSignature(
   pam.k = 3,
   RescaleLightnessBy = 1,
   useProportions = TRUE,
-  pigmentNames = c(".white.pigment", ".red.pigment", ".green.pigment",
-    ".yellow.pigment", ".blue.pigment"),
+  pigmentNames = c(".white.pigment", ".red.pigment", ".green.pigment", ".yellow.pigment",
+    ".blue.pigment"),
   apply.fun = lapply
 )
 }
