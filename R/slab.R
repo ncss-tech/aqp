@@ -25,7 +25,7 @@
 	return(pt)
 }
 
-.slab.fun.factor.weighted <- function(values, weights) {
+.slab.fun.factor.weighted <- function(values, w) {
   # TODO
 }
   
@@ -39,15 +39,12 @@
 # for a site or horizon level weight column, use Hmisc::wtd.quantile
 #   note that "frequency weights" are assumed to be most common use case, so normwt=FALSE by default, 
 #   normwt=TRUE can be passed as optional argument for slab.fun from slab() interface
-.slab.fun.numeric.weighted <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), wt, normwt = FALSE) {
+.slab.fun.numeric.weighted <- function(values, w, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), normwt = FALSE) {
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `wtd.quantile()` method', call. = FALSE)
-  res <- try(Hmisc::wtd.quantile(values, weights = wt, probs = probs, na.rm = TRUE, normwt = normwt), silent = TRUE)
+  res <- try(Hmisc::wtd.quantile(values, w, probs = probs, na.rm = TRUE, normwt = normwt), silent = TRUE)
   if (inherits(res, 'try-error') && grepl("zero non-NA points", res[1])) {
     res <- rep(NA_real_, length(probs))
-  } else if (inherits(res, 'try-error')) {
-    print(res)
-    return(NULL)
   } else {
     names(res) <- paste('p.q', round(probs * 100), sep = '')
   }
@@ -180,10 +177,10 @@
 		# check for weights
 		if (!missing(weights)) {
 		  slab.fun <- .slab.fun.factor.weighted
+		} else {
+  		# re-set default function, currently no user-supply-able option
+  		slab.fun <- .slab.fun.factor.default
 		}
-
-		# re-set default function, currently no user-supply-able option
-		slab.fun <- .slab.fun.factor.default
 
 		# add extra arguments required by this function
 		# note that we cannot accept additional arguments when processing categorical values
@@ -212,6 +209,14 @@
 		data[, g] <- 1
 	}
  	
+ 	if (length(weights) > 1) {
+ 	  stop("`weights` argument should be a character vector of length one containing (site-level) weight column name", call. = FALSE)
+ 	}
+ 	
+ 	if (!is.null(weights) && !weights %in% siteNames(object)) {
+ 	  stop("column '", weights, "' not present in site data", call. = FALSE)
+ 	}
+ 	
  	# convert wide -> long format
  	d.long <- data.table::melt(
  	  as.data.table(data[which(!is.na(data$seg.label)), ]),
@@ -227,11 +232,13 @@
 	  if (missing(slab.fun)) {
 	    # default _weighted_ aggregation fun is .slab.fun.numeric.weighted
 	    FUN <- .slab.fun.numeric.weighted
-	    # custom weighted aggregation fun should take first argument as values w. named "weights" argument
-	  } else FUN <- slab.fun
-	  
-	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, wt = weights))), by = c('variable', g, 'seg.label')])
-	  d.slabbed$variable
+	    # custom weighted aggregation fun should take first argument as values 
+	    # second argument is "weights" argument
+	  } else {
+	    FUN <- slab.fun
+	  }
+	  wt <- eval(weights)
+	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[wt]]))), by = c('variable', g, 'seg.label')])
 	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, by = c('variable', g, 'seg.label')]$V1
 
 	} else {
@@ -274,6 +281,12 @@
    	)$value
    	
 	}
+ 	
+ 	# rename default data.table value column names
+ 	unn <- grepl("^V\\d+$", colnames(d.slabbed))
+ 	if (any(unn)) {
+ 	  colnames(d.slabbed)[unn] <- paste0("value", ifelse(sum(unn) == 1, "", 1:sum(unn)))
+ 	}
  	
  	# convert the slab.label column into top/bottom as integers
  	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
