@@ -119,6 +119,14 @@ test_that("extended slab functionality: weighted aggregation", {
   a.2 <- slab(x, ~ ph1to1h2o_r, slab.structure = c(0, 10), weights = "comppct_r")
   expect_equal(a.2$p.q50, 6.5)
   
+  # comppct_r adjusted to get lower result more like jokerst
+  x$comppct_r <- c(NA, 90)
+  na.1 <- slab(x, ~ ph1to1h2o_r, slab.structure = c(0, 10), weights = "comppct_r", na.rm = TRUE)
+  expect_equal(na.1$p.q50, 6.5)
+  
+  na.2 <- slab(x, ~ ph1to1h2o_r, slab.structure = c(0, 10), weights = "comppct_r", slab.fun = weighted.mean, na.rm = TRUE)
+  expect_equal(na.2$value, NA)
+  
 })
 
 test_that("slab calculations: mean, single profile", {
