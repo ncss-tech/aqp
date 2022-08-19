@@ -7,6 +7,7 @@
 \alias{slab2}
 \alias{genSlabLabels}
 \alias{slab,SoilProfileCollection-method}
+\alias{slab_function}
 \title{Slab-Wise Aggregation of SoilProfileCollection Objects}
 \usage{
 \S4method{slab}{SoilProfileCollection}(
@@ -14,10 +15,14 @@
   fm,
   slab.structure = 1,
   strict = FALSE,
-  slab.fun = .slab.fun.numeric.default,
+  slab.fun = slab_function(method = "numeric"),
   cpm = 1,
   weights = NULL,
   ...
+)
+
+slab_function(
+  method = c("numeric", "factor", "hd", "weighted.numeric", "weighted.factor", "fast")
 )
 }
 \arguments{
@@ -42,9 +47,11 @@ either: number of profiles with data at the current slice (cpm=1), or by the
 number of profiles in the collection (cpm=2). Mode 1 values will always sum
 to the contributing fraction, while mode 2 values will always sum to 1.}
 
-\item{weights}{Column name containing weights. NOT YET IMPLEMENTED}
+\item{weights}{Column name containing site-level weights}
 
 \item{\dots}{further arguments passed to \code{slab.fun}}
+
+\item{method}{one of \code{"numeric"}, \code{"factor"}, \code{"hd"}, \code{"weighted.numeric"}, \code{"weighted.factor"}, \code{"fast"}}
 }
 \value{
 Output is returned in long format, such that slice-wise aggregates
@@ -74,6 +81,8 @@ fraction of profiles contributing to the aggregate value, ranges from
 1/n_profiles to 1.}
 
 }
+
+\code{slab_function()}: return an aggregation function based on the \code{method} argument
 }
 \description{
 Aggregate soil properties along user-defined \code{slabs}, and optionally within
@@ -91,6 +100,8 @@ mean, mean-1SD and mean+1SD. The default slab function wraps
 \code{stats::quantile} from the Hmisc package, which requires at least 2
 observations per chunk. Note that if \code{group} is a factor it must not contain
 NAs.
+
+\code{slab()} uses \code{dice()} to "resample" profiles to 1cm slices from depth 0 to \code{max(x)} (or \code{slab.structure[2]}, if defined).
 
 Sometimes \code{slab} is used to conveniently re-arrange data vs. aggregate.
 This is performed by specifying \code{identity} in \code{slab.fun}. See
@@ -114,6 +125,8 @@ integers}{e.g. c(50, 60): data are aggregated over depths spanning 50--60
 units} \item{a vector of 3 or more integers}{e.g. c(0, 5, 10, 50, 100): data
 are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
 }
+
+\code{slab_function()}: The default \code{"numeric"} aggregation method is the \code{"fast"} numeric (quantile) method. Additional methods include \code{"factor"} for categorical data, \code{"hd"} to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "\code{weighted}" to use a weighted quantile method from the Hmisc package
 }
 \note{
 Arguments to \code{slab} have changed with \code{aqp} 1.5 (2012-12-29)
@@ -190,7 +203,6 @@ xyplot(top ~ value | id, data=a, ylab='Depth',
        prepanel=prepanel.depth_function,
        scales=list(x=list(alternating=1))
 )
-
 
 ##
 ## categorical variable example
