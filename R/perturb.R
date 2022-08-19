@@ -1,15 +1,10 @@
 #' Perturb soil horizon depths using boundary distinctness
-#' 
-#' @aliases permute_profile
-#' 
-#' @param p A single-profile SoilProfileCollection
-#' @param n Number of new profiles to generate (default: 100)
+#'  
+#' @param p A SoilProfileCollection
+#' @param n Number of new profiles to generate (default: `100`) per profile in `p`
 #' @param id a vector of profile IDs with length equal to (\code{n}). Overrides use of \code{seq_len(n)} as default profile ID values.
-#' 
 #' @param boundary.attr Horizon variance attribute containing numeric "standard deviations" reflecting boundary transition distinctness
-#' 
 #' @param thickness.attr Horizon variance attribute containing numeric "standard deviations" reflecting horizon thickness  
-#' 
 #' @param max.depth Depth below which horizon depths are not perturbed (default: `NULL`)
 #' @param min.thickness Minimum thickness of permuted horizons (default: `1`)
 #' @param new.idname New column name to contain unique profile ID (default: `pID`)
@@ -22,17 +17,17 @@
 #' 
 #' Imagine a Normal curve with mean centered on the vertical (depth axis) at a representative value (RV) horizon bottom depth or thickness. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that "central" mean value represent 95% of the "typical volume" of that horizon or boundary.
 #' 
-#' `perturb` can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is [hzDistinctnessCodeToOffset()]. The `boundary.attr` is arguably easier to parameterize from a single profile description or "Form 232" where _horizon boundary distinctness_ classes (based on vertical distance of transition) are conventionally recorded for each layer.
+#' `perturb()` can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is [hzDistinctnessCodeToOffset()]. The `boundary.attr` is arguably easier to parameterize from a single profile description or "Form 232" where _horizon boundary distinctness_ classes (based on vertical distance of transition) are conventionally recorded for each layer.
 #' 
-#' Alternately, `perturb` can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.
+#' Alternately, `perturb()` can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.
 #'
-#' @return a SoilProfileCollection with `n` realizations of `p`
+#' @return a SoilProfileCollection with `n` realizations of each profile in `p`
 #' 
 #' @seealso [random_profile()] [hzDistinctnessCodeToOffset()]
 #' 
 #' @export
 #' @author D.E. Beaudette, A.G. Brown
-#'
+#' @aliases permute_profile
 #' @examples
 #' 
 #' ### THICKNESS
@@ -168,7 +163,7 @@ perturb <- function(p,
     by_thickness <- TRUE
   }
   
-  if (!missing(id)) {
+  if (!missing(id) && !is.null(id)) {
     custom.ids <- TRUE
     # keep track of missing `n` argument before it is set
     missing.n <- missing(n)
@@ -184,24 +179,20 @@ perturb <- function(p,
 
   hz <- horizons(p)
   
-  if(by_thickness) {
+  if (by_thickness) {
     bounds <- hz[[thickness.attr]]
   } else {
     bounds <- hz[[boundary.attr]]
   }
   
   depthz <- horizonDepths(p)
-  mindepth <- min(hz[[depthz[1]]])
+  mindepth <- p[, , .FIRST][[depthz[1]]]
 
-  if(!is.numeric(bounds) | !length(bounds) == nrow(p)) {
-    stop("variance attribute must be refer to a numeric column in `p` containing standard deviations of horizon (or boundary) thickness")
+  if (!is.numeric(bounds) | !length(bounds) == nrow(p)) {
+    stop("variance attribute must be a numeric column  name in `p` containing standard deviations of horizon or boundary thickness")
   }
 
-  if(length(p) != 1 | !inherits(p, 'SoilProfileCollection')) {
-    stop("`p` must be a single-profile SoilProfileCollection")
-  }
-
-  if(!checkHzDepthLogic(p)$valid) {
+  if (!all(checkHzDepthLogic(p)$valid)) {
     stop("one or more horizon depth logic tests failed for object `p`")
   }
 
@@ -214,149 +205,165 @@ perturb <- function(p,
   }
   
   # do not vary layers below `max.depth` (if not NULL) can be arbitrary depth
-  if (!is.null(max.depth)) {
-    if (!is.na(max.depth) & max.depth >= mindepth) {
+  if (!is.null(max.depth) && !is.na(max.depth)) {
+    idx <- which(max.depth >= mindepth)
+    if (length(idx) > 0) {
       if (by_thickness) {
-        ldx <- (cumsum(perturb_var) + mindepth) > max.depth
+        d1 <- data.table::data.table(id = hz[[idname(p)]], perturb_var)
+        d2 <- data.table::data.table(id = profile_id(p), mindepth)
+        ldx <- (d1[d2, on = "id"][, cumsum(perturb_var) + mindepth, by = "id"]$V1) > max.depth
       } else {
         ldx <- perturb_var > max.depth
       }
-      bounds[ldx] <- 0
     }
+    bounds[ldx] <- 0
   }
   
-  # for each horizon bottom depth (boundary) calculate a gaussian offset
-  #  from the representative value recorded in the pedon descripton
-  res <- do.call('rbind', lapply(1:nrow(p), function(i) {
+  # for each horizon bottom depth (boundary) calculate the gaussian offset
+  
+  # this is a bit non-kosher, but rather than sorting to fix random depths
+  # that may be out of order, replace them iteratively until there are none
+  
+  # it is possible to specify SDs so large the loop below will not converge,
+  # so a hard break is triggered at 1000 iterations.
+  
+  # in practice, qc warnings for improbably large SD would be useful
+  # say, if the SD is greater than 1/3 the hz thickness, you are likely to
+  # generate extreme values prone to causing logic errors;
+  # could be data entry error or improbable class assignment
+  #
+  # with irregular bounds, high SD could be intentional/desired -- if unstable
+  #  - enforcing some sort of sorting?
+  #  - additional random processes: waves for wavy/irregular
+  #  - allowing irregular boundaries to eclipse/omit thin layers?
+  #  - presence/absence of broken horizons; could this be a separate random process?
+  #    would it require that volume or other % area field populated?
+  
+  res <- do.call('rbind', lapply(seq_len(nrow(p)), function(i) {
     new <- rnorm(n, perturb_var[i], bounds[i])
-
-    # this is a bit non-kosher, but rather than sorting to fix random depths
-    # that may be out of order, replace them iteratively until there are none
-    
-    # it is possible to specify SDs so large the loop below will not converge,
-    # so a hard break is triggered at 1000 iterations.
-
-    # in practice, qc warnings for improbably large SD would be useful
-    # say, if the SD is greater than 1/3 the hz thickness, you are likely to
-    # generate extreme values prone to causing logic errors;
-    # could be data entry error or improbable class assignment
-    #
-    # with irregular bounds, high SD could be intentional/desired -- if unstable
-    #  - enforcing some sort of sorting?
-    #  - additional random processes: waves for wavy/irregular
-    #  - allowing irregular boundaries to eclipse/omit thin layers?
-    #  - presence/absence of broken horizons; could this be a separate random process?
-    #    would it require that volume or other % area field populated?
-
     idx <- 1
     counter <- 0
     # TODO: do better
-    while(length(idx) > 0) {
-      if(counter > 1000) {
+    while (length(idx) > 0) {
+      if (counter > 1000) {
         break
       }
-      idx <- which(new <= perturb_var[pmax(1, i - 1)] |
-            new >= perturb_var[pmin(i + 1, length(perturb_var))])
+      idx <- which(new <= perturb_var[pmax(1, i - 1)] | new >= perturb_var[pmin(i + 1, length(perturb_var))])
       new[idx] <- rnorm(length(idx), perturb_var[i], bounds[i])
       counter <- counter + 1
     }
 
     # finally, no depths should be negative
-    return(pmax(new, 0))
+    #  and aqp only supports integer depths
+    return(round(pmax(new, 0)))
   }))
 
-  # aqp only supports integer depths
-  res <- round(res)
-  
   # handle minimum thickness 
   if (!by_thickness) {
     res <- apply(res, 2, function(x) diff(c(mindepth, x)))
   }
   
-  res <- apply(res, 2, function(x) {
+  # result is a 3D array
+  #  dimension 1: input profile index
+  #  dimension 2: horizon index
+  #  dimension 3: output profile index (1 for each input profile)
+  
+  # For example res[1,1,1:25]: 25 realizations of bottom depth of first profile, first horizon
+  res <- apply(res, MARGIN = c(1, 2), function(x) {
     idx <- x < min.thickness
     if (any(idx)) {
       x[idx] <- min.thickness
     }
-    return(cumsum(x) + mindepth)
+    return(round(cumsum(x) + mindepth))
   })
   
-  res <- round(res)
-
-  # allocate a list for n-profile result
-  pID <- 1:n
-  profiles <- vector('list', n)
-
-  profiles <- lapply(pID, function(i) {
-    p.sub <- hz
-
-    # create new idname and hzidname
-    p.sub$pID <- as.character(i)
-    p.sub$hzID <- as.character(1:length(p.sub$hzID) * i)
-
-    # insert new depths
-    nd <- (res[,i])     #TODO: sort is rarely needed, ensures topological
-                        #      but not statistical correctness?
-    p.sub[[depthz[1]]] <- c(mindepth, nd)[1:nrow(p)]
-    p.sub[[depthz[2]]] <- nd
-
-    test <- hzDepthTests(p.sub[[depthz[1]]], p.sub[[depthz[2]]])
-    if(any(test)) {
-      stop(paste("one or more horizon logic tests failed for realization:", i))
+  # insert new depths
+  if (length(dim(res)) == 2) {
+    pID <- 1:n
+    # allocate a list for n-profile result
+    profiles <- vector('list', n)
+    profiles <- lapply(pID, function(i) {
+      p.sub <- hz
+  
+      # create new idname and hzidname
+      p.sub$pID <- as.character(i)
+      p.sub$hzID <- as.character(1:length(p.sub$hzID) * i)
+  
+      nd <- data.frame(id = hz[[idname(p)]], X1 = t(res)[i, ])
+      nd$V1 <- cumsum(nd$X1)
+      p.sub[[depthz[1]]] <- c(mindepth, nd$V1)[1:nrow(p)]
+      p.sub[[depthz[2]]] <- nd$V1
+      test <- hzDepthTests(p.sub[[depthz[1]]], p.sub[[depthz[2]]])
+        
+      if (any(test)) {
+          stop(paste("one or more horizon logic tests failed for realization:", i))
+      }
+      return(p.sub)
+    })
+    
+    # fast "pbindlist" with no checks since we know the origin
+    
+    # horizon
+    o.h <- as.data.frame(data.table::rbindlist(profiles))
+    # need to remove duped ID from horizon table! only allowed for current ID
+    o.h[[idname(p)]] <- NULL
+    names(o.h)[which(names(o.h) == 'pID')] <- new.idname
+    
+    # site
+    o.s <- data.frame(site(p), pID = pID, row.names = NULL)
+    names(o.s)[which(names(o.s) == 'pID')] <- new.idname
+    
+    # diagnostic
+    d <- diagnostic_hz(p)
+    o.d <- data.frame()
+    if (length(d) != 0) {
+      o.d <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(d))), 
+                        d[rep(1:nrow(d), length(pID))])
     }
-
-    return(p.sub)
-  })
-
-  # fast "pbindlist" with no checks since we know the origin
-
-  # horizon
-  o.h <- as.data.frame(data.table::rbindlist(profiles))
-  # need to remove duped ID from horizon table! only allowed for current ID
-  o.h[[idname(p)]] <- NULL
-  names(o.h)[which(names(o.h) == 'pID')] <- new.idname
-
-  # site
-  o.s <- data.frame(site(p), pID = pID, row.names = NULL)
-  names(o.s)[which(names(o.s) == 'pID')] <- new.idname
-
-  # diagnostic
-  d <- diagnostic_hz(p)
-  o.d <- data.frame()
-  if (length(d) != 0) {
-    o.d <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(d))), 
-                      d[rep(1:nrow(d), length(pID))])
+    names(o.d)[which(names(o.d) == 'pID')] <- new.idname
+    
+    # restriction
+    re <- restrictions(p)
+    o.r <- data.frame()
+    if (nrow(re) > 0) {
+      o.r <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(re))),
+                        re[rep(1:nrow(re), length(pID))])
+    }
+    names(o.r)[which(names(o.r) == 'pID')] <- new.idname
+    
+    # always drop spatial data -- still present in site
+    o.sp <- new('SpatialPoints')
+    
+    metadat <- metadata(p)
+    
+    # TODO: alter metadata to reflect the processing done here?
+    
+    # drop old ID name from horizon table
+    #(can't have it in site and horizon, not the ID any mores)
+    o.h[[idname(p)]] <- NULL
+    
+    res <- SoilProfileCollection(idcol = new.idname, depthcols = horizonDepths(p),
+                                 metadata = metadat,
+                                 horizons = o.h, site = o.s, sp = o.sp,
+                                 diagnostic = o.d, restrictions = o.r)
+    ## reset horizon IDs
+    hzID(res) <- as.character(1:nrow(res))
+    
+    res <- .transfer.metadata.aqp(p, res)
+  } else {
+    value <- NULL; md <- NULL; .N <- NULL
+    p.sub <- duplicate(p, n)
+    profiles <- aqp::combine(lapply(seq_along(p), function(i) {
+      nd <- data.table::melt(data.table(id = horizons(p[i,])[[idname(p)]], res[i, , ]), id.vars = "id")
+      nd <- nd[data.frame(id = profile_id(p[i,]), md = mindepth), on = "id"]
+      nd1 <- nd[, cumsum(c(md[1], value))[1:.N], by = c("id", "variable")]
+      nd2 <- nd[, cumsum(value), by = c("id", "variable")]
+      p.sub[[depthz[1]]] <- nd1$V1
+      p.sub[[depthz[2]]] <- nd2$V1
+      return(p.sub)
+    }))
   }
-  names(o.d)[which(names(o.d) == 'pID')] <- new.idname
-
-  # restriction
-  re <- restrictions(p)
-  o.r <- data.frame()
-  if (nrow(re) > 0) {
-    o.r <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(re))),
-                      re[rep(1:nrow(re), length(pID))])
-  }
-  names(o.r)[which(names(o.r) == 'pID')] <- new.idname
-
-  # always drop spatial data -- still present in site
-  o.sp <- new('SpatialPoints')
-
-  metadat <- metadata(p)
-
-  # TODO: alter metadata to reflect the processing done here?
-
-  # drop old ID name from horizon table
-  #(can't have it in site and horizon, not the ID any mores)
-  o.h[[idname(p)]] <- NULL
-
-  res <- SoilProfileCollection(idcol = new.idname, depthcols = horizonDepths(p),
-                               metadata = metadat,
-                               horizons = o.h, site = o.s, sp = o.sp,
-                               diagnostic = o.d, restrictions = o.r)
-  ## reset horizon IDs
-  hzID(res) <- as.character(1:nrow(res))
-
-  res <- .transfer.metadata.aqp(p, res)
+    
   
   if (custom.ids & length(unique(id)) == length(res))
     profile_id(res) <- id
