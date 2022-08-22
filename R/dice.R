@@ -176,6 +176,12 @@ dice <-  function(x,
     if (any(is.na(from)) | any(is.na(to))) {
       stop('corrupt horizonation, consider using `strict = TRUE`', call. = FALSE)
     }
+    # need to invert from/to for overlapping horizons; error: wrong sign in 'by' argument
+    if (from > to) {
+      toold <- to
+      to <- from
+      from <- toold
+    }
     return(
       seq(from = from, to = to, by = by)
     )
@@ -203,7 +209,7 @@ dice <-  function(x,
   # these are used to join with horizons
   sliceIDs <- rep(
     h.sub[[hzidn]], 
-    times = h.sub[[htb[2]]] - h.sub[[htb[1]]]
+    times = abs(h.sub[[htb[2]]] - h.sub[[htb[1]]])
   )
   
   # assemble slice LUT for JOIN
