@@ -214,3 +214,27 @@ test_that("edge case: slab.structure[2] > max(x)", {
 })
 
 
+test_that("overlapping horizons", {
+  data(sp4, package = 'aqp')
+  depths(sp4) <- id ~ top + bottom
+  
+  # overlapping horizons results in increased number of slices (according to overlapping thickness)
+  x1 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg)
+  
+  # create overlap
+  sp4@horizons[2,]$bottom <- sp4@horizons[2,]$bottom + 12
+  
+  x2 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg, strict = FALSE)
+  
+  # evaluate logic by profile, not horizon
+  
+  # default case--nothing removed, nothing added
+  expect_equal(nrow(x1), 331)
+  
+  # 12cm of overlap
+  expect_equal(nrow(x2), 331 + 12)
+  
+  # 1 profile removed due to overlap
+  expect_equal(nrow(x3), 289)
+})
+

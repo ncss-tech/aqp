@@ -15,6 +15,7 @@
   fm,
   slab.structure = 1,
   strict = FALSE,
+  byhz = TRUE,
   slab.fun = slab_function(method = "numeric"),
   cpm = 1,
   weights = NULL,
@@ -37,6 +38,8 @@ or user-defined structure (numeric vector). See details below.}
 
 \item{strict}{logical: should horizons be strictly checked for
 self-consistency?}
+
+\item{byhz}{logical: should horizons or whole profiles be removed by logic checks in \code{strict}? Default \code{TRUE} removes only offending horizons, \code{FALSE} removes whole profiles with one or more illogical horizons.}
 
 \item{slab.fun}{Function used to process each 'slab' of data, ideally
 returning a vector with names attribute. Defaults to a wrapper function

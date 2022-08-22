@@ -83,6 +83,7 @@
                   fm,
                   slab.structure = 1,
                   strict = FALSE,
+                  byhz = TRUE,
                   slab.fun = slab_function(method = "numeric"),
                   cpm = 1,
                   weights = NULL,
@@ -133,7 +134,7 @@
 	}
 	
 	# slice into 1cm increments, result is a data.frame
-	data <- dice(x = object, fm = fm.slice, strict = strict, SPC = FALSE, pctMissing = TRUE)
+	data <- dice(x = object, fm = fm.slice, strict = strict, byhz = byhz, SPC = FALSE, pctMissing = TRUE)
   
 	# Note: in this case we need to subtract the extra slice included by slice()/dice()
   # do it to sliced result so that the genSlabLabels have the correct length
@@ -242,6 +243,11 @@
 	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, by = c('variable', g, 'seg.label')]$V1
 
 	} else {
+	  if (missing(slab.fun) || !inherits(slab.fun, 'function')) {
+	    # default numeric aggregation fun is .slab.fun.numeric.default
+	    slab.fun <- .slab.fun.numeric.default
+	  }
+	  
 	  # convert back to data.frame
 	  d.long <- as.data.frame(d.long)
 	  
@@ -311,6 +317,7 @@ setGeneric("slab", function(object,
                               fm,
                               slab.structure = 1,
                               strict = FALSE,
+                              byhz = TRUE,
                               slab.fun = slab_function(method = "numeric"),
                               cpm = 1,
                               weights = NULL,
@@ -371,6 +378,7 @@ setGeneric("slab", function(object,
 #' or user-defined structure (numeric vector). See details below.
 #' @param strict logical: should horizons be strictly checked for
 #' self-consistency?
+#' @param byhz logical: should horizons or whole profiles be removed by logic checks in `strict`? Default `TRUE` removes only offending horizons, `FALSE` removes whole profiles with one or more illogical horizons.
 #' @param slab.fun Function used to process each 'slab' of data, ideally
 #' returning a vector with names attribute. Defaults to a wrapper function
 #' around \code{stats::quantile}. See details.
