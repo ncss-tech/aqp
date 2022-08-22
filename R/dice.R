@@ -53,7 +53,7 @@ dice <-  function(x,
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
   if  (strict) {
-    x <- HzDepthLogicSubset(x, byhz = TRUE)
+    x <- HzDepthLogicSubset(x, byhz = byhz)
     
     ## TODO: this could invoke 2x calls to fillHzGaps
     # removed horizons will trigger an automatic gap-filling
@@ -182,7 +182,7 @@ dice <-  function(x,
       from <- toold
     }
     return(
-      seq(from = from, to = to, by = abs(by))
+      seq(from = from, to = to, by = by)
     )
   }
   
@@ -214,8 +214,8 @@ dice <-  function(x,
   # assemble slice LUT for JOIN
   s <- data.table(
     sliceID = sliceIDs, 
-    .sliceTop = tops[1:length(sliceIDs)], 
-    .sliceBottom = bottoms[1:length(sliceIDs)]
+    .sliceTop = tops[seq_along(sliceIDs)], 
+    .sliceBottom = bottoms[seq_along(sliceIDs)]
   )
   
   # re-name for simpler JOIN
@@ -241,7 +241,7 @@ dice <-  function(x,
   res[['.sliceTop']] <- NULL
   res[['.sliceBottom']] <- NULL
   
-  ## TODO: move z-index subset"up" to original sequence creation to save a lot of time
+  ## TODO: move z-index subset "up" to original sequence creation to save a lot of time
   if (!is.null(z)) {
     res <- res[which(res[[htb[1]]] %in% z), ]
   }
