@@ -176,11 +176,6 @@ dice <-  function(x,
     if (any(is.na(from)) | any(is.na(to))) {
       stop('corrupt horizonation, consider using `strict = TRUE`', call. = FALSE)
     }
-    if (from > to) {
-      toold <- to
-      to <- from
-      from <- toold
-    }
     return(
       seq(from = from, to = to, by = by)
     )
@@ -214,8 +209,8 @@ dice <-  function(x,
   # assemble slice LUT for JOIN
   s <- data.table(
     sliceID = sliceIDs, 
-    .sliceTop = tops[seq_along(sliceIDs)], 
-    .sliceBottom = bottoms[seq_along(sliceIDs)]
+    .sliceTop = tops,
+    .sliceBottom = bottoms
   )
   
   # re-name for simpler JOIN
