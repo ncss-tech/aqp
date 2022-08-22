@@ -271,7 +271,6 @@ test_that("overlapping horizons", {
   expect_equal(nrow(x3), 289)
 })
 
-
 test_that("dropped profile IDs", {
   
   # corrupt depth
@@ -295,5 +294,3 @@ test_that("dropped profile IDs", {
   )
     
 })
-
-
