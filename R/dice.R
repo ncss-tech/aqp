@@ -44,7 +44,7 @@ dice <-  function(x,
                   pctMissing = FALSE,
                   fill = FALSE,
                   strict = TRUE,
-                  byhz = FALSE,
+                  byhz = TRUE,
                   verbose = FALSE) {
     
   # sacrifice to R CMD check spirits
