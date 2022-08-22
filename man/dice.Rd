@@ -11,7 +11,7 @@ dice(
   pctMissing = FALSE,
   fill = FALSE,
   strict = TRUE,
-  byhz = FALSE,
+  byhz = TRUE,
   verbose = FALSE
 )
 }
