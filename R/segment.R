@@ -111,7 +111,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   
   # depth interval rules
   dep <- data.frame(
-    top = intervals[- length(intervals)],
+    top = intervals[-length(intervals)],
     bot = intervals[-1],
     stringsAsFactors = FALSE
   )
@@ -129,7 +129,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   test_dep <- is.numeric(dep$top) & is.numeric(dep$bot) & all(dep$top < dep$bot)
   
   
-  if (! any(test_spc, test_df)) {
+  if (!any(test_spc, test_df)) {
     stop("the input must be either a SoilProfileCollection or data.frame")
   }
   
@@ -286,30 +286,29 @@ dissolve_hz <- function(object, by, id = "peiid", hztop = "hzdept", hzbot = "hzd
   test_object   <- inherits(object,   "data.frame")
   test_by <- inherits(by, "character")
   
-  if (! any(test_object | test_by)) {
-    stop("the object argument must be a data.frame, and by a character")
+  if (!any(test_object | test_by)) {
+    stop("the object argument must be a data.frame, and by a character", call. = FALSE)
   }
   
   # check that by is not NULL
   if (is.null(by)) stop("the by argument must not be NULL")
   
   # check that collapse is a logical of length 1
-  if (class(collapse) != "logical" & length(collapse) == 1) {
-    stop("the collapse argument must be logical and a length of one")
+  if (!inherits(collapse, "logical") || length(collapse) != 1) {
+    stop("the collapse argument must be logical and a length of one", call. = FALSE)
   }
   
   # check that the column names exisit within the object
   var_names <- c(id = id, top = hztop, bot = hzbot, by)
-  if (! all(var_names %in% names(object))) {
+  if (!all(var_names %in% names(object))) {
     stop("all arguments must match object names")
   }
   
   # check that "by" are characters or convert
-  if (any(! "character" %in% sapply(object[by], class))) {
+  if (any(!"character" %in% sapply(object[by], class))) {
     message("non-character grouping variables are being converted to characters")
     object[by] <- lapply(object[by], as.character)
   }
-  
   
   # standardize inputs ----
   df <- object
@@ -327,7 +326,6 @@ dissolve_hz <- function(object, by, id = "peiid", hztop = "hzdept", hzbot = "hzd
     df[by_co] <- apply(df[by], 1, paste, collapse = " & ")
     by    <- by_co
   }
-  
   
   # var thickness ----
   var_dep <- lapply(by, function(x) {
