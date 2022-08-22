@@ -141,4 +141,24 @@ test_that("testing exact values", {
   
 })
 
-
+test_that("overlapping horizons", {
+  # overlapping horizons results in increased number of slices (according to overlapping thickness)
+  x1 <- horizons(dice(sp4, ~ .))
+  
+  # create overlap
+  sp4@horizons[2,]$bottom <- sp4@horizons[2,]$bottom + 12
+  
+  x2 <- horizons(dice(sp4, ~ .))
+  
+  # evaluate logic by profile, not horizon
+  expect_message({ x3 <- horizons(dice(sp4, ~ ., byhz = FALSE)) })
+  
+  # default case--nothing removed, nothing added
+  expect_equal(nrow(x1), 331)
+  
+  # 12cm of overlap
+  expect_equal(nrow(x2), 331 + 12)
+  
+  # 1 profile removed due to overlap
+  expect_equal(nrow(x3), 289)
+})
