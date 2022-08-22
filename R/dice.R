@@ -159,54 +159,21 @@ dice <-  function(x,
     h <- as.data.table(h)
   }
   
-  ## TODO: are keys worth the extra sorting / re-sorting?
-  ##       no, probably not inherently worth it -AGB 2022/08/17
-  # init keys, sorts the data on hzID (alpha-sort)
-  # setkeyv(h, hzidn)
-  # consider an index, seems to have no effect
-  # setindexv(h, hzidn)
-  
-  ## expand 1 unit slices to max depth of each profile
-  # TODO: this will have to be made more intelligent in the presence of overlap
-  # mapply() call takes 1/4 of total time
-  
-  # safe wrapper to base::seq
-  # NA in from/to (hz depths) not allowed
-  .seq.safe <- function(from, to, by) {
-    if (any(is.na(from)) | any(is.na(to))) {
-      stop('corrupt horizonation, consider using `strict = TRUE`', call. = FALSE)
-    }
-    # need to invert from/to for overlapping horizons; error: wrong sign in 'by' argument
-    if (from > to) {
-      toold <- to
-      to <- from
-      from <- toold
-    }
-    return(
-      seq(from = from, to = to, by = by)
-    )
-  }
-  
   # from == to (0-thickness) horizons -- these should be removed -AGB 2022/08/17
   zthk <- h[[htb[1]]] == h[[htb[2]]]
   if (any(zthk, na.rm = TRUE)) {
     message("horizons with zero thickness have been omitted from results")
   }
-  h.sub <- h[which(!zthk),]
   
-  tops <- mapply(
-    FUN = .seq.safe, 
-    from = h.sub[[htb[1]]], 
-    to = h.sub[[htb[2]]] - 1, 
-    by = 1, 
-    SIMPLIFY = FALSE
-  )
+  h.sub <- as.data.table(h[which(!zthk),])
   
-  tops <- unlist(tops)
+  # expand 1 unit slices to max depth of each profile
+  tops <- unlist(h.sub[, list(sapply(seq_len(.N), function(i) {
+      .SD[[htb[1]]][i] + seq_len(abs(.SD[[htb[2]]][i] - .SD[[htb[1]]][i])) - 1
+    })), by = c(idname(x)), .SDcols = htb]$V1)
   bottoms <- tops + 1
   
-  # expand slice IDs (horizon IDs)
-  # these are used to join with horizons
+  # expand slice IDs (horizon IDs); used to join with horizons
   sliceIDs <- rep(
     h.sub[[hzidn]], 
     times = abs(h.sub[[htb[2]]] - h.sub[[htb[1]]])
@@ -225,9 +192,7 @@ dice <-  function(x,
   # FULL JOIN via fast data.table compiled code
   res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
-  ## TODO: update to := syntax, but how does it work with with variables?
-  # https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reference-semantics.html
-  # init unique horizon IDs
+ # init unique horizon IDs
   res[['sliceID']] <- as.character(1:nrow(res))
   
   # copy old depths
@@ -265,6 +230,8 @@ dice <-  function(x,
     # res[, .pctMissing := .pctMissing / length(vars)]
     set(res, j = '.pctMissing', value = res$.pctMissing / length(vars))
   }
+  
+  res <- res[order(res[[idname(x)]], res[[horizonDepths(x)[1]]]),]
   
   # only returning horizons as a data.frame
   if (!SPC) {
