@@ -115,7 +115,7 @@ test_that("discrete slices entirely within SPC", {
   expect_true(nrow(s) == length(sp4) * length(.slices))
   
   # reference horizons
-  .ref <- horizons(fillHzGaps(sp4, flag = FALSE, to_top = 5, to_bottom = 16))
+  .ref <- horizons(sp4)
   
   # inner join on original hz ID
   x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
@@ -138,7 +138,7 @@ test_that("slices below bottom of profiles or entire collection", {
   expect_true(length(which(is.na(s$Mg))) == 3)
   
   # reference horizons
-  .ref <- horizons(fillHzGaps(sp4, flag = FALSE, to_top = 25, to_bottom = 26))
+  .ref <- horizons(sp4)
   
   # inner join on original hz ID
   x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
@@ -165,7 +165,7 @@ test_that("slices below bottom of profiles or entire collection", {
   expect_true(nrow(s) == length(sp4) * length(.slices))
   
   # reference horizons
-  .ref <- horizons(fillHzGaps(sp4, flag = FALSE, to_top = 5, to_bottom = 101))
+  .ref <- horizons(sp4)
   
   # inner join on original hz ID
   x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
