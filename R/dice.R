@@ -119,8 +119,10 @@ dice <-  function(x,
       z <- NULL
     } else {
       # z-index is specified
-      # must fill from min(z) --- [gaps] --- max(z)
-      x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z))
+      # note z-index defines slice tops, lower limit is (z + 1)
+      # must fill from min(z) --- [gaps] --- max(z) + 1
+      x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z) + 1)
+      
     }
     
     # check for '.' --> all variables, minus ID/depths

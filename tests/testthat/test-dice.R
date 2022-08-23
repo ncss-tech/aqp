@@ -87,22 +87,14 @@ test_that("formula interface", {
   
 })
 
-test_that("discrete slices", {
+
+test_that("discrete slices entirely within SPC", {
   
   # single slice
   s <- dice(sp4, fm = 5 ~ Mg, SPC = FALSE)
   
-  # reference horizons
-  .ref <- horizons(sp4)
-  
-  # inner join on original hz ID
-  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
-  
-  # sliced == original
-  expect_equal(x$Mg.x, x$Mg.y)
-  
-  # single slice, deeper than some profiles
-  s <- dice(sp4, fm = 25 ~ Mg, SPC = FALSE)
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4))
   
   # reference horizons
   .ref <- horizons(sp4)
@@ -113,9 +105,12 @@ test_that("discrete slices", {
   # sliced == original
   expect_equal(x$Mg.x, x$Mg.y)
 
-  
   # multiple slices, all within SPC depth interval
-  s <- dice(sp4, fm = c(5, 10, 15) ~ Mg, SPC = FALSE)
+  .slices <- c(5, 10, 15)
+  s <- dice(sp4, fm = .slices ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4) * length(.slices))
   
   # reference horizons
   .ref <- horizons(sp4)
@@ -129,33 +124,57 @@ test_that("discrete slices", {
 })
 
 
+## these worked in slice()
 test_that("slices below bottom of profiles or entire collection", {
   
-  ## this worked in slice()
-  # single slice below bottom of some profiles in collection
-  s <- dice(sp4, fm = 25 ~ ., SPC = FALSE)
   
-  # should be 1 single row of NA / profile
+  # single slice, deeper than some profiles
+  s <- dice(sp4, fm = 25 ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  # filled horizons will create hzID beyond original sequence
   expect_true(nrow(s) == length(sp4))
   
-  
-  ## this worked in slice()
-  # single slice below bottom of original collection
-  s <- dice(sp4, fm = 75 ~ ., SPC = FALSE)
-  
-  # should be 1 single row of NA / profile
-  expect_true(nrow(s) == length(sp4))
-  
-  
-  # multiple slices, some outside of SPC depth interval
-  s <- dice(sp4, fm = c(5, 10, 15, 100) ~ Mg, SPC = FALSE)
+  # there should be 3 NA
+  expect_true(length(which(is.na(s$Mg))) == 3)
   
   # reference horizons
   .ref <- horizons(sp4)
   
   # inner join on original hz ID
-  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
   
+  # after NA-removal
+  x <- na.omit(x)
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+  
+  
+  # single slice, deeper than all profiles
+  s <- dice(sp4, fm = 75 ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4))
+  
+  # there should be as many NA as profiles in sp4
+  expect_true(length(which(is.na(s$Mg))) == length(sp4))
+  
+  
+  # multiple slices, some beyond profile depths
+  .slices <- c(5, 10, 15, 50, 100)
+  s <- dice(sp4, fm = .slices ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4) * length(.slices))
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
+  
+  # after NA-removal
+  x <- na.omit(x)
   # sliced == original
   expect_equal(x$Mg.x, x$Mg.y)
   
@@ -193,10 +212,11 @@ test_that("percent missing calculation", {
 
 test_that("padding with NA, backwards-compatible with slice", {
   
-  s <- dice(sp4, fm = 0:80 ~ ., fill = TRUE)
+  # fill = TRUE is implied with formula interface
+  s <- dice(sp4, fm = 0:80 ~ .)
   
   # all profiles should be the same "depth", including empty (NA) horizons
-  expect_true(all(profileApply(s, max) == 80))
+  expect_true(all(profileApply(s, max) == 81))
   
 })
 
