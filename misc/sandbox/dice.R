@@ -4,13 +4,12 @@
 ## plot original + diced sketches
 .sideBySidePlot <- function(d, s, .color = 'p1', .width = 0.15, .xoffset = -0.45, ...) {
   # original
-  plotSPC(d, width = .width, color = .color, name = NA, defalt.color = 'grey', ...)
+  plotSPC(d, width = .width, color = .color, name = NA, default.color = 'grey', ...)
   
   # sliced
   plotSPC(s, width = .width + 0.05, color = .color, name = NA, divide.hz = FALSE, default.color = 'grey', x.idx.offset = .xoffset, add = TRUE, cex.id = 0.5, plot.depth.axis = FALSE, show.legend = FALSE)
   
 }
-
 
 set.seed(1010)
 d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
