@@ -1,9 +1,27 @@
-## TODO: documentation / generalization
-# note source data must be "normalized" via dice() first; assumes each profile has the same number of horizons
+# does not assume logical horizons (may overlap, resulting in different # of slices per profile)
+.genSlabLabels2 <- function(spc, diced, slab.structure = 1) {
+  if (length(slab.structure) == 1) {
+    i <- seq(from = 0, length.out = (max(spc) / slab.structure) + 1) * slab.structure
+  } else if (length(slab.structure) > 1) {
+    i <- slab.structure
+  } else {
+    stop("empty slab.structure", call. = FALSE)
+  }
+  j <- diff(i)
+  idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x]))))
+  idx2 <- do.call('c', lapply(seq_along(j), function(x) rep(x, j[x])))
+  mt <- data.frame(idx1, slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
+  hzdepb <- horizonDepths(spc)[2]
+  colnames(mt) <- c(hzdepb, "slab_id", "slab_label")
+  res <- merge(diced, mt, by = hzdepb, all.x = TRUE, sort = FALSE)
+  res <- res[order(res[[idname(spc)]], res[[hzdepb]]),]
+  factor(res$slab_id, labels = na.omit(unique(res$slab_label)))
+}
 
+# note source data must be "normalized" via dice() first; assumes each profile has the same number of horizons
 # generate labels for slabs
 genSlabLabels <- function(slab.structure = 1, max.d, n.profiles) {
-  
+
   # fixed-size slabs
   if (length(slab.structure) == 1) {
     # generate sequence of segment labels

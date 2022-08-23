@@ -224,12 +224,16 @@ test_that("overlapping horizons", {
   # create overlap
   sp4@horizons[2,]$bottom <- sp4@horizons[2,]$bottom + 12
   
-  
-  # TODO: these should not cause errors
   # strict=TRUE byhz=FALSE removes overlap via whole profile
-  expect_error(x2 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg, strict = TRUE, byhz = FALSE))
+  expect_message({x2 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg, strict = TRUE, byhz = FALSE)})
+  expect_equal(nrow(x2), 245)
   
-  # strict=TRUE / strict=FALSE (with default byhz)
-  expect_error(x2 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg, strict = FALSE))
+  # strict=TRUE / strict=FALSE (with default byhz) -- we get same number of rows with overlap as without
+  expect_silent(x3 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg, strict = FALSE))
+  expect_equal(nrow(x3), 245)
+  
+  # try with a larger constant slab structure
+  expect_silent(x3 <- slab(sp4, ~ K + Mg + Ca + CEC_7 + ex_Ca_to_Mg, slab.structure = 10, strict = FALSE))
+  expect_equal(nrow(x3), 25)
 })
 

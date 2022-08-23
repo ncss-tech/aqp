@@ -98,12 +98,9 @@
 	# get unique list of names in object
 	object.names <- unique(unlist(names(object)))
 
-	# get number of profiles
-	n.profiles <- length(object)
-
-	# max depth
-	max.d <- max(object)
-
+	# get horizon depth column names
+	hzd <- horizonDepths(object)
+	
 	# get name of ID column in original object for later
 	object.ID <- idname(object)
 
@@ -142,7 +139,17 @@
 	if (length(slab.structure) == 2 && any(ldx, na.rm = TRUE)) {
 	  data <- data[which(!ldx), ]  
 	}
-	
+  
+  # get number of profiles
+  n.profiles <- length(unique(data[[idname(object)]]))
+  
+  # note this is now a vector with length = n.profiles  
+  data$.thkslb <- data[[hzd[2]]] - data[[hzd[1]]]
+  
+  # maximum depth from the diced result (not source SPC object)--accounts for logic "fixes"
+  max.d <- aggregate(data$.thkslb, by = list(data[[idname(object)]]), sum, na.rm = TRUE)$x
+  data$.thkslb <- NULL
+  
 	# extract site data
 	site.data <- site(object)
 
@@ -202,7 +209,7 @@
 	##       l <- split(data, data$seg.label, drop=FALSE)
 
 	# add segmenting label to data
- 	data$seg.label <- genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
+ 	data$seg.label <- .genSlabLabels2(object, data, slab.structure = slab.structure)
 
 	# if there is no left-hand component in the formula, we are aggregating all data in the collection
 	if (g == '.') {
@@ -780,4 +787,9 @@ slab_function <- function(method = c("numeric", "factor", "hd", "weighted.numeri
          fast = .slab.fun.numeric.fast,
          .slab.fun.numeric.default
   )
+}
+
+# for debugging;
+.slabinternal <- function(...) {
+  .slab(...)
 }
