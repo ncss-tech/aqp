@@ -3,21 +3,20 @@
 
 #' @title Segmenting of Soil Horizon Data by Depth Interval
 #' 
-#' @description This function segments or subdivides horizon data from a \code{SoilProfileCollection} or \code{data.frame} by depth interval (e.g. 0-10, 0:50, or 25-100). This results in horizon records being split at the specified depth intervals, which duplicates the original horizon data but also adds new horizon depths. In addition, labels (i.e. "segment_id") are added to each horizon record that correspond with their depth interval (e.g. 025-100). This function is intended to harmonize horizons to a common support (i.e. depth interval) for further aggregation or summary. See the examples.
+#' @description This function segments or subdivides horizon data from a `SoilProfileCollection` or `data.frame` by depth interval (e.g. `c(0, 10)`, `c(0, 50)`, or `25:100`). This results in horizon records being split at the specified depth intervals, which duplicates the original horizon data but also adds new horizon depths. In addition, labels (i.e. `"segment_id"`) are added to each horizon record that correspond with their depth interval (e.g. `025-100`). This function is intended to harmonize horizons to a common support (i.e. depth interval) for further aggregation or summary. See the examples.
 #'
-#' @param object either a \code{SoilProfileCollection} or \code{data.frame}
-#' @param intervals a vector of integers over which to slice the horizon data (e.g. \code{c(25, 100)} or \code{25:100})
-#' @param trim logical, when \code{TRUE} horizons in \code{object} are truncated to the min/max specified in \code{intervals}. When \code{FALSE}, those horizons overlapping an interval are marked as such. Care should be taken when specifying more than one depth interval and \code{trim = FALSE}.
-#' @param hzdepcols a character vector of length 2 specifying the names of the horizon depths (e.g. \code{c("hzdept", "hzdepb")}), only necessary if \code{object} is a \code{data.frame}.
+#' @param object either a `SoilProfileCollection` or `data.frame`
+#' @param intervals a vector of integers over which to slice the horizon data (e.g. `c(25, 100)` or `25:100`)
+#' @param trim logical, when `TRUE` horizons in `object` are truncated to the min/max specified in `intervals`. When `FALSE`, those horizons overlapping an interval are marked as such. Care should be taken when specifying more than one depth interval and \code{`trim = FALSE`}.
+#' @param hzdepcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("hzdept", "hzdepb")`), only necessary if `object` is a `data.frame`.
 #' 
-#' 
-#' @details Compared to \code{slice}, \code{slab}, and \code{glom}, \code{segment} performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice} or \code{slab}.
+#' @details `segment()` performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice} or \code{slab}.
 #'
-#' @return Either a \code{SoilProfileCollection} or \code{data.frame} with the original horizon data segmented by depth intervals. There are usually more records in the resulting object, one for each time a segment interval partially overlaps with a horizon. A new column called \code{segment_id} identifying the depth interval is added.
+#' @return Either a `SoilProfileCollection` or `data.frame` with the original horizon data segmented by depth intervals. There are usually more records in the resulting object, one for each time a segment interval partially overlaps with a horizon. A new column called \code{segment_id} identifying the depth interval is added.
 #' 
 #' @author Stephen Roecker
 #' 
-#' @seealso \code{\link{slice}, \link{dice}, \link{glom}}
+#' @seealso [dice()] [glom()]
 #' 
 #' @export
 #'
@@ -106,12 +105,11 @@
 #' 
 #' head(test3_agg)
 #' 
-
 segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   
   # depth interval rules
   dep <- data.frame(
-    top = intervals[- length(intervals)],
+    top = intervals[-length(intervals)],
     bot = intervals[-1],
     stringsAsFactors = FALSE
   )
