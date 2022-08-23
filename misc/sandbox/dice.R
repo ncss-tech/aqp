@@ -10,6 +10,14 @@
 # https://github.com/ncss-tech/aqp/issues/115
 
 
+.sideBySidePlot <- function(d, s, .color = 'p1', .width = 0.15, .xoffset = -0.45, ...) {
+  # original
+  plotSPC(d, width = .width, color = .color, name = NA, defalt.color = 'grey', ...)
+  
+  # sliced
+  plotSPC(s, width = .width + 0.05, color = .color, name = NA, divide.hz = FALSE, default.color = 'grey', x.idx.offset = .xoffset, add = TRUE, cex.id = 0.5, plot.depth.axis = FALSE, show.legend = FALSE)
+  
+}
 
 
 set.seed(1010)
@@ -17,60 +25,93 @@ d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, meth
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
 
-# introduce horizonation errors
+## introduce errors
+
+# missing depths
 d$bottom[2] <- NA
+
+# 0-thickness hz
 d$top[20] <- d$bottom[20]
+
+# garbage depths
 d$bottom[32] <- 15
 d$top[6] <- 95
+
+# missing data
 d$p1[23] <- NA
+
+# flag for later
+d$zero.thick <- (d$bottom - d$top) == 0
+# profiles 1 and 2
+profile_id(subset(d, zero.thick))
 
 # verify illogical horizons are gone
 x <- HzDepthLogicSubset(d, byhz = TRUE)
+# 0-thick hz removed
+table(x$zero.thick)
+
+par(mar = c(1, 1, 3, 1))
+
+
 plotSPC(fillHzGaps(x, to_bottom = NULL), color = '.filledGap')
 # ok
 all(checkHzDepthLogic(x, fast = TRUE, byhz = TRUE)$valid)
 
 
 # OK
+# 0-depth hz removed with strict = FALSE
+s <- dice(d, byhz = FALSE, fill = FALSE, strict = FALSE)
+.sideBySidePlot(d, s)
+
+
+# OK
 # note we set `p1` to NA above, this is profile #4 in the collection
 s <- dice(d, byhz = FALSE, fill = FALSE)
 plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+# can't use .sideBySidePlot(d, s) with missing profiles
 abline(h = max(d), lwd = 2, lty = 1)
+max(d) == max(s)
 
 # OK
 # auto-filling of gaps introduced (byhz = TRUE) but no where else
 s <- dice(d, byhz = TRUE, fill = FALSE)
-plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+.sideBySidePlot(d, s)
 abline(h = max(d), lwd = 2, lty = 1)
+max(d) == max(s)
 
 # OK
 # auto-filling of gaps introduced (byhz = TRUE) and to-depth of SPC
 s <- dice(d, byhz = TRUE, fill = TRUE)
-plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+.sideBySidePlot(d, s)
 abline(h = max(d), lwd = 2, lty = 1)
+max(d) == max(s)
+
 
 # OK
 # # auto-filling of gaps introduced (byhz = TRUE) but no where else
 s <- dice(d, byhz = TRUE, fill = TRUE, fm = ~ .)
-plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
+.sideBySidePlot(d, s)
 abline(h = max(d), lwd = 2, lty = 1)
+max(d) == max(s)
 
 # OK
 # auto-filling of gaps introduced (byhz = TRUE) but no where else
 # note top = 5, bottom = 6
 s <- dice(d, byhz = TRUE, fill = TRUE, fm = 5 ~ .)
-plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
-abline(h = 5, lwd = 2, lty = 1)
+.sideBySidePlot(d, s)
+abline(h = 5, lwd = 1, lty = 1)
 
 # TODO: BUG
 # profiles 10 / 3 / 6 contain data that extends below 132cm -> data extend to 133
 # other profiles should extend to 133 as well
 # auto-filling of gaps introduced (byhz = TRUE) and to max(z)
 s <- dice(d, byhz = TRUE, fill = TRUE, fm = 0:132 ~ .)
-plotSPC(s, color = 'p1', name = NA, divide.hz = FALSE, default.color = 'grey')
-abline(h = 132, lwd = 2, lty = 1)
+.sideBySidePlot(d, s)
 
-max(s[1, ])
+abline(h = 132, lwd = 1, lty = 1)
+profileApply(s, max)
+
+
 
 
 ### finish updating these
@@ -125,11 +166,10 @@ plotSPC(d[1:10, ], color = 'p1', show.legend = FALSE)
 z <- dice(d[1:2, ], pctMissing = TRUE)
 
 par(mar = c(0,1,3,1))
-plotSPC(z, color = 'hzID', name = NA, divide.hz = FALSE, show.legend = FALSE)
+.sideBySidePlot(d[1:2], z, .color = 'hzID')
 z$.pctMissing
 
 
-## hmm... sometimes this breaks, strange edge cases
 
 ## introduce horizonation errors
 z <- d[1:10, ]
@@ -171,29 +211,29 @@ plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 # select hz attr
 zz <- dice(z, fm = 1:100 ~ p1 + p2, byhz = TRUE)
 horizonNames(zz)
-plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+.sideBySidePlot(z, zz, .color = 'p1')
 
 # all hz attr
 zz <- dice(z, fm = 1:100 ~ ., byhz = TRUE)
 horizonNames(zz)
-plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+.sideBySidePlot(z, zz, .color = 'p1')
 
 # single slice
 zz <- dice(z, fm = 50 ~ ., byhz = TRUE)
 horizonNames(zz)
-plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+.sideBySidePlot(z, zz, .color = 'p1')
 
 # no LHS: all depths
 zz <- dice(z, fm =  ~ p1, byhz = TRUE)
 horizonNames(zz)
-plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
+.sideBySidePlot(z, zz, .color = 'p1')
 
 
 # pctMissing
 zz <- dice(z, pctMissing = TRUE, byhz = TRUE)
 horizonNames(zz)
-plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
-plotSPC(zz, color = '.pctMissing', name = NA, divide.hz = FALSE)
+.sideBySidePlot(z, zz, .color = 'p1')
+.sideBySidePlot(z, zz, .color = '.pctMissing')
 
 
 
@@ -247,7 +287,7 @@ d <- dice(sp4, fm = 5 ~ ., byhz = TRUE)
 ## this works, but corrupt profile is dropped
 d <- dice(sp4, fm = 5 ~ ., byhz = FALSE)
 
-## stops with suggestion to use `strict = TRUE`
+## Error: profile IDs in site are missing from replacement horizons!
 # safely wraps base::seq()
 d <- dice(sp4, fm = 5 ~ ., strict = FALSE)
 

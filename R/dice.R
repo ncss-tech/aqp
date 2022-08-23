@@ -52,7 +52,7 @@ dice <-  function(x,
   
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
-  if  (strict) {
+  if (strict) {
     x <- HzDepthLogicSubset(x, byhz = byhz)
     
     ## TODO: this could invoke 2x calls to fillHzGaps
@@ -95,25 +95,27 @@ dice <-  function(x,
       
     # LHS ~ RHS
     # LHS: "", single integer, vector of integers slices
+    # z-index
     z <- as.numeric(eval(parse(text = fm[[1]])))
+    
     # RHS: variable names
     vars <- fm[[2]] 
     
     # check for bogus left/right side problems with the formula
     if (any(z < 0) | any(is.na(z))) {
-      stop('z-slice must be >= 0', call. = FALSE)
+      stop('z-index must be >= 0', call. = FALSE)
     }
       
     # check for integer / numeric slices
     if (!inherits(z,  c('numeric','integer'))) {
-      stop('z-slice must be either numeric or integer', call. = FALSE)
+      stop('z-index must be either numeric or integer', call. = FALSE)
     }
       
     # if z-index is missing set to NULL for later on
     if (length(z) == 0) {
       z <- NULL
     } else {
-      # z index is specified
+      # z-index is specified
       # must fill from min(z) --- [gaps] --- max(z)
       x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z))
     }
@@ -154,23 +156,38 @@ dice <-  function(x,
     col.names = c(hznames[ids.top.bottom.idx], vars)
   )
   
-  # convert to DT
+  # convert to DT, as needed
   if (!inherits(h, 'data.table')) {
     h <- as.data.table(h)
   }
   
-  # from == to (0-thickness) horizons -- these should be removed -AGB 2022/08/17
+  ## TODO: this needs to be integrated / coordinated with 
+  #        strict = TRUE, HzDepthLogicSubset() 
+  
+  ## TODO: how will this affect the FULL JOIN below if subset?
+  
+  # flag 0-thickness horizons
   zthk <- h[[htb[1]]] == h[[htb[2]]]
   if (any(zthk, na.rm = TRUE)) {
     message("horizons with zero thickness have been omitted from results")
   }
   
-  h.sub <- as.data.table(h[which(!zthk),])
+  # remove any 0-thickness horizons
+  h.sub <- h[which(!zthk), ]
   
+  ## TODO: clarify for DEB
   # expand 1 unit slices to max depth of each profile
-  tops <- unlist(h.sub[, list(sapply(seq_len(.N), function(i) {
-      .SD[[htb[1]]][i] + seq_len(abs(.SD[[htb[2]]][i] - .SD[[htb[1]]][i])) - 1
-    })), by = c(idname(x)), .SDcols = htb]$V1)
+  tops <- h.sub[, 
+                list(
+                  sapply(seq_len(.N), function(i) {
+                    .SD[[htb[1]]][i] + seq_len(abs(.SD[[htb[2]]][i] - .SD[[htb[1]]][i])) - 1
+                  })
+                ), 
+                by = c(idn), 
+                .SDcols = htb
+  ]$V1
+  
+  tops <- unlist(tops)
   bottoms <- tops + 1
   
   # expand slice IDs (horizon IDs); used to join with horizons
@@ -192,7 +209,7 @@ dice <-  function(x,
   # FULL JOIN via fast data.table compiled code
   res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
- # init unique horizon IDs
+  # init unique horizon IDs
   res[['sliceID']] <- as.character(1:nrow(res))
   
   # copy old depths
@@ -207,8 +224,9 @@ dice <-  function(x,
   res[['.sliceTop']] <- NULL
   res[['.sliceBottom']] <- NULL
   
-  ## TODO: move z-index subset "up" to original sequence creation to save a lot of time
+  ## TODO: perform z-index subset before slice sequence creation to save a lot of time
   if (!is.null(z)) {
+    # selection via top depth within z-index
     res <- res[which(res[[htb[1]]] %in% z), ]
   }
   
@@ -218,20 +236,17 @@ dice <-  function(x,
     # this is quite slow: DT -> DF -> matrix -> apply (8x longer)
     # res[['.pctMissing']] <- .pctMissing(res, vars)
     
-    # native DT approach
-    ## TODO: throws warning: https://github.com/ncss-tech/aqp/issues/115#issuecomment-785301769
-    # count number of NA in vars, by row 
-    # res[, .pctMissing := rowSums(is.na(res[, .SD, .SDcols = vars]))]
-    
+    # hybrid base + DT approach
     res$'.pctMissing' <- NA
+    # count number of NA in vars, by row
     set(res, j = '.pctMissing', value = rowSums(is.na(res[, .SD, .SDcols = vars])))
     
     # convert NA count to percentage
-    # res[, .pctMissing := .pctMissing / length(vars)]
     set(res, j = '.pctMissing', value = res$.pctMissing / length(vars))
   }
   
-  res <- res[order(res[[idname(x)]], res[[horizonDepths(x)[1]]]),]
+  # ensure sliced horizons are in ID/top order
+  res <- res[order(res[[idname(x)]], res[[horizonDepths(x)[1]]]), ]
   
   # only returning horizons as a data.frame
   if (!SPC) {
