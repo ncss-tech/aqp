@@ -2,8 +2,6 @@
 
 par(mar = c(1, 1, 3, 1))
 
-
-
 # plot original + diced sketches
 .sideBySidePlot <- function(d, s, ...) {
   
@@ -14,6 +12,9 @@ par(mar = c(1, 1, 3, 1))
   # original + sliced, same color scheme
   plotSPC(g, name = NA, divide.hz = FALSE, width = 0.3, default.color = 'grey', ...)
 }
+
+
+## TODO: move this into test-dice.R
 
 # check that slices contain the same data as source
 .slicesAreSame <- function(d, s) {
