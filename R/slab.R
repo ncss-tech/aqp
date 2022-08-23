@@ -139,17 +139,7 @@
 	if (length(slab.structure) == 2 && any(ldx, na.rm = TRUE)) {
 	  data <- data[which(!ldx), ]  
 	}
-  
-  # get number of profiles
-  n.profiles <- length(unique(data[[idname(object)]]))
-  
-  # note this is now a vector with length = n.profiles  
-  data$.thkslb <- data[[hzd[2]]] - data[[hzd[1]]]
-  
-  # maximum depth from the diced result (not source SPC object)--accounts for logic "fixes"
-  max.d <- aggregate(data$.thkslb, by = list(data[[idname(object)]]), sum, na.rm = TRUE)$x
-  data$.thkslb <- NULL
-  
+   
 	# extract site data
 	site.data <- site(object)
 
