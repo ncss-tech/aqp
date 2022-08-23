@@ -140,7 +140,7 @@ test_that("slices below bottom of profiles or entire collection", {
   expect_true(length(which(is.na(s$Mg))) == 3)
   
   # reference horizons
-  .ref <- horizons(sp4)
+  .ref <- horizons(fillHzGaps(sp4, flag = FALSE, to_top = 25, to_bottom = 26))
   
   # inner join on original hz ID
   x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
