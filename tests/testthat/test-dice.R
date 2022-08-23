@@ -28,7 +28,6 @@ test_that("basic functionality", {
   
 })
 
-
 test_that("data integrity, default arguments", {
   
   # SPC
@@ -44,8 +43,6 @@ test_that("data integrity, default arguments", {
   # sliced == original
   expect_equal(x$Mg.x, x$Mg.y)
 })
-
-
 
 test_that("formula interface", {
   
@@ -84,9 +81,14 @@ test_that("formula interface", {
   )
   
   expect_true(all(profileApply(s4, nrow) <= 31))
-  
 })
-
+  
+test_that("formula interface (with non-standard evaluation)", {
+  # NSE (these work interactively, but not in testthat env)
+  .slices <-  0:30
+  expect_error({s5 <- slice(sp4, .slices ~ Ca + K)})
+  expect_error({d5 <- dice(sp4, .slices ~ Ca + K)})
+})
 
 test_that("discrete slices entirely within SPC", {
   
@@ -107,13 +109,13 @@ test_that("discrete slices entirely within SPC", {
 
   # multiple slices, all within SPC depth interval
   .slices <- c(5, 10, 15)
-  s <- dice(sp4, fm = .slices ~ Mg, SPC = FALSE)
+  s <- dice(sp4, fm = c(5, 10, 15) ~ Mg, SPC = FALSE)
   
   # NA should be returned for slices within gaps / below profile bottoms
   expect_true(nrow(s) == length(sp4) * length(.slices))
   
   # reference horizons
-  .ref <- horizons(sp4)
+  .ref <- horizons(fillHzGaps(sp4, flag = FALSE, to_top = 5, to_bottom = 16))
   
   # inner join on original hz ID
   x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
@@ -123,9 +125,6 @@ test_that("discrete slices entirely within SPC", {
   
 })
 
-
-## currently failing
-## these worked in slice()
 test_that("slices below bottom of profiles or entire collection", {
   
   
@@ -163,13 +162,13 @@ test_that("slices below bottom of profiles or entire collection", {
   
   # multiple slices, some beyond profile depths
   .slices <- c(5, 10, 15, 50, 100)
-  s <- dice(sp4, fm = .slices ~ Mg, SPC = FALSE)
+  s <- dice(sp4, fm = c(5, 10, 15, 50, 100) ~ Mg, SPC = FALSE)
   
   # NA should be returned for slices within gaps / below profile bottoms
   expect_true(nrow(s) == length(sp4) * length(.slices))
   
   # reference horizons
-  .ref <- horizons(sp4)
+  .ref <- horizons(fillHzGaps(sp4, flag = FALSE, to_top = 5, to_bottom = 101))
   
   # inner join on original hz ID
   x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
@@ -180,7 +179,6 @@ test_that("slices below bottom of profiles or entire collection", {
   expect_equal(x$Mg.x, x$Mg.y)
   
 })
-
 
 test_that("percent missing calculation", {
   
@@ -199,7 +197,7 @@ test_that("percent missing calculation", {
   expect_true('.pctMissing' %in% horizonNames(s))
   
   # some should be non-zero
-  expect_true(any(s$.pctMissing > 0) & ! all(s$.pctMissing > 0))
+  expect_true(any(s$.pctMissing > 0) & !all(s$.pctMissing > 0))
   
   # check exact values
   # 1st horizon, 2/3 missing
