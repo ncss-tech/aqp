@@ -3,14 +3,17 @@
 
 ## TODO: 
 ##   * add S4 interface
-##   * suggest / offer repairMissingHzDepths() before running
+##   * document / suggest / offer 
+##      - repairMissingHzDepths()
+##      - accumulateDepths()
+##
 ##   * DT full outer join ideas
 ##     https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
 
 
 #' @title Efficient Slicing of `SoilProfileCollection` Objects
 #' 
-#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function will eventually replace `aqp::slice()`.
+#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function replaces `aqp::slice()`, which will be deprecated in aqp 2.0.
 #'
 #'
 #' @param x a `SoilProfileCollection` object
@@ -29,7 +32,7 @@
 #' 
 #' @param verbose Print information about object size/memory usage. Default: `FALSE`
 #' 
-#' @details For large and potentially messy collections that include missing horizon bottom depths, or 0-thickness horions, consider using `repairMissingHzDepths()` before `dice()`.
+#' @details For large and potentially messy collections that may include missing horizon depth logic errors, consider using `repairMissingHzDepths()` before `dice()`. Consider using `accumulateDepths()` before invoking `dice()` on collections that may contain old-style O horizon notation (e.g. 5-0cm).
 #' 
 #'
 #' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`

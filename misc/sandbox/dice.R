@@ -1,15 +1,7 @@
 
 
-## TODO: offer repairMissingHzDepths()
 
-## DT full outer join ideas
-# https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
-# 
-
-## address TODO and major design questions:
-# https://github.com/ncss-tech/aqp/issues/115
-
-
+## plot original + diced sketches
 .sideBySidePlot <- function(d, s, .color = 'p1', .width = 0.15, .xoffset = -0.45, ...) {
   # original
   plotSPC(d, width = .width, color = .color, name = NA, defalt.color = 'grey', ...)
