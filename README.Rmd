@@ -53,6 +53,16 @@ plot(sp4, color = 'clay')
 plot(sp4, color = 'CF')
 ```
 
+## Install Suggested Packages
+```r
+p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+"sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
+"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+
+install.packages(p)
+```
+
 ## Citation
 ```{r}
 citation("aqp")
