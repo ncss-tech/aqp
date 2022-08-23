@@ -127,7 +127,6 @@ test_that("discrete slices entirely within SPC", {
 
 test_that("slices below bottom of profiles or entire collection", {
   
-  
   # single slice, deeper than some profiles
   s <- dice(sp4, fm = 25 ~ Mg, SPC = FALSE)
   
@@ -149,7 +148,6 @@ test_that("slices below bottom of profiles or entire collection", {
   # sliced == original
   expect_equal(x$Mg.x, x$Mg.y)
   
-  
   # single slice, deeper than all profiles
   s <- dice(sp4, fm = 75 ~ Mg, SPC = FALSE)
   
@@ -158,7 +156,6 @@ test_that("slices below bottom of profiles or entire collection", {
   
   # there should be as many NA as profiles in sp4
   expect_true(length(which(is.na(s$Mg))) == length(sp4))
-  
   
   # multiple slices, some beyond profile depths
   .slices <- c(5, 10, 15, 50, 100)

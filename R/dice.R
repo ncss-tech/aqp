@@ -2,46 +2,20 @@
 ## https://github.com/ncss-tech/aqp/issues/115
 
 ## TODO: 
-##   * add S4 interface
-##   * document / suggest / offer 
-##      - repairMissingHzDepths()
-##      - accumulateDepths()
-##
 ##   * DT full outer join ideas
 ##     https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
 
+setGeneric("dice", function(x,
+                            fm = NULL,
+                            SPC = TRUE,
+                            pctMissing = FALSE,
+                            fill = FALSE,
+                            strict = TRUE,
+                            byhz = TRUE,
+                            verbose = FALSE)
+  standardGeneric("dice"))
 
-#' @title Efficient Slicing of `SoilProfileCollection` Objects
-#' 
-#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function replaces `aqp::slice()`, which will be deprecated in aqp 2.0.
-#'
-#'
-#' @param x a `SoilProfileCollection` object
-#' 
-#' @param fm optional `formula` describing top depths and horizon level attributes to include: `integer.vector ~ var1 + var2 + var3` or `integer.vector ~ .` to include all horizon level attributes. Specification of `integer.vector` forces `fill = TRUE`. When `NULL` profiles are "diced" to depth and results will include all horizon level attributes. Note on interpretation of `integer.vector` (slice tops)
-#' 
-#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
-#' 
-#' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
-#' 
-#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
-#' 
-#' @param strict perform horizon depth logic checking / flagging / removal
-#' 
-#' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
-#' 
-#' @param verbose Print information about object size/memory usage. Default: `FALSE`
-#' 
-#' @details For large and potentially messy collections that may include missing horizon depth logic errors, consider using `repairMissingHzDepths()` before `dice()`. Consider using `accumulateDepths()` before invoking `dice()` on collections that may contain old-style O horizon notation (e.g. 5-0cm).
-#' 
-#'
-#' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`
-#' 
-#' @author D.E. Beaudette, A.G. Brown 
-#' 
-#' @export
-#' 
-dice <-  function(x,
+.dice <- function(x,
                   fm = NULL,
                   SPC = TRUE,
                   pctMissing = FALSE,
@@ -49,7 +23,7 @@ dice <-  function(x,
                   strict = TRUE,
                   byhz = TRUE,
                   verbose = FALSE) {
-    
+  
   # sacrifice to R CMD check spirits
   .pctMissing <- NULL
   
@@ -90,12 +64,12 @@ dice <-  function(x,
     fm <- str_c(deparse(fm, 500), collapse = "")
     elements <- str_split(fm, fixed("~"))[[1]]
     fm <- lapply(str_split(elements, "[+*]"), str_trim)
-
+    
     # test for a multi-part formula A ~ B ~ C ?
     if (length(fm) > 2) {
       stop("please provide a valid formula", call. = FALSE)
     }
-      
+    ;
     # LHS ~ RHS
     # LHS: "", single integer, vector of integers slices
     # z-index
@@ -108,12 +82,12 @@ dice <-  function(x,
     if (any(z < 0) | any(is.na(z))) {
       stop('z-index must be >= 0', call. = FALSE)
     }
-      
+    
     # check for integer / numeric slices
     if (!inherits(z,  c('numeric','integer'))) {
       stop('z-index must be either numeric or integer', call. = FALSE)
     }
-      
+    
     # if z-index is missing set to NULL for later on
     if (length(z) == 0) {
       z <- NULL
@@ -130,12 +104,12 @@ dice <-  function(x,
       # all variables except profile ID, horizon ID, top, bottom
       vars <- hznames[-ids.top.bottom.idx]
     }
-
+    
     # check for column names that don't exist
     if (!any(vars %in% hznames)) {
       stop('names in formula do not match any horizon attributes', call. = FALSE)
     }
-      
+    
     
   } else {
     # no formula
@@ -210,7 +184,7 @@ dice <-  function(x,
   
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
-
+  
   # FULL JOIN via fast data.table compiled code
   res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
@@ -263,7 +237,7 @@ dice <-  function(x,
   
   # this will fail if strict = FALSE, and sub-setting resulted in corrupt SPC
   .condition <- try(replaceHorizons(x) <- res, silent = TRUE)
-   
+  
   # gracefully fail
   if (inherits(.condition, 'try-error')) {
     stop('SPC object corruption, please specify `strict = TRUE`', call. = FALSE)
@@ -287,3 +261,33 @@ dice <-  function(x,
   return(x)
 }
 
+## TODO: allow the use of site data (PSC etc.) to determine the z-slice
+
+#' @title Efficient Slicing of `SoilProfileCollection` Objects
+#' 
+#' @description Cut ("dice") soil horizons into 1-unit thick slices. This function replaces `aqp::slice()`, which will be deprecated in aqp 2.0.
+#'
+#'
+#' @param x a `SoilProfileCollection` object
+#' 
+#' @param fm optional `formula` describing top depths and horizon level attributes to include: `integer.vector ~ var1 + var2 + var3` or `integer.vector ~ .` to include all horizon level attributes. Specification of `integer.vector` forces `fill = TRUE`. When `NULL` profiles are "diced" to depth and results will include all horizon level attributes. Note on interpretation of `integer.vector` (slice tops)
+#' 
+#' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
+#' 
+#' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
+#' 
+#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
+#' 
+#' @param strict perform horizon depth logic checking / flagging / removal
+#' 
+#' @param byhz Evaluate horizon depth logic at the horizon level (`TRUE`) or profile level (`FALSE`). Invalid depth logic invokes `HzDepthLogicSubset` which removes offending profiles or horizon records.
+#' 
+#' @param verbose Print information about object size/memory usage. Default: `FALSE`
+#' 
+#' @details For large and potentially messy collections that may include missing horizon depth logic errors, consider using `repairMissingHzDepths()` before `dice()`. Consider using `accumulateDepths()` before invoking `dice()` on collections that may contain old-style O horizon notation (e.g. 5-0cm).
+#' @aliases dice
+#' @seealso [repairMissingHzDepths()], [accumulateDepths()], [fillHzGaps()]
+#' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`
+#' @author D.E. Beaudette, A.G. Brown 
+#' @export
+setMethod(f = 'dice', signature(x = 'SoilProfileCollection'), .dice)
