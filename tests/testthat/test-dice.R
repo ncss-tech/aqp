@@ -28,6 +28,25 @@ test_that("basic functionality", {
   
 })
 
+
+test_that("data integrity, default arguments", {
+  
+  # SPC
+  s <- dice(sp4, SPC = FALSE)
+  
+  # values match
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+})
+
+
+
 test_that("formula interface", {
   
   # reference
@@ -65,6 +84,80 @@ test_that("formula interface", {
   )
   
   expect_true(all(profileApply(s4, nrow) <= 31))
+  
+})
+
+test_that("discrete slices", {
+  
+  # single slice
+  s <- dice(sp4, fm = 5 ~ Mg, SPC = FALSE)
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+  
+  # single slice, deeper than some profiles
+  s <- dice(sp4, fm = 25 ~ Mg, SPC = FALSE)
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+
+  
+  # multiple slices, all within SPC depth interval
+  s <- dice(sp4, fm = c(5, 10, 15) ~ Mg, SPC = FALSE)
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+  
+})
+
+
+test_that("slices below bottom of profiles or entire collection", {
+  
+  ## this worked in slice()
+  # single slice below bottom of some profiles in collection
+  s <- dice(sp4, fm = 25 ~ ., SPC = FALSE)
+  
+  # should be 1 single row of NA / profile
+  expect_true(nrow(s) == length(sp4))
+  
+  
+  ## this worked in slice()
+  # single slice below bottom of original collection
+  s <- dice(sp4, fm = 75 ~ ., SPC = FALSE)
+  
+  # should be 1 single row of NA / profile
+  expect_true(nrow(s) == length(sp4))
+  
+  
+  # multiple slices, some outside of SPC depth interval
+  s <- dice(sp4, fm = c(5, 10, 15, 100) ~ Mg, SPC = FALSE)
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
   
 })
 
