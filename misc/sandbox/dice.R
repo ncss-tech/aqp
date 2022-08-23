@@ -22,8 +22,16 @@ par(mar = c(1, 1, 3, 1))
   .d <- horizons(d)[, c('hzID', 'p1', horizonDepths(d))]
   .m <- merge(.s, .d, by = 'hzID')
   
+  # remove NA, slices within gaps / below profile max depth
+  .m <- na.omit(.m)
+  
   res <- all(.m$p1.x == .m$p1.y)
-  return(res)
+  if (!res) {
+    return(.m[which(.m$p1.x != .m$p1.y), ])
+  } else {
+    return(res)
+  }
+  
 }
 
 
@@ -32,12 +40,21 @@ d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, meth
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
 
-## discreet slices
+## continuous slices
 s <- dice(d)
 .sideBySidePlot(d, s, color = 'p1')
 .slicesAreSame(d, s)
 
+
+## TODO: figure out issues with discrete slices
+
+## discrete slices
 .slices <- c(5)
+s <- dice(d, fm = .slices ~ .)
+.sideBySidePlot(d, s, color = 'p1')
+.slicesAreSame(d, s)
+
+.slices <- c(150)
 s <- dice(d, fm = .slices ~ .)
 .sideBySidePlot(d, s, color = 'p1')
 .slicesAreSame(d, s)
