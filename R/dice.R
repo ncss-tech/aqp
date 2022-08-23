@@ -256,10 +256,16 @@ dice <-  function(x,
     return(as.data.frame(res))
   }
   
-  ## TODO: conditionally
   # re-pack horizon data
   res <- as.data.frame(res)
-  replaceHorizons(x) <- res
+  
+  # this will fail if strict = FALSE, and sub-setting resulted in corrupt SPC
+  .condition <- try(replaceHorizons(x) <- res, silent = TRUE)
+   
+  # gracefully fail
+  if (inherits(.condition, 'try-error')) {
+    stop('SPC object corruption, please specify `strict = TRUE`', call. = FALSE)
+  }
   
   # switch horizon ID to slice ID
   hzidname(x) <- 'sliceID'

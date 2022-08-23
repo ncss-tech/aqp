@@ -215,6 +215,11 @@ zz <- dice(z, fm = 50 ~ ., byhz = TRUE)
 horizonNames(zz)
 .sideBySidePlot(z, zz, .color = 'p1')
 
+zz <- dice(z, fm = 5 ~ ., byhz = TRUE)
+horizonNames(zz)
+.sideBySidePlot(z, zz, .color = 'p1')
+
+
 # no LHS: all depths
 zz <- dice(z, fm =  ~ p1, byhz = TRUE)
 horizonNames(zz)
@@ -279,8 +284,7 @@ d <- dice(sp4, fm = 5 ~ ., byhz = TRUE)
 ## this works, but corrupt profile is dropped
 d <- dice(sp4, fm = 5 ~ ., byhz = FALSE)
 
-## Error: profile IDs in site are missing from replacement horizons!
-# safely wraps base::seq()
+# gracefully catch corrupt SPC
 d <- dice(sp4, fm = 5 ~ ., strict = FALSE)
 
 # old slice, NA returned
