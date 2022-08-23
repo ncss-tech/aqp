@@ -124,6 +124,7 @@ test_that("discrete slices entirely within SPC", {
 })
 
 
+## currently failing
 ## these worked in slice()
 test_that("slices below bottom of profiles or entire collection", {
   
