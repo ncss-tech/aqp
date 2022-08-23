@@ -18,7 +18,7 @@
 #'
 #' @param x a `SoilProfileCollection` object
 #' 
-#' @param fm optional `formula` describing top depths and horizon level attributes to include: `integer.vector ~ var1 + var2 + var3` or `integer.vector ~ .` to include all horizon level attributes. When `NULL` profiles are "diced" to depth and results will include all horizon level attributes. Note on interpretation of `integer.vector`
+#' @param fm optional `formula` describing top depths and horizon level attributes to include: `integer.vector ~ var1 + var2 + var3` or `integer.vector ~ .` to include all horizon level attributes. Specification of `integer.vector` forces `fill = TRUE`. When `NULL` profiles are "diced" to depth and results will include all horizon level attributes. Note on interpretation of `integer.vector` (slice tops)
 #' 
 #' @param SPC return the diced `SoilPrfolileCollection`, if `FALSE` a `data.frame` of horizon-level attributes
 #' 

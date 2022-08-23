@@ -16,6 +16,23 @@ d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, meth
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
 
+## discreet slices
+s <- dice(d)
+.sideBySidePlot(d, s, .color = 'p1')
+
+.slices <- c(5)
+s <- dice(d, fm = .slices ~ .)
+.sideBySidePlot(d, s, .color = 'p1')
+
+.slices <- c(5, 10, 15, 25, 100, 190)
+s <- dice(d, fm = .slices ~ .)
+.sideBySidePlot(d, s, .color = 'p1')
+
+
+
+
+
+
 ## introduce errors
 
 # missing depths
@@ -92,15 +109,13 @@ s <- dice(d, byhz = TRUE, fill = TRUE, fm = 5 ~ .)
 .sideBySidePlot(d, s)
 abline(h = 5, lwd = 1, lty = 1)
 
-# TODO: BUG
-# profiles 10 / 3 / 6 contain data that extends below 132cm -> data extend to 133
-# other profiles should extend to 133 as well
+# all profiles should extend to bottom = 133
 # auto-filling of gaps introduced (byhz = TRUE) and to max(z)
 s <- dice(d, byhz = TRUE, fill = TRUE, fm = 0:132 ~ .)
 .sideBySidePlot(d, s)
 
-abline(h = 132, lwd = 1, lty = 1)
-profileApply(s, max)
+abline(h = 133, lwd = 1, lty = 1)
+all(profileApply(s, max) == 133)
 
 
 
