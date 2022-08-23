@@ -38,8 +38,11 @@ test_that("fillHzGaps", {
                                                 13L, 18L, 21L, 24L, 
                                                 27L, 33L, 37L)))
   
-  # calculated hzIDs are in ascending order
-  expect_equal(hzID(z), as.character(1:nrow(z)))
+  # filled horizons IDs start from the original max (30)
+  expect_equal(hzID(z), c("1", "31", "3", "4", "32", "5", "33", "34", "9", "35", "10", 
+                          "11", "36", "13", "14", "15", "16", "37", "17", "18", "38", "19", 
+                          "20", "39", "21", "22", "40", "23", "24", "25", "26", "27", "41", 
+                          "28", "29", "30", "42"))
   
   # fill just top to 10 cm
   z2 <- fillHzGaps(x, flag = TRUE, to_top = 10, to_bottom = NULL)
