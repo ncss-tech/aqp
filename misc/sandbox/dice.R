@@ -1,15 +1,31 @@
 
 
+par(mar = c(1, 1, 3, 1))
 
-## plot original + diced sketches
-.sideBySidePlot <- function(d, s, .color = 'p1', .width = 0.15, .xoffset = -0.45, ...) {
-  # original
-  plotSPC(d, width = .width, color = .color, name = NA, default.color = 'grey', ...)
+
+
+# plot original + diced sketches
+.sideBySidePlot <- function(d, s, ...) {
   
-  # sliced
-  plotSPC(s, width = .width + 0.05, color = .color, name = NA, divide.hz = FALSE, default.color = 'grey', x.idx.offset = .xoffset, add = TRUE, cex.id = 0.5, plot.depth.axis = FALSE, show.legend = FALSE)
+  # adjust IDs on slices
+  profile_id(s) <- sprintf("%s*", profile_id(s))
+  g <- combine(d, s)
   
+  # original + sliced, same color scheme
+  plotSPC(g, name = NA, divide.hz = FALSE, width = 0.3, default.color = 'grey', ...)
 }
+
+# check that slices contain the same data as source
+.slicesAreSame <- function(d, s) {
+  ## double check data are conserved
+  .s <- horizons(s)[, c('hzID', 'p1', horizonDepths(d))]
+  .d <- horizons(d)[, c('hzID', 'p1', horizonDepths(d))]
+  .m <- merge(.s, .d, by = 'hzID')
+  
+  res <- all(.m$p1.x == .m$p1.y)
+  return(res)
+}
+
 
 set.seed(1010)
 d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
@@ -18,16 +34,18 @@ depths(d) <- id ~ top + bottom
 
 ## discreet slices
 s <- dice(d)
-.sideBySidePlot(d, s, .color = 'p1')
+.sideBySidePlot(d, s, color = 'p1')
+.slicesAreSame(d, s)
 
 .slices <- c(5)
 s <- dice(d, fm = .slices ~ .)
-.sideBySidePlot(d, s, .color = 'p1')
+.sideBySidePlot(d, s, color = 'p1')
+.slicesAreSame(d, s)
 
 .slices <- c(5, 10, 15, 25, 100, 190)
 s <- dice(d, fm = .slices ~ .)
-.sideBySidePlot(d, s, .color = 'p1')
-
+.sideBySidePlot(d, s, color = 'p1')
+.slicesAreSame(d, s)
 
 
 
@@ -58,7 +76,6 @@ x <- HzDepthLogicSubset(d, byhz = TRUE)
 # 0-thick hz removed
 table(x$zero.thick)
 
-par(mar = c(1, 1, 3, 1))
 
 
 plotSPC(fillHzGaps(x, to_bottom = NULL), color = '.filledGap')
