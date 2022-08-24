@@ -134,9 +134,9 @@ vector</p></dd>
 <span class="r-in"><span><span class="co"># re-sample each profile into 1 cm (thick) depth slices</span></span></span>
 <span class="r-in"><span><span class="co"># for the variables 'prop', 'name', 'soil_color'</span></span></span>
 <span class="r-in"><span><span class="co"># result is a SoilProfileCollection object</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="slice-methods.html">slice</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">prop</span> <span class="op">+</span> <span class="va">name</span> <span class="op">+</span> <span class="va">soil_color</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">prop</span> <span class="op">+</span> <span class="va">name</span> <span class="op">+</span> <span class="va">soil_color</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> dropping horizons with invalid depth logic, see `metadata(x)$removed.horizons`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> filling gaps left by HzDepthLogicSubset</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot, note slices</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>

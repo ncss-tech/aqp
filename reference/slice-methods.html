@@ -96,11 +96,6 @@ variables are sliced according to <code>integer.vector</code>: <code>integer.vec
 
 <p>Either a new <code>SoilProfileCollection</code> with data sliced according to <code>fm</code>, or a <code>data.frame</code>.</p>
     </div>
-    <div id="note">
-    <h2>Note</h2>
-    <p><code><a href="slab-methods.html">slab()</a></code> and <code>slice()</code> are much faster and require less
-memory if input data are either numeric or character.</p>
-    </div>
     <div id="details">
     <h2>Details</h2>
     <p>By default, slices are defined from the top-down:
@@ -144,42 +139,35 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate single slice at 10 cm</span></span></span>
 <span class="r-in"><span><span class="co"># output is a SoilProfileCollection object</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">d</span>, fm <span class="op">=</span> <span class="fl">10</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate single slice at 10 cm, output data.frame</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span>, just.the.data<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span>, SPC <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate integer slices from 0 - 26 cm</span></span></span>
 <span class="r-in"><span><span class="co"># note that slices are specified by default as "top-down"</span></span></span>
+<span class="r-in"><span><span class="co"># result is a SoilProfileCollection</span></span></span>
 <span class="r-in"><span><span class="co"># e.g. the lower depth will always by top + 1</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">d</span>, fm <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">25</span> <span class="op">~</span> <span class="va">name</span> <span class="op">+</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="slice-methods-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate slices from 0 - 11 cm, for all variables</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">10</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">d</span>, fm <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 20 profiles and 220 horizons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: sliceID </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 11 - 11 cm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----- Horizons (6 / 220 rows  |  10 / 12 columns) -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id sliceID top bottom name      p1        p2       p3        p4       p5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       1   0      1   H1 -8.1148 -4.038598 2.344391 -4.589098 4.091567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       2   1      2   H1 -8.1148 -4.038598 2.344391 -4.589098 4.091567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       3   2      3   H1 -8.1148 -4.038598 2.344391 -4.589098 4.091567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       4   3      4   H1 -8.1148 -4.038598 2.344391 -4.589098 4.091567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       5   4      5   H1 -8.1148 -4.038598 2.344391 -4.589098 4.091567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       6   5      6   H1 -8.1148 -4.038598 2.344391 -4.589098 4.091567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----- Horizons (6 / 220 rows  |  10 / 13 columns) -----</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  id sliceID top bottom hzID name      p1        p2       p3        p4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       1   0      1    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       2   1      2    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       3   2      3    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       4   3      4    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       5   4      5    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       6   5      6    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [... more horizons ...]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Sites (6 / 20 rows  |  1 / 1 columns) -----</span>
@@ -195,55 +183,25 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [EMPTY]</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># note that pct missing is computed for each slice,</span></span></span>
+<span class="r-in"><span><span class="co"># compute percent missing, for each slice,</span></span></span>
 <span class="r-in"><span><span class="co"># if all vars are missing, then NA is returned</span></span></span>
 <span class="r-in"><span><span class="va">d</span><span class="op">$</span><span class="va">p1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">.</span>, just.the.data<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id top bottom name         p1          p2         p3         p4          p5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1  10     11   H1         NA  -4.0385981   2.344391  -4.589098   4.0915670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  10  10     11   H2         NA  -0.4422915  -3.941346  14.046647 -14.4513307</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  11  10     11   H2         NA -10.3652288  12.298109  -6.787727  -1.0061679</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  12  10     11   H1 12.2478451   4.3251815   1.382016 -13.858707  -4.2897974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  13  10     11   H1  4.1093180   5.8979316  -3.498424  -4.977782   0.4193661</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  14  10     11   H1  5.3559125  -6.6952467   7.802510  -3.715831   3.6439653</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  15  10     11   H1 -3.7011259   9.1723723  -5.099757  17.253590  -1.2091909</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  16  10     11   H1  9.7621707  -1.6365155  -2.531768  14.951041   1.2118246</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  17  10     11   H1  2.2858269   0.1033124  10.846833   1.974751  -3.0724983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 18  10     11   H2 -3.2555536   4.7075869   1.808541 -15.946827  -8.1252504</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 19  10     11   H2 19.4158483   8.5939950  -3.519748  14.397891  -8.7977167</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2  10     11   H1  0.3511825   8.5255555  -2.147085   6.427000 -13.3832370</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 20  10     11   H1  1.4091895  -1.0522815 -11.899534   5.642722  25.7662942</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  3  10     11   H1 -6.0493603   0.8389426  -4.750750  -1.339424   5.9589200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  4  10     11   H1 12.2250460  -2.4268264   1.124063  -1.161578  -7.8328957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  5  10     11   H2  0.6967898  -0.7419808  -7.570307  -1.557993  -9.8805954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  6  10     11   H1  8.4857760   7.3645801  -3.566509  -9.246360  -8.9077010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  7  10     11   H1  9.2938257   4.3802295 -10.987727  -1.563246  15.2099849</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  8  10     11   H1 -0.4983424  -3.0795379   5.145072  12.804704  -5.2546552</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  9  10     11   H1 13.3712670  -8.9597712  10.985822  -4.556075   2.1875744</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    hzID .pctMissing</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1   0.1428571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     5   0.1428571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     9   0.1428571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    13   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    19   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    24   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    30   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    33   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    38   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   45   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   49   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   52   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   58   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   64   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   67   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   71   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   75   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   78   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19   83   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20   88   0.0000000</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">.</span>, SPC <span class="op">=</span> <span class="cn">FALSE</span>, pctMissing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hzID id top bottom name        p1          p2        p3         p4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1  1  10     11   H1        NA  -4.0385981  2.344391  -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    5 10  10     11   H2        NA  -0.4422915 -3.941346  14.046647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    9 11  10     11   H2        NA -10.3652288 12.298109  -6.787727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   13 12  10     11   H1 12.247845   4.3251815  1.382016 -13.858707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   19 13  10     11   H1  4.109318   5.8979316 -3.498424  -4.977782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   24 14  10     11   H1  5.355912  -6.6952467  7.802510  -3.715831</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            p5 sliceID .oldTop .oldBottom .pctMissing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   4.0915670      11       0         28   0.1666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -14.4513307      70       9         29   0.1666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  -1.0061679     140       9         36   0.1666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  -4.2897974     217       0         22   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.4193661     342       0         28   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   3.6439653     469       0         29   0.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
@@ -265,12 +223,11 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># hopefully the same value, calculated via slice()</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">slice</span><span class="op">(</span><span class="va">sp1.sub</span>, <span class="fl">0</span><span class="op">:</span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp1.sub</span><span class="op">)</span> <span class="op">~</span> <span class="va">prop</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">hz.slice.mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">prop</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">sp1.sub</span>, fm <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">sp1.sub</span><span class="op">)</span> <span class="op">~</span> <span class="va">prop</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">hz.slice.mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">prop</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># same?</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">hz.slice.mean</span>, <span class="va">hz.wt.mean</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">'there is a bug in slice() !!!'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># they are the same</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">hz.slice.mean</span>, <span class="va">hz.wt.mean</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

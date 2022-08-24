@@ -241,19 +241,6 @@ with caution</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># extract a SPDF with horizon data along a slice at 25 cm</span></span></span>
-<span class="r-in"><span><span class="va">s.25</span> <span class="op">&lt;-</span> <span class="fu"><a href="slice-methods.html">slice</a></span><span class="op">(</span><span class="va">ca</span>, fm<span class="op">=</span><span class="fl">25</span> <span class="op">~</span> <span class="va">bs_7</span> <span class="op">+</span> <span class="va">CEC7</span> <span class="op">+</span> <span class="va">ex_acid</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spplot.html" class="external-link">spplot</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span><span class="va">s.25</span>, zcol<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'bs_7'</span>,<span class="st">'CEC7'</span>,<span class="st">'ex_acid'</span><span class="op">)</span>, </span></span>
-<span class="r-in"><span>par.settings <span class="op">=</span> <span class="va">tactile.theme</span>,</span></span>
-<span class="r-in"><span>layout <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># note that the ordering is preserved:</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">s.25</span><span class="op">$</span><span class="va">pedon_key</span>, <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">ca</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># extract a data.frame with horizon data at 10, 20, and 50 cm</span></span></span>
-<span class="r-in"><span><span class="va">s.multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="slice-methods.html">slice</a></span><span class="op">(</span><span class="va">ca</span>, fm<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">20</span>,<span class="fl">50</span><span class="op">)</span> <span class="op">~</span> <span class="va">bs_7</span> <span class="op">+</span> <span class="va">CEC7</span> <span class="op">+</span> <span class="va">ex_acid</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract the 2nd horizon from all profiles as SPDF</span></span></span>
 <span class="r-in"><span><span class="va">ca.2</span> <span class="op">&lt;-</span> <span class="va">ca</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
