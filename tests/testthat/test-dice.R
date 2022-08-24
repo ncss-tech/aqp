@@ -82,12 +82,11 @@ test_that("formula interface", {
   
   expect_true(all(profileApply(s4, nrow) <= 31))
 })
-  
+
+.slices <<- 0:30
 test_that("formula interface (with non-standard evaluation)", {
-  # NSE (these work interactively, but not in testthat env)
-  .slices <-  0:30
-  expect_error({s5 <- slice(sp4, .slices ~ Ca + K)})
-  expect_error({d5 <- dice(sp4, .slices ~ Ca + K)})
+  d5 <- dice(sp4, .slices ~ Ca + K)
+  expect_true(inherits(d5, 'SoilProfileCollection'))
 })
 
 test_that("discrete slices entirely within SPC", {
