@@ -134,19 +134,6 @@ auto.key = list(lines = TRUE, points = FALSE, columns = 2)
 )
 
 
-# extract a SPDF with horizon data along a slice at 25 cm
-s.25 <- slice(ca, fm=25 ~ bs_7 + CEC7 + ex_acid)
-spplot(
-s.25, zcol=c('bs_7','CEC7','ex_acid'), 
-par.settings = tactile.theme,
-layout = c(3,1)
-)
-
-# note that the ordering is preserved:
-all.equal(s.25$pedon_key, profile_id(ca))
-
-# extract a data.frame with horizon data at 10, 20, and 50 cm
-s.multiple <- slice(ca, fm=c(10,20,50) ~ bs_7 + CEC7 + ex_acid)
 
 # Extract the 2nd horizon from all profiles as SPDF
 ca.2 <- ca[, 2]

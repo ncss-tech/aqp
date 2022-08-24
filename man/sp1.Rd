@@ -36,7 +36,7 @@ site(sp1) <- ~ group
 # re-sample each profile into 1 cm (thick) depth slices
 # for the variables 'prop', 'name', 'soil_color'
 # result is a SoilProfileCollection object
-s <- slice(sp1, 0:25 ~ prop + name + soil_color)
+s <- dice(sp1, 0:25 ~ prop + name + soil_color)
 
 # plot, note slices
 plot(s)

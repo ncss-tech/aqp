@@ -1,4 +1,3 @@
-## TODO: convert to dice()
 
 # compute LAB coordinates from clusters of slices
 .pigments.pam <- function(x, k) {
@@ -21,7 +20,7 @@
   
   # slice to unwind weighted data into un-weighted data (weights are thickness)
   fm <- as.formula(paste0(top, ':', bottom, ' ~ L + A + B'))
-  x.slices <- suppressMessages(slice(x, fm, just.the.data = TRUE, strict = FALSE))
+  x.slices <- suppressMessages(dice(x, fm = fm, SPC = FALSE))
   x.slices <- na.omit(x.slices[, c(idname(x), 'L', 'A', 'B')])
   
   # have to have at least 1 more row than k

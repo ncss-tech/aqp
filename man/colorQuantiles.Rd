@@ -34,11 +34,12 @@ The results can be conveniently inspected using \code{plotColorQuantiles}.
 data(sp5)
 
 # slice top 25 cm
-s <- slice(sp5, 1:25 ~ .)
+# 24-25cm is the last slice
+s <- dice(sp5, 0:24 ~ .)
 
 # check some of the data
 par(mar=c(0,0,0,0))
-plot(sample(s, 25), divide.hz=FALSE, name='', print.id=FALSE, width=0.5)
+plotSPC(sample(s, 25), divide.hz = FALSE, name = '', print.id = FALSE, width = 0.5)
 
 # colors
 previewColors(unique(s$soil_color))
