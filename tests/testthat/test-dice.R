@@ -278,7 +278,12 @@ test_that("dropped profile IDs", {
   sp4$top[5] <- sp4$bottom[5]
   
   # offending horizons removed
-  s <- dice(sp4, byhz = TRUE)
+  expect_message(s <- dice(sp4, byhz = TRUE))
+  
+  expect_equal(
+    setdiff(profile_id(sp4), profile_id(s)),
+    character(0)
+  )
   
   # offending profiles removed
   expect_message(s <- dice(sp4, byhz = FALSE))
