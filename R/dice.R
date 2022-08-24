@@ -154,19 +154,32 @@ setGeneric("dice", function(x,
   # remove any 0-thickness horizons
   h.sub <- h[which(!zthk), ]
   
-  ## TODO: clarify for DEB
   # expand 1 unit slices to max depth of each profile
+  #  calculate sequence of top depths of slices using data.table j index
   tops <- h.sub[, 
                 list(
+                  # iterate over horizons in each profile
                   sapply(seq_len(.N), function(i) {
-                    .SD[[htb[1]]][i] + seq_len(abs(.SD[[htb[2]]][i] - .SD[[htb[1]]][i])) - 1
+                    
+                    # calculate the number of slices in source horizon
+                    j <- seq_len(abs(.SD[[htb[2]]][i] - .SD[[htb[1]]][i]))
+                    
+                    # when top and bottom are equal, no slice, return 0-length 
+                    if (length(j) == 0) 
+                      return(j)
+                    
+                    # calculate sequence from input top depth, minus 1
+                    list(.SD[[htb[1]]][i] + j - 1)
                   })
                 ), 
+                
+                # iterate over profiles in the collection (by idname)
                 by = c(idn), 
-                .SDcols = htb
-  ]$V1
+                
+                # .SD contains only ID + depths (more efficient)
+                .SDcols = htb]
   
-  tops <- unlist(tops)
+  tops <- unlist(tops$V1)
   bottoms <- tops + 1
   
   # expand slice IDs (horizon IDs); used to join with horizons
