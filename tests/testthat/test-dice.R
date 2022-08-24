@@ -271,3 +271,25 @@ test_that("overlapping horizons", {
   # 1 profile removed due to overlap
   expect_equal(nrow(x3), 289)
 })
+
+
+test_that("dropped profile IDs", {
+  
+  # corrupt depth
+  sp4$top[5] <- sp4$bottom[5]
+  
+  # offending horizons removed
+  s <- dice(sp4, byhz = TRUE)
+  
+  # offending profiles removed
+  expect_message(s <- dice(sp4, byhz = FALSE))
+  
+  # single dropped ID should be present in metadata
+  expect_equal(
+    setdiff(profile_id(sp4), profile_id(s)),
+    metadata(s)$removed.profiles
+  )
+    
+})
+
+
