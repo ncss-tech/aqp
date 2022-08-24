@@ -25,7 +25,7 @@ opts_chunk$set(
   comment = "#>"
 )
 
-options(width = 100, stringsAsFactors = FALSE)
+options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
 # Introduction
