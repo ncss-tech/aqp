@@ -17,11 +17,12 @@ par(mar = c(1, 1, 3, 1))
 ## TODO: move this into test-dice.R
 
 # check that slices contain the same data as source
-.slicesAreSame <- function(d, s) {
-  ## double check data are conserved
-  .s <- horizons(s)[, c('hzID', 'p1', horizonDepths(d))]
-  .d <- horizons(d)[, c('hzID', 'p1', horizonDepths(d))]
-  .m <- merge(.s, .d, by = 'hzID')
+.slicesAreSame <- function(d, s, .id = '.xxID') {
+  
+  # double check data are conserved
+  .s <- horizons(s)[, c(.id, 'p1', horizonDepths(d))]
+  .d <- horizons(d)[, c(.id, 'p1', horizonDepths(d))]
+  .m <- merge(.s, .d, by = .id)
   
   # remove NA, slices within gaps / below profile max depth
   .m <- na.omit(.m)
@@ -40,6 +41,9 @@ set.seed(1010)
 d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
+
+# ID for QC
+horizons(d)[['.xxID']] <- d$hzID
 
 ## continuous slices
 s <- dice(d)
@@ -207,7 +211,7 @@ plotSPC(d[1:10, ], color = 'p1', show.legend = FALSE)
 z <- dice(d[1:2, ], pctMissing = TRUE)
 
 par(mar = c(0,1,3,1))
-.sideBySidePlot(d[1:2], z, .color = 'hzID')
+.sideBySidePlot(d[1:2], z, color = 'hzID', show.legend = FALSE)
 z$.pctMissing
 
 
@@ -252,34 +256,34 @@ plotSPC(zz, color = 'p1', name = NA, divide.hz = FALSE)
 # select hz attr
 zz <- dice(z, fm = 1:100 ~ p1 + p2, byhz = TRUE)
 horizonNames(zz)
-.sideBySidePlot(z, zz, .color = 'p1')
+.sideBySidePlot(z, zz, color = 'p1')
 
 # all hz attr
 zz <- dice(z, fm = 1:100 ~ ., byhz = TRUE)
 horizonNames(zz)
-.sideBySidePlot(z, zz, .color = 'p1')
+.sideBySidePlot(z, zz, color = 'p1')
 
 # single slice
 zz <- dice(z, fm = 50 ~ ., byhz = TRUE)
 horizonNames(zz)
-.sideBySidePlot(z, zz, .color = 'p1')
+.sideBySidePlot(z, zz, color = 'p1')
 
 zz <- dice(z, fm = 5 ~ ., byhz = TRUE)
 horizonNames(zz)
-.sideBySidePlot(z, zz, .color = 'p1')
+.sideBySidePlot(z, zz, color = 'p1')
 
 
 # no LHS: all depths
 zz <- dice(z, fm =  ~ p1, byhz = TRUE)
 horizonNames(zz)
-.sideBySidePlot(z, zz, .color = 'p1')
+.sideBySidePlot(z, zz, color = 'p1')
 
 
 # pctMissing
 zz <- dice(z, pctMissing = TRUE, byhz = TRUE)
 horizonNames(zz)
-.sideBySidePlot(z, zz, .color = 'p1')
-.sideBySidePlot(z, zz, .color = '.pctMissing')
+.sideBySidePlot(z, zz, color = 'p1')
+.sideBySidePlot(z, zz, color = '.pctMissing')
 
 
 
