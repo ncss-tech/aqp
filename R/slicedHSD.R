@@ -147,9 +147,8 @@ slicedHSD <- function(object, fm, conf = 0.95) {
   ## for now, using slice + slab
 
   # slice for HSD iteration
-  # don't enforce strict horizon depth checking
   # use results with caution
-  s <- slice(object, fm = slice.fm, strict = FALSE)
+  s <- dice(object, fm = slice.fm)
 
   # aggregate by group over slices
   a <- slab(object, fm = slab.fm, slab.structure = depth.sequence)

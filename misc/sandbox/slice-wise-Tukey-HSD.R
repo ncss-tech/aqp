@@ -165,7 +165,7 @@ p.3
 library(nlme)
 library(rms)
 
-s <- slice(g, 0:25 ~ .)
+s <- dice(g, 0:25 ~ .)
 horizons(s)$group <- denormalize(s, 'taxonname')
 s$mid <- (s$hzn_top + s$hzn_bot) / 2
 

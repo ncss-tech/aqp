@@ -151,6 +151,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   }
   names(h)[names(h) %in% hzdepcols] <- c("hzdept", "hzdepb")
   
+  ## TODO: consider using dice()
   # filter horizons and trim
   .slice <- function(h, top = NULL, bot = NULL) {
     idx <- h$hzdept <= bot & h$hzdepb >= top

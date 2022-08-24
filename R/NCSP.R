@@ -148,7 +148,7 @@
   # 
   
   
-  # ## TODO: convert to slice() (#7)
+  # ## TODO: convert to dice() (#7)
   # ## BUG: !!! this step re-orders via string-factor-string conversion step by split() (#7)
   # ## --> this is only a bug when profile IDs have been altered after SPC init
   # ## --> https://stackoverflow.com/questions/17611734/r-split-preserving-natural-order-of-factors
