@@ -1,4 +1,11 @@
-# aqp 1.43 (2022-07-27)
+# aqp 2.0 (2022-08-24)
+This is major update to aqp that may create some issues for scripts that depend on aqp < 1.42, particularly those relying on `slice()` or `slab()`.
+
+Notable changes include:
+ * deprecation of `slice()` in favor of the new, faster, more robust implementation in `dice()` 
+ * complete overhaul of `slab()`, with new arguments, faster back-end, and weighted aggregation implemented (finally)
+
+Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
  * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
@@ -9,7 +16,7 @@
  * `correctAWC()`: NA handling  - return NA when frags are NA 
  * `mutate_profile()`: Faster (data.table-based) evaluation of profile-level expressions (#255)
  * `profileApply`: Add support for custom `lapply()`-like function (`APPLY.FUN`) for processing chunks (#256) 
- *  Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()` (#254)
+ * Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()` (#254)
  * Add `simplify` argument to `SoilTextureLevels()` and `ssc_to_texcl()` to optionally convert to an ordered factor with maximum of 12 levels (rather than 21). This smaller list of classes excludes sand grain size variants such as fine sand, loamy coarse sand, and very fine sandy loam.
  
 # aqp 1.42 (2022-04-08)
