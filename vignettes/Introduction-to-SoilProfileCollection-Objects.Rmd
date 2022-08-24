@@ -64,7 +64,7 @@ remotes::install_github("ncss-tech/aqp", dependencies = FALSE)
 
 ```{r load-packages}
 library(aqp)
-library(lattice) # used for slice/slab-wise profile plots
+library(lattice)
 ```
 
 ```{r creation}
