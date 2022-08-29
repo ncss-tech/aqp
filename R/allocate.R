@@ -442,13 +442,13 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   
   # match pattern
   
-  # lithic contact
+  # lithic contact ----
   if (featkind == "lithic contact") {
     message(paste("guessing", featkind))
     idx_hzn <-  grepl("R|Dr", df$hzname) & !grepl("\\/", df$hzname)
     idx_tex <- !grepl("Cr|CR", df$hzname) & (df$texture %in% c("br", "wb", "uwb") | is.na(df$texture))
     
-    lev <- c("strongly cemented", "very strongly cemented", "indurated", "strongly", "extremely strongly", "H") 
+    lev <- c("strongly cemented", "very strongly cemented", "indurated", "strongly", "extremely strongly", "H", "moderately coherent", "strongly coherent", "very strongly coherent") 
     idx_cem <- df$rupresblkcem %in% lev | is.na(df$rupresblkcem)
     
     # error
@@ -461,7 +461,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
   
   
-  # paralithic contact
+  # paralithic contact ----
   if (featkind == "paralithic contact") {
     message(paste("guessing", featkind))
     
@@ -481,7 +481,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
   
   
-  # densic contact
+  # densic contact ----
   if (featkind == "densic contact") {
     message(paste("guessing", featkind))
     idx <- grepl("d$|D$|d[1:9]|D[1:9]", df$hzname)
@@ -489,7 +489,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
   
   
-  # petrocalcic horizon
+  # petrocalcic horizon ----
   if (featkind == "petrocalcic horizon") {
     message(paste("guessing", featkind))
     
@@ -509,7 +509,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
   
   
-  # calcic horizon
+  # calcic horizon ----
   if (featkind == "calcic horizon") {
     message(paste("guessing", featkind))
     
@@ -529,7 +529,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
   
   
-  # secondary carbonates
+  # secondary carbonates ----
   if (featkind == "secondary carbonates") {
     message(paste("guessing", featkind))
     
@@ -539,24 +539,25 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
   
   
-  # mollic epipedon
+  # mollic epipedon ----
    if (featkind == "mollic epipedon") {
      message(paste("guessing", featkind))
      
      idx_hzn <- !grepl("O|Ao|R|W|M|C|\\/", df$hzname)
+     idx_tex <- df$texcl %in% levels(SoilTextureLevels()) | is.na(df$texcl)
      # need to add structure to fetchNASIS
      idx_col <- 
-       (df$m_value  <= 3 | !is.na(df$m_value))  & 
-       (df$d_value  <= 5 | !is.na(df$d_value))  &
+       (df$m_value  <= 3 | is.na(df$m_value))  & 
+       (df$d_value  <= 5 | is.na(df$d_value))  &
         df$m_chroma <= 3                        &
-       (!is.na(df$m_value) & !is.na(df$d_value))
+       (!is.na(df$m_value) | !is.na(df$d_value))
      idx_bs  <- (df$BS >= 50 | is.na(df$BS)) # & (df$ph1to1 > 6 | is.na(df$ph1to1))
      idx_oc  <- 
        ((df$OC >= 2.5 | is.na(df$OC)) & (df$m_value %in% 4:5 | is.na(df$m_value))) |
        ((df$OC >= 0.6 | is.na(df$OC)) & (df$m_value < 4      | is.na(df$m_value)))
      idx_nv <- (df$n_value < 0.7 | is.na(df$n_value))
      
-     df$featkind <- ifelse(idx_hzn & idx_col & idx_bs & idx_oc & idx_nv, featkind, NA)
+     df$featkind <- ifelse(idx_hzn & idx_tex & idx_col & idx_bs & idx_oc & idx_nv, featkind, NA)
    }
   
   
