@@ -56,7 +56,7 @@ Each classification scheme (\code{to} argument) uses a different set of argument
 \item \strong{hzname:} horizon name column, required when \code{object} is a \code{data.frame}
 \item \strong{hztop:} horizon top depth column name, required when \code{object} is a \code{data.frame}
 \item \strong{hzbot:} horizon bottom depth column name, required when \code{object} is a \code{data.frame}
-\item \strong{texture:} soil texture class (USDA) column name
+\item \strong{texcl:} soil texture class (USDA) column name
 \item \strong{rupresblkcem:} rupture resistance column name
 \item \strong{m_value:} moist Munsell value column name
 \item \strong{m_chroma:} moist Munsell chroma column name
@@ -154,8 +154,9 @@ allocate(
 
 # Soil Taxonomy Diagnostic Features
 data(sp1)
+sp1$texcl = gsub("gr|grv|cbv", "", sp1$texture)
 df <- allocate(object = sp1, pedonid = "id", hzname = "name", 
-               hzdept = "top", hzdepb = "bot", texture = "texture", 
+               hzdept = "top", hzdepb = "bottom", texcl = "texcl", 
                to = "ST Diagnostic Features"
 )
 aggregate(featdept ~ id, data = df, summary)
