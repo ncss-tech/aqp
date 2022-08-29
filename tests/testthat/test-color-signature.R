@@ -63,6 +63,10 @@ test_that("expected order from OSDs, depthSlices", {
   # only run this locally
   skip_on_cran()
   
+  skip_if_offline()
+  
+  skip_if_not_installed("soilDB")
+  
   suppressWarnings(library(soilDB, quietly = TRUE))
   suppressWarnings(library(cluster, quietly = TRUE))
   

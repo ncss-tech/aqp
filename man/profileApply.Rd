@@ -13,6 +13,7 @@
   frameify = FALSE,
   chunk.size = 100,
   column.names = NULL,
+  APPLY.FUN = lapply,
   ...
 )
 }
@@ -28,6 +29,8 @@
 \item{chunk.size}{numeric, size of "chunks" for faster processing of large SoilProfileCollection objects; default: 100}
 
 \item{column.names}{character, optional character vector to replace frameify-derived column names; should match length of colnames() from FUN result; default: NULL}
+
+\item{APPLY.FUN}{function, optional alternate \code{lapply()}-like function for processing chunks. For example \code{future.apply::future_lapply()} for processing chunks in parallel. Default \code{base::lapply()}.}
 
 \item{...}{additional arguments passed to FUN}
 }

@@ -28,6 +28,22 @@ test_that("basic functionality", {
   
 })
 
+test_that("data integrity, default arguments", {
+  
+  # SPC
+  s <- dice(sp4, SPC = FALSE)
+  
+  # values match
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+})
+
 test_that("formula interface", {
   
   # reference
@@ -65,9 +81,100 @@ test_that("formula interface", {
   )
   
   expect_true(all(profileApply(s4, nrow) <= 31))
+})
+
+.slices <<- 0:30
+test_that("formula interface (with non-standard evaluation)", {
+  d5 <- dice(sp4, .slices ~ Ca + K)
+  expect_true(inherits(d5, 'SoilProfileCollection'))
+})
+
+test_that("discrete slices entirely within SPC", {
+  
+  # single slice
+  s <- dice(sp4, fm = 5 ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4))
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+
+  # multiple slices, all within SPC depth interval
+  .slices <- c(5, 10, 15)
+  s <- dice(sp4, fm = c(5, 10, 15) ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4) * length(.slices))
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(.ref[, c('hzID', 'Mg')], s[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = FALSE)
+  
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
   
 })
 
+test_that("slices below bottom of profiles or entire collection", {
+  
+  # single slice, deeper than some profiles
+  s <- dice(sp4, fm = 25 ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  # filled horizons will create hzID beyond original sequence
+  expect_true(nrow(s) == length(sp4))
+  
+  # there should be 3 NA
+  expect_true(length(which(is.na(s$Mg))) == 3)
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
+  
+  # after NA-removal
+  x <- na.omit(x)
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+  
+  # single slice, deeper than all profiles
+  s <- dice(sp4, fm = 75 ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4))
+  
+  # there should be as many NA as profiles in sp4
+  expect_true(length(which(is.na(s$Mg))) == length(sp4))
+  
+  # multiple slices, some beyond profile depths
+  .slices <- c(5, 10, 15, 50, 100)
+  s <- dice(sp4, fm = c(5, 10, 15, 50, 100) ~ Mg, SPC = FALSE)
+  
+  # NA should be returned for slices within gaps / below profile bottoms
+  expect_true(nrow(s) == length(sp4) * length(.slices))
+  
+  # reference horizons
+  .ref <- horizons(sp4)
+  
+  # inner join on original hz ID
+  x <- merge(s[, c('hzID', 'Mg')], .ref[, c('hzID', 'Mg')], by = 'hzID', sort = FALSE, all.x = TRUE)
+  
+  # after NA-removal
+  x <- na.omit(x)
+  # sliced == original
+  expect_equal(x$Mg.x, x$Mg.y)
+  
+})
 
 test_that("percent missing calculation", {
   
@@ -86,7 +193,7 @@ test_that("percent missing calculation", {
   expect_true('.pctMissing' %in% horizonNames(s))
   
   # some should be non-zero
-  expect_true(any(s$.pctMissing > 0) & ! all(s$.pctMissing > 0))
+  expect_true(any(s$.pctMissing > 0) & !all(s$.pctMissing > 0))
   
   # check exact values
   # 1st horizon, 2/3 missing
@@ -100,10 +207,11 @@ test_that("percent missing calculation", {
 
 test_that("padding with NA, backwards-compatible with slice", {
   
-  s <- dice(sp4, fm = 0:80 ~ ., fill = TRUE)
+  # fill = TRUE is implied with formula interface
+  s <- dice(sp4, fm = 0:80 ~ .)
   
   # all profiles should be the same "depth", including empty (NA) horizons
-  expect_true(all(profileApply(s, max) == 80))
+  expect_true(all(profileApply(s, max) == 81))
   
 })
 
@@ -139,6 +247,53 @@ test_that("testing exact values", {
   # the last horizon is truncated to 107cm
   expect_true(rle(s$p)$lengths[7] == 7)
   
+})
+
+test_that("overlapping horizons", {
+  # overlapping horizons results in increased number of slices (according to overlapping thickness)
+  x1 <- horizons(dice(sp4, ~ .))
+  
+  # create overlap
+  sp4@horizons[2,]$bottom <- sp4@horizons[2,]$bottom + 12
+  
+  x2 <- horizons(dice(sp4, ~ .))
+  
+  # evaluate logic by profile, not horizon
+  expect_message({ x3 <- horizons(dice(sp4, ~ ., byhz = FALSE)) })
+  
+  # default case--nothing removed, nothing added
+  expect_equal(nrow(x1), 331)
+  
+  # 12cm of overlap
+  expect_equal(nrow(x2), 331 + 12)
+  
+  # 1 profile removed due to overlap
+  expect_equal(nrow(x3), 289)
+})
+
+
+test_that("dropped profile IDs", {
+  
+  # corrupt depth
+  sp4$top[5] <- sp4$bottom[5]
+  
+  # offending horizons removed
+  expect_message(s <- dice(sp4, byhz = TRUE))
+  
+  expect_equal(
+    setdiff(profile_id(sp4), profile_id(s)),
+    character(0)
+  )
+  
+  # offending profiles removed
+  expect_message(s <- dice(sp4, byhz = FALSE))
+  
+  # single dropped ID should be present in metadata
+  expect_equal(
+    setdiff(profile_id(sp4), profile_id(s)),
+    metadata(s)$removed.profiles
+  )
+    
 })
 
 

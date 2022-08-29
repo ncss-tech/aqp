@@ -1,6 +1,6 @@
 
 ##
-## wrappers to spatial operations via sp, rgdal, raster
+## wrappers to spatial operations
 ##
 
 ## Note: this should probably be done with proper S4 methods
@@ -24,25 +24,45 @@
 ## proj4string setting
 ##
 
-#' Set PROJ4 string for the SoilProfileCollection
+#' Get or Set Coordinate Reference System for SoilProfileCollection
+#' 
+#' @description `proj4string()`: Get Coordinate Reference System as PROJ4 String
 #'
 #' @param obj A SoilProfileCollection
+#' @rdname SoilProfileCollection-crs
 setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
-  function(obj){
-    suppressWarnings(proj4string(obj@sp))
-  }
+          function(obj) {
+            slot(slot(obj@sp, "proj4string"), "projargs")
+          }
 )
-#' Set PROJ4 string for the SoilProfileCollection
+
+#' @description `wkt():` Get Coordinate Reference System as Well-Known Text
 #'
-#' @param obj A SoilProfileCollection
-#' @param value A proj4string
+#' @rdname SoilProfileCollection-crs
+setMethod(f = 'wkt', signature(obj = 'SoilProfileCollection'),
+          function(obj) {
+            w <- suppressWarnings(wkt(slot(obj@sp, "proj4string")))
+            if (is.null(w)) {
+              w <- suppressWarnings(comment(slot(obj@sp, "proj4string")))
+            }
+            w
+          }
+)
+
+#' @description `proj4string()<-`: Set Coordinate Reference System string for the SoilProfileCollection
 #'
+#' @param value A PROJ4, WKT string or equivalent or {sp} CRS object
+#' @rdname SoilProfileCollection-crs
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
   function(obj, value) {
-    suppressWarnings(proj4string(obj@sp) <- value)
+    if (!inherits(value, 'CRS')) {
+      value <- CRS(value)
+    }
+    suppressWarnings(slot(obj@sp, "proj4string") <- value)
     obj
   }
 )
+
 
 ##
 ## initialize spatial data

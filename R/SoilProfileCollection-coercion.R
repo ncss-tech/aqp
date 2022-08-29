@@ -76,12 +76,12 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
   # horizons + site + coordinates
   if(nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
     site.coords <- data.frame(site(from), coordinates(from), stringsAsFactors = FALSE)
-    return(join(horizons(from), site.coords, by=idname(from)))
+    return(merge(horizons(from), site.coords, by = idname(from), sort = FALSE, all.x = TRUE))
   }
   
   # horizons + site
   if(nrow(site(from)) > 0 & ! nrow(coordinates(from)) == length(from))
-    return(join(horizons(from), site(from), by=idname(from)))
+    return(merge(horizons(from), site(from), by = idname(from), sort = FALSE, all.x = TRUE))
     
   # horizons + coordinates
   if(! nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
@@ -136,3 +136,10 @@ setAs("SoilProfileCollection", "SpatialPoints", function(from) {
     SpatialPoints(coordinates(from), proj4string = CRS(proj4string(from)))
   }
 )
+
+#' @param x a SoilProfileCollection
+#' @export 
+#' @rdname coercion-methods
+setMethod("as.data.frame", "SoilProfileCollection", function(x) {
+  as(x, 'data.frame')
+})

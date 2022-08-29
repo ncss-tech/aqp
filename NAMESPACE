@@ -91,11 +91,15 @@ importFrom(sp,
   SpatialPoints,
   SpatialPointsDataFrame,
   coordinates,
-  "coordinates<-",
   proj4string,
+  wkt,
+  "coordinates<-",
   "proj4string<-",
   rbind.SpatialPoints
 )
+
+importFrom(gower,
+           gower_topn)
 
 exportClasses(SoilProfileCollection)
 
@@ -132,6 +136,7 @@ exportMethods(
   profile_id,
   proj4string,
   "proj4string<-",
+  wkt,
   site,
   "site<-",
   slab,

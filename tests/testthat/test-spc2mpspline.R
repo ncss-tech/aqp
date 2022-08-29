@@ -1,34 +1,39 @@
-context("spc2mpspline - 1cm spline interpolation w/ mpspline2")
-
 test_that("spc2mpspline works as expected", {
+  skip_if_not_installed('mpspline2')
+  
   data(sp1)
   depths(sp1) <- id ~ top + bottom
+  
+  # horizons with NA in property of interest are removed (not whole profiles)
+  res1 <- spc2mpspline(sp1, "prop", hzdesgn = 'name')
+  expect_equal(length(res1), length(sp1))
 
-  # profiles failing aqp::hzDepthTests are removed
-  res1 <- spc2mpspline(sp1, "prop")
-  expect_equal(length(res1), length(sp1) - 1)
-  expect_equal(attr(res1, "removed"), "P001")
+  # correspond to profiles P002 and P009
+  expect_equal(max(res1), 240)
+  expect_equal(min(res1), 59)
 
-  # P001 removed because of bad hz logic
-  sp1filt <- subset(sp1, checkHzDepthLogic(sp1)$valid)
-  res2 <- spc2mpspline(sp1filt, "prop")
-  expect_equal(length(res2), length(sp1filt)) # due to 89-89cm R layer
-
-  # plot(res2, color = "spline_prop")
-
-  # max and min of SPC are equal for spline'd result due to truncation to available data interval
-  expect_equal(max(res1), 59)
-  expect_equal(max(res1), min(res1))
-
-  # actually fix the data
+  # # actually fix the data
   sp1fix <- sp1
+  
+  # profile 1: set bedrock bottom depth to 200cm
   sp1fix@horizons[6,]$bottom <- 200
-  res3 <- spc2mpspline(sp1fix, "prop")
-  expect_equal(length(res3), length(sp1fix)) # first profile was fixed
+  
+  # profile 1: set bedrock clay content to zero
+  sp1fix@horizons[6,]$prop <- 0
+  
+  # pass d= argument for greater max depth
+  res3 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300))
+  
+  # pass d= argument (with method="est_dcm")
+  res4 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300), method = "est_dcm")
+  expect_equal(nrow(res4), length(sp1fix)*7) # first profile was fixed
+  
+  # pass d= argument (with method="est_icm")
+  res4 <- spc2mpspline(sp1fix, "prop", d = c(0, 5, 15, 30, 60, 100, 200, 300), method = "est_icm")
+  expect_equal(nrow(res4), nrow(sp1fix)) # first profile was fixed
 
-  # the available interval is still the same
-  expect_equal(max(res1), 59)
-  expect_equal(max(res1), min(res1))
+  expect_equal(max(res3), 240)
+  expect_equal(min(res1), 59)
 
   # if you want to show original and spline together, create combined horizon var
   sp1$prop_combined <- sp1$prop
@@ -40,4 +45,24 @@ test_that("spc2mpspline works as expected", {
   expect_equal(length(sp1union), 2*length(sp1))
 
   # plot(sp1union, color = "prop_combined", divide.hz = FALSE)
+})
+
+test_that("alternate depth output methods", {
+  skip_if_not_installed('mpspline2')
+  
+  data(sp1, package = "aqp")
+  depths(sp1) <- id ~ top + bottom
+  
+  res1 <- spc2mpspline(sp1, 'prop', 
+                       method = "est_icm", 
+                       hzdesgn = 'name')
+  # contains one horizon with equal top and bottom
+  expect_equal(nrow(sp1) - 1, nrow(res1))
+  
+  res2 <- spc2mpspline(sp1, 'prop', 
+                       method = "est_dcm", 
+                       hzdesgn = 'name')
+  # 6 layers per input profile in output
+  expect_equal(6*length(sp1), nrow(res2))
+  
 })

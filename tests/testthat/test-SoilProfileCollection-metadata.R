@@ -41,11 +41,14 @@ test_that("metadata and attributes are persistent", {
   obj <- rebuildSPC(sp3)
   .check_metadata_and_attribution(obj, sp3)
   
+  # compare when perturbed
+  obj <- perturb(sp3[1,], thickness.attr = "thickness_attr")
+  .check_metadata_and_attribution(obj, sp3)
+  
+  skip_if_not_installed('Gmedian')
+  
   # compare when L1_profile-d
   obj <- L1_profiles(sp3[1:3, ], id ~ clay + ph + tc + cec, method = "simple")
   .check_metadata_and_attribution(obj, sp3)
   
-  # compare when perturbed
-  obj <- perturb(sp3[1,], thickness.attr = "thickness_attr")
-  .check_metadata_and_attribution(obj, sp3)
 })

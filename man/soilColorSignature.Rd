@@ -9,12 +9,13 @@ soilColorSignature(
   r = "r",
   g = "g",
   b = "b",
-  method = "colorBucket",
+  method = c("colorBucket", "depthSlices", "pam"),
   pam.k = 3,
   RescaleLightnessBy = 1,
   useProportions = TRUE,
-  pigmentNames = c(".white.pigment", ".red.pigment", ".green.pigment",
-    ".yellow.pigment", ".blue.pigment")
+  pigmentNames = c(".white.pigment", ".red.pigment", ".green.pigment", ".yellow.pigment",
+    ".blue.pigment"),
+  apply.fun = lapply
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ soilColorSignature(
 \item{useProportions}{use proportions or quantities, see details}
 
 \item{pigmentNames}{names for resulting pigment proportions or quantities}
+
+\item{apply.fun}{function passed to \code{aqp::profileApply(APPLY.FUN)} argument, can be used to add progress bars via \code{pbapply::pblapply}, or parallel processing with \code{furrr::future_map}}
 }
 \value{
 For the \code{colorBucket} method, a \code{data.frame} object containing:

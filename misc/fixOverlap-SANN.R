@@ -39,6 +39,9 @@ tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # B, O, +, -
   cols <- c(grey(0.5), grey(0.85), 'royalblue', 'firebrick')
   
+  cols.lines <- brewer.pal(9, 'Spectral')
+  cols.lines <- colorRampPalette(cols.lines)(length(x))
+  
   # total overlap (objective function) progress
   plot(
     seq_along(z$stats), z$stats, 
@@ -70,7 +73,7 @@ tracePlot <- function(x, z, cex.axis.labels = 0.85) {
     lty = 1, las = 1, 
     xlab = 'Iteration', ylab = 'x-position',
     axes = FALSE,
-    col = 2:6
+    col = cols.lines
   )
   
   axis(side = 2, cex.axis = cex.axis.labels, col.axis = 'white', las = 1, at = x, labels = seq_along(z$x))
@@ -105,7 +108,8 @@ plot(z$stats, z$ssd)
 
 
 # nearly impossible
-x <- runif(10, min = 2.5, max = 3.5)
+x <- sort(runif(10, min = 2.5, max = 3.5))
+
 # widen boundary conditions
 z <- fixOverlap(x, thresh = 0.2, trace = TRUE, min.x = 0, max.x = 10, maxIter = 2000, adj = 0.05)
 
@@ -120,7 +124,7 @@ dev.off()
 
 ##
 
-# evalute over many replications
+# evaluate over many replications
 # pct of iterations accepted
 res <- replicate(10, expr = fixOverlap(x, thresh = 0.6, trace = TRUE)$log)
 

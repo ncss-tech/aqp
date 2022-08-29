@@ -6,3 +6,6 @@ README.md
 ^docs$
 ^misc$
 ^\.github$
+^CITATION\.cff$
+^README\.Rmd$
+^man/figures$

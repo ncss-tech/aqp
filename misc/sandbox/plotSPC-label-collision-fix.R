@@ -1,3 +1,6 @@
+devtools::load_all()
+devtools::load_all('../sharpshootR/')
+
 library(soilDB)
 
 ## test single-horizon SPC
@@ -75,7 +78,6 @@ library(soilDB)
 library(cluster)
 library(ape)
 library(colorspace)
-library(sharpshootR)
 
 s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford', 'cecil', 'sycamore', 'KLAMATH', 'MOGLIA', 'vleck', 'drummer', 'CANEYHEAD', 'sierra', 'PALAU')
 
@@ -101,4 +103,36 @@ dd <- diana(d)
 par(mar=c(0,0,0,0), bg = 'black', fg = 'white')
 
 plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2, scaling.factor = 0.4, y.offset = 5, width = 0.28, cex.names = 0.66, name.style = 'center-center', shrink = TRUE, hz.depths = TRUE, cex.id = 0.66, plot.depth.axis = FALSE, fixLabelCollisions = TRUE, hz.depths.offset = 0.05, hz.distinctness.offset = 'hzd')
+
+
+
+
+
+##
+## Another check on scaling of adjustments made by fixOverlap()
+
+
+x <- c("Chandler", "Cleveland", "Tuckasegee", "Cullasaja", "Edneyville", 
+       "Chestnut", "Evard", "Cowee", "Plott")
+
+# get OSDs and display
+o <- fetchOSD(x)
+
+par(mar = c(0, 0, 0, 0))
+
+
+# label collision works as expected
+plotSPC(o, width = 0.3, name.style = 'center-center', cex.names = 0.75, hz.depths = TRUE, plot.depth.axis = FALSE, fixLabelCollisions = TRUE, hz.depths.offset = 0.05)
+
+explainPlotSPC(o, width = 0.3, name.style = 'center-center', cex.names = 0.75, hz.depths = TRUE, plot.depth.axis = FALSE, fixLabelCollisions = TRUE, hz.depths.offset = 0.05)
+
+
+explainPlotSPC(o, width = 0.3, name.style = 'center-center', cex.names = 0.75, hz.depths = TRUE, plot.depth.axis = FALSE, fixLabelCollisions = TRUE, hz.depths.offset = 0.05, scaling.factor = 0.5)
+
+
+# scale of adjustments is now correct
+SoilTaxonomyDendrogram(o, width = 0.3, name.style = 'center-center', cex.names = 0.75, hz.depths = TRUE, plot.depth.axis = FALSE, fixLabelCollisions = TRUE, hz.depths.offset = 0.05)
+
+
+
 

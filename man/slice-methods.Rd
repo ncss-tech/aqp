@@ -30,10 +30,6 @@ Either a new \code{SoilProfileCollection} with data sliced according to \code{fm
 \description{
 Slicing of SoilProfileCollection Objects
 }
-\note{
-\code{slab()} and \code{slice()} are much faster and require less
-memory if input data are either numeric or character.
-}
 \section{Details}{
  By default, slices are defined from the top-down:
 \code{0:10} implies 0-11 depth units.
@@ -53,27 +49,28 @@ head(horizons(d))
 
 # generate single slice at 10 cm
 # output is a SoilProfileCollection object
-s <- slice(d, 10 ~ name + p1 + p2 + p3)
+s <- dice(d, fm = 10 ~ name + p1 + p2 + p3)
 
 # generate single slice at 10 cm, output data.frame
-s <- slice(d, 10 ~ name + p1 + p2 + p3, just.the.data=TRUE)
+s <- dice(d, 10 ~ name + p1 + p2 + p3, SPC = FALSE)
 
 # generate integer slices from 0 - 26 cm
 # note that slices are specified by default as "top-down"
+# result is a SoilProfileCollection
 # e.g. the lower depth will always by top + 1
-s <- slice(d, 0:25 ~ name + p1 + p2 + p3)
+s <- dice(d, fm = 0:25 ~ name + p1 + p2 + p3)
 par(mar=c(0,1,0,1))
-plot(s)
+plotSPC(s)
 
 # generate slices from 0 - 11 cm, for all variables
-s <- slice(d, 0:10 ~ .)
+s <- dice(d, fm = 0:10 ~ .)
 print(s)
 
-# note that pct missing is computed for each slice,
+# compute percent missing, for each slice,
 # if all vars are missing, then NA is returned
 d$p1[1:10] <- NA
-s <- slice(d, 10 ~ ., just.the.data=TRUE)
-print(s)
+s <- dice(d, 10 ~ ., SPC = FALSE, pctMissing = TRUE)
+head(s)
 
 \dontrun{
 ##
@@ -95,12 +92,11 @@ hz.wt.mean <- with(
 )
 
 # hopefully the same value, calculated via slice()
-s <- slice(sp1.sub, 0:max(sp1.sub) ~ prop)
-hz.slice.mean <- mean(s$prop, na.rm=TRUE)
+s <- dice(sp1.sub, fm = 0:max(sp1.sub) ~ prop)
+hz.slice.mean <- mean(s$prop, na.rm = TRUE)
 
-# same?
-if(!all.equal(hz.slice.mean, hz.wt.mean))
-  stop('there is a bug in slice() !!!')
+# they are the same
+all.equal(hz.slice.mean, hz.wt.mean)
 }
 
 }

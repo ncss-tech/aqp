@@ -17,7 +17,7 @@ getClosestMunsellChip(munsellColor, convertColors = TRUE, ...)
 a \code{data.frame} when \code{convertColors=TRUE}, otherwise character vector
 }
 \description{
-Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the \code{munsell} sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package.
+Non-standard Munsell notation ('7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the \code{munsell} sRGB/CIELAB look-up table via \code{getClosestMunsellChip()}. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package. For example, conversion from Munsell to CIELAB, assuming a D65 illuminant via: \code{MunsellToLab('0.1Y 3.3/4.4', white='D65', adapt='Bradford')}.
 }
 \examples{
 

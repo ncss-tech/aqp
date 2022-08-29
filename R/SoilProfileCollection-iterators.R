@@ -6,6 +6,7 @@
  	                                    frameify = FALSE,
  	                                    chunk.size = 100,
  	                                    column.names = NULL,
+ 	                                    APPLY.FUN = lapply,
  	                                    ...) standardGeneric("profileApply"))
 # made internal by AGB 2020/01/19
 #
@@ -45,7 +46,9 @@
 #' @param column.names character, optional character vector to replace frameify-derived column names; should match length of colnames() from FUN result; default: NULL
 #'
 #' @param ... additional arguments passed to FUN
-#'
+#' 
+#' @param APPLY.FUN function, optional alternate `lapply()`-like function for processing chunks. For example `future.apply::future_lapply()` for processing chunks in parallel. Default `base::lapply()`.
+#' 
 #' @return When simplify is TRUE, a vector of length nrow(object) (horizon data) or of length length(object) (site data). When simplify is FALSE, a list is returned. When frameify is TRUE, a data.frame is returned. An attempt is made to identify idname and/or hzidname in the data.frame result, safely ensuring that IDs are preserved to facilitate merging profileApply result downstream.
 #'
 #' @aliases profileApply,SoilProfileCollection-method
@@ -160,6 +163,7 @@ setMethod('profileApply', signature(object = 'SoilProfileCollection'), function(
                         frameify = FALSE,
                         chunk.size = 100,
                         column.names = NULL,
+                        APPLY.FUN = lapply,
                         ...) {
   if (simplify & frameify) {
     # simplify and frameify are both TRUE -- ignore simplify argument
@@ -176,7 +180,7 @@ setMethod('profileApply', signature(object = 'SoilProfileCollection'), function(
   # by dividing by a tunable factor -- set as 100 by default
   # then we iterate through each chunk, calling FUN on each element (profile)
   # then, concatenate the result into a list (or vector if simplify == TRUE)
-  res <- do.call('c', lapply(split(1:n, chunk), function(idx) {
+  res <- do.call('c', APPLY.FUN(split(1:n, chunk), function(idx) {
     .profileApply(object[idx,], FUN, simplify, ...)
   }))
 

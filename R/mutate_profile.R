@@ -1,7 +1,7 @@
 #' @title Transform a SPC (by profile) with a set of expressions
 #' @name mutate_profile
 #' @aliases mutate_profile,SoilProfileCollection-method
-#' @description \code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{mutate}, which is applied to all values in a collection, regardless of which profile they came from.
+#' @description \code{mutate_profile()} is a function used for transforming SoilProfileCollections. Each expression is applied to site or horizon level attributes of individual profiles. This distinguishes this function from \code{transform}, which is applied to all values in a collection, regardless of which profile they came from.
 #' @param object A SoilProfileCollection
 #' @param ... A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{mutate_profile(hzdept = max(hzdept) - hzdept)}
 #' @param horizon_level logical. If `TRUE` results of expressions are added to the SoilProfileCollection's horizon slot, if `FALSE` the results are added to the site slot. If `NULL` (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the _first_ and _last_ profile in the collection.
@@ -28,7 +28,7 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
     
     # iterate over expressions left to right
     for (i in 1:length(.dots)) {
-      if (is.null(horizon_level) || !is.logical(horizon_level)){
+      if (is.null(horizon_level) || !is.logical(horizon_level)) {
         horizon_level <- FALSE
         
         # decide whether we are adding/modifying a site or horizon level variable so
@@ -42,42 +42,27 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
         }
       }
       
-      # then iterate over profiles within expression, frameify results
-      res <- profileApply(object, function(o) {
-
-        # create composite object to facilitate eval_tidy
-        .data <- compositeSPC(o)
-        res_eval <- .data_dots(.data, eval(.dots[[i]]))[[1]]
-
-        if (horizon_level) {
-          horizons(o)[[.names[i]]] <- res_eval
-        } else {
-          site(o)[[.names[i]]] <- res_eval
+      x <- data.table::data.table(object@site)[object@horizons, on = idname(object)]
+      .SD <- NULL
+      
+      res <- x[, list(.hzidname = .SD[[hzidname(object)]], 
+                      eval(.dots[[i]], envir = .SD)), by = c(idname(object))]
+      colnames(res) <- c(idname(object), hzidname(object), .names[i])
+      if (any(.names[i] %in% names(object))) {
+        for (n in .names[i]) {
+          object[[n]] <- NULL
         }
-
-        return(list(st = site(o), hz = horizons(o)))
-      }, simplify = FALSE)
-
-      # make a big data.frame
-      if (requireNamespace("data.table")) {
-        if (!horizon_level)
-         .site <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$st })), aqp_df_class(object))
-        else
-         .hz <- .as.data.frame.aqp(data.table::rbindlist(lapply(res, function(r) { r$hz })), aqp_df_class(object))
-      } else {
-        if (!horizon_level)
-         .site <- do.call('rbind', lapply(res, function(r) { r$st }))
-        else
-         .hz  <- do.call('rbind',  lapply(res, function(r) { r$hz }))
       }
-
       if (!horizon_level) {
-        rownames(.site) <- NULL
-        slot(object, 'site') <- .site
+        if (nrow(unique(res[, .SD, .SDcols = colnames(res)[colnames(res) != hzidname(object)]])) > length(object)) {
+          stop("mutate_profile: some profiles returned more than one result and `horizon_level=FALSE`", call. = FALSE)
+        }
+        res[[hzidname(object)]] <- NULL
+        site(object) <- unique(res)
       } else {
-        rownames(.hz) <- NULL
-        slot(object, 'horizons') <- .hz
+        horizons(object) <- res
       }
+      
     }
 
     return(object)

@@ -1,8 +1,6 @@
 
 
 #' @title Visualize soil colors in Munsell notation according to within-group frequency.
-#' 
-#'
 #' @param m character vector of color in Munsell notation ('10YR 4/6')
 #' 
 #' @param g factor describing group membership, typically a generalization of horizon designation, default value will generate a fake grouping that covers all of the colors in `m`

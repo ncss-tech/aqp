@@ -1,0 +1,710 @@
+# -----------------------------------------------------------
+# CITATION file created with {cffr} R package, v0.2.2
+# See also: https://docs.ropensci.org/cffr/
+# -----------------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "aqp" in publications use:'
+type: software
+license: GPL-3.0-or-later
+title: 'aqp: Algorithms for Quantitative Pedology'
+version: '1.43'
+abstract: The Algorithms for Quantitative Pedology (AQP) project was started in 2009
+  to organize a loosely-related set of concepts and source code on the topic of soil
+  profile visualization, aggregation, and classification into this package (aqp).
+  Over the past 8 years, the project has grown into a suite of related R packages
+  that enhance and simplify the quantitative analysis of soil profile data. Central
+  to the AQP project is a new vocabulary of specialized functions and data structures
+  that can accommodate the inherent complexity of soil profile information; freeing
+  the scientist to focus on ideas rather than boilerplate data processing tasks <doi:10.1016/j.cageo.2012.10.020>.
+  These functions and data structures have been extensively tested and documented,
+  applied to projects involving hundreds of thousands of soil profiles, and deeply
+  integrated into widely used tools such as SoilWeb <https://casoilresource.lawr.ucdavis.edu/soilweb-apps/>.
+  Components of the AQP project (aqp, soilDB, sharpshootR, soilReports packages) serve
+  an important role in routine data analysis within the USDA-NRCS Soil Science Division.
+  The AQP suite of R packages offer a convenient platform for bridging the gap between
+  pedometric theory and practice.
+authors:
+- family-names: Beaudette
+  given-names: Dylan
+  email: dylan.beaudette@usda.gov
+- family-names: Roudier
+  given-names: Pierre
+  email: roudierp@landcareresearch.co.nz
+- family-names: Brown
+  given-names: Andrew
+  email: andrew.g.brown@usda.gov
+preferred-citation:
+  type: manual
+  title: 'aqp: Algorithms for Quantitative Pedology'
+  authors:
+  - name: Beaudette
+  - name: D.
+  - name: Roudier
+  - name: P.
+  - name: Brown
+  - name: A.
+  notes: R package version 1.42
+  url: https://CRAN.R-project.org/package=aqp
+  year: '2022'
+repository: https://CRAN.R-project.org/package=aqp
+repository-code: https://github.com/ncss-tech/aqp
+url: https://github.com/ncss-tech/aqp
+contact:
+- family-names: Beaudette
+  given-names: Dylan
+  email: dylan.beaudette@usda.gov
+keywords:
+- digital-soil-mapping
+- ncss-tech
+- nrcs
+- pedology
+- pedometrics
+- soil
+- soil-survey
+- usda
+references:
+- type: article
+  title: 'Algorithms for quantitative pedology: A toolkit for soil scientists'
+  authors:
+  - name: Beaudette
+  - name: D.E.
+  - name: Roudier
+  - name: P.
+  - name: O'Geen
+  - name: A.T.
+  journal: Computers & Geosciences
+  year: '2013'
+  volume: '52'
+  url: http://dx.doi.org/10.1016/j.cageo.2012.10.020
+  start: 258-268
+- type: software
+  title: 'R: A Language and Environment for Statistical Computing'
+  notes: Depends
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+  version: '>= 3.5.0'
+- type: software
+  title: grDevices
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: graphics
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: stats
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: utils
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: methods
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: plyr
+  abstract: 'plyr: Tools for Splitting, Applying and Combining Data'
+  notes: Imports
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=plyr
+- type: software
+  title: grid
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: lattice
+  abstract: 'lattice: Trellis Graphics for R'
+  notes: Imports
+  authors:
+  - family-names: Sarkar
+    given-names: Deepayan
+    email: deepayan.sarkar@r-project.org
+    orcid: https://orcid.org/0000-0003-4107-1553
+  year: '2022'
+  url: https://CRAN.R-project.org/package=lattice
+- type: software
+  title: cluster
+  abstract: 'cluster: "Finding Groups in Data": Cluster Analysis Extended Rousseeuw
+    et al.'
+  notes: Imports
+  authors:
+  - family-names: Maechler
+    given-names: Martin
+    email: maechler@stat.math.ethz.ch
+    orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Rousseeuw
+    given-names: Peter
+    email: peter.rousseeuw@kuleuven.be
+    orcid: https://orcid.org/0000-0002-3807-5353
+  - family-names: Struyf
+    given-names: Anja
+  - family-names: Hubert
+    given-names: Mia
+    email: Mia.Hubert@uia.ua.ac.be
+    orcid: https://orcid.org/0000-0001-6398-4850
+  year: '2022'
+  url: https://CRAN.R-project.org/package=cluster
+- type: software
+  title: sp
+  abstract: 'sp: Classes and Methods for Spatial Data'
+  notes: Imports
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+  - family-names: Bivand
+    given-names: Roger
+    email: Roger.Bivand@nhh.no
+  year: '2022'
+  url: https://CRAN.R-project.org/package=sp
+- type: software
+  title: stringr
+  abstract: 'stringr: Simple, Consistent Wrappers for Common String Operations'
+  notes: Imports
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=stringr
+- type: software
+  title: data.table
+  abstract: 'data.table: Extension of `data.frame`'
+  notes: Imports
+  authors:
+  - family-names: Dowle
+    given-names: Matt
+    email: mattjdowle@gmail.com
+  - family-names: Srinivasan
+    given-names: Arun
+    email: asrini@pm.me
+  year: '2022'
+  url: https://CRAN.R-project.org/package=data.table
+- type: software
+  title: gower
+  abstract: 'gower: Gower''s Distance'
+  notes: Imports
+  authors:
+  - family-names: van der Loo
+    given-names: Mark
+    email: mark.vanderloo@gmail.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=gower
+- type: software
+  title: colorspace
+  abstract: 'colorspace: A Toolbox for Manipulating and Assessing Colors and Palettes'
+  notes: Suggests
+  authors:
+  - family-names: Ihaka
+    given-names: Ross
+    email: ihaka@stat.auckland.ac.nz
+  - family-names: Murrell
+    given-names: Paul
+    email: paul@stat.auckland.ac.nz
+    orcid: https://orcid.org/0000-0002-3224-8858
+  - family-names: Hornik
+    given-names: Kurt
+    email: Kurt.Hornik@R-project.org
+    orcid: https://orcid.org/0000-0003-4198-9911
+  - family-names: Fisher
+    given-names: Jason C.
+    email: jfisher@usgs.gov
+    orcid: https://orcid.org/0000-0001-9032-8912
+  - family-names: Stauffer
+    given-names: Reto
+    email: Reto.Stauffer@uibk.ac.at
+    orcid: https://orcid.org/0000-0002-3798-5507
+  - family-names: Wilke
+    given-names: Claus O.
+    email: wilke@austin.utexas.edu
+    orcid: https://orcid.org/0000-0002-7470-9261
+  - family-names: McWhite
+    given-names: Claire D.
+    email: claire.mcwhite@utmail.utexas.edu
+    orcid: https://orcid.org/0000-0001-7346-3047
+  - family-names: Zeileis
+    given-names: Achim
+    email: Achim.Zeileis@R-project.org
+    orcid: https://orcid.org/0000-0003-0918-3766
+  year: '2022'
+  url: https://CRAN.R-project.org/package=colorspace
+- type: software
+  title: ape
+  abstract: 'ape: Analyses of Phylogenetics and Evolution'
+  notes: Suggests
+  authors:
+  - family-names: Paradis
+    given-names: Emmanuel
+    email: Emmanuel.Paradis@ird.fr
+    orcid: https://orcid.org/0000-0003-3092-2199
+  - family-names: Blomberg
+    given-names: Simon
+    orcid: https://orcid.org/0000-0003-1062-0839
+  - family-names: Bolker
+    given-names: Ben
+    orcid: https://orcid.org/0000-0002-2127-0443
+  - family-names: Brown
+    given-names: Joseph
+    orcid: https://orcid.org/0000-0002-3835-8062
+  - family-names: Claramunt
+    given-names: Santiago
+    orcid: https://orcid.org/0000-0002-8926-5974
+  - family-names: Claude
+    given-names: Julien
+    orcid: https://orcid.org/0000-0002-9267-1228
+  - family-names: Cuong
+    given-names: Hoa Sien
+  - family-names: Desper
+    given-names: Richard
+  - family-names: Didier
+    given-names: Gilles
+    orcid: https://orcid.org/0000-0003-0596-9112
+  - family-names: Durand
+    given-names: Benoit
+  - family-names: Dutheil
+    given-names: Julien
+    orcid: https://orcid.org/0000-0001-7753-4121
+  - family-names: Ewing
+    given-names: RJ
+  - family-names: Gascuel
+    given-names: Olivier
+  - family-names: Guillerme
+    given-names: Thomas
+    orcid: https://orcid.org/0000-0003-4325-1275
+  - family-names: Heibl
+    given-names: Christoph
+    orcid: https://orcid.org/0000-0002-7655-3299
+  - family-names: Ives
+    given-names: Anthony
+    orcid: https://orcid.org/0000-0001-9375-9523
+  - family-names: Jones
+    given-names: Bradley
+    orcid: https://orcid.org/0000-0003-4498-1069
+  - family-names: Krah
+    given-names: Franz
+    orcid: https://orcid.org/0000-0001-7866-7508
+  - family-names: Lawson
+    given-names: Daniel
+    orcid: https://orcid.org/0000-0002-5311-6213
+  - family-names: Lefort
+    given-names: Vincent
+  - family-names: Legendre
+    given-names: Pierre
+    orcid: https://orcid.org/0000-0002-3838-3305
+  - family-names: Lemon
+    given-names: Jim
+  - family-names: Louvel
+    given-names: Guillaume
+    orcid: https://orcid.org/0000-0002-7745-0785
+  - family-names: Marcon
+    given-names: Eric
+    orcid: https://orcid.org/0000-0002-5249-321X
+  - family-names: McCloskey
+    given-names: Rosemary
+    orcid: https://orcid.org/0000-0002-9772-8553
+  - family-names: Nylander
+    given-names: Johan
+  - family-names: Opgen-Rhein
+    given-names: Rainer
+  - family-names: Popescu
+    given-names: Andrei-Alin
+  - family-names: Royer-Carenzi
+    given-names: Manuela
+  - family-names: Schliep
+    given-names: Klaus
+    orcid: https://orcid.org/0000-0003-2941-0161
+  - family-names: Strimmer
+    given-names: Korbinian
+    orcid: https://orcid.org/0000-0001-7917-2056
+  - family-names: de Vienne
+    given-names: Damien
+    orcid: https://orcid.org/0000-0001-9532-5251
+  year: '2022'
+  url: https://CRAN.R-project.org/package=ape
+- type: software
+  title: soilDB
+  abstract: 'soilDB: Soil Database Interface'
+  notes: Suggests
+  authors:
+  - family-names: Beaudette
+    given-names: Dylan
+    email: dylan.beaudette@usda.gov
+  - family-names: Skovlin
+    given-names: Jay
+  - family-names: Roecker
+    given-names: Stephen
+  - family-names: Brown
+    given-names: Andrew
+    email: andrew.g.brown@usda.gov
+  year: '2022'
+  url: https://CRAN.R-project.org/package=soilDB
+- type: software
+  title: latticeExtra
+  abstract: 'latticeExtra: Extra Graphical Utilities Based on Lattice'
+  notes: Suggests
+  authors:
+  - family-names: Sarkar
+    given-names: Deepayan
+    email: deepayan.sarkar@r-project.org
+  - family-names: Andrews
+    given-names: Felix
+    email: felix@nfrac.org
+  year: '2022'
+  url: https://CRAN.R-project.org/package=latticeExtra
+- type: software
+  title: tactile
+  abstract: 'tactile: New and Extended Plots, Methods, and Panel Functions for ''lattice'''
+  notes: Suggests
+  authors:
+  - family-names: Larsson
+    given-names: Johan
+    email: johanlarsson@outlook.com
+    orcid: https://orcid.org/0000-0002-4029-5945
+  year: '2022'
+  url: https://CRAN.R-project.org/package=tactile
+- type: software
+  title: compositions
+  abstract: 'compositions: Compositional Data Analysis'
+  notes: Suggests
+  authors:
+  - family-names: van den Boogaart
+    given-names: K. Gerald
+    email: boogaart@hzdr.de
+  - family-names: Tolosana-Delgado
+    given-names: Raimon
+  - family-names: Bren
+    given-names: Matevz
+  year: '2022'
+  url: https://CRAN.R-project.org/package=compositions
+- type: software
+  title: sharpshootR
+  abstract: 'sharpshootR: A Soil Survey Toolkit'
+  notes: Suggests
+  authors:
+  - family-names: Beaudette
+    given-names: Dylan
+    email: dylan.beaudette@usda.gov
+  - family-names: Skovlin
+    given-names: Jay
+  - family-names: Roecker
+    given-names: Stephen
+  - family-names: Brown
+    given-names: Andrew
+  year: '2022'
+  url: https://CRAN.R-project.org/package=sharpshootR
+- type: software
+  title: markovchain
+  abstract: 'markovchain: Easy Handling Discrete Time Markov Chains'
+  notes: Suggests
+  authors:
+  - family-names: Spedicato
+    given-names: Giorgio Alfredo
+    email: spedicato_giorgio@yahoo.it
+    orcid: https://orcid.org/0000-0002-0315-8888
+  - family-names: Seung Kang
+    given-names: Tae
+  - family-names: Bhargav Yalamanchi
+    given-names: Sai
+  - family-names: Yadav
+    given-names: Deepak
+  - family-names: Cordón
+    given-names: Ignacio
+    orcid: https://orcid.org/0000-0002-3152-0231
+  year: '2022'
+  url: https://CRAN.R-project.org/package=markovchain
+- type: software
+  title: xtable
+  abstract: 'xtable: Export Tables to LaTeX or HTML'
+  notes: Suggests
+  authors:
+  - family-names: Dahl
+    given-names: David B.
+  - family-names: Scott
+    given-names: David
+    email: d.scott@auckland.ac.nz
+  - family-names: Roosen
+    given-names: Charles
+  - family-names: Magnusson
+    given-names: Arni
+  - family-names: Swinton
+    given-names: Jonathan
+  year: '2022'
+  url: https://CRAN.R-project.org/package=xtable
+- type: software
+  title: testthat
+  abstract: 'testthat: Unit Testing for R'
+  notes: Suggests
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=testthat
+- type: software
+  title: Gmedian
+  abstract: 'Gmedian: Geometric Median, k-Medians Clustering and Robust Median PCA'
+  notes: Suggests
+  authors:
+  - family-names: Cardot
+    given-names: Herve
+  year: '2022'
+  url: https://CRAN.R-project.org/package=Gmedian
+- type: software
+  title: farver
+  abstract: 'farver: High Performance Colour Space Manipulation'
+  notes: Suggests
+  authors:
+  - family-names: Pedersen
+    given-names: Thomas Lin
+    email: thomasp85@gmail.com
+    orcid: https://orcid.org/0000-0002-5147-4711
+  - family-names: Nicolae
+    given-names: Berendea
+  - family-names: François
+    given-names: Romain
+    email: romain@purrple.cat
+    orcid: https://orcid.org/0000-0002-2444-4226
+  year: '2022'
+  url: https://CRAN.R-project.org/package=farver
+- type: software
+  title: Hmisc
+  abstract: 'Hmisc: Harrell Miscellaneous'
+  notes: Suggests
+  authors:
+  - family-names: Harrell Jr
+    given-names: Frank E
+    email: fh@fharrell.com
+    orcid: https://orcid.org/0000-0002-8271-5493
+  year: '2022'
+  url: https://CRAN.R-project.org/package=Hmisc
+- type: software
+  title: tibble
+  abstract: 'tibble: Simple Data Frames'
+  notes: Suggests
+  authors:
+  - family-names: Müller
+    given-names: Kirill
+    email: krlmlr+r@mailbox.org
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=tibble
+- type: software
+  title: RColorBrewer
+  abstract: 'RColorBrewer: ColorBrewer Palettes'
+  notes: Suggests
+  authors:
+  - family-names: Neuwirth
+    given-names: Erich
+    email: erich.neuwirth@univie.ac.at
+  year: '2022'
+  url: https://CRAN.R-project.org/package=RColorBrewer
+- type: software
+  title: scales
+  abstract: 'scales: Scale Functions for Visualization'
+  notes: Suggests
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  - family-names: Seidel
+    given-names: Dana
+  year: '2022'
+  url: https://CRAN.R-project.org/package=scales
+- type: software
+  title: digest
+  abstract: 'digest: Create Compact Hash Digests of R Objects'
+  notes: Suggests
+  authors:
+  - family-names: Lucas
+    given-names: Dirk Eddelbuettel with contributions by Antoine
+    email: edd@debian.org
+  - family-names: Tuszynski
+    given-names: Jarek
+  - family-names: Bengtsson
+    given-names: Henrik
+  - family-names: Urbanek
+    given-names: Simon
+  - family-names: Frasca
+    given-names: Mario
+  - family-names: Lewis
+    given-names: Bryan
+  - family-names: Stokely
+    given-names: Murray
+  - family-names: Muehleisen
+    given-names: Hannes
+  - family-names: Murdoch
+    given-names: Duncan
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Wu
+    given-names: Wush
+  - family-names: Kou
+    given-names: Qiang
+  - family-names: Onkelinx
+    given-names: Thierry
+  - family-names: Lang
+    given-names: Michel
+  - family-names: Simko
+    given-names: Viliam
+  - family-names: Hornik
+    given-names: Kurt
+  - family-names: Neal
+    given-names: Radford
+  - family-names: Bell
+    given-names: Kendon
+  - family-names: de Queljoe
+    given-names: Matthew
+  - family-names: Suruceanu
+    given-names: Ion
+  - family-names: Denney
+    given-names: Bill
+  - family-names: Schumacher
+    given-names: Dirk
+  - family-names: Chang.
+    given-names: and Winston
+  year: '2022'
+  url: https://CRAN.R-project.org/package=digest
+- type: software
+  title: MASS
+  abstract: 'MASS: Support Functions and Datasets for Venables and Ripley''s MASS'
+  notes: Suggests
+  authors:
+  - family-names: Ripley
+    given-names: Brian
+    email: ripley@stats.ox.ac.uk
+  year: '2022'
+  url: https://CRAN.R-project.org/package=MASS
+- type: software
+  title: mpspline2
+  abstract: 'mpspline2: Mass-Preserving Spline Functions for Soil Data'
+  notes: Suggests
+  authors:
+  - family-names: O'Brien
+    given-names: Lauren
+    email: obrlsoilau@gmail.com
+    orcid: https://orcid.org/0000-0002-7336-2171
+  year: '2022'
+  url: https://CRAN.R-project.org/package=mpspline2
+- type: software
+  title: soiltexture
+  abstract: 'soiltexture: Functions for Soil Texture Plot, Classification and Transformation'
+  notes: Suggests
+  authors:
+  - family-names: Moeys
+    given-names: Julien
+    email: jules_m78-soiltexture@yahoo.fr
+  year: '2022'
+  url: https://CRAN.R-project.org/package=soiltexture
+- type: software
+  title: knitr
+  abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
+  notes: Suggests
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  year: '2022'
+  url: https://CRAN.R-project.org/package=knitr
+- type: software
+  title: rmarkdown
+  abstract: 'rmarkdown: Dynamic Documents for R'
+  notes: Suggests
+  authors:
+  - family-names: Allaire
+    given-names: JJ
+    email: jj@rstudio.com
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: McPherson
+    given-names: Jonathan
+    email: jonathan@rstudio.com
+  - family-names: Luraschi
+    given-names: Javier
+    email: javier@rstudio.com
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevin@rstudio.com
+  - family-names: Atkins
+    given-names: Aron
+    email: aron@rstudio.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  - family-names: Cheng
+    given-names: Joe
+    email: joe@rstudio.com
+  - family-names: Chang
+    given-names: Winston
+    email: winston@rstudio.com
+  - family-names: Iannone
+    given-names: Richard
+    email: rich@rstudio.com
+    orcid: https://orcid.org/0000-0003-3925-190X
+  year: '2022'
+  url: https://CRAN.R-project.org/package=rmarkdown

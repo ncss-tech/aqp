@@ -69,7 +69,7 @@ a <- aggregateColor(sp1, groups = 'group', col = 'soil_color')
 a <- aggregateColor(sp1, groups = 'group', col = 'soil_color', k = 4)
 
 # aggregate colors over depth-slices
-s <- slice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ soil_color)
+s <- dice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ soil_color)
 s$slice <- paste0(s$top, ' cm')
 s$slice <- factor(s$slice, levels=guessGenHzLevels(s, 'slice')$levels)
 a <- aggregateColor(s, groups = 'slice', col = 'soil_color')

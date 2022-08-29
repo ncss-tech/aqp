@@ -19,10 +19,10 @@ segment(object, intervals, trim = TRUE, hzdepcols = NULL)
 Either a \code{SoilProfileCollection} or \code{data.frame} with the original horizon data segmented by depth intervals. There are usually more records in the resulting object, one for each time a segment interval partially overlaps with a horizon. A new column called \code{segment_id} identifying the depth interval is added.
 }
 \description{
-This function segments or subdivides horizon data from a \code{SoilProfileCollection} or \code{data.frame} by depth interval (e.g. 0-10, 0:50, or 25-100). This results in horizon records being split at the specified depth intervals, which duplicates the original horizon data but also adds new horizon depths. In addition, labels (i.e. "segment_id") are added to each horizon record that correspond with their depth interval (e.g. 025-100). This function is intended to harmonize horizons to a common support (i.e. depth interval) for further aggregation or summary. See the examples.
+This function segments or subdivides horizon data from a \code{SoilProfileCollection} or \code{data.frame} by depth interval (e.g. \code{c(0, 10)}, \code{c(0, 50)}, or \code{25:100}). This results in horizon records being split at the specified depth intervals, which duplicates the original horizon data but also adds new horizon depths. In addition, labels (i.e. \code{"segment_id"}) are added to each horizon record that correspond with their depth interval (e.g. \code{025-100}). This function is intended to harmonize horizons to a common support (i.e. depth interval) for further aggregation or summary. See the examples.
 }
 \details{
-Compared to \code{slice}, \code{slab}, and \code{glom}, \code{segment} performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice} or \code{slab}.
+\code{segment()} performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. \code{slice()} or \code{slab()}.
 }
 \examples{
 
@@ -111,7 +111,7 @@ head(test3_agg)
 
 }
 \seealso{
-\code{\link{slice}, \link{dice}, \link{glom}}
+\code{\link[=dice]{dice()}}, \code{\link[=glom]{glom()}}
 }
 \author{
 Stephen Roecker

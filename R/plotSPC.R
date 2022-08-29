@@ -110,6 +110,8 @@
 #' @param default.color default horizon fill color used when \code{color} attribute is \code{NA}
 #' 
 #' @param fixLabelCollisions use `aqp::fixOverlap()` to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`
+#' 
+#' @param maxLabelAdjustmentIndex numeric, maximum (total) adjustments allowed when `fixLabelCollisions = TRUE`, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).
 #'
 #' @param \dots other arguments passed into lower level plotting functions
 #'
@@ -338,7 +340,7 @@ plotSPC <- function(
   name.style = 'right-center',
   label = idname(x),
   hz.depths = FALSE,
-  hz.depths.offset = 0,
+  hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
   alt.label = NULL,
   alt.label.col = 'black',
@@ -381,6 +383,7 @@ plotSPC <- function(
   lty = 1,
   default.color = grey(0.95),
   fixLabelCollisions = FALSE,
+  maxLabelAdjustmentIndex = 4,
   ...
 ) {
   
@@ -507,21 +510,6 @@ plotSPC <- function(
   # re-order y-offset according to plot.order
   y.offset <- y.offset[plot.order]
   
-  # save arguments to aqp env
-  lsp <- list('width'=width,
-              'plot.order'=plot.order,
-              'x0'=relative.pos + x.idx.offset,
-              'pIDs'=pIDs[plot.order],
-              'idname'=idname(x),
-              'y.offset'=y.offset,
-              'scaling.factor'=scaling.factor,
-              'max.depth'=max.depth,
-              'n'=n,
-              'extra_x_space'=extra_x_space,
-              'extra_y_space'=extra_y_space)
-  
-  assign('last_spc_plot', lsp, envir=aqp.env)
-  
   # get horizons
   h <- horizons(x)
   
@@ -558,6 +546,23 @@ plotSPC <- function(
   # legend data if relevant, otherwise NULL
   hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
   h[['.color']] <- hz.color.interpretation$colors
+  
+  # sketch parameters for follow-up overlay / inspection
+  lsp <- list('width' = width,
+              'plot.order' = plot.order,
+              'x0' = relative.pos + x.idx.offset,
+              'pIDs' = pIDs[plot.order],
+              'idname' = idname(x),
+              'y.offset' = y.offset,
+              'scaling.factor' = scaling.factor,
+              'max.depth' = max.depth,
+              'n' = n,
+              'extra_x_space' = extra_x_space,
+              'extra_y_space' = extra_y_space,
+              'hz.depth.LAI' = rep(NA_real_, n),
+              'legend.colors' = hz.color.interpretation$colors,
+              'legend.data' = hz.color.interpretation$color.legend.data
+  )
   
   
   ####################
@@ -1000,8 +1005,6 @@ plotSPC <- function(
         adj = c(0, 0.8)
       )
       
-      ## TODO: add optional adjustments here using fixOverlap()
-      ##       https://github.com/ncss-tech/aqp/issues/240
       
       # in-between horizons, if present: vertical align is "center"
       if(nh > 1) {
@@ -1013,11 +1016,25 @@ plotSPC <- function(
         
         ## collision detection / fix
         if(fixLabelCollisions) {
+          
+          ## TODO: make these adjustable via aqp options
+          
           # reasonable threshold for label collision detection
+          # this depends on graphics device / figure scale / cex.names
           y.thresh <- 1.25 * abs(strheight('0', cex = cex.names))
           
-          # print(y.thresh)
-          # print(diff(y1))
+          # adjustment suggestion must be on the same scale as threshold
+          .adj <- y.thresh * 1/4
+          
+          ## debugging
+          # print(
+          #   sprintf(
+          #     "y.thresh: %s   |   adj: %s",
+          #     signif(y.thresh, 3), 
+          #     signif(.adj, 3)
+          #   )
+          # )
+          
           
           # must include top + bottom depths for collision detection
           hzd.txt.y.fixed <- suppressMessages(fixOverlap( 
@@ -1025,7 +1042,7 @@ plotSPC <- function(
             thresh = y.thresh, 
             min.x = y1[1], 
             max.x = y0[nh], 
-            adj = 1,
+            adj = .adj,
             k = 20,
             trace = FALSE
           ))
@@ -1033,19 +1050,25 @@ plotSPC <- function(
           # remove top + bottom horizon depths
           hzd.txt.y.fixed <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
           
-          # how much shuffling was performed
-          .badness <- (hzd.txt.y - hzd.txt.y.fixed)
-          # normalize
-          .badness <- sum(abs(.badness), na.rm = TRUE) / y0[nh]
+          ## this is the Label Adjustment Index (LAI)
           
-          # when n > length(x), we are iterating over non-profiles and .badness is NA
-          if(!is.na(.badness)) {
+          # how much shuffling was performed?
+          .LAI <- (hzd.txt.y - hzd.txt.y.fixed)
+          # normalize
+          .LAI <- sum(abs(.LAI), na.rm = TRUE) / y0[nh]
+          
+          # keep track of overlap metric for each profile
+          lsp[['hz.depth.LAI']][i] <- .LAI
+          
+          # when n > length(x), we are iterating over non-profiles and .LAI is NA
+          if(!is.na(.LAI)) {
             # if not too "bad", keep suggested adjustments
-            if(.badness < 0.2) {
+            if(.LAI < maxLabelAdjustmentIndex) {
+              # make changes to annotation label locations
               hzd.txt.y <- hzd.txt.y.fixed
             } else {
               ## TODO: consider a message or keeping track of which profiles
-              # print(.badness)
+              # print(.LAI)
             }
           }
           
@@ -1276,7 +1299,8 @@ plotSPC <- function(
     }
   }
   
-  
+  # save to aqp env
+  assign('last_spc_plot', lsp, envir = aqp.env)
   
   
 }

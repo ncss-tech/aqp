@@ -45,7 +45,7 @@ sp1$genhz <- generalize.hz(sp1$name, n, p)
 levels(sp1$genhz)
 
 # generalize horizons by depth slice
-s <- slice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ .)
+s <- dice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ .)
 s$slice <- paste0(s$top, ' cm')
 # not a factor
 levels(s$slice)

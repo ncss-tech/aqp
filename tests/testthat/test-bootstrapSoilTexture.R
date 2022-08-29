@@ -7,7 +7,9 @@ ssc <- sp6[grep('^Bt', sp6$name), c('sand', 'silt', 'clay')]
 names(ssc) <- toupper(names(ssc))
 
 test_that("bootstrapSoilTexture() works as expected", {
-
+  
+  skip_if_not_installed('compositions')
+  
   # simulated under relatively stable conditions
   set.seed(1010101)
   s <- bootstrapSoilTexture(ssc, n = 50, method = 'dirichlet')

@@ -1,7 +1,61 @@
-# need these packages
+
 library(aqp)
 library(cluster)
 library(sharpshootR)
+
+## Wilson et al. paper with excellent synthesis over all three transects
+# field names need manual adjustment
+# note that not all sites from original papers are included
+# some depths / horizon designations are not the same
+# minor formatted adjustments and splitting of depths
+#
+# converted '<0.01' -> 0
+
+w <- read.csv('wilson-et-al-appdx-tables.csv')
+str(w)
+
+# split depths
+.d <- stringi::stri_split_fixed(w$depth, pattern = '|', n = 2, simplify = TRUE)
+w$top <- as.integer(.d[, 1])
+w$bottom <- as.integer(.d[, 2])
+w$depth <- NULL
+
+
+# use factors to establish numeric IDs
+table(w$biome)
+table(w$pm)
+
+w$pm <- factor(w$pm, levels = c('Granite', 'Andesite', 'Basalt'))
+w$biome <- factor(w$biome, levels = c('Oak', 'Ponderosa pine', 'White fir', 'Red fir'))
+
+# ordering Oak -> Red fir / parent material
+w$.id <- interaction(w$biome, w$pm)
+# looks right
+
+# 0-padding for proper sorts
+w$.id <- sprintf('%03d', as.integer(w$.id))
+
+# init SPC
+depths(w) <- .id ~ top + bottom
+site(w) <- ~ pm + biome
+hzdesgnname(w) <- 'name'
+
+# check
+par(mar = c(0, 0, 3, 0))
+groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'CIA', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+
+groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'CaO', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+
+groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+
+groupedProfilePlot(w, groups = 'biome', group.name.offset = -15, label = 'pm', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+
+## TODO: generate docs + units
+
+# re-name and save
+
+
+
 
 ## load original Sierra Transect (central Sierra, granite) data from CSV
 granite <- read.csv('dahlgren-granitics.csv', stringsAsFactors=FALSE)

@@ -4,10 +4,12 @@
 \alias{SoilTextureLevels}
 \title{Ranking Systems for USDS Soil Texture Classes}
 \usage{
-SoilTextureLevels(which = "codes")
+SoilTextureLevels(which = "codes", simplify = FALSE)
 }
 \arguments{
 \item{which}{'codes' (texture codes) or 'names' (texture class names)}
+
+\item{simplify}{Return 12-class factor levels (\code{TRUE}) or 21-class factor levels (default: \code{FALSE})? The 12-class system does not separate sands, loamy sands and sandy loams into sand fraction variants (e.g. "very fine sandy loam" in the 21-class system is "sandy loam" in 12-class system)}
 }
 \value{
 an ordered factor
@@ -22,6 +24,9 @@ SoilTextureLevels()
 
 # class names
 SoilTextureLevels(which = 'names')
+
+# simpler class names
+SoilTextureLevels(which = 'names', simplify = TRUE)
  
 }
 \references{
