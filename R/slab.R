@@ -216,11 +216,12 @@
  	}
  	
  	# convert wide -> long format
- 	d.long <- data.table::melt(
+ 	# warnings will occur when not all columns are e.g. double
+ 	d.long <- suppressWarnings(data.table::melt(
  	  as.data.table(data[which(!is.na(data$seg.label)), ]),
  	  id.vars = unique(c(object.ID, 'seg.label', g, weights)),
  	  measure.vars = vars
- 	)
+ 	))
  	
  	# make a formula for aggregate()
  	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep = ''))
