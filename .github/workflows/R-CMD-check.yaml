@@ -77,7 +77,13 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-
+        
+      - name: Install soilDB from r-universe (devel+3.6 only)
+        if: matrix.config.r == '3.6' || matrix.config.r == 'devel'
+        run: |
+          install.packages("soilDB", repos = 'https://ncss-tech.r-universe.dev')
+        shell: Rscript {0}
+        
       - name: Install markovchain from MRAN (3.6 only)
         if: matrix.config.r == '3.6'
         run: |
