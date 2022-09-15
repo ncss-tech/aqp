@@ -297,3 +297,26 @@ test_that("dropped profile IDs", {
 })
 
 
+test_that("safely handle hzdesgnname", {
+  
+  # init hzname
+  hzdesgnname(sp4) <- 'name'
+  
+  # hzdesgnname is lost
+  d <- dice(sp4, ~ K)
+  expect_true(hzdesgnname(d) == '')
+  
+  # hzdesgnname retained
+  d <- dice(sp4, ~ .)
+  expect_true(hzdesgnname(d) == 'name')
+  
+  # hzdesgnname retained
+  d <- dice(sp4, ~ name + K)
+  expect_true(hzdesgnname(d) == 'name')
+  
+})
+
+
+
+
+

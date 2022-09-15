@@ -259,6 +259,11 @@ setGeneric("dice", function(x,
   # switch horizon ID to slice ID
   hzidname(x) <- 'sliceID'
   
+  # remove horizon designation metadata if not retained in fm
+  if(!hzdesgnname(x) %in% horizonNames(x)) {
+    hzdesgnname(x) <- ''
+  }
+  
   # final size
   f.size <- object.size(x)
   
