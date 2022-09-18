@@ -1147,6 +1147,25 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
             return(res)
           })
 
+setGeneric("hzMetadata", function(object, ...)
+  standardGeneric("hzMetadata"))
+
+#' Get horizon-level metadata
+#'
+#' Get `idname(object)` and `hzidname(object)`, with `hzdesgnname(object)`, `hztexclname(object)` (if defined)
+#'
+#' @param object a SoilProfileCollection
+#' @docType methods
+#' @aliases hzMetadata
+#' @rdname hzMetadata
+setMethod("hzMetadata", signature(object = "SoilProfileCollection"), 
+          function(object) {
+            idn <- c(idname(object), hzidname(object), hzdesgnname(object), hztexclname(object))
+            
+            .data.frame.j(horizons(object),
+                          col.names = idn[idn %in% horizonNames(object)],
+                          use_class = aqp_df_class(object))
+          })
 
 ##
 ## initialize metadata: object modification in-place
