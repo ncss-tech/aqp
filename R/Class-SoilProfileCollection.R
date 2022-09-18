@@ -295,19 +295,9 @@ setMethod(f = 'show',
             h <- h[rows.show.h, , drop = FALSE]
             s <- s[rows.show.s, , drop = FALSE]
 
-            # move IDs and depths, horizon designation if available
-            hzd <- hzdesgnname(object)
-            if (hzd != "") {
-
-              # registered in a slot
-              idx <- match(c(idname(object),
-                             hzidname(object),
-                             horizonDepths(object),
-                             hzdesgnname(object)), names(h))
-            } else {
-              # undefined
-              idx <- match(c(idname(object), hzidname(object), horizonDepths(object)), names(h))
-            }
+            # move IDs and depths, horizon designation/texture if available
+            hzm <- .hzMetadataNames(object, depths = horizonDepths(object))
+            idx <- match(hzm, names(h))
 
             # determine number of columns to show, and index to hz / site data
             # user sett-able
@@ -321,18 +311,7 @@ setMethod(f = 'show',
 
             if (length(h.n) > 0) {
 
-              # aqp:::.data.frame.j is the safe way to use the j index the data.frame way
-              #  if you might encounter a data.table
               h <- .data.frame.j(h, c(h.n[idx], h.n[-na.omit(idx)]), aqp_df_class(object))
-
-              # # if defined, move horizon designation to the 3rd column
-              # # missing horizon designation evaluates to character(0)
-              hzd <- hzdesgnname(object)
-              if (hzd != "") {
-                idx <- match(hzd, names(h))
-                if (length(idx))
-                  h <- .data.frame.j(h, c(names(h)[idx], names(h)[-idx]), aqp_df_class(object))
-              }
 
               # show first n
               hz.show <- seq(from = 1,
@@ -386,10 +365,7 @@ setMethod(f = 'show',
             # make note of additional hz attributes
             cat(hz.txt)
 
-            # note: use of the j index here is not compatible with data.table
-            #  no need to use aqp:::.data.frame.j here -- this is just for output
-            print(.as.data.frame.aqp(data.frame(h)[, hz.show, drop = FALSE],
-                                     aqp_df_class(object)), row.names = FALSE)
+            print(data.frame(h)[, hz.show, drop = FALSE], row.names = FALSE)
 
             if(n.h > max(rows.show.h))
               cat('[... more horizons ...]\n')
@@ -397,9 +373,7 @@ setMethod(f = 'show',
             # make note of additional site attributes
             cat(site.txt)
 
-            # again: use of the j index here is not compatible with data.table
-            print(.as.data.frame.aqp(data.frame(s)[, site.show, drop = FALSE],
-                                     aqp_df_class(object)), row.names = FALSE)
+            print(data.frame(s)[, site.show, drop = FALSE], row.names = FALSE)
 
             if(n.s > max(rows.show.s))
               cat('[... more sites ...]\n')
@@ -1147,6 +1121,15 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
             return(res)
           })
 
+.hzMetadataNames <- function(object, depths = character(0), ...) {
+  idn <- c(idname(object),
+    hzidname(object),
+    depths,
+    hzdesgnname(object),
+    hztexclname(object))
+  idn[nchar(idn) > 0]
+}
+
 setGeneric("hzMetadata", function(object, ...)
   standardGeneric("hzMetadata"))
 
@@ -1160,8 +1143,7 @@ setGeneric("hzMetadata", function(object, ...)
 #' @rdname hzMetadata
 setMethod("hzMetadata", signature(object = "SoilProfileCollection"), 
           function(object) {
-            idn <- c(idname(object), hzidname(object), hzdesgnname(object), hztexclname(object))
-            
+            idn <- .hzMetadataNames(object)
             .data.frame.j(horizons(object),
                           col.names = idn[idn %in% horizonNames(object)],
                           use_class = aqp_df_class(object))
