@@ -45,6 +45,12 @@ s$color.group <- factor(cutree(dd, 3))
 ## map distance matrix to 2D space via principal coordinates
 d.betadisper <- betadisper(d, group=s$color.group, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
 
+anova(d.betadisper)
+boxplot(d.betadisper)
+
+plot(TukeyHSD(d.betadisper))
+
+
 ## fancy plot
 # define some nice colors
 cols <- brewer.pal(9, 'Set1') 
