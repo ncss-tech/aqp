@@ -199,7 +199,8 @@ setGeneric("dice", function(x,
   names(s)[1] <- hzidn
   
   # FULL JOIN via fast data.table compiled code
-  res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
+  hm <- merge(h, hzMetadata(x), by = c(idn, hzidn), all.x = TRUE, sort = FALSE)
+  res <- merge(hm, s, by = hzidn, all = TRUE, sort = FALSE)
   
   # init unique horizon IDs
   res[['sliceID']] <- as.character(1:nrow(res))
@@ -246,7 +247,7 @@ setGeneric("dice", function(x,
   }
   
   # re-pack horizon data
-  res <- as.data.frame(res)
+  res <- .as.data.frame.aqp(res, aqp_df_class(x))
   
   # this will fail if strict = FALSE, and sub-setting resulted in corrupt SPC
   .condition <- try(replaceHorizons(x) <- res, silent = TRUE)
