@@ -116,11 +116,11 @@
 	  stop('must provide a valid formula: groups ~ var1 + var2 + ...', call. = FALSE)
 	
 	# check for bogus left/right side problems with the formula
-	if (any(g %in% object.names) == FALSE & g != '.') # bogus grouping column
-	  stop('group name either missing from formula, or does match any columns in dataframe', call. = FALSE)
+	if (length(g) > 0 && !any(g %in% object.names) && g != '.') # bogus grouping column
+	  stop('group name either missing from formula, or does match any columns in data.frame', call. = FALSE)
 
 	if (any(vars %in% object.names) == FALSE) # bogus column names in right-hand side
-	  stop('column names in formula do not match column names in dataframe', call. = FALSE)
+	  stop('column names in formula do not match column names in data.frame', call. = FALSE)
 	
 	# make formula for slicing
 	if (length(slab.structure) == 2) {
