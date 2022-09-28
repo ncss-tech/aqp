@@ -237,8 +237,15 @@
 	    FUN <- slab.fun
 	  }
 	  .internal_wt <- eval(weights)
-	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[.internal_wt]], ...))), by = c('variable', g, 'seg.label')])
-	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, by = c('variable', g, 'seg.label')]$V1
+	  
+	  # calculate the summary function FUN for each variable*groups*slablabel, including weights
+	  #  FUN returns a (named) vector of summary statistics, which are converted to "wide" data.frame
+	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[.internal_wt]], ...))), 
+	                                    by = c('variable', g, 'seg.label')])
+	  
+	  # calculate the contributing fraction for each variable*groups*slablabel
+	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, 
+	                                            by = c('variable', g, 'seg.label')]$V1
 
 	} else {
 	  if (missing(slab.fun) || !inherits(slab.fun, 'function')) {
