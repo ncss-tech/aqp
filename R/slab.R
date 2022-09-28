@@ -236,8 +236,8 @@
 	  } else {
 	    FUN <- slab.fun
 	  }
-	  wt <- eval(weights)
-	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[wt]], ...))), by = c('variable', g, 'seg.label')])
+	  .internal_wt <- eval(weights)
+	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[.internal_wt]], ...))), by = c('variable', g, 'seg.label')])
 	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, by = c('variable', g, 'seg.label')]$V1
 
 	} else {
@@ -245,9 +245,6 @@
 	    # default numeric aggregation fun is .slab.fun.numeric.default
 	    slab.fun <- .slab.fun.numeric.default
 	  }
-	  
-	  # convert back to data.frame
-	  d.long <- as.data.frame(d.long)
 	  
 	  # reset factor levels in d.long[[value]]
 	  if (.factorFlag) {
