@@ -41,24 +41,27 @@ set.seed(1010)
 d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
+
+horizons(d)$texture <- 'cl'
+hztexclname(d) <- 'texture'
 hzdesgnname(d) <- 'name'
 
-# duplication with proposed merge(..., hzMetadata(x) )
-dice(d, fm = 25 ~ p1 + name, SPC = FALSE)
+# OK
+dice(d, fm = 25 ~ p1 + name + texture, SPC = FALSE)
 
-# error with proposed merge(..., hzMetadata(x) )
-dice(d, fm = 25 ~ p1 + name, SPC = TRUE)
+# OK
+dice(d, fm = 25 ~ p1 + name + texture, SPC = TRUE)
 
 # OK
 dice(d, fm = 25 ~ p1, SPC = FALSE)
 
-# error after revert
+# OK
 dice(d, fm = 25 ~ p1, SPC = TRUE)
 
-# duplication with proposed merge(..., hzMetadata(x) )
+# OK
 dice(d, fm = 25 ~ ., SPC = FALSE)
 
-# error with proposed merge(..., hzMetadata(x) )
+# OK
 dice(d, fm = 25 ~ ., SPC = TRUE)
 
 
