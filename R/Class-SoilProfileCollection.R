@@ -1122,9 +1122,13 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
           })
 
 .hzMetadataNames <- function(object, depths = FALSE, ...) {
+  hzd <- character(0)
+  if (depths) {
+    hzd <- horizonDepths(object)
+  }
   idn <- c(idname(object),
     hzidname(object),
-    ifelse(depths, horizonDepths(object), character(0)),
+    hzd,
     hzdesgnname(object),
     hztexclname(object))
   idn[!is.na(idn) & nchar(idn) > 0]
