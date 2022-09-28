@@ -46,12 +46,20 @@ hzdesgnname(d) <- 'name'
 # duplication with proposed merge(..., hzMetadata(x) )
 dice(d, fm = 25 ~ p1 + name, SPC = FALSE)
 
+# error with proposed merge(..., hzMetadata(x) )
+dice(d, fm = 25 ~ p1 + name, SPC = TRUE)
+
 # OK
 dice(d, fm = 25 ~ p1, SPC = FALSE)
+
+# error after revert
+dice(d, fm = 25 ~ p1, SPC = TRUE)
 
 # duplication with proposed merge(..., hzMetadata(x) )
 dice(d, fm = 25 ~ ., SPC = FALSE)
 
+# error with proposed merge(..., hzMetadata(x) )
+dice(d, fm = 25 ~ ., SPC = TRUE)
 
 
 # ID for QC
