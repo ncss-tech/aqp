@@ -1,17 +1,32 @@
-.phclasses <- function(halfclass = FALSE) {
-  lut1 <- read.table(header = TRUE, 
-                     text = 'DescriptiveTerm pH_low pH_high
-  "Ultra Acid" 0 3.55
-  "Extremely Acid" 3.55 4.45
-  "Very Strongly Acid" 4.45 5.05
-  "Strongly Acid" 5.05 5.55
-  "Moderately Acid" 5.55 6.05
-  "Slightly Acid" 6.05 6.55
-  "Neutral" 6.55 7.35
-  "Slightly Alkaline" 7.35 7.85
-  "Moderately Alkaline" 7.85 8.45
-  "Strongly Alkaline" 8.45 9.05
-  "Very Strongly Alkaline" 9.05 14')
+.reactionclass <- function() {
+  data.frame(
+    DescriptiveTerm = c(
+      "Ultra Acid",
+      "Extremely Acid",
+      "Very Strongly Acid",
+      "Strongly Acid",
+      "Moderately Acid",
+      "Slightly Acid",
+      "Neutral",
+      "Slightly Alkaline",
+      "Moderately Alkaline",
+      "Strongly Alkaline",
+      "Very Strongly Alkaline"
+    ),
+    pH_low = c(0, 3.55, 4.45, 5.05, 5.55, 6.05, 6.55, 7.35, 7.85, 8.45, 9.05),
+    pH_high = c(3.55, 4.45, 5.05, 5.55, 6.05, 6.55, 7.35, 7.85, 8.45, 9.05, 14)
+  )
+}
+
+.reactionclass2 <-  function() {
+  # rda can be built using reactionclass <- .reactionclass(); save(reactionclass, file = "data/reactionclass.rda")
+  reactionclass <- NULL
+  load(system.file("data", "reactionclass.rda", package = "aqp"))
+  reactionclass
+}
+
+.phclasses1 <- function(halfclass = FALSE) {
+  lut1 <- .reactionclass()
   if (halfclass) {
     lut2 <- lut1
     lut2$pH_high <- lut2$pH_low + ((lut2$pH_high - lut2$pH_low) / 2)
@@ -25,15 +40,15 @@
   lut
 }
 
-.phclass <- function(x, halfclass=FALSE) {
-  lut1 <- .phclasses(halfclass = halfclass)
+.phclass <- function(x, halfclass = FALSE) {
+  lut1 <- .phclasses1(halfclass = halfclass)
   idx <- findInterval(x, lut1[["pH_low"]])
   trimws(paste(lut1[["id"]][idx], lut1[["DescriptiveTerm"]][idx]))
 }
 
-.phrange <- function(x, halfclass=FALSE) {
+.phrange <- function(x, halfclass = FALSE) {
   if (any(grepl('high|low', x, ignore.case = TRUE))) halfclass <- TRUE
-  lut1 <- .phclasses(halfclass = halfclass)
+  lut1 <- .phclasses1(halfclass = halfclass)
   res <- lut1[trimws(tolower(paste(lut1[["id"]], lut1[["DescriptiveTerm"]]))) %in% tolower(x), c("pH_low", "pH_high")]
   res2 <- res[0,][1,]
   res2$pH_low <- min(res$pH_low)
@@ -51,7 +66,10 @@
 #' @rdname reaction
 #' @examples
 #' ph_to_rxnclass(6.2)
-ph_to_rxnclass <- function(x, halfclass = FALSE) {
+ph_to_rxnclass <- function(x, 
+                           halfclass = FALSE,
+                           as.is = FALSE,
+                           droplevels = TRUE) {
   .phclass(x, halfclass = halfclass)
 }
 
