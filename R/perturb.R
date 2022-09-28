@@ -77,7 +77,7 @@
 #' # aggregate horizonation of simulated data
 #' # note: set class_prob_mode=2 as profiles were not defined to a constant depth
 #' sim.2$name <- factor(sim.2$name)
-#' a <- slab(sim.2, ~ name, class_prob_mode=2)
+#' a <- slab(sim.2, ~ name, cpm=2)
 #' 
 #' # convert to long format for plotting simplicity
 #' library(data.table)
