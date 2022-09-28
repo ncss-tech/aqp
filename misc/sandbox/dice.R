@@ -41,6 +41,18 @@ set.seed(1010)
 d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = FALSE)
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
+hzdesgnname(d) <- 'name'
+
+# duplication with proposed merge(..., hzMetadata(x) )
+dice(d, fm = 25 ~ p1 + name, SPC = FALSE)
+
+# OK
+dice(d, fm = 25 ~ p1, SPC = FALSE)
+
+# duplication with proposed merge(..., hzMetadata(x) )
+dice(d, fm = 25 ~ ., SPC = FALSE)
+
+
 
 # ID for QC
 horizons(d)[['.xxID']] <- d$hzID

@@ -43,6 +43,11 @@ setGeneric("dice", function(x,
   # keep track of original object size
   o.size <- object.size(x)
   
+  ## TODO: adapt subset by column name (metadata) + (variables)
+  ##       to use a revised version of hzMetadata()
+  ##       this will include horizon designation, horizon text, and future (special) columns
+  ##       special column will be added to vars in dice() and some related functions
+  
   ## extract pieces
   idn <- idname(x)
   hzidn <- hzidname(x)
@@ -198,9 +203,14 @@ setGeneric("dice", function(x,
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
   
+  ## TODO: adapt subset by column name (metadata) + (variables)
+  ##       to use a revised version of hzMetadata()
+  ##       this will include horizon designation, horizon text, and future (special) columns
+  ##       special column will be added to vars in dice() and some related functions
+  
   # FULL JOIN via fast data.table compiled code
-  hm <- merge(h, hzMetadata(x), by = c(idn, hzidn), all.x = TRUE, sort = FALSE)
-  res <- merge(hm, s, by = hzidn, all = TRUE, sort = FALSE)
+  # hm <- merge(h, hzMetadata(x), by = c(idn, hzidn), all.x = TRUE, sort = FALSE)
+  res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
   # init unique horizon IDs
   res[['sliceID']] <- as.character(1:nrow(res))
