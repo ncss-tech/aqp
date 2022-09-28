@@ -129,11 +129,11 @@ setGeneric("dice", function(x,
   # time to work with horizons 
   h <- horizons(x)
   
+  hmnames <- .hzMetadataNames(x, depths = TRUE)
+  newhm <- hmnames[which(!hmnames %in% vars)]
+  
   # safely select variables
-  h <- .data.frame.j(
-    h, 
-    col.names = c(hznames[ids.top.bottom.idx], vars)
-  )
+  h <- .data.frame.j(h, col.names = c(newhm, vars))
   
   # convert to DT, as needed
   if (!inherits(h, 'data.table')) {
@@ -197,13 +197,6 @@ setGeneric("dice", function(x,
   
   # re-name for simpler JOIN
   names(s)[1] <- hzidn
-  hmnames <- .hzMetadataNames(x)
-  newhm <- hmnames[which(!hmnames %in% vars)]
-  
-  #  join hzMetadata() to include horizon designation, horizon text + future columns _not_ included in vars
-  if (length(newhm) > 2) {
-    h <- merge(h, .data.frame.j(hzMetadata(x), newhm), by = c(idn, hzidn), all.x = TRUE, sort = FALSE)
-  }
   
   # FULL JOIN via fast data.table compiled code
   res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
