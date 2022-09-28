@@ -218,7 +218,7 @@
  	# convert wide -> long format
  	# warnings will occur when not all columns are e.g. double
  	d.long <- suppressWarnings(data.table::melt(
- 	  as.data.table(data[which(!is.na(data$seg.label)), ]),
+ 	  data.table::as.data.table(data[which(!is.na(data$seg.label)), ]),
  	  id.vars = unique(c(object.ID, 'seg.label', g, weights)),
  	  measure.vars = vars
  	))
@@ -307,7 +307,7 @@
     attr(d.slabbed, 'original.levels') <- original.levels
   }
 	
-	return(d.slabbed)
+	.as.data.frame.aqp(d.slabbed, aqp_df_class(object))
 }
 
 # setup generic function
