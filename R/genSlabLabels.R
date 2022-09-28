@@ -1,5 +1,15 @@
 # does not assume logical horizons (may overlap, resulting in different # of slices per profile)
+#' .genSlabLabels2
+#'
+#' @param spc A SoilProfileCollection
+#' @param diced The `dice()`-ed horizon-level data.frame corresponding to `spc`
+#' @param slab.structure Slab structure, either constant thickness, or vector of boundary depths
+#' @keywords internal
+#' @noRd
+#' @return a factor containing slab IDs, labels are the segment top and bottom separated by `"-"`
 .genSlabLabels2 <- function(spc, diced, slab.structure = 1) {
+  
+  # handle various allowed slab.structure specifications
   if (length(slab.structure) == 1) {
     i <- seq(from = 0, length.out = (max(spc) / slab.structure) + 1) * slab.structure
   } else if (length(slab.structure) > 1) {
@@ -7,14 +17,22 @@
   } else {
     stop("empty slab.structure", call. = FALSE)
   }
+  
+  # calculate a sequence of cumulative depths and corresponding indices for each slab
   j <- diff(i)
   idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x]))))
   idx2 <- do.call('c', lapply(seq_along(j), function(x) rep(x, j[x])))
   mt <- data.frame(idx1, slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
   hzdepb <- horizonDepths(spc)[2]
   colnames(mt) <- c(hzdepb, "slab_id", "slab_label")
+  
+  # merge the dice'd data.frame result with the slab ID and labels
   res <- merge(diced, mt, by = hzdepb, all.x = TRUE, sort = FALSE)
+  
+  # order by horizon ID and depth
   res <- res[order(res[[idname(spc)]], res[[hzdepb]]),]
+  
+  # return the slab IDs as a factor, with labels denoting each segment top and bottom
   factor(res$slab_id, labels = na.omit(unique(res$slab_label)))
 }
 
