@@ -91,9 +91,6 @@
 
   # define keywords for data.table
   .SD <- NULL; .N <- NULL; value <- NULL
-  
-	# get extra arguments: length of 0 if no extra arguments
-	extra.args <- list(...)
 
 	# get unique list of names in object
 	object.names <- unique(unlist(names(object)))
@@ -180,10 +177,6 @@
   		slab.fun <- .slab.fun.factor.default
 		}
 
-		# add extra arguments required by this function
-		# note that we cannot accept additional arguments when processing categorical values
-		extra.args <- list(cpm = cpm)
-
     # save factor levels for later
     original.levels <- levels(data[[vars]])
 
@@ -215,16 +208,12 @@
  	  stop("column '", weights, "' not present in site data", call. = FALSE)
  	}
  	
- 	# convert wide -> long format
- 	# warnings will occur when not all columns are e.g. double
+ 	# convert wide -> long format; warnings will occur when not all columns are e.g. double
  	d.long <- suppressWarnings(data.table::melt(
  	  data.table::as.data.table(data[which(!is.na(data$seg.label)), ]),
  	  id.vars = unique(c(object.ID, 'seg.label', g, weights)),
  	  measure.vars = vars
  	))
- 	
- 	# make a formula for aggregate()
- 	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep = ''))
  	
 	# check for weights
 	if (!missing(weights)) {
@@ -236,60 +225,44 @@
 	  } else {
 	    FUN <- slab.fun
 	  }
-	  .internal_wt <- eval(weights)
-	  
-	  # calculate the summary function FUN for each variable*groups*slablabel, including weights
-	  #  FUN returns a (named) vector of summary statistics, which are converted to "wide" data.frame
-	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[.internal_wt]], ...))), 
-	                                    by = c('variable', g, 'seg.label')])
-	  
-	  # calculate the contributing fraction for each variable*groups*slablabel
-	  d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N, 
-	                                            by = c('variable', g, 'seg.label')]$V1
-
 	} else {
 	  if (missing(slab.fun) || !inherits(slab.fun, 'function')) {
 	    # default numeric aggregation fun is .slab.fun.numeric.default
-	    slab.fun <- .slab.fun.numeric.default
-	  }
-	  
-	  # reset factor levels in d.long[[value]]
-	  if (.factorFlag) {
-	    d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
-	  }
-	  
-	  # process chunks according to group -> variable -> segment
-	  # NA values are not explicitly dropped
-	  if (length(extra.args) == 0) {
-	    d.slabbed <- aggregate(aggregate.fm, data = d.long, na.action = na.pass, FUN = slab.fun)
+	    FUN <- .slab.fun.numeric.default
 	  } else {
-	    # optionally account for extra arguments
-	    the.args <- c(list(aggregate.fm, data = d.long, na.action = na.pass, FUN = slab.fun), extra.args)
-	    d.slabbed <- do.call(what = 'aggregate', args = the.args)
+	    FUN <- slab.fun
 	  }
-	  
-	  # if slab.fun returns a vector of length > 1 we must:
-	  # convert the complex data.frame returned by aggregate into a regular data.frame
-	  # the column 'value' is a matrix with the results of slab.fun
-	  if (inherits(d.slabbed$value, 'matrix')) {
-	    d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
-	  }
-	  
-	  # ensure that the names returned from slab.fun are legal
-	  names(d.slabbed) <- make.names(names(d.slabbed)) 
-	  
-   	# estimate contributing fraction
-   	d.slabbed$contributing_fraction <- aggregate(
-   	  aggregate.fm,
-   	  data = d.long,
-   	  na.action = na.pass,
-   	  FUN = function(i) {
-   	    length(na.omit(i)) / length(i)
-   	  }
-   	)$value
-   	
 	}
  	
+ 	.internal_wt <- eval(weights)
+ 	
+ 	# calculate summary function FUN for each variable*groups*slablabel
+ 	#  FUN returns a (named) vector of summary statistics, which are converted to "wide" data.frame
+ 	
+ 	if (.factorFlag) {
+ 	  d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
+ 	}
+ 	
+ 	if (!missing(weights)) {
+   	d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[.internal_wt]], ...))),
+   	                                  by = c('variable', g, 'seg.label')])
+ 	} else {
+ 	  if (!missing(cpm)) {
+ 	    d.slabbed <- as.data.frame(d.long[, as.data.frame(t(unclass(FUN(value, cpm = cpm, ...)))),
+ 	                                      by = c('variable', g, 'seg.label')])
+ 	  } else {
+   	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, ...))),
+   	                                    by = c('variable', g, 'seg.label')])
+ 	  }
+ 	}
+ 	
+ 	# calculate contributing fraction for each variable*groups*slablabel
+ 	d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N,
+ 	                                          by = c('variable', g, 'seg.label')]$V1
+ 	
+	# ensure that the names returned from slab.fun are legal
+	names(d.slabbed) <- make.names(names(d.slabbed)) 
+	  
  	# rename default data.table value column names
  	unn <- grepl("^V\\d+$", colnames(d.slabbed))
  	if (any(unn)) {
@@ -311,7 +284,7 @@
     attr(d.slabbed, 'original.levels') <- original.levels
   }
 	
-	.as.data.frame.aqp(d.slabbed, aqp_df_class(object))
+	d.slabbed
 }
 
 # setup generic function
