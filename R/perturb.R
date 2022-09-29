@@ -257,118 +257,36 @@ perturb <- function(p,
     #  and aqp only supports integer depths
     return(round(pmax(new, 0)))
   }))
+  
+  value <- NULL; md <- NULL; .N <- NULL
+  p.sub <- duplicate(p, n)
+  h.sub <- horizons(p.sub)
+    
+  idlut <- p.sub[[".oldID"]]
+  names(idlut) <- p.sub[[idname(p)]]
+  nd <- data.table::data.table(id = h.sub[[idname(p)]],
+                               .oldID = idlut[h.sub[[idname(p)]]])
+  nd <- nd[data.frame(.oldID = profile_id(p), 
+                      md = mindepth), 
+           on = ".oldID"]
+  nd$V1 <- as.numeric(res)
+  nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
+  nd$.newbot <- nd[, cumsum(md[1] + V1), by = c("id")]$V1
+  p.sub[[depthz[1]]] <- nd$.newtop
+  p.sub[[depthz[2]]] <- nd$.newbot
+    
+  if (custom.ids & length(unique(id)) == length(p.sub))
+    profile_id(p.sub) <- id
 
-  # handle minimum thickness 
-  if (!by_thickness) {
-    res <- apply(res, 2, function(x) diff(c(mindepth, x)))
+  if (!missing(new.idname)) {
+    old.idname <- idname(p)
+    p.sub[[new.idname]] <- p.sub[[old.idname]]
+    p.sub@horizons[[new.idname]] <- horizons(p.sub)[[old.idname]]
+    p.sub@idcol <- new.idname
+    p.sub@horizons[[old.idname]] <- NULL
   }
   
-  # result is a 3D array
-  #  dimension 1: input profile index
-  #  dimension 2: horizon index
-  #  dimension 3: output profile index (1 for each input profile)
-  
-  # For example res[1,1,1:25]: 25 realizations of bottom depth of first profile, first horizon
-  res <- apply(res, MARGIN = c(1, 2), function(x) {
-    idx <- x < min.thickness
-    if (any(idx)) {
-      x[idx] <- min.thickness
-    }
-    return(round(cumsum(x) + mindepth))
-  })
-  
-  # insert new depths
-  if (length(dim(res)) == 2) {
-    pID <- 1:n
-    # allocate a list for n-profile result
-    profiles <- vector('list', n)
-    profiles <- lapply(pID, function(i) {
-      p.sub <- hz
-  
-      # create new idname and hzidname
-      p.sub$pID <- as.character(i)
-      p.sub$hzID <- as.character(1:length(p.sub$hzID) * i)
-  
-      nd <- data.frame(id = hz[[idname(p)]], X1 = t(res)[i, ])
-      nd$V1 <- cumsum(nd$X1)
-      p.sub[[depthz[1]]] <- c(mindepth, nd$V1)[1:nrow(p)]
-      p.sub[[depthz[2]]] <- nd$V1
-      test <- hzDepthTests(p.sub[[depthz[1]]], p.sub[[depthz[2]]])
-        
-      if (any(test)) {
-          stop(paste("one or more horizon logic tests failed for realization:", i))
-      }
-      return(p.sub)
-    })
-    
-    # fast "pbindlist" with no checks since we know the origin
-    
-    # horizon
-    o.h <- as.data.frame(data.table::rbindlist(profiles))
-    # need to remove duped ID from horizon table! only allowed for current ID
-    o.h[[idname(p)]] <- NULL
-    names(o.h)[which(names(o.h) == 'pID')] <- new.idname
-    
-    # site
-    o.s <- data.frame(site(p), pID = pID, row.names = NULL)
-    names(o.s)[which(names(o.s) == 'pID')] <- new.idname
-    
-    # diagnostic
-    d <- diagnostic_hz(p)
-    o.d <- data.frame()
-    if (length(d) != 0) {
-      o.d <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(d))), 
-                        d[rep(1:nrow(d), length(pID))])
-    }
-    names(o.d)[which(names(o.d) == 'pID')] <- new.idname
-    
-    # restriction
-    re <- restrictions(p)
-    o.r <- data.frame()
-    if (nrow(re) > 0) {
-      o.r <- data.frame(pID = do.call('c', lapply(pID, rep, nrow(re))),
-                        re[rep(1:nrow(re), length(pID))])
-    }
-    names(o.r)[which(names(o.r) == 'pID')] <- new.idname
-    
-    # always drop spatial data -- still present in site
-    o.sp <- new('SpatialPoints')
-    
-    metadat <- metadata(p)
-    
-    # TODO: alter metadata to reflect the processing done here?
-    
-    # drop old ID name from horizon table
-    #(can't have it in site and horizon, not the ID any mores)
-    o.h[[idname(p)]] <- NULL
-    
-    res <- SoilProfileCollection(idcol = new.idname, depthcols = horizonDepths(p),
-                                 metadata = metadat,
-                                 horizons = o.h, site = o.s, sp = o.sp,
-                                 diagnostic = o.d, restrictions = o.r)
-    ## reset horizon IDs
-    hzID(res) <- as.character(1:nrow(res))
-    
-    res <- .transfer.metadata.aqp(p, res)
-  } else {
-    value <- NULL; md <- NULL; .N <- NULL
-    p.sub <- duplicate(p, n)
-    profiles <- aqp::combine(lapply(seq_along(p), function(i) {
-      nd <- data.table::melt(data.table(id = horizons(p[i,])[[idname(p)]], res[i, , ]), id.vars = "id")
-      nd <- nd[data.frame(id = profile_id(p[i,]), md = mindepth), on = "id"]
-      nd1 <- nd[, cumsum(c(md[1], value))[1:.N], by = c("id", "variable")]
-      nd2 <- nd[, cumsum(value), by = c("id", "variable")]
-      p.sub[[depthz[1]]] <- nd1$V1
-      p.sub[[depthz[2]]] <- nd2$V1
-      return(p.sub)
-    }))
-  }
-    
-  
-  if (custom.ids & length(unique(id)) == length(res))
-    profile_id(res) <- id
-
-  return(res)
+  .transfer.metadata.aqp(p, p.sub)
 }
 
 permute_profile <- function(p,
