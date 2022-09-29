@@ -74,10 +74,14 @@ test_that("perturb (by boundaries) works as expected (single profile)", {
 test_that("perturb() (by thickness) works as expected (multiple profiles)", {
   
   horizons(sp3)$hz.sd <- 2
-  p=sp3
-  n=25
-  thickness.attr="hz.sd"
-  max.depth=50
   expect_silent({ sim.1 <- perturb(sp3, n = 25, thickness.attr = "hz.sd") })
-  
+  expect_equal(length(sim.1), 250)
 })
+
+test_that("perturb() (by boundary) works as expected (multiple profiles)", {
+  
+  horizons(sp3)$hz.sd <- 2
+  expect_silent({ sim.1 <- perturb(sp3, n = 25, boundary.attr = "hz.sd") })
+  expect_equal(length(sim.1), 250)
+})
+
