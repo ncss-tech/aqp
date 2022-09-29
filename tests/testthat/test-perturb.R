@@ -77,7 +77,7 @@ test_that("perturb() (by thickness) works as expected (multiple profiles)", {
   expect_silent({ sim.1 <- perturb(sp3, n = 25, thickness.attr = "hz.sd") })
   expect_equal(length(sim.1), 250)
   
-  # test min.thickness arg
+  # test min.thickness arg (no horizon thinner than min.thickness)
   thk <- sim.1$bottom - sim.1$top
   expect_true(min(thk) >= 1)
   
@@ -88,14 +88,17 @@ test_that("perturb() (by thickness) works as expected (multiple profiles)", {
 test_that("perturb() (by boundary) works as expected (multiple profiles)", {
   
   horizons(sp3)$hz.sd <- 2
-  expect_silent({ sim.1 <- perturb(sp3[9:10,], n = 250, boundary.attr = "hz.sd", min.thickness = 3) })
+  expect_silent({ sim.1 <- perturb(sp3[9:10,], n = 250, boundary.attr = "hz.sd", min.thickness = 3, max.depth = 50) })
   expect_equal(length(sim.1), 500)
   
-  # test min.thickness arg
+  # test min.thickness arg (no horizon thinner than min.thickness)
   thk <- sim.1$bottom - sim.1$top
   expect_true(min(thk) >= 3)
   
   # all results are logical
   expect_true(all(checkHzDepthLogic(sim.1)$valid))
+  
+  # test max.depth (thicknesses of 4th horizon below 50cm are unaltered)
+  expect_equal(thk[seq_along(thk) %% 4 == 0], c(rep(112, 250), rep(80, 250)))
 })
 
