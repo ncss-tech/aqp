@@ -234,15 +234,13 @@ perturb <- function(p,
 
   # calculate perturbed variable vector
   # for each horizon bottom depth (boundary) calculate the gaussian offset
-  res <- hz[, list(rnorm(n, perturb_var[.GRP], varattr[.GRP]), 
-                   gidx = seq_len(n), pidx = .SD[[idn]]), 
+  res <- hz[, list(round(rnorm(n, perturb_var[.GRP], varattr[.GRP])), 
+                   gidx = seq_len(n), # number of replicates
+                   pidx = .SD[[idn]]), # profile ID
             by = list(hidx = seq_len(nrow(hz)))]
   
-  if (length(p) == 1) {
-    res <- res[order(gidx)]$V1
-  } else {
-    res <- res[order(pidx, gidx)]$V1
-  }
+  # order result by profile*rep
+  res <- res[order(pidx, gidx)]$V1
   
   # create template SPC/horizon data to insert perturb()-ed depths
   p.sub <- duplicate(p, n)
@@ -262,9 +260,19 @@ perturb <- function(p,
   # insert values
   nd$V1 <- res
   
-  FUN <- cumsum
+  FUN <- function(x) {
+    x[x < min.thickness] <- min.thickness
+    cumsum(x)
+  }
+
   if (!is.null(boundary.attr)) {
-    FUN <- function(x) x
+    FUN <- function(x) {
+      x2 <- abs(diff(x))
+      x2[x2 < min.thickness] <- min.thickness
+      mx <- abs(min(x))
+      y <- cumsum(c(mx, x2))
+      y
+    }
   }
   
   # calculate new top and bottom depths

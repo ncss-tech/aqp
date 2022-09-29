@@ -76,6 +76,10 @@ test_that("perturb() (by thickness) works as expected (multiple profiles)", {
   horizons(sp3)$hz.sd <- 2
   expect_silent({ sim.1 <- perturb(sp3, n = 25, thickness.attr = "hz.sd") })
   expect_equal(length(sim.1), 250)
+  
+  # test min.thickness arg
+  thk <- sim.1$bottom - sim.1$top
+  expect_true(min(thk) >= 1)
 })
 
 test_that("perturb() (by boundary) works as expected (multiple profiles)", {
@@ -83,5 +87,9 @@ test_that("perturb() (by boundary) works as expected (multiple profiles)", {
   horizons(sp3)$hz.sd <- 2
   expect_silent({ sim.1 <- perturb(sp3, n = 25, boundary.attr = "hz.sd") })
   expect_equal(length(sim.1), 250)
+  
+  # test min.thickness arg
+  thk <- sim.1$bottom - sim.1$top
+  expect_true(min(thk) >= 1)
 })
 
