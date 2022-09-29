@@ -80,6 +80,9 @@ test_that("perturb() (by thickness) works as expected (multiple profiles)", {
   # test min.thickness arg
   thk <- sim.1$bottom - sim.1$top
   expect_true(min(thk) >= 1)
+  
+  # all results are logical
+  expect_true(all(checkHzDepthLogic(sim.1)$valid))
 })
 
 test_that("perturb() (by boundary) works as expected (multiple profiles)", {
@@ -91,5 +94,8 @@ test_that("perturb() (by boundary) works as expected (multiple profiles)", {
   # test min.thickness arg
   thk <- sim.1$bottom - sim.1$top
   expect_true(min(thk) >= 3)
+  
+  # all results are logical
+  expect_true(all(checkHzDepthLogic(sim.1)$valid))
 })
 
