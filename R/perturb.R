@@ -149,16 +149,18 @@ perturb <- function(p,
                     min.thickness = 1,
                     max.depth = NULL,
                     new.idname = 'pID') {
-  .FIRST <- NULL
+  
+  # aqp and data.table global definitions for keywords
+  .FIRST <- NULL; value <- NULL; md <- NULL; .N <- NULL; V1 <- NULL; .GRP <- NULL
+  
   custom.ids <- FALSE
+  by_thickness <- FALSE
   
   if ((missing(boundary.attr) && missing(thickness.attr)) ||
       !is.null(thickness.attr) && !is.null(boundary.attr) ||
       is.null(thickness.attr) && is.null(boundary.attr)) {
     stop("must provide one column name: thickness `thickness.attr` OR boundary `boundary.attr` containing horizon-level standard deviations", call. = FALSE)
   }
-  
-  by_thickness <- FALSE
   
   if (!is.null(thickness.attr)) {
     by_thickness <- TRUE
@@ -178,7 +180,7 @@ perturb <- function(p,
       message("if profile ID vector `id` is specified, `n` argument is ignored")
   }
 
-  hz <- horizons(p)
+  hz <- data.table::data.table(horizons(p))
   idn <- idname(p)
   depthz <- horizonDepths(p)
   mindepth <- p[, , .FIRST][[depthz[1]]]
@@ -221,47 +223,26 @@ perturb <- function(p,
     }
     varattr[ldx] <- 0
   }
-  
-  # for each horizon bottom depth (boundary) calculate the gaussian offset
-  
-  # this is a bit non-kosher, but rather than sorting to fix random depths
-  # that may be out of order, replace them iteratively until there are none
-  
-  # it is possible to specify SDs so large the loop below will not converge,
-  # so a hard break is triggered at 1000 iterations.
-  
+
   # in practice, qc warnings for improbably large SD would be useful
-  # say, if the SD is greater than 1/3 the hz thickness, you are likely to
-  # generate extreme values prone to causing logic errors;
   # could be data entry error or improbable class assignment
   #
-  # with irregular bounds, high SD could be intentional/desired -- if unstable
-  #  - enforcing some sort of sorting?
+  # with irregular bounds, high SD could be intentional
   #  - additional random processes: waves for wavy/irregular
   #  - allowing irregular boundaries to eclipse/omit thin layers?
   #  - presence/absence of broken horizons; could this be a separate random process?
-  #    would it require that volume or other % area field populated?
-  
-  # TODO: optimize
-  res <- do.call('rbind', lapply(seq_len(nrow(p)), function(i) {
-    new <- rnorm(n, perturb_var[i], varattr[i])
-    idx <- 1
-    counter <- 0
-    # TODO: do better
-    while (length(idx) > 0) {
-      if (counter > 1000) {
-        break
-      }
-      idx <- which(new <= perturb_var[pmax(1, i - 1)] | new >= perturb_var[pmin(i + 1, length(perturb_var))])
-      new[idx] <- rnorm(length(idx), perturb_var[i], varattr[i])
-      counter <- counter + 1
-    }
 
-    # aqp only supports integer depths
-    round(new)
-  }))
+  # calculate perturbed variable vector
+  # for each horizon bottom depth (boundary) calculate the gaussian offset
+  res <- hz[, list(rnorm(n, perturb_var[.GRP], varattr[.GRP]), 
+                   gidx = seq_len(n), pidx = .SD[[idn]]), 
+            by = list(hidx = seq_len(nrow(hz)))]
   
-  value <- NULL; md <- NULL; .N <- NULL; V1 <- NULL
+  if (length(p) == 1) {
+    res <- res[order(gidx)]$V1
+  } else {
+    res <- res[order(pidx, gidx)]$V1
+  }
   
   # create template SPC/horizon data to insert perturb()-ed depths
   p.sub <- duplicate(p, n)
@@ -278,12 +259,17 @@ perturb <- function(p,
                       md = mindepth), 
            on = ".oldID"]
   
-  # calculate perturbed variable vector
-  nd$V1 <- as.numeric(res)
+  # insert values
+  nd$V1 <- res
+  
+  FUN <- cumsum
+  if (!is.null(boundary.attr)) {
+    FUN <- function(x) x
+  }
   
   # calculate new top and bottom depths
-  nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
-  nd$.newbot <- nd[, cumsum(md[1] + V1), by = c("id")]$V1
+  nd$.newtop <- nd[, FUN(c(md[1], V1))[1:.N], by = c("id")]$V1
+  nd$.newbot <- nd[, FUN(md[1] + V1), by = c("id")]$V1
   
   # replace in template SPC
   p.sub[[depthz[1]]] <- nd$.newtop
