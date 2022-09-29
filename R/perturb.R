@@ -149,10 +149,11 @@ perturb <- function(p,
                     min.thickness = 1,
                     max.depth = NULL,
                     new.idname = 'pID') {
-  
+  .FIRST <- NULL
   custom.ids <- FALSE
   
-  if (!is.null(thickness.attr) && !is.null(boundary.attr) |
+  if ((missing(boundary.attr) && missing(thickness.attr)) ||
+      !is.null(thickness.attr) && !is.null(boundary.attr) ||
       is.null(thickness.attr) && is.null(boundary.attr)) {
     stop("must provide one column name: thickness `thickness.attr` OR boundary `boundary.attr` containing horizon-level standard deviations", call. = FALSE)
   }
@@ -178,17 +179,19 @@ perturb <- function(p,
   }
 
   hz <- horizons(p)
-  
-  if (by_thickness) {
-    bounds <- hz[[thickness.attr]]
-  } else {
-    bounds <- hz[[boundary.attr]]
-  }
-  
+  idn <- idname(p)
   depthz <- horizonDepths(p)
   mindepth <- p[, , .FIRST][[depthz[1]]]
 
-  if (!is.numeric(bounds) | !length(bounds) == nrow(p)) {
+  # setup for variable being perturbed
+  if (by_thickness) {
+    varattr <- hz[[thickness.attr]]
+  } else {
+    varattr <- hz[[boundary.attr]]
+  }
+  
+  # logic checks
+  if (!is.numeric(varattr) | !length(varattr) == nrow(p)) {
     stop("variance attribute must be a numeric column  name in `p` containing standard deviations of horizon or boundary thickness")
   }
 
@@ -216,7 +219,7 @@ perturb <- function(p,
         ldx <- perturb_var > max.depth
       }
     }
-    bounds[ldx] <- 0
+    varattr[ldx] <- 0
   }
   
   # for each horizon bottom depth (boundary) calculate the gaussian offset
@@ -239,8 +242,9 @@ perturb <- function(p,
   #  - presence/absence of broken horizons; could this be a separate random process?
   #    would it require that volume or other % area field populated?
   
+  # TODO: optimize
   res <- do.call('rbind', lapply(seq_len(nrow(p)), function(i) {
-    new <- rnorm(n, perturb_var[i], bounds[i])
+    new <- rnorm(n, perturb_var[i], varattr[i])
     idx <- 1
     counter <- 0
     # TODO: do better
@@ -249,43 +253,59 @@ perturb <- function(p,
         break
       }
       idx <- which(new <= perturb_var[pmax(1, i - 1)] | new >= perturb_var[pmin(i + 1, length(perturb_var))])
-      new[idx] <- rnorm(length(idx), perturb_var[i], bounds[i])
+      new[idx] <- rnorm(length(idx), perturb_var[i], varattr[i])
       counter <- counter + 1
     }
 
-    # finally, no depths should be negative
-    #  and aqp only supports integer depths
-    return(round(pmax(new, 0)))
+    # aqp only supports integer depths
+    round(new)
   }))
   
-  value <- NULL; md <- NULL; .N <- NULL
+  value <- NULL; md <- NULL; .N <- NULL; V1 <- NULL
+  
+  # create template SPC/horizon data to insert perturb()-ed depths
   p.sub <- duplicate(p, n)
   h.sub <- horizons(p.sub)
-    
+  
+  # relate .oldID to idname(p) in horizon data.frame
   idlut <- p.sub[[".oldID"]]
-  names(idlut) <- p.sub[[idname(p)]]
-  nd <- data.table::data.table(id = h.sub[[idname(p)]],
-                               .oldID = idlut[h.sub[[idname(p)]]])
+  names(idlut) <- p.sub[[idn]]
+  nd <- data.table::data.table(id = h.sub[[idn]],
+                               .oldID = idlut[h.sub[[idn]]])
+  
+  # join in mindepth by .oldID
   nd <- nd[data.frame(.oldID = profile_id(p), 
                       md = mindepth), 
            on = ".oldID"]
+  
+  # calculate perturbed variable vector
   nd$V1 <- as.numeric(res)
+  
+  # calculate new top and bottom depths
   nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
   nd$.newbot <- nd[, cumsum(md[1] + V1), by = c("id")]$V1
+  
+  # replace in template SPC
   p.sub[[depthz[1]]] <- nd$.newtop
   p.sub[[depthz[2]]] <- nd$.newbot
     
-  if (custom.ids & length(unique(id)) == length(p.sub))
+  # replace ID values if needed
+  if (custom.ids & length(unique(id)) == length(p.sub)) {
     profile_id(p.sub) <- id
-
-  if (!missing(new.idname)) {
-    old.idname <- idname(p)
-    p.sub[[new.idname]] <- p.sub[[old.idname]]
-    p.sub@horizons[[new.idname]] <- horizons(p.sub)[[old.idname]]
-    p.sub@idcol <- new.idname
-    p.sub@horizons[[old.idname]] <- NULL
   }
   
+  # replace ID name if needed
+  if (!missing(new.idname)) {
+    # these are derived from a valid ID in p.sub
+    p.sub[[new.idname]] <- p.sub[[idn]]
+    p.sub@horizons[[new.idname]] <- horizons(p.sub)[[idn]]
+    
+    # TODO: safe idname replacement method
+    p.sub@idcol <- new.idname
+    p.sub@horizons[[idn]] <- NULL
+  }
+  
+  # transfers @metadata slot p->p.sub
   .transfer.metadata.aqp(p, p.sub)
 }
 
