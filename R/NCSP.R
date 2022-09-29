@@ -1,12 +1,189 @@
 
 
-## future home of profile_compare() re-write
+## TODO: this can be run in parallel
+
+
+#' @title Internal wrapper for distance calculations by NCSP
+#'
+#' @param m `data.frame`, rows are individuals columns are characteristics, IDs should be saved in rownames
+#' 
+#' @param sm vector, a single row from the soil/non-soil matrix, must be equal to `nrow(m)`
+#' 
+#' @param w numeric vector of length `ncol(m)`, optionally specified for weighted distance calc
+#' @param ... additional arguments to `cluster::daisy()`
+#'
+#' @return dissimilarity object (cluster package)
+#' 
+#' @keywords internal
+#' @noRd
+#'
+#' @examples
+.NCSP_distanceCalc <- function(m, sm, w = NULL) {
+  
+  # maximum distance used to replace soil + non-soil distances
+  # set to 1 for metric = gower
+  d.max <- 1
+  
+  # distance used to replace (NA) non-soil + non-soil distances
+  d.notsoil <- 0
+  
+  # distance used to replace NA (NA in m, not related to non-soil evaluation)
+  d.NA <- 0
+  
+  # sanity checking on w is performed outside of this function
+  if(!is.null(w)) {
+    # weighted distances
+    d <- cluster::daisy(m, metric = 'gower', weights = w) 
+  } else {
+    # standard, un-weighted distances
+    d <- cluster::daisy(m, metric = 'gower')
+  }
+  
+  
+  # save original attributes from daisy()
+  a <- attributes(d)
+  
+  # convert to full matrix for manipulation by row/col index
+  d <- as.matrix(d)
+  
+  # locate soil / non-soil pairs
+  # TRUE = soil | FALSE = non-soil
+  idx.notsoil <- which(!sm)
+  
+  # of soil / non-soil pairs exist, process accordingly
+  if(length(idx.notsoil) > 0) {
+    
+    ## create logical matrix of soil + non-soil co-occurences
+    ## --> set to MAX distance
+    #
+    # soil XOR non-soil -> TRUE
+    # soil XOR soil -> FALSE
+    # non-soil XOR non-soil -> FALSE
+    sm.mat <- outer(sm, sm, FUN = xor)
+    d[which(sm.mat)] <- d.max
+    
+    
+    ## create logical matrix of non-soil + non-soil co-occurences
+    ## --> set to d.notsoil
+    #
+    # !soil AND !non-soil -> FALSE
+    # !soil AND !soil -> FALSE
+    # !non-soil AND !non-soil -> FALSE
+    sm.mat <- outer(!sm, !sm, FUN = '&')
+    d[which(sm.mat)] <- d.notsoil
+    
+    ## any remaining NA are related to missing data in m
+    ## --> set to distance given to missing data
+    d[which(is.na(d))] <- d.NA
+    
+    # reset diagonal
+    diag(d) <- 0
+  }
+  
+  
+  ## replace remaining NA (missing data in m) with min distance
+  idx.NA <- which(is.na(d))
+  d[idx.NA] <- d.NA
+  
+  
+  # back to reduced dist form and reset attributes
+  d <- as.dist(d)
+  attributes(d) <- a
+  
+  return(d)
+  
+}
+
+
+
+
+
 ## name suggested by Jon Maynard
 ## ideas, commentary, updates c/o Maynard et al. 2020
 
 
+#' @title Numerical Classification of Soil Profiles
+#' @description Replaces `profile_compare()`.
+#' 
+#' Performs a numerical comparison of soil profiles using named properties,
+#' based on a weighted, summed, depth-segment-aligned dissimilarity
+#' calculation. The site-level and
+#' horizon-level dissimilarity matrices are then re-scaled and averaged.
+#'
+#' Variability in soil depth can interfere significantly with the calculation
+#' of between-profile dissimilarity-- what is the numerical ``distance'' (or
+#' dissimilarity) between a slice of soil from profile A and the corresponding,
+#' but missing, slice from a shallower profile B? Gower's distance metric would
+#' yield a NULL distance, despite the fact that intuition suggests otherwise:
+#' shallower soils should be more dissimilar from deeper soils. For example,
+#' when a 25 cm deep profile is compared with a 50 cm deep profile, numerical
+#' distances are only accumulated for the first 25 cm of soil (distances from
+#' 26 - 50 cm are NULL). When summed, the total distance between these profiles
+#' will generally be less than the distance between two profiles of equal
+#' depth. Our algorithm has an option (setting replace_na=TRUE) to replace NULL
+#' distances with the maximum distance between any pair of profiles for the
+#' current depth slice. In this way, the numerical distance between a slice of
+#' soil and a corresponding slice of non-soil reflects the fact that these two
+#' materials should be treated very differently (i.e. maximum dissimilarity).
+#'
+#' This alternative calculation of dissimilarities between soil and non-soil
+#' slices solves the problem of comparing shallow profiles with deeper
+#' profiles. However, it can result in a new problem: distances calculated
+#' between two shallow profiles will be erroneously inflated beyond the extent
+#' of either profile's depth. Our algorithm has an additional option (setting
+#' add_soil_flag=TRUE) that will preserve NULL distances between slices when
+#' both slices represent non-soil material. With this option enabled, shallow
+#' profiles will only accumulate mutual dissimilarity to the depth of the
+#' deeper profile.
+#'
+#' Slices
+#' are classified as 'soil' down to the maximum depth to which at least one of
+#' variables used in the dissimilarity calculation is not NA. This will cause
+#' problems when profiles within a collection contain all NAs within the
+#' columns used to determine dissimilarity. An approach for identifying and
+#' removing these kind of profiles is presented in the examples section below.
+#'
+#' A notice is issued if there are any NA values within the matrix used for
+#' distance calculations, as these values are optionally replaced by the max
+#' dissimilarity.
+#'
+#' Our approach builds on the work of (Moore, 1972) and the previously
+#' mentioned depth-slicing algorithm.
+#' 
+#' 
+#' @param x x
+#' @param vars x
+#' @param var.wt x
+#' @param maxDepth x
+#' @param k x
+#' @param rescaleResult x
+#' @param progress x
+#' @param verbose x
+#' @param returnDepthDistances x
+#'
+#' @noRd
 
-.NCSP <- function(x, vars, maxDepth = max(x), k = 0, rescaleResult = FALSE, trace = NULL) {
+
+## TODO:
+# * finish testing / comparing
+# * benchmarking 
+# * integrate dist(site data)
+# * weighted mean of D_hz + D_site, user-defined weights
+# * expose dice() fm
+# * parallel operation
+# * progress bar for large SPCs
+
+
+NCSP <- function(x, 
+                  vars, 
+                  var.wt = rep(1, times = length(vars)), 
+                  maxDepth = max(x), 
+                  k = 0, 
+                  rescaleResult = FALSE, 
+                  progress = TRUE,
+                  verbose = TRUE, 
+                  returnDepthDistances = FALSE
+) {
 
   
   ## depreciated arguments
@@ -19,7 +196,6 @@
   # replace_na
   # add_soil_flag
   # strict_hz_eval
-  # progress
   # plot.depth.matrix
   # verbose
   
@@ -42,17 +218,14 @@
   }
   
   
+  
+  ## TODO: reconsider hard-coded top depth
   ## truncate at maxDepth
   x <- trunc(x, 0, maxDepth)
-  
-  ## sort by ID / top depth
   
   
   
   ## variables used in NCSP algorithm
-  
-  # number of profiles
-  n.profiles <- length(x)
   
   # number of variables
   n.vars <- length(vars)
@@ -74,21 +247,43 @@
   # it could be better to perform sanity checks on horizonation outside of this function
   
   .fm <- as.formula(
-    sprintf(' ~ %s',
+    sprintf('0:%s ~ %s',
+            maxDepth - 1,
             paste0(h.vars, collapse = ' + '))
   )
   
-  s <- dice(x, fm = .fm, SPC = TRUE, pctMissing = FALSE, strict = TRUE)
+  ## TODO: consider exposing depth logic subset options in arguments to NCSP
+  ##       for now, entire profiles are subset
+  
+  ## TODO: expose LHS of formula to dice()
+  
+  ## dice
+  s <- suppressMessages(dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = FALSE, strict = TRUE))
+  
+  # number of profiles, accounting for subset via dice()
+  n.profiles <- length(s)
+  
+  # keep track of removed profiles, due to hz logic errors
+  .removed.profiles <- metadata(s)$removed.profiles
+  if(length(nchar(.removed.profiles)) > 0) {
+    warning('hz depth logic subset has removed some profiles')
+  }
   
   ## slice sequence
   sliceSequence <- 1:max(s)
   
   ## add soil flag, previously optional now required
-  # using same datastructure / conventions as profile_compare()
-  # logical matrix [length(slice_idx), 1:n.profiles]
+  # using same data structure / conventions as profile_compare()
+  # logical matrix [sliceSequence, 1:n.profiles]
+  #                       [slices, profiles]
   
   ## TODO: ensure that in-line NA are correctly handled
   ## TODO: in-line NA may require another argument to determine assumptions
+  ## TODO: consider: refactor into external function, supply soil.matrix as an argument
+  
+  ## TODO: can we use pctMissing from dice() ?
+  
+  ## this is slow
   
   # derive soil / non-soil matrix 
   # rows are links to depth slices defined in depthSequence vect
@@ -116,10 +311,70 @@
     
   })
   
+  # flatten soil matrix
+  # rows are depth slices
+  # columns are individuals
   soil.matrix <- do.call('cbind', soil.matrix)
   
-  ## stop here for now
-  return(soil.matrix)
+  
+  ## evaluate distances by slice
+  ## accounting for soil/non-soil comparisons
+  ## filling NA due to missing data
+  .d <- list()
+  .ids <- profile_id(s)
+  
+  ## TODO: basic progress reporting
+  
+  ## TODO: convert this to parallel evaluation, maybe furrr package
+  message(paste('Computing dissimilarity matrices from', n.profiles, 'profiles'), appendLF = FALSE)
+  for(i in sliceSequence) {
+    
+    # horizon data for slice i
+    .s <- horizons(s[, i])
+    # characteristics for slice i
+    .s <- .s[, vars, drop = FALSE]
+    row.names(.s) <- .ids
+    
+    .d[[i]] <- .NCSP_distanceCalc(m = .s, sm = soil.matrix[i, ], w = var.wt)
+  }
+  
+  
+  ## optionally return list of distance matrices
+  if(returnDepthDistances) {
+    # depth-weighting
+    for(i in sliceSequence)
+      .d[[i]] <- .d[[i]] * w[i]
+    return(.d)
+  }
+  
+  
+  ## flatten list of distance matrices
+  .d <- Reduce('+', .d)
+  
+  
+  ## optionally normalize by dividing by max(D)
+  # this is important when incorporating site data
+  # TODO: causes problems for some functions like MASS::sammon() ?
+  if(rescaleResult) {
+    .d <- .d / max(.d, na.rm = TRUE)
+  }
+    
+  
+  
+  ## metadata
+  # distance metric 
+  attr(.d, 'Distance Metric') <- 'Gower'
+  
+  # removed profiles, if any
+  attr(.d, 'removed.profiles') <- .removed.profiles
+
+  # remove warnings about NA from cluster::daisy()
+  attr(.d, 'NA.message') <- NULL
+  
+  
+  # print total size of D
+  message(paste(" [", signif(object.size(.d) / 1024^2, 1), " Mb]", sep=''))
+  return(.d)
   
   
   
