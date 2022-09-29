@@ -1,9 +1,10 @@
-# aqp 2.0 (2022-08-24)
+# aqp 2.0 (2022-10-01)
 This is major update to aqp that may create some issues for scripts that depend on aqp < 1.42, particularly those relying on `slice()` or `slab()`.
 
 Notable changes include:
  * deprecation of `slice()` in favor of the new, faster, more robust implementation in `dice()` 
  * complete overhaul of `slab()`, with new arguments, faster back-end, and weighted aggregation implemented (finally)
+ * deprecatgion of `profile_compare()` in favor of the `NCSP()`--a complete overhaul based on Maynard et al., 2020
 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
