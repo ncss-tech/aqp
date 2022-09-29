@@ -69,12 +69,18 @@ plot(
 SoilTaxonomyDendrogram(osds, width=0.3, name.style = 'center-center', cex.taxon.labels = 1)
 
 
-
-
-
-
-
 par(mar=c(3,8,3,1), mfcol=c(1,1))
 plot(TukeyHSD(d.betadisper, conf.level = 0.85), las=1)
+
+
+
+##############
+
+
+
+
+
+
+
 
 
