@@ -239,6 +239,8 @@ perturb <- function(p,
                    pidx = .SD[[idn]]), # profile ID
             by = list(hidx = seq_len(nrow(hz)))]
   
+  res[res < min.thickness] <- min.thickness
+  
   # order result by profile*rep
   res <- res[order(pidx, gidx)]$V1
   
@@ -260,24 +262,9 @@ perturb <- function(p,
   # insert values
   nd$V1 <- res
   
-  FUN <- function(x) {
-    x[x < min.thickness] <- min.thickness
-    cumsum(x)
-  }
-
-  if (!is.null(boundary.attr)) {
-    FUN <- function(x) {
-      x2 <- abs(diff(x))
-      x2[x2 < min.thickness] <- min.thickness
-      mx <- abs(min(x))
-      y <- cumsum(c(mx, x2))
-      y
-    }
-  }
-  
   # calculate new top and bottom depths
-  nd$.newtop <- nd[, FUN(c(md[1], V1))[1:.N], by = c("id")]$V1
-  nd$.newbot <- nd[, FUN(md[1] + V1), by = c("id")]$V1
+  nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
+  nd$.newbot <- nd[, cumsum(md[1] + V1), by = c("id")]$V1
   
   # replace in template SPC
   p.sub[[depthz[1]]] <- nd$.newtop
