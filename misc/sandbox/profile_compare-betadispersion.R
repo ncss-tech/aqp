@@ -24,8 +24,10 @@ x$.flag <- profileApply(x, function(i) {
 # subset collection
 x <- subset(x, .flag == TRUE)
 
+x <- HzDepthLogicSubset(x)
+
 # distance matrix
-d <- profile_compare(x, vars=c('clay', 'estimated_ph_h2o', 'cec7', 'estimated_om'), k=0, max_d=120, rescale.result=FALSE)
+d <- NCSP(x, vars=c('clay', 'estimated_ph_h2o', 'cec7', 'estimated_om'), k=0, maxDepth = 120)
 
 # divisive hierarchical clustering
 dd <- diana(d)

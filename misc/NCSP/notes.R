@@ -21,7 +21,7 @@ d1 <- profile_compare(sp4, vars = c('Ca', 'CEC_7'), k = 0, max_d = 40)
 
 d2 <- NCSP(sp4, vars = c('Ca', 'CEC_7'), k = 0, maxDepth = 40)
 
-d3 <- NCSP(sp4, vars = c('Ca', 'CEC_7'), k = 0, maxDepth = 40, var.wt = c(1, 5))
+d3 <- NCSP(sp4, vars = c('Ca', 'CEC_7'), k = 0, maxDepth = 40, weights = c(1, 5))
 
 d4 <- NCSP(sp4, vars = c('Ca', 'CEC_7'), k = 0, maxDepth = 40, rescaleResult = TRUE)
 
@@ -80,6 +80,28 @@ tanglegram(
   dendextend::rotate(hclust(d2), order = profile_id(sp4))
 )
 
+
+
+## single  values
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+hzdesgnname(sp4) <- 'name'
+
+d1 <- profile_compare(sp4, vars = c('Ca', 'Ca'), k = 0, max_d = 40)
+
+d2 <- NCSP(sp4, vars = c('Ca'), k = 0, maxDepth = 40)
+
+
+par(mfrow = c(2, 1), mar = c(0, 0, 3, 0))
+
+plotProfileDendrogram(sp4, diana(d1), scaling.factor = 1, y.offset = 5, width = 0.3, color = 'Ca', name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, rotateToProfileID = TRUE)
+
+plotProfileDendrogram(sp4, diana(d2), scaling.factor = 1, y.offset = 5, width = 0.3, color = 'Ca', name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, rotateToProfileID = TRUE)
+
+tanglegram(
+  dendextend::rotate(hclust(d1), order = profile_id(sp4)), 
+  dendextend::rotate(hclust(d2), order = profile_id(sp4))
+)
 
 
 

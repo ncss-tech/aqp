@@ -25,7 +25,7 @@
 
 \item{pctMissing}{compute "percent missing data" by slice (when \code{TRUE} expect 6-8x longer run time)}
 
-\item{fill}{logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in \code{fm}. Automatically set to \code{TRUE} when \code{fm} is specified. Backwards compatibility with \code{slice} is maintained by setting \code{fill = TRUE} with or without \code{fm}.}
+\item{fill}{logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in \code{fm}. Automatically set to \code{TRUE} when LHS of \code{fm} is specified. Backwards compatibility with \code{slice} is maintained by setting \code{fill = TRUE} with or without \code{fm}.}
 
 \item{strict}{perform horizon depth logic checking / flagging / removal}
 

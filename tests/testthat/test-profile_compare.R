@@ -37,7 +37,7 @@ test_that("profile_compare works as expected", {
   
   # compute betwee-profile dissimilarity, no depth weighting
   d.dis <- suppressMessages(profile_compare(d, vars=c('clay', 'ph', 'frags'), k=0, 
-                           max_d=61, replace_na=TRUE, add_soil_flag=TRUE))
+                                            max_d=61, replace_na=TRUE, add_soil_flag=TRUE))
   m <- as.matrix(d.dis)
   
   # results should be 3x3 distance matrix
@@ -52,34 +52,5 @@ test_that("profile_compare works as expected", {
   expect_equal(m[1,3], 49.02092, tolerance=0.00001)
   expect_equal(m[2,3], 45.94683, tolerance=0.00001)
 })
-
-
-##
-## TODO: this test no longer makes sense after aqpdf merge, standby...
-##
-
-# # ensure that tapply-based re sort of profile IDs doesn't throw an error
-# # this will not be a problem after the re-write
-# # https://github.com/ncss-tech/aqp/issues/7
-# test_that("profile_compare gracefully handles numeric IDs (#7)", {
-#   
-#   # this has been a problem for years, alpha-sorting changes ordering
-#   set.seed(1010101)
-#   s <- pbindlist(lapply(1:10, random_profile, SPC=TRUE))
-#   
-#   # expected ID orering after pbindlist() of random profiles
-#   expect_equal(profile_id(s), c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
-#   
-#   # expected ID ordering after rebuildSPC
-#   rebuilt.ids <- profile_id(rebuildSPC(s))
-#   expect_equal(rebuilt.ids, c("1", "10", "2", "3", "4", "5", "6", "7", "8", "9"))
-#   
-#   # this works as of 2020-06-09, but will not work with aqpdf branch
-#   # rebuildSPC() called by profile_compare, on input SPC re-orders via alpha-sort
-#   d <- profile_compare(s, vars=c('p1','p2'), max_d=100, k=0)
-#   
-#   # new sorting by rebuildSPC / tapply in profile_compare
-#   expect_equal(attr(d, 'Labels'), rebuilt.ids)
-# })
 
 
