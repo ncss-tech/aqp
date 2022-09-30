@@ -3,25 +3,34 @@
 \name{ph_to_rxnclass}
 \alias{ph_to_rxnclass}
 \alias{rxnclass_to_ph}
+\alias{ReactionClassLevels}
 \title{Convert pH to/from Reaction Classes}
 \usage{
-ph_to_rxnclass(x, halfclass = FALSE, as.is = FALSE, droplevels = TRUE)
+ph_to_rxnclass(x, halfclass = FALSE, as.is = TRUE, droplevels = TRUE)
 
 rxnclass_to_ph(x, halfclass = FALSE, digits = 2, simplify = TRUE)
+
+ReactionClassLevels(halfclass = FALSE, as.is = FALSE, droplevels = FALSE)
 }
 \arguments{
 \item{x}{input pH values (numeric; \code{ph_to_rxnclass()}) or reaction classes (character; \code{rxnclass_to_ph()})}
 
 \item{halfclass}{Split the standard classes in half for higher resolution? Default: \code{FALSE}}
 
+\item{as.is}{logical. Should character vectors be converted to factors? Default: \code{FALSE}}
+
+\item{droplevels}{logical. Drop unused levels in factors? Default: \code{FALSE}}
+
 \item{digits}{Number of digits after decimal place; Default: \code{2}. Used only for \code{rxnclass_to_ph()}}
 
 \item{simplify}{Simplify list result to numeric vector when length of result is 1? Default: \code{TRUE}}
 }
 \value{
-\code{ph_to_rxnclass()}: a vector of reaction classes
+\code{ph_to_rxnclass()}: a vector of reaction classes corresponding to numeric input in \code{x}; if \code{as.is=FALSE} an ordered factor using \code{ReactionClassLevels()}
 
-\code{rxnclass_to_ph()}: a list of high/low values of reaction class 1:1 with input; if simplify=TRUE and result is length 1, a numeric vector containing low and high values.
+\code{rxnclass_to_ph()}: a list of data.frame objects containing high/low values of reaction class 1:1 with input; if simplify=TRUE and input is  a data.frame.
+
+\code{ReactionClassLevels()}: ordered factor containing descriptive terms for reaction classes
 }
 \description{
 Convert pH to/from Reaction Classes
@@ -29,4 +38,8 @@ Convert pH to/from Reaction Classes
 \examples{
 ph_to_rxnclass(6.2)
 rxnclass_to_ph("slightly acid")
+
+rxnclass_to_ph(list(c("Slightly Acid", NA, "Moderately Acid"),
+                    c("Slightly Acid", NA, "Strongly Acid")), simplify = FALSE)
+ReactionClassLevels()
 }

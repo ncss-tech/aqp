@@ -43,7 +43,9 @@
 .phclass <- function(x, halfclass = FALSE) {
   lut1 <- .phclasses1(halfclass = halfclass)
   idx <- findInterval(x, lut1[["pH_low"]])
-  trimws(paste(lut1[["id"]][idx], lut1[["DescriptiveTerm"]][idx]))
+  res <- trimws(paste(lut1[["id"]][idx], lut1[["DescriptiveTerm"]][idx]))
+  res[res == "NA NA"] <- NA_character_
+  res
 }
 
 .phrange <- function(x, halfclass = FALSE) {
@@ -61,31 +63,71 @@
 #'
 #' @param x input pH values (numeric; `ph_to_rxnclass()`) or reaction classes (character; `rxnclass_to_ph()`)
 #' @param halfclass Split the standard classes in half for higher resolution? Default: `FALSE`
-#' @return `ph_to_rxnclass()`: a vector of reaction classes
+#' @param as.is logical. Should character vectors be converted to factors? Default: `FALSE`
+#' @param droplevels logical. Drop unused levels in factors? Default: `FALSE`
+#' @return `ph_to_rxnclass()`: a vector of reaction classes corresponding to numeric input in `x`; if `as.is=FALSE` an ordered factor using `ReactionClassLevels()`
 #' @export
 #' @rdname reaction
 #' @examples
 #' ph_to_rxnclass(6.2)
 ph_to_rxnclass <- function(x, 
                            halfclass = FALSE,
-                           as.is = FALSE,
-                           droplevels = TRUE) {
-  .phclass(x, halfclass = halfclass)
+                           as.is = TRUE,
+                           droplevels = FALSE) {
+  res <- .phclass(x, halfclass = halfclass)
+  
+  if (!as.is) {
+    res <- factor(res, levels = ReactionClassLevels(halfclass = halfclass, as.is = TRUE), ordered = TRUE)
+    if (droplevels) {
+      return(droplevels(res))
+    }
+  }
+  res
 }
 
 #' @param digits Number of digits after decimal place; Default: `2`. Used only for `rxnclass_to_ph()`
 #' @param simplify Simplify list result to numeric vector when length of result is 1? Default: `TRUE`
 #' @export
-#' @return `rxnclass_to_ph()`: a list of high/low values of reaction class 1:1 with input; if simplify=TRUE and result is length 1, a numeric vector containing low and high values.
+#' @return `rxnclass_to_ph()`: a list of data.frame objects containing high/low values of reaction class 1:1 with input; if simplify=TRUE and input is  a data.frame.
 #' @rdname reaction
 #' @examples 
 #' rxnclass_to_ph("slightly acid")
+#' 
+#' rxnclass_to_ph(list(c("Slightly Acid", NA, "Moderately Acid"),
+#'                     c("Slightly Acid", NA, "Strongly Acid")), simplify = FALSE)
 rxnclass_to_ph <- function(x, halfclass = FALSE, digits = 2, simplify = TRUE) {
   if (!is.list(x))
     x <- list(x)
   res <- lapply(x, function(y) round(.phrange(y, halfclass = halfclass), digits = digits))
   if (length(res) == 1 && simplify) {
-    return(res[[1]]) 
+    return(res[[1]])
+  }
+  res
+}
+
+#' @export
+#' @return `ReactionClassLevels()`: ordered factor containing descriptive terms for reaction classes 
+#' @rdname reaction
+#' @examples 
+#' ReactionClassLevels()
+ReactionClassLevels <- function(halfclass = FALSE, as.is = FALSE, droplevels = FALSE) {
+  rxn <- .reactionclass()
+  x <- rxn$DescriptiveTerm
+  
+  if (halfclass) {
+    i <- seq(1, length(x) * 2, 2)
+    i2 <- seq(2, length(x) * 2, 2)
+    x <- c(paste("Low", x), paste("High", x))
+    x <- x[order(c(i, i2))]
+  }
+  
+  if (as.is) {
+    return(x)
+  }
+  
+  res <- factor(x, levels = x, ordered = TRUE)
+  if (droplevels) {
+    return(droplevels(res))
   }
   res
 }
