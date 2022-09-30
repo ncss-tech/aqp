@@ -24,4 +24,4 @@ g$taxonname <- factor(g$taxonname)
 
 g.slab <- slab(g, taxonname ~ clay + estimated_ph_h2o + bs82 + wmpd)
 
-saveRDS(g.slab, file = 'misc/slab/slab-1.x-kssl.rds')
+saveRDS(g.slab, file = 'E:/temp/slab-1.x-kssl.rds')
