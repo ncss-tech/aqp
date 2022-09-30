@@ -147,8 +147,8 @@ ggplot(site(x), aes(x = pi, y = greatgroup)) +
   stat_summary(geom = 'point', fun = median, shape = 21, fill = 'black', col = 'white', cex = 2) +
   scale_color_brewer() + 
   scale_x_continuous(n.breaks = 16, limits = c(0, 1)) +
-  xlab('CEC by Ammonium Acetate at pH 7 (cmol[+]/kg), <2mm Fraction') + ylab('') +
-  labs(title = 'Interpretation of Clay Fraction Mineralogy (XRD), KSSL Snapshot', color = 'Interval')
+  xlab('Profile Information Index') + ylab('') +
+  labs(title = 'Profile Information Index for Select Greatgroup Taxa', color = 'Interval')
 
 
 ##### 
