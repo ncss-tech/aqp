@@ -177,6 +177,9 @@
 # * add Maynard et all. reference
 # * list-output, with diagnostics and other interesting information
 
+## Ideas:
+# * see L1_profiles.R for ideas / examples related to selecting logical "bottom depths"
+
 ## name suggested by Jon Maynard
 ## ideas, commentary, updates c/o Maynard et al. 2020
 
