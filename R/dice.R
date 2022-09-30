@@ -223,6 +223,8 @@ setGeneric("dice", function(x,
   }
   
   # slice-wise "percent missing" calculation
+  ## NOTE: this does not exclude horizon metadata columns like hzname, hztexture
+  ##       -> unless formula RHS is specified, but not with ~ .
   if (pctMissing) {
     
     # this is quite slow: DT -> DF -> matrix -> apply (8x longer)

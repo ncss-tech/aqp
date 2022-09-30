@@ -58,7 +58,36 @@ tanglegram(
 
 
 
+
+## single missing values
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+hzdesgnname(sp4) <- 'name'
+
+d1 <- profile_compare(sp4, vars = c('Ca', 'K'), k = 0, max_d = 40)
+
+d2 <- NCSP(sp4, vars = c('Ca', 'K'), k = 0, maxDepth = 40)
+
+
+par(mfrow = c(2, 1), mar = c(0, 0, 3, 0))
+
+plotProfileDendrogram(sp4, diana(d1), scaling.factor = 1, y.offset = 5, width = 0.3, color = 'K', name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, rotateToProfileID = TRUE)
+
+plotProfileDendrogram(sp4, diana(d2), scaling.factor = 1, y.offset = 5, width = 0.3, color = 'K', name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, rotateToProfileID = TRUE)
+
+tanglegram(
+  dendextend::rotate(hclust(d1), order = profile_id(sp4)), 
+  dendextend::rotate(hclust(d2), order = profile_id(sp4))
+)
+
+
+
+
 ## profile corruption / dice()
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+hzdesgnname(sp4) <- 'name'
+
 sp4$top[2] <- sp4$top[1]
 
 d5 <- NCSP(sp4, vars = c('Ca', 'CEC_7'), k = 0, maxDepth = 40, var.wt = c(1, 5))
@@ -82,7 +111,7 @@ v <-  c('p1', 'p2', 'p3', 'p4')
 # ~ 12 seconds
 system.time(d1 <- profile_compare(x, vars = v, k = 0, max_d = 100))
 
-# 14 seconds
+# ~ 13 seconds
 system.time(d2 <- NCSP(x, vars = v, k = 0, maxDepth = 100))
 
 # bench::mark(

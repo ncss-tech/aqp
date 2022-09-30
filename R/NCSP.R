@@ -256,9 +256,11 @@ NCSP <- function(x,
   ##       for now, entire profiles are subset
   
   ## TODO: expose LHS of formula to dice()
+  ## NOTE: dice() LHS usually starts from 0, sliceSequence and soil.matrix are indexed from 1
   
   ## dice
-  s <- suppressMessages(dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = FALSE, strict = TRUE))
+  # pctMissing is used to develop soil/non-soil matrix
+  s <- suppressMessages(dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = TRUE, strict = TRUE))
   
   # number of profiles, accounting for subset via dice()
   n.profiles <- length(s)
@@ -279,42 +281,54 @@ NCSP <- function(x,
   
   ## TODO: ensure that in-line NA are correctly handled
   ## TODO: in-line NA may require another argument to determine assumptions
-  ## TODO: consider: refactor into external function, supply soil.matrix as an argument
+  ## TODO: define soil / non-soil using pattern matching on horizon designation
   
-  ## TODO: can we use pctMissing from dice() ?
+  # use a vector of horizon (slice) indices to extract all pctMissing values
+  # develop a matrix from these
+  soil.matrix <- matrix(
+    s[, sliceSequence][['.pctMissing']], 
+    ncol = n.profiles, 
+    nrow = length(sliceSequence), 
+    byrow = FALSE
+  )
   
-  ## this is slow
+  # "soil" has a pctMising very close to 0
+  soil.matrix <- soil.matrix < 0.00001
+  # keep track of profile IDs
+  dimnames(soil.matrix)[[2]] <- profile_id(s)
   
-  # derive soil / non-soil matrix 
-  # rows are links to depth slices defined in depthSequence vect
-  soil.matrix <- profileApply(s, simplify = FALSE, FUN = function(i) {
-    
-    # working only with horizon variables
-    .h <- horizons(i)[, h.vars, drop = FALSE]
-    
-    ## TODO: use complete.cases, or depth to ALL missing data?
-    
-    # indices to slices not missing ALL hz vars
-    .fulldata_idx <- which(
-      apply(.h[, h.vars, drop = FALSE], MARGIN = 1, FUN = function(j) {
-      all(!is.na(j))
-    })
-    )
-    
-    ## TODO: ensure that nrow(soil.matrix) is correctly defined
-    
-    # soil = TRUE / non-soil = FALSE
-    .res <- vector(mode = 'logical', length = length(sliceSequence))
-    .res[.fulldata_idx] <- TRUE
-    
-    return(.res)
-    
-  })
-  
-  # flatten soil matrix
-  # rows are depth slices
-  # columns are individuals
-  soil.matrix <- do.call('cbind', soil.matrix)
+  # ## previous version, quite slow
+  # # derive soil / non-soil matrix 
+  # # rows are links to depth slices defined in depthSequence vect
+  # soil.matrix <- profileApply(s, simplify = FALSE, FUN = function(i) {
+  #   
+  #   # working only with horizon variables
+  #   .h <- horizons(i)[, h.vars, drop = FALSE]
+  #   
+  #   ## TODO: use complete.cases, or depth to ALL missing data?
+  #   
+  #   # indices to slices not missing ALL hz vars
+  #   .fulldata_idx <- which(
+  #     apply(.h[, h.vars, drop = FALSE], MARGIN = 1, FUN = function(j) {
+  #     all(!is.na(j))
+  #   })
+  #   )
+  #   
+  #   ## TODO: ensure that nrow(soil.matrix) is correctly defined
+  #   
+  #   # soil = TRUE / non-soil = FALSE
+  #   # .res is initialized with all FALSE
+  #   .res <- vector(mode = 'logical', length = length(sliceSequence))
+  #   .res[.fulldata_idx] <- TRUE
+  #   
+  #   return(.res)
+  #   
+  # })
+  # 
+  # # flatten soil matrix
+  # # rows are depth slices
+  # # columns are individuals
+  # soil.matrix <- do.call('cbind', soil.matrix)
   
   
   ## evaluate distances by slice
@@ -347,6 +361,8 @@ NCSP <- function(x,
     return(.d)
   }
   
+  # print total size of D
+  message(paste(" [", signif(object.size(.d) / 1024^2, 1), " Mb]", sep=''))
   
   ## flatten list of distance matrices
   .d <- Reduce('+', .d)
@@ -371,9 +387,7 @@ NCSP <- function(x,
   # remove warnings about NA from cluster::daisy()
   attr(.d, 'NA.message') <- NULL
   
-  
-  # print total size of D
-  message(paste(" [", signif(object.size(.d) / 1024^2, 1), " Mb]", sep=''))
+  # done
   return(.d)
   
   
