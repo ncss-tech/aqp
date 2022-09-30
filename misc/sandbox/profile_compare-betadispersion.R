@@ -24,8 +24,10 @@ x$.flag <- profileApply(x, function(i) {
 # subset collection
 x <- subset(x, .flag == TRUE)
 
+x <- HzDepthLogicSubset(x)
+
 # distance matrix
-d <- profile_compare(x, vars=c('clay', 'estimated_ph_h2o', 'cec7', 'estimated_om'), k=0, max_d=120, rescale.result=FALSE)
+d <- NCSP(x, vars=c('clay', 'estimated_ph_h2o', 'cec7', 'estimated_om'), k=0, maxDepth = 120)
 
 # divisive hierarchical clustering
 dd <- diana(d)
@@ -69,12 +71,18 @@ plot(
 SoilTaxonomyDendrogram(osds, width=0.3, name.style = 'center-center', cex.taxon.labels = 1)
 
 
-
-
-
-
-
 par(mar=c(3,8,3,1), mfcol=c(1,1))
 plot(TukeyHSD(d.betadisper, conf.level = 0.85), las=1)
+
+
+
+##############
+
+
+
+
+
+
+
 
 

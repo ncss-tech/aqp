@@ -8,7 +8,7 @@ depths(sp4) <- id ~ top + bottom
 
 
 # depth-wise comparison of hz-level attributes to 50cm
-d <- profile_compare(sp4, vars=c('ex_Ca_to_Mg', 'K', 'sand'), k=0, max_d=50)
+d <- NCSP(sp4, vars=c('ex_Ca_to_Mg', 'K', 'sand'), k=0, maxDepth = 49)
 
 # k-medoids clustering into 3 groups
 clust <- pam(x = d, diss = TRUE, k = 3)

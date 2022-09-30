@@ -223,6 +223,8 @@ setGeneric("dice", function(x,
   }
   
   # slice-wise "percent missing" calculation
+  ## NOTE: this does not exclude horizon metadata columns like hzname, hztexture
+  ##       -> unless formula RHS is specified, but not with ~ .
   if (pctMissing) {
     
     # this is quite slow: DT -> DF -> matrix -> apply (8x longer)
@@ -289,7 +291,7 @@ setGeneric("dice", function(x,
 #' 
 #' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
 #' 
-#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
+#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when LHS of `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
 #' 
 #' @param strict perform horizon depth logic checking / flagging / removal
 #' 
