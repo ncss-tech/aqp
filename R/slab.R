@@ -155,7 +155,7 @@
 	  vars.numeric.test <- is.numeric(data[[vars]])
 	}
 
-	# sanity check: all numeric, or single character/factor
+	# # sanity check: all numeric, or single character/factor
 	if (any(!vars.numeric.test) & length(vars) > 1) {
 	  stop('mixed variable types and multiple categorical variables are not currently supported in the same call to slab', call. = FALSE)
 	}
@@ -185,11 +185,6 @@
 	} else {
 	  .factorFlag <- FALSE
 	}
-
-	## Note: use of factor labels could be slowing things down...
-	## Note: this assumes ordering is correct in source data / segment labels
-	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
-	##       l <- split(data, data$seg.label, drop=FALSE)
 
 	# add segmenting label to data
  	data$seg.label <- .genSlabLabels2(object, data, slab.structure = slab.structure)
@@ -345,10 +340,10 @@ setGeneric("slab", function(object,
 #' @aliases slab slab2 genSlabLabels slab,SoilProfileCollection-method
 #' @docType methods
 #' @param object a SoilProfileCollection
-#' @param fm A formula: either `groups ~ var1 + var2 + var3' where named
+#' @param fm A formula: either `groups ~ var1 + var2 + var3` where named
 #' variables are aggregated within `groups' OR where named variables are
-#' aggregated across the entire collection ` ~ var1 + var2 + var3'. If `groups`
-#' is a factor it must not contain NA.
+#' aggregated across the entire collection ` ~ var1 + var2 + var3`. If `groups`
+#' is a factor it must not contain `NA`
 #' @param slab.structure A user-defined slab thickness (defined by an integer),
 #' or user-defined structure (numeric vector). See details below.
 #' @param strict logical: should horizons be strictly checked for
@@ -356,16 +351,16 @@ setGeneric("slab", function(object,
 #' @param byhz logical: should horizons or whole profiles be removed by logic checks in `strict`? Default `TRUE` removes only offending horizons, `FALSE` removes whole profiles with one or more illogical horizons.
 #' @param slab.fun Function used to process each 'slab' of data, ideally
 #' returning a vector with names attribute. Defaults to a wrapper function
-#' around \code{stats::quantile}. See details.
+#' around `stats::quantile()`. See details.
 #' @param cpm Strategy for normalizing slice-wise probabilities, dividing by
-#' either: number of profiles with data at the current slice (cpm=1), or by the
+#' either: number of profiles with data at the current slice (`cpm=1`), or by the
 #' number of profiles in the collection (cpm=2). Mode 1 values will always sum
 #' to the contributing fraction, while mode 2 values will always sum to 1.
 #' @param weights Column name containing site-level weights
-#' @param \dots further arguments passed to \code{slab.fun}
+#' @param \dots further arguments passed to `slab.fun`
 #' @return Output is returned in long format, such that slice-wise aggregates
 #' are returned once for each combination of grouping level (optional),
-#' variable described in the \code{fm} argument, and depth-wise 'slab'.
+#' variable described in the `fm` argument, and depth-wise 'slab'.
 #'
 #' Aggregation of numeric variables, using the default slab function:
 #' \describe{ \item{variable}{The names of variables included in the call to

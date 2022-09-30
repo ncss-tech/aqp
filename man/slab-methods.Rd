@@ -29,9 +29,8 @@ slab_function(
 \arguments{
 \item{object}{a SoilProfileCollection}
 
-\item{fm}{A formula: either \verb{groups ~ var1 + var2 + var3' where named variables are aggregated within }groups' OR where named variables are
-aggregated across the entire collection \verb{~ var1 + var2 + var3'. If}groups`
-is a factor it must not contain NA.}
+\item{fm}{A formula: either \code{groups ~ var1 + var2 + var3} where named
+variables are aggregated within \verb{groups' OR where named variables are aggregated across the entire collection } ~ var1 + var2 + var3\verb{. If }groups\verb{is a factor it must not contain}NA`}
 
 \item{slab.structure}{A user-defined slab thickness (defined by an integer),
 or user-defined structure (numeric vector). See details below.}
@@ -43,10 +42,10 @@ self-consistency?}
 
 \item{slab.fun}{Function used to process each 'slab' of data, ideally
 returning a vector with names attribute. Defaults to a wrapper function
-around \code{stats::quantile}. See details.}
+around \code{stats::quantile()}. See details.}
 
 \item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by
-either: number of profiles with data at the current slice (cpm=1), or by the
+either: number of profiles with data at the current slice (\code{cpm=1}), or by the
 number of profiles in the collection (cpm=2). Mode 1 values will always sum
 to the contributing fraction, while mode 2 values will always sum to 1.}
 
