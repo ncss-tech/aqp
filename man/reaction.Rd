@@ -6,7 +6,7 @@
 \alias{ReactionClassLevels}
 \title{Convert pH to/from Reaction Classes}
 \usage{
-ph_to_rxnclass(x, halfclass = FALSE, as.is = TRUE, droplevels = TRUE)
+ph_to_rxnclass(x, halfclass = FALSE, as.is = TRUE, droplevels = FALSE)
 
 rxnclass_to_ph(x, halfclass = FALSE, digits = 2, simplify = TRUE)
 
