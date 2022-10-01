@@ -23,5 +23,14 @@ g$taxonname <- tolower(g$taxonname)
 g$taxonname <- factor(g$taxonname)
 
 g.slab <- slab(g, taxonname ~ clay + estimated_ph_h2o + bs82 + wmpd)
+# saveRDS(g.slab, file = 'slab-1.x-kssl.rds')
+# saveRDS(g.slab, file = 'slab-2.x-kssl.rds')
 
-saveRDS(g.slab, file = 'E:/temp/slab-1.x-kssl.rds')
+# valid profiles only
+
+# keep only valid profiles
+g2 <- subset(g, checkHzDepthLogic(g)$valid)
+
+g.slab <- slab(g2, taxonname ~ clay + estimated_ph_h2o + bs82 + wmpd)
+# saveRDS(g.slab, file = 'slab-1.x-kssl-valid.rds')
+# saveRDS(g.slab, file = 'slab-2.x-kssl-valid.rds')
