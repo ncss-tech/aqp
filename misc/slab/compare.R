@@ -22,17 +22,18 @@ d <- diff_data(s1, s2) |>
   render_diff()
 
 # all profiles
+# re-order rows, use common column ordering
 s1 <- readRDS('misc/slab/slab-1.x-kssl.rds')
 s2 <- readRDS('misc/slab/slab-2.x-kssl.rds')
-s1 <- s1[order(s1$taxonname, s1$variable, s1$top), ]
-s2 <- s2[order(s2$taxonname, s2$variable, s2$top), ]
+s1 <- s1[order(s1$taxonname, s1$variable, s1$top), names(s1)]
+s2 <- s2[order(s2$taxonname, s2$variable, s2$top), names(s1)]
 
-# chaix is identical (1 column reordered)
+# chaix is identical
 d1 <- subset(s1, taxonname == 'chaix')
 d2 <- subset(s2, taxonname == 'chaix')
 d12 <- diff_data(d1,d2) |> render_diff()
 
-# holland is identical (1 column reordered)
+# holland is identical
 d1 <- subset(s1, taxonname == 'holland')
 d2 <- subset(s2, taxonname == 'holland')
 d12 <- diff_data(d1, d2) |> render_diff()
