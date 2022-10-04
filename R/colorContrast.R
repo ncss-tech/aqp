@@ -76,7 +76,7 @@ colorContrast <- function(m1, m2) {
 
   # sanity check, need this for color distance eval
   if(!requireNamespace('farver', quietly = TRUE))
-    stop('pleast install the `farver` package.', call.=FALSE)
+    stop('please install the `farver` package.', call.=FALSE)
 
   # sanity check: length of colors to compare should be equal
   if(length(m1) != length(m2)) {

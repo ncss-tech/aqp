@@ -10,6 +10,7 @@ NCSP(
   weights = rep(1, times = length(vars)),
   maxDepth = max(x),
   k = 0,
+  isColor = FALSE,
   rescaleResult = FALSE,
   progress = TRUE,
   verbose = TRUE,
@@ -26,6 +27,8 @@ NCSP(
 \item{maxDepth}{numeric, maximum depth of analysis}
 
 \item{k}{numeric, weighting coefficient, see examples}
+
+\item{isColor, }{logical: variables represent color, should be CIELAB coordinates (D65 illuminant), weights are ignored. Variables should be named \code{L}, \code{A}, \code{B} in specified in that order.}
 
 \item{rescaleResult}{logical, distance matrix is rescaled based on max(D)}
 

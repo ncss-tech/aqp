@@ -2,6 +2,11 @@
 
 ## TODO: this can be run in parallel
 
+## TODO: consider allowing variable color specifications
+
+
+## Note: sanity checking on w is performed outside of this function
+
 
 #' @title Internal wrapper for distance calculations by NCSP
 #'
@@ -10,18 +15,27 @@
 #' @param sm vector, a single row from the soil/non-soil matrix, must be equal to `nrow(m)`
 #' 
 #' @param w numeric vector of length `ncol(m)`, optionally specified for weighted distance calc
-#' @param ... additional arguments to `cluster::daisy()`
+#' 
+#' @param isColor logical, `m` contains CIELAB color coordinates, CIE2000 color contrast metric is used, requires `farver` package
 #'
 #' @return dissimilarity object (cluster package)
 #' 
 #' @keywords internal
 #' @noRd
 #'
-.NCSP_distanceCalc <- function(m, sm, w = NULL) {
+.NCSP_distanceCalc <- function(m, sm, w = NULL, isColor) {
   
   # maximum distance used to replace soil + non-soil distances
   # set to 1 for metric = gower
   d.max <- 1
+  
+  ## TODO: consider adding as an argument
+  # CIE2000 will requires an alternative max distance
+  # use something reasonable, as this function is applied slice-wise
+  # ~ Munsell value 1 -> 8 : dE00 ~ 70
+  if(isColor) {
+    d.max <- 70
+  }
   
   # distance used to replace (NA) non-soil + non-soil distances
   d.notsoil <- 0
@@ -29,21 +43,39 @@
   # distance used to replace NA (NA in m, not related to non-soil evaluation)
   d.NA <- 0
   
-  # sanity checking on w is performed outside of this function
-  if(!is.null(w)) {
-    # weighted distances
-    d <- cluster::daisy(m, metric = 'gower', weights = w) 
+  # number of individuals
+  n <- ncol(m)
+  
+  if(isColor) {
+    # CIE2000 color contrast
+    # weights are ignored
+    
+    ## TODO: verify result when NA are present in data matrix
+    # result is the full form of a distance matrix
+    d <- farver::compare_colour(
+      from = m, 
+      to = m, 
+      from_space = 'lab', 
+      to_space = 'lab',
+      method = 'CIE2000', 
+      white_from = 'D65'
+    )
+    
   } else {
-    # standard, un-weighted distances
-    d <- cluster::daisy(m, metric = 'gower')
+    # Gower distances
+    
+    if(!is.null(w)) {
+      # weighted distances
+      d <- cluster::daisy(m, metric = 'gower', weights = w) 
+    } else {
+      # standard, un-weighted distances
+      d <- cluster::daisy(m, metric = 'gower')
+    }
+    
+    # convert to full matrix for manipulation by row/col index
+    d <- as.matrix(d)
   }
   
-  
-  # save original attributes from daisy()
-  a <- attributes(d)
-  
-  # convert to full matrix for manipulation by row/col index
-  d <- as.matrix(d)
   
   # locate soil / non-soil pairs
   # TRUE = soil | FALSE = non-soil
@@ -52,7 +84,7 @@
   # of soil / non-soil pairs exist, process accordingly
   if(length(idx.notsoil) > 0) {
     
-    ## create logical matrix of soil + non-soil co-occurences
+    ## create logical matrix of soil + non-soil co-occurrences
     ## --> set to MAX distance
     #
     # soil XOR non-soil -> TRUE
@@ -62,7 +94,7 @@
     d[which(sm.mat)] <- d.max
     
     
-    ## create logical matrix of non-soil + non-soil co-occurences
+    ## create logical matrix of non-soil + non-soil co-occurrences
     ## --> set to d.notsoil
     #
     # !soil AND !non-soil -> FALSE
@@ -84,13 +116,10 @@
   idx.NA <- which(is.na(d))
   d[idx.NA] <- d.NA
   
-  
-  # back to reduced dist form and reset attributes
+  # back to reduced format as dist object 
   d <- as.dist(d)
-  attributes(d) <- a
   
   return(d)
-  
 }
 
 
@@ -147,12 +176,21 @@
 #' @param x `SoilProfileColection` object, should be pre-filtered to remove profiles with horizon depth logic, see [`HzDepthLogicSubset`]
 #'
 #' @param vars character vector, names of horizon attributes to use in the classification
+#' 
 #' @param weights numeric vector, same length as `vars`: variable importance weights, need not sum to 1
+#' 
 #' @param maxDepth numeric, maximum depth of analysis
+#' 
 #' @param k numeric, weighting coefficient, see examples
+#' 
+#' @param isColor, logical: variables represent color, should be CIELAB coordinates (D65 illuminant), weights are ignored. Variables should be named `L`, `A`, `B` in specified in that order.
+#' 
 #' @param rescaleResult logical, distance matrix is rescaled based on max(D)
+#' 
 #' @param progress logical, report progress
+#' 
 #' @param verbose logical, extra output messages
+#' 
 #' @param returnDepthDistances logical, return a list of distances by depth slice
 #'
 #' @author Dylan E. Beaudette and Jon Maynard
@@ -184,17 +222,19 @@
 ## ideas, commentary, updates c/o Maynard et al. 2020
 
 
-NCSP <- function(x, 
-                  vars, 
-                  weights = rep(1, times = length(vars)), 
-                  maxDepth = max(x), 
-                  k = 0, 
-                  rescaleResult = FALSE, 
-                  progress = TRUE,
-                  verbose = TRUE, 
-                  returnDepthDistances = FALSE
+NCSP <- function(
+    x, 
+    vars, 
+    weights = rep(1, times = length(vars)), 
+    maxDepth = max(x), 
+    k = 0, 
+    isColor = FALSE,
+    rescaleResult = FALSE, 
+    progress = TRUE,
+    verbose = TRUE, 
+    returnDepthDistances = FALSE
 ) {
-
+  
   
   ## depreciated arguments
   
@@ -223,6 +263,18 @@ NCSP <- function(x,
   if(maxDepth > max(x) | maxDepth < 1) {
     stop('`maxDepth` should be > 0 and <= max(`x`)', call. = FALSE)
   }
+  
+  # color comparisons require farver pkg for dE00
+  if(isColor & !requireNamespace('farver', quietly = TRUE)) {
+    stop('color comparison requires the `farver` package', call. =FALSE)
+    
+    # for now, color comparisons are based on CIELAB color coordinates
+    # must be named "L", "A", "B" and in that order
+    if(any(vars != c('L', 'A', 'B'))) {
+      stop('CIELAB color coordinates must be specified as `L`, `A`, `B` in `vars`', call. =FALSE)  
+    }
+  }
+    
   
   
   
@@ -365,7 +417,7 @@ NCSP <- function(x,
     row.names(.s) <- .ids
     
     # compute distance, with rules related to soil/non-soil matrix
-    .d[[i]] <- .NCSP_distanceCalc(m = .s, sm = soil.matrix[i, ], w = weights)
+    .d[[i]] <- .NCSP_distanceCalc(m = .s, sm = soil.matrix[i, ], w = weights, isColor = isColor)
     
     # apply depth-weighting
     .d[[i]] <- .d[[i]] * w[i]
@@ -394,14 +446,21 @@ NCSP <- function(x,
   
   
   ## metadata
-  # distance metric 
-  attr(.d, 'Distance Metric') <- 'Gower'
+  
+  # distance metric
+  if(isColor) {
+    attr(.d, 'Distance Metric') <- 'CIE2000'
+  } else {
+    attr(.d, 'Distance Metric') <- 'Gower'
+  }
   
   # removed profiles, if any
   attr(.d, 'removed.profiles') <- .removed.profiles
 
   # remove warnings about NA from cluster::daisy()
   attr(.d, 'NA.message') <- NULL
+  
+  # full set of profile IDs are stored in attr(.d, 'Labels')
   
   # done
   return(.d)
