@@ -180,6 +180,8 @@
 #'
 #' @param vars character vector, names of horizon attributes to use in the classification
 #' 
+#' @fm formula, formula as specified to [`dice()`], not yet implemented
+#' 
 #' @param weights numeric vector, same length as `vars`: variable importance weights, need not sum to 1
 #' 
 #' @param maxDepth numeric, maximum depth of analysis
@@ -211,15 +213,16 @@
 #' @export
 
 ## TODO:
+# * allow pre-diced() or mpspline()-ed input
 # * finish testing / comparing
-# * benchmarking 
 # * integrate dist(site data)
 # * weighted mean of D_hz + D_site, user-defined weights
 # * parallel operation
 # * progress bar for large SPCs
 # * think about a formula interface for simple specification of depths + vars
-# * expose dice() fm
+# * expose full dice() fm argument
 # * list-output, with diagnostics and other interesting information
+# * benchmarking 
 
 ## Ideas:
 # * see L1_profiles.R for ideas / examples related to selecting logical "bottom depths"
@@ -232,6 +235,7 @@
 NCSP <- function(
     x, 
     vars, 
+    fm = NULL, 
     weights = rep(1, times = length(vars)), 
     maxDepth = max(x), 
     k = 0, 
@@ -246,7 +250,6 @@ NCSP <- function(
   ## depreciated arguments
   
   # filter
-  # sample_interval
   # replace_na
   # add_soil_flag
   # strict_hz_eval
@@ -353,23 +356,22 @@ NCSP <- function(
   
   
   
-  
-  ## dice according to depthSequence and vars
-  # preserve SPC for access to all site data
-  # will have to think about arguments to dice() a little more
-  # it could be better to perform sanity checks on horizonation outside of this function
-  
-  .fm <- as.formula(
-    sprintf('0:%s ~ %s',
-            maxDepth - 1,
-            paste0(h.vars, collapse = ' + '))
-  )
+  ## TODO: expose LHS of formula to dice()
+  ## NOTE: dice() LHS usually starts from 0, sliceSequence and soil.matrix are indexed from 1
   
   ## TODO: consider exposing depth logic subset options in arguments to NCSP
   ##       for now, entire profiles are subset
   
-  ## TODO: expose LHS of formula to dice()
-  ## NOTE: dice() LHS usually starts from 0, sliceSequence and soil.matrix are indexed from 1
+  
+  ## dice according to depth sequence and vars
+  # preserve SPC for access to all site data
+  # it could be better to perform sanity checks on horizonation outside of this function
+  .seq <- seq(from = 0, to = maxDepth - 1, by = 1)
+  .fm <- as.formula(
+    sprintf('c(%s) ~ %s',
+            paste0(.seq, collapse = ','),
+            paste0(h.vars, collapse = ' + '))
+  )
   
   # reset removed.profiles metadata, it may have been set prior to calling NCSP()
   metadata(x)$removed.profiles <- NULL
@@ -421,8 +423,9 @@ NCSP <- function(
   ## filling NA due to missing data
   .d <- list()
   
+  ## TODO: more efficient data reshaping without calling horizons() in each iteration
   ## TODO: basic progress reporting
-  ## TODO: cachining identical slices
+  ## TODO: cache identical slices
   ## TODO: convert this to parallel evaluation, maybe furrr package
   
   ## TODO: if !returnDepthDistances: do not retain full list of dist mat, accumulate in single variable
