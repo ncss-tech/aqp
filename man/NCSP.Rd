@@ -86,6 +86,9 @@ dissimilarity.
 Our approach builds on the work of (Moore, 1972) and the previously
 mentioned depth-slicing algorithm.
 }
+\note{
+\code{NCSP()} will overwrite the \code{removed.profiles} metadata from \code{x}.
+}
 \references{
 \itemize{
 \item J.J Maynard, S.W. Salley, D.E. Beaudette, J.E Herrick. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Sci. Soc. Am. J. 2020; 84: 1675-1692. \doi{10.1002/saj2.20119}.

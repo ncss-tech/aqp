@@ -174,6 +174,7 @@
 #' Our approach builds on the work of (Moore, 1972) and the previously
 #' mentioned depth-slicing algorithm.
 #' 
+#' @note `NCSP()` will overwrite the `removed.profiles` metadata from `x`.
 #' 
 #' @param x `SoilProfileColection` object, should be pre-filtered to remove profiles with horizon depth logic, see [`HzDepthLogicSubset`]
 #'
@@ -196,7 +197,9 @@
 #' @param returnDepthDistances logical, return a list of distances by depth slice
 #'
 #' @author Dylan E. Beaudette and Jon Maynard
+#' 
 #' @seealso [`slice`], [`daisy`]
+#' 
 #' @references
 #'  - J.J Maynard, S.W. Salley, D.E. Beaudette, J.E Herrick. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Sci. Soc. Am. J. 2020; 84: 1675-1692. \doi{10.1002/saj2.20119}.
 #'  - D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, \doi{10.1016/j.cageo.2012.10.020}.
@@ -366,6 +369,9 @@ NCSP <- function(
   
   ## TODO: expose LHS of formula to dice()
   ## NOTE: dice() LHS usually starts from 0, sliceSequence and soil.matrix are indexed from 1
+  
+  # reset removed.profiles metadata, it may have been set prior to calling NCSP()
+  metadata(x)$removed.profiles <- NULL
   
   ## dice
   # pctMissing is used to develop soil/non-soil matrix
