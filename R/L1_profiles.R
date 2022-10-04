@@ -39,17 +39,18 @@
 
 
 ## TODO:
+# would it make more sense to select a single profile based on NCSP?
+# how does variable scale affect Gmedian? 
 # best practices for variable name compatibility (slab-style vs. original names)
 # slab-style support for arbitrary depth intervals via basis argument
 # most-likely horizon designation by chunk
-# parallel operation -> see dice()
 # parallel Gmedian computation
 # add principal components for viz
 # document!
 
 #' @title Create Representative Soil Profiles via L1 Estimator
 #' 
-#' @description The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
+#' @description The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis. Data should be well stratified by groups defined in `fm`, otherwise the L1 median may not make any sense.
 #' 
 #' See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutorial} for additional examples.
 #'
@@ -196,6 +197,9 @@ L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constan
   
   # transfer metadata
   agg <- .transfer.metadata.aqp(x, agg)
+  
+  # reset horizon designation for now
+  hzdesgnname(agg) <- NULL
   
   return(agg)
 }

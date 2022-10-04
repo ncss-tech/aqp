@@ -46,5 +46,5 @@ For large and potentially messy collections that may include missing horizon dep
 \code{\link[=repairMissingHzDepths]{repairMissingHzDepths()}}, \code{\link[=accumulateDepths]{accumulateDepths()}}, \code{\link[=fillHzGaps]{fillHzGaps()}}
 }
 \author{
-D.E. Beaudette, A.G. Brown
+D.E. Beaudette and A.G. Brown
 }

@@ -300,9 +300,14 @@ setGeneric("dice", function(x,
 #' @param verbose Print information about object size/memory usage. Default: `FALSE`
 #' 
 #' @details For large and potentially messy collections that may include missing horizon depth logic errors, consider using `repairMissingHzDepths()` before `dice()`. Consider using `accumulateDepths()` before invoking `dice()` on collections that may contain old-style O horizon notation (e.g. 5-0cm).
+#' 
 #' @aliases dice
+#' 
 #' @seealso [repairMissingHzDepths()], [accumulateDepths()], [fillHzGaps()]
+#' 
 #' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`
-#' @author D.E. Beaudette, A.G. Brown 
+#' 
+#' @author D.E. Beaudette and A.G. Brown 
+#' 
 #' @export
 setMethod(f = 'dice', signature(x = 'SoilProfileCollection'), .dice)

@@ -223,6 +223,7 @@
 
 ## Ideas:
 # * see L1_profiles.R for ideas / examples related to selecting logical "bottom depths"
+# * write new function for selecting a profile that minimizes distance to all others in SPC
 
 ## name suggested by Jon Maynard
 ## ideas, commentary, updates c/o Maynard et al. 2020
