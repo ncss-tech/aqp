@@ -88,6 +88,7 @@ mentioned depth-slicing algorithm.
 }
 \references{
 \itemize{
+\item J.J Maynard, S.W. Salley, D.E. Beaudette, J.E Herrick. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Sci. Soc. Am. J. 2020; 84: 1675-1692. \doi{10.1002/saj2.20119}.
 \item D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, \doi{10.1016/j.cageo.2012.10.020}.
 \item Moore, A.; Russell, J. & Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.
 }

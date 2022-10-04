@@ -17,8 +17,10 @@
 #' @param w numeric vector of length `ncol(m)`, optionally specified for weighted distance calc
 #' 
 #' @param isColor logical, `m` contains CIELAB color coordinates, CIE2000 color contrast metric is used, requires `farver` package
+#' 
+#' @note Sanity checking on inputs is performed outside of this function.
 #'
-#' @return dissimilarity object (cluster package)
+#' @return `dissimilarity`, `dist` object
 #' 
 #' @keywords internal
 #' @noRd
@@ -196,8 +198,10 @@
 #' @author Dylan E. Beaudette and Jon Maynard
 #' @seealso [`slice`], [`daisy`]
 #' @references
+#'  - J.J Maynard, S.W. Salley, D.E. Beaudette, J.E Herrick. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Sci. Soc. Am. J. 2020; 84: 1675-1692. \doi{10.1002/saj2.20119}.
 #'  - D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, \doi{10.1016/j.cageo.2012.10.020}.
 #'  - Moore, A.; Russell, J. & Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.
+#'  
 #' @keywords methods manip
 #'
 
@@ -208,11 +212,10 @@
 # * benchmarking 
 # * integrate dist(site data)
 # * weighted mean of D_hz + D_site, user-defined weights
-# * expose dice() fm
 # * parallel operation
 # * progress bar for large SPCs
 # * think about a formula interface for simple specification of depths + vars
-# * add Maynard et all. reference
+# * expose dice() fm
 # * list-output, with diagnostics and other interesting information
 
 ## Ideas:
@@ -300,6 +303,53 @@ NCSP <- function(
   s.vars <- intersect(sn, vars)
   
   
+  ## TODO: if there are any site data, extract those here
+  ##       and compute simple distance via cluster::daisy(, metric = 'gower')
+  ##       be sure to extract associated weights
+  
+  ## TODO: refactor old code here
+  
+  #   # check for any site data, remove and a save for later
+  #   if(any(vars %in% sn)) {
+  #     
+  #     # extract site-level vars
+  #     matching.idx <- na.omit(match(sn, vars))
+  #     site.vars <- vars[matching.idx]
+  #     
+  #     # remove from hz-level vars
+  #     vars <- vars[-matching.idx]
+  #     
+  #     ## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
+  #     ## TODO: allow user to pass-in variable type information
+  #     # compute dissimilarty on site-level data: only works with 2 or more variables
+  #     # rescale to [0,1]
+  #     
+  #     message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
+  #     d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
+  #     
+  #     # re-scale to [0,1]
+  #     d.site <- .rescaleRange(d.site, x0 = 0, x1 = 1)
+  #     
+  #     # reset default behavior of hz-level D
+  #     rescale.result=TRUE
+  #     
+  #     ## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
+  #     ## ... but why ? read-up on daisy
+  #     if(any(is.na(d.site))) {
+  #       warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
+  #       d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
+  #     }
+  #     
+  #     ## TODO: ordering of D_hz vs D_site ... assumptions safe?
+  #     
+  #   } else {
+  #     # setup a dummy D_site
+  #     d.site <- NULL
+  #   }
+  
+  
+  
+  
   ## dice according to depthSequence and vars
   # preserve SPC for access to all site data
   # will have to think about arguments to dice() a little more
@@ -358,41 +408,7 @@ NCSP <- function(
   # keep track of profile IDs
   dimnames(soil.matrix)[[2]] <- .ids
   
-  # ## previous version, quite slow
-  #
-  # # derive soil / non-soil matrix 
-  # # rows are links to depth slices defined in depthSequence vect
-  # soil.matrix <- profileApply(s, simplify = FALSE, FUN = function(i) {
-  #   
-  #   # working only with horizon variables
-  #   .h <- horizons(i)[, h.vars, drop = FALSE]
-  #   
-  #   ## TODO: use complete.cases, or depth to ALL missing data?
-  #   
-  #   # indices to slices not missing ALL hz vars
-  #   .fulldata_idx <- which(
-  #     apply(.h[, h.vars, drop = FALSE], MARGIN = 1, FUN = function(j) {
-  #     all(!is.na(j))
-  #   })
-  #   )
-  #   
-  #   ## TODO: ensure that nrow(soil.matrix) is correctly defined
-  #   
-  #   # soil = TRUE / non-soil = FALSE
-  #   # .res is initialized with all FALSE
-  #   .res <- vector(mode = 'logical', length = length(sliceSequence))
-  #   .res[.fulldata_idx] <- TRUE
-  #   
-  #   return(.res)
-  #   
-  # })
-  # 
-  # # flatten soil matrix
-  # # rows are depth slices
-  # # columns are individuals
-  # soil.matrix <- do.call('cbind', soil.matrix)
-  
-  
+ 
   ## evaluate distances by slice
   ## accounting for soil/non-soil comparisons
   ## filling NA due to missing data
@@ -464,49 +480,6 @@ NCSP <- function(
   
   # done
   return(.d)
-  
-  
-
-#   
-#   # check for any site data, remove and a save for later
-#   if(any(vars %in% sn)) {
-#     
-#     # extract site-level vars
-#     matching.idx <- na.omit(match(sn, vars))
-#     site.vars <- vars[matching.idx]
-#     
-#     # remove from hz-level vars
-#     vars <- vars[-matching.idx]
-#     
-#     ## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
-#     ## TODO: allow user to pass-in variable type information
-#     # compute dissimilarty on site-level data: only works with 2 or more variables
-#     # rescale to [0,1]
-#     
-#     message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
-#     d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
-#     
-#     # re-scale to [0,1]
-#     d.site <- .rescaleRange(d.site, x0 = 0, x1 = 1)
-#     
-#     # reset default behavior of hz-level D
-#     rescale.result=TRUE
-#     
-#     ## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
-#     ## ... but why ? read-up on daisy
-#     if(any(is.na(d.site))) {
-#       warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
-#       d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
-#     }
-#     
-#     ## TODO: ordering of D_hz vs D_site ... assumptions safe?
-#     
-#   } else {
-#     # setup a dummy D_site
-#     d.site <- NULL
-#   }
-#   
-#   
 
 }
 

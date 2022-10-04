@@ -1213,9 +1213,9 @@ plotSPC(
 )
 ```
 
-# Pair-Wise Dissimilarity: `profile_compare()`
+# Pair-Wise Dissimilarity: `NCSP()`
 
-Calculation of between-profile dissimilarity is performed using the `profile_compare()` function. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`max_d`). 
+Calculation of between-profile dissimilarity is performed using `NCSP()` (Numerical Classification of Soil Profiles). As of aqp 2.0, `NCSP()` replaces the older implementation in `profile_compare()` which is now deprecated. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`maxDepth`). 
 
 See the [function manual page](http://ncss-tech.github.io/aqp/reference/pc.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
 
@@ -1229,10 +1229,10 @@ depths(sp4) <- id ~ top + bottom
 hzdesgnname(sp4) <- 'name'
 
 # eval dissimilarity:
-# using Ex-Ca:Mg and CEC at pH 7
-# with no depth-weighting (k=0)
+# using Ex-Ca:Mg ratio and CEC at pH 7
+# no depth-weighting (k = 0)
 # to a maximum depth of 40 cm
-d <- profile_compare(sp4, vars = c('ex_Ca_to_Mg', 'CEC_7'), k = 0, max_d = 40)
+d <- NCSP(sp4, vars = c('ex_Ca_to_Mg', 'CEC_7'), k = 0, maxDepth = 40)
 
 # check distance matrix:
 round(d, 1)
@@ -1242,15 +1242,18 @@ d.diana <- diana(d)
 
 # this function is from the sharpshootR package
 # requires some manual adjustments
-par(mar = c(0, 0, 4, 1))
+par(mar = c(0, 0, 4, 0))
 plotProfileDendrogram(
   sp4,
   d.diana,
-  scaling.factor = 0.8,
+  scaling.factor = 0.9,
   y.offset = 5,
   cex.names = 0.7,
   width = 0.3,
-  color = 'ex_Ca_to_Mg'
+  color = 'ex_Ca_to_Mg',
+  name.style = 'center-center',
+  hz.depths = TRUE,
+  plot.depth.axis = FALSE
 )
 ```
 
