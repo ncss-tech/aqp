@@ -147,6 +147,7 @@ mentioned depth-slicing algorithm.</p>
 <span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  maxDepth <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  isColor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  rescaleResult <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -174,6 +175,10 @@ mentioned depth-slicing algorithm.</p>
 
 <dt>k</dt>
 <dd><p>numeric, weighting coefficient, see examples</p></dd>
+
+
+<dt>isColor, </dt>
+<dd><p>logical: variables represent color, should be CIELAB coordinates (D65 illuminant), weights are ignored. Variables should be named <code>L</code>, <code>A</code>, <code>B</code> in specified in that order.</p></dd>
 
 
 <dt>rescaleResult</dt>
