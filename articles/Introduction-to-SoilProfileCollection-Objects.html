@@ -267,8 +267,8 @@
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span></span>
 <span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span>
-<span><span class="co">#&gt;  [1] 1313.0543 1240.6493 1024.7496 1016.9319  720.1551  824.9030 1126.6412  946.4496  915.2089</span></span>
-<span><span class="co">#&gt; [10]  961.2565</span></span>
+<span><span class="co">#&gt;  [1]  994.6881  880.0311  928.0726  620.0004  799.5183  955.8461 1131.8869 1216.8563 1079.8784</span></span>
+<span><span class="co">#&gt; [10] 1014.8726</span></span>
 <span></span>
 <span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -319,12 +319,12 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa 1313.0543             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn 1240.6493             1        1     B</span></span>
-<span><span class="co">#&gt;      kings 1024.7496             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa 1016.9319             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino  720.1551             1        1     A</span></span>
-<span><span class="co">#&gt;       napa  824.9030             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa  994.6881             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn  880.0311             1        1     B</span></span>
+<span><span class="co">#&gt;      kings  928.0726             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa  620.0004             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino  799.5183             1        1     A</span></span>
+<span><span class="co">#&gt;       napa  955.8461             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -417,16 +417,16 @@
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           x       y</span></span>
-<span><span class="co">#&gt; 1  354302.9 4109466</span></span>
-<span><span class="co">#&gt; 2  353904.4 4109486</span></span>
-<span><span class="co">#&gt; 3  354021.8 4109648</span></span>
-<span><span class="co">#&gt; 4  353931.5 4109545</span></span>
-<span><span class="co">#&gt; 5  353937.9 4109544</span></span>
-<span><span class="co">#&gt; 6  353924.9 4109407</span></span>
-<span><span class="co">#&gt; 7  354077.7 4109530</span></span>
-<span><span class="co">#&gt; 8  353862.2 4109575</span></span>
-<span><span class="co">#&gt; 9  353949.4 4109602</span></span>
-<span><span class="co">#&gt; 10 353946.6 4109632</span></span>
+<span><span class="co">#&gt; 1  353993.0 4109425</span></span>
+<span><span class="co">#&gt; 2  354012.0 4109655</span></span>
+<span><span class="co">#&gt; 3  354037.4 4109478</span></span>
+<span><span class="co">#&gt; 4  353986.7 4109499</span></span>
+<span><span class="co">#&gt; 5  354045.7 4109343</span></span>
+<span><span class="co">#&gt; 6  353772.4 4109357</span></span>
+<span><span class="co">#&gt; 7  353951.5 4109460</span></span>
+<span><span class="co">#&gt; 8  354001.1 4109404</span></span>
+<span><span class="co">#&gt; 9  354026.4 4109692</span></span>
+<span><span class="co">#&gt; 10 354051.8 4109576</span></span>
 <span></span>
 <span><span class="co"># get/set spatial reference system using PROJ4 syntax</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -1342,13 +1342,13 @@
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   variable id    value top bottom contributing_fraction</span></span>
-<span><span class="co">#&gt; 1       p1  1 15.57879   0      5              1.000000</span></span>
-<span><span class="co">#&gt; 2       p1  1 15.57879   5     15              1.000000</span></span>
-<span><span class="co">#&gt; 3       p1  1 16.21729  15     30              1.000000</span></span>
-<span><span class="co">#&gt; 4       p1  1 18.45719  30     60              1.000000</span></span>
-<span><span class="co">#&gt; 5       p1  1 20.41284  60    100              1.000000</span></span>
-<span><span class="co">#&gt; 6       p1  1 18.37779 100    200              0.578125</span></span>
-<span><span class="co">#&gt; 7       p1  2 15.92922   0      5              1.000000</span></span></code></pre></div>
+<span><span class="co">#&gt; 1       p1  1 23.45308   0      5              1.000000</span></span>
+<span><span class="co">#&gt; 2       p1  1 29.45977   5     15              1.000000</span></span>
+<span><span class="co">#&gt; 3       p1  1 43.47537  15     30              1.000000</span></span>
+<span><span class="co">#&gt; 4       p1  1 35.19405  30     60              1.000000</span></span>
+<span><span class="co">#&gt; 5       p1  1 25.48509  60    100              1.000000</span></span>
+<span><span class="co">#&gt; 6       p1  1 23.95988 100    200              0.253012</span></span>
+<span><span class="co">#&gt; 7       p1  2 46.51723   0      5              1.000000</span></span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil profile data, after converting <code><a href="../reference/slab-methods.html">slab()</a></code> result from long -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reshape to wide format</span></span>
@@ -1387,9 +1387,9 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="pair-wise-dissimilarity-profile_compare">Pair-Wise Dissimilarity: <code>profile_compare()</code><a class="anchor" aria-label="anchor" href="#pair-wise-dissimilarity-profile_compare"></a>
+<h2 id="pair-wise-dissimilarity-ncsp">Pair-Wise Dissimilarity: <code>NCSP()</code><a class="anchor" aria-label="anchor" href="#pair-wise-dissimilarity-ncsp"></a>
 </h2>
-<p>Calculation of between-profile dissimilarity is performed using the <code><a href="../reference/pc.html">profile_compare()</a></code> function. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (<code>k</code>), and a maximum depth of evaluation (<code>max_d</code>).</p>
+<p>Calculation of between-profile dissimilarity is performed using <code><a href="../reference/NCSP.html">NCSP()</a></code> (Numerical Classification of Soil Profiles). As of aqp 2.0, <code><a href="../reference/NCSP.html">NCSP()</a></code> replaces the older implementation in <code><a href="../reference/pc.html">profile_compare()</a></code> which is now deprecated. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (<code>k</code>), and a maximum depth of evaluation (<code>maxDepth</code>).</p>
 <p>See the <a href="http://ncss-tech.github.io/aqp/reference/pc.html" class="external-link">function manual page</a> and <a href="http://dx.doi.org/10.1016/j.cageo.2012.10.020" class="external-link">this paper</a> for details.</p>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span></span>
@@ -1401,42 +1401,41 @@
 <span><span class="fu"><a href="../reference/hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'name'</span></span>
 <span></span>
 <span><span class="co"># eval dissimilarity:</span></span>
-<span><span class="co"># using Ex-Ca:Mg and CEC at pH 7</span></span>
-<span><span class="co"># with no depth-weighting (k=0)</span></span>
+<span><span class="co"># using Ex-Ca:Mg ratio and CEC at pH 7</span></span>
+<span><span class="co"># no depth-weighting (k = 0)</span></span>
 <span><span class="co"># to a maximum depth of 40 cm</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pc.html">profile_compare</a></span><span class="op">(</span><span class="va">sp4</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'ex_Ca_to_Mg'</span>, <span class="st">'CEC_7'</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">0</span>, max_d <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NCSP.html">NCSP</a></span><span class="op">(</span><span class="va">sp4</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'ex_Ca_to_Mg'</span>, <span class="st">'CEC_7'</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">0</span>, maxDepth <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># check distance matrix:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Dissimilarities :</span></span>
 <span><span class="co">#&gt;                colusa glenn kings mariposa mendocino napa san benito shasta shasta-trinity</span></span>
-<span><span class="co">#&gt; glenn            13.5                                                                     </span></span>
-<span><span class="co">#&gt; kings            16.0  12.7                                                               </span></span>
-<span><span class="co">#&gt; mariposa          8.4  11.3  16.5                                                         </span></span>
-<span><span class="co">#&gt; mendocino        11.5   8.0  16.4     15.0                                                </span></span>
-<span><span class="co">#&gt; napa             30.4  24.1  29.4     29.2      21.6                                      </span></span>
-<span><span class="co">#&gt; san benito       25.7  20.6  26.3     28.2      15.8 18.0                                 </span></span>
-<span><span class="co">#&gt; shasta           17.2  13.3   8.7     17.6      17.1 33.7       22.2                      </span></span>
-<span><span class="co">#&gt; shasta-trinity    6.4  16.6  22.3      9.6      16.5 29.8       27.2   23.3               </span></span>
-<span><span class="co">#&gt; tehama           28.7  22.9  27.9     27.3      20.0  8.8       15.1   31.4           27.9</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Metric :  mixed ;  Types = I, I </span></span>
-<span><span class="co">#&gt; Number of objects : 10</span></span>
+<span><span class="co">#&gt; glenn            13.8                                                                     </span></span>
+<span><span class="co">#&gt; kings            16.0  13.1                                                               </span></span>
+<span><span class="co">#&gt; mariposa          8.4  11.6  16.5                                                         </span></span>
+<span><span class="co">#&gt; mendocino        12.1   8.2  17.0     15.5                                                </span></span>
+<span><span class="co">#&gt; napa             31.5  24.9  30.5     30.3      22.2                                      </span></span>
+<span><span class="co">#&gt; san benito       26.8  21.4  27.4     29.3      16.4 18.0                                 </span></span>
+<span><span class="co">#&gt; shasta           17.2  13.6   8.7     17.6      17.6 34.8       23.3                      </span></span>
+<span><span class="co">#&gt; shasta-trinity    6.4  16.9  22.3      9.6      17.0 30.9       28.3   23.3               </span></span>
+<span><span class="co">#&gt; tehama           30.1  23.9  29.2     28.6      20.8  9.0       15.3   32.7           29.2</span></span>
 <span></span>
 <span><span class="co"># visualize dissimilarity matrix via divisive hierarchical clustering</span></span>
 <span><span class="va">d.diana</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># this function is from the sharpshootR package</span></span>
 <span><span class="co"># requires some manual adjustments</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span></span>
 <span>  <span class="va">sp4</span>,</span>
 <span>  <span class="va">d.diana</span>,</span>
-<span>  scaling.factor <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  scaling.factor <span class="op">=</span> <span class="fl">0.9</span>,</span>
 <span>  y.offset <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  cex.names <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  width <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span></span>
+<span>  color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span>,</span>
+<span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span>
+<span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-50-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>Some additional examples can be found in:</p>
