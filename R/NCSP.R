@@ -180,7 +180,7 @@
 #'
 #' @param vars character vector, names of horizon attributes to use in the classification
 #' 
-#' @fm formula, formula as specified to [`dice()`], not yet implemented
+#' @param fm formula, formula as specified to [`dice()`], not yet implemented
 #' 
 #' @param weights numeric vector, same length as `vars`: variable importance weights, need not sum to 1
 #' 

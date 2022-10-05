@@ -7,6 +7,7 @@
 NCSP(
   x,
   vars,
+  fm = NULL,
   weights = rep(1, times = length(vars)),
   maxDepth = max(x),
   k = 0,
@@ -21,6 +22,8 @@ NCSP(
 \item{x}{\code{SoilProfileColection} object, should be pre-filtered to remove profiles with horizon depth logic, see \code{\link{HzDepthLogicSubset}}}
 
 \item{vars}{character vector, names of horizon attributes to use in the classification}
+
+\item{fm}{formula, formula as specified to \code{\link[=dice]{dice()}}, not yet implemented}
 
 \item{weights}{numeric vector, same length as \code{vars}: variable importance weights, need not sum to 1}
 
