@@ -168,6 +168,7 @@ perturb <- function(p,
   
   if (!missing(id) && !is.null(id)) {
     custom.ids <- TRUE
+    
     # keep track of missing `n` argument before it is set
     missing.n <- missing(n)
     
@@ -180,9 +181,12 @@ perturb <- function(p,
       message("if profile ID vector `id` is specified, `n` argument is ignored")
   }
 
+  # calculate some SPC metadata
   hz <- data.table::data.table(horizons(p))
   idn <- idname(p)
   depthz <- horizonDepths(p)
+  
+  # calculate minimum depth of each profile in p
   mindepth <- p[, , .FIRST][[depthz[1]]]
 
   # setup for variable being perturbed
@@ -241,11 +245,11 @@ perturb <- function(p,
   
   # order result by profile*rep
   res <- res[order(pidx, gidx),]
-  
-  
+ 
+  # regardless of simulation method new profiles  are reconstructed from layer thicknesses
+  # (allows for handling of min.thickness, minimum depth, etc. consistently)
   if (by_thickness) {
     res <- res$V1
-    res[res < min.thickness] <- min.thickness
   } else {
     res <- res[, list(V1 = diff(c(0, V1))), by = c("pidx", "gidx")]$V1
   }
@@ -296,21 +300,21 @@ perturb <- function(p,
   .transfer.metadata.aqp(p, p.sub)
 }
 
-permute_profile <- function(p,
-                            n = 100,
-                            id = NULL,
-                            boundary.attr = NULL,
-                            min.thickness = 1,
-                            soildepth = NULL,
-                            new.idname = 'pID') {
-  .Deprecated("perturb")
-  
-  perturb(p, n = n, id = id, 
-          boundary.attr = boundary.attr, 
-          min.thickness = min.thickness, 
-          max.depth = soildepth, 
-          new.idname = new.idname)
-}
+# permute_profile <- function(p,
+#                             n = 100,
+#                             id = NULL,
+#                             boundary.attr = NULL,
+#                             min.thickness = 1,
+#                             soildepth = NULL,
+#                             new.idname = 'pID') {
+#   .Deprecated("perturb")
+#   
+#   perturb(p, n = n, id = id, 
+#           boundary.attr = boundary.attr, 
+#           min.thickness = min.thickness, 
+#           max.depth = soildepth, 
+#           new.idname = new.idname)
+# }
 
 ## compare permute_profile and sim, using same estimated SD
 
