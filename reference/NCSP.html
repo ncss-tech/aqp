@@ -144,6 +144,7 @@ mentioned depth-slicing algorithm.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NCSP</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">vars</span>,</span>
+<span>  fm <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  maxDepth <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -163,6 +164,10 @@ mentioned depth-slicing algorithm.</p>
 
 <dt>vars</dt>
 <dd><p>character vector, names of horizon attributes to use in the classification</p></dd>
+
+
+<dt>fm</dt>
+<dd><p>formula, formula as specified to <code><a href="dice-SoilProfileCollection-method.html">dice()</a></code>, not yet implemented</p></dd>
 
 
 <dt>weights</dt>
