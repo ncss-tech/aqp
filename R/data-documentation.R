@@ -1515,4 +1515,15 @@ NULL
 "munsellHuePosition"
 
 
+#' @title pH Reaction Classes
+#' 
+#' @description Levels of pH (reaction) classes including descriptive name, and range from low to high pH
+#' @references Soil Science Division Staff. (2017) Soil Survey Manual. C. Ditzler, K. Scheffe, and H.C. Monger (eds.). USDA Handbook 18. Government Printing Office, Washington, D.C.
+#' @keywords datasets
+#' @usage data(reactionclass)
+#' 
+"reactionclass"
+
+
+
 
