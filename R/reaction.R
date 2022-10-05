@@ -1,18 +1,8 @@
 .reactionclass <- function() {
   data.frame(
-    DescriptiveTerm = c(
-      "Ultra Acid",
-      "Extremely Acid",
-      "Very Strongly Acid",
-      "Strongly Acid",
-      "Moderately Acid",
-      "Slightly Acid",
-      "Neutral",
-      "Slightly Alkaline",
-      "Moderately Alkaline",
-      "Strongly Alkaline",
-      "Very Strongly Alkaline"
-    ),
+    DescriptiveTerm = c("ultra acid", "extremely acid", "very strongly acid", "strongly acid", 
+                        "moderately acid", "slightly acid", "neutral", "slightly alkaline", 
+                        "moderately alkaline", "strongly alkaline", "very strongly alkaline"),
     pH_low = c(0, 3.55, 4.45, 5.05, 5.55, 6.05, 6.55, 7.35, 7.85, 8.45, 9.05),
     pH_high = c(3.55, 4.45, 5.05, 5.55, 6.05, 6.55, 7.35, 7.85, 8.45, 9.05, 14)
   )
@@ -31,7 +21,7 @@
     lut2 <- lut1
     lut2$pH_high <- lut2$pH_low + ((lut2$pH_high - lut2$pH_low) / 2)
     lut1$pH_low <- lut2$pH_high
-    lut <- rbind(data.frame(id = "Low", lut2), data.frame(id = "High", lut1))
+    lut <- rbind(data.frame(id = "low", lut2), data.frame(id = "high", lut1))
     lut <- lut[order(lut$pH_low),]
   } else {
     lut1$id <- ""
@@ -117,7 +107,7 @@ ReactionClassLevels <- function(halfclass = FALSE, as.is = FALSE) {
   if (halfclass) {
     i <- seq(1, length(x) * 2, 2)
     i2 <- seq(2, length(x) * 2, 2)
-    x <- c(paste("Low", x), paste("High", x))
+    x <- c(paste("low", x), paste("high", x))
     x <- x[order(c(i, i2))]
   }
   
