@@ -222,7 +222,7 @@ diagnostic_hz(sp4) <- rbind(dh, dh.new)
 
 # Root Restrictive Features
 
-Features that restrict root entry (fine or very fine roots) are commonly used to estimate *functional* soil depth. Restrictive features include salt accumulations, duripans, fragipans, paralithic matrials, lithic contact, or an abrupt change in chemical property. 
+Features that restrict root entry (fine or very fine roots) are commonly used to estimate *functional* soil depth. Restrictive features include salt accumulations, duripans, fragipans, paralithic materials, lithic contact, or an abrupt change in chemical property. 
 
 Not all soils have restrictive features, therefore these data are stored as a `data.frame` in "long format". Each row corresponds to a restrictive feature, associated depths, and identified by `profile_id()`. There may be more than one restrictive feature per soil profile.
 
@@ -1037,7 +1037,7 @@ rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5)
 
 # Depth Aggregation: `slab()`
 
-Depth-wise summary of horizon-level attributes is performed with the `slab()` function. Profile grouping criteria and horizon attribute selection is parametrized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
+Depth-wise summary of horizon-level attributes is performed with the `slab()` function. Profile grouping criteria and horizon attribute selection is parameterized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
 
 The depth structure ("slabs") over which summaries are computed is defined with the `slab.structure` argument using:
 

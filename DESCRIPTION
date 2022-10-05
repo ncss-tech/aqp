@@ -13,6 +13,7 @@ LazyLoad: yes
 Repository: CRAN
 URL: https://github.com/ncss-tech/aqp
 BugReports: https://github.com/ncss-tech/aqp/issues
+Language: en-US
 Encoding: UTF-8
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)

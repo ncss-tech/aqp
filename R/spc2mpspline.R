@@ -8,7 +8,7 @@
 
 #' @title SoilProfileCollection wrapper for `mpspline2::mpspline()` 
 #'
-#' @description Generate mass-preserving splines for any numeric attribute in a SoilProfileCollectuion using `mpspline2::mpspline()`. mpspline2 implements the method described in Bishop et al. (1999). Currently this function only works with a single `var_name` at a time. 
+#' @description Generate mass-preserving splines for any numeric attribute in a SoilProfileCollection using `mpspline2::mpspline()`. mpspline2 implements the method described in Bishop et al. (1999). Currently this function only works with a single `var_name` at a time. 
 #' 
 #' @details This function now relies on the missing data checks provided by the mpspline2 package. See `attr(..., 'removed')` to see whole profiles that were removed from the set. Horizons containing `NA` in the property of interest are dropped with a message.
 #'

@@ -31,7 +31,7 @@
 A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in \code{attr(result, 'removed')}.
 }
 \description{
-Generate mass-preserving splines for any numeric attribute in a SoilProfileCollectuion using \code{mpspline2::mpspline()}. mpspline2 implements the method described in Bishop et al. (1999). Currently this function only works with a single \code{var_name} at a time.
+Generate mass-preserving splines for any numeric attribute in a SoilProfileCollection using \code{mpspline2::mpspline()}. mpspline2 implements the method described in Bishop et al. (1999). Currently this function only works with a single \code{var_name} at a time.
 }
 \details{
 This function now relies on the missing data checks provided by the mpspline2 package. See \code{attr(..., 'removed')} to see whole profiles that were removed from the set. Horizons containing \code{NA} in the property of interest are dropped with a message.

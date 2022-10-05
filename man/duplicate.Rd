@@ -2,7 +2,7 @@
 % Please edit documentation in R/duplicate.R
 \name{duplicate}
 \alias{duplicate}
-\title{Duplicte Profiles of a SoilProfileCollection}
+\title{Duplicate Profiles of a SoilProfileCollection}
 \usage{
 duplicate(x, times = 3, oldID = ".oldID")
 }
