@@ -1,18 +1,19 @@
 test_that("ph_to_rxnclass() works", {
-  expect_equal(ph_to_rxnclass(6.2), "Slightly Acid")
-  expect_equal(ph_to_rxnclass(c(6.2, NA, 6.3)), c("Slightly Acid", NA, "Slightly Acid"))
+  expect_equal(as.character(ph_to_rxnclass(6.2)), "Slightly Acid")
+  expect_equal(ph_to_rxnclass(c(6.2, NA, 6.3), as.is = TRUE), 
+               c("Slightly Acid", NA, "Slightly Acid"))
   
-  expect_equal(ph_to_rxnclass(c(6.2, NA, 6.8), as.is = FALSE),
+  expect_equal(ph_to_rxnclass(c(6.2, NA, 6.8)),
                factor(c("Slightly Acid", NA, "Neutral"),
-                      levels = ReactionClassLevels(as.is = TRUE),
+                      levels = c("Slightly Acid", "Neutral"),
                       ordered = TRUE))
   
-  expect_equal(ph_to_rxnclass(c(6.2, NA, 6.8), as.is = FALSE, halfclass = TRUE),
+  expect_equal(ph_to_rxnclass(c(6.2, NA, 6.8), halfclass = TRUE, droplevels = FALSE),
                factor(c("Low Slightly Acid", NA, "Low Neutral"),
                       levels = ReactionClassLevels(halfclass = TRUE, as.is = TRUE),
                       ordered = TRUE))
   
-  expect_equal(length(levels(ph_to_rxnclass(c(6.2, NA, 6.8), as.is = FALSE, droplevels = TRUE))), 2)
+  expect_equal(length(levels(ph_to_rxnclass(c(6.2, NA, 6.8)))), 2)
 })
 
 test_that("rxnclass_to_ph() works", {

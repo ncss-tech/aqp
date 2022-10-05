@@ -6,11 +6,11 @@
 \alias{ReactionClassLevels}
 \title{Convert pH to/from Reaction Classes}
 \usage{
-ph_to_rxnclass(x, halfclass = FALSE, as.is = TRUE, droplevels = FALSE)
+ph_to_rxnclass(x, halfclass = FALSE, as.is = FALSE, droplevels = TRUE)
 
 rxnclass_to_ph(x, halfclass = FALSE, digits = 2, simplify = TRUE)
 
-ReactionClassLevels(halfclass = FALSE, as.is = FALSE, droplevels = FALSE)
+ReactionClassLevels(halfclass = FALSE, as.is = FALSE)
 }
 \arguments{
 \item{x}{input pH values (numeric; \code{ph_to_rxnclass()}) or reaction classes (character; \code{rxnclass_to_ph()})}

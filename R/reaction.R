@@ -72,8 +72,8 @@
 #' ph_to_rxnclass(6.2)
 ph_to_rxnclass <- function(x, 
                            halfclass = FALSE,
-                           as.is = TRUE,
-                           droplevels = FALSE) {
+                           as.is = FALSE,
+                           droplevels = TRUE) {
   res <- .phclass(x, halfclass = halfclass)
   
   if (!as.is) {
@@ -110,7 +110,7 @@ rxnclass_to_ph <- function(x, halfclass = FALSE, digits = 2, simplify = TRUE) {
 #' @rdname reaction
 #' @examples 
 #' ReactionClassLevels()
-ReactionClassLevels <- function(halfclass = FALSE, as.is = FALSE, droplevels = FALSE) {
+ReactionClassLevels <- function(halfclass = FALSE, as.is = FALSE) {
   rxn <- .reactionclass()
   x <- rxn$DescriptiveTerm
   
@@ -125,9 +125,5 @@ ReactionClassLevels <- function(halfclass = FALSE, as.is = FALSE, droplevels = F
     return(x)
   }
   
-  res <- factor(x, levels = x, ordered = TRUE)
-  if (droplevels) {
-    return(droplevels(res))
-  }
-  res
+  factor(x, levels = x, ordered = TRUE)
 }
