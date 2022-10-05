@@ -3,6 +3,7 @@
 \name{generalize.hz}
 \alias{generalize.hz}
 \alias{generalizeHz,character-method}
+\alias{generalizeHz}
 \alias{generalizeHz,SoilProfileCollection-method}
 \title{Generalize Horizon Names}
 \usage{

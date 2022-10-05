@@ -96,6 +96,7 @@ generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdep
 setGeneric("generalizeHz",  function(x, new, pattern, non.matching.code, hzdepm, ordered, ...) standardGeneric("generalizeHz"))
 
 #' @export
+#' @aliases generalizeHz
 #' @rdname generalize.hz
 setMethod("generalizeHz", signature(x = "character"), function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), ...) {
  generalize.hz(
