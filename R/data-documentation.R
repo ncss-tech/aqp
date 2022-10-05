@@ -2,6 +2,18 @@
 ## document data here
 ## don't forget: @usage data(XXX)
 
+
+#' @title Example Output from soilDB::fetchOSD()
+#' @description An example `SoilProfileCollection` object created by `soilDB::fetchOSD()`, derived from the Cecil, Appling, and Bonneau Official Series Descriptions.
+#' @keywords datasets
+#' @usage data(osd)
+#' @format A `SoilProfileCollection`
+"osd"
+
+
+
+
+
 #' Soil Profile Data Example 1
 #'
 #' Soil profile data from Pinnacles National Monument, CA.
