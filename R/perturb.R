@@ -240,9 +240,15 @@ perturb <- function(p,
             by = list(hidx = seq_len(nrow(hz)))]
   
   # order result by profile*rep
-  res <- res[order(pidx, gidx)]$V1
+  res <- res[order(pidx, gidx),]
   
-  res[res < min.thickness] <- min.thickness
+  
+  if (by_thickness) {
+    res <- res$V1
+    res[res < min.thickness] <- min.thickness
+  } else {
+    res <- res[, list(V1 = diff(c(0, V1))), by = c("pidx", "gidx")]$V1
+  }
   
   # create template SPC/horizon data to insert perturb()-ed depths
   p.sub <- duplicate(p, n)
@@ -263,13 +269,8 @@ perturb <- function(p,
   nd$V1 <- res
   
   # calculate new top and bottom depths
-  if (by_thickness) {
-    nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
-    nd$.newbot <- nd[, md[1] + cumsum(V1), by = c("id")]$V1
-  } else {
-    nd$.newtop <- nd[, c(md[1], V1)[1:.N], by = c("id")]$V1
-    nd$.newbot <- nd[, md[1] + V1, by = c("id")]$V1
-  }
+  nd$.newtop <- nd[, cumsum(c(md[1], pmax(min.thickness, V1)))[1:.N], by = c("id")]$V1
+  nd$.newbot <- nd[, md[1] + cumsum(pmax(min.thickness, V1)), by = c("id")]$V1
   
   # replace in template SPC
   p.sub[[depthz[1]]] <- nd$.newtop
