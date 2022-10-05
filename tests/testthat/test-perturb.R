@@ -99,6 +99,6 @@ test_that("perturb() (by boundary) works as expected (multiple profiles)", {
   expect_true(all(checkHzDepthLogic(sim.1)$valid))
   
   # test max.depth (thicknesses of 4th horizon below 50cm are unaltered)
-  expect_equal(thk[seq_along(thk) %% 4 == 0], c(rep(112, 250), rep(80, 250)))
+  expect_equal(thk[seq_along(thk) %% 4 == 0], c(rep(34, 250), rep(22, 250)))
 })
 

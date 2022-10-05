@@ -263,11 +263,12 @@ perturb <- function(p,
   nd$V1 <- res
   
   # calculate new top and bottom depths
-  nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
   if (by_thickness) {
+    nd$.newtop <- nd[, cumsum(c(md[1], V1))[1:.N], by = c("id")]$V1
     nd$.newbot <- nd[, md[1] + cumsum(V1), by = c("id")]$V1
   } else {
-    nd$.newbot <- nd[, cumsum(md[1] + V1), by = c("id")]$V1
+    nd$.newtop <- nd[, c(md[1], V1)[1:.N], by = c("id")]$V1
+    nd$.newbot <- nd[, md[1] + V1, by = c("id")]$V1
   }
   
   # replace in template SPC
