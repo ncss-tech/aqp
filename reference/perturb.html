@@ -80,11 +80,11 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
-<dd><p>A single-profile SoilProfileCollection</p></dd>
+<dd><p>A SoilProfileCollection</p></dd>
 
 
 <dt>n</dt>
-<dd><p>Number of new profiles to generate (default: 100)</p></dd>
+<dd><p>Number of new profiles to generate (default: <code>100</code>) per profile in <code>p</code></p></dd>
 
 
 <dt>id</dt>
@@ -115,15 +115,15 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
     <h2>Value</h2>
     
 
-<p>a SoilProfileCollection with <code>n</code> realizations of <code>p</code></p>
+<p>a SoilProfileCollection with <code>n</code> realizations of each profile in <code>p</code></p>
 
 
     </div>
     <div id="details">
     <h2>Details</h2>
     <p>Imagine a Normal curve with mean centered on the vertical (depth axis) at a representative value (RV) horizon bottom depth or thickness. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that "central" mean value represent 95% of the "typical volume" of that horizon or boundary.</p>
-<p><code>perturb</code> can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is <code><a href="hzDistinctnessCodeToOffset.html">hzDistinctnessCodeToOffset()</a></code>. The <code>boundary.attr</code> is arguably easier to parameterize from a single profile description or "Form 232" where <em>horizon boundary distinctness</em> classes (based on vertical distance of transition) are conventionally recorded for each layer.</p>
-<p>Alternately, <code>perturb</code> can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.</p>
+<p><code>perturb()</code> can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is <code><a href="hzDistinctnessCodeToOffset.html">hzDistinctnessCodeToOffset()</a></code>. The <code>boundary.attr</code> is arguably easier to parameterize from a single profile description or "Form 232" where <em>horizon boundary distinctness</em> classes (based on vertical distance of transition) are conventionally recorded for each layer.</p>
+<p>Alternately, <code>perturb()</code> can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -249,27 +249,34 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">perturb</span><span class="op">(</span><span class="va">p</span>, boundary.attr <span class="op">=</span> <span class="st">"bound_sd"</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 10 profiles and 50 horizons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: pID  |  horizon ID: hzID </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 63 - 67 cm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: hzID </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 64 - 69 cm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Horizons (6 / 50 rows  |  10 / 20 columns) -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  pID hzID top bottom group bound_distinct bound_topography name texture prop</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    1   0      2     2              C                W Oa/A      SL   14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    2   2     11     2              G                S   AB     SCL   18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    3  11     38     2              G                S   BA     SCL   22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    4  38     53     2              C                S  Bt1  GRVSCL   30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    5  53     64     2              G                S  Bt2    GRVC   50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2    6   0      2     2              C                W Oa/A      SL   14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id hzID top bottom group bound_distinct bound_topography name texture</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-01    1   0      1     2              C                W Oa/A      SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-01    2   1     16     2              G                S   AB     SCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-01    3  16     35     2              G                S   BA     SCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-01    4  35     53     2              C                S  Bt1  GRVSCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-01    5  53     65     2              G                S  Bt2    GRVC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-02    6   0      1     2              C                W Oa/A      SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  prop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [... more horizons ...]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Sites (6 / 10 rows  |  2 / 2 columns) -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id pID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003   5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003   6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id .oldID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-01   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-02   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-03   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-04   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-05   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-06   P003</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [... more sites ...]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
@@ -281,16 +288,16 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 <span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%03d"</span>, <span class="fu"><a href="profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="fu">perturb</span><span class="op">(</span><span class="va">p</span>, boundary.attr <span class="op">=</span> <span class="st">"bound_sd"</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 10 profiles and 50 horizons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: pID  |  horizon ID: hzID </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 64 - 67 cm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: hzID </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 65 - 69 cm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Horizons (6 / 50 rows  |  10 / 20 columns) -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       pID hzID top bottom group bound_distinct bound_topography name texture</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    1   0      3     2              C                W Oa/A      SL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    2   3     11     2              G                S   AB     SCL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    3  11     34     2              G                S   BA     SCL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    4  34     54     2              C                S  Bt1  GRVSCL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    5  54     66     2              G                S  Bt2    GRVC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id hzID top bottom group bound_distinct bound_topography name texture</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    1   0      2     2              C                W Oa/A      SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    2   2     12     2              G                S   AB     SCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    3  12     36     2              G                S   BA     SCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    4  36     53     2              C                S  Bt1  GRVSCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001    5  53     66     2              G                S  Bt2    GRVC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  P003-002    6   0      2     2              C                W Oa/A      SL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  prop</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    14</span>
@@ -302,13 +309,13 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 <span class="r-out co"><span class="r-pr">#&gt;</span> [... more horizons ...]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Sites (6 / 10 rows  |  2 / 2 columns) -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id      pID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003 P003-001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003 P003-002</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003 P003-003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003 P003-004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003 P003-005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P003 P003-006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id .oldID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-001   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-002   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-003   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-004   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-005   P003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P003-006   P003</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [... more sites ...]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
