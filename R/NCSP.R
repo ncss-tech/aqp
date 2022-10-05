@@ -66,12 +66,14 @@
   } else {
     # Gower distances
     
+    # suppressing warnings issued when <2 unique values causes
+    # WARNING: binary variable(s) 1, 2 treated as interval scaled
     if(!is.null(w)) {
       # weighted distances
-      d <- cluster::daisy(m, metric = 'gower', weights = w) 
+      d <- suppressWarnings(cluster::daisy(m, metric = 'gower', weights = w))
     } else {
       # standard, un-weighted distances
-      d <- cluster::daisy(m, metric = 'gower')
+      d <- suppressWarnings(cluster::daisy(m, metric = 'gower'))
     }
     
     # convert to full matrix for manipulation by row/col index
