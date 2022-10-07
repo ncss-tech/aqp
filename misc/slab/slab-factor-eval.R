@@ -4,7 +4,7 @@ library(aqp)
 
 ## pre-cached/subset data
 # all VALID
-x <- readRDS('clarksville-pedons-final.rds')
+x <- readRDS('misc/slab/clarksville-pedons-final.rds')
 
 # keep track of generalized horizon names for later
 hz.names <- levels(x$genhz)
@@ -20,7 +20,6 @@ s$genhz <- factor(s$genhz, levels = hz.names)
 
 # compute slice-wise probability: slice-wise P always sum to 1
 a <- slab(x, ~ genhz, cpm = 1)
-
  
 # saveRDS(a, file = 'slab-factor-1x.rds')
 
