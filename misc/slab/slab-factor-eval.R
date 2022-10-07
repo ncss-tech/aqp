@@ -21,6 +21,13 @@ s$genhz <- factor(s$genhz, levels = hz.names)
 # compute slice-wise probability: slice-wise P always sum to 1
 a <- slab(x, ~ genhz, cpm = 1)
  
-# saveRDS(a, file = 'slab-factor-1x.rds')
+# saveRDS(a, file = 'misc/slab/slab-factor-1x.rds')
 
-# saveRDS(a, file = 'e:/temp/slab-factor-2x.rds')
+# saveRDS(a, file = 'misc/slab/slab-factor-2x.rds')
+
+library(daff)
+
+d1 <- readRDS('misc/slab/slab-factor-1x.rds')
+d2 <- readRDS('misc/slab/slab-factor-2x.rds')
+diff_data(d1,d2) |> 
+  render_diff()
