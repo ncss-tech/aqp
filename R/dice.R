@@ -69,7 +69,7 @@ setGeneric("dice", function(x,
     if (length(fm) > 2) {
       stop("please provide a valid formula", call. = FALSE)
     }
-    ;
+    
     # LHS ~ RHS
     # LHS: "", single integer, vector of integers slices
     # z-index
@@ -181,6 +181,11 @@ setGeneric("dice", function(x,
   
   tops <- unlist(tops$V1)
   bottoms <- tops + 1
+  
+  # use internal hzID if hzidname has been set
+  if (is.null(h.sub[[hzidn]])) {
+    hzidn <- "hzID"
+  } 
   
   # expand slice IDs (horizon IDs); used to join with horizons
   sliceIDs <- rep(
