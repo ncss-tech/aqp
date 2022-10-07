@@ -75,30 +75,31 @@ test_that("expected order from OSDs, depthSlices", {
   # get these soil series
   s <- soilDB::fetchOSD(s.list)
   
-  ## TODO: this will be simplified soon
-  # manually convert Munsell -> sRGB
-  rgb.data <- munsell2rgb(s$hue, s$value, s$chroma, return_triplets = TRUE)
-  s$r <- rgb.data$r
-  s$g <- rgb.data$g
-  s$b <- rgb.data$b
-  
-  # 
-  pig <- soilColorSignature(s, RescaleLightnessBy = 5, method = 'depthSlices')
-  row.names(pig) <- pig[, 1]
-  d <- daisy(pig[, -1])
-  dd <- diana(d)
-  
-  # expected ordering
-  o <- c("AMADOR", "VLECK", "PENTZ", "YOLO", "HANFORD", "MOGLIA", "PARDEE", 
-         "HAYNER", "CANEYHEAD", "DRUMMER", "WILLOWS", "ZOOK", "SYCAMORE", 
-         "KLAMATH", "ARGONAUT", "REDDING", "MUSICK", "CECIL", "SIERRA", 
-         "PALAU")
-  
-  
-  expect_true(
-    all(profile_id(s)[dd$order] ==  o)
-  )
-  
+  if (!is.null(s)) {
+    ## TODO: this will be simplified soon
+    # manually convert Munsell -> sRGB
+    rgb.data <- munsell2rgb(s$hue, s$value, s$chroma, return_triplets = TRUE)
+    s$r <- rgb.data$r
+    s$g <- rgb.data$g
+    s$b <- rgb.data$b
+    
+    # 
+    pig <- soilColorSignature(s, RescaleLightnessBy = 5, method = 'depthSlices')
+    row.names(pig) <- pig[, 1]
+    d <- daisy(pig[, -1])
+    dd <- diana(d)
+    
+    # expected ordering
+    o <- c("AMADOR", "VLECK", "PENTZ", "YOLO", "HANFORD", "MOGLIA", "PARDEE", 
+           "HAYNER", "CANEYHEAD", "DRUMMER", "WILLOWS", "ZOOK", "SYCAMORE", 
+           "KLAMATH", "ARGONAUT", "REDDING", "MUSICK", "CECIL", "SIERRA", 
+           "PALAU")
+    
+    
+    expect_true(
+      all(profile_id(s)[dd$order] ==  o)
+    )
+  }
     
 })
 
