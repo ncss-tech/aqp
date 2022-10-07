@@ -222,7 +222,7 @@ diagnostic_hz(sp4) <- rbind(dh, dh.new)
 
 # Root Restrictive Features
 
-Features that restrict root entry (fine or very fine roots) are commonly used to estimate *functional* soil depth. Restrictive features include salt accumulations, duripans, fragipans, paralithic matrials, lithic contact, or an abrupt change in chemical property. 
+Features that restrict root entry (fine or very fine roots) are commonly used to estimate *functional* soil depth. Restrictive features include salt accumulations, duripans, fragipans, paralithic materials, lithic contact, or an abrupt change in chemical property. 
 
 Not all soils have restrictive features, therefore these data are stored as a `data.frame` in "long format". Each row corresponds to a restrictive feature, associated depths, and identified by `profile_id()`. There may be more than one restrictive feature per soil profile.
 
@@ -616,10 +616,9 @@ Making quality figures with fewer than 5 soil profiles usually requires more cus
  * move depth axis to the left with negative `axis.line.offset` values
 
 Get some example data from the Official Series Descriptions:
-
 ```{r, fig.width=5, fig.height=6}
-library(soilDB)
-x <- fetchOSD(c('appling', 'cecil', 'bonneau'))
+data(osd)
+x <- osd
 ```
 
 Using 5x6 inch output device:
@@ -1037,7 +1036,7 @@ rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5)
 
 # Depth Aggregation: `slab()`
 
-Depth-wise summary of horizon-level attributes is performed with the `slab()` function. Profile grouping criteria and horizon attribute selection is parametrized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
+Depth-wise summary of horizon-level attributes is performed with the `slab()` function. Profile grouping criteria and horizon attribute selection is parameterized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
 
 The depth structure ("slabs") over which summaries are computed is defined with the `slab.structure` argument using:
 
@@ -1213,9 +1212,9 @@ plotSPC(
 )
 ```
 
-# Pair-Wise Dissimilarity: `profile_compare()`
+# Pair-Wise Dissimilarity: `NCSP()`
 
-Calculation of between-profile dissimilarity is performed using the `profile_compare()` function. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`max_d`). 
+Calculation of between-profile dissimilarity is performed using `NCSP()` (Numerical Classification of Soil Profiles). As of aqp 2.0, `NCSP()` replaces the older implementation in `profile_compare()` which is now deprecated. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`maxDepth`). 
 
 See the [function manual page](http://ncss-tech.github.io/aqp/reference/pc.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
 
@@ -1229,10 +1228,10 @@ depths(sp4) <- id ~ top + bottom
 hzdesgnname(sp4) <- 'name'
 
 # eval dissimilarity:
-# using Ex-Ca:Mg and CEC at pH 7
-# with no depth-weighting (k=0)
+# using Ex-Ca:Mg ratio and CEC at pH 7
+# no depth-weighting (k = 0)
 # to a maximum depth of 40 cm
-d <- profile_compare(sp4, vars = c('ex_Ca_to_Mg', 'CEC_7'), k = 0, max_d = 40)
+d <- NCSP(sp4, vars = c('ex_Ca_to_Mg', 'CEC_7'), k = 0, maxDepth = 40)
 
 # check distance matrix:
 round(d, 1)
@@ -1242,15 +1241,18 @@ d.diana <- diana(d)
 
 # this function is from the sharpshootR package
 # requires some manual adjustments
-par(mar = c(0, 0, 4, 1))
+par(mar = c(0, 0, 4, 0))
 plotProfileDendrogram(
   sp4,
   d.diana,
-  scaling.factor = 0.8,
+  scaling.factor = 0.9,
   y.offset = 5,
   cex.names = 0.7,
   width = 0.3,
-  color = 'ex_Ca_to_Mg'
+  color = 'ex_Ca_to_Mg',
+  name.style = 'center-center',
+  hz.depths = TRUE,
+  plot.depth.axis = FALSE
 )
 ```
 

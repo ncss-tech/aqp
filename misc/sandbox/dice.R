@@ -42,6 +42,29 @@ d <- lapply(as.character(1:10), random_profile, n = c(6, 7, 8), n_prop = 5, meth
 d <- do.call('rbind', d)
 depths(d) <- id ~ top + bottom
 
+horizons(d)$texture <- 'cl'
+hztexclname(d) <- 'texture'
+hzdesgnname(d) <- 'name'
+
+# OK
+dice(d, fm = 25 ~ p1 + name + texture, SPC = FALSE)
+
+# OK
+dice(d, fm = 25 ~ p1 + name + texture, SPC = TRUE)
+
+# OK
+dice(d, fm = 25 ~ p1, SPC = FALSE)
+
+# OK
+dice(d, fm = 25 ~ p1, SPC = TRUE)
+
+# OK
+dice(d, fm = 25 ~ ., SPC = FALSE)
+
+# OK
+dice(d, fm = 25 ~ ., SPC = TRUE)
+
+
 # ID for QC
 horizons(d)[['.xxID']] <- d$hzID
 

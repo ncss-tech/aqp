@@ -17,9 +17,9 @@ perturb(
 )
 }
 \arguments{
-\item{p}{A single-profile SoilProfileCollection}
+\item{p}{A SoilProfileCollection}
 
-\item{n}{Number of new profiles to generate (default: 100)}
+\item{n}{Number of new profiles to generate (default: \code{100}) per profile in \code{p}}
 
 \item{id}{a vector of profile IDs with length equal to (\code{n}). Overrides use of \code{seq_len(n)} as default profile ID values.}
 
@@ -34,7 +34,7 @@ perturb(
 \item{new.idname}{New column name to contain unique profile ID (default: \code{pID})}
 }
 \value{
-a SoilProfileCollection with \code{n} realizations of \code{p}
+a SoilProfileCollection with \code{n} realizations of each profile in \code{p}
 }
 \description{
 "Perturbs" the \strong{boundary between horizons} or the \strong{thickness of horizons} using a standard deviation specified as a horizon-level attribute. This is selected using either \code{boundary.attr} or \code{thickness.attr} to specify the column name.
@@ -44,9 +44,9 @@ The boundary standard deviation corresponds roughly to the concept of "horizon b
 \details{
 Imagine a Normal curve with mean centered on the vertical (depth axis) at a representative value (RV) horizon bottom depth or thickness. By the Empirical Rule for Normal distribution, two "standard deviations" above or below that "central" mean value represent 95\% of the "typical volume" of that horizon or boundary.
 
-\code{perturb} can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}. The \code{boundary.attr} is arguably easier to parameterize from a single profile description or "Form 232" where \emph{horizon boundary distinctness} classes (based on vertical distance of transition) are conventionally recorded for each layer.
+\code{perturb()} can leverage semi-quantitative (ordered factor) levels of boundary distinctness/topography for the upper and lower boundary of individual horizons. A handy function for this is \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}. The \code{boundary.attr} is arguably easier to parameterize from a single profile description or "Form 232" where \emph{horizon boundary distinctness} classes (based on vertical distance of transition) are conventionally recorded for each layer.
 
-Alternately, \code{perturb} can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.
+Alternately, \code{perturb()} can be parameterized using standard deviation in thickness of layers derived from a group. Say, the variance parameters are defined from a set of pedons correlated to a particular series or component, and the template "seed" profile is, for example, the Official Series Description or the Representative Component Pedon.
 }
 \examples{
 

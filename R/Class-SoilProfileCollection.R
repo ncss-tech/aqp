@@ -296,7 +296,7 @@ setMethod(f = 'show',
             s <- s[rows.show.s, , drop = FALSE]
 
             # move IDs and depths, horizon designation/texture if available
-            hzm <- .hzMetadataNames(object, depths = horizonDepths(object))
+            hzm <- .hzMetadataNames(object, depths = TRUE)
             idx <- match(hzm, names(h))
 
             # determine number of columns to show, and index to hz / site data
@@ -1121,13 +1121,17 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
             return(res)
           })
 
-.hzMetadataNames <- function(object, depths = character(0), ...) {
+.hzMetadataNames <- function(object, depths = FALSE, ...) {
+  hzd <- character(0)
+  if (depths) {
+    hzd <- horizonDepths(object)
+  }
   idn <- c(idname(object),
     hzidname(object),
-    depths,
+    hzd,
     hzdesgnname(object),
     hztexclname(object))
-  idn[nchar(idn) > 0]
+  idn[!is.na(idn) & nchar(idn) > 0]
 }
 
 setGeneric("hzMetadata", function(object, ...)

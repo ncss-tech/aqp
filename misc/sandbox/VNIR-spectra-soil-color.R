@@ -8,6 +8,14 @@ library(tactile)
 x <- fetchRaCA('redding', get.vnir = TRUE)
 x <- as.data.frame(x$spectra[1:pmin(25, nrow(x$spectra)), ])
 
+y <- fetchRaCA('zook', get.vnir = TRUE)
+y <- as.data.frame(y$spectra[1:pmin(25, nrow(y$spectra)), ])
+
+z <- fetchRaCA('drummer', get.vnir = TRUE)
+z <- as.data.frame(z$spectra[1:pmin(25, nrow(z$spectra)), ])
+
+
+x <- rbind(x, y, z)
 
 # # "wide" format, no IDs
 # x <- read.csv('E:/temp/lab_spectra_csv.csv')

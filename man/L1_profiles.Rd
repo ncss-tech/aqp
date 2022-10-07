@@ -30,7 +30,7 @@ L1_profiles(
 a \code{SoilProfileCollection} object
 }
 \description{
-The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis.
+The L1 estimator, or \href{https://en.wikipedia.org/wiki/Geometric_median}{geometric median}, is a multivariate generalization of the (univariate) \href{https://en.wikipedia.org/wiki/Median}{median} concept. This function performs a multivariate aggregation (via L1 estimator) according to a suite of ratio-scale soil properties. The L1 estimator is applied to soil profile data that have been sliced to a 1-depth-unit basis. Data should be well stratified by groups defined in \code{fm}, otherwise the L1 median may not make any sense.
 
 See the \href{https://ncss-tech.github.io/AQP/aqp/L1-profiles.html}{L1 Profiles Tutorial} for additional examples.
 }

@@ -129,11 +129,11 @@ setGeneric("dice", function(x,
   # time to work with horizons 
   h <- horizons(x)
   
+  hmnames <- .hzMetadataNames(x, depths = TRUE)
+  newhm <- hmnames[which(!hmnames %in% vars)]
+  
   # safely select variables
-  h <- .data.frame.j(
-    h, 
-    col.names = c(hznames[ids.top.bottom.idx], vars)
-  )
+  h <- .data.frame.j(h, col.names = c(newhm, vars))
   
   # convert to DT, as needed
   if (!inherits(h, 'data.table')) {
@@ -204,8 +204,7 @@ setGeneric("dice", function(x,
   names(s)[1] <- hzidn
   
   # FULL JOIN via fast data.table compiled code
-  hm <- merge(h, hzMetadata(x), by = c(idn, hzidn), all.x = TRUE, sort = FALSE)
-  res <- merge(hm, s, by = hzidn, all = TRUE, sort = FALSE)
+  res <- merge(h, s, by = hzidn, all = TRUE, sort = FALSE)
   
   # init unique horizon IDs
   res[['sliceID']] <- as.character(1:nrow(res))
@@ -229,6 +228,8 @@ setGeneric("dice", function(x,
   }
   
   # slice-wise "percent missing" calculation
+  ## NOTE: this does not exclude horizon metadata columns like hzname, hztexture
+  ##       -> unless formula RHS is specified, but not with ~ .
   if (pctMissing) {
     
     # this is quite slow: DT -> DF -> matrix -> apply (8x longer)
@@ -295,7 +296,7 @@ setGeneric("dice", function(x,
 #' 
 #' @param pctMissing compute "percent missing data" by slice (when `TRUE` expect 6-8x longer run time)
 #' 
-#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
+#' @param fill logical, fill with empty placeholder horizons in gaps within profiles, and/or, above/below interval specified in `fm`. Automatically set to `TRUE` when LHS of `fm` is specified. Backwards compatibility with `slice` is maintained by setting `fill = TRUE` with or without `fm`.
 #' 
 #' @param strict perform horizon depth logic checking / flagging / removal
 #' 
@@ -304,9 +305,14 @@ setGeneric("dice", function(x,
 #' @param verbose Print information about object size/memory usage. Default: `FALSE`
 #' 
 #' @details For large and potentially messy collections that may include missing horizon depth logic errors, consider using `repairMissingHzDepths()` before `dice()`. Consider using `accumulateDepths()` before invoking `dice()` on collections that may contain old-style O horizon notation (e.g. 5-0cm).
+#' 
 #' @aliases dice
+#' 
 #' @seealso [repairMissingHzDepths()], [accumulateDepths()], [fillHzGaps()]
+#' 
 #' @return a `SoilProfileCollection` object, or `data.frame` when `SPC = FALSE`
-#' @author D.E. Beaudette, A.G. Brown 
+#' 
+#' @author D.E. Beaudette and A.G. Brown 
+#' 
 #' @export
 setMethod(f = 'dice', signature(x = 'SoilProfileCollection'), .dice)
