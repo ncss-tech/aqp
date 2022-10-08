@@ -97,6 +97,8 @@ setGeneric("dice", function(x,
       # must fill from min(z) --- [gaps] --- max(z) + 1
       x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z) + 1)
       
+      # NB: fillHzGaps will recalculate/reset hzID, so update the local var!
+      hzidn <- "hzID"
     }
     
     # check for '.' --> all variables, minus ID/depths
@@ -124,7 +126,6 @@ setGeneric("dice", function(x,
     vars <- hznames[-ids.top.bottom.idx]
     z <- NULL
   }
-  
   
   # time to work with horizons 
   h <- horizons(x)
@@ -172,7 +173,6 @@ setGeneric("dice", function(x,
                     list(.SD[[htb[1]]][i] + j - 1)
                   })
                 ), 
-                
                 # iterate over profiles in the collection (by idname)
                 by = c(idn), 
                 
@@ -181,11 +181,6 @@ setGeneric("dice", function(x,
   
   tops <- unlist(tops$V1)
   bottoms <- tops + 1
-  
-  # use internal hzID if hzidname has been set
-  if (is.null(h.sub[[hzidn]])) {
-    hzidn <- "hzID"
-  } 
   
   # expand slice IDs (horizon IDs); used to join with horizons
   sliceIDs <- rep(
