@@ -16,7 +16,7 @@ render_diff(d)
 s1 <- readRDS('misc/slab/slab-factor-1x-cpm2.rds')
 s2 <- readRDS('misc/slab/slab-factor-2x-cpm2.rds')
 
-# 82 modifications...
+# no difference
 d <- diff_data(s1, s2)
 render_diff(d)
 
