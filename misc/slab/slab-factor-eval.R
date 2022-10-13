@@ -22,7 +22,16 @@ s$genhz <- factor(s$genhz, levels = hz.names)
 a <- slab(x, ~ genhz, cpm = 1)
  
 # saveRDS(a, file = 'misc/slab/slab-factor-1x.rds')
+# saveRDS(a, file = 'misc/slab/slab-factor-2x.rds')
 
+a.1 <- slab(x, ~ genhz, cpm = 1)
+a.2 <- slab(x, ~ genhz, cpm = 2)
+# saveRDS(a.1, file = 'misc/slab/slab-factor-1x-cpm1.rds')
+# saveRDS(a.2, file = 'misc/slab/slab-factor-1x-cpm2.rds')
+saveRDS(a.1, file = 'misc/slab/slab-factor-2x-cpm1.rds')
+saveRDS(a.2, file = 'misc/slab/slab-factor-2x-cpm2.rds')
+
+# saveRDS(a, file = 'misc/slab/slab-factor-1x-cpm2.rds')
 # saveRDS(a, file = 'misc/slab/slab-factor-2x.rds')
 
 library(daff)
