@@ -1,20 +1,16 @@
-
-
 # default slab function for categorical variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
-.slab.fun.factor.default <- function(values, cpm) {
+.slab.fun.factor.default <- function(values, cpm, ...) {
 
-	# probabilities are relative to number of contributing profiles
-	if(cpm == 1) {
-		tb <- table(values, useNA='no')
+  if (cpm == 1) {
+	  # probabilities are relative to number of contributing profiles
+    tb <- table(values, useNA = 'no')
 		# convert to proportions
 		pt <- prop.table(tb)
-	}
-
-	# probabilities are relative to total number of profiles
-	else if(cpm == 2) {
-		tb <- table(values, useNA='always')
+	} else if (cpm == 2) {
+	  # probabilities are relative to total number of profiles
+	  tb <- table(values, useNA = 'always')
 		# convert to proportions,
 		# the last column will be named 'NA', and contains the tally of NAs --> remove it
 		pt <- prop.table(tb)
@@ -27,61 +23,52 @@
 	names(pt) <- make.names(levels(values))
 
 	return(pt)
-	}
+}
 
-
-## TODO: make these exported functions with documentation (https://github.com/ncss-tech/aqp/issues/99)
-
-
+.slab.fun.factor.weighted <- function(values, w, na.rm = TRUE, ...) {
+  # TODO
+}
+  
 # default slab function for continuous variables
 # returns a named vector of results
 # this type of function is compatible with aggregate()
-.slab.fun.numeric.default <- function(values) {
-	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-	## 2019-10-30: dropping Hmisc as a suggested package
-	# res <- Hmisc::hdquantile(values, probs=q.probs, na.rm=TRUE)
-	res <- quantile(values, probs=q.probs, na.rm=TRUE)
-	names(res) <- paste('p.q', round(q.probs * 100), sep='')
-	return(res)
+.slab.fun.numeric.default <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE, ...) {
+  .slab.fun.numeric.fast(values, probs = probs, na.rm = na.rm, ...)
 }
 
-# easy specification of Hmisc::hdquantile if available
-.slab.fun.numeric.HD <- function(values) {
-  # sanity check, need this for color distance eval
-  if(!requireNamespace('Hmisc', quietly = TRUE))
-    stop('pleast install the `Hmisc` package.', call.=FALSE)
-
-  q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-
-  res <- Hmisc::hdquantile(values, probs=q.probs, na.rm=TRUE)
-
-  names(res) <- paste('p.q', round(q.probs * 100), sep='')
+# for a site or horizon level weight column, use Hmisc::wtd.quantile
+#   note that "frequency weights" are assumed to be most common use case, so normwt=FALSE by default, 
+#   normwt=TRUE can be passed as optional argument for slab.fun from slab() interface
+.slab.fun.numeric.weighted <- function(values, w, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), normwt = FALSE, na.rm = TRUE, ...) {
+  if (!requireNamespace('Hmisc', quietly = TRUE))
+    stop('please install the `Hmisc` package to use `wtd.quantile()` method', call. = FALSE)
+  res <- try(Hmisc::wtd.quantile(values, w, probs = probs, na.rm = na.rm, normwt = normwt), silent = TRUE)
+  if (inherits(res, 'try-error') && grepl("zero non-NA points", res[1])) {
+    res <- rep(NA_real_, length(probs))
+  } else {
+    names(res) <- paste('p.q', round(probs * 100), sep = '')
+  }
   return(res)
 }
 
-# basic quantile evaluation, better for large datasets
-.slab.fun.numeric.fast <- function(values) {
-	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-	res <- quantile(values, probs=q.probs, na.rm=TRUE)
-	names(res) <- paste('p.q', round(q.probs * 100), sep='')
-	return(res)
+# easy specification of Hmisc::hdquantile if available
+.slab.fun.numeric.HD <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE, ...) {
+  # sanity check, need this for color distance eval
+  if (!requireNamespace('Hmisc', quietly = TRUE))
+    stop('please install the `Hmisc` package to use `hdquantile()` method', call. = FALSE)
+  
+  res <- Hmisc::hdquantile(values, probs = probs, na.rm = na.rm)
+  
+  names(res) <- paste('p.q', round(probs * 100), sep = '')
+  return(res)
 }
 
-
-# ## TODO: not yet implemented
-# # default slab function for weighted, continuous variables
-# # returns a named vector of results
-# # this type of function is compatible with aggregate()
-# # NOTE: nw (normalize-weights) argument will affect the results!
-# .slab.fun.wtd.numeric.default <- function(values, w, nw=TRUE) {
-# 	q.probs <- c(0.05, 0.25, 0.5, 0.75, 0.95)
-# 	res <- wtd.quantile(values, weights=w, probs=q.probs, na.rm=TRUE, normwt=nw)
-# 	names(res) <- paste('p.q', round(q.probs * 100), sep='')
-# 	return(res)
-# }
-
-
-## note: slab() uses slice() to resample to 1cm slices, to max(x) or slab.structure[2] if defined
+# basic quantile evaluation, better for large data sets
+.slab.fun.numeric.fast <- function(values, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE, ...) {
+  res <- quantile(values, probs = probs, na.rm = na.rm)
+  names(res) <- paste('p.q', round(probs * 100), sep = '')
+  return(res)
+}
 
 # SoilProfileCollection method
 # object: SoilProfileCollection
@@ -90,29 +77,27 @@
 # progress: plyr-progress display
 # slab.fun: aggregate function applied to data chunks (must return a single row / chunk)
 # cpm: class probability normalization mode
-# weights: character vector naming column containing weights
+# weights: character vector naming column in site slot containing weights
 # ... : extra arguments passed on to slab.fun
+.slab <- function(object,
+                  fm,
+                  slab.structure = 1,
+                  strict = FALSE,
+                  byhz = TRUE,
+                  slab.fun = slab_function(method = "numeric"),
+                  cpm = 1,
+                  weights = NULL,
+                  ...) {
 
-# this is about 40% slower than the old method
-.slab <- function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...){
-	# issue a message for now that things have changed
-	#	message('usage of slab() has changed considerably, please see the manual page for details')
-
-	# get extra arguments: length of 0 if no extra arguments
-	extra.args <- list(...)
-
-	## important: change the default behavior of data.frame and melt
-	opt.original <- options(stringsAsFactors = FALSE)
+  # define keywords for data.table
+  .SD <- NULL; .N <- NULL; value <- NULL
 
 	# get unique list of names in object
 	object.names <- unique(unlist(names(object)))
 
-	# get number of profiles
-	n.profiles <- length(object)
-
-	# max depth
-	max.d <- max(object)
-
+	# get horizon depth column names
+	hzd <- horizonDepths(object)
+	
 	# get name of ID column in original object for later
 	object.ID <- idname(object)
 
@@ -120,112 +105,77 @@
 	original.levels <- NULL
 
 	# extract components of the formula:
-	g <- all.vars(update(fm, .~0)) # left-hand side
-	vars <- all.vars(update(fm, 0~.)) # right-hand side
-
-	# sanity check:
-	if(! inherits(fm, "formula"))
-		stop('must provide a valid formula: groups ~ var1 + var2 + ...', call.=FALSE)
-
-	# check for bogus left/right side problems with the formula
-	if(any(g %in% object.names) == FALSE & g != '.') # bogus grouping column
-		stop('group name either missing from formula, or does match any columns in dataframe', call.=FALSE)
-
-	if(any(vars %in% object.names) == FALSE) # bogus column names in right-hand side
-		stop('column names in formula do not match column names in dataframe', call.=FALSE)
-
+	g <- all.vars(update(fm, . ~ 0)) # left-hand side
+	vars <- all.vars(update(fm, 0 ~ .)) # right-hand side
 	
-	## old slice() version ###############################
+	# sanity check:
+	if (!inherits(fm, "formula"))
+	  stop('must provide a valid formula: groups ~ var1 + var2 + ...', call. = FALSE)
+	
+	# check for bogus left/right side problems with the formula
+	if (length(g) > 0 && !any(g %in% object.names) && g != '.') # bogus grouping column
+	  stop('group name either missing from formula, or does match any columns in data.frame', call. = FALSE)
+
+	if (any(vars %in% object.names) == FALSE) # bogus column names in right-hand side
+	  stop('column names in formula do not match column names in data.frame', call. = FALSE)
 	
 	# make formula for slicing
-	## TODO: slice() returns an extra row, so only request slices to max-1
-	fm.slice <- formula(paste('0:', max(object)-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
-
-	# short-cut for user-defined slab
-	## TODO: slice() returns an extra row, so only request slices to max-1
-	if(length(slab.structure) == 2 )
-		fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2]-1, ' ~ ', paste(vars, collapse=' + '), sep=''))
-
+	if (length(slab.structure) == 2) {
+  	# user-defined single slab
+	  fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2], ' ~ ', paste(vars, collapse = ' + '), sep = ''))
+	} else {
+	  fm.slice <- formula(paste('0:', max(object), ' ~ ', paste(vars, collapse = ' + '), sep = ''))
+	}
+	
 	# slice into 1cm increments, result is a data.frame
-	data <- slice(object, fm.slice, strict=strict, just.the.data=TRUE)
-
-	#######################################################
-	
-	
-	## dice() version  ####################################
-	# https://github.com/ncss-tech/aqp/issues/115
-	
-	## TODO:
-	#  * enforce filling / check assumptions about length
-	#  * consider total re-write vs. adaptation
-	
-	# # make formula for slicing
-	# fm.slice <- formula(paste('0:', max(object), ' ~ ', paste(vars, collapse=' + '), sep=''))
-	# 
-	# # short-cut for user-defined slab
-	# if(length(slab.structure) == 2 )
-	#   fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2], ' ~ ', paste(vars, collapse=' + '), sep=''))
-	# 
-	# # slice into 1cm increments, result is a data.frame
-	# data <- dice(x = object, fm = fm.slice, strict = strict, SPC = FALSE, pctMissing = TRUE)
-	
-	#######################################################
-	
-	
-	
-	
+	data <- dice(x = object, fm = fm.slice, strict = strict, byhz = byhz, SPC = FALSE, pctMissing = TRUE)
+  
+	# Note: in this case we need to subtract the extra slice included by slice()/dice()
+  # do it to sliced result so that the genSlabLabels have the correct length
+  ldx <- data[[horizonDepths(object)[2]]] > slab.structure[2]
+	if (length(slab.structure) == 2 && any(ldx, na.rm = TRUE)) {
+	  data <- data[which(!ldx), ]  
+	}
+   
 	# extract site data
 	site.data <- site(object)
 
 	# check groups for NA, if grouping variable was given
-	if(g != '.')
-		if(any(is.na(site.data[, g])))
-			stop('grouping variable must not contain NA', call.=FALSE)
-
-	### !!! this runs out of memory when groups contains NA !!!
-	## this is generating a lot of extra objects and possibly wasting memory
+	if (g != '.' && any(is.na(site.data[, g]))) {
+		stop('grouping variable must not contain NA', call. = FALSE)
+	}
+	
 	# merge site data back into the result, this would include site-level weights
-	data <- merge(x = data, y = site.data, by=object.ID, all.x=TRUE, sort=FALSE)
-
-	# clean-up
-	rm(object, site.data)
-	gc()
+	data <- merge(x = data, y = site.data, by = object.ID, all.x = TRUE, sort = FALSE)
 
 	# check variable classes
-	if(length(vars) > 1) {
+	if (length(vars) > 1) {
 	  vars.numeric.test <- sapply(data[, vars], is.numeric)
 	}	else {
 	  vars.numeric.test <- is.numeric(data[[vars]])
 	}
 
-
-	# sanity check: all numeric, or single character/factor
-	if(any(! vars.numeric.test) & length(vars) > 1) {
+	# # sanity check: all numeric, or single character/factor
+	if (any(!vars.numeric.test) & length(vars) > 1) {
 	  stop('mixed variable types and multiple categorical variables are not currently supported in the same call to slab', call. = FALSE)
 	}
 
-
 	# check for single categorical variable, and convert to factor
-	if(length(vars) == 1 & inherits(data[, vars], c('character', 'factor'))) {
+	if (length(vars) == 1 & inherits(data[, vars], c('character', 'factor'))) {
 
 		# if we have a character, then convert to factor
-		if(inherits(data[[vars]],'character')) {
+		if (inherits(data[[vars]],'character')) {
 			message('Note: converting categorical variable to factor.')
 			data[[vars]] <- factor(data[[vars]])
 		}
 
 		# check for weights
-		if(!missing(weights)) {
-		  stop('weighted aggregation of categorical variables not yet implemented', call.=FALSE)
+		if (!missing(weights)) {
+		  slab.fun <- .slab.fun.factor.weighted
+		} else {
+  		# re-set default function, currently no user-supply-able option
+  		slab.fun <- .slab.fun.factor.default
 		}
-
-
-		# re-set default function, currently no user-supply-able option
-		slab.fun <- .slab.fun.factor.default
-
-		# add extra arguments required by this function
-		# note that we cannot accept additional arguments when processing categorical values
-		extra.args <- list(cpm = cpm)
 
     # save factor levels for later
     original.levels <- levels(data[[vars]])
@@ -236,127 +186,114 @@
 	  .factorFlag <- FALSE
 	}
 
-
-	####
-	#### optimization note: use of factor labels could be slowing things down...
-	####
-	## Note: this assumes ordering is correct in source data / segment labels
-	## TODO: make sure that nrow(data) == genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
-	## TODO: investigate use of split() to speed things up, no need to keep everything in the safe DF:
-	##
-	##         l <- split(data, data$seg.label, drop=FALSE)
-	##
-	## ... parallel processing with furrr
-
 	# add segmenting label to data
- 	data$seg.label <- genSlabLabels(slab.structure = slab.structure, max.d = max.d, n.profiles = n.profiles)
+ 	data$seg.label <- .genSlabLabels2(object, data, slab.structure = slab.structure)
 
 	# if there is no left-hand component in the formula, we are aggregating all data in the collection
-	if(g == '.') {
+	if (g == '.') {
 		g <- 'all.profiles' # add new grouping variable to horizons
 		data[, g] <- 1
 	}
-
-
-	##
-	## TODO: adding weighted-aggregate functionality here
-	## we can't use aggregate() for this
-	## we can use data.table methods
-
+ 	
+ 	if (length(weights) > 1) {
+ 	  stop("`weights` argument should be a character vector of length one containing (site-level) weight column name", call. = FALSE)
+ 	}
+ 	
+ 	if (!is.null(weights) && !weights %in% siteNames(object)) {
+ 	  stop("column '", weights, "' not present in site data", call. = FALSE)
+ 	}
+ 	
+ 	# convert wide -> long format; warnings will occur when not all columns are e.g. double
+ 	d.long <- suppressWarnings(data.table::melt(
+ 	  data.table::as.data.table(data[which(!is.na(data$seg.label)), ]),
+ 	  id.vars = unique(c(object.ID, 'seg.label', g, weights)),
+ 	  measure.vars = vars
+ 	))
+ 	
 	# check for weights
-	if(!missing(weights))
-		stop('weighted aggregation is not yet supported', call.=FALSE)
-
- 	## TODO: why would this ever happen?
-	# throwing out those rows with an NA segment label
-	seg.label.is.not.NA <- which(!is.na(data$seg.label))
-
-	# convert into long format
-	# d.long.df <- reshape::melt(data[seg.label.is.not.NA, ], id.vars=c(object.ID, 'seg.label', g), measure.vars=vars)
-
-	# convert wide -> long format
-	# using data.table::melt()
-	# note that this will not preserve factor levels when 'vars' is categorical
-	# must call unique() on `id.vars`
-	d.long <- melt(
-	  as.data.table(data[seg.label.is.not.NA, ]),
-	  id.vars = unique(c(object.ID, 'seg.label', g)),
-	  measure.vars = vars,
-	  )
-
-	# convert back to data.frame
-	d.long <- as.data.frame(d.long)
-
-  # reset factor levels in d.long[[value]]
-	if(.factorFlag) {
-	  d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
+	if (!missing(weights)) {
+	  if (missing(slab.fun)) {
+	    # default _weighted_ aggregation fun is .slab.fun.numeric.weighted
+	    FUN <- .slab.fun.numeric.weighted
+	    # custom weighted aggregation fun should take first argument as values 
+	    # second argument is "weights" argument
+	  } else {
+	    FUN <- slab.fun
+	  }
+	} else {
+	  if (missing(slab.fun) || !inherits(slab.fun, 'function')) {
+	    # default numeric aggregation fun is .slab.fun.numeric.default
+	    FUN <- .slab.fun.numeric.default
+	  } else {
+	    FUN <- slab.fun
+	  }
 	}
-
-	# make a formula for aggregate()
-	aggregate.fm <- as.formula(paste('value ~ seg.label + variable + ', g, sep=''))
-
-	##
-	## TODO: this might be the place to implement parallel code in furrr
-	##       1. split into a list based on number of cores/cpus available
-	##       2. aggregate using seg.label + variable in parallel
-	##       3. combine results (a list of data.frames)
-	##
-	## NOPE: use data.table which will automatically scale to multiple threads
-	##
-
-
-
-	# process chunks according to group -> variable -> segment
-	# NA values are not explicitly dropped
-	if(length(extra.args) == 0)
-		d.slabbed <- aggregate(aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun)
-
-	# optionally account for extra arguments
-	else {
-		the.args <- c(list(aggregate.fm, data=d.long, na.action=na.pass, FUN=slab.fun), extra.args)
-		d.slabbed <- do.call(what='aggregate', args=the.args)
-	}
-
-
-	# if slab.fun returns a vector of length > 1 we must:
-	# convert the complex data.frame returned by aggregate into a regular data.frame
-	# the column 'value' is a matrix with the results of slab.fun
-	if(inherits(d.slabbed$value, 'matrix'))
-		d.slabbed <- cbind(d.slabbed[, 1:3], d.slabbed$value)
-
-  # ensure that the names returned from slab.fun are legal
-  names(d.slabbed) <- make.names(names(d.slabbed))
-
-	# convert the slab.label column into top/bottom as integers
-	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
-	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
-	d.slabbed$bottom <- as.integer(lapply(slab.depths, function(i) i[2]))
-
-	# estimate contributing fraction
-	d.slabbed$contributing_fraction <- aggregate(aggregate.fm, data=d.long, na.action=na.pass, FUN=function(i) {length(na.omit(i)) / length(i)})$value
-
-
+ 	
+ 	.internal_wt <- eval(weights)
+ 	
+ 	# calculate summary function FUN for each variable*groups*slablabel
+ 	#  FUN returns a (named) vector of summary statistics, which are converted to "wide" data.frame
+ 	
+ 	if (.factorFlag) {
+ 	  d.long[['value']] <- factor(d.long[['value']], levels = original.levels)
+ 	}
+ 	
+ 	if (!missing(weights)) {
+   	d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, .SD[[.internal_wt]], ...))),
+   	                                  by = c('variable', g, 'seg.label')])
+ 	} else {
+ 	  if (!missing(cpm)) {
+ 	    d.slabbed <- as.data.frame(d.long[, as.data.frame(t(unclass(FUN(value, cpm = cpm, ...)))),
+ 	                                      by = c('variable', g, 'seg.label')])
+ 	  } else {
+   	  d.slabbed <- as.data.frame(d.long[, as.data.frame(t(FUN(value, ...))),
+   	                                    by = c('variable', g, 'seg.label')])
+ 	  }
+ 	}
+ 	
+ 	# calculate contributing fraction for each variable*groups*slablabel
+ 	d.slabbed$contributing_fraction <- d.long[, sum(!is.na(.SD[["value"]])) / .N,
+ 	                                          by = c('variable', g, 'seg.label')]$V1
+ 	
+	# ensure that the names returned from slab.fun are legal
+	names(d.slabbed) <- make.names(names(d.slabbed)) 
+	  
+ 	# rename default data.table value column names
+ 	unn <- grepl("^V\\d+$", colnames(d.slabbed))
+ 	if (any(unn)) {
+ 	  colnames(d.slabbed)[unn] <- paste0("value", ifelse(sum(unn) == 1, "", 1:sum(unn)))
+ 	}
+ 	
+ 	# convert the slab.label column into top/bottom as integers
+ 	slab.depths <- strsplit(as.character(d.slabbed$seg.label), '-')
+ 	d.slabbed$top <- as.integer(lapply(slab.depths, function(i) i[1]))
+ 	d.slabbed$bottom <- as.integer(lapply(slab.depths, function(i) i[2]))
+ 	
 	# remove seg.label from result
 	d.slabbed$seg.label <- NULL
 
   # if categorical data have been aggregated, set an attribute with the original levels
   # this allows one to recover values that are not legal column names
   # e.g. 2Bt is corrupted to X2Bt
-  if(! is.null(original.levels))
+  if (!is.null(original.levels)) {
     attr(d.slabbed, 'original.levels') <- original.levels
-
-	# reset options:
-	options(opt.original)
-
-	# done
-	return(d.slabbed)
+  }
+	
+	d.slabbed
 }
 
 # setup generic function
-# if (!isGeneric("slab"))
-	setGeneric("slab", function(object, fm, slab.structure=1, strict=FALSE, slab.fun=.slab.fun.numeric.default, cpm=1, weights=NULL, ...) standardGeneric("slab"))
+setGeneric("slab", function(object,
+                              fm,
+                              slab.structure = 1,
+                              strict = FALSE,
+                              byhz = TRUE,
+                              slab.fun = slab_function(method = "numeric"),
+                              cpm = 1,
+                              weights = NULL,
+                              ...)
+    standardGeneric("slab"))
 
-# method dispatch
 #' Slab-Wise Aggregation of SoilProfileCollection Objects
 #'
 #' Aggregate soil properties along user-defined `slabs`, and optionally within
@@ -373,6 +310,8 @@
 #' \code{stats::quantile} from the Hmisc package, which requires at least 2
 #' observations per chunk. Note that if `group` is a factor it must not contain
 #' NAs.
+#' 
+#' `slab()` uses `dice()` to "resample" profiles to 1cm slices from depth 0 to `max(x)` (or `slab.structure[2]`, if defined).
 #'
 #' Sometimes \code{slab} is used to conveniently re-arrange data vs. aggregate.
 #' This is performed by specifying \code{identity} in \code{slab.fun}. See
@@ -401,26 +340,27 @@
 #' @aliases slab slab2 genSlabLabels slab,SoilProfileCollection-method
 #' @docType methods
 #' @param object a SoilProfileCollection
-#' @param fm A formula: either `groups ~ var1 + var2 + var3' where named
+#' @param fm A formula: either `groups ~ var1 + var2 + var3` where named
 #' variables are aggregated within `groups' OR where named variables are
-#' aggregated across the entire collection ` ~ var1 + var2 + var3'. If `groups`
-#' is a factor it must not contain NA.
+#' aggregated across the entire collection ` ~ var1 + var2 + var3`. If `groups`
+#' is a factor it must not contain `NA`
 #' @param slab.structure A user-defined slab thickness (defined by an integer),
 #' or user-defined structure (numeric vector). See details below.
 #' @param strict logical: should horizons be strictly checked for
 #' self-consistency?
+#' @param byhz logical: should horizons or whole profiles be removed by logic checks in `strict`? Default `TRUE` removes only offending horizons, `FALSE` removes whole profiles with one or more illogical horizons.
 #' @param slab.fun Function used to process each 'slab' of data, ideally
 #' returning a vector with names attribute. Defaults to a wrapper function
-#' around \code{stats::quantile}. See details.
+#' around `stats::quantile()`. See details.
 #' @param cpm Strategy for normalizing slice-wise probabilities, dividing by
-#' either: number of profiles with data at the current slice (cpm=1), or by the
+#' either: number of profiles with data at the current slice (`cpm=1`), or by the
 #' number of profiles in the collection (cpm=2). Mode 1 values will always sum
 #' to the contributing fraction, while mode 2 values will always sum to 1.
-#' @param weights Column name containing weights. NOT YET IMPLEMENTED
-#' @param \dots further arguments passed to \code{slab.fun}
+#' @param weights Column name containing site-level weights
+#' @param \dots further arguments passed to `slab.fun`
 #' @return Output is returned in long format, such that slice-wise aggregates
 #' are returned once for each combination of grouping level (optional),
-#' variable described in the \code{fm} argument, and depth-wise 'slab'.
+#' variable described in the `fm` argument, and depth-wise 'slab'.
 #'
 #' Aggregation of numeric variables, using the default slab function:
 #' \describe{ \item{variable}{The names of variables included in the call to
@@ -525,7 +465,6 @@
 #'        prepanel=prepanel.depth_function,
 #'        scales=list(x=list(alternating=1))
 #' )
-#'
 #'
 #' ##
 #' ## categorical variable example
@@ -780,6 +719,7 @@
 #'
 #'
 #'
+# # TODO: update this when weights are implemented
 #' ## weighted-aggregation -- NOT YET IMPLEMENTED --
 #' # load sample data, upgrade to SoilProfileCollection
 #' data(sp1)
@@ -790,4 +730,29 @@
 #' sp1$site.wts <- runif(n=length(sp1), min=20, max=100)
 #' }
 #'
-setMethod(f='slab', signature='SoilProfileCollection', definition=.slab)
+setMethod(f = 'slab',
+          signature = 'SoilProfileCollection',
+          definition = .slab)
+
+#' @param method one of `"numeric"`, `"factor"`, `"hd"`, `"weighted.numeric"`, `"weighted.factor"`, `"fast"`
+#' @details `slab_function()`: The default `"numeric"` aggregation method is the `"fast"` numeric (quantile) method. Additional methods include `"factor"` for categorical data, `"hd"` to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "`weighted`" to use a weighted quantile method from the Hmisc package
+#' @return `slab_function()`: return an aggregation function based on the `method` argument
+#' @rdname slab-methods
+#' @export
+slab_function <- function(method = c("numeric", "factor", "hd", "weighted.numeric", "weighted.factor", "fast")) {
+  switch(method,
+         numeric = .slab.fun.numeric.default, # uses "fast" numeric method
+         factor = .slab.fun.factor.default, 
+         weighted.factor = .slab.fun.factor.weighted, 
+         hd = .slab.fun.numeric.HD, 
+         weighted.numeric = .slab.fun.numeric.weighted,
+         weighted.factor = .slab.fun.numeric.weighted,
+         fast = .slab.fun.numeric.fast,
+         .slab.fun.numeric.default
+  )
+}
+
+# for debugging;
+.slabinternal <- function(...) {
+  .slab(...)
+}
