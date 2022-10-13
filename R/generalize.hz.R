@@ -93,7 +93,7 @@ generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdep
 	}
 }
 
-setGeneric("generalizeHz",  function(x, new, pattern, non.matching.code, hzdepm, ordered, ...) standardGeneric("generalizeHz"))
+setGeneric("generalizeHz",  function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), ...) standardGeneric("generalizeHz"))
 
 #' @export
 #' @aliases generalizeHz
@@ -126,6 +126,10 @@ setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, ne
     ordered = ordered, 
     ...
   )
+  
+  # set label in metadata
+  GHL(x) <- ghl
+  
   x
 })
 

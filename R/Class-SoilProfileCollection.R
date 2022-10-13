@@ -1130,6 +1130,7 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
     hzidname(object),
     hzd,
     hzdesgnname(object),
+    GHL(object),
     hztexclname(object))
   idn[!is.na(idn) & nchar(idn) > 0]
 }

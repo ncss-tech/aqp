@@ -226,3 +226,61 @@ setReplaceMethod("hztexclname", signature(object = "SoilProfileCollection"),
                      allowednames = "horizon"
                    )
                  })
+
+## get column containing horizon designations (there is a setter of same name)
+
+setGeneric("GHL", function(object, required = FALSE)
+  standardGeneric("GHL"))
+
+#' @title Get or Set Generalized Horizon Label (GHL) Column Name
+#' @name GHL
+#' @aliases GHL GHL,SoilProfileCollection-method GHL<- GHL,SoilProfileCollection-method
+#' @details Store the column name containing generalized horizon labels in the metadata slot of the SoilProfileCollection.
+#' @description `GHL()`: Get column name containing generalized horizon labels 
+#' @param object a SoilProfileCollection
+#' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
+#' @docType methods
+#' @rdname GHL
+setMethod("GHL", signature(object = "SoilProfileCollection"),
+          function(object, required = FALSE) {
+            .require.metadata.aqp(object,
+                                  attr = "aqp_ghl",
+                                  attrlabel = "Generalized Horizon Label",
+                                  message = "\nSee ??GHL",
+                                  required = required)
+          })
+
+setGeneric('GHL<-', function(object, required = FALSE, value)
+  standardGeneric('GHL<-'))
+
+#' @description `GHL<-`: Set generalized horizon label column name
+#' @param object a SoilProfileCollection
+#' @param value character, name of column containing generalized horizon labels
+#' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid `value`.
+#' @docType methods
+#' @rdname GHL
+#' @examples
+#'
+#' data(sp1)
+#'
+#' # promote to SPC
+#' depths(sp1) <- id ~ top + bottom
+#'
+#' # set horizon designation column
+#' GHL(sp1) <- "name"
+#'
+#' # get horizon designation column
+#' GHL(sp1)
+setReplaceMethod("GHL",
+                 signature(object = "SoilProfileCollection"),
+                 function(object, required = FALSE, value) {
+                   .set.metadata.aqp(
+                     object = object,
+                     value = value,
+                     required = required,
+                     attr = "aqp_ghl",
+                     attrlabel = "Generalized Horizon Label",
+                     message = "\nSee ??GHL",
+                     allowednames = "horizon"
+                   )
+                 })
