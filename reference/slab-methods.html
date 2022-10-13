@@ -71,10 +71,15 @@ groups.</p>
 <span>  <span class="va">fm</span>,</span>
 <span>  slab.structure <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  strict <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  slab.fun <span class="op">=</span> <span class="va">.slab.fun.numeric.default</span>,</span>
+<span>  byhz <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  slab.fun <span class="op">=</span> <span class="fu">slab_function</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span>,</span>
 <span>  cpm <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">slab_function</span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"numeric"</span>, <span class="st">"factor"</span>, <span class="st">"hd"</span>, <span class="st">"weighted.numeric"</span>, <span class="st">"weighted.factor"</span>, <span class="st">"fast"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,9 +90,8 @@ groups.</p>
 
 
 <dt>fm</dt>
-<dd><p>A formula: either <code>groups ~ var1 + var2 + var3' where named variables are aggregated within </code>groups' OR where named variables are
-aggregated across the entire collection <code>~ var1 + var2 + var3'. If</code>groups`
-is a factor it must not contain NA.</p></dd>
+<dd><p>A formula: either <code>groups ~ var1 + var2 + var3</code> where named
+variables are aggregated within <code>groups' OR where named variables are aggregated across the entire collection </code> ~ var1 + var2 + var3<code>. If </code>groups<code>is a factor it must not contain</code>NA`</p></dd>
 
 
 <dt>slab.structure</dt>
@@ -100,25 +104,33 @@ or user-defined structure (numeric vector). See details below.</p></dd>
 self-consistency?</p></dd>
 
 
+<dt>byhz</dt>
+<dd><p>logical: should horizons or whole profiles be removed by logic checks in <code>strict</code>? Default <code>TRUE</code> removes only offending horizons, <code>FALSE</code> removes whole profiles with one or more illogical horizons.</p></dd>
+
+
 <dt>slab.fun</dt>
 <dd><p>Function used to process each 'slab' of data, ideally
 returning a vector with names attribute. Defaults to a wrapper function
-around <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile</a></code>. See details.</p></dd>
+around <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>. See details.</p></dd>
 
 
 <dt>cpm</dt>
 <dd><p>Strategy for normalizing slice-wise probabilities, dividing by
-either: number of profiles with data at the current slice (cpm=1), or by the
+either: number of profiles with data at the current slice (<code>cpm=1</code>), or by the
 number of profiles in the collection (cpm=2). Mode 1 values will always sum
 to the contributing fraction, while mode 2 values will always sum to 1.</p></dd>
 
 
 <dt>weights</dt>
-<dd><p>Column name containing weights. NOT YET IMPLEMENTED</p></dd>
+<dd><p>Column name containing site-level weights</p></dd>
 
 
 <dt>...</dt>
 <dd><p>further arguments passed to <code>slab.fun</code></p></dd>
+
+
+<dt>method</dt>
+<dd><p>one of <code>"numeric"</code>, <code>"factor"</code>, <code>"hd"</code>, <code>"weighted.numeric"</code>, <code>"weighted.factor"</code>, <code>"fast"</code></p></dd>
 
 </dl></div>
     <div id="value">
@@ -189,7 +201,8 @@ fraction of profiles contributing to the aggregate value, ranges from
 
 
 
-</dl></div>
+</dl><p><code>slab_function()</code>: return an aggregation function based on the <code>method</code> argument</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>Multiple continuous variables OR a single categorical (factor) variable can
@@ -203,6 +216,7 @@ mean, mean-1SD and mean+1SD. The default slab function wraps
 <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile</a></code> from the Hmisc package, which requires at least 2
 observations per chunk. Note that if <code>group</code> is a factor it must not contain
 NAs.</p>
+<p><code>slab()</code> uses <code><a href="dice-SoilProfileCollection-method.html">dice()</a></code> to "resample" profiles to 1cm slices from depth 0 to <code>max(x)</code> (or <code>slab.structure[2]</code>, if defined).</p>
 <p>Sometimes <code>slab</code> is used to conveniently re-arrange data vs. aggregate.
 This is performed by specifying <code>identity</code> in <code>slab.fun</code>. See
 examples beflow for a demonstration of this functionality.</p>
@@ -227,7 +241,8 @@ units</p></dd>
 are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units</p></dd>
 
 
-</dl></div>
+</dl><p><code>slab_function()</code>: The default <code>"numeric"</code> aggregation method is the <code>"fast"</code> numeric (quantile) method. Additional methods include <code>"factor"</code> for categorical data, <code>"hd"</code> to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "<code>weighted</code>" to use a weighted quantile method from the Hmisc package</p>
+    </div>
     <div id="note">
     <h2>Note</h2>
     <p>Arguments to <code>slab</code> have changed with <code>aqp</code> 1.5 (2012-12-29)
@@ -278,11 +293,9 @@ Biometrika 69:635-640.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># aggregate entire collection with two different segment sizes</span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">prop</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> horizons with zero thickness have been omitted from results</span>
 <span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">prop</span>, slab.structure<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> horizons with zero thickness have been omitted from results</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># check output</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
@@ -294,9 +307,9 @@ Biometrika 69:635-640.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ p.q50                : num  3 3 3 5 5 5 5 5 5 5 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ p.q75                : num  8 8 7 7 7 7 7 7 7 7 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ p.q95                : num  13.6 13.6 14 14 14 16.4 16.4 16.4 16.4 16.4 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># stack into long format</span></span></span>
 <span class="r-in"><span><span class="va">ab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lattice/man/make.groups.html" class="external-link">make.groups</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span></span></span>
@@ -328,8 +341,7 @@ Biometrika 69:635-640.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># arrange data by ID</span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm <span class="op">=</span> <span class="va">id</span> <span class="op">~</span> <span class="va">prop</span>, slab.fun<span class="op">=</span><span class="va">identity</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> horizons with zero thickness have been omitted from results</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># convert id to a factor for plotting</span></span></span>
 <span class="r-in"><span><span class="va">a</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
@@ -340,9 +352,9 @@ Biometrika 69:635-640.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ variable             : Factor w/ 1 level "prop": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ id                   : Factor w/ 9 levels "P001","P002",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ value                : int  13 13 7 7 7 7 7 7 7 7 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ top                  : int  0 1 2 3 4 5 6 7 8 9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ bottom               : int  1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ contributing_fraction: num  1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot via step function</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html" class="external-link">xyplot</a></span><span class="op">(</span><span class="va">top</span> <span class="op">~</span> <span class="va">value</span> <span class="op">|</span> <span class="va">id</span>, data<span class="op">=</span><span class="va">a</span>, ylab<span class="op">=</span><span class="st">'Depth'</span>,</span></span>
@@ -352,7 +364,6 @@ Biometrika 69:635-640.</p>
 <span class="r-in"><span>       scales<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alternating<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="slab-methods-2.png" alt="" width="768" height="475"></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
 <span class="r-in"><span><span class="co">## categorical variable example</span></span></span>
@@ -371,8 +382,7 @@ Biometrika 69:635-640.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compute slice-wise probability so that it sums to contributing fraction, from 0-150</span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm<span class="op">=</span><span class="fl">1</span>, slab.structure<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> horizons with zero thickness have been omitted from results</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># convert wide -&gt; long for plotting</span></span></span>
 <span class="r-in"><span><span class="co"># result is a data.table</span></span></span>
@@ -419,8 +429,7 @@ Biometrika 69:635-640.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># adjust probability to size of collection, from 0-150</span></span></span>
 <span class="r-in"><span><span class="va">a.1</span> <span class="op">&lt;-</span> <span class="fu">slab</span><span class="op">(</span><span class="va">sp1</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">name</span>, cpm <span class="op">=</span> <span class="fl">2</span>, slab.structure <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: aqp::slice() will be deprecated in aqp version 2.0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; Please consider using the more efficient aqp::dice()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> horizons with zero thickness have been omitted from results</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># convert wide -&gt; long for plotting</span></span></span>
 <span class="r-in"><span><span class="co"># result is a data.table</span></span></span>
