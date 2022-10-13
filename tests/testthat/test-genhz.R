@@ -141,4 +141,14 @@ test_that("get.ml.hz works as expected", {
   
 })
 
-
+test_that("generalizeHz SPC method", {
+  data(sp4)
+  depths(sp4) <- id ~ top + bottom
+  
+  # name is the regular hz designation
+  hzdesgnname(sp4) <- "name"
+  
+  sp4 <- generalizeHz(sp4, c('A','B','C'), c('^A', '^B', '^C'), ghl = "mylabel")
+  
+  expect_equal(GHL(sp4), "mylabel")
+})
