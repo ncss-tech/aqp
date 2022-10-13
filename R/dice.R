@@ -69,7 +69,7 @@ setGeneric("dice", function(x,
     if (length(fm) > 2) {
       stop("please provide a valid formula", call. = FALSE)
     }
-    ;
+    
     # LHS ~ RHS
     # LHS: "", single integer, vector of integers slices
     # z-index
@@ -97,6 +97,8 @@ setGeneric("dice", function(x,
       # must fill from min(z) --- [gaps] --- max(z) + 1
       x <- fillHzGaps(x, flag = TRUE, to_top = min(z), to_bottom = max(z) + 1)
       
+      # NB: fillHzGaps will recalculate/reset hzID, so update the local var!
+      hzidn <- "hzID"
     }
     
     # check for '.' --> all variables, minus ID/depths
@@ -124,7 +126,6 @@ setGeneric("dice", function(x,
     vars <- hznames[-ids.top.bottom.idx]
     z <- NULL
   }
-  
   
   # time to work with horizons 
   h <- horizons(x)
@@ -172,7 +173,6 @@ setGeneric("dice", function(x,
                     list(.SD[[htb[1]]][i] + j - 1)
                   })
                 ), 
-                
                 # iterate over profiles in the collection (by idname)
                 by = c(idn), 
                 

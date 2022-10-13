@@ -616,10 +616,9 @@ Making quality figures with fewer than 5 soil profiles usually requires more cus
  * move depth axis to the left with negative `axis.line.offset` values
 
 Get some example data from the Official Series Descriptions:
-
 ```{r, fig.width=5, fig.height=6}
-library(soilDB)
-x <- fetchOSD(c('appling', 'cecil', 'bonneau'))
+data(osd)
+x <- osd
 ```
 
 Using 5x6 inch output device:

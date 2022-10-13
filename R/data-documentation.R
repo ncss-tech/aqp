@@ -2,6 +2,18 @@
 ## document data here
 ## don't forget: @usage data(XXX)
 
+
+#' @title Example Output from soilDB::fetchOSD()
+#' @description An example `SoilProfileCollection` object created by `soilDB::fetchOSD()`, derived from the Cecil, Appling, and Bonneau Official Series Descriptions.
+#' @keywords datasets
+#' @usage data(osd)
+#' @format A `SoilProfileCollection`
+"osd"
+
+
+
+
+
 #' Soil Profile Data Example 1
 #'
 #' Soil profile data from Pinnacles National Monument, CA.
@@ -1501,6 +1513,17 @@ NULL
 #' @usage data(munsellHuePosition)
 #' 
 "munsellHuePosition"
+
+
+#' @title pH Reaction Classes
+#' 
+#' @description Levels of pH (reaction) classes including descriptive name, and range from low to high pH
+#' @references Soil Science Division Staff. (2017) Soil Survey Manual. C. Ditzler, K. Scheffe, and H.C. Monger (eds.). USDA Handbook 18. Government Printing Office, Washington, D.C.
+#' @keywords datasets
+#' @usage data(reactionclass)
+#' 
+"reactionclass"
+
 
 
 
