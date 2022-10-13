@@ -34,7 +34,7 @@ generalize.hz(
   non.matching.code = "not-used",
   hzdepm = NULL,
   ordered = !missing(hzdepm),
-  gendesgnname = "genhz",
+  ghl = "genhz",
   ...
 )
 }
@@ -53,17 +53,17 @@ generalize.hz(
 
 \item{...}{additional arguments passed to \code{grep()} such as \code{perl=TRUE} for advanced REGEX}
 
-\item{gendesgnname}{Generalized Horizon Designation column name (to be created/updated when \code{x} is a \code{SoilProfileCollection})}
+\item{ghl}{Generalized Horizon Designation column name (to be created/updated when \code{x} is a \code{SoilProfileCollection})}
 }
 \value{
 (ordered) factor of the same length as \code{x} (if character) or as number of horizons in \code{x} (if SoilProfileCollection)
 }
 \description{
 Generalize a vector of horizon names, based on new classes, and REGEX
-patterns. Or create a new column \code{gendesgnname} in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
+patterns. Or create a new column \code{ghl} in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
 }
 \details{
-When \code{x} is a SoilProfileCollection the \code{gendesgnname} column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations. See \code{hzdesgnname()}.
+When \code{x} is a SoilProfileCollection the \code{ghl} column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations. See \code{hzdesgnname()}.
 }
 \examples{
 

@@ -8,7 +8,7 @@
 #' Generalize Horizon Names
 #'
 #' Generalize a vector of horizon names, based on new classes, and REGEX
-#' patterns. Or create a new column `gendesgnname` in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
+#' patterns. Or create a new column `ghl` in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
 #'
 #' @param x a character vector of horizon names or a `SoilProfileCollection`
 #' @param new a character vector of new horizon classes
@@ -18,7 +18,7 @@
 #' @param ordered by default, the result is an ordered factor when `hzdepm` is defined. 
 #' @param ... additional arguments passed to `grep()` such as `perl=TRUE` for advanced REGEX
 #' @return (ordered) factor of the same length as `x` (if character) or as number of horizons in `x` (if SoilProfileCollection)
-#' @details When `x` is a SoilProfileCollection the `gendesgnname` column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations. See `hzdesgnname()`.
+#' @details When `x` is a SoilProfileCollection the `ghl` column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations. See `hzdesgnname()`.
 #' @seealso `hzdesgnname()`
 #' @author D.E. Beaudette
 #' @keywords manip
@@ -111,13 +111,13 @@ setMethod("generalizeHz", signature(x = "character"), function(x, new, pattern, 
 })
 
 # SoilProfileColletion method
-#' @param gendesgnname Generalized Horizon Designation column name (to be created/updated when `x` is a `SoilProfileCollection`)
+#' @param ghl Generalized Horizon Designation column name (to be created/updated when `x` is a `SoilProfileCollection`)
 #' @export
 #' @rdname generalize.hz
-setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), gendesgnname = "genhz", ...) {
+setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), ghl = "genhz", ...) {
   hzdesgn <- hzdesgnname(x, required = TRUE)
   
-  x[[gendesgnname]] <- generalize.hz(
+  x[[ghl]] <- generalize.hz(
     x[[hzdesgn]],
     new = new,
     pattern = pattern,
