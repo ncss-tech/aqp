@@ -9,7 +9,7 @@
 
 #' Determine ML Horizon Boundaries
 #'
-#' This function accepts input from \code{slab()} along with a vector of
+#' This function accepts input from \code{slab()} (a data.frame) along with a vector of
 #' horizon names, and returns a \code{data.frame} of the most likely horizon
 #' boundaries.
 #'
@@ -18,9 +18,10 @@
 #' \code{o.names} is required.
 #'
 #' @param x output from \code{\link{slab}}
+#' @param name Column name containing horizon label. Default: `"name"`
 #' @param o.names an optional character vector of horizon designations that
 #' will be used in the final table
-#' @return A dataframe with the following columns: \item{hz}{horizon names}
+#' @return A data.frame with the following columns: \item{hz}{horizon names}
 #' \item{top}{top boundary} \item{bottom}{bottom boundary}
 #' \item{confidence}{integrated probability over thickness of each ML horizon,
 #' rounded to the nearest integer} \item{pseudo.brier}{A "pseudo"" Brier Score
@@ -48,9 +49,9 @@
 #' a <- slab(sp1, fm= ~ name, cpm=1, slab.structure=0:150)
 #'
 #' # generate table of ML horizonation
-#' get.ml.hz(a)
+#' get.ml.hz(a, name = "name")
 #'
-get.ml.hz <- function(x, o.names = attr(x, which = 'original.levels')) {
+get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.levels')) {
 
   # trick R CMD check
   H = top = bottom = NULL
@@ -81,10 +82,10 @@ get.ml.hz <- function(x, o.names = attr(x, which = 'original.levels')) {
 
 
 	# get most probable, original,  horizon designation by slice
-	x$name <- safe.names[apply(x[, safe.names], 1, .f.ML.hz)]
+	x[[name]] <- safe.names[apply(x[, safe.names], 1, .f.ML.hz)]
 
 	# extract ML hz sequences
-	x.rle <- rle(as.vector(na.omit(x$name)))
+	x.rle <- rle(as.vector(na.omit(x[[name]])))
 	x.hz.bounds <- cumsum(x.rle$lengths)
 
 	# composite into a data.frame
@@ -116,7 +117,7 @@ get.ml.hz <- function(x, o.names = attr(x, which = 'original.levels')) {
   # compute a pseudo-brier score using ML hz as the "true" outcome
   # brier's multi-class score : http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier
 	# filter NA: why would this happen?
-	idx <- which(!is.na(x$name))
+	idx <- which(!is.na(x[[name]]))
   x.bs <- ddply(x[idx, ], 'name', brierScore, classLabels=safe.names, actual='name')
 
   # shannon entropy, (log base 2) bits)

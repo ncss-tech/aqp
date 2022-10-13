@@ -6,7 +6,11 @@
 \alias{mostLikelyHzSequence}
 \title{Horizon Transition Probabilities}
 \usage{
-hzTransitionProbabilities(x, name, loopTerminalStates = FALSE)
+hzTransitionProbabilities(
+  x,
+  name = GHL(x, required = TRUE),
+  loopTerminalStates = FALSE
+)
 }
 \arguments{
 \item{x}{A \code{SoilProfileCollection} object.}

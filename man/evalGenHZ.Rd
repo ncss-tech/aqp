@@ -6,7 +6,7 @@
 \usage{
 evalGenHZ(
   obj,
-  genhz,
+  genhz = GHL(x, required = TRUE),
   vars,
   non.matching.code = "not-used",
   stand = TRUE,

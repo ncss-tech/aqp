@@ -4,16 +4,18 @@
 \alias{get.ml.hz}
 \title{Determine ML Horizon Boundaries}
 \usage{
-get.ml.hz(x, o.names = attr(x, which = "original.levels"))
+get.ml.hz(x, name = "name", o.names = attr(x, which = "original.levels"))
 }
 \arguments{
 \item{x}{output from \code{\link{slab}}}
+
+\item{name}{Column name containing horizon label. Default: \code{"name"}}
 
 \item{o.names}{an optional character vector of horizon designations that
 will be used in the final table}
 }
 \value{
-A dataframe with the following columns: \item{hz}{horizon names}
+A data.frame with the following columns: \item{hz}{horizon names}
 \item{top}{top boundary} \item{bottom}{bottom boundary}
 \item{confidence}{integrated probability over thickness of each ML horizon,
 rounded to the nearest integer} \item{pseudo.brier}{A "pseudo"" Brier Score
@@ -26,7 +28,7 @@ probabilities within each most-likely horizon. Larger values suggest more
 confusion within each ML.}
 }
 \description{
-This function accepts input from \code{slab()} along with a vector of
+This function accepts input from \code{slab()} (a data.frame) along with a vector of
 horizon names, and returns a \code{data.frame} of the most likely horizon
 boundaries.
 }
@@ -49,7 +51,7 @@ sp1$name <- generalize.hz(sp1$name,
 a <- slab(sp1, fm= ~ name, cpm=1, slab.structure=0:150)
 
 # generate table of ML horizonation
-get.ml.hz(a)
+get.ml.hz(a, name = "name")
 
 }
 \seealso{

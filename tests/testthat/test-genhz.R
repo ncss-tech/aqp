@@ -10,13 +10,21 @@ test_that("basic pattern matching", {
   # the third pattern will steal from the second
   n <- c('A', '^AC', 'C')
   p <- c('A', '\\^A', 'C')
-  res <- generalize.hz(x, new = n, pat=p, non.matching.code = 'not-used')
+  res <- generalize.hz(x, new = n, pat = p, non.matching.code = 'not-used')
 
   # matching only text, not factor levels
   expect_equal(as.character(res), c('A', 'C', 'not-used', 'C', 'C', 'C', 'C'))
 
   # check levels: these should match the ording of `n` + non matching code
   expect_equal(levels(res), c('A', '^AC', 'C', 'not-used'))
+  
+  res2 <- generalizeHz(x, new = n, pat = p, non.matching.code = 'not-used')
+  
+  # matching only text, not factor levels
+  expect_equal(as.character(res2), c('A', 'C', 'not-used', 'C', 'C', 'C', 'C'))
+  
+  # check levels: these should match the ording of `n` + non matching code
+  expect_equal(levels(res2), c('A', '^AC', 'C', 'not-used'))
 })
 
 
@@ -29,10 +37,10 @@ test_that("advanced pattern matching, requires perl", {
 
   # the last pattern requires perl-compatible REGEX
   # error without perl=TRUE
-  expect_error(suppressWarnings(generalize.hz(x, new = n, pat=p, non.matching.code = 'not-used')))
+  expect_error(suppressWarnings(generalize.hz(x, new = n, pat = p, non.matching.code = 'not-used')))
 
   # this should work
-  res <- generalize.hz(x, new = n, pat=p, non.matching.code = 'not-used', perl=TRUE)
+  res <- generalize.hz(x, new = n, pat = p, non.matching.code = 'not-used', perl=TRUE)
 
   # matching only text, not factor levels
   expect_equal(as.character(res), c('A', 'A', 'not-used', '^AC', 'C', 'C', 'C'))
@@ -54,6 +62,8 @@ horizons(sp3) <- rbind(data.frame(hzID = sp3[,1]$hzID,     genhz = "A", stringsA
 sp3$genhz[sp3$clay > 16] <- "Bt"
 
 test_that("guessGenHzLevels works as expected", {
+  expect_error(as.numeric(guessGenHzLevels(sp3)$median.depths))
+  GHL(sp3) <- "genhz"
   expect_equal(as.numeric(guessGenHzLevels(sp3)$median.depths), c(5,40,44))
 })
 

@@ -52,7 +52,7 @@
 #' # that is better
 #' levels(s$slice)
 #'
-guessGenHzLevels <- function(x, hz='genhz') {
+guessGenHzLevels <- function(x, hz = GHL(x, required = TRUE)) {
   tb <- horizonDepths(x)
   h <- horizons(x)
   # compute horizon mid-point
