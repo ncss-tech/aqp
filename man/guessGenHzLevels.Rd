@@ -4,7 +4,7 @@
 \alias{guessGenHzLevels}
 \title{Guess Appropriate Ordering for Generalized Horizon Labels}
 \usage{
-guessGenHzLevels(x, hz = "genhz")
+guessGenHzLevels(x, hz = GHL(x, required = TRUE))
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}
