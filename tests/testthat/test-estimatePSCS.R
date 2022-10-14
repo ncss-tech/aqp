@@ -64,5 +64,8 @@ test_that("estimatePSCS()", {
   expect_error(estimatePSCS(q2, clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'foo'))
 })
 
-
-
+test_that("estimatePSCS() multiple profiles",{
+  e <- estimatePSCS(sp1, clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'name')
+  expect_equal(e$pscs_top, c(49, 30, 2, 32, 5, 31, 25, 27, 28))
+  expect_equal(e$pscs_bottom, c(89, 59, 52, 62, 55, 106, 100, 102, 103))
+})

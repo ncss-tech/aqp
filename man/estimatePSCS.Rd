@@ -12,11 +12,12 @@ estimatePSCS(
   texcl.attr = "texcl",
   tax_order_field = "tax_order",
   bottom.pattern = "Cr|R|Cd",
+  simplify = TRUE,
   ...
 )
 }
 \arguments{
-\item{p}{A single-profile SoilProfileCollection object}
+\item{p}{A SoilProfileCollection}
 
 \item{hzdesgn}{Name of the horizon attribute containing the horizon
 designation. Default 'hzname'}
@@ -36,11 +37,14 @@ ignored.}
 contact. Default matches Cr, R or Cd. This argument is passed to both
 estimateSoilDepth and getArgillicBounds.}
 
+\item{simplify}{Return a length 2 vector with upper and lower boundary when p has length 1? Default TRUE.}
+
 \item{...}{additional arguments are passed to getArgillicBounds()}
 }
 \value{
-A numeric vector containing the top and bottom depth of the particle
+A numeric vector (when \code{simplify=TRUE}) containing the top and bottom depth of the particle
 size control section. First value is top, second value is bottom.
+If \code{p} contains more than one profile, the result is a data.frame with profile ID plus PSCS top and bottom depths.
 }
 \description{
 Estimates the upper and lower boundary of the particle size control section
@@ -65,7 +69,7 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-p <- sp1[1]
+p <- sp1
 attr <- 'prop' # clay contents
 foo <- estimatePSCS(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 foo
