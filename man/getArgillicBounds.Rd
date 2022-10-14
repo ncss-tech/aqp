@@ -19,7 +19,7 @@ getArgillicBounds(
 )
 }
 \arguments{
-\item{p}{A single-profile SoilProfileCollection}
+\item{p}{A SoilProfileCollection}
 
 \item{hzdesgn}{the name of the column/attribute containing the horizon designation; default="hzname"}
 
@@ -65,7 +65,7 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-p <- sp1[1]
+p <- sp1
 attr <- 'prop' # clay contents
 foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 foo

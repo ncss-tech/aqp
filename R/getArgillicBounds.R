@@ -5,7 +5,7 @@
 
 #' Estimate upper and lower boundary of argillic diagnostic subsurface horizon
 #'
-#' @param p A single-profile SoilProfileCollection
+#' @param p A SoilProfileCollection
 #' @param hzdesgn the name of the column/attribute containing the horizon designation; default="hzname"
 #' @param clay.attr the name of the column/attribute containing the clay content; default="clay"
 #' @param texcl.attr the name of the column/attribute containing the textural class (used for finding sandy horizons); default="texcl"
@@ -42,7 +42,7 @@
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #'
-#' p <- sp1[1]
+#' p <- sp1
 #' attr <- 'prop' # clay contents
 #' foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
 #' foo
