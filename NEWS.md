@@ -5,7 +5,7 @@ Notable changes include:
  * deprecation of `slice()` in favor of the new, faster, more robust implementation in `dice()` 
  * complete overhaul of `slab()`, with new arguments, faster back-end, and weighted aggregation implemented (finally)
  * deprecation of `profile_compare()` in favor of the `NCSP()`--a complete overhaul based on Maynard et al., 2020
- * `perturb()` is now vectorized, and optimized for larger collections 
+ * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections 
 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
