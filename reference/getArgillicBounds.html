@@ -83,7 +83,7 @@ The upper boundary is where the clay increase threshold is met. The function use
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>p</dt>
-<dd><p>A single-profile SoilProfileCollection</p></dd>
+<dd><p>A SoilProfileCollection</p></dd>
 
 
 <dt>hzdesgn</dt>
@@ -151,12 +151,20 @@ The upper boundary is where the clay increase threshold is met. The function use
 <span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span></span></span>
 <span class="r-in"><span><span class="va">attr</span> <span class="op">&lt;-</span> <span class="st">'prop'</span> <span class="co"># clay contents</span></span></span>
 <span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">getArgillicBounds</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span>, clay.attr <span class="op">=</span> <span class="va">attr</span>, texcl.attr<span class="op">=</span><span class="st">"texture"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">foo</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ubound lbound </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     49     89 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     id ubound lbound</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 P001     49     89</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 P002     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 P003      2     67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 P004     32     62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 P005      5     68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 P006     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 P007     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 P008     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9 P009     NA     NA</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
