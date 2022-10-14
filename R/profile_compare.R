@@ -219,7 +219,7 @@ pc <- function(s, vars, max_d, k, filter=NULL, sample_interval=NA, replace_na=TR
 add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none',
 plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 
-  .Deprecated('NCSP')
+  .Deprecated('NCSP', old = "profile_compare")
   
 	# currently this will only work with integer depths
 	# test by attempting to cast to integers
@@ -492,7 +492,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 
 pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 
-  .Deprecated('NCSP')
+  .Deprecated('NCSP', old = "profile_compare")
   
 	if(!requireNamespace("scales", quietly = TRUE))
 	  stop("package `scales` is required", call.=FALSE)

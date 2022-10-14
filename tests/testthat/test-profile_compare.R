@@ -35,9 +35,12 @@ site(d) <- s
 
 test_that("profile_compare works as expected", {
   
-  # compute betwee-profile dissimilarity, no depth weighting
-  d.dis <- suppressMessages(profile_compare(d, vars=c('clay', 'ph', 'frags'), k=0, 
-                                            max_d=61, replace_na=TRUE, add_soil_flag=TRUE))
+  # compute between-profile dissimilarity, no depth weighting
+  # warning is expected because this is deprecated
+  expect_warning({
+    d.dis <- suppressMessages(profile_compare(d, vars=c('clay', 'ph', 'frags'), k=0, 
+                                              max_d=61, replace_na=TRUE, add_soil_flag=TRUE))
+  })
   m <- as.matrix(d.dis)
   
   # results should be 3x3 distance matrix
