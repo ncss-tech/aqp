@@ -182,56 +182,63 @@ Foundation of Soil Science.</p>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">$</span><span class="va">ph</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co">## perform comparison, and convert to phylo class object</span></span></span>
-<span class="r-in"><span>  <span class="co">## D is rescaled to [0,]</span></span></span>
-<span class="r-in"><span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="pc.html">profile_compare</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>                        <span class="va">sp3.grouped</span>,</span></span>
-<span class="r-in"><span>                        vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'clay'</span>, <span class="st">'cec'</span>, <span class="st">'ph'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                        max_d <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>                        k <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
-<span class="r-in"><span>                        replace_na <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                        add_soil_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                        rescale.result <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span>                      <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">d</span>, method <span class="op">=</span> <span class="st">'ward'</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ape/man/ladderize.html" class="external-link">ladderize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/as.phylo.html" class="external-link">as.phylo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># first promote to SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># look at distance plot-- just the median profile</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="plot_distance_graph.html">plot_distance_graph</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># similarity relative to median profile (profile #12)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>,<span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## perform comparison, and convert to phylo class object</span></span></span>
+<span class="r-in"><span><span class="co">## D is rescaled to [0,]</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="NCSP.html">NCSP</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.grouped</span>,</span></span>
+<span class="r-in"><span>  vars <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'clay'</span>, <span class="st">'cec'</span>, <span class="st">'ph'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  maxDepth <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">0.01</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co">## make dendrogram + soil profiles</span></span></span>
-<span class="r-in"><span>  <span class="co"># first promote to SoilProfileCollection</span></span></span>
-<span class="r-in"><span>  <span class="fu">depths</span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">d</span>, method <span class="op">=</span> <span class="st">'ward'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ape/man/ladderize.html" class="external-link">ladderize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/as.phylo.html" class="external-link">as.phylo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># setup plot: note that D has a scale of [0,1]</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># look at distance plot-- just the median profile</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_distance_graph.html">plot_distance_graph</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">12</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># get the last plot geometry</span></span></span>
-<span class="r-in"><span>  <span class="va">lastPP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>, envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># similarity relative to median profile (profile #12)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>, <span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">12</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># the original labels, and new (indexed) order of pedons in dendrogram</span></span></span>
-<span class="r-in"><span>  <span class="va">d.labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">'Labels'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## make dendrogram + soil profiles</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">new_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span>,</span></span>
-<span class="r-in"><span>                      <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                        <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">xx</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># setup plot: note that D has a scale of [0,1]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p.plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">p</span>,</span></span>
+<span class="r-in"><span>               cex <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>               label.offset <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>               direction <span class="op">=</span> <span class="st">'up'</span>,</span></span>
+<span class="r-in"><span>               y.lim <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               x.lim <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1.25</span>, <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp3.grouped</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               show.tip.label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># plot the profiles, in the ordering defined by the dendrogram</span></span></span>
-<span class="r-in"><span>  <span class="co"># with a couple fudge factors to make them fit</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">sp3.grouped</span>,</span></span>
-<span class="r-in"><span>    color <span class="op">=</span> <span class="st">"soil_color"</span>,</span></span>
-<span class="r-in"><span>    plot.order <span class="op">=</span> <span class="va">new_order</span>,</span></span>
-<span class="r-in"><span>    scaling.factor <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
-<span class="r-in"><span>    width <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
-<span class="r-in"><span>    cex.names <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
-<span class="r-in"><span>    y.offset <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">yy</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,</span></span>
-<span class="r-in"><span>    add <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># get the last plot geometry</span></span></span>
+<span class="r-in"><span><span class="va">lastPP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>, envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the original labels, and new (indexed) order of pedons in dendrogram</span></span></span>
+<span class="r-in"><span><span class="va">d.labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">'Labels'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">new_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span>,</span></span>
+<span class="r-in"><span>                    <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">xx</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">lastPP</span><span class="op">$</span><span class="va">Ntip</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot the profiles, in the ordering defined by the dendrogram</span></span></span>
+<span class="r-in"><span><span class="co"># with a couple fudge factors to make them fit</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">sp3.grouped</span>,</span></span>
+<span class="r-in"><span>  color <span class="op">=</span> <span class="st">"soil_color"</span>,</span></span>
+<span class="r-in"><span>  plot.order <span class="op">=</span> <span class="va">new_order</span>,</span></span>
+<span class="r-in"><span>  y.offset <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">lastPP</span><span class="op">$</span><span class="va">yy</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  width <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>  add <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	72 obs. of  10 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ variable             : Factor w/ 6 levels "clay","cec","ph",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
@@ -247,13 +254,11 @@ Foundation of Soil Science.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The dcast generic in data.table has been passed a data.frame and will attempt to redirect to the reshape2::dcast; please note that reshape2 is deprecated, and this redirection is now deprecated as well. Please do this redirection yourself like reshape2::dcast(a). In the next version, this warning will become an error.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The dcast generic in data.table has been passed a data.frame and will attempt to redirect to the reshape2::dcast; please note that reshape2 is deprecated, and this redirection is now deprecated as well. Please do this redirection yourself like reshape2::dcast(a). In the next version, this warning will become an error.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The dcast generic in data.table has been passed a data.frame and will attempt to redirect to the reshape2::dcast; please note that reshape2 is deprecated, and this redirection is now deprecated as well. Please do this redirection yourself like reshape2::dcast(a). In the next version, this warning will become an error.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'profile_compare' is deprecated.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'NCSP' instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing dissimilarity matrices from 13 profiles</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  [0.26 Mb]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  [0.3 Mb]</span>
 <span class="r-plt img"><img src="sp3-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"><span></span></span>
+<span class="r-plt img"><img src="sp3-2.png" alt="" width="768" height="475"></span>
+<span class="r-plt img"><img src="sp3-3.png" alt="" width="768" height="475"></span>
 </code></pre></div>
     </div>
   </div>
