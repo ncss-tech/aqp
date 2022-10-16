@@ -151,7 +151,7 @@ perturb <- function(p,
                     new.idname = 'pID') {
   
   # aqp and data.table global definitions for keywords
-  .FIRST <- NULL; value <- NULL; md <- NULL; .N <- NULL; V1 <- NULL; .GRP <- NULL
+  .FIRST <- NULL; value <- NULL; md <- NULL; .N <- NULL; V1 <- NULL; .GRP <- NULL; gidx <- NULL; pidx <- NULL
   
   custom.ids <- FALSE
   by_thickness <- FALSE
