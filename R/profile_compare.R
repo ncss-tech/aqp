@@ -95,9 +95,7 @@
 #' results (FALSE)
 #' @param strict_hz_eval should horizons be strictly checked for internal
 #' self-consistency? (FALSE)
-#' @param progress 'none' (default): argument passed to \code{ddply} and
-#' related functions, see \code{\link{create_progress_bar}} for all possible
-#' options; 'text' is usually fine.
+#' @param progress not used
 #' @param plot.depth.matrix should a plot of the 'soil'/'non-soil' matrix be
 #' returned (FALSE)
 #' @param rescale.result should the result be rescaled by dividing by max(D)
@@ -119,6 +117,10 @@ add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress
 plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 
   .Deprecated('NCSP', old = "profile_compare")
+  
+  if (!requireNamespace("plyr")) {
+    stop("package `plyr` is required to use `profile_compare()`; use `NCSP()` instead or install the `plyr` package", call. = FALSE)
+  }
   
 	# currently this will only work with integer depths
 	# test by attempting to cast to integers
@@ -165,7 +167,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	## unroll each named soil property, for each soil profile
 	## the result is a list matrices with dimensions: depth, num_properties
 	# this approach requires a named list of soil properties
-	s.unrolled <- dlply(s, "id", .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) {
+	s.unrolled <- plyr::dlply(s, "id", .progress=progress, .fun=function(di, p=vars, d=max_d, strict=strict_hz_eval, .parallel=getOption('AQP_parallel', default=FALSE)) {
 
 		# iterate over the set of properties, unrolling as we go
 		# the result is a [z by p] matrix unrolled to max_d
@@ -246,7 +248,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	ow <- options('warn')
 	options(warn=-1)
 
-	d <- llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) {
+	d <- plyr::llply(depth_slice_seq, .parallel=getOption('AQP_parallel', default=FALSE), .progress=progress, .fun=function(i, su=s.unrolled) {
     
 	  
 	  ## 2021-03-03
