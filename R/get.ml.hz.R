@@ -125,9 +125,9 @@ get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.leve
   # brier's multi-class score : http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier
 	# filter NA: why would this happen?
 	idx <- which(!is.na(x[[name]]))
-	.bsfun <- function(x) {}
 	
-	x.bs <- x[idx,][, list(brierScore(.SD, classLabels = safe.names, actual = name)), 
+	.internalName <- name
+	x.bs <- x[idx,][, list(brierScore(.SD, classLabels = safe.names, actual = .internalName)), 
 	                by = c(name), .SDcols = c(name, safe.names)]
 	
 	# shannon entropy, (log base 2) bits)
