@@ -101,6 +101,10 @@ importFrom(sp,
 importFrom(gower,
            gower_topn)
 
+importFrom(farver,
+           compare_colour,
+           convert_colour)
+
 exportClasses(SoilProfileCollection)
 
 exportMethods(
