@@ -117,17 +117,19 @@ sp3.grouped$name <- paste(round(sp3.grouped$clay), '/' ,
                           round(sp3.grouped$cec), '/',
                           round(sp3.grouped$ph, 1))
 
+# first promote to SoilProfileCollection
+depths(sp3.grouped) <- id ~ top + bottom
+
 plot(sp3.grouped)
 
 ## perform comparison, and convert to phylo class object
 ## D is rescaled to [0,]
-d <- profile_compare(sp3.grouped,
-                     vars = c('clay', 'cec', 'ph'),
-                     max_d = 100,
-                     k = 0.01,
-                     replace_na = TRUE,
-                     add_soil_flag = TRUE, 
-                     rescale.result = TRUE)
+d <- NCSP(
+  sp3.grouped,
+  vars = c('clay', 'cec', 'ph'),
+  maxDepth = 100,
+  k = 0.01
+)
 
 h <- agnes(d, method = 'ward')
 p <- ladderize(as.phylo(as.hclust(h)))
@@ -139,8 +141,6 @@ plot_distance_graph(d, 12)
 round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
 
 ## make dendrogram + soil profiles
-# first promote to SoilProfileCollection
-depths(sp3.grouped) <- id ~ top + bottom
 
 # setup plot: note that D has a scale of [0,1]
 par(mar = c(1, 1, 1, 1))
@@ -148,7 +148,7 @@ p.plot <- plot(p,
                cex = 0.8,
                label.offset = 3,
                direction = 'up',
-               y.lim = c(2, 0),
+               y.lim = c(200, 0),
                x.lim = c(1.25, length(sp3.grouped) + 1),
                show.tip.label = FALSE)
 
@@ -168,9 +168,8 @@ plotSPC(
   sp3.grouped,
   color = "soil_color",
   plot.order = new_order,
-  scaling.factor = 0.01,
+  y.offset = max(lastPP$yy) + 10,
   width = 0.1,
   cex.names = 0.5,
-  y.offset = max(lastPP$yy) + 0.1,
   add = TRUE
 )

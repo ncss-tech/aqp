@@ -42,7 +42,7 @@ NCSP(
 \item{returnDepthDistances}{logical, return a list of distances by depth slice}
 }
 \description{
-Experimental replacement for \code{profile_compare()}.
+Replacement for \code{profile_compare()}.
 
 Performs a numerical comparison of soil profiles using named properties,
 based on a weighted, summed, depth-segment-aligned dissimilarity

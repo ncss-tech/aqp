@@ -1,6 +1,6 @@
 ## fairly generic, will be required by (at least):"
 # * dice() [x]
-# * profile_compare()
+# * NCSP()
 # * slab()
 # * spc2mpspline()
 

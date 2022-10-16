@@ -120,8 +120,7 @@ border='black', col=rgb(0,0,0.8, alpha=0.25))
 # sample 25 profiles from the collection
 s <- sp5[sample(1:length(sp5), size=25), ]
 # compute pair-wise dissimilarity
-d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0,
-replace_na=TRUE, add_soil_flag=TRUE, max_d=300)
+d <- NCSP(s, vars=c('R25','pH','clay','EC'), k = 0, maxDepth = 300)
 # keep only the dissimilarity between profile 1 and all others
 d.1 <- as.matrix(d)[1, ]
 # rescale dissimilarities

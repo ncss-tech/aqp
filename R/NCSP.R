@@ -129,7 +129,7 @@
 
 
 #' @title Numerical Classification of Soil Profiles
-#' @description Experimental replacement for `profile_compare()`.
+#' @description Replacement for `profile_compare()`.
 #' 
 #' Performs a numerical comparison of soil profiles using named properties,
 #' based on a weighted, summed, depth-segment-aligned dissimilarity

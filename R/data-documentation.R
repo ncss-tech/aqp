@@ -128,8 +128,7 @@ NULL
 #'
 #' # compute numerical distances between profiles
 #' # based on select horizon-level properties, to a depth of 200 cm
-#' d <- profile_compare(sp2, vars=c('prop','field_ph','hue'),
-#' max_d=200, k=0, sample_interval=5, rescale.result=TRUE)
+#' d <- NCSP(sp2, vars=c('prop','field_ph','hue'), maxDepth = 100, k = 0)
 #'
 #' # plot dendrogram with ape package:
 #' if(require(ape) & require(cluster)) {
@@ -228,58 +227,64 @@ NULL
 #'     round(sp3.grouped$ph, 1)
 #'   )
 #'
-#'   ## perform comparison, and convert to phylo class object
-#'   ## D is rescaled to [0,]
-#'   d <- profile_compare(
-#'                         sp3.grouped,
-#'                         vars = c('clay', 'cec', 'ph'),
-#'                         max_d = 100,
-#'                         k = 0.01,
-#'                         replace_na = TRUE,
-#'                         add_soil_flag = TRUE,
-#'                         rescale.result = TRUE
-#'                       )
-#'
-#'   h <- agnes(d, method = 'ward')
-#'   p <- ladderize(as.phylo(as.hclust(h)))
-#'
-#'   # look at distance plot-- just the median profile
-#'   plot_distance_graph(d, 12)
-#'
-#'   # similarity relative to median profile (profile #12)
-#'   round(1 - (as.matrix(d)[12,] / max(as.matrix(d)[12,])), 2)
-#'
-#'   ## make dendrogram + soil profiles
-#'   # first promote to SoilProfileCollection
-#'   depths(sp3.grouped) <- id ~ top + bottom
-#'
-#'   # setup plot: note that D has a scale of [0,1]
-#'   par(mar = c(1, 1, 1, 1))
-#'
-#'   # get the last plot geometry
-#'   lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
-#'
-#'   # the original labels, and new (indexed) order of pedons in dendrogram
-#'   d.labels <- attr(d, 'Labels')
-#'
-#'   new_order <- sapply(1:lastPP$Ntip,
-#'                       function(i)
-#'                         which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
-#'
-#'   # plot the profiles, in the ordering defined by the dendrogram
-#'   # with a couple fudge factors to make them fit
-#'   plot(
-#'     sp3.grouped,
-#'     color = "soil_color",
-#'     plot.order = new_order,
-#'     scaling.factor = 0.01,
-#'     width = 0.1,
-#'     cex.names = 0.5,
-#'     y.offset = max(lastPP$yy) + 0.1,
-#'     add = TRUE
-#'   )
+#' 
+#' # first promote to SoilProfileCollection
+#' depths(sp3.grouped) <- id ~ top + bottom
+#' 
+#' plot(sp3.grouped)
+#' 
+#' ## perform comparison, and convert to phylo class object
+#' ## D is rescaled to [0,]
+#' d <- NCSP(
+#'   sp3.grouped,
+#'   vars = c('clay', 'cec', 'ph'),
+#'   maxDepth = 100,
+#'   k = 0.01
+#' )
+#' 
+#' h <- agnes(d, method = 'ward')
+#' p <- ladderize(as.phylo(as.hclust(h)))
+#' 
+#' # look at distance plot-- just the median profile
+#' plot_distance_graph(d, 12)
+#' 
+#' # similarity relative to median profile (profile #12)
+#' round(1 - (as.matrix(d)[12, ] / max(as.matrix(d)[12, ])), 2)
+#' 
+#' ## make dendrogram + soil profiles
+#' 
+#' # setup plot: note that D has a scale of [0,1]
+#' par(mar = c(1, 1, 1, 1))
+#' p.plot <- plot(p,
+#'                cex = 0.8,
+#'                label.offset = 3,
+#'                direction = 'up',
+#'                y.lim = c(200, 0),
+#'                x.lim = c(1.25, length(sp3.grouped) + 1),
+#'                show.tip.label = FALSE)
+#' 
+#' # get the last plot geometry
+#' lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+#' 
+#' # the original labels, and new (indexed) order of pedons in dendrogram
+#' d.labels <- attr(d, 'Labels')
+#' 
+#' new_order <- sapply(1:lastPP$Ntip,
+#'                     function(i)
+#'                       which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
+#' 
+#' # plot the profiles, in the ordering defined by the dendrogram
+#' # with a couple fudge factors to make them fit
+#' plotSPC(
+#'   sp3.grouped,
+#'   color = "soil_color",
+#'   plot.order = new_order,
+#'   y.offset = max(lastPP$yy) + 10,
+#'   width = 0.1,
+#'   cex.names = 0.5,
+#'   add = TRUE
+#' )
 #' }
-#'
 NULL
 
 #' Soil Chemical Data from Serpentinitic Soils of California
@@ -532,8 +537,7 @@ NULL
 #' # sample 25 profiles from the collection
 #' s <- sp5[sample(1:length(sp5), size=25), ]
 #' # compute pair-wise dissimilarity
-#' d <- profile_compare(s, vars=c('R25','pH','clay','EC'), k=0,
-#' replace_na=TRUE, add_soil_flag=TRUE, max_d=300)
+#' d <- NCSP(s, vars=c('R25','pH','clay','EC'), k = 0, maxDepth = 300)
 #' # keep only the dissimilarity between profile 1 and all others
 #' d.1 <- as.matrix(d)[1, ]
 #' # rescale dissimilarities
