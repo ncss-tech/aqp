@@ -34,7 +34,7 @@
 #' @author D.E. Beaudette
 #' @seealso \code{\link{get.ml.hz}}
 #' @keywords manip
-evalGenHZ <- function(obj, genhz = GHL(x, required = TRUE), vars, non.matching.code='not-used', stand=TRUE, trace=FALSE, metric='euclidean') {
+evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching.code='not-used', stand=TRUE, trace=FALSE, metric='euclidean') {
   if(!requireNamespace("MASS", quietly = TRUE))
     stop("package `MASS` is required", call.=FALSE)
 
