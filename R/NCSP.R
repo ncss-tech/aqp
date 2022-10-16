@@ -495,3 +495,265 @@ NCSP <- function(
 
 }
 
+
+.NCSP2 <- function(
+    x, 
+    vars, 
+    fm = NULL, 
+    weights = rep(1, times = length(vars)), 
+    maxDepth = max(x), 
+    k = 0, 
+    isColor = FALSE,
+    rescaleResult = FALSE, 
+    progress = TRUE,
+    verbose = TRUE, 
+    returnDepthDistances = FALSE
+) {
+  
+  
+  ## deprecated arguments
+  
+  # filter
+  # replace_na
+  # add_soil_flag
+  # strict_hz_eval
+  # plot.depth.matrix
+  
+  
+  ## sanity checks
+  
+  # x must be a SPC
+  if(! inherits(x, 'SoilProfileCollection')) {
+    stop('`x` must be a SoilProfileCollection', call. = FALSE)
+  }
+  
+  # vars
+  if(! all(vars %in% names(x))) {
+    stop('`vars` must specify horizon or site level attributes of `x`', call. = FALSE)
+  }
+  
+  ## TODO: consider a message and setting maxDepth <- max(x)
+  # maxDepth
+  if(maxDepth > max(x) | maxDepth < 1) {
+    stop('`maxDepth` should be > 0 and <= max(`x`)', call. = FALSE)
+  }
+  
+  # color comparisons require farver pkg for dE00
+  if(isColor & !requireNamespace('farver', quietly = TRUE)) {
+    stop('color comparison requires the `farver` package', call. =FALSE)
+    
+    # for now, color comparisons are based on CIELAB color coordinates
+    # must be named "L", "A", "B" and in that order
+    if(any(vars != c('L', 'A', 'B'))) {
+      stop('CIELAB color coordinates must be specified as `L`, `A`, `B` in `vars`', call. =FALSE)  
+    }
+  }
+  
+  
+  
+  
+  ## TODO: reconsider hard-coded top depth
+  ## truncate at maxDepth
+  x <- trunc(x, 0, maxDepth)
+  
+  
+  
+  ## variables used in NCSP algorithm
+  
+  # number of variables
+  n.vars <- length(vars)
+  
+  # compute a weighting vector based on k
+  # indexed to distance matrix list
+  w <- 1 * exp(-k * 1:maxDepth)
+  
+  ## split horizon / site vars
+  hn <- horizonNames(x)
+  sn <- siteNames(x)
+  h.vars <- intersect(hn, vars)
+  s.vars <- intersect(sn, vars)
+  
+  
+  ## TODO: if there are any site data, extract those here
+  ##       and compute simple distance via cluster::daisy(, metric = 'gower')
+  ##       be sure to extract associated weights
+  
+  ## TODO: refactor old code here
+  
+  #   # check for any site data, remove and a save for later
+  #   if(any(vars %in% sn)) {
+  #     
+  #     # extract site-level vars
+  #     matching.idx <- na.omit(match(sn, vars))
+  #     site.vars <- vars[matching.idx]
+  #     
+  #     # remove from hz-level vars
+  #     vars <- vars[-matching.idx]
+  #     
+  #     ## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
+  #     ## TODO: allow user to pass-in variable type information
+  #     # compute dissimilarty on site-level data: only works with 2 or more variables
+  #     # rescale to [0,1]
+  #     
+  #     message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
+  #     d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
+  #     
+  #     # re-scale to [0,1]
+  #     d.site <- .rescaleRange(d.site, x0 = 0, x1 = 1)
+  #     
+  #     # reset default behavior of hz-level D
+  #     rescale.result=TRUE
+  #     
+  #     ## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
+  #     ## ... but why ? read-up on daisy
+  #     if(any(is.na(d.site))) {
+  #       warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
+  #       d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
+  #     }
+  #     
+  #     ## TODO: ordering of D_hz vs D_site ... assumptions safe?
+  #     
+  #   } else {
+  #     # setup a dummy D_site
+  #     d.site <- NULL
+  #   }
+  
+  
+  
+  ## TODO: expose LHS of formula to dice()
+  ## NOTE: dice() LHS usually starts from 0, sliceSequence and soil.matrix are indexed from 1
+  
+  ## TODO: consider exposing depth logic subset options in arguments to NCSP
+  ##       for now, entire profiles are subset
+  
+  
+  ## dice according to depth sequence and vars
+  # preserve SPC for access to all site data
+  # it could be better to perform sanity checks on horizonation outside of this function
+  .seq <- seq(from = 0, to = maxDepth - 1, by = 1)
+  .fm <- as.formula(
+    sprintf('c(%s) ~ %s',
+            paste0(.seq, collapse = ','),
+            paste0(h.vars, collapse = ' + '))
+  )
+  
+  # reset removed.profiles metadata, it may have been set prior to calling NCSP()
+  metadata(x)$removed.profiles <- NULL
+  
+  ## dice
+  # pctMissing is used to develop soil/non-soil matrix
+  s <- suppressMessages(dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = TRUE, strict = TRUE))
+  
+  # number of profiles, accounting for subset via dice()
+  n.profiles <- length(s)
+  # profile IDs
+  .ids <- profile_id(s)
+  
+  # keep track of removed profiles, due to hz logic errors
+  .removed.profiles <- metadata(s)$removed.profiles
+  if(length(nchar(.removed.profiles)) > 0) {
+    warning('hz depth logic subset has removed some profiles')
+  }
+  
+  ## slice sequence
+  sliceSequence <- 1:max(s)
+  
+  ## add soil flag, previously optional now required
+  # using same data structure / conventions as profile_compare()
+  # logical matrix [sliceSequence, 1:n.profiles]
+  #                       [slices, profiles]
+  
+  ## TODO: ensure that in-line NA are correctly handled
+  ## TODO: in-line NA may require another argument to determine assumptions
+  ## TODO: define soil / non-soil using pattern matching on horizon designation
+  
+  # use a vector of horizon (slice) indices to extract all pctMissing values
+  # develop a matrix from these
+  soil.matrix <- matrix(
+    s[, sliceSequence][['.pctMissing']], 
+    ncol = n.profiles, 
+    nrow = length(sliceSequence), 
+    byrow = FALSE
+  )
+  
+  # "soil" has a pctMising very close to 0
+  soil.matrix <- soil.matrix < 0.00001
+  # keep track of profile IDs
+  dimnames(soil.matrix)[[2]] <- .ids
+  
+  
+  ## evaluate distances by slice
+  ## accounting for soil/non-soil comparisons
+  ## filling NA due to missing data
+  
+  ## TODO: basic progress reporting
+  ## TODO: cache identical slices
+  ## TODO: if !returnDepthDistances: do not retain full list of dist mat, accumulate in single variable
+  
+  message(paste('Computing dissimilarity matrices from', n.profiles, 'profiles'), appendLF = FALSE)
+  
+  .sall <- as.data.table(horizons(s))[, .SD, .SDcols = vars]
+  
+  # SPC j index is overkill; each profile is known to have same number of slices...
+  # .v <- vapply(sliceSequence, FUN.VALUE = numeric(length(s)), function(i) s[, i, .HZID])
+  
+  # much more efficient indexing given assumption of equal number of slices/profile
+  .maxSlice <- max(sliceSequence)
+  .sliceStarts <-  which(seq_len(nrow(.sall)) %% .maxSlice == 0) - .maxSlice
+  .v <- vapply(sliceSequence, FUN.VALUE = numeric(length(s)), function(i) .sliceStarts + i)
+  
+  # create dissimilarity matrix for each slice
+  .ds <- data.table(.sliceID = sliceSequence)
+  .d <- .ds[, list(list(
+    .NCSP_distanceCalc(
+      m = .sall[.v[, .sliceID], ],
+      sm = soil.matrix[.sliceID,],
+      w = weights,
+      isColor = isColor
+    ) * w[.sliceID])), by = ".sliceID"]$V1
+  
+  ## optionally return list of distance matrices
+  if(returnDepthDistances) {
+    return(.d)
+  }
+  
+  # print total size of D
+  message(paste(" [", signif(object.size(.d) / 1024^2, 1), " Mb]", sep=''))
+  
+  ## flatten list of distance matrices
+  .d <- Reduce('+', .d)
+  
+  
+  ## optionally normalize by dividing by max(D)
+  # this is important when incorporating site data
+  # TODO: causes problems for some functions like MASS::sammon() ?
+  if(rescaleResult) {
+    .d <- .d / max(.d, na.rm = TRUE)
+  }
+  
+  
+  
+  ## metadata
+  
+  # distance metric
+  if(isColor) {
+    attr(.d, 'Distance Metric') <- 'CIE2000'
+  } else {
+    attr(.d, 'Distance Metric') <- 'Gower'
+  }
+  
+  # removed profiles, if any
+  attr(.d, 'removed.profiles') <- .removed.profiles
+  
+  # remove warnings about NA from cluster::daisy()
+  attr(.d, 'NA.message') <- NULL
+  
+  # full set of profiles replaced with profile IDs stored in attr(.d, 'Labels')
+  attr(.d, 'Labels') <- .ids
+  
+  # done
+  return(.d)
+  
+}
+
+
