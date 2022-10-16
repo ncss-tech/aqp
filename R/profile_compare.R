@@ -95,7 +95,9 @@
 #' results (FALSE)
 #' @param strict_hz_eval should horizons be strictly checked for internal
 #' self-consistency? (FALSE)
-#' @param progress not used
+#' @param progress 'none' (default): argument passed to \code{ddply} and
+#' related functions, see \code{\link{create_progress_bar}} for all possible
+#' options; 'text' is usually fine.
 #' @param plot.depth.matrix should a plot of the 'soil'/'non-soil' matrix be
 #' returned (FALSE)
 #' @param rescale.result should the result be rescaled by dividing by max(D)

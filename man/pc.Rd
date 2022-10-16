@@ -60,7 +60,9 @@ results (FALSE)}
 \item{strict_hz_eval}{should horizons be strictly checked for internal
 self-consistency? (FALSE)}
 
-\item{progress}{not used}
+\item{progress}{'none' (default): argument passed to \code{ddply} and
+related functions, see \code{\link{create_progress_bar}} for all possible
+options; 'text' is usually fine.}
 
 \item{plot.depth.matrix}{should a plot of the 'soil'/'non-soil' matrix be
 returned (FALSE)}
