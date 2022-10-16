@@ -416,6 +416,8 @@ setGeneric("slab", function(object,
 #' data(sp1)
 #' depths(sp1) <- id ~ top + bottom
 #'
+#' hzdesgnname(sp1) <- "name"
+#'
 #' # aggregate entire collection with two different segment sizes
 #' a <- slab(sp1, fm = ~ prop)
 #' b <- slab(sp1, fm = ~ prop, slab.structure=5)
@@ -557,7 +559,7 @@ setGeneric("slab", function(object,
 #'
 #'
 #' # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
-#' (gen.hz.ml <- get.ml.hz(a, c('O','A','B','C')))
+#' gen.hz.ml <- get.ml.hz(a, "variable", c('O','A','B','C'))
 #'
 #'
 #' \dontrun{

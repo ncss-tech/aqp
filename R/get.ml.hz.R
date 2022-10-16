@@ -56,17 +56,24 @@ get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.leve
   # trick R CMD check
   H = top = bottom = NULL
 
+  o.levels <- attr(x, which='original.levels')
+  
+  x <- data.table::data.table(x)
+  
   # sanity check
-  if(missing(o.names) & is.null(attr(x, which='original.levels')))
+  if(missing(o.names) && is.null(o.levels)) {
     stop('x not derived from slab() or o.names is missing')
-
+  } else if (!is.null(o.names)) {
+    o.levels <- o.names
+  }
+  
   ## this should accomodate DF-safe names returned by slab()
   # make DF-safe names for hz that violate DF constraints
-  safe.names <- make.names(o.names)
+  safe.names <- make.names(o.levels)
 
   # LUT for names
   names.LUT <- data.frame(
-    original = o.names,
+    original = o.levels,
     safe = safe.names,
     stringsAsFactors = FALSE
     )
@@ -82,7 +89,7 @@ get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.leve
 
 
 	# get most probable, original,  horizon designation by slice
-	x[[name]] <- safe.names[apply(x[, safe.names], 1, .f.ML.hz)]
+	x[[name]] <- safe.names[apply(x[, .SD, .SDcols = safe.names], 1, .f.ML.hz)]
 
 	# extract ML hz sequences
 	x.rle <- rle(as.vector(na.omit(x[[name]])))
@@ -90,7 +97,7 @@ get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.leve
 
 	# composite into a data.frame
 	# note: we always start from 0
-	x.ml <- data.frame(
+	x.ml <- data.table::data.table(
 	  hz = x.rle$value,
 	  top = c(0, x.hz.bounds[-length(x.hz.bounds)]),
 	  bottom = x.hz.bounds,
@@ -99,7 +106,7 @@ get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.leve
 
 	# in cases where probability depth-functions cross more than once,
 	# it is necessary to account for overlaps
-	x.ml <- ddply(x.ml, 'hz', summarise, top=min(top), bottom=max(bottom))
+	x.ml <- x.ml[, list(top = min(top), bottom = max(bottom)), by = "hz"]
 
 	# re-order using vector of original horizon names-- this will result in NAs if a named horizon was not the most likely
 	x.ml <- x.ml[match(safe.names, x.ml$hz), ]
@@ -109,20 +116,23 @@ get.ml.hz <- function(x, name = "name", o.names = attr(x, which = 'original.leve
 	x.ml$confidence <- NA
 	for(i in seq_along(x.ml$hz)) {
 		slice.seq <- seq(from=x.ml$top[i], to=x.ml$bottom[i])
-		x.i <- x[slice.seq, x.ml$hz[i]]
+		x.i <- x[slice.seq, .SD, .SDcols = x.ml$hz[i]][[1]]
 		hz.int.prob.pct <- round( (sum(x.i) / length(slice.seq)) * 100)
 		x.ml$confidence[i] <- hz.int.prob.pct
 	}
 
-  # compute a pseudo-brier score using ML hz as the "true" outcome
+	# compute a pseudo-brier score using ML hz as the "true" outcome
   # brier's multi-class score : http://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier
 	# filter NA: why would this happen?
 	idx <- which(!is.na(x[[name]]))
-  x.bs <- ddply(x[idx, ], 'name', brierScore, classLabels=safe.names, actual='name')
-
+	x.bs <- x[idx,][, list(brierScore(data.frame(.SD),
+	                                  classLabels = safe.names, 
+	                                  actual = name)), 
+	                by = c(name)]
+	
   # shannon entropy, (log base 2) bits)
-  x$H <- apply(x[, safe.names], 1, shannonEntropy, b=2)
-  x.H <- ddply(x[idx, ], 'name', plyr::summarize, H=mean(H))
+  x$H <- apply(x[, .SD, .SDcols = safe.names], 1, shannonEntropy, b=2)
+  x.H <- x[idx, ][, list(H = mean(H)), by = c(name)]
 
   # fix names for joining
   names(x.bs) <- c('hz', 'pseudo.brier')
