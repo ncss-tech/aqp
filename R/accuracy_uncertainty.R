@@ -128,6 +128,10 @@ confusionIndex <- function(x) {
 #' brierScore(x = d.factors, classLabels = c('a', 'b', 'c'), actual = 'actual')
 #' 
 brierScore <- function(x, classLabels, actual = 'actual') {
+  if (inherits(x, 'data.frame')) {
+    x <- data.frame(x)
+  } else stop("`x` should be a data.frame", call. = FALSE)
+  
   # number of observations
   n <- nrow(x)
   
