@@ -66,13 +66,8 @@ importFrom(graphics,
 )
 
 importFrom(plyr,
-  ddply,
   llply,
-  ldply,
-  dlply,
-  join,
-  summarise,
-  rbind.fill
+  dlply
 )
 
 import(data.table)

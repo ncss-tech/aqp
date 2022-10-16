@@ -238,11 +238,10 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     m.i.sub <- get.slice(h, id=id, top=top, bottom=bottom, vars=vars, z=z[slice.i], strict=strict)
 
     # join with original IDs in order to account for NA, or bad horizonation
-    d <- data.frame(temp_id=id.order)
+    d <- data.frame(temp_id = id.order)
     names(d) <- id
 
-    ## TODO: convert to data.table merge method (but is there a match = 'first' option?)
-    m.i <- join(d, m.i.sub, by=id, type='left', match='first')
+    m.i <- merge(d, m.i.sub[!duplicated(m.i.sub[[id]]),], by = id, all.x = TRUE, sort = FALSE)
 
     # add depth range:
     # top-down, means that the slice starts from the user-defined depths (default)
@@ -258,11 +257,10 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
     # save to the list
     hd.slices[[slice.i]] <- m.i
-    }
+  }
 
-  ## TODO: do all of the work via list, lapply / map / do.call('rbind')
   # convert list into DF
-  hd.slices <- ldply(hd.slices)
+  hd.slices <- data.frame(data.table::rbindlist(hd.slices))
 
   # re-order by id, then top
   # keep only data we care about
@@ -274,18 +272,19 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
     return(hd.slices)
 
   # if spatial data and only a single slice: SPDF
-  if(validSpatialData(object) & length(z) == 1) {
+  if (validSpatialData(object) & length(z) == 1) {
     cat('result is a SpatialPointsDataFrame object\n')
+    
     # check for site data, if present - join to our sliced data
-    if(nrow(site(object)) > 0 )
-      hd.slices <- join(hd.slices, site(object), by=id)
-
+    if (nrow(site(object)) > 0) {
+      hd.slices <- merge(hd.slices, site(object), by=id, all.x = TRUE, sort = FALSE)
+    }
     # since the order of our slices and coordinates are the same
     # it is safe to use 'match.ID=FALSE'
     # this gets around a potential problem when dimnames(object)[[1]] aren't consecutive
     # values-- often the case when subsetting has been performed
     return(SpatialPointsDataFrame(coordinates(object), data=hd.slices, match.ID=FALSE))
-    }
+  }
 
   ## otherwise return an SPC, be sure to copy over the spatial data
 
@@ -332,7 +331,7 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
   # done
   return(hd.slices)
-  }
+}
 
 
 ## slice:
