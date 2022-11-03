@@ -16,6 +16,10 @@
 #' @param style 'hue' or 'CC', see details
 #' 
 #' @param gridLines logical, add grid lines to the color contrast chart
+#' 
+#' @param de00.cex character scaling applied to dE00 annotation
+#' 
+#' @param cc.cex character scaling applied to contrast class annotation
 #'
 #' @param thresh threshold (<) applied to pair-wise comparisons and resulting color chips
 #'
@@ -52,7 +56,7 @@
 #' contrastChart(m = '10YR 5/6', hues = c('10YR', '2.5Y'), style='CC')
 #'
 
-contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = FALSE, thresh = NULL, returnData = FALSE) {
+contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = FALSE, de00.cex = 0.6, cc.cex = 0.6, thresh = NULL, returnData = FALSE) {
 
   # load Munsell LUT
   # safe for CRAN check
@@ -72,6 +76,11 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
   # multiHue required when length(hues) > 1
   if(length(hues) > 1 & style == 'hue') {
     style <- 'multiHue'
+    
+    # move dE00 up if CC is disabled via 0-length abbreviation
+    if(ccAbbreviate == 0) {
+      y.offset.dE00 <- y.offset.dE00 - 0.1
+    }
   }
 
   # 2. disable CC label when style = CC
@@ -79,7 +88,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
     # hack to disable CC label
     ccAbbreviate <- 0
     # move dE00 up
-    y.offset.dE00 <- 0.1
+    y.offset.dE00 <- y.offset.dE00 - 0.1
 
     # multiple hues
     if(length(hues) > 1) {
@@ -210,21 +219,21 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
                  # optionally annotate contrast class and abbreviate
                  if(ccAbbreviate >= 1) {
                    panel.text(
-                     xx,
-                     yy - (bd.bottom + y.offset.CC),
+                     x = xx,
+                     y = yy - (bd.bottom + y.offset.CC),
                      as.character(abbreviate(d$cc, minlength = ccAbbreviate)),
-                     cex=0.6,
-                     font=4
+                     cex = cc.cex,
+                     font = 4
                    )
                  }
                  
                  
                  # annotate dE00
                  panel.text(
-                   xx,
-                   yy - (bd.bottom + y.offset.dE00),
+                   x = xx,
+                   y = yy - (bd.bottom + y.offset.dE00),
                    d$dE00,
-                   cex=0.66
+                   cex = de00.cex
                  )
                }
   )

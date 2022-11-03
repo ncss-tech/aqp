@@ -10,6 +10,8 @@ contrastChart(
   ccAbbreviate = 1,
   style = "hue",
   gridLines = FALSE,
+  de00.cex = 0.6,
+  cc.cex = 0.6,
   thresh = NULL,
   returnData = FALSE
 )
@@ -24,6 +26,10 @@ contrastChart(
 \item{style}{'hue' or 'CC', see details}
 
 \item{gridLines}{logical, add grid lines to the color contrast chart}
+
+\item{de00.cex}{character scaling applied to dE00 annotation}
+
+\item{cc.cex}{character scaling applied to contrast class annotation}
 
 \item{thresh}{threshold (<) applied to pair-wise comparisons and resulting color chips}
 
