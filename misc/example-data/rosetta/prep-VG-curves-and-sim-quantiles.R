@@ -1,6 +1,7 @@
 library(aqp)
 library(soilDB)
 library(latticeExtra)
+library(pbapply)
 
 data("ROSETTA.centroids")
 
@@ -57,7 +58,7 @@ xyplot(
 
 
 
-
+x <- ROSETTA.centroids
 d <- split(x, x$texture)
 
 .sim <- function(i, n=1000) {
@@ -93,7 +94,7 @@ d <- split(x, x$texture)
   return(res)
 }
 
-dd <- lapply(d, .sim)
+dd <- pblapply(d, .sim)
 dd <- do.call('rbind', dd)
 
 str(dd)
