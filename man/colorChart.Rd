@@ -14,7 +14,8 @@ colorChart(
   chip.cex.max = 1.5,
   chip.border.col = "black",
   annotate.cex = chip.cex * 0.25,
-  annotate.type = c("count", "percentage")
+  annotate.type = c("count", "percentage"),
+  threshold = NULL
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ colorChart(
 \item{annotate.cex}{scaling factor for chip frequency annotation}
 
 \item{annotate.type}{character, within-group \code{count} or \code{percentage}}
+
+\item{threshold}{numeric within 0-1, color chips with proportion \verb{< threshold} are removed}
 }
 \value{
 a \code{trellis} object
@@ -65,7 +68,6 @@ if(!requireNamespace('latticeExtra')) {
   
   # annotation of frequency
   colorChart(ric, chip.cex = 4, annotate = TRUE)
-  
   
   # bootstrap to larger size
   ric.big <- sample(ric, size = 100, replace = TRUE)
@@ -98,6 +100,10 @@ if(!requireNamespace('latticeExtra')) {
   
   # note special panel used to show neutral hues
   colorChart(cols, size = FALSE, annotate = TRUE)
+  
+  # filter proportions below given threshold
+  colorChart(cols, size = FALSE, annotate = TRUE, threshold = 0.01, 
+  chip.cex = 4, annotate.type = 'percentage')
   
 }
 
