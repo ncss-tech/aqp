@@ -219,12 +219,16 @@
 # * finish testing / comparing
 # * integrate dist(site data)
 # * weighted mean of D_hz + D_site, user-defined weights
-# * parallel operation
-# * progress bar for large SPCs
 # * think about a formula interface for simple specification of depths + vars
 # * expose full dice() fm argument
 # * list-output, with diagnostics and other interesting information
+
+## Next release:
+# * parallel operation
+# * progress bar for large SPCs
 # * benchmarking 
+
+
 
 ## Ideas:
 # * see L1_profiles.R for ideas / examples related to selecting logical "bottom depths"
