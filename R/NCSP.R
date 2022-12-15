@@ -202,7 +202,7 @@
 #'
 #' @author Dylan E. Beaudette and Jon Maynard
 #' 
-#' @seealso [`slice`], [`daisy`]
+#' @seealso [`dice`], [`daisy`]
 #' 
 #' @references
 #'  - J.J Maynard, S.W. Salley, D.E. Beaudette, J.E Herrick. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Sci. Soc. Am. J. 2020; 84: 1675-1692. \doi{10.1002/saj2.20119}.
@@ -215,19 +215,17 @@
 #' @export
 
 ## TODO:
-# * allow pre-diced() or mpspline()-ed input
 # * finish testing / comparing
-# * integrate dist(site data)
-# * weighted mean of D_hz + D_site, user-defined weights
-# * think about a formula interface for simple specification of depths + vars
-# * expose full dice() fm argument
+# * example with multiple runs on suites of variables + weighted combination of D1, D2, D3, ...
+# * integrate dist(site data) and wt. combination
 # * list-output, with diagnostics and other interesting information
 
 ## Next release:
+# * expose full dice() fm argument for simple specification of depths + vars
+# * allow pre-diced() or mpspline()-ed input
 # * parallel operation
 # * progress bar for large SPCs
 # * benchmarking 
-
 
 
 ## Ideas:
@@ -470,11 +468,14 @@ NCSP <- function(
   
   ## optionally normalize by dividing by max(D)
   # this is important when incorporating site data
-  # TODO: causes problems for some functions like MASS::sammon() ?
+  # TODO: causes problems for some functions like MASS::sammon()
+  # TODO: consider safer re-scaling, which removes possibility of 0-distance
   if(rescaleResult) {
     .d <- .d / max(.d, na.rm = TRUE)
   }
     
+  
+  ## optional weighted average with D_site
   
   
   ## metadata
