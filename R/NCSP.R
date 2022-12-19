@@ -133,8 +133,7 @@
 #' 
 #' Performs a numerical comparison of soil profiles using named properties,
 #' based on a weighted, summed, depth-segment-aligned dissimilarity
-#' calculation. The site-level and
-#' horizon-level dissimilarity matrices are then re-scaled and averaged.
+#' calculation.
 #'
 #' Variability in soil depth can interfere significantly with the calculation
 #' of between-profile dissimilarity-- what is the numerical ``distance'' (or
@@ -202,7 +201,7 @@
 #'
 #' @author Dylan E. Beaudette and Jon Maynard
 #' 
-#' @seealso [`dice`], [`daisy`]
+#' @seealso [dice()], [cluster::daisy()], [compareSites()]
 #' 
 #' @references
 #'  - J.J Maynard, S.W. Salley, D.E. Beaudette, J.E Herrick. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Sci. Soc. Am. J. 2020; 84: 1675-1692. \doi{10.1002/saj2.20119}.
@@ -217,8 +216,15 @@
 ## TODO:
 # * finish testing / comparing
 # * example with multiple runs on suites of variables + weighted combination of D1, D2, D3, ...
-# * integrate dist(site data) and wt. combination
 # * list-output, with diagnostics and other interesting information
+# * SS: more examples, vignettes -> interpretation made clear
+
+## long-term, framework for
+## SS: need some original research to make suggestions on weights, suites
+#
+# D = wt.mean(w1 * D1, w2 * D2, w3 * D3, ..., w_site * D_site)
+# 
+# D_site could be generated / related to adjacency matrix
 
 ## Next release:
 # * expose full dice() fm argument for simple specification of depths + vars
@@ -231,6 +237,7 @@
 ## Ideas:
 # * see L1_profiles.R for ideas / examples related to selecting logical "bottom depths"
 # * write new function for selecting a profile that minimizes distance to all others in SPC
+# * NEON data for vignette + paper (SS and JM)
 
 ## name suggested by Jon Maynard
 ## ideas, commentary, updates c/o Maynard et al. 2020
@@ -267,9 +274,15 @@ NCSP <- function(
     stop('`x` must be a SoilProfileCollection', call. = FALSE)
   }
   
-  # vars
-  if(! all(vars %in% names(x))) {
-    stop('`vars` must specify horizon or site level attributes of `x`', call. = FALSE)
+  # check for site-level vars
+  if(any(vars %in% siteNames(x))) {
+    message('consider compareSites() for site level attributes')
+    stop('`vars` may only contain horizon level attributes of `x`', call. = FALSE)
+  }
+  
+  # vars must be in horizon names
+  if(! all(vars %in% horizonNames(x))) {
+    stop('`vars` must specify horizon level attributes of `x`', call. = FALSE)
   }
   
   ## TODO: consider a message and setting maxDepth <- max(x)
@@ -297,7 +310,6 @@ NCSP <- function(
   x <- trunc(x, 0, maxDepth)
   
   
-  
   ## variables used in NCSP algorithm
   
   # number of variables
@@ -307,57 +319,9 @@ NCSP <- function(
   # indexed to distance matrix list
   w <- 1 * exp(-k * 1:maxDepth)
   
-  ## split horizon / site vars
+  ## split horizon vars
   hn <- horizonNames(x)
-  sn <- siteNames(x)
   h.vars <- intersect(hn, vars)
-  s.vars <- intersect(sn, vars)
-  
-  
-  ## TODO: if there are any site data, extract those here
-  ##       and compute simple distance via cluster::daisy(, metric = 'gower')
-  ##       be sure to extract associated weights
-  
-  ## TODO: refactor old code here
-  
-  #   # check for any site data, remove and a save for later
-  #   if(any(vars %in% sn)) {
-  #     
-  #     # extract site-level vars
-  #     matching.idx <- na.omit(match(sn, vars))
-  #     site.vars <- vars[matching.idx]
-  #     
-  #     # remove from hz-level vars
-  #     vars <- vars[-matching.idx]
-  #     
-  #     ## TODO: BUG!!! horizon data are rescaled via D/max(D) !!!
-  #     ## TODO: allow user to pass-in variable type information
-  #     # compute dissimilarty on site-level data: only works with 2 or more variables
-  #     # rescale to [0,1]
-  #     
-  #     message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
-  #     d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
-  #     
-  #     # re-scale to [0,1]
-  #     d.site <- .rescaleRange(d.site, x0 = 0, x1 = 1)
-  #     
-  #     # reset default behavior of hz-level D
-  #     rescale.result=TRUE
-  #     
-  #     ## TODO: there might be cases where we get an NA in d.site ... seems like it happens with boolean variables
-  #     ## ... but why ? read-up on daisy
-  #     if(any(is.na(d.site))) {
-  #       warning('NA in site-level dissimilarity matrix, replacing with min dissimilarity', call.=FALSE)
-  #       d.site[which(is.na(d.site))] <- min(d.site, na.rm=TRUE)
-  #     }
-  #     
-  #     ## TODO: ordering of D_hz vs D_site ... assumptions safe?
-  #     
-  #   } else {
-  #     # setup a dummy D_site
-  #     d.site <- NULL
-  #   }
-  
   
   
   ## TODO: expose LHS of formula to dice()
@@ -475,16 +439,13 @@ NCSP <- function(
   }
     
   
-  ## optional weighted average with D_site
-  
-  
   ## metadata
   
   # distance metric
   if(isColor) {
-    attr(.d, 'Distance Metric') <- 'CIE2000'
+    attr(.d, 'Metric') <- 'CIE2000'
   } else {
-    attr(.d, 'Distance Metric') <- 'Gower'
+    attr(.d, 'Metric') <- 'Gower'
   }
   
   # removed profiles, if any
@@ -492,6 +453,9 @@ NCSP <- function(
 
   # remove warnings about NA from cluster::daisy()
   attr(.d, 'NA.message') <- NULL
+  
+  # remove 'call' attribute
+  attr(.d, 'call') <- NULL
   
   # full set of profile IDs are stored in attr(.d, 'Labels')
   

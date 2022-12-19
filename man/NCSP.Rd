@@ -46,8 +46,7 @@ Replacement for \code{profile_compare()}.
 
 Performs a numerical comparison of soil profiles using named properties,
 based on a weighted, summed, depth-segment-aligned dissimilarity
-calculation. The site-level and
-horizon-level dissimilarity matrices are then re-scaled and averaged.
+calculation.
 
 Variability in soil depth can interfere significantly with the calculation
 of between-profile dissimilarity-- what is the numerical ``distance'' (or
@@ -100,7 +99,7 @@ mentioned depth-slicing algorithm.
 }
 }
 \seealso{
-\code{\link{slice}}, \code{\link{daisy}}
+\code{\link[=dice]{dice()}}, \code{\link[cluster:daisy]{cluster::daisy()}}, \code{\link[=compareSites]{compareSites()}}
 }
 \author{
 Dylan E. Beaudette and Jon Maynard
