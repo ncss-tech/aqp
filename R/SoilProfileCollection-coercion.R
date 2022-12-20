@@ -29,13 +29,13 @@
 #' # make some random coordinate data for each profile
 #' sp5$x <- sp5$y <- rnorm(length(sp5))
 #' coordinates(sp5) <- ~ x + y
+#' proj4string(sp5) <- "EPSG:4326"
 #' 
 #' # SpatialPointsDataFrame output
 #' str(as(sp5, 'SpatialPointsDataFrame'))
 #' 
 #' # SpatialPoints output
 #' str(as(sp5, 'SpatialPoints'))
-
 setAs("SoilProfileCollection", "list", function(from) {
   
   # get slot names from prototype
@@ -121,10 +121,37 @@ setAs("SoilProfileCollection", "data.table", function(from) {
 #' @docType methods
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
-  s <- SpatialPointsDataFrame(coordinates(from), data = site(from), proj4string=CRS(proj4string(from)), match.ID = FALSE)
-  message('only site data are extracted')
-  return(s)
+  if (!requireNamespace("sf")) {
+    stop("Package 'sf' is required to coerce a SoilProfileCollection to SpatialPointsDataFrame object", call. = FALSE)
+  }
+  sf::as_Spatial(as(from, 'sf'))
 }
+)
+
+#' @name as
+#' @return sf
+#' @aliases as,SoilProfileCollection-method
+#' @docType methods
+#' @rdname coercion-methods
+setAs("SoilProfileCollection", "sf", 
+  function(from) {
+
+    if (!requireNamespace("sf")) {
+      stop("Package 'sf' is required to coerce a SoilProfileCollection to sf object", call. = FALSE)
+    }
+    
+    crd <- metadata(from)$coordinates
+    prj <- metadata(from)$projection
+    
+    if (all(is.null(crd) | is.na(crd)) || length(crd) < 2) {
+      stop("Two coordinate (X, Y) column names must be defined to coerce a SoilProfileCollection to sf object", call. = FALSE)
+    }
+    
+    # keep empty point geometries, and do not remove original columns
+    s <- sf::st_as_sf(site(from), crs = prj, coords = crd, na.fail =  FALSE, remove = FALSE)
+    message('only site data are extracted')
+    return(s)
+  }
 )
 
 #' @name as
@@ -133,7 +160,12 @@ setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
 #' @docType methods
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPoints", function(from) {
-    SpatialPoints(coordinates(from), proj4string = CRS(proj4string(from)))
+  
+    if (!requireNamespace("sf")) {
+      stop("Package 'sf' is required to coerce a SoilProfileCollection to sf object", call. = FALSE)
+    }
+  
+    sf::as_Spatial(sf::st_as_sfc(as(from, 'sf')))
   }
 )
 

@@ -6,7 +6,7 @@
 \alias{coordinates,SoilProfileCollection-method}
 \alias{coordinates}
 \alias{coordinates<-,SoilProfileCollection-method}
-\title{Get coordinates from spatial slot}
+\title{Get Soil Profile Coordinates}
 \usage{
 \S4method{coordinates}{SoilProfileCollection}(obj)
 
@@ -20,7 +20,7 @@
 \item{value}{A formula specifying columns containing x and y coordinates}
 }
 \description{
-Get coordinates from spatial slot, if present.
+Get coordinates of each profile
 }
 \examples{
 

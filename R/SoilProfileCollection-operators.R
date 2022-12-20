@@ -151,12 +151,12 @@ setMethod("[", signature(x = "SoilProfileCollection",
                              s <- s.all[s.i, , drop = FALSE]
 
                              # subset spatial data, but only if valid
-                             if (validSpatialData(x)) {
-                               sp <- x@sp[i]
-                             } else {
+                             # if (validSpatialData(x)) {
+                             #   sp <- x@sp[i]
+                             # } else {
                                # copy empty SpatialPoints object
                                sp <- x@sp
-                             }
+                             # }
 
                              # subset diagnostic data
                              d <- diagnostic_hz(x)
@@ -282,9 +282,9 @@ setMethod("[", signature(x = "SoilProfileCollection",
                                }
 
                                # spatial
-                               if (validSpatialData(x)) {
-                                 sp <- sp[i.idx,]
-                               }
+                               # if (validSpatialData(x)) {
+                               #   sp <- sp[i.idx,]
+                               # }
                              }
                            }
 

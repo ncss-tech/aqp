@@ -15,7 +15,7 @@
 \arguments{
 \item{obj}{A SoilProfileCollection}
 
-\item{value}{A PROJ4, WKT string or equivalent or {sp} CRS object}
+\item{value}{character. Representation of Coordinate Reference System as WKT or equivalent.}
 }
 \description{
 \code{proj4string()}: Get Coordinate Reference System as PROJ4 String

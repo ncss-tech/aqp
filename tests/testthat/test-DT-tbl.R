@@ -155,10 +155,10 @@ res <- lapply(dfclasses, function(use_class) {
     # newx should be removed after promotion
     if (use_class == "tbl_df") {
       expect_warning(expect_null(horizons(test)$siteprop))
-      expect_warning(expect_null(horizons(test)$newx))
+      # expect_warning(expect_null(horizons(test)$newx))
     } else {
       expect_null(horizons(test)$siteprop)
-      expect_null(horizons(test)$newx)
+      # expect_null(horizons(test)$newx)
     }
     
     # check that ids are in order

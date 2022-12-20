@@ -151,9 +151,13 @@ test_that("combine with non-conformal spatial data", {
   sp::proj4string(x) <- ''
   sp::proj4string(y) <- ''
   
-  expect_message(res <- combine(list(x, y, z)), "non-conformal point geometry, dropping spatial data")
+  expect_message(res <- combine(list(x, y, z)), "inconsistent CRS, dropping spatial data")
   expect_true(inherits(res, 'SoilProfileCollection'))
 
+  # coordinates are preserved, but projection is not
+  expect_null(metadata(res)$projection)
+  expect_null(metadata(res)$coordinates)
+  
   ## TODO: different coordinate names
 })
 

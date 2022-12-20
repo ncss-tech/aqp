@@ -88,9 +88,9 @@ rebuildSPC <- function(x) {
 
   # copy valid spatial data from the source object
   # otherwise, the previous and possibly invalid SpatialPoints object created by horizons() is fine
-  if(validSpatialData(x)) {
-    res@sp <- x.list$sp
-  }
+  # if(validSpatialData(x)) {
+  #   res@sp <- x.list$sp
+  # }
 
   # done
   return(res)

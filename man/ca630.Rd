@@ -85,7 +85,7 @@ if(length(missing.coords.idx) > 0)
 coordinates(ca) <- ~ lon + lat
 
 # assign a coordinate reference system
-proj4string(ca) <- '+proj=longlat +datum=NAD83'
+proj4string(ca) <- 'EPSG:4269'
 
 # check the result
 print(ca)

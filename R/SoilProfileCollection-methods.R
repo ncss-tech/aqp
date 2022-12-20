@@ -12,13 +12,15 @@
 #'
 setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
           function(object) {
-            # n x 2 ---> valid / initialized coordinates
-            # n x 1 ---> empty SP object
-            res <- dim(coordinates(object))[[2]]
-            if (res == 2)
-              return(TRUE)
-            else
-              return(FALSE)
+            crds <- metadata(object)$coordinates
+            return(all(!is.null(crds) & crds %in% names(object)))
+            # # n x 2 ---> valid / initialized coordinates
+            # # n x 1 ---> empty SP object
+            # res <- dim(coordinates(object))[[2]]
+            # if (res == 2)
+            #   return(TRUE)
+            # else
+            #   return(FALSE)
           })
 
 ##

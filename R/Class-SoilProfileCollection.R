@@ -381,13 +381,19 @@ setMethod(f = 'show',
             # presence of spatial data
             if (nrow(coordinates(object)) == n.profiles) {
               cat('\nSpatial Data:\n')
-              show(object@sp@bbox)
-              cat("CRS: ", proj4string(object))
+              cat("  CRS: ", aqp::wkt(object), ";", sep = "")
+              cat(.spc_bbox(object))
             } else {
               cat('\nSpatial Data:\n[EMPTY]\n')
             }
 
           })
+
+.spc_bbox <- function(x) {
+  crds <- metadata(x)$coordinates
+  paste0(" ", crds[1], ": ", signif(min(x[[crds[1]]]), 6), " to ", signif(max(x[[crds[1]]]), 6), "; ",
+              crds[2], ": ", signif(min(x[[crds[2]]]), 6), " to ", signif(max(x[[crds[2]]]), 6), "\n")
+}
 
 #' @description `as.character()`: Character Representation of SoilProfileCollection Object
 #' @param x a SoilProfileCollection
@@ -915,9 +921,9 @@ setMethod("horizonDepths", signature(object = "SoilProfileCollection"),
             return(object@depthcols))
 
 
-#' Get coordinates from spatial slot
+#' Get Soil Profile Coordinates
 #'
-#' @description Get coordinates from spatial slot, if present.
+#' @description Get coordinates of each profile
 #'
 #' @param obj a SoilProfileCollection
 #' @docType methods
@@ -926,7 +932,7 @@ setMethod("horizonDepths", signature(object = "SoilProfileCollection"),
 #' @rdname coordinates
 setMethod("coordinates", signature(obj = "SoilProfileCollection"),
           function(obj) {
-            return(coordinates(obj@sp))
+            return(as.matrix(sapply(metadata(obj)$coordinates, function(x) obj[[x]])))
           })
 
 ## site data
