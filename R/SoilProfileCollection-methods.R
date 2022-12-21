@@ -2,25 +2,21 @@
   setGeneric("validSpatialData", function(object, ...)
     standardGeneric("validSpatialData"))
 
-#' Get names of columns in site table
+#' Check for valid spatial reference of profiles
 #'
-#' @description Are the contents of @sp valid: n x 2 matrix? If not, then contents of @sp in the SoilProfileCollection are an empty SpatialPoints object.
+#' @description Are coordinate column names defined in metadata and existing in the SoilProfileCollection?
 #' @param object a SoilProfileCollection
 #' @aliases validSpatialData
 #' @docType methods
 #' @rdname validSpatialData
-#'
+#' @return logical `TRUE` if column names are defined and correspond to existing data
 setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
           function(object) {
+            # coordinate column names are defined in metadata
             crds <- metadata(object)$coordinates
-            return(all(!is.null(crds) & crds %in% names(object)))
-            # # n x 2 ---> valid / initialized coordinates
-            # # n x 1 ---> empty SP object
-            # res <- dim(coordinates(object))[[2]]
-            # if (res == 2)
-            #   return(TRUE)
-            # else
-            #   return(FALSE)
+            
+            # and columns of that name exist in either site or horizon slots
+            return(!is.null(crds) && all(crds %in% names(object)))
           })
 
 ##

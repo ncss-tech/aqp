@@ -149,15 +149,10 @@ setMethod("[", signature(x = "SoilProfileCollection",
 
                              # need to use drop=FALSE when @site contains only a single column
                              s <- s.all[s.i, , drop = FALSE]
-
-                             # subset spatial data, but only if valid
-                             # if (validSpatialData(x)) {
-                             #   sp <- x@sp[i]
-                             # } else {
-                               # copy empty SpatialPoints object
-                               sp <- x@sp
-                             # }
-
+                             
+                             # copy empty SpatialPoints object
+                             sp <- x@sp
+                             
                              # subset diagnostic data
                              d <- diagnostic_hz(x)
                              if (length(d) > 0) {
@@ -281,10 +276,6 @@ setMethod("[", signature(x = "SoilProfileCollection",
                                  r <- r[-r.idx, , drop = FALSE]
                                }
 
-                               # spatial
-                               # if (validSpatialData(x)) {
-                               #   sp <- sp[i.idx,]
-                               # }
                              }
                            }
 
