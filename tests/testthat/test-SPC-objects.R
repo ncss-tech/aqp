@@ -174,7 +174,7 @@ test_that("SPC subsetting with tidy verbs ", {
 test_that("SPC graceful failure of spatial operations when data are missing", {
 
   # @sp has not been initialized
-  expect_true(validSpatialData(sp1))
+  expect_false(validSpatialData(sp1))
 
   # coercion should not work
   expect_error(as(sp1, 'SpatialPoints'))
@@ -190,7 +190,7 @@ test_that("SPC graceful failure of spatial operations when data are missing", {
 
 test_that("SPC spatial operations ", {
   
-  skip_if_not_installed("sp")
+  skip_if_not_installed("sf")
   
   # init / extract coordinates
   coordinates(sp1) <- ~ x + y
@@ -209,7 +209,7 @@ test_that("SPC spatial operations ", {
   # expect_true(all(!dimnames(co)[[2]] %in% siteNames(sp1)))
 
   # set CRS
-  expect_silent(wkt(sp1) <- CRS("OGC:CRS84"))
+  expect_silent(wkt(sp1) <- "OGC:CRS84")
   
   # get CRS (via wkt(<SPC>) method)
   expect_true(nchar(wkt(sp1)) > 0)
