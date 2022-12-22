@@ -112,7 +112,7 @@ res <- lapply(dfclasses, function(use_class) {
 
     # promote to spatial
     coordinates(test) <- ~ x + y
-    proj4string(test) <- "+proj=longlat +datum=WGS84"
+    wkt(test) <- "+proj=longlat +datum=WGS84"
 
     # show method should be produce output without error
     expect_output(show(test))

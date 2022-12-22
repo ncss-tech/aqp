@@ -10,7 +10,7 @@ sp1$y <- seq(38, 39, length.out = length(sp1))
 
 sp::coordinates(sp1) <- ~ x + y
 
-sp::proj4string(sp1) <- 'EPSG:4326'
+wkt(sp1) <- 'EPSG:4326'
 
 test_that("basic combination tests", {
 
@@ -131,7 +131,7 @@ test_that("combine with non-conformal spatial data", {
 
   # alter CRS, this generates an sp warning
   # 2020-07-12: now caught with all other rgdal 1.5-8+ warnings in proj4string,SoilProfileCollection-method
-  sp::proj4string(y) <- 'EPSG:26910' # NAD83 UTM Zone 10
+  wkt(y) <- 'EPSG:26910' # NAD83 UTM Zone 10
 
   # this should not work, IDs aren't unique
   expect_error(expect_message(combine(list(x, y)),
@@ -148,8 +148,8 @@ test_that("combine with non-conformal spatial data", {
   res <- combine(list(x, y, z))
   
   # remove CRS (avoids "inconsistent CRS, dropping spatial data")
-  sp::proj4string(x) <- ''
-  sp::proj4string(y) <- ''
+  wkt(x) <- ''
+  wkt(y) <- ''
   
   expect_message(res <- combine(list(x, y, z)), "inconsistent CRS, dropping spatial data")
   expect_true(inherits(res, 'SoilProfileCollection'))

@@ -763,7 +763,7 @@ NULL
 #' coordinates(ca) <- ~ lon + lat
 #'
 #' # assign a coordinate reference system
-#' proj4string(ca) <- 'EPSG:4269'
+#' wkt(ca) <- 'EPSG:4269'
 #'
 #' # check the result
 #' print(ca)

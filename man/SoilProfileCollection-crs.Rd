@@ -4,6 +4,8 @@
 \alias{proj4string,SoilProfileCollection-method}
 \alias{wkt,SoilProfileCollection-method}
 \alias{proj4string<-,SoilProfileCollection,ANY-method}
+\alias{wkt<-}
+\alias{wkt<-,SoilProfileCollection-method}
 \title{Get or Set Coordinate Reference System for SoilProfileCollection}
 \usage{
 \S4method{proj4string}{SoilProfileCollection}(obj)
@@ -11,6 +13,10 @@
 \S4method{wkt}{SoilProfileCollection}(obj)
 
 \S4method{proj4string}{SoilProfileCollection,ANY}(obj) <- value
+
+wkt(obj) <- value
+
+\S4method{wkt}{SoilProfileCollection}(obj) <- value
 }
 \arguments{
 \item{obj}{A SoilProfileCollection}
@@ -23,4 +29,6 @@
 \verb{wkt():} Get Coordinate Reference System as Well-Known Text
 
 \verb{proj4string()<-}: Set Coordinate Reference System string for the SoilProfileCollection
+
+\verb{wkt()<-}: Set Coordinate Reference System string for the SoilProfileCollection
 }

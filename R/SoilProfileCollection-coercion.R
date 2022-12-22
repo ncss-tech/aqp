@@ -29,7 +29,7 @@
 #' # make some random coordinate data for each profile
 #' sp5$x <- sp5$y <- rnorm(length(sp5))
 #' coordinates(sp5) <- ~ x + y
-#' proj4string(sp5) <- "EPSG:4326"
+#' wkt(sp5) <- "EPSG:4326"
 #' 
 #' # SpatialPointsDataFrame output
 #' str(as(sp5, 'SpatialPointsDataFrame'))

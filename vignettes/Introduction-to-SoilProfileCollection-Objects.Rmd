@@ -270,8 +270,8 @@ coordinates(sp4) <- ~ x + y
 coordinates(sp4)
 
 # get/set spatial reference system using PROJ4 syntax
-proj4string(sp4) <- '+proj=utm +zone=11 +datum=NAD83'
-proj4string(sp4)
+wkt(sp4) <- '+proj=utm +zone=11 +datum=NAD83'
+wkt(sp4)
 
 # extract spatial data + site level attribtutes
 # see ?SpatialPointsDataFrame for details

@@ -12,7 +12,7 @@
 setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
           function(obj) {
             .Deprecated("wkt", package = "aqp")
-            wkt(obj)
+            return(wkt(obj))
           }
 )
 
@@ -21,15 +21,35 @@ setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
 #' @rdname SoilProfileCollection-crs
 setMethod(f = 'wkt', signature(obj = 'SoilProfileCollection'),
           function(obj) {
-            metadata(obj)$projection
+            value <- metadata(obj)$projection
+            if (length(value) == 0 || (!is.na(value) && nchar(value) == 0)) {
+              value <- NA_character_
+            }
+            return(value)
           }
 )
-
 #' @description `proj4string()<-`: Set Coordinate Reference System string for the SoilProfileCollection
 #'
 #' @param value character. Representation of Coordinate Reference System as WKT or equivalent.
 #' @rdname SoilProfileCollection-crs
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
+                 function(obj, value) {
+                   .Deprecated("wkt", package = "aqp")
+                   wkt(obj) <- value
+                   return(obj)
+                 })
+
+#' @description `wkt()<-`: Set Coordinate Reference System string for the SoilProfileCollection
+#'
+#' @param value character. Representation of Coordinate Reference System as WKT or equivalent.
+#' @rdname SoilProfileCollection-crs
+#' @export
+setGeneric("wkt<-", function(obj, value)
+  standardGeneric("wkt<-"))
+
+#' @rdname SoilProfileCollection-crs
+#' @export
+setReplaceMethod("wkt", signature(obj = 'SoilProfileCollection'),
   function(obj, value) {
     
     # backward compatibility for sp::CRS object
@@ -52,6 +72,11 @@ setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
         # otherwise use input proj arg string
         value <- value$input
       }
+    }
+    
+    # 0-length or empty character are equivalent to NA CRS
+    if (length(value) == 0 || nchar(value) == 0) {
+      value <- NA_character_
     }
     
     # "projection" metadata stores the WKT string in the SPC

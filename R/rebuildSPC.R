@@ -100,7 +100,7 @@ rebuildSPC <- function(x) {
       
       site(res) <- newsp
       coordinates(res) <- colnames(newsp)[2:3]
-      try(proj4string(res) <- x.list$sp@proj4string)
+      try(wkt(res) <- x.list$sp@proj4string)
     }
   }
   return(res)
