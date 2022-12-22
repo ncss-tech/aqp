@@ -147,6 +147,10 @@ setAs("SoilProfileCollection", "sf",
       stop("Two coordinate (X, Y) column names must be defined to coerce a SoilProfileCollection to sf object", call. = FALSE)
     }
     
+    if (is.null(prj)) {
+      prj <- NA_character_
+    }
+    
     # keep empty point geometries, and do not remove original columns
     s <- sf::st_as_sf(site(from), crs = prj, coords = crd, na.fail =  FALSE, remove = FALSE)
     message('only site data are extracted')
