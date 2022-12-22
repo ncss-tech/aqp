@@ -89,11 +89,11 @@ setReplaceMethod("wkt", signature(obj = 'SoilProfileCollection'),
 ##
 ## initialize spatial data
 ##
-#' @aliases coordinates<-,SoilProfileCollection-method
 #' @param object A SoilProfileCollection
-#' @param value A formula specifying columns containing x and y coordinates
+#' @param value A formula specifying columns containing x and y coordinates, or character with the column names
 #'
 #' @rdname coordinates
+#' @export
 #'
 #' @examples
 #'
@@ -106,7 +106,7 @@ setReplaceMethod("wkt", signature(obj = 'SoilProfileCollection'),
 #' # coordinates takes a formula object as input
 #' coordinates(sp5) <- ~ x + y
 #'
-setReplaceMethod("coordinates", "SoilProfileCollection",
+setReplaceMethod("coordinates", c("SoilProfileCollection", "formula"),
   function(object, value) {
     # basic sanity check
     if (!inherits(value, "formula"))
@@ -127,9 +127,16 @@ setReplaceMethod("coordinates", "SoilProfileCollection",
     if (nrow(mf) != length(object)) {
       stop("coordinates in horizon data are not unique within site: ", quote(value), call. = FALSE)
     }
-   
+    
     # set coordinates metadata entry
-    metadata(object)$coordinates <- fterms[1:2]
+    metadata(object)$coordinates <- fterms
     return(object)
-  }
-)
+})
+
+#' @rdname coordinates
+#' @export
+setReplaceMethod("coordinates", c("SoilProfileCollection", "character"),
+  function(object, value) {
+    coordinates(object) <- as.formula(paste0("~", paste0(value, collapse = "+")))
+    return(object)
+})

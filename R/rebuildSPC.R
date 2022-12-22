@@ -89,14 +89,16 @@ rebuildSPC <- function(x) {
   # 2022-12-21: aqp 2.0; sp slot is no longer transferred by rebuildSPC
   #             but we transfer any existing data back to site 
   if (!is.null(x.list$sp)) {
-    if (inherits(x.list$sp, 'SpatialPoints')) {
+    if (inherits(x.list$sp, 'SpatialPoints') &&
+        ncol(x.list$sp@coords) == 2) {
       newsp <- cbind(data.frame(id = profile_id(x), stringsAsFactors = FALSE), 
                      as.data.frame(x.list$sp, stringsAsFactors = FALSE))
       
-      colnames(newsp) <- c(idname(x), "x", "y")
-      if (any(c("x", "y") %in% names(x))) {
-        colnames(newsp) <- c(idname(x), "sp.x", "sp.y")
+      crdnms <- c("x", "y")
+      if (any(crdnms %in% names(x))) {
+        crdnms <-  paste0("sp.", crdnms)
       } 
+      colnames(newsp) <- c(idname(x), crdnms)
       
       site(res) <- newsp
       coordinates(res) <- colnames(newsp)[2:3]

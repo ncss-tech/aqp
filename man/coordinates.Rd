@@ -5,19 +5,22 @@
 \name{coordinates,SoilProfileCollection-method}
 \alias{coordinates,SoilProfileCollection-method}
 \alias{coordinates}
-\alias{coordinates<-,SoilProfileCollection-method}
+\alias{coordinates<-,SoilProfileCollection,formula-method}
+\alias{coordinates<-,SoilProfileCollection,character-method}
 \title{Get Soil Profile Coordinates}
 \usage{
 \S4method{coordinates}{SoilProfileCollection}(obj)
 
-\S4method{coordinates}{SoilProfileCollection}(object) <- value
+\S4method{coordinates}{SoilProfileCollection,formula}(object) <- value
+
+\S4method{coordinates}{SoilProfileCollection,character}(object) <- value
 }
 \arguments{
 \item{obj}{a SoilProfileCollection}
 
 \item{object}{A SoilProfileCollection}
 
-\item{value}{A formula specifying columns containing x and y coordinates}
+\item{value}{A formula specifying columns containing x and y coordinates, or character with the column names}
 }
 \description{
 Get coordinates of each profile
