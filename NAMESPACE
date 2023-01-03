@@ -88,8 +88,6 @@ importFrom(sp,
   rbind.SpatialPoints
 )
 
-importFrom(gower,
-           gower_topn)
 
 importFrom(farver,
            compare_colour,

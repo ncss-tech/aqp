@@ -1,4 +1,4 @@
-# aqp 2.0 (2022-10-01)
+# aqp 2.0 (2023-01-04)
 This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`.
 
 Notable changes include:
@@ -7,7 +7,9 @@ Notable changes include:
  * deprecation of `profile_compare()` in favor of the `NCSP()`--a complete overhaul based on Maynard et al., 2020
    - site level attributes now handled by `compareSites()`
    - variable weights now possible via argument
- * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections 
+ * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections
+ * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive mixtures
+ * `gower` package moved to SUGGESTS
 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
@@ -15,7 +17,7 @@ Incremental changes, should have no effect on previous code:
  * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
  * aesthetic cleanup in `explainPlotSPC()`
  * `soilColorSignature()` gains arguments and perceptual color distances (dE00) via farver package
- * `as(<SPC>, "data.frame")`: Replace join with merge 
+ * `as(<SPC>, "data.frame")`: Replace `plyr::join()` with `merge()`
  * Add S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
  * `correctAWC()`: NA handling  - return NA when frags are NA 
  * `mutate_profile()`: Faster (data.table-based) evaluation of profile-level expressions (#255)
