@@ -12,11 +12,12 @@
 #' @param w vector of weights, can sum to any number
 #' 
 #' @param mixingMethod approach used to simulate a mixture: 
-#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra
 #'    
-#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see [`mixMunsell`])
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see [mixMunsell()])
+#'    
+#'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra, requires `gower` package
 #' 
-#' @param n number of closest mixture candidates when `mixingMethod = 'reference'` (see [`mixMunsell`]), results can be hard to interpret when `n > 2`
+#' @param n number of closest mixture candidates when `mixingMethod = 'reference'` (see [mixMunsell()]), results can be hard to interpret when `n > 2`
 #' 
 #' @param swatch.cex scaling factor for color swatch
 #' 
@@ -24,9 +25,11 @@
 #' 
 #' @param showMixedSpec show weighted geometric mean (mixed) spectra as dotted line (only when `mixingMethod = 'reference'`)
 #' 
-#' @param overlapFix attempt to "fix" overlapping chip labels via [`fixOverlap`]
+#' @param overlapFix attempt to "fix" overlapping chip labels via [fixOverlap()]
 #' 
 #' @return a `lattice` graphics object
+#' 
+#' @seealso [mixMunsell()]
 #' 
 #' @examples 
 #' 
@@ -37,6 +40,7 @@
 #' # weights
 #' wt <- c(1, 1)
 #' 
+#' if(requireNamespace("gower")) {
 #' plotColorMixture(
 #' x = chips, 
 #' w = wt, 
@@ -45,6 +49,9 @@
 #' showMixedSpec = TRUE, 
 #' mixingMethod = 'reference'
 #' )
+#'
+#'}
+#'
 #' 
 #' plotColorMixture(
 #'   x = chips, 
@@ -54,7 +61,7 @@
 #'   mixingMethod = 'exact'
 #' )
 #' 
-plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('reference', 'exact'), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
+plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('exact', 'reference'), n = 1, swatch.cex = 6, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
   
   # TODO plot will be incorrect if duplicate Munsell chips are specified
   
@@ -64,6 +71,11 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
   
   # mixture method sanity checks
   mixingMethod <- match.arg(mixingMethod)
+  
+  # 'reference' mixing method requires gower package
+  if(mixingMethod == 'reference' & !requireNamespace('gower')) {
+    stop('package `gower` is required for `reference` mixingMethod', call. = FALSE)
+  }
   
   # can't use n > 1 with mixingMethod = 'exact'
   if(mixingMethod == 'exact') {

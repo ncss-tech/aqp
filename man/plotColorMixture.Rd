@@ -7,7 +7,7 @@
 plotColorMixture(
   x,
   w = rep(1, times = length(x))/length(x),
-  mixingMethod = c("reference", "exact"),
+  mixingMethod = c("exact", "reference"),
   n = 1,
   swatch.cex = 6,
   label.cex = 0.85,
@@ -22,8 +22,8 @@ plotColorMixture(
 
 \item{mixingMethod}{approach used to simulate a mixture:
 \itemize{
-\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra
 \item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see \code{\link{mixMunsell}})
+\item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra, requires \code{gower} package
 }}
 
 \item{n}{number of closest mixture candidates when \code{mixingMethod = 'reference'} (see \code{\link{mixMunsell}}), results can be hard to interpret when \code{n > 2}}
@@ -54,6 +54,7 @@ names(chips) <- chips
 # weights
 wt <- c(1, 1)
 
+if(requireNamespace("gower")) {
 plotColorMixture(
 x = chips, 
 w = wt, 
@@ -62,6 +63,9 @@ label.cex = 0.65,
 showMixedSpec = TRUE, 
 mixingMethod = 'reference'
 )
+
+}
+
 
 plotColorMixture(
   x = chips, 

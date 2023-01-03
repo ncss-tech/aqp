@@ -10,10 +10,10 @@
 #' @param groups the name of a horizon or site attribute used to group horizons, see examples
 #' @param col the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")
 #' @param colorSpace the name of color space or color distance metric to use for conversion of aggregate colors to Munsell; either CIE2000 (color distance metric), LAB, or sRGB. Default = 'CIE2000'
-#' @param k single integer specifying the number of colors discretized via PAM (cluster package), see details
+#' @param k single integer specifying the number of colors discretized via PAM ([cluster::pam()]), see details
 #' @param profile_wt the name of a site-level attribute used to modify weighting, e.g. area
 #' 
-#' @param mixingMethod method used to estimate "aggregate" soil colors, see [`mixMunsell`]
+#' @param mixingMethod method used to estimate "aggregate" soil colors, see [mixMunsell()]
 #'
 #' @return A list with the following components:
 #' 
@@ -28,7 +28,7 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @seealso \code{\link{generalize.hz}}
+#' @seealso [generalize.hz()]
 #' 
 #' 
 #' @examples
