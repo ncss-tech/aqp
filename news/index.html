@@ -58,10 +58,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.0" id="aqp-20-2022-10-01">aqp 2.0 (2022-10-01)<a class="anchor" aria-label="anchor" href="#aqp-20-2022-10-01"></a></h2>
+<h2 class="page-header" data-toc-text="2.0" id="aqp-20-2023-01-04">aqp 2.0 (2023-01-04)<a class="anchor" aria-label="anchor" href="#aqp-20-2023-01-04"></a></h2>
 <p>This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp &lt; 1.42, particularly those relying on <code><a href="../reference/slice-methods.html">slice()</a></code>, <code><a href="../reference/slab-methods.html">slab()</a></code>, and <code><a href="../reference/pc.html">profile_compare()</a></code>.</p>
-<p>Notable changes include: * deprecation of <code><a href="../reference/slice-methods.html">slice()</a></code> in favor of the new, faster, more robust implementation in <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> * complete overhaul of <code><a href="../reference/slab-methods.html">slab()</a></code>, with new arguments, faster back-end, and weighted aggregation implemented (finally) * deprecation of <code><a href="../reference/pc.html">profile_compare()</a></code> in favor of the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al., 2020 * <code><a href="../reference/perturb.html">perturb()</a></code> and <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code> are now vectorized, and optimized for larger collections</p>
-<p>Incremental changes, should have no effect on previous code: * <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gains argument <code>maxLabelAdjustmentIndex</code> for controlling horizon depth label collisions * bug fix in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> when <code>fixLabelCollisions = TRUE</code>, adjustments suggested to <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> are now scaled correctly * <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> reports label adjustment index when label collision repair is enabled * aesthetic cleanup in <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> * <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> gains arguments and perceptual color distances (dE00) via farver package * <code>as(&lt;SPC&gt;, "data.frame")</code>: Replace join with merge * Add S4 <code>as.data.frame(&lt;SPC&gt;)</code> as shorthand for <code>as(&lt;SPC&gt;, 'data.frame')</code> * <code><a href="../reference/correctAWC.html">correctAWC()</a></code>: NA handling - return NA when frags are NA * <code><a href="../reference/mutate_profile.html">mutate_profile()</a></code>: Faster (data.table-based) evaluation of profile-level expressions (<a href="https://github.com/ncss-tech/aqp/issues/255" class="external-link">#255</a>) * <code>profileApply</code>: Add support for custom <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function (<code>APPLY.FUN</code>) for processing chunks (<a href="https://github.com/ncss-tech/aqp/issues/256" class="external-link">#256</a>) * Add <code>.interpretHorizonColor()</code> outputs to <code>last_spc_plot</code> in <code>aqp.env</code> for use in custom <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend()</a></code> (<a href="https://github.com/ncss-tech/aqp/issues/254" class="external-link">#254</a>) * Add <code>simplify</code> argument to <code><a href="../reference/SoilTextureLevels.html">SoilTextureLevels()</a></code> and <code><a href="../reference/texture.html">ssc_to_texcl()</a></code> to optionally convert to an ordered factor with maximum of 12 levels (rather than 21). This smaller list of classes excludes sand grain size variants such as fine sand, loamy coarse sand, and very fine sandy loam.</p>
+<p>Notable changes include: * deprecation of <code><a href="../reference/slice-methods.html">slice()</a></code> in favor of the new, faster, more robust implementation in <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> * complete overhaul of <code><a href="../reference/slab-methods.html">slab()</a></code>, with new arguments, faster back-end, and weighted aggregation implemented (finally) * deprecation of <code><a href="../reference/pc.html">profile_compare()</a></code> in favor of the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al., 2020 - site level attributes now handled by <code><a href="../reference/compareSites.html">compareSites()</a></code> - variable weights now possible via argument * <code><a href="../reference/perturb.html">perturb()</a></code> and <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code> are now vectorized, and optimized for larger collections * <code><a href="../reference/mixMunsell.html">mixMunsell()</a></code> now uses <code>mixingMethod = 'exact'</code> by default for the simulation of subtractive mixtures * <code>gower</code> package moved to SUGGESTS</p>
+<p>Incremental changes, should have no effect on previous code: * <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gains argument <code>maxLabelAdjustmentIndex</code> for controlling horizon depth label collisions * bug fix in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> when <code>fixLabelCollisions = TRUE</code>, adjustments suggested to <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> are now scaled correctly * <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> reports label adjustment index when label collision repair is enabled * aesthetic cleanup in <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> * <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> gains arguments and perceptual color distances (dE00) via farver package * <code>as(&lt;SPC&gt;, "data.frame")</code>: Replace <code><a href="https://rdrr.io/pkg/plyr/man/join.html" class="external-link">plyr::join()</a></code> with <code><a href="https://rdrr.io/pkg/sp/man/merge.html" class="external-link">merge()</a></code> * Add S4 <code>as.data.frame(&lt;SPC&gt;)</code> as shorthand for <code>as(&lt;SPC&gt;, 'data.frame')</code> * <code><a href="../reference/correctAWC.html">correctAWC()</a></code>: NA handling - return NA when frags are NA * <code><a href="../reference/mutate_profile.html">mutate_profile()</a></code>: Faster (data.table-based) evaluation of profile-level expressions (<a href="https://github.com/ncss-tech/aqp/issues/255" class="external-link">#255</a>) * <code>profileApply</code>: Add support for custom <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function (<code>APPLY.FUN</code>) for processing chunks (<a href="https://github.com/ncss-tech/aqp/issues/256" class="external-link">#256</a>) * Add <code>.interpretHorizonColor()</code> outputs to <code>last_spc_plot</code> in <code>aqp.env</code> for use in custom <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend()</a></code> (<a href="https://github.com/ncss-tech/aqp/issues/254" class="external-link">#254</a>) * Add <code>simplify</code> argument to <code><a href="../reference/SoilTextureLevels.html">SoilTextureLevels()</a></code> and <code><a href="../reference/texture.html">ssc_to_texcl()</a></code> to optionally convert to an ordered factor with maximum of 12 levels (rather than 21). This smaller list of classes excludes sand grain size variants such as fine sand, loamy coarse sand, and very fine sandy loam.</p>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.42" id="aqp-142-2022-04-08">aqp 1.42 (2022-04-08)<small>2022-04-11</small><a class="anchor" aria-label="anchor" href="#aqp-142-2022-04-08"></a></h2>
@@ -69,8 +69,10 @@
 <li>
 <code><a href="../reference/getArgillicBounds.html">getArgillicBounds()</a></code>, <code><a href="../reference/getCambicBounds.html">getCambicBounds()</a></code>, <code><a href="../reference/mollic.thickness.requirement.html">mollic.thickness.requirement()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code> and related functions have been optimized and now work on SoilProfileCollection objects with length &gt; 1</li>
 <li>Added <code><a href="../reference/reduceSPC.html">reduceSPC()</a></code> function for selecting a subset of minimal plus additional specified columns from a SoilProfileCollection</li>
-<li>Added new “k-keyword” <code>.NHZ</code> for use with <code>SoilProfileCollection</code> <code>[</code> method<ul><li>
-<code>object[,,.NHZ]</code> returns a vector with the number of horizons in each profile</li></ul></li>
+<li>Added new “k-keyword” <code>.NHZ</code> for use with <code>SoilProfileCollection</code> <code>[</code> method
+<ul><li>
+<code>object[,,.NHZ]</code> returns a vector with the number of horizons in each profile</li>
+</ul></li>
 <li>proper identification and conversion of Munsell value == 2.5</li>
 <li>interpolated reference spectra for Munsell value == 2.5</li>
 <li>neutral color chips in the Munsell look-up table are now based on direct measurement vs. estimation</li>
@@ -120,7 +122,8 @@
 </li>
 <li>new function <code><a href="../reference/huePositionCircle.html">huePositionCircle()</a></code> for helping visualize differences in Munsell hue on the unit circle</li>
 <li>
-<code>plotSPC</code> defaults change:<ul><li>
+<code>plotSPC</code> defaults change:
+<ul><li>
 <code>width = 0.25</code>: slightly wider profile sketches</li>
 <li>
 <code>name = hzdesgnname(x)</code>: use metadata if present, no longer guessing. This may cause your figures to “lose” previously guessed horizon names, specify with <code>name = 'column name'</code> or set metadata with <code>hzdesgnname(x) &lt;- 'hzname'</code>
@@ -139,7 +142,9 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.30" id="aqp-130-2021-07-14">aqp 1.30 (2021-07-14)<small>2021-07-27</small><a class="anchor" aria-label="anchor" href="#aqp-130-2021-07-14"></a></h2>
 <ul><li>
-<code>unique</code> method for <code>SoilProfileCollection</code> objects now returns a <code>SoilProfileCollection</code> by default<ul><li>this may break existing code! use the new argument <code>SPC = FALSE</code> for previous behavior (<a href="https://github.com/ncss-tech/aqp/issues/159" class="external-link uri">https://github.com/ncss-tech/aqp/issues/159</a>)</li></ul></li>
+<code>unique</code> method for <code>SoilProfileCollection</code> objects now returns a <code>SoilProfileCollection</code> by default
+<ul><li>this may break existing code! use the new argument <code>SPC = FALSE</code> for previous behavior (<a href="https://github.com/ncss-tech/aqp/issues/159" class="external-link uri">https://github.com/ncss-tech/aqp/issues/159</a>)</li>
+</ul></li>
 <li>
 <code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> now uses <code>mixMunsell</code> for the estimation of soil color mixtures</li>
 <li>
@@ -147,30 +152,42 @@
 <li>
 <code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> now more robust and faster, c/o P. Roudier</li>
 <li>
-<code>mixMunsell</code>:<ul><li>new method <code>exact</code> for direct conversion of mixture spectra to sRGB or closest Munsell chip (via <code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code>)</li></ul></li>
+<code>mixMunsell</code>:
+<ul><li>new method <code>exact</code> for direct conversion of mixture spectra to sRGB or closest Munsell chip (via <code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code>)</li>
+</ul></li>
 <li>new convenience function <code><a href="../reference/PMS2Munsell.html">PMS2Munsell()</a></code> for converting PMS codes -&gt; closest Munsell chip (<a href="https://github.com/ncss-tech/aqp/issues/124" class="external-link uri">https://github.com/ncss-tech/aqp/issues/124</a>)</li>
 <li>
-<code><a href="../reference/glom-SoilProfileCollection-method.html">glom()</a></code> <code>z1</code> and <code>z2</code> arguments vectorized to allow for profile-specific intervals<ul><li>
+<code><a href="../reference/glom-SoilProfileCollection-method.html">glom()</a></code> <code>z1</code> and <code>z2</code> arguments vectorized to allow for profile-specific intervals
+<ul><li>
 <code>z1</code> and <code>z2</code> support non-standard evaluation based on column names in <code>siteNames(p)</code>, and also can take character vector (length 1) with column names in <code>siteNames(p)</code>
-</li></ul></li>
+</li>
+</ul></li>
 <li>
-<code><a href="../reference/depthOf.html">depthOf()</a></code>, <code><a href="../reference/depthOf.html">minDepthOf()</a></code>, <code><a href="../reference/depthOf.html">maxDepthOf()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getMineralSoilSurfaceDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getPlowLayerDepth()</a></code> can now be applied to multiple profiles.<ul><li>If the input <code>SoilProfileCollection</code> has more than one profile then result is a <code>data.frame</code> containing profile ID, top or bottom depths, horizon designation and pattern</li></ul></li>
+<code><a href="../reference/depthOf.html">depthOf()</a></code>, <code><a href="../reference/depthOf.html">minDepthOf()</a></code>, <code><a href="../reference/depthOf.html">maxDepthOf()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getMineralSoilSurfaceDepth()</a></code>, <code><a href="../reference/getSurfaceHorizonDepth.html">getPlowLayerDepth()</a></code> can now be applied to multiple profiles.
+<ul><li>If the input <code>SoilProfileCollection</code> has more than one profile then result is a <code>data.frame</code> containing profile ID, top or bottom depths, horizon designation and pattern</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.29" id="aqp-129-2021-04-05">aqp 1.29 (2021-04-05)<small>2021-04-07</small><a class="anchor" aria-label="anchor" href="#aqp-129-2021-04-05"></a></h2>
 <ul><li>CRAN release</li>
-<li>Several <code>SoilProfileCollection</code> methods that conflict with {dplyr} 1.0+ have been deprecated:<ul><li>
+<li>Several <code>SoilProfileCollection</code> methods that conflict with {dplyr} 1.0+ have been deprecated:
+<ul><li>
 <code>filter</code>, <code>mutate</code>, <code>group_by</code>, <code>summarize</code>
 </li>
-<li>New overloaded {base} names:<ul><li>{base}-like syntax: “filter” -&gt; <code>subset</code>, “mutate” -&gt; <code>transform</code>, “combine” -&gt; <code>c</code>
-</li></ul></li>
-<li>New unique {aqp}/SoilProfileCollection aliases:<ul><li>
+<li>New overloaded {base} names:
+<ul><li>{base}-like syntax: “filter” -&gt; <code>subset</code>, “mutate” -&gt; <code>transform</code>, “combine” -&gt; <code>c</code>
+</li>
+</ul></li>
+<li>New unique {aqp}/SoilProfileCollection aliases:
+<ul><li>
 <code>*SPC</code> syntax: <code>filterSPC</code>, <code>mutateSPC</code>, <code>groupSPC</code>, <code>summarizeSPC</code>
-</li></ul></li>
+</li>
+</ul></li>
 <li>Be aware <code>dplyr::combine</code> (deprecated in {dplyr} 0.7) still conflicts</li>
 </ul></li>
 <li>
-<code><a href="https://rdrr.io/r/base/sets.html" class="external-link">aqp::union()</a></code>, previously deprecated, has been removed from namespace<ul><li>Use <code><a href="../reference/combine-SoilProfileCollection-method.html">c()</a></code> or <code><a href="../reference/combine-SoilProfileCollection-method.html">combine()</a></code> for <code>SoilProfileCollection</code> input</li>
+<code><a href="https://rdrr.io/r/base/sets.html" class="external-link">aqp::union()</a></code>, previously deprecated, has been removed from namespace
+<ul><li>Use <code><a href="../reference/combine-SoilProfileCollection-method.html">c()</a></code> or <code><a href="../reference/combine-SoilProfileCollection-method.html">combine()</a></code> for <code>SoilProfileCollection</code> input</li>
 <li>Use<code><a href="../reference/combine-SoilProfileCollection-method.html">combine()</a></code> or <code><a href="../reference/pbindlist.html">pbindlist()</a></code> for <code>list</code> input</li>
 </ul></li>
 <li>Methods that used {rlang} for non-standard evaluation now use {base}</li>
@@ -185,7 +202,8 @@
 <code>coordinates&lt;-</code> will check formula terms (<em>unique</em> coordinates) in the <code>@horizons</code> slot, if needed.</li>
 <li>new function <code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code> for converting reflectance spectra into sRGB coordinates or closest Munsell chip</li>
 <li>
-<code>mixMunsell</code>:<ul><li>new <code>mixingMethod</code> argument for selecting several mixing strategies</li>
+<code>mixMunsell</code>:
+<ul><li>new <code>mixingMethod</code> argument for selecting several mixing strategies</li>
 <li>suggestions on interpreting spectral distances, message printed when greater than reasonable threshold</li>
 </ul></li>
 <li>minor bug-fix in <code>panel.depth_function</code> when plotting grouped step-functions</li>
@@ -202,7 +220,8 @@
 <li>
 <code>fillHzGaps</code> now has <code>to_top</code> and <code>to_bottom</code> arguments for filling above shallowest top / deepest bottom by profile</li>
 <li>
-<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> more flexible and will usually settle on a solution in fewer iterations:<ul><li>
+<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> more flexible and will usually settle on a solution in fewer iterations:
+<ul><li>
 <code><a href="../reference/overlapMetrics.html">overlapMetrics()</a></code> instead of <code><a href="../reference/findOverlap.html">findOverlap()</a></code> for part of objective function</li>
 <li>cooling schedule is now fully adjustable via <code>T0</code> and <code>k</code> arguments</li>
 </ul></li>
@@ -239,7 +258,8 @@
 <li>new function <code>L1_profiles</code> computes multivariate (L1) medians, compare to marginal medians via <code>slab</code>
 </li>
 <li>
-<code>plotSPC</code> updates:<ul><li>argument named changes: <code>hz.boundary.lty</code> is a horizon-level attribute that contains line type codes</li>
+<code>plotSPC</code> updates:
+<ul><li>argument named changes: <code>hz.boundary.lty</code> is a horizon-level attribute that contains line type codes</li>
 <li>
 <code>hz.topography.offset</code> a horizon-level attribute that contains representative offsets that encode horizon boundary topography</li>
 <li>
@@ -255,8 +275,11 @@
 <li>new function <code>duplicate</code> will makes copies of profiles within a <code>SoilProfileCollection</code>
 </li>
 <li>new example data <code>us.state.soils</code>: 50 state soils + PR and VI soils</li>
-<li>simulate subtractive mixtures of Munsell colors with <code>mixMunsell</code><ul><li>see companion function <code>plotColorMixture</code> for visualization of spectra / mixture</li></ul></li>
-<li>complete overhaul of <code>textureTriangleSummary</code>:<ul><li>uses <code>soiltexture</code> package for visualization (<code>plotrix</code> implementation dropped)</li>
+<li>simulate subtractive mixtures of Munsell colors with <code>mixMunsell</code>
+<ul><li>see companion function <code>plotColorMixture</code> for visualization of spectra / mixture</li>
+</ul></li>
+<li>complete overhaul of <code>textureTriangleSummary</code>:
+<ul><li>uses <code>soiltexture</code> package for visualization (<code>plotrix</code> implementation dropped)</li>
 <li>argument names changes (! may break old code, sorry)</li>
 <li>dropped simulation via <code>sim = TRUE</code> argument, see <code>bootstrapSoilTexture</code> for a better approach</li>
 </ul></li>
@@ -371,13 +394,15 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.10" id="aqp-11710-2019-10-30">aqp 1.17.10 (2019-10-30)<a class="anchor" aria-label="anchor" href="#aqp-11710-2019-10-30"></a></h2>
-<ul><li>removing imported functions from <code>Hmisc</code> (<code>hdquantile</code>), loading <code>aqp</code> is now much faster<ul><li>
+<ul><li>removing imported functions from <code>Hmisc</code> (<code>hdquantile</code>), loading <code>aqp</code> is now much faster
+<ul><li>
 <code><a href="../reference/slab-methods.html">slab()</a></code> now uses <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> as the default slab function</li>
 <li>details at: <a href="https://github.com/ncss-tech/aqp/issues/79" class="external-link uri">https://github.com/ncss-tech/aqp/issues/79</a>
 </li>
 <li>previous behavior of <code><a href="../reference/slab-methods.html">slab()</a></code> can be activated via argument: <code>slab.fun = aqp:::.slab.fun.numeric.HD</code>
 </li>
-</ul></li></ul></div>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.08" id="aqp-11708-2019-10-03">aqp 1.17.08 (2019-10-03)<a class="anchor" aria-label="anchor" href="#aqp-11708-2019-10-03"></a></h2>
 <ul><li>
@@ -402,7 +427,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.05" id="aqp-11705-2019-05-18">aqp 1.17.05 (2019-05-18)<a class="anchor" aria-label="anchor" href="#aqp-11705-2019-05-18"></a></h2>
-<ul><li>new functions colorContrast(), contrastClass(), and huePosition()</li></ul></div>
+<ul><li>new functions colorContrast(), contrastClass(), and huePosition()</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.02" id="aqp-11702-2019-03-15">aqp 1.17.02 (2019-03-15)<a class="anchor" aria-label="anchor" href="#aqp-11702-2019-03-15"></a></h2>
 <ul><li>fixed nasty bug in [-indexing when SPC contains a single profile (<a href="https://github.com/ncss-tech/aqp/issues/85" class="external-link uri">https://github.com/ncss-tech/aqp/issues/85</a>)</li>
@@ -442,7 +468,8 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.16-6" id="aqp-116-6-2018-12-12">aqp 1.16-6 (2018-12-12)<a class="anchor" aria-label="anchor" href="#aqp-116-6-2018-12-12"></a></h2>
 <ul><li>partial bug fix in test_hz_logic() related to missing top AND bottom depths, needs work: <a href="https://github.com/ncss-tech/aqp/issues/65" class="external-link uri">https://github.com/ncss-tech/aqp/issues/65</a>
-</li></ul></div>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.16-5" id="aqp-116-5-2018-11-21">aqp 1.16-5 (2018-11-21)<a class="anchor" aria-label="anchor" href="#aqp-116-5-2018-11-21"></a></h2>
 <ul><li>moved <code>explainPlotSPC</code> from SPC tutorial to <code><a href="../reference/explainPlotSPC.html">aqp::explainPlotSPC()</a></code>
@@ -459,10 +486,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.15.5" id="aqp-1155-2018-03-14">aqp 1.15.5 (2018-03-14)<a class="anchor" aria-label="anchor" href="#aqp-1155-2018-03-14"></a></h2>
-<ul><li>enhancement to <code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> for cases when horizon depths are missing or top/bottom logic flipped</li></ul></div>
+<ul><li>enhancement to <code><a href="../reference/aggregateColor.html">aggregateColor()</a></code> for cases when horizon depths are missing or top/bottom logic flipped</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.15.4" id="aqp-1154-2018-01-29">aqp 1.15.4 (2018-01-29)<a class="anchor" aria-label="anchor" href="#aqp-1154-2018-01-29"></a></h2>
-<ul><li>bug fix for <code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> when fragment volume &gt; 100%</li></ul></div>
+<ul><li>bug fix for <code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> when fragment volume &gt; 100%</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.15.3" id="aqp-1153-2018-01-24">aqp 1.15.3 (2018-01-24)<a class="anchor" aria-label="anchor" href="#aqp-1153-2018-01-24"></a></h2>
 <ul><li>added a new argument to <code><a href="../reference/addDiagnosticBracket.html">addDiagnosticBracket()</a></code> allowing for specification of column containing diagnostic feature kind</li>
@@ -479,15 +508,18 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.15" id="aqp-115-2017-11-11">aqp 1.15 (2017-11-11)<small>2017-11-12</small><a class="anchor" aria-label="anchor" href="#aqp-115-2017-11-11"></a></h2>
-<ul><li>push to CRAN, getting ready for aqp 2.0</li></ul></div>
+<ul><li>push to CRAN, getting ready for aqp 2.0</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.14" id="aqp-114-2017-09-19">aqp 1.14 (2017-09-19)<a class="anchor" aria-label="anchor" href="#aqp-114-2017-09-19"></a></h2>
 <ul><li>
 <code><a href="../reference/missingDataGrid.html">missingDataGrid()</a></code> relaxing <code><a href="../reference/slice-methods.html">slice()</a></code> with <code>strict=FALSE</code>
-</li></ul></div>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.12" id="aqp-112-2017-07-05">aqp 1.12 (2017-07-05)<a class="anchor" aria-label="anchor" href="#aqp-112-2017-07-05"></a></h2>
-<ul><li>CIELAB colors are now in the <code>munsell</code> look-up table</li></ul></div>
+<ul><li>CIELAB colors are now in the <code>munsell</code> look-up table</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.12" id="aqp-112-2017-07-05-1">aqp 1.12 (2017-07-05)<a class="anchor" aria-label="anchor" href="#aqp-112-2017-07-05-1"></a></h2>
 <ul><li>
@@ -497,7 +529,8 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.11" id="aqp-111-2017-06-13">aqp 1.11 (2017-06-13)<a class="anchor" aria-label="anchor" href="#aqp-111-2017-06-13"></a></h2>
 <ul><li>
-<code><a href="../reference/rgb2munsell.html">rgb2munsell()</a></code> now uses CIELAB colorspace for lookup, results are <em>more accurate</em> as compared to using sRGB colorspace</li></ul></div>
+<code><a href="../reference/rgb2munsell.html">rgb2munsell()</a></code> now uses CIELAB colorspace for lookup, results are <em>more accurate</em> as compared to using sRGB colorspace</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.10-4" id="aqp-110-4-2017-05-02">aqp 1.10-4 (2017-05-02)<a class="anchor" aria-label="anchor" href="#aqp-110-4-2017-05-02"></a></h2>
 <ul><li>
@@ -508,7 +541,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.10" id="aqp-110-2017-01-05">aqp 1.10 (2017-01-05)<small>2017-01-06</small><a class="anchor" aria-label="anchor" href="#aqp-110-2017-01-05"></a></h2>
-<ul><li>fixed major bug (<a href="https://github.com/ncss-tech/aqp/issues/23" class="external-link uri">https://github.com/ncss-tech/aqp/issues/23</a>) related to editing horizon-level attributes after <code>rbind</code>-ing</li></ul></div>
+<ul><li>fixed major bug (<a href="https://github.com/ncss-tech/aqp/issues/23" class="external-link uri">https://github.com/ncss-tech/aqp/issues/23</a>) related to editing horizon-level attributes after <code>rbind</code>-ing</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.13" id="aqp-1913-2016-10-20">aqp 1.9.13 (2016-10-20)<a class="anchor" aria-label="anchor" href="#aqp-1913-2016-10-20"></a></h2>
 <ul><li>new dataset <code>soil_minerals</code> with some common soil mineral colors source: <a href="http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286" class="external-link uri">http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286</a>
@@ -525,11 +559,14 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.8" id="aqp-198-2016-03-07">aqp 1.9.8 (2016-03-07)<a class="anchor" aria-label="anchor" href="#aqp-198-2016-03-07"></a></h2>
 <ul><li>
-<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> can now accommodate neutral hues (N), and values of “2.5”, see manual page for details</li></ul></div>
+<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> can now accommodate neutral hues (N), and values of “2.5”, see manual page for details</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.7" id="aqp-197-2016-02-25">aqp 1.9.7 (2016-02-25)<a class="anchor" aria-label="anchor" href="#aqp-197-2016-02-25"></a></h2>
 <ul><li>new function: <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, see manual page</li>
-<li>new function: <code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> for converting strings of ‘10YR 2/2’ into R colors or RGB triplets<ul><li>this is a convenience function that calls <code>munsell2rgb</code> on parsed strings of full Munsell notation</li></ul></li>
+<li>new function: <code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> for converting strings of ‘10YR 2/2’ into R colors or RGB triplets
+<ul><li>this is a convenience function that calls <code>munsell2rgb</code> on parsed strings of full Munsell notation</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.6" id="aqp-196-2016-02-23">aqp 1.9.6 (2016-02-23)<a class="anchor" aria-label="anchor" href="#aqp-196-2016-02-23"></a></h2>
@@ -538,7 +575,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.5" id="aqp-195-2015-12-28">aqp 1.9.5 (2015-12-28)<a class="anchor" aria-label="anchor" href="#aqp-195-2015-12-28"></a></h2>
-<ul><li>documentation for new transition probability functions, see ?hzTransitionProbabilities for details</li></ul></div>
+<ul><li>documentation for new transition probability functions, see ?hzTransitionProbabilities for details</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.4" id="aqp-194-2015-12-22">aqp 1.9.4 (2015-12-22)<a class="anchor" aria-label="anchor" href="#aqp-194-2015-12-22"></a></h2>
 <ul><li>better checking for other places where the bug fixed in rbind.SoilProfileCollection (aqp 1.9.3) could occur</li>
@@ -547,9 +585,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.3" id="aqp-193-2015-12-18">aqp 1.9.3 (2015-12-18)<small>2015-12-19</small><a class="anchor" aria-label="anchor" href="#aqp-193-2015-12-18"></a></h2>
-<ul><li>fixed a nasty bug in <code>rbind.SoilProfileCollection()</code> related to object re-ordering<ul><li>in aqp &lt; 1.9.3: there was a chance than <code>profile_id(x)</code> and <code>site(x)[[idname(x)]])</code> would not match</li>
+<ul><li>fixed a nasty bug in <code>rbind.SoilProfileCollection()</code> related to object re-ordering
+<ul><li>in aqp &lt; 1.9.3: there was a chance than <code>profile_id(x)</code> and <code>site(x)[[idname(x)]])</code> would not match</li>
 <li>bugs like this will no longer be a possibility after aqp 2.0, new SPC object structure planned</li>
-</ul></li></ul></div>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.1" id="aqp-191-2015-11-18">aqp 1.9.1 (2015-11-18)<a class="anchor" aria-label="anchor" href="#aqp-191-2015-11-18"></a></h2>
 <ul><li>
@@ -598,7 +638,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.7-8" id="aqp-17-8-2014-12-08">aqp 1.7-8 (2014-12-08)<a class="anchor" aria-label="anchor" href="#aqp-17-8-2014-12-08"></a></h2>
-<ul><li>texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method=‘closest’, see manual page for details</li></ul></div>
+<ul><li>texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method=‘closest’, see manual page for details</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.7-7" id="aqp-17-7-2014-11-06">aqp 1.7-7 (2014-11-06)<small>2014-11-13</small><a class="anchor" aria-label="anchor" href="#aqp-17-7-2014-11-06"></a></h2>
 <ul><li>bug fix c/o Jos? Padarian: SPC objects now understand logical indexing rules</li>
@@ -615,10 +656,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6-4" id="aqp-16-4-2014-02-14">aqp 1.6-4 (2014-02-14)<a class="anchor" aria-label="anchor" href="#aqp-16-4-2014-02-14"></a></h2>
-<ul><li>When applied to a single categorical variable, the results from slab() now contain an attribute ‘original.levels’ that contains the original factor levels. This is important because when casting from long-&gt;wide format, illegal column names are scrubbed by make.names(). This process would convert horizon designations like ‘2Bt’ into ‘X2Bt’. You can recover the original horizon names via attr(x, ‘original.levels’).</li></ul></div>
+<ul><li>When applied to a single categorical variable, the results from slab() now contain an attribute ‘original.levels’ that contains the original factor levels. This is important because when casting from long-&gt;wide format, illegal column names are scrubbed by make.names(). This process would convert horizon designations like ‘2Bt’ into ‘X2Bt’. You can recover the original horizon names via attr(x, ‘original.levels’).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6-3" id="aqp-16-3-2014-02-04">aqp 1.6-3 (2014-02-04)<a class="anchor" aria-label="anchor" href="#aqp-16-3-2014-02-04"></a></h2>
-<ul><li>plotSPC() has a new argument: <code>label</code>, used to set site-level attribute containing profile labels</li></ul></div>
+<ul><li>plotSPC() has a new argument: <code>label</code>, used to set site-level attribute containing profile labels</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6-2" id="aqp-16-2-2014-01-10">aqp 1.6-2 (2014-01-10)<a class="anchor" aria-label="anchor" href="#aqp-16-2-2014-01-10"></a></h2>
 <ul><li>plotSPC() now registers plotting parameters in the environment aqp.env</li>
@@ -631,15 +674,19 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6" id="aqp-16-2013-12-11">aqp 1.6 (2013-12-11)<small>2013-12-17</small><a class="anchor" aria-label="anchor" href="#aqp-16-2013-12-11"></a></h2>
-<ul><li>rbind.SoilProfileCollection() now re-orders data according to the new set of profile IDs<ul><li>this fixes several problems associated with assumptions in profile_compare()</li></ul></li>
+<ul><li>rbind.SoilProfileCollection() now re-orders data according to the new set of profile IDs
+<ul><li>this fixes several problems associated with assumptions in profile_compare()</li>
+</ul></li>
 <li>profile_compare() will be re-written soon to work natively with SPC objects</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-6" id="aqp-15-6-2013-11-25">aqp 1.5-6 (2013-11-25)<a class="anchor" aria-label="anchor" href="#aqp-15-6-2013-11-25"></a></h2>
-<ul><li>new function addBracket() for annotating profile sketches with depth-brackets; useful for plotting diagnostic features</li></ul></div>
+<ul><li>new function addBracket() for annotating profile sketches with depth-brackets; useful for plotting diagnostic features</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-6" id="aqp-15-6-2013-11-15">aqp 1.5-6 (2013-11-15)<a class="anchor" aria-label="anchor" href="#aqp-15-6-2013-11-15"></a></h2>
-<ul><li>new function missingDataGrid() for graphically describing the presence of missing data in an SPC object</li></ul></div>
+<ul><li>new function missingDataGrid() for graphically describing the presence of missing data in an SPC object</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-2" id="aqp-15-2-2013-04-09">aqp 1.5-2 (2013-04-09)<small>2013-04-18</small><a class="anchor" aria-label="anchor" href="#aqp-15-2-2013-04-09"></a></h2>
 <ul><li>panel.depth_function() now prints “contributing fraction” values in the same color as corresponding depth-function lines and shaded areas</li>
@@ -652,8 +699,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-1" id="aqp-15-1-2013-03-07">aqp 1.5-1 (2013-03-07)<a class="anchor" aria-label="anchor" href="#aqp-15-1-2013-03-07"></a></h2>
-<ul><li>removed excessive checking in SoilProfileCollection init code, this may speed things up<ul><li>previously identified horizonation errors may no longer result in ERRORS; be sure to test</li></ul></li>
-<li>test_hz_logic() now more useful:<ul><li>always checks for NA and overlapping horizons</li>
+<ul><li>removed excessive checking in SoilProfileCollection init code, this may speed things up
+<ul><li>previously identified horizonation errors may no longer result in ERRORS; be sure to test</li>
+</ul></li>
+<li>test_hz_logic() now more useful:
+<ul><li>always checks for NA and overlapping horizons</li>
 <li>no longer called with initialization of SoilProfileCollection objects</li>
 <li>note that default behavior has changed since version 1.5</li>
 <li>moved related documentation to test_hz_logic manual page</li>
@@ -664,8 +714,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5" id="aqp-15-2013-02-24">aqp 1.5 (2013-02-24)<small>2013-02-26</small><a class="anchor" aria-label="anchor" href="#aqp-15-2013-02-24"></a></h2>
-<ul><li>profileApply() can now return arbitrary objects = new subsetting/transformation possibilities<ul><li>see ?profileApply for examples</li></ul></li>
-<li>panel.depth_function() can now display contributing fraction values with grouped data<ul><li>see multi-variate example in ?slab</li></ul></li>
+<ul><li>profileApply() can now return arbitrary objects = new subsetting/transformation possibilities
+<ul><li>see ?profileApply for examples</li>
+</ul></li>
+<li>panel.depth_function() can now display contributing fraction values with grouped data
+<ul><li>see multi-variate example in ?slab</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4-7" id="aqp-14-7-2013-01-24">aqp 1.4-7 (2013-01-24)<a class="anchor" aria-label="anchor" href="#aqp-14-7-2013-01-24"></a></h2>
@@ -682,14 +736,17 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4-5" id="aqp-14-5-2012-12-29">aqp 1.4-5 (2012-12-29)<a class="anchor" aria-label="anchor" href="#aqp-14-5-2012-12-29"></a></h2>
 <ul><li>
-<code><a href="../reference/slab-methods.html">slab()</a></code> re-written from scratch, resulting in reduced memory footprint and quicker running time ! older code based on slab() is likely to now broken- sorry, it won’t happen again<ul><li>the new code is much slimmer and based on aggregate() rather than ddply</li>
+<code><a href="../reference/slab-methods.html">slab()</a></code> re-written from scratch, resulting in reduced memory footprint and quicker running time ! older code based on slab() is likely to now broken- sorry, it won’t happen again
+<ul><li>the new code is much slimmer and based on aggregate() rather than ddply</li>
 <li>function arguments have changed so be sure to check the manual page</li>
 <li>user-supplied functions are now much simpler to write and rely on vectors rather than data.frames (= faster)</li>
 <li>the next major release will contain additional examples of how to use the new features</li>
-</ul></li></ul></div>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4" id="aqp-14-2012-12-18">aqp 1.4 (2012-12-18)<small>2012-12-21</small><a class="anchor" aria-label="anchor" href="#aqp-14-2012-12-18"></a></h2>
-<ul><li>new function <code><a href="../reference/sim.html">sim()</a></code> for simulation based on a template soil profile, proper documentation pending…</li></ul></div>
+<ul><li>new function <code><a href="../reference/sim.html">sim()</a></code> for simulation based on a template soil profile, proper documentation pending…</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3-3" id="aqp-13-3-2012-12-06">aqp 1.3-3 (2012-12-06)<a class="anchor" aria-label="anchor" href="#aqp-13-3-2012-12-06"></a></h2>
 <ul><li>new function <code><a href="../reference/subsetProfiles.html">subsetProfiles()</a></code> for simpler subsetting of <code>SoilProfileCollection</code> objects via site or horizon-level attributes</li>
@@ -708,15 +765,23 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3-1" id="aqp-13-1-2012-10-17">aqp 1.3-1 (2012-10-17)<a class="anchor" aria-label="anchor" href="#aqp-13-1-2012-10-17"></a></h2>
-<ul><li>speed-bump in profileApply()<ul><li>splitProfiles() function is no longer defined/used/needed</li></ul></li>
-<li>bug fix in SoilProfileCollection subsetting via []<ul><li>SoilProfiles with a single horizon confused subsetting in the presence of spatial data</li></ul></li>
+<ul><li>speed-bump in profileApply()
+<ul><li>splitProfiles() function is no longer defined/used/needed</li>
+</ul></li>
+<li>bug fix in SoilProfileCollection subsetting via []
+<ul><li>SoilProfiles with a single horizon confused subsetting in the presence of spatial data</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3" id="aqp-13-2012-10-07">aqp 1.3 (2012-10-07)<small>2012-10-10</small><a class="anchor" aria-label="anchor" href="#aqp-13-2012-10-07"></a></h2>
-<ul><li>added rbind.SoilProfileCollection() for concatenating SPC objects<ul><li>this function performs basic sanity checks, but cannot combine unlike objects</li></ul></li></ul></div>
+<ul><li>added rbind.SoilProfileCollection() for concatenating SPC objects
+<ul><li>this function performs basic sanity checks, but cannot combine unlike objects</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2-10" id="aqp-12-10-2012-09-05">aqp 1.2-10 (2012-09-05)<a class="anchor" aria-label="anchor" href="#aqp-12-10-2012-09-05"></a></h2>
-<ul><li>fixed minor bug in prepanel.depth_function() where an error would occur when input data was all NA</li></ul></div>
+<ul><li>fixed minor bug in prepanel.depth_function() where an error would occur when input data was all NA</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2-9" id="aqp-12-9-2012-08-31">aqp 1.2-9 (2012-08-31)<a class="anchor" aria-label="anchor" href="#aqp-12-9-2012-08-31"></a></h2>
 <ul><li>new ‘unique’ method for SoilProfileCollection objects, returns indices of unique profiles</li>
@@ -748,16 +813,20 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1" id="aqp-11-2012-04-18">aqp 1.1 (2012-04-18)<a class="anchor" aria-label="anchor" href="#aqp-11-2012-04-18"></a></h2>
-<ul><li>merged documentation for soil.slot() and slab()<ul><li>slab() should be used in all places where soil.slot() was used</li>
+<ul><li>merged documentation for soil.slot() and slab()
+<ul><li>slab() should be used in all places where soil.slot() was used</li>
 <li>soil.slot() will disappear from the package NAMESPACE eventually, so don’t use it directly!</li>
 </ul></li>
 <li>minor bug fix in panel.depth_function()</li>
 <li>cleanup of documentation and examples</li>
-<li>added horizon boundary distinctness code conversions and plotting functionality<ul><li>see ?sp1 and ?random_profile for new examples</li></ul></li>
+<li>added horizon boundary distinctness code conversions and plotting functionality
+<ul><li>see ?sp1 and ?random_profile for new examples</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-2" id="aqp-10-2-2012-03-29">aqp 1.0-2 (2012-03-29)<a class="anchor" aria-label="anchor" href="#aqp-10-2-2012-03-29"></a></h2>
-<ul><li>More NAMESPACE cleaning</li></ul></div>
+<ul><li>More NAMESPACE cleaning</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-1" id="aqp-10-1-2012-03-28">aqp 1.0-1 (2012-03-28)<a class="anchor" aria-label="anchor" href="#aqp-10-1-2012-03-28"></a></h2>
 <ul><li>Cleaned NAMESPACE and DESCRIPTION</li>
@@ -776,7 +845,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-9.8" id="aqp-099-98-2012-03-02">aqp 0.99-9.8 (2012-03-02)<a class="anchor" aria-label="anchor" href="#aqp-099-98-2012-03-02"></a></h2>
-<ul><li>profile_compare() will now use site-level attributes if input is a SoilProfileCollection<ul><li>horizon / site level data currently weighted equally</li>
+<ul><li>profile_compare() will now use site-level attributes if input is a SoilProfileCollection
+<ul><li>horizon / site level data currently weighted equally</li>
 <li>NOTE: this feature is new, test-first!</li>
 </ul></li>
 <li>minor bug fixes in profile_compare() to remove spurious warnings</li>
@@ -785,7 +855,9 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-9.6" id="aqp-099-96-2012-02-21">aqp 0.99-9.6 (2012-02-21)<a class="anchor" aria-label="anchor" href="#aqp-099-96-2012-02-21"></a></h2>
-<ul><li>spurious warnings from profile_compare() caused by daisy() now suppressed<ul><li>warnings were generated when calling daisy() on a matrix of all NA which typically occurred when using too-large a lower depth for evaluation of D</li></ul></li>
+<ul><li>spurious warnings from profile_compare() caused by daisy() now suppressed
+<ul><li>warnings were generated when calling daisy() on a matrix of all NA which typically occurred when using too-large a lower depth for evaluation of D</li>
+</ul></li>
 <li>preliminary support for diagnostic horizons via diagnostic_hz()</li>
 <li>new examples</li>
 <li>error and warnings messages cleaned-up</li>
@@ -794,19 +866,28 @@
 <h2 class="page-header" data-toc-text="0.99-9.52" id="aqp-099-952-2012-01-31">aqp 0.99-9.52 (2012-01-31)<a class="anchor" aria-label="anchor" href="#aqp-099-952-2012-01-31"></a></h2>
 <ul><li>converting all messages passed to the user from cat() to message() and warning()</li>
 <li>profile_compare() and slab() now default to <em>no</em> progress bars, see ‘progress’ argument to adjust</li>
-<li>profileApply() now provides access to all aspects of the SoilProfileCollection object<ul><li>that means that: profileApply(SPC, function(x) … ) operates on x, which is a soilProfileCollection containing only profile_i <em>note that this may break functionality based on aqp 0.99-9.3</em>
-</li></ul></li>
+<li>profileApply() now provides access to all aspects of the SoilProfileCollection object
+<ul><li>that means that: profileApply(SPC, function(x) … ) operates on x, which is a soilProfileCollection containing only profile_i <em>note that this may break functionality based on aqp 0.99-9.3</em>
+</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-9.4" id="aqp-099-94-2012-01-09">aqp 0.99-9.4 (2012-01-09)<a class="anchor" aria-label="anchor" href="#aqp-099-94-2012-01-09"></a></h2>
 <ul><li>
-<code>site(SCP) &lt;- d</code> now tries to merge data from <a href="mailto:SPC@site" class="email">SPC@site</a> with ‘d’ via left join<ul><li>this means that all new SPC objects will have a single column of <a href="https://github.com/site" class="external-link">@site</a> data, containing profile IDs</li></ul></li>
-<li>plot-SoilProfileCollection now tries to guess the best orientation of IDs<ul><li>override with id.style=‘top’ or id.style=‘side’</li></ul></li>
-<li>slice-SoilProfileCollection now accepts ‘.’ to define all columns should be returned at requested slices<ul><li>slice(SPC, 1:50 ~ . ) # this means all vars. ID, top, bottom are automatically removed</li></ul></li>
+<code>site(SCP) &lt;- d</code> now tries to merge data from <a href="mailto:SPC@site" class="email">SPC@site</a> with ‘d’ via left join
+<ul><li>this means that all new SPC objects will have a single column of <a href="https://github.com/site" class="external-link">@site</a> data, containing profile IDs</li>
+</ul></li>
+<li>plot-SoilProfileCollection now tries to guess the best orientation of IDs
+<ul><li>override with id.style=‘top’ or id.style=‘side’</li>
+</ul></li>
+<li>slice-SoilProfileCollection now accepts ‘.’ to define all columns should be returned at requested slices
+<ul><li>slice(SPC, 1:50 ~ . ) # this means all vars. ID, top, bottom are automatically removed</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-9.1" id="aqp-099-91-2011-12-27">aqp 0.99-9.1 (2011-12-27)<small>2012-01-03</small><a class="anchor" aria-label="anchor" href="#aqp-099-91-2011-12-27"></a></h2>
-<ul><li>pedonPC, NASIS, and SDA functions moved <em>out</em> of aqp, and <em>into</em> new package: soilDB<ul><li>removed associated, suggested packages from aqp</li>
+<ul><li>pedonPC, NASIS, and SDA functions moved <em>out</em> of aqp, and <em>into</em> new package: soilDB
+<ul><li>removed associated, suggested packages from aqp</li>
 <li>soilDB will be on CRAN shortly</li>
 </ul></li>
 <li>new argument to plot(SoilProfileCollection, …, divide.hz=TRUE|FALSE) that can optionally suppress plotting of dividing lines between horizons (suggested by Ludwig Hilger)</li>
@@ -826,11 +907,18 @@
 <h2 class="page-header" data-toc-text="0.99-8.58" id="aqp-099-858-2011-12-21">aqp 0.99-8.58 (2011-12-21)<a class="anchor" aria-label="anchor" href="#aqp-099-858-2011-12-21"></a></h2>
 <ul><li>WARNING: soil.slot.multiple() renamed to slab()</li>
 <li>fixed minor bug in slice(), when numerical IDs are used: ddply() and cast() implicitly re-order data…</li>
-<li>added <code>strict</code> argument to many functions, to gracefully account for bad horizon data<ul><li>enforce quality control with strict=TRUE</li></ul></li>
-<li>munsell2rgb() is now 100x faster thanks to plyr::join()<ul><li>note that factors cannot be used in the conversion, see: <a href="https://github.com/hadley/plyr/issues/43" class="external-link uri">https://github.com/hadley/plyr/issues/43</a><ul><li>there is a check and conversion within the function that should prevent segfaults</li></ul></li></ul></li>
+<li>added <code>strict</code> argument to many functions, to gracefully account for bad horizon data
+<ul><li>enforce quality control with strict=TRUE</li>
+</ul></li>
+<li>munsell2rgb() is now 100x faster thanks to plyr::join()
+<ul><li>note that factors cannot be used in the conversion, see: <a href="https://github.com/hadley/plyr/issues/43" class="external-link uri">https://github.com/hadley/plyr/issues/43</a>
+<ul><li>there is a check and conversion within the function that should prevent segfaults</li>
+</ul></li>
+</ul></li>
 <li>documentation updates, demo(aqp) updates, more examples</li>
 <li>bug fix in slice(), now works with numeric OR categorical vars, but NOT both…</li>
-<li>matrix-style subsetting functional:<ul><li>s[i, j] —&gt; i is the profile index, and j is the horizon/slice index</li>
+<li>matrix-style subsetting functional:
+<ul><li>s[i, j] —&gt; i is the profile index, and j is the horizon/slice index</li>
 <li>s[i, ] returns a SoilProfileCollection</li>
 <li>s[, j] returns a SpatialPointsDataFrame when a single slice is used</li>
 </ul></li>
@@ -842,8 +930,12 @@
 <ul><li>added “site(SoilProfileCollection) &lt;-” method for data.frame</li>
 <li>started VERY basic AQP Introduction vignette… still experimental</li>
 <li>adding coercion methods for common objects and sp-class objects</li>
-<li>matrix-style subsetting almost works:<ul><li>s[i, j] —&gt; i is the profile index, and j is the horizon/slice index</li></ul></li>
-<li>added a ‘slice’ method for SoilProfileCollection objects<ul><li>returns selected variables along depth slice(s) (i.e. no aggregation)</li></ul></li>
+<li>matrix-style subsetting almost works:
+<ul><li>s[i, j] —&gt; i is the profile index, and j is the horizon/slice index</li>
+</ul></li>
+<li>added a ‘slice’ method for SoilProfileCollection objects
+<ul><li>returns selected variables along depth slice(s) (i.e. no aggregation)</li>
+</ul></li>
 <li>added NAMESPACE file for R &gt;= 2.14 compatibility</li>
 <li>stabilized S4 class, working on S4-izing all related functions</li>
 <li>preliminary documentation on the new S4 classes/methods</li>
@@ -857,17 +949,20 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-8.2" id="aqp-099-82-2011-09-21">aqp 0.99-8.2 (2011-09-21)<a class="anchor" aria-label="anchor" href="#aqp-099-82-2011-09-21"></a></h2>
-<ul><li>added S4 class/methods for <code>SoilProfileCollection</code><ul><li>this supersedes the (now removed) S3 <code>SoilProfileList</code> classes</li>
+<ul><li>added S4 class/methods for <code>SoilProfileCollection</code>
+<ul><li>this supersedes the (now removed) S3 <code>SoilProfileList</code> classes</li>
 <li>basic accessors/setters are in place, subject to change</li>
 </ul></li>
-<li>profile_plot() now uses the <code>SoilProfileCollection</code> class<ul><li><em>initSoilProfileList() is no longer supported; see depths() for similar functionality</em></li>
+<li>profile_plot() now uses the <code>SoilProfileCollection</code> class
+<ul><li><em>initSoilProfileList() is no longer supported; see depths() for similar functionality</em></li>
 <li><em>expect some tumultuous times ahead in the API… should be ironed out by 1.0 release</em></li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-8" id="aqp-099-8-2011-09-14">aqp 0.99-8 (2011-09-14)<small>2011-09-16</small><a class="anchor" aria-label="anchor" href="#aqp-099-8-2011-09-14"></a></h2>
 <ul><li>soil.slot() will now accept boundaries defining a ‘slab’ over which aggregates are computed</li>
-<li>soil.slot.multiple() now cleanly wraps soil.slot(), accepting all arguments<ul><li>these two changes make it possible to ask: “what is the wt. mean value of some property within this slab, and among these groups?”</li>
+<li>soil.slot.multiple() now cleanly wraps soil.slot(), accepting all arguments
+<ul><li>these two changes make it possible to ask: “what is the wt. mean value of some property within this slab, and among these groups?”</li>
 <li>soil.slot.multiple() now uses a formula interface: NOTE that this will break existing scripts (sorry)</li>
 </ul></li>
 </ul></div>
@@ -887,12 +982,13 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-4" id="aqp-099-4-2011-08-15">aqp 0.99-4 (2011-08-15)<a class="anchor" aria-label="anchor" href="#aqp-099-4-2011-08-15"></a></h2>
 <ul><li>code and documentation clean-up</li>
-<li>Soil Sata Access (SDA) query functions have been added<ul><li>
+<li>Soil Sata Access (SDA) query functions have been added
+<ul><li>
 <code>mapunit_geom_by_ll_bbox()</code> : get map unit geometry by bounding box</li>
 <li>
 <code>MUKEYS_by_ll_bbox()</code> : get map unit keys by bounding box</li>
 <li>
-<code><a href="https://ncss-tech.github.io/soilDB/reference/SDA_query.html" class="external-link">SDA_query()</a></code> : retrieve soil tabular data via query written in SQL</li>
+<code><a href="http://ncss-tech.github.io/soilDB/reference/SDA_query.html" class="external-link">SDA_query()</a></code> : retrieve soil tabular data via query written in SQL</li>
 </ul></li>
 <li>additional customization added to <code>plotSPC</code>
 </li>
@@ -900,7 +996,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.99-1" id="aqp-099-1-2011-01-26">aqp 0.99-1 (2011-01-26)<small>2011-02-28</small><a class="anchor" aria-label="anchor" href="#aqp-099-1-2011-01-26"></a></h2>
-<ul><li>soil.slot() and profile_compare() now have support for parallel computation thanks to bug-fixes in plyr 1.4<ul><li>plyr &gt;= 1.4, foreach, and doMC packages are required</li>
+<ul><li>soil.slot() and profile_compare() now have support for parallel computation thanks to bug-fixes in plyr 1.4
+<ul><li>plyr &gt;= 1.4, foreach, and doMC packages are required</li>
 <li>specific examples are not yet documented, but should be soon</li>
 <li>this feature is still experimental! testing is advised</li>
 </ul></li>
@@ -909,22 +1006,27 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.98-4" id="aqp-098-4-2010-12-15">aqp 0.98-4 (2010-12-15)<a class="anchor" aria-label="anchor" href="#aqp-098-4-2010-12-15"></a></h2>
-<ul><li>fixed minor bug in soil.slot() when computing probabilities from profiles that had missing horizons and that had only a single class within the variable to be aggregated</li></ul></div>
+<ul><li>fixed minor bug in soil.slot() when computing probabilities from profiles that had missing horizons and that had only a single class within the variable to be aggregated</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.98-1" id="aqp-098-1-2010-11-23">aqp 0.98-1 (2010-11-23)<a class="anchor" aria-label="anchor" href="#aqp-098-1-2010-11-23"></a></h2>
 <ul><li>added basic demo: demo(aqp)</li>
 <li>soil.slot() now computes aggregate probabilities over user-defined segments</li>
-<li>re-write of weighted profile aggregation functions<ul><li>aqp package now requires Hmisc package</li>
+<li>re-write of weighted profile aggregation functions
+<ul><li>aqp package now requires Hmisc package</li>
 <li>using Hmisc::wtd.{mean,var,quantile} to compute values</li>
 </ul></li>
 <li>better adjustment of weights when computing weighted SD</li>
 <li>fixes long-standing bugs with wt. mean/SD when NA present in x_i and not in wt_i</li>
-<li>weighted quantiles now computed<ul><li>addition of new (experimental) S4 classes and methods</li>
+<li>weighted quantiles now computed
+<ul><li>addition of new (experimental) S4 classes and methods</li>
 <li>these are now in the aqp_S4 branch</li>
 </ul></li>
 <li>added n.depth.ticks option to profile_plot()</li>
 <li>profile_compare() algorithm stabilized, new default settings</li>
-<li>removed code in profile_compare() that is now obsolete<ul><li>note that this will cause changes to numerical classification of soil profiles</li></ul></li>
+<li>removed code in profile_compare() that is now obsolete
+<ul><li>note that this will cause changes to numerical classification of soil profiles</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.97-1" id="aqp-097-1-2010-10-06">aqp 0.97-1 (2010-10-06)<a class="anchor" aria-label="anchor" href="#aqp-097-1-2010-10-06"></a></h2>
@@ -933,15 +1035,20 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.97" id="aqp-097-2010-09-22">aqp 0.97 (2010-09-22)<small>2010-09-24</small><a class="anchor" aria-label="anchor" href="#aqp-097-2010-09-22"></a></h2>
-<ul><li>soil.slot() streamlined and functionality restored to pre-0.95 condition</li></ul></div>
+<ul><li>soil.slot() streamlined and functionality restored to pre-0.95 condition</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.96-1" id="aqp-096-1-2010-09-21">aqp 0.96-1 (2010-09-21)<a class="anchor" aria-label="anchor" href="#aqp-096-1-2010-09-21"></a></h2>
-<ul><li>fixed weighted mean / SD calculation when using 1 unit segments in soil.slot()<ul><li>wt. mean / SD still disabled for user-defined segment sizes</li></ul></li></ul></div>
+<ul><li>fixed weighted mean / SD calculation when using 1 unit segments in soil.slot()
+<ul><li>wt. mean / SD still disabled for user-defined segment sizes</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.96" id="aqp-096-2010-09-20">aqp 0.96 (2010-09-20)<a class="anchor" aria-label="anchor" href="#aqp-096-2010-09-20"></a></h2>
 <ul><li>temporarily disabled parallel computation, will be re-added in next release</li>
 <li>bug fixes in panel.depth_function where ‘groups’ was not defined</li>
-<li>bug fixes and major re-factoring of soil.slot() when called with user-defined segment size, or segmenting vector:<ul><li>SD values are probably too low due to an inflated ‘n’ in the calculation</li>
+<li>bug fixes and major re-factoring of soil.slot() when called with user-defined segment size, or segmenting vector:
+<ul><li>SD values are probably too low due to an inflated ‘n’ in the calculation</li>
 <li>calculation of weighted mean and sd is currently disabled</li>
 </ul></li>
 </ul></div>
@@ -975,7 +1082,8 @@
 <h2 class="page-header" data-toc-text="0.89" id="aqp-089-2010-07-10">aqp 0.89 (2010-07-10)<a class="anchor" aria-label="anchor" href="#aqp-089-2010-07-10"></a></h2>
 <ul><li>added plot_distance_graph() function for visualizing between-profile dissimilarity</li>
 <li>updated documentation: extended manual is now accessible as a vignette</li>
-<li>major improvements in profile_compare() when add_soil_flag=TRUE and replace_na=TRUE<ul><li>appears to create much more realistic groupings when there are both shallow and deep soils in the collection</li>
+<li>major improvements in profile_compare() when add_soil_flag=TRUE and replace_na=TRUE
+<ul><li>appears to create much more realistic groupings when there are both shallow and deep soils in the collection</li>
 <li>new functionality requires further testing</li>
 </ul></li>
 <li>plotting under dendrograms generated by ape::plot.phylo() may need some manual adjustments</li>
@@ -1001,7 +1109,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -73,7 +73,8 @@
 <span>  chip.cex.max <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>  chip.border.col <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  annotate.cex <span class="op">=</span> <span class="va">chip.cex</span> <span class="op">*</span> <span class="fl">0.25</span>,</span>
-<span>  annotate.type <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"percentage"</span><span class="op">)</span></span>
+<span>  annotate.type <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"percentage"</span><span class="op">)</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -118,6 +119,10 @@
 <dt>annotate.type</dt>
 <dd><p>character, within-group <code>count</code> or <code>percentage</code></p></dd>
 
+
+<dt>threshold</dt>
+<dd><p>numeric within 0-1, color chips with proportion <code>&lt; threshold</code> are removed</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -148,7 +153,6 @@
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  <span class="co"># annotation of frequency</span></span></span>
 <span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">ric</span>, chip.cex <span class="op">=</span> <span class="fl">4</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  <span class="co"># bootstrap to larger size</span></span></span>
 <span class="r-in"><span>  <span class="va">ric.big</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">ric</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -182,6 +186,10 @@
 <span class="r-in"><span>  <span class="co"># note special panel used to show neutral hues</span></span></span>
 <span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">cols</span>, size <span class="op">=</span> <span class="cn">FALSE</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
+<span class="r-in"><span>  <span class="co"># filter proportions below given threshold</span></span></span>
+<span class="r-in"><span>  <span class="fu">colorChart</span><span class="op">(</span><span class="va">cols</span>, size <span class="op">=</span> <span class="cn">FALSE</span>, annotate <span class="op">=</span> <span class="cn">TRUE</span>, threshold <span class="op">=</span> <span class="fl">0.01</span>, </span></span>
+<span class="r-in"><span>  chip.cex <span class="op">=</span> <span class="fl">4</span>, annotate.type <span class="op">=</span> <span class="st">'percentage'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -198,7 +206,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

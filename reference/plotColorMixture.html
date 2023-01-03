@@ -66,7 +66,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotColorMixture</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"reference"</span>, <span class="st">"exact"</span><span class="op">)</span>,</span>
+<span>  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"reference"</span><span class="op">)</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  swatch.cex <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  label.cex <span class="op">=</span> <span class="fl">0.85</span>,</span>
@@ -86,8 +86,8 @@
 
 
 <dt>mixingMethod</dt>
-<dd><p>approach used to simulate a mixture:</p><ul><li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra</p></li>
-<li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see <code><a href="mixMunsell.html">mixMunsell</a></code>)</p></li>
+<dd><p>approach used to simulate a mixture:</p><ul><li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see <code><a href="mixMunsell.html">mixMunsell</a></code>)</p></li>
+<li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra, requires <code>gower</code> package</p></li>
 </ul></dd>
 
 
@@ -136,6 +136,7 @@
 <span class="r-in"><span><span class="co"># weights</span></span></span>
 <span class="r-in"><span><span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"gower"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">plotColorMixture</span><span class="op">(</span></span></span>
 <span class="r-in"><span>x <span class="op">=</span> <span class="va">chips</span>, </span></span>
 <span class="r-in"><span>w <span class="op">=</span> <span class="va">wt</span>, </span></span>
@@ -144,7 +145,10 @@
 <span class="r-in"><span>showMixedSpec <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
 <span class="r-in"><span>mixingMethod <span class="op">=</span> <span class="st">'reference'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="plotColorMixture-1.png" alt="" width="768" height="475"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plotColorMixture</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">chips</span>, </span></span>
@@ -169,7 +173,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

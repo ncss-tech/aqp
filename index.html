@@ -90,8 +90,9 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'aqp'</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Get the development version from Github, after installing the CRAN version + dependencies:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ncss-tech/aqp"</span>, dependencies<span class="op">=</span><span class="cn">FALSE</span>, upgrade<span class="op">=</span><span class="cn">FALSE</span>, build<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<!-- aqp hexsticker! --><p><a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" class="external-link"> <img src="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width="45%" height="45%" hspace="15" vspace="15" align="right"></a></p>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ncss-tech/aqp"</span>, dependencies<span class="op">=</span><span class="cn">FALSE</span>, upgrade<span class="op">=</span><span class="cn">FALSE</span>, build<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<!-- aqp hexsticker! -->
+<p><a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" class="external-link"> <img src="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title="aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width="45%" height="45%" hspace="15" vspace="15" align="right"></a></p>
 </div>
 <div class="section level2">
 <h2 id="website">Website<a class="anchor" aria-label="anchor" href="#website"></a>
@@ -103,7 +104,7 @@
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is aqp 2.0</span></span>
+<span><span class="co">#&gt; This is aqp 1.43</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="fu">depths</span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
 <span></span>
@@ -115,20 +116,9 @@
 <p><img src="reference/figures/README-unnamed-chunk-2-2.png" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="install-suggested-packages">Install Suggested Packages<a class="anchor" aria-label="anchor" href="#install-suggested-packages"></a>
-</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"colorspace"</span>, <span class="st">"ape"</span>, <span class="st">"soilDB"</span>, <span class="st">"latticeExtra"</span>, <span class="st">"tactile"</span>, <span class="st">"compositions"</span>, </span>
-<span><span class="st">"sharpshootR"</span>, <span class="st">"markovchain"</span>, <span class="st">"xtable"</span>, <span class="st">"testthat"</span>, <span class="st">"Gmedian"</span>, </span>
-<span><span class="st">"farver"</span>, <span class="st">"Hmisc"</span>, <span class="st">"tibble"</span>, <span class="st">"RColorBrewer"</span>, <span class="st">"scales"</span>, <span class="st">"digest"</span>, </span>
-<span><span class="st">"MASS"</span>, <span class="st">"mpspline2"</span>, <span class="st">"soiltexture"</span>, <span class="st">"knitr"</span>, <span class="st">"rmarkdown"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"aqp"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To cite aqp in publications use:</span></span>
@@ -228,7 +218,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
