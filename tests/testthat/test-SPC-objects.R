@@ -209,10 +209,10 @@ test_that("SPC spatial operations ", {
   # expect_true(all(!dimnames(co)[[2]] %in% siteNames(sp1)))
 
   # set CRS
-  expect_silent(wkt(sp1) <- "OGC:CRS84")
+  expect_silent(aqp::crs(sp1) <- "OGC:CRS84")
   
-  # get CRS (via wkt(<SPC>) method)
-  expect_true(nchar(wkt(sp1)) > 0)
+  # get CRS (via crs(<SPC>) method)
+  expect_true(nchar(crs(sp1)) > 0)
   
   # # basic coercion
   expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints'))

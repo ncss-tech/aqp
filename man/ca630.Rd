@@ -85,7 +85,7 @@ if(length(missing.coords.idx) > 0)
 coordinates(ca) <- ~ lon + lat
 
 # assign a coordinate reference system
-wkt(ca) <- 'EPSG:4269'
+aqp::crs(ca) <- 'EPSG:4269'
 
 # check the result
 print(ca)

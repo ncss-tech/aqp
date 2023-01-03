@@ -381,7 +381,7 @@ setMethod(f = 'show',
             # presence of spatial data
             if (nrow(coordinates(object)) == n.profiles) {
               cat('\nSpatial Data:\n')
-              cat("  CRS: ", aqp::wkt(object), ";", sep = "")
+              cat("  CRS: ", aqp::crs(object), ";", sep = "")
               cat(.spc_bbox(object))
             } else {
               cat('\nSpatial Data:\n[EMPTY]\n')
@@ -932,7 +932,10 @@ setMethod("horizonDepths", signature(object = "SoilProfileCollection"),
 #' @rdname coordinates
 setMethod("coordinates", signature(obj = "SoilProfileCollection"),
           function(obj) {
-            return(as.matrix(sapply(metadata(obj)$coordinates, function(x) obj[[x]])))
+            cn <- metadata(obj)$coordinates
+            if (length(cn) == 0 || !validSpatialData(obj))
+              return(matrix(numeric(0), ncol = 2, dimnames = list(NULL, c("x", "y"))))
+            return(as.matrix(sapply(cn, function(x) obj[[x]])))
           })
 
 ## site data

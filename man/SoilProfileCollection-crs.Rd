@@ -3,32 +3,38 @@
 \name{proj4string,SoilProfileCollection-method}
 \alias{proj4string,SoilProfileCollection-method}
 \alias{wkt,SoilProfileCollection-method}
+\alias{crs,SoilProfileCollection-method}
+\alias{crs}
 \alias{proj4string<-,SoilProfileCollection,ANY-method}
-\alias{wkt<-}
-\alias{wkt<-,SoilProfileCollection-method}
+\alias{crs<-,SoilProfileCollection-method}
+\alias{crs<-}
 \title{Get or Set Coordinate Reference System for SoilProfileCollection}
 \usage{
 \S4method{proj4string}{SoilProfileCollection}(obj)
 
 \S4method{wkt}{SoilProfileCollection}(obj)
 
+\S4method{crs}{SoilProfileCollection}(x)
+
 \S4method{proj4string}{SoilProfileCollection,ANY}(obj) <- value
 
-wkt(obj) <- value
-
-\S4method{wkt}{SoilProfileCollection}(obj) <- value
+\S4method{crs}{SoilProfileCollection}(x) <- value
 }
 \arguments{
 \item{obj}{A SoilProfileCollection}
 
+\item{x}{A SoilProfileCollection}
+
 \item{value}{character. Representation of Coordinate Reference System as WKT or equivalent.}
 }
 \description{
-\code{proj4string()}: Get Coordinate Reference System as PROJ4 String
+\code{proj4string()}: (Deprecated) Get Coordinate Reference System as PROJ4 String
 
-\verb{wkt():} Get Coordinate Reference System as Well-Known Text
+\code{wkt()}: (Deprecated) Get Coordinate Reference System as WKT String
 
-\verb{proj4string()<-}: Set Coordinate Reference System string for the SoilProfileCollection
+\verb{crs():} Get Coordinate Reference System metadata
 
-\verb{wkt()<-}: Set Coordinate Reference System string for the SoilProfileCollection
+\verb{proj4string()<-}: Set Coordinate Reference System metadatafor the SoilProfileCollection
+
+\verb{crs()<-}: Set Coordinate Reference System metadatafor the SoilProfileCollection
 }

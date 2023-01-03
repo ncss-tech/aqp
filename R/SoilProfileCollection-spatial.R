@@ -5,52 +5,63 @@
 
 #' Get or Set Coordinate Reference System for SoilProfileCollection
 #' 
-#' @description `proj4string()`: Get Coordinate Reference System as PROJ4 String
+#' @description `proj4string()`: (Deprecated) Get Coordinate Reference System as PROJ4 String
 #'
+#' @param x A SoilProfileCollection
 #' @param obj A SoilProfileCollection
 #' @rdname SoilProfileCollection-crs
-setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
+setMethod("proj4string", signature(obj = 'SoilProfileCollection'),
           function(obj) {
-            .Deprecated("wkt", package = "aqp")
-            return(wkt(obj))
+            .Deprecated("crs", package = "aqp")
+            return(crs(obj))
           }
 )
 
-#' @description `wkt():` Get Coordinate Reference System as Well-Known Text
-#'
+#' @description `wkt()`: (Deprecated) Get Coordinate Reference System as WKT String
 #' @rdname SoilProfileCollection-crs
-setMethod(f = 'wkt', signature(obj = 'SoilProfileCollection'),
+setMethod("wkt", signature(obj = 'SoilProfileCollection'),
           function(obj) {
-            value <- metadata(obj)$projection
+            .Deprecated("crs", package = "aqp")
+            return(crs(obj))
+          }
+)
+
+setGeneric("crs", function(x, ...)
+  standardGeneric("crs"))
+
+#' @description `crs():` Get Coordinate Reference System metadata
+#' @aliases crs
+#' @rdname SoilProfileCollection-crs
+setMethod("crs", 'SoilProfileCollection',
+          function(x) {
+            value <- metadata(x)$crs
             if (length(value) == 0 || (!is.na(value) && nchar(value) == 0)) {
               value <- NA_character_
             }
             return(value)
           }
 )
-#' @description `proj4string()<-`: Set Coordinate Reference System string for the SoilProfileCollection
+#' @description `proj4string()<-`: Set Coordinate Reference System metadatafor the SoilProfileCollection
 #'
 #' @param value character. Representation of Coordinate Reference System as WKT or equivalent.
 #' @rdname SoilProfileCollection-crs
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
                  function(obj, value) {
-                   .Deprecated("wkt", package = "aqp")
-                   wkt(obj) <- value
+                   .Deprecated("crs", package = "aqp")
+                   aqp::crs(obj) <- value
                    return(obj)
                  })
 
-#' @description `wkt()<-`: Set Coordinate Reference System string for the SoilProfileCollection
-#'
+setGeneric("crs<-", function(x, value)
+  standardGeneric("crs<-"))
+
+#' @description `crs()<-`: Set Coordinate Reference System metadatafor the SoilProfileCollection
+#' @aliases crs<-
 #' @param value character. Representation of Coordinate Reference System as WKT or equivalent.
 #' @rdname SoilProfileCollection-crs
 #' @export
-setGeneric("wkt<-", function(obj, value)
-  standardGeneric("wkt<-"))
-
-#' @rdname SoilProfileCollection-crs
-#' @export
-setReplaceMethod("wkt", signature(obj = 'SoilProfileCollection'),
-  function(obj, value) {
+setReplaceMethod("crs", 'SoilProfileCollection',
+  function(x, value) {
     
     # backward compatibility for sp::CRS object
     if (inherits(value, 'CRS')) {
@@ -79,9 +90,9 @@ setReplaceMethod("wkt", signature(obj = 'SoilProfileCollection'),
       value <- NA_character_
     }
     
-    # "projection" metadata stores the WKT string in the SPC
-    metadata(obj)$projection <- value
-    return(obj)
+    # "crs" metadata stores the WKT string in the SPC
+    metadata(x)$crs <- value
+    return(x)
   }
 )
 

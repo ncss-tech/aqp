@@ -29,7 +29,7 @@
 #' # make some random coordinate data for each profile
 #' sp5$x <- sp5$y <- rnorm(length(sp5))
 #' coordinates(sp5) <- ~ x + y
-#' wkt(sp5) <- "EPSG:4326"
+#' aqp::crs(sp5) <- "EPSG:4326"
 #' 
 #' # SpatialPointsDataFrame output
 #' str(as(sp5, 'SpatialPointsDataFrame'))
@@ -141,7 +141,7 @@ setAs("SoilProfileCollection", "sf",
     }
     
     crd <- metadata(from)$coordinates
-    prj <- metadata(from)$projection
+    prj <- metadata(from)$crs
     
     if (all(is.null(crd) | is.na(crd)) || length(crd) < 2) {
       stop("Two coordinate (X, Y) column names must be defined to coerce a SoilProfileCollection to sf object", call. = FALSE)

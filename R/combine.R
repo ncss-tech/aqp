@@ -202,7 +202,7 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
     o.hztexcl <- ""
   }
 
-  o.p4s <- unique(lapply(spc, function(x) suppressWarnings(aqp::wkt(x))))
+  o.p4s <- unique(lapply(spc, function(x) suppressWarnings(aqp::crs(x))))
 
   drop.spatial <- FALSE
   if (length(o.p4s) > 1) {
@@ -239,7 +239,7 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
   
   if (drop.spatial) {
     new.metadata$coordinates <- NULL
-    new.metadata$projection <- NULL
+    new.metadata$crs <- NULL
   }
 
   # get the data.frame class and grouping variable into new metadata
