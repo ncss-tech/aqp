@@ -379,7 +379,7 @@ setMethod(f = 'show',
               cat('[... more sites ...]\n')
 
             # presence of spatial data
-            if (nrow(coordinates(object)) == n.profiles) {
+            if (validSpatialData(object)) {
               cat('\nSpatial Data:\n')
               cat("  CRS: ", aqp::crs(object), ";", sep = "")
               cat(.spc_bbox(object))
@@ -391,8 +391,11 @@ setMethod(f = 'show',
 
 .spc_bbox <- function(x) {
   crds <- metadata(x)$coordinates
-  paste0(" ", crds[1], ": ", signif(min(x[[crds[1]]]), 6), " to ", signif(max(x[[crds[1]]]), 6), "; ",
-              crds[2], ": ", signif(min(x[[crds[2]]]), 6), " to ", signif(max(x[[crds[2]]]), 6), "\n")
+  # if all coordinates in X or Y are NA warnings will be generated & Inf/-Inf result
+  suppressWarnings({
+    paste0(" ", crds[1], ": ", min(x[[crds[1]]], na.rm = TRUE), " to ", max(x[[crds[1]]], na.rm = TRUE), "; ",
+              crds[2], ": ", min(x[[crds[2]]], na.rm = TRUE), " to ", max(x[[crds[2]]], na.rm = TRUE), "\n")
+  })
 }
 
 #' @description `as.character()`: Character Representation of SoilProfileCollection Object
