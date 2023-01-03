@@ -13,11 +13,11 @@
 #' 
 #' @param mixingMethod approach used to simulate a mixture: 
 #'    
-#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see [`mixMunsell`])
+#'    * `exact`: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see [mixMunsell()])
 #'    
 #'    * `reference`  : simulate a subtractive mixture of pigments, selecting `n` closest reference spectra, requires `gower` package
 #' 
-#' @param n number of closest mixture candidates when `mixingMethod = 'reference'` (see [`mixMunsell`]), results can be hard to interpret when `n > 2`
+#' @param n number of closest mixture candidates when `mixingMethod = 'reference'` (see [mixMunsell()]), results can be hard to interpret when `n > 2`
 #' 
 #' @param swatch.cex scaling factor for color swatch
 #' 
@@ -25,9 +25,11 @@
 #' 
 #' @param showMixedSpec show weighted geometric mean (mixed) spectra as dotted line (only when `mixingMethod = 'reference'`)
 #' 
-#' @param overlapFix attempt to "fix" overlapping chip labels via [`fixOverlap`]
+#' @param overlapFix attempt to "fix" overlapping chip labels via [fixOverlap()]
 #' 
 #' @return a `lattice` graphics object
+#' 
+#' @seealso [mixMunsell()]
 #' 
 #' @examples 
 #' 
