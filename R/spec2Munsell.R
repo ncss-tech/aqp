@@ -59,7 +59,7 @@
 #'   labels = c('original', 'spectral\ninterpretation')
 #' )
 #' 
-#' 
+#' if(requireNamespace("gower")) {
 #' # mix colors, return spectra, convert to color
 #' cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
 #' res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
@@ -67,6 +67,8 @@
 #' # note that they are slightly different
 #' res$mixed
 #' spec2Munsell(res$spec)
+#' 
+#' }
 #' 
 spec2Munsell <- function(x, convert = TRUE, SO = c('CIE1931', 'CIE1964'), illuminant = c('D65', 'F2'), ...) {
   
