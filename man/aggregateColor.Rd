@@ -23,11 +23,11 @@ aggregateColor(
 
 \item{colorSpace}{the name of color space or color distance metric to use for conversion of aggregate colors to Munsell; either CIE2000 (color distance metric), LAB, or sRGB. Default = 'CIE2000'}
 
-\item{k}{single integer specifying the number of colors discretized via PAM (cluster package), see details}
+\item{k}{single integer specifying the number of colors discretized via PAM (\code{\link[cluster:pam]{cluster::pam()}}), see details}
 
 \item{profile_wt}{the name of a site-level attribute used to modify weighting, e.g. area}
 
-\item{mixingMethod}{method used to estimate "aggregate" soil colors, see \code{\link{mixMunsell}}}
+\item{mixingMethod}{method used to estimate "aggregate" soil colors, see \code{\link[=mixMunsell]{mixMunsell()}}}
 }
 \value{
 A list with the following components:
@@ -106,7 +106,7 @@ a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
 
 }
 \seealso{
-\code{\link{generalize.hz}}
+\code{\link[=generalize.hz]{generalize.hz()}}
 }
 \author{
 D.E. Beaudette

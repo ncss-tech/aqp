@@ -1,4 +1,0 @@
-Found these data at:
-https://github.com/ajesma/Pantoner/tree/gh-pages/csv
-
-Related issue: https://github.com/ncss-tech/aqp/issues/124

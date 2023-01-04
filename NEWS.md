@@ -10,6 +10,8 @@ Notable changes include:
  * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections
  * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive mixtures
  * `gower` package moved to SUGGESTS
+ * removal of `PMS2Munsell()` and support data
+ * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions

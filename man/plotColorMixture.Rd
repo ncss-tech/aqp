@@ -22,11 +22,11 @@ plotColorMixture(
 
 \item{mixingMethod}{approach used to simulate a mixture:
 \itemize{
-\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see \code{\link{mixMunsell}})
+\item \code{exact}: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see \code{\link[=mixMunsell]{mixMunsell()}})
 \item \code{reference}  : simulate a subtractive mixture of pigments, selecting \code{n} closest reference spectra, requires \code{gower} package
 }}
 
-\item{n}{number of closest mixture candidates when \code{mixingMethod = 'reference'} (see \code{\link{mixMunsell}}), results can be hard to interpret when \code{n > 2}}
+\item{n}{number of closest mixture candidates when \code{mixingMethod = 'reference'} (see \code{\link[=mixMunsell]{mixMunsell()}}), results can be hard to interpret when \code{n > 2}}
 
 \item{swatch.cex}{scaling factor for color swatch}
 
@@ -34,7 +34,7 @@ plotColorMixture(
 
 \item{showMixedSpec}{show weighted geometric mean (mixed) spectra as dotted line (only when \code{mixingMethod = 'reference'})}
 
-\item{overlapFix}{attempt to "fix" overlapping chip labels via \code{\link{fixOverlap}}}
+\item{overlapFix}{attempt to "fix" overlapping chip labels via \code{\link[=fixOverlap]{fixOverlap()}}}
 }
 \value{
 a \code{lattice} graphics object
@@ -75,6 +75,9 @@ plotColorMixture(
   mixingMethod = 'exact'
 )
 
+}
+\seealso{
+\code{\link[=mixMunsell]{mixMunsell()}}
 }
 \author{
 D.E. Beaudette
