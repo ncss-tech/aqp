@@ -86,13 +86,13 @@
 
 
 <dt>mixingMethod</dt>
-<dd><p>approach used to simulate a mixture:</p><ul><li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see <code><a href="mixMunsell.html">mixMunsell</a></code>)</p></li>
+<dd><p>approach used to simulate a mixture:</p><ul><li><p><code>exact</code>: simulate a subtractive mixture of pigments, color conversion via CIE1931 color-matching functions (see <code><a href="mixMunsell.html">mixMunsell()</a></code>)</p></li>
 <li><p><code>reference</code>  : simulate a subtractive mixture of pigments, selecting <code>n</code> closest reference spectra, requires <code>gower</code> package</p></li>
 </ul></dd>
 
 
 <dt>n</dt>
-<dd><p>number of closest mixture candidates when <code>mixingMethod = 'reference'</code> (see <code><a href="mixMunsell.html">mixMunsell</a></code>), results can be hard to interpret when <code>n &gt; 2</code></p></dd>
+<dd><p>number of closest mixture candidates when <code>mixingMethod = 'reference'</code> (see <code><a href="mixMunsell.html">mixMunsell()</a></code>), results can be hard to interpret when <code>n &gt; 2</code></p></dd>
 
 
 <dt>swatch.cex</dt>
@@ -108,7 +108,7 @@
 
 
 <dt>overlapFix</dt>
-<dd><p>attempt to "fix" overlapping chip labels via <code><a href="fixOverlap.html">fixOverlap</a></code></p></dd>
+<dd><p>attempt to "fix" overlapping chip labels via <code><a href="fixOverlap.html">fixOverlap()</a></code></p></dd>
 
 </dl></div>
     <div id="value">
@@ -120,6 +120,10 @@
     <div id="details">
     <h2>Details</h2>
     <p>If present, <code>names</code> attribute of <code>x</code> is used for the figure legend.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="mixMunsell.html">mixMunsell()</a></code></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>

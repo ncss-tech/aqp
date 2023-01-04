@@ -31,9 +31,6 @@
     <loc>/reference/NCSP.html</loc>
   </url>
   <url>
-    <loc>/reference/PMS2Munsell.html</loc>
-  </url>
-  <url>
     <loc>/reference/ROSETTA.centroids.html</loc>
   </url>
   <url>
@@ -440,9 +437,6 @@
   </url>
   <url>
     <loc>/reference/plot_distance_graph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pms.munsell.lut.html</loc>
   </url>
   <url>
     <loc>/reference/previewColors.html</loc>
