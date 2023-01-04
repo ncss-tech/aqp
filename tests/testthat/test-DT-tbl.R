@@ -111,8 +111,7 @@ res <- lapply(dfclasses, function(use_class) {
     site(test) <- crds
 
     # promote to spatial
-    coordinates(test) <- ~ x + y
-    crs(test) <- "+proj=longlat +datum=WGS84"
+    initSpatial(test, crs = "+proj=longlat +datum=WGS84") <- ~ x + y
 
     # show method should be produce output without error
     expect_output(show(test))
@@ -146,20 +145,19 @@ res <- lapply(dfclasses, function(use_class) {
     test$newy <- denormalize(test, "y")
     
     # promote to spatial works from horizons
-    coordinates(test) <- ~ newx + newy
-    
-    # only formulas are allowed for input value
-    expect_error(coordinates(test) <- "foo")
+    # formula and character are allowed inputs on RHS
+    # LHS specifies optional CRS
+    initSpatial(test, crs = "OGC:CRS84") <- ~ newx + newy
     
     # siteprop removed from horizons
-    # newx should be removed after promotion
     if (use_class == "tbl_df") {
       expect_warning(expect_null(horizons(test)$siteprop))
-      # expect_warning(expect_null(horizons(test)$newx))
     } else {
       expect_null(horizons(test)$siteprop)
-      # expect_null(horizons(test)$newx)
     }
+    
+    # newx is still in horizon data (converted to site level only on coercion)
+    expect_false(is.null(horizons(test)$newx))
     
     # check that ids are in order
     expect_equal(profile_id(test), site(test)$id)

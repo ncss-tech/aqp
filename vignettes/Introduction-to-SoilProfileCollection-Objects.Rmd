@@ -252,32 +252,6 @@ restrictions(sp4) <- rf
 restrictions(sp4)
 ```
 
-# Spatial Data
-
-Spatial data can be explicitly stored within a `SoilProfileCollection` object and accessed with methods modeled after the [sp](http://cran.at.r-project.org/web/packages/sp/index.html) package: `coordinates()`, `crs()`, and their replacement method equivalents.
-
-The use of `sp` classes (in this case `SpatialPoints` and `SpatialPointsDataFrame` objects) simplifies operations such as [plotting spatial data, coordinate system transformations, and spatial queries](http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf).
-
-```{r}
-# generate some fake coordinates as site level attributes
-sp4$x <- rnorm(n = length(sp4), mean = 354000, sd = 100)
-sp4$y <- rnorm(n = length(sp4), mean = 4109533, sd = 100)
-
-# initialize spatial coordinates
-coordinates(sp4) <- ~ x + y
-
-# extract coordinates as matrix
-coordinates(sp4)
-
-# get/set spatial reference system using PROJ4 syntax
-aqp::crs(sp4) <- '+proj=utm +zone=11 +datum=NAD83'
-aqp::crs(sp4)
-
-# extract spatial data + site level attribtutes
-# see ?SpatialPointsDataFrame for details
-sp4.sp <- as(sp4, 'SpatialPointsDataFrame')
-```
-
 # Object Metadata
 
 SoilProfileCollection metadata can be extracted and set using the `metadata()` and `metadata<-` methods.
@@ -299,6 +273,34 @@ str(metadata(sp4))
 
 # fix depth units, set back to 'cm'
 depth_units(sp4) <- 'cm'
+```
+
+# Spatial Data
+
+Spatial data and metadata can be stored within a `SoilProfileCollection` object. To initialize a "spatial" SoilProfileCollection, use `initSpatial()<-` method. This allows you to specify which columns contain the geometry and optionally the Coordinate Reference System of those data. The SoilProfileCollection stores two metadata entries: `coordinates` and `crs` which refer to the column names containing geometric data and the CRS, respectively.
+
+<!-- The use of `sp` classes (in this case `SpatialPoints` and `SpatialPointsDataFrame` objects) simplifies operations such as [plotting spatial data, coordinate system transformations, and spatial queries](http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf). -->
+
+```{r}
+# generate some fake coordinates as site level attributes
+sp4$x <- rnorm(n = length(sp4), mean = 354000, sd = 100)
+sp4$y <- rnorm(n = length(sp4), mean = 4109533, sd = 100)
+
+# initialize spatial coordinates (CRS optional)
+initSpatial(sp4, crs = "EPSG:26911") <- ~ x + y
+
+# extract coordinates as matrix
+getSpatial(sp4)
+
+# get/set spatial reference system using prj()<-
+prj(sp4) <- '+proj=utm +zone=11 +datum=NAD83'
+
+# return CRS information
+prj(sp4)
+
+# extract spatial data + site level attributes in new spatial object
+sp4.sp <- as(sp4, 'SpatialPointsDataFrame')
+sp4.sf <- as(sp4, 'sf')
 ```
 
 # Validity and Horizon Logic

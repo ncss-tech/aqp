@@ -202,12 +202,12 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
     o.hztexcl <- ""
   }
 
-  o.p4s <- unique(lapply(spc, function(x) suppressWarnings(aqp::crs(x))))
+  o.p4s <- unique(lapply(spc, function(x) suppressWarnings(prj(x))))
 
   drop.spatial <- FALSE
   if (length(o.p4s) > 1) {
     if (verbose)
-      message('pbindlist: inconsistent CRS, dropping spatial data')
+      message('pbindlist: inconsistent CRS, dropping spatial metadata')
     drop.spatial <- TRUE
   }
 

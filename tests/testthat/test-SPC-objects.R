@@ -193,8 +193,10 @@ test_that("SPC spatial operations ", {
   skip_if_not_installed("sf")
   
   # init / extract coordinates
-  coordinates(sp1) <- ~ x + y
-  co <- coordinates(sp1)
+  initSpatial(sp1) <- ~ x + y
+  
+  # "coordinates" getter is getSpatial
+  co <- getSpatial(sp1)
   
   # these are valid coordinates
   expect_true(validSpatialData(sp1))
@@ -209,10 +211,10 @@ test_that("SPC spatial operations ", {
   # expect_true(all(!dimnames(co)[[2]] %in% siteNames(sp1)))
 
   # set CRS
-  expect_silent(aqp::crs(sp1) <- "OGC:CRS84")
+  expect_silent(prj(sp1) <- "OGC:CRS84")
   
   # get CRS (via crs(<SPC>) method)
-  expect_true(nchar(crs(sp1)) > 0)
+  expect_true(nchar(prj(sp1)) > 0)
   
   # # basic coercion
   expect_true(inherits(as(sp1, 'SpatialPoints'), 'SpatialPoints'))

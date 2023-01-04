@@ -102,7 +102,7 @@ rebuildSPC <- function(x) {
       
       site(res) <- newsp
       coordinates(res) <- colnames(newsp)[2:3]
-      try(aqp::crs(res) <- x.list$sp@proj4string)
+      try(prj(res) <- x.list$sp@proj4string)
     }
   }
   return(res)

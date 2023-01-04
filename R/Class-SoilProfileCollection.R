@@ -381,7 +381,7 @@ setMethod(f = 'show',
             # presence of spatial data
             if (validSpatialData(object)) {
               cat('\nSpatial Data:\n')
-              cat("  CRS: ", aqp::crs(object), ";", sep = "")
+              cat("  CRS: ", prj(object), ";", sep = "")
               cat(.spc_bbox(object))
             } else {
               cat('\nSpatial Data:\n[EMPTY]\n')
@@ -391,10 +391,16 @@ setMethod(f = 'show',
 
 .spc_bbox <- function(x) {
   crds <- metadata(x)$coordinates
+ 
+  # this bbox outputs for "point" geometries specified in two columns
+  # TODO: extend as needed if other geometry types are added (i.e. wrapper around st_bbox())
+  if (length(crds) != 2) 
+    return("\n")
+  
   # if all coordinates in X or Y are NA warnings will be generated & Inf/-Inf result
   suppressWarnings({
     paste0(" ", crds[1], ": ", min(x[[crds[1]]], na.rm = TRUE), " to ", max(x[[crds[1]]], na.rm = TRUE), "; ",
-              crds[2], ": ", min(x[[crds[2]]], na.rm = TRUE), " to ", max(x[[crds[2]]], na.rm = TRUE), "\n")
+                crds[2], ": ", min(x[[crds[2]]], na.rm = TRUE), " to ", max(x[[crds[2]]], na.rm = TRUE), "\n")
   })
 }
 
@@ -922,24 +928,6 @@ setGeneric("horizonDepths", function(object)
 setMethod("horizonDepths", signature(object = "SoilProfileCollection"),
           function(object)
             return(object@depthcols))
-
-
-#' Get Soil Profile Coordinates
-#'
-#' @description Get coordinates of each profile
-#'
-#' @param obj a SoilProfileCollection
-#' @docType methods
-#' 
-#' @aliases coordinates
-#' @rdname coordinates
-setMethod("coordinates", signature(obj = "SoilProfileCollection"),
-          function(obj) {
-            cn <- metadata(obj)$coordinates
-            if (length(cn) == 0 || !validSpatialData(obj))
-              return(matrix(numeric(0), ncol = 2, dimnames = list(NULL, c("x", "y"))))
-            return(as.matrix(sapply(cn, function(x) obj[[x]])))
-          })
 
 ## site data
 setGeneric("site", function(object, ...)

@@ -763,7 +763,7 @@ NULL
 #' coordinates(ca) <- ~ lon + lat
 #'
 #' # assign a coordinate reference system
-#' aqp::crs(ca) <- 'EPSG:4269'
+#' prj(ca) <- 'EPSG:4269'
 #'
 #' # check the result
 #' print(ca)
