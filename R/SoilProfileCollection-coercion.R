@@ -28,8 +28,7 @@
 #' # Spatial Objects
 #' # make some random coordinate data for each profile
 #' sp5$x <- sp5$y <- rnorm(length(sp5))
-#' coordinates(sp5) <- ~ x + y
-#' prj(sp5) <- "EPSG:4326"
+#' initSpatial(sp5, crs = "OGC:CRS84") <- ~ x + y
 #' 
 #' # SpatialPointsDataFrame output
 #' str(as(sp5, 'SpatialPointsDataFrame'))
@@ -72,20 +71,21 @@ setAs("SoilProfileCollection", "list", function(from) {
 #' @rdname coercion-methods
 #'
 setAs("SoilProfileCollection", "data.frame", function(from) {
+  s <- getSpatial(from)
   
   # horizons + site + coordinates
-  if(nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
-    site.coords <- data.frame(site(from), coordinates(from), stringsAsFactors = FALSE)
+  if(nrow(site(from)) > 0 & nrow(s) == length(from)) {
+    site.coords <- data.frame(site(from), s, stringsAsFactors = FALSE)
     return(merge(horizons(from), site.coords, by = idname(from), sort = FALSE, all.x = TRUE))
   }
   
   # horizons + site
-  if(nrow(site(from)) > 0 & ! nrow(coordinates(from)) == length(from))
+  if(nrow(site(from)) > 0 & ! nrow(s) == length(from))
     return(merge(horizons(from), site(from), by = idname(from), sort = FALSE, all.x = TRUE))
     
   # horizons + coordinates
-  if(! nrow(site(from)) > 0 & nrow(coordinates(from)) == length(from)) {
-    ids.coords <- data.frame(profile_id(from), coordinates(from), stringsAsFactors = FALSE)
+  if(! nrow(site(from)) > 0 & nrow(s) == length(from)) {
+    ids.coords <- data.frame(profile_id(from), s, stringsAsFactors = FALSE)
     return(data.frame(horizons(from), ids.coords, stringsAsFactors = FALSE))
   }
   

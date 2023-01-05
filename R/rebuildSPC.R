@@ -101,7 +101,7 @@ rebuildSPC <- function(x) {
       colnames(newsp) <- c(idname(x), crdnms)
       
       site(res) <- newsp
-      coordinates(res) <- colnames(newsp)[2:3]
+      initSpatial(res) <- colnames(newsp)[2:3]
       try(prj(res) <- x.list$sp@proj4string)
     }
   }

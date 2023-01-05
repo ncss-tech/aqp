@@ -48,8 +48,7 @@ str(as(sp5, 'data.frame'))
 # Spatial Objects
 # make some random coordinate data for each profile
 sp5$x <- sp5$y <- rnorm(length(sp5))
-coordinates(sp5) <- ~ x + y
-prj(sp5) <- "EPSG:4326"
+initSpatial(sp5, crs = "OGC:CRS84") <- ~ x + y
 
 # SpatialPointsDataFrame output
 str(as(sp5, 'SpatialPointsDataFrame'))

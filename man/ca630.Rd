@@ -82,7 +82,7 @@ if(length(missing.coords.idx) > 0)
 	ca <- ca[-missing.coords.idx, ]
 
 # register spatial data
-coordinates(ca) <- ~ lon + lat
+initSpatial(ca) <- ~ lon + lat
 
 # assign a coordinate reference system
 prj(ca) <- 'EPSG:4269'

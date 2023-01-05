@@ -71,7 +71,7 @@ setReplaceMethod("prj", 'SoilProfileCollection',
 setMethod("proj4string", signature(obj = 'SoilProfileCollection'),
           function(obj) {
             .Deprecated("prj", package = "aqp", 
-                        msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `prj()`")
+                        msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?prj")
             return(prj(obj))
           }
 )
@@ -81,7 +81,7 @@ setMethod("proj4string", signature(obj = 'SoilProfileCollection'),
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
                  function(obj, value) {
                    .Deprecated("prj<-", package = "aqp", 
-                               msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `prj<-()`")
+                               msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?`prj<-`")
                    prj(obj) <- value
                    return(obj)
                  })
@@ -186,6 +186,8 @@ setMethod("getSpatial", signature(object = "SoilProfileCollection"),
 #' @aliases coordinates
 setMethod("coordinates", signature(obj = "SoilProfileCollection"),
           function(obj) {
+            .Deprecated("initSpatial<-", package = "aqp", 
+                        msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?getSpatial")
             getSpatial(obj)
           })
 
@@ -195,7 +197,7 @@ setMethod("coordinates", signature(obj = "SoilProfileCollection"),
 setReplaceMethod("coordinates", c("SoilProfileCollection", "ANY"),
                  function(object, value) {
                    .Deprecated("initSpatial<-", package = "aqp", 
-                               msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `initSpatial()<-`.")
+                               msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?`initSpatial<-`")
                    initSpatial(object) <- value
                    object
                  })
@@ -205,7 +207,7 @@ setReplaceMethod("coordinates", c("SoilProfileCollection", "ANY"),
 setReplaceMethod("coordinates", c("SoilProfileCollection", "character"),
                 function(object, value) {
                   .Deprecated("initSpatial<-", package = "aqp", 
-                              msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `initSpatial()<-`.")
+                              msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?`initSpatial<-`")
                   initSpatial(object) <-  as.formula(paste0("~", paste0(value, collapse = "+")))
                   object
                 })

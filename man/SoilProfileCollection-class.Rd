@@ -33,7 +33,7 @@ SoilProfileCollection(
 
 \item{site}{data.frame An object inheriting from data.frame containing Site data.}
 
-\item{sp}{SpatialPoints A SpatialPoints object. Generally initialized with \code{coordinates(spc) <- ~ x + y}.}
+\item{sp}{SpatialPoints A SpatialPoints object. No longer used in aqp 2+, see \code{?initSpatial}}
 
 \item{diagnostic}{data.frame An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}}
 

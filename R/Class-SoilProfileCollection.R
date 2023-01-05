@@ -68,7 +68,7 @@ setClass(
 #' @param metadata list, metadata including data.frame class in use and depth units
 #' @param horizons data.frame An object inheriting from data.frame containing Horizon data.
 #' @param site data.frame An object inheriting from data.frame containing Site data.
-#' @param sp SpatialPoints A SpatialPoints object. Generally initialized with \code{coordinates(spc) <- ~ x + y}.
+#' @param sp SpatialPoints A SpatialPoints object. No longer used in aqp 2+, see `?initSpatial`
 #' @param diagnostic data.frame An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}
 #' @param restrictions data.frame An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}
 #'
