@@ -189,7 +189,7 @@ with caution</p>
 <span class="r-in"><span>  <span class="va">ca</span> <span class="op">&lt;-</span> <span class="va">ca</span><span class="op">[</span><span class="op">-</span><span class="va">missing.coords.idx</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># register spatial data</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="initSpatial.html">coordinates</a></span><span class="op">(</span><span class="va">ca</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">lon</span> <span class="op">+</span> <span class="va">lat</span></span></span>
+<span class="r-in"><span><span class="fu">initSpatial</span><span class="op">(</span><span class="va">ca</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">lon</span> <span class="op">+</span> <span class="va">lat</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># assign a coordinate reference system</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">ca</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'EPSG:4269'</span></span></span>
