@@ -94,6 +94,9 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <p>SpatialPointsDataFrame</p>
 
 
+<p>sf</p>
+
+
 <p>SpatialPoints</p>
     </div>
 
@@ -219,39 +222,47 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-in"><span><span class="co"># Spatial Objects</span></span></span>
 <span class="r-in"><span><span class="co"># make some random coordinate data for each profile</span></span></span>
 <span class="r-in"><span><span class="va">sp5</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">sp5</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="initSpatial.html">coordinates</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `initSpatial()&lt;-`.</span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"EPSG:4326"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># SpatialPointsDataFrame output</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">as</span><span class="op">(</span><span class="va">sp5</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: sf</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> only site data are extracted</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ data       :'data.frame':	296 obs. of  1 variable:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ data       :'data.frame':	296 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ y   : num [1:296] 0.5083 0.5352 -1.0578 0.0606 -1.4683 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ x   : num [1:296] 0.5083 0.5352 -1.0578 0.0606 -1.4683 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords.nrs : num(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] 0.6163 -1.4216 1.0054 -0.2169 0.0959 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] 0.5083 0.5352 -1.0578 0.0606 -1.4683 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.29 -2.29 2.68 2.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.31 -2.31 2.79 2.79</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "min" "max"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ projargs: chr NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ projargs: chr "+proj=longlat +datum=WGS84 +no_defs"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ comment: chr "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic Sys"| __truncated__</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># SpatialPoints output</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">as</span><span class="op">(</span><span class="va">sp5</span>, <span class="st">'SpatialPoints'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> only site data are extracted</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] 0.6163 -1.4216 1.0054 -0.2169 0.0959 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] 0.5083 0.5352 -1.0578 0.0606 -1.4683 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:296] "1" "2" "3" "4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.29 -2.29 2.68 2.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.31 -2.31 2.79 2.79</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "x" "y"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "min" "max"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ projargs: chr NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ projargs: chr "+proj=longlat +datum=WGS84 +no_defs"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ comment: chr "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic Sys"| __truncated__</span>
 </code></pre></div>
     </div>
   </div>

@@ -315,8 +315,8 @@ follows.</p>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span></span>
 <span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span>
-<span><span class="co">#&gt;  [1]  852.0339  783.6930 1126.0584  795.5335 1094.0297  919.6246 1152.2582  814.5867  971.9437</span></span>
-<span><span class="co">#&gt; [10]  865.6556</span></span>
+<span><span class="co">#&gt;  [1] 1022.7052 1172.8939  894.8605 1063.7119 1046.9868 1176.6219 1175.4853  905.3042 1089.0574</span></span>
+<span><span class="co">#&gt; [10] 1007.2013</span></span>
 <span></span>
 <span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -372,12 +372,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa  852.0339             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn  783.6930             1        1     B</span></span>
-<span><span class="co">#&gt;      kings 1126.0584             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa  795.5335             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1094.0297             1        1     A</span></span>
-<span><span class="co">#&gt;       napa  919.6246             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa 1022.7052             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn 1172.8939             1        1     B</span></span>
+<span><span class="co">#&gt;      kings  894.8605             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa 1063.7119             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino 1046.9868             1        1     A</span></span>
+<span><span class="co">#&gt;       napa 1176.6219             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -473,54 +473,11 @@ features, so we will simulate some at the bottom of each profile +
 <span><span class="co">#&gt; 10         tehama  16     36 fake</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="spatial-data">Spatial Data<a class="anchor" aria-label="anchor" href="#spatial-data"></a>
-</h2>
-<p>Spatial data can be explicitly stored within a
-<code>SoilProfileCollection</code> object and accessed with methods
-imported from the <a href="http://cran.at.r-project.org/web/packages/sp/index.html" class="external-link">sp</a>
-package.</p>
-<p>The use of <code>sp</code> classes (in this case
-<code>SpatialPoints</code> and <code>SpatialPointsDataFrame</code>
-objects) simplifies operations such as <a href="http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf" class="external-link">plotting
-spatial data, coordinate system transformations, and spatial
-queries</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># generate some fake coordinates as site level attributes</span></span>
-<span><span class="va">sp4</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">354000</span>, sd <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">sp4</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">4109533</span>, sd <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># initialize spatial coordinates</span></span>
-<span><span class="fu"><a href="../reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
-<span></span>
-<span><span class="co"># extract coordinates as matrix</span></span>
-<span><span class="fu"><a href="../reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           x       y</span></span>
-<span><span class="co">#&gt; 1  353904.4 4109496</span></span>
-<span><span class="co">#&gt; 2  354056.4 4109503</span></span>
-<span><span class="co">#&gt; 3  354122.5 4109474</span></span>
-<span><span class="co">#&gt; 4  354004.9 4109368</span></span>
-<span><span class="co">#&gt; 5  354115.3 4109641</span></span>
-<span><span class="co">#&gt; 6  354072.3 4109725</span></span>
-<span><span class="co">#&gt; 7  353898.0 4109418</span></span>
-<span><span class="co">#&gt; 8  354000.2 4109643</span></span>
-<span><span class="co">#&gt; 9  353822.8 4109655</span></span>
-<span><span class="co">#&gt; 10 354258.6 4109567</span></span>
-<span></span>
-<span><span class="co"># get/set spatial reference system using PROJ4 syntax</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "+proj=utm +zone=11 +datum=NAD83"</span></span>
-<span></span>
-<span><span class="co"># extract spatial data + site level attribtutes</span></span>
-<span><span class="co"># see ?SpatialPointsDataFrame for details</span></span>
-<span><span class="va">sp4.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
 <h2 id="object-metadata">Object Metadata<a class="anchor" aria-label="anchor" href="#object-metadata"></a>
 </h2>
 <p>SoilProfileCollection metadata can be extracted and set using the
 <code><a href="../reference/metadata.html">metadata()</a></code> and <code>metadata&lt;-</code> methods.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># metadata structure</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 7</span></span>
@@ -556,6 +513,51 @@ queries</a>.</p>
 <span></span>
 <span><span class="co"># fix depth units, set back to 'cm'</span></span>
 <span><span class="fu"><a href="../reference/depth_units.html">depth_units</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'cm'</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="spatial-data">Spatial Data<a class="anchor" aria-label="anchor" href="#spatial-data"></a>
+</h2>
+<p>Spatial data and metadata can be stored within a
+<code>SoilProfileCollection</code> object. To initialize a “spatial”
+SoilProfileCollection, use <code>initSpatial()&lt;-</code> method. This
+allows you to specify which columns contain the geometry and optionally
+the Coordinate Reference System of those data. The SoilProfileCollection
+stores two metadata entries: <code>coordinates</code> and
+<code>crs</code> which refer to the column names containing geometric
+data and the CRS, respectively.</p>
+<!-- The use of `sp` classes (in this case `SpatialPoints` and `SpatialPointsDataFrame` objects) simplifies operations such as [plotting spatial data, coordinate system transformations, and spatial queries](http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf). -->
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># generate some fake coordinates as site level attributes</span></span>
+<span><span class="va">sp4</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">354000</span>, sd <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">sp4</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">4109533</span>, sd <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># initialize spatial coordinates (CRS optional)</span></span>
+<span><span class="fu">initSpatial</span><span class="op">(</span><span class="va">sp4</span>, crs <span class="op">=</span> <span class="st">"EPSG:26911"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
+<span></span>
+<span><span class="co"># extract coordinates as matrix</span></span>
+<span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              x       y</span></span>
+<span><span class="co">#&gt;  [1,] 354132.2 4109571</span></span>
+<span><span class="co">#&gt;  [2,] 354010.4 4109504</span></span>
+<span><span class="co">#&gt;  [3,] 354041.4 4109502</span></span>
+<span><span class="co">#&gt;  [4,] 353976.9 4109663</span></span>
+<span><span class="co">#&gt;  [5,] 354077.3 4109776</span></span>
+<span><span class="co">#&gt;  [6,] 354099.8 4109386</span></span>
+<span><span class="co">#&gt;  [7,] 354126.5 4109362</span></span>
+<span><span class="co">#&gt;  [8,] 353982.9 4109550</span></span>
+<span><span class="co">#&gt;  [9,] 354015.3 4109488</span></span>
+<span><span class="co">#&gt; [10,] 353957.4 4109735</span></span>
+<span></span>
+<span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
+<span></span>
+<span><span class="co"># return CRS information</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "+proj=utm +zone=11 +datum=NAD83"</span></span>
+<span></span>
+<span><span class="co"># extract spatial data + site level attributes in new spatial object</span></span>
+<span><span class="va">sp4.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span></span>
+<span><span class="va">sp4.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'sf'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validity-and-horizon-logic">Validity and Horizon Logic<a class="anchor" aria-label="anchor" href="#validity-and-horizon-logic"></a>
@@ -1585,14 +1587,14 @@ Map (GSM) standard depths.</p>
 <span><span class="co"># note: result is in long-format</span></span>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   variable id     value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1  8.636364            1.00000000   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1  8.636435            1.00000000   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1  8.644642            1.00000000  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1  9.537791            1.00000000  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 13.116715            1.00000000  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 11.534870            0.04545455 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2 18.329070            1.00000000   0      5</span></span></code></pre></div>
+<span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
+<span><span class="co">#&gt; 1       p1  1 23.92984             1.0000000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1 23.92984             1.0000000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 23.92992             1.0000000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 24.38800             1.0000000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 25.13236             1.0000000  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1 24.04778             0.1818182 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 11.31357             1.0000000   0      5</span></span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab-methods.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>

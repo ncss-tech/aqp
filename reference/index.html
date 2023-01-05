@@ -86,7 +86,7 @@ Class</p></td>
         </td>
         <td><p>An S4 object representation of a group of soil profiles.</p></td>
       </tr><tr><td>
-          <p><code><a href="SoilProfileCollection-crs.html">proj4string(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="SoilProfileCollection-crs.html">wkt(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="SoilProfileCollection-crs.html">`proj4string&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
+          <p><code><a href="SoilProfileCollection-crs.html">prj(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="SoilProfileCollection-crs.html">`prj&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="SoilProfileCollection-crs.html">proj4string(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="SoilProfileCollection-crs.html">`proj4string&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get or Set Coordinate Reference System for SoilProfileCollection</p></td>
       </tr><tr><td>
@@ -213,10 +213,6 @@ Class</p></td>
           <p><code><a href="contrastClass.html">contrastClass()</a></code> </p>
         </td>
         <td><p>Soil Color Contrast</p></td>
-      </tr><tr><td>
-          <p><code><a href="coordinates.html">coordinates(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="coordinates.html">`coordinates&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Get coordinates from spatial slot</p></td>
       </tr><tr><td>
           <p><code><a href="correctAWC.html">correctAWC()</a></code> </p>
         </td>
@@ -503,6 +499,10 @@ a vertical distance specified</p></td>
           <p><code><a href="idname.html">idname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get profile ID column name</p></td>
+      </tr><tr><td>
+          <p><code><a href="initSpatial.html">`initSpatial&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="initSpatial.html">`initSpatial&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="initSpatial.html">getSpatial(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="initSpatial.html">coordinates(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="initSpatial.html">`coordinates&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="initSpatial.html">`coordinates&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Initialize Spatial Data in a SoilProfileCollection</p></td>
       </tr><tr><td>
           <p><code><a href="invertLabelColor.html">invertLabelColor()</a></code> </p>
         </td>
@@ -863,7 +863,7 @@ Mountains, CA, USA.</p></td>
       </tr><tr><td>
           <p><code><a href="validSpatialData.html">validSpatialData(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Get names of columns in site table</p></td>
+        <td><p>Check for valid spatial reference of profiles</p></td>
       </tr><tr><td>
           <p><code><a href="xtableTauW.html">xtableTauW()</a></code> </p>
         </td>

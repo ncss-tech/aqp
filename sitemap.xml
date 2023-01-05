@@ -133,9 +133,6 @@
     <loc>/reference/contrastClass.html</loc>
   </url>
   <url>
-    <loc>/reference/coordinates.html</loc>
-  </url>
-  <url>
     <loc>/reference/correctAWC.html</loc>
   </url>
   <url>
@@ -350,6 +347,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/initSpatial.html</loc>
   </url>
   <url>
     <loc>/reference/invertLabelColor.html</loc>
