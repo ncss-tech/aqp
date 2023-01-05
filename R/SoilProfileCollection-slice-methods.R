@@ -271,21 +271,6 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   if(just.the.data)
     return(hd.slices)
 
-  # if spatial data and only a single slice: SPDF
-  if (validSpatialData(object) & length(z) == 1) {
-    cat('result is a SpatialPointsDataFrame object\n')
-    
-    # check for site data, if present - join to our sliced data
-    if (nrow(site(object)) > 0) {
-      hd.slices <- merge(hd.slices, site(object), by=id, all.x = TRUE, sort = FALSE)
-    }
-    # since the order of our slices and coordinates are the same
-    # it is safe to use 'match.ID=FALSE'
-    # this gets around a potential problem when dimnames(object)[[1]] aren't consecutive
-    # values-- often the case when subsetting has been performed
-    return(SpatialPointsDataFrame(coordinates(object), data=hd.slices, match.ID=FALSE))
-  }
-
   ## otherwise return an SPC, be sure to copy over the spatial data
 
   # init new SPC
@@ -298,8 +283,8 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   horizonNames(hd.slices)[idx] <- 'sliceID'
   hzidname(hd.slices) <- 'sliceID'
 
-  # copy spatial data
-  hd.slices@sp <- object@sp
+  # # copy spatial data
+  # hd.slices@sp <- object@sp
 
   # safely copy site data via JOIN
   site(hd.slices) <- site(object)

@@ -9,3 +9,4 @@ README.md
 ^CITATION\.cff$
 ^README\.Rmd$
 ^man/figures$
+^revdep$

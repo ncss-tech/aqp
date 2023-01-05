@@ -1,78 +1,106 @@
-
-##
-## wrappers to spatial operations
-##
-
-## Note: this should probably be done with proper S4 methods
-
-# spTransform.SoilProfileCollection <- function(spc, ...) {
-# 	spc@sp <- spTransform(spc@sp, ...)
-# 	return(x)
-# }
-#
-# over.SoilProfileCollection <- function(spc, ...) {
-# 	res <- over(spc@sp, ...)
-# 	return(res)
-# }
-#
-# extract.SoilProfileCollection <- function(spc, x, ...) {
-# 	res <- extract(spc@sp, ...)
-# 	return(res)
-# }
-
-##
-## proj4string setting
-##
+setGeneric("prj", function(object, ...)
+  standardGeneric("prj"))
 
 #' Get or Set Coordinate Reference System for SoilProfileCollection
-#' 
-#' @description `proj4string()`: Get Coordinate Reference System as PROJ4 String
 #'
+#' @description `prj()`: Get Coordinate Reference System (Projection) metadata
+#' @param object A SoilProfileCollection
+#' @param value character. Representation of Coordinate Reference System as `"authority:code"`, integer EPSG code, WKT2019 / PROJ4 string, an sf `crs` or sp `CRS` object.
+#' @param ... Additional arguments (not used)
 #' @param obj A SoilProfileCollection
+#' @export
+#' @seealso [initSpatial<-()]
 #' @rdname SoilProfileCollection-crs
-setMethod(f = 'proj4string', signature(obj = 'SoilProfileCollection'),
-          function(obj) {
-            slot(slot(obj@sp, "proj4string"), "projargs")
-          }
-)
-
-#' @description `wkt():` Get Coordinate Reference System as Well-Known Text
-#'
-#' @rdname SoilProfileCollection-crs
-setMethod(f = 'wkt', signature(obj = 'SoilProfileCollection'),
-          function(obj) {
-            w <- suppressWarnings(wkt(slot(obj@sp, "proj4string")))
-            if (is.null(w)) {
-              w <- suppressWarnings(comment(slot(obj@sp, "proj4string")))
+#' @aliases prj
+setMethod("prj", 'SoilProfileCollection',
+          function(object, ...) {
+            value <- metadata(object)$crs
+            if (length(value) == 0 || (!is.na(value) && nchar(value) == 0)) {
+              value <- NA_character_
             }
-            w
+            return(value)
           }
 )
 
-#' @description `proj4string()<-`: Set Coordinate Reference System string for the SoilProfileCollection
-#'
-#' @param value A PROJ4, WKT string or equivalent or {sp} CRS object
+setGeneric("prj<-", function(object, ..., value)
+  standardGeneric("prj<-"))
+
+#' @description `prj()<-`: Set Coordinate Reference System metadata for the SoilProfileCollection
+#' @aliases prj<-
+#' @rdname SoilProfileCollection-crs
+#' @export
+setReplaceMethod("prj", 'SoilProfileCollection',
+                 function(object, ..., value) {
+                   
+                   # backward compatibility for sp::CRS object
+                   if (inherits(value, 'CRS')) {
+                     if (!is.null(attr(value, 'comment'))) {
+                       # use WKT2019 if available
+                       value <- attr(value, 'comment')
+                     } else {
+                       # otherwise use proj arg string
+                       value <- value@projargs
+                     }
+                   }
+                   
+                   # added compatibility for sf::crs object
+                   if (inherits(value, 'crs')) {
+                     if (!is.null(value$wkt)) {
+                       # use WKT2019 if available
+                       value <- value$wkt
+                     } else {
+                       # otherwise use input proj arg string
+                       value <- value$input
+                     }
+                   }
+                   
+                   # 0-length or empty character are equivalent to NA CRS
+                   if (length(value) == 0 || nchar(value) == 0) {
+                     value <- NA_character_
+                   }
+                   
+                   # "crs" metadata stores the WKT string in the SPC
+                   metadata(object)$crs <- value
+                   return(object)
+                 }
+)
+
+#' @description `proj4string()`: (Deprecated) Get Coordinate Reference System as PROJ4 String
+#' @rdname SoilProfileCollection-crs
+#' @export
+setMethod("proj4string", signature(obj = 'SoilProfileCollection'),
+          function(obj) {
+            .Deprecated("prj", package = "aqp", 
+                        msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `prj()`")
+            return(prj(obj))
+          }
+)
+
+#' @description `proj4string()<-`: (Deprecated) Set Coordinate Reference System metadata for the SoilProfileCollection
 #' @rdname SoilProfileCollection-crs
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
-  function(obj, value) {
-    if (!inherits(value, 'CRS')) {
-      value <- CRS(value)
-    }
-    suppressWarnings(slot(obj@sp, "proj4string") <- value)
-    obj
-  }
-)
+                 function(obj, value) {
+                   .Deprecated("prj<-", package = "aqp", 
+                               msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `prj<-()`")
+                   prj(obj) <- value
+                   return(obj)
+                 })
+    
+setGeneric("initSpatial<-", function(object, crs = NULL, value)
+  standardGeneric("initSpatial<-"))
 
-
-##
-## initialize spatial data
-##
-#' @aliases coordinates<-,SoilProfileCollection-method
+#' Initialize Spatial Data in a SoilProfileCollection 
+#' 
+#' `initSpatial()<-`: Set the column names containing spatial data and the corresponding coordinate reference system for a SoilProfileCollection.
+#' 
 #' @param object A SoilProfileCollection
-#' @param value A formula specifying columns containing x and y coordinates
-#'
-#' @rdname coordinates
-#'
+#' @param value A formula specifying names of columns containing geometry (x and y coordinates), or character with the column names
+#' @param crs Optional: character. Representation of Coordinate Reference System as `"authority:code"`, integer EPSG code, WKT2019 or PROJ4 string, an sf `crs` or sp `CRS` object.
+#' @rdname initSpatial
+#' @name initSpatial<-
+#' @aliases initSpatial<-,SoilProfileCollection,ANY,ANY-method
+#' @export
+#' @seealso [prj()]
 #' @examples
 #'
 #' data(sp5)
@@ -82,100 +110,102 @@ setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
 #' sp5$y <- rnorm(length(sp5))
 #'
 #' # coordinates takes a formula object as input
-#' coordinates(sp5) <- ~ x + y
+#' initSpatial(sp5) <- ~ x + y
+#' 
+#' # optionally specify Coordinate Reference System (crs) on left-hand side
+#' initSpatial(sp5, crs = "OGC:CRS84") <- ~ x + y
+setReplaceMethod("initSpatial", signature(object = "SoilProfileCollection", value = "ANY"),
+                 function(object, crs = NULL, value) {
+                   # basic sanity check
+                   if (!inherits(value, "formula"))
+                     stop('invalid formula: ', quote(value), call. = FALSE)
+                   
+                   fterms <- attr(terms(value), "term.labels")
+                   
+                   if (all(fterms %in% siteNames(object))) {
+                     mf <- data.matrix(model.frame(value, site(object), na.action = na.pass))
+                   } else if (all(fterms %in% horizonNames(object))) {
+                     mf <- unique(data.matrix(model.frame(value, horizons(object), na.action = na.pass)))
+                   } else {
+                     stop("formula terms not found in site or horizon table: ",
+                          paste0(fterms[!fterms %in% names(object)], collapse = ","))
+                   }
+                   
+                   # make sure that "normalization" worked
+                   if (nrow(mf) != length(object)) {
+                     stop("coordinates in horizon data are not unique within site: ", quote(value), call. = FALSE)
+                   }
+                   
+                   # set coordinates metadata entry
+                   metadata(object)$coordinates <- fterms
+                   
+                   # set CRS if specified
+                   if (!is.null(crs)) {
+                     prj(object) <- crs
+                   }
+                   
+                   return(object)
+                 })
+
+#' @rdname initSpatial
+#' @export
+setReplaceMethod("initSpatial", signature(object = "SoilProfileCollection", value = "character"),
+                 function(object, crs = NULL, value) {
+                   initSpatial(object, crs = crs) <- as.formula(paste0("~", paste0(value, collapse = "+")))
+                   object
+                  })
+
+
+setGeneric("getSpatial", function(object, ...)
+  standardGeneric("getSpatial"))
+
+#' Get Soil Profile Spatial Data
 #'
-setReplaceMethod("coordinates", "SoilProfileCollection",
-  function(object, value) {
+#' @description `getSpatial()`: Get spatial data associated with a SoilProfileCollection
+#'
+#' @param object A SoilProfileCollection
+#' @docType methods
+#' 
+#' @export
+#' @aliases getSpatial
+#' @rdname initSpatial
+setMethod("getSpatial", signature(object = "SoilProfileCollection"),
+          function(object) {
+            cn <- metadata(object)$coordinates
+            
+            # if not specified or not valid, return a 0x2 matrix
+            if (length(cn) == 0 || !validSpatialData(object))
+              return(matrix(numeric(0), ncol = 2, dimnames = list(NULL, c("x", "y"))))
+            
+            return(as.matrix(sapply(cn, function(x) object[[x]])))
+          })
 
-  # basic sanity check
-  if (!inherits(value, "formula"))
-    stop('invalid formula: ', quote(value), call. = FALSE)
-  
-  fterms <- attr(terms(value),"term.labels")
-  
-  if (all(fterms %in% siteNames(object))) {
-    mf <- data.matrix(model.frame(value, site(object), na.action = na.pass))
-  } else if (all(fterms %in% horizonNames(object))) {
-    mf <- unique(data.matrix(model.frame(value, horizons(object), na.action = na.pass)))
-  } else {
-    stop("formula terms not found in site or horizon table: ", 
-         paste0(fterms[!fterms %in% names(object)], collapse=","))
-  }
-  
-  # make sure that "normalization" worked
-  if (nrow(mf) != length(object)) {
-    stop("coordinates in horizon data are not unique within site: ", quote(value), call. = FALSE)
-  }
-  
-  # test for missing coordinates
-  mf.missing <- apply(mf, 2, is.na)
+#' @param obj A SoilProfileCollection
+#' @export
+#' @rdname initSpatial
+#' @aliases coordinates
+setMethod("coordinates", signature(obj = "SoilProfileCollection"),
+          function(obj) {
+            getSpatial(obj)
+          })
 
-  if(any(mf.missing))
-	  stop('cannot promote to spatial SoilProfileCollection with missing coordinates', call.=FALSE)
+#' @rdname initSpatial
+#' @export
+#' @aliases coordinates<-
+setReplaceMethod("coordinates", c("SoilProfileCollection", "ANY"),
+                 function(object, value) {
+                   .Deprecated("initSpatial<-", package = "aqp", 
+                               msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `initSpatial()<-`.")
+                   initSpatial(object) <- value
+                   object
+                 })
 
-  # assign to sp slot
-  # note that this will clobber any existing spatial data
-  object@sp <- SpatialPoints(coords = mf)
-
-  # remove coordinates from source data
-  # note that mf is a matrix, so we need to access the colnames differently
-  coord_names <- dimnames(mf)[[2]]
-  sn <- siteNames(object)
-  hn <- horizonNames(object)
-
-  # @site minus coordinates "promoted" to @sp
-  object@site <- .data.frame.j(object@site, sn[!sn %in% coord_names], aqp_df_class(object))
-  
-  # remove from horizons if they came from there
-  if (all(fterms %in% horizonNames(object))) {
-    object@horizons <- .data.frame.j(object@horizons, hn[!hn %in% coord_names], aqp_df_class(object))
-  }
-  
-  # done
-  return(object)
-  }
-)
-
-# ### TODO: consider removing this function
-#
-# ##
-# ## spatial_subset: spatial clipping of a SPC (requires GEOS)
-# ##
-#
-# if (!isGeneric("spatial_subset"))
-#   setGeneric("spatial_subset", function(object, geom) standardGeneric("spatial_subset"))
-#
-# setMethod(f='spatial_subset', signature='SoilProfileCollection',
-#   function(object, geom){
-#
-#     # This functionality require the GEOS bindings
-#     # provided by rgeos
-#     if(require(rgeos)) {
-#       spc_intersection <- gIntersects(as(object, "SpatialPoints"), geom, byid = TRUE)
-#       ids <- which(spc_intersection)
-#
-# 	# extract relevant info
-# 	s <- site(object)
-# 	h <- horizons(object)
-# 	d <- diagnostic_hz(object)
-#   r <- restrictions(object)
-#
-# 	# get indexes to valid site, hz, diagnostic data
-#   valid_ids <- s[ids, idname(object)]
-#   valid_horizons <- which(h[, idname(object)] %in% valid_ids)
-#   valid_sites <- which(s[, idname(object)] %in% valid_ids)
-#   valid_diagnostic <- which(d[, idname(object)] %in% valid_ids)
-# 	valid_restriction <- which(r[, idname(object)] %in% valid_ids)
-#
-# 	# create a new SPC with subset data
-#   ## TODO: copy over diagnostic horizon data
-# 	## TODO: use integer profile index to simplify this process
-# 	## TODO: @sp bbox may need to be re-computed
-#   ## TODO: check diagnostic subset
-#       SoilProfileCollection(idcol = object@idcol, depthcols = object@depthcols, metadata = metadata(object), horizons = h[valid_horizons, ], site = s[valid_sites, ], sp = object@sp[ids,], diagnostic = d[valid_diagnostic, ], restrictions=r[valid_restriction,])
-#     }
-#     else { # no rgeos, return original
-#       stop('Spatial subsetting not performed, please install the `rgeos` package.', call.=FALSE)
-#     }
-#   }
-# )
+#' @rdname initSpatial
+#' @export
+setReplaceMethod("coordinates", c("SoilProfileCollection", "character"),
+                function(object, value) {
+                  .Deprecated("initSpatial<-", package = "aqp", 
+                              msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See `initSpatial()<-`.")
+                  initSpatial(object) <-  as.formula(paste0("~", paste0(value, collapse = "+")))
+                  object
+                })

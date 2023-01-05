@@ -4,13 +4,16 @@
 \name{validSpatialData,SoilProfileCollection-method}
 \alias{validSpatialData,SoilProfileCollection-method}
 \alias{validSpatialData}
-\title{Get names of columns in site table}
+\title{Check for valid spatial reference of profiles}
 \usage{
 \S4method{validSpatialData}{SoilProfileCollection}(object)
 }
 \arguments{
 \item{object}{a SoilProfileCollection}
 }
+\value{
+logical \code{TRUE} if column names are defined and correspond to existing data
+}
 \description{
-Are the contents of @sp valid: n x 2 matrix? If not, then contents of @sp in the SoilProfileCollection are an empty SpatialPoints object.
+Are coordinate column names defined in metadata and existing in the SoilProfileCollection?
 }

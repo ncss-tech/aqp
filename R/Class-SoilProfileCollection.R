@@ -379,15 +379,30 @@ setMethod(f = 'show',
               cat('[... more sites ...]\n')
 
             # presence of spatial data
-            if (nrow(coordinates(object)) == n.profiles) {
+            if (validSpatialData(object)) {
               cat('\nSpatial Data:\n')
-              show(object@sp@bbox)
-              cat("CRS: ", proj4string(object))
+              cat("  CRS: ", prj(object), ";", sep = "")
+              cat(.spc_bbox(object))
             } else {
               cat('\nSpatial Data:\n[EMPTY]\n')
             }
 
           })
+
+.spc_bbox <- function(x) {
+  crds <- metadata(x)$coordinates
+ 
+  # this bbox outputs for "point" geometries specified in two columns
+  # TODO: extend as needed if other geometry types are added (i.e. wrapper around st_bbox())
+  if (length(crds) != 2) 
+    return("\n")
+  
+  # if all coordinates in X or Y are NA warnings will be generated & Inf/-Inf result
+  suppressWarnings({
+    paste0(" ", crds[1], ": ", min(x[[crds[1]]], na.rm = TRUE), " to ", max(x[[crds[1]]], na.rm = TRUE), "; ",
+                crds[2], ": ", min(x[[crds[2]]], na.rm = TRUE), " to ", max(x[[crds[2]]], na.rm = TRUE), "\n")
+  })
+}
 
 #' @description `as.character()`: Character Representation of SoilProfileCollection Object
 #' @param x a SoilProfileCollection
@@ -913,21 +928,6 @@ setGeneric("horizonDepths", function(object)
 setMethod("horizonDepths", signature(object = "SoilProfileCollection"),
           function(object)
             return(object@depthcols))
-
-
-#' Get coordinates from spatial slot
-#'
-#' @description Get coordinates from spatial slot, if present.
-#'
-#' @param obj a SoilProfileCollection
-#' @docType methods
-#' 
-#' @aliases coordinates
-#' @rdname coordinates
-setMethod("coordinates", signature(obj = "SoilProfileCollection"),
-          function(obj) {
-            return(coordinates(obj@sp))
-          })
 
 ## site data
 setGeneric("site", function(object, ...)

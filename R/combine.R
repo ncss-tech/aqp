@@ -202,12 +202,12 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
     o.hztexcl <- ""
   }
 
-  o.p4s <- unique(lapply(spc, function(x) suppressWarnings(proj4string(x))))
+  o.p4s <- unique(lapply(spc, function(x) suppressWarnings(prj(x))))
 
   drop.spatial <- FALSE
   if (length(o.p4s) > 1) {
     if (verbose)
-      message('pbindlist: inconsistent CRS, dropping spatial data')
+      message('pbindlist: inconsistent CRS, dropping spatial metadata')
     drop.spatial <- TRUE
   }
 
@@ -236,6 +236,11 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
 
   new.hzd <- spc.list[[1]]$depthcols
   new.metadata <- spc.list[[1]]$metadata
+  
+  if (drop.spatial) {
+    new.metadata$coordinates <- NULL
+    new.metadata$crs <- NULL
+  }
 
   # get the data.frame class and grouping variable into new metadata
 
@@ -391,48 +396,8 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
     stop("package `data.table` is required to combine SoilProfileCollections", call.=FALSE)
   }
 
-  if (!drop.spatial) {
-    # check for non-conformal coordinates
-    dim.coords <- sapply(o.sp, function(i) {
-      ncol(sp::coordinates(i))
-    })
-
-    # note: an SPC with default @sp is a 1 column matrix
-    if (length(unique(dim.coords)) > 1) {
-      if (verbose)
-        message('pbindlist: non-conformal point geometry, dropping spatial data')
-      drop.spatial <- TRUE
-    }
-
-    ## TODO: this may not matter to rbind.SpatialPoints
-    # # check for variations in coordinate names
-    # coords.names <- lapply(o.sp, function(i) {
-    #   dimnames(coordinates(i))[[2]]
-    # })
-    #
-    # if(length(unique(coords.names)) > 1) {
-    #   stop('non-conformal coordinate names', call. = FALSE)
-    # }
-
-    # spatial points require some more effort when spatial data are missing
-    if (!drop.spatial) {
-      o.1.sp <- spc.list[[1]]$sp
-
-      # missing spatial data
-      if (ncol(coordinates(o.1.sp)) == 1) {
-        o.sp <- o.1.sp # copy the first filler
-      } else {
-        # not missing spatial data
-        # 2015-12-18: added call to specific function: "sp::rbind.SpatialPoints"
-        o.sp <- suppressMessages(do.call("rbind.SpatialPoints", o.sp))
-      }
-    }
-  }
-
-  if (drop.spatial) {
-    # default NULL SpatialPoints
-    o.sp <- new('SpatialPoints')
-  }
+  # sp slot is deprecated; always empty/uninitialized now
+  o.sp <- new('SpatialPoints')
 
   ## sanity check: profile IDs should be unique
   if (length(o.s[[new.pID]]) != length(unique(o.s[[new.pID]]))) {
