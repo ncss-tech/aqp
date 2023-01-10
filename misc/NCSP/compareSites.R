@@ -27,8 +27,11 @@ d2 <- compareSites(x, vars = c('MAP', 'MAAT'))
 par(mar = c(0, 0, 0, 1))
 plotProfileDendrogram(x, clust = cluster::diana(d2), color = 'Fe_o_to_Fe_d', width = 0.3, name.style = 'center-center')
 
+w1 <- 2
+w2 <- 1
 
-d <- (d1 + d2) / 2
+## idea: following symbolic representation used in SEM ... I think
+d <- (w1*d1 + w2*d2) / sum(c(w1, w2))
 
 par(mar = c(0, 0, 0, 1))
 plotProfileDendrogram(x, clust = cluster::diana(d), color = 'Fe_o_to_Fe_d', width = 0.3, name.style = 'center-center')
