@@ -1200,8 +1200,6 @@ NULL
 #' Teacher, May 2000. 2. Schwertmann, U. 1993. Relations Between Iron Oxides,
 #' Soil Color, and Soil Formation. "Soil Color". SSSA Special Publication no.
 #' 31, pages 51--69.
-#' @source
-#' \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286}
 #' @keywords datasets
 #' @examples
 #'

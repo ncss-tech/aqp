@@ -11,9 +11,9 @@
   return(res)
   }
 
-#' Random Profile
+#' @title Random Profile
 #'
-#' Generate a random soil profile according to set criteria, with correlated
+#' @description Generate a random soil profile according to set criteria, with correlated
 #' depth trends.
 #'
 #' The random walk method produces profiles with considerable variation between
@@ -28,8 +28,7 @@
 #' the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further
 #' description of the method is outlined in (Brenton et al, 2011). Simulated
 #' horizon distinctness codes are based on the USDA-NCSS field description
-#' methods
-#' (\url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/?cid=nrcs142p2_054184}).
+#' methods.
 #' Simulated distinctness codes are constrained according to horizon thickness,
 #' i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that
 #' are thinner than 3x this vertical distance
@@ -133,7 +132,7 @@
 #'
 #'
 #'
-random_profile <- function(id, n=c(3,4,5,6), min_thick=5, max_thick=30, n_prop=5, exact=FALSE, method='random_walk', HzDistinctSim=FALSE, SPC=FALSE, ...) {
+random_profile <- function(id, n = c(3,4,5,6), min_thick = 5, max_thick = 30, n_prop = 5, exact = FALSE, method= 'random_walk', HzDistinctSim = FALSE, SPC = FALSE, ...) {
 
   # sanity check
   if(missing(id))

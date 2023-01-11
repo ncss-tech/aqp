@@ -1,6 +1,7 @@
 ## fully vectorized
 ## determine color contrast class, based on
-## https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+## Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
+##
 ## and 2-5 in the field book (version 3.0)
 #
 # v1: Munsell value of first color
@@ -34,7 +35,7 @@
 #' @author D.E. Beaudette
 #' @seealso \code{\link{colorContrast}}
 #' @references
-#'  - [Soil Survey Technical Note 2](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
+#'  - Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
 #' @keywords manip
 #' @examples
 #'

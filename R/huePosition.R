@@ -24,9 +24,9 @@
 #' @seealso [colorContrast], [huePositionCircle]
 #' 
 #' @references
-#' https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+#'  - Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
 #' 
-#' Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
+#'  - Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
 #' 
 #' @keywords manip
 #' @examples
@@ -54,7 +54,7 @@
 #'
 huePosition <- function(x, returnHues = FALSE, includeNeutral = FALSE, origin = '5R', direction = c('cw', 'ccw')) {
   # ordering via Tech Note #2
-  # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+  # Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
   
   # sacrifice to CRAN deity
   munsellHuePosition <- NULL

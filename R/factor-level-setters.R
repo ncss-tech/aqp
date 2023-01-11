@@ -22,7 +22,7 @@
 #' 
 #' @description Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size
 #'
-#' @references \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
+#' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
 #' @param which 'codes' (texture codes) or 'names' (texture class names)
 #' @param simplify Return 12-class factor levels (`TRUE`) or 21-class factor levels (default: `FALSE`)? The 12-class system does not separate sands, loamy sands and sandy loams into sand fraction variants (e.g. "very fine sandy loam" in the 21-class system is "sandy loam" in 12-class system)

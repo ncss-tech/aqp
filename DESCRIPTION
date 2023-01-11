@@ -11,7 +11,7 @@ Description: The Algorithms for Quantitative Pedology (AQP) project was started 
 License: GPL (>= 3)
 LazyLoad: yes
 Repository: CRAN
-URL: https://github.com/ncss-tech/aqp, https://ncss-tech.github.io/AQP
+URL: https://github.com/ncss-tech/aqp, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/aqp/issues
 Language: en-US
 Encoding: UTF-8

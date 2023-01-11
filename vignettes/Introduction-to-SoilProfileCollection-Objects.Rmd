@@ -279,7 +279,6 @@ depth_units(sp4) <- 'cm'
 
 Spatial data and metadata can be stored within a `SoilProfileCollection` object. To initialize a "spatial" SoilProfileCollection, use `initSpatial()<-` method. This allows you to specify which columns contain the geometry and optionally the Coordinate Reference System of those data. The SoilProfileCollection stores two metadata entries: `coordinates` and `crs` which refer to the column names containing geometric data and the CRS, respectively.
 
-<!-- The use of `sp` classes (in this case `SpatialPoints` and `SpatialPointsDataFrame` objects) simplifies operations such as [plotting spatial data, coordinate system transformations, and spatial queries](http://cran.at.r-project.org/web/packages/sp/vignettes/intro_sp.pdf). -->
 
 ```{r}
 # generate some fake coordinates as site level attributes

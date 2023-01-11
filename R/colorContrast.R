@@ -24,14 +24,14 @@
 #' \item{dV: }{delta-value, absolute value of difference in Munsell value (m1 vs. m2)}
 #' \item{dc: }{delta-chroma, absolute value of difference in Munsell chroma (m1 vs. m2)}
 #' \item{dE00: }{delta-E00, e.g. the [CIE delta-E as refined in 2000](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000)}
-#' \item{cc: }{soil color contrast class, as specified in [Soil Survey Technical Note 2](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)}
+#' \item{cc: }{soil color contrast class, as specified in Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)}
 #' }
 #'
 #' @references
 #'
 #'  1. https://en.wikipedia.org/wiki/Color_difference
 #'
-#'  2. \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{Soil Survey Technical Note 2}
+#'  2. Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
 #'
 #' @author D.E. Beaudette
 #'
@@ -102,7 +102,7 @@ colorContrast <- function(m1, m2) {
   ## TODO: add a notes / flag field in the results
   
   # difference in number of hue chips, clock-wise, as specified in:
-  # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+  # Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
   # including neutral hues in position 1
   dH <- abs(huePosition(m1.pieces[[1]], includeNeutral = TRUE) - huePosition(m2.pieces[[1]], includeNeutral = TRUE))
   
@@ -144,7 +144,8 @@ colorContrast <- function(m1, m2) {
   dE00 <- unlist(d)
 
   # NCSS color contrast classes
-  # https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
+  # Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
+  #
   # value1, chroma1, value2, chroma2, dH, dV, dC
   cc <- contrastClass(m1.pieces[[2]], m1.pieces[[3]], m2.pieces[[2]], m2.pieces[[3]], dH, dV, dC)
 
