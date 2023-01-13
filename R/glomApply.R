@@ -83,9 +83,8 @@ glomApply <- function(object, .fun = NULL, truncate = FALSE, invert = FALSE,
 #' @param z2 Lower boundary
 #'
 #' @return A SoilProfileCollection truncated to interval \code{[z1, z2]}
-#' @export trunc
+#' @export 
 #' @aliases trunc
-#' @method trunc SoilProfileCollection
 #' @examples
 #'
 #' # load sample data
@@ -104,12 +103,6 @@ glomApply <- function(object, .fun = NULL, truncate = FALSE, invert = FALSE,
 #'
 #' # trunc'd profiles
 #' plot(trunc(sp3, 0, 25))
-
-# note, we are using the default method signature: trunc(x, ...)
-#       so this will not show up as being "masked" from base
-#setGeneric("trunc", function(x, ...)
-#  standardGeneric("trunc"))
-
 setMethod(f = 'trunc', signature(x = 'SoilProfileCollection'),
           function(x, z1, z2) {
             return(glom(x, z1, z2, invert = FALSE, truncate = TRUE))

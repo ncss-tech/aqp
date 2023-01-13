@@ -10,6 +10,8 @@ tauW(
   W = diag(sqrt(length(as.matrix(CM)))),
   P = rep(1/nrow(as.matrix(CM)), nrow(as.matrix(CM)))
 )
+
+summaryTauW(result.tau)
 }
 \arguments{
 \item{CM}{a square confusion (cross-classification) matrix (rows: allocation, columns: reference)}
@@ -17,6 +19,8 @@ tauW(
 \item{W}{weights: 1 on diagonals, [-1..1] off giving partial credit to this error}
 
 \item{P}{prior probability vector, length = number of rows/columns in \code{CM} and \code{W}}
+
+\item{result.tau}{\code{tauW()} result}
 }
 \value{
 Results are returned in a list with obvious R names
@@ -94,6 +98,6 @@ summaryTauW(tauW(crossclass, W=weights, P=priors))
 }
 }
 \author{
-D G Rossiter
+D.G. Rossiter
 }
 \keyword{array}

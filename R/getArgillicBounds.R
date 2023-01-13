@@ -186,6 +186,7 @@ getArgillicBounds <- function(p,
 #' @references Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.
 #' USDA-Natural Resources Conservation Service, Washington, DC.
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' # crit.clay.argillic uses different equations for clay content
@@ -232,6 +233,7 @@ crit.clay.argillic <- function(eluvial_clay_content) {
 #' @seealso \code{getArgillicBounds}, \code{get.increase.matrix},
 #' \code{crit.clay.argillic}
 #' @keywords manip
+#' @export
 #' @examples
 #' 
 #' data(sp1, package = 'aqp')

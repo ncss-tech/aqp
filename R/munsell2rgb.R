@@ -354,8 +354,8 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   
   ## TODO: maybe more efficient with keys
   # round-trip through data.table is still faster
-  d <- as.data.table(d)
-  munsell <- as.data.table(munsell)
+  d <- data.table::as.data.table(d)
+  munsell <- data.table::as.data.table(munsell)
   # join
   res <- merge(d, munsell, by = c('hue','value','chroma'), all.x = TRUE, sort = FALSE)
   # back to data.frame
@@ -422,10 +422,9 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
 #' @param as.spc Return a data.frame-like object with ID columns?
 #'
 #' @return A SoilProfileCollection or \code{data.frame}-like object
-#' @aliases munsell2spc
 #' @seealso \code{\link{parseMunsell}} \code{\link{rgb2munsell}} \code{\link{munsell2rgb}}
-#' @export munsell2spc,SoilProfileCollection-method
-#'
+#' @export 
+#' @aliases munsell2spc
 #' @examples
 #'
 #' data(sp3)

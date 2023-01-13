@@ -37,6 +37,7 @@
 #' @references
 #'  - Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' ## standard use, result is an ordered factor

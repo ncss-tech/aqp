@@ -40,6 +40,7 @@
 #'   }
 #'
 #' @keywords hplots manip
+#' @export
 #'
 #' @examples
 #' # single hue page
@@ -149,7 +150,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
   chroma.subset.labels <- as.character(c(chroma.subset, 5, 7))
 
   # make plot
-  pp <- xyplot(fm, data = z,
+  pp <- lattice::xyplot(fm, data = z,
                main = sprintf('Color Contrast Chart: %s', m$queryColor),
                asp = 1.2, xlab='Chroma', ylab='Value',
                xlim = c(0.75, 6.25), 

@@ -13,7 +13,7 @@
 #' @return a \code{SoilProfileCollection} object
 #' 
 #' @keywords manip
-#' 
+#' @export
 #' @examples 
 #' 
 #' # sample data

@@ -21,6 +21,7 @@
 #' @author D.E. Beaudette
 #' @seealso \code{\link{generalize.hz}}
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' # load some example data

@@ -17,6 +17,7 @@
 #' such as \code{\link{plotMultipleSPC}}.
 #' @author D.E. Beaudette
 #' @seealso \code{\link{plotMultipleSPC}}
+#' @export
 #' @examples
 #'
 #' # load sample data
@@ -120,7 +121,7 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #' @seealso \code{\link{profileGroupLabels}}
 #' 
 #' @keywords hplots
-#' 
+#' @export
 #' @examples
 #'
 #' ##
@@ -240,8 +241,6 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #'   merged.legend = 'clay', merged.legend.title = 'Clay (%)',
 #'   axis.line.offset = 0
 #' )
-
-
 plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times = length(spc.list)), merged.legend = NULL, merged.colors = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598", "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"), merged.legend.title = merged.legend, arrow.offset = 2, bracket.base.depth = 95, label.offset = 2, label.cex = 0.75, ...) {
 
   # compute group stats

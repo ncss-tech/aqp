@@ -10,6 +10,10 @@
 \title{Slicing of SoilProfileCollection Objects}
 \usage{
 slice.fast(object, fm, top.down = TRUE, just.the.data = FALSE, strict = TRUE)
+
+\S4method{slice}{SoilProfileCollection}(object, fm, top.down = TRUE, just.the.data = FALSE, strict = TRUE)
+
+get.slice(h, id, top, bottom, vars, z, include = "top", strict = TRUE)
 }
 \arguments{
 \item{object}{a SoilProfileCollection}
@@ -22,13 +26,27 @@ variables are sliced according to \code{integer.vector}: \code{integer.vector ~ 
 
 \item{just.the.data}{Logical, return just the sliced data or a new \code{SoilProfileCollection} object.}
 
-\item{strict}{Logical, should the horizonation be strictly checked for self-consistency?}
+\item{strict}{Check for logic errors? Default: \code{TRUE}}
+
+\item{h}{Horizon data.frame}
+
+\item{id}{Profile ID}
+
+\item{top}{Top Depth Column Name}
+
+\item{bottom}{Bottom Depth Column Nmae}
+
+\item{vars}{Variables of Interest}
+
+\item{z}{Slice Depth (index).}
+
+\item{include}{Either \code{'top'} or \code{'bottom'}. Boundary to include in slice. Default: \code{'top'}}
 }
 \value{
 Either a new \code{SoilProfileCollection} with data sliced according to \code{fm}, or a \code{data.frame}.
 }
 \description{
-Slicing of SoilProfileCollection Objects
+A method for "slicing" of SoilProfileCollection objects into constant depth intervals. Now deprecated, see \verb{[dice()]}.
 }
 \section{Details}{
  By default, slices are defined from the top-down:

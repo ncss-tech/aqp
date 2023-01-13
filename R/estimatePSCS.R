@@ -41,6 +41,7 @@
 #' @references Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.
 #' USDA-Natural Resources Conservation Service, Washington, DC.
 #' @keywords manip
+#' @export 
 #' @examples
 #'
 #' data(sp1, package = 'aqp')

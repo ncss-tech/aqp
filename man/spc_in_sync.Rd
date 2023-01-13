@@ -22,10 +22,12 @@ Check 1: Same number of sites in site as number of sites in horizons. No intermi
 
 Check 2: Site IDs match coalesced profile ID from horizons. Ensures the same \emph{relative} ordering, but horizons still may be out of order within profiles
 }
-\author{
-Andrew G. Brown
-
+\examples{
 data(sp5)
 
 spc_in_sync(sp5)
+
+}
+\author{
+Andrew G. Brown
 }

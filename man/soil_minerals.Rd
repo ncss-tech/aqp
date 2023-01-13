@@ -10,9 +10,6 @@ A data frame with 20 observations on the following 5 variables.
 color} \item{hue}{Munsell hue} \item{value}{Munsell value}
 \item{chroma}{Munsell chroma} }
 }
-\source{
-\url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/edu/?cid=nrcs142p2_054286}
-}
 \usage{
 data(soil_minerals)
 }

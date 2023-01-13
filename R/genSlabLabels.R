@@ -38,8 +38,17 @@
 
 # note source data must be "normalized" via dice() first; assumes each profile has the same number of horizons
 # generate labels for slabs
+#' @param slab.structure 
+#'
+#' @param max.d Maximum depth
+#' @param n.profiles Number of profiles
+#'
+#' @export
+#' @rdname slab-methods
 genSlabLabels <- function(slab.structure = 1, max.d, n.profiles) {
 
+  # NOTE: this method is no longer used in favor of .genSlabLabels2
+  
   # fixed-size slabs
   if (length(slab.structure) == 1) {
     # generate sequence of segment labels

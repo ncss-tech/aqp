@@ -4,9 +4,9 @@
 \name{diagnostic_hz<-}
 \alias{diagnostic_hz<-}
 \alias{diagnostic_hz<-,SoilProfileCollection-method}
-\title{Add data to the diagnostic slot}
+\title{Add Data to Diagnostic Features Slot}
 \usage{
-diagnostic_hz(object) <- value
+\S4method{diagnostic_hz}{SoilProfileCollection}(object) <- value
 }
 \arguments{
 \item{object}{A SoilProfileCollection}
@@ -14,7 +14,7 @@ diagnostic_hz(object) <- value
 \item{value}{An object inheriting \code{data.frame}}
 }
 \description{
-Diagnostic data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
+Diagnostic feature data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
 }
 \examples{
 

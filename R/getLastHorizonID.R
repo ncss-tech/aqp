@@ -4,7 +4,7 @@
 #' @description Return horizon IDs of the deepest horizon within each profile of a `SoilProfileCollection`. IDs are returned in the same order as `profile_id(x)`. Horizon top depths are used because there are cases where bottom depths may be missing.
 #'
 #' @param x a `SoilProfileCollection`
-#'
+#' @export
 getLastHorizonID <- function(x) {
 
   # with data.table

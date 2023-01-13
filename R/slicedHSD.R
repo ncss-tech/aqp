@@ -108,7 +108,7 @@
 #' @param fm a formula describing depth sequence, horizon attribute, and site (grouping) attribute.
 #' For example 0:100 ~ estimated_oc | taxonname
 #' @param conf confidence applied in \code{TukeyHSD}
-#'
+#' @export
 slicedHSD <- function(object, fm, conf = 0.95) {
 
   # parse specialized HSD formula

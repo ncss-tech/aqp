@@ -23,6 +23,7 @@
 #'
 #' @author Andrew G. Brown
 #' @aliases harmonize
+#' @export
 #' @examples
 #'
 #' ### single source "harmonization" of single-profile with range -> single attribute, multi-profile

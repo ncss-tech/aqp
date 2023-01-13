@@ -53,7 +53,7 @@
 #' @author D.E. Beaudette
 #' 
 #' @seealso \code{\link{sp1}}, \code{\link{slice}}, \code{\link{slab}}
-#' 
+#' @export
 #' @keywords hplot
 #' @examples
 #'
@@ -113,8 +113,8 @@
 #'   x <- sp6[1:5, ]
 #'   
 #'   # wide -> long format
-#'   x.long <- melt(
-#'     data.table(x), 
+#'   x.long <- data.table::melt(
+#'     data.table::data.table(x), 
 #'     id.vars = c('id', 'top', 'bottom'), 
 #'     measure.vars = c('sand', 'silt', 'clay')
 #'   )
@@ -144,8 +144,8 @@
 #'   x <- sp6
 #'   
 #'   # wide -> long format
-#'   x.long <- melt(
-#'     data.table(x), 
+#'   x.long <- data.table::melt(
+#'     data.table::data.table(x), 
 #'     id.vars = c('id', 'top', 'bottom'), 
 #'     measure.vars = c('sand', 'silt', 'clay')
 #'   )
@@ -217,12 +217,6 @@
 #'   
 #'   
 #' }
-#' 
-#' 
-#' 
-#' 
-
-#' 
 panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, groups=NULL, sync.colors=FALSE, cf=NA, cf.col=NA, cf.interval=20, ...) {
   
   # add grid
@@ -397,7 +391,13 @@ panel.depth_function <- function(x, y, id, upper=NA, lower=NA, subscripts=NULL, 
       
       # add to right-hand side of the panel
       unit <- gpar <- NULL
-      grid.text(a.text, x=unit(0.99, 'npc'), y=unit(a.seq, 'native'), just='right', gp=gpar(font=3, cex=0.8, col=cf.col))
+      grid::grid.text(
+        a.text,
+        x = grid::unit(0.99, 'npc'),
+        y = grid::unit(a.seq, 'native'),
+        just = 'right',
+        gp = grid::gpar(font = 3, cex = 0.8, col = cf.col)
+      )
     })
     
   }

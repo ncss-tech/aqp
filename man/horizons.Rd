@@ -11,7 +11,7 @@
 \usage{
 \S4method{horizons}{SoilProfileCollection}(object)
 
-horizons(object) <- value
+\S4method{horizons}{SoilProfileCollection}(object) <- value
 }
 \arguments{
 \item{object}{A SoilProfileCollection}

@@ -99,7 +99,6 @@ res <- generalize.hz(x, new = n, pattern=p, perl=TRUE)
 # double-check: OK
 table(res, x)
 
-
 }
 \seealso{
 \code{hzdesgnname()}

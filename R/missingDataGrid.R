@@ -25,6 +25,7 @@
 #' @author D.E. Beaudette
 #' @seealso \code{\link{slice}}
 #' @keywords hplots
+#' @export
 #' @examples
 #'
 #' # 10 random profiles
@@ -135,12 +136,12 @@ missingDataGrid <- function(s, max_depth, vars, filter.column = NULL, filter.reg
   ylim <- c(max(h$mid) + 5, -3)
 
   # plot missing data fraction
-  lp <- levelplot(f, data=h, ylim=ylim, col.regions=cols.palette(ncuts), cuts=ncuts-1, ylab=ylab, xlab='', scales=list(x=list(rot=90), y=list(tick.number=10)), ..., panel=function(...) {
-    panel.levelplot(...)
-    panel.abline(v=1:(length(ss)+1)-0.5)
-    panel.grid(h=-1, v=FALSE, lty=2, col=grey(0.25))
+  lp <- lattice::levelplot(f, data=h, ylim=ylim, col.regions=cols.palette(ncuts), cuts=ncuts-1, ylab=ylab, xlab='', scales=list(x=list(rot=90), y=list(tick.number=10)), ..., panel=function(...) {
+    lattice::panel.levelplot(...)
+    lattice::panel.abline(v=1:(length(ss)+1)-0.5)
+    lattice::panel.grid(h=-1, v=FALSE, lty=2, col=grey(0.25))
     for(i in 1:length(obd)) {
-      panel.segments(i-0.5, obd[[i]], i+0.5, obd[[i]], col='black')
+      lattice::panel.segments(i-0.5, obd[[i]], i+0.5, obd[[i]], col='black')
     }
   })
 

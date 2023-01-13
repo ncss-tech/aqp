@@ -35,6 +35,7 @@
 #' @author D.E. Beaudette
 #' @seealso [slab()]
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' data(sp1)

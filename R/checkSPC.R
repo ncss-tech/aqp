@@ -15,6 +15,7 @@
 #' @return TRUE or FALSE. Consider using \code{rebuildSPC()} if FALSE.
 #' @author D.E. Beaudette
 #' @seealso \code{\link{rebuildSPC}}, \code{\link{checkHzDepthLogic}}
+#' @export
 checkSPC <- function(x) {
 
   # get slot names from prototype

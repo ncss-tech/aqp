@@ -9,6 +9,7 @@
 
 #' @aliases depths<-,SoilProfileCollection-method
 #' @rdname depths
+#' @export
 setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 	function(object, value) {
 		message('This is already a SoilProfileCollection-class object, doing nothing.')
@@ -22,7 +23,7 @@ setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 #' @aliases depths<-,data.frame-method
 #' @details The input horizon data, and the resulting profile order, is sorted based on unique profile ID and top depth. ID columns are converted to character, depth columns are converted to integer. If `NA` values exist in all of the top depths, a prototype with 1 horizon per profile ID is returned, with `NA` in all non-essential columns. If the input `object` has 0 rows, a prototype with 0 horizons and 0 rows, but same column names as `object`, is returned. 
 #' @rdname depths
-#'
+#' @export
 #' @examples
 #' ## init SoilProfileCollection objects from data.frame of horizon data
 #'
@@ -230,11 +231,10 @@ setReplaceMethod("depths", "data.frame",
   return(res)
 }
 
+setGeneric('site<-', function(object, value)
+  standardGeneric('site<-'))
 
-##
-## initialize site data
-##
-#' Create or add data to the site slot
+#' Create or Add Data to Site Slot
 #'
 #' @name site<-
 #'
@@ -251,7 +251,7 @@ setReplaceMethod("depths", "data.frame",
 #' @usage site(object) <- value
 #'
 #' @rdname site
-#'
+#' @export
 #' @examples
 #'
 #' # load test data
@@ -277,10 +277,6 @@ setReplaceMethod("depths", "data.frame",
 #' # inspect site table: holocene & lower riverbank have values
 #' site(sp2)
 #'
-# if (!isGeneric('site<-'))
-  setGeneric('site<-', function(object, value)
-    standardGeneric('site<-'))
-
 setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   function(object, value) {
 
@@ -381,7 +377,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 
   .SD <- NULL
   
-  dth <- as.data.table(horizons(object))
+  dth <- data.table::as.data.table(horizons(object))
   
   new_site_data <- .as.data.frame.aqp(unique(dth[, .SD, .SDcols = names_attr]), aqp_df_class(object))
   
@@ -409,7 +405,11 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
   return(object)
 }
 
-#' Replace data in the horizon slot
+
+setGeneric('replaceHorizons<-', function(object, value)
+  standardGeneric('replaceHorizons<-'))
+
+#' Replace Data in Horizon Slot
 #'
 #' @name replaceHorizons<-
 #'
@@ -421,6 +421,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 #' @docType methods
 #'
 #' @rdname replaceHorizons
+#' @export
 #'
 #' @examples
 #'
@@ -442,10 +443,6 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 #' # inspect result (a clean slate)
 #' horizons(p)
 #'
-# if (!isGeneric('replaceHorizons<-'))
-  setGeneric('replaceHorizons<-', function(object, value)
-    standardGeneric('replaceHorizons<-'))
-
 setReplaceMethod("replaceHorizons",
                  signature(object = "SoilProfileCollection"),
                  function(object, value) {
@@ -487,7 +484,11 @@ setReplaceMethod("replaceHorizons",
   return(object)
 })
 
-#' Add data to the horizons slot
+
+setGeneric('horizons<-', function(object, value)
+  standardGeneric('horizons<-'))
+
+#' Join Data to Horizon Slot
 #'
 #' @name horizons<-
 #'
@@ -498,7 +499,7 @@ setReplaceMethod("replaceHorizons",
 #' @param value An object inheriting \code{data.frame}
 #' @aliases horizons<-,SoilProfileCollection-method
 #' @docType methods
-#'
+#' @export
 #' @rdname horizons
 #'
 #' @examples
@@ -520,10 +521,6 @@ setReplaceMethod("replaceHorizons",
 #' #  with top depth equal to zero
 #' horizons(sp2)
 #'
-# if (!isGeneric('horizons<-'))
-  setGeneric('horizons<-', function(object, value)
-    standardGeneric('horizons<-'))
-
 setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   function(object, value) {
 
@@ -613,18 +610,21 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   return(object)
 })
 
-#' Add data to the diagnostic slot
+setGeneric('diagnostic_hz<-', function(object, value)
+  standardGeneric('diagnostic_hz<-'))
+
+#' Add Data to Diagnostic Features Slot
 #'
 #' @name diagnostic_hz<-
 #'
-#' @description Diagnostic data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
+#' @description Diagnostic feature data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
 #'
 #' @param object A SoilProfileCollection
 #' @param value An object inheriting \code{data.frame}
 #'
 #' @aliases diagnostic_hz<-,SoilProfileCollection-method
 #' @docType methods
-#'
+#' @export
 #' @rdname diagnostic_hz-set
 #'
 #' @examples
@@ -648,10 +648,6 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
 #' #  with top depth equal to zero
 #' diagnostic_hz(sp2)
 #'
-# if (!isGeneric('diagnostic_hz<-'))
-  setGeneric('diagnostic_hz<-', function(object, value)
-    standardGeneric('diagnostic_hz<-'))
-
 setReplaceMethod("diagnostic_hz",
                  signature(object = "SoilProfileCollection"),
   function(object, value) {
@@ -698,8 +694,10 @@ setReplaceMethod("diagnostic_hz",
   return(object)
 })
 
+setGeneric('restrictions<-', function(object, value)
+  standardGeneric('restrictions<-'))
 
-#' Add data to the restrictions slot
+#' Add Data to Restrictions Slot
 #'
 #' @name restrictions<-
 #'
@@ -712,7 +710,7 @@ setReplaceMethod("diagnostic_hz",
 #' @docType methods
 #'
 #' @rdname restrictions-set
-#'
+#' @export
 #' @examples
 #'
 #' # load test data
@@ -733,10 +731,6 @@ setReplaceMethod("diagnostic_hz",
 #' #  with top depth equal to zero
 #' restrictions(sp2)
 #'
-# if (!isGeneric('restrictions<-'))
-  setGeneric('restrictions<-', function(object, value)
-    standardGeneric('restrictions<-'))
-
 setReplaceMethod("restrictions", signature(object = "SoilProfileCollection"),
                  function(object, value) {
 

@@ -28,7 +28,7 @@
 #' 
 #' Additional examples will be added to [this tutorial](http://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html).
 #' 
-#' @note This is a work in progress.
+#' @export
 #' 
 #' 
 #' @references 

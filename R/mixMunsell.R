@@ -189,6 +189,7 @@
 #' 
 #'
 #' @seealso [munsell.spectra]
+#' @export
 #' @examples 
 #' 
 #' 

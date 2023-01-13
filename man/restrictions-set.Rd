@@ -4,9 +4,9 @@
 \name{restrictions<-}
 \alias{restrictions<-}
 \alias{restrictions<-,SoilProfileCollection-method}
-\title{Add data to the restrictions slot}
+\title{Add Data to Restrictions Slot}
 \usage{
-restrictions(object) <- value
+\S4method{restrictions}{SoilProfileCollection}(object) <- value
 }
 \arguments{
 \item{object}{A SoilProfileCollection}

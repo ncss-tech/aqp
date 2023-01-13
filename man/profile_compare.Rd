@@ -25,16 +25,32 @@ pc(
   rescale.result = FALSE,
   verbose = FALSE
 )
+
+pc.SPC(s, vars, rescale.result = FALSE, ...)
+
+\S4method{profile_compare}{SoilProfileCollection}(s, vars, rescale.result = FALSE, ...)
+
+\S4method{profile_compare}{data.frame}(
+  s,
+  vars,
+  max_d,
+  k,
+  filter = NULL,
+  sample_interval = NA,
+  replace_na = TRUE,
+  add_soil_flag = TRUE,
+  return_depth_distances = FALSE,
+  strict_hz_eval = FALSE,
+  progress = "none",
+  plot.depth.matrix = FALSE,
+  rescale.result = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{s}{a dataframe with at least 2 columns of soil properties, and an 'id'
-column for each profile. horizon depths must be integers and
-self-consistent, or a \code{SoilProfileCollection} object}
+\item{s}{A SoilProfileCollection}
 
-\item{vars}{A vector with named properties that will be used in the
-comparison. These are typically column names describing horizon-level
-attributes (2 or more), but can also contain site-level attributes (2 or
-more) if \code{s} is a \code{\link{SoilProfileCollection}}.}
+\item{vars}{Variable names}
 
 \item{max_d}{depth-slices up to this depth are considered in the comparison}
 
@@ -65,10 +81,11 @@ self-consistency? (FALSE)}
 \item{plot.depth.matrix}{should a plot of the 'soil'/'non-soil' matrix be
 returned (FALSE)}
 
-\item{rescale.result}{should the result be rescaled by dividing by max(D)
-(FALSE)}
+\item{rescale.result}{Rescale result? Default: FALSE}
 
 \item{verbose}{extra debug output (FALSE)}
+
+\item{...}{Additional arguments passed to \code{profile_compare()}}
 }
 \value{
 A dissimilarity matrix object of class 'dissimilarity, dist',

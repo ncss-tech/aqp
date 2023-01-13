@@ -38,7 +38,7 @@
 #' @seealso \code{\link{plotSPC}}
 #' 
 #' @keywords hplots
-#' 
+#' @export
 #' @examples
 #'
 #' # sample data

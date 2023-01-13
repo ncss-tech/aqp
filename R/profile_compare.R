@@ -112,6 +112,8 @@
 #' @keywords methods manip
 #' @examples
 #' # See ?NCSP for examples
+#' @rdname profile_compare
+#' @export
 pc <- function(s, vars, max_d, k, filter=NULL, sample_interval=NA, replace_na=TRUE,
 add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none',
 plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
@@ -274,7 +276,7 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	  ## TODO: don't call daisy on bogus input data, temp fix: disable warnings (#7)
 	  ## if all of the input to daisy is NA, then we get warnings from min() and max()
 	  ## this happens when we set a max depth that is beyond most profiles
-	  d.i <- daisy(sp, metric='gower')
+	  d.i <- cluster::daisy(sp, metric='gower')
 		return(d.i)
 	  }
 	)
@@ -391,6 +393,13 @@ plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 	}
 
 
+#' @param s A SoilProfileCollection
+#' @param vars Variable names
+#' @param rescale.result Rescale result? Default: FALSE
+#' @param ... Additional arguments passed to `profile_compare()`
+#'
+#' @rdname profile_compare
+#' @export
 pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 
   .Deprecated('NCSP', old = "profile_compare")
@@ -461,7 +470,7 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 		# rescale to [0,1]
 
 		message(paste('site-level variables included:', paste(site.vars, collapse=', ')))
-		d.site <- daisy(s.site[, site.vars, drop=FALSE], metric='gower')
+		d.site <- cluster::daisy(s.site[, site.vars, drop=FALSE], metric='gower')
 		
 		# re-scale to [0,1]
 		d.site <- .rescaleRange(d.site, x0 = 0, x1 = 1)
@@ -525,8 +534,11 @@ pc.SPC <- function(s, vars, rescale.result=FALSE, ...){
 setGeneric("profile_compare", function(s, ...) standardGeneric("profile_compare"))
 
 # temp interface to SPC class objects
-
+#' @export
+#' @rdname profile_compare
 setMethod(f='profile_compare', signature='SoilProfileCollection', definition=pc.SPC)
 
 # temp interface for dataframes
+#' @export
+#' @rdname profile_compare
 setMethod(f='profile_compare', signature='data.frame', definition=pc)

@@ -21,7 +21,7 @@ hzTopographyCodeToLineType(
 vector of line types with same length as \code{x}
 }
 \description{
-This function will convert USDA-NCSS horizon boundary topography codes into line types, based on the \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
+This function will convert USDA-NCSS horizon boundary topography codes into line types, based on the \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}.
 }
 \details{
 Visualization of horizon boundary topography can be difficult, line type offers an additional visual cue. See \code{hzTopographyCodeToOffset} for an offset-based approach. Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned as line type 1.
@@ -33,7 +33,7 @@ Either format (or mixture) are accepted, case insensitive:
 }
 }
 \references{
-\href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
+\href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 }
 \seealso{
 \code{\link{plotSPC}, \link{hzTopographyCodeToOffset}}

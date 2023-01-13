@@ -17,6 +17,7 @@
 #' @seealso \code{\link{sp2}}, \code{\link{profile_compare}}
 #' @references http://casoilresource.lawr.ucdavis.edu/
 #' @keywords hplot
+#' @export
 #' @examples
 #'
 #' data(sp2)

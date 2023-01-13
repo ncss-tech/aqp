@@ -33,6 +33,7 @@
 #' @author D.E. Beaudette
 #' @seealso \code{\link{colorContrast}}
 #' @keywords hplots
+#' @export
 #' @examples
 #'
 #' # two sets of colors to compare

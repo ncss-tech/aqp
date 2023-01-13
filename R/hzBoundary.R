@@ -68,7 +68,7 @@
 #' 
 #' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
-#' 
+#' @export
 #' @examples 
 #' # example data
 #' data(sp1)
@@ -91,7 +91,6 @@
 #' 
 #' # clean-up
 #' par(op)
-
 hzDistinctnessCodeToOffset <- function(
   x, 
   codes =  c('very abrupt', 'abrupt', 'clear', 'gradual', 'diffuse'), 
@@ -135,7 +134,7 @@ hzDistinctnessCodeToOffset <- function(
 #' @keywords manip
 #' 
 #' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
-#' 
+#' @export
 hzTopographyCodeToLineType <- function(
   x, 
   codes =  c('smooth', 'wavy', 'irregular', 'broken'), 
@@ -176,7 +175,7 @@ hzTopographyCodeToLineType <- function(
 #' @seealso \code{\link{plotSPC}}
 #' 
 #' @keywords manip
-#' 
+#' @export
 #' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
 hzTopographyCodeToOffset <- function(

@@ -42,12 +42,11 @@
 #'
 #' Error checks: \code{CM} must be square; \code{P} must have correct number of classes and sum to 1 +/- 0.0001; \code{W} & \code{CM} must be conformable
 #'
-#' @aliases tauW summaryTauW
 #' @param CM a square confusion (cross-classification) matrix (rows: allocation, columns: reference)
 #' @param W weights: 1 on diagonals, \[-1..1] off giving partial credit to this error
 #' @param P prior probability vector, length = number of rows/columns in \code{CM} and \code{W}
 #' @return Results are returned in a list with obvious R names
-#' @author D G Rossiter
+#' @author D.G. Rossiter
 #'
 #' @references
 #'
@@ -58,6 +57,7 @@
 #'    - Naesset, E. (1996). Conditional tau coefficient for assessment of producer’s accuracy of classified remotely sensed data. ISPRS Journal of Photogrammetry and Remote Sensing, 51(2), 91–98. \doi{10.1016/0924-2716(69)00007-4}
 #'
 #' @keywords array
+#' @export
 #' @examples
 #'
 #' # example confusion matrix
@@ -211,6 +211,10 @@ tauW <- function(CM,
               tau.w=tau.w))
 }
 
+#' @param result.tau `tauW()` result
+#'
+#' @export
+#' @rdname tauW
 summaryTauW <- function(result.tau) {
   print("Cross-classification matrix:", quote=F)
   print(result.tau$crossclass)
@@ -249,7 +253,6 @@ summaryTauW <- function(result.tau) {
 #'
 #' @return NULL
 #' @export
-#'
 xtableTauW <- function(result.tau, file.name="tau_results_table.tex") {
 
   # safely check for required packages

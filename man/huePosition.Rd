@@ -58,9 +58,10 @@ par(op)
 
 }
 \references{
-https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569
-
-Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
+\itemize{
+\item Soil Survey Technical Note 2 \href{https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{wayback machine URL}
+\item Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
+}
 }
 \seealso{
 \link{colorContrast}, \link{huePositionCircle}

@@ -54,6 +54,7 @@
 #' @aliases profileApply,SoilProfileCollection-method
 #' @docType methods
 #' @rdname profileApply
+#' @export
 #' @examples
 #'
 #' data(sp1)

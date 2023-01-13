@@ -14,6 +14,7 @@
 #' @author D.E. Beaudette and J.M. Skovlin
 #' @seealso \code{\link{estimateSoilDepth}}
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' data(sp1)

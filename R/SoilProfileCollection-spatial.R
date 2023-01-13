@@ -78,6 +78,7 @@ setMethod("proj4string", signature(obj = 'SoilProfileCollection'),
 
 #' @description `proj4string()<-`: (Deprecated) Set Coordinate Reference System metadata for the SoilProfileCollection
 #' @rdname SoilProfileCollection-crs
+#' @export
 setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
                  function(obj, value) {
                    .Deprecated("prj<-", package = "aqp", 
@@ -184,6 +185,7 @@ setMethod("getSpatial", signature(object = "SoilProfileCollection"),
 #' @export
 #' @rdname initSpatial
 #' @aliases coordinates
+#' @export
 setMethod("coordinates", signature(obj = "SoilProfileCollection"),
           function(obj) {
             .Deprecated("initSpatial<-", package = "aqp", 
@@ -194,6 +196,7 @@ setMethod("coordinates", signature(obj = "SoilProfileCollection"),
 #' @rdname initSpatial
 #' @export
 #' @aliases coordinates<-
+#' @export
 setReplaceMethod("coordinates", c("SoilProfileCollection", "ANY"),
                  function(object, value) {
                    .Deprecated("initSpatial<-", package = "aqp", 

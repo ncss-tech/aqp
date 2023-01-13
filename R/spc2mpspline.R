@@ -25,7 +25,7 @@
 #'
 #' @return A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in `attr(result, 'removed')`.
 #'
-#' @export spc2mpspline,SoilProfileCollection-method
+#' @export
 #' @aliases spc2mpspline
 #' @references Bishop, T.F.A., McBratney, A.B., Laslett, G.M. (1999) Modelling soil attribute depth functions with equal-area quadratic smoothing splines. Geoderma 91(1–2), pp. 27-45. \doi{https://doi.org/10.1016/S0016-7061(99)00003-8}
 #' 
