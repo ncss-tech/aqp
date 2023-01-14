@@ -418,19 +418,13 @@ setMethod('as.character', 'SoilProfileCollection', function(x, ...) {
 })
 
 #' @title Wrapper method for data.frame subclass conversion
-#'
+#' @noRd
 #' @param x ANY.
 #' @param as.class `"data.frame"`, `"tibble"`, or `"data.table"` default: `"data.frame"`
 #' @param ... Additional arguments to coercion function  `as.data.frame`, `as_tibble` or `as.data.table`
-#'
-#' @return a subclass of `data.frame` corresponding to `as.class`,
-#'
-#' @importFrom data.table as.data.table
+#' @return a subclass of `data.frame` corresponding to `as.class`
 .as.data.frame.aqp <- function(x, as.class = "data.frame", ...) {
   # 2020-05-30: sub-classes of data.frame have more than one class
-  # debug
-  #            if (as.class == 'data.frame')
-  #              stop("foo")
 
   # NULL x -- probably from unusual use cases
   if (class(x)[1] == "NULL")
