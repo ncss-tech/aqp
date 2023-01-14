@@ -5,7 +5,7 @@
 #' @param ... One or more expressions (preferably named e.g. `foo = "bar"`) to evaluate in `.data`
 #'
 #' @return A `list` where names are expression "names" from `...` and values are the result of evaluating expressions in context of `.data`
-#'
+#' @noRd
 #' @examples
 #' # .data_dots(data.frame(a = 1:10, b = 2:11), cc = a + b, d = cc * 2)
 #
