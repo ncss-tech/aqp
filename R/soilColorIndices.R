@@ -263,15 +263,15 @@ buntley.westin.index <- function(hue, chroma) {
 #' @references Thompson, J.A. and Bell, J.C. (1996), Color Index for Identifying Hydric Conditions for Seasonally Saturated Mollisols in Minnesota. Soil Science Society of America Journal, 60: 1979-1988. doi:10.2136/sssaj1996.03615995006000060051x
 #' @rdname thompson.bell.darkness
 #' @export thompson.bell.darkness
-thompson.bell.darkness <-
-  function(p,
-           name = guessHzDesgnName(p),
+thompson.bell.darkness <- function(p,
+                                   name = guessHzDesgnName(p, required = TRUE),
                                    pattern = "^A",
                                    value = "m_value",
                                    chroma = "m_chroma") {
     
   # after Thompson & Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota"
   # 10.2136/sssaj1996.03615995006000060051x
+  
   hz <- horizons(p)
   depthz <- horizonDepths(p)
   if (!all(name %in% horizonNames(p))) {

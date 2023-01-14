@@ -6,7 +6,7 @@
 \usage{
 thompson.bell.darkness(
   p,
-  name = guessHzDesgnName(p),
+  name = guessHzDesgnName(p, required = TRUE),
   pattern = "^A",
   value = "m_value",
   chroma = "m_chroma"
