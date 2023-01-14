@@ -336,8 +336,8 @@ setGeneric("slab", function(object,
 #' are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
 #' }
 #'
-#' @name slab-methods
-#' @aliases slab slab2 genSlabLabels slab,SoilProfileCollection-method
+#' @name slab
+#' @aliases slab slab,SoilProfileCollection-method
 #' @docType methods
 #' @param object a SoilProfileCollection
 #' @param fm A formula: either `groups ~ var1 + var2 + var3` where named
@@ -740,7 +740,8 @@ setMethod(f = 'slab',
 #' @param method one of `"numeric"`, `"factor"`, `"hd"`, `"weighted.numeric"`, `"weighted.factor"`, `"fast"`
 #' @details `slab_function()`: The default `"numeric"` aggregation method is the `"fast"` numeric (quantile) method. Additional methods include `"factor"` for categorical data, `"hd"` to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "`weighted`" to use a weighted quantile method from the Hmisc package
 #' @return `slab_function()`: return an aggregation function based on the `method` argument
-#' @rdname slab-methods
+#' @rdname slab
+#' 
 #' @export
 slab_function <- function(method = c("numeric", "factor", "hd", "weighted.numeric", "weighted.factor", "fast")) {
   switch(method,
