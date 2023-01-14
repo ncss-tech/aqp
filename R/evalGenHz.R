@@ -81,7 +81,7 @@ evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching
   # compute silhouette widths after removing not-used genhz class
   sil.idx <-  which(complete.cases(h[, vars, drop = FALSE]) & h[[genhz]] != non.matching.code)
   d.sil <- cluster::daisy(h[sil.idx, vars, drop = FALSE], stand=stand)
-  sil <- silhouette(as.numeric(h[[genhz]])[sil.idx], d.sil)
+  sil <- cluster::silhouette(as.numeric(h[[genhz]])[sil.idx], d.sil)
 
   # add new columns
   h$mds.1 <- NA

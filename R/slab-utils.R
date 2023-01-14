@@ -38,8 +38,6 @@
 
 # note source data must be "normalized" via dice() first; assumes each profile has the same number of horizons
 # generate labels for slabs
-#' @param slab.structure 
-#'
 #' @param max.d Maximum depth
 #' @param n.profiles Number of profiles
 #'

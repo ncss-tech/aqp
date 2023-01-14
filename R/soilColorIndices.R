@@ -79,9 +79,9 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 }
 
 #' @title Harden (1982) Rubification
-#' @description Calculate Rubification component of Profile Development Index after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for hue and chroma to produce vector output.
+#' @description Calculate "rubification" component of "Profile Development Index" after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for hue and chroma to produce vector output.
 #'
-#' In Harden (1982) rubification is calculated relative to a reference parent material. Several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
+#' In Harden (1982) "rubification" is calculated relative to a reference parent material. Several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 #'
 #' @param hue A character vector containing Munsell hues (e.g. "7.5YR")
 #' @param chroma A numeric vector containing Munsell chromas
@@ -162,12 +162,12 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 
 #' @title Harden (1982) Melanization
 #'
-#' @description Calculate Melanization component of Profile Development Index after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for value and reference value to produce vector output. A convenient use case would be to apply this on a profile-specific basis, where the `value_ref` has a single value, and `value` is a vector of length equal to the number of horizons within the upper 100 cm.
+#' @description Calculate "melanization" component of "Profile Development Index" after Harden (1982) "A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California". Accepts vectorized inputs for value and reference value to produce vector output. A convenient use case would be to apply this on a profile-specific basis, where the `value_ref` has a single value, and `value` is a vector of length equal to the number of horizons within the upper 100 cm.
 #'
-#' @details In Harden (1982), melanization is calculated relative to a reference parent material for all horizons within 100cm of the soil surface. In addition, several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
+#' @details In Harden (1982), "melanization" is calculated relative to a reference parent material for all horizons within 100cm of the soil surface. In addition, several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 #'
 #' @param value numeric vector containing Munsell values
-#' @param value_ref A numeric vector containingMunsell value(s) for reference material
+#' @param value_ref A numeric vector containing Munsell value(s) for reference material
 #' @return A numeric vector reflecting horizon darkening relative to a reference (e.g. parent) material.
 #' @author Andrew G. Brown
 #' @references Harden, J.W. (1982) A quantitative index of soil development from field descriptions: Examples from a chronosequence in central California. Geoderma. 28(1) 1-28. doi:  10.1016/0016-7061(82)90037-4
@@ -266,9 +266,9 @@ buntley.westin.index <- function(hue, chroma) {
 thompson.bell.darkness <-
   function(p,
            name = guessHzDesgnName(p),
-           pattern = "^A",
-           value = "m_value",
-           chroma = "m_chroma") {
+                                   pattern = "^A",
+                                   value = "m_value",
+                                   chroma = "m_chroma") {
     
   # after Thompson & Bell (1996) "Color index for identifying hydric conditions for seasonally saturated mollisols in Minnesota"
   # 10.2136/sssaj1996.03615995006000060051x

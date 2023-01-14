@@ -28,9 +28,9 @@ mostLikelyHzSequence(mc, t0, maxIterations = 10)
 This is useful when the transition probability matrix will be used to
 initialize a \code{markovchain} object. See examples below.}
 
-\item{mc}{Passed to \code{\link[markovchain:conditionalDistribution]{markovchain::conditionalDistribution()}}}
+\item{mc}{Passed to \code{markovchain} \code{conditionalDistribution()}}
 
-\item{t0}{Passed to \code{\link[markovchain:conditionalDistribution]{markovchain::conditionalDistribution()}}}
+\item{t0}{Passed to \code{markovchain} \code{conditionalDistribution()}}
 
 \item{maxIterations}{Maximum number of iterations. Default: \code{10}}
 }
