@@ -36,9 +36,7 @@
 #' @param drop not used
 #' @rdname singlebracket
 #  SPC extract: "[" '[' single bracket SPC object extract method
-setMethod("[", signature(x = "SoilProfileCollection",
-                         i = "ANY",
-                         j = "ANY"),  function(x, i, j, ...) {
+setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
 
                            # capture k right away
                            ksubflag <- FALSE
