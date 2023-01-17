@@ -6,6 +6,7 @@
 \usage{
 spec2Munsell(
   x,
+  res = 10,
   convert = TRUE,
   SO = c("CIE1931", "CIE1964"),
   illuminant = c("D65", "F2"),
@@ -13,7 +14,9 @@ spec2Munsell(
 )
 }
 \arguments{
-\item{x}{reflectance spectra, (380nm to 730nm, 10nm resolution)}
+\item{x}{reflectance spectra, must range from 380nm to 730nm with resolution specified in \code{res}}
+
+\item{res}{spectra resolution in nm, typically 5nm or 10nm}
 
 \item{convert}{logical, convert sRGB coordinates to closest Munsell chip (see \code{?munsell})}
 
@@ -25,10 +28,10 @@ spec2Munsell(
 \item F2 represents typical fluorescent lighting
 }}
 
-\item{...}{further arguments to \code{\link{rgb2munsell}}}
+\item{...}{further arguments to \code{\link[=rgb2munsell]{rgb2munsell()}}}
 }
 \value{
-output from \code{\link{rgb2munsell}}
+output from \code{\link[=rgb2munsell]{rgb2munsell()}}
 }
 \description{
 Convert reflectance spectra to closest Munsell chip
