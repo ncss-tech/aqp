@@ -26,7 +26,6 @@
 #' @return a `trellis` object
 #' 
 #' @export
-#'
 #' @examples
 #' 
 #' # required for latticeExtra:useOuterStrips
@@ -274,7 +273,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
   )
   
   # assemble basic plot
-  pp <- xyplot(
+  pp <- lattice::xyplot(
     value ~ chroma | hue + .groups, 
     data = tab,
     as.table = TRUE,
@@ -319,7 +318,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     x.at.list <- rep(x.at.list, times = n.groups)
     x.limits.list <- rep(x.limits.list, times = n.groups)
     
-    pp <- xyplot(
+    pp <- lattice::xyplot(
       value ~ chroma | hue + .groups, 
       data = tab,
       as.table = TRUE,

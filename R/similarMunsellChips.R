@@ -44,7 +44,7 @@
 #'   quantile(doubletest)
 #' }
 #'
-#' @importFrom farver compare_colour
+#' @importFrom farver convert_colour compare_colour
 #' @keywords internal
 #' @noRd
 .makeEquivalentMunsellLUT <- function(threshold = 0.001) {

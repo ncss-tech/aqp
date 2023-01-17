@@ -193,7 +193,7 @@ plotColorQuantiles <- function(res, pt.cex = 7, lab.cex = 0.66) {
   # convert wide -> long format for plotting in panels
   # using data.table::melt()
   m.long <- melt(
-    as.data.table(res$marginal), 
+    data.table::as.data.table(res$marginal), 
     id.var = c('p', 'L_colors', 'A_colors', 'B_colors', 'L_chip', 'A_chip', 'B_chip')
     )
   
@@ -221,7 +221,7 @@ plotColorQuantiles <- function(res, pt.cex = 7, lab.cex = 0.66) {
   
   
   # compose figure
-  pp <- xyplot(
+  pp <- lattice::xyplot(
     y ~ value | variable, 
     data = m.long, 
     ylim = c(0.5, 2.5),

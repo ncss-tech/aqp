@@ -18,7 +18,7 @@
 # }
 
 
-#' @title Ranking Systems for USDS Soil Texture Classes
+#' @title Ranking Systems for USDA Soil Texture Classes
 #' 
 #' @description Generate a vector of USDA soil texture codes or class names, sorted according to approximate particle size
 #'
@@ -27,7 +27,7 @@
 #' @param which 'codes' (texture codes) or 'names' (texture class names)
 #' @param simplify Return 12-class factor levels (`TRUE`) or 21-class factor levels (default: `FALSE`)? The 12-class system does not separate sands, loamy sands and sandy loams into sand fraction variants (e.g. "very fine sandy loam" in the 21-class system is "sandy loam" in 12-class system)
 #' @return an ordered factor
-#' 
+#' @export
 #' @examples
 #' 
 #' # class codes

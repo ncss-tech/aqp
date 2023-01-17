@@ -98,7 +98,7 @@ setMethod("combine", signature(... = "list"), function(...)  {
 #'
 #' @return a SoilProfileCollection object
 #' @author D.E. Beaudette and A.G. Brown
-#'
+#' @export
 #' @examples
 #' # example data
 #' data(sp2, package = 'aqp')

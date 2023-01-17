@@ -8,7 +8,7 @@
 #' @return vector of label colors
 #' 
 #' @author D.E. Beaudette
-#' 
+#' @export
 #' @examples 
 #' 
 #' # test with shades of grey

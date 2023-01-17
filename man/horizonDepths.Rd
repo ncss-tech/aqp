@@ -8,7 +8,7 @@
 \alias{horizonDepths}
 \title{Set horizon depth column names}
 \usage{
-horizonDepths(object) <- value
+\S4method{horizonDepths}{SoilProfileCollection}(object) <- value
 
 \S4method{horizonDepths}{SoilProfileCollection}(object)
 }

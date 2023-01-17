@@ -25,7 +25,7 @@
 #' @seealso \code{\link{getSoilDepthClass}}, \code{\link{profileApply}}
 #' 
 #' @keywords manip
-#' 
+#' @export
 #' @examples 
 #' 
 #' 

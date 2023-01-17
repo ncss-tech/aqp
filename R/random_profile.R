@@ -58,6 +58,7 @@
 #' Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution
 #' soil profile data Geoderma, 2011, 166, 74-83.
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #'

@@ -8,7 +8,7 @@
 \alias{horizonNames}
 \title{Set horizon column names}
 \usage{
-horizonNames(object) <- value
+\S4method{horizonNames}{SoilProfileCollection}(object) <- value
 
 \S4method{horizonNames}{SoilProfileCollection}(object)
 }

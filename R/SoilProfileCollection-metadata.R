@@ -92,6 +92,7 @@ setGeneric("hzdesgnname", function(object, required = FALSE)
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
 #' @docType methods
 #' @rdname hzdesgnname
+#' @export
 setMethod("hzdesgnname", signature(object = "SoilProfileCollection"),
           function(object, required = FALSE) {
             .require.metadata.aqp(object,
@@ -111,6 +112,7 @@ setGeneric('hzdesgnname<-', function(object, required = FALSE, value)
 #' @docType methods
 #' @seealso [hzDesgn()]
 #' @rdname hzdesgnname
+#' @export
 #' @examples
 #'
 #' data(sp1)
@@ -149,6 +151,7 @@ setGeneric("hzDesgn", function(object, ...)
 #' @docType methods
 #' @aliases hzDesgn
 #' @rdname hzDesgn
+#' @export
 setMethod("hzDesgn", signature(object = "SoilProfileCollection"),
           function(object) {
             
@@ -188,6 +191,7 @@ setGeneric('hztexclname<-', function(object, required = FALSE, value)
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
 #' @docType methods
 #' @rdname hztexclname
+#' @export
 setMethod("hztexclname", signature(object = "SoilProfileCollection"),
           function(object, required = FALSE) {
             .require.metadata.aqp(object,
@@ -202,6 +206,7 @@ setMethod("hztexclname", signature(object = "SoilProfileCollection"),
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid `value`.
 #' @docType methods
 #' @rdname hztexclname
+#' @export
 #' @examples
 #'
 #' data(sp1)
@@ -241,6 +246,7 @@ setGeneric("GHL", function(object, required = FALSE)
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
 #' @docType methods
 #' @rdname GHL
+#' @export
 setMethod("GHL", signature(object = "SoilProfileCollection"),
           function(object, required = FALSE) {
             .require.metadata.aqp(object,
@@ -259,6 +265,7 @@ setGeneric('GHL<-', function(object, required = FALSE, value)
 #' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid `value`.
 #' @docType methods
 #' @rdname GHL
+#' @export
 #' @examples
 #'
 #' data(sp1)

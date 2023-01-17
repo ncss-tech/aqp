@@ -11,6 +11,7 @@
 #' @param max.depth If adj is `NA`, or the resulting offset sum exceeds `max.depth`, `max.depth` is used. 
 #' 
 #' @return `SoilProfileCollection` with a new (logical) horizon-level attribute `.repaired` marking affected horizons
+#' @export
 #' @examples 
 #' h <- data.frame(
 #'   id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),

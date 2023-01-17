@@ -15,6 +15,7 @@
 #' @return a list of internally-used ordering vectors and graphical offsets / scaling factors
 #'
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' # sample data

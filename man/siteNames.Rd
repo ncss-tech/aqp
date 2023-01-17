@@ -8,7 +8,7 @@
 \alias{siteNames}
 \title{Set site column names}
 \usage{
-siteNames(object) <- value
+\S4method{siteNames}{SoilProfileCollection}(object) <- value
 
 \S4method{siteNames}{SoilProfileCollection}(object)
 }

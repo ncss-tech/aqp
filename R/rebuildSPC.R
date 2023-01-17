@@ -25,6 +25,7 @@
 #' @return A valid \code{SoilProfileCollection} object.
 #' @author D.E. Beaudette, A.G. Brown
 #' @seealso \code{\link{checkSPC}}
+#' @export
 rebuildSPC <- function(x) {
 
   # break into pieces as list

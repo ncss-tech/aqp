@@ -10,6 +10,7 @@
 #' @docType methods
 #' @rdname validSpatialData
 #' @return logical `TRUE` if column names are defined and correspond to existing data
+#' @export
 setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
           function(object) {
             # coordinate column names are defined in metadata
@@ -33,7 +34,7 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
 #' @aliases names
 #' @docType methods
 #' @rdname names
-#'
+#' @export
 setMethod("names", signature("SoilProfileCollection"),
           function(x) {
             res <- c(horizons = horizonNames(x), site = siteNames(x)[-1])
@@ -49,6 +50,7 @@ setMethod("names", signature("SoilProfileCollection"),
 #' @aliases min
 #' @docType methods
 #' @rdname min
+#' @export
 setMethod(
   f = "min",
   signature(x = "SoilProfileCollection"),
@@ -89,6 +91,7 @@ setMethod(
 #' @aliases max
 #' @docType methods
 #' @rdname max
+#' @export
 setMethod(
   f = "max",
   signature(x = "SoilProfileCollection"),
@@ -127,6 +130,7 @@ setMethod(
 #' @aliases length
 #' @docType methods
 #' @rdname length
+#' @export
 setMethod(
   f = "length",
   signature(x = "SoilProfileCollection"),
@@ -139,11 +143,7 @@ setMethod(
 )
 
 # overload nrow() to give us the number of horizons in the collection
-
 # do not need to define a generic at all if we use the base prototype
-# if (!isGeneric('nrow'))
-#   setGeneric('nrow', function(x)
-#     standardGeneric('nrow'))
   
 #' Get the number of horizons in a SoilProfileCollection
 #' @aliases nrow
@@ -151,6 +151,7 @@ setMethod(
 #' @param x a SoilProfileCollection
 #' @docType methods
 #' @rdname nrow
+#' @export
 setMethod(
   f = "nrow",
   signature(x = "SoilProfileCollection"),
@@ -172,7 +173,7 @@ setMethod(
 #' @aliases unique
 #' @docType methods
 #' @rdname unique
-#' 
+#' @export
 #' @examples
 #'
 #'   # an example soil profile
@@ -255,6 +256,7 @@ setMethod(f = 'unique',
 #'
 #'
 #' @aliases subset
+#' @export
 #'
 #' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `subset()` inside another function, all expressions used in `...` should be in terms of variables that are in the site or horizon data frame.
 #'
@@ -500,6 +502,7 @@ setMethod("subApply", signature(object = "SoilProfileCollection"),
 #' @param ... not used
 #'
 #' @return A \code{SoilProfileCollection} class object.
+#' @export
 #' @examples
 #'
 #' # more interesting sample data

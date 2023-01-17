@@ -8,7 +8,7 @@
 \alias{hzidname}
 \title{Set horizon ID column name}
 \usage{
-hzidname(object) <- value
+\S4method{hzidname}{SoilProfileCollection}(object) <- value
 
 \S4method{hzidname}{SoilProfileCollection}(object)
 }

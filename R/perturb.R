@@ -76,7 +76,7 @@
 #' 
 #' # convert to long format for plotting simplicity
 #' library(data.table)
-#' a.long <- melt(as.data.table(a),
+#' a.long <- data.table::melt(data.table::as.data.table(a),
 #'                id.vars = c('top', 'bottom'),
 #'                 measure.vars = levels(sim.2$name))
 #' 

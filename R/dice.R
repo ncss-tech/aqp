@@ -15,6 +15,7 @@ setGeneric("dice", function(x,
                             verbose = FALSE)
   standardGeneric("dice"))
 
+#' @importFrom stringr str_c fixed str_split
 .dice <- function(x,
                   fm = NULL,
                   SPC = TRUE,
@@ -61,9 +62,9 @@ setGeneric("dice", function(x,
     }
     
     # extract components of the formula:
-    fm <- str_c(deparse(fm, 500), collapse = "")
-    elements <- str_split(fm, fixed("~"))[[1]]
-    fm <- lapply(str_split(elements, "[+*]"), str_trim)
+    fm <- stringr::str_c(deparse(fm, 500), collapse = "")
+    elements <- stringr::str_split(fm, stringr::fixed("~"))[[1]]
+    fm <- lapply(stringr::str_split(elements, "[+*]"), str_trim)
     
     # test for a multi-part formula A ~ B ~ C ?
     if (length(fm) > 2) {
@@ -138,7 +139,7 @@ setGeneric("dice", function(x,
   
   # convert to DT, as needed
   if (!inherits(h, 'data.table')) {
-    h <- as.data.table(h)
+    h <- data.table::as.data.table(h)
   }
   
   ## TODO: this needs to be integrated / coordinated with 
@@ -189,7 +190,7 @@ setGeneric("dice", function(x,
   )
   
   # assemble slice LUT for JOIN
-  s <- data.table(
+  s <- data.table::data.table(
     sliceID = sliceIDs, 
     .sliceTop = tops,
     .sliceBottom = bottoms
@@ -233,10 +234,10 @@ setGeneric("dice", function(x,
     # hybrid base + DT approach
     res$'.pctMissing' <- NA
     # count number of NA in vars, by row
-    set(res, j = '.pctMissing', value = rowSums(is.na(res[, .SD, .SDcols = vars])))
+    data.table::set(res, j = '.pctMissing', value = rowSums(is.na(res[, .SD, .SDcols = vars])))
     
     # convert NA count to percentage
-    set(res, j = '.pctMissing', value = res$.pctMissing / length(vars))
+    data.table::set(res, j = '.pctMissing', value = res$.pctMissing / length(vars))
   }
   
   # ensure sliced horizons are in ID/top order

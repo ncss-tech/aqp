@@ -100,7 +100,7 @@
 #' @seealso \code{\link{bootstrapSoilTexture}}
 #' 
 #' @keywords hplots
-#' 
+#' @export
 #' @examples
 #' 
 #' \donttest{

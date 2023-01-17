@@ -143,6 +143,7 @@
 #' Soil Scientists. Computers & Geosciences. 52:258 - 268.
 #'
 #' @keywords hplots
+#' @export
 #'
 #' @seealso \code{\link{fixOverlap}, \link{explainPlotSPC}, \link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
 #'
@@ -330,8 +331,6 @@
 #' )
 #' 
 #' box()
-
-
 plotSPC <- function(
   x,
   color = 'soil_color',
@@ -1308,13 +1307,9 @@ plotSPC <- function(
 #' generic plot method for \code{SoilProfileCollection} objects
 #' @name plot
 #' @param y (not used)
-#' @usage
-#' ## S4 method for signature 'SoilProfileCollection,ANY'
-#' ## note: y argument in generic definition is not currently used
-#' plot(x, y, ...)
 #' @aliases plot,SoilProfileCollection,ANY-method
 #' @rdname SoilProfileCollection-plotting-methods
-#'
+#' @export
 setMethod("plot", signature(x = "SoilProfileCollection",
                             y = "ANY"),
           definition = {function(x, y, ...) plotSPC(x, ...)})

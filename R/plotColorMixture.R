@@ -30,6 +30,7 @@
 #' @return a `lattice` graphics object
 #' 
 #' @seealso [mixMunsell()]
+#' @export
 #' 
 #' @examples 
 #' 

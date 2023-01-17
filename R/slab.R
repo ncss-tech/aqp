@@ -336,8 +336,8 @@ setGeneric("slab", function(object,
 #' are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
 #' }
 #'
-#' @name slab-methods
-#' @aliases slab slab2 genSlabLabels slab,SoilProfileCollection-method
+#' @name slab
+#' @aliases slab slab,SoilProfileCollection-method
 #' @docType methods
 #' @param object a SoilProfileCollection
 #' @param fm A formula: either `groups ~ var1 + var2 + var3` where named
@@ -403,6 +403,7 @@ setGeneric("slab", function(object,
 #' Harrell FE, Davis CE (1982): A new distribution-free quantile estimator.
 #' Biometrika 69:635-640.
 #' @keywords methods manip
+#' @export
 #' @examples
 #'
 #' ##
@@ -488,8 +489,8 @@ setGeneric("slab", function(object,
 #' # convert wide -> long for plotting
 #' # result is a data.table
 #' # genhz factor levels are set by order in `measure.vars`
-#' a.long <- melt(
-#'   as.data.table(a),
+#' a.long <- data.table::melt(
+#'   data.table::as.data.table(a),
 #'   id.vars = c('top','bottom'),
 #'   measure.vars = c('O', 'A', 'B', 'C'),
 #'   )
@@ -532,8 +533,8 @@ setGeneric("slab", function(object,
 #' # convert wide -> long for plotting
 #' # result is a data.table
 #' # genhz factor levels are set by order in `measure.vars`
-#' a.1.long <- melt(
-#'   as.data.table(a.1),
+#' a.1.long <- data.table::melt(
+#'   data.table::as.data.table(a.1),
 #'   id.vars = c('top','bottom'),
 #'   measure.vars = c('O','A','B','C')
 #' )
@@ -694,8 +695,8 @@ setGeneric("slab", function(object,
 #' # now we have weighted average properties (within the defined slab)
 #' # for each variable, and each group
 #' # convert long -> wide
-#' dcast(
-#'   as.data.table(a),
+#' data.table::dcast(
+#'   data.table::as.data.table(a),
 #'   formula = group + top + bottom ~ variable,
 #'   value.var = 'mean'
 #' )
@@ -708,8 +709,8 @@ setGeneric("slab", function(object,
 #' )
 #'
 #' # convert long -> wide
-#' dcast(
-#'   as.data.table(a),
+#' data.table::dcast(
+#'   data.table::as.data.table(a),
 #'   formula = id + top + bottom ~ variable,
 #'   value.var = 'mean'
 #' )
@@ -739,7 +740,8 @@ setMethod(f = 'slab',
 #' @param method one of `"numeric"`, `"factor"`, `"hd"`, `"weighted.numeric"`, `"weighted.factor"`, `"fast"`
 #' @details `slab_function()`: The default `"numeric"` aggregation method is the `"fast"` numeric (quantile) method. Additional methods include `"factor"` for categorical data, `"hd"` to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "`weighted`" to use a weighted quantile method from the Hmisc package
 #' @return `slab_function()`: return an aggregation function based on the `method` argument
-#' @rdname slab-methods
+#' @rdname slab
+#' 
 #' @export
 slab_function <- function(method = c("numeric", "factor", "hd", "weighted.numeric", "weighted.factor", "fast")) {
   switch(method,

@@ -33,7 +33,7 @@
   dE00 <- as.dist(dE00)
   
   # use PAM to cluster, note `pamonce=5`` used for optimization
-  cl <- pam(dE00, k = k, diss = TRUE, pamonce = 5)
+  cl <- cluster::pam(dE00, k = k, diss = TRUE, pamonce = 5)
   
   # get data
   x.medoids <- x.slices[cl$id.med, c(idname(x), 'L', 'A', 'B')]
@@ -43,8 +43,8 @@
   
   # convert wide -> long and create new variable names
   # using data.table::melt()
-  m <- melt(
-    as.data.table(x.medoids), 
+  m <- data.table::melt(
+    data.table::as.data.table(x.medoids), 
     id.var = c(idname(x), '.ids'), 
     measure.vars = c('L', 'A', 'B')
   )
@@ -100,8 +100,8 @@
   
   # convert wide -> long and create new variable names
   # using data.table::melt()
-  m <- melt(
-    as.data.table(x.slices),
+  m <- data.table::melt(
+    data.table::as.data.table(x.slices),
     id.var = c(idname(x), 'depth.id'), 
     measure.vars = c('L', 'A', 'B')
   )

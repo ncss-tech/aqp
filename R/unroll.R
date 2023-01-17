@@ -23,6 +23,7 @@
 #' @author Dylan E. Beaudette
 #' @references http://casoilresource.lawr.ucdavis.edu/
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' data(sp1)

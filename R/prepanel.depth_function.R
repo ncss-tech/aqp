@@ -1,5 +1,7 @@
 # computes proper limits when there is an 'upper' and 'lower' bound
 # expands x-axis on either side of upper/lower (if present) by 5%
+#' @rdname panel.depth_function
+#' @export
 prepanel.depth_function <- function(x, y, upper=NA, lower=NA, subscripts, groups = NULL, ...) {
 
   ## borrowed from prepanel.default.xyplot

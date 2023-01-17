@@ -27,7 +27,7 @@
 #' @note The result is a simple figure on the active plotting device.
 #' 
 #' @keywords hplots
-#' 
+#' @export
 #' @examples 
 #' 
 #' # maybe useful for teaching about soil color

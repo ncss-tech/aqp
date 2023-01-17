@@ -76,6 +76,7 @@
 #' 
 #' @rdname texture
 #' @keywords manip
+#' @export
 #' @examples
 #' \donttest{
 #' # example of ssc_to_texcl()

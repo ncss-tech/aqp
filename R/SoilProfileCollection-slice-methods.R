@@ -1,64 +1,6 @@
-## this scales fairly well:
-## n = (100, 1000, 10000) --> (0.53, 4.21, 38) seconds
-
-## TODO: this function cannot deal with overlapping horizons (usually an error):  > 1 row / slice
-## it would be useful to support these kind of data, as many lab-sampled sites have sub-samples
-## https://github.com/ncss-tech/aqp/issues/88
-
-# this function is run on the horizon data, once for each depth slice
-get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
-
-  ## TODO: this is likely very slow
-  # 1. get indices to rows matchings current depth slice (z)
-  # this is the default method
-  if(include == 'top')
-    idx <- which(z >= h[[top]] & z < h[[bottom]])
-  # not sure why someone would use this approach, but include it anyways
-  if(include == 'bottom')
-  	idx <- which(z > h[[top]] & z <= h[[bottom]])
-
-  ## TODO: split -> list -> process -> combine
-  # 2. extract data.frame along slice, and named vars + id
-  h <- h[idx, c(id, vars)]
-
-  # 2.5 compute fraction missing
-  # if there is only 1 variable, don't try to compute this value
-  # if all data are missing NA is returned
-  h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
-
-  # 3. QA/QC
-  # how many unique IDs?
-  l.ids <- length(unique(h[[id]]))
-  # how many rows in the result?
-  n.res <- nrow(h)
-
-  # more rows than IDs --> bad horizonation
-  if(l.ids != n.res) {
-  	if(strict == TRUE) {
-  	  # get offending IDs
-  	  id.tab <- table(h[[id]])
-  	  bad.ids <- paste(names(id.tab)[which(id.tab > 1)], collapse=', ')
-  	  stop(paste('bad horizonation in IDs:', bad.ids), call.=FALSE)
-  	  }
-
-  	# looser interp of the data... issue warning and return multuple rows/ID
-  	# join(..., match='first') will correct the problem
-    else
-      warning('Bad horizonation detected, first matching horizon selected. Use strict=TRUE to enforce QA/QC.')
-  	}
-
-  # done: return subset of original data + pct not NA
-  return(h)
-  }
-
-
-## TODO: further optimization should be possible.
-## this is a much more robust + fast version of slice.slow
-## needs a little more testing, and then will be ready
 #' Slicing of SoilProfileCollection Objects
 #'
-#' Slicing of SoilProfileCollection Objects
-#'
+#' A method for "slicing" of SoilProfileCollection objects into constant depth intervals. Now deprecated, see `[dice()]`.
 #'
 #' @name slice-methods
 #' 
@@ -93,7 +35,9 @@ get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
 #' 10.1016/j.cageo.2012.10.020.
 #' 
 #' @keywords methods manip
-#' 
+#' @export
+#' @rdname slice
+#' @importFrom stringr str_c fixed str_split
 #' @examples
 #'
 #' library(aqp)
@@ -179,9 +123,9 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
 
   # extract components of the formula:
-  formula <- str_c(deparse(fm, 500), collapse="")
-  elements <- str_split(formula, fixed("~"))[[1]]
-  formula <- lapply(str_split(elements, "[+*]"), str_trim)
+  formula <- stringr::str_c(deparse(fm, 500), collapse="")
+  elements <- stringr::str_split(formula, stringr::fixed("~"))[[1]]
+  formula <- lapply(stringr::str_split(elements, "[+*]"), str_trim)
 
   # TODO: this will have to be changed when we implement no LHS = all slices
   if (length(formula) > 2)
@@ -318,11 +262,68 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   return(hd.slices)
 }
 
+setGeneric("slice", function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE) 
+  standardGeneric("slice"))
 
-## slice:
-# if (!isGeneric("slice"))
-  setGeneric("slice", function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE) standardGeneric("slice"))
-
-
-## TODO: allow the use of site data (PSC etc.) to determine the z-slice
+#' @export
+#' @rdname slice
 setMethod(f='slice', signature(object = 'SoilProfileCollection'), slice.fast)
+
+
+# this function is run on the horizon data, once for each depth slice
+#' @param h Horizon data.frame
+#' @param id Profile ID
+#' @param top Top Depth Column Name
+#' @param bottom Bottom Depth Column Nmae
+#' @param vars Variables of Interest
+#' @param z Slice Depth (index).
+#' @param include Either `'top'` or `'bottom'`. Boundary to include in slice. Default: `'top'`
+#' @param strict Check for logic errors? Default: `TRUE`
+#'
+#' @export
+#' @rdname slice
+get.slice <- function(h, id, top, bottom, vars, z, include='top', strict=TRUE) {
+  
+  ## TODO: this is likely very slow
+  # 1. get indices to rows matchings current depth slice (z)
+  # this is the default method
+  if(include == 'top')
+    idx <- which(z >= h[[top]] & z < h[[bottom]])
+  # not sure why someone would use this approach, but include it anyways
+  if(include == 'bottom')
+    idx <- which(z > h[[top]] & z <= h[[bottom]])
+  
+  ## TODO: split -> list -> process -> combine
+  # 2. extract data.frame along slice, and named vars + id
+  h <- h[idx, c(id, vars)]
+  
+  # 2.5 compute fraction missing
+  # if there is only 1 variable, don't try to compute this value
+  # if all data are missing NA is returned
+  h$.pctMissing <- apply(as.matrix(h[, vars]), 1, function(i, n=length(vars)) length(which(is.na(i))) / n)
+  
+  # 3. QA/QC
+  # how many unique IDs?
+  l.ids <- length(unique(h[[id]]))
+  # how many rows in the result?
+  n.res <- nrow(h)
+  
+  # more rows than IDs --> bad horizonation
+  if(l.ids != n.res) {
+    if(strict == TRUE) {
+      # get offending IDs
+      id.tab <- table(h[[id]])
+      bad.ids <- paste(names(id.tab)[which(id.tab > 1)], collapse=', ')
+      stop(paste('bad horizonation in IDs:', bad.ids), call.=FALSE)
+    }
+    
+    # looser interp of the data... issue warning and return multuple rows/ID
+    # join(..., match='first') will correct the problem
+    else
+      warning('Bad horizonation detected, first matching horizon selected. Use strict=TRUE to enforce QA/QC.')
+  }
+  
+  # done: return subset of original data + pct not NA
+  return(h)
+}
+

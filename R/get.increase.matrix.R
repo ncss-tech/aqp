@@ -1,6 +1,8 @@
 # get.increase.matrix()
-#' compute pair-wise distances to determine where an attribute increases within
-#' a vertical distance specified
+#' Compute Pair-wise Distances of Soil Properties over Depth
+#' 
+#' Computes pair-wise distance matrix to determine where an attribute increases within
+#' a specified vertical distance threshold.
 #'
 #' Uses matrix outer product to determine all pair-wise differences in `attr`
 #' for the horizons of `p`. Supplies `attr` to `threshold.fun` to determine the
@@ -34,6 +36,7 @@
 #' @author Andrew Gene Brown
 #' @seealso \code{getArgillicBounds}, \code{crit.clay.argillic}
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' data(sp1, package = 'aqp')
@@ -105,13 +108,13 @@ get.increase.matrix <- function(p, attr, threshold.fun, vertical.distance) {
   return(criteria.met)
 }
 
-#' Return the horizon top depths from a call to get.increase.matrix()
+#' Return the horizon top depths from a call to `get.increase.matrix()`
 #'
 #' \code{get.increase.depths} performs the conversion of the square matrix
 #' output of \code{get.increase.matrix} back to horizon top depth for where
 #' criteria were met.
 #'
-#' Note that the `threshold.fun` result is allowed to contain NA, but that will
+#' Note that the `threshold.fun` result is allowed to contain `NA`, but that will
 #' result in no output for affected cells.
 #'
 #'
@@ -124,11 +127,12 @@ get.increase.matrix <- function(p, attr, threshold.fun, vertical.distance) {
 #' @return Returns a numeric vector of depths where the increase requirement is
 #' met. For the argillic, the first is the one of interest.
 #'
-#' \code{get.increase.depths} converts to horizon dop depth by using above
+#' `get.increase.depths()` converts to horizon top depth by using above
 #' matrix output to determine depths where increase is met.
-#' @author Andrew Gene Brown
-#' @seealso \code{getArgillicBounds}, \code{crit.clay.argillic}
+#' @seealso [getArgillicBounds()] [crit.clay.argillic()]
+#' @rdname get.increase.matrix
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' data(sp1, package = 'aqp')

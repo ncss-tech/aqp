@@ -34,6 +34,7 @@
 #' @author D.E. Beaudette
 #' @seealso \code{\link{get.ml.hz}}
 #' @keywords manip
+#' @export
 evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching.code='not-used', stand=TRUE, trace=FALSE, metric='euclidean') {
   if(!requireNamespace("MASS", quietly = TRUE))
     stop("package `MASS` is required", call.=FALSE)
@@ -65,7 +66,7 @@ evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching
     warning(paste0('duplicate data associated with pedons: ', dupe.ids), call. = FALSE)
 
   # compute pair-wise dissimilarities using our variables of interest
-  d <- daisy(h[no.na.idx, vars, drop = FALSE], stand = stand, metric = metric)
+  d <- cluster::daisy(h[no.na.idx, vars, drop = FALSE], stand = stand, metric = metric)
 
   # fudge-factor in case of duplicate data (0s in the dissimilarity matrix)
   dupe.idx <- which(d < 1e-8)
@@ -79,8 +80,8 @@ evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching
 
   # compute silhouette widths after removing not-used genhz class
   sil.idx <-  which(complete.cases(h[, vars, drop = FALSE]) & h[[genhz]] != non.matching.code)
-  d.sil <- daisy(h[sil.idx, vars, drop = FALSE], stand=stand)
-  sil <- silhouette(as.numeric(h[[genhz]])[sil.idx], d.sil)
+  d.sil <- cluster::daisy(h[sil.idx, vars, drop = FALSE], stand=stand)
+  sil <- cluster::silhouette(as.numeric(h[[genhz]])[sil.idx], d.sil)
 
   # add new columns
   h$mds.1 <- NA
@@ -102,8 +103,8 @@ evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching
   # using data.table::melt
   # suppressing warnings related to mixture of int / numeric
   m <- suppressWarnings(
-    melt(
-      as.data.table(h),
+    data.table::melt(
+      data.table::as.data.table(h),
       id.vars = genhz,
       measure.vars = c(vars, 'sil.width')
     )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/factor-level-setters.R
 \name{SoilTextureLevels}
 \alias{SoilTextureLevels}
-\title{Ranking Systems for USDS Soil Texture Classes}
+\title{Ranking Systems for USDA Soil Texture Classes}
 \usage{
 SoilTextureLevels(which = "codes", simplify = FALSE)
 }

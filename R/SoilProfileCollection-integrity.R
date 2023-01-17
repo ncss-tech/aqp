@@ -14,7 +14,8 @@
 #' @return data.frame
 #' @docType methods
 #' @author Andrew G. Brown
-#'
+#' @export
+#' @examples 
 #' data(sp5)
 #' 
 #' spc_in_sync(sp5)
@@ -112,7 +113,7 @@ spc_in_sync <- function(object) {
 #' @return SoilProfileCollection
 #' @docType methods
 #' @rdname reorderHorizons
-#'
+#' @export
 setMethod('reorderHorizons',
           signature(object = 'SoilProfileCollection', target.order = "ANY"),
           function(object, target.order = NULL) {

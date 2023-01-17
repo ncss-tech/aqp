@@ -22,6 +22,7 @@
 #' @seealso `hzdesgnname()`
 #' @author D.E. Beaudette
 #' @keywords manip
+#' @export
 #' @examples
 #' 
 #' data(sp1)
@@ -55,7 +56,6 @@
 #' 
 #' # double-check: OK
 #' table(res, x)
-#' 
 #'
 generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), ...) {
 
@@ -134,6 +134,10 @@ setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, ne
 })
 
 # convert a cross-tabulation: {original, genhz} to adjacency matrix
+#' @param tab A cross-tabulation of original and generalized labels e.g. `table(original, genhz)`
+#'
+#' @export
+#' @rdname hzTransitionProbabilities
 genhzTableToAdjMat <- function(tab) {
   tab <- as.matrix(tab)
   # extract unique set of names

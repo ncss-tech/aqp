@@ -40,7 +40,7 @@
 #' @seealso [colorContrastPlot], [huePosition], [huePositionCircle]
 #'
 #' @keywords manip
-#'
+#' @export
 #' @examples
 #'
 #' # two sets of colors to compare

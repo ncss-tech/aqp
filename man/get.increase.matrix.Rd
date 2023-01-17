@@ -2,10 +2,12 @@
 % Please edit documentation in R/get.increase.matrix.R
 \name{get.increase.matrix}
 \alias{get.increase.matrix}
-\title{compute pair-wise distances to determine where an attribute increases within
-a vertical distance specified}
+\alias{get.increase.depths}
+\title{Compute Pair-wise Distances of Soil Properties over Depth}
 \usage{
 get.increase.matrix(p, attr, threshold.fun, vertical.distance)
+
+get.increase.depths(p, attr, threshold.fun, vertical.distance)
 }
 \arguments{
 \item{p}{a SoilProfileCollection, containing a single profile}
@@ -24,16 +26,29 @@ criteria were met.
 
 \code{get.increase.depths} converts to horizon dop depth by using above
 matrix output to determine depths where increase is met.
+
+Returns a numeric vector of depths where the increase requirement is
+met. For the argillic, the first is the one of interest.
+
+\code{get.increase.depths()} converts to horizon top depth by using above
+matrix output to determine depths where increase is met.
 }
 \description{
+Computes pair-wise distance matrix to determine where an attribute increases within
+a specified vertical distance threshold.
+
+\code{get.increase.depths} performs the conversion of the square matrix
+output of \code{get.increase.matrix} back to horizon top depth for where
+criteria were met.
+}
+\details{
 Uses matrix outer product to determine all pair-wise differences in \code{attr}
 for the horizons of \code{p}. Supplies \code{attr} to \code{threshold.fun} to determine the
 minimum value criterion to return TRUE in output matrix for an "increase".
 Also, computes all pair-wise distances in depth dimension to determine
 whether the vertical distance criteria have been met simultaneously with
 \code{attr} increase.
-}
-\details{
+
 This function assumes that the \code{threshold.fun} supplied by the user returns
 either a constant or a vector of equal length to its input.
 
@@ -43,6 +58,9 @@ result in no output for affected cells.
 \code{get.increase.depths} performs the conversion of the square matrix
 output of \code{get.increase.matrix} back to horizon top depth for where
 criteria were met.
+
+Note that the \code{threshold.fun} result is allowed to contain \code{NA}, but that will
+result in no output for affected cells.
 }
 \examples{
 
@@ -56,9 +74,22 @@ foo <- get.increase.matrix(p, threshold.fun = crit.clay.argillic,
                            attr = attr, vertical.distance = 30)
 foo
 
+
+data(sp1, package = 'aqp')
+depths(sp1) <- id ~ top + bottom
+site(sp1) <- ~ group
+
+p <- sp1[1]
+attr <- 'prop' # clay contents
+foo <- get.increase.depths(p, threshold.fun = crit.clay.argillic,
+                           attr = attr, vertical.distance = 30)
+foo
+
 }
 \seealso{
 \code{getArgillicBounds}, \code{crit.clay.argillic}
+
+\code{\link[=getArgillicBounds]{getArgillicBounds()}} \code{\link[=crit.clay.argillic]{crit.clay.argillic()}}
 }
 \author{
 Andrew Gene Brown

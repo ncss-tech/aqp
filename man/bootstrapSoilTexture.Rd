@@ -33,9 +33,6 @@ Simulations from the Dirichlet distribution will usually be a better fit (fewer 
 
 Additional examples will be added to \href{http://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html}{this tutorial}.
 }
-\note{
-This is a work in progress.
-}
 \examples{
 
 \donttest{

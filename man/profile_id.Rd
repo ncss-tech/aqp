@@ -8,7 +8,7 @@
 \alias{profile_id}
 \title{Set profile IDs}
 \usage{
-profile_id(object) <- value
+\S4method{profile_id}{SoilProfileCollection}(object) <- value
 
 \S4method{profile_id}{SoilProfileCollection}(object)
 }

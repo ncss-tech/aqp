@@ -71,6 +71,7 @@
 #' each profile.
 #' @author D.E. Beaudette
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' # example data

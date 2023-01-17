@@ -2,7 +2,13 @@
 ## not imported, so list in suggests and address function names with markovchain::
 
 # what is the most likely sequence, given a markovchain and initial state
-# the result isn't likely correct when there are non-zero ties in tp
+# the result isn't likely correct when there are non-zero ties in t
+#' @param mc Passed to `markovchain` `conditionalDistribution()`
+#' @param t0 Passed to `markovchain` `conditionalDistribution()`
+#' @param maxIterations Maximum number of iterations. Default: `10`
+#'
+#' @export
+#' @rdname hzTransitionProbabilities
 mostLikelyHzSequence <- function(mc, t0, maxIterations=10) {
 
   if(!requireNamespace('markovchain', quietly = TRUE))

@@ -29,6 +29,7 @@
 #'  - Munsell book of color. 1976. Macbeth, a Division of Kollmorgen Corp., Baltimore, MD.
 #' 
 #' @keywords manip
+#' @export
 #' @examples
 #'
 #' # get hue ordering for setting levels of a factor

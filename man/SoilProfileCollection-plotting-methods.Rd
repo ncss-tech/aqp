@@ -63,9 +63,7 @@ plotSPC(
   ...
 )
 
-## S4 method for signature 'SoilProfileCollection,ANY'
-## note: y argument in generic definition is not currently used
-plot(x, y, ...)
+\S4method{plot}{SoilProfileCollection,ANY}(x, y, ...)
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}
