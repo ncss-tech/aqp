@@ -65,6 +65,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spec2Munsell</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
+<span>  res <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  convert <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  SO <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"CIE1931"</span>, <span class="st">"CIE1964"</span><span class="op">)</span>,</span>
 <span>  illuminant <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"D65"</span>, <span class="st">"F2"</span><span class="op">)</span>,</span>
@@ -75,7 +76,11 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
-<dd><p>reflectance spectra, (380nm to 730nm, 10nm resolution)</p></dd>
+<dd><p>reflectance spectra, must range from 380nm to 730nm with resolution specified in <code>res</code></p></dd>
+
+
+<dt>res</dt>
+<dd><p>spectra resolution in nm, typically 5nm or 10nm</p></dd>
 
 
 <dt>convert</dt>
@@ -93,14 +98,14 @@
 
 
 <dt>...</dt>
-<dd><p>further arguments to <code><a href="rgb2munsell.html">rgb2munsell</a></code></p></dd>
+<dd><p>further arguments to <code><a href="rgb2munsell.html">rgb2munsell()</a></code></p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>output from <code><a href="rgb2munsell.html">rgb2munsell</a></code></p>
+<p>output from <code><a href="rgb2munsell.html">rgb2munsell()</a></code></p>
 
 
     </div>
