@@ -51,8 +51,7 @@ A \code{data.frame} or \code{SoilProfileCollection} object.
 \description{
 Generate a random soil profile according to set criteria, with correlated
 depth trends.
-}
-\details{
+
 The random walk method produces profiles with considerable variation between
 horizons and is based on values from the normal distribution seeded with
 means and standard deviations drawn from the uniform distribution of [0,
@@ -65,8 +64,7 @@ hard-coded using the optional arguments: "lpp.a", "lpp.b", "lpp.u", "lpp.d",
 the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further
 description of the method is outlined in (Brenton et al, 2011). Simulated
 horizon distinctness codes are based on the USDA-NCSS field description
-methods
-(\url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/?cid=nrcs142p2_054184}).
+methods.
 Simulated distinctness codes are constrained according to horizon thickness,
 i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that
 are thinner than 3x this vertical distance

@@ -21,7 +21,7 @@ hzTopographyCodeToOffset(
 vector of vertical offsets with same length as \code{x}
 }
 \description{
-This function will convert USDA-NCSS horizon boundary topography codes into a vertical offset, suitable for use in \code{plotSPC}. Default values are reasonable starting points for encoding smooth, wavy, irregular, or broken style horizon boundary topography as defined in \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}.
+This function will convert USDA-NCSS horizon boundary topography codes into a vertical offset, suitable for use in \code{plotSPC}. Default values are reasonable starting points for encoding smooth, wavy, irregular, or broken style horizon boundary topography as defined in \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}.
 }
 \details{
 Additional examples are available in the \href{https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html}{Visualization of Horizon Boundaries tutorial}. Missing data in \code{x} (NA) or codes that are not defined in \code{codes} are returned with an offset of 0.
@@ -33,7 +33,7 @@ Either format (or mixture) are accepted, case insensitive:
 }
 }
 \references{
-\href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/research/guide/?cid=nrcs142p2_054184}{Field Book for Describing and Sampling Soils, version 3.0}
+\href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 }
 \seealso{
 \code{\link{plotSPC}}
