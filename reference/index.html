@@ -90,13 +90,13 @@ Class</p></td>
         </td>
         <td><p>Get or Set Coordinate Reference System for SoilProfileCollection</p></td>
       </tr><tr><td>
-          <p><code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> <code><a href="SoilProfileCollection-plotting-methods.html">plot()</a></code> </p>
+          <p><code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> <code><a href="SoilProfileCollection-plotting-methods.html">plot(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
         </td>
         <td><p>Create Soil Profile Sketches</p></td>
       </tr><tr><td>
           <p><code><a href="SoilTextureLevels.html">SoilTextureLevels()</a></code> </p>
         </td>
-        <td><p>Ranking Systems for USDS Soil Texture Classes</p></td>
+        <td><p>Ranking Systems for USDA Soil Texture Classes</p></td>
       </tr><tr><td>
           <p><code><a href="accumulateDepths.html">accumulateDepths()</a></code> </p>
         </td>
@@ -242,9 +242,9 @@ Class</p></td>
         </td>
         <td><p>Initialize a SoilProfileCollection from a data.frame object</p></td>
       </tr><tr><td>
-          <p><code><a href="diagnostic_hz-set.html">`diagnostic_hz&lt;-`()</a></code> </p>
+          <p><code><a href="diagnostic_hz-set.html">`diagnostic_hz&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add data to the diagnostic slot</p></td>
+        <td><p>Add Data to Diagnostic Features Slot</p></td>
       </tr><tr><td>
           <p><code><a href="diagnostic_hz.html">diagnostic_hz(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
@@ -265,14 +265,6 @@ Class</p></td>
           <p><code><a href="dollarsign.html">`$`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Get data from column of horizon or site data in a SoilProfileCollection</p></td>
-      </tr><tr><td>
-          <p><code><a href="dot-as.data.frame.aqp.html">.as.data.frame.aqp()</a></code> </p>
-        </td>
-        <td><p>Wrapper method for data.frame subclass conversion</p></td>
-      </tr><tr><td>
-          <p><code><a href="dot-data_dots.html">.data_dots()</a></code> </p>
-        </td>
-        <td><p>Make a data.frame from non-standard expressions evaluated in a data environment</p></td>
       </tr><tr><td>
           <p><code><a href="doublebracket-set.html">`[[&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
         </td>
@@ -335,18 +327,17 @@ Class</p></td>
         </td>
         <td><p>Fix Overlap within a Sequence via Simulated Annealing</p></td>
       </tr><tr><td>
+          <p><code><a href="genSlabLabels.html">genSlabLabels()</a></code> </p>
+        </td>
+        <td><p>Generate Labels for Slabs</p></td>
+      </tr><tr><td>
           <p><code><a href="generalize.hz.html">generalize.hz()</a></code> <code><a href="generalize.hz.html">generalizeHz(<i>&lt;character&gt;</i>)</a></code> <code><a href="generalize.hz.html">generalizeHz(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Generalize Horizon Names</p></td>
       </tr><tr><td>
-          <p><code><a href="get.increase.depths.html">get.increase.depths()</a></code> </p>
+          <p><code><a href="get.increase.matrix.html">get.increase.matrix()</a></code> <code><a href="get.increase.matrix.html">get.increase.depths()</a></code> </p>
         </td>
-        <td><p>Return the horizon top depths from a call to get.increase.matrix()</p></td>
-      </tr><tr><td>
-          <p><code><a href="get.increase.matrix.html">get.increase.matrix()</a></code> </p>
-        </td>
-        <td><p>compute pair-wise distances to determine where an attribute increases within
-a vertical distance specified</p></td>
+        <td><p>Compute Pair-wise Distances of Soil Properties over Depth</p></td>
       </tr><tr><td>
           <p><code><a href="get.ml.hz.html">get.ml.hz()</a></code> </p>
         </td>
@@ -424,15 +415,15 @@ a vertical distance specified</p></td>
         </td>
         <td><p>Horizon Color Indices</p></td>
       </tr><tr><td>
-          <p><code><a href="horizonDepths.html">`horizonDepths&lt;-`()</a></code> <code><a href="horizonDepths.html">horizonDepths(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="horizonDepths.html">`horizonDepths&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="horizonDepths.html">horizonDepths(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Set horizon depth column names</p></td>
       </tr><tr><td>
-          <p><code><a href="horizonNames.html">`horizonNames&lt;-`()</a></code> <code><a href="horizonNames.html">horizonNames(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="horizonNames.html">`horizonNames&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="horizonNames.html">horizonNames(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Set horizon column names</p></td>
       </tr><tr><td>
-          <p><code><a href="horizons.html">horizons(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="horizons.html">`horizons&lt;-`()</a></code> </p>
+          <p><code><a href="horizons.html">horizons(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="horizons.html">`horizons&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Retrieve horizon data from SoilProfileCollection</p></td>
       </tr><tr><td>
@@ -480,7 +471,7 @@ a vertical distance specified</p></td>
         </td>
         <td><p>Convert Horizon Boundary Topography to Vertical Offset</p></td>
       </tr><tr><td>
-          <p><code><a href="hzTransitionProbabilities.html">hzTransitionProbabilities()</a></code> </p>
+          <p><code><a href="hzTransitionProbabilities.html">genhzTableToAdjMat()</a></code> <code><a href="hzTransitionProbabilities.html">hzTransitionProbabilities()</a></code> <code><a href="hzTransitionProbabilities.html">mostLikelyHzSequence()</a></code> </p>
         </td>
         <td><p>Horizon Transition Probabilities</p></td>
       </tr><tr><td>
@@ -488,7 +479,7 @@ a vertical distance specified</p></td>
         </td>
         <td><p>Get or Set Horizon Designation Column Name</p></td>
       </tr><tr><td>
-          <p><code><a href="hzidname.html">`hzidname&lt;-`()</a></code> <code><a href="hzidname.html">hzidname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="hzidname.html">`hzidname&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="hzidname.html">hzidname(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Set horizon ID column name</p></td>
       </tr><tr><td>
@@ -584,7 +575,7 @@ a vertical distance specified</p></td>
         </td>
         <td><p>Find and Quantify Overlap within a 1D Sequence</p></td>
       </tr><tr><td>
-          <p><code><a href="panel.depth_function.html">panel.depth_function()</a></code> </p>
+          <p><code><a href="panel.depth_function.html">panel.depth_function()</a></code> <code><a href="panel.depth_function.html">prepanel.depth_function()</a></code> </p>
         </td>
         <td><p>Lattice Panel Function for Soil Profiles</p></td>
       </tr><tr><td>
@@ -595,10 +586,6 @@ a vertical distance specified</p></td>
           <p><code><a href="pbindlist.html">pbindlist()</a></code> </p>
         </td>
         <td><p>Combine a list of SoilProfileCollection objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="pc.html">pc()</a></code> </p>
-        </td>
-        <td><p>Deprecated: Numerical Soil Profile Comparison</p></td>
       </tr><tr><td>
           <p><code><a href="perturb.html">perturb()</a></code> </p>
         </td>
@@ -636,7 +623,11 @@ a vertical distance specified</p></td>
         </td>
         <td><p>Soil Profile Information Index</p></td>
       </tr><tr><td>
-          <p><code><a href="profile_id.html">`profile_id&lt;-`()</a></code> <code><a href="profile_id.html">profile_id(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="profile_compare.html">pc()</a></code> <code><a href="profile_compare.html">pc.SPC()</a></code> <code><a href="profile_compare.html">profile_compare(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="profile_compare.html">profile_compare(<i>&lt;data.frame&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Deprecated: Numerical Soil Profile Comparison</p></td>
+      </tr><tr><td>
+          <p><code><a href="profile_id.html">`profile_id&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="profile_id.html">profile_id(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Set profile IDs</p></td>
       </tr><tr><td>
@@ -668,13 +659,13 @@ a vertical distance specified</p></td>
         </td>
         <td><p>Repair Problematic Lower Horizon Depths</p></td>
       </tr><tr><td>
-          <p><code><a href="replaceHorizons.html">`replaceHorizons&lt;-`()</a></code> </p>
+          <p><code><a href="replaceHorizons.html">`replaceHorizons&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Replace data in the horizon slot</p></td>
+        <td><p>Replace Data in Horizon Slot</p></td>
       </tr><tr><td>
-          <p><code><a href="restrictions-set.html">`restrictions&lt;-`()</a></code> </p>
+          <p><code><a href="restrictions-set.html">`restrictions&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add data to the restrictions slot</p></td>
+        <td><p>Add Data to Restrictions Slot</p></td>
       </tr><tr><td>
           <p><code><a href="restrictions.html">restrictions(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
@@ -721,15 +712,15 @@ Mountains, CA, USA.</p></td>
         </td>
         <td><p>Retrieve site data from SoilProfileCollection</p></td>
       </tr><tr><td>
-          <p><code><a href="siteNames.html">`siteNames&lt;-`()</a></code> <code><a href="siteNames.html">siteNames(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
+          <p><code><a href="siteNames.html">`siteNames&lt;-`(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="siteNames.html">siteNames(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Set site column names</p></td>
       </tr><tr><td>
-          <p><code><a href="slab-methods.html">slab(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="slab-methods.html">slab_function()</a></code> </p>
+          <p><code><a href="slab.html">slab(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="slab.html">slab_function()</a></code> </p>
         </td>
         <td><p>Slab-Wise Aggregation of SoilProfileCollection Objects</p></td>
       </tr><tr><td>
-          <p><code><a href="slice-methods.html">slice.fast()</a></code> </p>
+          <p><code><a href="slice.html">slice.fast()</a></code> <code><a href="slice.html">slice(<i>&lt;SoilProfileCollection&gt;</i>)</a></code> <code><a href="slice.html">get.slice()</a></code> </p>
         </td>
         <td><p>Slicing of SoilProfileCollection Objects</p></td>
       </tr><tr><td>
@@ -821,7 +812,7 @@ Mountains, CA, USA.</p></td>
         </td>
         <td><p>Perform summaries on groups (from <code>group_by</code>) and create new site or horizon level attributes</p></td>
       </tr><tr><td>
-          <p><code><a href="tauW.html">tauW()</a></code> </p>
+          <p><code><a href="tauW.html">tauW()</a></code> <code><a href="tauW.html">summaryTauW()</a></code> </p>
         </td>
         <td><p>Compute weighted naive and <em>tau</em> statistics for a cross-classification matrix</p></td>
       </tr><tr><td>

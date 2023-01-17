@@ -59,8 +59,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0" id="aqp-20-2023-01-04">aqp 2.0 (2023-01-04)<a class="anchor" aria-label="anchor" href="#aqp-20-2023-01-04"></a></h2>
-<p>This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp &lt; 1.42, particularly those relying on <code><a href="../reference/slice-methods.html">slice()</a></code>, <code><a href="../reference/slab-methods.html">slab()</a></code>, and <code><a href="../reference/pc.html">profile_compare()</a></code>.</p>
-<p>Notable changes include: * deprecation of <code><a href="../reference/slice-methods.html">slice()</a></code> in favor of the new, faster, more robust implementation in <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> * complete overhaul of <code><a href="../reference/slab-methods.html">slab()</a></code>, with new arguments, faster back-end, and weighted aggregation implemented (finally) * deprecation of <code><a href="../reference/pc.html">profile_compare()</a></code> in favor of the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al., 2020 - site level attributes now handled by <code><a href="../reference/compareSites.html">compareSites()</a></code> - variable weights now possible via argument * <code><a href="../reference/perturb.html">perturb()</a></code> and <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code> are now vectorized, and optimized for larger collections * <code><a href="../reference/mixMunsell.html">mixMunsell()</a></code> now uses <code>mixingMethod = 'exact'</code> by default for the simulation of subtractive mixtures * <code>gower</code> package moved to SUGGESTS * removal of <code>PMS2Munsell()</code> and support data * deprecation of <code>coordinates()&lt;-</code> and <code>proj4string()&lt;-</code> in favor of <code>initSpatial()&lt;-</code></p>
+<p>This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp &lt; 1.42, particularly those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>, and <code><a href="../reference/profile_compare.html">profile_compare()</a></code>.</p>
+<p>Notable changes include: * deprecation of <code><a href="../reference/slice.html">slice()</a></code> in favor of the new, faster, more robust implementation in <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> * complete overhaul of <code><a href="../reference/slab.html">slab()</a></code>, with new arguments, faster back-end, and weighted aggregation implemented (finally) * deprecation of <code><a href="../reference/profile_compare.html">profile_compare()</a></code> in favor of the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al., 2020 - site level attributes now handled by <code><a href="../reference/compareSites.html">compareSites()</a></code> - variable weights now possible via argument * <code><a href="../reference/perturb.html">perturb()</a></code> and <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code> are now vectorized, and optimized for larger collections * <code><a href="../reference/mixMunsell.html">mixMunsell()</a></code> now uses <code>mixingMethod = 'exact'</code> by default for the simulation of subtractive mixtures * <code>gower</code> package moved to SUGGESTS * removal of <code>PMS2Munsell()</code> and support data * deprecation of <code>coordinates()&lt;-</code> and <code>proj4string()&lt;-</code> in favor of <code>initSpatial()&lt;-</code></p>
 <p>Incremental changes, should have no effect on previous code: * <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gains argument <code>maxLabelAdjustmentIndex</code> for controlling horizon depth label collisions * bug fix in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> when <code>fixLabelCollisions = TRUE</code>, adjustments suggested to <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> are now scaled correctly * <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> reports label adjustment index when label collision repair is enabled * aesthetic cleanup in <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> * <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> gains arguments and perceptual color distances (dE00) via farver package * <code>as(&lt;SPC&gt;, "data.frame")</code>: Replace <code><a href="https://rdrr.io/pkg/plyr/man/join.html" class="external-link">plyr::join()</a></code> with <code><a href="https://rdrr.io/pkg/sp/man/merge.html" class="external-link">merge()</a></code> * Add S4 <code>as.data.frame(&lt;SPC&gt;)</code> as shorthand for <code>as(&lt;SPC&gt;, 'data.frame')</code> * <code><a href="../reference/correctAWC.html">correctAWC()</a></code>: NA handling - return NA when frags are NA * <code><a href="../reference/mutate_profile.html">mutate_profile()</a></code>: Faster (data.table-based) evaluation of profile-level expressions (<a href="https://github.com/ncss-tech/aqp/issues/255" class="external-link">#255</a>) * <code>profileApply</code>: Add support for custom <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function (<code>APPLY.FUN</code>) for processing chunks (<a href="https://github.com/ncss-tech/aqp/issues/256" class="external-link">#256</a>) * Add <code>.interpretHorizonColor()</code> outputs to <code>last_spc_plot</code> in <code>aqp.env</code> for use in custom <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend()</a></code> (<a href="https://github.com/ncss-tech/aqp/issues/254" class="external-link">#254</a>) * Add <code>simplify</code> argument to <code><a href="../reference/SoilTextureLevels.html">SoilTextureLevels()</a></code> and <code><a href="../reference/texture.html">ssc_to_texcl()</a></code> to optionally convert to an ordered factor with maximum of 12 levels (rather than 21). This smaller list of classes excludes sand grain size variants such as fine sand, loamy coarse sand, and very fine sandy loam.</p>
 </div>
     <div class="section level2">
@@ -97,7 +97,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.40" id="aqp-140-2022-01-04">aqp 1.40 (2022-01-04)<small>2022-01-04</small><a class="anchor" aria-label="anchor" href="#aqp-140-2022-01-04"></a></h2>
 <ul><li>CRAN release</li>
-<li>fixed small bug in <code><a href="../reference/panel.depth_function.html">panel.depth_function()</a></code> that affected plotting of grouped data, created by <code><a href="../reference/slab-methods.html">slab()</a></code>
+<li>fixed small bug in <code><a href="../reference/panel.depth_function.html">panel.depth_function()</a></code> that affected plotting of grouped data, created by <code><a href="../reference/slab.html">slab()</a></code>
 </li>
 <li>
 <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> now uses variable (vertical) text alignment for horizon depth labels</li>
@@ -109,7 +109,7 @@
 </li>
 <li>removed (deprecated) <code>f.noise()</code> and <code>resample.twotheta()</code>: use {powdR} package instead</li>
 <li>new functions: <code><a href="../reference/texture.html">texture_to_texmod()</a></code> and <code><a href="../reference/texture.html">fragvol_to_texmod()</a></code> c/o <a href="https://github.com/smroecker" class="external-link">@smroecker</a></li>
-<li>faster, more robust version of <code><a href="../reference/slice-methods.html">slice()</a></code> implemented as <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>
+<li>faster, more robust version of <code><a href="../reference/slice.html">slice()</a></code> implemented as <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>
 </li>
 </ul></div>
     <div class="section level2">
@@ -396,10 +396,10 @@
 <h2 class="page-header" data-toc-text="1.17.10" id="aqp-11710-2019-10-30">aqp 1.17.10 (2019-10-30)<a class="anchor" aria-label="anchor" href="#aqp-11710-2019-10-30"></a></h2>
 <ul><li>removing imported functions from <code>Hmisc</code> (<code>hdquantile</code>), loading <code>aqp</code> is now much faster
 <ul><li>
-<code><a href="../reference/slab-methods.html">slab()</a></code> now uses <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> as the default slab function</li>
+<code><a href="../reference/slab.html">slab()</a></code> now uses <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> as the default slab function</li>
 <li>details at: <a href="https://github.com/ncss-tech/aqp/issues/79" class="external-link uri">https://github.com/ncss-tech/aqp/issues/79</a>
 </li>
-<li>previous behavior of <code><a href="../reference/slab-methods.html">slab()</a></code> can be activated via argument: <code>slab.fun = aqp:::.slab.fun.numeric.HD</code>
+<li>previous behavior of <code><a href="../reference/slab.html">slab()</a></code> can be activated via argument: <code>slab.fun = aqp:::.slab.fun.numeric.HD</code>
 </li>
 </ul></li>
 </ul></div>
@@ -513,7 +513,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.14" id="aqp-114-2017-09-19">aqp 1.14 (2017-09-19)<a class="anchor" aria-label="anchor" href="#aqp-114-2017-09-19"></a></h2>
 <ul><li>
-<code><a href="../reference/missingDataGrid.html">missingDataGrid()</a></code> relaxing <code><a href="../reference/slice-methods.html">slice()</a></code> with <code>strict=FALSE</code>
+<code><a href="../reference/missingDataGrid.html">missingDataGrid()</a></code> relaxing <code><a href="../reference/slice.html">slice()</a></code> with <code>strict=FALSE</code>
 </li>
 </ul></div>
     <div class="section level2">
@@ -570,7 +570,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.6" id="aqp-196-2016-02-23">aqp 1.9.6 (2016-02-23)<a class="anchor" aria-label="anchor" href="#aqp-196-2016-02-23"></a></h2>
-<ul><li>minor changes to <code><a href="../reference/pc.html">profile_compare()</a></code>, getting ready for a complete overhaul to this function</li>
+<ul><li>minor changes to <code><a href="../reference/profile_compare.html">profile_compare()</a></code>, getting ready for a complete overhaul to this function</li>
 <li>new function: <code><a href="../reference/evalMissingData.html">evalMissingData()</a></code>, see manual page</li>
 </ul></div>
     <div class="section level2">
@@ -729,14 +729,14 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4-6" id="aqp-14-6-2013-01-03">aqp 1.4-6 (2013-01-03)<a class="anchor" aria-label="anchor" href="#aqp-14-6-2013-01-03"></a></h2>
 <ul><li>updated documentation and SoilProfileCollection tutorial</li>
-<li>plans laid for parallel processing in <code><a href="../reference/slab-methods.html">slab()</a></code> and <code><a href="../reference/profileApply.html">profileApply()</a></code> via ‘parallel’ package</li>
+<li>plans laid for parallel processing in <code><a href="../reference/slab.html">slab()</a></code> and <code><a href="../reference/profileApply.html">profileApply()</a></code> via ‘parallel’ package</li>
 <li>
 <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gets a <code>density</code> argument for shaded coloring of horizons</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4-5" id="aqp-14-5-2012-12-29">aqp 1.4-5 (2012-12-29)<a class="anchor" aria-label="anchor" href="#aqp-14-5-2012-12-29"></a></h2>
 <ul><li>
-<code><a href="../reference/slab-methods.html">slab()</a></code> re-written from scratch, resulting in reduced memory footprint and quicker running time ! older code based on slab() is likely to now broken- sorry, it won’t happen again
+<code><a href="../reference/slab.html">slab()</a></code> re-written from scratch, resulting in reduced memory footprint and quicker running time ! older code based on slab() is likely to now broken- sorry, it won’t happen again
 <ul><li>the new code is much slimmer and based on aggregate() rather than ddply</li>
 <li>function arguments have changed so be sure to check the manual page</li>
 <li>user-supplied functions are now much simpler to write and rely on vectors rather than data.frames (= faster)</li>
@@ -1002,7 +1002,7 @@
 <li>this feature is still experimental! testing is advised</li>
 </ul></li>
 <li>
-<code><a href="../reference/pc.html">profile_compare()</a></code> now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)</li>
+<code><a href="../reference/profile_compare.html">profile_compare()</a></code> now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.98-4" id="aqp-098-4-2010-12-15">aqp 0.98-4 (2010-12-15)<a class="anchor" aria-label="anchor" href="#aqp-098-4-2010-12-15"></a></h2>

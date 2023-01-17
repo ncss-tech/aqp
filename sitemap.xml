@@ -172,12 +172,6 @@
     <loc>/reference/dollarsign.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-as.data.frame.aqp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-data_dots.html</loc>
-  </url>
-  <url>
     <loc>/reference/doublebracket-set.html</loc>
   </url>
   <url>
@@ -223,10 +217,10 @@
     <loc>/reference/fixOverlap.html</loc>
   </url>
   <url>
-    <loc>/reference/generalize.hz.html</loc>
+    <loc>/reference/genSlabLabels.html</loc>
   </url>
   <url>
-    <loc>/reference/get.increase.depths.html</loc>
+    <loc>/reference/generalize.hz.html</loc>
   </url>
   <url>
     <loc>/reference/get.increase.matrix.html</loc>
@@ -421,9 +415,6 @@
     <loc>/reference/pbindlist.html</loc>
   </url>
   <url>
-    <loc>/reference/pc.html</loc>
-  </url>
-  <url>
     <loc>/reference/perturb.html</loc>
   </url>
   <url>
@@ -449,6 +440,9 @@
   </url>
   <url>
     <loc>/reference/profileInformationIndex.html</loc>
+  </url>
+  <url>
+    <loc>/reference/profile_compare.html</loc>
   </url>
   <url>
     <loc>/reference/profile_id.html</loc>
@@ -520,10 +514,10 @@
     <loc>/reference/siteNames.html</loc>
   </url>
   <url>
-    <loc>/reference/slab-methods.html</loc>
+    <loc>/reference/slab.html</loc>
   </url>
   <url>
-    <loc>/reference/slice-methods.html</loc>
+    <loc>/reference/slice.html</loc>
   </url>
   <url>
     <loc>/reference/slicedHSD.html</loc>

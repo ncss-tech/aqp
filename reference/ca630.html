@@ -198,7 +198,7 @@ with caution</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ca</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># aggregate %BS 7 for all profiles into 1 cm slices</span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">ca</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">bs_7</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab.html">slab</a></span><span class="op">(</span><span class="va">ca</span>, fm<span class="op">=</span> <span class="op">~</span> <span class="va">bs_7</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot median &amp; IQR by 1 cm slice</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html" class="external-link">xyplot</a></span><span class="op">(</span></span></span>
@@ -217,7 +217,7 @@ with caution</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># aggregate %BS at pH 8.2 for all profiles by MLRA, along 1 cm slices</span></span></span>
 <span class="r-in"><span><span class="co"># note that mlra is stored in @site</span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab-methods.html">slab</a></span><span class="op">(</span><span class="va">ca</span>, <span class="va">mlra</span> <span class="op">~</span> <span class="va">bs_8.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="slab.html">slab</a></span><span class="op">(</span><span class="va">ca</span>, <span class="va">mlra</span> <span class="op">~</span> <span class="va">bs_8.2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># keep only MLRA 18 and 22</span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">a</span>, subset<span class="op">=</span><span class="va">mlra</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'18'</span>, <span class="st">'22'</span><span class="op">)</span><span class="op">)</span></span></span>

@@ -67,7 +67,9 @@
 <span>  <span class="va">CM</span>,</span>
 <span>  W <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">CM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  P <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">CM</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">CM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">summaryTauW</span><span class="op">(</span><span class="va">result.tau</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -82,6 +84,10 @@
 
 <dt>P</dt>
 <dd><p>prior probability vector, length = number of rows/columns in <code>CM</code> and <code>W</code></p></dd>
+
+
+<dt>result.tau</dt>
+<dd><p><code>tauW()</code> result</p></dd>
 
 </dl></div>
     <div id="value">
@@ -109,7 +115,7 @@
 </ul></div>
     <div id="author">
     <h2>Author</h2>
-    <p>D G Rossiter</p>
+    <p>D.G. Rossiter</p>
     </div>
 
     <div id="ref-examples">
