@@ -90,6 +90,9 @@ spec2Munsell <- function(x, res = 10, convert = TRUE, SO = c('CIE1931', 'CIE1964
   #   * munsell.spectra.wide
   .wl <- seq(from = 380, to = 730, by = res)
   
+  
+  ## 10nm res: length(x) == 36
+  ## 5nm res: length(x) == 71
   # sanity check
   if(length(.wl) != length(x)) {
     stop('inconsistent spectral limits / resolution', call. = FALSE)
