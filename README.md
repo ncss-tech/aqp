@@ -88,6 +88,7 @@ citation("aqp")
 -   [as found by Google
     Scholar](https://scholar.google.com/scholar?cites=14155970656017510549&as_sdt=5,29&sciodt=0,29&hl=en)
 -   <http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-80872019000100121>
+-   <https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JF004720>
 
 ## Dependency Graph
 
