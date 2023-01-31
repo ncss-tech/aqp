@@ -19,8 +19,8 @@
 
   # short-circuit: if all h[[color]] are NA the following logic will not reliably work
   # this is because sometimes all NA are interpreted as logical vectors
-  if(all(is.na(h[[color]]))) {
-    h[[".color"]] <- NA
+  if (all(is.na(h[[color]]))) {
+    h[[".color"]] <- rep(NA_character_, nrow(h))
   } else {
 
     # there is at least 1 non-NA color to work with

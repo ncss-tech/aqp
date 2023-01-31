@@ -390,6 +390,16 @@ plotSPC <- function(
   ## sanity checks ##
   ###################
   
+  # `x` should be a SoilProfileCollection
+  if (!inherits(x, 'SoilProfileCollection')) {
+    stop("Object `x` must be a SoilProfileCollection", call. = FALSE) 
+  }
+  
+  # don't plot an empty collection
+  if (nrow(x) == 0) {
+    stop("SoilProfileCollection `x` contains no horizon data", call. = FALSE)
+  }
+  
   # horizon name style
   if(! name.style %in% c('right-center', 'left-center', 'left-top', 'center-center', 'center-top')) {
     warning('invalid `name.style`', call. = FALSE)
@@ -489,7 +499,7 @@ plotSPC <- function(
   }
   
   # special cases
-  if(n == 1) {
+  if (n == 1) {
     extra_x_space <- extra_x_space + 0.5
     x_left_space_mult <- 3.5
   }
@@ -497,11 +507,11 @@ plotSPC <- function(
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
   if(max.depth <=50)
-    extra_y_space <- 5
+      extra_y_space <- 5
   if(max.depth > 50 & max.depth <= 100)
-    extra_y_space <- 10
+      extra_y_space <- 10
   if(max.depth > 100)
-    extra_y_space <- 15
+      extra_y_space <- 15
   
   # get profile IDs
   pIDs <- profile_id(x)
@@ -523,7 +533,7 @@ plotSPC <- function(
   # hzdesgnname() does most of the work here, with sensible defaults when metadata are missing
   
   # code can safely run with all input except NULL
-  if(is.null(name)) {
+  if (is.null(name)) {
     # set to empty string
     name <- ''
   }
@@ -536,7 +546,7 @@ plotSPC <- function(
   
   # .interpretHorizonColors() expects numeric | categorical data
   # convert logical to factor
-  if(is.logical(h[[color]])) {
+  if (is.logical(h[[color]])) {
     h[[color]] <- factor(h[[color]])
   }
   
@@ -544,7 +554,7 @@ plotSPC <- function(
   # vector of horizon colors, row-order preserved
   # legend data if relevant, otherwise NULL
   hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
-  h[['.color']] <- hz.color.interpretation$colors
+    h[['.color']] <- hz.color.interpretation$colors
   
   # sketch parameters for follow-up overlay / inspection
   lsp <- list('width' = width,
@@ -607,10 +617,10 @@ plotSPC <- function(
       -extra_y_space
     )
     
-    plot(x = 0, y = 0, type='n', 
-         xlim = c(width * x_left_space_mult, n+(extra_x_space)),
+    plot(x = 0, y = 0, type = 'n', 
+         xlim = c(width * x_left_space_mult, n + (extra_x_space)),
          ylim = ylim.range,
-         axes=FALSE, xlab='', ylab=''
+         axes = FALSE, xlab = '', ylab = ''
     )
   }
   
