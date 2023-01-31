@@ -65,8 +65,9 @@ setMethod(
     }
     
     # handle empty spc
-    if(length(x@horizons[[htb[2]]]) == 0) {
-      return(NA)
+    bd <- x@horizons[[htb[2]]]
+    if (length(bd) == 0 || all(is.na(bd))) {
+      return(Inf)
     }
     
     # filter out missing data, accounting for optional `v`
@@ -105,8 +106,9 @@ setMethod(
     }
     
     # handle empty spc
-    if(length(x@horizons[[htb[2]]]) == 0) {
-      return(NA)
+    bd <- x@horizons[[htb[2]]]
+    if (length(bd) == 0 || all(is.na(bd))) {
+      return(-Inf)
     }
     
     # filter out missing data, accounting for optional `v`
