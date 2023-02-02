@@ -210,18 +210,17 @@ accumulateDepths <- function(x,
   dat$thk <- dat[[.BOTTOM]] - dat[[.TOP]]
   dat$thk[is.na(dat$thk)] <- 0
   
-  # need more than 1 record
-  test1 <- dat[, .N, by = .BYLIST1]
-  dat_sub <- dat[!dat[[.internalID]] %in% test1[[.internalID]][test1$N == 1],]
+  ## previously below code needed more than 1 record
+  # test1 <- dat[, .N, by = .BYLIST1]
+  # dat <- dat[!dat[[.internalID]] %in% test1[[.internalID]][test1$N == 1],]
   
-  .BYLIST2 <- list(dat_sub[[.internalID]])
+  .BYLIST2 <- list(dat[[.internalID]])
   names(.BYLIST2) <- .internalID
   
   # cumulative sums of thickness to make new top/bottom depths
-  dat_sub$.hzdatum <- hzdatum[match(dat_sub[[.internalID]], unique(dat_sub[[.internalID]]))]
+  dat$.hzdatum <- hzdatum[match(dat[[.internalID]], unique(dat[[.internalID]]))]
            
-  dat_after <- dat_sub[, list(top = c(.hzdatum[1] + min(abs(.SD[[.TOP]])), 
-                                      .hzdatum[1] + min(abs(.SD[[.TOP]])) + cumsum(thk[1:(.N - 1)])),
+  dat_after <- dat[, list(top = c(.hzdatum[1] + min(abs(.SD[[.TOP]])), .hzdatum[1] + min(abs(.SD[[.TOP]])) + cumsum(thk[1:(.N - 1)]))[seq_along(thk)],
                               bottom = .hzdatum[1] + min(abs(.SD[[.TOP]])) + cumsum(thk)), 
                        by = .BYLIST2]
   
@@ -232,29 +231,30 @@ accumulateDepths <- function(x,
   test2 <- dat_after[, .N, by = .BYLIST3]
   
   # insert into working subset
-  dat_sub[[.TOP]] <- dat_after$top
-  dat_sub[[.BOTTOM]] <- dat_after$bottom
+  dat[[.TOP]] <- dat_after$top
+  dat[[.BOTTOM]] <- dat_after$bottom
   
-  ndrop <- sum(!dat_sub[[.internalID]] %in% dat[[.internalID]])
+  ndrop <- sum(!dat[[.internalID]] %in% dat[[.internalID]])
   
   if (ndrop > 0)
     message("profile IDs (n=", ndrop, ") dropped from set")
   
-  if (nrow(dat) != nrow(dat_sub))
-    message("horizons (n=",(nrow(dat) - nrow(dat_sub)),") dropped from set")
+  ## this shouldn't happen any more
+  # if (nrow(dat) != nrow(dat_sub))
+  #   message("horizons (n=",(nrow(dat) - nrow(dat_sub)),") dropped from set")
   
   # return SPC if input was SPC
   if (inherits(x, 'SoilProfileCollection')) {
     
     # subset with [,
-    x <- x[which(profile_id(x) %in% dat_sub[[idname(x)]]), ]
+    x <- x[which(profile_id(x) %in% dat[[idname(x)]]), ]
     
     # replace horizons
-    replaceHorizons(x) <- .as.data.frame.aqp(dat_sub, aqp_df_class(x))
+    replaceHorizons(x) <- .as.data.frame.aqp(dat, aqp_df_class(x))
     
     return(x)
   } else {
     # regular data.frame result
-    return(data.frame(dat_sub))
+    return(data.frame(dat))
   }
 }
