@@ -1,3 +1,9 @@
+
+## TODO:
+# * convert to terra, or
+# * use matrix / array 
+
+
 library(aqp)
 library(raster)
 

@@ -34,7 +34,7 @@ evolve <- function(x, loss.limits = c(0, 10), gain.limits = c(0, 20), iter = 10)
     newID <- sprintf("T%03d_%s", i, ids)
     
     # flip a coin: loss / gain
-    coin.flip <- sample(0:1, size = 1, prob = c(0.7, 0.3))
+    coin.flip <- sample(0:1, size = 1, prob = c(0.6, 0.4))
     
     # loss
     amount <- runif(1, min = loss.limits[1], max = loss.limits[2])
@@ -102,7 +102,7 @@ deposite <- function(x, z, depName = '2C', depColor = parseMunsell('5Y 6/2')) {
 o <- fetchOSD(c('musick'))
 
 # limits define range of runif()
-e <- evolve(o, iter = 25, loss.limits = c(1, 10))
+e <- evolve(o, iter = 75, loss.limits = c(1, 3))
 
 par(mar = c(0, 0, 0, 0))
 plotSPC(e, plot.depth.axis = FALSE, name.style = 'center-center', print.id = FALSE, width = 0.45)
@@ -110,8 +110,8 @@ abline(h = 0)
 
 
 
-plotSPC(z, plot.depth.axis = FALSE, name.style = 'center-center', print.id = FALSE, width = 0.45)
-abline(h = 0)
+# plotSPC(z, plot.depth.axis = FALSE, name.style = 'center-center', print.id = FALSE, width = 0.45)
+# abline(h = 0)
 
 
 

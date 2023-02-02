@@ -1,5 +1,7 @@
 library(aqp)
 library(RColorBrewer)
+library(viridisLite)
+
 
 ##
 ## nutty idea: label collision fixes via simulation of electrostatic charged particles
@@ -10,9 +12,10 @@ library(RColorBrewer)
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10)
 # x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
-# x <- c(1, rep(5, times = 10), 15)
-x <- sort(1:15 + rnorm(15, mean = 0, sd = 2))
+# x <- c(1, rep(5, times = 10), 12)
+# x <- sort(1:15 + rnorm(15, mean = 0, sd = 2))
 
+x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
 
 length(x)
 
@@ -122,6 +125,9 @@ simParticles <- function(x, k.start = 0.1, n = 100) {
 # cols <- viridisLite::viridis(length(x))
 
 cols <- brewer.pal(9, 'Spectral')
+
+# cols <- mako(length(x))
+
 cols <- colorRampPalette(cols)(length(x))
 
 

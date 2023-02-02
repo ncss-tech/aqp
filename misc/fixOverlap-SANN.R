@@ -1,6 +1,6 @@
 library(aqp)
 library(lattice)
-library(viridis)
+library(viridisLite)
 
 
 ## explore correlation between dist(initial configuration) and dist(proposed configuration)
