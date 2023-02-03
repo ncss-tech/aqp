@@ -41,6 +41,28 @@ Information content via compression (gzip) is the central assumption behind this
 
 The ratios computed against a "simple" baseline represent something like "information gain", ranging from 0 to 1. Larger baseline ratios suggest more complexity (more information) associated with a soil profile's depth-functions. Alternatively, the total quantity of information (in bytes) can be determined by setting \code{baseline = FALSE} and \code{method = 'sum'}.
 }
+\examples{
+
+# simulate three profiles of increasing complexity
+p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5)
+p2 <- data.frame(id = 2, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = rep(5, times = 6))
+p3 <- data.frame(id = 3, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = c(1, 5, 10, 3, 6, 2))
+
+# combine and upgrade to SPC
+z <- rbind(p1, p2, p3)
+depths(z) <- id ~ top + bottom
+
+# visual check
+plotSPC(z, color = 'p')
+
+# compute information index several ways
+profileInformationIndex(z, vars = c('p'), method = 'sum')
+profileInformationIndex(z, vars = c('p'), method = 'mean')
+
+profileInformationIndex(z, vars = c('p'), method = 'mean', baseline = FALSE)
+profileInformationIndex(z, vars = c('p'), method = 'sum', baseline = FALSE)
+
+}
 \author{
 D.E. Beaudette
 }

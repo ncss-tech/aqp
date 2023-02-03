@@ -103,7 +103,7 @@ z <- data.frame(
 
 cor(z)
 
-hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = viridis, colorkey = FALSE, varname.cex = 0.75, varname.font = 2)
+hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = mako, colorkey = FALSE, varname.cex = 0.75, varname.font = 2)
 
 
 
@@ -140,11 +140,11 @@ library(ggdist)
 library(ggplot2)
 
 ggplot(site(x), aes(x = pi, y = greatgroup)) +
-  stat_interval(inherit.aes = TRUE, orientation = 'horizontal') + 
+  stat_interval(inherit.aes = TRUE, orientation = 'horizontal', size = 6) + 
   theme_minimal() +
   theme(legend.position = c(1, 1), legend.justification ='right', legend.direction	
         = 'horizontal', legend.background = element_rect(fill = 'white', color = NA), axis.text.y = element_text(face = 'bold')) + 
-  stat_summary(geom = 'point', fun = median, shape = 21, fill = 'black', col = 'white', cex = 2) +
+  stat_summary(geom = 'point', fun = median, shape = 21, fill = 'black', col = 'white', cex = 3) +
   scale_color_brewer() + 
   scale_x_continuous(n.breaks = 16, limits = c(0, 1)) +
   xlab('Profile Information Index') + ylab('') +
@@ -158,7 +158,7 @@ ggplot(site(x), aes(x = pi, y = greatgroup)) +
 z1 <- lapply(letters[1:10], random_profile, n = 5, exact = TRUE, n_prop = 1, SPC = TRUE, method = 'LPP', lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25)
 z1 <- combine(z1)
 
-z2 <- lapply(letters[11:20], random_profile, n = 5, exact = TRUE, n_prop = 1, SPC = TRUE, method = 'LPP', lpp.a=5, lpp.b=1, lpp.d=1, lpp.e=1, lpp.u=25)
+z2 <- lapply(letters[11:20], random_profile, n = 5, exact = TRUE, n_prop = 1, SPC = TRUE, method = 'LPP', lpp.a=5, lpp.b=2, lpp.d=1, lpp.e=1, lpp.u=25)
 z2 <- combine(z2)
 
 site(z1)$g <- 'high'
@@ -166,7 +166,7 @@ site(z2)$g <- 'low'
 
 z <- combine(z1, z2)
 
-z$pi <- profileApply(z, FUN = profileInformationIndex, simplify = TRUE, vars = c('p1'), method = 'sum')
+z$pi <- profileApply(z, FUN = profileInformationIndex, simplify = TRUE, vars = c('p1'), method = 'sum', baseline = FALSE)
 z$nhz <- profileApply(z, FUN = nrow, simplify = TRUE)
 
 z$pi
@@ -177,32 +177,36 @@ par(mar = c(0, 0, 3, 0))
 groupedProfilePlot(z, groups = 'g', color = 'p1')
 
 
-tapply(z$pi, z$g, summary)
+bwplot(g ~ pi, data = site(z))
 
 
 
 z1 <- lapply(1:50, random_profile, n = 5, exact = TRUE, n_prop = 1, SPC = TRUE, method = 'LPP', lpp.a=5, lpp.b=10, lpp.d=5, lpp.e=5, lpp.u=25, min_thick = 2, max_thick = 50)
 z1 <- combine(z1)
 
-z1$pi <- profileApply(z1, FUN = profileInformationIndex, simplify = TRUE, vars = c('p1'), method = 'median')
+z1$pi <- profileApply(z1, FUN = profileInformationIndex, simplify = TRUE, vars = c('p1'), method = 'median', baseline = TRUE)
 
 par(mar = c(3, 0, 0, 0))
 plotSPC(z1, color = 'p1', plot.order = order(z1$pi), print.id = FALSE, width = 0.35, divide.hz = FALSE)
 axis(side = 1, at = 1:length(z1), labels = format(z1$pi[order(z1$pi)], digits = 3), cex.axis = 0.66)
 
 
+# simulate three profiles of increasing complexity
+p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5)
+p2 <- data.frame(id = 2, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = rep(5, times = 6))
+p3 <- data.frame(id = 3, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = c(1, 5, 10, 3, 6, 2))
 
-a <- data.frame(id = 1, top = 0, bottom = 100, p = 5)
-b <- data.frame(id = 1, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = rep(5, times = 6))
+# combine and upgrade to SPC
+z <- rbind(p1, p2, p3)
+depths(z) <- id ~ top + bottom
 
-depths(a) <- id ~ top + bottom
-depths(b) <- id ~ top + bottom
+# visual check
+plotSPC(z, color = 'p')
 
-profileInformationIndex(a, vars = c('p'), method = 'sum')
-profileInformationIndex(b, vars = c('p'), method = 'sum')
+# compute information index several ways
+profileInformationIndex(z, vars = c('p'), method = 'sum')
+profileInformationIndex(z, vars = c('p'), method = 'mean')
 
-profileInformationIndex(a, vars = c('p'), method = 'mean')
-profileInformationIndex(b, vars = c('p'), method = 'mean')
-
-
+profileInformationIndex(z, vars = c('p'), method = 'mean', baseline = FALSE)
+profileInformationIndex(z, vars = c('p'), method = 'sum', baseline = FALSE)
 
