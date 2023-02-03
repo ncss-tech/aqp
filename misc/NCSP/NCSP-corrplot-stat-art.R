@@ -6,16 +6,21 @@ library(corrplot)
 library(viridisLite)
 
 # make n profiles of fake data
-# compute pair-wise distances
-# return full distance matrix
 .makeData <- function(n) {
   x <- lapply(1:n, random_profile, n = c(6, 7, 8), n_prop = 5, method = 'LPP', SPC = TRUE)
   x <- combine(x)
   
+  return(x)
+}
+
+# compute pair-wise distances
+# return full distance matrix
+.doNCSP <- function(i) {
+  
   v <-  c('p1', 'p2', 'p3', 'p4')
-  d <- NCSP(x, vars = v, k = 0, rescaleResult = TRUE)
+  d <- NCSP(i, vars = v, k = 0, rescaleResult = TRUE)
   m <- as.matrix(d)
-  dimnames(m) <- list(profile_id(x), profile_id(x))
+  dimnames(m) <- list(profile_id(i), profile_id(i))
   
   return(m)
 }
@@ -29,7 +34,7 @@ library(viridisLite)
     is.corr = FALSE, 
     col.lim = c(0, 1), 
     method = "color", 
-    order = "hclust",
+    order = "original",
     type = "upper", 
     tl.pos = "n",
     cl.pos = "n",
@@ -48,10 +53,17 @@ n.profiles <- c(35, 6, 100, 20, 15, 8, 45, 10, 67, 3)
 n.profiles <- sort(n.profiles)
 
 # simulate data and prepare distance matrices
-l <- lapply(n.profiles, .makeData)
+.profiles <- lapply(n.profiles, .makeData)
+
+# compute distances
+.dist <- lapply(.profiles, .doNCSP)
 
 par(mfrow=c(2, 5), bg = 'black', fg = 'white')
-.junk <- lapply(l, .plotData)
+.junk <- lapply(.dist, .plotData)
 
+# compute iformation content
+.info <- lapply(.profiles, profileInformationIndex, vars =  c('p1', 'p2', 'p3', 'p4'), method = 'sum', baseline = FALSE)
+
+sapply(.info, sum)
 
 

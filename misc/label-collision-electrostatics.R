@@ -13,9 +13,9 @@ library(viridisLite)
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10)
 # x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
 # x <- c(1, rep(5, times = 10), 12)
-# x <- sort(1:15 + rnorm(15, mean = 0, sd = 2))
+x <- sort(1:15 + rnorm(15, mean = 0, sd = 2))
 
-x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
+# x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
 
 length(x)
 

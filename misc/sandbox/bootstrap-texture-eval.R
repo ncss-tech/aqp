@@ -12,8 +12,8 @@ library(dplyr)
 
 ssc <- data.frame(SAND = .sand, SILT = .silt, CLAY = .clay)
 
-# simulate 20 samples
-.n <- 20
+# simulate n samples
+.n <- 100
 s.d <- bootstrapSoilTexture(ssc, n = .n, method = 'dirichlet')$samples
 s.n <- bootstrapSoilTexture(ssc, n = .n, method = 'normal')$samples
 
@@ -37,6 +37,9 @@ TT.points(tri.data = s.n, geo = TT, col='darkgreen', pch = 1, cex = 0.5, lwd = 1
 TT.points(tri.data = ssc, geo = TT, bg='royalblue', pch = 22, cex = 1, lwd = 1, tri.sum.tst = FALSE)
 
 legend('top', legend = c('Source', 'Dirichlet', 'Multivariate Normal'), pch = c(22, 3, 1), col = c('black', 'firebrick', 'darkgreen'), pt.bg = c('royalblue', NA, NA), horiz = TRUE, bty = 'n')
+
+
+stats.full <- textureTriangleSummary(s.d, pch = 1, cex = 0.5, range.alpha = 50, col = grey(0.5), legend = TRUE, main = 'Original')
 
 
 
