@@ -45,8 +45,18 @@ The ratios computed against a "simple" baseline represent something like "inform
 
 # simulate three profiles of increasing complexity
 p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5)
-p2 <- data.frame(id = 2, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = rep(5, times = 6))
-p3 <- data.frame(id = 3, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = c(1, 5, 10, 3, 6, 2))
+
+p2 <- data.frame(
+id = 2, top = c(0, 10, 20, 30, 40, 50), 
+bottom = c(10, 20, 30, 40, 50, 100), 
+p = rep(5, times = 6)
+)
+
+p3 <- data.frame(
+id = 3, top = c(0, 10, 20, 30, 40, 50), 
+bottom = c(10, 20, 30, 40, 50, 100), 
+p = c(1, 5, 10, 3, 6, 2)
+)
 
 # combine and upgrade to SPC
 z <- rbind(p1, p2, p3)
