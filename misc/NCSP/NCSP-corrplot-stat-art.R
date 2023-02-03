@@ -61,7 +61,7 @@ n.profiles <- sort(n.profiles)
 par(mfrow=c(2, 5), bg = 'black', fg = 'white')
 .junk <- lapply(.dist, .plotData)
 
-# compute iformation content
+# compute information content
 .info <- lapply(.profiles, profileInformationIndex, vars =  c('p1', 'p2', 'p3', 'p4'), method = 'sum', baseline = FALSE)
 
 sapply(.info, sum)
