@@ -37,7 +37,8 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
 #' @export
 setMethod("names", signature("SoilProfileCollection"),
           function(x) {
-            res <- c(horizons = horizonNames(x), site = siteNames(x)[-1])
+            sn <- siteNames(x)
+            res <- c(horizons = horizonNames(x), site = sn[!sn %in% idname(x)])
             return(res)
           })
 
