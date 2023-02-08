@@ -46,7 +46,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                            ksub <- as.character(kargs)[2:length(kargs)]
 
                            # handle special keywords in "k" index
-                           for(k in ksub) {
+                           for (k in ksub) {
                              if (!is.na(k)) {
                                switch(k,
                                       ".FIRST" = {
@@ -59,6 +59,12 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                                         ksubflag <- TRUE
                                       },
                                       ".NHZ" = {
+                                        ksubflag <- TRUE
+                                      },
+                                      ".TOP" = {
+                                        ksubflag <- TRUE
+                                      },
+                                      ".BOTTOM" = {
                                         ksubflag <- TRUE
                                       })
                              }
@@ -175,6 +181,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
 
                              # local vars to make R CMD check happy
                              .N <- NULL
+                             .SD <- NULL
                              .I <- NULL
                              V1 <- NULL
 
@@ -186,10 +193,11 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
 
                              # handle special symbols in j index
                              # currently supported:
+                             #  - .FIRST: first horizon index per profile
                              #  - .LAST: last horizon index per profile
                              #  - .HZID: return horizon slot row index (short circuit)
-                             #  - .FIRST: first horizon index per profile
-                             # the above can be combined. .LAST takes precedent over .FIRST.
+                             #  - .TOP/.BOTTOM: return top/bottom depth (short circuit)
+                             # the above can be combined. .LAST takes precedence over .FIRST
 
                              # determine j indices to KEEP
 
@@ -209,6 +217,16 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                              # short circuit for horizon-slot indices
                              if (ksubflag && ".HZID" %in% ksub) {
                                return(j.idx)
+                             # short circuit for top and/or bottom depths
+                             } else if (ksubflag && any(c(".TOP", ".BOTTOM") %in% ksub)) {
+                               hzd <- horizonDepths(x)
+                               res <- h[j.idx, .SD, .SDcols = hzd[c(".TOP", ".BOTTOM") %in% ksub]]
+                               # vector default with 1 keyword
+                               if (ncol(res) == 1) 
+                                 return(res[[1]])
+                               # TODO: should names be standardized for data.frame?
+                               #       always top, bottom order even if keywords are reversed
+                               return(.as.data.frame.aqp(res, aqp_df_class(x)))
                              } else if (ksubflag && ".NHZ" %in% ksub) {
                                # short circuit for number of horizons
                                return(h[j.idx, .N, by = list(bylist[[1]][j.idx])]$N)
