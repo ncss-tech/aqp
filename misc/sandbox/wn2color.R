@@ -2,9 +2,10 @@
 # https://aty.sdsu.edu/explain/optics/rendering.html
 
 
+## simulate the color of materials that refelect light (D65) within very narrow bands of select wavelength(s)
 
 library(aqp)
-
+library(gifski)
 
 ?spec2Munsell
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
@@ -53,7 +54,7 @@ w2c <- function(.w, .sd = rep(10, times = length(.w)), .max = rep(0.75, times = 
   .lab.y <- max(.s) - (max(.s) * 0.05)
   
   
-  plot(.m, .s, type = 'h', xlab = 'Wavelength (nm)', ylab = '', axes = FALSE, col = .col, lwd = 7, lend = 1)
+  plot(.m, .s, type = 'h', xlab = '', ylab = '', axes = FALSE, col = .col, lwd = 7, lend = 1)
   
   axis(1, at = seq(from = 380, to = 730, by = 10), cex.axis = 0.75 * .cex, las = 3, col.axis = .fgcol, col.ticks = .fgcol)
   
@@ -71,8 +72,17 @@ w2c <- function(.w, .sd = rep(10, times = length(.w)), .max = rep(0.75, times = 
   
   
   ## TODO: simplify title when length(.w) > 1
-  .txt <- sprintf('Estimated Color @ %snm [std.dev %snm]\nD65 Illuminant / CIE1931 Standard Observer', .w, .sd)
+  if(length(.w) < 2) {
+    .txt <- sprintf('Estimated Color @ %snm [std.dev %snm]\nD65 Illuminant / CIE1931 Standard Observer', .w, .sd)
+  } else {
+    .txt <- 'Estimated Color\nD65 Illuminant / CIE1931 Standard Observer'
+  }
+  
   title(.txt, cex.main = 0.9 * .cex, col.main = .fgcol)
+  
+  # closer annotation of axes
+  mtext('Reflectance', side = 2, line = 1.5)
+  mtext('Wavelength (nm)', side = 1, line = 2.5)
   
   box()
   
@@ -117,7 +127,7 @@ w2c(680, .sd = 20)
 w2c(480, .sd = 20)
 
 
-library(gifski)
+
 
 
 .plotIt <- function(i, ...) {
@@ -128,7 +138,7 @@ library(gifski)
 }
 
 .seq <- seq(from = 380, to = 730, by = 5)
-gifski::save_gif(sapply(.seq, .plotIt, .max = 1), gif_file = 'spec1.gif', delay = 0.1)
+gifski::save_gif(sapply(.seq, .plotIt, .max = 1), gif_file = 'e:/working_copies/spec1.gif', delay = 0.1)
 
 
 .seq <- seq(from = 1, to = 50, by = 1)
@@ -136,26 +146,26 @@ gifski::save_gif(sapply(.seq, .plotIt, .max = 1), gif_file = 'spec1.gif', delay 
 gifski::save_gif(
   {
     sapply(.seq, function(i) {
-      par(mar = c(4.25, 1, 3, 1), mfrow = c(1, 1), bg = 'black', fg = 'white')
+      par(mar = c(4.25, 2.5, 3, 0.25), mfrow = c(1, 1), bg = 'black', fg = 'white')
       w2c(.w = 480, .sd = i, .max = 0.9, .cex = 1.1)
     })
     
     sapply(.seq, function(i) {
-      par(mar = c(4.25, 1, 3, 1), mfrow = c(1, 1), bg = 'black', fg = 'white')
+      par(mar = c(4.25, 2.5, 3, 0.25), mfrow = c(1, 1), bg = 'black', fg = 'white')
       w2c(.w = 600, .sd = i, .max = 0.9, .cex = 1.1)
     })
     
     sapply(.seq, function(i) {
-      par(mar = c(4.25, 1, 3, 1), mfrow = c(1, 1), bg = 'black', fg = 'white')
+      par(mar = c(4.25, 2.5, 3, 0.25), mfrow = c(1, 1), bg = 'black', fg = 'white')
       w2c(.w = 530, .sd = i, .max = 0.9, .cex = 1.1)
     })
     
     sapply(.seq, function(i) {
-      par(mar = c(4.25, 1, 3, 1), mfrow = c(1, 1), bg = 'black', fg = 'white')
+      par(mar = c(4.25, 2.5, 3, 0.25), mfrow = c(1, 1), bg = 'black', fg = 'white')
       w2c(.w = 680, .sd = i, .max = 0.9, .cex = 1.1)
     })
   }, 
-  gif_file = 'spec2.gif', 
+  gif_file = 'e:/working_copies/spec2.gif', 
   delay = 0.02, 
   width = 800, 
   height = 400
@@ -167,10 +177,10 @@ g <- expand.grid(sd = seq(from = 1, to = 50, by = 5), w = seq(from = 380, to = 7
 
 gifski::save_gif(
   sapply(1:nrow(g), function(i) {
-    par(mar = c(4.25, 1, 3, 1), mfrow = c(1, 1))
+    par(mar = c(4.25, 1.5, 3, 0.25), mfrow = c(1, 1))
     w2c(.w = g$w[i], .sd = g$sd[i], .max = 0.9, .cex = 1.1)
   }), 
-  gif_file = 'spec3.gif', 
+  gif_file = 'e:/working_copies/spec3.gif', 
   delay = 0.1, 
   width = 800, 
   height = 400
