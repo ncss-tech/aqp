@@ -8,25 +8,40 @@ library(viridisLite)
 ##
 
 
+## TODO: 
+## thanks Keith !!!
+
+# compare final configurations
+# allow electrostatic version to "stop" when badness is minimized
+
+
 ## input must be sorted ASC
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10)
 # x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
 # x <- c(1, rep(5, times = 10), 12)
-x <- sort(1:15 + rnorm(15, mean = 0, sd = 2))
+x <- sort(1:15 + abs(rnorm(15, mean = 0, sd = 2)))
 
 # x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
+
+# x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
+
+
 
 length(x)
 
 # static electrical force between two charged particles
-electricForce <- function(Q1, Q2, k, d, tiny = 0.1) {
+electricForce <- function(Q1, Q2, k, d, tiny = 0.1, exponet = 2, const = 0.25) {
   
   # if 0-distance, force is infinite
   # use a small number
   d <- ifelse(d < tiny, tiny, d)
   
-  res <- (k * Q1 * Q2 ) / d^2
+  # keith: add constant reduction in force
+  # / (d^2 + const)
+  
+  # increase const --> dampen ringing
+  res <- (k * Q1 * Q2 ) / (d^exponet + const)
   return(res)
 }
 
@@ -133,7 +148,7 @@ cols <- colorRampPalette(cols)(length(x))
 
 ## TODO: animate this
 
-z <- simParticles(x, k.start = 0.5, n = 1000)
+z <- simParticles(x, k.start = 0.5, n = 100)
 .n <- nrow(z$xnew)
 
 par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
@@ -156,7 +171,7 @@ axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = 'white',
 ## fixOverlap doesn't always preserve rank ordering
 ##  ->> maybe impossible with ties in x?
 
-z <- fixOverlap(x, trace = TRUE)
+z <- fixOverlap(x, trace = TRUE, maxIter = 1000)
 .n <- nrow(z$states)
 
 plot(z$stats, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(0, .n))
