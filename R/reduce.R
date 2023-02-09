@@ -11,21 +11,20 @@
 #'  - `idname(p)`, `horizonDepths(p)`, `hzidname(p)`
 #'  
 #' Optional column names included (when metadata are set)
-#'  - `hzdesgnname(p)`, `hztexclname(p)`
+#'  - `hzdesgnname(p)`, `hztexclname(p)`, `GHL(p)`
 #'  
-#' @seealso `hzdesgnname()` `hztexclname()`
+#' @seealso `hzdesgnname()` `hztexclname()` `GHL()`
 #' @return a SoilProfileCollection
 #' @export
 reduceSPC <- function(p, column_names = NULL) {
   
-  minnames <- c(idname(p), horizonDepths(p), hzidname(p))
-  extnames <- c(hzdesgnname(p), hztexclname(p))
-  ecn <- column_names[!column_names %in% c(minnames, extnames)]
+  nn <- .hzMetadataNames(p, depths = TRUE)
+  ecn <- column_names[!column_names %in% nn]
   sn <- siteNames(p)
   hn <- horizonNames(p)
   
   stn <- sn[sn %in% ecn]
-  hzn <- c(minnames, extnames[extnames != ""], hn[hn %in% ecn])
+  hzn <- c(nn, hn[hn %in% ecn])
   msn <- ecn[!(ecn %in% stn | ecn %in% hzn)]
   
   if (length(msn) > 0) {

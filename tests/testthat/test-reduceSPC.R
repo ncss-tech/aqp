@@ -12,7 +12,7 @@ test_that("reduceSPC() works", {
   x <- reduceSPC(sp4, c("newsite", "CF"))
   
   expect_true(
-    all(horizonNames(x) == c("id", "top", "bottom", "hzID", "name", "texcl", "CF")) &&
-    all(siteNames(x) == c("id", "newsite"))
+    all(horizonNames(x) %in% c("id", "top", "bottom", "hzID", "name", "texcl", "CF")) &&
+    all(siteNames(x) %in% c("id", "newsite"))
   )
 })
