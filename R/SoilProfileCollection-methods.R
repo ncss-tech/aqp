@@ -1,3 +1,26 @@
+# if (!isGeneric("depths"))
+setGeneric("depths", function(x, hzID = FALSE, ...)
+  standardGeneric("depths"))
+
+#' @name depths
+#' @param x A SoilProfileCollection 
+#' @param hzID Include horizon ID? Usually this is calculated from the (sorted) row index unless `hzidname()<-` has been called. Default: `FALSE`
+#' @param ... not used
+#' @return a `data.frame` containing profile ID, top depth, and bottom depth
+#' @export
+#' @seealso `horizons()` `idname()` `hzidname()` `horizonDepths()`
+#' @rdname depths
+#' @aliases depths,SoilProfileCollection-method
+#' @examples
+#' # load a SoilProfileCollection
+#' data(jacobs2000, package = "aqp")
+#' 
+#' depths(jacobs2000)
+setMethod("depths", "SoilProfileCollection", function(x, hzID = FALSE, ...) {
+  n <- c(idname(x), ifelse(hzID, hzidname(x), character(0)), horizonDepths(x))
+  .data.frame.j(horizons(x), n, use_class = aqp_df_class(x))
+})
+
 # if (!isGeneric("validSpatialData"))
   setGeneric("validSpatialData", function(object, ...)
     standardGeneric("validSpatialData"))

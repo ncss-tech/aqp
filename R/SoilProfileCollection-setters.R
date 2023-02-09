@@ -16,11 +16,13 @@ setReplaceMethod("depths", signature(object = "SoilProfileCollection"),
 		object
 	})
 
-#' Initialize a SoilProfileCollection from a data.frame object
+#' Initialize a SoilProfileCollection from data.frame 
+#' @description `depths(<data.frame>) <- <formula>`: Initialize SoilProfileCollection
+#' @description `depths(<SoilProfileCollection>)`: Extract profile ID and horizon depths from SoilProfileCollection
 #' @name depths<-
 #' @param object An object to promote to SoilProfileCollection (inherits from data.frame)
 #' @param value A formula specifying the unique profile ID, top and bottom depth column names
-#' @aliases depths<-,data.frame-method
+#' @aliases depths<-,data.frame-method depths depths<-
 #' @details The input horizon data, and the resulting profile order, is sorted based on unique profile ID and top depth. ID columns are converted to character, depth columns are converted to integer. If `NA` values exist in all of the top depths, a prototype with 1 horizon per profile ID is returned, with `NA` in all non-essential columns. If the input `object` has 0 rows, a prototype with 0 horizons and 0 rows, but same column names as `object`, is returned. 
 #' @rdname depths
 #' @export
