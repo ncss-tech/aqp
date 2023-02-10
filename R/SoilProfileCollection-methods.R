@@ -17,7 +17,7 @@ setGeneric("depths", function(x, hzID = FALSE, ...)
 #' 
 #' depths(jacobs2000)
 setMethod("depths", "SoilProfileCollection", function(x, hzID = FALSE, ...) {
-  n <- c(idname(x), ifelse(hzID, hzidname(x), character(0)), horizonDepths(x))
+  n <- c(idname(x), hzidname(x)[isTRUE(hzID)], horizonDepths(x))
   .data.frame.j(horizons(x), n, use_class = aqp_df_class(x))
 })
 
