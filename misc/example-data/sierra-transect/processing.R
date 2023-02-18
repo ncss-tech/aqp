@@ -4,6 +4,9 @@ library(cluster)
 library(sharpshootR)
 
 ## Wilson et al. paper with excellent synthesis over all three transects
+# https://www.sciencedirect.com/science/article/pii/S0016706122001161
+# https://doi.org/10.1016/j.geoderma.2022.115809
+
 # field names need manual adjustment
 # note that not all sites from original papers are included
 # some depths / horizon designations are not the same
@@ -29,14 +32,14 @@ w$pm <- factor(w$pm, levels = c('Granite', 'Andesite', 'Basalt'))
 w$biome <- factor(w$biome, levels = c('Oak', 'Ponderosa pine', 'White fir', 'Red fir'))
 
 # ordering Oak -> Red fir / parent material
-w$.id <- interaction(w$biome, w$pm)
+w$pedonID <- interaction(w$biome, w$pm)
 # looks right
 
 # 0-padding for proper sorts
-w$.id <- sprintf('%03d', as.integer(w$.id))
+w$pedonID <- sprintf('%03d', as.integer(w$pedonID))
 
 # init SPC
-depths(w) <- .id ~ top + bottom
+depths(w) <- pedonID ~ top + bottom
 site(w) <- ~ pm + biome
 hzdesgnname(w) <- 'name'
 
@@ -50,11 +53,10 @@ groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', n
 
 groupedProfilePlot(w, groups = 'biome', group.name.offset = -15, label = 'pm', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
 
-## TODO: generate docs + units
 
-# re-name and save
-
-
+## re-name and save
+wilson2022 <- w
+save(wilson2022, file = '../../../data/wilson2022.rda')
 
 
 ## load original Sierra Transect (central Sierra, granite) data from CSV
