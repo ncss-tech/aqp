@@ -1138,38 +1138,6 @@ NULL
 #'
 "ROSETTA.centroids"
 
-#' Sample XRD Patterns
-#'
-#' Several sample XRD patterns from the RRUFF project site.
-#'
-#'
-#' @name rruff.sample
-#' @docType data
-#' @usage data(rruff.sample)
-#' @format A data frame with 3000 observations on the following 8 variables.
-#' \describe{ \item{twotheta}{twotheta values}
-#' \item{nontronite}{XRD pattern for nontronite}
-#' \item{montmorillonite}{XRD pattern for montmorillonite}
-#' \item{clinochlore}{XRD pattern for clinochlore}
-#' \item{antigorite}{XRD pattern for antigorite}
-#' \item{chamosite}{XRD pattern for chamosite}
-#' \item{hematite}{XRD pattern for hematite}
-#' \item{goethite}{XRD pattern for goethite} }
-#' @references http://rruff.info/
-#' @source http://rruff.info/
-#' @keywords datasets
-#' @examples
-#'
-#' data(rruff.sample)
-#'
-#' # plot all patterns
-#' matplot(rruff.sample, type='l', lty=1)
-#'
-#'
-"rruff.sample"
-
-
-
 
 #'
 #' @title US State Soils

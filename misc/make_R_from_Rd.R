@@ -16,7 +16,7 @@ lapply(filez, function(x) {
 
 # make data doc into one file; good enough for a one time thing -- add to data-documentation.R
 a <- c("sp1", "sp2", "sp3", "sp4", "sp5", "sp6", "sierraTransect", "ca630",
-       "rowley2019", "jacobs2000", "ROSETTA.centroids", "rruff.sample", "munsell", "soil_minerals")
+       "rowley2019", "jacobs2000", "ROSETTA.centroids", "munsell", "soil_minerals")
 datafilez <- file.path("R", paste0(a,".R"))
 cat((paste0(do.call('c', lapply(datafilez, readLines)),'\n')), file = "misc/newdatadoc.R")
 lapply(datafilez, file.remove)
