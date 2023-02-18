@@ -87,20 +87,18 @@ site(andesite) <- ~ elev + precip + MAP + MAT + veg + Fe_d_to_Fe_t
 site(andesite) <- andesites.site
 
 
-
-## init spatial data from coordinates
-# GCS NAD83
-initSpatial(granite, crs = '4269') <- ~ x + y
-initSpatial(andesite, crs = '4269') <- ~ x + y
-
 ## label transects via site-level attribute
-granite$transect <- rep('Granite', times = length(granite))
-andesite$transect <- rep('Andesite', times = length(andesite))
+site(granite)$transect <- 'Granite'
+site(andesite)$transect <- 'Andesite'
 
 
 ## combine into single SPC, 
 # attribute names not the same, filled with NA
 g <- c(granite, andesite)
+
+## init spatial data from coordinates, same column names
+# GCS NAD83
+initSpatial(granite, crs = '4269') <- ~ x + y
 
 ## set horizon designation
 hzdesgnname(g) <- 'name'
