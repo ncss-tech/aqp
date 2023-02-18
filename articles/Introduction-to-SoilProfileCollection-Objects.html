@@ -315,8 +315,8 @@ follows.</p>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span></span>
 <span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span>
-<span><span class="co">#&gt;  [1]  793.7768  826.1799  875.2551 1095.2951 1039.6699 1007.7331  904.6441 1147.1379 1289.5773</span></span>
-<span><span class="co">#&gt; [10] 1043.6796</span></span>
+<span><span class="co">#&gt;  [1] 1054.6778 1208.3146 1127.1274  798.2522  774.4593 1027.4249  825.5156  887.3022 1154.1135</span></span>
+<span><span class="co">#&gt; [10]  878.4738</span></span>
 <span></span>
 <span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -372,12 +372,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa  793.7768             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn  826.1799             1        1     B</span></span>
-<span><span class="co">#&gt;      kings  875.2551             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa 1095.2951             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1039.6699             1        1     A</span></span>
-<span><span class="co">#&gt;       napa 1007.7331             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa 1054.6778             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn 1208.3146             1        1     B</span></span>
+<span><span class="co">#&gt;      kings 1127.1274             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa  798.2522             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino  774.4593             1        1     A</span></span>
+<span><span class="co">#&gt;       napa 1027.4249             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -536,16 +536,16 @@ data and the CRS, respectively.</p>
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;              x       y</span></span>
-<span><span class="co">#&gt;  [1,] 353935.3 4109708</span></span>
-<span><span class="co">#&gt;  [2,] 353891.1 4109625</span></span>
-<span><span class="co">#&gt;  [3,] 354033.8 4109487</span></span>
-<span><span class="co">#&gt;  [4,] 354068.3 4109519</span></span>
-<span><span class="co">#&gt;  [5,] 354062.9 4109469</span></span>
-<span><span class="co">#&gt;  [6,] 353924.5 4109587</span></span>
-<span><span class="co">#&gt;  [7,] 354060.9 4109307</span></span>
-<span><span class="co">#&gt;  [8,] 353935.0 4109590</span></span>
-<span><span class="co">#&gt;  [9,] 354004.9 4109495</span></span>
-<span><span class="co">#&gt; [10,] 354133.3 4109501</span></span>
+<span><span class="co">#&gt;  [1,] 354034.5 4109481</span></span>
+<span><span class="co">#&gt;  [2,] 353994.2 4109354</span></span>
+<span><span class="co">#&gt;  [3,] 353976.6 4109612</span></span>
+<span><span class="co">#&gt;  [4,] 353931.0 4109550</span></span>
+<span><span class="co">#&gt;  [5,] 353952.8 4109421</span></span>
+<span><span class="co">#&gt;  [6,] 354037.6 4109549</span></span>
+<span><span class="co">#&gt;  [7,] 354112.8 4109429</span></span>
+<span><span class="co">#&gt;  [8,] 353756.3 4109481</span></span>
+<span><span class="co">#&gt;  [9,] 353933.7 4109518</span></span>
+<span><span class="co">#&gt; [10,] 353872.5 4109479</span></span>
 <span></span>
 <span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -1586,14 +1586,14 @@ Map (GSM) standard depths.</p>
 <span><span class="co"># note: result is in long-format</span></span>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1 20.48757             1.0000000   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1 20.48805             1.0000000   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1 20.49196             1.0000000  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1 20.89720             1.0000000  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 23.84270             1.0000000  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 22.77316             0.9333333 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2 14.31950             1.0000000   0      5</span></span></code></pre></div>
+<span><span class="co">#&gt;   variable id     value contributing_fraction top bottom</span></span>
+<span><span class="co">#&gt; 1       p1  1  6.059228                 1.000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1  6.682417                 1.000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 12.291114                 1.000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 21.413862                 1.000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 21.686345                 0.675  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1       NaN                 0.000 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 20.032377                 1.000   0      5</span></span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
