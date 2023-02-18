@@ -60,12 +60,12 @@ save(wilson2022, file = '../../../data/wilson2022.rda')
 
 
 ## load original Sierra Transect (central Sierra, granite) data from CSV
-granite <- read.csv('dahlgren-granitics.csv', stringsAsFactors=FALSE)
+granite <- read.csv('dahlgren-granitics.csv', stringsAsFactors = FALSE)
 
 ## load parallel Merhten formation transect from CSV
 # note that there are two files
-andesite <- read.csv(file='rasmussen-andisitic-lahar.csv', stringsAsFactors=FALSE)
-andesites.site <- read.csv(file='rasmussen-andisitic-lahar-site.csv', stringsAsFactors=FALSE)
+andesite <- read.csv(file = 'rasmussen-andesitic-lahar.csv', stringsAsFactors = FALSE)
+andesites.site <- read.csv(file = 'rasmussen-andesitic-lahar-site.csv', stringsAsFactors = FALSE)
 
 
 # convert Munsell notation into R colors (sRGB)
@@ -89,46 +89,46 @@ site(andesite) <- andesites.site
 
 
 ## init spatial data from coordinates
-coordinates(granite) <- ~ x + y
-proj4string(granite) <- '+proj=longlat +datum=NAD83'
-
-coordinates(andesite) <- ~ x + y
-proj4string(andesite) <- '+proj=longlat +datum=NAD83'
-
+# GCS NAD83
+initSpatial(granite, crs = '4269') <- ~ x + y
+initSpatial(andesite, crs = '4269') <- ~ x + y
 
 ## label transects via site-level attribute
-granite$transect <- rep('Granite', times=length(granite))
-andesite$transect <- rep('Andesite', times=length(andesite))
+granite$transect <- rep('Granite', times = length(granite))
+andesite$transect <- rep('Andesite', times = length(andesite))
 
 
+## combine into single SPC, 
+# attribute names not the same, filled with NA
+g <- c(granite, andesite)
 
-## pbindlist into single SPC, note that attribute names may not be the same
-g <- pbindlist(list(granite, andesite))
+## set horizon designation
+hzdesgnname(g) <- 'name'
+
 
 # quick check
-par(mar=c(0,0,3,1))
-plot(g, width=0.3)
-plot(g, width=0.3, color='clay')
+par(mar = c(0,0,3,1))
+plotSPC(g, width = 0.3)
+plotSPC(g, width = 0.3, color = 'clay')
 
 ## load and merge sampled raster data
 gis.data <- read.csv('transect-GIS-data.csv', stringsAsFactors = FALSE)
 site(g) <- gis.data
 
-plot(g, width=0.3, color='clay', plot.order=order(g$elev))
-plot(g, width=0.3, color='clay', plot.order=order(g$effective.ppt_800))
+plotSPC(g, width = 0.3, color = 'clay', plot.order = order(g$elev))
+plotSPC(g, width = 0.3, color = 'clay', plot.order = order(g$effective.ppt_800))
 
 ## check
 
 
 ## re-level factors
-g$transect <- factor(g$transect, levels=c('Granite', 'Andesite'))
+g$transect <- factor(g$transect, levels = c('Granite', 'Andesite'))
 
-## compute some idices if possible
+## compute if possible
 g$Fe_o_to_Fe_d <- g$Fe_o / g$Fe_d
 
 
-# set horizon designation
-hzdesgnname(g) <- 'name'
+
 
 ## save
 sierraTransect <- g
