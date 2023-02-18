@@ -52,6 +52,23 @@ data(wilson2022)
 \description{
 An example \code{SoilProfileCollection}, derived from Wilson et al., 2022. Select data extracted from Appendix tables.
 }
+\examples{
+
+data(wilson2022)
+
+groupedProfilePlot(wilson2022, groups = 'pm', 
+group.name.offset = -15, label = 'biome', 
+name.style = 'center-center', color = 'CIA', 
+cex.names = 0.66, cex.id = 0.66, width = 0.3, 
+plot.depth.axis = FALSE, hz.depths = TRUE)
+
+groupedProfilePlot(wilson2022, groups = 'biome', 
+group.name.offset = -15, label = 'pm', 
+name.style = 'center-center', color = 'Fet', 
+cex.names = 0.66, cex.id = 0.66, width = 0.3, 
+plot.depth.axis = FALSE, hz.depths = TRUE)
+
+}
 \references{
 Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{doi.org/10.1016/j.geoderma.2022.115809}
 }

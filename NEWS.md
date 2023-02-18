@@ -12,7 +12,9 @@ Notable changes include:
  * `gower` package moved to SUGGESTS
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
-
+ * removal of `rruff.sample` example XRD patterns
+ * new example data, `wilson2022`
+ 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
