@@ -11,7 +11,7 @@ test_that("alignTransect works as expected", {
   
   # CRAN safe
   
-  # simple examples, data are pre-sorted by elevation
+  # data are not pre-sorted by elevation, alpha order
   p <- alignTransect(g$elev, 1, length(g), fix = FALSE)
   
   # structure
@@ -19,7 +19,7 @@ test_that("alignTransect works as expected", {
   expect_true(length(p) == 3)
   
   # known output
-  expect_true(all(p$order == 1:7))
+  expect_true(all(p$order == c(7, 1, 2, 4, 5, 6, 3)))
 })
 
 # basic functionality
@@ -35,7 +35,7 @@ test_that("more complex input", {
   expect_true(length(p) == 3)
   
   # known output
-  expect_true(all(p$order == c(7, 6, 5, 4, 3, 2, 1)))
+  expect_true(all(p$order == c(2, 5, 1, 3, 7, 4, 6)))
   
 })
 
