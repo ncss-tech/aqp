@@ -1,17 +1,17 @@
 citHeader("To cite aqp in publications use:")
 
-citEntry(
-  entry = "Manual",
+bibentry(
+  bibtype = "Manual",
   title = "aqp: Algorithms for Quantitative Pedology",
   author = "Beaudette, D., Roudier, P., Brown, A.",
-  note = "R package version 1.42",
+  note = "R package version 2.0",
   url = "https://CRAN.R-project.org/package=aqp",
-  year = "2022",
-  textVersion = "Beaudette, D., Roudier, P., Brown, A. (2022). aqp: Algorithms for Quantitative Pedology. R package version 1.42. <https://CRAN.R-project.org/package=aqp>"
+  year = "2023",
+  textVersion = "Beaudette, D., Roudier, P., Brown, A. (2023). aqp: Algorithms for Quantitative Pedology. R package version 2.0. <https://CRAN.R-project.org/package=aqp>"
 )
 
-citEntry(
-  entry    = "Article",
+bibentry(
+  bibtype    = "Article",
   title    = "Algorithms for quantitative pedology: A toolkit for soil scientists",
   author   = "Beaudette, D.E., Roudier, P., O'Geen, A.T.",
   journal  = "Computers & Geosciences",
