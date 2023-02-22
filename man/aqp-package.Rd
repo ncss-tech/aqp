@@ -3,15 +3,9 @@
 \docType{package}
 \name{aqp-package}
 \alias{aqp-package}
-\alias{aqp.env}
 \alias{aqp}
+\alias{aqp.env}
 \title{Algorithms for Quantitative Pedology}
-\format{
-An object of class \code{environment} of length 0.
-}
-\usage{
-aqp.env
-}
 \description{
 The aqp (Algorithms for Quantitative Pedology) package for R was developed
 to address some of the difficulties associated with processing soils
@@ -32,7 +26,7 @@ Demos: \code{demo(aqp)}
 \href{http://ncss-tech.github.io/AQP/}{Project homepage}
 }
 \seealso{
-\link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}, \link{sp5}}
+\verb{depths<-()}, \code{SoilProfileCollection()}, \code{\link{sp1}}, \code{\link{sp2}}, \code{\link{sp3}}, \code{\link{sp4}}, \code{\link{sp5}}, \code{\link{sp6}}
 }
 \author{
 Dylan E. Beaudette \href{mailto:debeaudette@ucdavis.edu}{debeaudette@ucdavis.edu}, Pierre Roudier, Andrew G. Brown
