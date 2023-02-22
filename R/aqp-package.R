@@ -23,7 +23,7 @@
 #' @aliases aqp-package aqp aqp.env
 #' @docType package
 #' @author Dylan E. Beaudette <debeaudette@@ucdavis.edu>, Pierre Roudier, Andrew G. Brown
-#' @seealso \link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}, \link{sp5}}
+#' @seealso `depths<-()`, `SoilProfileCollection()`, \code{\link{sp1}}, \code{\link{sp2}}, \code{\link{sp3}}, \code{\link{sp4}}, \code{\link{sp5}}, \code{\link{sp6}}
 #' @keywords package
 #' @import data.table
 #' @importFrom grDevices chull col2rgb colorRamp colorRampPalette colors convertColor grey hsv rgb rgb2hsv

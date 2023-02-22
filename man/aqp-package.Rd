@@ -26,7 +26,7 @@ Demos: \code{demo(aqp)}
 \href{http://ncss-tech.github.io/AQP/}{Project homepage}
 }
 \seealso{
-\link{ca630}, \code{\link{sp1}, \link{sp2}, \link{sp3}, \link{sp4}, \link{sp5}}
+\verb{depths<-()}, \code{SoilProfileCollection()}, \code{\link{sp1}}, \code{\link{sp2}}, \code{\link{sp3}}, \code{\link{sp4}}, \code{\link{sp5}}, \code{\link{sp6}}
 }
 \author{
 Dylan E. Beaudette \href{mailto:debeaudette@ucdavis.edu}{debeaudette@ucdavis.edu}, Pierre Roudier, Andrew G. Brown
