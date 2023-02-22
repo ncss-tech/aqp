@@ -90,7 +90,7 @@ setClass(
 #' ## profile ID, top and bottom depth and set up
 #' ## a SPC that is topologically correct and complete
 #'
-#' d <- do.call('rbind',lapply(1:10, random_profile))
+#' d <- do.call('rbind', lapply(1:10, random_profile))
 #'
 #' # promote to SoilProfileCollection and plot
 #' depths(d) <- id ~ top + bottom
@@ -101,8 +101,9 @@ setClass(
 #' d.2 <- d[2, ]
 #' d.345 <- d[3:5, ]
 #'
-#' # recombine, note that profiles are sorted according to ID
-#' d.new <- pbindlist(list(d.345, d.1, d.2))
+#' # combine profile collections
+#' # note that profiles are sorted according to ID
+#' d.new <- c(d.345, d.1, d.2)
 #' plot(d.new)
 #'
 #' data(sp1)
@@ -156,7 +157,6 @@ setClass(
 #' # note that IDs should all be character class
 #' d <- data.frame(id=profile_id(sp1), p=runif(n=length(sp1)), stringsAsFactors=FALSE)
 #' site(sp1) <- d
-#'
 #'
 #' # edit horizon depths
 #' horizonDepths(sp1) <- c('t', 'b')
