@@ -25,9 +25,9 @@ Minimum column names included (when \code{column_names = NULL})
 
 Optional column names included (when metadata are set)
 \itemize{
-\item \code{hzdesgnname(p)}, \code{hztexclname(p)}
+\item \code{hzdesgnname(p)}, \code{hztexclname(p)}, \code{GHL(p)}
 }
 }
 \seealso{
-\code{hzdesgnname()} \code{hztexclname()}
+\code{hzdesgnname()} \code{hztexclname()} \code{GHL()}
 }
