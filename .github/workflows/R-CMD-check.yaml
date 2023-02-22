@@ -43,10 +43,17 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@v2
-
+      
+      - name: Install system dependencies (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          brew install pkg-config
+          brew install cairo
+          brew install --cask xquartz
+          
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: any::rcmdcheck, markovchain=?ignore-before-r=4.0.0
           needs: check
 
       - name: Install soilDB from r-universe (devel+3.6 only)
