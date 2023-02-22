@@ -3,15 +3,9 @@
 \docType{package}
 \name{aqp-package}
 \alias{aqp-package}
-\alias{aqp.env}
 \alias{aqp}
+\alias{aqp.env}
 \title{Algorithms for Quantitative Pedology}
-\format{
-An object of class \code{environment} of length 0.
-}
-\usage{
-aqp.env
-}
 \description{
 The aqp (Algorithms for Quantitative Pedology) package for R was developed
 to address some of the difficulties associated with processing soils

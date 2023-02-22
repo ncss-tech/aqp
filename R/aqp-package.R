@@ -35,5 +35,8 @@
 #' @importFrom grid grid.text gpar unit
 #' @importFrom graphics plot
 #' @importFrom lattice levelplot xyplot panel.abline panel.grid panel.lines panel.points panel.polygon panel.rect panel.segments panel.text strip.custom trellis.par.get
+NULL
+
 #' @export aqp.env
+#' @noRd
 "aqp.env"
