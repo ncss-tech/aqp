@@ -2,8 +2,6 @@ context("mixing Munsell colors")
 
 test_that("mixMunsell works as expected", {
   
-  skip_if_not_installed('gower')
-  
   ## error conditions
   expect_error(mixMunsell(c(NA, '10YR 3/4')))
 
