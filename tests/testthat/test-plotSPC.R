@@ -246,17 +246,20 @@ test_that("horizon color specification interpreted correctly", {
   h <- horizons(p)
   
   # colors to use
-  cols <- c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598", "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142")
+  cols <- c("#5E4FA2", "#3288BD", "#66C2A5",
+            "#ABDDA4", "#E6F598", "#FEE08B",
+            "#FDAE61", "#F46D43", "#D53E4F",
+            "#9E0142")
   
   # attempt to interpret
-  x <- aqp:::.interpretHorizonColor(
-    h, 
-    color = 'p1', 
-    default.color = 'grey', 
+  x <- .interpretHorizonColor(
+    h,
+    color = 'p1',
+    default.color = 'grey',
     col.palette = cols,
     col.palette.bias = 1,
     n.legend = 8
-    )
+  )
   
   # reasonable object?
   expect_true(inherits(x, 'list'))
@@ -266,7 +269,7 @@ test_that("horizon color specification interpreted correctly", {
   expect_null(x$color.legend.data$leg.row.indices)
   
   # another try, no colors specified
-  x <- aqp:::.interpretHorizonColor(
+  x <- .interpretHorizonColor(
     h, 
     color = NA, 
     default.color = 'grey', 
@@ -281,9 +284,8 @@ test_that("horizon color specification interpreted correctly", {
   # there is no legend
   expect_true(is.null(x$color.legend.data))
   
-  
   # factor variable + multi-line legend
-  x <- aqp:::.interpretHorizonColor(
+  x <- .interpretHorizonColor(
     h, 
     color = 'p.factor', 
     default.color = 'grey', 

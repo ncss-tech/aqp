@@ -54,15 +54,15 @@ test_that("non-conformal combination tests", {
 
   # random data
   ids <- sprintf("%02d", 1:5)
-  x <- plyr::ldply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP',
-                   lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
+  x <- do.call('rbind', lapply(ids, random_profile, n=c(6, 7, 8), n_prop=1, method='LPP',
+                   lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25))
 
   depths(x) <- id ~ top + bottom
 
   # more random data
   ids <- sprintf("%s", letters[1:5])
-  y <- plyr::ldply(ids, random_profile, n=c(6, 7, 8), n_prop=4, method='LPP',
-                   lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25)
+  y <- do.call('rbind', lapply(ids, random_profile, n=c(6, 7, 8), n_prop=4, method='LPP',
+                   lpp.a=5, lpp.b=15, lpp.d=5, lpp.e=5, lpp.u=25))
 
   # alter ID, top, bottom column names
   y$pID <- y$id

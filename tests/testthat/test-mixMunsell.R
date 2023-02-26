@@ -1,8 +1,8 @@
 context("mixing Munsell colors")
 
-# skip_if_not_installed('gower')
-
 test_that("mixMunsell works as expected", {
+  
+  skip_if_not_installed('gower')
   
   ## error conditions
   expect_error(mixMunsell(c(NA, '10YR 3/4')))
@@ -26,14 +26,16 @@ test_that("mixMunsell works as expected", {
   # 1 10YR 4/2 1.955568
   
   x <- mixMunsell(c('10YR 5/3', '10YR 3/2'), w = 1)
-  expect_true(x$munsell == '10YR 4/2')
+  expect_equal(x$munsell, '10YR 4/2')
   expect_equal(x$distance, 1.9555, tolerance = 1e-4)
 
   # weights when length(x) != length(unique(x))
-  expect_silent(mixMunsell(c('10YR 5/3', '10YR 3/2', '10YR 5/3')))
+  expect_equal(mixMunsell(c('10YR 5/3', '10YR 3/2', '10YR 5/3'))$munsell,
+               "10YR 4/3")
 
   # 0 weights to filter NA
-  expect_silent(mixMunsell(c(NA, '10YR 3/4'), w = c(0, 1)))
+  expect_equal(mixMunsell(c(NA, '10YR 3/4'), w = c(0, 1))$munsell,
+               "10YR 3/4")
 
 })
 

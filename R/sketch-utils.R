@@ -1,3 +1,19 @@
+# draft replacement for scales::col_factor (without looking at it)
+.aqp_color_map <- function(palette, domain, na.color, ordered) {
+  .FUN <- function(x) {
+    if (is.numeric(x)) {
+      cuts <- c(gsub("^\\[(.*),.*", "\\1", domain[1]),
+                gsub(".*,(.*)\\]$", "\\1", domain))
+      x <- cut(x, breaks = cuts)
+    } else {
+      x <- factor(x, levels = domain, ordered = ordered)
+    }
+    idx <- as.integer(x)
+    res <- palette[idx]
+    res[is.na(res)] <- na.color
+    res
+  }
+}
 
 ## generalize and make into an exported function
 
@@ -29,12 +45,8 @@
     if(is.numeric(h[[color]])) {
 
       # generate color ramp function
-      cr <- colorRamp(col.palette, bias = col.palette.bias)
+      cr <- grDevices::colorRamp(col.palette, bias = col.palette.bias)
 
-      if(!requireNamespace("scales", quietly = TRUE))
-        stop("package `scales` is required", call.=FALSE)
-
-      
       # re-scale to [0,1]
       # may contain NAs
       c.rgb <- cr(.rescaleRange(h[[color]], x0 = 0, x1 = 1))
@@ -91,18 +103,23 @@
         h[[color]] <- droplevels(h[[color]])
         color.levels <- levels(h[[color]])
 
+        crp <- grDevices::colorRampPalette(col.palette, bias = col.palette.bias)
+        
         # make a color mapping function
-        if(!requireNamespace("scales", quietly = TRUE))
-          stop("package `scales` is required", call.=FALSE)
-
-        ## TODO: replace with native function
-        color.mapper <- scales::col_factor(
-          palette = colorRampPalette(col.palette, bias = col.palette.bias)(length(color.levels)),
+        if (requireNamespace("scales", quietly = TRUE)) {
+          ## TODO: replace with native function
+          FUN <- scales::col_factor
+        } else {
+          FUN <- .aqp_color_map
+        }
+        
+        color.mapper <- FUN(
+          palette = crp(length(color.levels)),
           domain = color.levels,
           na.color = default.color,
           ordered = TRUE
         )
-
+        
         # apply color mapping
         h$.color <- color.mapper(h[[color]])
 
@@ -152,9 +169,6 @@
 
   return(res)
 }
-
-
-
 
 
 # split legend into two rows, and create indices
