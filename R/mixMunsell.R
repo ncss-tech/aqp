@@ -218,18 +218,18 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
   mixingMethod <- match.arg(mixingMethod)
   
   # multiple matches only possible when using mixingMethod == 'reference'
-  if((n > 1) & mixingMethod != 'reference') {
+  if((n > 1) && mixingMethod != 'reference') {
     stop('`n` is only valid for `mixingMethod = "reference"`', call. = FALSE)
   }
   
   # mixed spectra and multiple matches only possible when using mixingMethod == 'reference'
-  if(keepMixedSpec & ! mixingMethod %in% c('reference', 'exact')) {
+  if(keepMixedSpec && !mixingMethod %in% c('reference', 'exact')) {
     stop('`keepMixedSpec` is only valid for mixingMethod = "reference" or "exact"', call. = FALSE)
   }
   
   # sanity check, need this for gower::gower_topn()
-  if(mixingMethod == 'reference' & !requireNamespace('gower')) {
-    stop('package `gower` is required for `reference` mixingMethod', call. = FALSE)
+  if(mixingMethod == 'reference' && !requireNamespace('gower')) {
+    stop("package `gower` is required for `mixingMethod='reference'`", call. = FALSE)
   }
   
 
