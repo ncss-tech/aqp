@@ -59,28 +59,28 @@ test_that("parseMunsell()", {
 test_that("Munsell hue parsing", {
 
   # normal operation
-  res <- aqp:::.parseMunsellHue('10YR')
+  res <- .parseMunsellHue('10YR')
   expect_true(inherits(res, 'data.frame'))
   expect_equal(res$hue.numeric, 10L)
   expect_equal(res$hue.character, 'YR')
   expect_equal(nrow(res), 1)
 
   # white space is trimmed
-  res <- aqp:::.parseMunsellHue('10 YR')
+  res <- .parseMunsellHue('10 YR')
   expect_true(inherits(res, 'data.frame'))
   expect_equal(res$hue.numeric, 10L)
   expect_equal(res$hue.character, 'YR')
   expect_equal(nrow(res), 1)
   
   # decimal, won't convert correctly, but should be split
-  res <- aqp:::.parseMunsellHue('10.1YR')
+  res <- .parseMunsellHue('10.1YR')
   expect_true(inherits(res, 'data.frame'))
   expect_equal(res$hue.numeric, 10.1)
   expect_equal(res$hue.character, 'YR')
   expect_equal(nrow(res), 1)
   
   # bogus hue
-  res <- aqp:::.parseMunsellHue('G1 ')
+  res <- .parseMunsellHue('G1 ')
   expect_true(inherits(res, 'data.frame'))
   expect_true(is.na(res$hue.numeric))
   expect_true(is.na(res$hue.character))
