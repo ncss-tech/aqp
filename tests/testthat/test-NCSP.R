@@ -97,7 +97,7 @@ test_that(".NCSP_distanceCalc() with color data", {
   sm <- rep(TRUE, times = nrow(.lab))
   
   # CIE2000 color contrast
-  d <- aqp:::.NCSP_distanceCalc(.lab, sm = sm, isColor = TRUE)
+  d <- .NCSP_distanceCalc(.lab, sm = sm, isColor = TRUE)
   
   # results should be 3x3 distance matrix
   # not created by cluster package, plain old dist object
