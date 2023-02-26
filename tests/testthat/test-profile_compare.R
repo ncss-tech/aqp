@@ -35,6 +35,8 @@ site(d) <- s
 
 test_that("profile_compare works as expected", {
   
+  skip_if_not_installed("scales")
+  
   # compute between-profile dissimilarity, no depth weighting
   # warning is expected because this is deprecated
   expect_warning({

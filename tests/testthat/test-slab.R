@@ -67,23 +67,6 @@ test_that("extended slab functionality: weighted aggregation", {
   sp1$weights <- rep(1:2, length(sp1))[1:length(sp1)]
   sp1$wtgrp <- rep(1, length(sp1))
   
-  # we expect quantile estimates to vary (given weighted v.s. unweighted)
-  a.0 <- slab(sp1, fm = ~ prop, weights = "weights")
-  a.1 <- slab(sp1, fm = ~ prop, strict = TRUE, weights = "weights")
-  a.2 <- slab(sp1, fm = wtgrp ~ prop, strict = TRUE, weights = "weights")
-  a.3 <- slab(sp1, fm = wtgrp ~ prop, strict = TRUE)
-  
-  # expect consistent structure for weighted/unweighted: same column names except for group
-  ungroupcols <- colnames(a.3)
-  ungroupcols[2] <- "all.profiles"
-  expect_equal(colnames(a.0), ungroupcols)
-  expect_equal(colnames(a.1), ungroupcols)
-  expect_equal(colnames(a.2), colnames(a.3))
-  
-  # contributing fractions should be identical
-  expect_true(all(a.1$contributing_fraction == a.2$contributing_fraction))
-  expect_true(all(a.2$contributing_fraction == a.3$contributing_fraction))
-  
   # component weighted averages
   # mukey=461268; Doemill-Jokerst, 3 to 8 percent slopes (615)
   x <- data.frame(cokey = c(21469960L, 21469960L, 21469960L, 21469960L, 
@@ -103,6 +86,25 @@ test_that("extended slab functionality: weighted aggregation", {
       na.rm = TRUE
     )
   expect_equal(a.0$value, 6.54, tolerance = 0.005) 
+  
+  skip_if_not_installed("Hmisc")
+  
+  # we expect quantile estimates to vary (given weighted v.s. unweighted)
+  a.0 <- slab(sp1, fm = ~ prop, weights = "weights")
+  a.1 <- slab(sp1, fm = ~ prop, strict = TRUE, weights = "weights")
+  a.2 <- slab(sp1, fm = wtgrp ~ prop, strict = TRUE, weights = "weights")
+  a.3 <- slab(sp1, fm = wtgrp ~ prop, strict = TRUE)
+  
+  # expect consistent structure for weighted/unweighted: same column names except for group
+  ungroupcols <- colnames(a.3)
+  ungroupcols[2] <- "all.profiles"
+  expect_equal(colnames(a.0), ungroupcols)
+  expect_equal(colnames(a.1), ungroupcols)
+  expect_equal(colnames(a.2), colnames(a.3))
+  
+  # contributing fractions should be identical
+  expect_true(all(a.1$contributing_fraction == a.2$contributing_fraction))
+  expect_true(all(a.2$contributing_fraction == a.3$contributing_fraction))
   
   # should match this within the tolerance:
   #   soilDB::get_SDA_property(property = 'ph1to1h2o_r', method = "weighted average",
