@@ -100,7 +100,7 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
   lt36idx <- which(soildepth <= 36)
   if (length(lt36idx) > 0) {
     default_t[lt36idx] <- 0
-    default_b[lt36idx] <- soildepth
+    default_b[lt36idx] <- soildepth[lt36idx]
     shallow_flag[lt36idx] <- TRUE
   }
   
