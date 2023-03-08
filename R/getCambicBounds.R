@@ -55,6 +55,9 @@ getCambicBounds <- function(p,
                             sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
                             ...) {
 
+  # sacrafice to CRAN gods in the name of NSE
+  id <- NULL
+  
   # construct data.frame result for no-cambic-found (NA)
   empty_frame <- data.frame(id = character(0),
                             cambic_id = numeric(0),
@@ -155,6 +158,9 @@ getCambicBounds <- function(p,
   }
   iddf <- iddf[,-1]
   res <- cbind(final, iddf)
+  
+  # note: NSE used to specifiy ordering condition for data.table object
+  # much faster than ordering on the data.frame representation used next
   res <- data.table::rbindlist(list(res, nadf), fill = TRUE)[order(id)]
   colnames(res)[1] <- idname(p)
   .as.data.frame.aqp(res, aqp_df_class(p))
