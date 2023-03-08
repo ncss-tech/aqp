@@ -144,19 +144,18 @@ getCambicBounds <- function(p,
       }
     }
   }
-  names(final)[1] <- idname(p)
 
   .N <- NULL 
-  iddf <- data.table::data.table(id = as.character(final[[idname(p)]]))[, list(cambic_index = 1:.N), by = "id"]
-  nadf <- data.frame(id = profile_id(p)[!profile_id(p) %in% final[[idname(p)]]])
-  if (!is.null(nadf$id)){
-    nadf[[idname(p)]] <- as.character(nadf$id)
+  iddf <- data.table::data.table(id = as.character(final[["id"]]))[, list(cambic_index = 1:.N), by = "id"]
+  nadf <- data.frame(id = profile_id(p)[!profile_id(p) %in% final[["id"]]])
+  if (nrow(nadf) > 0) {
     nadf$cambic_index <- rep(NA_real_, nrow(nadf))
     nadf$cambic_top <- rep(NA_real_, nrow(nadf))
     nadf$cambic_bottom <- rep(NA_real_, nrow(nadf))
   }
   iddf <- iddf[,-1]
   res <- cbind(final, iddf)
-  res <- data.table::rbindlist(list(res, nadf), fill = TRUE)
+  res <- data.table::rbindlist(list(res, nadf), fill = TRUE)[order(id)]
+  colnames(res)[1] <- idname(p)
   .as.data.frame.aqp(res, aqp_df_class(p))
 }
