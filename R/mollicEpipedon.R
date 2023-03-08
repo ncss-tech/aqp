@@ -139,8 +139,11 @@ mollic.thickness.requirement <- function(p,
   # SHORT CIRCUITS
   depi <- data.table::data.table(id = horizons(epi)[[idname(p)]], texcl = epi[[texcl.attr]])
   
-  sandy.textures <- depi[,list(sandy.textures = all(grepl("S$", epi[[texcl.attr]], ignore.case = TRUE) &
-                               !grepl("LVFS$|LFS$", epi[[texcl.attr]], ignore.case = TRUE))), by = "id"]$sandy.textures
+  sandy.textures <- depi[, list(all(
+       grepl("S$", .SD[["texcl"]], ignore.case = TRUE) 
+       & !grepl("LVFS$|LFS$", .SD[["texcl"]], ignore.case = TRUE)
+    )), by = "id"]$V1
+  
   # 6A - assumes you must check for sandy textures throughout 0-25 to trigger minimum thickness of 25cm
   #      there is an implicit assumption that after mixing any non-sandy texture into sandy texture
   #      you would have non-sandy. this logic could be altered to be more "restrictive" by changing
