@@ -1,4 +1,4 @@
-# aqp 2.0 (2023-01-04)
+# aqp 2.0 (2023-03-09)
 This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`.
 
 Notable changes include:
@@ -14,6 +14,7 @@ Notable changes include:
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
  * new example data, `wilson2022`
+ * fast prototyping of SPCs via `quickSPC()` and list / character templates
  
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
