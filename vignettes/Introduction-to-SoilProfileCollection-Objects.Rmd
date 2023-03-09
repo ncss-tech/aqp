@@ -36,20 +36,7 @@ The `SoilProfileCollection` class was designed to simplify the process of workin
 
 Examples listed below are meant to be copied/pasted from this document and interactively run within **R**. Comments (preceded by `#` symbol) briefly describe what the code in each line does. Further documentation on objects and functions from the `aqp` package can be accessed by typing `help(aqp)` (or more generally, `?function_name`) at the **R** console.
 
-# Object Creation
-
-`SoilProfileCollection` objects are typically created by "promoting" `data.frame` objects (rectangular tables of data) that contain at least three essential columns:
-
-   1. an ID column uniquely identifying groups of horizons (e.g. pedons)
-   2. horizon top boundaries
-   3. horizon bottom boundaries
-
-The `data.frame` is sorted internally according to the profile ID and horizon top boundary. Formula notation is used to define the columns used to promote a `data.frame` object:
-
-```{r promote_to_spc, eval=FALSE} 
-idcolumn ~ hz_top_column + hz_bottom_column
-```
-
+# Setup
 In this tutorial we will use some sample data included with the `aqp` package, based on characterization data from 10 soils sampled on serpentinitic parent material as described in [McGahan et al, 2009](https://www.soils.org/publications/sssaj/articles/73/6/2087).
 
 To begin you will load required packages. You may have to first install these if missing:
@@ -57,6 +44,7 @@ To begin you will load required packages. You may have to first install these if
 ```{r install, eval=FALSE}
 # install CRAN release + dependencies
 install.packages('aqp', dependencies = TRUE)
+install.packages('remotes', dependencies = TRUE)
 
 # install latest version from GitHub
 remotes::install_github("ncss-tech/aqp", dependencies = FALSE)
@@ -88,6 +76,22 @@ hzdesgnname(sp4) <- 'name'
 class(sp4)
 print(sp4)
 ```
+
+# Object Creation
+
+`SoilProfileCollection` objects are typically created by "promoting" `data.frame` objects (rectangular tables of data) that contain at least three essential columns:
+
+   1. an ID column uniquely identifying groups of horizons (e.g. pedons)
+   2. horizon top boundaries
+   3. horizon bottom boundaries
+
+The `data.frame` is sorted internally according to the profile ID and horizon top boundary. Formula notation is used to define the columns used to promote a `data.frame` object:
+
+```{r promote_to_spc, eval=FALSE} 
+idcolumn ~ hz_top_column + hz_bottom_column
+```
+
+
 
 # Accessing, Setting, and Replacing Data
 
@@ -898,6 +902,70 @@ Sketches for use in layout tools such as Adobe Illustrator or Inkscape should be
 # dev.off()
 ```
 
+# Misc. Utility Functions
+## Template-Based Creation
+The `quickSPC()` function can be used to rapidly prototype `SoilProfileCollection` objects based on a simple `list` template, or one of several text-based templates:
+
+  1. 'A-Bt1-Bt2-Bt3-Cr-R'
+  2. 'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'
+
+  Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
+
+  Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the `interval` argument to `quickSPC()`. Profile ID is created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
+  
+```{r, fig.width=4, fig.height=2.5}
+# tighter margins
+par(mar = c(0, 0, 0, 0))
+
+# list-based template
+# not vectorized
+x <- list(
+  id = 'P1',
+  depths = c(25, 33, 100, 150),
+  name = c('A', 'Bw', 'Bt', 'Cr'),
+  clay = c(12, 15, 22, 25)
+)
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', 
+        cex.names = 0.66, plot.depth.axis = FALSE,
+        hz.depths = TRUE)
+
+
+# character template, mode 1
+# horizon thickness is generated at random (uniform [5,20])
+# vectorized
+x <- c(
+  'A-Bt1-Bt2-Bt3-Cr-R',
+  'A-C1-C2-C3-C4-Ab',
+  'Ap-A-A/E-E-Bhs-Cr'
+)
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', 
+        cex.names = 0.66, plot.depth.axis = FALSE,
+        hz.depths = TRUE)
+
+
+# character template, mode 2
+# horizon thickness is proportional to replication of
+# horizon designation and scaled by 'interval' argument
+# default of 10 depth units
+# e.g. A horizon is 3 * 10 = 30 depth units thick.
+# vectorized
+x <- c(
+  'AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+  'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+  'A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'
+)
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center',
+        cex.names = 0.66, plot.depth.axis = FALSE,
+        hz.depths = TRUE
+)
+```
+
 # Iterating Over Profiles in a Collection
 
 The `profileApply()` function is an extension of the familiar *apply()* family of functions that operate on vectors (`sapply()` and `tapply()`), matrices (`apply()`), and lists (`lapply()`)-- extended to `SoilProfileCollection` objects. 
@@ -969,7 +1037,8 @@ axis(1, at = 1:length(sp4), labels = round(sp4$wt.mean.ca.to.mg, 3), cex.axis = 
 mtext(1, line = 2.25, text = 'Horizon Thickness Weighted Mean Ex. Ca:Mg', cex = 0.75)
 ```
 
-# Slicing Horizons: `dice()`
+# Depth-wise Selection and Resampling
+## Slicing Horizons: `dice()`
 
 Collections of soil profiles can be sliced (or re-sampled) into regular depth-intervals with the `dice()` function. The slicing structure and variables of interest are defined via formula notation:
 
@@ -1010,7 +1079,7 @@ plotSPC(s[, 25:50])
 plotSPC(s[, c(10:20, 40:50)])
 ```
 
-# Ragged Extraction: `glom()`
+## Ragged Extraction: `glom()`
 
 Select all horizons that overlap the interval of 5-15cm:
 
@@ -1023,7 +1092,7 @@ plotSPC(clods, name = 'name', color = 'ex_Ca_to_Mg')
 rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5)
 ```
 
-# Truncation: `trunc()`
+## Truncation: `trunc()`
 
 Truncate the SPC to the interval of 5-15cm:
 
@@ -1035,9 +1104,13 @@ plotSPC(sp4.truncated, name = 'name', color = 'ex_Ca_to_Mg')
 rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5)
 ```
 
-# Depth Aggregation: `slab()`
+## Change of Support
 
-Depth-wise summary of horizon-level attributes is performed with the `slab()` function. Profile grouping criteria and horizon attribute selection is parameterized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
+There is often a need for converting data to a new set of depth intervals. This re-alignment of horizon depths via aggregation can be considered a type of *change of support*. The operation on `SoilProfileCollection` objects requires some aggregation function (mean, median, etc.) and possibly interpolation (e.g. splines).
+
+### Aggregation over "slabs"
+
+The `slab()` function is the simplest way to implement a change of depth support via aggregation. Profile grouping criteria and horizon attribute selection is parameterized via formula: either `groups ~ var1 + var2 + var3` where named variables are aggregated within `groups` OR where named variables are aggregated across the entire collection ` ~ var1 + var2 + var3`. The default summary function (`slab.fun`) computes the 5th, 25th, 50th, 75th, and 95th percentiles via Harrell-Davis quantile estimator.
 
 The depth structure ("slabs") over which summaries are computed is defined with the `slab.structure` argument using:
 
@@ -1136,18 +1209,15 @@ xyplot(top ~ p.q50 | variable, groups = which, data = g, ylab = 'Depth',
 )
 ```
 
-## Change of Support
 
-There is often a need for converting data to a new set of depth intervals. This re-alignment of horizon depths via aggregation can be considered a type of *change of support*. The operation on SoilProfileCollections requires some aggregation function (mean, median, etc.) and possibly interpolation (e.g. splines). 
-
-The `slab()` function is the simplest way to implement a change of depth support via aggregation. The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.
+The following example is based on a set of 9 randomly generated profiles, re-aligned to the Global Soil Map (GSM) standard depths.
 
 ```{r, fig.height=4.5, fig.width=9}
 library(data.table)
 library(RColorBrewer)
 
 # 9 random profiles
-# 1 simulated properties via logistic power peak (LPP) function
+# 1 simulated property via logistic power peak (LPP) function
 # 6, 7, or 8 horizons per profile
 # result is a list of single-profile SPC
 d <- lapply(
@@ -1179,7 +1249,13 @@ A simple graphical comparison of the original and re-aligned soil profile data, 
 ```{r, fig.height=7, fig.width=9}
 # reshape to wide format
 # this scales to > 1 aggregated variables
-d.gsm.pedons <- data.table::dcast(data.table(d.gsm), id + top + bottom ~ variable, value.var = 'value')
+d.gsm.pedons <- data.table::dcast(
+  data.table(d.gsm), 
+  formula = id + top + bottom ~ variable, 
+  value.var = 'value'
+  )
+
+# init SPC
 depths(d.gsm.pedons) <- id ~ top + bottom
 
 # iterate over aggregated profiles and make new hz names
@@ -1190,20 +1266,29 @@ d.gsm.pedons$hzname <- profileApply(d.gsm.pedons, function(i) {
 # compare original and aggregated
 par(mar = c(1, 0, 3, 3), mfrow = c(2, 1))
 plotSPC(d, color = 'p1')
+mtext('original depths', side = 2, line = -1.5)
 plotSPC(d.gsm.pedons, color = 'p1')
+mtext('GSM depths', side = 2, line = -1.5)
 ```
 
 Note that re-aligned data may not represent reality (and should therefore be used with caution) when the original soil depth is shallower than the deepest of the new (re-aligned) horizon depths. The `contributing_fraction` metric returned by `slab()` can be useful for assessing how much *real* data were used to generate the new set of re-aligned data.
 
 ```{r, fig.height=7, fig.width=9}
 # reshape to wide format
-d.gsm.pedons.2 <- data.table::dcast(data.table(d.gsm), id + top + bottom ~ variable, value.var = 'contributing_fraction')
+d.gsm.pedons.2 <- data.table::dcast(
+  data.table(d.gsm), 
+  formula = id + top + bottom ~ variable, 
+  value.var = 'contributing_fraction'
+)
 
+# init SPC
 depths(d.gsm.pedons.2) <- id ~ top + bottom
 
 # compare original and aggregated
 par(mar = c(1, 0, 3, 3), mfrow = c(2, 1))
 plotSPC(d.gsm.pedons, name = '', color = 'p1')
+mtext('GSM depths', side = 2, line = -1.5)
+
 plotSPC(
   d.gsm.pedons.2,
   name = '',
@@ -1211,7 +1296,12 @@ plotSPC(
   col.label = 'Contributing Fraction',
   col.palette = RColorBrewer::brewer.pal(10, 'Spectral')
 )
+mtext('GSM depths', side = 2, line = -1.5)
 ```
+
+### Equal Area Splines
+TODO
+
 
 # Pair-Wise Dissimilarity: `NCSP()`
 
