@@ -108,38 +108,25 @@ each line does. Further documentation on objects and functions from the
 at the <strong>R</strong> console.</p>
 </div>
 <div class="section level2">
-<h2 id="object-creation">Object Creation<a class="anchor" aria-label="anchor" href="#object-creation"></a>
+<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
-<p><code>SoilProfileCollection</code> objects are typically created by
-“promoting” <code>data.frame</code> objects (rectangular tables of data)
-that contain at least three essential columns:</p>
-<ol style="list-style-type: decimal">
-<li>an ID column uniquely identifying groups of horizons
-(e.g. pedons)</li>
-<li>horizon top boundaries</li>
-<li>horizon bottom boundaries</li>
-</ol>
-<p>The <code>data.frame</code> is sorted internally according to the
-profile ID and horizon top boundary. Formula notation is used to define
-the columns used to promote a <code>data.frame</code> object:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">idcolumn</span> <span class="op">~</span> <span class="va">hz_top_column</span> <span class="op">+</span> <span class="va">hz_bottom_column</span></span></code></pre></div>
 <p>In this tutorial we will use some sample data included with the
 <code>aqp</code> package, based on characterization data from 10 soils
 sampled on serpentinitic parent material as described in <a href="https://www.soils.org/publications/sssaj/articles/73/6/2087" class="external-link">McGahan
 et al, 2009</a>.</p>
 <p>To begin you will load required packages. You may have to first
 install these if missing:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install CRAN release + dependencies</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'aqp'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># install latest version from GitHub</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ncss-tech/aqp"</span>, dependencies <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lattice.r-forge.r-project.org/" class="external-link">lattice</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load sample data set, a data.frame object with horizon-level data from 10 profiles</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
@@ -202,6 +189,24 @@ install these if missing:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
 <span><span class="co">#&gt; [EMPTY]</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="object-creation">Object Creation<a class="anchor" aria-label="anchor" href="#object-creation"></a>
+</h2>
+<p><code>SoilProfileCollection</code> objects are typically created by
+“promoting” <code>data.frame</code> objects (rectangular tables of data)
+that contain at least three essential columns:</p>
+<ol style="list-style-type: decimal">
+<li>an ID column uniquely identifying groups of horizons
+(e.g. pedons)</li>
+<li>horizon top boundaries</li>
+<li>horizon bottom boundaries</li>
+</ol>
+<p>The <code>data.frame</code> is sorted internally according to the
+profile ID and horizon top boundary. Formula notation is used to define
+the columns used to promote a <code>data.frame</code> object:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">idcolumn</span> <span class="op">~</span> <span class="va">hz_top_column</span> <span class="op">+</span> <span class="va">hz_bottom_column</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="accessing-setting-and-replacing-data">Accessing, Setting, and Replacing Data<a class="anchor" aria-label="anchor" href="#accessing-setting-and-replacing-data"></a>
@@ -315,8 +320,8 @@ follows.</p>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">clay</span> <span class="co"># vector of clay content (horizon data)</span></span>
 <span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span>
-<span><span class="co">#&gt;  [1] 1067.2943 1200.5922  939.3806  933.9758 1151.4316 1140.6834 1096.4109 1036.0688 1025.0067</span></span>
-<span><span class="co">#&gt; [10] 1064.7557</span></span>
+<span><span class="co">#&gt;  [1]  934.6710 1048.7304 1193.2477 1105.4564  871.6980 1111.9812 1191.5584  820.1537  927.3706</span></span>
+<span><span class="co">#&gt; [10]  960.1300</span></span>
 <span></span>
 <span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -372,12 +377,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa 1067.2943             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn 1200.5922             1        1     B</span></span>
-<span><span class="co">#&gt;      kings  939.3806             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa  933.9758             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1151.4316             1        1     A</span></span>
-<span><span class="co">#&gt;       napa 1140.6834             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa   934.671             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn  1048.730             1        1     B</span></span>
+<span><span class="co">#&gt;      kings  1193.248             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa  1105.456             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino   871.698             1        1     A</span></span>
+<span><span class="co">#&gt;       napa  1111.981             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -536,16 +541,16 @@ data and the CRS, respectively.</p>
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;              x       y</span></span>
-<span><span class="co">#&gt;  [1,] 353821.5 4109444</span></span>
-<span><span class="co">#&gt;  [2,] 354077.9 4109611</span></span>
-<span><span class="co">#&gt;  [3,] 354017.2 4109539</span></span>
-<span><span class="co">#&gt;  [4,] 354050.8 4109681</span></span>
-<span><span class="co">#&gt;  [5,] 353952.3 4109509</span></span>
-<span><span class="co">#&gt;  [6,] 353956.9 4109313</span></span>
-<span><span class="co">#&gt;  [7,] 353949.0 4109488</span></span>
-<span><span class="co">#&gt;  [8,] 353899.8 4109519</span></span>
-<span><span class="co">#&gt;  [9,] 354103.6 4109719</span></span>
-<span><span class="co">#&gt; [10,] 353933.8 4109573</span></span>
+<span><span class="co">#&gt;  [1,] 354120.2 4109520</span></span>
+<span><span class="co">#&gt;  [2,] 353910.6 4109570</span></span>
+<span><span class="co">#&gt;  [3,] 354073.0 4109347</span></span>
+<span><span class="co">#&gt;  [4,] 353847.7 4109537</span></span>
+<span><span class="co">#&gt;  [5,] 353931.9 4109596</span></span>
+<span><span class="co">#&gt;  [6,] 354196.2 4109404</span></span>
+<span><span class="co">#&gt;  [7,] 353963.7 4109622</span></span>
+<span><span class="co">#&gt;  [8,] 353959.2 4109545</span></span>
+<span><span class="co">#&gt;  [9,] 353818.3 4109456</span></span>
+<span><span class="co">#&gt; [10,] 353834.2 4109689</span></span>
 <span></span>
 <span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -1242,6 +1247,89 @@ and can be written with the <code>win.metafile()</code> function.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="misc--utility-functions">Misc. Utility Functions<a class="anchor" aria-label="anchor" href="#misc--utility-functions"></a>
+</h2>
+<div class="section level3">
+<h3 id="template-based-creation">Template-Based Creation<a class="anchor" aria-label="anchor" href="#template-based-creation"></a>
+</h3>
+<p>The <code><a href="../reference/quickSPC.html">quickSPC()</a></code> function can be used to rapidly prototype
+<code>SoilProfileCollection</code> objects based on a simple
+<code>list</code> template, or one of several text-based templates:</p>
+<ol style="list-style-type: decimal">
+<li>‘A-Bt1-Bt2-Bt3-Cr-R’</li>
+<li>‘ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC’</li>
+</ol>
+<p>Format 1 is interpreted as a horizon sequence delimited by ‘-’.
+Random integer thickness are assigned to horizons, and profile ID
+created via <code>digest::digest(..., algo = 'xxhash32')</code>.
+Iteration over templates in this format is automatic when <code>x</code>
+is a character vector of <code>length &gt; 1</code>.</p>
+<p>Format 2 is interpreted as a horizon sequence delimited by ‘|’.
+Horizon thickness is proportional to replication of horizon designation
+and scaled by the <code>interval</code> argument to
+<code><a href="../reference/quickSPC.html">quickSPC()</a></code>. Profile ID is created via
+<code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over
+templates in this format is automatic when <code>x</code> is a character
+vector of <code>length &gt; 1</code>.</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># tighter margins</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># list-based template</span></span>
+<span><span class="co"># not vectorized</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="st">'P1'</span>,</span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">33</span>, <span class="fl">100</span>, <span class="fl">150</span><span class="op">)</span>,</span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'Bw'</span>, <span class="st">'Bt'</span>, <span class="st">'Cr'</span><span class="op">)</span>,</span>
+<span>  clay <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">22</span>, <span class="fl">25</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quickSPC.html">quickSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, </span>
+<span>        cex.names <span class="op">=</span> <span class="fl">0.66</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-43-1.png" width="384" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="co"># character template, mode 1</span></span>
+<span><span class="co"># horizon thickness is generated at random (uniform [5,20])</span></span>
+<span><span class="co"># vectorized</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">'A-Bt1-Bt2-Bt3-Cr-R'</span>,</span>
+<span>  <span class="st">'A-C1-C2-C3-C4-Ab'</span>,</span>
+<span>  <span class="st">'Ap-A-A/E-E-Bhs-Cr'</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quickSPC.html">quickSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, </span>
+<span>        cex.names <span class="op">=</span> <span class="fl">0.66</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-43-2.png" width="384" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="co"># character template, mode 2</span></span>
+<span><span class="co"># horizon thickness is proportional to replication of</span></span>
+<span><span class="co"># horizon designation and scaled by 'interval' argument</span></span>
+<span><span class="co"># default of 10 depth units</span></span>
+<span><span class="co"># e.g. A horizon is 3 * 10 = 30 depth units thick.</span></span>
+<span><span class="co"># vectorized</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">'AAA|BwBwBwBw|CCCCCCC|CdCdCdCd'</span>,</span>
+<span>  <span class="st">'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'</span>,</span>
+<span>  <span class="st">'A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quickSPC.html">quickSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span>
+<span>        cex.names <span class="op">=</span> <span class="fl">0.66</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-43-3.png" width="384" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="iterating-over-profiles-in-a-collection">Iterating Over Profiles in a Collection<a class="anchor" aria-label="anchor" href="#iterating-over-profiles-in-a-collection"></a>
 </h2>
 <p>The <code><a href="../reference/profileApply.html">profileApply()</a></code> function is an extension of the
@@ -1253,7 +1341,7 @@ familiar <em>apply()</em> family of functions that operate on vectors
 for each profile in the collection, typically returning a single value
 per profile. In this case, the ordering of the results would match the
 ordering of values in the site level attribute table.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># max() returns the depth of a soil profile</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">soil.depth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, FUN <span class="op">=</span> <span class="va">max</span><span class="op">)</span></span>
 <span></span>
@@ -1273,7 +1361,7 @@ number of horizons in a profile, <code><a href="../reference/profileApply.html">
 to create new horizon-level attributes. For example, the change in clay
 content by horizon depth (<code>delta.clay</code>, below) could be
 calculated as:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save as horizon-level attribute</span></span>
 <span><span class="va">sp4</span><span class="op">$</span><span class="va">delta.clay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp4</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">i</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1296,7 +1384,7 @@ for details.</p>
 custom function can be combined into a single
 <code>SoilProfileCollection</code> object via
 <code><a href="../reference/combine-SoilProfileCollection-method.html">combine()</a></code>.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compute hz-thickness weighted mean exchangeable-Ca:Mg</span></span>
 <span><span class="va">wt.mean.ca.mg</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># use horizon thickness as a weight</span></span>
@@ -1313,7 +1401,7 @@ profiles when plotting.</p>
 <p>In this case profiles are ordered based on the horizon-thickness
 weighted mean, exchangeable Ca:Mg values. Horizons are colored by
 exchangeable Ca:Mg values.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot the data using our new order based on Ca:Mg weighted average</span></span>
 <span><span class="co"># the result is an index of rank </span></span>
 <span><span class="va">new.order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">$</span><span class="va">wt.mean.ca.to.mg</span><span class="op">)</span></span>
@@ -1330,13 +1418,16 @@ exchangeable Ca:Mg values.</p>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/profileApply-4-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
-<h2 id="slicing-horizons-dice">Slicing Horizons: <code>dice()</code><a class="anchor" aria-label="anchor" href="#slicing-horizons-dice"></a>
+<h2 id="depth-wise-selection-and-resampling">Depth-wise Selection and Resampling<a class="anchor" aria-label="anchor" href="#depth-wise-selection-and-resampling"></a>
 </h2>
+<div class="section level3">
+<h3 id="slicing-horizons-dice">Slicing Horizons: <code>dice()</code><a class="anchor" aria-label="anchor" href="#slicing-horizons-dice"></a>
+</h3>
 <p>Collections of soil profiles can be sliced (or re-sampled) into
 regular depth-intervals with the <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> function. The
 slicing structure and variables of interest are defined via formula
 notation:</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># slice select horizon-level attributes</span></span>
 <span><span class="va">seq</span> <span class="op">~</span> <span class="va">var.1</span> <span class="op">+</span> <span class="va">var.2</span> <span class="op">+</span> <span class="va">var.3</span> <span class="op">+</span> <span class="va">...</span></span>
 <span><span class="co"># slice all horizon-level attributes</span></span>
@@ -1350,7 +1441,7 @@ right-hand-side of the formula. The results returned by
 <code>data.frame</code> when called with the optional argument
 <code>SPC = FALSE</code>. For example, to slice our sample data set into
 1-cm intervals, from 0–15 cm:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># resample to 1cm slices</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">sp4</span>, fm <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">15</span> <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span> <span class="op">+</span> <span class="va">name</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span><span class="op">)</span></span>
 <span></span>
@@ -1363,10 +1454,10 @@ right-hand-side of the formula. The results returned by
 <span><span class="co"># plot sliced data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># tighten figure margins</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-43-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-44-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Once soil profile data have been sliced, it is simple to extract
 “chunks” of data by depth interval via <code>[</code>-subsetting:</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># slice from 0 to max depth in the collection</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">sp4</span>, fm<span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fu"><a href="../reference/max.html">max</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">~</span> <span class="va">sand</span> <span class="op">+</span> <span class="va">silt</span> <span class="op">+</span> <span class="va">clay</span> <span class="op">+</span> <span class="va">name</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span><span class="op">)</span></span>
 <span></span>
@@ -1379,37 +1470,46 @@ right-hand-side of the formula. The results returned by
 <span><span class="co"># extract all data over the range of 10--20 and 40--50 cm:</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>, <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">40</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="ragged-extraction-glom">Ragged Extraction: <code>glom()</code><a class="anchor" aria-label="anchor" href="#ragged-extraction-glom"></a>
-</h2>
+<div class="section level3">
+<h3 id="ragged-extraction-glom">Ragged Extraction: <code>glom()</code><a class="anchor" aria-label="anchor" href="#ragged-extraction-glom"></a>
+</h3>
 <p>Select all horizons that overlap the interval of 5-15cm:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># truncate to the interval 5-15cm</span></span>
 <span><span class="va">clods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/glom-SoilProfileCollection-method.html">glom</a></span><span class="op">(</span><span class="va">sp4</span>, z1 <span class="op">=</span> <span class="fl">5</span>, z2 <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">clods</span>, name <span class="op">=</span> <span class="st">'name'</span>, color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span>xleft <span class="op">=</span> <span class="fl">0.5</span>, ybottom <span class="op">=</span> <span class="fl">15</span>, xright <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, ytop <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-45-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-46-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
-<h2 id="truncation-trunc">Truncation: <code>trunc()</code><a class="anchor" aria-label="anchor" href="#truncation-trunc"></a>
-</h2>
+<div class="section level3">
+<h3 id="truncation-trunc">Truncation: <code>trunc()</code><a class="anchor" aria-label="anchor" href="#truncation-trunc"></a>
+</h3>
 <p>Truncate the SPC to the interval of 5-15cm:</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># truncate to the interval 5-15cm</span></span>
 <span><span class="va">sp4.truncated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trunc-SoilProfileCollection-method.html">trunc</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="fl">5</span>, <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4.truncated</span>, name <span class="op">=</span> <span class="st">'name'</span>, color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span>xleft <span class="op">=</span> <span class="fl">0.5</span>, ybottom <span class="op">=</span> <span class="fl">15</span>, xright <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, ytop <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-46-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-47-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
-<h2 id="depth-aggregation-slab">Depth Aggregation: <code>slab()</code><a class="anchor" aria-label="anchor" href="#depth-aggregation-slab"></a>
-</h2>
-<p>Depth-wise summary of horizon-level attributes is performed with the
-<code><a href="../reference/slab.html">slab()</a></code> function. Profile grouping criteria and horizon
-attribute selection is parameterized via formula: either
+<div class="section level3">
+<h3 id="change-of-support">Change of Support<a class="anchor" aria-label="anchor" href="#change-of-support"></a>
+</h3>
+<p>There is often a need for converting data to a new set of depth
+intervals. This re-alignment of horizon depths via aggregation can be
+considered a type of <em>change of support</em>. The operation on
+<code>SoilProfileCollection</code> objects requires some aggregation
+function (mean, median, etc.) and possibly interpolation
+(e.g. splines).</p>
+<div class="section level4">
+<h4 id="aggregation-over-slabs">Aggregation over “slabs”<a class="anchor" aria-label="anchor" href="#aggregation-over-slabs"></a>
+</h4>
+<p>The <code><a href="../reference/slab.html">slab()</a></code> function is the simplest way to implement a
+change of depth support via aggregation. Profile grouping criteria and
+horizon attribute selection is parameterized via formula: either
 <code>groups ~ var1 + var2 + var3</code> where named variables are
 aggregated within <code>groups</code> OR where named variables are
 aggregated across the entire collection
@@ -1427,7 +1527,7 @@ aggregated over depths spanning 50–60 units</li>
 (e.g. <code>c(0, 5, 10, 50, 100)</code>): data are aggregated over the
 depths spanning 0–5, 5–10, 10–50, 50–100 units</li>
 </ul>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># aggregate a couple of the horizon-level attributes, </span></span>
 <span><span class="co"># across the entire collection, </span></span>
 <span><span class="co"># from 0--10 cm</span></span>
@@ -1512,7 +1612,7 @@ depths spanning 0–5, 5–10, 10–50, 50–100 units</li>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/slab-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Depth-wise aggregation can be useful for visual evaluation of
 multivariate similarity among groups of profiles.</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># processing the "napa" and tehama profiles</span></span>
 <span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="../reference/profile_id.html">profile_id</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'napa'</span>, <span class="st">'tehama'</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">napa.and.tehama</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slab.html">slab</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">[</span><span class="va">idx</span>,<span class="op">]</span>, fm <span class="op">=</span> <span class="op">~</span> <span class="va">Mg</span> <span class="op">+</span> <span class="va">Ca</span> <span class="op">+</span> <span class="va">ex_Ca_to_Mg</span> <span class="op">+</span> <span class="va">CEC_7</span> <span class="op">+</span> <span class="va">clay</span><span class="op">)</span></span>
@@ -1544,24 +1644,14 @@ multivariate similarity among groups of profiles.</p>
 <span>                       points <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/slab-2-1.png" width="768" style="display: block; margin: auto;"></p>
-<div class="section level3">
-<h3 id="change-of-support">Change of Support<a class="anchor" aria-label="anchor" href="#change-of-support"></a>
-</h3>
-<p>There is often a need for converting data to a new set of depth
-intervals. This re-alignment of horizon depths via aggregation can be
-considered a type of <em>change of support</em>. The operation on
-SoilProfileCollections requires some aggregation function (mean, median,
-etc.) and possibly interpolation (e.g. splines).</p>
-<p>The <code><a href="../reference/slab.html">slab()</a></code> function is the simplest way to implement a
-change of depth support via aggregation. The following example is based
-on a set of 9 randomly generated profiles, re-aligned to the Global Soil
-Map (GSM) standard depths.</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<p>The following example is based on a set of 9 randomly generated
+profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 9 random profiles</span></span>
-<span><span class="co"># 1 simulated properties via logistic power peak (LPP) function</span></span>
+<span><span class="co"># 1 simulated property via logistic power peak (LPP) function</span></span>
 <span><span class="co"># 6, 7, or 8 horizons per profile</span></span>
 <span><span class="co"># result is a list of single-profile SPC</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
@@ -1586,21 +1676,27 @@ Map (GSM) standard depths.</p>
 <span><span class="co"># note: result is in long-format</span></span>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   variable id     value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1 21.037850             1.0000000   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1 21.037850             1.0000000   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1 21.038979             1.0000000  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1 21.151118             1.0000000  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 22.439081             1.0000000  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 21.504976             0.9473684 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2  8.578889             1.0000000   0      5</span></span></code></pre></div>
+<span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
+<span><span class="co">#&gt; 1       p1  1 43.35422             1.0000000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1 43.35422             1.0000000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 42.59695             1.0000000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 38.35402             1.0000000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 29.04754             1.0000000  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1 23.75518             0.6304348 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 21.11885             1.0000000   0      5</span></span></code></pre></div>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reshape to wide format</span></span>
 <span><span class="co"># this scales to &gt; 1 aggregated variables</span></span>
-<span><span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'value'</span><span class="op">)</span></span>
+<span><span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, </span>
+<span>  formula <span class="op">=</span> <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, </span>
+<span>  value.var <span class="op">=</span> <span class="st">'value'</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># init SPC</span></span>
 <span><span class="fu"><a href="../reference/depths.html">depths</a></span><span class="op">(</span><span class="va">d.gsm.pedons</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
 <span></span>
 <span><span class="co"># iterate over aggregated profiles and make new hz names</span></span>
@@ -1611,31 +1707,47 @@ profile data, after converting <code><a href="../reference/slab.html">slab()</a>
 <span><span class="co"># compare original and aggregated</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, mfrow <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d</span>, color <span class="op">=</span> <span class="st">'p1'</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d.gsm.pedons</span>, color <span class="op">=</span> <span class="st">'p1'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-48-1.png" width="864" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'original depths'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d.gsm.pedons</span>, color <span class="op">=</span> <span class="st">'p1'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'GSM depths'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-49-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>Note that re-aligned data may not represent reality (and should
 therefore be used with caution) when the original soil depth is
 shallower than the deepest of the new (re-aligned) horizon depths. The
 <code>contributing_fraction</code> metric returned by
 <code><a href="../reference/slab.html">slab()</a></code> can be useful for assessing how much <em>real</em>
 data were used to generate the new set of re-aligned data.</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reshape to wide format</span></span>
-<span><span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, value.var <span class="op">=</span> <span class="st">'contributing_fraction'</span><span class="op">)</span></span>
+<span><span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, </span>
+<span>  formula <span class="op">=</span> <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, </span>
+<span>  value.var <span class="op">=</span> <span class="st">'contributing_fraction'</span></span>
+<span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># init SPC</span></span>
 <span><span class="fu"><a href="../reference/depths.html">depths</a></span><span class="op">(</span><span class="va">d.gsm.pedons.2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
 <span></span>
 <span><span class="co"># compare original and aggregated</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, mfrow <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d.gsm.pedons</span>, name <span class="op">=</span> <span class="st">''</span>, color <span class="op">=</span> <span class="st">'p1'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'GSM depths'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span></span>
 <span>  <span class="va">d.gsm.pedons.2</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">''</span>,</span>
 <span>  color <span class="op">=</span> <span class="st">'p1'</span>,</span>
 <span>  col.label <span class="op">=</span> <span class="st">'Contributing Fraction'</span>,</span>
 <span>  col.palette <span class="op">=</span> <span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">'Spectral'</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-49-1.png" width="864" style="display: block; margin: auto;"></p>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'GSM depths'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-50-1.png" width="864" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level4">
+<h4 id="equal-area-splines">Equal Area Splines<a class="anchor" aria-label="anchor" href="#equal-area-splines"></a>
+</h4>
+<p>TODO</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -1651,7 +1763,7 @@ of evaluation (<code>maxDepth</code>).</p>
 <p>See the <a href="http://ncss-tech.github.io/aqp/reference/pc.html" class="external-link">function manual
 page</a> and <a href="http://dx.doi.org/10.1016/j.cageo.2012.10.020" class="external-link">this paper</a> for
 details.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span></span>
 <span></span>
@@ -1697,7 +1809,7 @@ details.</p>
 <span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-50-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-51-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>Some additional examples can be found in:</p>
 <ul>
 <li><a href="http://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html" class="external-link">Pair-Wise
