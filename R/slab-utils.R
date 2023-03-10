@@ -96,9 +96,15 @@ genSlabLabels <- function(slab.structure = 1, max.d = NULL, n.profiles = NULL, s
   
   # calculate a sequence of cumulative depths and corresponding indices for each slab
   j <- diff(i)
-  idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x]))))
-  idx2 <- do.call('c', lapply(seq_along(j), function(x) rep(x, j[x])))
-  mt <- data.frame(idx1, slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
+  if (length(j) == 0) {
+    stop("Empty slab.structure", call. = FALSE)
+  } else if(length(j) == 1 && j == 0) {
+    stop("Invalid slab.structure", call. = FALSE)
+  } else {
+    idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x]))))
+    idx2 <- do.call('c', lapply(seq_along(j), function(x) rep(x, j[x])))
+    mt <- data.frame(idx1, slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
+  }
   hzdepb <- horizonDepths(spc)[2]
   colnames(mt) <- c(hzdepb, "slab_id", "slab_label")
   
