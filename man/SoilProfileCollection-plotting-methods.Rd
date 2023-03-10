@@ -74,11 +74,11 @@ plotSPC(
 
 \item{name}{quoted column name of the (horizon-level) attribute containing horizon designations or labels, if missing \code{hzdesgnname(x)} is used. Suppress horizon name printing by setting \code{name = NA} or \code{name = ''}.}
 
-\item{name.style}{one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'}
+\item{name.style}{one of several possible horizon designations labeling styles: \code{c('right-center', 'left-center', 'left-top', 'center-center', 'center-top')}}
 
 \item{label}{quoted column name of the (site-level) attribute used to identify profile sketches}
 
-\item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (FALSE)}
+\item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (\code{FALSE})}
 
 \item{hz.depths.offset}{numeric, user coordinates for left-right adjustment for horizon depth annotation; reasonable values are usually within 0.01-0.05 (default: 0)}
 
@@ -98,7 +98,7 @@ plotSPC(
 
 \item{srt.id}{rotation applied to \code{label}, only when \code{id.style = 'top'}}
 
-\item{print.id}{logical, print \code{label} above/beside each profile? (TRUE)}
+\item{print.id}{logical, print \code{label} above/beside each profile? (\code{TRUE})}
 
 \item{id.style}{\code{label} printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'}
 
@@ -130,27 +130,27 @@ plotSPC(
 
 \item{abbr.cutoff}{suggested minimum length for abbreviated \code{label}}
 
-\item{divide.hz}{logical, divide horizons with line segment? (TRUE), see details}
+\item{divide.hz}{logical, divide horizons with line segment? (\code{TRUE}), see details}
 
-\item{hz.distinctness.offset}{NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}; consider setting \code{hz.depths.lines = TRUE} when used in conjunction with \code{hz.depths = TRUE}}
+\item{hz.distinctness.offset}{\code{NULL}, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}; consider setting \code{hz.depths.lines = TRUE} when used in conjunction with \code{hz.depths = TRUE}}
 
-\item{hz.topography.offset}{NULL, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and code{\link{hzTopographyCodeToOffset}}}
+\item{hz.topography.offset}{\code{NULL}, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and \code{\link[=hzTopographyCodeToOffset]{hzTopographyCodeToOffset()}}}
 
 \item{hz.boundary.lty}{quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography}
 
 \item{axis.line.offset}{horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)}
 
-\item{plot.depth.axis}{logical, plot depth axis? (default is TRUE)}
+\item{plot.depth.axis}{logical, plot depth axis? (default is \code{TRUE})}
 
-\item{density}{fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is NULL, no shading)}
+\item{density}{fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is \code{NULL}, no shading)}
 
-\item{show.legend}{logical, show legend? (default is TRUE)}
+\item{show.legend}{logical, show legend? (default is \code{TRUE})}
 
 \item{col.label}{thematic legend title}
 
 \item{col.palette}{color palette used for thematic sketches (default is \code{rev(brewer.pal(10, 'Spectral'))})}
 
-\item{col.palette.bias}{color ramp bias (skew), see \code{\link{colorRamp}}}
+\item{col.palette.bias}{color ramp bias (skew), see \code{\link[=colorRamp]{colorRamp()}}}
 
 \item{col.legend.cex}{scaling of thematic legend}
 
@@ -162,7 +162,7 @@ plotSPC(
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
-\item{fixLabelCollisions}{use \code{aqp::fixOverlap()} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
+\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
 
 \item{maxLabelAdjustmentIndex}{numeric, maximum (total) adjustments allowed when \code{fixLabelCollisions = TRUE}, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).}
 
@@ -171,20 +171,22 @@ plotSPC(
 \item{y}{(not used)}
 }
 \description{
-Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} contains many examples and discussion of the large number of arguments to this function.
+Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{http://ncss-tech.github.io/aqp/articles/Introduction-to-SoilProfileCollection-Objects.html}{Introduction to SoilProfileCollection Objects Vignette} contains many examples and discussion of the large number of arguments to this function. The \href{https://ncss-tech.github.io/AQP/aqp/sketches.html}{Soil Profile Sketches} tutorial has longer-form discussion and examples pertaining to suites of related arguments.
+
+Options can be used to conveniently specify sets of arguments that will be used in several calls to \code{plotSPC()} within a single R session. For example, arguments can be specified in a named list (\code{.a}) and set using: \code{options(.aqp.plotSPC.args = .a)}. Reset these options via \code{options(.aqp.plotSPC.args = NULL)}. Arguments explicitly passed to \code{plotSPC()} will override arguments set via \code{\link[=options]{options()}}.
 }
 \details{
-Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are \emph{suggestions} to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want.
+Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are \emph{suggestions} to the \code{\link[=pretty]{pretty()}} function. You may have to tinker with both parameters to get what you want.
 
 The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
 
-If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations.
+If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'--this usually works, but it is best to manual specify the name of the column containing horizon designations.
 
-The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
+The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link[=munsell2rgb]{munsell2rgb()}}, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
 
 Adjustments to the legend can be specified via \code{col.label} (legend title), \code{col.palette} (palette of colors, automatically expanded), \code{col.legend.cex} (legend scaling), and \code{n.legend} (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, \code{plotSPC} will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
 
-Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within \{1,n\} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{addDiagnosticBracket} and \code{addVolumeFraction} use the \code{relative.pos} values for subsequent annotation.
+Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within \{1,n\} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{\link[=addDiagnosticBracket]{addDiagnosticBracket()}} and \code{\link[=addVolumeFraction]{addVolumeFraction()}} use the \code{relative.pos} values for subsequent annotation.
 
 Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with \code{fixOverlap(pos)}, where \code{pos} is the original vector of relative positions.
 
@@ -383,7 +385,7 @@ Beaudette, D.E., Roudier P., and A.T. O'Geen. 2013. Algorithms for Quantitative 
 Soil Scientists. Computers & Geosciences. 52:258 - 268.
 }
 \seealso{
-\code{\link{fixOverlap}, \link{explainPlotSPC}, \link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
+\code{\link[=fixOverlap]{fixOverlap()}}, \code{\link[=explainPlotSPC]{explainPlotSPC()}}, \linkS4class{SoilProfileCollection}, \code{\link[=pretty]{pretty()}}, \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}, \code{\link[=addBracket]{addBracket()}}, \code{\link[=profileGroupLabels]{profileGroupLabels()}}
 }
 \author{
 D.E. Beaudette

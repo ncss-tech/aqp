@@ -6,7 +6,6 @@ aqp.env <- new.env(hash = TRUE, parent = parent.frame())
 .onLoad <- function(libname, pkgname) {
   options(.aqp.show.n.cols = 10)
 
-
 }
 
 # no longer needed since it is imported

@@ -1,19 +1,20 @@
 ## 2019-07-16: moved util functions to `sketch-utils.R`
 
-
-
 # TODO: behavior not defined for horizons with an indefinite lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
 
-#' Create Soil Profile Sketches
+#' @title Create Soil Profile Sketches
 #' @name plotSPC
 #' @rdname SoilProfileCollection-plotting-methods
 #' @docType methods
 #' @aliases plot,SoilProfileCollection,ANY-method,plot.SoilProfileCollection
 #'
-#' @description Generate a diagram of soil profile sketches from a \code{SoilProfileCollection} object. The \href{https://ncss-tech.github.io/AQP/aqp/aqp-intro.html}{Introduction to SoilProfileCollection Objects tutorial} contains many examples and discussion of the large number of arguments to this function.
+#' @description Generate a diagram of soil profile sketches from a `SoilProfileCollection` object. The [Introduction to SoilProfileCollection Objects Vignette](http://ncss-tech.github.io/aqp/articles/Introduction-to-SoilProfileCollection-Objects.html) contains many examples and discussion of the large number of arguments to this function. The [Soil Profile Sketches](https://ncss-tech.github.io/AQP/aqp/sketches.html) tutorial has longer-form discussion and examples pertaining to suites of related arguments.
 #'
-#' @param x a \code{SoilProfileCollection} object
+#' Options can be used to conveniently specify sets of arguments that will be used in several calls to `plotSPC()` within a single R session. For example, arguments can be specified in a named list (`.a`) and set using: `options(.aqp.plotSPC.args = .a)`. Reset these options via `options(.aqp.plotSPC.args = NULL)`. Arguments explicitly passed to `plotSPC()` will override arguments set via [options()].
+#'
+#'
+#' @param x a `SoilProfileCollection` object
 #'
 #' @param color quoted column name containing R-compatible color descriptions, or numeric / categorical data to be displayed thematically; see details
 #'
@@ -21,11 +22,11 @@
 #'
 #' @param name quoted column name of the (horizon-level) attribute containing horizon designations or labels, if missing `hzdesgnname(x)` is used. Suppress horizon name printing by setting `name = NA` or `name = ''`.
 #'
-#' @param name.style one of several possible horizon designations labeling styles: 'right-center' (aqp default), 'left-top', 'left-center'
+#' @param name.style one of several possible horizon designations labeling styles: `c('right-center', 'left-center', 'left-top', 'center-center', 'center-top')`
 #'
 #' @param label quoted column name of the (site-level) attribute used to identify profile sketches
 #'
-#' @param hz.depths logical, annotate horizon top depths to the right of each sketch (FALSE)
+#' @param hz.depths logical, annotate horizon top depths to the right of each sketch (`FALSE`)
 #' 
 #' @param hz.depths.offset numeric, user coordinates for left-right adjustment for horizon depth annotation; reasonable values are usually within 0.01-0.05 (default: 0)
 #' 
@@ -39,19 +40,19 @@
 #'
 #' @param cex.depth.axis character scaling applied to depth scale
 #'
-#' @param cex.id character scaling applied to \code{label}
+#' @param cex.id character scaling applied to `label`
 #'
 #' @param font.id font style applied to `label`, default is 2 (bold)
 #' 
 #' @param srt.id rotation applied to `label`, only when `id.style = 'top'`
 #'
-#' @param print.id logical, print \code{label} above/beside each profile? (TRUE)
+#' @param print.id logical, print `label` above/beside each profile? (`TRUE`)
 #'
-#' @param id.style \code{label} printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'
+#' @param id.style `label` printing style: 'auto' (default) = simple heuristic used to select from: 'top' = centered above each profile, 'side' = 'along the top-left edge of profiles'
 #'
 #' @param plot.order integer vector describing the order in which individual soil profiles should be plotted
 #'
-#' @param relative.pos vector of relative positions along the x-axis, within \{1, n\}, ignores \code{plot.order} see details
+#' @param relative.pos vector of relative positions along the x-axis, within \{1, n\}, ignores `plot.order` see details
 #'
 #' @param add logical, add to an existing figure
 #'
@@ -77,27 +78,27 @@
 #'
 #' @param abbr.cutoff suggested minimum length for abbreviated `label`
 #'
-#' @param divide.hz logical, divide horizons with line segment? (TRUE), see details
+#' @param divide.hz logical, divide horizons with line segment? (`TRUE`), see details
 #'
-#' @param hz.distinctness.offset NULL, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and code{\link{hzDistinctnessCodeToOffset}}; consider setting `hz.depths.lines = TRUE` when used in conjunction with `hz.depths = TRUE`
+#' @param hz.distinctness.offset `NULL`, or quoted column name (horizon-level attribute) containing vertical offsets used to depict horizon boundary distinctness (same units as profiles), see details and [hzDistinctnessCodeToOffset()]; consider setting `hz.depths.lines = TRUE` when used in conjunction with `hz.depths = TRUE`
 #' 
-#' @param hz.topography.offset NULL, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and code{\link{hzTopographyCodeToOffset}}
+#' @param hz.topography.offset `NULL`, or quoted column name (horizon-level attribute) containing offsets used to depict horizon boundary topography (same units as profiles), see details and [hzTopographyCodeToOffset()]
 #'
 #' @param hz.boundary.lty quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography
 #'
 #' @param axis.line.offset horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)
 #'
-#' @param plot.depth.axis logical, plot depth axis? (default is TRUE)
+#' @param plot.depth.axis logical, plot depth axis? (default is `TRUE`)
 #'
-#' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is NULL, no shading)
+#' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is `NULL`, no shading)
 #'
-#' @param show.legend logical, show legend? (default is TRUE)
+#' @param show.legend logical, show legend? (default is `TRUE`)
 #'
 #' @param col.label thematic legend title
 #'
-#' @param col.palette color palette used for thematic sketches (default is \code{rev(brewer.pal(10, 'Spectral'))})
+#' @param col.palette color palette used for thematic sketches (default is `rev(brewer.pal(10, 'Spectral'))`)
 #'
-#' @param col.palette.bias color ramp bias (skew), see \code{\link{colorRamp}}
+#' @param col.palette.bias color ramp bias (skew), see [colorRamp()]
 #'
 #' @param col.legend.cex scaling of thematic legend
 #'
@@ -107,9 +108,9 @@
 #'
 #' @param lty line style used for sketches
 #'
-#' @param default.color default horizon fill color used when \code{color} attribute is \code{NA}
+#' @param default.color default horizon fill color used when `color` attribute is `NA`
 #' 
-#' @param fixLabelCollisions use `aqp::fixOverlap()` to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`
+#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`
 #' 
 #' @param maxLabelAdjustmentIndex numeric, maximum (total) adjustments allowed when `fixLabelCollisions = TRUE`, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).
 #'
@@ -117,21 +118,21 @@
 #'
 #'
 #' @details
-#' Depth limits (\code{max.depth}) and number of depth ticks (\code{n.depth.ticks}) are *suggestions* to the \code{\link{pretty}} function. You may have to tinker with both parameters to get what you want.
+#' Depth limits (`max.depth`) and number of depth ticks (`n.depth.ticks`) are *suggestions* to the [pretty()] function. You may have to tinker with both parameters to get what you want.
 #'
-#' The 'side' \code{id.style} is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
+#' The 'side' `id.style` is useful when plotting a large collection of profiles, and/or, when profile IDs are long.
 #'
-#' If the column containing horizon designations is not specified (the \code{name} argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'-- this usually works, but it is best to manual specify the name of the column containing horizon designations.
+#' If the column containing horizon designations is not specified (the `name` argument), a column (presumed to contain horizon designation labels) is guessed based on regular expression matching of the pattern 'name'--this usually works, but it is best to manual specify the name of the column containing horizon designations.
 #'
-#' The \code{color} argument can either name a column containing R-compatible colors, possibly created via \code{\link{munsell2rgb}}, or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
+#' The `color` argument can either name a column containing R-compatible colors, possibly created via [munsell2rgb()], or column containing either numeric or categorical (either factor or character) values. In the second case, values are converted into colors and displayed along with a simple legend above the plot. Note that this functionality makes several assumptions about plot geometry and is most useful in an interactive setting.
 #'
-#' Adjustments to the legend can be specified via \code{col.label} (legend title), \code{col.palette} (palette of colors, automatically expanded), \code{col.legend.cex} (legend scaling), and \code{n.legend} (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, \code{plotSPC} will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
+#' Adjustments to the legend can be specified via `col.label` (legend title), `col.palette` (palette of colors, automatically expanded), `col.legend.cex` (legend scaling), and `n.legend` (approximate number of classes for numeric variables, or, maximum number of legend items per row for categorical variables). Currently, `plotSPC` will only generate two rows of legend items. Consider reducing the number of classes if two rows isn't enough room.
 #'
-#' Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via \code{relative.pos} argument. This should be a vector of positions within \{1,n\} that are used for horizontal placement. Default values are \code{1:length(x)}. Care must be taken when both \code{plot.order} and \code{relative.pos} are used simultaneously: \code{relative.pos} specifies horizontal placement after sorting. \code{addDiagnosticBracket} and \code{addVolumeFraction} use the \code{relative.pos} values for subsequent annotation.
+#' Profile sketches can be added according to relative positions along the x-axis (vs. integer sequence) via `relative.pos` argument. This should be a vector of positions within \{1,n\} that are used for horizontal placement. Default values are `1:length(x)`. Care must be taken when both `plot.order` and `relative.pos` are used simultaneously: `relative.pos` specifies horizontal placement after sorting. [addDiagnosticBracket()] and [addVolumeFraction()] use the `relative.pos` values for subsequent annotation.
 #'
-#' Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with \code{fixOverlap(pos)}, where \code{pos} is the original vector of relative positions.
+#' Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with `fixOverlap(pos)`, where `pos` is the original vector of relative positions.
 #'
-#' The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
+#' The `x.idx.offset` argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different `SoilProfileCollection` objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
 #'
 #'
 #'
@@ -145,7 +146,7 @@
 #' @keywords hplots
 #' @export
 #'
-#' @seealso \code{\link{fixOverlap}, \link{explainPlotSPC}, \link{SoilProfileCollection-class}, \link{pretty}, \link{hzDistinctnessCodeToOffset}, \link{addBracket}, \link{profileGroupLabels}}
+#' @seealso [fixOverlap()], [explainPlotSPC()], [SoilProfileCollection-class], [pretty()], [hzDistinctnessCodeToOffset()], [addBracket()], [profileGroupLabels()]
 #'
 #' @examples
 #'
@@ -385,6 +386,53 @@ plotSPC <- function(
   maxLabelAdjustmentIndex = 4,
   ...
 ) {
+  
+  ############################
+  ## arguments from options ##
+  ############################
+  
+  # sepecified as: options(.aqp.plotSPC.args = list())
+  
+  # get any options set, result is a list
+  # NULL otherwise
+  .opArgs <- getOption(".aqp.plotSPC.args", default = NULL)
+  
+  # process options
+  if(!is.null(.opArgs)) {
+    
+    # e.g. some of: names(formals('plotSPC'))
+    # not all arguments can be set via options
+    .argSet <- c("color", "width", "name", "name.style", "label", "hz.depths", 
+                 "hz.depths.offset", "hz.depths.lines", "alt.label", "alt.label.col", 
+                 "cex.names", "cex.depth.axis", "cex.id", "font.id", "srt.id", 
+                 "print.id", "id.style", "plot.order", "relative.pos", "add", 
+                 "scaling.factor", "y.offset", "x.idx.offset", "n", "max.depth", 
+                 "n.depth.ticks", "shrink", "shrink.cutoff", "shrink.thin", "abbr", 
+                 "abbr.cutoff", "divide.hz", "hz.distinctness.offset", "hz.topography.offset", 
+                 "hz.boundary.lty", "axis.line.offset", "plot.depth.axis", "density", 
+                 "show.legend", "col.label", "col.palette", "col.palette.bias", 
+                 "col.legend.cex", "n.legend", "lwd", "lty", "default.color", 
+                 "fixLabelCollisions", "maxLabelAdjustmentIndex"
+                 )
+    
+    # iterate over all possible arguments that can be modified in this way
+    for(.arg in .argSet) {
+      
+      # test to see if the current argument has been explicitly provided
+      .missing <- do.call(missing, list(.arg))
+      
+      # consider only:
+      # specified via options AND NOT given by function arguments
+      if(!is.null(.opArgs[[.arg]]) && .missing) {
+        # debug
+        # print(sprintf("using options: %s", .arg))
+        # set to local variable in place of default argument
+        assign(.arg, .opArgs[[.arg]])
+      }
+    }
+    
+  }
+  
   
   ###################
   ## sanity checks ##
