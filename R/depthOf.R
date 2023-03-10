@@ -202,7 +202,7 @@ depthOf <- function(p,
   }
   
   idx2 <- sort(unique(c(which(naldx), idx)))
-  res <- res[idx2, .SD[1, ], by = id, .SDcols = c(idname(p), hzidname(p), depthcol, hzdesgn, "pattern")]
+  res <- res[idx2, .SD[1, ], by = id, .SDcols = c(hzidname(p), depthcol, hzdesgn, "pattern")]
   
   if (length(p) == 1 && simplify) {  
     return(res[[depthcol]])
