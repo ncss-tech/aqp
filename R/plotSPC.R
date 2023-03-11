@@ -775,7 +775,7 @@ plotSPC <- function(
       ht.lty <- this_profile_data[, hz.boundary.lty]
     } else {
       # use constant value
-      ht.lty <- rep(1, times=nh)
+      ht.lty <- rep(lty, times = nh)
     }
     
     
