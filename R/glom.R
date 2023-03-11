@@ -1,12 +1,12 @@
 setGeneric("glom", function(p, z1, z2 = NULL,
                             ids = FALSE, df = FALSE,
                             truncate = FALSE, invert = FALSE, fill = FALSE,
-                            modality = "all")
+                            modality = "all", drop = !fill, ...)
   standardGeneric("glom"))
 
 #' Subset soil horizon data using a depth or depth interval
-#'
-#' @param p a SoilProfileCollection
+#' @param p A SoilProfileCollection
+#' @param x A SoilProfileCollection
 #' @param z1 numeric vector of top depth to intersect horizon (required). Can be an expression involving `siteNames(p)` or quoted column name. Should evaluate to numeric length `1` or length equal to `length(p)`
 #' @param z2 numeric vector bottom depth of intersection interval (optional). Can also be an expression involving `siteNames(p)` or quoted column name. Should evaluate to numeric length `1`, length equal to `length(p)` or `NULL`. Default: `NULL` is "point" intersection 
 #' @param ids return only horizon IDs? default: `FALSE`
@@ -15,6 +15,8 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' @param invert get horizons _outside_ the interval `[z1,z2]`? default: `FALSE`
 #' @param fill keep sites and preserve order for profiles that do not have horizons in interval by filling with a single horizon with `NA` top and bottom depth. default: `FALSE`
 #' @param modality default: `"all"` return all horizons; or `modality = "thickest"`) to return the _thickest_ horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.
+#' @param drop Inverted alias of fill for consistency with other methods. When `drop=FALSE`, filling occurs.
+#' @param ... Additional arguments (not used)
 #'
 #' @description Make a "clod" of horizons from a SoilProfileCollection given a point or a depth interval to intersect. The interval `[z1,z2]` may be profile-specific (equal in length to `p`), or may be recycled over all profiles (if boundaries are length 1). For "point" intersection, `z2` may be left as the default value `NULL`. 
 #'
@@ -32,7 +34,7 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #'
 #' @export glom
 #' @aliases glom
-#'
+#' @rdname glom
 #' @examples
 #' data(sp1, package = 'aqp')
 #' depths(sp1) <- id ~ top + bottom
@@ -85,7 +87,7 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' par(mar = c(1,1,3,1))
 #' plot(p4, color = "prop", max.depth = 200)
 #' 
-setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
+setMethod("glom", signature(p = "SoilProfileCollection"),
           function(p,
                    z1,
                    z2 = NULL,
@@ -94,7 +96,9 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
                    truncate = FALSE,
                    invert = FALSE,
                    fill = FALSE,
-                   modality = "all") {
+                   modality = "all",
+                   drop = !fill, 
+                   ...) {
             
   
   # handle unquoted symbols from @site column names (or expressions using them)
@@ -206,12 +210,12 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     p2 <- glom(p, z2, max(p[[depthn[2]]]), truncate = TRUE)
 
     # combine horizon data
-    if(inherits(p1, 'SoilProfileCollection') && 
-       inherits(p2, 'SoilProfileCollection')) {
+    if (inherits(p1, 'SoilProfileCollection') && 
+        inherits(p2, 'SoilProfileCollection')) {
       
       if (nrow(p1) > 0) {
         p <- p1
-        if(inherits(p2, 'SoilProfileCollection') && nrow(p2) > 0) {
+        if (inherits(p2, 'SoilProfileCollection') && nrow(p2) > 0) {
           h <- rbind(horizons(p1), horizons(p2))
         } else {
           h <- horizons(p1)
@@ -240,30 +244,22 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     }
   }
   
-  if (fill) {
-    missingid <- fillids[!fillids %in% h[[idname(p)]]]
-    if (length(missingid) > 0) {
-      hmissing <- h[0,][1:length(missingid),]
-      hmissing[[idname(p)]] <- missingid
-      h <- rbind(h, hmissing)
-    }
-    
-    # enforce ID+top depth order after combining upper and lower SPCs
-    h <- h[order(h[[idname(p)]], h[[depthn[1]]]), ]          
-    
-    # replace horizon IDs because we split horizons possibly
-    h$hzID <- as.character(seq_len(nrow(h)))
-    
-    # force autocalculated ID
-    hzidname(p) <- "hzID"
-  } else {
-    # update slots for new h
+  if (!missing(drop)) {
+    fill <- !drop
+  }
+  
+  # update slots for new h
+  if (!fill) {
     p <- .updateSite(p, h)
   }
-
+  
   if (nrow(h) > 0) {
-    # replace @horizons with h
-    replaceHorizons(p) <- h
+    if (!fill) {
+      # replace @horizons with h
+      replaceHorizons(p) <- h
+    } else {
+      p <- .insert_dropped_horizons(p, horizons = h)
+    }
   } else {
     p <- p[0,]
   }
@@ -311,75 +307,7 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
   return(p)
 }
 
-# new workhorse function replacing .glom
-# much less fussy, and vectorized
-.multiglom <- function (p, z1, z2 = NULL, modality = "all", as.list = FALSE) {
-
-  # access SPC slots to get important info about p
-  hz <- horizons(p)
-  dz <- horizonDepths(p)
-  id <- idname(p)
-  pid <- profile_id(p)
-  hzid <- hzidname(p)
-
-  # get top and bottom horizon depth vectors
-  tdep <- hz[[dz[1]]]
-  bdep <- hz[[dz[2]]]
-
-  # determine top depths greater/equal to z1
-  # include horizons whose bottom portion are below z1
-  gt1 <- tdep >= z1 | (bdep > z1)
-
-  # get the index of the first horizon
-  idx.top <- which(gt1)
-
-  if (length(idx.top) == 0) {
-    warning(paste0('Invalid upper bound `z1` (',z1,'), returning `NULL` (',
-                   id,': ', pid,')'), call.=FALSE)
-    return(NULL)
-  }
-
-  # if a bottom depth of the clod interval is not specified
-  if (is.null(z2)) {
-    z2 <- z1
-  }
-
-  # determine bottom depths less than z2
-  lt2 <- bdep < z2
-
-  # include bottom depths equal to z2
-  lt2[which(bdep == z2)] <- TRUE
-
-  # include horizons whose top portion are above z2
-  lt2 <- lt2 | (tdep < z2)
-
-  # get index of last horizon
-  idx.bot <- which(lt2)
-
-  # intersection of idx.top and idx.bot
-  idx <- intersect(idx.top, idx.bot)
-
-  if (modality == "thickest") {
-    # get index of thickest horizon by profile
-    idx <- .thickestHzID(p, hz[idx, ])
-  }
-
-  # get the ID values out of horizon table
-  idval <- hz[idx, ][[hzidname(p)]]
-
-  # just the horizon IDs
-  if (!as.list) {
-    return(idval)
-  }
-
-  # # list result.
-  return(list(
-    hzid = hzid,
-    hz.idx = idx,
-    value = idval
-  ))
-}
-
+# new workhorse function replacing .glom and .multiglom
 .multiglomDT <- function (p, z1, z2 = NULL, modality = "all", as.list = FALSE) {
   
   # access SPC slots to get important info about p
@@ -429,3 +357,32 @@ setMethod(f = 'glom', signature(p = 'SoilProfileCollection'),
     value = idval
   ))
 }
+
+
+#' @description `trunc()` is a wrapper method (using S4 generic) for `glom()` where `truncate=TRUE`
+#' @param ... `trunc()`: additional arguments passed to `glom()`
+#' @export 
+#' @rdname glom
+#' @examples
+#'
+#' # load sample data
+#' data("sp3")
+#'
+#' # promote to SPC
+#' depths(sp3) <- id ~ top + bottom
+#'
+#' ### TRUNCATE all profiles in sp3 to [0,25]
+#'
+#' # set up plot parameters
+#' par(mfrow=c(2,1), mar=c(0,0,0,0))
+#'
+#' # full profiles
+#' plot(sp3)
+#'
+#' # trunc'd profiles
+#' plot(trunc(sp3, 0, 25))
+setMethod("trunc", signature(x = "SoilProfileCollection"),
+          function(x, z1, z2, ...) {
+            return(glom(x, z1, z2, truncate = TRUE, ...))
+          })
+

@@ -3,6 +3,7 @@
 \name{glom,SoilProfileCollection-method}
 \alias{glom,SoilProfileCollection-method}
 \alias{glom}
+\alias{trunc,SoilProfileCollection-method}
 \title{Subset soil horizon data using a depth or depth interval}
 \usage{
 \S4method{glom}{SoilProfileCollection}(
@@ -14,11 +15,15 @@
   truncate = FALSE,
   invert = FALSE,
   fill = FALSE,
-  modality = "all"
+  modality = "all",
+  drop = !fill,
+  ...
 )
+
+\S4method{trunc}{SoilProfileCollection}(x, z1, z2, ...)
 }
 \arguments{
-\item{p}{a SoilProfileCollection}
+\item{p}{A SoilProfileCollection}
 
 \item{z1}{numeric vector of top depth to intersect horizon (required). Can be an expression involving \code{siteNames(p)} or quoted column name. Should evaluate to numeric length \code{1} or length equal to \code{length(p)}}
 
@@ -35,12 +40,20 @@
 \item{fill}{keep sites and preserve order for profiles that do not have horizons in interval by filling with a single horizon with \code{NA} top and bottom depth. default: \code{FALSE}}
 
 \item{modality}{default: \code{"all"} return all horizons; or \code{modality = "thickest"}) to return the \emph{thickest} horizon in interval. If multiple horizons have equal thickness, the first (shallowest) is returned.}
+
+\item{drop}{Inverted alias of fill for consistency with other methods. When \code{drop=FALSE}, filling occurs.}
+
+\item{...}{\code{trunc()}: additional arguments passed to \code{glom()}}
+
+\item{x}{A SoilProfileCollection}
 }
 \value{
 a SoilProfileCollection, data.frame, or a vector of horizon IDs. \code{NULL} if no result.
 }
 \description{
 Make a "clod" of horizons from a SoilProfileCollection given a point or a depth interval to intersect. The interval \verb{[z1,z2]} may be profile-specific (equal in length to \code{p}), or may be recycled over all profiles (if boundaries are length 1). For "point" intersection, \code{z2} may be left as the default value \code{NULL}.
+
+\code{trunc()} is a wrapper method (using S4 generic) for \code{glom()} where \code{truncate=TRUE}
 }
 \details{
 "To glom" is "to steal" or to "become stuck or attached to". The word is related to the compound "glomalin", which is a glycoprotein produced by mycorrhizal fungi in soil.
@@ -101,6 +114,23 @@ p4 <- glom(sp1, glom_top / 2, glom_bottom * 1.2, truncate = TRUE)
 par(mar = c(1,1,3,1))
 plot(p4, color = "prop", max.depth = 200)
 
+
+# load sample data
+data("sp3")
+
+# promote to SPC
+depths(sp3) <- id ~ top + bottom
+
+### TRUNCATE all profiles in sp3 to [0,25]
+
+# set up plot parameters
+par(mfrow=c(2,1), mar=c(0,0,0,0))
+
+# full profiles
+plot(sp3)
+
+# trunc'd profiles
+plot(trunc(sp3, 0, 25))
 }
 \seealso{
 \code{\link{glomApply}} \code{\link{trunc}}
