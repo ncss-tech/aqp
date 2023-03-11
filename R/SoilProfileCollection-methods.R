@@ -425,27 +425,60 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
   
   if (drop) {
     # subset SPC first to remove sites and other slots
-    x <- x[which(pid %in% newhz[[idn]]),]
+    x <- x[which(pid %in% newhz[[idn]]), ]
+    
+    # then replace horizons with horizon subset 
+    replaceHorizons(x) <- newhz
   } else {
     # reinsert empty horizons and site data for "retained" profiles
-    idx <- which(!pid %in% newhz[[idn]])
-    emptyhz <- .data[0,][seq_along(idx),]
-    emptyhz[[idn]] <- pid[idx]
-    newsite <- site(x)[-idx, , drop = FALSE]
-    emptysite <- newsite[0, , drop = FALSE][seq_along(idx), , drop = FALSE]
-    emptysite[[idn]] <- pid[idx]
-    newhz <- rbind(newhz, emptyhz)
-    newhz <- newhz[order(newhz[[idn]], newhz[[hzd[1]]]),]
-    s <- rbind(newsite, emptysite)
-    s <- s[order(s[[idn]]), , drop = FALSE]
-    x@site <- s
+    x <- .insert_dropped_horizons(x, newhz)
   }
   
-  # then replace horizons with horizon subset 
-  #   (avoid profile IDs in site are missing from replacement horizons!)
-  replaceHorizons(x) <- newhz
   x
 })
+
+#' @description  used to implement "drop=FALSE" for various methods that remove horizons from SoilProfileCollection object
+#' @noRd
+.insert_dropped_horizons <- function(object = SoilProfileCollection(), 
+                                     horizons = horizons(object), 
+                                     sites = site(object),
+                                     pid = idname(object),
+                                     depths = horizonDepths(object),
+                                     SPC = TRUE) {
+  
+  s.i <- sites[[pid]]
+  i.idx <- unique(horizons[[pid]])
+  i.idx2 <- setdiff(s.i, i.idx)
+  newid <- sites[[pid]][which(sites[[pid]] %in% i.idx2)]
+  
+  # create ID-only empty data using original data as templates
+  h.empty <- horizons[0, , drop = FALSE][seq_along(i.idx2), , drop = FALSE]
+  h.empty[[pid]] <- newid
+  s.empty <- sites[0, , drop = FALSE][seq_along(i.idx2), , drop = FALSE]
+  s.empty[[pid]] <- newid
+  
+  # reorder to original id (+ top depth for horizons)
+  horizons <- rbind(horizons, h.empty)
+  horizons <- horizons[order(horizons[[pid]], horizons[[depths[1]]]),]
+  
+  sites <- sites[which(!sites[[pid]] %in% h.empty[[pid]]), , drop = FALSE]
+  sites <- rbind(sites, s.empty)
+  sites <- sites[order(sites[[pid]]), , drop = FALSE]
+  
+  if (inherits(object, 'SoilProfileCollection') && SPC) {
+    object@site <- sites
+    replaceHorizons(object) <- horizons
+    return(object)
+  } else {
+    return(list(
+      horizons = horizons,
+      sites = sites,
+      pid = pid,
+      depths = depths
+    ))
+  }
+}
+
 
 # functions tailored for use with magrittr %>% operator / tidyr
 

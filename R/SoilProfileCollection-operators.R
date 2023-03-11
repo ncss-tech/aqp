@@ -283,16 +283,9 @@ setMethod("[", signature(x = "SoilProfileCollection"),
                              h.ids <- s[[idn]]
                              
                              if (!drop) {
-                               i.idx2 <- setdiff(s.i, i.idx)
-                               newid <- s.all[[idn]][i.idx2]
-                               h.empty <- h[0,][seq_along(i.idx2),]
-                               s.empty <- s[0,, drop = FALSE][seq_along(i.idx2),, drop = FALSE]
-                               h.empty[[idn]] <- newid
-                               s.empty[[idn]] <- newid
-                               h <- rbind(h, h.empty)
-                               s <- rbind(s, s.empty)
-                               h <- h[order(h[[idn]], h[[hzd[1]]]),]
-                               s <- s[order(s[[idn]]),, drop = FALSE]
+                               res <- .insert_dropped_horizons(x, h, SPC = FALSE)
+                               h <- res$horizons
+                               s <- res$sites
                              }
                              
                              # remove also: diagnostics
