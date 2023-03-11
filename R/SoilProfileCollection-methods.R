@@ -379,7 +379,7 @@ setGeneric("subsetHz", function(x, ...)
 #' 
 #' @param x a SoilProfileCollection
 #' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
-#' 
+#' @param drop Default: `TRUE`. When `drop=FALSE` placeholder horizons (profile ID with all other values `NA`) are created where the specified filter results in removal of all horizons.
 #' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `subsetHz()` inside another function, all expressions used in `...` should be in terms of variables that are in the horizon data frame.
 #' 
 #' @return a SoilProfileCollection with a subset of horizons, possibly with some sites removed
@@ -394,13 +394,16 @@ setGeneric("subsetHz", function(x, ...)
 #' # show just horizons with 10YR hues
 #' plot(subsetHz(sp3, hue == '10YR'))
 #' 
-setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ...) {
+setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., drop = TRUE) {
   # capture expression(s) at function
   .dots <- substitute(list(...))
   .dots <- .dots[2:length(.dots)]
   
   # create composite object to facilitate eval
   .data <- horizons(x)
+  idn <- idname(x)
+  pid <- profile_id(x)
+  hzd <- horizonDepths(x)
   
   # loop through list of expressions and evaluate
   res <- vector('list', length(.dots))
@@ -411,16 +414,32 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ...) {
   subcrit <- Reduce('&', res)
   
   if (!is.logical(subcrit)) {
-    badxpr <- paste0("'",paste0(.dots[sapply(.dots, function(x) !is.logical(x))],
-                                collapse=",'"),"'")
+    badxpr <- paste0("'", paste0(.dots[sapply(.dots, function(x) {
+      !is.logical(x)
+    })], collapse = ",'"), "'")
     message(sprintf("%s is not logical; returning `x` unchanged", badxpr))
     return(x)
   }
   
   newhz <- .data[which(subcrit),]
   
-  # subset SPC first to remove sites and other slots
-  x <- x[which(profile_id(x) %in% newhz[[idname(x)]]),]
+  if (drop) {
+    # subset SPC first to remove sites and other slots
+    x <- x[which(pid %in% newhz[[idn]]),]
+  } else {
+    # reinsert empty horizons and site data for "retained" profiles
+    idx <- which(!pid %in% newhz[[idn]])
+    emptyhz <- .data[0,][seq_along(idx),]
+    emptyhz[[idn]] <- pid[idx]
+    newsite <- site(x)[-idx, , drop = FALSE]
+    emptysite <- newsite[0, , drop = FALSE][seq_along(idx), , drop = FALSE]
+    emptysite[[idn]] <- pid[idx]
+    newhz <- rbind(newhz, emptyhz)
+    newhz <- newhz[order(newhz[[idn]], newhz[[hzd[1]]]),]
+    s <- rbind(newsite, emptysite)
+    s <- s[order(s[[idn]]), , drop = FALSE]
+    x@site <- s
+  }
   
   # then replace horizons with horizon subset 
   #   (avoid profile IDs in site are missing from replacement horizons!)
