@@ -453,34 +453,37 @@ setReplaceMethod("replaceHorizons",
                  signature(object = "SoilProfileCollection"),
                  function(object, value) {
 
+  hmn <- .hzMetadataNames(object, depths = TRUE)
   required.columns <-  c(idname(object), horizonDepths(object))
   required.missing <- !required.columns %in% names(value)
 
-  if(any(required.missing))
-    stop(paste0("required horizon data are missing: ",
-         paste0(required.columns[required.missing], collapse=", ")), call. = FALSE)
-
+  if (any(required.missing)) {
+    stop(paste0("required horizon data are missing from replacement: ",
+                paste0(required.columns[required.missing], 
+                       collapse = ", ")), call. = FALSE)
+  }
+  
   ids.match1 <- all(profile_id(object) %in% value[[idname(object)]])
-  if(!ids.match1)
+  if (!ids.match1) {
     stop("profile IDs in site are missing from replacement horizons!", call. = FALSE)
-
+  }
+  
   ids.match2 <- all(value[[idname(object)]] %in% profile_id(object))
-  if(!ids.match2)
+  if (!ids.match2) {
     stop("profile IDs in replacement are missing from site!", call. = FALSE)
-
-  optional.columns <-  c(hzidname(object),
-                         hzdesgnname(object),
-                         hztexclname(object))
-
+  }
+  
+  optional.columns <-  hmn[!hmn %in% required.columns]
   optional.missing <- !optional.columns %in% names(value)
 
-  #if(any(optional.missing))
-    #message(paste0("optional columns are missing: ",
-    #               paste0(optional.columns[optional.missing],
-    #               collapse=", ")))
+  if (any(optional.missing)) {
+    message(paste0("optional columns are missing from replacement: ",
+                   paste0(optional.columns[optional.missing],
+                          collapse = ", ")))
+  }
 
   # assign hzID if hzidname() is missing
-  if(optional.missing[1]) {
+  if (optional.missing[1]) {
     value$hzID <- as.character(1:nrow(value))
     hzidname(object) <- "hzID"
     message("no horizon ID present, defaulting to `hzID`")
