@@ -92,6 +92,9 @@ setMethod("split",
 
       # preserve NA levels as missing
       if (any(is.na(f)) && !drop) {
+        if (is.factor(f)) {
+         levels(f) <- c(levels(f), "<missing>")
+        }
         f[is.na(f)] <- "<missing>"
       }
 
@@ -105,6 +108,9 @@ setMethod("split",
       # preserve NA levels as missing
       f <- lapply(f, function(ff) {
         if (any(is.na(ff)) && !drop) {
+          if (is.factor(ff)) {
+            levels(ff) <- c(levels(ff), "<missing>")
+          }
           ff[is.na(ff)] <- "<missing>"
         }
         ff
@@ -116,10 +122,6 @@ setMethod("split",
     } else {
       stop(sprintf('invalid argument `f`'), call. = FALSE)
     }
-  }
-
-  if (drop) {
-    fg <- droplevels(fg)
   }
 
   # iterate over levels
