@@ -16,7 +16,7 @@
 #'
 #' @param x a SoilProfileCollection object
 #' @param f a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.
-#' @param drop logical indicating if levels that do not occur should be dropped (if f is a factor or a list).
+#' @param drop logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When `drop=FALSE` and `f` contains missing values an additional group "<missing>" is returned.
 #' @param ...	Additional arguments are ignored
 #'
 #' @details As of aqp 1.25, omission of `f` argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to \code{idname(x)}, e.g. a list as long as \code{length(x)}, with a single-profile SoilProfileCollection per list element. Replicate this behavior using \code{f = idname(x)} or \code{f = profile_id(x)}
@@ -54,7 +54,7 @@
 #' names(p4)
 #' length(p4) # 5 unique "surfaces", 5 SPCs in result list
 #'
-setMethod(f = "split",
+setMethod("split",
           signature(x = "SoilProfileCollection", f = "ANY"),
           function(x, f, drop = TRUE, ...) {
 
@@ -68,19 +68,19 @@ setMethod(f = "split",
   } else {
     # standard, site-level group split
     # using an existing site-level attribute
-    if (is.character(f) & length(f) == 1) {
+    if (is.character(f) && length(f) == 1) {
       if (!f %in% siteNames(x)) {
         stop(sprintf('%s must be site-level attribute', f), call. = FALSE)
       }
-
-      # no NA allowed
-      if (any(is.na(x[[f]]))) {
-        stop(sprintf('NA not allowed in %s', f), call. = FALSE)
-      }
-
+      
       # extract to local variable, so as not to modify original data
       fg <- x[[f]]
-
+      
+      # no NA allowed
+      if (any(is.na(fg)) && !drop) {
+        fg[is.na(fg)] <- "<missing>"
+      }
+   
       # splitting variable should be a factor
       if (!inherits(fg, 'factor')) {
         fg <- factor(fg)
@@ -88,11 +88,11 @@ setMethod(f = "split",
       }
 
     # using a vector coercible to factor (like base::split)
-    } else if (length(f) == length(x) & !is.list(f)) {
+    } else if (length(f) == length(x) && !is.list(f)) {
 
-      # no NA allowed
-      if (any(is.na(f))) {
-        stop(sprintf('NA not allowed in argument `f`'), call. = FALSE)
+      # preserve NA levels as missing
+      if (any(is.na(f)) && !drop) {
+        f[is.na(f)] <- "<missing>"
       }
 
       if (!inherits(f, 'factor')) {
@@ -102,6 +102,14 @@ setMethod(f = "split",
       }
     } else if (is.list(f)) {
 
+      # preserve NA levels as missing
+      f <- lapply(f, function(ff) {
+        if (any(is.na(ff)) && !drop) {
+          ff[is.na(ff)] <- "<missing>"
+        }
+        ff
+      })
+      
       # using a interaction of a list coercible to factor (like base::split)
       fg <- interaction(f, drop = drop, sep = ".", lex.order = FALSE)
 
@@ -110,8 +118,6 @@ setMethod(f = "split",
     }
   }
 
-  ## TODO: test this
-  # is this really neccessary?
   if (drop) {
     fg <- droplevels(fg)
   }
@@ -127,7 +133,7 @@ setMethod(f = "split",
 
     return(rr)
   })
-
+  
   # save names
   names(res) <- lv
 

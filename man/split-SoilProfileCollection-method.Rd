@@ -11,7 +11,7 @@
 
 \item{f}{a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.}
 
-\item{drop}{logical indicating if levels that do not occur should be dropped (if f is a factor or a list).}
+\item{drop}{logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When \code{drop=FALSE} and \code{f} contains missing values an additional group "\if{html}{\out{<missing>}}" is returned.}
 
 \item{...}{Additional arguments are ignored}
 }

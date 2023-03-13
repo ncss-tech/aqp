@@ -56,6 +56,26 @@ test_that("split fails as expected", {
   expect_error(split(sp6, f = 'XXX'))
 })
 
-## warnings
-
-
+test_that("split with NA values in `f`", {
+  
+  site(sp6)$grp1 <- c(1, 1, 2, 2, NA, NA)
+  site(sp6)$grp2 <- c(1, 2, 1, 2,  1,  2)
+  
+  # no more error
+  x <- split(sp6, sp6$grp1)
+  expect_equal(length(x), 2)
+  
+  # additional "<missing>" group (with drop=FALSE)
+  x <- split(sp6, "grp1", drop = FALSE)
+  expect_equal(length(x), 3)
+  expect_equal(length(x[["<missing>"]]), 2)
+  
+  # interaction grp1*grp2
+  x <- split(sp6, list(sp6$grp1, sp6$grp2))
+  expect_equal(length(x), 4)
+  
+  # interaction grp1*grp2 (with drop=FALSE)
+  x <- split(sp6, list(sp6$grp1, sp6$grp2), drop = FALSE)
+  expect_equal(length(x), 6)
+  
+}) 
