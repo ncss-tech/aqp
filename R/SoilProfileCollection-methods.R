@@ -43,6 +43,33 @@ setMethod("validSpatialData", signature(object = "SoilProfileCollection"),
             return(!is.null(crds) && all(crds %in% names(object)))
           })
 
+setGeneric("isEmpty", function(object, ...)
+  standardGeneric("isEmpty"))
+
+#' Check for "empty" profiles in a SoilProfileCollection
+#' 
+#' "Empty" profiles are used as placeholders for positions in a `SoilProfileCollection`
+#' These profiles result from operations that remove or extract portions of horizons
+#' from source profiles. 
+#' 
+#' In a `SoilProfileCollection` an empty profile occurs when it has one horizon, 
+#' with `NA` top and bottom depths. Generally all non-profile ID site and horizon-level
+#' values are all also `NA`, but only the depths are checked by `isEmpty()`.
+#' 
+#' @param object A SoilProfileCollection
+#' @param ... Additional arguments not used.
+#' @aliases isEmpty
+#' @docType methods
+#' @rdname isEmpty
+#' @return logical. Vector of length equal to number of profiles in `object`. Returns `TRUE` when a profile has one horizon with `NA` top and bottom depths
+#' @export
+setMethod("isEmpty", signature(object = "SoilProfileCollection"),
+          function(object, ...) {
+  .NHZ <- .TOP <- .BOTTOM <- NULL
+  d <- object[, 1, .TOP, .BOTTOM]
+  object[, , .NHZ] == 1 & is.na(d[[1]]) & is.na(d[[2]])
+})
+
 ##
 ## overloads
 ##
