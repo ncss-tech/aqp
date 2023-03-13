@@ -157,7 +157,7 @@
 </ul></li>
 <li>new convenience function <code>PMS2Munsell()</code> for converting PMS codes -&gt; closest Munsell chip (<a href="https://github.com/ncss-tech/aqp/issues/124" class="external-link uri">https://github.com/ncss-tech/aqp/issues/124</a>)</li>
 <li>
-<code><a href="../reference/glom-SoilProfileCollection-method.html">glom()</a></code> <code>z1</code> and <code>z2</code> arguments vectorized to allow for profile-specific intervals
+<code><a href="../reference/glom.html">glom()</a></code> <code>z1</code> and <code>z2</code> arguments vectorized to allow for profile-specific intervals
 <ul><li>
 <code>z1</code> and <code>z2</code> support non-standard evaluation based on column names in <code>siteNames(p)</code>, and also can take character vector (length 1) with column names in <code>siteNames(p)</code>
 </li>
@@ -232,7 +232,7 @@
 <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> automatically converts <code>logical</code> data supplied to <code>color</code> argument into <code>factor</code>
 </li>
 <li>
-<code><a href="../reference/glom-SoilProfileCollection-method.html">glom()</a></code> is now vectorized over profiles</li>
+<code><a href="../reference/glom.html">glom()</a></code> is now vectorized over profiles</li>
 <li>
 <code>estimateAWC</code> introduced for testing lookup table estimation of available water capacity (AWC) of fine-earth fraction</li>
 <li>
@@ -303,7 +303,7 @@
 <li>add <code>returnData</code> argument to <code>contrastChart</code>
 </li>
 <li>improvements to <code>glom(..., invert=TRUE)</code>, <code>glomApply</code>, and better tests</li>
-<li>new wrapper method around <code>glomApply</code>: <code><a href="../reference/trunc-SoilProfileCollection-method.html">aqp::trunc</a></code> for cases when top and bottom depth interval is the same for all profiles in a <em>SoilProfileCollection</em>
+<li>new wrapper method around <code>glomApply</code>: <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">aqp::trunc</a></code> for cases when top and bottom depth interval is the same for all profiles in a <em>SoilProfileCollection</em>
 </li>
 <li>fix for routing of <code>NULL</code> through <code>$&lt;-</code> and <code>horizons&lt;-</code> or <code>site&lt;-</code> (<a href="https://github.com/ncss-tech/aqp/issues/163" class="external-link uri">https://github.com/ncss-tech/aqp/issues/163</a>)</li>
 <li>fix handling of missing metadata in (old) serialized <em>SoilProfileCollection</em> objects</li>
@@ -357,7 +357,7 @@
 <ul><li>CRAN release</li>
 <li>new functions: <code><a href="../reference/hzDesgn.html">hzDesgn()</a></code>, get horizon designations from a SPC</li>
 <li>new functions: <code><a href="../reference/hzdesgnname.html">hzdesgnname()</a></code>/<code>hzdesgnname()&lt;-</code> and <code><a href="../reference/hztexclname.html">hztexclname()</a></code>/<code>hztexclname()&lt;-</code> get/set column containing horizon designations and texture classes</li>
-<li>better error/logic handling for <code><a href="../reference/glom-SoilProfileCollection-method.html">glom()</a></code>
+<li>better error/logic handling for <code><a href="../reference/glom.html">glom()</a></code>
 </li>
 </ul></div>
     <div class="section level2">

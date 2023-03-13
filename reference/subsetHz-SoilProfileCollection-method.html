@@ -64,7 +64,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SoilProfileCollection</span></span>
-<span><span class="fu">subsetHz</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">subsetHz</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -75,6 +75,10 @@
 
 <dt>...</dt>
 <dd><p>Comma-separated set of R expressions that evaluate as <code>TRUE</code> or <code>FALSE</code> in context of horizon data frame. Length for individual expressions matches number of horizons, in <code>x</code>.</p></dd>
+
+
+<dt>drop</dt>
+<dd><p>Default: <code>TRUE</code>. When <code>drop=FALSE</code> placeholder horizons (profile ID with all other values <code>NA</code>) are created where the specified filter results in removal of all horizons.</p></dd>
 
 </dl></div>
     <div id="value">

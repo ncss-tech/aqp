@@ -247,7 +247,7 @@
     <loc>/reference/getSurfaceHorizonDepth.html</loc>
   </url>
   <url>
-    <loc>/reference/glom-SoilProfileCollection-method.html</loc>
+    <loc>/reference/glom.html</loc>
   </url>
   <url>
     <loc>/reference/glomApply.html</loc>
@@ -347,6 +347,9 @@
   </url>
   <url>
     <loc>/reference/invertLabelColor.html</loc>
+  </url>
+  <url>
+    <loc>/reference/isEmpty.html</loc>
   </url>
   <url>
     <loc>/reference/jacobs2000.html</loc>
@@ -602,9 +605,6 @@
   </url>
   <url>
     <loc>/reference/transform.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trunc-SoilProfileCollection-method.html</loc>
   </url>
   <url>
     <loc>/reference/unique.html</loc>
