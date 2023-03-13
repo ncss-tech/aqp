@@ -60,6 +60,6 @@ test_that("mollic.thickness.requirement", {
   #  rather than 36/3 = 12 truncated to 18 which comes from argillic bottom depth/2nd carbonate upperbound
   expect_equal(mollic.thickness.requirement(spc2, clay.attr = 'claytotest'), 22)
   
-  expect_equal(mollic.thickness.requirement(x), c(18, 25))
+  expect_equal(mollic.thickness.requirement(spc3), c(18, 25))
 })
 
