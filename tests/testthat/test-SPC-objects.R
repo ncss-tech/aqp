@@ -150,10 +150,9 @@ test_that("SPC subsetting ", {
   expect_equal(sum(is.na(sp1d$foo)), 4)   # 4 profiles with NA $foo data
   
   # check empty profiles
-  expect_true(all(!isEmpty(sp1d)))
-  expect_equal(isEmpty(sp1d), c(TRUE, FALSE, FALSE, FALSE, FALSE,
-                                TRUE, TRUE, TRUE, TRUE))
-  
+  expect_true(all(!isEmpty(sp1)))
+  expect_equal(isEmpty(sp1d), c(FALSE, TRUE, TRUE, TRUE, TRUE,
+                                FALSE, FALSE, FALSE, FALSE))
   
   # there should only be 1 profile and 1 horizon
   expect_equal(length(sp1[1, 1]), 1)
