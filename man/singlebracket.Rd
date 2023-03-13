@@ -15,7 +15,7 @@
 
 \item{...}{non-standard expressions to evaluate in a subset}
 
-\item{drop}{not used}
+\item{drop}{Default: \code{TRUE}. When \code{drop=FALSE} placeholder horizons (profile ID with all other values \code{NA}) are created where the specified \code{j} index results in removal of all horizons.}
 }
 \description{
 You can access the contents of a SoilProfileCollection by profile and horizon "index", \code{i} and \code{j}, respectively: \code{spc[i, j, ...]}. Subset operations are propagated to other slots (such as diagnostics or spatial) when they result in removal of sites from a collection.

@@ -32,15 +32,24 @@
 #' @param i a numeric or logical value denoting profile indices to select in a subset
 #' @param j a numeric or logical value denoting horizon indices to select in a subset
 #' @param ... non-standard expressions to evaluate in a subset
-#' 
-#' @param drop not used
+#' @param drop Default: `TRUE`. When `drop=FALSE` placeholder horizons (profile ID with all other values `NA`) are created where the specified `j` index results in removal of all horizons. 
 #' @rdname singlebracket
 #  SPC extract: "[" '[' single bracket SPC object extract method
-setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
+setMethod("[", signature(x = "SoilProfileCollection"),
+          function(x, i, j, ..., drop = TRUE) {
 
                            # capture k right away
                            ksubflag <- FALSE
-
+                           
+                           # local vars to make R CMD check happy
+                           .N <- NULL
+                           .SD <- NULL
+                           .I <- NULL
+                           V1 <- NULL
+                           
+                           idn <- idname(x)
+                           hzd <- horizonDepths(x)
+                           
                            # 2nd value is first user-supplied expression
                            kargs <- substitute(list(...))
                            ksub <- as.character(kargs)[2:length(kargs)]
@@ -128,11 +137,11 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                            s.all <- x@site
 
                            # extract requested profile IDs
-                           p.ids <- s.all[[idname(x)]][unique(i)]
+                           p.ids <- s.all[[idn]][unique(i)]
 
                            # keep only the requested horizon data (filtered by profile ID)
                            h <- .as.data.frame.aqp(h, aqp_df_class(x))
-                           pidx <- h[[idname(x)]] %in% p.ids
+                           pidx <- h[[idn]] %in% p.ids
                            h <- h[pidx,]
                             
                            # TODO: combine?
@@ -149,7 +158,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                              j.idx.allowed <- seq_len(nrow(h))
 
                              # keep only the requested site data, (filtered by profile ID)
-                             s.i <- which(s.all[[idname(x)]] %in% p.ids)
+                             s.i <- which(s.all[[idn]] %in% p.ids)
 
                              # need to use drop=FALSE when @site contains only a single column
                              s <- s.all[s.i, , drop = FALSE]
@@ -160,32 +169,23 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                              # subset diagnostic data
                              d <- diagnostic_hz(x)
                              if (length(d) > 0) {
-                               d <- d[which(d[[idname(x)]] %in% p.ids),]
+                               d <- d[which(d[[idn]] %in% p.ids),]
                              }
 
                              # subset restriction data
                              r <- restrictions(x)
                              if (length(r) > 0) {
-                               r <- r[which(r[[idname(x)]] %in% p.ids),]
+                               r <- r[which(r[[idn]] %in% p.ids),]
                              }
-
                            }
 
                            # subset horizons/slices based on j --> only when j is given
-                           if (!missing(j) | ksubflag) {
+                           if (!missing(j) || ksubflag) {
 
                              # faster replacement of j subsetting of horizon data
                              # if (aqp_df_class(x) == "data.table") {
 
                              h <- data.table::as.data.table(h)
-
-                             # local vars to make R CMD check happy
-                             .N <- NULL
-                             .SD <- NULL
-                             .I <- NULL
-                             V1 <- NULL
-
-                             idn <- idname(x)
 
                              # by list @horizons idname (essentially iterating over profiles)
                              bylist <- list(h[[idn]])
@@ -219,7 +219,6 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                                return(j.idx)
                              # short circuit for top and/or bottom depths
                              } else if (ksubflag && any(c(".TOP", ".BOTTOM") %in% ksub)) {
-                               hzd <- horizonDepths(x)
                                res <- h[j.idx, .SD, .SDcols = hzd[c(".TOP", ".BOTTOM") %in% ksub]]
                                # vector default with 1 keyword
                                if (ncol(res) == 1) 
@@ -234,12 +233,15 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                              
                              # determine which site indices to keep
                              # in case all horizons are removed, remove sites too
-                             if (length(j.idx) == 0) {
+                             if (length(j.idx) == 0 && drop) {
                                i.idx <- numeric(0)
                              } else {
                                # determine which profiles to KEEP
-                               i.idx <- which(profile_id(x) %in% unique(h[j.idx,][[idn]]))
+                               i.idx <- which(profile_id(x) %in% unique(h[[idn]][j.idx]))
                              }
+                             
+                             # do horizon subset with j index
+                             h <- h[j.idx, ]
 
                              # }
                              # } else {
@@ -269,39 +271,39 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                              #
                              # if (length(j.idx))
                              #   j.idx <- j.idx[-j.idx.bad]
-
-                             # do horizon subset with j index
-                             h <- h[j.idx, ]
-
-                             # if profiles have been removed based on the j-index constraints
-                             if (length(i.idx) > 0) {
+                             
+                             
+                             if (length(i.idx) > 0 && drop) {
                                # remove sites that have no matching j
-                               i.idx <- unique(c(s.i, i.idx))
-                               s <- s.all[i.idx, , drop = FALSE]
-                               h.ids <- s[[idname(x)]]
-
-                               # remove also: diagnostics
-                               d.idx <- which(d[[idname(x)]] %in% h.ids)
-                               if (length(d.idx) > 0) {
-                                 d <- d[-d.idx, , drop = FALSE]
-                               }
-
-                               # restrictions
-                               r.idx <- which(r[[idname(x)]] %in% h.ids)
-                               if (length(r.idx) > 0) {
-                                 r <- r[-r.idx, , drop = FALSE]
-                               }
-
+                               i.idx <- intersect(s.i, i.idx)
                              }
+                             
+                             # if sites have been removed based on the j-index+drop args
+                             s <- s.all[i.idx, , drop = FALSE]
+                             h.ids <- s[[idn]]
+                             
+                             if (!drop) {
+                               res <- .insert_dropped_horizons(x, h, SPC = FALSE)
+                               h <- res$horizons
+                               s <- res$sites
+                             }
+                             
+                             # remove also: diagnostics
+                             d.idx <- which(d[[idn]] %in% h.ids)
+                             d <- d[d.idx, , drop = FALSE]
+                             
+                             # restrictions
+                             r.idx <- which(r[[idn]] %in% h.ids)
+                             r <- r[r.idx, , drop = FALSE]
                            }
-
+                           
                            rownames(h) <- NULL
-
+                             
                            # rebuild SPC object from slots
-                           res <- SoilProfileCollection(
-                             idcol = idname(x),
+                           res <-  SoilProfileCollection(
+                             idcol = idn,
                              hzidcol = hzidname(x),
-                             depthcols = horizonDepths(x),
+                             depthcols = hzd,
                              metadata = aqp::metadata(x),
                              horizons = .as.data.frame.aqp(h, aqp_df_class(x)),
                              site = .as.data.frame.aqp(s, aqp_df_class(x)),
@@ -316,12 +318,12 @@ setMethod("[", signature(x = "SoilProfileCollection"),  function(x, i, j, ...) {
                            
                            # fill in any missing data.frame class or group var
                            o.df.class <- aqp::metadata(x)$aqp_df_class
-                           if(length(o.df.class) == 0) {
+                           if (length(o.df.class) == 0) {
                              o.df.class <- "data.frame"
                            }
 
                            o.group.by <- aqp::metadata(x)$aqp_group_by
-                           if(length(o.group.by) == 0) {
+                           if (length(o.group.by) == 0) {
                              o.group.by <- ""
                            }
 

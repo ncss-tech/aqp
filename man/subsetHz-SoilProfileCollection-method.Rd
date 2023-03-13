@@ -5,12 +5,14 @@
 \alias{subsetHz}
 \title{Subset the horizons in a SoilProfileCollection using logical criteria}
 \usage{
-\S4method{subsetHz}{SoilProfileCollection}(x, ...)
+\S4method{subsetHz}{SoilProfileCollection}(x, ..., drop = TRUE)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
 
 \item{...}{Comma-separated set of R expressions that evaluate as \code{TRUE} or \code{FALSE} in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.}
+
+\item{drop}{Default: \code{TRUE}. When \code{drop=FALSE} placeholder horizons (profile ID with all other values \code{NA}) are created where the specified filter results in removal of all horizons.}
 }
 \value{
 a SoilProfileCollection with a subset of horizons, possibly with some sites removed

@@ -139,7 +139,21 @@ test_that("SPC subsetting ", {
 
   # horizon subsets
   expect_true(inherits(sp1[, 2], 'SoilProfileCollection'))
-
+  expect_true(inherits(sp1[, 6], 'SoilProfileCollection'))
+  
+  # j-index subset with drop=FALSE argument
+  site(sp1)$foo <- "bar"
+  sp1d <- sp1[, 6, drop = FALSE]
+  expect_true(inherits(sp1d, 'SoilProfileCollection'))
+  expect_equal(length(sp1d), length(sp1)) # no profiles removed 
+                                          # (4 with less than 6 horizons)
+  expect_equal(sum(is.na(sp1d$foo)), 4)   # 4 profiles with NA $foo data
+  
+  # check empty profiles
+  expect_true(all(!isEmpty(sp1)))
+  expect_equal(isEmpty(sp1d), c(FALSE, TRUE, TRUE, TRUE, TRUE,
+                                FALSE, FALSE, FALSE, FALSE))
+  
   # there should only be 1 profile and 1 horizon
   expect_equal(length(sp1[1, 1]), 1)
   expect_equal(nrow(sp1[1, 1]), 1)

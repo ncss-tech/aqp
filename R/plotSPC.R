@@ -682,6 +682,8 @@ plotSPC <- function(
   
   ## TODO only iterate over real profiles, this will require testing of plot.order and relativePos
   
+  ## TODO: NO DATA template for empty profiles (now possible)
+  
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
   for(i in 1:n) {
