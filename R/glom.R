@@ -195,8 +195,8 @@ setMethod("glom", signature(p = "SoilProfileCollection"),
     newhz[z2bidx, 'bdep'] <- newhz[z2bidx, 'z2']
 
     # replace original values with truncated 
-    h[[depthn[1]]] <- newhz$tdep
-    h[[depthn[2]]] <- newhz$bdep
+    h[[depthn[1]]][!is.na(h[[depthn[1]]])] <- newhz$tdep
+    h[[depthn[2]]][!is.na(h[[depthn[2]]])] <- newhz$bdep
 
   # or "invert" and truncate
   } else if (invert & truncate & !is.null(z2)) {
@@ -206,7 +206,9 @@ setMethod("glom", signature(p = "SoilProfileCollection"),
     .bottom <- h[[depthn[2]]]
 
     # create an upper and lower SPC
-    p1 <- glom(p, 0, z1, truncate = TRUE)
+    z0 <- rep(0, length(z1))
+    z0[is.na(z1)] <- NA
+    p1 <- glom(p, z0, z1, truncate = TRUE)
     p2 <- glom(p, z2, max(p[[depthn[2]]]), truncate = TRUE)
 
     # combine horizon data

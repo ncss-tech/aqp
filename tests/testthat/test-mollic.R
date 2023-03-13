@@ -33,6 +33,19 @@ depths(spc2) <- id ~ hzdept + hzdepb
 hzdesgnname(spc2) <- 'hzname'
 hztexclname(spc2) <- 'texcl'
 
+spc3 <- data.frame(pedon_key = c("10016", "10016", "10016", "10047",  "10047",
+                                   "10047", "10047", "10047", "10047", "10047"), 
+                   hzn_top = c(0, 18, 51, 0, 26, 45, 55, 90, 102, 130), 
+                   hzn_bot = c(18, 51, 107, 26, 45, 55, 90, 102, 130, 185), 
+                   hzn_desgn = c("A", "C1",  "C2", "Ap", "E", "Btn", "Bt", 
+                                 "Eb", "2Btk1", "2Btk2"), 
+                   texture_lab = c("sl", "sil", "sil", "sil", "sil", 
+                                   "sil", "sil", "sil", "sil", "sil"), 
+                   clay_total = c(4.4, 7.7, 11.9, 16.7, 9.9, 
+                                  19.5, 14.2, 7.3, 11.3, 7.6))
+depths(spc3) <-pedon_key ~ hzn_top + hzn_bot
+hzdesgnname(spc3) <- "hzn_desgn"
+hztexclname(spc3) <- "texture_lab"
 
 test_that("mollic.thickness.requirement", {
   expect_equal(mollic.thickness.requirement(spc, clay.attr = 'prop'), 18)
@@ -46,5 +59,7 @@ test_that("mollic.thickness.requirement", {
   #  so most limiting crit is the bottom depth of cambic: 66/3 = 22 
   #  rather than 36/3 = 12 truncated to 18 which comes from argillic bottom depth/2nd carbonate upperbound
   expect_equal(mollic.thickness.requirement(spc2, clay.attr = 'claytotest'), 22)
+  
+  expect_equal(mollic.thickness.requirement(x), c(18, 25))
 })
 
