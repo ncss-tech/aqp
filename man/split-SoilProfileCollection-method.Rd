@@ -7,22 +7,22 @@
 \S4method{split}{SoilProfileCollection}(x, f, drop = TRUE, ...)
 }
 \arguments{
-\item{x}{a SoilProfileCollection object}
+\item{x}{a \code{SoilProfileCollection} object}
 
 \item{f}{a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.}
 
-\item{drop}{logical indicating if levels that do not occur should be dropped (if f is a factor or a list).}
+\item{drop}{logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When \code{drop=FALSE} and \code{f} contains missing values an additional group "\if{html}{\out{<missing>}}" is returned.}
 
 \item{...}{Additional arguments are ignored}
 }
 \value{
-A list of SoilProfileCollections or \code{NULL} for empty result.
+A list of \code{SoilProfileCollection} or \code{NULL} for empty result.
 }
 \description{
-This function splits a SoilProfileCollection into a list of SoilProfileCollection objects using a site-level attribute to define groups or profile ID (idname(x)).
+This function splits a \code{SoilProfileCollection} into a list of \code{SoilProfileCollection} objects using a site-level attribute to define groups or profile ID (\code{idname(x)}).
 }
 \details{
-As of aqp 1.25, omission of \code{f} argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to \code{idname(x)}, e.g. a list as long as \code{length(x)}, with a single-profile SoilProfileCollection per list element. Replicate this behavior using \code{f = idname(x)} or \code{f = profile_id(x)}
+As of aqp 1.25, omission of \code{f} argument is no longer possible, as the base R generic is overloaded by this \code{SoilProfileCollection} method. This used to result in an "identity" split, according to \code{idname(x)}, e.g. a list as long as \code{length(x)}, with a single-profile \code{SoilProfileCollection} per list element. Replicate this behavior using \code{f = idname(x)} or \code{f = profile_id(x)}.
 }
 \examples{
 
@@ -54,5 +54,5 @@ length(p4) # 5 unique "surfaces", 5 SPCs in result list
 
 }
 \author{
-D.E Beaudette
+D.E. Beaudette and A.G. Brown
 }
