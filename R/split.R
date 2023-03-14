@@ -10,20 +10,20 @@
 #                                 aqp =     { split(loafercreek, "pmorigin") })
 #
 
-#' Split a SoilProfileCollection object into a list of SoilProfileCollection objects.
+#' @title Split a SoilProfileCollection object into a list of SoilProfileCollection objects.
 #'
-#' This function splits a SoilProfileCollection into a list of SoilProfileCollection objects using a site-level attribute to define groups or profile ID (idname(x)).
+#' @description This function splits a `SoilProfileCollection` into a list of `SoilProfileCollection` objects using a site-level attribute to define groups or profile ID (`idname(x)`).
 #'
-#' @param x a SoilProfileCollection object
-#' @param f a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.
+#' @param x a `SoilProfileCollection` object
+#' @param f a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that `as.factor(f)` defines the grouping, or a list of such factors in which case their interaction is used for the grouping.
 #' @param drop logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When `drop=FALSE` and `f` contains missing values an additional group "<missing>" is returned.
 #' @param ...	Additional arguments are ignored
 #'
-#' @details As of aqp 1.25, omission of `f` argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to \code{idname(x)}, e.g. a list as long as \code{length(x)}, with a single-profile SoilProfileCollection per list element. Replicate this behavior using \code{f = idname(x)} or \code{f = profile_id(x)}
+#' @details As of aqp 1.25, omission of `f` argument is no longer possible, as the base R generic is overloaded by this `SoilProfileCollection` method. This used to result in an "identity" split, according to `idname(x)`, e.g. a list as long as `length(x)`, with a single-profile `SoilProfileCollection` per list element. Replicate this behavior using `f = idname(x)` or `f = profile_id(x)`.
 #'
-#' @author D.E Beaudette
+#' @author D.E. Beaudette and A.G. Brown
 #'
-#' @return A list of SoilProfileCollections or \code{NULL} for empty result.
+#' @return A list of `SoilProfileCollection` or `NULL` for empty result.
 #' @export
 #'
 #' @examples
@@ -58,7 +58,7 @@ setMethod("split",
           signature(x = "SoilProfileCollection", f = "ANY"),
           function(x, f, drop = TRUE, ...) {
 
-  # identity split, use idname
+  # identity split, use idname()
   if (is.null(f)) {
 
     # grouping factor, make sure to use original ordering
@@ -85,8 +85,9 @@ setMethod("split",
       if (!inherits(fg, 'factor')) {
         fg <- factor(fg)
         message(sprintf('converting %s to factor', f))
+        print(fg)
       }
-
+  
     # using a vector coercible to factor (like base::split)
     } else if (length(f) == length(x) && !is.list(f)) {
 
