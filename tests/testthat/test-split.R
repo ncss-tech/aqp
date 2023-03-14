@@ -62,6 +62,7 @@ test_that("split with NA values in `f`", {
   
   site(sp6)$grp1 <- c(1, 1, 2, 2, NA, NA)
   site(sp6)$grp2 <- c(1, 2, 1, 2,  1,  2)
+  site(sp6)$grp3 <- rep(NA_character_, times = length(sp6))
   
   # profiles with NA are dropped
   x <- split(sp6, sp6$grp1)
@@ -87,5 +88,17 @@ test_that("split with NA values in `f`", {
   # interaction grp1*grp2 (with drop=FALSE)
   x <- split(sp6, list(sp6$grp1, sp6$grp2), drop = FALSE)
   expect_equal(length(x), 6)
+  
+  ## all NA, not sure why this would happen...
+  
+  # all NA, empty list is the result
+  x <- split(sp6, 'grp3', drop = TRUE)
+  expect_true(inherits(x, 'list'))
+  expect_equal(length(x), 0)
+  
+  # single <missing> group 
+  x <- split(sp6, 'grp3', drop = FALSE)
+  expect_equal(names(x), '<missing>')
+  expect_equal(as.vector(sapply(x, length)), 6)
   
 }) 

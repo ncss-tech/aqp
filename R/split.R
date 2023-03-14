@@ -76,6 +76,13 @@ setMethod("split",
       # extract to local variable, so as not to modify original data
       fg <- x[[f]]
       
+      # all NA, empty list is the result
+      if(all(is.na(fg)) && drop) {
+        message('all groups have been dropped due to NA')
+        # nothing left to do
+        return(list())
+      }
+      
       # no NA allowed
       if (any(is.na(fg)) && !drop) {
         fg[is.na(fg)] <- "<missing>"
@@ -85,7 +92,6 @@ setMethod("split",
       if (!inherits(fg, 'factor')) {
         fg <- factor(fg)
         message(sprintf('converting %s to factor', f))
-        print(fg)
       }
   
     # using a vector coercible to factor (like base::split)
