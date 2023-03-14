@@ -5,7 +5,7 @@ data(sp6)
 depths(sp6) <- id ~ top + bottom
 
 # fake grouping var
-sp6$g <- factor(rep(c('A', 'B'), each=3))
+sp6$g <- factor(rep(c('A', 'B'), each = 3))
 
 ## tests
 
@@ -17,11 +17,13 @@ test_that("site-level grouping factor", {
   # result should be a list
   expect_true(inherits(s, 'list'))
   
-  # two goups
+  # expected groups
   expect_true(length(s) == 2)
+  expect_equal(names(s), levels(sp6$g))
   
   # three profiles / group
-  expect_equivalent(sapply(s, length), c(3,3))
+  expect_equivalent(sapply(s, length), c(3, 3))
+  
 })
 
 test_that("identity split", {
@@ -61,14 +63,22 @@ test_that("split with NA values in `f`", {
   site(sp6)$grp1 <- c(1, 1, 2, 2, NA, NA)
   site(sp6)$grp2 <- c(1, 2, 1, 2,  1,  2)
   
-  # no more error
+  # profiles with NA are dropped
   x <- split(sp6, sp6$grp1)
+  # two groups
   expect_equal(length(x), 2)
+  # 4/6 profiles remain
+  expect_equal(sum(sapply(x, length)), 4)
+  
   
   # additional "<missing>" group (with drop=FALSE)
   x <- split(sp6, "grp1", drop = FALSE)
+  # three groups
   expect_equal(length(x), 3)
-  expect_equal(length(x[["<missing>"]]), 2)
+  # check for special NA group
+  expect_equal(names(x), c('<missing>', c('1', '2')))
+  # all groups have 2 members
+  expect_true(all(sapply(x, length) == 2))
   
   # interaction grp1*grp2
   x <- split(sp6, list(sp6$grp1, sp6$grp2))
