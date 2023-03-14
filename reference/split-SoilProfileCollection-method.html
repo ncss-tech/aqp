@@ -59,7 +59,7 @@
     </div>
 
     <div class="ref-description">
-    <p>This function splits a SoilProfileCollection into a list of SoilProfileCollection objects using a site-level attribute to define groups or profile ID (idname(x)).</p>
+    <p>This function splits a <code>SoilProfileCollection</code> into a list of <code>SoilProfileCollection</code> objects using a site-level attribute to define groups or profile ID (<code>idname(x)</code>).</p>
     </div>
 
     <div id="ref-usage">
@@ -70,7 +70,7 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
-<dd><p>a SoilProfileCollection object</p></dd>
+<dd><p>a <code>SoilProfileCollection</code> object</p></dd>
 
 
 <dt>f</dt>
@@ -78,7 +78,7 @@
 
 
 <dt>drop</dt>
-<dd><p>logical indicating if levels that do not occur should be dropped (if f is a factor or a list).</p></dd>
+<dd><p>logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When <code>drop=FALSE</code> and <code>f</code> contains missing values an additional group "<missing>" is returned.</missing></p></dd>
 
 
 <dt>...</dt>
@@ -89,15 +89,15 @@
     <h2>Value</h2>
     
 
-<p>A list of SoilProfileCollections or <code>NULL</code> for empty result.</p>
+<p>A list of <code>SoilProfileCollection</code> or <code>NULL</code> for empty result.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>As of aqp 1.25, omission of <code>f</code> argument is no longer possible, as the base R generic is overloaded by this SoilProfileCollection method. This used to result in an "identity" split, according to <code>idname(x)</code>, e.g. a list as long as <code>length(x)</code>, with a single-profile SoilProfileCollection per list element. Replicate this behavior using <code>f = idname(x)</code> or <code>f = profile_id(x)</code></p>
+    <p>As of aqp 1.25, omission of <code>f</code> argument is no longer possible, as the base R generic is overloaded by this <code>SoilProfileCollection</code> method. This used to result in an "identity" split, according to <code>idname(x)</code>, e.g. a list as long as <code>length(x)</code>, with a single-profile <code>SoilProfileCollection</code> per list element. Replicate this behavior using <code>f = idname(x)</code> or <code>f = profile_id(x)</code>.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
-    <p>D.E Beaudette</p>
+    <p>D.E. Beaudette and A.G. Brown</p>
     </div>
 
     <div id="ref-examples">
@@ -141,9 +141,9 @@
 <span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">sp2</span>, f <span class="op">=</span> <span class="st">"surface"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "holocene"        "lower modesto"   "upper modesto"   "lower riverbank"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "lower laguna"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "upper riverbank" "lower laguna"   </span>
 <span class="r-in"><span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span> <span class="co"># 5 unique "surfaces", 5 SPCs in result list</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
