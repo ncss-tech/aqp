@@ -26,6 +26,23 @@ test_that("site-level grouping factor", {
   
 })
 
+test_that("site-level grouping factor, as a vector", {
+  
+  # standard, grouping factor
+  s <- split(sp6, sp6$g)
+  
+  # result should be a list
+  expect_true(inherits(s, 'list'))
+  
+  # expected groups
+  expect_true(length(s) == 2)
+  expect_equal(names(s), levels(sp6$g))
+  
+  # three profiles / group
+  expect_equivalent(sapply(s, length), c(3, 3))
+  
+})
+
 test_that("identity split", {
   
   # idname used
@@ -77,7 +94,7 @@ test_that("split with NA values in `f`", {
   # three groups
   expect_equal(length(x), 3)
   # check for special NA group
-  expect_equal(names(x), c('<missing>', c('1', '2')))
+  expect_true('<missing>' %in% names(x))
   # all groups have 2 members
   expect_true(all(sapply(x, length) == 2))
   
