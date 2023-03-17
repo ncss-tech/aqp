@@ -5,9 +5,9 @@
 # hzdepm: vector of hz mid-points
 # dots: additional arguments passed to grep (e.g. perl=TRUE)
 
-#' Generalize Horizon Names
+#' @title Generalize Horizon Names
 #'
-#' Generalize a vector of horizon names, based on new classes, and REGEX
+#' @description Generalize a vector of horizon names, based on new classes, and REGEX
 #' patterns. Or create a new column `ghl` in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
 #'
 #' @param x a character vector of horizon names or a `SoilProfileCollection`
@@ -18,8 +18,9 @@
 #' @param ordered by default, the result is an ordered factor when `hzdepm` is defined. 
 #' @param ... additional arguments passed to `grep()` such as `perl=TRUE` for advanced REGEX
 #' @return (ordered) factor of the same length as `x` (if character) or as number of horizons in `x` (if SoilProfileCollection)
-#' @details When `x` is a SoilProfileCollection the `ghl` column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations. See `hzdesgnname()`.
-#' @seealso `hzdesgnname()`
+#' @details When `x` is a `SoilProfileCollection` the `ghl` column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations.
+#' 
+#' @seealso [hzdesgnname()]
 #' @author D.E. Beaudette
 #' @keywords manip
 #' @export

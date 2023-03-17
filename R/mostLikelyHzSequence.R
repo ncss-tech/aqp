@@ -1,5 +1,3 @@
-## requires the markovchain library
-## not imported, so list in suggests and address function names with markovchain::
 
 # what is the most likely sequence, given a markovchain and initial state
 # the result isn't likely correct when there are non-zero ties in t
@@ -9,10 +7,10 @@
 #'
 #' @export
 #' @rdname hzTransitionProbabilities
-mostLikelyHzSequence <- function(mc, t0, maxIterations=10) {
+mostLikelyHzSequence <- function(mc, t0, maxIterations = 10) {
 
   if(!requireNamespace('markovchain', quietly = TRUE))
-    stop('pleast install the `markovchain` package.', call.=FALSE)
+    stop('pleast install the `markovchain` package.', call. = FALSE)
 
   # check for ties
   if(!is.null(attr(as(mc, 'matrix'), 'ties')))

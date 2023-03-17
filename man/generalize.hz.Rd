@@ -63,7 +63,7 @@ Generalize a vector of horizon names, based on new classes, and REGEX
 patterns. Or create a new column \code{ghl} in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
 }
 \details{
-When \code{x} is a SoilProfileCollection the \code{ghl} column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations. See \code{hzdesgnname()}.
+When \code{x} is a \code{SoilProfileCollection} the \code{ghl} column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations.
 }
 \examples{
 
@@ -101,7 +101,7 @@ table(res, x)
 
 }
 \seealso{
-\code{hzdesgnname()}
+\code{\link[=hzdesgnname]{hzdesgnname()}}
 }
 \author{
 D.E. Beaudette
