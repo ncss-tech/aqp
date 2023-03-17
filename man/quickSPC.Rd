@@ -14,7 +14,7 @@ quickSPC(
 )
 }
 \arguments{
-\item{x}{either a \code{list} or \code{character}, see Details and Examples}
+\item{x}{either a \code{list} or \code{character} vector, see Details and Examples}
 
 \item{id}{character, specified when \code{x} is a \code{list}, name of ID list element}
 
@@ -44,6 +44,8 @@ The character template can be provided in one of several formats:
 Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via \code{digest::digest(..., algo = 'xxhash32')}. Iteration over templates in this format is automatic when \code{x} is a character vector of \code{length > 1}.
 
 Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the \code{interval} argument. Profile ID is created via \code{digest::digest(..., algo = 'xxhash32')}. Iteration over templates in this format is automatic when \code{x} is a character vector of \code{length > 1}.
+
+Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within \code{x}.
 }
 \examples{
 

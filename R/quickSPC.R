@@ -3,7 +3,7 @@
 #' 
 #' @description Quickly assemble a single-profile, `SoilProfileCollection` object from two possible templates. This function is a useful shortcut for creating theoretical `SoilProfileCollection` objects for testing or demonstrative purposes.
 #'
-#' @param x either a `list` or `character`, see Details and Examples
+#' @param x either a `list` or `character` vector, see Details and Examples
 #' @param id character, specified when `x` is a `list`, name of ID list element
 #' @param d character, specified when `x` is a `list`, name of depths list element
 #' @param n character, specified when `x` is a `list`, name of horizon name list element
@@ -19,10 +19,11 @@
 #'   1. 'A-Bt1-Bt2-Bt3-Cr-R'
 #'   2. 'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'
 #'   
-#'   Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
+#' Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
 #'   
-#'   Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the `interval` argument. Profile ID is created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
+#' Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the `interval` argument. Profile ID is created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
 #' 
+#' Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within `x`.
 #' 
 #' @examples
 #' 
