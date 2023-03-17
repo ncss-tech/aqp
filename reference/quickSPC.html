@@ -76,7 +76,7 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
-<dd><p>either a <code>list</code> or <code>character</code>, see Details and Examples</p></dd>
+<dd><p>either a <code>list</code> or <code>character</code> vector, see Details and Examples</p></dd>
 
 
 <dt>id</dt>
@@ -112,6 +112,7 @@
 <li><p>'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'</p></li>
 </ol><p>Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
 <p>Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the <code>interval</code> argument. Profile ID is created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
+<p>Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within <code>x</code>.</p>
     </div>
 
     <div id="ref-examples">
