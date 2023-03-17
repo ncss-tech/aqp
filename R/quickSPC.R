@@ -7,6 +7,7 @@
 #' @param id character, specified when `x` is a `list`, name of ID list element
 #' @param d character, specified when `x` is a `list`, name of depths list element
 #' @param n character, specified when `x` is a `list`, name of horizon name list element
+#' @param m character, specified when `x` is a `list`, name of list element containing Munsell color notation
 #' @param interval, numeric, typically an integer and only specified when using character templates in mode 2. See Details.
 #'
 #' @return `SoilProfileCollection` object
@@ -30,7 +31,8 @@
 #' id = 'P1',
 #' depths = c(25, 33, 100, 150),
 #' name = c('A', 'Bw', 'Bt', 'Cr'),
-#' clay = c(12, 15, 22, 25)
+#' clay = c(12, 15, 22, 25),
+#' soil_color = '10YR 3/3'
 #' )
 #' 
 #' s <- quickSPC(x)
@@ -52,6 +54,17 @@
 #' )
 #'
 #' # this interface is vectorized 
+#' s <- quickSPC(x)
+#' plotSPC(s, name.style = 'center-center', cex.names = 1)
+#' 
+#' 
+#' # specify profile IDs using "ID:" prefix
+#' x <- c(
+#' 'P1:A-Bt1-Bt2-Bt3-Cr-R',
+#' 'P2:A-C1-C2-C3-C4-Ab',
+#' 'P3:Ap-A-A/E-E-Bhs-Cr'
+#' )
+#' 
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
 #' 
@@ -80,12 +93,25 @@
 #'         cex.names = 1, plot.depth.axis = FALSE, 
 #'         hz.depths = TRUE
 #' )
-#'
+#' 
+#' # optionally specify some / all profile IDs with "ID:" prefix
+#' x <- c(
+#'   'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+#'   'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+#'   'A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'
+#'   )
+#' 
+#' s <- quickSPC(x)
+#' plotSPC(s, name.style = 'center-center', 
+#'         cex.names = 1, plot.depth.axis = FALSE, 
+#'         hz.depths = TRUE
+#' )
+
 
 ## TODO: 
 # * add vectorization for list-based template
 
-quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
+quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 'soil_color') {
   
   # sanity check
   stopifnot(inherits(x, 'list') || inherits(x, 'character'))
@@ -95,8 +121,7 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
     class(x), 
     # more expressive, list specification
     'list' = {
-      
-      .data <- .qSPC.list(x, id, d, n)
+      .data <- .qSPC.list(x, id, d, n, m)
       .data
     }, 
     
@@ -152,14 +177,31 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
   return(.res)
 }
 
+
+.parseID <- function(x, d = ':') {
+  # attempt splitting optional ID prefix
+  .s <- strsplit(x, ':', fixed = TRUE)[[1]]
+  
+  # length > 1 indicates an ID prefix
+  if(length(.s) >1) {
+    .id <- .s[1]
+    # ID now removed from hz sequence
+    x <- .s[2]
+  } else {
+    .id <- NULL
+  }
+  
+  return(list(id = .id, x = x))
+}
+
+
 # handle character-based templates, mode 1
 # x <- 'A-C-R'
 .qSPC.char.1 <- function(x) {
   
-  # used for unique IDs
-  if(!requireNamespace("digest", quietly = TRUE)) {
-    stop("package `digest` is required", call. = FALSE)
-  }
+  # detect / extract ID prefix
+  .s <- .parseID(x)
+  x <- .s$x
   
   # split name sequence into horizons
   .names <- strsplit(x, '-', fixed = TRUE)[[1]]
@@ -184,10 +226,20 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
     name = .names
   )
   
-  # unique ID
-  .data$id <- as.character(
-    digest::digest(.data, algo = 'xxhash32')
-  )
+  # IDs
+  if(is.null(.s$id)) {
+    # generate one via digest
+    if(!requireNamespace("digest", quietly = TRUE)) {
+      stop("package `digest` is required", call. = FALSE)
+    }
+    
+    .data$id <- as.character(
+      digest::digest(.data, algo = 'xxhash32')
+    )
+  } else {
+    # use the ID prefix
+    .data$id <- .s$id
+  }
   
   # init SPC
   depths(.data) <- c('id', 'top', 'bottom')
@@ -202,10 +254,9 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
 # x <- 'ApAp|AA|Bh|BhsBhs|Bt1|Bt2Bt2|CCCC|Cr'
 .qSPC.char.2 <- function(x, interval = 10) {
   
-  # used for unique IDs
-  if(!requireNamespace("digest", quietly = TRUE)) {
-    stop("package `digest` is required", call. = FALSE)
-  }
+  # detect / extract ID prefix
+  .s <- .parseID(x)
+  x <- .s$x
   
   # split name sequence into horizons
   .name.thick <- strsplit(x, '|', fixed = TRUE)[[1]]
@@ -237,10 +288,20 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
     name = .names
   )
   
-  # unique ID
-  .data$id <- as.character(
-    digest::digest(.data, algo = 'xxhash32')
-  )
+  # IDs
+  if(is.null(.s$id)) {
+    # generate one via digest
+    if(!requireNamespace("digest", quietly = TRUE)) {
+      stop("package `digest` is required", call. = FALSE)
+    }
+    
+    .data$id <- as.character(
+      digest::digest(.data, algo = 'xxhash32')
+    )
+  } else {
+    # use the ID prefix
+    .data$id <- .s$id
+  }
   
   # init SPC
   depths(.data) <- c('id', 'top', 'bottom')
@@ -251,8 +312,8 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
   return(.data)
 }
 
-
-.qSPC.list <- function(x, id, d, n) {
+# list-based template
+.qSPC.list <- function(x, id, d, n, m) {
   
   # sanity check on column names
   stopifnot(id %in% names(x))
@@ -289,8 +350,13 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10) {
   # sanity check on number of rows vs. depths
   stopifnot(nrow(.data) == length(.top))
   
-  # retain orininal ID name
+  # retain original ID name
   names(.data)[1] <- id
+  
+  # attempt to init soil color from Munsell notation
+  if(!is.null(.data[[m]])) {
+    .data[[m]] <- parseMunsell(.data[[m]])
+  }
   
   # init SPC
   depths(.data) <- c(id, 'top', 'bottom')

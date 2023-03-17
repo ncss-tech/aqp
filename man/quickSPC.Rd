@@ -4,7 +4,14 @@
 \alias{quickSPC}
 \title{Quickly Assemble a SoilProfileCollection}
 \usage{
-quickSPC(x, id = "id", d = "depths", n = "name", interval = 10)
+quickSPC(
+  x,
+  id = "id",
+  d = "depths",
+  n = "name",
+  interval = 10,
+  m = "soil_color"
+)
 }
 \arguments{
 \item{x}{either a \code{list} or \code{character}, see Details and Examples}
@@ -16,6 +23,8 @@ quickSPC(x, id = "id", d = "depths", n = "name", interval = 10)
 \item{n}{character, specified when \code{x} is a \code{list}, name of horizon name list element}
 
 \item{interval, }{numeric, typically an integer and only specified when using character templates in mode 2. See Details.}
+
+\item{m}{character, specified when \code{x} is a \code{list}, name of list element containing Munsell color notation}
 }
 \value{
 \code{SoilProfileCollection} object
@@ -43,7 +52,8 @@ x <- list(
 id = 'P1',
 depths = c(25, 33, 100, 150),
 name = c('A', 'Bw', 'Bt', 'Cr'),
-clay = c(12, 15, 22, 25)
+clay = c(12, 15, 22, 25),
+soil_color = '10YR 3/3'
 )
 
 s <- quickSPC(x)
@@ -65,6 +75,17 @@ x <- c(
 )
 
 # this interface is vectorized 
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', cex.names = 1)
+
+
+# specify profile IDs using "ID:" prefix
+x <- c(
+'P1:A-Bt1-Bt2-Bt3-Cr-R',
+'P2:A-C1-C2-C3-C4-Ab',
+'P3:Ap-A-A/E-E-Bhs-Cr'
+)
+
 s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', cex.names = 1)
 
@@ -94,4 +115,16 @@ plotSPC(s, name.style = 'center-center',
         hz.depths = TRUE
 )
 
+# optionally specify some / all profile IDs with "ID:" prefix
+x <- c(
+  'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+  'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+  'A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'
+  )
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', 
+        cex.names = 1, plot.depth.axis = FALSE, 
+        hz.depths = TRUE
+)
 }

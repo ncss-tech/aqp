@@ -109,3 +109,13 @@ test_that("character template, other errors", {
 })
 
 
+test_that("ID prefix", {
+  
+  s <- quickSPC('P1:A-Bt-C-Ab-Cr')
+  expect_equal('P1', profile_id(s))
+  
+  s <- quickSPC('P3:AAAA|BtBtBtBt|Cr|R')
+  expect_equal('P3', profile_id(s))
+  
+})
+
