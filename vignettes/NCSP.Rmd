@@ -1,0 +1,34 @@
+---
+title: "Numerical Classification of Soil Profiles"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Numerical Classification of Soil Profiles}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo=FALSE, results='hide', warning=FALSE}
+library(knitr, quietly = TRUE)
+ogbmt <- getOption("bitmapType")
+options(bitmapType = "cairo")
+opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  background = '#F7F7F7', 
+  fig.align = 'center', 
+  tidy = FALSE, 
+  verbose = FALSE,
+  collapse = TRUE,
+  dev = 'png',
+  comment = "#>"
+)
+
+options(width = 100, stringsAsFactors = FALSE, timeout = 600)
+```
+
+# Introduction
+
+
