@@ -1,3 +1,7 @@
+
+## TODO: add verbose = FALSE argument cut down on chatter
+
+
 #' @title Allocate soil properties within various classification systems.
 #' 
 #' @description Generic function to allocate soil properties to different classification schemes.
