@@ -19,21 +19,21 @@ sieve(
 )
 }
 \arguments{
-\item{diameter}{numeric. Vector of diameters of coarse fragments to "sieve".}
+\item{diameter}{numeric. Vector of diameters of coarse fragments to "sieve". Default \code{sieves} are specified in millimeters.}
 
 \item{flat}{logical. Default: \code{FALSE}. If \code{TRUE} and \code{sieves} is not specified use the "flat" fragment classes for sieves.}
 
-\item{prefix}{character. Add a prefix to resulting names? Default: \code{""} adds no prefix. For example \code{"para"} might be used for size classes of parafragments.}
+\item{prefix}{character. Add a prefix to result names? Default: \code{""} adds no prefix. For example \code{"para"} might be used for size classes of parafragments.}
 
 \item{sieves}{numeric, possibly named. Thresholds to separate \code{diameter} into classes. Default (\code{flat=FALSE}): \code{c(fine_gravel = 5, gravel = 76, cobbles = 250, stones = 600, boulders = 1e10)}. Default (\code{flat=TRUE}): \code{c(channers = 150, flagstones = 380, stones = 600, boulders = 1e10)}}
 
-\item{new_names}{Optional: new labels for resulting classes. Should match length of \code{sieves}.}
+\item{new_names}{Optional: apply new labels to result classes. Should match length of \code{sieves}.}
 }
 \value{
 character. Group labels based on names of \code{sieves}, \code{new_names}, and \code{prefix} (if specified).
 }
 \description{
-Sieve the Coarse Fraction of Soil
+Sieve applies thresholds to a numeric vector of diameters to produce generalized size classes from observed data.
 }
 \examples{
 

@@ -1,10 +1,12 @@
 #' Sieve the Coarse Fraction of Soil
-#'
-#' @param diameter numeric. Vector of diameters of coarse fragments to "sieve".
+#' 
+#' Sieve applies thresholds to a numeric vector of diameters to produce generalized size classes from observed data. 
+#' 
+#' @param diameter numeric. Vector of diameters of coarse fragments to "sieve". Default `sieves` are specified in millimeters.
 #' @param flat logical. Default: `FALSE`. If `TRUE` and `sieves` is not specified use the "flat" fragment classes for sieves.
-#' @param prefix character. Add a prefix to resulting names? Default: `""` adds no prefix. For example `"para"` might be used for size classes of parafragments.
+#' @param prefix character. Add a prefix to result names? Default: `""` adds no prefix. For example `"para"` might be used for size classes of parafragments.
 #' @param sieves numeric, possibly named. Thresholds to separate `diameter` into classes. Default (`flat=FALSE`): `c(fine_gravel = 5, gravel = 76, cobbles = 250, stones = 600, boulders = 1e10)`. Default (`flat=TRUE`): `c(channers = 150, flagstones = 380, stones = 600, boulders = 1e10)`
-#' @param new_names Optional: new labels for resulting classes. Should match length of `sieves`. 
+#' @param new_names Optional: apply new labels to result classes. Should match length of `sieves`. 
 #'
 #' @return character. Group labels based on names of `sieves`, `new_names`, and `prefix` (if specified).
 #' @export
