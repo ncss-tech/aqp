@@ -118,13 +118,19 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
   odepth <- getMineralSoilSurfaceDepth(p, hzdesgn, simplify = FALSE)[[hz.depths[2]]]
   ohzidx <- which(odepth > 0)
   if (length(ohzidx) > 0) {
-    default_t[ohzidx] <- default_t[ohzidx] + odepth[ohzidx]
     
+    default_t[ohzidx] <- default_t[ohzidx] + odepth[ohzidx]
     maxdtruncidx <- which(default_b != soildepth)
     
     if (length(maxdtruncidx) > 0) {
       default_b[maxdtruncidx] <- default_b[maxdtruncidx] + odepth[maxdtruncidx]
     }
+    
+    # TODO: get logic for the classification of histosol/histel control section in here?
+    # handle thick o horizons that cause the mineral PSCS to be greater than soil depth
+    bad.idx <- default_t[ohzidx] >= soildepth[ohzidx]
+    default_t[bad.idx] <- NA_real_
+    default_b[bad.idx] <- NA_real_
   }
 
   # Key parts C and E (has argillic/kandic/natric WITHIN 100CM)
