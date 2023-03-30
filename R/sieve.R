@@ -10,7 +10,7 @@
 #' 
 #' @param flat logical. Default: `FALSE`. If `TRUE` and `sieves` is not specified use the "flat" fragment classes for sieves.
 #' 
-#' @param prefix character. Add a prefix to result names? Default: `""` adds no prefix. For example `"para"` might be used for size classes of parafragments.
+#' @param prefix character. Add a prefix to result names? Default: `""` adds no prefix. For example `"para"` might be used for size classes of pararock fragments.
 #' 
 #' @param sieves numeric, possibly named. Thresholds to separate `diameter` into classes. Default (`flat=FALSE`): `c(fine_gravel = 5, gravel = 76, cobbles = 250, stones = 600, boulders = 1e10)`. Default (`flat=TRUE`): `c(channers = 150, flagstones = 380, stones = 600, boulders = 1e10)`
 #' 
@@ -37,8 +37,7 @@ sieve <- function(diameter,
                   flat = FALSE,
                   prefix = "",
                   sieves = if (isFALSE(flat)) {
-                    c(fine_gravel = 5,
-                      gravel = 76,
+                    c(gravel = 76,
                       cobbles = 250,
                       stones = 600,
                       boulders = 1e10)
