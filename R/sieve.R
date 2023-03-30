@@ -2,6 +2,10 @@
 #' 
 #' @description Sieve applies thresholds to a numeric vector of fragment diameter values, returning fragment size classes. Particle diameter thresholds are evaluated as `d < threshold`.
 #' 
+#' @references 
+#' 
+#' Soil Science Division Staff. 2017. Soil survey manual. C. Ditzler, K. Scheffe, and H.C. Monger (eds.). USDA Handbook 18. Government Printing Office, Washington, D.C.
+#' 
 #' @param diameter numeric. Vector of diameters of coarse fragments to "sieve". Default `sieves` are specified in millimeters.
 #' 
 #' @param flat logical. Default: `FALSE`. If `TRUE` and `sieves` is not specified use the "flat" fragment classes for sieves.
@@ -63,7 +67,7 @@ sieve <- function(diameter,
     classes <- t(sapply(diameter[no.na.idx], function(i) i < sieves))
     
     if (length(names(sieves)) == 0) {
-      names(sieves) <- paste0("grp", seq_along(sieves))
+      names(sieves) <- paste0("class_", seq_along(sieves))
     }
     
     # determine largest passing sieve name

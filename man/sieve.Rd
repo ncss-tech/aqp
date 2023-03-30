@@ -50,3 +50,6 @@ sieve(c(30, 125, 180, 500, 1000), sieves = c(75, 1e10), new_names = LETTERS[1:2]
 sieve(c(10, 50), sieves = c(30, 70))
  
 }
+\references{
+Soil Science Division Staff. 2017. Soil survey manual. C. Ditzler, K. Scheffe, and H.C. Monger (eds.). USDA Handbook 18. Government Printing Office, Washington, D.C.
+}
