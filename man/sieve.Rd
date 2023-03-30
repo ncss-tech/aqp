@@ -30,10 +30,10 @@ sieve(
 \item{new_names}{Optional: apply new labels to result classes. Should match length of \code{sieves}.}
 }
 \value{
-character. Group labels based on names of \code{sieves}, \code{new_names}, and \code{prefix} (if specified).
+character. Size class labels based on names of \code{sieves}, \code{new_names}, and \code{prefix} (if specified).
 }
 \description{
-Sieve applies thresholds to a numeric vector of diameters to produce generalized size classes from observed data.
+Sieve applies thresholds to a numeric vector of fragment diameter values, returning fragment size classes. Particle diameter thresholds are evaluated as \code{d < threshold}.
 }
 \examples{
 
@@ -46,4 +46,7 @@ sieve(c(30, 125, 180, 500, 1000), flat = TRUE)
 # custom limits and names
 sieve(c(30, 125, 180, 500, 1000), sieves = c(75, 1e10), new_names = LETTERS[1:2])
 
+# unnamed sieves, generic labels used
+sieve(c(10, 50), sieves = c(30, 70))
+ 
 }

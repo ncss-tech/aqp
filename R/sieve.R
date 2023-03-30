@@ -1,14 +1,18 @@
-#' Sieve the Coarse Fraction of Soil
+#' @title Sieve the Coarse Fraction of Soil
 #' 
-#' Sieve applies thresholds to a numeric vector of diameters to produce generalized size classes from observed data. 
+#' @description Sieve applies thresholds to a numeric vector of fragment diameter values, returning fragment size classes. Particle diameter thresholds are evaluated as `d < threshold`.
 #' 
 #' @param diameter numeric. Vector of diameters of coarse fragments to "sieve". Default `sieves` are specified in millimeters.
+#' 
 #' @param flat logical. Default: `FALSE`. If `TRUE` and `sieves` is not specified use the "flat" fragment classes for sieves.
+#' 
 #' @param prefix character. Add a prefix to result names? Default: `""` adds no prefix. For example `"para"` might be used for size classes of parafragments.
+#' 
 #' @param sieves numeric, possibly named. Thresholds to separate `diameter` into classes. Default (`flat=FALSE`): `c(fine_gravel = 5, gravel = 76, cobbles = 250, stones = 600, boulders = 1e10)`. Default (`flat=TRUE`): `c(channers = 150, flagstones = 380, stones = 600, boulders = 1e10)`
+#' 
 #' @param new_names Optional: apply new labels to result classes. Should match length of `sieves`. 
 #'
-#' @return character. Group labels based on names of `sieves`, `new_names`, and `prefix` (if specified).
+#' @return character. Size class labels based on names of `sieves`, `new_names`, and `prefix` (if specified).
 #' @export
 #'
 #' @examples
@@ -22,6 +26,9 @@
 #' # custom limits and names
 #' sieve(c(30, 125, 180, 500, 1000), sieves = c(75, 1e10), new_names = LETTERS[1:2])
 #' 
+#' # unnamed sieves, generic labels used
+#' sieve(c(10, 50), sieves = c(30, 70))
+#'  
 sieve <- function(diameter,
                   flat = FALSE,
                   prefix = "",
@@ -62,8 +69,7 @@ sieve <- function(diameter,
     # determine largest passing sieve name
     res[no.na.idx] <- names(sieves)[apply(classes, 1, which.max)]
     
-    # change names if we are working with parafrags
-    
+    # apply prefix if specified, e.g. parafrags
     if (nchar(prefix) > 0) {
       res[no.na.idx] <- paste0(prefix, res[no.na.idx])
     }
