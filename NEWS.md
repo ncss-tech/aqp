@@ -15,7 +15,7 @@ Notable changes include:
  * removal of `rruff.sample` example XRD patterns
  * new example data, `wilson2022`
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
- * coarse fragment classification via `sieve()` and `fragmentClasses()`
+ 
  
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions

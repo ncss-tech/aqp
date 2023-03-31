@@ -1,7 +1,7 @@
 context("sieve")
 
 
-test_that("basic functionality", {
+test_that("basic functionality, USDA simplified system", {
   
   # obvious diameters
   expect_equal(sieve(c(75, 150, 450, 1000)), c('gravel', 'cobbles', 'stones', 'boulders'))
@@ -20,6 +20,14 @@ test_that("basic functionality", {
   
   # custom sieves
   expect_equal(sieve(c(50, 100), sieves = c('teaspoon' = 76, 'tablespoon' = 250)), c('teaspoon', 'tablespoon'))
+  
+  # ordered factors
+  expect_true(
+    inherits(
+      sieve(c(5, 4, 7, 75, 150, 450, 1000), ordered = TRUE),
+      'factor'
+    )
+  )
   
 })
 
