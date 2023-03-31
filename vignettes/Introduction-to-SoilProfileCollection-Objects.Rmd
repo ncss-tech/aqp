@@ -93,7 +93,7 @@ idcolumn ~ hz_top_column + hz_bottom_column
 ```
 
 ## Rapid Templating
-Small collections of soil profiles can be described using text "templates" and `quickSPC()`. Templates take the form of
+Small collections of soil profiles can be described using text "templates" and `quickSPC()`. Templates take the form of:
 
    * `ID:AAA|BBB|CCCCCC`: relative thickness specified by horizon designations, split by "|" symbol
    
@@ -1264,9 +1264,6 @@ plotSPC(
 )
 mtext('GSM depths', side = 2, line = -1.5)
 ```
-
-### Equal Area Splines
-TODO
 
 
 # Pair-Wise Dissimilarity: `NCSP()`

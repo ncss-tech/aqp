@@ -13,12 +13,14 @@ Notable changes include:
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
- * new example data, `wilson2022`
+
+New features:
+ * example data, `wilson2022`
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
  * coarse fragment classification via `sieve()` and `fragmentClasses()`
- 
- 
+ * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
+
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
@@ -26,8 +28,7 @@ Incremental changes, should have no effect on previous code:
  * aesthetic cleanup in `explainPlotSPC()`
  * `soilColorSignature()` gains arguments and perceptual color distances (dE00) via farver package
  * `as(<SPC>, "data.frame")`: Replace `plyr::join()` with `merge()`
- * Add S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
- * `correctAWC()`: NA handling  - return NA when frags are NA 
+ * `correctAWC()`: NA handling - return NA when frags are NA 
  * `mutate_profile()`: Faster (data.table-based) evaluation of profile-level expressions (#255)
  * `profileApply`: Add support for custom `lapply()`-like function (`APPLY.FUN`) for processing chunks (#256) 
  * Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()` (#254)

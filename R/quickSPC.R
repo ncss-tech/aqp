@@ -33,7 +33,7 @@
 #' depths = c(25, 33, 100, 150),
 #' name = c('A', 'Bw', 'Bt', 'Cr'),
 #' clay = c(12, 15, 22, 25),
-#' soil_color = '10YR 3/3'
+#' soil_color = c('10YR 3/3', '10YR 4/4', '10YR 4/6', '5G 6/2')
 #' )
 #' 
 #' s <- quickSPC(x)
