@@ -8,46 +8,40 @@
 #' 
 #' @param diameter numeric. Vector of diameters of coarse fragments to "sieve". Default `sieves` are specified in millimeters.
 #' 
-#' @param flat logical. Default: `FALSE`. If `TRUE` and `sieves` is not specified use the "flat" fragment classes for sieves.
+#' @param sieves leave as `NULL` to use sieve names and fragment diameters defined by [fragmentClasses()], or a named vector of fragment diameters. See examples.
+#' 
+#' @param ordered logical. Return as an ordered factor.
 #' 
 #' @param prefix character. Add a prefix to result names? Default: `""` adds no prefix. For example `"para"` might be used for size classes of pararock fragments.
 #' 
-#' @param sieves numeric, possibly named. Thresholds to separate `diameter` into classes. Default (`flat=FALSE`): `c(fine_gravel = 5, gravel = 76, cobbles = 250, stones = 600, boulders = 1e10)`. Default (`flat=TRUE`): `c(channers = 150, flagstones = 380, stones = 600, boulders = 1e10)`
-#' 
 #' @param new_names Optional: apply new labels to result classes. Should match length of `sieves`. 
+#' 
+#' @param ... additional arguments to [fragmentClasses()], such as `sys`, `flat`, and `rounded`, see Details.
 #'
 #' @return character. Size class labels based on names of `sieves`, `new_names`, and `prefix` (if specified).
+#' 
+#' @details 
+#' 
+#' 
 #' @export
 #'
 #' @examples
 #' 
 #' # default
-#' sieve(c(30, 125, 180, 500, 1000))
-#' 
-#' # flat size classes
-#' sieve(c(30, 125, 180, 500, 1000), flat = TRUE)
-#' 
-#' # custom limits and names
-#' sieve(c(30, 125, 180, 500, 1000), sieves = c(75, 1e10), new_names = LETTERS[1:2])
-#' 
-#' # unnamed sieves, generic labels used
-#' sieve(c(10, 50), sieves = c(30, 70))
+
 #'  
 sieve <- function(diameter,
-                  flat = FALSE,
+                  sieves = NULL, 
+                  ordered = FALSE,
                   prefix = "",
-                  sieves = if (isFALSE(flat)) {
-                    c(gravel = 76,
-                      cobbles = 250,
-                      stones = 600,
-                      boulders = 1e10)
-                  } else{
-                    c(channers = 150,
-                      flagstones = 380,
-                      stones = 600,
-                      boulders = 1e10)
-                  }, 
-                  new_names = NULL) {
+                  new_names = NULL, 
+                  ...) {
+  
+  
+  
+  if(is.null(sieves)) {
+    sieves <- fragmentClasses(...)
+  }
   
   if (!is.null(new_names)) {
     names(sieves) <- new_names
@@ -76,6 +70,11 @@ sieve <- function(diameter,
     if (nchar(prefix) > 0) {
       res[no.na.idx] <- paste0(prefix, res[no.na.idx])
     }
+  }
+  
+  # optional conversion to ordered factor
+  if(ordered) {
+    res <- factor(res, levels = names(sieves), ordered = TRUE)
   }
   
   return(res)

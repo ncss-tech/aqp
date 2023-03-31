@@ -6,28 +6,25 @@
 \usage{
 sieve(
   diameter,
-  flat = FALSE,
+  sieves = NULL,
+  ordered = FALSE,
   prefix = "",
-  sieves = if (isFALSE(flat)) {
-     c(gravel = 76, cobbles = 250, stones = 600, boulders
-    = 1e+10)
- } else {
-     c(channers = 150, flagstones = 380, stones = 600, boulders =
-    1e+10)
- },
-  new_names = NULL
+  new_names = NULL,
+  ...
 )
 }
 \arguments{
 \item{diameter}{numeric. Vector of diameters of coarse fragments to "sieve". Default \code{sieves} are specified in millimeters.}
 
-\item{flat}{logical. Default: \code{FALSE}. If \code{TRUE} and \code{sieves} is not specified use the "flat" fragment classes for sieves.}
+\item{sieves}{leave as \code{NULL} to use sieve names and fragment diameters defined by \code{\link[=fragmentClasses]{fragmentClasses()}}, or a named vector of fragment diameters. See examples.}
+
+\item{ordered}{logical. Return as an ordered factor.}
 
 \item{prefix}{character. Add a prefix to result names? Default: \code{""} adds no prefix. For example \code{"para"} might be used for size classes of pararock fragments.}
 
-\item{sieves}{numeric, possibly named. Thresholds to separate \code{diameter} into classes. Default (\code{flat=FALSE}): \code{c(fine_gravel = 5, gravel = 76, cobbles = 250, stones = 600, boulders = 1e10)}. Default (\code{flat=TRUE}): \code{c(channers = 150, flagstones = 380, stones = 600, boulders = 1e10)}}
-
 \item{new_names}{Optional: apply new labels to result classes. Should match length of \code{sieves}.}
+
+\item{...}{additional arguments to \code{\link[=fragmentClasses]{fragmentClasses()}}, such as \code{sys}, \code{flat}, and \code{rounded}, see Details.}
 }
 \value{
 character. Size class labels based on names of \code{sieves}, \code{new_names}, and \code{prefix} (if specified).
@@ -38,16 +35,6 @@ Sieve applies thresholds to a numeric vector of fragment diameter values, return
 \examples{
 
 # default
-sieve(c(30, 125, 180, 500, 1000))
-
-# flat size classes
-sieve(c(30, 125, 180, 500, 1000), flat = TRUE)
-
-# custom limits and names
-sieve(c(30, 125, 180, 500, 1000), sieves = c(75, 1e10), new_names = LETTERS[1:2])
-
-# unnamed sieves, generic labels used
-sieve(c(10, 50), sieves = c(30, 70))
  
 }
 \references{
