@@ -16,7 +16,7 @@ sieve(
 \arguments{
 \item{diameter}{numeric. Vector of diameters of coarse fragments to "sieve". Default \code{sieves} are specified in millimeters.}
 
-\item{sieves}{leave as \code{NULL} to use sieve names and fragment diameters defined by \code{\link[=fragmentClasses]{fragmentClasses()}}, or a named vector of fragment diameters. See examples.}
+\item{sieves}{leave as \code{NULL} to use fragment class labels and diameters defined by \code{\link[=fragmentClasses]{fragmentClasses()}}, or a named vector of fragment diameters. See examples.}
 
 \item{ordered}{logical. Return as an ordered factor.}
 
@@ -24,7 +24,7 @@ sieve(
 
 \item{new_names}{Optional: apply new labels to result classes. Should match length of \code{sieves}.}
 
-\item{...}{additional arguments to \code{\link[=fragmentClasses]{fragmentClasses()}}, such as \code{sys}, \code{flat}, and \code{rounded}, see Details.}
+\item{...}{additional arguments to \code{\link[=fragmentClasses]{fragmentClasses()}}, such as \code{sys}, \code{flat}, and \code{rounded}, see examples.}
 }
 \value{
 character. Size class labels based on names of \code{sieves}, \code{new_names}, and \code{prefix} (if specified).
@@ -34,9 +34,41 @@ Sieve applies thresholds to a numeric vector of fragment diameter values, return
 }
 \examples{
 
-# default
+# use a simplified version of the USDA system
+# common within NRCS/SPSD and NCSS
+sieve(c(30, 125, 180, 500, 1000))
+
+# pararock fragments
+sieve(c(30, 125, 180, 500, 1000), prefix = 'para')
+
+# result as an ordered factor
+sieve(c(30, 125, 180, 500, 1000), ordered = TRUE)
+
+# USDA system, flat size classes
+sieve(c(30, 125, 180, 500, 1000), flat = TRUE)
+
+# alternative classification systems
+sieve(c(30, 125, 180, 500, 1000), sys = 'usda')
+sieve(c(30, 125, 180, 500, 1000), sys = 'international')
+sieve(c(30, 125, 180, 500, 1000), sys = 'unified')
+sieve(c(30, 125, 180, 500, 1000), sys = 'aashto')
+sieve(c(30, 125, 180, 500, 1000), sys = 'mod.wentworth')
+
+# custom fragment labels / diameter
+sieve(
+c(30, 125, 180, 500, 1000), 
+sieves = c(clumps = 50, chunks = 300, blocks = 100000)
+)
+
+# unnamed sieves, generic labels used
+sieve(c(10, 50), sieves = c(30, 70))
+
+sieve(c(10, 50), sieves = c(30, 70), ordered = TRUE)
  
 }
 \references{
 Soil Science Division Staff. 2017. Soil survey manual. C. Ditzler, K. Scheffe, and H.C. Monger (eds.). USDA Handbook 18. Government Printing Office, Washington, D.C.
+}
+\seealso{
+\code{\link[=fragmentClasses]{fragmentClasses()}}
 }

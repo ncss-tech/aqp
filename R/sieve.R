@@ -8,7 +8,7 @@
 #' 
 #' @param diameter numeric. Vector of diameters of coarse fragments to "sieve". Default `sieves` are specified in millimeters.
 #' 
-#' @param sieves leave as `NULL` to use sieve names and fragment diameters defined by [fragmentClasses()], or a named vector of fragment diameters. See examples.
+#' @param sieves leave as `NULL` to use fragment class labels and diameters defined by [fragmentClasses()], or a named vector of fragment diameters. See examples.
 #' 
 #' @param ordered logical. Return as an ordered factor.
 #' 
@@ -16,19 +16,46 @@
 #' 
 #' @param new_names Optional: apply new labels to result classes. Should match length of `sieves`. 
 #' 
-#' @param ... additional arguments to [fragmentClasses()], such as `sys`, `flat`, and `rounded`, see Details.
+#' @param ... additional arguments to [fragmentClasses()], such as `sys`, `flat`, and `rounded`, see examples.
 #'
 #' @return character. Size class labels based on names of `sieves`, `new_names`, and `prefix` (if specified).
 #' 
-#' @details 
-#' 
+#' @seealso [fragmentClasses()]
 #' 
 #' @export
 #'
 #' @examples
 #' 
-#' # default
-
+#' # use a simplified version of the USDA system
+#' # common within NRCS/SPSD and NCSS
+#' sieve(c(30, 125, 180, 500, 1000))
+#' 
+#' # pararock fragments
+#' sieve(c(30, 125, 180, 500, 1000), prefix = 'para')
+#' 
+#' # result as an ordered factor
+#' sieve(c(30, 125, 180, 500, 1000), ordered = TRUE)
+#' 
+#' # USDA system, flat size classes
+#' sieve(c(30, 125, 180, 500, 1000), flat = TRUE)
+#' 
+#' # alternative classification systems
+#' sieve(c(30, 125, 180, 500, 1000), sys = 'usda')
+#' sieve(c(30, 125, 180, 500, 1000), sys = 'international')
+#' sieve(c(30, 125, 180, 500, 1000), sys = 'unified')
+#' sieve(c(30, 125, 180, 500, 1000), sys = 'aashto')
+#' sieve(c(30, 125, 180, 500, 1000), sys = 'mod.wentworth')
+#' 
+#' # custom fragment labels / diameter
+#' sieve(
+#' c(30, 125, 180, 500, 1000), 
+#' sieves = c(clumps = 50, chunks = 300, blocks = 100000)
+#' )
+#' 
+#' # unnamed sieves, generic labels used
+#' sieve(c(10, 50), sieves = c(30, 70))
+#' 
+#' sieve(c(10, 50), sieves = c(30, 70), ordered = TRUE)
 #'  
 sieve <- function(diameter,
                   sieves = NULL, 
@@ -38,7 +65,8 @@ sieve <- function(diameter,
                   ...) {
   
   
-  
+  # if not specified as named vector of diameters
+  # use fragmentClasses() to lookup one of several systems
   if(is.null(sieves)) {
     sieves <- fragmentClasses(...)
   }

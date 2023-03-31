@@ -1,20 +1,23 @@
 
 
-#' @title Title
-#' @description 
+#' @title Coarse Fragment Class Labels and Diameter
+#' @description This is a convenience function for accessing coarse fragment class labels and associated diameter (mm), as defined in various classification systems such as USDA, Unified, and AASHTO.
 #'
-#' @param sys 
-#' @param flat 
-#' @param rounded 
+#' @param sys character, length 1. This is an abbreviated name used to select class labels and fragment diameter.
+#' @param flat logical. Fragments are flat, only used by USDA systems.
+#' @param rounded logical. Fragments are rounded, only used by AASHTO system.
 #' 
 #' @references 
 #' Schoeneberger, P.J., D.A. Wysocki, E.C. Benham, and Soil Survey Staff. 2012. Field book for describing and sampling soils, Version 3.0. Natural Resources Conservation Service, National Soil Survey Center, Lincoln, NE.
 #' 
-#' @return named vector of fragment diameters
+#' @return named vector of fragment diameter in mm
 #' @export
+#' 
+#' @seealso [sieve()]
 #'
 #' @examples
 #' 
+#' # use default system: "usda_simplified"
 #' fragmentClasses()
 #' fragmentClasses(flat = TRUE)
 #' 
