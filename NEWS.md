@@ -1,4 +1,4 @@
-# aqp 2.0 (2023-03-31)
+# aqp 2.0 (2023-03-16)
 This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`.
 
 Notable changes include:
