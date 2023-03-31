@@ -17,6 +17,7 @@ Notable changes include:
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
  
+ 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
