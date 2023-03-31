@@ -1,4 +1,4 @@
-# aqp 2.0 (2023-03-16)
+# aqp 2.0 (2023-03-31)
 This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`.
 
 Notable changes include:
@@ -16,6 +16,7 @@ Notable changes include:
  * new example data, `wilson2022`
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
+ * coarse fragment classification via `sieve()` and `fragmentClasses()`
  
  
 Incremental changes, should have no effect on previous code:
