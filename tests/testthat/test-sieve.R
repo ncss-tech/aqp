@@ -23,3 +23,29 @@ test_that("basic functionality", {
   
 })
 
+test_that("other systems", {
+  
+  x <- c(4, 35, 150, 400, 650)
+  
+  # USDA simplified
+  expect_equal(sieve(x), c('gravel', 'gravel', 'cobbles', 'stones', 'boulders'))
+  
+  # USDA
+  expect_equal(sieve(x, sys = 'USDA'), c('fine_gravel', 'coarse_gravel', 'cobbles', 'stones', 'boulders'))
+  
+  # International
+  expect_equal(sieve(x, sys = 'international'), c('gravel', 'stones', 'stones', 'stones', 'stones'))
+  
+  # unified
+  expect_equal(sieve(x, sys = 'unified'), c('fine_gravel', 'coarse_gravel', 'cobbles', 'boulders', 'boulders'))
+  
+  # AASHTO
+  expect_equal(sieve(x, sys = 'AASHTO'), c('fine_gravel', 'coarse_gravel', 'broken_rock', 'broken_rock', 'broken_rock'))
+  expect_equal(sieve(x, sys = 'AASHTO', rounded = TRUE), c('fine_gravel', 'coarse_gravel', 'boulders', 'boulders', 'boulders'))
+  
+  # modified wentworth
+  expect_equal(sieve(x, sys = 'mod.wentworth'), c('pebbles', 'pebbles', 'cobbles', 'boulders', 'boulders'))
+  
+})
+
+
