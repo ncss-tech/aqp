@@ -11,7 +11,8 @@ estimatePSCS(
   clay.attr = "clay",
   texcl.attr = "texcl",
   tax_order_field = "tax_order",
-  bottom.pattern = "Cr|R|Cd",
+  lieutex = "lieutex",
+  bottom.pattern = "Cr|R|Cd|m",
   simplify = TRUE,
   ...
 )
@@ -20,22 +21,24 @@ estimatePSCS(
 \item{p}{A SoilProfileCollection}
 
 \item{hzdesgn}{Name of the horizon attribute containing the horizon
-designation. Default 'hzname'}
+designation. Default \code{"hzname"}}
 
 \item{clay.attr}{Name of the horizon attribute containing clay contents.
-Default 'clay'}
+Default \code{"clay"}}
 
 \item{texcl.attr}{Name of the horizon attribute containing textural class
-(used for finding sandy textures). Default 'texcl'}
+(used for finding sandy textures). Default \code{"texcl"}}
 
 \item{tax_order_field}{Name of the site attribute containing taxonomic
 order; for handling PSCS rules for Andisols in lieu of lab data. May be NA
 or column missing altogether, in which case Andisol PSC possibility is
 ignored.}
 
+\item{lieutex}{Optional data element used in addition to the horizon designation to identify kinds of organic soil material for soils with organic surfaces. Default: \code{"lieutex"}}
+
 \item{bottom.pattern}{Regular expression pattern to match a root-restrictive
-contact. Default matches Cr, R or Cd. This argument is passed to both
-estimateSoilDepth and getArgillicBounds.}
+contact. Default matches Cr, R, Cd or m. This argument is passed to both
+\code{minDepthOf()} and \code{getArgillicBounds()}.}
 
 \item{simplify}{Return a length 2 vector with upper and lower boundary when p has length 1? Default TRUE.}
 
@@ -57,11 +60,13 @@ designations) with \code{getArgillicBounds()} as well as the presence of
 plow layers and surface organic soil material. Any
 \code{getArgillicBounds()} arguments may be passed to \code{estimatePSCS}.
 
-Requires information on taxonomic order (to handle andisols).
+Requires information on taxonomic order (to handle Andisols).
 
 WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with
 strongly contrasting PSCs may not be classified correctly. The author would
 welcome a dataset to develop this functionality for.
+
+In aqp 2.0, control sections of Histosols and Histels are supported.
 }
 \examples{
 
@@ -81,7 +86,7 @@ Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.
 USDA-Natural Resources Conservation Service, Washington, DC.
 }
 \seealso{
-\code{getArgillicBounds}, \code{getSurfaceHorizonDepth}
+\code{\link[=getArgillicBounds]{getArgillicBounds()}}, \code{\link[=getSurfaceHorizonDepth]{getSurfaceHorizonDepth()}}
 }
 \author{
 Andrew Gene Brown
