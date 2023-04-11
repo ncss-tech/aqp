@@ -165,7 +165,7 @@
 #' )
 #' aggregate(featdept ~ id, data = df, summary)
 #' 
-allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"), droplevels = TRUE) {
+allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"), droplevels = FALSE) {
   
   # sanity check
   to <- match.arg(to, several.ok = FALSE)
@@ -207,7 +207,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 # To do add USDA and other salt classes
 ## TODO consider optional object = NULL
 ## TODO safe handling of NA
-.rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, SAR = NULL, system = "FAO Salt Severity", droplevels = TRUE) {
+.rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, SAR = NULL, system = "FAO Salt Severity", droplevels = FALSE) {
   
   # EC = 1; pH = 3; ESP = 50
   l <- list(EC = EC, pH = pH, ESP = ESP, SAR = SAR)
@@ -246,7 +246,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   
   
   # saline soils
-  sc <- ifelse(ESP <= 15 | SAR <= 13, # & EC > 4 & pH <= 8.5, 
+  sc <- ifelse((ESP <= 15 & !is.na(ESP)) | (SAR <= 13 & !is.na(SAR)), # & EC > 4 & pH <= 8.5, 
                as.character(
                  cut(EC,
                      breaks = c(-1, 0.75, 2, 4, 8, 15, 1000), 
@@ -257,7 +257,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                )
   # sodic soils
   # ESP
-  sc <- ifelse(EC <= 4 & (ESP > 15 | pH > 8.2),  
+  sc <- ifelse(EC <= 4 & ((ESP > 15 & !is.na(ESP)) | (pH > 8.2 & !is.na(pH))),  
                as.character(
                  cut(ESP,
                      # breaks = c(0, 15, 30, 50, 70, 100),
@@ -269,7 +269,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                sc
                )
   # SAR
-  sc <- ifelse(EC <= 4 & (SAR > 13 | pH > 8.2),  
+  sc <- ifelse(EC <= 4 & ((SAR > 13 & !is.na(SAR)) | pH > 8.2 & !is.na(pH)),  
                as.character(
                  cut(SAR,
                      # breaks = c(0, 13, 30, 70, 160, 100),
@@ -281,7 +281,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                sc
                )
   # saline-sodic soils
-  sc <- ifelse(EC > 4 & (ESP > 15 | SAR > 13), "saline-sodic", sc)
+  sc <- ifelse(EC > 4 & ((ESP > 15 & !is.na(ESP)) | (SAR > 13 & !is.na(SAR))), "saline-sodic", sc)
   
   
   # convert to factor
@@ -298,7 +298,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 
 
 
-.codify <- function(x, system = "salt severity", droplevels = TRUE) {
+.codify <- function(x, system = "salt severity", droplevels = FALSE) {
 
   if (system == "salt severity") {
 
@@ -307,7 +307,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
 
 
-.codify_salt_severity <- function(x, droplevels = TRUE) {
+.codify_salt_severity <- function(x, droplevels = FALSE) {
   
   # set levels
   fao_lev <- c(
