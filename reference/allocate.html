@@ -69,7 +69,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">allocate</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
 <span>  to <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"FAO Salt Severity"</span>, <span class="st">"FAO Black Soil"</span>, <span class="st">"ST Diagnostic Features"</span><span class="op">)</span>,</span>
-<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  droplevels <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -157,6 +157,7 @@
 <span class="r-in"><span>  ESP <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span>, <span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">70</span>, <span class="fl">100</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">test</span><span class="op">$</span><span class="va">ss</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">test</span>, <span class="fu">allocate</span><span class="op">(</span>EC <span class="op">=</span> <span class="va">EC</span>, pH <span class="op">=</span> <span class="va">pH</span>, ESP <span class="op">=</span> <span class="va">ESP</span>, to <span class="op">=</span> <span class="st">"FAO Salt Severity"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Both ESP &amp; SAR are present and will impact the ranking if either (OR) is above or below a threshold. If you prefer one versus the other remove it when the other is present (e.g. ifelse(complete.cases(cbind(ESP, SAR), ESP, SAR))).</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">ss</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            nonsaline      slightly saline    moderately saline </span>
@@ -164,9 +165,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>      strongly saline very strongly saline     extremely saline </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   70                   90                  150 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         saline-sodic       slightly sodic     moderately sodic </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  780                  352                  198 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  780                   44                   66 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       strongly sodic  very strongly sodic </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  198                  330 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   66                  110 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Black Soil Category 1 (BS1)</span></span></span>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span></span>

@@ -223,6 +223,9 @@
     <loc>/reference/fragmentClasses.html</loc>
   </url>
   <url>
+    <loc>/reference/fragmentSieve.html</loc>
+  </url>
+  <url>
     <loc>/reference/genSlabLabels.html</loc>
   </url>
   <url>
@@ -506,9 +509,6 @@
   </url>
   <url>
     <loc>/reference/sierraTransect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sieve.html</loc>
   </url>
   <url>
     <loc>/reference/sim.html</loc>
