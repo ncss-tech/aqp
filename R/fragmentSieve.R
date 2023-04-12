@@ -28,36 +28,36 @@
 #' 
 #' # use a simplified version of the USDA system
 #' # common within NRCS/SPSD and NCSS
-#' sieve(c(30, 125, 180, 500, 1000))
+#' fragmentSieve(c(30, 125, 180, 500, 1000))
 #' 
 #' # pararock fragments
-#' sieve(c(30, 125, 180, 500, 1000), prefix = 'para')
+#' fragmentSieve(c(30, 125, 180, 500, 1000), prefix = 'para')
 #' 
 #' # result as an ordered factor
-#' sieve(c(30, 125, 180, 500, 1000), ordered = TRUE)
+#' fragmentSieve(c(30, 125, 180, 500, 1000), ordered = TRUE)
 #' 
 #' # USDA system, flat size classes
-#' sieve(c(30, 125, 180, 500, 1000), flat = TRUE)
+#' fragmentSieve(c(30, 125, 180, 500, 1000), flat = TRUE)
 #' 
 #' # alternative classification systems
-#' sieve(c(30, 125, 180, 500, 1000), sys = 'usda')
-#' sieve(c(30, 125, 180, 500, 1000), sys = 'international')
-#' sieve(c(30, 125, 180, 500, 1000), sys = 'unified')
-#' sieve(c(30, 125, 180, 500, 1000), sys = 'aashto')
-#' sieve(c(30, 125, 180, 500, 1000), sys = 'mod.wentworth')
+#' fragmentSieve(c(30, 125, 180, 500, 1000), sys = 'usda')
+#' fragmentSieve(c(30, 125, 180, 500, 1000), sys = 'international')
+#' fragmentSieve(c(30, 125, 180, 500, 1000), sys = 'unified')
+#' fragmentSieve(c(30, 125, 180, 500, 1000), sys = 'aashto')
+#' fragmentSieve(c(30, 125, 180, 500, 1000), sys = 'mod.wentworth')
 #' 
 #' # custom fragment labels / diameter
-#' sieve(
-#' c(30, 125, 180, 500, 1000), 
-#' sieves = c(clumps = 50, chunks = 300, blocks = 100000)
+#' fragmentSieve(
+#'   c(30, 125, 180, 500, 1000),
+#'   sieves = c(clumps = 50, chunks = 300, blocks = 100000)
 #' )
 #' 
 #' # unnamed sieves, generic labels used
-#' sieve(c(10, 50), sieves = c(30, 70))
+#' fragmentSieve(c(10, 50), sieves = c(30, 70))
 #' 
-#' sieve(c(10, 50), sieves = c(30, 70), ordered = TRUE)
+#' fragmentSieve(c(10, 50), sieves = c(30, 70), ordered = TRUE)
 #'  
-sieve <- function(diameter,
+fragmentSieve <- function(diameter,
                   sieves = NULL, 
                   ordered = FALSE,
                   prefix = "",
@@ -67,7 +67,7 @@ sieve <- function(diameter,
   
   # if not specified as named vector of diameters
   # use fragmentClasses() to lookup one of several systems
-  if(is.null(sieves)) {
+  if (is.null(sieves)) {
     sieves <- fragmentClasses(...)
   }
   
@@ -101,7 +101,7 @@ sieve <- function(diameter,
   }
   
   # optional conversion to ordered factor
-  if(ordered) {
+  if (ordered) {
     res <- factor(res, levels = names(sieves), ordered = TRUE)
   }
   

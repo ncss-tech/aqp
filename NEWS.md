@@ -18,7 +18,7 @@ New features:
  * example data, `wilson2022`
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
- * coarse fragment classification via `sieve()` and `fragmentClasses()`
+ * coarse fragment classification via `fragmentSieve()` and `fragmentClasses()`
  * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
 
 Incremental changes, should have no effect on previous code:
