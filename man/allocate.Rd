@@ -7,7 +7,7 @@
 allocate(
   ...,
   to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"),
-  droplevels = TRUE
+  droplevels = FALSE
 )
 }
 \arguments{
