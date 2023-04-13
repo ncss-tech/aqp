@@ -214,8 +214,11 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   
   # tests ----
   # ESP vs SAR
-  if (all(complete.cases(cbind(ESP, SAR)))) {
-    warning("Both ESP & SAR are present and will impact the ranking if either (OR) is above or below a threshold. If you prefer one versus the other remove it when the other is present (e.g. ifelse(complete.cases(cbind(ESP, SAR), ESP, SAR))).")
+  if (!is.null(SAR)) {
+    warning("SAR will be converted to ESP via Richards (1958) conversion formula.")
+  }
+  if (!is.null(ESP) & !is.null(SAR)) {
+    warning("Both ESP & SAR are present, SAR will only be used where ESP is missing.")
   }
   # minimum dataset
   if (any(sapply(l[1:3], is.null)) & any(sapply(l[c(1:2, 4)], is.null))) {
@@ -239,14 +242,21 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   sc <- rep("none", times = length(EC))
   
   ## TODO: consider separate saline / sodic classification
-  
-  # replace NULL
+  # estimate ESP from SAR ----
   if (is.null(ESP)) ESP <- rep(NA_real_, times = length(EC))
   if (is.null(SAR)) SAR <- rep(NA_real_, times = length(EC))
   
+  .esp <- function(SAR) {
+    (100 * (-0.0126 + 0.01475 * SAR)) / 
+      (1   + (-0.0126 + 0.01475 * SAR))
+  }
+  ESPx <- .esp(SAR)
+  ESP <- ifelse(is.na(ESP) & !is.na(SAR), ESPx, ESP)
   
+  
+  # rank ----
   # saline soils
-  sc <- ifelse((ESP <= 15 & !is.na(ESP)) | (SAR <= 13 & !is.na(SAR)), # & EC > 4 & pH <= 8.5, 
+  sc <- ifelse(ESP <= 15, # & EC > 4 & pH <= 8.5, 
                as.character(
                  cut(EC,
                      breaks = c(-1, 0.75, 2, 4, 8, 15, 1000), 
@@ -257,7 +267,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                )
   # sodic soils
   # ESP
-  sc <- ifelse(EC <= 4 & ((ESP > 15 & !is.na(ESP)) | (pH > 8.2 & !is.na(pH))),  
+  sc <- ifelse(EC <= 4 & (ESP > 15 | pH > 8.2),  
                as.character(
                  cut(ESP,
                      # breaks = c(0, 15, 30, 50, 70, 100),
@@ -268,20 +278,8 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                      )),
                sc
                )
-  # SAR
-  sc <- ifelse(EC <= 4 & ((SAR > 13 & !is.na(SAR)) | pH > 8.2 & !is.na(pH)),  
-               as.character(
-                 cut(SAR,
-                     # breaks = c(0, 13, 30, 70, 160, 100),
-                     breaks = c(-2, 13, 30, 70, 160),
-                     # labels = fao_lev[7:11],
-                     labels = fao_lev[8:11],
-                     right  = FALSE
-                 )),
-               sc
-               )
   # saline-sodic soils
-  sc <- ifelse(EC > 4 & ((ESP > 15 & !is.na(ESP)) | (SAR > 13 & !is.na(SAR))), "saline-sodic", sc)
+  sc <- ifelse(EC > 4 & ESP > 15, "saline-sodic", sc)
   
   
   # convert to factor
