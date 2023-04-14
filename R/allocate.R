@@ -259,7 +259,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   sc <- ifelse(ESP <= 15, # & EC > 4 & pH <= 8.5, 
                as.character(
                  cut(EC,
-                     breaks = c(-1, 0.75, 2, 4, 8, 15, 1000), 
+                     breaks = c(-1, 0.75, 2, 4, 8, 15, 1500), 
                      labels = fao_lev[1:6],
                      right  = FALSE
                      )),
@@ -267,7 +267,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                )
   # sodic soils
   # ESP
-  sc <- ifelse(EC <= 4 & (ESP > 15 | pH > 8.2),  
+  sc <- ifelse(EC <= 4 & (ESP > 15) & complete.cases(EC, ESP),  # | pH > 8.2
                as.character(
                  cut(ESP,
                      # breaks = c(0, 15, 30, 50, 70, 100),
@@ -279,7 +279,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                sc
                )
   # saline-sodic soils
-  sc <- ifelse(EC > 4 & ESP > 15, "saline-sodic", sc)
+  sc <- ifelse(EC > 4 & ESP > 15 & complete.cases(EC, ESP), "saline-sodic", sc)
   
   
   # convert to factor
