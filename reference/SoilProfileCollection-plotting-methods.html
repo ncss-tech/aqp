@@ -75,6 +75,7 @@ Options can be used to conveniently specify sets of arguments that will be used 
 <span>  name <span class="op">=</span> <span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  name.style <span class="op">=</span> <span class="st">"right-center"</span>,</span>
 <span>  label <span class="op">=</span> <span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  raggedBottom <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hz.depths <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hz.depths.offset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">fixLabelCollisions</span>, <span class="fl">0.03</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  hz.depths.lines <span class="op">=</span> <span class="va">fixLabelCollisions</span>,</span>
@@ -151,6 +152,10 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 <dt>label</dt>
 <dd><p>quoted column name of the (site-level) attribute used to identify profile sketches</p></dd>
+
+
+<dt>raggedBottom</dt>
+<dd><p>quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary</p></dd>
 
 
 <dt>hz.depths</dt>
@@ -230,7 +235,7 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 
 <dt>max.depth</dt>
-<dd><p>suggested lower depth boundary of plot</p></dd>
+<dd><p>suggested lower depth boundary of plot, profiles are also truncated at this depth</p></dd>
 
 
 <dt>n.depth.ticks</dt>
@@ -550,7 +555,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="co"># align / adjust relative x positions</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, thresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 394 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 iterations</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># y-offset is automatically re-ordered according to</span></span></span>
 <span class="r-in"><span><span class="co"># plot.order</span></span></span>

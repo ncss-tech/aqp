@@ -326,12 +326,12 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-in"><span><span class="va">ssc</span> <span class="op">&lt;-</span> <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span>, clay <span class="op">=</span> <span class="va">ssc</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      texcl clay</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] "ls"  "6" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] "sil" "13"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] "c"   "55"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] "si"  "5" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] "sil" "13"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] "s"   "3" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] "sl"  "10"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] "sl"  "10"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] "scl" "27"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] "sic" "47"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] "c"   "55"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example of texmod_to_fragvoltol</span></span></span>
@@ -378,6 +378,7 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-in"><span>                                  clay <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">clay</span> <span class="op">-</span> <span class="va">carbclay</span>,</span></span>
 <span class="r-in"><span>                                  sand <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">sand</span> <span class="op">-</span> <span class="va">vfs</span>,</span></span>
 <span class="r-in"><span>                                  fragvoltot <span class="op">=</span> <span class="va">tex</span><span class="op">$</span><span class="va">fragvoltot</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>some records are &gt; 100% or &lt; 0%, or the calcuated silt fraction is &gt; 100% or &lt; 0%</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>some of the texcl records don't match the calculated texcl via ssc_to_texcl()</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tex</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   texcl clay sand fragvoltot            fpsc</span>
@@ -398,18 +399,18 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">clay</span> <span class="op">~</span> <span class="va">sample</span> <span class="op">+</span> <span class="va">texcl</span>, data <span class="op">=</span> <span class="va">ssc</span>, <span class="va">summary</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample texcl clay.Min. clay.1st Qu. clay.Median clay.Mean clay.3rd Qu.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  FALSE    cl     33.00        33.00       33.00     33.00        33.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   TRUE    cl     27.00        29.25       32.50     32.20        35.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   TRUE    cl     28.00        31.25       35.00     33.60        36.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  FALSE   sil     13.00        13.00       13.00     13.00        13.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   TRUE   sil      0.00         8.25       10.50     11.50        15.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   TRUE   sil      1.00         6.25       10.00     11.10        16.75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  FALSE    sl     10.00        10.00       10.00     10.00        10.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   TRUE    sl      0.00         3.50        6.00      8.30        13.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   TRUE    sl      0.00         5.25       10.00      8.90        12.75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   clay.Max.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     33.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     37.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     13.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     23.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     25.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     10.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     19.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     16.00</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># example of texture_to_texmod()</span></span></span>
