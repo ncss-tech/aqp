@@ -1,10 +1,4 @@
 
-
-## TODO: this can be run in parallel
-
-## TODO: consider allowing variable color specifications
-
-
 ## Note: sanity checking on w is performed outside of this function
 
 

@@ -15,6 +15,7 @@ plotSPC(
   name = hzdesgnname(x),
   name.style = "right-center",
   label = idname(x),
+  raggedBottom = NULL,
   hz.depths = FALSE,
   hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
@@ -78,6 +79,8 @@ plotSPC(
 
 \item{label}{quoted column name of the (site-level) attribute used to identify profile sketches}
 
+\item{raggedBottom}{quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary}
+
 \item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (\code{FALSE})}
 
 \item{hz.depths.offset}{numeric, user coordinates for left-right adjustment for horizon depth annotation; reasonable values are usually within 0.01-0.05 (default: 0)}
@@ -116,7 +119,7 @@ plotSPC(
 
 \item{n}{integer describing amount of space along x-axis to allocate, defaults to \code{length(x)}}
 
-\item{max.depth}{suggested lower depth boundary of plot}
+\item{max.depth}{suggested lower depth boundary of plot, profiles are also truncated at this depth}
 
 \item{n.depth.ticks}{suggested number of ticks in depth scale}
 

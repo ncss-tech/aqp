@@ -25,6 +25,8 @@
 #' @param name.style one of several possible horizon designations labeling styles: `c('right-center', 'left-center', 'left-top', 'center-center', 'center-top')`
 #'
 #' @param label quoted column name of the (site-level) attribute used to identify profile sketches
+#' 
+#' @param raggedBottom quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary
 #'
 #' @param hz.depths logical, annotate horizon top depths to the right of each sketch (`FALSE`)
 #' 
@@ -64,7 +66,7 @@
 #'
 #' @param n integer describing amount of space along x-axis to allocate, defaults to `length(x)`
 #'
-#' @param max.depth suggested lower depth boundary of plot
+#' @param max.depth suggested lower depth boundary of plot, profiles are also truncated at this depth
 #'
 #' @param n.depth.ticks suggested number of ticks in depth scale
 #'
@@ -333,65 +335,74 @@
 #' 
 #' box()
 plotSPC <- function(
-  x,
-  color = 'soil_color',
-  width = ifelse(length(x) < 2, 0.15, 0.25),
-  name = hzdesgnname(x),
-  name.style = 'right-center',
-  label = idname(x),
-  hz.depths = FALSE,
-  hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
-  hz.depths.lines = fixLabelCollisions,
-  alt.label = NULL,
-  alt.label.col = 'black',
-  cex.names = 0.5,
-  cex.depth.axis = cex.names,
-  cex.id = cex.names + (0.2 * cex.names),
-  font.id = 2,
-  srt.id = 0, 
-  print.id = TRUE,
-  id.style = 'auto',
-  plot.order = 1:length(x),
-  relative.pos = 1:length(x),
-  add = FALSE,
-  scaling.factor = 1,
-  y.offset = rep(0, times = length(x)),
-  x.idx.offset = 0,
-  n = length(x),
-  max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
-  n.depth.ticks = 5,
-  shrink = FALSE,
-  shrink.cutoff = 3,
-  shrink.thin = NULL,
-  abbr = FALSE,
-  abbr.cutoff = 5,
-  divide.hz = TRUE,
-  hz.distinctness.offset = NULL,
-  hz.topography.offset = NULL,
-  hz.boundary.lty = NULL,
-  axis.line.offset = -2.5,
-  plot.depth.axis = TRUE,
-  density = NULL,
-  show.legend = TRUE,
-  col.label = color,
-  col.palette = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598",
-                  "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"),
-  col.palette.bias = 1,
-  col.legend.cex = 1,
-  n.legend = 8,
-  lwd = 1,
-  lty = 1,
-  default.color = grey(0.95),
-  fixLabelCollisions = FALSE,
-  maxLabelAdjustmentIndex = 4,
-  ...
+    x,
+    color = 'soil_color',
+    width = ifelse(length(x) < 2, 0.15, 0.25),
+    name = hzdesgnname(x),
+    name.style = 'right-center',
+    label = idname(x),
+    raggedBottom = NULL,
+    hz.depths = FALSE,
+    hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
+    hz.depths.lines = fixLabelCollisions,
+    alt.label = NULL,
+    alt.label.col = 'black',
+    cex.names = 0.5,
+    cex.depth.axis = cex.names,
+    cex.id = cex.names + (0.2 * cex.names),
+    font.id = 2,
+    srt.id = 0, 
+    print.id = TRUE,
+    id.style = 'auto',
+    plot.order = 1:length(x),
+    relative.pos = 1:length(x),
+    add = FALSE,
+    scaling.factor = 1,
+    y.offset = rep(0, times = length(x)),
+    x.idx.offset = 0,
+    n = length(x),
+    max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
+    n.depth.ticks = 5,
+    shrink = FALSE,
+    shrink.cutoff = 3,
+    shrink.thin = NULL,
+    abbr = FALSE,
+    abbr.cutoff = 5,
+    divide.hz = TRUE,
+    hz.distinctness.offset = NULL,
+    hz.topography.offset = NULL,
+    hz.boundary.lty = NULL,
+    axis.line.offset = -2.5,
+    plot.depth.axis = TRUE,
+    density = NULL,
+    show.legend = TRUE,
+    col.label = color,
+    col.palette = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598",
+                    "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"),
+    col.palette.bias = 1,
+    col.legend.cex = 1,
+    n.legend = 8,
+    lwd = 1,
+    lty = 1,
+    default.color = grey(0.95),
+    fixLabelCollisions = FALSE,
+    maxLabelAdjustmentIndex = 4,
+    ...
 ) {
+  
+  
+  ############################
+  ## make R CMD check happy ##
+  ############################
+  .LAST <- NULL
+  .BOTTOM <- NULL
+  
   
   ############################
   ## arguments from options ##
   ############################
   
-  # sepecified as: options(.aqp.plotSPC.args = list())
+  # specified as: options(.aqp.plotSPC.args = list())
   
   # get any options set, result is a list
   # NULL otherwise
@@ -402,7 +413,7 @@ plotSPC <- function(
     
     # e.g. some of: names(formals('plotSPC'))
     # not all arguments can be set via options
-    .argSet <- c("color", "width", "name", "name.style", "label", "hz.depths", 
+    .argSet <- c("color", "width", "name", "name.style", "label", "raggedBottom", "hz.depths", 
                  "hz.depths.offset", "hz.depths.lines", "alt.label", "alt.label.col", 
                  "cex.names", "cex.depth.axis", "cex.id", "font.id", "srt.id", 
                  "print.id", "id.style", "plot.order", "relative.pos", "add", 
@@ -413,7 +424,7 @@ plotSPC <- function(
                  "show.legend", "col.label", "col.palette", "col.palette.bias", 
                  "col.legend.cex", "n.legend", "lwd", "lty", "default.color", 
                  "fixLabelCollisions", "maxLabelAdjustmentIndex"
-                 )
+    )
     
     # iterate over all possible arguments that can be modified in this way
     for(.arg in .argSet) {
@@ -497,6 +508,17 @@ plotSPC <- function(
       stop('`hz.boundary.lty` must be numeric', call. = FALSE)
   }
   
+  # ragged bottom flag
+  if(!missing(raggedBottom)) {
+    # valid name
+    if(! raggedBottom %in% siteNames(x))
+      stop('invalid `raggedBottom` column name', call. = FALSE)
+    
+    # must be logical
+    if(! is.logical(x[[raggedBottom]]))
+      stop('`raggedBottom` must be logical', call. = FALSE)
+  }
+  
   # length of y.offset must length(x) or 1
   if(length(y.offset) == 1) {
     y.offset <- rep(y.offset, times = length(x))
@@ -506,6 +528,38 @@ plotSPC <- function(
     warning('length of `y.offset` must be `length(x)` or 1, using `0`', call. = FALSE)
     y.offset <- rep(0, times = length(x))
   }
+  
+  
+  #################################
+  ## SPC truncation and flagging ##
+  #################################
+  
+  # keep track of truncation by max.depth via special site-level attr
+  site(x)$.isTruncated <- FALSE
+  
+  if(!missing(max.depth)) {
+    
+    # keep track of original profile bottom depths
+    .pb0 <- x[, , .LAST, .BOTTOM]
+    
+    # truncate
+    x <- trunc(x, 0, max.depth)
+    
+    # truncated bottom depths
+    .pb1 <- x[, , .LAST, .BOTTOM]
+    
+    # flag
+    x$.isTruncated[which(.pb0 != .pb1)] <- TRUE
+  }
+  
+  # accommodate other flag specified in raggedBottom
+  if(!missing(raggedBottom)) {
+    truncation_flag <- x[['.isTruncated']] | x[[raggedBottom]]
+  } else {
+    truncation_flag <- x[['.isTruncated']]
+  }
+  
+  
   
   
   ###################
@@ -554,12 +608,12 @@ plotSPC <- function(
   
   # padding above profiles, ~ 15 is about right for n in {1,25} and max depth near 150cm
   # a sketch of shalllow profiles could benefit from ~ 5
-  if(max.depth <=50)
-      extra_y_space <- 5
+  if(max.depth <= 50)
+    extra_y_space <- 5
   if(max.depth > 50 & max.depth <= 100)
-      extra_y_space <- 10
+    extra_y_space <- 10
   if(max.depth > 100)
-      extra_y_space <- 15
+    extra_y_space <- 15
   
   # get profile IDs
   pIDs <- profile_id(x)
@@ -602,7 +656,7 @@ plotSPC <- function(
   # vector of horizon colors, row-order preserved
   # legend data if relevant, otherwise NULL
   hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
-    h[['.color']] <- hz.color.interpretation$colors
+  h[['.color']] <- hz.color.interpretation$colors
   
   # sketch parameters for follow-up overlay / inspection
   lsp <- list('width' = width,
@@ -689,6 +743,14 @@ plotSPC <- function(
   for(i in 1:n) {
     # convert linear sequence into plotting order
     profile_i <- plot.order[i]
+    
+    # get truncation flag
+    truncation_flag_i <- truncation_flag[profile_i]
+    
+    # fill NA with FALSE:
+    #  - if n > length(x)
+    #  - NA present in x$raggedBottom
+    truncation_flag_i[is.na(truncation_flag_i)] <- FALSE
     
     # extract the current profile's horizon data
     this_profile_label <- pLabels[profile_i]
@@ -814,7 +876,12 @@ plotSPC <- function(
       # *  there is a "gap" between adjacent horizons (overlapOrGap = TRUE)
       
       if(j == 1 & nh == 1){
-        # first horizon of a single-horizon profile
+        ## first horizon of a single-horizon profile ##
+        
+        # ragged bottom place-holder
+        .r <- NULL
+        
+        # 
         y.ll <- pmin(y0[j] + hdo[j], y0[j]) # cannot exceed y.ll of next horizon
         y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
         y.ur <- y1[j] # use upper-right verbatim
@@ -823,12 +890,46 @@ plotSPC <- function(
         y.lc <- pmax(y0[j] - hto[j], y1[j]) # cannot exceed top depth of current horizon
         y.uc <- y1[j] # use upper-center verbatim
         
-        # assemble y-coords and plot first horizon polygon, without borders
-        yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        ## truncated bottom
+        # this is only possible when horizon geometry is available
+        # e.g. NOT:
+        #  - horizon-less SPC
+        #  - n > length(SPC)
+        if(truncation_flag_i & !all(is.na(xx))) {
+          
+          # ragged line characteristics depend on vertical offset
+          .raggedOffsets <- max.depth * c(-0.01,  0.03) / 2
+          
+          # must be an even number of oscillations
+          # computed as function of number of profiles
+          # adjusted to width (n.osc increases with width)
+          # min value of 4
+          .raggedN <- pmax(4, round((2.5 * width) * 32 / (n / 2)) * 2)
+          
+          # ragged bottom line segment: lr -> ll ordering
+          .r <- .raggedLines(x1 = x.ll, x2 = x.lr, y = y0[j], o = .raggedOffsets, n = .raggedN)
+          
+          # modify ragged x and y to include upper right, center, left coords
+          xx <- c(.r[, 1], x.ur, x.uc, x.ul)
+          yy <- c(.r[, 2], y.ur, y.uc, y.ul)
+        } else {
+          # place-holder for ragged bottom
+          .r <- NULL
+          
+          # assemble standard y-coords
+          yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+        }
+        
+        # plot first horizon polygon, without borders
+        polygon(x = xx, y = yy, col = this_profile_colors[j], border = NA, density = this_profile_density[j], lend = 1)
         
       } else if(j == 1 & nh > 1){
-        # first horizon, of several
+        ## first horizon, of several ##
+        
+        # ragged bottom place-holder
+        .r <- NULL
+        
+        # 
         y.ll <- pmin(y0[j] + hdo[j], y0[j+1]) # cannot exceed y.ll of next horizon
         y.lr <- pmax(y0[j] - hdo[j], y1[j]) # cannot exceed y.ur of this horizon
         y.ur <- y1[j] # use upper-right verbatim
@@ -839,10 +940,15 @@ plotSPC <- function(
         
         # assemble y-coords and plot first horizon polygon, without borders
         yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        polygon(x = xx, y = yy, col = this_profile_colors[j], border = NA, density = this_profile_density[j], lend = 1)
         
       } else if(j < nh) {
-        # next horizons, except bottom-most horizon
+        ## next horizons, except bottom-most horizon ##
+        
+        # ragged bottom place-holder
+        .r <- NULL
+        
+        # 
         y.ll <- pmin(y0[j] + hdo[j], y0[j+1], na.rm = TRUE) # cannot exceed y.ll of next horizon
         y.lr <- pmax(y0[j] - hdo[j], y0[j-1]) # cannot exceed y.lr of previous horizon
         y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
@@ -853,12 +959,17 @@ plotSPC <- function(
         
         # assemble y-coords and plot next n horizon's polygon, without borders
         yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lend=1)
         ## debugging
         # polygon(x = xx, y = yy, col=NA, border='red', density=this_profile_density[j], lwd=lwd, lty=lty)
         
       } else {
-        # last horizon
+        ## last horizon ##
+        
+        # ragged bottom place-holder
+        .r <- NULL
+        
+        #
         y.ll <- y0[j] # user lower-left verbatim
         y.lr <- y0[j] # use lower-right verbatim
         y.ur <- pmax(y1[j] - hdo[j-1], y1[j-1]) # cannot exceed y.ur of previous horizon
@@ -871,18 +982,50 @@ plotSPC <- function(
         # NA lower horizon depths ll, lc, lr to all be NA
         # this will break divide.hz functionality
         
-        # assemble y-coords and plot last horizon polygon, without borders
-        yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
-        polygon(x = xx, y = yy, col=this_profile_colors[j], border=NA, density=this_profile_density[j], lwd=lwd, lty=lty, lend=1)
+        ## truncated bottom
+        # this is only possible when horizon geometry is available
+        # e.g. NOT:
+        #  - horizon-less SPC
+        #  - n > length(SPC)
+        if(truncation_flag_i & !all(is.na(xx))) {
+          
+          # ragged line characteristics depend on vertical offset
+          .raggedOffsets <- max.depth * c(-0.01,  0.03) / 2
+          
+          # must be an even number of oscillations
+          # computed as function of number of profiles
+          # adjusted to width (n.osc increases with width)
+          # min value of 4
+          .raggedN <- pmax(4, round((2.5 * width) * 32 / (n / 2)) * 2)
+          
+          # ragged bottom line segment: lr -> ll ordering
+          .r <- .raggedLines(x1 = x.ll, x2 = x.lr, y = y0[j], o = .raggedOffsets, n = .raggedN)
+          
+          # modify ragged x and y to include upper right, center, left coords
+          xx <- c(.r[, 1], x.ur, x.uc, x.ul)
+          yy <- c(.r[, 2], y.ur, y.uc, y.ul)
+        } else {
+          # place-holder for ragged bottom
+          .r <- NULL
+          
+          # assemble standard y-coords
+          yy <- c(y.ll, y.lc, y.lr, y.ur, y.uc, y.ul)
+        }
         
-      }
+        # plot last horizon polygon, without borders
+        polygon(x = xx, y = yy, col = this_profile_colors[j], border = NA, density = this_profile_density[j], lend = 1)
+        
+        ## debugging
+        # polygon(x = xx, y = yy, col = NA, border = 'red', density=this_profile_density[j], lwd = 2)
+      } # end selecting horizon sequence class
       
       # save current iteration of coordinates and line type
-      coords.list[[j]] <- list(xx=xx, yy=yy, lty=ht.lty[j])
+      # also save ragged bottom coordinates, usually NULL
+      coords.list[[j]] <- list(xx = xx, yy = yy, lty = ht.lty[j], ragged = .r)
       
     } # end looping over horizons
     
-    
+
     ## note: have to do this after the polygons, otherwise the lines are over-plotted
     # optionally divide horizons with line segment
     if(divide.hz) {
@@ -891,48 +1034,95 @@ plotSPC <- function(
       # coordinate logic: ll, lc, lr, ur, uc, ul
       # line style included
       lapply(coords.list, function(seg) {
+        
         # lower left -> lower center
-        segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd=lwd, lty=seg$lty, lend=1)
+        # segments(x0 = seg$xx[1], y0 = seg$yy[1], x1 = seg$xx[2], y1 = seg$yy[2], lwd = lwd, lty =  seg$lty, lend = 1)
         # lower center -> lower right
-        segments(x0 = seg$xx[2], y0 = seg$yy[2], x1 = seg$xx[3], y1 = seg$yy[3], lwd=lwd, lty=seg$lty, lend=1)
+        # segments(x0 = seg$xx[2], y0 = seg$yy[2], x1 = seg$xx[3], y1 = seg$yy[3], lwd = lwd, lty = seg$lty, lend = 1)
+        
+        # add line segments in order
+        lines(seg$xx, seg$yy, lwd = lwd, lty = seg$lty, lend = 1)
+
       })
     }
     
-    ## final rectangle border around entire profile
+    
+    ## final border left-side, top, right-side
     # note: when manually specifying n > length(SPC)
     # x0,x1,y0,y1 are NA
     # using `na.rm = TRUE` in the following calls to min() or max() will generate warnings
-    suppressWarnings(
-      rect(
-        xleft = x0 - width, 
-        ybottom = min(y1, na.rm = TRUE), 
-        xright = x0 + width, 
-        ytop = max(y0, na.rm = TRUE), 
-        lwd = lwd, 
-        lty = lty, 
-        lend = 2
-      )
-    )
+    
+    # left-side, top -> bottom
+    suppressWarnings(segments(
+      x0 = x0 - width, 
+      x1 =  x0 - width, 
+      y0 = min(y1, na.rm = TRUE), 
+      y1 = max(y0, na.rm = TRUE), 
+      lwd = lwd,
+      lty = lty,
+      lend = 2
+    ))
+    
+    # top, left -> right
+    suppressWarnings(segments(
+      x0 = x0 - width, 
+      x1 =  x0 + width, 
+      y0 = min(y1, na.rm = TRUE), 
+      y1 = min(y1, na.rm = TRUE), 
+      lwd = lwd,
+      lty = lty,
+      lend = 2
+    ))
+    
+    # right-side, top -> bottom
+    suppressWarnings(segments(
+      x0 = x0 + width, 
+      x1 =  x0 + width, 
+      y0 = min(y1, na.rm = TRUE), 
+      y1 = max(y0, na.rm = TRUE), 
+      lwd = lwd,
+      lty = lty,
+      lend = 2
+    ))
     
     
+    ## final bottom-most line or ragged edge
+    # no line when divide.hz = TRUE
+    # simple line when divide.hz = FALSE
+    # ragged edge when profiles are truncated
     
-    # # standard rectangles
-    # # default are filled rectangles
-    # if(divide.hz) {
-    #   # classic approach: use rectangles, fully vectorized and automatic recycling over arguments
-    #   # x0 and width have length of 1
-    #   rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NULL, density=this_profile_density, lwd=lwd, lty=lty)
-    # 
-    # } else {
-    #   # otherwise, we only draw the left, top, right borders, and then fill
-    # 
-    #   rect(x0 - width, y0, x0 + width, y1, col=this_profile_colors, border=NA, density=this_profile_density, lwd=lwd, lty=lty)
-    #   segments(x0 - width, y0, x0 - width, y1, lwd=lwd, lty=lty, lend=2) # left-hand side
-    #   segments(x0 + width, y0, x0 + width, y1, lwd=lwd, lty=lty, lend=2) # right-rand side
-    #   segments(x0 - width, min(y1), x0 + width, min(y1), lwd=lwd, lty=lty, lend=2) # profile top
-    #   segments(x0 - width, max(y0), x0 + width, max(y0), lwd=lwd, lty=lty, lend=2) # profile bottom
-    # }
-    # 
+    # bottom, left -> right
+    if(!divide.hz) {
+      
+      # use ragged bottom for truncated profiles
+      if(truncation_flag_i) {
+        
+        # derive from last element of coords.list
+        lines(
+          x = coords.list[[nh]]$ragged[, 1], 
+          y = coords.list[[nh]]$ragged[, 2], 
+          lwd = lwd, 
+          lty = coords.list[[nh]]$lty, 
+          lend = 1
+        )
+        
+      } else {
+      
+        suppressWarnings(segments(
+          x0 = x0 - width,
+          x1 =  x0 + width,
+          y0 = max(y0, na.rm = TRUE),
+          y1 = max(y0, na.rm = TRUE),
+          lwd = lwd,
+          lty = lty,
+          lend = 2
+        ))  
+        
+      }
+      
+    }
+    
+    
     
     ##################################
     ## horizon designations (names) ##
@@ -991,9 +1181,9 @@ plotSPC <- function(
     )
     
     
-
-   ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)    ## See hz depth annotation code below
-
+    
+    ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)    ## See hz depth annotation code below
+    
     # optionally shrink the size of names if they are longer than a given thresh
     if(shrink) {
       
@@ -1260,11 +1450,11 @@ plotSPC <- function(
       if(id.style == 'top') {
         text(x = x0, y = y.offset[i], id.text, pos = 3, font = font.id, cex = cex.id, srt = srt.id)
       }
-        
+      
       if(id.style == 'side') {
         text(x0 - (width+0.025), y.offset[i], id.text, adj = c(1, -width), font = font.id, cex = cex.id, srt = 90)
       }
-        
+      
     }
     
   } # end looping over profiles

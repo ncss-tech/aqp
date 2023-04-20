@@ -211,4 +211,27 @@
 }
 
 
+# x1: left-side x coordinate
+# x2: right-side x coordinate
+# y:  common y coordinate
+# n: number of vertices
+# o: vertical offsets
+# f: jittering factor
+.raggedLines <- function(x1, x2, y, n = 16, o = c(-0.25, 0.75), f = 1) {
+  
+  # initial vertices, includes left and right points
+  .x <- seq(from = x1, to = x2, length.out = n)
+  .y <- rep(y, times = n)
+  
+  # add offsets + jitter to all but outermost vertices
+  .idx <- 2:(n-1)
+  .y[.idx] <- jitter(.y[.idx] + o, factor = f)
+  
+  # TODO: convert to step function, would look better on screen
+  
+  # final coordinates
+  return(cbind(.x, .y))
+}
+
+
 

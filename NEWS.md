@@ -20,6 +20,7 @@ New features:
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
  * coarse fragment classification via `fragmentSieve()` and `fragmentClasses()`
  * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
+ * `plotSPC()` can now mark truncated profiles with a ragged bottom
 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
