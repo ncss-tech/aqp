@@ -1,5 +1,6 @@
 library(aqp)
 library(soilDB)
+library(sharpshootR)
 
 x1 <- 0.25
 x2 <- 0.75
@@ -154,6 +155,30 @@ osds$hzto.lty <- hzTopographyCodeToLineType(osds$topography)
 plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.topography.offset = 'hzto', hz.boundary.lty = 'hzto.lty')
 
 plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.topography.offset = 'hzto', hz.boundary.lty = 'hzto.lty', hz.distinctness.offset = 'hzd', max.depth = 150)
+
+
+plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.topography.offset = 'hzto', hz.boundary.lty = 'hzto.lty', hz.distinctness.offset = 'hzd', max.depth = 150, scaling.factor = 0.8)
+
+
+
+# accommodate scaling factor
+SoilTaxonomyDendrogram(
+  osds, 
+  KST.order = FALSE,
+  y.offset = 0.4, 
+  scaling.factor = 0.018, 
+  cex.taxon.labels = 0.75, 
+  cex.id = 0.66,
+  cex.names = 0.66,
+  width = 0.3, 
+  name.style = 'center-center', 
+  plot.depth.axis = TRUE,
+  axis.line.offset = -3,
+  hz.distinctness.offset = 'hzd',
+  max.depth = 150
+)
+
+
 
 
 

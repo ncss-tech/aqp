@@ -559,7 +559,8 @@ plotSPC <- function(
     truncation_flag <- x[['.isTruncated']]
   }
   
-  
+  # ragged line characteristics depend on vertical scale
+  .raggedOffsets <- scaling.factor * max.depth * c(-0.01,  0.03) / 2
   
   
   ###################
@@ -897,9 +898,6 @@ plotSPC <- function(
         #  - n > length(SPC)
         if(truncation_flag_i & !all(is.na(xx))) {
           
-          # ragged line characteristics depend on vertical offset
-          .raggedOffsets <- max.depth * c(-0.01,  0.03) / 2
-          
           # must be an even number of oscillations
           # computed as function of number of profiles
           # adjusted to width (n.osc increases with width)
@@ -988,9 +986,6 @@ plotSPC <- function(
         #  - horizon-less SPC
         #  - n > length(SPC)
         if(truncation_flag_i & !all(is.na(xx))) {
-          
-          # ragged line characteristics depend on vertical offset
-          .raggedOffsets <- max.depth * c(-0.01,  0.03) / 2
           
           # must be an even number of oscillations
           # computed as function of number of profiles

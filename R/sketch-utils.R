@@ -215,7 +215,7 @@
 # x2: right-side x coordinate
 # y:  common y coordinate
 # n: number of vertices
-# o: vertical offsets
+# o: vertical offsets (must be pre-scaled by plotSPC's scaling.factor argument)
 # f: jittering factor
 .raggedLines <- function(x1, x2, y, n = 16, o = c(-0.25, 0.75), f = 1) {
   
