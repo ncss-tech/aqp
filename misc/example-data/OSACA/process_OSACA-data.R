@@ -1,10 +1,19 @@
 library(aqp)
-library(plyr)
 
 x <- read.csv('OSACA-example_soil_data.csv', stringsAsFactors = FALSE)
 
 # assume horizons are measured from 0
-x.new <- ddply(x, .(soil), .fun=function(i) {data.frame(i, top=c(0, i$depth[-length(i$depth)]), bottom=i$depth)})
+x.new <- split(x, x$soil)
+x.new <- lapply(x.new, FUN = function(i) {
+  data.frame(
+    i, 
+    top = c(0, i$depth[-length(i$depth)]), 
+    bottom = i$depth
+  )
+})
+
+x.new <- do.call('rbind', x.new)
+row.names(x.new) <- NULL
 
 # fix depths
 x.new$top <- as.integer(x.new$top)
@@ -27,6 +36,14 @@ m$dateAdded <- Sys.Date()
 
 metadata(x.new) <- m
 
+# horizon names
+horizons(x.new)$name <- profileApply(x.new, FUN = function(i) {
+  sprintf("H%s", 1:nrow(i))
+})
+
+hzdesgnname(x.new) <- 'name'
+
+
 # copy for sample data sp5
 sp5 <- x.new
 
@@ -35,5 +52,7 @@ sp5@horizons$depth <- NULL
 sp5@horizons$hor <- NULL
 sp5@horizons$soil <- as.character(sp5@horizons$soil)
 
+
+
 # save to package
-save(sp5, file='../../data/sp5.rda')
+save(sp5, file = '../../../data/sp5.rda', compress = 'xz')
