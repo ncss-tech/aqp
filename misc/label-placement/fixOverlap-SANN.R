@@ -1,7 +1,7 @@
 library(aqp)
 library(lattice)
 library(viridisLite)
-
+library(RColorBrewer)
 
 ## explore correlation between dist(initial configuration) and dist(proposed configuration)
 x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
