@@ -323,7 +323,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 
   sc <- factor(
     x, 
-    levels = c(fao_lev[6:1], fao_lev[8:11], "saline-sodic"), 
+    levels = 1:11, 
     labels = c(fao_lev[6:1], fao_lev[8:11], "saline-sodic")
     )
   
