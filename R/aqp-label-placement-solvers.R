@@ -1,4 +1,192 @@
 
+
+#' @title Modified solution to a two-charge electrostatic force problem.
+#' @description Compute the static electrical force between two charged particles. Used internally for label placement in the presence of overlap.
+#'
+#' @param Q1 numeric, charge on particle 1 
+#' @param Q2 numeric, charge on particle 2
+#' @param k numeric, empirical constant
+#' @param d numeric, distance between charges 
+#' @param tiny numeric, number used to represent very small distances (avoid division by 0)
+#' @param ex numeric, exponent used in distance-weighting
+#' @param const numeric, constant used in distance weighting function, increase to dampen oscillation 
+#' 
+#' @return numeric
+#'
+#' @author D.E. Beaudette and K.C. Thompson
+#' 
+#' @noRd
+#' 
+#' @examples 
+#' 
+#' aqp:::.electricForce(Q1 = 1, Q2 = 1, k = 0.5, d = 5)
+#'
+.electricForce <- function(Q1, Q2, k, d, tiny = 0.1, ex = 2, const = 0.25) {
+  
+  # if 0-distance, force is infinite
+  # use a small number
+  d <- ifelse(d < tiny, tiny, d)
+  
+  # Keith: add constant reduction in force
+  # k * Q1 * Q2/ (d^ex + const)
+  
+  # increase const --> dampen ringing
+  res <- (k * Q1 * Q2 ) / (d^ex + const)
+  
+  return(res)
+}
+
+
+#' @title Label placement based on a simulation of electrostatic forces
+#'
+#' @param x numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration
+#' @param thresh numeric, overlap threshold, same as in [fixOverlap()]
+#' @param k.start numeric (typically between 0.01 and 2), initial electrical force constant
+#' @param maxIter integer, maximum number of iterations before giving up
+#' 
+#' @author D.E. Beaudette and K.C. Thompson
+#'
+#' @return list
+#' 
+#' @noRd
+#' 
+#' @examples 
+#' 
+#' z <- aqp:::.simParticles(c(1, 2, 3, 3.5, 4, 6, 8, 10))
+#' 
+#' plot(
+#' z$F_total, 
+#' z$cost, 
+#' las = 1, 
+#' xlab = 'Total Force', 
+#' ylab = 'Overlap Cost', 
+#' type = 'b', 
+#' xlim = rev(range(z$F_total))
+#' )
+#' 
+.simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
+  
+  # original configuration
+  x.orig <- x
+  x.n <- length(x)
+  
+  # storage for new configurations / total force / const
+  xnew <- list()
+  F_total <- rep(NA_real_, times = maxIter)
+  cost <- rep(NA_real_, times = maxIter)
+  
+  ## constants used to control effect of force on charged particles
+  # mass
+  .m <- 10
+  
+  # time step
+  .t <- 1
+  
+  for(i in 1:maxIter) {
+    
+    # pair-wise distances
+    m <- as.matrix(dist(x))
+    
+    # remove distance to self
+    diag(m) <- NA
+    
+    # repelling forces (same charge) between all particles
+    .F <- .electricForce(1, 1, k = k.start, d = m)
+    
+    # negative forces are to the left
+    # lower triangle is used for particles to the right of any given position
+    .F[lower.tri(.F)] <- - .F[lower.tri(.F)]
+    
+    # net repelling force on each particle
+    # force vector: negative <--- | ---> positive
+    .F_repl <- colSums(.F, na.rm = TRUE)
+    
+    # attractive forces between each particle and its original position
+    # weaker than repelling forces
+    .offset <- x.orig - x
+    
+    # direction is based on offset vector
+    .direction <- sign(.offset)
+    
+    # force vector: negative <--- | ---> positive
+    .F_attr <- .electricForce(0.5, 0.5, k = k.start, d = abs(.offset), tiny = 0.1)
+    
+    ## hack
+    # if attractive force is > repelling force, set repelling force to 0
+    .F_repl <- ifelse(abs(.F_attr) > abs(.F_repl), 0, .F_repl)
+    
+    # sum attractive + repelling forces
+    .F_net <- (.direction * .F_attr) + .F_repl
+    
+    ## debugging
+    # print(
+    #   rbind(x, x.orig, .direction, .F_repl, .F_attr, .F_net)
+    # )
+    
+    # displacement vector: d = 1/2 F/m * t
+    # negative <--- | ---> positive
+    .d <- 1/2 * (.F_net / .m) * .t^1
+    
+    # displacement of boundary points is always 0
+    .d[1] <- 0
+    .d[x.n] <- 0
+    
+    # keep track of new locations at time step i
+    # displacement can't be outside of bounds
+    xnew[[i]] <- pmin(pmax(x + .d, x.orig[1]), x.orig[x.n])
+    
+    # rank can't change... how can you fix that?
+    
+    # keep track of total force in system at time step i
+    F_total[i] <- sum(abs(.F_net))
+    
+    # update locations
+    x <- xnew[[i]]
+    
+    # compute overlap metrics at threshold
+    .om <- overlapMetrics(x, thresh = thresh)
+    cost[i] <- .om$ov
+    
+    ## TODO: save configurations in case of multiple local minima
+    ##       -> return to lowest cost configuration
+    
+    # stop simulation if there is no overlap in this iteration
+    if(length(.om$idx) < 1) {
+      break
+    }
+    
+    ## no longer using this criteria
+    # # stop when change in total force is very small
+    # if(i > 2) {
+    #   if(min(abs(diff(F_total)), na.rm = TRUE) < 0.0001) {
+    #     break
+    #   }  
+    # }
+    
+  }
+  
+  # done with iterations
+  message(sprintf("%s iterations", i))
+  
+  # flatten
+  xnew <- do.call('rbind', xnew)
+  
+  # check for convergence
+  .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x) & length(.om$idx) < 1)
+  
+  # compile full results
+  .res <- list(
+    F_total = na.omit(F_total), 
+    cost = na.omit(cost),
+    xnew = xnew, 
+    converged = .converged
+  )
+  
+  return(.res)
+}
+
+
+
 #' @title Find Overlap within a Sequence
 #' @description Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 #'
@@ -115,6 +303,8 @@ overlapMetrics <- function(x, thresh) {
     return(exp(-(n1 - n0) / Te * k))
   }
 }
+
+
 
 
 
@@ -281,7 +471,7 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
   if(m$ov <  tiny) {
     return(x)
   }
-    
+  
   # continue while total overlap > small number
   while(m$ov > tiny) {
     
@@ -440,4 +630,5 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
   
   return(x)
 }
+
 
