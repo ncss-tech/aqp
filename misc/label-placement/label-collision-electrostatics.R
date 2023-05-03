@@ -18,45 +18,52 @@ library(viridisLite)
 ## input must be sorted ASC
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10)
+
 # x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
+
 # x <- c(1, rep(5, times = 10), 12)
-x <- sort(1:15 + abs(rnorm(15, mean = 0, sd = 2)))
+
+# x <- sort(1:15 + abs(rnorm(15, mean = 0, sd = 2)))
 
 # x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
 
 # x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
+
+# x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+
+x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
 
 
 
 length(x)
 
 # static electrical force between two charged particles
-electricForce <- function(Q1, Q2, k, d, tiny = 0.1, exponet = 2, const = 0.25) {
+electricForce <- function(Q1, Q2, k, d, tiny = 0.1, ex = 2, const = 0.25) {
   
   # if 0-distance, force is infinite
   # use a small number
   d <- ifelse(d < tiny, tiny, d)
   
-  # keith: add constant reduction in force
-  # / (d^2 + const)
+  # Keith: add constant reduction in force
+  # k * Q1 * Q2/ (d^ex + const)
   
   # increase const --> dampen ringing
-  res <- (k * Q1 * Q2 ) / (d^exponet + const)
+  res <- (k * Q1 * Q2 ) / (d^ex + const)
   return(res)
 }
 
 
 
 
-simParticles <- function(x, k.start = 0.1, n = 100) {
+simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
   
   x.orig <- x
   x.n <- length(x)
   
   xnew <- list()
-  F_total <- rep(NA_real_, times = n)
+  F_total <- rep(NA_real_, times = maxIter)
   
-  for(i in 1:n) {
+  for(i in 1:maxIter) {
     
     # pair-wise distances
     m <- as.matrix(dist(x))
@@ -90,9 +97,10 @@ simParticles <- function(x, k.start = 0.1, n = 100) {
     # sum attractive + repelling forces
     .F_net <- (.direction * .F_attr) + .F_repl
     
-    # debugging 
-    # rbind(x, x.orig, .direction, .F_repl, .F_attr, .F_net)
-    
+    ## debugging
+    # print(
+    #   rbind(x, x.orig, .direction, .F_repl, .F_attr, .F_net)
+    # )
     
     # mass
     .m <- 10
@@ -120,20 +128,36 @@ simParticles <- function(x, k.start = 0.1, n = 100) {
     # update locations
     x <- xnew[[i]]
     
+    # check overlap given threshold
+    # if none, stop simulation
+    .fo <- findOverlap(x, thresh = thresh)
+    if(length(.fo) < 1) {
+      break
+    }
+    
+    ## TODO: consider removing this stopping condition
     # stop when change in total force is very small
     if(i > 2) {
-      if(min(abs(diff(F_total)), na.rm = TRUE) < 0.001) {
+      if(min(abs(diff(F_total)), na.rm = TRUE) < 0.0001) {
         break
       }  
     }
     
   }
   
+  # flatten
   xnew <- do.call('rbind', xnew)
   
-  .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x))
+  # check for convergence
+  .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x) & length(.fo) < 1)
   
-  return(list(F_total = na.omit(F_total), xnew = xnew, converged = .converged))
+  .res <- list(
+    F_total = na.omit(F_total), 
+    xnew = xnew, 
+    converged = .converged
+  )
+  
+  return(.res)
 }
 
 
@@ -148,7 +172,7 @@ cols <- colorRampPalette(cols)(length(x))
 
 ## TODO: animate this
 
-z <- simParticles(x, k.start = 0.5, n = 100)
+system.time(z <- simParticles(x, k.start = 0.5, maxIter = 500))
 .n <- nrow(z$xnew)
 
 par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
@@ -171,7 +195,7 @@ axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = 'white',
 ## fixOverlap doesn't always preserve rank ordering
 ##  ->> maybe impossible with ties in x?
 
-z <- fixOverlap(x, trace = TRUE, maxIter = 1000)
+system.time(z <- fixOverlap(x, trace = TRUE, maxIter = 1000))
 .n <- nrow(z$states)
 
 plot(z$stats, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(0, .n))
