@@ -37,6 +37,10 @@
 }
 
 
+
+## TODO: allow for min.x | min.y as defined in parent function
+
+
 #' @title Label placement based on a simulation of electrostatic forces
 #'
 #' @param x numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration
@@ -314,8 +318,8 @@ overlapMetrics <- function(x, thresh) {
 # http://umsl.edu/~adhikarib/cs4130-fall2017/slides/11%20-%20The%20Simulated%20Annealing%20Algorithm.pdf
 #
 
-## Ideas:
-# * there is probably a LP solution to this in ~ 5 lines of code... (work wih Keith on this)
+## TODO:
+# * enforce rank in degenerate cases
 # * secondary objective function: as close as possible to original configuration
 # * cleanup variable names: stats -> overlap, log -> x.log, etc.
 

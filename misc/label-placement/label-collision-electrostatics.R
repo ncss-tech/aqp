@@ -11,29 +11,26 @@ library(viridisLite)
 ## TODO: 
 ## thanks Keith !!!
 
-# compare final configurations
-# allow electrostatic version to "stop" when badness is minimized
 
+## input should be sorted ASC
 
-## input must be sorted ASC
+# x <- sort(c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10))
 
-# x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10)
-
-# x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
+# x <- sort(c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5))
 
 # x <- c(1, rep(5, times = 10), 12)
 
 # x <- sort(1:15 + abs(rnorm(15, mean = 0, sd = 2)))
 
-# x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
+# x <- sort(c(1, 2, 3, rep(4:5, each = 2), 7, 9))
 
-x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
+# x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 # results are visually interesting
 # consider adjusting exponent and constant
-# x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
+x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
 
 
 

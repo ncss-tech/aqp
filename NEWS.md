@@ -21,6 +21,7 @@ New features:
  * coarse fragment classification via `fragmentSieve()` and `fragmentClasses()`
  * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
  * `plotSPC()` can now mark truncated profiles with a ragged bottom
+ * `fixOverlap()` now has two label-placement solvers, based on 1) electrostatics and 2) simulated annealing
 
 Incremental changes, should have no effect on previous code:
  * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
