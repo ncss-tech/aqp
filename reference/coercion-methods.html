@@ -114,18 +114,17 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ idcol       : chr "soil"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ hzidcol     : chr "hzID"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ depthcols   : chr [1:2] "top" "bottom"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ metadata    :List of 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ metadata    :List of 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ aqp_df_class    : chr "data.frame"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ aqp_group_by    : chr ""</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ aqp_hzdesgn     : chr ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ aqp_hzdesgn     : chr "name"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ aqp_hztexcl     : chr ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ depth_units     : chr "cm"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ stringsAsFactors: logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ dateAdded       : Date[1:1], format: "2018-12-27"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ horizons    :'data.frame':	1539 obs. of  18 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ dateAdded       : Date[1:1], format: "2023-04-25"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ horizons    :'data.frame':	1539 obs. of  19 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ silt      : num [1:1539] 10.9 11.2 11.6 10.9 10.8 ...</span>
@@ -142,8 +141,9 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Na        : num [1:1539] 19 34.1 70.2 81.7 100 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ top       : int [1:1539] 0 8 25 55 100 0 10 25 40 70 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ bottom    : int [1:1539] 8 25 55 100 267 10 25 40 70 100 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ hzID      : chr [1:1539] "1" "2" "3" "4" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ name      : chr [1:1539] "H1" "H2" "H3" "H4" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ site        :'data.frame':	296 obs. of  1 variable:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
@@ -160,18 +160,17 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ idcol       : chr "soil"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ hzidcol     : chr "hzID"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ depthcols   : chr [1:2] "top" "bottom"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata    :List of 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata    :List of 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ aqp_df_class    : chr "data.frame"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ aqp_group_by    : chr ""</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ aqp_hzdesgn     : chr ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ aqp_hzdesgn     : chr "name"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ aqp_hztexcl     : chr ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth_units     : chr "cm"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ stringsAsFactors: logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ original.order  : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ target.order    : int [1:1539] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ citation        : chr "F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types based on regression kriging of taxonomic distan"| __truncated__</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dateAdded       : Date[1:1], format: "2018-12-27"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ horizons    :'data.frame':	1539 obs. of  18 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dateAdded       : Date[1:1], format: "2023-04-25"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ horizons    :'data.frame':	1539 obs. of  19 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ soil      : chr [1:1539] "soil1" "soil1" "soil1" "soil1" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sand      : num [1:1539] 32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ silt      : num [1:1539] 10.9 11.2 11.6 10.9 10.8 ...</span>
@@ -188,8 +187,9 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Na        : num [1:1539] 19 34.1 70.2 81.7 100 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ top       : int [1:1539] 0 8 25 55 100 0 10 25 40 70 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ bottom    : int [1:1539] 8 25 55 100 267 10 25 40 70 100 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hzID      : chr [1:1539] "1" "2" "3" "4" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ soil_color: chr [1:1539] "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ name      : chr [1:1539] "H1" "H2" "H3" "H4" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ site        :'data.frame':	296 obs. of  1 variable:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
@@ -202,7 +202,7 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># data.frame output</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">as</span><span class="op">(</span><span class="va">sp5</span>, <span class="st">'data.frame'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	1539 obs. of  18 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	1539 obs. of  19 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ soil      : chr  "soil1" "soil1" "soil1" "soil1" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ sand      : num  32.3 29 34.9 38.2 32.2 25.2 24.4 24 21.2 18.4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ silt      : num  10.9 11.2 11.6 10.9 10.8 ...</span>
@@ -219,8 +219,9 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ Na        : num  19 34.1 70.2 81.7 100 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ top       : int  0 8 25 55 100 0 10 25 40 70 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ bottom    : int  8 25 55 100 267 10 25 40 70 100 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soil_color: chr  "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ hzID      : chr  "1" "2" "3" "4" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soil_color: chr  "#696157" "#4F4740" "#4F4740" "#4F4740" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ name      : chr  "H1" "H2" "H3" "H4" ...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Spatial Objects</span></span></span>
 <span class="r-in"><span><span class="co"># make some random coordinate data for each profile</span></span></span>
@@ -234,14 +235,14 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ data       :'data.frame':	296 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100" "soil101" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ y   : num [1:296] -0.177 0.586 -0.75 0.424 -0.939 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ x   : num [1:296] -0.177 0.586 -0.75 0.424 -0.939 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ y   : num [1:296] -0.474 -0.462 -1.085 -0.547 -1.963 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ x   : num [1:296] -0.474 -0.462 -1.085 -0.547 -1.963 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords.nrs : num(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] -0.177 0.586 -0.75 0.424 -0.939 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] -0.474 -0.462 -1.085 -0.547 -1.963 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.43 -2.43 2.79 2.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.19 -2.19 2.68 2.68</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "min" "max"</span>
@@ -253,11 +254,11 @@ Possible endpoints include: list, data.frame, SpatialPointsDataFrame and Spatial
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">as</span><span class="op">(</span><span class="va">sp5</span>, <span class="st">'SpatialPoints'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> only site data are extracted</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] -0.177 0.586 -0.75 0.424 -0.939 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ coords     : num [1:296, 1:2] -0.474 -0.462 -1.085 -0.547 -1.963 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.43 -2.43 2.79 2.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ bbox       : num [1:2, 1:2] -2.19 -2.19 2.68 2.68</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ : chr [1:2] "min" "max"</span>
