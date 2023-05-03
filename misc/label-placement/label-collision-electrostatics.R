@@ -27,20 +27,33 @@ library(viridisLite)
 
 # x <- c(1, 2, 3, rep(4:5, each = 2), 7, 9)
 
-# x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
+x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 # results are visually interesting
 # consider adjusting exponent and constant
-x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
+# x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
 
 
 
 length(x)
 
-# static electrical force between two charged particles
-electricForce <- function(Q1, Q2, k, d, tiny = 0.1, ex = 2, const = 0.25) {
+#' @title Simulate static electrical force between two charged particles
+#'
+#' @param Q1 numeric, charge on particle 1 
+#' @param Q2 numeric, charge on particle 2
+#' @param k numeric, empirical constant
+#' @param d numeric, distance between charges 
+#' @param tiny numeric, number used to represent very small distances (avoid division by 0)
+#' @param ex numeric, exponent used in distance-weighting
+#' @param const numeric, constant used in distance weighting function, increase to dampen oscillation 
+#' 
+#' @return numeric
+#'
+#' @author D.E. Beaudette and K.C. Thompson
+#'
+.electricForce <- function(Q1, Q2, k, d, tiny = 0.1, ex = 2, const = 0.25) {
   
   # if 0-distance, force is infinite
   # use a small number
@@ -57,13 +70,34 @@ electricForce <- function(Q1, Q2, k, d, tiny = 0.1, ex = 2, const = 0.25) {
 
 
 
-simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
+#' @title Label placement based on a simulation of electrostatic forces
+#'
+#' @param x numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration
+#' @param thresh numeric, overlap threshold, same as in [fixOverlap()]
+#' @param k.start numeric (typically between 0.01 and 2), initial electrical force constant
+#' @param maxIter integer, maximum number of iterations before giving up
+#' 
+#' @author D.E. Beaudette and K.C. Thompson
+#'
+#' @return
+#' 
+.simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
   
+  # original configuration
   x.orig <- x
   x.n <- length(x)
   
+  # storage for new configurations / total force / const
   xnew <- list()
   F_total <- rep(NA_real_, times = maxIter)
+  cost <- rep(NA_real_, times = maxIter)
+  
+  ## constants used to control effect of force on charged particles
+  # mass
+  .m <- 10
+  
+  # time step
+  .t <- 1
   
   for(i in 1:maxIter) {
     
@@ -74,7 +108,7 @@ simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
     diag(m) <- NA
     
     # repelling forces (same charge) between all particles
-    .F <- electricForce(1, 1, k = k.start, d = m)
+    .F <- .electricForce(1, 1, k = k.start, d = m)
     
     # negative forces are to the left
     # lower triangle is used for particles to the right of any given position
@@ -87,10 +121,12 @@ simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
     # attractive forces between each particle and its original position
     # weaker than repelling forces
     .offset <- x.orig - x
+    
     # direction is based on offset vector
     .direction <- sign(.offset)
+    
     # force vector: negative <--- | ---> positive
-    .F_attr <- electricForce(0.5, 0.5, k = k.start, d = abs(.offset), tiny = 0.1)
+    .F_attr <- .electricForce(0.5, 0.5, k = k.start, d = abs(.offset), tiny = 0.1)
     
     ## hack
     # if attractive force is > repelling force, set repelling force to 0
@@ -104,15 +140,9 @@ simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
     #   rbind(x, x.orig, .direction, .F_repl, .F_attr, .F_net)
     # )
     
-    # mass
-    .m <- 10
-    
-    # time step
-    .t <- 1
-    
-    # displacement vector
+    # displacement vector: d = 1/2 F/m * t
     # negative <--- | ---> positive
-    .d <- 1/2 * (.F_net/.m) * .t^1
+    .d <- 1/2 * (.F_net / .m) * .t^1
     
     # displacement of boundary points is always 0
     .d[1] <- 0
@@ -130,31 +160,41 @@ simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
     # update locations
     x <- xnew[[i]]
     
-    # check overlap given threshold
-    # if none, stop simulation
-    .fo <- findOverlap(x, thresh = thresh)
-    if(length(.fo) < 1) {
+    # compute overlap metrics at threshold
+    .om <- overlapMetrics(x, thresh = thresh)
+    cost[i] <- .om$ov
+    
+    ## TODO: save configurations in case of multiple local minima
+    ##       -> return to lowest cost configuration
+    
+    # stop simulation if there is no overlap in this iteration
+    if(length(.om$idx) < 1) {
       break
     }
     
-    ## TODO: consider removing this stopping condition
-    # stop when change in total force is very small
-    if(i > 2) {
-      if(min(abs(diff(F_total)), na.rm = TRUE) < 0.0001) {
-        break
-      }  
-    }
+    ## no longer using this criteria
+    # # stop when change in total force is very small
+    # if(i > 2) {
+    #   if(min(abs(diff(F_total)), na.rm = TRUE) < 0.0001) {
+    #     break
+    #   }  
+    # }
     
   }
+  
+  # done with iterations
+  message(sprintf("%s iterations", i))
   
   # flatten
   xnew <- do.call('rbind', xnew)
   
   # check for convergence
-  .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x) & length(.fo) < 1)
+  .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x) & length(.om$idx) < 1)
   
+  # compile full results
   .res <- list(
     F_total = na.omit(F_total), 
+    cost = na.omit(cost),
     xnew = xnew, 
     converged = .converged
   )
@@ -174,15 +214,15 @@ cols <- colorRampPalette(cols)(length(x))
 
 ## TODO: animate this
 
-system.time(z <- simParticles(x, k.start = 0.5, maxIter = 500))
+system.time(z <- .simParticles(x, k.start = 0.5, maxIter = 500))
 .n <- nrow(z$xnew)
 
 par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
 layout(matrix(c(1, 2, 3, 4), ncol = 2, nrow = 2), heights = c(0.33, 0.66))
 
-plot(z$F_total, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(0, .n))
+plot(z$cost, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(0, .n))
 mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 0, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
-matplot(z$xnew, type = 'l', lty = 1, las = 1, axes = FALSE, col = cols)
+matplot(z$xnew, type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1)
 
 points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
 points(x = rep(.n, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)

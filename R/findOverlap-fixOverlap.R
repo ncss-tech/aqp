@@ -19,10 +19,13 @@ findOverlap <- function(x, thresh) {
   # all pair-wise distance
   d <- dist(x)
   m <- as.matrix(d)
+  
   # diagonal isn't used here
   diag(m) <- NA
+  
   # find matrix elements
   idx <- which(m < thresh)
+  
   # use upper-triangle indexes to find elements in original vector
   # only uniquely affected elements
   col.idx <- unique(col(m)[idx])
@@ -45,6 +48,8 @@ findOverlap <- function(x, thresh) {
 #'   * `idx`: unique index to overlapping elements in `x`
 #'   * `ov`: normalized overlap (see details)
 #'   
+#' 
+#' 
 #' 
 #' @export
 #'
@@ -158,7 +163,7 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with information about objective functions and decisions made during iteration.
 #' 
-#' @author D.E. Beaudette
+#' @author D.E. Beaudette and K.C. Thompson
 #' @export
 #'
 #' @examples 
