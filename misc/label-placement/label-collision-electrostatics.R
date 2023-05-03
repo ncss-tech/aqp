@@ -31,6 +31,8 @@ library(viridisLite)
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
+# results are visually interesting
+# consider adjusting exponent and constant
 x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
 
 
