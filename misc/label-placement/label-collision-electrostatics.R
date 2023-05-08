@@ -1,6 +1,4 @@
 library(aqp)
-library(RColorBrewer)
-library(viridisLite)
 
 
 ##
@@ -38,13 +36,13 @@ x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
 # cols <- viridisLite::viridis(length(x))
 # cols <- mako(length(x))
 
-cols <- brewer.pal(9, 'Spectral')
+cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
 cols <- colorRampPalette(cols)(length(x))
 
 
 ## TODO: animate this
 
-system.time(z <- aqp:::.simParticles(x, k.start = 0.5, maxIter = 500))
+system.time(z <- aqp:::.simParticles(x, thresh = 0.1, k.start = 0.5, maxIter = 500))
 .n <- nrow(z$xnew)
 
 par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
