@@ -1274,11 +1274,11 @@ plotSPC <- function(
           # print(
           #   sprintf(
           #     "y.thresh: %s   |   adj: %s",
-          #     signif(y.thresh, 3), 
+          #     signif(y.thresh, 3),
           #     signif(.adj, 3)
           #   )
           # )
-          
+
           
           # must include top + bottom depths for collision detection
           hzd.txt.y.fixed <- suppressMessages(fixOverlap( 
@@ -1288,7 +1288,9 @@ plotSPC <- function(
             max.x = y0[nh], 
             adj = .adj,
             k = 20,
-            trace = FALSE
+            trace = FALSE,
+            method = 'S'
+            # method = 'E', q = 10
           ))
           
           # remove top + bottom horizon depths
@@ -1313,6 +1315,7 @@ plotSPC <- function(
             } else {
               ## TODO: consider a message or keeping track of which profiles
               # print(.LAI)
+              # print('not adjusting')
             }
           }
           

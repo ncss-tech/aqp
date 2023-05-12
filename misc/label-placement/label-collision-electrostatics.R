@@ -1,5 +1,4 @@
-library(aqp)
-
+devtools::load_all()
 
 ##
 ## nutty idea: label collision fixes via simulation of electrostatic charged particles
@@ -14,6 +13,7 @@ library(aqp)
 
 # x <- sort(c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10))
 
+# impossible for both
 # x <- sort(c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5))
 
 # x <- c(1, rep(5, times = 10), 12)
@@ -25,16 +25,32 @@ library(aqp)
 # x <- sort(c(1, 12, 5, 5, 4, 4, 6, 6, 6, 6, 6))
 
 # x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
-
-# results are visually interesting
-# consider adjusting exponent and constant
-x <- jitter(c(1, rep(25, times = 48), 50), factor = 10)
-
+ 
+# .thresh <- 0.6
+# .q <- 10
 
 
+## simulated  horizon depths
+x <- c(0, 2, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
+.thresh <- 6
+.q <- 60
 
-# cols <- viridisLite::viridis(length(x))
-# cols <- mako(length(x))
+
+## 
+x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
+.thresh <- 9
+.q <- 60
+
+
+# 
+# ## edge conditions
+# x <- c(0, 3, 20, 35, 40, 55, 90, 120, 145, 150)
+# .thresh <- 7
+# .q <- 60
+
+
+## note: in general, as the complexity increases (larger thresholds, more overlap), q need to be larger
+
 
 cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
 cols <- colorRampPalette(cols)(length(x))
@@ -42,33 +58,34 @@ cols <- colorRampPalette(cols)(length(x))
 
 ## TODO: animate this
 
-system.time(z <- aqp:::.simParticles(x, thresh = 0.1, k.start = 0.5, maxIter = 500))
+system.time(z <- fixOverlap(x, thresh = .thresh, method = 'E', maxIter = 100, trace = TRUE, q = .q))
 .n <- nrow(z$xnew)
 
 par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
 layout(matrix(c(1, 2, 3, 4), ncol = 2, nrow = 2), heights = c(0.33, 0.66))
 
-plot(z$cost, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(0, .n))
+plot(seq_along(z$cost), z$cost, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(1, .n))
 mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 0, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
-matplot(z$xnew, type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1)
+matplot(rbind(x, z$xnew), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1)
 
 points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
-points(x = rep(.n, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)
+points(x = rep(.n + 1, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)
 
 text(x = 1, y = x, col = cols, labels = seq_along(x), cex = 0.66, font = 2, pos = 2)
-text(x = .n, y = z$xnew[.n, ], col = cols, labels = seq_along(x), cex = 0.66, font = 2, pos = 4)
+text(x = .n + 1, y = z$xnew[.n, ], col = cols, labels = seq_along(x), cex = 0.66, font = 2, pos = 4)
 
-axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = 'white', las = 1, cex.axis = 0.6)
+axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = par('fg'), las = 1, cex.axis = 0.6)
 
 
 
-## fixOverlap doesn't always preserve rank ordering
+## SANN_1D doesn't always preserve rank ordering
+##  ->> not designed to use unsorted input
 ##  ->> maybe impossible with ties in x?
 
-system.time(z <- fixOverlap(x, trace = TRUE, maxIter = 1000))
+system.time(z <- fixOverlap(x, thresh = .thresh, method = 'S', trace = TRUE, maxIter = 1000))
 .n <- nrow(z$states)
 
-plot(z$stats, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(0, .n))
+plot(seq_along(z$stats), z$stats, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(1, .n))
 mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 0, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
 
 matplot(z$states, type = 'l', lty = 1, las = 1, axes = FALSE, col = cols)
@@ -79,6 +96,75 @@ points(x = rep(.n, times = length(x)), y = z$x, cex = 0.66, pch = 16, col = cols
 text(x = 1, y = z$states[1, ], col = cols, labels = seq_along(x), cex = 0.66, font = 2, pos = 2)
 text(x = .n, y = z$x, col = cols, labels = seq_along(x), cex = 0.66, font = 2, pos = 4)
 
-axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = 'white', las = 1, cex.axis = 0.6)
+axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = par('fg'), las = 1, cex.axis = 0.6)
+
+
+
+dev.off()
+
+## 
+x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
+.thresh <- 9
+
+
+z.s <- fixOverlap(x, thresh = .thresh, method = 'S')
+z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 50)
+
+s <- rep(1, times = length(x))
+r <- rank(x)
+
+par(mar = c(3, 6, 0, 1))
+plot(x, s, type = 'n', axes = FALSE, xlab = '', ylab = '', ylim = c(0.8, 1.2))
+segments(x0 = x, x1 = z.s, y0 = s, y1 = s + 0.1, col = 'grey')
+segments(x0 = x, x1 = z.e, y0 = s, y1 = s - 0.1, col = 'grey')
+text(z.s, s + 0.1, labels = r, pch = 'E', font = 2, cex = 1, pos = 3)
+text(z.e, s - 0.1, labels = r, pch = 'E', font = 2, cex = 1, pos = 1)
+points(x, s, pch = 22, cex = 1.5, bg = 'royalblue')
+axis(side = 1, at = pretty(x, n = 10))
+mtext('Electrostatics', side = 2, at = 0.9, las = 1, cex = 1)
+mtext('Simulated\nAnnealing', side = 2, at = 1.1, las = 1, cex = 1)
+
+
+
+library(soilDB)
+
+# some interesting soil series
+s <- c('leon', 'musick', 'clarksville', 'pardee', 'lucy', 'pierre', 'drummer', 'zook', 'san joaquin')
+
+# get basic morphology and extended data from SoilWeb cache
+osds.full <- fetchOSD(s, extended = TRUE)
+
+# save copy of SoilProfileCollection for later
+osds <- osds.full$SPC
+
+par(mar = c(0, 0, 0, 0))
+plotSPC(osds, cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
+
+plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
+
+
+
+o <- osds[6, ]
+x <- unique(c(o[, , .TOP], o[, , .BOTTOM]))
+
+z.s <- fixOverlap(x, thresh = 9.1, method = 'S')
+z.e <- fixOverlap(x, thresh = 9.1, method = 'E', q = 25)
+
+s <- rep(1, times = length(x))
+r <- rank(x)
+
+par(mar = c(3, 6, 0, 1))
+plot(x, s, type = 'n', axes = FALSE, xlab = '', ylab = '', ylim = c(0.8, 1.2))
+segments(x0 = x, x1 = z.s, y0 = s, y1 = s + 0.1, col = 'grey')
+segments(x0 = x, x1 = z.e, y0 = s, y1 = s - 0.1, col = 'grey')
+text(z.s, s + 0.1, labels = r, pch = 'E', font = 2, cex = 1, pos = 3)
+text(z.e, s - 0.1, labels = r, pch = 'E', font = 2, cex = 1, pos = 1)
+points(x, s, pch = 22, cex = 1.5, bg = 'royalblue')
+axis(side = 1, at = pretty(x))
+mtext('Electrostatics', side = 2, at = 0.9, las = 1, cex = 1)
+mtext('Simulated\nAnnealing', side = 2, at = 1.1, las = 1, cex = 1)
+
+
+
 
 

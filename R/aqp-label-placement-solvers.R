@@ -5,7 +5,7 @@
 #'
 #' @param Q1 numeric, charge on particle 1 
 #' @param Q2 numeric, charge on particle 2
-#' @param k numeric, empirical constant
+#' @param Qk numeric, empirical constant
 #' @param d numeric, distance between charges 
 #' @param tiny numeric, number used to represent very small distances (avoid division by 0)
 #' @param ex numeric, exponent used in distance-weighting
@@ -19,60 +19,73 @@
 #' 
 #' @examples 
 #' 
-#' aqp:::.electricForce(Q1 = 1, Q2 = 1, k = 0.5, d = 5)
+#' aqp:::.electricForce(Q1 = 1, Q2 = 1, Qk = 0.5, d = 5)
 #'
-.electricForce <- function(Q1, Q2, k, d, tiny = 0.1, ex = 2, const = 0.25) {
+.electricForce <- function(Q1, Q2, Qk, d, tiny = 0.0001, ex = 2, const = 0.25) {
   
   # if 0-distance, force is infinite
   # use a small number
   d <- ifelse(d < tiny, tiny, d)
   
   # Keith: add constant reduction in force
-  # k * Q1 * Q2/ (d^ex + const)
+  # Qk * Q1 * Q2/ (d^ex + const)
   
   # increase const --> dampen ringing
-  res <- (k * Q1 * Q2 ) / (d^ex + const)
+  res <- (Qk * Q1 * Q2 ) / (d^ex + const)
   
   return(res)
 }
 
 
 
-## TODO: allow for min.x | min.y as defined in parent function
-
 
 #' @title Label placement based on a simulation of electrostatic forces
 #'
 #' @param x numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration
 #' @param thresh numeric, overlap threshold, same as in [fixOverlap()]
-#' @param k.start numeric (typically between 0.01 and 2), initial electrical force constant
+#' @param q numeric electrical charge
 #' @param maxIter integer, maximum number of iterations before giving up
 #' 
 #' @author D.E. Beaudette and K.C. Thompson
 #'
 #' @return list
-#' 
-#' @noRd
+#' @export
 #' 
 #' @examples 
 #' 
-#' z <- aqp:::.simParticles(c(1, 2, 3, 3.5, 4, 6, 8, 10))
+#' x <- c(1, 2, 3, 3, 5, 6, 7, 8, 9, 10)
+#' z <- electroStatics_1D(x, thresh = 0.65, trace = TRUE, q = 1)
+#' txt <- sprintf("Converged %s (%s iterations)", z$converged, length(z$cost))
 #' 
 #' plot(
-#' z$F_total, 
+#' seq_along(z$cost),
 #' z$cost, 
 #' las = 1, 
-#' xlab = 'Total Force', 
+#' xlab = 'Iteration', 
 #' ylab = 'Overlap Cost', 
 #' type = 'b', 
-#' xlim = rev(range(z$F_total))
+#' main = txt
 #' )
 #' 
-.simParticles <- function(x, thresh = 0.6, k.start = 0.1, maxIter = 100) {
+#' abline(h = 0, lty = 2, col = 2)
+#' 
+
+## TODO: remove place-holder arguments until fully generalized
+
+## TODO: what is a reasonable starting value for q?
+##       -> too low, not enough perturbation, does not converge
+##       -> too high, chaos
+
+
+electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.10, maxIter = 100, tiny = 0.0001, const = thresh * 2, trace = FALSE, min.x = NULL, max.x = NULL, adj = NULL, k = NULL) {
+  
+  # pre-sort ASC, just in case
+  x <- sort(x)
   
   # original configuration
   x.orig <- x
   x.n <- length(x)
+  r <- range(x)
   
   # storage for new configurations / total force / const
   xnew <- list()
@@ -86,7 +99,37 @@
   # time step
   .t <- 1
   
+  # initial attractive force constant (Qk) to uniform spacing
+  .Fu <- 2
+  
+  # exponential decay schedule for particle charge
+  # from t = 1 -> maxIter
+  .q <- q * exp(-1 * chargeDecayRate * 1:maxIter)
+  
+  # simulation
   for(i in 1:maxIter) {
+    
+    # compute initial overlap metrics at threshold
+    .om <- overlapMetrics(x, thresh = thresh)
+    
+    # constraints:
+    # rank order
+    .rank_test <- all(rank(x) == seq_along(x))
+    # overlap test
+    .overlap_test <- length(.om$idx) < 1
+    
+    # stop simulation if there is nothing left to do
+    if(.rank_test & .overlap_test) {
+      xnew[[i]] <- x
+      break
+    }
+    
+    # if rank order is violated
+    # progressively increase Qk for attractive force to uniform spacing
+    # this will progressively pull particles into the "right" order
+    if(!.rank_test) {
+      .Fu <- .Fu + (.Fu * QkA_GrowthRate)
+    }
     
     # pair-wise distances
     m <- as.matrix(dist(x))
@@ -95,7 +138,7 @@
     diag(m) <- NA
     
     # repelling forces (same charge) between all particles
-    .F <- .electricForce(1, 1, k = k.start, d = m)
+    .F <- .electricForce(Q1 = q, Q2 = q, Qk = 1, d = m, tiny = tiny, const = const)
     
     # negative forces are to the left
     # lower triangle is used for particles to the right of any given position
@@ -105,19 +148,18 @@
     # force vector: negative <--- | ---> positive
     .F_repl <- colSums(.F, na.rm = TRUE)
     
-    # attractive forces between each particle and its original position
+    # attractive forces between each particle <--> uniform spacing, rank order
     # weaker than repelling forces
-    .offset <- x.orig - x
+    
+    # uniform spacing distances
+    .offset <- seq(from = r[1], to = r[2], length.out = x.n)
     
     # direction is based on offset vector
     .direction <- sign(.offset)
     
     # force vector: negative <--- | ---> positive
-    .F_attr <- .electricForce(0.5, 0.5, k = k.start, d = abs(.offset), tiny = 0.1)
-    
-    ## hack
-    # if attractive force is > repelling force, set repelling force to 0
-    .F_repl <- ifelse(abs(.F_attr) > abs(.F_repl), 0, .F_repl)
+    # weaker than repelling forces, set via Qk arg
+    .F_attr <- .electricForce(Q1 = q, Q2 = q, Qk = .Fu, d = abs(.offset), tiny = tiny, const = const)
     
     # sum attractive + repelling forces
     .F_net <- (.direction * .F_attr) + .F_repl
@@ -131,6 +173,10 @@
     # negative <--- | ---> positive
     .d <- 1/2 * (.F_net / .m) * .t^1
     
+    # displacement is only applied to overlapping points
+    .ignore <- setdiff(seq_along(x), .om$idx)
+    .d[.ignore] <- 0
+    
     # displacement of boundary points is always 0
     .d[1] <- 0
     .d[x.n] <- 0
@@ -139,33 +185,24 @@
     # displacement can't be outside of bounds
     xnew[[i]] <- pmin(pmax(x + .d, x.orig[1]), x.orig[x.n])
     
-    # rank can't change... how can you fix that?
-    
     # keep track of total force in system at time step i
     F_total[i] <- sum(abs(.F_net))
     
     # update locations
     x <- xnew[[i]]
     
-    # compute overlap metrics at threshold
+    # exponential decay of all charges with each iteration
+    q <- .q[i]
+    
+    # compute overlap metrics at threshold, after displacement
     .om <- overlapMetrics(x, thresh = thresh)
     cost[i] <- .om$ov
     
-    ## TODO: save configurations in case of multiple local minima
-    ##       -> return to lowest cost configuration
-    
     # stop simulation if there is no overlap in this iteration
-    if(length(.om$idx) < 1) {
+    # AND rank order is preserved
+    if(all(rank(x) == seq_along(x)) & length(.om$idx) < 1) {
       break
     }
-    
-    ## no longer using this criteria
-    # # stop when change in total force is very small
-    # if(i > 2) {
-    #   if(min(abs(diff(F_total)), na.rm = TRUE) < 0.0001) {
-    #     break
-    #   }  
-    # }
     
   }
   
@@ -175,21 +212,33 @@
   # flatten
   xnew <- do.call('rbind', xnew)
   
+  ## TODO: optionally return to lowest cost configuration
+  ## TODO: optionally re-run with lower / higher q
+  
   # check for convergence
+  # 1. no overlap
+  # 2. no change in rank order
   .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x) & length(.om$idx) < 1)
   
-  # compile full results
-  .res <- list(
-    F_total = na.omit(F_total), 
-    cost = na.omit(cost),
-    xnew = xnew, 
-    converged = .converged
-  )
+  if(trace) {
+    # compile full results
+    .res <- list(
+      F_total = as.vector(na.omit(F_total)), 
+      cost = as.vector(na.omit(cost)),
+      xnew = xnew, 
+      converged = .converged
+    )
+  } else {
+    # only the final configuration
+    .res <- as.vector(xnew[nrow(xnew), ])
+  }
+  
   
   return(.res)
 }
 
 
+## TODO: this will be replaced by overlapMetrics()
 
 #' @title Find Overlap within a Sequence
 #' @description Establish which elements within a vector of horizontal positions overlap beyond a given threshold
@@ -335,7 +384,7 @@ overlapMetrics <- function(x, thresh) {
 #'   
 #'   * increase `k`
 #' 
-#' @param x vector of horizontal positions
+#' @param x vector of horizontal positions, ideally pre-sorted
 #' 
 #' @param thresh horizontal threshold defining "overlap" or distance between elements of `x`. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).
 #' 
@@ -416,8 +465,7 @@ overlapMetrics <- function(x, thresh) {
 #' # -: rejected perturbation
 #' table(z$log)
 #' 
-fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 10) {
-  
+SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 10) {
   
   # sanity check: cannot have perfect overlap (duplicates) in the initial configuration
   # jitter duplicates will resolve the problem
@@ -629,10 +677,37 @@ fixOverlap <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2
       converged = TRUE,
       states = states
     ))
+  } else {
+    # best configuration only
+    return(x)
   }
   
-  
-  return(x)
 }
+
+
+
+
+
+fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...) {
+  
+  # sanity checks on method
+  method <- match.arg(method)
+  
+  .res <- switch(method, 
+                 'E' = {
+                   electroStatics_1D(x = x, thresh = thresh, trace = trace, ...) 
+                 },
+                 
+                 'S' = {
+                   SANN_1D(x = x, thresh = thresh, trace = trace, ...) 
+                 }
+  )
+  
+  return(.res)
+  
+}
+
+
+
 
 
