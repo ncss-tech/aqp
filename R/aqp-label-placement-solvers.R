@@ -1,12 +1,110 @@
 
 
-#' @title Modified solution to a two-charge electrostatic force problem.
-#' @description Compute the static electrical force between two charged particles. Used internally for label placement in the presence of overlap.
+## TODO: this will be replaced by overlapMetrics()
+
+#' @title Find Overlap within a Sequence
+#' @description Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 #'
-#' @param Q1 numeric, charge on particle 1 
-#' @param Q2 numeric, charge on particle 2
+#' @param x vector of relative horizontal positions, one for each profile
+#' @param thresh threshold defining "overlap", typically < 1
+#' 
+#' @return unique index to affected (overlapping) elements in `x`
+#' 
+#' @export
+#'
+#' @examples 
+#' 
+#' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+#' 
+#' findOverlap(x, thresh = 0.5)
+#'
+findOverlap <- function(x, thresh) {
+  # all pair-wise distance
+  d <- dist(x)
+  m <- as.matrix(d)
+  
+  # diagonal isn't used here
+  diag(m) <- NA
+  
+  # find matrix elements
+  idx <- which(m < thresh)
+  
+  # use upper-triangle indexes to find elements in original vector
+  # only uniquely affected elements
+  col.idx <- unique(col(m)[idx])
+  
+  return(col.idx)
+}
+
+
+
+#' @title Find and Quantify Overlap within a 1D Sequence
+#' 
+#' @description Desc.
+#' 
+#' @param x vector of relative horizontal positions, one for each profile
+#' @param thresh threshold defining "overlap", typically < 1
+#' 
+#'  @return a `list`:
+#'   * `idx`: unique index to overlapping elements in `x`
+#'   * `ov`: normalized overlap (see details)
+#' 
+#' @export
+#'
+#' @examples 
+#' 
+#' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+#' 
+#' overlapMetrics(x, thresh = 0.5)
+#' 
+#' 
+overlapMetrics <- function(x, thresh) {
+  
+  
+  ## TODO: 
+  # convert to diff(x) vs. dist(x)
+  
+  # all pair-wise distance
+  d <- dist(x)
+  m <- as.matrix(d)
+  
+  # diagonal isn't used here
+  diag(m) <- NA
+  
+  # find matrix elements
+  idx <- which(m < thresh)
+  
+  # use upper-triangle indexes to find elements in original vector
+  # only uniquely affected elements
+  col.idx <- unique(col(m)[idx])
+  
+  # overlap = (thresh - distance[i,j]) when d < thresh, otherwise overlap = 0
+  # using full matrix, elements are mirrored over diagonal so divide by 2
+  ov <- sum(thresh - m[idx]) / 2
+  
+  # normalize overlap by dividing by total possible overlap
+  # all elements overlapping results in values > 1
+  # ov_norm = ov / thresh * length(x)
+  ov <- ov / (thresh * length(x))
+  
+  res <- list(
+    idx = col.idx,
+    ov = ov
+  )
+  
+  return(res)
+}
+
+
+
+
+#' @title Simulation of electrostatic force between two charged particles
+#' @description This function computes a "force" (attraction or repulsion) between two charged "particles" (usually labels or other graphical elements), using a modification of the 1D electrostatic force equation. This function is used internally for label placement in the presence of overlap, as in [fixOverlap()].
+#'
+#' @param Q1 numeric, charge on particle 1 (e.g. a label)
+#' @param Q2 numeric, charge on particle 2 (e.g. another label)
 #' @param Qk numeric, empirical constant
-#' @param d numeric, distance between charges 
+#' @param d numeric, distance between particles
 #' @param tiny numeric, number used to represent very small distances (avoid division by 0)
 #' @param ex numeric, exponent used in distance-weighting
 #' @param const numeric, constant used in distance weighting function, increase to dampen oscillation 
@@ -17,19 +115,21 @@
 #' 
 #' @noRd
 #' 
+#' @seealso [fixOverlap()]
+#' 
 #' @examples 
 #' 
 #' aqp:::.electricForce(Q1 = 1, Q2 = 1, Qk = 0.5, d = 5)
 #'
 .electricForce <- function(Q1, Q2, Qk, d, tiny = 0.0001, ex = 2, const = 0.25) {
   
-  # if 0-distance, force is infinite
-  # use a small number
+  # fix for 0-distance where force is infinite
   d <- ifelse(d < tiny, tiny, d)
   
-  # Keith: add constant reduction in force
-  # Qk * Q1 * Q2/ (d^ex + const)
+  # traditional definition of electrostatic force
+  # (Qk * Q1 * Q2) / (d^ex + const)
   
+  # modified version, c/o K.C. Thompson
   # increase const --> dampen ringing
   res <- (Qk * Q1 * Q2 ) / (d^ex + const)
   
@@ -42,18 +142,37 @@
 #' @title Label placement based on a simulation of electrostatic forces
 #'
 #' @param x numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration
+#' 
 #' @param thresh numeric, overlap threshold, same as in [fixOverlap()]
-#' @param q numeric electrical charge
+#' 
+#' @param q numeric, electrical charge
+#' 
+#' @param chargeDecayRate numeric, exponential decay rate constant for `q` as a function of iteration `i`
+#' 
+#' @param QkA_GrowthRate numeric, growth rate constant for `Qk` applied to attraction to uniform spacing of labels, invoked when rank order is violated during the simulation
+#' 
 #' @param maxIter integer, maximum number of iterations before giving up
+#' 
+#' @param tiny numeric, 0-values replaced by this number to avoid division by 0 and infinite forces
+#' 
+#' @param const numeric, empirical constant added to the 1D electrostatic force equation to dampen oscillation: `(Qk * Q1 * Q2) / (d^ex + const)`
+#' 
+#' @param trace logical, include diagnostic output
+#' 
+#' @param \dots not used, absorbs arguments from [fixOverlap()]
 #' 
 #' @author D.E. Beaudette and K.C. Thompson
 #'
-#' @return list
+#' @return When `trace = TRUE` as `list`, otherwise numeric vector.
+#' 
 #' @export
 #' 
 #' @examples 
 #' 
+#' # vector of object locations, with potential overlap
 #' x <- c(1, 2, 3, 3, 5, 6, 7, 8, 9, 10)
+#' 
+#' # full diagnostic output
 #' z <- electroStatics_1D(x, thresh = 0.65, trace = TRUE, q = 1)
 #' txt <- sprintf("Converged %s (%s iterations)", z$converged, length(z$cost))
 #' 
@@ -69,15 +188,18 @@
 #' 
 #' abline(h = 0, lty = 2, col = 2)
 #' 
-
-## TODO: remove place-holder arguments until fully generalized
+#' # final configuration only
+#' xnew <- electroStatics_1D(x, thresh = 0.65, q = 1)
+#' 
+#' cbind(x, round(xnew, 2))
+#' 
 
 ## TODO: what is a reasonable starting value for q?
 ##       -> too low, not enough perturbation, does not converge
 ##       -> too high, chaos
 
 
-electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.10, maxIter = 100, tiny = 0.0001, const = thresh * 2, trace = FALSE, min.x = NULL, max.x = NULL, adj = NULL, k = NULL) {
+electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.10, maxIter = 100, tiny = 0.0001, const = thresh * 2, trace = FALSE, ...) {
   
   # pre-sort ASC, just in case
   x <- sort(x)
@@ -238,124 +360,14 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
 }
 
 
-## TODO: this will be replaced by overlapMetrics()
-
-#' @title Find Overlap within a Sequence
-#' @description Establish which elements within a vector of horizontal positions overlap beyond a given threshold
-#'
-#' @param x vector of relative horizontal positions, one for each profile
-#' @param thresh threshold defining "overlap", typically < 1
-#' 
-#' @return unique index to affected (overlapping) elements in `x`
-#' 
-#' @export
-#'
-#' @examples 
-#' 
-#' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
-#' 
-#' findOverlap(x, thresh = 0.5)
-#'
-findOverlap <- function(x, thresh) {
-  # all pair-wise distance
-  d <- dist(x)
-  m <- as.matrix(d)
-  
-  # diagonal isn't used here
-  diag(m) <- NA
-  
-  # find matrix elements
-  idx <- which(m < thresh)
-  
-  # use upper-triangle indexes to find elements in original vector
-  # only uniquely affected elements
-  col.idx <- unique(col(m)[idx])
-  
-  return(col.idx)
-}
-
-
-
-## TODO: this will replace findOverlap()
-
-#' @title Find and Quantify Overlap within a 1D Sequence
-#' 
-#' @description Desc.
-#' 
-#' @param x vector of relative horizontal positions, one for each profile
-#' @param thresh threshold defining "overlap", typically < 1
-#' 
-#'  @return a `list`:
-#'   * `idx`: unique index to overlapping elements in `x`
-#'   * `ov`: normalized overlap (see details)
-#'   
-#' 
-#' 
-#' 
-#' @export
-#'
-#' @examples 
-#' 
-#' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
-#' 
-#' overlapMetrics(x, thresh = 0.5)
-overlapMetrics <- function(x, thresh) {
-  
-  
-  ## TODO: 
-  # convert to diff(x) vs. dist(x)
-  
-  # all pair-wise distance
-  d <- dist(x)
-  m <- as.matrix(d)
-  
-  # diagonal isn't used here
-  diag(m) <- NA
-  
-  # find matrix elements
-  idx <- which(m < thresh)
-  
-  # use upper-triangle indexes to find elements in original vector
-  # only uniquely affected elements
-  col.idx <- unique(col(m)[idx])
-  
-  # overlap = (thresh - distance[i,j]) when d < thresh, otherwise overlap = 0
-  # using full matrix, elements are mirrored over diagonal so divide by 2
-  ov <- sum(thresh - m[idx]) / 2
-  
-  # normalize overlap by dividing by total possible overlap
-  # all elements overlapping results in values > 1
-  # ov_norm = ov / thresh * length(x)
-  ov <- ov / (thresh * length(x))
-  
-  res <- list(
-    idx = col.idx,
-    ov = ov
-  )
-  
-  return(res)
-}
 
 
 
 
 
-## TODO: document this as part of fixOverlap()
-## system energy ~ probability ~ metropolis step
-# energy / cost function
-# these are all length-1 vectors
-# n0: starting cost 
-# n1: resulting cost adjustment i
-# Te: temperature 
-# k: cooling constant (empirically determined)
-.P <- function(n0, n1, Te, k = 1) {
-  if(n1 < n0) {
-    return(1)
-  } else {
-    # delta-E: n1 - n0
-    return(exp(-(n1 - n0) / Te * k))
-  }
-}
+
+
+
 
 
 
@@ -403,6 +415,8 @@ overlapMetrics <- function(x, thresh) {
 #' @param T0 starting temperature
 #' 
 #' @param k cooling constant
+#' 
+#' @param \dots not used, absorbs additional arguments to [fixOverlap()]
 #' 
 #' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with information about objective functions and decisions made during iteration.
 #' 
@@ -465,7 +479,24 @@ overlapMetrics <- function(x, thresh) {
 #' # -: rejected perturbation
 #' table(z$log)
 #' 
-SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 10) {
+SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 10, ...) {
+  
+  # system energy ~ probability ~ metropolis step
+  # energy / cost function
+  # these are all length-1 vectors
+  # n0: starting cost 
+  # n1: resulting cost adjustment i
+  # Te: temperature 
+  # k: cooling constant (empirically determined)
+  .P <- function(n0, n1, Te, k = 1) {
+    if(n1 < n0) {
+      return(1)
+    } else {
+      # delta-E: n1 - n0
+      return(exp(-(n1 - n0) / Te * k))
+    }
+  }
+  
   
   # sanity check: cannot have perfect overlap (duplicates) in the initial configuration
   # jitter duplicates will resolve the problem
@@ -688,6 +719,18 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 
 
 
+#' Title
+#'
+#' @param x 
+#' @param thresh 
+#' @param method 
+#' @param trace 
+#' @param ... 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...) {
   
   # sanity checks on method
