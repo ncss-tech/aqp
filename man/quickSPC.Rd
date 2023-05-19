@@ -9,8 +9,8 @@ quickSPC(
   id = "id",
   d = "depths",
   n = "name",
-  interval = 10,
-  m = "soil_color"
+  m = "soil_color",
+  interval = 10
 )
 }
 \arguments{
@@ -22,9 +22,9 @@ quickSPC(
 
 \item{n}{character, specified when \code{x} is a \code{list}, name of horizon name list element}
 
-\item{interval, }{numeric, typically an integer and only specified when using character templates in mode 2. See Details.}
-
 \item{m}{character, specified when \code{x} is a \code{list}, name of list element containing Munsell color notation}
+
+\item{interval, }{numeric, typically an integer and only specified when using character templates in mode 2. See Details.}
 }
 \value{
 \code{SoilProfileCollection} object
@@ -95,7 +95,21 @@ plotSPC(s, name.style = 'center-center', cex.names = 1)
 # optionally specify:
 # horizon bottom depths in cm
 # soil color in Munsell notation
-x <- 'p1:A+20+10YR 3/3-Bt1+45+10YR 5/6-Bt2+66+2.5YR 6/6-Bt3+100+2.5YR 4/6-Cr+125-R+150'
+x <- c(
+'1. simple:Oe-A-E-Bhs-BC-C',
+'2. full:Oe,10,10YR 2/2-A,20,10YR 3/3-E,30,2.5Y 8/2-Bhs,60,7.5YR 4/6-BC,125,7.5YR 6/4-C,150,10YR 6/2'
+)
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', cex.names = 1)
+
+# use newline (\n) as delimiter, more compact
+x <- 'Oe,10,10YR 2/2
+A,20,10YR 3/3
+E,30,2.5Y 8/2
+Bhs,60,7.5YR 4/6
+BC,125,7.5YR 6/4
+C,150,10YR 6/2'
 
 s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', cex.names = 1)

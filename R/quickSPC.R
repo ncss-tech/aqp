@@ -75,14 +75,22 @@
 #' # soil color in Munsell notation
 #' x <- c(
 #' '1. simple:Oe-A-E-Bhs-BC-C',
-#' '2. full:Oe+10+10YR 2/2-A+20+10YR 3/3-E+30+2.5Y 8/2-Bhs+60+7.5YR 4/6-BC+125+7.5YR 6/4-C+150+10YR 6/2'
+#' '2. full:Oe,10,10YR 2/2-A,20,10YR 3/3-E,30,2.5Y 8/2-Bhs,60,7.5YR 4/6-BC,125,7.5YR 6/4-C,150,10YR 6/2'
 #' )
 #' 
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
 #' 
+#' # use newline (\n) as delimiter, more compact
+#' x <- 'Oe,10,10YR 2/2
+#' A,20,10YR 3/3
+#' E,30,2.5Y 8/2
+#' Bhs,60,7.5YR 4/6
+#' BC,125,7.5YR 6/4
+#' C,150,10YR 6/2'
 #' 
-#' 
+#' s <- quickSPC(x)
+#' plotSPC(s, name.style = 'center-center', cex.names = 1)
 #' 
 #' 
 #' # character template, mode 2
@@ -127,7 +135,7 @@
 ## TODO: 
 # * add vectorization for list-based template
 
-quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 'soil_color') {
+quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', interval = 10) {
   
   # sanity check
   stopifnot(inherits(x, 'list') || inherits(x, 'character'))
@@ -149,8 +157,9 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
       
       # mode 1: "A-Bt-Cr-R" -> random depths
       #         "id:A-Bt-Cr-R" -> random depths
-      #         "id:A+10+10YR 4/4" -> depths + colors specified
-      .m1 <- grepl(pattern = '-', x = x[1], fixed = TRUE)
+      #         "id:A,10,10YR 4/4" -> depths + colors specified
+      #         can also use \n as token delimiter
+      .m1 <- grepl(pattern = '-', x = x[1], fixed = TRUE) || grepl(pattern = '\n', x = x[1], fixed = TRUE)
       
       # mode 2: "A|BtBt|Cr|RRRR" -> proportional depths
       .m2 <- grepl(pattern = '|', x = x[1], fixed = TRUE)
@@ -213,8 +222,8 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
 }
 
 # split extract data from within a token
-.parseExtra <- function(x, d = '+') {
-  .s <- strsplit(x, '+', fixed = TRUE)[[1]]
+.parseExtra <- function(x, d = ',') {
+  .s <- strsplit(x, split = d, fixed = TRUE)[[1]]
   .res <- data.frame(
     name = .s[1],
     bottom = as.numeric(.s[2]),
@@ -227,18 +236,26 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
 # handle character-based templates, mode 1
 # x <- 'A-C-R'
 # x <- 'id:A-C-R'
-# x <- 'id:A+10+7.5YR 3/3
+# x <- 'id:A,10,7.5YR 3/3
+# delimiter can be either '-' or '\n'
 .qSPC.char.1 <- function(x) {
+  
+  # detect delimiter
+  if(grepl(pattern = '\n', x = x[1], fixed = TRUE)) {
+    delim = '\n'
+  } else {
+    delim = '-'
+  }
   
   # detect / extract ID prefix
   .s <- .parseID(x)
   x <- .s$x
   
   # detect extra data
-  .extraFlag <- grepl(pattern = '+', x, fixed = TRUE)
+  .extraFlag <- grepl(pattern = ',', x, fixed = TRUE)
   
   # split token sequence into horizons
-  .names <- strsplit(x, '-', fixed = TRUE)[[1]]
+  .names <- strsplit(x, split = delim, fixed = TRUE)[[1]]
   .nhz <- length(.names)
   
   # sanity check
@@ -295,14 +312,14 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
 
 # handle character-based templates, mode 2
 # x <- 'ApAp|AA|Bh|BhsBhs|Bt1|Bt2Bt2|CCCC|Cr'
-.qSPC.char.2 <- function(x, interval = 10) {
+.qSPC.char.2 <- function(x, delim = '|', interval = 10) {
   
   # detect / extract ID prefix
   .s <- .parseID(x)
   x <- .s$x
   
   # split name sequence into horizons
-  .name.thick <- strsplit(x, '|', fixed = TRUE)[[1]]
+  .name.thick <- strsplit(x, split = delim, fixed = TRUE)[[1]]
   .nhz <- length(.name.thick)
   
   # extract names
