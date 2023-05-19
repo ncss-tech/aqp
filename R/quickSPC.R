@@ -73,10 +73,16 @@
 #' # optionally specify:
 #' # horizon bottom depths in cm
 #' # soil color in Munsell notation
-#' x <- 'p1:A+20+10YR 3/3-Bt1+45+10YR 5/6-Bt2+66+2.5YR 6/6-Bt3+100+2.5YR 4/6-Cr+125-R+150'
+#' x <- c(
+#' '1. simple:Oe-A-E-Bhs-BC-C',
+#' '2. full:Oe+10+10YR 2/2-A+20+10YR 3/3-E+30+2.5Y 8/2-Bhs+60+7.5YR 4/6-BC+125+7.5YR 6/4-C+150+10YR 6/2'
+#' )
 #' 
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
+#' 
+#' 
+#' 
 #' 
 #' 
 #' # character template, mode 2
@@ -249,7 +255,7 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
     .data$soil_color <- parseMunsell(.data$m)
   } else {
     # random horizon thickness
-    .thick <- round(runif(.nhz, min = 5, max = 20))
+    .thick <- round(runif(.nhz, min = 5, max = 40))
     
     # convert to top/bottom depths
     .bottom <- cumsum(.thick)
