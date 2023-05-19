@@ -14,7 +14,8 @@ SANN_1D(
   trace = FALSE,
   tiny = 1e-04,
   T0 = 500,
-  k = 10
+  k = 10,
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ SANN_1D(
 \item{T0}{starting temperature}
 
 \item{k}{cooling constant}
+
+\item{\dots}{not used, absorbs additional arguments to \code{\link[=fixOverlap]{fixOverlap()}}}
 }
 \value{
 When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with information about objective functions and decisions made during iteration.

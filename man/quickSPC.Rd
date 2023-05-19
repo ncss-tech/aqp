@@ -81,12 +81,21 @@ s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', cex.names = 1)
 
 
-# specify profile IDs using "ID:" prefix
+# optionally specify profile IDs using "ID:" prefix
 x <- c(
 'P1:A-Bt1-Bt2-Bt3-Cr-R',
 'P2:A-C1-C2-C3-C4-Ab',
 'P3:Ap-A-A/E-E-Bhs-Cr'
 )
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', cex.names = 1)
+
+
+# optionally specify:
+# horizon bottom depths in cm
+# soil color in Munsell notation
+x <- 'p1:A+20+10YR 3/3-Bt1+45+10YR 5/6-Bt2+66+2.5YR 6/6-Bt3+100+2.5YR 4/6-Cr+125-R+150'
 
 s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', cex.names = 1)

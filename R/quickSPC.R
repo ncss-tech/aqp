@@ -59,12 +59,21 @@
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
 #' 
 #' 
-#' # specify profile IDs using "ID:" prefix
+#' # optionally specify profile IDs using "ID:" prefix
 #' x <- c(
 #' 'P1:A-Bt1-Bt2-Bt3-Cr-R',
 #' 'P2:A-C1-C2-C3-C4-Ab',
 #' 'P3:Ap-A-A/E-E-Bhs-Cr'
 #' )
+#' 
+#' s <- quickSPC(x)
+#' plotSPC(s, name.style = 'center-center', cex.names = 1)
+#' 
+#' 
+#' # optionally specify:
+#' # horizon bottom depths in cm
+#' # soil color in Munsell notation
+#' x <- 'p1:A+20+10YR 3/3-Bt1+45+10YR 5/6-Bt2+66+2.5YR 6/6-Bt3+100+2.5YR 4/6-Cr+125-R+150'
 #' 
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
@@ -133,6 +142,8 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
       # character template mode, detected from first element of x
       
       # mode 1: "A-Bt-Cr-R" -> random depths
+      #         "id:A-Bt-Cr-R" -> random depths
+      #         "id:A+10+10YR 4/4" -> depths + colors specified
       .m1 <- grepl(pattern = '-', x = x[1], fixed = TRUE)
       
       # mode 2: "A|BtBt|Cr|RRRR" -> proportional depths
@@ -195,16 +206,32 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
   return(list(id = .id, x = x))
 }
 
+# split extract data from within a token
+.parseExtra <- function(x, d = '+') {
+  .s <- strsplit(x, '+', fixed = TRUE)[[1]]
+  .res <- data.frame(
+    name = .s[1],
+    bottom = as.numeric(.s[2]),
+    m = .s[3]
+  )
+  return(.res)
+}
 
+## TODO: handle horizon boundary codes: AS, CW, etc.
 # handle character-based templates, mode 1
 # x <- 'A-C-R'
+# x <- 'id:A-C-R'
+# x <- 'id:A+10+7.5YR 3/3
 .qSPC.char.1 <- function(x) {
   
   # detect / extract ID prefix
   .s <- .parseID(x)
   x <- .s$x
   
-  # split name sequence into horizons
+  # detect extra data
+  .extraFlag <- grepl(pattern = '+', x, fixed = TRUE)
+  
+  # split token sequence into horizons
   .names <- strsplit(x, '-', fixed = TRUE)[[1]]
   .nhz <- length(.names)
   
@@ -213,19 +240,28 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', interval = 10, m = 
     stop('Empty horizon designation not allowed in this template', call. = FALSE) 
   }
   
-  # random horizon thickness
-  .thick <- round(runif(.nhz, min = 5, max = 20))
-  
-  # convert to top/bottom depths
-  .bottom <- cumsum(.thick)
-  .top <- c(0, .bottom[-.nhz])
-  
-  # assemble
-  .data <- data.frame(
-    top = .top,
-    bottom = .bottom,
-    name = .names
-  )
+  if(.extraFlag) {
+    # horizon bottoms are specified, along with other possible data
+    .data <- do.call('rbind', lapply(.names, .parseExtra))
+    .data$top <- c(0, .data$bottom[-.nhz])
+    
+    # convert colors, if present
+    .data$soil_color <- parseMunsell(.data$m)
+  } else {
+    # random horizon thickness
+    .thick <- round(runif(.nhz, min = 5, max = 20))
+    
+    # convert to top/bottom depths
+    .bottom <- cumsum(.thick)
+    .top <- c(0, .bottom[-.nhz])
+    
+    # assemble
+    .data <- data.frame(
+      top = .top,
+      bottom = .bottom,
+      name = .names
+    )
+  }
   
   # IDs
   if(is.null(.s$id)) {
