@@ -74,8 +74,8 @@
 #' # horizon bottom depths in cm
 #' # soil color in Munsell notation
 #' x <- c(
-#' '1. simple:Oe-A-E-Bhs-BC-C',
-#' '2. full:Oe,10,10YR 2/2-A,20,10YR 3/3-E,30,2.5Y 8/2-Bhs,60,7.5YR 4/6-BC,125,7.5YR 6/4-C,150,10YR 6/2'
+#' '1. simple:Oe-A-E-Bhs',
+#' '2. full:Oe,10,10YR 2/2-A,20,10YR 3/3-E,30,2.5Y 8/2-Bhs,60,7.5YR 4/6'
 #' )
 #' 
 #' s <- quickSPC(x)
