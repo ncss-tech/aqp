@@ -36,10 +36,10 @@ electroStatics_1D(
 
 \item{trace}{logical, include diagnostic output}
 
-\item{\dots}{not used, absorbs arguments from \code{\link[=fixOverlap]{fixOverlap()}}}
+\item{\dots}{not used, absorbs additional arguments to \code{\link[=fixOverlap]{fixOverlap()}}}
 }
 \value{
-When \code{trace = TRUE} as \code{list}, othewise numeric vector.
+When \code{trace = TRUE} as \code{list}, otherwise numeric vector.
 }
 \description{
 Label placement based on a simulation of electrostatic forces

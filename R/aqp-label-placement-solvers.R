@@ -159,7 +159,7 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' @param trace logical, include diagnostic output
 #' 
-#' @param \dots not used, absorbs arguments from [fixOverlap()]
+#' @param \dots not used, absorbs additional arguments to [fixOverlap()]
 #' 
 #' @author D.E. Beaudette and K.C. Thompson
 #'
@@ -719,29 +719,40 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 
 
 
-#' Title
+#' @title Fix Overlap within a Sequence
 #'
-#' @param x 
-#' @param thresh 
-#' @param method 
-#' @param trace 
-#' @param ... 
+#' @param x vector of initial positions, ideally pre-sorted
+#' @param thresh numeric, overlap threshold defined on the same scale as `x`
+#' @param method character vector, 'S' for simulated annealing via [SANN_1D()] or 'E' for electrostatic simulation via [electroStatics_1D()]
+#' @param trace logical, return full output
+#' @param \dots additional arguments to [SANN_1D()] or [electroStatics_1D()]
 #'
-#' @return
+#' @return When `trace = FALSE`, a vector of the same length as `x`, preserving rank-ordering and boundary conditions. When `trace = TRUE` a list containing the new sequence along with information about objective functions and decisions made during adjustment of `x`.
+#' 
 #' @export
 #'
 #' @examples
+#' 
+#' s <- c(1, 2, 2.3, 4, 5, 5, 7)
+#' 
+#' # simulated annealing, solution is non-deterministic
+#' fixOverlap(s, thresh = 0.6, method = 'S')
+#' 
+#' # electrostatics-inspired simulation of particles
+#' # solution is deterministic
+#' fixOverlap(s, thresh = 0.6, method = 'E')
+#' 
 fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...) {
   
   # sanity checks on method
-  method <- match.arg(method)
+  method <- tolower(match.arg(method))
   
   .res <- switch(method, 
-                 'E' = {
+                 'e' = {
                    electroStatics_1D(x = x, thresh = thresh, trace = trace, ...) 
                  },
                  
-                 'S' = {
+                 's' = {
                    SANN_1D(x = x, thresh = thresh, trace = trace, ...) 
                  }
   )

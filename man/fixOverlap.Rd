@@ -2,114 +2,36 @@
 % Please edit documentation in R/aqp-label-placement-solvers.R
 \name{fixOverlap}
 \alias{fixOverlap}
-\title{Fix Overlap within a Sequence via Simulated Annealing}
+\title{Fix Overlap within a Sequence}
 \usage{
-fixOverlap(
-  x,
-  thresh = 0.6,
-  adj = thresh * 2/3,
-  min.x = min(x) - 0.2,
-  max.x = max(x) + 0.2,
-  maxIter = 1000,
-  trace = FALSE,
-  tiny = 1e-04,
-  T0 = 500,
-  k = 10
-)
+fixOverlap(x, thresh = 0.6, method = c("S", "E"), trace = FALSE, ...)
 }
 \arguments{
-\item{x}{vector of horizontal positions}
+\item{x}{vector of initial positions, ideally pre-sorted}
 
-\item{thresh}{horizontal threshold defining "overlap" or distance between elements of \code{x}. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).}
+\item{thresh}{numeric, overlap threshold defined on the same scale as \code{x}}
 
-\item{adj}{specifies the size of perturbations within \code{runif(min = adj * -1, max = adj)}. Larger values will sometimes reduce the number of iterations required to solve particularly difficult overlap conditions. See \code{coolingRate} argument when \code{adj} is large}
+\item{method}{character vector, 'S' for simulated annealing via \code{\link[=SANN_1D]{SANN_1D()}} or 'E' for electrostatic simulation via \code{\link[=electroStatics_1D]{electroStatics_1D()}}}
 
-\item{min.x}{left-side boundary condition, consider expanding if a solution cannot be found within \code{maxIter}.}
+\item{trace}{logical, return full output}
 
-\item{max.x}{right-side boundary condition, consider expanding if a solution cannot be found within \code{maxIter}.}
-
-\item{maxIter}{maximum number of iterations to attempt before giving up and returning a regularly-spaced sequence}
-
-\item{trace}{print diagnostics, result is a \code{list} vs \code{vector}}
-
-\item{tiny}{the smallest allowable overlap}
-
-\item{T0}{starting temperature}
-
-\item{k}{cooling constant}
+\item{\dots}{additional arguments to \code{\link[=SANN_1D]{SANN_1D()}} or \code{\link[=electroStatics_1D]{electroStatics_1D()}}}
 }
 \value{
-When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with information about objective functions and decisions made during iteration.
+When \code{trace = FALSE}, a vector of the same length as \code{x}, preserving rank-ordering and boundary conditions. When \code{trace = TRUE} a list containing the new sequence along with information about objective functions and decisions made during adjustment of \code{x}.
 }
 \description{
-This function makes small adjustments to elements of \code{x} until overlap defined by \code{thresh} is removed, or until \code{maxIter} is reached. Rank order and boundary conditions (defined by \code{min.x} and \code{max.x}) are preserved. The underlying algorithm is based on simulated annealing. The "cooling schedule" parameters \code{T0} and \code{k} can be used to tune the algorithm for specific applications.
-}
-\details{
-Ideas for solving difficult overlap scenarios:
-\itemize{
-\item widen the boundary conditions by adjusting \code{min.x} and \code{max.x} beyond the original scale of \code{x}
-\item reduce the allowable overlap threshold \code{thresh}
-\item reduce the magnitude of perturbations (\code{adj}) and increase \code{maxIter}
-\item increase \code{k}
-}
+Fix Overlap within a Sequence
 }
 \examples{
 
-x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+s <- c(1, 2, 2.3, 4, 5, 5, 7)
 
-# easy
-z <- fixOverlap(x, thresh = 0.2, trace = TRUE)
+# simulated annealing, solution is non-deterministic
+fixOverlap(s, thresh = 0.6, method = 'S')
 
-# harder
-z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
+# electrostatics-inspired simulation of particles
+# solution is deterministic
+fixOverlap(s, thresh = 0.6, method = 'E')
 
-# much harder
-z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
-
-
-# interpret `trace` output
-
-# relatively challenging
-x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
-
-# fix overlap, return debugging information
-set.seed(10101)
-z <- fixOverlap(x, thresh = 0.8, trace = TRUE)
-
-# setup plot device
-par(mar = c(4, 4, 1, 1))
-layout(matrix(c(1,2,3)), widths = 1, heights = c(1,1,2))
-
-# objective function = overlap + SSD
-plot(
-  seq_along(z$stats), z$stats, 
-  type = 'h', las = 1,
-  xlab = 'Iteration', ylab = 'Overlap',
-  cex.axis = 0.8
-)
-
-# SSD: deviation from original configuration 
-plot(
-  seq_along(z$ssd), z$ssd, 
-  type = 'h', las = 1,
-  xlab = 'Iteration', ylab = 'Deviation',
-  cex.axis = 0.8
-)
-# adjustments at each iteration
-matplot(
-  z$states, type = 'l', 
-  lty = 1, las = 1, 
-  xlab = 'Iteration', ylab = 'x-position'
-)
-
-# trace log
-# B: boundary condition violation
-# O: rank (order) violation
-# +: accepted perturbation
-# -: rejected perturbation
-table(z$log)
-
-}
-\author{
-D.E. Beaudette and K.C. Thompson
 }

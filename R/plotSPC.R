@@ -433,7 +433,7 @@ plotSPC <- function(
       .missing <- do.call(missing, list(.arg))
       
       # consider only:
-      # specified via options AND NOT given by function arguments
+      # specified via options AND NOT (XOR) given by function arguments
       if(!is.null(.opArgs[[.arg]]) && .missing) {
         # debug
         # print(sprintf("using options: %s", .arg))
