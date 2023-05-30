@@ -378,8 +378,8 @@ plotSPC <- function(
     show.legend = TRUE,
     col.label = color,
     col.palette = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598",
-                    "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"),
-    col.palette.bias = 1,
+                             "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"),
+                             col.palette.bias = 1,
     col.legend.cex = 1,
     n.legend = 8,
     lwd = 1,
@@ -1020,7 +1020,7 @@ plotSPC <- function(
       
     } # end looping over horizons
     
-
+    
     ## note: have to do this after the polygons, otherwise the lines are over-plotted
     # optionally divide horizons with line segment
     if(divide.hz) {
@@ -1037,7 +1037,7 @@ plotSPC <- function(
         
         # add line segments in order
         lines(seg$xx, seg$yy, lwd = lwd, lty = seg$lty, lend = 1)
-
+        
       })
     }
     
@@ -1102,7 +1102,7 @@ plotSPC <- function(
         )
         
       } else {
-      
+        
         suppressWarnings(segments(
           x0 = x0 - width,
           x1 =  x0 + width,
@@ -1238,7 +1238,8 @@ plotSPC <- function(
       # along with user adjustment
       hzd.txt.x <- x0 + width + hz.depths.xfuzz + hz.depths.offset
       
-      # top-horizon, top depth: vertical alignment is close to "top"
+      ## top-most horizon
+      # top depth: vertical alignment is close to "top"
       hzd.txt <- this_profile_data[[tcol]][1]
       text(
         x = hzd.txt.x, 
@@ -1250,7 +1251,7 @@ plotSPC <- function(
       )
       
       
-      # in-between horizons, if present: vertical align is "center"
+      ## in-between horizons, if present: vertical align is "center"
       if(nh > 1) {
         # horizon depth annotation text (no scaling / offset applied here)
         hzd.txt <- this_profile_data[[tcol]][-1]
@@ -1262,42 +1263,47 @@ plotSPC <- function(
         if(fixLabelCollisions) {
           
           ## TODO: make these adjustable via aqp options
+          ## TODO: adapt after electrostatic sim. is performed on constant scale
           
           # reasonable threshold for label collision detection
-          # this depends on graphics device / figure scale / cex.names
-          y.thresh <- 1.25 * abs(strheight('0', cex = cex.names))
+          # depends on aesthetic weighting / graphics device / hz.depths.cex
+          y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
           
-          # adjustment suggestion must be on the same scale as threshold
-          .adj <- y.thresh * 1/4
-          
-          ## debugging
+          # # debugging
           # print(
           #   sprintf(
-          #     "y.thresh: %s   |   adj: %s",
-          #     signif(y.thresh, 3),
-          #     signif(.adj, 3)
+          #     "y.thresh: %s",
+          #     signif(y.thresh, 3)
           #   )
           # )
-
           
           # must include top + bottom depths for collision detection
-          hzd.txt.y.fixed <- suppressMessages(fixOverlap( 
-            c(y1, y0[nh]), 
-            thresh = y.thresh, 
-            min.x = y1[1], 
-            max.x = y0[nh], 
-            adj = .adj,
-            k = 20,
-            trace = FALSE,
-            method = 'S'
-            # method = 'E', q = 10
-          ))
+          # account for the fact that top-most and bottom-most horizon depths
+          # are inset
+          # TODO: use a better heuristic, just in case these values overlap with the bottom of the first hz
+          .verticalBuffer <- 2.5 * scaling.factor
+          .pos <- c(
+            y1[1] + .verticalBuffer, 
+            y1[-1],
+            y0[nh] - .verticalBuffer
+          )
           
-          # remove top + bottom horizon depths
+          ## TODO: this should be scale-independent effect of q is too strong
+          # find / fix overlap using electrostatic simulation
+          hzd.txt.y.fixed <- 
+            fixOverlap( 
+              .pos, 
+              thresh = y.thresh, 
+              method = 'E', 
+              q = 10 * scaling.factor, 
+              const = y.thresh * 0.5
+            )
+          
+          
+          # remove top-most AND bottom-most horizon depths
           hzd.txt.y.fixed <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
           
           ## this is the Label Adjustment Index (LAI)
-          
           # how much shuffling was performed?
           .LAI <- (hzd.txt.y - hzd.txt.y.fixed)
           # normalize
@@ -1334,7 +1340,8 @@ plotSPC <- function(
         ) 
       }
       
-      # bottom-horizon, bottom depth: vertical alignment is "bottom"
+      ## bottom-most horizon
+      # bottom depth: vertical alignment is "bottom"
       hzd.txt <- this_profile_data[[bcol]][nh]
       text(
         x = hzd.txt.x, 

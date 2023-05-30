@@ -198,11 +198,12 @@ overlapMetrics <- function(x, thresh) {
 ##       -> too low, not enough perturbation, does not converge
 ##       -> too high, chaos
 
+## TODO: re-scale to common [0,1] interval, perform adjustments, return to original scale
+
+## TODO: preserve original ordering
+
 
 electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.10, maxIter = 100, tiny = 0.0001, const = thresh * 2, trace = FALSE, ...) {
-  
-  # pre-sort ASC, just in case
-  x <- sort(x)
   
   # original configuration
   x.orig <- x
@@ -236,7 +237,7 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     
     # constraints:
     # rank order
-    .rank_test <- all(rank(x) == seq_along(x))
+    .rank_test <- all(rank(x) == rank(x.orig))
     # overlap test
     .overlap_test <- length(.om$idx) < 1
     
@@ -322,7 +323,7 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     
     # stop simulation if there is no overlap in this iteration
     # AND rank order is preserved
-    if(all(rank(x) == seq_along(x)) & length(.om$idx) < 1) {
+    if(all(rank(x) == rank(x.orig)) & length(.om$idx) < 1) {
       break
     }
     
@@ -337,10 +338,12 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   ## TODO: optionally return to lowest cost configuration
   ## TODO: optionally re-run with lower / higher q
   
+  ## TODO: return to original sorting order
+  
   # check for convergence
   # 1. no overlap
   # 2. no change in rank order
-  .converged <- all(rank(xnew[nrow(xnew), ]) == seq_along(x) & length(.om$idx) < 1)
+  .converged <- all(rank(xnew[nrow(xnew), ]) == rank(x.orig) & length(.om$idx) < 1)
   
   if(trace) {
     # compile full results
@@ -396,7 +399,7 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
 #'   
 #'   * increase `k`
 #' 
-#' @param x vector of horizontal positions, ideally pre-sorted
+#' @param x vector of horizontal positions, pre-sorted
 #' 
 #' @param thresh horizontal threshold defining "overlap" or distance between elements of `x`. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).
 #' 
@@ -721,7 +724,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 
 #' @title Fix Overlap within a Sequence
 #'
-#' @param x vector of initial positions, ideally pre-sorted
+#' @param x vector of initial positions, pre-sorted
 #' @param thresh numeric, overlap threshold defined on the same scale as `x`
 #' @param method character vector, 'S' for simulated annealing via [SANN_1D()] or 'E' for electrostatic simulation via [electroStatics_1D()]
 #' @param trace logical, return full output

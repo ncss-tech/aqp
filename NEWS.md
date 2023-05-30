@@ -10,6 +10,7 @@ Notable changes include:
  * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections
  * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive mixtures
  * `gower` package moved to SUGGESTS
+ * `plotColorMixture()` now using grid graphics functions to determine color swatch geometry and setting overlap detection threshold
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns

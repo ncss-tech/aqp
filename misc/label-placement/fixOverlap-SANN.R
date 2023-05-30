@@ -15,7 +15,7 @@ z$mantel <- sapply(seq_along(z$stats), FUN = function(i) {
 })
 
 
-
+par(mfcol = c(1, 2))
 # hmm.
 plot(seq_along(z$stats), z$cor, type = 'l', las = 1)
 

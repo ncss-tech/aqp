@@ -4,12 +4,18 @@ devtools::load_all()
 ## nutty idea: label collision fixes via simulation of electrostatic charged particles
 ##
 
-
-## TODO: 
 ## thanks Keith !!!
 
 
-## input should be sorted ASC
+## input should be pre-sorted ASC
+
+x <- c(1, 2, 3, 1.5, 5)
+tr <- electroStatics_1D(x, thresh = 0.3, trace = TRUE)
+tr$converged
+
+
+
+
 
 # x <- sort(c(1, 2, 3, 3.4, 3.5, 5, 6, 6.1, 10))
 
@@ -108,7 +114,7 @@ x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
 
 
 z.s <- fixOverlap(x, thresh = .thresh, method = 'S')
-z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 50)
+z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 60)
 
 s <- rep(1, times = length(x))
 r <- rank(x)
@@ -141,6 +147,19 @@ par(mar = c(0, 0, 0, 0))
 plotSPC(osds, cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
 plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
+
+plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 135)
+
+
+plotSPC(osds, cex.names = 0.5, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, scaling.factor = 0.5)
+
+plotSPC(osds, cex.names = 0.5, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, scaling.factor = 0.25)
+
+
+## check for errors in ordering
+library(sharpshootR)
+
+SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 205, scaling.factor = 0.015)
 
 
 
