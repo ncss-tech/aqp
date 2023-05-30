@@ -195,8 +195,8 @@ setMethod("glom", signature(p = "SoilProfileCollection"),
     newhz[z2bidx, 'bdep'] <- newhz[z2bidx, 'z2']
 
     # replace original values with truncated 
-    h[[depthn[1]]][!is.na(h[[depthn[1]]])] <- newhz$tdep
-    h[[depthn[2]]][!is.na(h[[depthn[2]]])] <- newhz$bdep
+    h[[depthn[1]]][!is.na(h[[depthn[1]]])] <- newhz$tdep[!is.na(newhz$tdep)]
+    h[[depthn[2]]][!is.na(h[[depthn[2]]])] <- newhz$bdep[!is.na(newhz$bdep)]
 
   # or "invert" and truncate
   } else if (invert & truncate & !is.null(z2)) {
@@ -259,6 +259,9 @@ setMethod("glom", signature(p = "SoilProfileCollection"),
     if (!fill) {
       # replace @horizons with h
       replaceHorizons(p) <- h
+      
+      # if pre-existing "filled" horizons are present, drop them
+      p <- p[!isEmpty(p),]
     } else {
       p <- .insert_dropped_horizons(p, horizons = h)
     }

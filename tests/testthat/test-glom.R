@@ -214,5 +214,8 @@ test_that("glom vectorization", {
   t5 <- glom(sp1, z1, z2, truncate = TRUE)
   expect_equal(t5$bottom, c(2L, 10L, 59L, 2L, 10L, 60L, 5L, 
                             10L, 60L, 4L, 10L, 60L, 3L, 10L))  
+  
+  # truncate twice, initially with drop=FALSE
+  expect_equal(length(trunc(trunc(sp1, 75, 100, drop = FALSE), 90, 100)), 4)
 })
 
