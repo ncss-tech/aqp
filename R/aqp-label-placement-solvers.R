@@ -203,7 +203,16 @@ overlapMetrics <- function(x, thresh) {
 ## TODO: preserve original ordering
 
 
-electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.10, maxIter = 100, tiny = 0.0001, const = thresh * 2, trace = FALSE, ...) {
+electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.05, maxIter = 100, tiny = 0.0001, const = 0.001, trace = FALSE, ...) {
+  
+  # keep track of original range
+  .original_range <- range(x)
+  
+  # re-scale to 0,1
+  x <- aqp:::.rescaleRange(x, 0, 1)
+  
+  # apply scaling factor to threshold
+  thresh <- thresh / abs(diff(.original_range))
   
   # original configuration
   x.orig <- x
@@ -217,13 +226,14 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   
   ## constants used to control effect of force on charged particles
   # mass
-  .m <- 10
+  .m <- 100
   
   # time step
   .t <- 1
   
   # initial attractive force constant (Qk) to uniform spacing
-  .Fu <- 2
+  .Fu <- 1.5e-3
+  .Qk <- 1e-2
   
   # exponential decay schedule for particle charge
   # from t = 1 -> maxIter
@@ -236,21 +246,21 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     .om <- overlapMetrics(x, thresh = thresh)
     
     # constraints:
-    # rank order
-    .rank_test <- all(rank(x) == rank(x.orig))
+    # rank order, by element
+    .rank_test <- rank(x) == rank(x.orig)
     # overlap test
     .overlap_test <- length(.om$idx) < 1
     
     # stop simulation if there is nothing left to do
-    if(.rank_test & .overlap_test) {
+    if(all(.rank_test) & .overlap_test) {
       xnew[[i]] <- x
       break
     }
     
-    # if rank order is violated
+    # if any rank order is violated
     # progressively increase Qk for attractive force to uniform spacing
     # this will progressively pull particles into the "right" order
-    if(!.rank_test) {
+    if(!any(.rank_test)) {
       .Fu <- .Fu + (.Fu * QkA_GrowthRate)
     }
     
@@ -261,7 +271,7 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     diag(m) <- NA
     
     # repelling forces (same charge) between all particles
-    .F <- .electricForce(Q1 = q, Q2 = q, Qk = 1, d = m, tiny = tiny, const = const)
+    .F <- .electricForce(Q1 = q, Q2 = q, Qk = .Qk, d = m, tiny = tiny, const = const)
     
     # negative forces are to the left
     # lower triangle is used for particles to the right of any given position
@@ -274,9 +284,10 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     # attractive forces between each particle <--> uniform spacing, rank order
     # weaker than repelling forces
     
-    # uniform spacing distances
-    .offset <- seq(from = r[1], to = r[2], length.out = x.n)
+    # distance from uniform spacing
+    .offset <- x - seq(from = r[1], to = r[2], length.out = x.n)
     
+    # note: sign(0) --> 0
     # direction is based on offset vector
     .direction <- sign(.offset)
     
@@ -287,7 +298,7 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     # sum attractive + repelling forces
     .F_net <- (.direction * .F_attr) + .F_repl
     
-    ## debugging
+    # ## debugging
     # print(
     #   rbind(x, x.orig, .direction, .F_repl, .F_attr, .F_net)
     # )
@@ -296,8 +307,9 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     # negative <--- | ---> positive
     .d <- 1/2 * (.F_net / .m) * .t^1
     
-    # displacement is only applied to overlapping points
-    .ignore <- setdiff(seq_along(x), .om$idx)
+    # displacement is only applied to overlapping AND out-of-order points
+    .affected_points <- unique(c(.om$idx, which(!.rank_test)))
+    .ignore <- setdiff(seq_along(x), .affected_points)
     .d[.ignore] <- 0
     
     # displacement of boundary points is always 0
@@ -350,12 +362,12 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     .res <- list(
       F_total = as.vector(na.omit(F_total)), 
       cost = as.vector(na.omit(cost)),
-      xnew = xnew, 
+      xnew = t(apply(xnew, 1, aqp:::.rescaleRange, .original_range[1], .original_range[2])), 
       converged = .converged
     )
   } else {
     # only the final configuration
-    .res <- as.vector(xnew[nrow(xnew), ])
+    .res <- aqp:::.rescaleRange(as.vector(xnew[nrow(xnew), ]), .original_range[1], .original_range[2])
   }
   
   
