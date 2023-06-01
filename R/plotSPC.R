@@ -1177,7 +1177,8 @@ plotSPC <- function(
     
     
     
-    ## TODO:use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)    ## See hz depth annotation code below
+    ## TODO: use find/fixOverlap() to adjust horizon designations in the presence of collisions (PARDEE)    
+    ## See hz depth annotation code below
     
     # optionally shrink the size of names if they are longer than a given thresh
     if(shrink) {
@@ -1263,13 +1264,12 @@ plotSPC <- function(
         if(fixLabelCollisions) {
           
           ## TODO: make these adjustable via aqp options
-          ## TODO: adapt after electrostatic sim. is performed on constant scale
           
           # reasonable threshold for label collision detection
           # depends on aesthetic weighting / graphics device / hz.depths.cex
           y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
           
-          # # debugging
+          # debugging
           # print(
           #   sprintf(
           #     "y.thresh: %s",
@@ -1280,23 +1280,32 @@ plotSPC <- function(
           # must include top + bottom depths for collision detection
           # account for the fact that top-most and bottom-most horizon depths
           # are inset
-          # TODO: use a better heuristic, just in case these values overlap with the bottom of the first hz
-          .verticalBuffer <- 2.5 * scaling.factor
+          
+          ## TODO: use a better heuristic, just in case these values overlap with the bottom of the first hz
+          .verticalBuffer <- 1.5 * scaling.factor
           .pos <- c(
             y1[1] + .verticalBuffer, 
             y1[-1],
             y0[nh] - .verticalBuffer
           )
           
+          # account for max.depth < any horizon bottom
+          # these are scaled depths
+          # print(.pos)
+          .pos <- .pos[which(.pos < (max.depth * scaling.factor))]
+          
+          
           ## TODO: this should be scale-independent effect of q is too strong
           # find / fix overlap using electrostatic simulation
           hzd.txt.y.fixed <- 
-            fixOverlap( 
-              .pos, 
-              thresh = y.thresh, 
-              method = 'E', 
-              q = 10 * scaling.factor, 
-              const = y.thresh * 0.5
+            suppressMessages(
+              fixOverlap( 
+                .pos, 
+                thresh = y.thresh, 
+                method = 'E', 
+                q = 1
+                # const = y.thresh * 3
+              )
             )
           
           
