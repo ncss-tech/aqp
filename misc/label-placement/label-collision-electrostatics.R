@@ -9,8 +9,10 @@ devtools::load_all()
 
 ## input should be pre-sorted ASC
 
-x <- c(1, 2, 3, 1.5, 5)
-tr <- electroStatics_1D(x, thresh = 0.3, trace = TRUE)
+x <- c(1, 1.2, 2, 3, 4.75, 5, 8)
+x <- sort(x)
+
+(tr <- electroStatics_1D(x, thresh = 0.3, trace = TRUE, q = 0.1))
 tr$converged
 
 
@@ -39,20 +41,20 @@ tr$converged
 ## simulated  horizon depths
 x <- c(0, 2, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
 .thresh <- 6
-.q <- 60
+.q <- 1
 
 
-## 
-x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
-.thresh <- 9
-.q <- 60
-
-
+# ##
+# x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
+# .thresh <- 9
+# .q <- 0.2
+# 
+# 
 # 
 # ## edge conditions
 # x <- c(0, 3, 20, 35, 40, 55, 90, 120, 145, 150)
-# .thresh <- 7
-# .q <- 60
+# .thresh <- 6
+# .q <- 0.1
 
 
 ## note: in general, as the complexity increases (larger thresholds, more overlap), q need to be larger
@@ -82,6 +84,7 @@ text(x = .n + 1, y = z$xnew[.n, ], col = cols, labels = seq_along(x), cex = 0.66
 
 axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = par('fg'), las = 1, cex.axis = 0.6)
 
+overlapMetrics(z$xnew[nrow(z$xnew), ], thresh = .thresh)
 
 
 ## SANN_1D doesn't always preserve rank ordering
@@ -167,7 +170,7 @@ o <- osds[6, ]
 x <- unique(c(o[, , .TOP], o[, , .BOTTOM]))
 
 z.s <- fixOverlap(x, thresh = 9.1, method = 'S')
-z.e <- fixOverlap(x, thresh = 9.1, method = 'E', q = 25)
+z.e <- fixOverlap(x, thresh = 9.1, method = 'E', q = 0.1)
 
 s <- rep(1, times = length(x))
 r <- rank(x)
