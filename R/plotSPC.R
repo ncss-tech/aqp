@@ -803,6 +803,8 @@ plotSPC <- function(
     
     ## center of each sketch
     # 2019-07-15: added relative position feature, could use some more testing
+    #             y.offset is indexed to plot.order
+    #
     # x0 <- x.idx.offset + i
     x0 <- x.idx.offset + relative.pos[i]
     
@@ -1285,7 +1287,9 @@ plotSPC <- function(
           .vbf <- 0.5
           .vertical_buffer_top <- y1[1] + pmin((.vbf * scaling.factor), min(y1[-1]))
           
-          # bottom vertical buffer must account for max.depth
+          # bottom vertical buffer must be truncated by max.depth
+          # this can result in bottom anchor < previous elements in pos
+          # remove in next steps
           .vertical_buffer_bottom <- pmin(
             ((max.depth + y.offset[i]) - .vbf) * scaling.factor, 
             y0[nh] - (.vbf * scaling.factor)
@@ -1298,15 +1302,16 @@ plotSPC <- function(
             .vertical_buffer_bottom
           )
           
-          ## TODO: hard-to-understand errors here, SoilTaxonomyDendrogram()
+          ## TODO: scaling (?) errors when specifiying: y.offset and scaling.factor
           
-          # keep only positions that are < max.depth, after yoffset and scaling
+          # keep only positions that are < max.depth, after y.offset and scaling
           # these are scaled positions
+          # print(y.thresh)
           .pos <- .pos[which(.pos < ((max.depth + y.offset[i]) * scaling.factor))]
           
-          
-          ## TODO: allow for override of arguments
+          ## TODO: allow for argument override
           # find / fix overlap using electrostatic simulation
+          # this includes top/bottom anchor points
           hzd.txt.y.fixed <- 
             suppressMessages(
               fixOverlap( 
@@ -1324,6 +1329,8 @@ plotSPC <- function(
           #   print(list(max.depth = max.depth, thres = y.thresh, pos = .pos, orig = hzd.txt.y, final = hzd.txt.y.fixed))
           # }
           
+          
+          ## TODO consider removing this
           
           ## this is the Label Adjustment Index (LAI)
           # how much shuffling was performed?
@@ -1479,7 +1486,7 @@ plotSPC <- function(
       }
       
       if(id.style == 'side') {
-        text(x0 - (width+0.025), y.offset[i], id.text, adj = c(1, -width), font = font.id, cex = cex.id, srt = 90)
+        text(x0 - (width + 0.025), y.offset[i], id.text, adj = c(1, -width), font = font.id, cex = cex.id, srt = 90)
       }
       
     }

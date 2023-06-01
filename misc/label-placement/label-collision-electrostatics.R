@@ -149,6 +149,9 @@ osds <- osds.full$SPC
 par(mar = c(0, 0, 0, 0))
 plotSPC(osds, cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
+plotSPC(trunc(osds, 0, 25), cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
+
+
 plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
 plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 135)
@@ -156,6 +159,12 @@ plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', wid
 plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 50)
 
 plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 30, max.depth = 135)
+
+# error
+plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 30, scaling.factor = 0.5, max.depth = 135)
+
+plotSPC(osds, cex.names = 1, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 30, scaling.factor = 0.5)
+
 
 plotSPC(osds, cex.names = 0.6, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 300, max.depth = 135)
 
@@ -167,10 +176,27 @@ plotSPC(osds, cex.names = 0.5, print.id = FALSE, name.style = 'center-center', w
 
 
 ## simulate environment setup by SoilTaxonomyDendrogram()
-par(mar = c(0,0,0,0))
-plot(1, 1, cex = 0.8, ylim = c(4,0), xlim = c(0.5, length(osds) + 1), type = 'n')
+s <- c('leon', 'musick', 'pardee')
+osds <- soilDB::fetchOSD(s)
 
-plotSPC(osds, plot.order = c(3, 4, 1, 9, 2, 8, 6, 5, 7), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 0.5, scaling.factor = 0.015, add = TRUE)
+par(mar = c(0,0,0,0))
+
+# no errors
+plot(1, 1, cex = 0.8, ylim = c(4,0), xlim = c(0.5, length(osds) + 1), type = 'n')
+plotSPC(osds, plot.order = c(3, 2, 1), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 0.5, scaling.factor = 0.015, add = TRUE)
+
+# errors
+plot(1, 1, cex = 0.8, ylim = c(4,0), xlim = c(0.5, length(osds) + 1), type = 'n')
+plotSPC(osds, plot.order = c(3, 2, 1), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 0.5, scaling.factor = 0.015, add = TRUE, max.depth = 100)
+
+
+# errors
+plot(1, 1, cex = 0.8, ylim = c(4,0), xlim = c(0.5, length(osds) + 1), type = 'n')
+plotSPC(osds, plot.order = c(3, 2, 1), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 1, scaling.factor = 0.015, add = TRUE)
+
+
+plot(1, 1, cex = 0.8, ylim = c(4,0), xlim = c(0.5, length(osds) + 1), type = 'n')
+plotSPC(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 2, scaling.factor = 0.015, add = TRUE)
 
 
 
@@ -227,6 +253,7 @@ plotSPC(y[15:19, ], color = 'genhz', width = 0.3, name.style = 'center-center', 
 
 ## TODO: errors when max.depth < profile depth
 devtools::load_all(path = '../sharpshootR/', reset = TRUE)
+devtools::load_all(reset = TRUE)
 
 # some interesting soil series
 s <- c('leon', 'musick', 'clarksville', 'pardee', 'lucy', 'pierre', 'drummer', 'zook', 'san joaquin')
@@ -235,22 +262,19 @@ osds <- soilDB::fetchOSD(s)
 SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
 
+s <- c('leon', 'musick', 'pardee')
+osds <- soilDB::fetchOSD(s)
 
-par(mar = c(0,0,0,0))
-plot(1, 1, cex = 0.8, ylim = c(4,0), xlim = c(0.5, length(osds) + 1), type = 'n')
-
-plotSPC(osds, plot.order = length(osds):1, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, y.offset = 0.5, scaling.factor = 0.015, add = TRUE)
+SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
 
 
 SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 300)
 
+SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 125)
 
 
-SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 125, scaling.factor = 0.015)
-
-
-SoilTaxonomyDendrogram(trunc(osds, 0, 150), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
+SoilTaxonomyDendrogram(trunc(osds, 0, 90), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
 
 # o <- osds[6, ]

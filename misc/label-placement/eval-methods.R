@@ -103,6 +103,8 @@ fixOverlap(x, thresh = 9.7, q = 1, method = 'E')
 evalMethods(x, thresh = 9.7, q = 1)
 
 
+x <- c(1.0075, 1.1200, 1.3450, 1.6450, 1.8700, 1.8825)
+fixOverlap(x, thresh = 0.05442329, q = 1)
+evalMethods(x, thresh = 0.05442329, q = 1)
 
-
-
+dev.off()
