@@ -4,6 +4,7 @@ context("find/fixOverlap")
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 
+## TODO: more tests for electrostatic simulation
 
 test_that("overlapMetrics", {
   
@@ -54,6 +55,31 @@ test_that("fixOverlap, simple cases", {
   expect_true(min(z) >= 1)
   expect_true(max(z) <= 10)
 })
+
+
+test_that("electrostatic simulation", {
+
+  # simple
+  x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
+  z <- fixOverlap(x, thresh = 0.3, method = 'E', q = 1, trace = TRUE)
+  
+  # list
+  expect_true(inherits(z, 'list'))
+  
+  # should converge
+  expect_true(z$converged)
+  
+  # more difficult
+  z <- fixOverlap(x, thresh = 0.7, method = 'E', q = 1, trace = TRUE)
+  
+  # list
+  expect_true(inherits(z, 'list'))
+  
+  # should converge
+  expect_true(z$converged)
+
+})
+
 
 
 test_that("fixOverlap, trace = TRUE", {
