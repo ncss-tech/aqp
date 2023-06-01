@@ -203,6 +203,9 @@ plotSPC(y[15:19, ], color = 'genhz', width = 0.3, name.style = 'center-center', 
 
 plotSPC(y[15:19, ], color = 'genhz', width = 0.3, name.style = 'center-center', plot.depth.axis = FALSE, hz.depths = TRUE, cex.names = 0.8, fixLabelCollisions = TRUE, col.label = 'Generalized Horizon Label', label = 'shortID', max.depth = 107)
 
+plotSPC(y[15:19, ], color = 'genhz', width = 0.3, name.style = 'center-center', plot.depth.axis = FALSE, hz.depths = TRUE, cex.names = 0.8, fixLabelCollisions = TRUE, col.label = 'Generalized Horizon Label', label = 'shortID', max.depth = 5)
+
+
 
 
 ## TODO: errors when scale.factor is very small
@@ -213,8 +216,13 @@ library(soilDB)
 s <- c('leon', 'musick', 'clarksville', 'pardee', 'lucy', 'pierre', 'drummer', 'zook', 'san joaquin')
 osds <- fetchOSD(s)
 
-SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 205, scaling.factor = 0.015)
+SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
+
+SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 125, scaling.factor = 0.015)
+
+
+SoilTaxonomyDendrogram(trunc(osds, 0, 150), cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
 
 o <- osds[6, ]

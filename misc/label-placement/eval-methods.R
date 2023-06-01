@@ -53,6 +53,7 @@ evalMethods <- function(x, thresh, q, ...) {
 ## note: in general, as the complexity increases (larger thresholds, more overlap), q need to be larger
 ##
 
+# explore effect of charge, too large -> chaos
 x <- c(0, 2, 5, 12, 18, 20, 35, 40, 50, 56, 90, 120, 145, 150)
 evalMethods(x, thresh = 5, q = 1.1)
 evalMethods(x, thresh = 5, q = 1.8)
@@ -60,18 +61,21 @@ evalMethods(x, thresh = 5, q = 3)
 evalMethods(x, thresh = 5, q = 4)
 evalMethods(x, thresh = 5, q = 5)
 
-evalMethods(x, thresh = 10, q = 4)
+# threshold too large
+evalMethods(x, thresh = 10, q = 3)
 
 
+# large threshold
 x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 145, 150)
 evalMethods(x, thresh = 9, q = 2)
 
+# single iteration enoug
 x <- c(0, 3, 20, 35, 40, 55, 90, 120, 145, 150)
 evalMethods(x, thresh = 6, q = 1)
 
-
-x <- sort(c(0, rep(25, 5), 150))
+# clusters
+x <- sort(c(0, jitter(rep(10, 3)), jitter(rep(25, 3)), jitter(rep(90, 3)), 150))
 evalMethods(x, thresh = 6, q = 3)
-
+evalMethods(x, thresh = 6, q = 2)
 
 
