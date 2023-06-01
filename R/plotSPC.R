@@ -1284,14 +1284,14 @@ plotSPC <- function(
           # based on native units (e.g. cm)
           
           # top vertical buffer should not exceed bottom of first hz
-          .vbf <- 0.5
+          .vbf <- 0.8
           .vertical_buffer_top <- y1[1] + pmin((.vbf * scaling.factor), min(y1[-1]))
           
           # bottom vertical buffer must be truncated by max.depth
           # this can result in bottom anchor < previous elements in pos
           # remove in next steps
           .vertical_buffer_bottom <- pmin(
-            ((max.depth + y.offset[i]) - .vbf) * scaling.factor, 
+            ((max.depth - .vbf) * scaling.factor) + y.offset[i], 
             y0[nh] - (.vbf * scaling.factor)
             )
           
@@ -1302,12 +1302,10 @@ plotSPC <- function(
             .vertical_buffer_bottom
           )
           
-          ## TODO: scaling (?) errors when specifiying: y.offset and scaling.factor
-          
           # keep only positions that are < max.depth, after y.offset and scaling
           # these are scaled positions
           # print(y.thresh)
-          .pos <- .pos[which(.pos < ((max.depth + y.offset[i]) * scaling.factor))]
+          .pos <- .pos[which(.pos < ((max.depth * scaling.factor) + y.offset[i]))]
           
           ## TODO: allow for argument override
           # find / fix overlap using electrostatic simulation

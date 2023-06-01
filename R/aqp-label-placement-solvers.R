@@ -764,6 +764,12 @@ fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...
   # sanity checks on method
   method <- tolower(match.arg(method))
   
+  # check for un-sorted input
+  if(!all(x == sort(x))) {
+    warning('data should be pre-sorted', call. = FALSE)
+  }
+  
+  
   .res <- switch(method, 
                  'e' = {
                    electroStatics_1D(x = x, thresh = thresh, trace = trace, ...) 

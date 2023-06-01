@@ -2,7 +2,7 @@
 
 .npanel <- 4
 
-ragg::agg_png(file = 'art.png', width = 1600, height = 900, scaling = 1.5)
+ragg::agg_png(file = 'decent-into-madness.png', width = 1600, height = 900, scaling = 1.8)
 
 par(mar = c(0.1, 0.1, 0.1, 0.1), bg = 'black', fg = 'white', mfrow = c(.npanel, .npanel))
 
