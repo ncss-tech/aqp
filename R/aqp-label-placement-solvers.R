@@ -198,9 +198,7 @@ overlapMetrics <- function(x, thresh) {
 ##       -> too low, not enough perturbation, does not converge
 ##       -> too high, chaos
 
-## TODO: re-scale to common [0,1] interval, perform adjustments, return to original scale
-
-## TODO: preserve original ordering
+## NOTE: this method does not work well in the presence of ties
 
 
 electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.05, maxIter = 100, tiny = 0.0001, const = 0.001, trace = FALSE, ...) {
@@ -233,6 +231,8 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   
   # initial attractive force constant (Qk) to uniform spacing
   .Fu <- 1.5e-3
+  
+  # repulsion force constant
   .Qk <- 1e-2
   
   # exponential decay schedule for particle charge
@@ -513,8 +513,10 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
   }
   
   
+  ## TODO: this will violate original ranks... don't do this
+  
   # sanity check: cannot have perfect overlap (duplicates) in the initial configuration
-  # jitter duplicates will resolve the problem
+  # jitter usually will resolve the problem
   if(any(table(x) > 1)) {
     x <- jitter(x)
     if(trace) {

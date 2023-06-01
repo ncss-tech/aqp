@@ -117,7 +117,7 @@ x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
 
 
 z.s <- fixOverlap(x, thresh = .thresh, method = 'S')
-z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 60)
+z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 2)
 
 s <- rep(1, times = length(x))
 r <- rank(x)
@@ -159,8 +159,59 @@ plotSPC(osds, cex.names = 0.5, print.id = FALSE, name.style = 'center-center', w
 plotSPC(osds, cex.names = 0.5, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, scaling.factor = 0.25)
 
 
-## check for errors in ordering
+## very thin horizons
+
+library(soilDB)
+data("loafercreek")
+hzdesgnname(loafercreek) <- 'hzname'
+
+
+# profiles 20-40
+x <- loafercreek[20:40, ]
+
+# new labels
+n <- c('O', 'A', 'B', 'Bt', 'BC', 'Cr', 'R')
+# GHL patterns
+p <- c('O', 'A', 'B', 'Bt', 'BC', 'Cr', 'R')
+
+# note additional argument
+horizons(x)$genhz <- generalize.hz(x$hzname, new = n, pat = p)
+
+# the most important step, genhz must be encoded as an ordered factor
+x$genhz <- ordered(x$genhz)
+
+
+x$flag <- profileApply(x, function(i) {
+  any(i$genhz == 'not-used')
+})
+
+# SPC-aware version of subset()
+y <- subset(x, !flag)
+
+# check: ok
+table(y$genhz)
+
+# add short ID for checking our work
+site(y)$shortID <- 1:length(y)
+
+par(mar = c(0, 0, 3, 0))
+
+plotSPC(y, color = 'genhz', width = 0.3, name.style = 'center-center', plot.depth.axis = FALSE, hz.depths = TRUE, cex.names = 0.8, fixLabelCollisions = TRUE, col.label = 'Generalized Horizon Label', label = 'shortID', max.depth = 50, scaling.factor = 0.1)
+
+
+plotSPC(y[15:19, ], color = 'genhz', width = 0.3, name.style = 'center-center', plot.depth.axis = FALSE, hz.depths = TRUE, cex.names = 0.8, fixLabelCollisions = TRUE, col.label = 'Generalized Horizon Label', label = 'shortID')
+
+plotSPC(y[15:19, ], color = 'genhz', width = 0.3, name.style = 'center-center', plot.depth.axis = FALSE, hz.depths = TRUE, cex.names = 0.8, fixLabelCollisions = TRUE, col.label = 'Generalized Horizon Label', label = 'shortID', max.depth = 107)
+
+
+
+## TODO: errors when scale.factor is very small
 library(sharpshootR)
+library(soilDB)
+
+# some interesting soil series
+s <- c('leon', 'musick', 'clarksville', 'pardee', 'lucy', 'pierre', 'drummer', 'zook', 'san joaquin')
+osds <- fetchOSD(s)
 
 SoilTaxonomyDendrogram(osds, cex.names = 0.8, print.id = FALSE, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, max.depth = 205, scaling.factor = 0.015)
 

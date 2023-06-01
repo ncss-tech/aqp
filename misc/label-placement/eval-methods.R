@@ -1,12 +1,12 @@
 devtools::load_all()
 
 
-evalMethods <- function(x, thresh, q) {
+evalMethods <- function(x, thresh, q, ...) {
   
   cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
   cols <- colorRampPalette(cols)(length(x))
   
-  z <- fixOverlap(x, thresh = thresh, method = 'E', maxIter = 100, trace = TRUE, q = q)
+  z <- fixOverlap(x, thresh = thresh, method = 'E', maxIter = 100, trace = TRUE, q = q, ...)
   .n <- nrow(z$xnew)
   
   par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
@@ -54,13 +54,24 @@ evalMethods <- function(x, thresh, q) {
 ##
 
 x <- c(0, 2, 5, 12, 18, 20, 35, 40, 50, 56, 90, 120, 145, 150)
+evalMethods(x, thresh = 5, q = 1.1)
 evalMethods(x, thresh = 5, q = 1.8)
+evalMethods(x, thresh = 5, q = 3)
+evalMethods(x, thresh = 5, q = 4)
+evalMethods(x, thresh = 5, q = 5)
+
+evalMethods(x, thresh = 10, q = 4)
 
 
 x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 145, 150)
 evalMethods(x, thresh = 9, q = 2)
 
-
 x <- c(0, 3, 20, 35, 40, 55, 90, 120, 145, 150)
 evalMethods(x, thresh = 6, q = 1)
+
+
+x <- sort(c(0, rep(25, 5), 150))
+evalMethods(x, thresh = 6, q = 3)
+
+
 

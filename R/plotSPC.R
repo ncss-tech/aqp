@@ -1312,6 +1312,8 @@ plotSPC <- function(
           # remove top-most AND bottom-most horizon depths
           hzd.txt.y.fixed <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
           
+          ## TODO: problems here
+          
           ## this is the Label Adjustment Index (LAI)
           # how much shuffling was performed?
           .LAI <- (hzd.txt.y - hzd.txt.y.fixed)
