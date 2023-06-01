@@ -79,3 +79,30 @@ evalMethods(x, thresh = 6, q = 3)
 evalMethods(x, thresh = 6, q = 2)
 
 
+## impact of scale / offset
+x <- c(0, 5, 12, 18, 20, 35, 40, 50, 120, 145, 150)
+
+# works as expected
+evalMethods(x, thresh = 5, q = 1.1)
+
+# works as expected, as long as threshold is scaled
+evalMethods(x / 10, thresh = 5 / 10, q = 1.1)
+
+# works as expected, as long as threshold is scaled
+evalMethods(x * 10, thresh = 5 * 10, q = 1.1)
+
+
+# all work as expected, threshold not modified
+evalMethods(x + 10, thresh = 5, q = 1.1)
+evalMethods(x + 100, thresh = 5, q = 1.1)
+evalMethods(x + 1000, thresh = 5, q = 1.1)
+
+# works as expected
+x <- c(315, 325, 341, 353, 366, 374, 422)
+fixOverlap(x, thresh = 9.7, q = 1, method = 'E')
+evalMethods(x, thresh = 9.7, q = 1)
+
+
+
+
+

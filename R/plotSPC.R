@@ -1278,24 +1278,34 @@ plotSPC <- function(
           # )
           
           # must include top + bottom depths for collision detection
-          # account for the fact that top-most and bottom-most horizon depths
-          # are inset
+          # account for the fact that top-most and bottom-most horizon depths are inset
+          # based on native units (e.g. cm)
           
-          ## TODO: use a better heuristic, just in case these values overlap with the bottom of the first hz
-          .verticalBuffer <- 1.5 * scaling.factor
+          # top vertical buffer should not exceed bottom of first hz
+          .vbf <- 0.5
+          .vertical_buffer_top <- y1[1] + pmin((.vbf * scaling.factor), min(y1[-1]))
+          
+          # bottom vertical buffer must account for max.depth
+          .vertical_buffer_bottom <- pmin(
+            ((max.depth + y.offset[i]) - .vbf) * scaling.factor, 
+            y0[nh] - (.vbf * scaling.factor)
+            )
+          
+          # add synthetic top / bottom anchors
           .pos <- c(
-            y1[1] + .verticalBuffer, 
+            .vertical_buffer_top,
             y1[-1],
-            y0[nh] - .verticalBuffer
+            .vertical_buffer_bottom
           )
           
-          # account for max.depth < any horizon bottom
-          # these are scaled depths
-          # print(.pos)
-          .pos <- .pos[which(.pos < (max.depth * scaling.factor))]
+          ## TODO: hard-to-understand errors here, SoilTaxonomyDendrogram()
+          
+          # keep only positions that are < max.depth, after yoffset and scaling
+          # these are scaled positions
+          .pos <- .pos[which(.pos < ((max.depth + y.offset[i]) * scaling.factor))]
           
           
-          ## TODO: this should be scale-independent effect of q is too strong
+          ## TODO: allow for override of arguments
           # find / fix overlap using electrostatic simulation
           hzd.txt.y.fixed <- 
             suppressMessages(
@@ -1304,15 +1314,16 @@ plotSPC <- function(
                 thresh = y.thresh, 
                 method = 'E', 
                 q = 1
-                # const = y.thresh * 3
               )
             )
           
-          
-          # remove top-most AND bottom-most horizon depths
+          # remove top AND bottom anchors
           hzd.txt.y.fixed <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
           
-          ## TODO: problems here
+          # if(length(hzd.txt.y.fixed) != length(hzd.txt.y)) {
+          #   print(list(max.depth = max.depth, thres = y.thresh, pos = .pos, orig = hzd.txt.y, final = hzd.txt.y.fixed))
+          # }
+          
           
           ## this is the Label Adjustment Index (LAI)
           # how much shuffling was performed?
