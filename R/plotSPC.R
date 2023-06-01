@@ -1271,14 +1271,6 @@ plotSPC <- function(
           # depends on aesthetic weighting / graphics device / hz.depths.cex
           y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
           
-          # debugging
-          # print(
-          #   sprintf(
-          #     "y.thresh: %s",
-          #     signif(y.thresh, 3)
-          #   )
-          # )
-          
           # must include top + bottom depths for collision detection
           # account for the fact that top-most and bottom-most horizon depths are inset
           # based on native units (e.g. cm)

@@ -5,31 +5,31 @@ x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 
 
-test_that("findOverlap", {
+test_that("overlapMetrics", {
   
-  # CRAN safe
+  x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
   
   # no overlap with 0 threshold
-  z <- findOverlap(x, thresh = 0)
-  expect_true(length(z) == 0)
+  z <- overlapMetrics(x, thresh = 0)
+  expect_true(length(z$idx) == 0)
   
   # none yet
-  z <- findOverlap(x, thresh = 0.1)
-  expect_true(length(z) == 0)
+  z <- overlapMetrics(x, thresh = 0.1)
+  expect_true(length(z$idx) == 0)
   
   # a little
-  z <- findOverlap(x, thresh = 0.3)
-  expect_true(length(z) == 2)
-  expect_equal(x[z], c(3.4, 3.5))
+  z <- overlapMetrics(x, thresh = 0.3)
+  expect_true(length(z$idx) == 2)
+  expect_equal(x[z$idx], c(3.4, 3.5))
 
   # more
-  z <- findOverlap(x, thresh = 1)
-  expect_true(length(z) == 3)
-  expect_equal(x[z], c(3, 3.4, 3.5))
+  z <- overlapMetrics(x, thresh = 1)
+  expect_true(length(z$idx) == 3)
+  expect_equal(x[z$idx], c(3, 3.4, 3.5))
   
   # all
-  z <- findOverlap(x, thresh = 2)
-  expect_true(length(z) == 7)
+  z <- overlapMetrics(x, thresh = 2)
+  expect_true(length(z$idx) == 7)
 })
 
 

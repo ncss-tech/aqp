@@ -275,7 +275,8 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
         if(length(ov$idx) > 0) {
           message('fixing overlap')
           
-          ## TODO: finish electrostatic simulation adjustments before conversion
+          ## TODO: data must be pre-sorted for electrostatic simulation
+          ##       --> sort data / index to labels together
           
           # init position vector 
           # set boundary conditions for overlap adjustment

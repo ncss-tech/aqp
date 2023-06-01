@@ -130,7 +130,7 @@ overlapMetrics <- function(x, thresh) {
   # (Qk * Q1 * Q2) / (d^ex + const)
   
   # modified version, c/o K.C. Thompson
-  # increase const --> dampen ringing
+  # increase const --> dampen chaotic oscillation during simulation 
   res <- (Qk * Q1 * Q2 ) / (d^ex + const)
   
   return(res)
@@ -141,11 +141,11 @@ overlapMetrics <- function(x, thresh) {
 
 #' @title Label placement based on a simulation of electrostatic forces
 #'
-#' @param x numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration
+#' @param x numeric vector, pre-sorted sorted, without duplication, describing 1D label (particle) configuration
 #' 
 #' @param thresh numeric, overlap threshold, same as in [fixOverlap()]
 #' 
-#' @param q numeric, electrical charge
+#' @param q numeric, electrical charge (typically between 0.1 and 2)
 #' 
 #' @param chargeDecayRate numeric, exponential decay rate constant for `q` as a function of iteration `i`
 #' 
@@ -170,7 +170,7 @@ overlapMetrics <- function(x, thresh) {
 #' @examples 
 #' 
 #' # vector of object locations, with potential overlap
-#' x <- c(1, 2, 3, 3, 5, 6, 7, 8, 9, 10)
+#' x <- c(1, 2, 3, 3.3, 3.8, 5, 6, 7, 8, 9, 10)
 #' 
 #' # full diagnostic output
 #' z <- electroStatics_1D(x, thresh = 0.65, trace = TRUE, q = 1)
@@ -199,6 +199,9 @@ overlapMetrics <- function(x, thresh) {
 ##       -> too high, chaos
 
 ## NOTE: this method does not work well in the presence of ties
+
+
+## TODO: implement domain[min, max] argument for convenient anchors
 
 
 electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.05, maxIter = 100, tiny = 0.0001, const = 0.001, trace = FALSE, ...) {
@@ -495,6 +498,10 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
 #' table(z$log)
 #' 
 SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, max.x = max(x) + 0.2, maxIter = 1000, trace = FALSE, tiny = 0.0001, T0 = 500, k = 10, ...) {
+  
+  
+  ## TODO: convert min.x and max.x to domain
+  
   
   # system energy ~ probability ~ metropolis step
   # energy / cost function

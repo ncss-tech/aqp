@@ -18,11 +18,11 @@ electroStatics_1D(
 )
 }
 \arguments{
-\item{x}{numeric vector, typically integers, ideally sorted, describing 1D label (particle) configuration}
+\item{x}{numeric vector, pre-sorted sorted, without duplication, describing 1D label (particle) configuration}
 
 \item{thresh}{numeric, overlap threshold, same as in \code{\link[=fixOverlap]{fixOverlap()}}}
 
-\item{q}{numeric, electrical charge}
+\item{q}{numeric, electrical charge (typically between 0.1 and 2)}
 
 \item{chargeDecayRate}{numeric, exponential decay rate constant for \code{q} as a function of iteration \code{i}}
 
@@ -47,7 +47,7 @@ Label placement based on a simulation of electrostatic forces
 \examples{
 
 # vector of object locations, with potential overlap
-x <- c(1, 2, 3, 3, 5, 6, 7, 8, 9, 10)
+x <- c(1, 2, 3, 3.3, 3.8, 5, 6, 7, 8, 9, 10)
 
 # full diagnostic output
 z <- electroStatics_1D(x, thresh = 0.65, trace = TRUE, q = 1)
