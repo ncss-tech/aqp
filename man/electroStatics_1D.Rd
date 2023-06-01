@@ -9,10 +9,10 @@ electroStatics_1D(
   thresh,
   q = 1,
   chargeDecayRate = 0.01,
-  QkA_GrowthRate = 0.1,
+  QkA_GrowthRate = 0.05,
   maxIter = 100,
   tiny = 1e-04,
-  const = thresh * 2,
+  const = 0.001,
   trace = FALSE,
   ...
 )

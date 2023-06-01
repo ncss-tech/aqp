@@ -7,7 +7,7 @@
 fixOverlap(x, thresh = 0.6, method = c("S", "E"), trace = FALSE, ...)
 }
 \arguments{
-\item{x}{vector of initial positions, ideally pre-sorted}
+\item{x}{vector of initial positions, pre-sorted}
 
 \item{thresh}{numeric, overlap threshold defined on the same scale as \code{x}}
 

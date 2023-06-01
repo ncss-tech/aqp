@@ -19,7 +19,7 @@ SANN_1D(
 )
 }
 \arguments{
-\item{x}{vector of horizontal positions, ideally pre-sorted}
+\item{x}{vector of horizontal positions, pre-sorted}
 
 \item{thresh}{horizontal threshold defining "overlap" or distance between elements of \code{x}. For adjusting soil profile sketches values are typically < 1 and likely in (0.3, 0.8).}
 
