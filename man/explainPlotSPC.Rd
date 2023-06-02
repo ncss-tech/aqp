@@ -27,33 +27,34 @@ depths(sp4) <- id ~ top + bottom
 pos <- c(1, 1.1, 3, 4, 5, 5.2, 7, 8, 9, 10)
 
 # try it
-explainPlotSPC(sp4, name='name', relative.pos=pos)
+explainPlotSPC(sp4, name = 'name', relative.pos=pos)
 
 # attempt to fix using an integer sequence, short-circut will prevent adjustments
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(1:10))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(1:10))
 
 # attempt to adjust using defaults
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos))
 
 # attempt to adjust and tinker with defaults
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos, adj = 0.2))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, adj = 0.2))
 
-# repeatable adjustments
-set.seed(10101)
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos, thresh = 0.7))
+# enforce larger space between
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7))
 
 # more complex adjustments required
-pos <- c(1, 2, 3, 3.3, 5, 5.1, 5.5, 8, 9, 9.1)
+pos <- c(1, 2, 3, 3.3, 5, 5.1, 5.5, 8, 9, 10)
 
 # tinker
-explainPlotSPC(sp4, name='name', relative.pos=pos)
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos))
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos, thresh = 0.7))
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos, thresh=0.7, adj = 0.2))
+explainPlotSPC(sp4, name = 'name', relative.pos = pos)
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7, adj = 0.2))
 
 # no solution possible given these constraints
-explainPlotSPC(sp4, name='name', relative.pos=fixOverlap(pos, thresh=1, adj = 0.2))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 1, adj = 0.2))
 
+# use alternative strategy
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 1, method = 'E'))
 
 }
 \seealso{

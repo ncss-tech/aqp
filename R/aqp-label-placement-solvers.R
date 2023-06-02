@@ -163,7 +163,7 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' @author D.E. Beaudette and K.C. Thompson
 #'
-#' @return When `trace = TRUE` as `list`, otherwise numeric vector.
+#' @return When `trace = TRUE` a `list`, otherwise numeric vector with `converged` attribute.
 #' 
 #' @export
 #' 
@@ -191,7 +191,11 @@ overlapMetrics <- function(x, thresh) {
 #' # final configuration only
 #' xnew <- electroStatics_1D(x, thresh = 0.65, q = 1)
 #' 
-#' cbind(x, round(xnew, 2))
+#' # check for convergence
+#' attr(xnew, 'converged')
+#' 
+#' # compare original vs. modified
+#' data.frame(orig = x, new = round(xnew, 2))
 #' 
 
 ## TODO: what is a reasonable starting value for q?
@@ -210,7 +214,7 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   .original_range <- range(x)
   
   # re-scale to 0,1
-  x <- aqp:::.rescaleRange(x, 0, 1)
+  x <- .rescaleRange(x, 0, 1)
   
   # apply scaling factor to threshold
   thresh <- thresh / abs(diff(.original_range))
@@ -365,12 +369,13 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     .res <- list(
       F_total = as.vector(na.omit(F_total)), 
       cost = as.vector(na.omit(cost)),
-      xnew = t(apply(xnew, 1, aqp:::.rescaleRange, .original_range[1], .original_range[2])), 
+      xnew = t(apply(xnew, 1, .rescaleRange, .original_range[1], .original_range[2])), 
       converged = .converged
     )
   } else {
     # only the final configuration
-    .res <- aqp:::.rescaleRange(as.vector(xnew[nrow(xnew), ]), .original_range[1], .original_range[2])
+    .res <- .rescaleRange(as.vector(xnew[nrow(xnew), ]), .original_range[1], .original_range[2])
+    attr(.res, 'converged') <- .converged
   }
   
   

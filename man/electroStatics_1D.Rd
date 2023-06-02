@@ -39,7 +39,7 @@ electroStatics_1D(
 \item{\dots}{not used, absorbs additional arguments to \code{\link[=fixOverlap]{fixOverlap()}}}
 }
 \value{
-When \code{trace = TRUE} as \code{list}, otherwise numeric vector.
+When \code{trace = TRUE} a \code{list}, otherwise numeric vector with \code{converged} attribute.
 }
 \description{
 Label placement based on a simulation of electrostatic forces
@@ -68,7 +68,11 @@ abline(h = 0, lty = 2, col = 2)
 # final configuration only
 xnew <- electroStatics_1D(x, thresh = 0.65, q = 1)
 
-cbind(x, round(xnew, 2))
+# check for convergence
+attr(xnew, 'converged')
+
+# compare original vs. modified
+data.frame(orig = x, new = round(xnew, 2))
 
 }
 \author{
