@@ -54,6 +54,7 @@ test_that("fixOverlap, simple cases", {
   # boundary conditions
   expect_true(min(z) >= 1)
   expect_true(max(z) <= 10)
+  
 })
 
 
